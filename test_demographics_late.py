@@ -731,7 +731,7 @@ class TestLateGameCountry(unittest.TestCase):
         eng.call("te_demog_bills_refresh")
         want = M.health_term(1.2, frozenset(P.HEALTH_TECHS), lx_public=0.9, lx_elig=0.6)
         self.assertAlmostEqual(eng.vars["te_dg_health_term"], want, places=5)
-        self.assertAlmostEqual(want, P.HEALTH_NEED_WEIGHT * 0.2 + 0.30 + 0.6 * P.LX_PUBLIC_HEALTH_WEIGHT)
+        self.assertAlmostEqual(want, P.HEALTH_NEED_WEIGHT * 0.2 + 0.35 + 0.6 * P.LX_PUBLIC_HEALTH_WEIGHT)
 
     def test_linked_to_common_follows_the_untreated(self):
         eng = _Engine({"te_demog_ms_now": 2100.0}, triggers={"te_demog_effects_run": True,

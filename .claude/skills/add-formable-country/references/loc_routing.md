@@ -23,7 +23,7 @@ if (
 
 When introducing tag `XYZ`:
 
-1. Append `"XYZ"` and `"XYZ_ADJ"` to the `key in { … }` set in the rule above. The `dyn_c_*` and `dp_*` prefixes catch the dynamic-name and diplomatic-play keys automatically — only the bare-tag display keys need an explicit entry.
+1. Append `"XYZ"` and `"XYZ_ADJ"` to the `key in { … }` set in the rule above. The `dyn_c_*` and `dp_*` prefixes catch the dynamic-name and diplomatic-play keys automatically — only the bare-tag display keys need an explicit entry. (The set only picks the file: `find_country_keys` already counts `XYZ` and `XYZ_ADJ` as used for every tag in `common/country_definitions/`, so neither drifts to `te_unused_l_english.yml`.)
 
 2. Run `python3 organize_loc.py --dry-run` and confirm `te_formable_countries_l_english.yml` shows the expected key delta. Then run `python3 organize_loc.py` for real.
 

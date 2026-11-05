@@ -321,6 +321,7 @@ on_monthly_pulse = {
 	on_actions = {
 		city_rank_on_action
 		global_warming_events_on_action
+		decol_gp_prestige_on_action
 	}
 }
 
@@ -347,6 +348,38 @@ on_monthly_pulse_country = {
 		aptitude_traits_cleanup_on_action
 		tech_marker_grants_on_action
 		te_barracks_doctrine_country_pulse
+		te_nation_source_flags_on_action
+	}
+}
+
+# NATION TAB'S LIST GROUPS - every country, every month, no rule gate
+# (National Info shows an AI country's Nation tab too): how many of each
+# group's modifiers the country holds, 0 included (te_nation_src_<group>). The
+# tab's Where These Come From lists compare a modifier's name only with the
+# groups whose flag is on, and their counts read the same flags (owner,
+# 2026-11-03). Generated effect:
+# common/scripted_effects/te_nation_generated_effects.txt (gen_nation_tab.py).
+te_nation_source_flags_on_action = {
+	effect = {
+		te_nation_refresh_source_flags = yes
+	}
+}
+
+# The same for every country once, two days after the lobby, so a new game's
+# lists don't wait for each country's first 30-day pulse (#1372 review). Two
+# days, not the first: te_tax.3's migration adds the Tax Code's interest-group
+# views a day later (te_tax.4, days = 1). The event is events/te_nation_events.txt.
+on_game_started_after_lobby = {
+	on_actions = {
+		te_nation_source_flags_seed_on_action
+	}
+}
+
+te_nation_source_flags_seed_on_action = {
+	effect = {
+		every_country = {
+			trigger_event = { id = te_nation.1 days = 2 }
+		}
 	}
 }
 
@@ -618,13 +651,24 @@ banking_law_cascade_on_law_activated = {
 # yearly.
 
 # ============================================================================
-# BUILDING BUILT (Root = Building)
+# BUILDING BUILT AND EXPANDED (Root = Building)
 # When a barracks is built, a new combat unit type enters a formation.
 # Recalculate combined arms bonuses immediately for the owning country.
+# When an Extraplanetary Base is built or gains a level, refresh the owner's
+# Base Room (sr_ebase_refresh, Space Race UI pass design § 8) at once rather
+# than at the next monthly pulse, which stays the backstop: a hidden country
+# event on the owner, since the refresh's modifiers take a multiplier, which
+# resolves against ROOT (scripting_best_practices.md, "dispatch through a
+# hidden country event").
 # ============================================================================
 on_building_built = {
 	on_actions = {
 		te_on_building_built
+	}
+}
+on_building_expanded = {
+	on_actions = {
+		te_on_building_expanded
 	}
 }
 te_on_building_built = {
@@ -638,6 +682,24 @@ te_on_building_built = {
 			owner = {
 				apply_combined_arms_bonuses = yes
 			}
+		}
+		if = {
+			limit = {
+				is_building_type = building_space_mine
+				exists = owner
+			}
+			owner = { sr_ebase_hook_fire = yes }
+		}
+	}
+}
+te_on_building_expanded = {
+	effect = {
+		if = {
+			limit = {
+				is_building_type = building_space_mine
+				exists = owner
+			}
+			owner = { sr_ebase_hook_fire = yes }
 		}
 	}
 }
@@ -698,8 +760,9 @@ te_on_military_formation_created = {
 # ============================================================================
 # STATE OWNER CHANGE (Root = state)
 # When a state changes hands (e.g. conquest), remove building_space_program
-# if it exists and this state is not the new owner's market capital, and
-# bring the state-input treaty articles' effects in line with the new owner.
+# if it exists and this state is not the new owner's capital
+# (sr_space_program_site), and bring the state-input treaty articles' effects in line with
+# the new owner.
 # ============================================================================
 on_state_owner_change = {
 	on_actions = {
@@ -712,11 +775,11 @@ te_on_state_owner_change = {
 		if = {
 			limit = {
 				has_building = building_space_program
-				# Only when the owner's market capital is known to be elsewhere: the
-				# link can come back invalid (observer run, 2026-10-06), and a
-				# broken link is no reason to demolish the program.
-				exists = owner.market_capital
-				NOT = { owner.market_capital = THIS }
+				# Only when the owner's capital is known: a market-capital link once
+				# came back invalid (observer run, 2026-10-06), and a broken link
+				# is no reason to demolish the program.
+				exists = owner.capital
+				NOT = { sr_space_program_site = yes }
 			}
 			remove_building = building_space_program
 		}
@@ -901,11 +964,12 @@ remove_invalid_buildings = {
 		every_scope_state = {
 			limit = {
 				AND = {
-					# As in te_on_state_owner_change: only a market capital known to
-					# be elsewhere removes the program.
-					exists = owner.market_capital
-					NOT = { owner.market_capital = THIS }
 					has_building = building_space_program
+					# As in te_on_state_owner_change: only a known capital, with
+					# this state not the owner's capital, removes the program
+					# (sr_space_program_site, space_race_triggers.txt).
+					exists = owner.capital
+					NOT = { sr_space_program_site = yes }
 				}
 			}
 			remove_building = building_space_program
@@ -978,8 +1042,9 @@ global_warming_events_on_action = {
 		# this on_action is the one global-scope monthly pulse, so each runs
 		# exactly once for the whole world rather than once per country.
 		# gw_refresh_global_counts_effect is a single country sweep that fills
-		# all ten adoption counters; gw_rebase_annual_emissions_effect is O(1)
-		# and only does work in January. Neither has a gameplay effect.
+		# all eleven adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# and only does work in January. Neither has a gameplay effect of its
+		# own, but the aerosol mask's target is read off the counts.
 		# Tariff maintenance also runs with the rule off to restore prior settings.
 		# Emissions and threshold events remain gated on the climate rule.
 		gw_refresh_tariff_policies_effect = yes
@@ -990,6 +1055,8 @@ global_warming_events_on_action = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
 			gw_refresh_global_counts_effect = yes
+			# The aerosol mask (Geoengineering) reads the counts just taken.
+			gw_aerosol_update_mask_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
 			# temperature_anomaly_display crosses each threshold upward. Runs in the
@@ -1020,6 +1087,7 @@ global_warming_events_on_action = {
 				name = greenhouse_gas_emissions
 				value = 0
 			}
+			gw_aerosol_clear_mask_effect = yes
 		}
 
 		# Recurring random events for countries experiencing global warming.
@@ -1339,7 +1407,7 @@ war_propaganda_on_action = {
 	}
 }
 
-# Excess Private Construction (docs/systems/mod_systems.md § Excess Private
+# Excess Private Construction (docs/systems/mod_systems/construction.md § Excess Private
 # Construction). too_much_private_construction raises every project's weekly
 # construction cap so an investment pool the private queue can't spend gets
 # spent, and charges a construction-efficiency penalty that scales with it.
@@ -1958,10 +2026,52 @@ international_relations_events_on_action = {
 }
 
 # ============================================================================
+# DECOLONIZATION - the great powers' prestige, once a month (global scope)
+# ============================================================================
+# Every great power's prestige, summed for the Colonial Empire tab's share
+# line (decol_stance_disp_gp_share, decolonization_stance_values.txt), so the
+# panel divides by a stored total instead of walking every country each frame.
+decol_gp_prestige_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_rule = decolonization_enabled }
+			set_global_variable = { name = decol_gp_prestige_total value = decol_gp_prestige_sum }
+		}
+	}
+}
+
+# ============================================================================
 # DECOLONIZATION EVENTS - monthly chance for eligible countries
 # ============================================================================
 decolonization_events_on_action = {
 	effect = {
+		# A stance on colonialism (decolonization_stance_effects.txt): the
+		# cooldown's month, the AI's drop of a stance it cannot pay for, and
+		# each stance's modifier while it counts, whatever the era or the
+		# entry, since a stance outlives both.
+		if = {
+			limit = {
+				OR = {
+					has_variable = gp_anti_colonial_stance
+					has_variable = gp_pro_colonial_stance
+					has_variable = decol_stance_months_left
+					has_modifier = gp_anti_colonial_policy_modifier
+					has_modifier = gp_pro_colonial_policy_modifier
+				}
+			}
+			decol_stance_monthly = yes
+		}
+		# The Colonial Empire tab's list of the colonial powers, for every
+		# player, with the entry or without it, and whether or not their own tab
+		# is open: National Info shows another country's tab, The Colonial
+		# Powers among it, to a player who hasn't researched Decolonization.
+		if = {
+			limit = {
+				is_player = yes
+				has_game_rule = decolonization_enabled
+			}
+			decol_world_refresh_display = yes
+		}
 		# Wars of independence (decolonization_war_effects.txt): the monthly
 		# settle, before the pool and whatever the entry's state, since a war can
 		# outlast a failed entry. A colonial subject at war with us for its
@@ -2227,11 +2337,13 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.13 }
 				}
-				# Great Power Colonial Policy Review (fires for GPs)
+				# Great Power Colonial Policy Review (fires for GPs; a player's
+				# once, decol_stance_question_due)
 				15 = {
 					trigger = {
 						country_rank >= rank_value:great_power
 						NOT = { has_variable = gp_colonial_policy_cooldown }
+						decol_stance_question_due = yes
 						any_country = {
 							NOT = { this = root }
 							any_scope_state = {
@@ -2750,7 +2862,7 @@ society_technology_events_on_action = {
 			}
 			5 = {
 				trigger = {
-					has_technology_researched = generative_ai
+					has_technology_researched = ai_agents
 					NOT = { has_law = law_type:law_automated_bureaucracy }
 				}
 				trigger_event = { id = society_technology_events.27 }
@@ -2783,6 +2895,30 @@ society_technology_events_on_action = {
 					OR = { has_modifier = ste_av_full_adoption has_modifier = ste_av_cautious_rollout }
 				}
 				trigger_event = { id = society_technology_events.31 }
+			}
+
+			# === AI TUTORS ===
+			# Who writes what the tutors teach (era 13 spec § 7.6). Each mirrors its
+			# event's trigger and fires once per country.
+			5 = {
+				trigger = {
+					has_technology_researched = ai_tutors
+					has_law = law_type:law_unregulated_internet
+					NOT = { has_variable = ste_event_36_fired }
+				}
+				trigger_event = { id = society_technology_events.36 }
+			}
+			5 = {
+				trigger = {
+					has_technology_researched = ai_tutors
+					OR = {
+						has_law = law_type:law_state_controlled_internet
+						has_law = law_type:law_ministry_of_propaganda
+						has_law = law_type:law_ministry_of_thought_control
+					}
+					NOT = { has_variable = ste_event_37_fired }
+				}
+				trigger_event = { id = society_technology_events.37 }
 			}
 
 			# === RELIGIOUS REVIVAL EVENTS ===

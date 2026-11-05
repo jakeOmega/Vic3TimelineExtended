@@ -637,7 +637,7 @@ colonial_state_sol_qualifying_floor = {
 # number to the bar, the widget, the charts or any loc string. To add a term:
 # add a leaf, add it to its group below, and add one `add` line to the bar
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
-# in docs/systems/mod_systems.md § Stability Bar Formula.
+# in docs/systems/mod_systems/decolonization.md § Stability Bar Formula.
 #
 # The bar's 23rd and last line, colonial_stability_term_cap, is not one of
 # these leaves: it caps the sum of all 22 and lives in the MONTHLY CAP
@@ -725,13 +725,15 @@ colonial_stability_term_non_gp = {
 # (colonial_gp_condemner_prestige_share), not on how many of them there are.
 # They stack: at two-thirds both apply. The per-power factors are named, so
 # International Pressure's table (colonial_empire_gp_row) weighs each power
-# with the same figure the bar does.
-colonial_gp_condemnation_per_power = -0.6
+# with the same figure the bar does. Condemnation's three figures were a
+# quarter larger until 2026-11-03 (-0.6, -1.0, -2.0; owner: "tune Great Power
+# pressure down somewhat"); support's is unchanged.
+colonial_gp_condemnation_per_power = -0.45
 colonial_gp_support_per_power = 0.3
 # And the two escalations' flat losses, which International Pressure's
 # escalation lines print.
-colonial_gp_isolation_loss = -1.0
-colonial_gp_consensus_loss = -2.0
+colonial_gp_isolation_loss = -0.75
+colonial_gp_consensus_loss = -1.5
 
 colonial_stability_term_gp_condemnation = {
 	value = colonial_gp_condemnation_weight
@@ -949,8 +951,9 @@ colonial_stability_drift_uncapped = {
 # MONTHLY CAP
 #
 # However large the sum of the leaves, the bar moves at most this far in one
-# month, in either direction: 100 / 60, so crossing the whole 0-100 bar takes
-# at least five years. The cap is applied to the TOTAL, after everything is
+# month, in either direction: 1.5, so crossing the whole 0-100 bar takes at
+# least 67 months, five and a half years (1.667, 100 / 60, until 2026-11-03,
+# owner). The cap is applied to the TOTAL, after everything is
 # summed, not to any single term. A sudden spike (a superpower condemning a
 # small empire) therefore cannot empty the bar in a few months, but a large
 # enough sum still outweighs the empire's own efforts, and the empire has to
@@ -962,7 +965,7 @@ colonial_stability_drift_uncapped = {
 # inside the cap. Its hover line therefore shows how much the cap absorbed.
 # ============================================================================
 
-colonial_stability_drift_cap = 1.667
+colonial_stability_drift_cap = 1.5
 
 # Projected monthly change after the cap, identical by construction to what
 # the bar applies (its 22 leaves plus colonial_stability_term_cap). Snapshotted
@@ -1386,12 +1389,12 @@ colonial_pillar_domestic_max = 0
 colonial_pillar_overreach_min = -2
 colonial_pillar_overreach_max = 0
 
-# colonial_stability_term_gp_*: each condemning great power -0.6 x its
+# colonial_stability_term_gp_*: each condemning great power -0.45 x its
 # weight (0.25-2, its prestige against ours), each supporting one +0.3 x its
-# weight, and the escalations -1 and a further -2 at a third and two thirds
-# of the prestige. Five peers condemning, with both escalations, is -6; a
-# few strong supporters about +2.
-colonial_pillar_gp_min = -6
+# weight, and the escalations -0.75 and a further -1.5 at a third and two
+# thirds of the prestige. Five peers condemning, with both escalations, is
+# -4.5; a few strong supporters about +2.
+colonial_pillar_gp_min = -4.5
 colonial_pillar_gp_max = 2
 
 # colonial_stability_term_{low,high}_acceptance: -0.4 per colony with a
@@ -2266,7 +2269,8 @@ colonial_subject_disp_can_be_dominion = {
 # SCOPE: script container, a great power's row (colonial_empire_gp_row in
 # colonial_empire_display_effects.txt). Each figure is the monthly
 # assessment's, guarded: the stance (-1 condemning, 1 supporting), the power's
-# prestige then, and its signed weight on stability a month.
+# prestige then, its share of the empire's prestige pool, and its signed
+# weight on stability a month.
 # ============================================================================
 colonial_gp_row_disp_stance = {
 	value = 0
@@ -2292,6 +2296,17 @@ colonial_gp_row_disp_weight = {
 	}
 }
 
+# The power's share of the empire's prestige pool (colonial_gp_prestige_pool:
+# every great power and the empire), 0-1: the condemners' shares add up to
+# the overview pie's red slice, the supporters' to its green one.
+colonial_gp_row_disp_share = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_gp_share }
+		value = var:ce_gp_share
+	}
+}
+
 # The power's prestige against ours, the factor before the sign: its weight
 # over the per-power figure, for the row's hover.
 colonial_gp_row_disp_factor = {
@@ -2309,6 +2324,19 @@ colonial_gp_row_disp_factor = {
 		else = {
 			divide = colonial_gp_support_per_power
 		}
+	}
+}
+
+# SCOPE: country (the empire). 1 once colonial_empire_refresh_gp_rows has
+# built the table in this version (it sets colonial_empire_gp_pool, which the
+# cleanup removes), else 0: an AI empire from an older save has no rows until
+# its next monthly pulse, and the player's old rows hold no share. International
+# Pressure shows its pending line until then.
+colonial_empire_disp_gp_rows_built = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_gp_pool }
+		value = 1
 	}
 }
 

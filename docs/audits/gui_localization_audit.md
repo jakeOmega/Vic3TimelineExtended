@@ -26,22 +26,20 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 |---|---|---|---|---|---|
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | 19 done, 2 needed no more | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | 23 done, TAX-21 in part, 2 needed no more | #1204 |
-| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | 25 done, UN-15 in part | #1205 |
+| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | all done | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | all done | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | all done (GW-12 on placeholder art) | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | 20 done, 1 needed no more | #1208 |
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | all done | #1209 |
 | Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 | 29 | all done | #1210 |
 | Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | all done or needed no more | #1211 |
-| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | 21 done, JE-8 in part | #1212 |
+| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | all done (JE-8b without the game, 2026-11-02) | #1212 |
 
 ## The follow-up wave (2026-10-27)
 
 After the owner answered the [decisions](#decisions-for-the-owner), one agent per slice implemented that slice's open findings, quick, medium and large, and a twelfth built the four audits of #1213. The work tables below and each detail file give every finding's status. What is still open:
 
-- **UN-15:** mission contributors as flag rows. It needs a second copy of the mission register, kept in step on every mission path, and a list read not yet proven in game, for at most eight names. The owner wanted it only if it was straightforward, so it waits.
 - **TAX-21:** history rows show the code version and the promise's group, but not what each entry changed, which would need more stored fields.
-- **JE-8 (b):** whether a journal entry's `_desc` renders anywhere needs the game (its play-test list, item 14).
 - **Art:** placeholders stand in for a credibility icon (Nuclear), two Global Warming policy icons, a warship icon and the Defense and Modules cells' icons (Space). The player guide's screenshots of the Nuclear, UN, Cultural Hegemony, Covert, Global Warming, Strategic Reserve and solar-colonization panels show the old layouts.
 
 The owner also settled four points the wave raised. The Banking tools that paid the treasury monthly (BNK-14) are charged weekly in the budget, at a quarter of the monthly cost; FX Surrender stays monthly, since its payment is the gold it buys. Open-Market Operations stays in both places (BNK-11). The Covert network rows became a table (COV-12). Seabed claimants are a list per basin, and each ship role has a short concept (SEA-3, SPC-3). One request came in mid-wave: once the viewing player has researched Abyssal Plain Mining, every coastal state shows its ocean basin (VAN-8b).
@@ -157,6 +155,8 @@ Rule 6 asks every greyed button to list its failing condition.
 ### 6. Hovers nobody can find
 
 A label whose row carries a tooltip should be underlined (rule 3).
+
+*Superseded 2026-10-30:* the owner rewrote rule 3 to follow vanilla, which underlines a hoverable word in running text, not a hover's label or value. The Space Race's underlines went in #1258 and every other panel's on the same day; `test_gui_underlines.py` holds the panels to the new rule.
 
 - **Done here:** Nuclear (NUC-1) and the Space Race labels and heads (SPC-12).
 - **Open:**
@@ -287,7 +287,7 @@ Top priorities: an overview of what needs us, and our own vote under the tally (
 | UN-12 | The UN's own core terms have no concept: International Standing, case strength, lean, docket **Done.** | over-explaining / style | medium |
 | UN-13 | Our Obligations' budget line is a seven-figure sentence that repeats the Development Fund section **Done.** | spread-out/redundant / list | medium |
 | UN-14 | Delegations: the same estimate caveat on all 24 rows, and the summary hidden by the collapse **Done.** | over-explaining / hidden info / list | quick–large |
-| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names **Partly done:** contributors as flag rows (datamodel) deferred. | list / style | medium–large |
+| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names **Done.** The contributors became flags after the wave, through fixed per-player capital mirrors rather than a datamodel. | list / style | medium–large |
 | UN-16 | The archive prints 5–7 lines per resolution, and detail mode repeats the ballot caveat on every row **Done.** | list | quick–large |
 | UN-17 | The authority reading appears three times in a row, its tooltip adds nothing, and the target tick is the eye marker **Done.** | spread-out/redundant / style | medium |
 | UN-18 | The font sizes are off the house ladder: rows at 20 or 14, buttons and overview labels at 12, three sizes inside one table **Done.** | style | medium |
@@ -521,7 +521,7 @@ Top priorities: State Collapse's status and goal line (JE-1; its reason is done 
 | JE-5 | Heir Education: a manual in the description, button text that repeats the engine's lines, one hidden cost (loc part done) | over-explaining / spread-out/redundant / hidden info | quick–medium | done |
 | JE-6 | The four "debate" entries: status lines restate the law, and don't say what is still missing | hidden info / style | quick–medium | done |
 | JE-7 | Human Augmentation's reason links the power-bloc concept by mistake (loc part done) | style / other | quick | done (#1202) |
-| JE-8 | Mental Health's fail condition reads in days, and `_desc` keys shadow `_reason` | other | medium | partly done: (b) needs the game |
+| JE-8 | Mental Health's fail condition reads in days, and `_desc` keys shadow `_reason` | other | medium | done: (b) from the engine docs and vanilla's GUI, the `_desc` keys folded into `_reason` and deleted (2026-11-02) |
 | JE-9 | Tax-code overrides of vanilla entries: three goal lines that can never be met under the rule | other | quick | done |
 
 ## Decisions for the owner
@@ -559,5 +559,5 @@ Four checks the audit ran by hand (#1213), now built as read-only audits in `POS
 
 - **Long live tooltips** (`long_tooltip_audit.py`, check `long_tooltip`, tag trailing on the key's loc line): loc keys referenced from `.gui` files, outside How sections, over 500 rendered characters, the scan behind finding 7. 500 is above all but 9 of vanilla's 4,722 tooltip keys. On the base: 120 keys (289 over 300).
 - **Hidden modifier lines** (`hidden_modifier_audit.py`, check `hidden_modifier`, tag on the `custom_tooltip = {` line): a `custom_tooltip` whose block holds an `add_modifier` and whose text renders no `GetStaticModifier` for it. On the base: 14 of the 26 such blocks.
-- **Unmarked hovers** (`unmarked_hover_audit.py`, check `unmarked_hover`, tag on the tooltip's line or a row type's opening line): a hover of the mod's whose text has no `#tooltippable`, a row type's instance tooltips reported once at the type. On the base: 110.
+- **Unmarked hovers** (`unmarked_hover_audit.py`, check `unmarked_hover`, tag on the tooltip's line or a row type's opening line): a hover of the mod's whose text has no `#tooltippable`, a row type's instance tooltips reported once at the type. On the base: 110. *Retired 2026-10-30:* vanilla underlines only 1 to 4% of its own text hovers (`gui_style_guide.md` rule 3), so the owner dropped the rule it enforced.
 - **Greyed buttons without reasons** (`button_reason_audit.py`, checks `missing_reason` on the `enabled` line and `raw_condition` on the `is_valid = {` / `possible = {` line): a button enabled by `ScriptedGui.IsValid` whose tooltip has no `IsValidTooltip`, and a rendered `is_valid` or a scripted button's `possible` with a raw variable or script value test. On the base: 492 `missing_reason` (460 of them the generated Space rows, SPC-1) and 169 `raw_condition` blocks (144 of them Create New Religion's trait buttons, JE-2).

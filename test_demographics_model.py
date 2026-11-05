@@ -328,23 +328,30 @@ class TestMedicine(unittest.TestCase):
         self.assertEqual(M.INFECTION_ADULT_GROUPS, frozenset(range(P.group_of(lo), P.group_of(hi))))
         self.assertEqual(M.INFECTION_ADULT_BANDS, frozenset(range(lo // 5, hi // 5)))
 
-    def test_chronic_treatment_reaches_its_cap_by_era_12(self):
+    def test_chronic_treatment_reaches_its_cap_by_era_13(self):
         """Owner, 2026-10-20: chronic treatment to 0.99, reached by technology alone in the last era, as infection's. Eras
-        8-11's carriers make 0.70; Genetic Engineering's 0.05 and era 12's two 0.12s take it to the cap, and the
-        augmentation laws' flat lines then only cap."""
+        8-11's carriers make 0.75 with Genetic Engineering's 0.05; era 13 spec call 6 (2026-10-31): Rejuvenation
+        Therapies takes it to about 0.90 in era 12, and era 13's Molecular Assemblers and Biological Immortality to the
+        cap, which the augmentation laws' flat lines then only cap."""
         t = P.TREATMENT_TYPE["chronic"]
         early = {"modern_pharmaceuticals", "telemedicine", "personalized_medicine"}
-        late = early | {"genetic_engineering", "molecular_assemblers", "biological_immortality"}
+        era_11 = early | {"genetic_engineering"}
+        era_12 = era_11 | {"rejuvenation_therapies"}
+        late = era_12 | {"molecular_assemblers", "biological_immortality"}
         self.assertEqual(P.TREATMENT_CAP["chronic"], 0.99)
         self.assertAlmostEqual(DM.totals(CARRIERS, early, (), {})[t], 0.70)
+        self.assertAlmostEqual(DM.totals(CARRIERS, era_11, (), {})[t], 0.75)
+        self.assertAlmostEqual(DM.totals(CARRIERS, era_12, (), {})[t], 0.90)
         self.assertAlmostEqual(DM.totals(CARRIERS, late, (), {})[t], P.TREATMENT_CAP["chronic"])
         with_law = DM.totals(CARRIERS, late, {"law_medical_augmentation_only"}, {})
         self.assertAlmostEqual(M.medicine_targets(M.Inputs(mods=with_law))["chronic"], P.TREATMENT_CAP["chronic"])
-        # the health bill counts all six carriers (owner, 2026-10-20: up to +0.30 at full technology)
+        # the health bill counts all seven carriers (era 13 spec call 18: up to +0.35 at full technology)
         self.assertEqual(P.HEALTH_TECHS, ("modern_pharmaceuticals", "telemedicine", "personalized_medicine",
-                                          "genetic_engineering", "molecular_assemblers", "biological_immortality"))
+                                          "genetic_engineering", "rejuvenation_therapies", "molecular_assemblers",
+                                          "biological_immortality"))
         self.assertEqual(set(P.HEALTH_TECHS), late)
-        self.assertAlmostEqual(M.health_term(1.0, frozenset(late)), 6 * P.HEALTH_TECH_STEP)
+        self.assertAlmostEqual(M.health_term(1.0, frozenset(late)), 7 * P.HEALTH_TECH_STEP)
+        self.assertAlmostEqual(7 * P.HEALTH_TECH_STEP, 0.35)
 
     def test_infection_treatment_reaches_its_cap_by_era_12(self):
         """#1045 (owner, 2026-10-18): the base game's carriers stop at 0.94 by era 7, the rich world of eras 9-10; era 11's

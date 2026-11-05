@@ -36,7 +36,14 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
 - ``common/customizable_localization/sr_fleets_generated_custom_loc.txt``: a
   slot's location, destination, target world and drive by name.
 - ``gui/journal_entry_widgets/sr_fleets_generated_rows.gui``: the Fleets and
-  Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows).
+  Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows),
+  and the Transfer popup's bodies, one a slot (UI pass design § 6).
+
+Transfer (UI pass design § 6) took in Merge and Detach on the panel: the amounts
+are country variables (``sr_det_amt_<key>``, ``sr_det_to``) read only through
+``sr_fl_<n>_xf_<key>``, which holds each to what the slot has; ``sr_fl_transfer_new``
+and ``sr_fl_transfer_into`` move them. Merge's and Detach's own effects, with no
+caller left (the AI never merged or detached), are gone (#1298).
 
 Run ``python3 scripts/generators/gen_space_fleets.py [--dry-run | --check]``.
 A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
@@ -103,13 +110,19 @@ POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
 SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "marines", "drive",
              "refit_until", "posture", "target", "destroy", "charged", "icpt")
 
+# A slot's variable lists, cleared with it, and on each new leg and landing
+# (sr_fl_dispatch, sr_fl_arrive_at): the players already told of the leg, by
+# volume (the Earth alert, UI pass design § 9).
+SLOT_LISTS = ("warned_quiet", "warned_loud")
+
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
-SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
-                "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
-                "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
-                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in")
+SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go",
+                "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
+                "gather", "apply_losses", "toggle_destroy", "ai_recall", "debug_drive",
+                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
+                "xfer_open", "xfer_step", "transfer")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -256,6 +269,28 @@ def render_slot_values(n: int) -> list[str]:
     return out
 
 
+def _bound(n: int, code: int) -> str:
+    """Slot n is in flight to the location of this code."""
+    return f"has_variable = sr_fl_{n}_dest var:sr_fl_{n}_dest = {code} NOT = {{ has_variable = sr_fl_{n}_loc }}"
+
+
+def _hostile_inbound(lc: glw.Location) -> list[str]:
+    """The hostile fleets in flight to a location, for the country reading it:
+    their strength, and the earliest landing month (each leg caps the value
+    with max =, from a ceiling only set when some leg exists)."""
+    count = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = 1 }}" for n in range(1, SLOTS + 1)]
+    each = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = sr_fl_{n}_strength }}" for n in range(1, SLOTS + 1)]
+    first = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} max = var:sr_fl_{n}_arrive }}" for n in range(1, SLOTS + 1)]
+    head = ["\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = { is_country_alive = yes has_war_with = prev }"]
+    listed = ["\tif = {", "\t\tlimit = { has_global_variable_list = sr_fleet_powers }", *head]
+    return [f"sr_loc_hostile_inbound_count_{lc.key} = {{", "\tvalue = 0", *listed, *count, "\t\t}", "\t}", "}",
+            f"sr_loc_hostile_inbound_strength_{lc.key} = {{", "\tvalue = 0", *listed, *each, "\t\t}", "\t}", "}",
+            f"sr_loc_hostile_inbound_first_{lc.key} = {{", "\tvalue = 0",
+            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", "\t\tvalue = 99999",
+            *head, *first, "\t\t}", "\t}", "}"]
+
+
 def render_values() -> str:
     out = [HEADER.rstrip("\n"),
            "# The fleets' per-slot and per-location values, from gen_space_fleets (slice 6",
@@ -273,6 +308,10 @@ def render_values() -> str:
            ""]
     for n in range(1, SLOTS + 1):
         out += render_slot_values(n) + [""]
+    for n in range(1, SLOTS + 1):
+        out += render_transfer_values(n) + [""]
+    out += ["# Where a transfer goes (sr_det_to): 0 a new fleet, else that slot.",
+            *_opt("sr_det_to_value", "sr_det_to"), ""]
     out += ["# ===== Totals, country scope =====",
             "sr_fl_strength_total = {", "\tvalue = 0", *[f"\tadd = {var(n, 'strength')}" for n in range(1, SLOTS + 1)], "}",
             "sr_fl_strength_full_total = {", "\tvalue = 0",
@@ -339,6 +378,11 @@ def render_values() -> str:
                "\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
                f"\t\t\tlimit = {{ is_country_alive = yes has_war_with = prev has_variable = sr_fl_at_{lc.key} }}",
                f"\t\t\tadd = var:sr_fl_at_{lc.key}", "\t\t}", "\t}", "}"]],
+            "", "# ===== Per location, country scope: hostile fleets on their way (UI pass design § 9) =====",
+            "#   sr_loc_hostile_inbound_count_<loc>     the fleets in flight there of countries at war with us",
+            "#   sr_loc_hostile_inbound_strength_<loc>  their strength",
+            "#   sr_loc_hostile_inbound_first_<loc>     the earliest of their landing months, 0 with none",
+            *[line for lc in LOCATIONS for line in _hostile_inbound(lc)],
             *[line for lc in LOCATIONS[1:] for line in
               [f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
                *[f"\tif = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} }} add = sr_site_target_strength_{w.key} }}"
@@ -423,7 +467,9 @@ def render_slot_triggers(n: int) -> list[str]:
                 f"\tNOT = {{ var:{loc} = {b.code} }}",
                 f"\tNOT = {{ {var(n, 'refitting')} = yes }}",
                 f"\t{var(n, 'strength')} >= sr_fl_minimum_strength",
-                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}"]
+                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}",
+                # UI pass design § 10: no Space Command, no fleet orders.
+                "\tsr_sc_operational = yes"]
         if b.code != EARTH:
             # 6d (design § 15): nothing leaves Earth blockaded or with the launch site lost.
             out.append(f"\tNOT = {{ AND = {{ var:{loc} = {EARTH} sr_launches_barred = yes }} }}")
@@ -434,13 +480,21 @@ def render_slot_triggers(n: int) -> list[str]:
             f"\tvar:{loc} = {EARTH}",
             "\tsr_launches_barred = yes",
             "}",
+            "# The destination popup's pick (scope:pick, a location's code) is not where it is.",
+            f"{var(n, 'pick_elsewhere')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {b.code} NOT = {{ var:{loc} = {b.code} }} }}" for b in LOCATIONS],
+            "\t}",
+            "}",
             "# The panel's Go: its picked destination may be flown now.",
             f"{var(n, 'can_go')} = {{",
             f"\thas_variable = sr_fl_dest_pick_{n}",
             "\tOR = {"]
     out += [f"\t\tAND = {{ var:sr_fl_dest_pick_{n} = {b.code} {var(n, f'may_depart_{b.key}')} = yes }}" for b in LOCATIONS]
     out += ["\t}", "}",
-            "# Another fleet of ours at the same location, to merge into.",
+            "# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the",
+            "# same location to move into (Merge's old test) ...",
             f"{var(n, 'can_merge')} = {{",
             f"\thas_variable = {loc}",
             "\tOR = {"]
@@ -448,7 +502,7 @@ def render_slot_triggers(n: int) -> list[str]:
         if m != n:
             out.append(f"\t\tAND = {{ has_variable = {var(m, 'loc')} var:{var(m, 'loc')} = var:{loc} }}")
     out += ["\t}", "}",
-            "# Strength to halve, and an empty slot to take the half.",
+            "# ... or strength to split, and an empty slot for a new fleet (Detach's).",
             f"{var(n, 'can_detach')} = {{",
             f"\thas_variable = {loc}",
             f"\t{var(n, 'strength')} >= {{ value = sr_fl_minimum_strength multiply = 4 }}",
@@ -484,6 +538,7 @@ def render_slot_triggers(n: int) -> list[str]:
             "\tOR = {",
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
+            f"{var(n, 'hostile_step_free')} = {{ sr_fl_hostile_step_free_at = {{ N = {n} }} }}",
             "# 6c: a world at its location it may interdict (a country at peace with us,",
             "# not our ally, holds it); its target is one; it interdicts. Never at Earth",
             "# (lunar colonization § 8.3).",
@@ -500,21 +555,28 @@ def render_slot_triggers(n: int) -> list[str]:
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
             f"{var(n, 'interdicting')} = {{ {var(n, 'posture_value')} = 4 }}",
+            f"{var(n, 'closing_in')} = {{ {var(n, 'posture_value')} = 3 }}",
+            "# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.",
+            f"{var(n, 'pick_is_posture')} = {{",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {p} {var(n, 'posture_value')} = {p} }}" for p in POSTURES],
+            "\t}",
+            "}",
+            "# The target popup's pick (scope:pick, a world's index) is a world where it is.",
+            f"{var(n, 'pick_world_here')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} var:{loc} = {CODE[w.location]} }}" for w in gss.SITES],
+            "\t}",
+            "}",
             "# At Earth, closing in on a lunar world (the AI's offence leaves it there).",
             f"{var(n, 'closing_at_earth')} = {{ {var(n, 'at_earth')} = yes {var(n, 'posture_value')} = 3 }}",
-            "# The target button: interdicting, the worlds it may interdict; else the",
-            "# hostile worlds.",
+            "# The target button's gate (sr_fleet_target_sgui): interdicting, a world here",
+            "# it may interdict; else a hostile world here.",
             f"{var(n, 'can_target')} = {{",
             "\tOR = {",
             f"\t\tAND = {{ {var(n, 'posture_value')} = 4 {var(n, 'has_interdict_world')} = yes }}",
             f"\t\tAND = {{ NOT = {{ {var(n, 'posture_value')} = 4 }} {var(n, 'has_hostile_world')} = yes }}",
-            "\t}", "}",
-            "# The posture button's next step is Interdict (its price, in the tooltip).",
-            f"{var(n, 'next_interdict')} = {{",
-            f"\t{var(n, 'has_interdict_world')} = yes",
-            "\tOR = {",
-            f"\t\t{var(n, 'posture_value')} = 3",
-            f"\t\tAND = {{ {var(n, 'posture_value')} = 2 NOT = {{ {var(n, 'has_hostile_world')} = yes }} }}",
             "\t}", "}",
             "# The AI's: at Earth, or where no world of ours is threatened.",
             f"{var(n, 'ai_free')} = {{",
@@ -554,16 +616,63 @@ def render_slot_triggers(n: int) -> list[str]:
     return out
 
 
+def _hostile_step_free() -> list[str]:
+    """sr_fl_hostile_step_free_at (slot N): the world the hostile step would
+    take (sr_fl_step_hostile_target_at, _step_target's rule) is a free colony,
+    so Close in's hover lists the price that taking it charges. The step takes
+    the first hostile world here (table order) whose index is above its
+    target's (0 without one), else the first hostile world here."""
+    target = "sr_fl_$N$_target"
+    after = {w.key: f"OR = {{ NOT = {{ has_variable = {target} }} var:{target} < {w.index} }}" for w in gss.SITES}
+
+    def hostile(w: gss.Site) -> str:
+        return f"sr_site_hostile_target = {{ KEY = {w.key} }}"
+
+    out = ["# Close in's hover (UI pass design § 7): the world the hostile step would take",
+           "# at slot N's location is a free colony (the first hostile world there after",
+           "# its target, table order, else the first; sr_fl_step_hostile_target_at).",
+           "sr_fl_hostile_step_free_at = {",
+           "\thas_variable = sr_fl_$N$_loc",
+           "\tOR = {"]
+    for lc in CLOSE_IN_LOCATIONS:
+        ws = worlds_at(lc.key)
+        out += ["\t\tAND = {", f"\t\t\tvar:sr_fl_$N$_loc = {lc.code}", "\t\t\tOR = {"]
+        none_after = "NOT = { OR = { " + " ".join(f"AND = {{ {after[w.key]} {hostile(w)} }}" for w in ws) + " } }"
+        for i, w in enumerate(ws):
+            first_after, first = after[w.key], none_after
+            if i:
+                first_after += (" NOT = { OR = { " + " ".join(f"AND = {{ {after[e.key]} {hostile(e)} }}" for e in ws[:i])
+                                + " } }")
+                first += " NOT = { OR = { " + " ".join(hostile(e) for e in ws[:i]) + " } }"
+            out += ["\t\t\t\tAND = {",
+                    f"\t\t\t\t\thas_global_variable = sr_site_free_{w.key}",
+                    f"\t\t\t\t\t{hostile(w)}",
+                    "\t\t\t\t\tOR = {",
+                    f"\t\t\t\t\t\tAND = {{ {first_after} }}",
+                    f"\t\t\t\t\t\tAND = {{ {first} }}",
+                    "\t\t\t\t\t}",
+                    "\t\t\t\t}"]
+        out += ["\t\t\t}", "\t\t}"]
+    return out + ["\t}", "}"]
+
+
 def render_triggers() -> str:
     out = [HEADER.rstrip("\n"),
            "# The fleets' per-slot and per-location triggers, from gen_space_fleets.",
            "# Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,",
            "# _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,",
-           "# its propellant covering the leg), and the panel's _can_go, _can_merge,",
-           "# _can_detach, _can_land, _can_embark.",
+           "# its propellant covering the leg), and the panel's _can_go, _can_land,",
+           "# _can_embark; the Transfer popup's _can_transfer (_can_merge or _can_detach),",
+           "# _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).",
            ""]
     for n in range(1, SLOTS + 1):
         out += render_slot_triggers(n) + [""]
+    for n in range(1, SLOTS + 1):
+        out += render_transfer_triggers(n) + [""]
+    out += ["# An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the",
+            "# transfer's (sr_det_to): the button greys, as the approach selector's does.",
+            "sr_xf_pick_chosen = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {m} sr_det_to_value = {m} }}" for m in range(0, SLOTS + 1)], "\t}", "}", ""]
     out += ["# ===== Per world: Survey Colony Defences (6b, design § 11) =====",
             "# Country scope, the operator: it surveys the world's holder this month",
             "# (sr_cov_survey_defences, from covert_ops_apply_all_phase_effects).",
@@ -590,6 +699,20 @@ def render_triggers() -> str:
             "sr_fl_any_bound = {", "\tOR = {"]
     out += [f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
     out += ["\t}", "}",
+            "", *_hostile_step_free(),
+            "", "# The target popup's pick (scope:pick, a world's index): a world we may close",
+            "# in on (sr_site_hostile_target), interdict (sr_site_interdict_target; never",
+            "# at Earth, lunar colonization § 8.3), and a free colony.",
+            "sr_fl_pick_hostile = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
+            "\t}", "}",
+            "sr_fl_pick_interdictable = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}"
+              for w in gss.SITES if w.location != "earth"],
+            "\t}", "}",
+            "sr_fl_pick_free = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} has_global_variable = sr_site_free_{w.key} }}" for w in gss.SITES],
+            "\t}", "}",
             "", "# The scripted GUIs' slot (scope:op) passes the slot's TEST (exists, can_go, ...).",
             "sr_fl_op_check = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:op = {n} sr_fl_{n}_$TEST$ = yes }}" for n in range(1, SLOTS + 1)]
@@ -676,6 +799,8 @@ def render_role_effects() -> list[str]:
            "sr_fl_clear_at = {"]
     names = [*SLOT_VARS, *[r.key for r in ROLES], *[f"{r.key}_full" for r in ROLES]]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{x} }} remove_variable = sr_fl_$N$_{x} }}" for x in names]
+    out += [f"\tif = {{ limit = {{ has_variable_list = sr_fl_$N$_{x} }} clear_variable_list = sr_fl_$N$_{x} }}"
+            for x in SLOT_LISTS]
     out += ["}", "",
             "# The month's construction (local_var:sr_sc_points) into the ground reserve (6d,",
             "# design § 15), shared by the build mix; it reaches orbit at full when launched.",
@@ -753,69 +878,308 @@ def render_role_effects() -> list[str]:
     return out
 
 
-def render_merge_detach() -> list[str]:
-    out = ["# ===== Merge and detach (design § 4) =====",
-           "# Slot n merges into the next of ours at its location: every number added, the",
-           "# drive the lower, propellant and supply the lower share of their capacities,",
-           "# then n is cleared. Detach: half of each role into the lowest empty slot."]
-    for n in range(1, SLOTS + 1):
-        others = [m for m in range(1, SLOTS + 1) if m != n]
-        out += [f"sr_fl_{n}_merge_now = {{"]
-        out += _chain([(f"has_variable = {var(m, 'loc')} var:{var(m, 'loc')} = var:{var(n, 'loc')}",
-                        [f"sr_fl_merge = {{ N = {n} M = {m} }}"]) for m in others])
-        out += ["}", f"sr_fl_{n}_detach_now = {{"]
-        out += _chain([(f"NOT = {{ {var(m, 'exists')} = yes }}", [f"sr_fl_detach = {{ N = {n} M = {m} }}"]) for m in others])
-        out += ["}"]
-    out += ["sr_fl_merge_at = { sr_fl_$N$_merge_now = yes }",
-            "sr_fl_detach_at = { sr_fl_$N$_detach_now = yes }"]
-    out += ["# N into M: shares first, then the numbers, then N cleared.",
-            "sr_fl_merge = {",
-            "\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
-            "\tif = { limit = { sr_fl_$M$_dv_capacity > 0 sr_fl_$M$_dv_value < { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } } "
-            "set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$M$_dv_value divide = sr_fl_$M$_dv_capacity max = 1 } } }",
-            "\tset_local_variable = { name = sr_fl_supply_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }",
-            "\tif = { limit = { sr_fl_$M$_endurance > 0 sr_fl_$M$_supply_value < { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } } "
-            "set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$M$_supply_value divide = sr_fl_$M$_endurance max = 1 } } }"]
-    for r in ROLES:
-        for suffix in ("", "_full"):
-            out.append(f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{r.key}{suffix} }} "
-                       f"sr_fl_add_role_part = {{ N = $M$ VAR = {r.key}{suffix} AMOUNT = var:sr_fl_$N$_{r.key}{suffix} }} }}")
-    out += ["\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = sr_fl_$N$_marines_value } }",
-            "\tif = { limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value } set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value } }",
-            "\tif = {",
-            "\t\tlimit = { has_variable = sr_fl_$N$_refit_until }",
-            "\t\tif = {",
-            "\t\t\tlimit = { OR = { NOT = { has_variable = sr_fl_$M$_refit_until } var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until } }",
-            "\t\t\tset_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }",
-            "\t\t}",
-            "\t}",
-            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
-            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } }",
-            "\tsr_fl_clear_at = { N = $N$ }",
-            "\tsr_loc_rebuild = yes",
+# ---------------------------------------------------------------------------
+# Transfer (UI pass design § 6): the popup that replaced Merge and Detach
+# ---------------------------------------------------------------------------
+
+# What a transfer moves, in the popup's order: the five roles, then the
+# marines. A key's code is the step button's scope:pick; the amount chosen is
+# the country variable sr_det_amt_<key>, where it goes sr_det_to (0 a new
+# fleet in the lowest empty slot, else that slot).
+XF_KEYS: tuple[str, ...] = (*(r.key for r in ROLES), "marines")
+XF_CODE = {k: i for i, k in enumerate(XF_KEYS, start=1)}
+# The step buttons' scope:step: positive codes, since nothing in the mod or
+# vanilla passes a negative scope value from a GUI. 1-4 take 1, 10, 100 or
+# 1,000 off and 5 sets none (the - button's click, Shift, Ctrl, Alt and
+# right-click); 6-9 add them and 10 sets all (the + button's), the
+# construction market's keys (gui/construction_panel.gui, TE_CM_INCREASE_TT).
+XF_STEPS = {1: -1, 2: -10, 3: -100, 4: -1000, 6: 1, 7: 10, 8: 100, 9: 1000}
+XF_NONE, XF_ALL = 5, 10
+XF_HANDLERS = ("ondefault", "onshift", "onctrl", "onalt")  # then onrightclick, a sibling property
+XF_LESS = (1, 2, 3, 4, XF_NONE)
+XF_MORE = (6, 7, 8, 9, XF_ALL)
+
+
+def _here(m: int, n: int) -> str:
+    """Slot m is at slot n's location."""
+    return f"has_variable = {var(m, 'loc')} has_variable = {var(n, 'loc')} var:{var(m, 'loc')} = var:{var(n, 'loc')}"
+
+
+def _others(n: int) -> list[int]:
+    return [m for m in range(1, SLOTS + 1) if m != n]
+
+
+def render_transfer_values(n: int) -> list[str]:
+    """Slot n's transfer: each amount held to 0 and what the slot has of it, so
+    a battle or a repair under an open popup can't make it move more; what then
+    stays, what the fleet it goes into carries, and their carriers' room. The
+    effects read these, never sr_det_amt_<key> raw."""
+    out = [f"# Slot {n}'s transfer (UI pass design § 6): each amount held to 0 and what the",
+           "# slot has, what stays, and what the fleet it goes into then carries."]
+    for k in XF_KEYS:
+        out += [f"{var(n, f'xf_{k}')} = {{", "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_det_amt_{k} }} value = var:sr_det_amt_{k} }}",
+                f"\tmax = {var(n, f'{k}_value')}", "\tmin = 0", "}"]
+    out += [f"{var(n, 'xf_strength')} = {{", "\tvalue = 0", *[f"\tadd = {var(n, f'xf_{r.key}')}" for r in ROLES], "}",
+            f"{var(n, 'xf_left')} = {{ value = {var(n, 'strength')} subtract = {var(n, 'xf_strength')} }}",
+            "# Nothing of its strength stays: its marines all go too (the fleet is cleared).",
+            f"{var(n, 'xf_marines_moved')} = {{",
+            f"\tvalue = {var(n, 'xf_marines')}",
+            f"\tif = {{ limit = {{ {var(n, 'xf_left')} <= 0 }} value = {var(n, 'marines_value')} }}",
+            "}"]
+    for k in XF_KEYS:
+        moved = var(n, "xf_marines_moved") if k == "marines" else var(n, f"xf_{k}")
+        out += [f"{var(n, f'xf_stay_{k}')} = {{ value = {var(n, f'{k}_value')} subtract = {moved} }}",
+                f"{var(n, f'xf_there_{k}')} = {{", f"\tvalue = {moved}",
+                *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, f'{k}_value')} }}" for m in _others(n)],
+                "}"]
+    out += [f"{var(n, 'xf_there_strength')} = {{", f"\tvalue = {var(n, 'xf_strength')}",
+            *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, 'strength')} }}" for m in _others(n)],
             "}",
-            "# Half of N into the empty M, at N's location, posture and shares.",
-            "sr_fl_detach = {",
-            "\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
+            f"{var(n, 'xf_stay_room')} = {{ value = {var(n, 'xf_stay_carrier')} multiply = sr_fl_marines_per_carrier }}",
+            f"{var(n, 'xf_there_room')} = {{ value = {var(n, 'xf_there_carrier')} multiply = sr_fl_marines_per_carrier }}",
+            "# How far past its carriers' room the fleet would be, and is now (carriers",
+            "# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).",
+            f"{var(n, 'xf_stay_over')} = {{ value = {var(n, 'xf_stay_marines')} subtract = {var(n, 'xf_stay_room')} min = 0 }}",
+            f"{var(n, 'xf_now_over')} = {{ value = {var(n, 'marines_value')} subtract = {var(n, 'marine_capacity')} min = 0 }}"]
+    return out
+
+
+def render_transfer_triggers(n: int) -> list[str]:
+    others = _others(n)
+    return ["# Transfer (UI pass design § 6): the popup opens where a fleet could move into another",
+            "# of ours here or split off a new one.",
+            f"{var(n, 'can_transfer')} = {{ OR = {{ {var(n, 'can_merge')} = yes {var(n, 'can_detach')} = yes }} }}",
+            "# An Into button's slot (scope:pick) is a fleet of ours here.",
+            f"{var(n, 'xf_pick_here')} = {{", "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
+            "# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a",
+            "# fleet damaged to nothing now takes its full strength along, as Merge did,",
+            "# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it",
+            "# goes into another fleet; a new fleet gets that much; the fleet it goes into",
+            "# (sr_det_to) is still here; the fleet it goes into carries no more marines",
+            "# than its assault carriers hold, and this one no further past its room than",
+            "# it is now.",
+            f"{var(n, 'xf_moves')} = {{ OR = {{ {var(n, 'xf_strength')} > 0 {var(n, 'xf_marines_moved')} > 0 "
+            f"AND = {{ {var(n, 'xf_left')} <= 0 {var(n, 'strength_full')} > 0 }} }} }}",
+            "# Some of its strength stays: else every marine goes with the last ship, and",
+            "# the marines' - and + grey (sr_fleet_xfer_step_sgui).",
+            f"{var(n, 'xf_some_stays')} = {{ {var(n, 'xf_left')} > 0 }}",
+            f"{var(n, 'xf_keeps')} = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength }}",
+            f"{var(n, 'xf_keeps_or_all')} = {{ OR = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength "
+            f"{var(n, 'xf_left')} <= 0 }} }}",
+            f"{var(n, 'xf_new_min')} = {{ {var(n, 'xf_strength')} >= sr_fl_minimum_strength }}",
+            f"{var(n, 'xf_partner_here')} = {{", "\tOR = {",
+            *[f"\t\tAND = {{ sr_det_to_value = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
+            f"{var(n, 'xf_room')} = {{",
+            f"\t{var(n, 'xf_there_marines')} <= {var(n, 'xf_there_room')}",
+            f"\tOR = {{ {var(n, 'xf_left')} <= 0 {var(n, 'xf_stay_over')} <= {var(n, 'xf_now_over')} }}",
+            "}"]
+
+
+def render_transfer_effects() -> list[str]:
+    out = ["# ===== Transfer (UI pass design § 6) =====",
+           "# Opening the popup (sr_fleet_xfer_open_sgui): each amount to half of the",
+           "# slot's, rounded, and the transfer bound for a new fleet, or with no slot",
+           "# free, for the first fleet of ours here."]
+    for n in range(1, SLOTS + 1):
+        out += [f"sr_fl_{n}_xfer_open_now = {{"]
+        out += [f"\tset_variable = {{ name = sr_det_amt_{k} value = {{ value = {var(n, f'{k}_value')} multiply = 0.5 round = yes }} }}"
+                for k in XF_KEYS]
+        out += _chain([("sr_fl_has_free_slot = yes", ["set_variable = { name = sr_det_to value = 0 }"])]
+                      + [(_here(m, n), [f"set_variable = {{ name = sr_det_to value = {m} }}"]) for m in _others(n)])
+        out += ["}"]
+    out += ["sr_fl_xfer_open_at = { sr_fl_$N$_xfer_open_now = yes }", "",
+            "# A step (sr_fleet_xfer_step_sgui): scope:pick the role (" + ", ".join(f"{c} {k}" for k, c in XF_CODE.items())
+            + "),",
+            "# scope:step its code (XF_STEPS: 1-4 take 1, 10, 100 or 1,000 off, 5 none;",
+            "# 6-9 add them, 10 all), the amount then held to 0 and what slot N has.",
+            "sr_fl_xfer_step_at = {"]
+    out += _chain([(f"scope:pick = {c}", [f"sr_fl_xfer_step_role = {{ N = $N$ ROLE = {k} CODE = {c} }}"])
+                   for k, c in XF_CODE.items()])
+    # Stepped from the amount as shown (already held to what the slot has, which
+    # a battle may have cut since), so each click moves the figure.
+    amount = "sr_det_amt_$ROLE$"
+    out += ["}", "sr_fl_xfer_step_role = {"]
+    cases = [(f"scope:step = {XF_NONE}", [f"set_variable = {{ name = {amount} value = 0 }}"]),
+             (f"scope:step = {XF_ALL}", [f"set_variable = {{ name = {amount} value = sr_fl_$N$_$ROLE$_value }}"])]
+    cases += [(f"scope:step = {code}", [f"set_variable = {{ name = {amount} value = {{ value = sr_fl_$N$_xf_$ROLE$ add = {step} "
+                                        "max = sr_fl_$N$_$ROLE$_value min = 0 } }"])
+              for code, step in XF_STEPS.items()]
+    # TE_SELF_CHECK xfer_step_scope: the third chained AddScope (scope:step)
+    # reaching a scripted GUI is unproven (two are: sr_colony_module_sgui).
+    # No code matched: it didn't arrive. Once a game either way: BROKEN sets the
+    # flag first, so OK, after the chain, can't follow it. The line's numbers go
+    # through variables, since a $PARAM$ inside a debug_log string is mangled
+    # (scripting_best_practices.md, "No $PARAM$ inside the string").
+    numbers = ["set_variable = { name = sr_xf_chk_slot value = $N$ }", "set_variable = { name = sr_xf_chk_role value = $CODE$ }"]
+    said = "slot=[THIS.Var('sr_xf_chk_slot').GetValue|0] role=[THIS.Var('sr_xf_chk_role').GetValue|0]"
+    removed = ["remove_variable = sr_xf_chk_slot", "remove_variable = sr_xf_chk_role"]
+    broken = ["if = {",
+              "\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
+              "\tset_global_variable = { name = sr_xf_step_checked value = yes }",
+              *[f"\t{line}" for line in numbers],
+              '\tdebug_log = "TE_SELF_CHECK BROKEN xfer_step_scope (a Transfer step reached its scripted GUI '
+              "with no step code: the third AddScope, scope:step, did not arrive; fallback: pick = role x 100 + step "
+              f'code, docs/testing/solar-colonies-playtest.md) {said} date=[TimeKeeper.GetCurrentDate.GetString]"',
+              *[f"\t{line}" for line in removed],
+              "}"]
+    out += _chain(cases, else_body=broken)
+    out += ["\tif = {",
+            "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
+            "\t\tset_global_variable = { name = sr_xf_step_checked value = yes }",
+            *[f"\t\t{line}" for line in numbers],
+            "\t\tset_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }",
+            '\t\tdebug_log = "TE_SELF_CHECK OK xfer_step_scope (a Transfer step reached its scripted GUI with its '
+            f"step code: three chained AddScopes arrive) {said} amount=[THIS.Var('sr_xf_chk_amount').GetValue|2] "
+            'date=[TimeKeeper.GetCurrentDate.GetString]"',
+            *[f"\t\t{line}" for line in removed],
+            "\t\tremove_variable = sr_xf_chk_amount",
+            "\t}",
+            "}", "",
+            "# The Into buttons (sr_fleet_xfer_to_sgui): where the transfer goes, scope:pick",
+            "# 0 a new fleet, else that slot.",
+            "sr_xf_set_to = {"]
+    out += _chain([(f"scope:pick = {m}", [f"set_variable = {{ name = sr_det_to value = {m} }}"]) for m in range(0, SLOTS + 1)])
+    out += ["}", "", *render_transfer()]
+    return out
+
+
+def _xf_shares() -> list[str]:
+    """Read before anything moves (the values follow the variables): each role's
+    amount, held to what N has, and its strength now; whether all of it goes
+    (nothing of N's strength stays: every role then goes as it stands, a role
+    damaged to nothing with its full strength, as Merge did); the marines;
+    whether ships move (all of a fleet's full strength counts, so a wreck joining
+    takes the slower drive as Merge's did); N's propellant and supply shares
+    (Merge's and Detach's)."""
+    out = ["\tset_local_variable = { name = sr_xf_all value = 0 }",
+           "\tif = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }",
+           "\tset_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }",
+           "\tif = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }",
+           "\tset_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }"]
+    for r in ROLES:
+        k = r.key
+        out += [f"\tset_local_variable = {{ name = sr_xf_amt_{k} value = sr_fl_$N$_xf_{k} }}",
+                f"\tset_local_variable = {{ name = sr_xf_now_{k} value = sr_fl_$N$_{k}_value }}"]
+    out += ["\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
+            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share "
+            "value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
+            "\tset_local_variable = { name = sr_fl_supply_share value = 1 }",
+            "\tif = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share "
+            "value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }"]
+    return out
+
+
+def _xf_move() -> list[str]:
+    """Each role of N into M: all of it as it stands, or the amount itself at
+    its strength now and its full by full x amount / now, multiplied first and
+    never under the amount, so a damaged role keeps its ratio on both sides.
+    (Moving by a share, var x (amount / var), left 1e-5 behind in fixed point: a
+    role no figure showed, which cost a fleet its pace and its endurance, #1286's
+    review I-1.) Then the marines by amount."""
+    out = []
+    for r in ROLES:
+        k = r.key
+        now, full = f"sr_fl_$N$_{k}", f"sr_fl_$N$_{k}_full"
+        out += ["\tif = {",
+                "\t\tlimit = { local_var:sr_xf_all = 1 }",
+                f"\t\tif = {{ limit = {{ has_variable = {now} }} sr_fl_add_role_part = {{ N = $M$ VAR = {k} AMOUNT = var:{now} }} "
+                f"set_variable = {{ name = {now} value = 0 }} }}",
+                f"\t\tif = {{ limit = {{ has_variable = {full} }} sr_fl_add_role_part = {{ N = $M$ VAR = {k}_full AMOUNT = var:{full} }} "
+                f"set_variable = {{ name = {full} value = 0 }} }}",
+                "\t}",
+                "\telse_if = {",
+                f"\t\tlimit = {{ local_var:sr_xf_amt_{k} > 0 }}",
+                f"\t\tset_local_variable = {{ name = sr_xf_part value = {{ value = sr_fl_$N$_{k}_full_value "
+                f"multiply = local_var:sr_xf_amt_{k} divide = local_var:sr_xf_now_{k} min = local_var:sr_xf_amt_{k} }} }}",
+                f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {k} AMOUNT = local_var:sr_xf_amt_{k} }}",
+                f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {k}_full AMOUNT = local_var:sr_xf_part }}",
+                f"\t\tset_variable = {{ name = {now} value = {{ value = sr_fl_$N$_{k}_value subtract = local_var:sr_xf_amt_{k} min = 0 }} }}",
+                f"\t\tset_variable = {{ name = {full} value = {{ value = sr_fl_$N$_{k}_full_value "
+                f"subtract = local_var:sr_xf_part min = 0 }} }}",
+                "\t}"]
+    out += ["\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }",
+            "\tset_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value "
+            "subtract = local_var:sr_xf_marines min = 0 } }"]
+    return out
+
+
+def render_transfer() -> list[str]:
+    """Transfer (UI pass design § 6): slot N's chosen share of each role and its
+    marines into slot M, a new fleet (Detach's shape) or one of ours there
+    (Merge's rules)."""
+    out = ["# Transfer (sr_fleet_transfer_sgui): into the lowest empty slot (sr_det_to 0),",
+           "# or into that slot while it is still here."]
+    for n in range(1, SLOTS + 1):
+        new = _chain([(f"NOT = {{ {var(m, 'exists')} = yes }}", [f"sr_fl_transfer_new = {{ N = {n} M = {m} }}"])
+                      for m in _others(n)], 0)
+        cases = [("sr_det_to_value = 0", new)]
+        cases += [(f"sr_det_to_value = {m} {_here(m, n)}", [f"sr_fl_transfer_into = {{ N = {n} M = {m} }}"])
+                  for m in _others(n)]
+        out += [f"sr_fl_{n}_transfer_now = {{", *_chain(cases), "}"]
+    out += ["sr_fl_transfer_at = { sr_fl_$N$_transfer_now = yes }", "",
+            "# N into the empty M, Detach's shape: M at N's location, on its drive, posture",
+            "# and refit; then both fleets N's shares of propellant and supply, of their",
+            "# new capacities (with the roles halved, as Detach's, the same months). A",
+            "# source closing in (3) or interdicting (4) leaves M at Stand off (2): M gets",
+            "# no target (owner, 2026-10-31).",
+            "sr_fl_transfer_new = {",
+            *_xf_shares(),
+            "\tsr_fl_clear_at = { N = $M$ }",
             "\tset_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
             "\tset_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
-            "\tset_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
-            "\tif = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until } }",
-            "\tset_variable = { name = sr_fl_$M$_supply value = sr_fl_$N$_supply_value }",
-            "\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$N$_marines_value multiply = 0.5 } }",
-            "\tset_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value multiply = 0.5 } }"]
-    for r in ROLES:
-        for suffix in ("", "_full"):
-            out += ["\tif = {",
-                    f"\t\tlimit = {{ has_variable = sr_fl_$N$_{r.key}{suffix} }}",
-                    f"\t\tset_variable = {{ name = sr_fl_$M$_{r.key}{suffix} value = {{ value = var:sr_fl_$N$_{r.key}{suffix} multiply = 0.5 }} }}",
-                    f"\t\tchange_variable = {{ name = sr_fl_$N$_{r.key}{suffix} multiply = 0.5 }}",
-                    "\t}"]
-    out += ["\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\tset_variable = { name = sr_fl_$M$_posture value = { value = sr_fl_$N$_posture_value max = 2 } }",
+            "\tif = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until "
+            "value = var:sr_fl_$N$_refit_until } }",
+            "\tset_variable = { name = sr_fl_$M$_marines value = 0 }",
+            *_xf_move(),
+            "\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
             "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\tset_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\tsr_loc_rebuild = yes",
+            "}",
+            "# N into M, one of ours there, Merge's rules: with ships joining, M takes the",
+            "# slower drive, the later refit, and the lower of the two shares of propellant",
+            "# and supply; it keeps its posture. N, with nothing of its strength left, is",
+            "# cleared, as Merge did; else it keeps its shares, of its new capacities.",
+            "sr_fl_transfer_into = {",
+            *_xf_shares(),
+            "\tset_local_variable = { name = sr_xf_m_dv_share value = 1 }",
+            "\tif = { limit = { sr_fl_$M$_dv_capacity > 0 } set_local_variable = { name = sr_xf_m_dv_share "
+            "value = { value = sr_fl_$M$_dv_value divide = sr_fl_$M$_dv_capacity max = 1 } } }",
+            "\tset_local_variable = { name = sr_xf_m_supply_share value = 1 }",
+            "\tif = { limit = { sr_fl_$M$_endurance > 0 } set_local_variable = { name = sr_xf_m_supply_share "
+            "value = { value = sr_fl_$M$_supply_value divide = sr_fl_$M$_endurance max = 1 } } }",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_xf_ships > 0 }",
+            "\t\tif = { limit = { local_var:sr_fl_dv_share < local_var:sr_xf_m_dv_share } "
+            "set_local_variable = { name = sr_xf_m_dv_share value = local_var:sr_fl_dv_share } }",
+            "\t\tif = { limit = { local_var:sr_fl_supply_share < local_var:sr_xf_m_supply_share } "
+            "set_local_variable = { name = sr_xf_m_supply_share value = local_var:sr_fl_supply_share } }",
+            "\t\tif = { limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value } "
+            "set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value } }",
+            "\t\tif = {",
+            "\t\t\tlimit = { has_variable = sr_fl_$N$_refit_until }",
+            "\t\t\tif = {",
+            "\t\t\t\tlimit = { OR = { NOT = { has_variable = sr_fl_$M$_refit_until } "
+            "var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until } }",
+            "\t\t\t\tset_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            *_xf_move(),
+            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_xf_m_dv_share } }",
+            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_xf_m_supply_share } }",
+            "\tif = {",
+            "\t\tlimit = { sr_fl_$N$_strength < sr_fl_minimum_strength }",
+            "\t\tsr_fl_clear_at = { N = $N$ }",
+            "\t}",
+            "\telse = {",
+            "\t\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
+            "\t\tset_variable = { name = sr_fl_$N$_supply value = { value = sr_fl_$N$_endurance multiply = local_var:sr_fl_supply_share } }",
+            "\t}",
             "\tsr_loc_rebuild = yes",
             "}"]
     return out
@@ -853,18 +1217,12 @@ def render_location_effects() -> list[str]:
     out += _chain([(f"has_variable = sr_fl_dest_pick_$N$ var:sr_fl_dest_pick_$N$ = {b.code} sr_fl_$N$_may_depart_{b.key} = yes",
                     [f"sr_fl_dispatch = {{ N = $N$ LOC = {b.key} CODE = {b.code} }}"]) for b in LOCATIONS])
     out += ["}", "",
-            "# The destination button: the next location, skipping where the fleet is.",
-            "sr_fl_step_pick_once = {"]
-    out += _chain([(f"local_var:sr_fl_pick = {c}", [f"set_local_variable = {{ name = sr_fl_pick value = {c % SLOTS + 1} }}"])
-                   for c in range(1, len(LOCATIONS) + 1)])
-    out += ["}",
-            "sr_fl_step_pick_at = {",
-            "\tset_local_variable = { name = sr_fl_pick value = sr_fl_$N$_loc_value }",
-            "\tif = { limit = { has_variable = sr_fl_dest_pick_$N$ } set_local_variable = { name = sr_fl_pick value = var:sr_fl_dest_pick_$N$ } }",
-            "\tsr_fl_step_pick_once = yes",
-            "\tif = { limit = { local_var:sr_fl_pick = sr_fl_$N$_loc_value } sr_fl_step_pick_once = yes }",
-            "\tset_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }",
-            "}", "",
+            "# The destination popup's choice (UI pass design § 4): the location whose code",
+            "# is scope:pick (sr_fleet_set_dest_sgui).",
+            "sr_fl_set_pick_at = {"]
+    out += _chain([(f"scope:pick = {b.code}", [f"set_variable = {{ name = sr_fl_dest_pick_$N$ value = {b.code} }}"])
+                   for b in LOCATIONS])
+    out += ["}", "",
             "# The slot into the location records (sr_loc_rebuild): where it is, or where",
             "# it is bound and when it lands.",
             "sr_fl_note_at = {",
@@ -948,17 +1306,28 @@ def render_records() -> list[str]:
     out += ["}", "sr_loc_clear_country = {"]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_at_{lc.key} }} remove_variable = sr_fl_at_{lc.key} }}" for lc in LOCATIONS]
     out += ["}", "",
-            "# The strongest two powers at each location, after the rebuild.",
+            "# The strongest two powers at each location, after the rebuild. Second place",
+            "# only where two powers are there: past the end of the list, position = 1",
+            "# caps to the last item, so a lone power was its own runner-up and the",
+            "# iterator logged `Given position was bigger than the list`",
+            "# (scripting_best_practices.md, ordered_scope_state clamps out-of-range).",
             "sr_loc_rank = {"]
+    def pick(key: str, pos: int, name: str, indent: str) -> list[str]:
+        return [indent + ln for ln in (
+            "ordered_in_global_list = {",
+            "\tvariable = sr_fleet_powers",
+            f"\tlimit = {{ is_country_alive = yes has_variable = sr_fl_at_{key} }}",
+            f"\torder_by = var:sr_fl_at_{key}",
+            f"\tposition = {pos}",
+            f"\tset_global_variable = {{ name = sr_loc_{name}_{key} value = this }}",
+            "}")]
     for lc in LOCATIONS:
-        for pos, name in ((0, "top"), (1, "second")):
-            out += ["\tordered_in_global_list = {",
-                    "\t\tvariable = sr_fleet_powers",
-                    f"\t\tlimit = {{ is_country_alive = yes has_variable = sr_fl_at_{lc.key} }}",
-                    f"\t\torder_by = var:sr_fl_at_{lc.key}",
-                    f"\t\tposition = {pos}",
-                    f"\t\tset_global_variable = {{ name = sr_loc_{name}_{lc.key} value = this }}",
-                    "\t}"]
+        out += pick(lc.key, 0, "top", "\t")
+        out += ["\tif = {",
+                f"\t\tlimit = {{ any_in_global_list = {{ variable = sr_fleet_powers "
+                f"is_country_alive = yes has_variable = sr_fl_at_{lc.key} count >= 2 }} }}"]
+        out += pick(lc.key, 1, "second", "\t\t")
+        out += ["\t}"]
     out += ["}", "",
             "# Players: the strongest other power's capital at each location, for its flag",
             "# (gui_modding_guide.md gotcha #15: a country is read through a stored state).",
@@ -1031,31 +1400,36 @@ def render_combat() -> list[str]:
     out += _chain([(f"has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = {w.index}",
                     [f"sr_cb_charge_free = {{ N = $N$ KEY = {w.key} INDEX = {w.index} }}"]) for w in gss.SITES])
     out += ["}", "",
-            "# The target button (6c): interdicting, the next world here it may interdict,",
-            "# at the interdiction's price when its holder is a new one; else the next",
-            "# hostile world.",
-            "sr_fl_step_target_at = {",
-            "\tif = {",
+            "# The target popup's choice (UI pass design § 7; sr_fleet_set_target_sgui): the",
+            "# world whose index is scope:pick, then its charge: interdicting, the",
+            "# interdiction's price when its holder is a new one; closing in, a free",
+            "# colony's. The scripted GUI holds the pick to a world here that the posture",
+            "# may take.",
+            "sr_fl_set_target_at = {"]
+    out += _chain([(f"scope:pick = {w.index}", [f"set_variable = {{ name = sr_fl_$N$_target value = {w.index} }}"])
+                   for w in gss.SITES])
+    out += ["\tif = {",
             "\t\tlimit = { sr_fl_$N$_posture_value = 4 }",
-            "\t\tsr_fl_step_icpt_target_at = { N = $N$ }",
             "\t\tsr_fl_charge_icpt_at = { N = $N$ }",
             "\t\tsr_icpt_rebuild = yes",
             "\t}",
-            "\telse = {",
-            "\t\tsr_fl_step_hostile_target_at = { N = $N$ }",
+            "\telse_if = {",
+            "\t\tlimit = { sr_fl_$N$_posture_value = 3 }",
+            "\t\tsr_fl_charge_free_at = { N = $N$ }",
             "\t}",
             "}", ""]
     out += _step_target("sr_fl_step_hostile_target_at", "sr_site_hostile_target",
-                        "The hostile step: the next hostile world at the slot's location after its",
-                        "target (table order), else the first; none clears it. At Earth, the lunar",
-                        "worlds (lunar colonization § 8.1). A free colony's price only while it closes",
-                        "in: a stationed fleet's target costs nothing.",
+                        "The hostile step (Close in's target, sr_fl_set_posture_at): the next hostile",
+                        "world at the slot's location after its target (table order), else the first;",
+                        "none clears it. At Earth, the lunar worlds (lunar colonization § 8.1). A free",
+                        "colony's price only while it closes in.",
                         locations=CLOSE_IN_LOCATIONS,
                         found=["\t\tif = { limit = { sr_fl_$N$_posture_value = 3 } sr_fl_charge_free_at = { N = $N$ } }"],
                         none=["\t\tremove_variable = sr_fl_$N$_target"])
     out += _step_target("sr_fl_step_icpt_target_at", "sr_site_interdict_target",
-                        "The interdiction's step (6c): the next world at the slot's location it may",
-                        "interdict, else the first; none ends the interdiction (it stands off).",
+                        "The interdiction's step (6c; Interdict's target, sr_fl_set_posture_at, and the",
+                        "console's): the next world at the slot's location it may interdict, else the",
+                        "first; none ends the interdiction (it stands off).",
                         "Never at Earth (lunar colonization § 8.3).",
                         locations=INTERDICT_LOCATIONS,
                         found=[],
@@ -1139,9 +1513,10 @@ def render_combat() -> list[str]:
 def _step_target(name: str, trigger: str, *comment: str, locations: tuple[glw.Location, ...],
                  found: list[str], none: list[str],
                  none_guard: str = "limit = { has_variable = sr_fl_$N$_target }") -> list[str]:
-    """A target button's step: the next world at the slot's location (one of
+    """A target step: the next world at the slot's location (one of
     ``locations``) after its target that passes ``trigger`` (table order), else
-    the first such."""
+    the first such. Close in and Interdict take one when the target held isn't
+    theirs (sr_fl_set_posture_at), as does the console's interdiction."""
     out = [f"# {line}" for line in comment]
     out += [f"{name} = {{",
             "\tset_local_variable = { name = sr_fl_tgt value = 0 }",
@@ -1314,13 +1689,13 @@ def render_debug() -> list[str]:
     for n in range(1, SLOTS + 1):
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'exists')} = yes }}",
-                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.MakeScope.ScriptValue('{var(n, 'loc_value')}')|0] "
+                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.ScriptValue('{var(n, 'loc_value')}')|0] "
                 f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at month "
                 f"[THIS.Var('{var(n, 'arrive')}').GetValue|0]) "
-                f"strength [THIS.MakeScope.ScriptValue('{var(n, 'strength')}')|1] of [THIS.MakeScope.ScriptValue('{var(n, 'strength_full')}')|1] "
-                f"drive [THIS.MakeScope.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.MakeScope.ScriptValue('{var(n, 'dv_value')}')|1] "
-                f"of [THIS.MakeScope.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.MakeScope.ScriptValue('{var(n, 'supply_value')}')|1] "
-                f"marines [THIS.MakeScope.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.MakeScope.ScriptValue('{var(n, 'posture_value')}')|0]\"",
+                f"strength [THIS.ScriptValue('{var(n, 'strength')}')|1] of [THIS.ScriptValue('{var(n, 'strength_full')}')|1] "
+                f"drive [THIS.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.ScriptValue('{var(n, 'dv_value')}')|1] "
+                f"of [THIS.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.ScriptValue('{var(n, 'supply_value')}')|1] "
+                f"marines [THIS.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.ScriptValue('{var(n, 'posture_value')}')|0]\"",
                 "\t}"]
     out += ["}",
            "sr_loc_debug_log = {"]
@@ -1345,15 +1720,121 @@ def render_debug() -> list[str]:
     return out
 
 
+def render_earth_alert() -> list[str]:
+    """The Earth alert (UI pass design § 9), for a player in its country pulse:
+    every slot of a power at war with it, in flight to Earth, is told once per
+    leg at each volume. Loud (space_race_events.111) while a landing would tip
+    the balance at Earth (sr_earth_alert_loud), in place of the quiet notice;
+    quiet (a feed notice) otherwise. One popup a month, given first to a loud
+    fleet nobody has been told of (the first pass), else to the first loud one;
+    the month's other loud fleets are marked told, and each not yet told
+    quietly gets its feed notice, so every hostile owner is named somewhere.
+    The players told are on the moving fleet's lists (SLOT_LISTS), cleared with
+    each new leg and landing, so a war declared mid-flight is heard the next
+    month and a quiet leg can turn loud. Also the cell's hover, a line a power
+    (sr_ov_list_earth)."""
+    heard = lambda name: f"is_target_in_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}"  # noqa: E731
+    add = lambda name: f"add_to_variable_list = {{ name = {name} target = scope:sr_alert_viewer }}"  # noqa: E731
+
+    def popup(n: int, ind: str) -> list[str]:
+        return [f"{ind}set_local_variable = {{ name = sr_earth_loud_sent value = 1 }}",
+                f"{ind}set_local_variable = {{ name = sr_earth_alert_arr value = var:sr_fl_{n}_arrive }}",
+                f"{ind}scope:sr_alert_viewer = {{",
+                f"{ind}\tset_variable = {{ name = sr_earth_alert_by value = prev }}",
+                f"{ind}\tset_variable = {{ name = sr_earth_alert_arrive value = local_var:sr_earth_alert_arr }}",
+                f"{ind}\ttrigger_event = {{ id = space_race_events.111 days = 1 }}",
+                f"{ind}}}"]
+
+    def feed(n: int, ind: str) -> list[str]:
+        return [f"{ind}{add(f'sr_fl_{n}_warned_quiet')}",
+                f"{ind}save_scope_as = sr_earth_alert_power",
+                f"{ind}scope:sr_alert_viewer = {{ post_notification = sr_earth_hostile_notice }}"]
+
+    walk = ["\tif = {",
+            "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
+            "\t\tevery_in_global_list = {",
+            "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_alert_viewer }"]
+    out = ["# ===== The Earth alert (UI pass design § 9), a player's country pulse =====",
+           "# Each hostile fleet in flight to Earth, once per leg: loud (.111) while a",
+           "# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it",
+           "# reads the location records and the fleets' strengths, which nothing here",
+           "# changes), else quiet (sr_earth_hostile_notice). The players told sit on the",
+           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a month, naming its",
+           "# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive): first",
+           "# pass, a loud fleet nobody was told of; second, the first loud one left. The",
+           "# month's other loud fleets are marked told, and each not yet told quietly",
+           "# gets its feed notice.",
+           "sr_earth_alert_step = {",
+           "\tsave_scope_as = sr_alert_viewer",
+           "\tset_local_variable = { name = sr_earth_loud value = 0 }",
+           "\tif = { limit = { sr_earth_alert_loud = yes } set_local_variable = { name = sr_earth_loud value = 1 } }",
+           "\tset_local_variable = { name = sr_earth_loud_sent value = 0 }",
+           "\t# First pass: the popup for a loud fleet nobody has been told of."]
+    out += walk
+    for n in range(1, SLOTS + 1):
+        quiet, loud = f"sr_fl_{n}_warned_quiet", f"sr_fl_{n}_warned_loud"
+        out += ["\t\t\tif = {",
+                f"\t\t\t\tlimit = {{ local_var:sr_earth_loud = 1 local_var:sr_earth_loud_sent = 0 {_bound(n, EARTH)} "
+                f"NOT = {{ {heard(loud)} }} NOT = {{ {heard(quiet)} }} }}",
+                f"\t\t\t\t{add(loud)}",
+                f"\t\t\t\t{add(quiet)}",
+                *popup(n, "\t\t\t\t"),
+                "\t\t\t}"]
+    out += ["\t\t}", "\t}",
+            "\t# Second pass: every other fleet bound for Earth."]
+    out += walk
+    for n in range(1, SLOTS + 1):
+        quiet, loud = f"sr_fl_{n}_warned_quiet", f"sr_fl_{n}_warned_loud"
+        out += ["\t\t\tif = {",
+                f"\t\t\t\tlimit = {{ {_bound(n, EARTH)} }}",
+                "\t\t\t\tif = {",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 1 NOT = {{ {heard(loud)} }} }}",
+                f"\t\t\t\t\t{add(loud)}",
+                "\t\t\t\t\tif = {",
+                "\t\t\t\t\t\tlimit = { local_var:sr_earth_loud_sent = 0 }",
+                f"\t\t\t\t\t\tif = {{ limit = {{ NOT = {{ {heard(quiet)} }} }} {add(quiet)} }}",
+                *popup(n, "\t\t\t\t\t\t"),
+                "\t\t\t\t\t}",
+                "\t\t\t\t\telse_if = {",
+                f"\t\t\t\t\t\tlimit = {{ NOT = {{ {heard(quiet)} }} }}",
+                *feed(n, "\t\t\t\t\t\t"),
+                "\t\t\t\t\t}",
+                "\t\t\t\t}",
+                "\t\t\t\telse_if = {",
+                f"\t\t\t\t\tlimit = {{ local_var:sr_earth_loud = 0 NOT = {{ {heard(quiet)} }} }}",
+                *feed(n, "\t\t\t\t\t"),
+                "\t\t\t\t}",
+                "\t\t\t}"]
+    out += ["\t\t}", "\t}", "}", "",
+            "# The Hostile Fleet cell's hover (sr_colony_overview_sgui, op 3): a line a power",
+            "# at war with the viewer with a fleet in flight to Earth, its name and its",
+            "# sr_disp_earth_power_* (read in its scope: gui_modding_guide.md gotcha #15).",
+            "sr_ov_list_earth = {",
+            "\tif = {",
+            "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
+            "\t\tevery_in_global_list = {",
+            "\t\t\tvariable = sr_fleet_powers",
+            "\t\t\tlimit = {", "\t\t\t\tis_country_alive = yes", "\t\t\t\thas_war_with = root", "\t\t\t\tOR = {",
+            *[f"\t\t\t\t\tAND = {{ {_bound(n, EARTH)} }}" for n in range(1, SLOTS + 1)],
+            "\t\t\t\t}", "\t\t\t}",
+            "\t\t\tcustom_tooltip = je_space_race_widget_ovc_earth_line",
+            "\t\t}",
+            "\t}",
+            "}"]
+    return out
+
+
 def render_effects() -> str:
     parts = [HEADER.rstrip("\n"),
              "# The fleets' per-slot and per-location effects, from gen_space_fleets (slice 6",
              "# design). The one-slot arithmetic they call is hand-written in",
              "# common/scripted_effects/sr_fleet_effects.txt; country scope unless said.",
              ""]
-    for block in (render_dispatchers(), render_role_effects(), render_merge_detach(), render_location_effects(),
+    for block in (render_dispatchers(), render_role_effects(), render_transfer_effects(),
+                  render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
-                  render_ai_attack(), render_debug(), render_overview_list()):
+                  render_ai_attack(), render_debug(), render_overview_list(), render_earth_alert()):
         parts += block + [""]
     return "\n".join(parts)
 
@@ -1431,7 +1912,14 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_refit_left   months of its refit left",
            "#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination",
            "#   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders",
-           "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)"]
+           "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)",
+           "#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the",
+           "#                               destination popup's note): 0 it may, 4 no Space",
+           "#                               Command of ours (it pauses a refit, so first), 1",
+           "#                               refitting, 2 below the minimum strength, 3 Earth's",
+           "#                               launches barred",
+           "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)",
+           "#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)"]
     for n in range(1, SLOTS + 1):
         out += [f"sr_disp_fl_{n} = {{",
                 "\tvalue = 0",
@@ -1453,6 +1941,23 @@ def render_display() -> str:
             out += [f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} var:sr_fl_dest_pick_{n} = {b.code} }} "
                     f"value = {var(n, f'leg_{kind}_{b.key}')} }}" for b in LOCATIONS]
             out.append("}")
+        # may_depart_<loc>'s slot-wide terms, in its order; the per-leg one,
+        # delta-v, is each row's own (UI pass design § 4).
+        out += [f"sr_disp_fl_{n}_why = {{",
+                "\tvalue = 0",
+                "\tif = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }",
+                f"\telse_if = {{ limit = {{ {var(n, 'refitting')} = yes }} value = 1 }}",
+                f"\telse_if = {{ limit = {{ {var(n, 'strength')} < sr_fl_minimum_strength }} value = 2 }}",
+                f"\telse_if = {{ limit = {{ {var(n, 'at_earth')} = yes sr_launches_barred = yes }} value = 3 }}",
+                "}",
+                f"sr_disp_fl_{n}_pick = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} }} value = var:sr_fl_dest_pick_{n} }}",
+                "}",
+                f"sr_disp_fl_{n}_target = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'target')} }} value = var:{var(n, 'target')} }}",
+                "}"]
         out += [f"sr_disp_fl_{n}_combat = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} NOT = {{ var:{var(n, 'loc')} = {EARTH} }} }} value = 1 }}",
@@ -1466,8 +1971,8 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} value = 1 }}",
                 "}"]
     out += ["",
-            "# Per location: our strength there, the strongest other power's, and the",
-            "# inbound record (as the Solar System rows)."]
+            "# Per location: our strength there, the strongest other power's, the",
+            "# inbound record (as the Solar System rows), and our worlds there."]
     for lc in LOCATIONS:
         k = lc.key
         out += [f"sr_disp_loc_ours_{k} = {{",
@@ -1496,6 +2001,11 @@ def render_display() -> str:
                 f"sr_disp_loc_inbound_ours_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ global_var:sr_loc_inbound_by_{k} ?= this }} value = 1 }}",
+                "}",
+                # The destination popup's Ours: our worlds there, occupied ones too.
+                f"sr_disp_loc_worlds_{k} = {{",
+                "\tvalue = 0",
+                *[f"\tif = {{ limit = {{ global_var:sr_site_holder_{w.key} ?= this }} add = 1 }}" for w in worlds_at(k)],
                 "}"]
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
             "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
@@ -1572,7 +2082,45 @@ def render_display() -> str:
             *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES],
             "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
             *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
+    # The Hostile Fleet cell's hover (UI pass design § 9): one line a power at
+    # war with the viewer (sr_ov_list_earth), read in the power's own scope.
+    bound = [_bound(n, EARTH) for n in range(1, SLOTS + 1)]
+    out += ["", "# Per power, in its own scope (the Hostile Fleet cell's hover, a line a power at",
+            "# war with the viewer, sr_ov_list_earth): its fleets in flight to Earth, their",
+            "# strength, and the months until the first lands.",
+            "sr_disp_earth_power_count = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ {b} }} add = 1 }}" for b in bound], "}",
+            "sr_disp_earth_power_strength = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ {b} }} add = sr_fl_{n}_strength }}" for n, b in enumerate(bound, 1)], "}",
+            "sr_disp_earth_power_months = {", "\tvalue = 0", "\tif = {",
+            "\t\tlimit = {", "\t\t\tOR = {", *[f"\t\t\t\tAND = {{ {b} }}" for b in bound], "\t\t\t}", "\t\t}",
+            "\t\tvalue = 99999",
+            *[f"\t\tif = {{ limit = {{ {b} }} max = var:sr_fl_{n}_arrive }}" for n, b in enumerate(bound, 1)],
+            "\t\tsubtract = te_history_month_index", "\t\tmin = 0", "\t}", "}"]
+    out += render_transfer_display()
     return "\n".join(out) + "\n"
+
+
+def render_transfer_display() -> list[str]:
+    """The Transfer popup's figures (UI pass design § 6), per slot: the amount of
+    each role and the marines (held to what the slot has), what stays, and what
+    the fleet it goes into then has. Each reads the script's own value
+    (sr_fl_<n>_xf_*), which the transfer reads in its turn."""
+    out = ["", "# Per slot, the Transfer popup (UI pass design § 6): each amount, what stays, what",
+           "# the fleet it goes into then has (the script's sr_fl_<n>_xf_* values); the",
+           "# marines' amount is what moves, all of them once every ship goes. Then 1 for",
+           "# each other slot at its location, which shows its Into button (a scope-free",
+           "# visible, #1286's review I1)."]
+    for n in range(1, SLOTS + 1):
+        for k in (*XF_KEYS, "strength"):
+            stay = "xf_left" if k == "strength" else f"xf_stay_{k}"
+            amount = "xf_marines_moved" if k == "marines" else f"xf_{k}"
+            out += [f"sr_disp_fl_{n}_xf_{k} = {{ value = {var(n, amount)} }}",
+                    f"sr_disp_fl_{n}_xf_stay_{k} = {{ value = {var(n, stay)} }}",
+                    f"sr_disp_fl_{n}_xf_there_{k} = {{ value = {var(n, f'xf_there_{k}')} }}"]
+        out += [f"sr_disp_fl_{n}_xf_here_{m} = {{ value = 0 if = {{ limit = {{ {_here(m, n)} }} value = 1 }} }}"
+                for m in _others(n)]
+    return out
 
 
 def _overview_custom_loc() -> list[str]:
@@ -1685,6 +2233,36 @@ def _reasoned(sgui: str, op: int) -> str:
             f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
 
 
+def _pick_scope(n: int, pick: int) -> str:
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) )"
+            f".AddScope( 'pick', MakeScopeValue( '(CFixedPoint){pick}' ) ).End")
+
+
+def _pick_call(sgui: str, method: str, n: int, pick: int) -> str:
+    return f"[GetScriptedGui('{sgui}').{method}( {_pick_scope(n, pick)} )]"
+
+
+def _pick_reasoned(sgui: str, n: int, pick: int) -> str:
+    """_reasoned, for a popup row's button: the slot and its choice (scope:pick)."""
+    scope = _pick_scope(n, pick)
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
+
+
+def _pick_button(name: str, sgui: str, n: int, pick: int) -> list[str]:
+    """A popup row's button: the choice runs, then the popup closes (as the
+    colony target popup's Target, UI pass design § 3)."""
+    return _override(name, f'enabled = "{_pick_call(sgui, "IsValid", n, pick)}"',
+                     f'onclick = "{_pick_call(sgui, "Execute", n, pick)}"',
+                     "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
+                     f'tooltip = "{_pick_reasoned(sgui, n, pick)}"')
+
+
+def _popup_key(kind: str, n: int) -> str:
+    """The client-side te_popup value of slot n's popup (UI pass design § 3)."""
+    return f"sr_{kind}_{n}"
+
+
 def _button(name: str, sgui: str, n: int) -> list[str]:
     return _override(name, f'enabled = "{_op(sgui, "IsValid", n)}"', f'onclick = "{_op(sgui, "Execute", n)}"',
                      f'tooltip = "{_reasoned(sgui, n)}"')
@@ -1706,29 +2284,45 @@ def _fleet_row(n: int) -> list[str]:
     out += _override("fl_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
     out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
-    # The destination button's hover is the leg to the destination picked
-    # (sr_disp_fl_<n>_leg_months / _dv), not the scripted GUI's tooltip; the
-    # key opens with the scripted GUI's IsValidTooltip, so a greyed button says
-    # why (a key that reads JournalEntry can't go through Localize, gotcha #16).
+    # The destination button opens the slot's destination popup (UI pass
+    # design § 4; te_popup sr_dest_<n>). It greys on sr_fleet_pick_sgui's
+    # is_valid, a gate with no effect. Its hover is the leg to the destination
+    # picked (sr_disp_fl_<n>_leg_months / _dv); the key opens with that gate's
+    # IsValidTooltip, so a greyed button says why it can't pick (a key that
+    # reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
-                     f'onclick = "{_op("sr_fleet_pick_sgui", "Execute", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('dest', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
     out += _override("fl_pick", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_pick_name')]\"")
     out += _button("fl_go_button", "sr_fleet_go_sgui", n)
-    out += _button("fl_merge_button", "sr_fleet_merge_sgui", n)
-    out += _button("fl_detach_button", "sr_fleet_detach_sgui", n)
+    # Transfer (UI pass design § 6, in place of Merge and Detach): the click sets
+    # the amounts to half and opens the slot's popup.
+    out += _override("fl_transfer_button", f'enabled = "{_op("sr_fleet_xfer_open_sgui", "IsValid", n)}"',
+                     f'onclick = "{_op("sr_fleet_xfer_open_sgui", "Execute", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', 'sr_xfer_{n}')]\"",
+                     f'tooltip = "{_reasoned("sr_fleet_xfer_open_sgui", n)}"')
     out += _button("fl_land_button", "sr_fleet_land_sgui", n)
     out += _button("fl_embark_button", "sr_fleet_embark_sgui", n)
     # 6b: posture, target, seize or destroy; at Earth, where everything else is
     # stationed, only while a lunar world may be closed in on (lunar colonization § 8.1).
     out += _override("fl_combat_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_combat", 1)}]"')
-    out += _button("fl_posture_button", "sr_fleet_posture_sgui", n)
+    # The posture buttons (UI pass design § 7): each sets its posture
+    # (sr_fleet_set_posture_sgui, scope:pick the posture), greyed with the
+    # reason where it can't be taken; the one in force is lit.
     for p_code in POSTURES:
-        out += _override(f"fl_posture_{p_code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_posture", p_code)}]"')
-    # The target button's hover is what we know of the target (sr_fl_<n>_target_intel),
-    # after the scripted GUI's IsValidTooltip, as the destination button's.
+        held = _eq(f"sr_disp_fl_{n}_posture", p_code)
+        out += _override(f"fl_posture_{p_code}_choice", f'visible = "[Not( {held} )]"')
+        out += _override(f"fl_posture_{p_code}_selected", f'visible = "[{held}]"')
+        out += _override(f"fl_posture_{p_code}_button",
+                         f'enabled = "{_pick_call("sr_fleet_set_posture_sgui", "IsValid", n, p_code)}"',
+                         f'onclick = "{_pick_call("sr_fleet_set_posture_sgui", "Execute", n, p_code)}"',
+                         f'tooltip = "{_pick_reasoned("sr_fleet_set_posture_sgui", n, p_code)}"')
+    # The target button opens the slot's target popup (te_popup sr_ftarget_<n>),
+    # greyed on sr_fleet_target_sgui's is_valid, a gate with no effect. Its hover
+    # is what we know of the target (sr_fl_<n>_target_intel), after that gate's
+    # IsValidTooltip, as the destination button's.
     out += _override("fl_target_button", f'enabled = "{_op("sr_fleet_target_sgui", "IsValid", n)}"',
-                     f'onclick = "{_op("sr_fleet_target_sgui", "Execute", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('ftarget', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')
     out += _override("fl_target", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_name')]\"")
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
@@ -1759,6 +2353,239 @@ def _location_row(lc: glw.Location) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _xf_scope(n: int, **extra: int) -> str:
+    """A scripted GUI's scopes: the slot (op), then the Transfer popup's own
+    (pick, step), each a literal."""
+    scope = f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) )"
+    for name, value in extra.items():
+        scope += f".AddScope( '{name}', MakeScopeValue( '(CFixedPoint){value}' ) )"
+    return scope + ".End"
+
+
+def _xf_call(sgui: str, method: str, scope: str) -> str:
+    return f"[GetScriptedGui('{sgui}').{method}( {scope} )]"
+
+
+def _xf_reasoned(sgui: str, scope: str) -> str:
+    return (f"[Concatenate( GetScriptedGui('{sgui}').IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"GetScriptedGui('{sgui}').ExecuteTooltip( {scope} ) ) )]")
+
+
+def _xf_step_button(n: int, code: int, codes: tuple[int, ...]) -> list[str]:
+    """A − or + button: its default click's code drives enabled and the hover;
+    the four keys are click_modifiers, right-click a sibling, as the
+    construction market's buttons (gui/construction_panel.gui)."""
+    sgui = "sr_fleet_xfer_step_sgui"
+    out = [f'enabled = "{_xf_call(sgui, "IsValid", _xf_scope(n, pick=code, step=codes[0]))}"',
+           f'tooltip = "{_xf_reasoned(sgui, _xf_scope(n, pick=code, step=codes[0]))}"',
+           "click_modifiers = {"]
+    out += [f'\t{handler} = "{_xf_call(sgui, "Execute", _xf_scope(n, pick=code, step=step))}"'
+            for handler, step in zip(XF_HANDLERS, codes)]
+    out += ["}", f'onrightclick = "{_xf_call(sgui, "Execute", _xf_scope(n, pick=code, step=codes[-1]))}"']
+    return out
+
+
+def _xf_override(name: str, *lines: str, depth: int = 5) -> list[str]:
+    tab = "\t" * depth
+    return [f'{tab}blockoverride "{name}" {{', *[f"{tab}\t{line}" for line in lines], f"{tab}}}"]
+
+
+def _or(terms: list[str]) -> str:
+    """The GUI's two-argument Or, nested: Or( a, Or( b, c ) )."""
+    return terms[0] if len(terms) == 1 else f"Or( {terms[0]}, {_or(terms[1:])} )"
+
+
+def _xf_here(n: int, m: int) -> str:
+    """Slot m is at slot n's location: its Into button shows (a display value, so
+    the button's visible reads no saved scope, #1286's review I1)."""
+    return _eq(f"sr_disp_fl_{n}_xf_here_{m}", 1)
+
+
+def _xf_to_button(n: int, pick: int) -> list[str]:
+    sgui = "sr_fleet_xfer_to_sgui"
+    scope = _xf_scope(n, pick=pick)
+    label = "je_space_race_widget_xf_new" if pick == 0 else f"je_space_race_widget_xf_to_{pick}"
+    out = ["\t\t\t\t\t\tte_sr_xf_to_button = {"]
+    shown = [] if pick == 0 else [f'visible = "[{_xf_here(n, pick)}]"']
+    out += _xf_override("xf_to_btn", *shown,
+                        f'enabled = "{_xf_call(sgui, "IsValid", scope)}"', f'onclick = "{_xf_call(sgui, "Execute", scope)}"',
+                        f'tooltip = "{_xf_reasoned(sgui, scope)}"', depth=7)
+    out += _xf_override("xf_to_label", f'text = "{label}"', depth=7)
+    return out + ["\t\t\t\t\t\t}"]
+
+
+def _xf_role_row(n: int, k: str | None) -> list[str]:
+    """A role's row (k a key of XF_KEYS), or with k None the strength's total."""
+    key = k or "strength"
+    name = f"je_space_race_widget_xf_role_{key}"
+    now = var(n, "strength") if k is None else var(n, f"{k}_value")
+    out = ["\t\t\t\tte_sr_xf_role_row = {",
+           *_xf_override("xf_name", f'text = "{name}"'),
+           *_xf_override("xf_now", f'raw_text = "[{_sv(now)}|0]"'),
+           *_xf_override("xf_amount", f'raw_text = "#v [{_sv(f"sr_disp_fl_{n}_xf_{key}")}|0]#!"'),
+           *_xf_override("xf_stay", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_xf_stay_{key}")}|0]"'),
+           *_xf_override("xf_there", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_xf_there_{key}")}|0]"')]
+    if k is None:
+        out += _xf_override("xf_less", "visible = no") + _xf_override("xf_more", "visible = no")
+    else:
+        out += _xf_override("xf_less", *_xf_step_button(n, XF_CODE[k], XF_LESS))
+        out += _xf_override("xf_more", *_xf_step_button(n, XF_CODE[k], XF_MORE))
+    return out + ["\t\t\t\t}"]
+
+
+def _xfer_body(n: int) -> list[str]:
+    """Slot n's Transfer popup (UI pass design § 6), shown on its own te_popup
+    value: Into (a new fleet, or each other fleet of ours here, three a line),
+    then a row a role and the marines with − and +, the strength's total, and
+    Transfer. A slot no longer at a location shows one line instead."""
+    shown = _eq(f"sr_disp_fl_{n}", 1)
+    picks = [0, *_others(n)]
+    lines = [picks[i:i + 3] for i in range(0, len(picks), 3)]
+    out = ["\t\tflowcontainer = {",
+           f"\t\t\tvisible = \"[GetVariableSystem.HasValue('te_popup', 'sr_xfer_{n}')]\"",
+           "\t\t\tdirection = vertical",
+           "\t\t\tignoreinvisible = yes",
+           "\t\t\tspacing = 4",
+           "",
+           "\t\t\tte_sr_note = {",
+           f'\t\t\t\tvisible = "[Not( {shown} )]"',
+           '\t\t\t\ttext = "je_space_race_widget_xf_gone"',
+           "\t\t\t}",
+           "\t\t\tflowcontainer = {",
+           f'\t\t\t\tvisible = "[{shown}]"',
+           "\t\t\t\tdirection = vertical",
+           "\t\t\t\tignoreinvisible = yes",
+           "\t\t\t\tspacing = 4",
+           "",
+           "\t\t\t\tte_sr_note = {",
+           '\t\t\t\t\ttext = "je_space_race_widget_xf_intro"',
+           "\t\t\t\t}",
+           "\t\t\t\tte_sr_xf_to_line = {",
+           '\t\t\t\t\tblockoverride "xf_to_rows" {']
+    for line in lines:
+        # A line with no fleet here hides, so it leaves no gap (New fleet, on
+        # the first, always shows). Within a line the buttons pack; across lines
+        # they keep their slot's line.
+        shown = [] if 0 in line else [f'\t\t\t\t\t\t\tvisible = "[{_or([_xf_here(n, m) for m in line])}]"']
+        out += ["\t\t\t\t\t\tflowcontainer = {", *shown, "\t\t\t\t\t\t\tdirection = horizontal",
+                "\t\t\t\t\t\t\tignoreinvisible = yes", "\t\t\t\t\t\t\tspacing = 4"]
+        for pick in line:
+            out += ["\t" + x for x in _xf_to_button(n, pick)]
+        out += ["\t\t\t\t\t\t}"]
+    out += ["\t\t\t\t\t}", "\t\t\t\t}", "\t\t\t\tte_sr_xf_head_row = {}"]
+    for k in XF_KEYS:
+        out += _xf_role_row(n, k)
+    out += _xf_role_row(n, None)
+    # Transfer: greyed with the refusal named; the click also closes the popup.
+    sgui, scope = "sr_fleet_transfer_sgui", _xf_scope(n)
+    out += ["\t\t\t\tte_sr_xf_go_row = {",
+            *_xf_override("xf_go_btn", f'enabled = "{_xf_call(sgui, "IsValid", scope)}"',
+                          f'onclick = "{_xf_call(sgui, "Execute", scope)}"',
+                          "onclick = \"[GetVariableSystem.Clear('te_popup')]\"",
+                          f'tooltip = "{_xf_reasoned(sgui, scope)}"'),
+            "\t\t\t\t}"]
+    out += ["\t\t\t}", "\t\t}"]
+    return out
+
+
+def _dest_row(n: int, b: glw.Location) -> list[str]:
+    """Slot n's row for the location b in its destination popup (UI pass
+    design § 4): hidden for where the fleet is; the leg's months and delta-v
+    (red when the fleet carries less), from Earth the window toward b's body,
+    our worlds there, the enemy's strength there and on its way, and Choose."""
+    k = b.key
+    loc, dv, leg_dv = var(n, "loc_value"), var(n, "dv_value"), var(n, f"leg_dv_{k}")
+    covered = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(dv)}, {_sv(leg_dv)} )"
+    at_earth = _eq(loc, EARTH)
+    wait = f"sr_window_wait_months_{b.body}"
+    out = ["\t\t\t\tte_sr_dest_row = {"]
+    rows = _override("dr_visible", f'visible = "[Not( {_eq(loc, b.code)} )]"')
+    rows += _override("dr_name", f'text = "sr_loc_name_{k}"')
+    rows += _override("dr_months", f'raw_text = "[{_sv(var(n, f"leg_months_{k}"))}|0]"')
+    rows += _override("dr_dv_covered", f'visible = "[{covered}]"', f'raw_text = "[{_sv(leg_dv)}|1]"')
+    rows += _override("dr_dv_short", f'visible = "[Not( {covered} )]"', f'raw_text = "#R [{_sv(leg_dv)}|1]#!"')
+    if b.code == EARTH:
+        # Every leg home has its mean-cycle window, no launch window (design § 4: blank).
+        rows += _override("dr_win_open_visible", "visible = no")
+        rows += _override("dr_win_wait", "visible = no")
+    else:
+        rows += _override("dr_win_open_visible", f'visible = "[And( {at_earth}, {_eq(wait, 0)} )]"')
+        rows += _override("dr_win_wait", f'visible = "[And( {at_earth}, {_ge(wait, 1)} )]"',
+                          f'text = "je_space_race_widget_win_wait_{b.body}"')
+    rows += _override("dr_worlds", f'raw_text = "[{_sv(f"sr_disp_loc_worlds_{k}")}|0]"')
+    rows += _override("dr_enemy", f'raw_text = "[{_sv(f"sr_loc_ai_enemy_fleets_{k}")}|0]"')
+    rows += _override("dr_inbound", f'raw_text = "[{_sv(f"sr_loc_hostile_inbound_strength_{k}")}|0]"')
+    rows += _pick_button("dr_button", "sr_fleet_set_dest_sgui", n, b.code)
+    rows += _override("dr_choose_visible", f'visible = "[Not( {_eq(f"sr_disp_fl_{n}_pick", b.code)} )]"')
+    rows += _override("dr_chosen_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_pick", b.code)}]"')
+    out += ["\t\t" + line for line in rows]
+    return out + ["\t\t\t\t}"]
+
+
+def _dest_slot(n: int) -> list[str]:
+    """Slot n's body in the destination popup: shown on te_popup sr_dest_<n>;
+    while the fleet is at a location, the fleet, the note on why it can't leave
+    this month whatever the leg, and a row per location; else one line."""
+    here = _eq(f"sr_disp_fl_{n}", 1)
+    out = ["\t\tte_sr_dest_slot = {"]
+    out += _override("dp_visible", f"visible = \"[GetVariableSystem.HasValue('te_popup', '{_popup_key('dest', n)}')]\"")
+    out += _override("dp_here_visible", f'visible = "[{here}]"')
+    out += _override("dp_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
+    out += _override("dp_strength", f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"',
+                     f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
+    out += _override("dp_dv", f'raw_text = "[{_sv(var(n, "dv_value"))}|1]"')
+    out += _override("dp_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
+    for code in (1, 2, 3, 4):
+        out += _override(f"dp_why_{code}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_why", code)}]"')
+    out += ['\t\t\tblockoverride "dp_rows" {']
+    for b in LOCATIONS:
+        out += _dest_row(n, b)
+    out += ["\t\t\t}"]
+    out += _override("dp_gone_visible", f'visible = "[Not( {here} )]"')
+    return out + ["\t\t}"]
+
+
+def _ftarget_row(n: int, w: gss.Site) -> list[str]:
+    """Slot n's row for the world w in its target popup (UI pass design § 7):
+    shown while the fleet is at w's location; the world, its holder (as Solar
+    System shows it), and Target, greyed with the reason where the fleet's
+    posture can't take it; the fleet's target reads Targeted."""
+    k = w.key
+    disp, target = f"sr_disp_site_{k}", f"sr_disp_fl_{n}_target"
+    out = ["\t\t\t\tte_sr_ftarget_row = {"]
+    rows = _override("fr_visible", f'visible = "[{_eq(var(n, "loc_value"), CODE[w.location])}]"')
+    rows += _override("fr_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{w.kind}.dds"')
+    rows += _override("fr_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
+    rows += _override("fr_ours_visible", f'visible = "[{_eq(disp, 1)}]"')
+    rows += _override("fr_other_visible", f'visible = "[{_eq(disp, 2)}]"')
+    rows += _override("fr_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_{k}').GetState]\"")
+    rows += _override("fr_unknown_visible", f'visible = "[{_eq(disp, 3)}]"')
+    rows += _override("fr_unclaimed_visible", f'visible = "[{_eq(disp, 0)}]"')
+    rows += _override("fr_free_visible", f'visible = "[{_eq(disp, 4)}]"')
+    rows += _override("fr_occupied_visible", f'visible = "[{_eq(disp, 5)}]"')
+    rows += _override("fr_ruined_visible", f'visible = "[{_eq(disp, 6)}]"')
+    rows += _pick_button("fr_button", "sr_fleet_set_target_sgui", n, w.index)
+    rows += _override("fr_target_visible", f'visible = "[Not( {_eq(target, w.index)} )]"')
+    rows += _override("fr_targeted_visible", f'visible = "[{_eq(target, w.index)}]"')
+    out += ["\t\t" + line for line in rows]
+    return out + ["\t\t\t\t}"]
+
+
+def _ftarget_slot(n: int) -> list[str]:
+    """Slot n's body in the target popup: shown on te_popup sr_ftarget_<n>;
+    while the fleet is at a location, the worlds there; else one line."""
+    here = _eq(f"sr_disp_fl_{n}", 1)
+    out = ["\t\tte_sr_ftarget_slot = {"]
+    out += _override("ft_visible", f"visible = \"[GetVariableSystem.HasValue('te_popup', '{_popup_key('ftarget', n)}')]\"")
+    out += _override("ft_here_visible", f'visible = "[{here}]"')
+    out += ['\t\t\tblockoverride "ft_rows" {']
+    for w in gss.panel_order():
+        out += _ftarget_row(n, w)
+    out += ["\t\t\t}"]
+    out += _override("ft_gone_visible", f'visible = "[Not( {here} )]"')
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
@@ -1766,7 +2593,10 @@ def render_gui() -> str:
            "### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and",
            "### te_sr_location_row (Locations, one per location). Each value is a display",
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
-           "### sr_fleet_sguis.txt and take the slot as scope:op. The colonies' Defenses",
+           "### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'",
+           "### bodies: Transfer's (te_sr_xfer_popup_body), the destination's",
+           "### (te_sr_dest_popup_body) and the target's (te_sr_ftarget_popup_body).",
+           "### The colonies' Defenses",
            "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
            "types sr_fleets_generated_rows_types",
@@ -1784,6 +2614,36 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for lc in LOCATIONS:
         out += [""] + _location_row(lc)
+    out += ["\t}", "",
+            "\t### The Transfer popup's content (UI pass design § 6; te_sr_xfer_popup in",
+            "\t### space_race_widget.gui), one body a slot, each on its te_popup value.",
+            "\ttype te_sr_xfer_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tminimumsize = { 584 -1 }"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _xfer_body(n)
+    out += ["\t}", "",
+            "\t### The destination popup's slots (UI pass design § 4; te_sr_dest_popup in",
+            "\t### space_race_widget.gui, te_popup sr_dest_<n>): one body a slot, the",
+            "\t### one open shown, each passing its slot and a location's code to",
+            "\t### sr_fleet_set_dest_sgui (scope:op, scope:pick).",
+            "\ttype te_sr_dest_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _dest_slot(n)
+    out += ["\t}", "",
+            "\t### The target popup's slots (UI pass design § 7; te_sr_ftarget_popup in",
+            "\t### space_race_widget.gui, te_popup sr_ftarget_<n>): one body a slot, each",
+            "\t### a row per world (Solar System's order), the worlds at the fleet's",
+            "\t### location shown, passing its slot and the world's index to",
+            "\t### sr_fleet_set_target_sgui (scope:op, scope:pick).",
+            "\ttype te_sr_ftarget_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _ftarget_slot(n)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

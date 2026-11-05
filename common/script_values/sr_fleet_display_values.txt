@@ -22,6 +22,14 @@ sr_disp_sc_rate = {
 	value = 0
 	if = { limit = { has_variable = sr_sc_built_last } value = var:sr_sc_built_last }
 }
+# 1 while construction is paused, 2 while a resume waits for the next step:
+# Built a month reads Paused for both (that step builds nothing), and the
+# button reads Pause, Resume, then Resuming.
+sr_disp_sc_paused = {
+	value = 0
+	if = { limit = { sr_sc_is_paused = yes } value = 1 }
+	if = { limit = { sr_sc_is_resuming = yes } value = 2 }
+}
 sr_disp_sc_levels = {
 	value = sr_sc_levels
 }
@@ -31,8 +39,60 @@ sr_disp_fl_strength = {
 sr_disp_fl_strength_full = {
 	value = sr_fl_strength_full_total
 }
+# Space Fleets' note (UI pass design § 10): 1 while our fleets take orders, a
+# Space Command level in a state we control (sr_sc_operational).
+sr_disp_sc_operational = {
+	value = 0
+	if = { limit = { sr_sc_operational = yes } value = 1 }
+}
 sr_disp_sc_upkeep_pct = {
-	value = sr_fleet_upkeep_units_value
+	value = 0
+	if = {
+		limit = { sr_sc_buildings >= 1 }
+		value = sr_fleet_upkeep_units_value
+		multiply = 900
+	}
+}
+
+# The Earth alert (UI pass design § 9), the overview's Hostile Fleet cell and
+# space_race_events.111: 0 no fleet of a power at war with us is bound for
+# Earth, 1 some are, 2 a landing would tip the balance (sr_earth_alert_loud);
+# the months to the first landing; the hostile fleets at Earth already, and
+# those with the ones in flight. Ours at Earth is sr_disp_loc_ours_earth; each
+# power's own count, strength and first landing, in the cell's hover, are
+# sr_disp_earth_power_* (gen_space_fleets).
+sr_disp_earth_hostile = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_earth > 0 }
+		value = 1
+		if = { limit = { sr_earth_alert_loud = yes } value = 2 }
+	}
+}
+sr_disp_earth_hostile_present = {
+	value = sr_loc_ai_enemy_fleets_earth
+}
+sr_disp_earth_hostile_total = {
+	value = sr_earth_hostile_total
+}
+sr_disp_earth_hostile_months = {
+	value = 0
+	if = {
+		limit = { sr_loc_hostile_inbound_count_earth > 0 }
+		value = sr_loc_hostile_inbound_first_earth
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+# .111's own fleet: months until it lands.
+sr_disp_earth_alert_months = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_earth_alert_arrive }
+		value = var:sr_earth_alert_arrive
+		subtract = te_history_month_index
+		min = 0
+	}
 }
 
 # The notices (space_race_events.100 and .101), read in their text: months

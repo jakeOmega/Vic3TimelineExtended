@@ -536,7 +536,9 @@ class TestCalibrationStep3Generated(unittest.TestCase):
                 listed.update(dict.fromkeys(pending, int(m.group(1))))
                 pending = []
         self.assertEqual(listed, R.malaria_levels())
-        self.assertEqual(sum(1 for v in listed.values() if v == 2), 26)
+        # Vanilla's 26 less Fiji, Tonga, Namaqualand, Zambezi and Botswana (state_trait_config.json; Local Climate,
+        # 2026-11-01).
+        self.assertEqual(sum(1 for v in listed.values() if v == 2), 21)
 
     def test_the_level_reads_the_trait_and_the_store_its_control(self):
         level = self._value("te_demog_malaria_level")

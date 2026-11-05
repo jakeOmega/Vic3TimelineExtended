@@ -235,7 +235,7 @@ is_in_or_adjacent_colonial_macroregion_australia_oceania = {
 # Checks if a state lies outside both the capital's macro-region and all directly
 # neighboring macro-regions. No longer the colony test (that is
 # is_separated_from_capital, below, since 2026-10-24): the Continental Union
-# HQ (common/buildings/wonders.txt) reads `is_overseas_from_capital = no` to
+# HQ (common/buildings/08_zz_te_wonders.txt) reads `is_overseas_from_capital = no` to
 # mean "on the capital's continent", which the macro-regions answer well.
 # Scope: state
 is_overseas_from_capital = {
@@ -553,9 +553,10 @@ country_has_qualifying_colonial_subject = {
 	}
 }
 
-# Country scope. The Timeline Extended window's Colonial Empire tab checklist
-# (te_window_colonial_empire_tab_unlock_sgui's is_valid, rendered by
-# IsValidTooltip on the greyed tab): je_colonial_empire's
+# Country scope. What opens the entry's own panels on the Timeline Extended
+# window's Colonial Empire tab (te_window_colonial_empire_entry_unlock_sgui's
+# is_valid, rendered by IsValidTooltip on the note the tab shows without the
+# entry; the tab itself opens with ce_tab_unlocked): je_colonial_empire's
 # `is_shown_when_inactive` technology and its `possible`, one line per
 # condition. The possible's OR sits inside a custom_tooltip, so it prints as one
 # line (TabUnlockTooltipTest in test_un_layout.py); test_te_systems_window.py
@@ -579,6 +580,58 @@ ce_entry_unlocked = {
 		text = ce_unlock_no_collapse_tt
 		NOT = { has_variable = colonial_empire_collapsed_recently }
 	}
+	# Not in the entry's possible: the re-entry pass's guard after a voluntary
+	# end (ce_reentry_due), listed so the checklist is true during that year.
+	custom_tooltip = {
+		text = ce_unlock_no_recent_end_tt
+		NOT = { has_variable = ce_reentry_voluntary_hold }
+	}
+}
+
+# Country scope. Is this country due its Colonial Empire entry back? The
+# re-entry pass (ce_reentry_monthly, common/scripted_effects/decolonization.txt)
+# adds je_colonial_empire to a country that has been due for a whole month.
+# The engine deletes a finished record, failed or completed, and never
+# activates the type again, so after an entry ends add_journal_entry is the
+# only way back. That effect skips the entry's is_shown_when_inactive and
+# possible, so this restates both, word for word (test_colonial_empire_reentry.py
+# holds them together), and adds what the add needs on top:
+#   - not decentralized: such a country takes no journal entries, and an add
+#     logs an error (scripting_best_practices.md);
+#   - not the rebels of a running revolution: without an entry of their own
+#     they inherit the nation's when they win, and with one they would run a
+#     fresh bar of their own, whose values would take precedence at the merge
+#     (te_banking_entry_expected leaves them out for the same reason);
+#   - no entry running;
+#   - the separation cache: the colony test reads it (the entry's voluntary
+#     end waits for it for the same reason);
+#   - a year since a voluntary end (ce_reentry_voluntary_hold, set by on_fail's
+#     voluntary branch). Not a cooldown: possible does not read it, and the
+#     owner's rule is that a voluntary end sets none. It is a guard against a
+#     flickering colony test: fail checks the live test every 4 days, so a
+#     country whose one colony passes it on two monthly passes and fails it a
+#     few days later would otherwise loop through .206 and a fresh entry every
+#     two months.
+# Cheap tests first; the colony test walks the states last.
+ce_reentry_due = {
+	# je_colonial_empire's is_shown_when_inactive
+	has_game_rule = decolonization_enabled
+	has_technology_researched = decolonization
+	# What add_journal_entry needs
+	NOT = { is_country_type = decentralized }
+	is_revolutionary = no
+	NOT = { has_journal_entry = je_colonial_empire }
+	has_variable = ce_separation_cached
+	NOT = { has_variable = ce_reentry_voluntary_hold }
+	# je_colonial_empire's possible
+	OR = {
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+		}
+		country_has_qualifying_colonial_subject = yes
+	}
+	NOT = { has_variable = colonial_empire_completed }
+	NOT = { has_variable = colonial_empire_collapsed_recently }
 }
 
 # Country-scope (evaluated on a METROPOLE): is it fighting a colonial war?

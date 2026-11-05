@@ -2,7 +2,9 @@
 # SYSTEM TABS IN VANILLA PANELS — gates
 # ============================================================================
 # A system's journal-entry panels are also shown as a tab in a vanilla panel
-# (docs/systems/system_panels_feasibility.md). Each tab has two handlers here,
+# (docs/systems/system_panels_feasibility.md), and the Timeline Extended window
+# mirrors that tab under the same two gates (gen_te_systems_window.py), so a
+# gate's name records the tab's first host. Each tab has two handlers here,
 # and both read nothing but the root, so they are safe as `visible` / `enabled`
 # gates (gotcha #22 in docs/guides/gui_modding_guide.md):
 #
@@ -169,6 +171,30 @@ te_military_nuclear_tab_unlock_sgui = {
 	is_shown = { has_game_rule = nuclear_weapons_enabled }
 	ai_is_valid = { always = no }
 	is_valid = { nuclear_program_entry_unlocked = yes }
+	effect = { }
+}
+
+# National Info's open gate for another country's Nuclear tab (the generator's
+# Tab.ni_open): the tab's gate, once the world's first warhead has made the
+# nuclear taboo (nd_taboo_birth). Before it only a country with a programme
+# holds the entry, so the tab's state would tell whether another country runs
+# one. In play neither nd_believed_armed nor nd_in_crisis comes before the
+# taboo; they keep an armed country's tab open in a save from before the taboo,
+# for the month until nd_taboo_seed_existing_world births it. The player's own
+# tab opens on te_military_nuclear_tab_sgui as before.
+te_ni_nuclear_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
+		has_journal_entry = je_nuclear_program
+		OR = {
+			has_global_variable = nd_taboo
+			nd_believed_armed = yes
+			nd_in_crisis = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
 	effect = { }
 }
 
@@ -457,7 +483,16 @@ te_window_space_race_solar_colonization_sgui = {
 }
 
 # ---------------------------------------------------------------------------
-# Colonial Empire: je_colonial_empire.
+# Colonial Empire: je_colonial_empire. The second exception to "greyed until
+# the entry runs" (owner, 2026-11-03), after Banking's readout: a country's
+# stance on colonialism and the list of the colonial powers outlive the entry
+# (decolonization_stance_effects.txt), so the tab opens once the country has
+# researched Decolonization. Without the entry it shows those two sections
+# alone (te_window_colonial_empire_readout_sgui); the entry adds its own
+# panels while it runs (te_window_colonial_empire_tab_sgui). The two are never
+# true together. The greyed tab's checklist is the research
+# (ce_tab_unlocked); what opens the entry is ce_entry_unlocked, which the
+# readout's note shows on hover (te_window_colonial_empire_entry_unlock_sgui).
 # ---------------------------------------------------------------------------
 te_window_colonial_empire_tab_sgui = {
 	scope = country
@@ -470,7 +505,27 @@ te_window_colonial_empire_tab_sgui = {
 	effect = { }
 }
 
+te_window_colonial_empire_readout_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = decolonization_enabled
+		NOT = { has_journal_entry = je_colonial_empire }
+		ce_tab_unlocked = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 te_window_colonial_empire_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = decolonization_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ce_tab_unlocked = yes }
+	effect = { }
+}
+
+te_window_colonial_empire_entry_unlock_sgui = {
 	scope = country
 	is_shown = { has_game_rule = decolonization_enabled }
 	ai_is_valid = { always = no }

@@ -524,7 +524,14 @@ class _Engine:
                                  "is_homeland_of_country_cultures": True,
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
-                                 "is_ai": False, **(triggers or {})}
+                                 "is_ai": False,
+                                 # Largest Cities (te_demog_town_triggers_generated.txt, from the map's and the buildings'
+                                 # data, which the interpreter doesn't load): every hub named and every workplace the
+                                 # capital's, unless a test says (test_demographics_towns.py)
+                                 **{f"te_demog_town_named_{k}": True for k in ("city", "port", "mine", "farm", "wood")},
+                                 **{f"te_demog_town_{k}_work": False
+                                    for k in ("port", "mine", "farm", "wood", "subsistence")},
+                                 **(triggers or {})}
         self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
                          **WEALTH_LINE_DEFAULTS, **CAUSE_TAG_DEFAULTS, **POP_LINE_DEFAULTS, **TERRITORY_DEFAULTS,
                          **fixtures}
@@ -1762,12 +1769,13 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_womens_suffrage", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "antibiotic_mass_production", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
-        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("absorbed", -0.2),   # phase 3 (§8.4)
+        ("technology", "biological_immortality", "modifier", "state_mortality_mult"): ("absorbed", -0.15),   # phase 3 (§8.4); -0.2 until the era 13 spec
         ("technology", "contraceptive_pill", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
         ("technology", "mental_health_awareness", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
         ("technology", "mind_backups", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # phase 3 (§8.4)
         ("technology", "modern_vaccines", "modifier", "state_birth_rate_mult"): ("absorbed", 0.05),
         ("technology", "modern_vaccines", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
+        ("technology", "rejuvenation_therapies", "modifier", "state_mortality_mult"): ("absorbed", -0.05),   # era 13 spec § 5.1: its share of immortality's
         ("technology", "second_wave_feminism", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
         ("technology", "sexual_revolution", "modifier", "state_birth_rate_mult"): ("ontop", -0.025),
     }
@@ -3937,8 +3945,8 @@ class TestNaturalFertilityScript(unittest.TestCase):
             for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
                 self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
         capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
         for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
             text = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
@@ -5408,9 +5416,9 @@ class TestGiniGate(unittest.TestCase):
     def test_every_country_gini_the_gui_shows_is_picked_by_the_gini_gate(self):
         gui, loc = _text(DEMOG_GUI), _text(MISC_LOC)
         # the loc keys that read the country's Gini
-        keys = re.findall(r'^ (\w+):0 "[^"\n]*GetPlayer\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
+        keys = re.findall(r'^ (\w+):0 "[^"\n]*Country\.MakeScope\.Var\(\'te_dg_gini\'\)', loc, re.M)
         self.assertEqual(sorted(keys), ["te_demog_gini_value", "te_demog_ov_gini_value"])
-        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
+        gate = r"GetScriptedGui\('te_demog_gini_ready_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)"
         for key in keys:
             uses = [m.start() for m in re.finditer(rf"['\"]{key}['\"]", gui)]
             self.assertTrue(uses, f"{key} is not used")
@@ -5715,7 +5723,7 @@ class TestInheritanceBalance(unittest.TestCase):
         self.assertIn("add = owner.te_demog_wc_public_term", _block(_text(VALUES), "te_demog_wc_target"))
         self.assertIn("set_variable = { name = te_dg_wc_t_public value = te_demog_wc_public_term }",
                       _block(_text(WEALTH_EFFECTS), "te_demog_wc_national"))
-        for scope in ("GetPlayer", "State.GetOwner"):
+        for scope in ("Country", "State.GetOwner"):
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_public_term')", _text(DEMOG_GUI), scope)
 
     def test_the_shown_target_follows_a_public_goods_law_at_once(self):
@@ -5744,7 +5752,7 @@ class TestInheritanceBalance(unittest.TestCase):
         self.assertIn("add = owner.te_demog_wc_slavery_term", _block(_text(VALUES), "te_demog_wc_target"))
         self.assertIn("set_variable = { name = te_dg_wc_t_slavery value = te_demog_wc_slavery_term }",
                       _block(_text(WEALTH_EFFECTS), "te_demog_wc_national"))
-        for scope in ("GetPlayer", "State.GetOwner"):
+        for scope in ("Country", "State.GetOwner"):
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_slavery_term')", _text(DEMOG_GUI), scope)
 
     def test_the_shown_target_follows_the_slavery_law_at_once(self):
@@ -7000,7 +7008,7 @@ class TestCausesSection(unittest.TestCase):
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
         self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
                                  "te_state_demog_work", "te_state_demog_longevity", "te_state_demog_wealth",
-                                 "te_state_demog_modifiers", "te_state_demog_how"])
+                                 "te_state_demog_modifiers"])
 
     def test_open_by_default(self):
         # rule 7: a section that starts open names its flag _closed

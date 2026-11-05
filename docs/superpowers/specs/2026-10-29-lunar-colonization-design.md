@@ -94,6 +94,8 @@ are first guesses for the balance pass (§ 11).
 
 Notes:
 
+- Base room is five times the column's since 2026-10-31 (owner): 75, 50, 100,
+  125, 50 and 125.
 - Every modifier named above is registered today. Shackleton's propellant depots
   need one new script-only boolean, `country_sr_propellant_depots_bool`
   (`common/modifier_type_definitions/`), read by `sr_launch_has_depots`.
@@ -395,8 +397,9 @@ painted all three, and the Moon's colony icon, which had been a copy of Mercury'
 - **Room before Asteroid Mining.** The near-Earth asteroids' 10 levels
   (`NEAR_EARTH_ROOM`) need Asteroid Mining. Before it, a country's room is its
   lunar (and any other) colonies' room. Levels past the room work at −50% as
-  today. So in era 10, a base without a lunar colony runs a weak method at half
-  output: possible (soft cap), rarely worth it.
+  today (−75% since 2026-10-31, owner). So in era 10, a base without a lunar
+  colony runs a weak method at half output (a quarter since): possible (soft
+  cap), rarely worth it.
   `sr_ebase_room_total`'s constant becomes conditional on the technology.
 - **Balance constraint:** `test_deep_sea_rebalance.py` compares the base with the
   Deep-Sea Mine era by era. Regolith Processing is era 10, when there is no
@@ -602,7 +605,7 @@ Mars for a strong power entering era 11.
   - each founding event's `event_image` (an existing space race image will
     do; `event_image_audit`).
 - **Docs:**
-  - `docs/systems/mod_systems.md`, Space Race;
+  - `docs/systems/mod_systems/space_race.md`, Space Race;
   - `docs/player_guide/16-space.md`, `02-timeline.md`, `17-reference.md` and
     the events appendix, then the PDF;
   - `docs/testing/solar-colonies-playtest.md`;

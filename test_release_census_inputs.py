@@ -204,13 +204,15 @@ class ReleaseCensusInputsTest(unittest.TestCase):
 
     def test_the_late_chronic_treatment_lines_go_and_their_technologies_stay(self):
         """The safeguards pass (owner, 2026-10-20): chronic treatment on Genetic Engineering, Molecular Assemblers and
-        Biological Immortality. A release comments each line out and keeps every other line the technology carries."""
+        Biological Immortality, and Rejuvenation Therapies since the era 13 spec (2026-10-31). A release comments each
+        line out and keeps every other line the technology carries."""
         self.assertIn("state_chronic_treatment_add", self.types)
         for rel, entry, kept in (
                 ("common/technology/technologies/era_11.txt", "genetic_engineering", "state_arable_land_mult = 0.50"),
-                ("common/technology/technologies/era_12.txt", "molecular_assemblers",
+                ("common/technology/technologies/era_12.txt", "rejuvenation_therapies", "character_health_add = 25"),
+                ("common/technology/technologies/era_13.txt", "molecular_assemblers",
                  "country_max_weekly_construction_progress_add = 200"),
-                ("common/technology/technologies/era_12.txt", "biological_immortality", "character_health_add = 100")):
+                ("common/technology/technologies/era_13.txt", "biological_immortality", "character_health_add = 100")):
             with self.subTest(entry=entry):
                 lines = self._text(rel).split("\n")
                 body = [lines[i] for i in sorted(self._entry_lines(self._text(rel), entry))]

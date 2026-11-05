@@ -24,14 +24,15 @@ tooltip breaks the numbers down.
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
+| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
+| Dynastic Wealth | While the state carries a modifier from its Dynastic Wealth or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
 | Seabed Licenses | On a coastal state, once your country has had its first share of seabed licenses | The state's ocean basin, the licenses its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licenses](02-timeline.md#seabed-licenses). |
 | Ocean Basin | On a coastal state without the Seabed Licenses tile (another country's, or one that never shared licenses), once you have researched Abyssal Plain Mining | The ocean basin the state faces, whose license pool its mines and ports would count in. |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
-| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: tourism output and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
+| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: tourism output and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state, while six monuments stand there, the least grand has Clear It Away, and the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 | Grand Monument (Under Construction) card | While a Grand Monument is being built in the state | The levels built, the grandeur they come to, what a level finished now adds, whether levels are still being built, and on your own state the Dedicate button. |
 
 In every version of the mod, the birth, death and workforce effects of laws,
@@ -57,6 +58,31 @@ Buildings and Elevators 5 each. With all five, every state houses 30,000 more
 people before crowding. That barely moves a large farming province, but it
 doubles the threshold of a state with three units of arable land, so a small
 state can still hold a large city.
+
+Public Housing, a government building unlocked by Urban Planning, adds Urban
+Engineering to its own state, for each staffed level:
+
+| Method | Needs | Urban Engineering per level |
+|---|---|---|
+| Model Dwellings | | +100 |
+| Sanitary Tenements | Modern Sewerage | +150 |
+| Steel-Frame Apartments | Steel-Frame Buildings | +200 |
+| High-Rise Apartments | Elevators | +300 |
+| Prefabricated Tower Blocks | Prefabricated Construction | +450 |
+| Arcologies | Advanced Structural Engineering | +700 |
+
+Technology caps how many levels a state can hold: 12 with Urban Planning,
+then +3 with Paved Roads, +5 with Modern Skyscrapers, +10 with
+Computer-Aided Design and +5 each with Advanced Nanofabrication and
+Programmable Matter, for 40 in all. On the newest method you can build, a
+state at the cap houses 1.2 million people with Model Dwellings, 3.6 million
+with High-Rise Apartments, 13.5 million with Prefabricated Tower Blocks and 21
+to 28 million with Arcologies, before tolerance. With the tolerance your
+technologies give, that is between half and nearly all of the world's largest
+rich city of the time.
+
+Its upkeep comes out of your budget, so build it where crowding bites: in a
+state below its threshold it does nothing.
 
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
@@ -93,6 +119,61 @@ and tolerance figures for their sources.
 Ministries are explained in [Ministries](06-politics.md#ministries). The same
 tolerance multiplies the densities that open and close a resettlement frontier
 (see [The Settlement Authority](#the-settlement-authority)).
+
+## Local climate
+
+Every state region has a climate record, taken where most of its people live:
+the hottest day of a typical year and how hard such days are to bear, the
+warmest month's humidity, the coldest month's temperature, how much water
+there is, and how common malaria was in 1836. The
+Local Climate tile shows it, and every part of a split region shares it.
+
+Migrants weigh the climate, so a harsh one cuts a state's migration pull, and
+through it the pull that draws mass migrations. Five things count:
+
+| Part | When |
+|---|---|
+| Heat | The hottest days are hot and humid enough to strain the body; each degree costs more than the last |
+| Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little unless the summer is hot |
+| Frost | The coldest month averages below freezing, on top of Winter |
+| Dry land | Water is limited (semi-arid country) or scarce (desert) |
+| Malaria | It was seasonal or endemic in 1836 |
+
+Heat counts a region's worst days rather than its average summer, so a steady
+warm island such as Hawaii costs little and a city whose summers spike, such
+as Paris, a little more. Humid heat counts for more than dry, since damp air
+stops sweat cooling the body.
+
+The tile's Comfort row gives the total as a percentage of the state's
+migration pull, worked out again once a year, and hovering a reading shows what
+it costs before and after technology. In 1836 a hot, humid, malarial state
+such as Georgia loses about 27%, Bengal about 50% and Yakutsk about 64%;
+London loses nothing and Paris 4%. A mild winter with little else against it
+adds pull, at most about 7%: Madeira gains 7%, Hawaii 5% and Cape Town 5%. A
+hot summer cancels that, so Bengal's or Singapore's warm winter adds nothing.
+Climate never costs more than 80%.
+
+Technologies ease each cost, for the country that researches them:
+
+- Frost eases early, with steam heating and concrete.
+- Winter's pull, harsh against mild, shrinks more slowly with heating and
+  insulation, and goes only with the last eras' technologies.
+- Malaria goes with Quinine and then Malaria Prevention.
+- Water follows mechanized farming, welding and chemistry.
+- Heat waits for the 20th century's appliances and air conditioning.
+
+By the last era none of the five costs or adds anything. On the way, air
+conditioning eases the South's heat sooner than heating closes the gap between
+winters, so once central air arrives Georgia costs less than Massachusetts.
+
+The record is today's climate. With [global warming](15-climate.md) at 0 the
+world runs about a degree colder than that, and winters more toward the
+poles. As it warms, every state's hot days and winters rise, winters most near
+the poles: hot states lose more to heat, and cold ones less to cold.
+
+A mass migration's target needs no arable land, so a city-state or a small
+partial state can draw one. Deserts are kept back by their climate instead,
+until the technologies catch up.
 
 ## Dynamic homelands
 
@@ -318,9 +399,9 @@ under Old-Age Pensions. A rich country at Standard with a
 fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
 Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
 people also needs more care: the Ministry of Health costs more bureaucracy as the
-census's health need rises above 1836's, and 5% more for each of six chronic-care
+census's health need rises above 1836's, and 5% more for each of seven chronic-care
 technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine, Genetic
-Engineering, Molecular Assemblers, Biological Immortality): about two fifths more
+Engineering, Rejuvenation Therapies, Molecular Assemblers, Biological Immortality): about two fifths more
 for a rich country today. Outside Full none of this changes
 anything, and the buttons are grayed.
 
@@ -363,7 +444,7 @@ there, and so do the Old Southwest and Florida.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled
-also removes the census and both tabs. Wealth Concentration and its
+also removes the census and both tabs. Dynastic Wealth and its
 effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
@@ -374,17 +455,21 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
+| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Dynastic Wealth and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
 | Population pyramid | Men per 100 women, then people by five-year age band (wider rows past 85 where many live past 100), with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short, with up to ten of the states where they are, strongest first. |
 | Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
-| History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
-| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
-| States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
-| How Demographics Works | A collapsed section that explains the method, topic by topic, from the census to work and retirement and longevity. |
+| History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Dynastic Wealth. A mark over a year shows war dead, a famine or a demographic event. |
+| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Dynastic Wealth target, with your states highest and lowest in it; the arrow beside each opens it. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, your largest cities (three, and up to ten under Show All), each a town named on the map with the people it is estimated to hold, and your three largest urban states. Under Full, the urban pattern's tooltip shows its effects. |
+| States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Dynastic Wealth, and click it to open the state. Show All lists up to 40. |
+
+The "?" at the right of the tab's header opens the Help page, How Demographics
+Works, which explains the method, topic by topic, from the census to work and
+retirement and longevity. A state's Demographics subtab has the same "?" at its
+top right.
 
 Every state the tab lists, in States, Where people live and Work and
 Retirement, opens on its Demographics subtab when you click it.
@@ -400,6 +485,18 @@ each one out again; the Planned Capital, and the modifiers your choices in a
 demographic event give, stay in the list with their time left. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
+
+National Info, the base game's Census Data window renamed, which the
+Population panel's button opens for your country and which shows any other
+country's pops too, has the census as well
+([Introduction](01-introduction.md)). Its Demographics tab, beside Pops, the
+base game's list, holds the same sections as the Population panel's tab for
+whichever country the window shows, in three columns. Its Wealth section leaves
+out the strata's average incomes, which only the Population panel shows. For
+another country it leaves out what only a played country has: the buttons, the
+pyramid's twenty-year outline, and, for a country that is not a major power,
+the history, whose empty charts say so. The tab shows while the Demographics
+rule is on.
 
 ### Reading the pyramid
 
@@ -462,15 +559,17 @@ nothing under No Police. Restorative Justice lowers them 4% and
 Rehabilitation-Focused Criminal Justice 8%; Penal Labor Camps raise deaths at
 work. Later technologies make work and everyday life safer whatever the
 laws: Prefabricated Construction, Industrial Robotics, Containerization and
-Knowledge Economy together prevent nine in ten deaths at work, and Modern Urban
-Planning, Computer-Aided Design and Cellular Networks two in five deaths from
-accidents and violence, half once Autonomous Vehicles is researched. Medicine
+Knowledge Economy together prevent nine in ten deaths at work, and nineteen in
+twenty with Self-Directed Evolution's bodies built for the work. Modern Urban
+Planning, Computer-Aided Design and Cellular Networks prevent two in five deaths
+from accidents and violence, half once Autonomous Vehicles is researched. Medicine
 cuts adults' deaths from infection by more than children's, since it cures the
 tuberculosis and pneumonia that killed adults in 1836, so in a rich country
 adults die of infection about as rarely as in the rich world today; Personalized
 Medicine and Advanced Nanofabrication cut deaths from infection to about a sixth
-of that. Genetic Engineering, Molecular Assemblers and Biological Immortality
-let medicine prevent nearly every death from chronic disease where it reaches. Life
+of that. Genetic Engineering and Rejuvenation Therapies let medicine prevent nine
+in ten deaths from chronic disease where it reaches, and Molecular Assemblers and
+Biological Immortality nearly every one. Life
 expectancy and infant mortality are the census's own figures, before famine, war
 and disasters.
 
@@ -557,6 +656,13 @@ families are a little smaller. Past 60% all but the crowding keep growing at hal
 the pace, to nearly twice their size at the highest shares. Below 20% its towns
 give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
+Its Largest Cities list names real towns and estimates the people in each. A
+state's towns are its capital and whichever of its port, mining, farming and
+logging towns have work of their kind, as the map names them, ordered by the
+people at that work, with farm, mine and logging work counted at a quarter. The largest holds the
+state's metropolitan share of its urban people, and each next town that share of
+what is left. A town you renamed keeps the map's name there.
+
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and
 can be taken with Steel-Frame Buildings, a Dominant or Primate pattern, 100
@@ -587,8 +693,9 @@ From mRNA Therapeutics on, medicine slows aging itself as well as treating
 illness, and the census tracks each person's body apart from the calendar.
 People in longevity care age nine-tenths of a year each year with mRNA
 Therapeutics, seven-tenths once Personalized Medicine, Genetic Engineering and
-Synthetic Biology follow, and not at all with Biological Immortality, under which bodies older than
-35 also wind back toward 35. Children are never treated: people join at 25.
+Synthetic Biology follow, half a year with Rejuvenation Therapies, and not at all
+with Biological Immortality, under which bodies older than 35 also wind back
+toward 35. Children are never treated: people join at 25.
 
 Who is in care depends on your laws and your people's wealth. Each law below
 lists its part among its modifiers.
@@ -602,6 +709,9 @@ lists its part among its modifiers.
 | Unrestricted Augmentation | The market reaches 20 levels of wealth further down. |
 | Regulated Augmentation Market | The market's price falls half again as fast; with Private Health Insurance, two and a half times as fast. |
 | Human Purity | None. |
+
+The RejoovenEsense company also brings the market 10 levels of wealth further
+down while its prosperity bonus is active.
 
 The market reaches the rich first: from your first aging technology, people
 from wealth 80 can buy care, and the line falls about a level a year, faster with

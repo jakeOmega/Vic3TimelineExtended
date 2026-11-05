@@ -6,6 +6,20 @@ sr_has_space_program = {
 	}
 }
 
+# State scope: this state is where its owner's Space Program stands, the
+# owner's capital (owner, 2026-11-03). Until then it was the market capital of
+# a market the owner led, so a customs-union member could never found one and
+# a leader that joined another market lost its program; nothing reads where
+# the program stands, so the market gained nothing. Read by the building's
+# possible and by the two removal sweeps (extra_on_actions.txt);
+# te_decision_found_space_program places it in the capital. Moving the capital
+# still loses the program (the sweep), as moving the market capital did.
+# ?=: an invalid capital link fails the test, and the sweeps require the link
+# to exist before removing anything.
+sr_space_program_site = {
+	owner.capital ?= THIS
+}
+
 # The country has run a milestone, so it may hold space-race state to repair:
 # the gate of the monthly sync (space_race_on_actions.txt). A cheap test that
 # no such country fails:
@@ -111,11 +125,6 @@ sr_entry_unlocked = {
 		text = sr_unlock_earth_orbit_tt
 		modifier:country_sr_earth_orbit_program_bool = yes
 	}
-}
-
-sr_has_failure_cooldown = {
-	has_variable = sr_failure_cooldown
-	var:sr_failure_cooldown > 0
 }
 
 has_space_company = {

@@ -2604,7 +2604,10 @@ un_chamber_missions_active_block = {
 }
 
 # One row of Missions in the Field: the mission in display slot $SLOT$, and
-# where we stand with it.
+# where we stand with it. Its contributors are the row's flags, under its
+# progress bar (un_mission_mirror_flags; the 2026-10-27 audit, UN-15), so
+# the text names only the Standing UN Force, which has no flag, and an
+# electoral mission's observers.
 # Scope: country (the viewer)
 un_chamber_mission_slot_entry = {
 	if = {
@@ -2614,7 +2617,15 @@ un_chamber_mission_slot_entry = {
 			limit = { un_mission_in_slot = { SLOT = $SLOT$ } }
 			order_by = un_mission_recency_order
 			max = 1
-			un_chamber_mission_entry = yes
+			un_chamber_mission_head = yes
+			if = {
+				limit = { has_tag = un_msn_electoral }
+				custom_tooltip_no_bullet = je_un_chamber_mission_observers
+			}
+			else_if = {
+				limit = { un_mission_force_serves = yes }
+				custom_tooltip_no_bullet = je_un_chamber_mission_force_serves
+			}
 			un_chamber_mission_our_part = yes
 		}
 	}
@@ -2665,12 +2676,20 @@ un_chamber_missions_ended_block = {
 	}
 }
 
-# One mission: what, where, for whom, how far along, and who serves in it.
-# The host and the state are printed only while both still exist: a temporary
-# scope saved for the entry before would otherwise print in their place (a
-# host that has stopped existing is itself a reason to lapse).
+# One mission in a list (the missions with no row, and the ended ones): what,
+# where, for whom, how it ended, and who served in it.
 # Scope: mission container
 un_chamber_mission_entry = {
+	un_chamber_mission_head = yes
+	un_chamber_mission_contributor_lines = yes
+}
+
+# What, where and for whom, and how it ended if it has. The host and the
+# state are printed only while both still exist: a temporary scope saved for
+# the entry before would otherwise print in their place (a host that has
+# stopped existing is itself a reason to lapse).
+# Scope: mission container
+un_chamber_mission_head = {
 	if = {
 		limit = {
 			exists = var:un_msn_host
@@ -2724,6 +2743,12 @@ un_chamber_mission_entry = {
 		limit = { NOT = { has_tag = un_msn_active } }
 		custom_tooltip_no_bullet = je_un_chamber_mission_lapsed
 	}
+}
+
+# Who serves, or served, in the mission, as names: for the lists. A row's
+# contributors are its flags instead (un_chamber_mission_slot_entry).
+# Scope: mission container
+un_chamber_mission_contributor_lines = {
 	# The contributors, largest economy first. Each name is printed from the
 	# mission's own scope, never from inside the contributor's: the tooltip
 	# engine gathers every line printed in one country's scope, anywhere in
@@ -2779,9 +2804,10 @@ un_chamber_mission_entry = {
 
 # The contributor at $POSITION$ (0-based, largest economy first), if the list
 # has $COUNT$ ($POSITION$ + 1) that still exist. It is saved as a temporary
-# scope and printed from the mission's scope (see un_chamber_mission_entry);
-# the saved scope survives into the next entry (gotcha #25), so the line is
-# printed only when this position was filled just now.
+# scope and printed from the mission's scope (see
+# un_chamber_mission_contributor_lines); the saved scope survives into the
+# next entry (gotcha #25), so the line is printed only when this position was
+# filled just now.
 # Parameters: $POSITION$, $COUNT$
 # Scope: mission container
 un_chamber_mission_contributor_at = {

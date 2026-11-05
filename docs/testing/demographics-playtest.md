@@ -244,7 +244,7 @@ others; check the switching, the costs and the politics.
 
 ## Phase 3: the urban pattern and Planned Capital
 
-The national urban pattern's effects and the Plan a New Capital decision (spec §5.1; mod_systems.md § Demographics,
+The national urban pattern's effects and the Plan a New Capital decision (spec §5.1; mod_systems/demographics.md § Demographics,
 "The urban pattern's effects and Planned Capital"). Everything here acts under Full only.
 
 1. **Full, a new game, a country of three states or more whose Urban Pattern row reads Primate or Dominant** (in the
@@ -285,7 +285,7 @@ The national urban pattern's effects and the Plan a New Capital decision (spec �
    event is open (the move's 675 branches sit behind a click-only marker).
 ## Family Policy in the census (step 3b)
 
-The census reads the measures and the family laws (spec §3.2, §3.5; `docs/systems/mod_systems.md`, § Family Policy in
+The census reads the measures and the family laws (spec §3.2, §3.5; `docs/systems/mod_systems/demographics.md`, § Family Policy in
 the census). Console option x writes the capital's `TE_DEMOG_FAMILY` line: the six types it reads, the policy term,
 Birth Limit's part, the sex ratio's add in force and the census's stored terms. No new self-check: the one unverified
 engine fact (a country modifier's script-only type reaching the state) is step 3a's `measure_country_types` row above,
@@ -431,7 +431,7 @@ below are written for them on. Spec: `docs/superpowers/archive/specs/2026-10-12-
 ## Phase 3: the event wave
 
 Ten events (the parent spec's §9) fire when the census crosses their thresholds, at most once a generation per country,
-under Full only: `events/te_demog_wave_events.txt`, `docs/systems/mod_systems.md` § Phase 3: the event wave. The owner
+under Full only: `events/te_demog_wave_events.txt`, `docs/systems/mod_systems/demographics.md` § Phase 3: the event wave. The owner
 judges their text and balance here (owner, 2026-10-12). No plan document; the self-check is in the table above.
 
 1. **Each event from the console (Full, any date).** `event te_debug_demog.1`, option w, then each of the ten in the
@@ -469,7 +469,7 @@ judges their text and balance here (owner, 2026-10-12). No plan document; the se
 
 ## Phase 3: the late game
 
-Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
+Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems/demographics.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
 
 1. **The ladder starts the late game.** After v, each state's next census holds `te_dg_elig` (option u's `elig=`), rising toward its target at the medical diffusion rate; `rate=` reads 0 (immortality's r) and `pull=` 0.03; `s5=`/`d5=` show a band's treated share and deficit. A country with no ladder logs `elig=-1`.
 2. **Who is reached.** Under Public Health Insurance with a large health system nearly everyone (`hs_cover=1.00`); under Private Health Insurance only the rich at first (`hs_cover=0.00`, `threshold=` falling about 2 a year from 80); under Human Purity nobody (`banned=1`, `elig=` drifting to 0 while bodies keep their age: `d5=` holds); under Mandatory Augmentation at least 0.9 (`floor=0.90`); under Unrestricted Augmentation `reach=20` and `threshold=` 20 lower.
@@ -554,7 +554,7 @@ effect on. Display only shows the same pyramids as Full; neither changes the gam
 ## Modern safety and the gap's politics (2026-10-16)
 
 Modern safety: work deaths and deaths from accidents and violence × (1 − the share the era 7-9 technologies prevent),
-a factor of its own beside laws (`docs/systems/mod_systems.md` § Causes of Death). The gap's politics: call 15 on at
+a factor of its own beside laws (`docs/systems/mod_systems/demographics.md` § Causes of Death). The gap's politics: call 15 on at
 the late-game design's sizes. Both act on the game under Full only; under Display only the census's figures (the
 hovers, life expectancy) move with safety but births and deaths don't. Neither rests on a new engine fact (a script-only
 type on a technology reaching a state is #892's; approval sums its lines before it rounds, owner 2026-10-16), so no
@@ -590,7 +590,7 @@ self-check.
 
 The Ministry of Public Safety and the criminal-justice laws on accidents and violence, Autonomous Vehicles as modern
 safety, Synthetic Biology's step on the ageing ladder and the Family Policy measures' new authority upkeep
-(`docs/systems/mod_systems.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
+(`docs/systems/mod_systems/demographics.md` § Causes of Death, § Phase 3: the late game, § Family Policy measures). Every line is a
 script-only type on a carrier the census already reads (#892's fact), so no self-check.
 
 1. **The carriers' tooltips.** Each police law's institution lines show Deaths from Violence and Accidents a level of
@@ -623,10 +623,10 @@ script-only type on a carrier the census already reads (#892's fact), so no self
    notice, which names the government as a cause. Birth Limit and the Crash Campaign stay dimmed under every
    government.
 
-## The laws' census and Wealth Concentration lines (2026-10-17)
+## The laws' census and Dynastic Wealth lines (2026-10-17)
 
 Five more terms that read laws with `has_law` now read lines the laws carry, so each law's tooltip says what it does
-(`docs/systems/mod_systems.md` § Wealth Concentration, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
+(`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
 Limitation). The values are the old ones, so no figure moves. Every engine fact but one is proven: a script-only state
 type on a law reaching the states (the augmentation laws' chronic treatment) and a script-only country type read with
 `modifier:` (the Banking panel's intervention points). The one that isn't, a state type on an amendment (Undivided Farm
@@ -635,12 +635,12 @@ Succession), is the `workforce_amendment_type` self-check's.
 1. **The tooltips.** Child Labor Allowed "Census: Children at Work +30%", Restricted Child Labor +10%; Primogeniture &
    Entail and Undivided Farm Succession "Late Marriage on the Farms +15%"; State Religion, the Millet System and People
    of the Book "Family Limitation Among the Literate −50%", Total Separation and State Atheism +50%; Serfdom and
-   Manorialism "Wealth Concentration: Land Tenure +15", Tenant Farmers and both Latifundias +5, Peasant Proprietorship
-   and Homesteading −10, Collectivized Agriculture −20; Graduated Taxation "Wealth Concentration: Taxes on Wealth −5";
-   Laissez-Faire "Wealth Concentration: Economic Laws +10", Extraction Economy, Guilds and Chartered Monopolies and
+   Manorialism "Dynastic Wealth: Land Tenure +15", Tenant Farmers and both Latifundias +5, Peasant Proprietorship
+   and Homesteading −10, Collectivized Agriculture −20; Graduated Taxation "Dynastic Wealth: Taxes on Wealth −5";
+   Laissez-Faire "Dynastic Wealth: Economic Laws +10", Extraction Economy, Guilds and Chartered Monopolies and
    Freedom of Contract +5, Interventionism, Antitrust Enforcement and Regulated Utilities −5. None shows a raw key, each
    hover gives its description, and `debug.log` holds no `Unknown modifier type` for them.
-2. **Wealth Concentration reads them (any rule).** The Demographics tab's Wealth section (Display only or Full) shows
+2. **Dynastic Wealth reads them (any rule).** The Demographics tab's Wealth section (Display only or Full) shows
    the Land Tenure, Taxes on Wealth and Economic Laws bars as before: a Serfdom country's Land Tenure bar is 15 × its
    farm share, a Laissez-Faire and Freedom of Contract one's Economic Laws bar +15. With the rule Disabled the
    Inheritance group's description shows the same national score as before the change.
@@ -652,7 +652,7 @@ Succession), is the `workforce_amendment_type` self-check's.
 ## UBI's working ages in the late game, and the Workforce row (2026-10-17)
 
 Under UBI and Post-Scarcity a late-game state's working ages end at its blended old-age threshold, the one the
-Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems.md` § Phase 2 step
+Demographics tab's Old age from row shows, no longer at the untreated's (`docs/systems/mod_systems/demographics.md` § Phase 2 step
 1). A threshold of None ends them nowhere. The Workforce row and its hover now add up and name their scales. Pure
 script order and loc, pinned by `test_demographics_late.py` and `test_demographics_work.py`, so no self-check.
 
@@ -766,7 +766,7 @@ only the game can show:
 7. **Type sizes.** Rows at 17, headings at 20, the overview at 16: nothing overlaps or elides at 1080p and at the UI
    scale the owner plays at.
 
-## The state's Wealth Concentration terms (2026-10-18)
+## The state's Dynastic Wealth terms (2026-10-18)
 
 The state subtab's Wealth section lists What Sets the Target under the score's bar, as the country tab does: the
 Inheritance law, land tenure, who owns capital, income inequality, taxes on wealth and the economic laws. Land tenure,
@@ -809,7 +809,7 @@ Since 2026-10-25 the women's-rights laws carry no Women's Work Outside the Home 
 among its workers took its place (§ Women's share of the workers, below, which replaces this section's law half).
 
 The migrant profile's two inputs were a `has_law` ladder and a `has_technology_researched` ladder; they are now
-census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems.md`
+census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems/demographics.md`
 § The census, Flows). The values are the old tables', so no figure moves, except that Commercial Aviation and Jet Engine
 Technology now add families too, which moves a late-game state's migrant profile toward families. No new engine fact: a
 state type on a tech's or law's `modifier` read in state scope is check a (option l, 2026-10-10), and a mod tech carrying
@@ -829,7 +829,7 @@ a census type is the Contraceptive Pill's. So no self-check. What only the game 
 The census's own count of women among its workers (`te_dg_fws_wk`; before a count, what the sexes' rates give:
 `te_demog_women_worker_share`) now splits work deaths under Display only as under Full, and sets the labour migrants'
 women's share and Late Marriage's women's-work term under both. The women's-rights laws' Women's Work Outside the Home
-line went, and so did the families' women's-rights term (`docs/systems/mod_systems.md` § The census, Flows). No new
+line went, and so did the families' women's-rights term (`docs/systems/mod_systems/demographics.md` § The census, Flows). No new
 engine fact: the count has run under both settings since phase 2 step 2, and the new value reads script values the
 panel already shows, so no self-check. What only the game can show:
 
@@ -848,7 +848,7 @@ panel already shows, so no self-check. What only the game can show:
 5. **The outline.** The Demographics tab's twenty-year outline splits work deaths by its states' counts, not by the
    owner's law, so under Full it agrees with the states' own Causes of Death rows.
 
-## Wealth Concentration's remaining shocks, r > g and the Inequality effect (2026-10-19)
+## Dynastic Wealth's remaining shocks, r > g and the Inequality effect (2026-10-19)
 
 The financial boom (+5 once a banking cycle reaches Frenzy), the ownership shocks (a state's state-owned share of its
 capital moving 10 points or more in a year: half a point a point, at most ±10), land reform (−10 × each state's
@@ -860,7 +860,7 @@ the ownership term's walk, `has_law_or_variant` (the monetary system's), `on_sta
 banking triggers and the radicals type Concentrated Property carries, so no self-check. What only the game can show:
 
 1. **The boom (any rule, the banking rule on).** A country whose cycle reaches Frenzy: every state's Wealth
-   Concentration jumps 5 that month (a step in the History chart's Wealth Concentration bars, the state subtab's
+   Concentration jumps 5 that month (a step in the History chart's Dynastic Wealth bars, the state subtab's
    score). No second jump while the cycle stays in Boom or Frenzy; after it falls below Boom (a crash takes it to 40 or
    less), the next Frenzy jumps again. Two cases that are by design, not bugs: a Frenzy pulled back below Boom
    without a crash (a rescue with the cycle's tools) re-arms too, so its next Frenzy takes another +5 with no −5
@@ -894,7 +894,7 @@ banking triggers and the radicals type Concentrated Property carries, so no self
 
 A Settlement Authority's moves are booked by their programme's own profile at both ends and taken out of the migration
 residual, its transit dead are known kills, and the US frontier's 1836 seed starts young and male
-(`docs/systems/mod_systems.md` § Demographics, "Internal Resettlement in the census, and the US frontier").
+(`docs/systems/mod_systems/demographics.md` § Demographics, "Internal Resettlement in the census, and the US frontier").
 `test_demographics_resettle.py` holds the script to the model; `demographics_harness.py resettle` and `frontier` print
 what it should do, with the Full effects below. One self-check, `resettle_moves_booked` (table above). Under Display
 only nothing changes outside the census's own figures. **Under Full the census's consequence modifiers follow the new
@@ -955,7 +955,7 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
 
 Both frontier densities (2 and 10 people per km²) and the AI's 0.5 per km² bonus now hold at a world population of one
 billion and scale in proportion to `global_population` (`resettlement_world_population_scale`,
-`mod_systems.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
+`mod_systems/pops_and_migration.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
 shows the numbers.
 
 1. **1836.** In a new game, the Settlement Authority's build requirements on an open frontier (Siberia, the American
@@ -970,7 +970,7 @@ shows the numbers.
 ## The metropolitan share (spec §5.2, 2026-10-19)
 
 A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that
-starts at its target and moves a twentieth of the way there at each yearly count (mod_systems.md § Demographics, "The
+starts at its target and moves a twentieth of the way there at each yearly count (mod_systems/demographics.md § Demographics, "The
 metropolitan share"). It is computed and shown under Display only and Full; its two modifiers and its fertility term act
 under Full only. `test_demographics_metro.py` holds the script's target to `demographics_metro.py` (its twin) term by
 term, the update, the refresh, the fertility term and the Overspill's trigger; `demographics_metro.py` prints the
@@ -1016,7 +1016,7 @@ can show:
 ## Uploaded minds (2026-10-19)
 
 The uploaded-minds spec's build (`docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
-minds in `mod_systems.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
+minds in `mod_systems/demographics.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
 restore to the model; `demographics_harness.py uploads` prints the calibration and the scenarios. One self-check,
 `um_nexus_scaling` (above). Everything here is under Full; a game needs Mind Backups (after Biological Immortality and
 Neural Lace) and a completed Nexus, so an observer run past 2100 or the console's research is the way in. What only the
@@ -1085,16 +1085,16 @@ the engine reads no new fact.
    `workforce_amendment_type` and `workforce_ig_trait_type` read `expected` at the new sizes (the laws' 0.014 or
    0.021, an amendment ±0.007) and 0.014, and still say OK.
 
-## No re-seed on a big move; the province line; Wealth Concentration's growth sample (2026-10-20)
+## No re-seed on a big move; the province line; Dynastic Wealth's growth sample (2026-10-20)
 
 The owner's call of 2026-10-20: a census no longer seeds a state again when its people move more than a quarter in a
 year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
 year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
-rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
+rest flat over everyone as whole families. Dynastic Wealth's ownership shock drops the same rule, and r > g's
 growth average takes each year's growth in log points (a fall and its recovery cancel; the hovers show it as a
 compound annual rate) and replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost
 states and its GDP moved more than a tenth, or a GDP of 0 or below, takes no growth sample and re-bases the GDP. Both
-Wealth Concentration changes run under every Demographics rule. The engine has no merge or split on-action, so a
+Dynastic Wealth changes run under every Demographics rule. The engine has no merge or split on-action, so a
 `TE_INFO` line reports when a state's provinces change.
 `test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
 `test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
@@ -1129,7 +1129,7 @@ line gives no verdict.
 
 ## The safeguards pass: medicine, floors and the life table's tail (2026-10-20)
 
-The owner's calls of 2026-10-20 (`docs/systems/mod_systems.md` § The safeguards pass): chronic treatment to 0.99 with
+The owner's calls of 2026-10-20 (`docs/systems/mod_systems/demographics.md` § The safeguards pass): chronic treatment to 0.99 with
 Genetic Engineering (0.05), Molecular Assemblers and Biological Immortality (0.12 each); no floor on a cause's laws factor
 but 0 (was 0.2); no ceiling on crowding's infection term (was +50%); the means' cap 1 (was 0.95); the life tables' open
 last interval, so late e0 runs into the thousands; the display capped at "over 10,000". `test_demographics_life_tail`,
@@ -1168,7 +1168,7 @@ engine fact (script values and locals as the tables already use), so no self-che
 
 The owner's call: the census's birth and death terms go down to the engine's own per-pop floor, a total of −1 (until
 then −0.8), and lose their ceilings (M's +3, the step's scales' −0.9 and +4). Everything here is under Full; Display
-only and Disabled are unchanged. `docs/systems/mod_systems.md` § Phase 2 step 4 ("The floor"). The owner's 2057 EU
+only and Disabled are unchanged. `docs/systems/mod_systems/demographics.md` § Phase 2 step 4 ("The floor"). The owner's 2057 EU
 game is the test: continue its last save on this build, run a year or two, and compare with the 2057-11-01 figures.
 
 1. **Late deaths at the census's rate.** In the late EU states the mod held at −0.8 (about 260 of them, 1.9 billion
@@ -1197,23 +1197,23 @@ game is the test: continue its last save on this build, run a year or two, and c
 
 ## The owner's follow-ups (2026-10-20)
 
-The hyperinflation crisis's Wealth Concentration shock (every Demographics rule), no cap on the Inequality effect, the
+The hyperinflation crisis's Dynastic Wealth shock (every Demographics rule), no cap on the Inequality effect, the
 Old Southwest and Florida in the 1836 frontier, a note on the state's Deaths Added on Top hover under Private Health
 Insurance and all six chronic carriers in the health bill (the last four under Full only, the frontier also under
-Display only). `docs/systems/mod_systems.md` § Demographics. `test_demographics_wc_shocks.py`,
+Display only). `docs/systems/mod_systems/demographics.md` § Demographics. `test_demographics_wc_shocks.py`,
 `test_demographics_resettle.py`, `test_demographics_rate_floor.py` and `test_demographics_model.py` pin the script. No
 new engine fact, so no self-check: the shock is the banking crash's `te_demog_wc_shock` in an event's `immediate`, and
 the note's scripted GUI reads the owner's law as the panel's other state-scope GUIs do.
 
 1. **The hyperinflation shock (any rule, the banking rule on).** In the console, `event te_inflation.1` on your country
-   (or let a country's inflation reach 50%): every state's Wealth Concentration falls 5 at once (the state subtab's
+   (or let a country's inflation reach 50%): every state's Dynastic Wealth falls 5 at once (the state subtab's
    score, the History chart's bars), and the national figure follows. Each option's tooltip says so: the reform's
    "falls by 5 more", dollarisation's "takes nothing more", riding it out's "falls by 5 again" if the crisis returns.
    Take the currency reform: every state falls 5 more. Ride it out with inflation still at 50% or more: 24 months later
    the crisis fires again and takes another 5. Nothing in `debug.log` from `te_demog_wc_shock` or
    `te_inh_apply_concentration_modifiers`.
 2. **The Inequality effect has no cap (Full).** A state whose shown Gini is above 0.65 lists Census: Inequality above
-   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Wealth Concentration's remaining shocks").
+   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Dynastic Wealth's remaining shocks").
 3. **The Old Southwest and Florida (Display only or Full, a new 1836 game).** Mississippi, Alabama, Louisiana and the
    US's Florida open with more men than women aged 20-59 (about 127, 114, 134 and 144 per 100) and, under Full, Census:
    More Men; Georgia, Kentucky and Ohio open as before (item 1 of "Internal Resettlement in the census, and the US
@@ -1231,9 +1231,9 @@ the note's scripted GUI reads the owner's law as the panel's other state-scope G
 ## The state's Modifiers section (2026-10-21)
 
 The owner's request: the standing modifiers the census gives a state move out of the state panel's modifier rows and into
-a Modifiers section on the state's Demographics subtab, as the Wealth Concentration six moved to their tile. Nine of
+a Modifiers section on the state's Demographics subtab, as the Dynastic Wealth six moved to their tile. Nine of
 them: Census: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City
-and Provincial Neglect. `docs/systems/mod_systems.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
+and Provincial Neglect. `docs/systems/mod_systems/demographics.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
 and `test_demographics_layout.py` pin the script and the markup. No new engine fact, so no self-check; what only the
 game shows is below.
 
@@ -1258,14 +1258,14 @@ game shows is below.
    and the modifier stays on the state, hidden from the rows, until its next yearly pulse takes it off (the effect still
    applies for up to a year). Display only keeps the subtab, so there the section just reads "none" after the pulse.
 
-## Public goods: the health, school and IP laws' Wealth Concentration lines (2026-10-21)
+## Public goods: the health, school and IP laws' Dynastic Wealth lines (2026-10-21)
 
-An eighth term on Wealth Concentration's target (`docs/systems/mod_systems.md` § Wealth Concentration, "Public goods"):
+An eighth term on Dynastic Wealth's target (`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, "Public goods"):
 Private Health Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public
 Health Insurance and Public Schools −5. It is a script-only country type read with `modifier:`, like the economic laws'
 term, so no engine fact is new. Offline the sums and the wiring are tested; the game shows the rest.
 
-1. **The tooltips.** Each of the seven laws shows "Wealth Concentration: Public Goods" with its value (+5, +10 or −5),
+1. **The tooltips.** Each of the seven laws shows "Dynastic Wealth: Public Goods" with its value (+5, +10 or −5),
    the type's hover gives its description, and `debug.log` holds no `Unknown modifier type` for it. Terakoya, Japan's
    variant of Private Schools, reads +5 like its parent.
 2. **The bar (any rule).** The Demographics tab's Wealth section lists a Public Goods bar between Economic Laws and Return
@@ -1280,34 +1280,34 @@ term, so no engine fact is new. Offline the sums and the wiring are tested; the 
    sign, re-centre the values rather than the start.
 5. **`debug.log`:** no error from `te_demog_wc_public_term` or `te_demog_wc_national`.
 
-## Slavery's Wealth Concentration line (2026-10-21)
+## Slavery's Dynastic Wealth line (2026-10-21)
 
 A ninth term on the target: Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave Trade +5, Slavery Banned 0
-(`docs/systems/mod_systems.md` § Wealth Concentration, "Slavery"). The same wiring as Public Goods (above), so no new
+(`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, "Slavery"). The same wiring as Public Goods (above), so no new
 engine fact; the line is flat and national, so it counts the law in force and not the slaves.
 
-1. **The tooltips.** The four laws show "Wealth Concentration: Slavery" with +5 or +10, and Slavery Banned shows nothing.
+1. **The tooltips.** The four laws show "Dynastic Wealth: Slavery" with +5 or +10, and Slavery Banned shows nothing.
    `debug.log` holds no `Unknown modifier type` for it.
 2. **The bar (any rule).** The Demographics tab's Wealth section and a state's Wealth subtab list a Slavery bar between Public
    Goods and Return on Capital, and its hover names the four laws. Enact Debt Slavery (the console): +10; Slave Trade: +5;
    Slavery Banned: the bar reads 0.
 3. **1836's start.** Countries that open under a slavery law (read an 1836 save; the USA, Brazil and several others do) show a
    Slavery bar of +5 or +10, and their national figure should not have moved by more than that. If it looks too heavy for a
-   country with few slaves, the line wants weighting by the state's slaves (`mod_systems.md` says what that takes).
+   country with few slaves, the line wants weighting by the state's slaves (`mod_systems/demographics.md` says what that takes).
 4. **Closing the trade and abolition.** A country that moves from Slave Trade to Legacy Slavery gains 5 on every state's
    target at once (the "heading for" figure), and one that then moves to Slavery Banned loses 10; the scores follow by 3% of
    the gap a year.
 
-## The inheritance laws' Wealth Concentration line (2026-10-21)
+## The inheritance laws' Dynastic Wealth line (2026-10-21)
 
 The inheritance law and its amendments now carry their part of the target as a line,
 `country_wealth_concentration_inheritance_add`, where #822 read them with `has_law` and `has_amendment`; until now only
-each law's on-enact text named its figure (`docs/systems/mod_systems.md` § Inheritance). The values are the old targets less 50, so no figure moves. A
+each law's on-enact text named its figure (`docs/systems/mod_systems/inheritance.md` § Inheritance). The values are the old targets less 50, so no figure moves. A
 script-only country type on an amendment read with `modifier:` is vanilla's own pattern (Reinstated Fueros'
 `country_two_spains_conservative_drift_add`, Tradition of Free Elections' `country_forbid_electoral_fraud_bool`), so no
 engine fact is new.
 
-1. **The tooltips.** Primogeniture & Entail shows "Wealth Concentration: Inheritance Law +30", Freedom of Testation +10,
+1. **The tooltips.** Primogeniture & Entail shows "Dynastic Wealth: Inheritance Law +30", Freedom of Testation +10,
    Forced Heirship −25, State as Universal Heir and Possession by Use −50; Customary Inheritance shows nothing. The
    amendments show it too: Estate Duties −30, the Birthright Endowment −20, Perpetual Dynastic Trusts +30, Undivided Farm
    Succession +10. The type's hover gives its description, the laws' on-enact texts no longer name a number, and
@@ -1363,13 +1363,13 @@ join the war dead, civilians of every age. The self-check `cause_tags_read` is i
 
 ## Stronger demographic effects (2026-10-22)
 
-The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Wealth Concentration
+The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Dynastic Wealth
 (every rule setting) and the census's Inequality, urban pattern, metropolitan share, sex balance and youth bulge (Full),
 now worth about one vanilla law at their reference and rising past it. No self-check: every field is a registered type
 on a modifier with a multiplier, and the bubble line rests on the banking cycle's own scaled script-only modifiers
 (`scripting_best_practices.md`).
 
-1. **The tooltips show the new figures.** Any rule: a state's Wealth Concentration tile lists Concentrated Property at
+1. **The tooltips show the new figures.** Any rule: a state's Dynastic Wealth tile lists Concentrated Property at
    up to +20% investment, political strength from wealth +20%, qualifications −20%, education access −10% (at a score
    of 80); a Forced Heirship country (France) shows Dispersed Property with no investment line. Full: the Urban
    Pattern, Settlement, sex balance and Youth hovers give the new sizes.
@@ -1395,7 +1395,7 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
     provinces Provincial Neglect turmoil of about +28% and their capital about +37% Urban Center throughput. Check
     those countries stay governable; the levers are a lower cap than 2 on the primacy strength, or the reference back
     toward 60%.
-11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
+11. **Observer run to about 1950.** AI stability and law paths under the stronger Dynastic Wealth (AI Britain's
     reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
     stacks (`demographics_harness.py effects SAVE`; an ordinary save works).
 
@@ -1507,7 +1507,7 @@ The owner's new 1836 game under Full (from 17:29, to about 1877) printed these v
 
 No self-check: every read the build makes is proven (`modulo` on the census year, as the open slot's; the GUI's
 `Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
-`mod_systems.md` § The ring's 300 years has the design.
+`mod_systems/demographics.md` § The ring's 300 years has the design.
 
 1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
    2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step
@@ -1589,3 +1589,89 @@ audits. Nothing here rests on an engine fact a script can check, so there is no 
    then its failing conditions and its effect. Standard's says no group reacts.
 9. **The greyed tab.** Before the first census (a country released mid-game), the Population panel's Demographics
    tab is greyed with "#b Demographics#!", "Not open yet. It opens once:" and the census line ticked or crossed.
+
+## The Census Data window's Demographics tab (2026-10-31)
+
+The Census Data window (vanilla's pop browser, `gui/pop_browser_panel.gui`) gains a strip over it: Pops, vanilla's
+window, and Demographics, the census of whichever country the window shows (§ The Census Data window in
+`docs/systems/mod_systems/demographics.md`). For it the country's sections read the `Country` in their context instead of
+`GetPlayer`, which the Population panel's tab now relies on too. Offline: `test_demographics_census_window.py` (the
+override against vanilla's file, the strip, no `GetPlayer` or "our" in what the sections reach, the controls),
+`test_demographics_layout.py` (the three columns) and the GUI lint. These are GUI reads, with no engine fact a script
+can check, so there is no self-check.
+
+1. **The Population panel's tab is unchanged (Full).** Every section shows the player's figures as before, every
+   hover renders (no raw `[Country...]` text, no blank tooltip), and `debug.log` has no `wanted context of type
+   'Country'` or `Failed to fetch variable` lines while the tab is open. This is the change's main risk: the tab now
+   reads the window's `AccessPlayer` context where it read the global `GetPlayer`.
+2. **The strip (Full or Display only).** The Population panel's Census Data button opens the window with two tabs
+   centred over it, Pops selected; vanilla's filters, charts and table are as before. Demographics shows the census
+   in three columns that scroll; Pops brings vanilla's window back. The window reopens on the tab last chosen. With
+   the rule Disabled there is no strip and the window is vanilla's.
+3. **Another country.** Open a foreign country's Census Data window ("French Census Data"): its Demographics tab
+   shows France's figures, not the player's (compare its overview with France's own Population panel figures, the
+   population and the capital's name in the Causes of Death hovers). Its Work and Retirement section has no pension
+   buttons or their grey notes, its Family Policy rows no buttons, and the columns stay aligned.
+4. **What only a played country has.** For an AI country the pyramid draws no pale outline and its legend says the
+   outline is drawn only for played countries; a minor power's History charts each say the census keeps a yearly
+   record only for played countries and major powers; a major power's show its record.
+5. **A state row.** Clicking a state in the window's States, Where People Live or Wealth rows opens that state on its
+   Demographics subtab (note whether the Census Data window stays open behind it).
+6. **The greyed tab.** For a country released mid-game, before its first census, Demographics is greyed and its hover
+   says it opens with the country's first census.
+7. **Wealth's strata incomes (added 2026-10-31).** In the window, Wealth shows the Gini and no Lower, Middle or Upper
+   income cells, for the player's country and another alike; the Population panel's tab still shows all four. With the
+   window's Demographics tab open, `debug.log` has no `PopsOverviewPanel` lines. The first build logged nine a frame
+   there, about 40,000 across debug.log and error.log in two minutes, from those three cells. Note whether the Gini
+   cell, now alone in its row at the left, reads as intended or wants centring.
+
+## RejoovenEsense's longevity care (2026-10-31)
+
+RejoovenEsense, a biotechnology company that unlocks with Biological Immortality, carries the census's market reach
+(+10 levels of wealth, half Unrestricted Augmentation's 20) on its prosperity bonus, and its flagship, the RejoovenEsense
+Compound, carries the census's rejuvenation (+2% a year, workforce-scaled) on its own state. Both are script-only state
+types a country modifier carries to the states, which item 15 of § Phase 3: the late game proved for the laws, so there
+is no self-check. Offline: `prestige_good_roster_audit`, `loc_coverage_audit` and `test_demographics_cause_tags.py` (its
+chronic illness tags).
+
+1. **The tooltips.** The company's prosperity bonus shows "Longevity Care Market Reach +10" and the Compound's method
+   "Rejuvenation +2%", neither a raw key, each hover giving its description.
+2. **The read (Full, late game).** In a country with Biological Immortality and the company prosperous, option u's
+   `reach=` reads 10 more than the laws give (30 under Unrestricted Augmentation) and `threshold=` 10 lower; in the
+   Compound's state, fully staffed, `pull=` reads 0.05 (immortality's 0.03 and the Compound's 0.02). When the bonus
+   lapses (prosperity below 75), `reach=` drops back by 10.
+3. **The logos (icon batch 8).** In the companies panel and on the flagships, RejoovenEsense shows an hourglass with a
+   green sprout growing from its sand, and InGen a mosquito in a disc of amber, each in the bronze emblem frame, not
+   the labeled PLACEHOLDER cards they had before.
+
+## Largest Cities (2026-11-03)
+
+Where People Live lists the country's largest towns by name, above the three states the game's city ranking puts
+first, renamed Largest Urban States (§ Largest Cities in `docs/systems/mod_systems/demographics.md`). The names come from
+the five hub accessors, and `GetMineHubName` is used nowhere in vanilla, so the first check is that every kind of town
+prints a name. Offline: `test_demographics_towns.py` (the generator, each state's order, the country's merge, the rows)
+and the GUI lint, which warns that four of the five accessors are unproven in a `.gui`. The names are GUI reads with no
+engine fact a script can check, so there is no self-check.
+
+1. **Every kind of town prints a name (Full or Display only).** From the game's start (the start's census fills the
+   list, before any state has a settlement share, from the share's target), in a country with many states (the USA,
+   Russia), open the Population panel's Demographics tab and press Show More. Each row shows a town
+   name, the state's name and a figure, and the hover names the town again with its kind ("the port town of …"). Look
+   for at least one capital, one port and one mining town; a state with a large mining or farming workforce is where a
+   mining or farming town leads. No row shows `HUB_NAME_`, an empty name or a raw `[State...]`. If one does, note the
+   kind and the state: a mining town printing nothing means `GetMineHubName` doesn't exist in the GUI, and the
+   fallback is the state's name for that kind in `gen_demog_towns.py`'s `KINDS`.
+2. **The figures look plausible.** In 1836 the capital of each state should lead its towns (Helsingfors in Uusimaa,
+   Stockholm in Svealand) except in a state of mines, farms or forests with few urban jobs. Ten rows of a large country
+   should mix capitals and second towns: a big state's port can outrank a small state's capital. Compare a row's people
+   with the state's urban people and its Settlement share on its subtab: the largest town holds that share of them
+   (in the first year, the share's target, the figure the tooltip says it is heading for). A state with no mines lists
+   no mining town.
+3. **Show All.** The button shows once a fourth town is listed, opens the list to ten and closes it to three, and the
+   Population panel's tab and the National Info window share the setting.
+4. **Another country.** National Info's Demographics tab for a foreign country lists its own towns, and clicking a row
+   opens that state. Then take or release a state the list names: until the next census the row keeps its town and
+   figure from the old owner's count, and `error.log` shows no failed `Var` read (the rows read the list's country,
+   not the state's owner).
+5. **Known, not a bug.** A town keeps the map's name after a player renames it, as every hub accessor does. A state
+   split between two countries gives both owners its hub names.

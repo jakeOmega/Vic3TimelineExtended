@@ -32,14 +32,12 @@ ranking, so in practice you race against the AI powers that hold those places.
 
 ### The Space Program building
 
-The Space Program is a monument in your market capital, and every milestone
-depends on it. It is a single, government-built building with a very high
-construction cost, but you don't have to build it: once you research Guided
-Missiles, the decision Found a Space Program places it in your market capital at
-once, with no construction cost, running Earth Orbit. Either way it can stand
-only in the capital of a market you lead, so a country in another country's
-market can't have one. It is removed if the state stops being your market
-capital, for example when you lose it in a war or join another market. It
+The Space Program is a monument in your capital, and every milestone depends on
+it. It is a single, government-built building with a very high construction
+cost, but you don't have to build it: once you research Guided Missiles, the
+decision Found a Space Program places it in your capital at once, with no
+construction cost, running Earth Orbit. It is removed if the state stops being
+your capital, for example when you lose it in a war or move your capital. It
 employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
 good your Aerospace Industry makes. That weekly bill is what the program really
 costs; the Budget panel's Breakdown tab lists it under Program Costs, in the
@@ -57,7 +55,7 @@ innovation, innovation cap and prestige.
 | Mars Mission | Knowledge Economy | adds Mars Landing | 5,000 |
 | Solar Colonization | Cislunar Infrastructure | adds Solar System Colonization, the Moon and stages 1 and 2 | 10,000 |
 | Deep Space Exploration | Space Colonization | lets a country with no colony beyond the Moon start colonizing at stages 3 to 5 | 50,000 |
-| Interstellar Mission | Muon-Catalyzed Fusion Reactors | adds the Interstellar Probe | 100,000 |
+| Interstellar Mission | Aneutronic Fusion | adds the Interstellar Probe | 100,000 |
 
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
@@ -111,7 +109,7 @@ Program runs a method that supports it.
 | Moon Landing | Orbital Flight | Space Exploration (era 7) | 200 | 6% | ×2 |
 | Deep-Space Probe | Moon Landing | Space Exploration (era 7) | 150 | 6% | ×2 |
 | Mars Landing | Moon Landing | Knowledge Economy (era 9) | 450 | 9% | ×6 |
-| Interstellar Probe | Deep-Space Probe and Mars Landing | Muon-Catalyzed Fusion Reactors (era 12) | 600 | 9% | ×12 |
+| Interstellar Probe | Deep-Space Probe and Mars Landing | Aneutronic Fusion (era 13) | 600 | 9% | ×12 |
 | Interstellar Probe: Awaiting Data | Interstellar Probe | none | 132 months | none | none |
 | Solar System Colonization | Moon Landing (Mars Landing for the sites beyond the Moon) | Cislunar Infrastructure (era 10) | 300 to 800 per colony | 10% | ×8 (×5 before your Mars Landing) |
 
@@ -141,7 +139,7 @@ a note stands in their place. Two sections of its own follow, Space Powers and
 Orbit (see [The Space Race tab](#the-space-race-tab)), and How the Space Race
 Works comes once at the end.
 
-![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Program row, Mission Control with the approach buttons and the funding stepper, and Rivals.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:
@@ -149,8 +147,7 @@ under it:
 | Icon | Reads | Means |
 |---|---|---|
 | Approach | Standard, Safe or Ambitious | The approach in force. Under Safe and Ambitious, their weekly innovation cost, as in −30 a week. |
-| Approach, during a post-setback review | Shielded: 4 mo | No milestone can suffer a setback for the months shown. The approach itself is unchanged. |
-| Setback risk | Risk: 6%/mo | This month's chance of a setback. The icon is faint while it reads 0%. |
+| Setback risk | Risk: 6%/mo | This month's chance of a setback. |
 | The first | First: Open or First: Claimed | Whether the larger reward is still there to win. The icon is faint once another power has claimed it. |
 
 Below them, the Progress bar fills toward the goal. Beside it are your progress,
@@ -169,13 +166,17 @@ share one icon with four pictures: the probe grayed (not begun), the probe with
 a wrench (under way), radio dishes with a clock (launched, awaiting data) and
 the dishes with a check (data received). Hover any icon for its state.
 
-Three sections follow the overview:
+Two sections follow the overview:
 
 | Section | Starts | Shows |
 |---|---|---|
 | Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is grayed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index on the journal entry (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
-| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals, the program, space powers, and satellites and debris. |
+
+The "?" at the top of each milestone's journal entry, and in each milestone's
+header in the Timeline Extended window, opens the Help page, How the Space Race
+Works. It explains approach and pace, funding, setbacks, the first, rivals, the
+program, space powers, and satellites and debris, then solar colonization.
 
 A rival's progress is an estimate. Every rival is listed, furthest along
 first, each with a band reaching 25% of the goal to either side of a marker,
@@ -206,26 +207,39 @@ needs you, with the detail on hover. A word turns red when something is due:
 
 | Cell | Reads |
 |---|---|
-| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 75 or more, which wants self-rule, and how many more do. Hover it for all of them. |
+| Colonies | Loyal, with the colonies you hold; or, in red, the name of a colony at autonomy 50 or more, which wants self-rule, and how many more do. Hover it for all of them. |
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
+| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
+| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
-Solar System Colonization has more sections below Rivals: Colony Fleets,
-Solar System and Colonies, then under Full Colonies Space Command and Space
-Fleets, and How Solar Colonization Works (collapsed), which explains them.
+Below its overview, Solar System Colonization has four tabs, and the one you
+were last on stays chosen while you play:
+
+| Tab | Holds |
+|---|---|
+| Mission Control | Mission Control (with Next Windows) and Rivals, as every milestone has. Shown first. |
+| Fleets | Colony Fleets, then under Full Colonies Space Command and Space Fleets. |
+| Colonies | Colonies. |
+| Solar System | Solar System. The colonies' rules come last on the Space Race's Help page, under How Solar Colonization Works. |
+
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
 dwarf planet). Hovering its name shows the colony's permanent effects, and
-clicking it opens the colony's page: all four views of that colony at once, with
-Back to return to the list. The buttons above the rows switch what each box
+clicking it, or the arrow beside it, opens the colony's page. The page sets out
+People, Modules, Autonomy and (under Full Colonies) Defenses one under another,
+each with its control beside its heading (the settler priority, Clear, Abandon),
+its figures in tiles and every module on a line of its own with its full name,
+with buttons to queue one more level or take one down.
+Back returns to the list. The buttons above the rows switch what each box
 shows:
 
 | View | Shows | Above the rows |
 |---|---|---|
 | People (the default) | Each colony's people and room, its crews and its settler priority | Emigration, settlers a month and your people off Earth |
-| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room and the queue |
+| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
 
@@ -269,6 +283,11 @@ Orbit gathers what anti-satellite strikes and debris mean for you now:
 | Anti-Satellite Strikes So Far | The strikes since the game began. Hover it for who struck whom last, and when. |
 | Anti-Satellite Moratorium | Not Adopted, Bound or Not Bound (see [The anti-satellite moratorium](10-united-nations.md#the-anti-satellite-moratorium)). |
 | Our Anti-Satellite Strike | Ready once you have Guided Missiles and a Space Program. Hover it for what is missing, or for the countries at war with you that have something in orbit to strike, each marked if it was struck in the last 12 months. |
+
+Another country's National Info shows its Space Race tab too, less its
+approach, setback risk, Mission Control, Rivals and strike row. Its progress
+there is an estimate band, a quarter of the goal either side, that your agent
+networks don't narrow.
 
 ### Standard, Safe and Ambitious approaches
 
@@ -320,9 +339,10 @@ milestone is finished it also decides a reward that fades over ten years.
 
 Each milestone has its own funding level, from 0 to six levels past your cap. The cap starts
 at 3 and rises with technology: thirteen space-related technologies from era 7
-to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10) and four
-technologies in era 12 raise it by 2 each. With all of them the cap is 13 by the
-end of era 10, 18 by the end of era 11 and 26 by the end of era 12. Tier V of the
+to era 11 raise it by 1 each, and Cislunar Infrastructure (era 10), three
+technologies in era 12 and Microfusion Cells in era 13 raise it by 2 each. With
+all of them the cap is 13 by the end of era 10, 18 by the end of era 11, 24 by
+the end of era 12 and 26 in era 13. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level up to the cap, on any milestone, adds 0.5 to your monthly pace, and so to
@@ -382,20 +402,18 @@ On an Ambitious approach you get a mission failure: an explosion on the pad, a
 lost probe, a habitat breach, a computer that aborts the landing. Most options
 cost 4 months of that milestone's progress, at the faster Ambitious pace, give Space Mission Failure (−2% prestige
 and −25 innovation cap, fading over five years) and radicalize some academics.
-They also start a six-month safety period during which none of your milestones
-can suffer another setback, although they keep moving at full pace; the panel
-reads Shielded, with the months left, and shows the risk as 0%. One
-option usually adds a Temporary Safety Review, which fades over ten years, and
-in some events also switches the milestone to Safe. Another usually presses on
-with 5 or 6 months lost, more radicals and no safety period.
+One option usually adds a Temporary Safety Review, which slows progress but
+lowers the risk of another setback and fades over ten years, and in some events
+also switches the milestone to Safe. Another usually presses on with 5 or 6
+months lost and more radicals. Every milestone keeps rolling for setbacks the
+month after a failure, as in any other month.
 Now and then the roll brings An Unexpected Breakthrough instead: no progress is
 lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
 On a Safe or Standard approach you get a minor setback: missing parts, bad weather, a
 scandal, a quarrel with a foreign supplier. It costs 1 to 4 months of the
-milestone's progress, usually 2 or 3, with no lasting modifier and no safety
-period. A few setbacks, on any approach, also cut the Space Program's throughput
-for some months. A setback never takes more progress than the milestone has, and
+milestone's progress, usually 2 or 3, with no lasting modifier. A few setbacks,
+on any approach, also cut the Space Program's throughput for some months. A setback never takes more progress than the milestone has, and
 in Solar System Colonization never more than one colony's, so fleets staged in
 orbit are never lost to a setback.
 
@@ -461,8 +479,8 @@ confirms its discovery; the reward is the same.
 ## Colonizing the solar system
 
 Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
-leaves for an unclaimed site: the one you chose with Target in the Solar System
-list (see [Choosing a colony's site](#choosing-a-colonys-site)), or otherwise
+leaves for an unclaimed site: the one you chose as its target (see [Choosing a
+colony's site](#choosing-a-colonys-site)), or otherwise
 one the program picks among those it can reach that month (see [Launch
 windows](#launch-windows)). Under Races Only the program picks a random site of
 the current stage, and the colony is founded the month its fleet leaves. Under
@@ -511,7 +529,7 @@ speed, +10% influence and +15% cultural pull.
 
 The Moon is stage 0, settled before Mars. You can colonize it once your Moon
 Landing is complete, with Cislunar Infrastructure and the Solar Colonization
-method; the sites beyond it wait for your Mars Landing, and a Target button on
+method; the sites beyond it wait for your Mars Landing, and the Target button on
 one says so until then. Its six sites need no launch window
 and no transit: under every setting, a colony fleet bound for the Moon founds its
 colony the month it leaves, and it never takes one of the six places for fleets
@@ -519,19 +537,19 @@ in flight.
 
 | Site | People room | Slots | Base room | Specializations |
 |---|---|---|---|---|
-| Shackleton Crater | 25,000 | 2 | 15 | Propellant Depot, Polar Outpost |
-| Peary Crater | 15,000 | 1 | 10 | Solar Power, Polar Observatory |
-| Tranquility Base | 20,000 | 2 | 20 | Heritage Site, Helium-3 Extraction |
-| Marius Hills | 40,000 | 3 | 25 | Lava Tube City, Hardened Installation |
-| Daedalus Crater | 10,000 | 1 | 10 | Radio Telescope, Deep-Space Relay |
-| Mare Imbrium | 25,000 | 2 | 25 | Mass Driver, KREEP Mining |
+| Shackleton Crater | 25,000 | 2 | 75 | Propellant Depot, Polar Outpost |
+| Peary Crater | 15,000 | 1 | 50 | Solar Power, Polar Observatory |
+| Tranquility Base | 20,000 | 2 | 100 | Heritage Site, Helium-3 Extraction |
+| Marius Hills | 40,000 | 3 | 125 | Lava Tube City, Hardened Installation |
+| Daedalus Crater | 10,000 | 1 | 50 | Radio Telescope, Deep-Space Relay |
+| Mare Imbrium | 25,000 | 2 | 125 | Mass Driver, KREEP Mining |
 
 The landing site your Moon Landing chose (Where the Eagle Shall Land) takes 25% off the
 progress of one lunar colony site, for you alone: Shackleton Crater for a Shackleton
 landing, Tranquility Base for the Sea of Tranquility, Marius Hills for the
 Equatorial Plain and Daedalus Crater for the far side. A site's hover in the
 Solar System list says when the discount is yours. Under Races Only it counts
-when you choose that site with Target, not when the program draws one for you.
+when you choose that site as your target, not when the program draws one for you.
 
 Shackleton's Propellant Depot cracks the crater's ice into rocket fuel. While you
 hold it, with its specialization built and the colony neither blockaded nor
@@ -578,7 +596,7 @@ Propulsion technology loosens the windows step by step:
 | Cislunar Infrastructure (opens colonization) | In a window only. |
 | Asteroid Mining, or Shackleton's Propellant Depot | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
 | Nuclear Thermal Propulsion | Outside a window at a smaller premium, once Asteroid Mining or Shackleton's Propellant Depot lets you launch there at all. |
-| Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+| Compact Fusion Reactors | Any month, with no premium. |
 | Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
 
 The premium is the extra propellant an off-window transfer needs, so it climbs
@@ -601,18 +619,22 @@ flight](#colony-fleets-in-flight)).
 
 ### Choosing a colony's site
 
-The Solar System list in Solar System Colonization has a Target button on each
-unclaimed site your program can send its next fleet to, while the program
-runs. It lists those sites, your own and any a fleet is on its way to; Show
-all lists all 40. Hover a site's name for what it offers: its stage, its two
-specializations, how long your drive takes to reach it, and its next launch
-window. Click Target to choose that site: its row reads Our target, and the
-Colony Fleets section names it, with a Clear button beside it. The next fleet waits for that site's launch window, even
+Colony Fleets, in Solar System Colonization, says where your next colony fleet
+goes. Click Choose there (Change once you have a target) to open the Colony
+Target window. It lists the unclaimed sites your program can send its next fleet
+to this month, under their locations, each with who holds it and its launch
+window (under Simple and Full Colonies, also its slots, its base room and grade,
+and the fleets on their way); Show all
+lists all 40, and a site you can't target says why on its button. Hover a site's
+name for what it offers: its stage, its two specializations and how long your
+drive takes to reach it. Click Target to choose that site: Colony Fleets names
+it, with Clear beside Change, and its row in the Solar System list reads Our
+target. The next fleet waits for that site's launch window, even
 if another site's window opens first. Outside the window it leaves at the
 premium when your approach judges it worth it, weighing the wait for that site's
 own window. Under Simple Colonies and Full Colonies a chosen site costs the
-progress of its own stage. Click Clear on the row to let the program pick again;
-it also picks again when someone else claims the site first.
+progress of its own stage. Click Clear to let the program pick again; it also
+picks again when someone else claims the site first.
 
 Under Races Only you can choose any site of the current stage, or a released
 site of an earlier stage. The colony is still founded the month its fleet
@@ -627,7 +649,7 @@ reach its site, and claims it only when it lands. Your drive sets how long:
 |---|---|---|---|---|---|---|
 | Chemical | (from the start) | In a launch window | 9 months | 33 months | 16 years | 51 years |
 | Fusion | Fusion Power | In a launch window | 2 to 3 months | 7 to 9 months | about 3 years | 11 to 25 years |
-| Fusion torch | Muon-Catalyzed Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
+| Fusion torch | Compact Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
 | Antimatter | Antimatter Production, with an Antimatter Containment Facility built | Any month | 1 month | 1 month | 2 months | 4 months |
 
 Fusion's times are for a departure in the window; a fusion fleet that leaves
@@ -659,7 +681,8 @@ progress it cost. Either way an event tells you.
 
 Under Simple Colonies and Full Colonies, colonies hold people. A colony starts as
 an automated outpost with no one in it, so it grows only once settlers arrive:
-then by about 2.4% a year up to its room, from 10,000 people on the smallest
+then by about 2.4% a year up to its room (3.7% once you have Self-Directed
+Evolution, era 13, whose people are adapted to low gravity and radiation), from 10,000 people on the smallest
 moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
 and Utopia plains. The Colonies section's People view in Solar System
 Colonization sets how many settlers you send from Earth:
@@ -683,8 +706,8 @@ ones you don't want settled to Closed.
 People are crews: the Crews figure counts how many module levels a colony's
 people can run, one for every 5,000. A colony's founding specialization runs
 without a crew. With Artificial General Intelligence colonies need no crews at
-all, and the figure reads AGI. Habitats add room for more people (see [Colony
-modules](#colony-modules)).
+all, and the figure reads AGI. Habitats, and Terraforming on the worlds that
+take it, add room for more people (see [Colony modules](#colony-modules)).
 
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
@@ -702,6 +725,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports, Defenses and facilities: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
+| Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | The colony's slots, up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
 | Facilities | See the table below | The colony's slots |
@@ -711,7 +735,7 @@ colonies:
 
 | Facility | A staffed level gives |
 |---|---|
-| Mining Complex | +10 Extraplanetary Base room at the colony |
+| Mining Complex | +50 Extraplanetary Base room at the colony |
 | Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month |
 | Research Station | +2% research speed |
 | Cultural Center | +3% cultural pull, +1% prestige |
@@ -725,19 +749,46 @@ colonies:
 A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
 occupied colony's facilities give nothing.
 
-A colony has 1 to 4 slots by its size, and one more each with Advanced
-Nanofabrication and Molecular Assemblers. Past them it still takes up to four
-more modules, each costing 100 fabrication points more than the last: 200, then
-300, 400 and 500. The Modules view's Slots figure turns red past them, and its
-hover gives the next module's price.
+Terraforming (an era 13 technology, after Space Colonization and
+Geoengineering) works the world itself, on the five Martian sites, the Venus
+cloud habitat, Titan, Ganymede and Callisto. Each staffed level adds 4% of the
+colony's starting room for people a year. Up to three work at a colony at once,
+so a world takes at least 25 years to finish, at +300%, where a Habitat gives
++50% at once and holds its slot for good. The room the work has added belongs
+to the world: it stays when the colony changes hands, is released, or takes a
+level down. A finished world's Terraforming levels stand down and free their
+slots. An occupation stops the work, and a colony short of crews works at its
+staffing share. Once you have the technology, the Modules view shows a
+Terraforming line under the facilities, with the room added so far and the
+years to go at this month's pace; the colony's page shows the same in its
+Terraformed tile.
+
+A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
+Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
+and Molecular Assemblers, whose tooltips list Colony Module Slots. Past them it
+still takes up to four more modules, each costing 100 fabrication points more
+than the last: 200, then 300, 400 and 500. The Modules view's Slots figure turns
+red past them, and its hover gives the next module's price. Solar System shows
+each site's slots and Extraplanetary Base room under its name, so you can weigh
+a site before you settle it.
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
 module queue, counting what is already queued and on its way against the
 colony's room, and its last button takes all of that colony's modules out of
 the queue. The queue holds up to 20 modules and is listed in order above the
-rows, each with a button that removes it. You can't take a module down once it
-is built.
+rows, each with a button that removes it.
+
+On a colony's page, the minus button beside a module takes one level of it
+down. That takes 12 months, one level at a time at each colony, and the module
+works until it comes down; a line under its name counts the months left. A
+blockade pauses the count, and losing the colony, or its occupation, ends it
+with the level still standing, so a colony can't be stripped bare once a rival
+moves on it. The founding specialization keeps its first level. A Habitat can't
+come down while the colony's people need its room, and while one comes down the
+colony takes in no more people than the room it will have. Pressing the button
+again stops the work; the months spent are lost. The freed slot takes a new
+module once the level is gone.
 
 Modules are built at Earth by your Space Program's third production method
 group, Module Fabrication, which starts on No Module Fabrication:
@@ -746,7 +797,7 @@ group, Module Fabrication, which starts on No Module Fabrication:
 |---|---|---|---|
 | Orbital Assembly | Cislunar Infrastructure | 1,500 and 10 | 5 |
 | Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
-| Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
+| Fusion Shipyards | Compact Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
@@ -775,9 +826,9 @@ values a colony more for each of them. An AI that holds a colony, or is in the
 top three, queues one module a year at each colony when it has money to spare:
 a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
-a facility: an Administration where autonomy has reached 50, a Mining Complex
-when its bases outgrow their room, a Nuclear Command Center with nuclear
-weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
+a facility: an Administration where autonomy has reached 25 and is heading for 45
+or more, a Mining Complex when its bases outgrow their room, Terraforming once its
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
 runs the best fabrication method it has while anything is queued, never builds
 Spaceports or Defenses, and never pays for a module past a colony's slots.
 
@@ -785,10 +836,10 @@ Spaceports or Defenses, and never pays for a module past a colony's slots.
 
 Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. With
 Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
-and each colony you hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche,
-and 10 more for each staffed level of its Mining Complexes.
-Each colony's room has a grade, which raises or lowers the output of the levels
-that work it:
+and each colony you hold adds its own, from 50 levels on the small outer moons to 300 at 16 Psyche,
+and 50 more for each staffed level of its Mining Complexes.
+Each colony's room has a base grade (Base Grade, a term you can hover in game),
+which raises or lowers the output of the levels that work it:
 
 | Sites | Grade |
 |---|---|
@@ -803,14 +854,18 @@ that work it:
 | The Kuiper Belt | −35% to −45% |
 
 Your levels fill the best room first, and any past all of your room work at
-−50%. Before Asteroid Mining, a country with no colony has no room at all. One
+−75%. Before Asteroid Mining, a country with no colony has no room at all. One
 country modifier, Extraplanetary Base Room, carries the average over
 all your levels, so only the levels past the room pay the penalty: with room for
-10 and 20 levels built, the base works at −25%. A new poor colony adds room
+10 and 20 levels built, the base works at −37.5%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
-colony raises your average and lowers theirs. The Colonies section's Modules
-view shows your levels against your room, and each colony's Bases figure its
-own room, with its grade on hover. Private investors don't build past your room,
+colony raises your average and lowers theirs. The overview's Base Room cell
+shows your levels, built and queued, against your room and the grade the next
+level would work at, counting the levels you have queued; that grade updates
+monthly and the day after a level finishes, except that it reads −75% at once
+when your queue passes all of your room. The Colonies section's Modules view shows
+your levels against your room, any queued, and each colony's Bases figure its
+own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under
 Races Only, bases have no room limit.
 
@@ -880,13 +935,13 @@ the terms that move that colony. It changes every month:
 Settling makes autonomy level out rather than climb for ever: a colony settles at
 100 times the sum of its other terms, and the hover shows where. A colony whose
 terms add up to +0.3 a month settles near 30; one demands self-government only
-when they reach +0.75, as for a large colony far out that is also at war or out
-of contact. A Mars colony that keeps receiving settlers stays near 0. Better
+when they reach +0.5, as for a colony far out that goes a year without contact,
+or a large one at war. A Mars colony that keeps receiving settlers stays near 0. Better
 drives bring the outer colonies closer: with a fusion torch the distance all but
 disappears. Keep settlers or modules arriving, on Low emigration if nothing
 else, so that no colony goes a year without contact.
 
-At 75, the colony demands self-government, once in five years at most, and you
+At 50, the colony demands self-government, once in five years at most, and you
 choose:
 
 | Choice | Now | After |
@@ -982,15 +1037,17 @@ here exists under Simple Colonies.
 
 ### Space Command
 
-Space Command is a government building, unlocked by Space Militarization and
-built only in a state with a Space Program. Each level builds fleet strength
-every month, by its production method:
+Space Command is a government building, unlocked by Space Militarization. A
+nation runs one: the first is built in a state with a Space Program, and while
+you have one the build menu refuses another, with the reason, so after moving
+your capital you keep expanding the one you have where it stands, or demolish it
+first. Each level builds fleet strength every month, by its production method:
 
 | Method | Technology | Strength a level a month |
 |---|---|---|
 | Orbital Shipyards | Space Militarization | 0.5 |
 | Fusion Yards | Fusion Power | 1 |
-| Torch Yards | Muon-Catalyzed Fusion Reactors | 1.5 |
+| Torch Yards | Compact Fusion Reactors | 1.5 |
 | Antimatter Yards | Antimatter Production | 2 |
 
 The figure is scaled by staffing, and the method's tooltip shows it as Fleet
@@ -1007,10 +1064,30 @@ the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit
 | Assault carrier | 0.25 | 0.25 | 12 | Carries 2 marine battalions a point of strength |
 | Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
 
-Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
-points of strength at full, the reserve's included. A large fleet makes the
-yards dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
-Production each raise your fleets' fire by a quarter.
+Every Space Command uses a maintenance line, the same whatever its method and
+however many levels it has: 20 Electronic Components, 20 Wired and 20 Wireless
+Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
+week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
+that line for every 10 points of strength at full, the reserve's included, so a
+fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
+method or cutting levels doesn't lower it. If annexed or formed land brings a
+second Space Command, the smaller of the two is dismantled, whichever it is (on
+a tie, the one outside your capital), and you are told. A large fleet
+makes Space Command dearer to run; it builds as fast while those goods can be
+bought.
+Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
+raise your fleets' fire by a quarter.
+
+Pause, beside Launch and Auto, stops construction at once: neither Space
+Command nor your colonies' Orbital Yards build fleet strength, Built a month
+reads Paused, and the yards buy no Launch Capacity, Advanced Materials or
+electricity. The maintenance line and the upkeep are still paid, and your
+fleets, Launch and Auto work as before. Resume waits for the next month's
+construction, which builds nothing; the button reads Resuming until then, and a
+click cancels it. From that month the yards buy their inputs again, and the
+month after builds. A month is built in one go, so it is built only if the
+yards bought their inputs all month. Pausing costs the inputs bought since the
+last month's construction, so pause just after Built a month changes.
 
 ### Moving fleets
 
@@ -1022,11 +1099,19 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 
 | Order | What it does |
 |---|---|
-| The destination button | Steps through the other locations; its hover gives the trip's months and propellant |
-| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows), when its propellant doesn't cover the trip, or from Earth while Earth is blockaded or your launch site occupied |
-| Merge | Joins another of your fleets at the same location |
-| Detach | Splits half of each role into a new fleet |
+| The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window, your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
+| Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
+| Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
+
+Your fleets take orders only while you have a Space Command level in a state
+you control. Without one, none can leave, change posture or target, start a
+refit or be repaired, and a refit under way pauses; Space Fleets says so above
+its rows. Fleets already on their way land, every fleet fights where it is at the
+posture it had, at half strength, and a docked fleet still takes on supply,
+propellant and marines. Demolishing Space Command ends the upkeep and grounds
+your fleets: one at Earth still fights there at half strength and keeps Earth
+from being blockaded, but can't leave or be repaired.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
@@ -1041,7 +1126,9 @@ with the months until it arrives.
 ### Battles in space
 
 Each month, fleets of countries at war fight at every location where they meet.
-What a fleet fights depends on its posture, set by the posture button:
+What a fleet fights depends on its posture, set by the four posture buttons under its
+orders. The one in force is lit, and one the fleet can't take is grayed, its
+hover saying why:
 
 | Posture | Fights | Use it to |
 |---|---|---|
@@ -1050,13 +1137,20 @@ What a fleet fights depends on its posture, set by the posture button:
 | Close in | The target site's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its site | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
+The target button beside them opens Fleet Target: the sites where the fleet is,
+with their holders, and Target on each, grayed with the reason where the fleet's
+posture can't take that site. Closing in on a site needs it to be an enemy's, a
+free colony or yours under an enemy's occupation; interdicting, a country's at
+peace with you that is not your ally. Choosing Close in or Interdict without such
+a target takes the first site there that fits.
+
 At Earth every fleet is stationed and fights every enemy fleet, an Orbital
 Battlestation fights for its owner (25 strength a level, regaining 10% a month;
 none in a state its owner doesn't control), and so do its ground-to-orbit
 batteries (see [Holding Earth orbit](#holding-earth-orbit)). The one exception
-is a fleet closing in on a colony on the Moon: the posture button at Earth
-steps between Station and Close in while there is a lunar colony you can close
-in on (an enemy's, a free one, or yours under an enemy's occupation). A fleet
+is a fleet closing in on a colony on the Moon: at Earth the posture buttons show
+while there is a lunar colony you can close in on (an enemy's, a free one, or
+yours under an enemy's occupation), and only Station and Close in can be chosen. A fleet
 closing in there takes fire from every enemy fleet, battlestation and battery at
 Earth, and no longer guards your own lunar colonies, which can't be seized or
 destroyed while a fleet of yours or your Orbital Battlestation is stationed at
@@ -1103,7 +1197,7 @@ You can blockade a rival's colonies without going to war, as the United States
 quarantined Cuba in 1962. Send a fleet to a location other than Earth where a
 country at peace with you, and not your ally (no alliance or defensive pact),
 holds a colony, and
-step its posture to Interdict; the target button picks which country's site.
+set its posture to Interdict; the target button picks which country's site.
 While none of that country's fleets is stationed or standing off there, its
 colonies at that location are blockaded as an enemy's would be, and its
 Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,
@@ -1142,6 +1236,18 @@ blockade or not. A blockade therefore faces everything you have built since it
 began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
 
+You hear of each fleet of a country at war with you that is on its way to
+Earth, once a leg, within a month of its setting out, or of a war beginning with
+it already on its way. A notice in the feed tells you of one whose landing would
+change nothing. A popup, Earth Is Threatened, tells you once of one whose
+landing would tip the balance: it would find no fleet of yours at Earth (and
+Earth not blockaded already), or yours holds against what is there now but not
+against that and what is coming. That can come later in the leg too, if your
+fleet leaves Earth or theirs grows. One popup a month covers every such fleet
+that month, and the others you hadn't heard of get the feed notice. The
+overview's Hostile Fleet cell shows the first landing; hover it for each
+country's fleets on their way.
+
 Ground-to-orbit batteries are a government building, unlocked by Space
 Militarization and built in any state. Each level fires on every enemy fleet at
 Earth every month and takes no losses:
@@ -1162,8 +1268,9 @@ orbits they can't reach.
 At war, holding Earth orbit supports your troops: while your fleets at Earth
 outmatch the enemy's there, or face none, you get Orbital Superiority, up to
 +10% offense and +5% defense for your units. It grows with the margin, and is
-full when you have twice the enemy's strength at Earth, or 10 against none. It
-stands beside the anti-satellite strike's Orbital Network Disrupted.
+full when you have twice the enemy's strength at Earth, or 10 against none;
+without a Space Command your fleets count half. It stands beside the
+anti-satellite strike's Orbital Network Disrupted.
 
 Nothing is launched, built or fired from a state its owner doesn't control.
 While your Space Program's state is occupied, nothing leaves Earth, no module is
@@ -1192,7 +1299,9 @@ fleets at Earth stay stationed. An AI never destroys a colony, never attacks a f
 interdicts. With an enemy fleet at Earth, it launches its reserve once the
 reserve and its fleets at Earth match the enemy's there. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs
-Ground Lasers at war, and in peace once debris is Cluttered.
+Ground Lasers at war, and in peace once debris is Cluttered. An AI in default,
+or in deficit while at peace, pauses Space Command's construction, and resumes
+once out of default with a surplus, or at war, after six months at least.
 
 ## After the space race
 
@@ -1274,7 +1383,7 @@ taking it from the high orbits first, and adds a little prestige:
 |---|---|---|---|
 | Active Debris Removal | Reusable Rocketry | 300 | 0.05 |
 | Laser Broom | Directed Energy Weapons | 300, and 500 electricity | 0.15 |
-| Fusion Sweepers | Muon-Catalyzed Fusion Reactors | 150 | 0.5 |
+| Fusion Sweepers | Compact Fusion Reactors | 150 | 0.5 |
 
 Each fully staffed Space Elevator level raises what you remove by 10%, up to
 +100% at ten levels, and its Launch Capacity makes every method cheaper in your

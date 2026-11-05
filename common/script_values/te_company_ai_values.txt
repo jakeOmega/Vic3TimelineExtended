@@ -1,5 +1,5 @@
 ﻿# Company AI tuning. One place for the numbers the company files and the
-# failing-company pulse read; see docs/systems/mod_systems.md § "Company AI".
+# failing-company pulse read; see docs/systems/mod_systems/ai.md § "Company AI".
 
 # ai_weight of a company type (country scope). The engine picks the next
 # company to work toward among those whose ai_will_do holds, by weight times

@@ -13,6 +13,7 @@ import unittest
 from paradox_file_parser import ParadoxFileParser
 from test_cultural_hegemony_layout import _type_body
 from test_history_chart_tooltip_context import _closure, _data_roots, _load_loc
+from gui_test_helpers import history_charts
 
 ROOT = Path(__file__).parent
 
@@ -248,7 +249,9 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
     def test_gui_palette_order_shared_binding_and_historical_tooltips(self):
         gui = read("gui/journal_entry_widgets/cultural_hegemony_widget.gui")
         history = _type_body(gui, "te_ch_sec_history")
-        chart = history[history.index("te_history_chart = {"):]
+        # the chart is its generated wrapper's (gen_te_history_charts.py), instanced once
+        self.assertEqual(history.count("te_hist_ch_models = {}"), 1)
+        chart = history_charts(history)[0]
         plot = chart[chart.index('blockoverride "sample_datamodel"'):chart.index('blockoverride "plot_layouts"')]
         self.assertIn("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')", plot)
         # The plot blocks sit on the te_history_chart instance, as in every
@@ -266,11 +269,14 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
             for actual, target in zip(rgb, want):
                 self.assertAlmostEqual(float(actual), target, places=6)
         # The legend names each model as the models legend does, the short name
-        # with the full one and its laws on hover (CH-12).
-        self.assertEqual(re.findall(r'text = "je_ch_ov_model_(\w+)"', history), MODELS)
-        self.assertEqual(re.findall(r'tooltip = "ch_model_((?!hist_)\w+)_tt"', history), MODELS)
-        self.assertNotIn("te_hist_mk", plot + history)
-        self.assertNotIn("'te_hist_range'", plot + history)
+        # with the full one and its laws on hover (CH-12). It is a type of its
+        # own, te_ch_hist_model_key, the section's and the chart viewer's.
+        self.assertEqual(history.count("te_ch_hist_model_key = {}"), 1)
+        key = _type_body(gui, "te_ch_hist_model_key")
+        self.assertEqual(re.findall(r'text = "je_ch_ov_model_(\w+)"', key), MODELS)
+        self.assertEqual(re.findall(r'tooltip = "ch_model_((?!hist_)\w+)_tt"', key), MODELS)
+        self.assertNotIn("te_hist_mk", plot + history + key)
+        self.assertNotIn("'te_hist_range'", plot + history + key)
         loc = _load_loc()
         for key in _closure("ch_model_hist_tt", loc):
             self.assertLessEqual(_data_roots(loc[key]), {"ScriptContainer"})
@@ -280,10 +286,10 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         # A full 5 / 20 / 100 years reaches from the axis labels to the frame's
         # right edge: the bars once filled 400 of the monthly charts' 496px and
         # left ~90px empty on the left. Integer bar widths must divide evenly
-        # (mod_systems.md, History Store and Charts), and the bars sit 6px clear
+        # (mod_systems/history_charts.md, History Store and Charts), and the bars sit 6px clear
         # of the frame top and bottom, where the axis labels are placed.
         history = _type_body(read("gui/journal_entry_widgets/cultural_hegemony_widget.gui"), "te_ch_sec_history")
-        chart = history[history.index("te_history_chart = {"):]
+        (chart,) = history_charts(history)
         frame = re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart)
         self.assertIsNotNone(frame, "the chart no longer sizes its frame to its 400px of bars")
         width, height = map(int, frame.groups())

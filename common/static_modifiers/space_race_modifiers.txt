@@ -349,30 +349,48 @@ sr_dome_breach_repairs = {
 
 # Extraplanetary Base room (colony modules design § 9): unit country modifiers,
 # one at a time, at multiplier = the average grade of the country's base levels
-# in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
+# in percent, past its room at -75%. The one refresh site is sr_ebase_refresh
 # (sr_colony_module_effects.txt), monthly from the country pulse.
 # ======= Solar System Colonization - fleets (slice 6;
 # docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
 # The fleets' upkeep: on each Space Command building, never the country (the
 # input multipliers are building-masked and would raise every building's use),
 # at sr_fleet_upkeep_units (full fleet strength in service / 10), its one
-# refresh site sr_fl_upkeep_refresh. +1% of the building's input goods a unit,
-# so a bigger fleet costs more and builds no faster. sr_fleet_upkeep_goods, the
-# three good-specific multipliers the mod registers, is the live one;
-# sr_fleet_upkeep, the generic building_goods_input_mult (one line for every
-# input, following the methods), waits on the upkeep_inputs probe
-# (te_debug_space_race.6): the owner recalls trouble with it, and nothing in
-# the repo says what. test_space_fleets.py keeps the goods list in step with
-# the methods' inputs.
+# refresh site sr_fl_upkeep_refresh. sr_fleet_upkeep_goods, the live one,
+# multiplies the six goods of the methods' identical unscaled maintenance line
+# (sr_space_command_pms.txt) by +900% a unit, so a bigger fleet costs more and
+# builds no faster, and the upkeep follows neither the method nor the levels
+# (Space Race UI pass design § 10, owner, 2026-10-31: ten times the old +1% of
+# every method input, the factor of ten in the line's base so the tooltip reads
+# +900% a unit). Six goods, so one shortage or glut can't make it very cheap or
+# very dear. A nation runs one Space Command (sr_sc_one_per_nation dismantles
+# any other first), so it carries all the units. test_space_fleets.py keeps
+# the goods in step with the line.
 sr_fleet_upkeep_goods = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.01
-	goods_input_advanced_materials_mult = 0.01
-	goods_input_electricity_mult = 0.01
+	goods_input_electronic_components_mult = 9
+	goods_input_telephones_mult = 9
+	goods_input_radios_mult = 9
+	goods_input_digital_assets_mult = 9
+	goods_input_robotics_mult = 9
+	goods_input_fertilizer_mult = 9
 }
-sr_fleet_upkeep = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_goods_input_mult = 0.01
+
+# Space Command paused (owner, 2026-10-31): while a country's construction is
+# paused (sr_sc_paused, a country variable), each of its Space Command
+# buildings of a level or more carries this, cutting the three goods the yard
+# methods' workforce-scaled inputs use (sr_space_command_pms.txt) by 100%, so
+# a paused yard buys none of them; sr_sc_month builds nothing meanwhile. The
+# maintenance line and the fleets' upkeep (sr_fleet_upkeep_goods) are on six
+# other goods and stay. These three multipliers were the old upkeep's, seen in
+# game. Derived from the variable: its one apply site sr_sc_pause_apply,
+# removed first, from sr_sc_month and the toggle (sr_sc_toggle_pause). A
+# building modifier, under NOT_ON_COUNTRY in gen_nation_tab.py.
+sr_space_command_paused = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_input_launch_capacity_mult = -1
+	goods_input_advanced_materials_mult = -1
+	goods_input_electricity_mult = -1
 }
 
 # Orbital fire support (fleets design § 15, 6d): at war, a country whose

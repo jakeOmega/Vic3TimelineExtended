@@ -403,6 +403,8 @@ sr_resume_solar_colonization = {
 		if = {
 			limit = { NOT = { has_variable = sr_active_solar_colonization } }
 			set_variable = { name = sr_active_solar_colonization value = yes }
+			# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+			sr_power_fuzz_first = { MILESTONE = solar_colonization }
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_progress_solar_colonization } }

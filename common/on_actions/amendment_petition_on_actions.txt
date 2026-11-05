@@ -21,7 +21,7 @@
 #  On top of the roll, te_ap_window_open holds back every petition for
 #  five years after the last one, and each event has a twenty-year
 #  cooldown of its own.
-#  Docs: docs/systems/mod_systems.md § Amendment Petitions.
+#  Docs: docs/systems/mod_systems/amendments.md § Amendment Petitions.
 # ======================================================================
 
 # Root = Country

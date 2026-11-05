@@ -21,6 +21,7 @@ nd_crisis_deadline_public_weeks = 8     # a public ultimatum's deadline
 nd_crisis_deadline_extension_weeks = 6
 nd_crisis_max_weeks = 52                # a crisis older than this expires
 nd_crisis_pressure_interval_weeks = 6   # target's pressure event cadence
+nd_crisis_notice_talks_weeks_value = 6  # talks an exercise notice opens (nuclear_incident.10.a, .12.a): as long as an exercise runs
 nd_crisis_transit_weeks_value = 3       # weeks the clock waits for the threat to reach the target (it arrives after 14-21 days)
 nd_crisis_cooldown_months_value = 24    # no second crisis with the same country
 nd_readiness_lock_months_value = 24     # a conceded or agreed stand-down
@@ -1343,10 +1344,7 @@ nd_cd_weeks_value = {
 nd_cd_talks_value = {
 	value = 0
 	if = {
-		limit = {
-			has_variable = nd_crisis_talks
-			var:nd_crisis_talks = 1
-		}
+		limit = { nd_crisis_talks_open = yes }
 		subtract = 15
 	}
 }
@@ -2358,6 +2356,23 @@ nd_believed_stockpile = {
 	if = {
 		limit = { nd_believed_armed = yes }
 		value = nd_display_public_estimate
+	}
+}
+
+# The public estimate as a panel shows it to the world: another country's
+# National Info cell and Nuclear Powers' rows. The estimate once the world has
+# one (nd_public_estimate, seeded by nd_init_posture), 0 before it is seeded and
+# while it is unset, and 0 for a country the world doesn't believe armed.
+# Display only: unlike nd_display_public_estimate and nd_believed_stockpile,
+# which script reads, it never falls back to the live count.
+nd_shown_public_estimate = {
+	value = 0
+	if = {
+		limit = {
+			nd_believed_armed = yes
+			has_variable = nd_public_estimate
+		}
+		value = var:nd_public_estimate
 	}
 }
 

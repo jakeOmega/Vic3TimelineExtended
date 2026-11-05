@@ -137,6 +137,7 @@ weight, so for a typical great power each point is one point of target.
 |---|---|
 | Rules of War law | Total War −2, Traditional Rules of War 0, War Crimes Forbidden +0.5, Humanitarian Regulations +1, Limited War +1.5 |
 | Isolationism (trade policy) | −1.5 |
+| International Oversight (Frontier AI Control law, members only; see [Laws on state power and information](06-politics.md#laws-on-state-power-and-information)) | +0.5 |
 | Ministry of International Aid | +0.15 for each level of investment (+1.35 at the cap of 9) |
 | Nuclear doctrine | No First Use +0.5, Existential Deterrence 0, Flexible First Use −0.5, Nuclear Compellence −1, Nuclear Warfighting −1.5 |
 | The Burden of the Bomb | Up to −1, in step with your arsenal's burden |
@@ -276,12 +277,14 @@ vetoed, Our Record shows your veto record and the case for expelling you.
 
 The floor takes one resolution at a time, and each is open for a year. The
 proposer's own vote counts in favor. Human members can vote in the chamber at
-once and receive the UN General Assembly Vote event after 30 days. Its "We will
-decide later." option closes the event without voting, and it comes back in the
-ninth and eleventh months of the session. AI members vote late: each votes in the
-ninth, tenth or eleventh month, drawn at random, by its lean at that time. An AI
-member that still has not voted (one that joined late, for example) votes in the
-last month of the session. After a year, General Assembly Vote Results applies the
+any time. Those that haven't voted yet receive the UN General Assembly Vote event
+once, in the ninth month of the session. Its default option, "We will decide
+later.", closes the event without voting, so an event left to time out casts no
+vote. After that, the chamber's buttons are the only way to vote, and a member
+that never uses them abstains. AI members vote late too: each votes in the ninth,
+tenth or eleventh month, drawn at random, by its lean at that time. An AI member
+that still has not voted (one that joined late, for example) votes in the last
+month of the session. After a year, General Assembly Vote Results applies the
 outcome.
 
 Most topics pass by **Majority**: the votes in favor outnumber those against.
@@ -988,7 +991,8 @@ delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
 
 Each row in Missions in the Field shows the mission's progress as a bar, with
-its month and strength beside it. Any major-power member not under sanctions
+its month and strength beside it, and its contributors' flags, the largest
+economies first. Any major-power member not under sanctions
 can press Send a Contingent on a mission's row, if it is not the host, not at
 war with it and has not left that mission before; a country that can send none
 anywhere sees one line saying why, and electoral missions take no contingents.
@@ -1014,7 +1018,7 @@ Development Fund section.
 |---|---|---|---|
 | Peacekeeping | Major power | 0.5% of GDP a year, 100 influence, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Development Programs | The World Development Fund founded; you pay your dues and draw no grant | 0.0625% to 1% of GDP a year, by [size](#development-programs-sizes) | Faster infamy decay, prestige, lobbying with the Fund's recipients; the money pays the Fund's grants |
-| Human rights champions | Universal Citizenship, Universal Suffrage or Protected Speech | 100 influence | Prestige, refugee ministry impact |
+| Human rights champions | Universal Citizenship, Universal Suffrage, Liquid Democracy or Protected Speech | 100 influence | Prestige, refugee ministry impact |
 | Arms control | War Crimes Forbidden, Humanitarian Regulations or Limited War | 100 influence, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
 Great powers can also Champion the Order or Undermine the Order, under the
@@ -1126,7 +1130,7 @@ collapsed when they are reference:
 |---|---|---|
 | General Assembly | Open | The resolution in session: a tally bar (green for, gray not yet voted, red against, with a line at two thirds for the topics that need it) and how many of its twelve months have run, then your vote or the vote buttons and your lean (hover it for its terms), then the topic, the parties, what it does if it carries and the grounds. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
 | Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers with Champion the Order or Undermine the Order, and the newest ledger entries (collapsed). |
-| Missions in the Field | Open | A row for each mission, with its progress bar and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
+| Missions in the Field | Open | A row for each mission, with its progress bar, its contributors' flags and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
 | Programs and Conventions | Open | How many countries take part in each program and convention, whether you do, with Join or Leave for a program, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take, with Propose the Mandate. |
 | Our Obligations | Open | Your dues, with Withhold Our Dues or Pay Our Dues, beside the budget as a table (all members' dues and what the Standing UN Force, the World Development Fund and the lending facility take), your pledge to the World Food Reserve with Pledge Grain or Withdraw Our Pledge, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
@@ -1134,7 +1138,9 @@ collapsed when they are reference:
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | A row for each closed resolution, its title and how it ended, with the rest of its card on hover; Voting Details adds how each member voted. |
-| How the UN Works | Collapsed | The explanations: authority, standing, missions, delegations, dues and the record. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How the UN Works. It explains authority, standing,
+missions, delegations, dues and the record.
 
 ## How the AI uses the UN
 

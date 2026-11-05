@@ -207,7 +207,7 @@ sr_fl_gather_at = {
 		}
 		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
 		set_local_variable = { name = sr_cb_s value = sr_fl_$N$_strength }
-		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality } }
+		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
 		if = {
 			limit = { local_var:sr_cb_p = 1 }
 			sr_cb_add = { VAR = sr_cb_s1 AMOUNT = local_var:sr_cb_s }
@@ -231,8 +231,9 @@ sr_fl_gather_at = {
 }
 
 # The slot's target world KEY (it closes in on it): its strength, its fire on
-# defences (x quality, x Survey Colony Defences' edge against the holder), and
-# its marines to seize or its fire to destroy.
+# defences (x quality, x readiness, half without a Space Command, x Survey
+# Colony Defences' edge against the holder), and its marines to seize or its
+# fire to destroy.
 sr_cb_add_target = {
 	sr_cb_add = { VAR = sr_cb_s3_$KEY$ AMOUNT = local_var:sr_cb_s }
 	set_local_variable = {
@@ -240,6 +241,7 @@ sr_cb_add_target = {
 		value = {
 			value = sr_fl_$N$_fire_defences
 			multiply = sr_fleet_quality
+			multiply = sr_fleet_readiness
 			multiply = sr_cb_edge_$KEY$
 		}
 	}
@@ -1097,52 +1099,22 @@ sr_site_lunar_blockade_step = {
 }
 
 # ---- Orders (design §§ 7, 9, 12) ------------------------------------------------------------------
-# Country scope (sr_fleet_sguis.txt, $N$): the posture steps Station, Stand off,
-# Close in, Interdict. Closing in needs a target: the first hostile world at the
-# location when none is set (sr_fl_<n>_has_hostile_world); with none, it is
-# skipped. Closing in on a free colony begins the price (§ 9.4) once per fleet
-# and world. Interdicting (6c, § 12) needs a world of a country at peace with
-# us and not our ally (sr_fl_<n>_has_interdict_world), the first such when the
-# target is not one; it begins the interdiction's price (sr_cb_charge_interdict)
-# once per fleet and target. With neither, it goes back to Station. At Earth
-# (lunar colonization § 8.1) it steps Station and Close in alone: Close in on a
-# lunar world, while one there is hostile; never Stand off or Interdict.
-sr_fl_step_posture_at = {
-	set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
+# Country scope (sr_fleet_set_posture_sgui, UI pass design § 7; $N$): the
+# posture buttons set scope:pick's posture at once. Close in takes the first
+# hostile world here as its target unless its target is one (the hostile step,
+# sr_fl_step_hostile_target_at), begins a free colony's price (§ 9.4, once per
+# fleet and world) and drops the interdiction's record; Interdict (6c, § 12)
+# drops Destroy, takes the first world here it may interdict unless its target
+# is one, and begins the interdiction's price (sr_cb_charge_interdict, once per
+# fleet and target); Station and Stand off drop Destroy and the interdiction's
+# record, as leaving Close in or Interdict does. The scripted GUI holds each
+# pick to its rules (at Earth, lunar colonization § 8.1, Station and Close in
+# alone), so none lands where it can't.
+sr_fl_set_posture_at = {
 	if = {
-		limit = { sr_fl_$N$_at_earth = yes }
-		if = {
-			limit = {
-				NOT = { local_var:sr_cb_p = 3 }
-				sr_fl_$N$_has_hostile_world = yes
-			}
-			set_variable = { name = sr_fl_$N$_posture value = 3 }
-			if = {
-				limit = {
-					OR = {
-						NOT = { has_variable = sr_fl_$N$_target }
-						NOT = { sr_fl_$N$_target_hostile = yes }
-					}
-				}
-				sr_fl_step_hostile_target_at = { N = $N$ }
-			}
-			sr_fl_charge_free_at = { N = $N$ }
-		}
-		else = {
-			set_variable = { name = sr_fl_$N$_posture value = 1 }
-			if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
-		}
-	}
-	else_if = {
-		limit = { local_var:sr_cb_p <= 1 }
-		set_variable = { name = sr_fl_$N$_posture value = 2 }
-	}
-	else_if = {
-		limit = {
-			local_var:sr_cb_p = 2
-			sr_fl_$N$_has_hostile_world = yes
-		}
+		limit = { scope:pick = 3 }
 		set_variable = { name = sr_fl_$N$_posture value = 3 }
+		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 		if = {
 			limit = {
 				OR = {
@@ -1155,10 +1127,7 @@ sr_fl_step_posture_at = {
 		sr_fl_charge_free_at = { N = $N$ }
 	}
 	else_if = {
-		limit = {
-			local_var:sr_cb_p <= 3
-			sr_fl_$N$_has_interdict_world = yes
-		}
+		limit = { scope:pick = 4 }
 		set_variable = { name = sr_fl_$N$_posture value = 4 }
 		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 		if = {
@@ -1167,8 +1136,20 @@ sr_fl_step_posture_at = {
 		}
 		sr_fl_charge_icpt_at = { N = $N$ }
 	}
-	else = {
-		set_variable = { name = sr_fl_$N$_posture value = 1 }
+	else_if = {
+		limit = {
+			OR = {
+				scope:pick = 1
+				scope:pick = 2
+			}
+		}
+		if = {
+			limit = { scope:pick = 1 }
+			set_variable = { name = sr_fl_$N$_posture value = 1 }
+		}
+		else = {
+			set_variable = { name = sr_fl_$N$_posture value = 2 }
+		}
 		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	}
@@ -1287,8 +1268,10 @@ sr_fl_ai_defend = {
 # Earth is blockaded, to seize it when its marines suffice; else it stays
 # stationed. The dispatch then leaves that fleet where it is.
 sr_fl_ai_attack = {
+	# No Space Command, no orders (UI pass design § 10): the lunar assault and
+	# the offensive set postures directly, so they wait as a player does.
 	if = {
-		limit = { is_at_war = yes }
+		limit = { is_at_war = yes sr_sc_operational = yes }
 		sr_fl_ai_lunar_assault = yes
 		sr_fl_ai_attack_all = yes
 		sr_fl_each_slot = { DO = ai_assault }

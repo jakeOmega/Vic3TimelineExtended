@@ -14,7 +14,7 @@
 # (common/modifier_type_definitions/barracks_training_modifier_types.txt),
 # workforce-scaled so an understaffed barracks counts for less; the monthly
 # pulses in common/on_actions/barracks_training_on_actions.txt turn the counts
-# into the effects. Mechanics: docs/systems/mod_systems.md, "Barracks training
+# into the effects. Mechanics: docs/systems/mod_systems/production_methods.md, "Barracks training
 # methods".
 
 # Ladder step after Mobile Warfare Tactics. More officers, and each staffed

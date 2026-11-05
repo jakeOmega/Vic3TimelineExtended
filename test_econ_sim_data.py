@@ -50,7 +50,7 @@ class TestNumbers(unittest.TestCase):
     def test_retooling_and_caps(self):
         self.assertEqual((N.retool_mult, N.retool_weeks), (10.0, 260))
         self.assertEqual((N.base_project_cap, N.base_eos_cap), (10.0, 20.0))
-        self.assertIn((12, "molecular_assemblers", 200.0), N.project_cap_steps)
+        self.assertIn((13, "molecular_assemblers", 200.0), N.project_cap_steps)
         self.assertIn((6, "fluorescent_lamps", 30.0), N.eos_cap_steps)
         self.assertEqual(N.prices["construction"], 1000.0)
         self.assertEqual(N.tech_era["steam_donkey"], 3)

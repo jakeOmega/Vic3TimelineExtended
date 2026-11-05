@@ -1,4 +1,8 @@
-"""Audit for `country_treaty_leverage_generation_add` on the wrong side of a directed treaty article.
+"""Audit for the two "which side" fields of a treaty article: leverage and Involvement.
+
+Leverage: `country_treaty_leverage_generation_add` on the wrong side of a directed
+treaty article. Involvement: an article that builds none, or builds it on the
+wrong side (see "Involvement" below).
 
 The modifier reads like "leverage this country generates", and the engine's own
 tooltip — "Leverage Generation from Treaty" — does nothing to dispel that. It is
@@ -53,6 +57,53 @@ Suppress a deliberate case with a trailing `# REVIEWED YYYY-MM-DD: rationale`
 comment on the `country_treaty_leverage_generation_add` line or on the article's
 opening `<name> = {` line.
 
+Involvement (2026-11-03)
+------------------------
+The same module checks an article's Involvement, the other side question a
+treaty article answers:
+
+    max_target_involvement = 1000
+    target_involvement_applies_to = target_country
+
+The second field names the **local** side. The *other* party gains up to the
+first figure in every strategic region where the named side is local, scaled
+by that side's locality (floor 10%, `INTEREST_MIN_INVOLVEMENT_RATIO`), and all
+treaties and pacts together are capped at 5,000 a region
+(`INTEREST_TREATY_PACT_INVOLVEMENT_CAP`). Vanilla only reads sensibly this
+way: investment rights name the host (`source_country`), so the investor
+gains; a guarantee names the guaranteed country (`target_country`), so the
+guarantor gains. In all six vanilla articles carrying both fields and a
+directed leverage line, the named side is the side carrying the leverage. An
+article without the fields builds no Involvement at all, and nothing says so:
+none of the mod's 49 articles had them before 2026-11-03.
+
+Flags (`InvolvementFlag.kind`):
+
+- `missing_involvement`: no `max_target_involvement`;
+- `missing_side`: a maximum but no `target_involvement_applies_to` (the
+  engine defaults it to `source_country` without a word);
+- `kind_mismatch`: a mutual article not set to `mutual`, or a directed one
+  set to it;
+- `wrong_side`: a directed article naming a side other than its leverage
+  line's. With no leverage line, naming the side that pays
+  `maintenance_paid_by`: the payer is the party gaining a presence, so the
+  local side is the one that does not pay. Vanilla breaks the maintenance
+  proxy four times (`offer_embassy`, where the unrecognized host pays, and
+  `toll_exemption`, `no_strait_closure`, `abandon_piracy`), so a deliberate
+  case is reviewed;
+- `bad_value`: a maximum that isn't a number, is 0 or less, or is above the
+  5,000 cap, or a side that is none of the three values;
+- `stale_review`: an `(involvement)` tag that suppresses nothing.
+
+`INJECT:` blocks are skipped, since the article they extend keeps its own
+fields. These flags take a **check-tagged** comment,
+`# REVIEWED YYYY-MM-DD (involvement): rationale`, on the article's opening
+`<name> = {` line or on either field's line. The tag stops it from blinding
+the leverage check above and `loc_coverage_audit`, whose untagged regexes
+want the colon straight after the date. An article that should build no
+Involvement (a one-off transfer, an imposed restriction) carries one on its
+opening line.
+
 Why a raw-text scan instead of `paradox_file_parser`
 ----------------------------------------------------
 Same reason as `iterator_limit_audit`: the parser discards line numbers and
@@ -82,6 +133,30 @@ _PAYING_SIDE_BLOCK = {
 
 AUDIT_DIRS = (os.path.join("common", "treaty_articles"),)
 
+INVOLVEMENT_MAX = "max_target_involvement"
+INVOLVEMENT_SIDE = "target_involvement_applies_to"
+INVOLVEMENT_CHECK = "involvement"
+# Vanilla's INTEREST_TREATY_PACT_INVOLVEMENT_CAP: every treaty and pact together.
+TREATY_INVOLVEMENT_CAP = 5000
+_INVOLVEMENT_SIDES = ("source_country", "target_country", "mutual")
+# leverage block -> the local side it implies (the side leveraged is local).
+_BLOCK_SIDE = {"source_modifier": "source_country", "target_modifier": "target_country"}
+_OTHER_SIDE = {"source_country": "target_country", "target_country": "source_country"}
+# `INJECT:x` extends an article that keeps its own fields.
+_INJECT_PREFIXES = ("INJECT:", "TRY_INJECT:", "INJECT_OR_CREATE:")
+INVOLVEMENT_KINDS = (
+    "missing_involvement", "missing_side", "kind_mismatch", "wrong_side",
+    "bad_value", "stale_review",
+)
+
+# `# REVIEWED YYYY-MM-DD (involvement): why`. The untagged regex below does not
+# match it (it wants the colon straight after the date), so an involvement tag
+# never suppresses a leverage flag.
+_TAGGED_REVIEWED_RE = re.compile(
+    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<check>[a-z_]+)\)\s*:"
+    r"\s*(?P<rationale>.+)$"
+)
+
 _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+)$"
 )
@@ -106,11 +181,38 @@ class Flag:
 
 
 @dataclass
+class InvolvementFlag:
+    file: str
+    line: int
+    article: str
+    kind: str  # one of INVOLVEMENT_KINDS
+    detail: str
+    exemption: dict | None = None
+
+
+@dataclass
 class AuditResult:
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
     articles_checked: int = 0  # directed articles the heuristic could judge
     articles_undetermined: int = 0  # leverage line present, no maintenance side
+    involvement_flags: list[InvolvementFlag] = field(default_factory=list)
+    articles_with_involvement: int = 0
+    articles_reviewed_without_involvement: int = 0
+
+
+@dataclass
+class _Article:
+    """One top-level article's involvement-relevant fields, for the judge."""
+    name: str
+    line: int
+    kind: str | None = None
+    maintenance: str | None = None
+    max_value: str | None = None
+    max_line: int = 0
+    side: str | None = None
+    side_line: int = 0
+    leverage_blocks: set = field(default_factory=set)
 
 
 def _line_starts(text: str) -> list[int]:
@@ -213,6 +315,135 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
     return flags
 
 
+def _parse_tagged(comment: str | None) -> dict | None:
+    if not comment:
+        return None
+    m = _TAGGED_REVIEWED_RE.search(comment)
+    if not m or m.group("check") != INVOLVEMENT_CHECK:
+        return None
+    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+
+
+def _judge_involvement(a: _Article) -> list[tuple[str, int, str]]:
+    """(kind, line, detail) for each problem with one article's Involvement."""
+    if a.max_value is None:
+        return [("missing_involvement", a.line,
+                 f"declares no `{INVOLVEMENT_MAX}`, so it builds no Involvement")]
+    out: list[tuple[str, int, str]] = []
+    try:
+        amount = float(a.max_value)
+    except ValueError:
+        amount = None
+    if amount is None or amount <= 0 or amount > TREATY_INVOLVEMENT_CAP:
+        out.append(("bad_value", a.max_line,
+                    f"`{INVOLVEMENT_MAX} = {a.max_value}` is not a figure from 1 "
+                    f"to the {TREATY_INVOLVEMENT_CAP:,} treaty cap"))
+    if a.side is None:
+        out.append(("missing_side", a.max_line,
+                    f"no `{INVOLVEMENT_SIDE}`: the engine defaults it to `source_country`"))
+        return out
+    if a.side not in _INVOLVEMENT_SIDES:
+        out.append(("bad_value", a.side_line,
+                    f"`{INVOLVEMENT_SIDE} = {a.side}` is not source_country, "
+                    "target_country or mutual"))
+        return out
+    if a.kind == "mutual":
+        if a.side != "mutual":
+            out.append(("kind_mismatch", a.side_line,
+                        f"a mutual article names `{a.side}`, which it doesn't have; use `mutual`"))
+        return out
+    if a.side == "mutual":
+        out.append(("kind_mismatch", a.side_line,
+                    "a directed article set to `mutual`; name its local side"))
+        return out
+    if len(a.leverage_blocks) == 1:
+        block = next(iter(a.leverage_blocks))
+        expected = _BLOCK_SIDE[block]
+        if a.side != expected:
+            out.append(("wrong_side", a.side_line,
+                        f"names `{a.side}`, but the leverage line sits in `{block}`: "
+                        f"the leveraged side is the local one, so name `{expected}`"))
+    elif not a.leverage_blocks and a.maintenance in _OTHER_SIDE and a.side == a.maintenance:
+        out.append(("wrong_side", a.side_line,
+                    f"names `{a.side}`, the side that pays `maintenance_paid_by`: the "
+                    "payer is the party gaining a presence, so name "
+                    f"`{_OTHER_SIDE[a.side]}`"))
+    return out
+
+
+def _scan_involvement(text: str, rel_path: str) -> tuple[list[InvolvementFlag], int]:
+    """(flags, articles declaring Involvement) for one file's raw text."""
+    clean, comments = blank_comments_and_strings(text)
+    starts = _line_starts(clean)
+    articles: list[_Article] = []
+    cur: _Article | None = None
+    stack: list[str | None] = []
+
+    for m in _TOKEN_RE.finditer(clean):
+        if m.group("close"):
+            if stack:
+                stack.pop()
+                if not stack and cur is not None:
+                    articles.append(cur)
+                    cur = None
+            continue
+        if m.group("anon"):
+            if stack:
+                stack.append(None)
+            continue
+        key = m.group("key")
+        line = _line_of(m.start(), starts)
+        if m.group("open"):
+            if not stack:
+                cur = None if key.startswith(_INJECT_PREFIXES) else _Article(key, line)
+            stack.append(key)
+            continue
+        if cur is None:
+            continue
+        value = m.group("value")
+        if len(stack) == 1:
+            if key == "kind":
+                cur.kind = value
+            elif key == "maintenance_paid_by":
+                cur.maintenance = value
+            elif key == INVOLVEMENT_MAX:
+                cur.max_value, cur.max_line = value, line
+            elif key == INVOLVEMENT_SIDE:
+                cur.side, cur.side_line = value, line
+        elif len(stack) == 2 and stack[1] in DIRECTED_SIDES and key == LEVERAGE_MODIFIER:
+            cur.leverage_blocks.add(stack[1])
+    if cur is not None:  # unbalanced braces: judge what we have
+        articles.append(cur)
+
+    flags: list[InvolvementFlag] = []
+    used: set[int] = set()
+    for a in articles:
+        sites = [ln for ln in (a.line, a.max_line, a.side_line) if ln]
+        for kind, line, detail in _judge_involvement(a):
+            exemption = None
+            for site in sites:
+                exemption = _parse_tagged(comments.get(site))
+                if exemption:
+                    used.add(site)
+                    break
+            flags.append(InvolvementFlag(rel_path, line, a.name, kind, detail, exemption))
+    for line in sorted(comments):
+        if line in used or not _parse_tagged(comments[line]):
+            continue
+        owner = next((a.name for a in reversed(articles) if a.line <= line), "")
+        flags.append(InvolvementFlag(
+            rel_path, line, owner, "stale_review",
+            "an `(involvement)` REVIEWED tag that suppresses nothing; remove it"))
+    flags.sort(key=lambda f: f.line)
+    with_involvement = sum(1 for a in articles if a.max_value is not None)
+    return flags, with_involvement
+
+
+def scan_involvement_text(text: str, rel_path: str) -> list[InvolvementFlag]:
+    """Scan one file's raw text; return a flag per Involvement problem."""
+    return _scan_involvement(text, rel_path)[0]
+
+
 def scan_file(filepath: str, rel_path: str) -> list[Flag]:
     try:
         with open(filepath, "r", encoding="utf-8-sig", errors="replace") as fh:
@@ -275,6 +506,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         mod_path = _default
 
     flags: list[Flag] = []
+    inv_flags: list[InvolvementFlag] = []
+    with_involvement = 0
     files_audited = 0
     checked = 0
     undetermined = 0
@@ -292,17 +525,33 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
                 flags.extend(scan_file(abs_p, rel_p))
                 try:
                     with open(abs_p, "r", encoding="utf-8-sig", errors="replace") as fh:
-                        c, u = _count_articles(fh.read())
+                        text = fh.read()
                 except OSError:
-                    c = u = 0
+                    text = ""
+                c, u = _count_articles(text)
                 checked += c
                 undetermined += u
+                f_inv, n_inv = _scan_involvement(text, rel_p)
+                inv_flags.extend(f_inv)
+                with_involvement += n_inv
 
     return AuditResult(
         flags=flags,
         files_audited=files_audited,
         articles_checked=checked,
         articles_undetermined=undetermined,
+        involvement_flags=inv_flags,
+        articles_with_involvement=with_involvement,
+        articles_reviewed_without_involvement=sum(
+            1 for f in inv_flags if f.kind == "missing_involvement" and f.exemption
+        ),
+    )
+
+
+def strict_failures(result: AuditResult) -> int:
+    """Flags with no REVIEWED exemption, across both checks (`--strict` fails on any)."""
+    return sum(1 for f in result.flags if not f.exemption) + sum(
+        1 for f in result.involvement_flags if not f.exemption
     )
 
 
@@ -311,7 +560,7 @@ def render_report(result: AuditResult) -> str:
     exemp = [f for f in result.flags if f.exemption]
 
     out = [
-        "# Treaty leverage side audit report",
+        "# Treaty leverage and involvement side audit report",
         "",
         "Auto-generated by `treaty_leverage_side_audit.py` on every full",
         "`POST /reload` of the mod state server. Do not hand-edit.",
@@ -383,6 +632,62 @@ def render_report(result: AuditResult) -> str:
             )
         out.append("")
 
+    inv_unrev = [f for f in result.involvement_flags if not f.exemption]
+    inv_none = [f for f in result.involvement_flags
+                if f.exemption and f.kind == "missing_involvement"]
+    inv_other = [f for f in result.involvement_flags
+                 if f.exemption and f.kind != "missing_involvement"]
+    out += [
+        "## Involvement",
+        "",
+        "Flagged: a treaty article with no `max_target_involvement` (it builds",
+        "no Involvement, silently), one with no explicit",
+        "`target_involvement_applies_to` (the engine defaults it to",
+        "`source_country`), a mutual article not set to `mutual` or a directed",
+        "one set to it, a side other than the leverage line's (or, with no",
+        "leverage line, the side paying `maintenance_paid_by`), a figure outside",
+        "1 to 5,000, and a stale tag.",
+        "",
+        "`target_involvement_applies_to` names the **local** side: the other",
+        "party gains Involvement where it is local. Vanilla's investment rights",
+        "name the host (the investor gains), its guarantee the guaranteed (the",
+        "guarantor gains).",
+        "",
+        "Suppress with a check-tagged comment on the article's opening",
+        "`<name> = {` line or on either field's line:",
+        "`<name> = {  # REVIEWED YYYY-MM-DD (involvement): why`",
+        "",
+        "### Unreviewed Involvement Flags",
+        "",
+    ]
+    if not inv_unrev:
+        out += ["_None._", ""]
+    else:
+        by_file_inv: dict[str, list[InvolvementFlag]] = {}
+        for f in inv_unrev:
+            by_file_inv.setdefault(f.file, []).append(f)
+        for fname in sorted(by_file_inv):
+            out += [f"#### `{fname}`", ""]
+            for f in by_file_inv[fname]:
+                out.append(f"- line {f.line}: `{f.article}` — {f.kind}: {f.detail}")
+            out.append("")
+    out += ["### Articles Reviewed As Building No Involvement", ""]
+    if not inv_none:
+        out += ["_None._", ""]
+    else:
+        for f in inv_none:
+            out.append(f"- `{f.file}` — `{f.article}` — "
+                       f"**{f.exemption['date']}**: {f.exemption['rationale']}")
+        out.append("")
+    out += ["### Other Reviewed Involvement Flags", ""]
+    if not inv_other:
+        out += ["_None._", ""]
+    else:
+        for f in inv_other:
+            out.append(f"- `{f.file}` — `{f.article}` ({f.kind}) — "
+                       f"**{f.exemption['date']}**: {f.exemption['rationale']}")
+        out.append("")
+
     # Flag counts, plus the articles the audit could not judge. The file /
     # judged-article counts stay on the result (and in the regenerate()
     # summary) but move with every new article.
@@ -395,6 +700,9 @@ def render_report(result: AuditResult) -> str:
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")
+    out.append(f"- involvement flags: {len(result.involvement_flags)}")
+    out.append(f"- involvement unreviewed: {len(inv_unrev)}")
+    out.append(f"- involvement exempted: {len(inv_none) + len(inv_other)}")
     out.append("")
 
     return "\n".join(out) + "\n"
@@ -411,15 +719,20 @@ def regenerate(mod_state=None) -> dict:
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
         fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
     exemp = sum(1 for f in result.flags if f.exemption)
+    inv_unrev = sum(1 for f in result.involvement_flags if not f.exemption)
     return {
         "files_audited": result.files_audited,
         "articles_checked": result.articles_checked,
         "articles_undetermined": result.articles_undetermined,
-        "total_flags": len(result.flags),
-        "unreviewed": unrev,
+        "total_flags": len(result.flags) + len(result.involvement_flags),
+        # Both checks: the reload warning fires on any unreviewed flag.
+        "unreviewed": strict_failures(result),
         "exempted": exemp,
+        "involvement_flags": len(result.involvement_flags),
+        "involvement_unreviewed": inv_unrev,
+        "articles_with_involvement": result.articles_with_involvement,
+        "articles_reviewed_without_involvement": result.articles_reviewed_without_involvement,
     }
 
 
@@ -429,6 +742,7 @@ if __name__ == "__main__":
     from path_constants import mod_path
     result = audit(mod_path=mod_path)
     print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    # --strict: CI mode. Exit 1 if any flag of either check lacks its REVIEWED
+    # exemption (a stale `(involvement)` tag never has one).
     if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+        raise SystemExit(1 if strict_failures(result) else 0)

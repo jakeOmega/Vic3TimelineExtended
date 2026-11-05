@@ -10,7 +10,7 @@
 # surfaces cannot drift.
 #
 # OP CODES — one handler per policy, two actions, selected by the `op` saved
-# scope. Identical for all ten policies, so the widget's row type hard-codes
+# scope. Identical for all eleven policies, so the widget's row type hard-codes
 # them and a row instance carries no op markup of its own:
 #
 #   0   Adopt   -> gw_possible_<policy>        / gw_effect_<policy>
@@ -636,6 +636,69 @@ gw_policy_fossil_fuel_tariffs_sgui = {
 gw_active_fossil_fuel_tariffs_sgui = {
 	scope = country
 	is_shown = { gw_policy_fossil_fuel_tariffs_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Stratospheric Aerosol Injection (Geoengineering): the policy's row, and the
+# overview's Aerosol Mask line.
+gw_policy_aerosol_injection_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_aerosol_injection = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_aerosol_injection = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			gw_effect_aerosol_injection = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			gw_effect_remove_aerosol_injection = yes
+		}
+	}
+}
+
+gw_active_aerosol_injection_sgui = {
+	scope = country
+	is_shown = { gw_policy_aerosol_injection_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is there an aerosol mask, or one on its way? The overview's Aerosol Mask line
+# shows only then. The mask is the world's, so any country scope answers it.
+gw_aerosol_shown_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			gw_aerosol_mask > 0
+			gw_aerosol_deployers > 0
+		}
+	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

@@ -557,7 +557,7 @@ class StateCardViewTests(unittest.TestCase):
 
     @staticmethod
     def code(text):
-        """A .gui block without its `###` comment lines (`#tooltippable` is code, so not strip_comments)."""
+        """A .gui block without its `###` comment lines (a `#` inside a string is code, so not strip_comments)."""
         return re.sub(r"(?m)^\s*###.*$", "", text)
 
     def type_body(self, name, kind="flowcontainer"):
@@ -901,7 +901,7 @@ class Trophies1836Tests(unittest.TestCase):
                          "value = 0 if = { limit = { has_variable = gm_tr_landmark } value = 1 }")
         gui = read(TR_GUI)
         line = ("gm_tr_line = { visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
-                "'gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                "'gm_tr_disp_is_landmark'), '(CFixedPoint)1' )]\" "
                 "tooltip = \"gm_tr_row_landmark_tt\" text = \"gm_row_landmark\" }")
         for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site"):
             self.assertIn(line, squash(raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")), row)
@@ -1268,15 +1268,28 @@ class OurMonumentsListTests(unittest.TestCase):
             self.assertNotEqual(first, -1, sec_name)
             self.assertGreater(second, first, sec_name)
         rest = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
-        self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
-                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }",
-                      rest)
+        # Carry It Off and Clear It Away are the player's own (te_own_country_only): the journal
+        # entry's rows put them in a guard through the row's mon_controls block; the state
+        # card, which has no Country, keeps the block's default.
+        guard = ("flowcontainer = { using = te_own_country_only direction = vertical ignoreinvisible = yes spacing = 2 "
+                 "minimumsize = { 480 -1 } maximumsize = { 480 -1 } gm_mon_take_button = {} gm_mon_clear_button = {}")
+        # Our Monuments' row: the guard in a wrapper shown only while a button is
+        # (test_grand_monuments_layout.ControlsGateTest pins its gate).
+        self.assertRegex(rest, re.escape("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
+                         "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                         "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                         "blockoverride \"mon_controls\" { flowcontainer = { visible = \"[And( Country.IsLocalPlayer, ")
+                         + r"[^\"]*" + re.escape("\" direction = vertical ignoreinvisible = yes minimumsize = { 480 -1 } "
+                                                  f"maximumsize = {{ 480 -1 }} {guard} }} }} }} }} }}"))
         decide = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_decisions = flowcontainer \{")))
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
                       "visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
                       "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
-                      "blockoverride \"mon_choices\" {", decide)
+                      f"blockoverride \"mon_controls\" {{}} blockoverride \"mon_choices\" {{ {guard} flowcontainer = {{",
+                      decide)
+        row = squash(strip_comments(raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_mon_row_site = flowcontainer \{")))
+        self.assertIn('block "mon_controls" { gm_mon_take_button = {} gm_mon_clear_button = {} } block "mon_choices" {}',
+                      row)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))

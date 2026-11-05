@@ -675,7 +675,7 @@ class TestWorkforceRow(unittest.TestCase):
 
     def test_the_loc_shows_the_third_term_only_when_there_is_one(self):
         loc = _text(ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml")
-        for key, scope in (("te_demog_wk_workforce_value", "GetPlayer"), ("te_demog_st_wk_workforce_value", "State")):
+        for key, scope in (("te_demog_wk_workforce_value", "Country"), ("te_demog_st_wk_workforce_value", "State")):
             line = next(x for x in loc.splitlines() if x.startswith(f" {key}:"))
             self.assertIn("te_demog_wk_at_work_shown", line, key)
             self.assertIn(f"GreaterThan_CFixedPoint( {scope}.MakeScope.ScriptValue('te_demog_wk_past_pct'), "

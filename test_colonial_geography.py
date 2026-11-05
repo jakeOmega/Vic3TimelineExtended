@@ -222,7 +222,7 @@ class ScriptShapeTests(unittest.TestCase):
                     text = re.sub(r"#[^\n]*", "", open(path, encoding="utf-8-sig").read())
                     if re.search(r"\bis_overseas_from_capital\s*=\s*(yes|no)\b", text):
                         callers.append(os.path.relpath(path, REPO).replace(os.sep, "/"))
-        self.assertEqual(callers, ["common/buildings/wonders.txt"])
+        self.assertEqual(callers, ["common/buildings/08_zz_te_wonders.txt"])
         self.assertNotIn("is_overseas_from_overlord_capital", TRIGGERS)
 
 

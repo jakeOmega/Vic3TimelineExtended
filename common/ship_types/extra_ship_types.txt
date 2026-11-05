@@ -2,18 +2,13 @@
 # Vic3TimelineExtended — modern (post-vanilla) ship types
 # =============================================================================
 # These ships extend vanilla 1.13's ship roster into the mod's late-era timeline.
-# Each ship is loosely modeled on a vanilla parent type. Nine carry their own
-# armor / guns / propulsion / range sets (ship_mod_<ship>_* in
-# common/ship_modifications/extra_ship_modifications.txt): asw_destroyer,
-# nuclear_submarine, guided_missile_ship, nuclear_supercarrier, arsenal_ship,
-# expeditionary_sea_base, hypersonic_missile_platform, pulsed_laser_escort and
-# swarm_coordination_vessel. The other ten reuse one of those sets or a vanilla
-# parent's (ship_mod_<parent>_*): stealth_attack_submarine and
-# autonomous_swarm_submarine use nuclear_submarine's, stealth_battlecruiser
-# arsenal_ship's, antimatter_battleship hypersonic_missile_platform's,
-# orbital_support_amphibious_mothership expeditionary_sea_base's;
-# fleet_carrier uses vanilla aircraft_carrier's, networked_air_defense_cruiser
-# light_cruiser's, and the three troop ships troop_ship's.
+# Each ship is loosely modeled on a vanilla parent type, and each carries its
+# own armor / guns / propulsion / range set (ship_mod_<ship>_* in
+# common/ship_modifications/extra_ship_modifications.txt). Hull and module
+# split each stat as the ship's vanilla class analogue does (that file's
+# header has the rule), so the hull values below are the ship WITHOUT its
+# modules: about half its damage, armor and supply with the default medium
+# ones, and most of its hit points and power projection.
 #
 # Era / tech mapping (covers all 4 roles every era 6-12 with 2-3 era overlap):
 #   era 6  bombing_aircraft             → fleet_carrier                     (capital)
@@ -33,7 +28,7 @@
 #   era 11 directed_energy_weapons      → pulsed_laser_escort               (escort)
 #   era 11 swarm_technology             → swarm_coordination_vessel         (capital/support)
 #   era 11 swarm_technology             → autonomous_swarm_submarine        (raider, terminal)
-#   era 12 antimatter_production        → antimatter_battleship             (capital, terminal)
+#   era 13 antimatter_production        → antimatter_battleship             (capital, terminal)
 #   era 12 orbital_weapon_platforms     → orbital_support_amphibious_mothership (troop, terminal)
 #
 # Power projection (ship_power_projection_add, vanilla 1.14.5's per-ship value):
@@ -41,17 +36,41 @@
 # country_navy_power_projection and the flagship pick (flagship_score_for_ship
 # = PP / 10). Navy prestige per ship = PP x 0.0077 x max HP / 1150, so HP is
 # already inside the prestige term. Each value is sized so the ship's PRESTIGE
-# keeps its vanilla class analogue's prestige per point of (hull + crew damage):
+# keeps its vanilla class analogue's prestige per point of (hull + crew damage),
+# derived on 2026-09-30 from the hull values of the time, which then carried
+# nearly all of a ship's damage:
 #     PP = analogue_ratio x (hull + crew damage) x 1150 / (0.0077 x max HP)
 # analogue ratios (vanilla prestige / damage): super_dreadnought 0.065 for the
 # capital ships, light_cruiser 0.030 for the cruiser-group escorts, destroyer
 # 0.035 for asw_destroyer / guided_missile_ship, aircraft_carrier 0.021 for the
-# carriers, submarine 0.010 for the submarines. Rounded to 5. A successor never
-# projects less than the vanilla class it replaces, so asw_destroyer and the two
-# carriers sit at the analogue's own PP (200 / 275) where the formula gave 130-140
+# carriers, submarine 0.010 for the submarines. Rounded to 5. A successor's hull
+# never projected less than its vanilla class's hull, so asw_destroyer and the two
+# carriers sat at the analogue's own PP (200 / 275) where the formula gave 130-140
 # (their strength is armor, accuracy and screening, not hull damage). The five
 # troop ships set none, as vanilla's troop_ship and supply_ship do.
-# Range modules add PP in vanilla (up to ~30% of the hull's); the mod's do not yet.
+# Since 2026-11-03 range modules carry part of it, as vanilla's do: each hull's
+# ship_power_projection_add is the ship's medium total before that date less its
+# medium range module's share (the analogue's split), so a ship with medium
+# modules projects what it did. (The Fleet Carrier and the Networked Air Defense
+# Cruiser had borrowed vanilla range modules that already carried PP, so their
+# totals were the derived figure plus that.)
+# With medium modules, a ship never projects less than its vanilla analogue or
+# the ship it succeeds (the same role, unlocked by the technology that obsoletes
+# it); test_ship_modules.py checks both. Two fell short until issue #1390: the
+# ASW Destroyer now takes the vanilla destroyer's own 200 + 0/33/56 (233 at
+# medium, was 200), and the Nuclear Supercarrier 330 at medium (was 275), a
+# step above the Fleet Carrier's 319 like vanilla's late successors (+4-7%).
+#
+# Accuracy (2026-11-03): a shot misses with chance 0.5 + 0.03 x (target speed -
+# target visibility / 15 - 5 x accuracy), clamped to 5-90% (NBattle defines), so
+# against modern speeds every shot hits once effective accuracy passes about 7.
+# Hull accuracy therefore sits at the base game's level (6-8; carriers 18-20, as
+# the base game's carrier has 20), and technologies add up to +35% fleet-wide.
+# Cruiser escorts carry point defense as standard (ship_suffered_accuracy_mult
+# -0.25 to -0.3), and capital ships fire at -50% against the mod's destroyers and
+# -60% against its submarines, as the base game's capitals do against torpedo
+# craft. The countermeasure modules add to that within the budget in the header
+# of common/ship_modifications/extra_utility_modifications.txt.
 # =============================================================================
 
 
@@ -73,19 +92,19 @@ ship_type_asw_destroyer = {
 	modifier = {
 		ship_power_projection_add = 200
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 4000
+		ship_hit_points_max_add = 3675
 		ship_crew_max_add = 200
 		ship_movement_speed_add = 5
-		ship_supply_capacity_add = 50
-		ship_hull_damage_add = 75
+		ship_supply_capacity_add = 45
+		ship_hull_damage_add = 70
 		ship_crew_damage_add = 30
-		ship_armor_add = 50
+		ship_armor_add = 35
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 50
 		ship_screening_add = 250
 		ship_readiness_gain_add = 12
-		ship_accuracy_add = 8
+		ship_accuracy_add = 7
 		ship_visibility_add = 25
 		ship_detection_add = 100
 		ship_blockade_strength_add = 150
@@ -144,10 +163,12 @@ ship_type_asw_destroyer = {
 			ship_mod_asw_destroyer_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_sonar_suite
 			utility_mod_fire_suppression
-			utility_mod_searchlights
+			utility_mod_damage_control_teams
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_surface_search_radar
+			utility_mod_sonar_suite
 		}
 	}
 }
@@ -170,19 +191,19 @@ ship_type_nuclear_submarine = {
 	modifier = {
 		ship_power_projection_add = 75
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 4500
+		ship_hit_points_max_add = 4075
 		ship_crew_max_add = 200
 		ship_movement_speed_add = 9
-		ship_supply_capacity_add = 120
-		ship_hull_damage_add = 180
-		ship_crew_damage_add = 60
-		ship_armor_add = 35
+		ship_supply_capacity_add = 50
+		ship_hull_damage_add = 115
+		ship_crew_damage_add = 48
+		ship_armor_add = 18
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 5
 		ship_screening_add = 5
 		ship_readiness_gain_add = 12
-		ship_accuracy_add = 10
+		ship_accuracy_add = 7
 		ship_visibility_add = 3
 		ship_detection_add = 80
 		ship_blockade_strength_add = 100
@@ -234,8 +255,8 @@ ship_type_nuclear_submarine = {
 			ship_mod_nuclear_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_sonar_suite
 			utility_mod_camouflage
+			utility_mod_sonar_suite
 		}
 	}
 }
@@ -257,21 +278,21 @@ ship_type_guided_missile_ship = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 290
+		ship_power_projection_add = 249
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 5000
+		ship_hit_points_max_add = 4475
 		ship_crew_max_add = 200
 		ship_movement_speed_add = 8
-		ship_supply_capacity_add = 70
-		ship_hull_damage_add = 200
-		ship_crew_damage_add = 75
-		ship_armor_add = 100
+		ship_supply_capacity_add = 55
+		ship_hull_damage_add = 125
+		ship_crew_damage_add = 55
+		ship_armor_add = 55
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 50
 		ship_screening_add = 250
 		ship_readiness_gain_add = 12
-		ship_accuracy_add = 16
+		ship_accuracy_add = 7
 		ship_visibility_add = 20
 		ship_detection_add = 100
 		ship_blockade_strength_add = 400
@@ -280,7 +301,6 @@ ship_type_guided_missile_ship = {
 
 		ship_battle_against_ship_type_fleet_carrier_hull_damage_mult = 0.3
 		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.3
-		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.4
 	}
 
 	construction_goods = {
@@ -326,10 +346,13 @@ ship_type_guided_missile_ship = {
 			ship_mod_guided_missile_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_ballistic_missile_bay
-			utility_mod_fire_control_system
-			utility_mod_range_finder
+			utility_mod_ciws
 			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_ballistic_missile_bay
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
 			utility_mod_aegis_air_defense
 		}
 	}
@@ -339,6 +362,7 @@ ship_type_guided_missile_ship = {
 ### NUCLEAR SUPERCARRIER — era 7, nuclear_energy
 ### Pre-update mod stats: 700 atk / 350 def — capital-class fleet flagship (~7x vanilla super_dreadnought)
 ### 1.13.1 rebalance: armor 360 → 200 (ratio 0.80) to match vanilla's new ~0.83 armor:damage target for late-game capitals.
+### (Hull armor then; since 2026-11-03 the hull carries part of it and the armor module the rest.)
 ship_type_nuclear_supercarrier = {
 	ship_group = ship_group_cruisers
 	ai_ship_category = ai_ship_category_carriers
@@ -354,15 +378,15 @@ ship_type_nuclear_supercarrier = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 275
+		ship_power_projection_add = 284
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 7500
+		ship_hit_points_max_add = 6450
 		ship_crew_max_add = 1500
 		ship_movement_speed_add = 8
-		ship_supply_capacity_add = 250
-		ship_hull_damage_add = 250
-		ship_crew_damage_add = 80
-		ship_armor_add = 200
+		ship_supply_capacity_add = 145
+		ship_hull_damage_add = 195
+		ship_crew_damage_add = 65
+		ship_armor_add = 135
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 100
@@ -422,18 +446,17 @@ ship_type_nuclear_supercarrier = {
 			ship_mod_nuclear_supercarrier_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_drone_complement
-			utility_mod_dew_point_defense
 			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
 			utility_mod_extended_sick_bay
-			utility_mod_underway_replenishment
+			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
 		}
 		ship_mod_slot_utility_2 = {
 			utility_mod_drone_complement
-			utility_mod_fire_suppression
-			utility_mod_extended_sick_bay
-			utility_mod_torpedo_nets
-			utility_mod_camouflage
+			utility_mod_underway_replenishment
 		}
 	}
 }
@@ -456,28 +479,33 @@ ship_type_arsenal_ship = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 1130
+		ship_power_projection_add = 988
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 12000
+		ship_hit_points_max_add = 10600
 		ship_crew_max_add = 700
 		ship_movement_speed_add = 9
-		ship_supply_capacity_add = 350
-		ship_hull_damage_add = 1100
-		ship_crew_damage_add = 300
-		ship_armor_add = 500
+		ship_supply_capacity_add = 185
+		ship_hull_damage_add = 585
+		ship_crew_damage_add = 160
+		ship_armor_add = 265
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 200
 		ship_screening_add = 10
 		ship_readiness_gain_add = 13
-		ship_accuracy_add = 22
+		ship_accuracy_add = 6
 		ship_visibility_add = 200
 		ship_detection_add = 300
 		ship_blockade_strength_add = 4500
 
 		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.4
 		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.3
-		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.3
+		# Capital ships fire poorly at small, fast ships, as the base game's do
+		ship_battle_against_ship_type_asw_destroyer_accuracy_mult = -0.5
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = -0.5
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = -0.6
 	}
 
 	construction_goods = {
@@ -523,17 +551,25 @@ ship_type_arsenal_ship = {
 			ship_mod_arsenal_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_ballistic_missile_bay
-			utility_mod_fire_control_system
-			utility_mod_range_finder
-			utility_mod_advanced_explosives
-			utility_mod_underway_replenishment
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
-			utility_mod_dew_point_defense
-			utility_mod_fire_suppression
-			utility_mod_torpedo_nets
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
+		}
+		ship_mod_slot_utility_3 = {
+			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_ballistic_missile_bay
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
+			utility_mod_underway_replenishment
 		}
 	}
 }
@@ -553,13 +589,13 @@ ship_type_expeditionary_sea_base = {
 
 	modifier = {
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 6500
+		ship_hit_points_max_add = 5500
 		ship_crew_max_add = 1000
 		ship_movement_speed_add = 4
-		ship_supply_capacity_add = 600
-		ship_hull_damage_add = 80
-		ship_crew_damage_add = 30
-		ship_armor_add = 150
+		ship_supply_capacity_add = 260
+		ship_hull_damage_add = 49
+		ship_crew_damage_add = 20
+		ship_armor_add = 70
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.1
 		ship_vulnerability_add = 250
@@ -619,11 +655,12 @@ ship_type_expeditionary_sea_base = {
 			ship_mod_expeditionary_sea_base_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_landing_skiffs
-			utility_mod_drone_complement
-			utility_mod_extended_sick_bay
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_drone_complement
+			utility_mod_landing_skiffs
 			utility_mod_helicopter_pad
+			utility_mod_extended_sick_bay
 		}
 	}
 }
@@ -644,13 +681,13 @@ ship_type_expeditionary_fast_transport = {
 
 	modifier = {
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 3500
+		ship_hit_points_max_add = 3100
 		ship_crew_max_add = 200
 		ship_movement_speed_add = 9
-		ship_supply_capacity_add = 100
-		ship_hull_damage_add = 30
+		ship_supply_capacity_add = 70
+		ship_hull_damage_add = 27
 		ship_crew_damage_add = 10
-		ship_armor_add = 60
+		ship_armor_add = 31
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.1
 		ship_vulnerability_add = 250
@@ -688,29 +725,30 @@ ship_type_expeditionary_fast_transport = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_troop_ship_armor_light
-			ship_mod_troop_ship_armor_medium
-			ship_mod_troop_ship_armor_high
+			ship_mod_expeditionary_fast_transport_armor_light
+			ship_mod_expeditionary_fast_transport_armor_medium
+			ship_mod_expeditionary_fast_transport_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_troop_ship_guns_light
-			ship_mod_troop_ship_guns_medium
-			ship_mod_troop_ship_guns_high
+			ship_mod_expeditionary_fast_transport_guns_light
+			ship_mod_expeditionary_fast_transport_guns_medium
+			ship_mod_expeditionary_fast_transport_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_troop_ship_propulsion_light
-			ship_mod_troop_ship_propulsion_medium
-			ship_mod_troop_ship_propulsion_high
+			ship_mod_expeditionary_fast_transport_propulsion_light
+			ship_mod_expeditionary_fast_transport_propulsion_medium
+			ship_mod_expeditionary_fast_transport_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_troop_ship_range_light
-			ship_mod_troop_ship_range_medium
-			ship_mod_troop_ship_range_high
+			ship_mod_expeditionary_fast_transport_range_light
+			ship_mod_expeditionary_fast_transport_range_medium
+			ship_mod_expeditionary_fast_transport_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_landing_skiffs
 			utility_mod_camouflage
-			utility_mod_searchlights
+			utility_mod_ciws
+			utility_mod_surface_search_radar
+			utility_mod_landing_skiffs
 			utility_mod_helicopter_pad
 		}
 	}
@@ -731,28 +769,33 @@ ship_type_hypersonic_missile_platform = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 1130
+		ship_power_projection_add = 988
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 18000
+		ship_hit_points_max_add = 15450
 		ship_crew_max_add = 1100
 		ship_movement_speed_add = 10
-		ship_supply_capacity_add = 400
-		ship_hull_damage_add = 1500
-		ship_crew_damage_add = 600
-		ship_armor_add = 1100
+		ship_supply_capacity_add = 205
+		ship_hull_damage_add = 765
+		ship_crew_damage_add = 285
+		ship_armor_add = 500
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 200
 		ship_screening_add = 10
 		ship_readiness_gain_add = 12
-		ship_accuracy_add = 26
+		ship_accuracy_add = 7
 		ship_visibility_add = 200
 		ship_detection_add = 350
 		ship_blockade_strength_add = 6000
 
-		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.1
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.6
 		ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult = 0.6
+		# Capital ships fire poorly at small, fast ships, as the base game's do
+		ship_battle_against_ship_type_asw_destroyer_accuracy_mult = -0.5
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = -0.5
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = -0.6
 	}
 
 	construction_goods = {
@@ -798,16 +841,24 @@ ship_type_hypersonic_missile_platform = {
 			ship_mod_hypersonic_missile_platform_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_ballistic_missile_bay
-			utility_mod_fire_control_system
-			utility_mod_range_finder
-			utility_mod_advanced_explosives
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
-			utility_mod_dew_point_defense
-			utility_mod_drone_complement
-			utility_mod_fire_suppression
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
+		}
+		ship_mod_slot_utility_3 = {
+			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_ballistic_missile_bay
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
 		}
 	}
 }
@@ -822,27 +873,29 @@ ship_type_pulsed_laser_escort = {
 	can_be_flagship = yes
 
 	modifier = {
-		ship_power_projection_add = 570
+		ship_power_projection_add = 505
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 8500
+		ship_hit_points_max_add = 7600
 		ship_crew_max_add = 400
 		ship_movement_speed_add = 12
-		ship_supply_capacity_add = 120
-		ship_hull_damage_add = 850
-		ship_crew_damage_add = 250
-		ship_armor_add = 600
+		ship_supply_capacity_add = 85
+		ship_hull_damage_add = 440
+		ship_crew_damage_add = 150
+		ship_armor_add = 290
 		ship_critical_hit_chance_add = 0.1
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 75
 		ship_screening_add = 600
 		ship_readiness_gain_add = 14
-		ship_accuracy_add = 26
+		ship_accuracy_add = 7
 		ship_visibility_add = 60
 		ship_detection_add = 300
 		ship_blockade_strength_add = 1500
 
 		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.5
 		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.5
+		# Point defense and countermeasures as standard (2026-11-03 design)
+		ship_suffered_accuracy_mult = -0.3
 	}
 
 	construction_goods = {
@@ -887,12 +940,15 @@ ship_type_pulsed_laser_escort = {
 			ship_mod_pulsed_laser_escort_range_high
 		}
 		ship_mod_slot_utility_1 = {
+			utility_mod_composite_armor_plating
+			utility_mod_ciws
 			utility_mod_dew_point_defense
+			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
 			utility_mod_drone_complement
 			utility_mod_fire_control_system
-			utility_mod_searchlights
-			utility_mod_advanced_explosives
-			utility_mod_composite_armor_plating
+			utility_mod_aegis_air_defense
+			utility_mod_surface_search_radar
 		}
 	}
 }
@@ -908,27 +964,29 @@ ship_type_swarm_coordination_vessel = {
 	combat_power_multiplier = 5.0
 
 	modifier = {
-		ship_power_projection_add = 440
+		ship_power_projection_add = 390
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 9000
+		ship_hit_points_max_add = 8000
 		ship_crew_max_add = 400
 		ship_movement_speed_add = 11
-		ship_supply_capacity_add = 110
-		ship_hull_damage_add = 700
-		ship_crew_damage_add = 200
-		ship_armor_add = 700
+		ship_supply_capacity_add = 80
+		ship_hull_damage_add = 375
+		ship_crew_damage_add = 125
+		ship_armor_add = 325
 		ship_critical_hit_chance_add = 0.1
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 100
 		ship_screening_add = 700
 		ship_readiness_gain_add = 14
-		ship_accuracy_add = 24
+		ship_accuracy_add = 6
 		ship_visibility_add = 80
 		ship_detection_add = 500
 		ship_blockade_strength_add = 2500
 
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.4
 		ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = 0.4
+		# Point defense and countermeasures as standard (2026-11-03 design)
+		ship_suffered_accuracy_mult = -0.3
 	}
 
 	construction_goods = {
@@ -973,17 +1031,22 @@ ship_type_swarm_coordination_vessel = {
 			ship_mod_swarm_coordination_vessel_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_drone_complement
-			utility_mod_fire_control_system
-			utility_mod_range_finder
-			utility_mod_searchlights
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
 			utility_mod_composite_armor_plating
+			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
 		}
 		ship_mod_slot_utility_2 = {
-			utility_mod_dew_point_defense
 			utility_mod_advanced_explosives
-			utility_mod_camouflage
-			utility_mod_fire_suppression
+			utility_mod_precision_warheads
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
+			utility_mod_surface_search_radar
 		}
 	}
 }
@@ -1008,13 +1071,13 @@ ship_type_fleet_carrier = {
 	modifier = {
 		ship_power_projection_add = 275
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 5500
+		ship_hit_points_max_add = 4850
 		ship_crew_max_add = 1100
 		ship_movement_speed_add = 5
-		ship_supply_capacity_add = 150
-		ship_hull_damage_add = 180
-		ship_crew_damage_add = 45
-		ship_armor_add = 130
+		ship_supply_capacity_add = 105
+		ship_hull_damage_add = 165
+		ship_crew_damage_add = 43
+		ship_armor_add = 110
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 100
@@ -1053,32 +1116,33 @@ ship_type_fleet_carrier = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_aircraft_carrier_armor_light
-			ship_mod_aircraft_carrier_armor_medium
-			ship_mod_aircraft_carrier_armor_high
+			ship_mod_fleet_carrier_armor_light
+			ship_mod_fleet_carrier_armor_medium
+			ship_mod_fleet_carrier_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_aircraft_carrier_guns_light
-			ship_mod_aircraft_carrier_guns_medium
-			ship_mod_aircraft_carrier_guns_high
+			ship_mod_fleet_carrier_guns_light
+			ship_mod_fleet_carrier_guns_medium
+			ship_mod_fleet_carrier_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_aircraft_carrier_propulsion_light
-			ship_mod_aircraft_carrier_propulsion_medium
-			ship_mod_aircraft_carrier_propulsion_high
+			ship_mod_fleet_carrier_propulsion_light
+			ship_mod_fleet_carrier_propulsion_medium
+			ship_mod_fleet_carrier_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_aircraft_carrier_range_light
-			ship_mod_aircraft_carrier_range_medium
-			ship_mod_aircraft_carrier_range_high
+			ship_mod_fleet_carrier_range_light
+			ship_mod_fleet_carrier_range_medium
+			ship_mod_fleet_carrier_range_high
 		}
 		ship_mod_slot_utility_1 = {
 			utility_mod_fire_suppression
-			utility_mod_extended_sick_bay
-			utility_mod_torpedo_nets
+			utility_mod_damage_control_teams
 			utility_mod_camouflage
-			utility_mod_searchlights
+			utility_mod_ciws
+			utility_mod_surface_search_radar
 			utility_mod_underway_replenishment
+			utility_mod_extended_sick_bay
 		}
 	}
 }
@@ -1101,13 +1165,13 @@ ship_type_amphibious_assault_ship = {
 
 	modifier = {
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 4500
+		ship_hit_points_max_add = 3900
 		ship_crew_max_add = 600
 		ship_movement_speed_add = 6
-		ship_supply_capacity_add = 250
-		ship_hull_damage_add = 60
-		ship_crew_damage_add = 20
-		ship_armor_add = 100
+		ship_supply_capacity_add = 130
+		ship_hull_damage_add = 40
+		ship_crew_damage_add = 15
+		ship_armor_add = 49
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.1
 		ship_vulnerability_add = 200
@@ -1146,31 +1210,33 @@ ship_type_amphibious_assault_ship = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_troop_ship_armor_light
-			ship_mod_troop_ship_armor_medium
-			ship_mod_troop_ship_armor_high
+			ship_mod_amphibious_assault_ship_armor_light
+			ship_mod_amphibious_assault_ship_armor_medium
+			ship_mod_amphibious_assault_ship_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_troop_ship_guns_light
-			ship_mod_troop_ship_guns_medium
-			ship_mod_troop_ship_guns_high
+			ship_mod_amphibious_assault_ship_guns_light
+			ship_mod_amphibious_assault_ship_guns_medium
+			ship_mod_amphibious_assault_ship_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_troop_ship_propulsion_light
-			ship_mod_troop_ship_propulsion_medium
-			ship_mod_troop_ship_propulsion_high
+			ship_mod_amphibious_assault_ship_propulsion_light
+			ship_mod_amphibious_assault_ship_propulsion_medium
+			ship_mod_amphibious_assault_ship_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_troop_ship_range_light
-			ship_mod_troop_ship_range_medium
-			ship_mod_troop_ship_range_high
+			ship_mod_amphibious_assault_ship_range_light
+			ship_mod_amphibious_assault_ship_range_medium
+			ship_mod_amphibious_assault_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_landing_skiffs
-			utility_mod_extended_sick_bay
 			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_landing_skiffs
 			utility_mod_helicopter_pad
+			utility_mod_extended_sick_bay
 		}
 	}
 }
@@ -1193,13 +1259,13 @@ ship_type_marine_assault_ship = {
 
 	modifier = {
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 5500
+		ship_hit_points_max_add = 4700
 		ship_crew_max_add = 700
 		ship_movement_speed_add = 7
-		ship_supply_capacity_add = 350
-		ship_hull_damage_add = 70
-		ship_crew_damage_add = 25
-		ship_armor_add = 130
+		ship_supply_capacity_add = 165
+		ship_hull_damage_add = 44
+		ship_crew_damage_add = 18
+		ship_armor_add = 60
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.1
 		ship_vulnerability_add = 220
@@ -1238,31 +1304,33 @@ ship_type_marine_assault_ship = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_troop_ship_armor_light
-			ship_mod_troop_ship_armor_medium
-			ship_mod_troop_ship_armor_high
+			ship_mod_marine_assault_ship_armor_light
+			ship_mod_marine_assault_ship_armor_medium
+			ship_mod_marine_assault_ship_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_troop_ship_guns_light
-			ship_mod_troop_ship_guns_medium
-			ship_mod_troop_ship_guns_high
+			ship_mod_marine_assault_ship_guns_light
+			ship_mod_marine_assault_ship_guns_medium
+			ship_mod_marine_assault_ship_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_troop_ship_propulsion_light
-			ship_mod_troop_ship_propulsion_medium
-			ship_mod_troop_ship_propulsion_high
+			ship_mod_marine_assault_ship_propulsion_light
+			ship_mod_marine_assault_ship_propulsion_medium
+			ship_mod_marine_assault_ship_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_troop_ship_range_light
-			ship_mod_troop_ship_range_medium
-			ship_mod_troop_ship_range_high
+			ship_mod_marine_assault_ship_range_light
+			ship_mod_marine_assault_ship_range_medium
+			ship_mod_marine_assault_ship_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_landing_skiffs
-			utility_mod_extended_sick_bay
-			utility_mod_camouflage
 			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
+			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_landing_skiffs
 			utility_mod_helicopter_pad
+			utility_mod_extended_sick_bay
 		}
 	}
 }
@@ -1285,21 +1353,21 @@ ship_type_stealth_battlecruiser = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 970
+		ship_power_projection_add = 848
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 13000
+		ship_hit_points_max_add = 11425
 		ship_crew_max_add = 900
 		ship_movement_speed_add = 9
-		ship_supply_capacity_add = 320
-		ship_hull_damage_add = 950
-		ship_crew_damage_add = 350
-		ship_armor_add = 800
+		ship_supply_capacity_add = 175
+		ship_hull_damage_add = 520
+		ship_crew_damage_add = 180
+		ship_armor_add = 380
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 100
 		ship_screening_add = 30
 		ship_readiness_gain_add = 13
-		ship_accuracy_add = 22
+		ship_accuracy_add = 6
 		ship_visibility_add = 60
 		ship_detection_add = 350
 		ship_blockade_strength_add = 4000
@@ -1307,6 +1375,12 @@ ship_type_stealth_battlecruiser = {
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.4
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.3
 		ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult = 0.4
+		# Capital ships fire poorly at small, fast ships, as the base game's do
+		ship_battle_against_ship_type_asw_destroyer_accuracy_mult = -0.5
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = -0.5
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = -0.6
 	}
 
 	construction_goods = {
@@ -1332,37 +1406,44 @@ ship_type_stealth_battlecruiser = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_arsenal_ship_armor_light
-			ship_mod_arsenal_ship_armor_medium
-			ship_mod_arsenal_ship_armor_high
+			ship_mod_stealth_battlecruiser_armor_light
+			ship_mod_stealth_battlecruiser_armor_medium
+			ship_mod_stealth_battlecruiser_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_arsenal_ship_guns_light
-			ship_mod_arsenal_ship_guns_medium
-			ship_mod_arsenal_ship_guns_high
+			ship_mod_stealth_battlecruiser_guns_light
+			ship_mod_stealth_battlecruiser_guns_medium
+			ship_mod_stealth_battlecruiser_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_arsenal_ship_propulsion_light
-			ship_mod_arsenal_ship_propulsion_medium
-			ship_mod_arsenal_ship_propulsion_high
+			ship_mod_stealth_battlecruiser_propulsion_light
+			ship_mod_stealth_battlecruiser_propulsion_medium
+			ship_mod_stealth_battlecruiser_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_arsenal_ship_range_light
-			ship_mod_arsenal_ship_range_medium
-			ship_mod_arsenal_ship_range_high
+			ship_mod_stealth_battlecruiser_range_light
+			ship_mod_stealth_battlecruiser_range_medium
+			ship_mod_stealth_battlecruiser_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_fire_control_system
-			utility_mod_range_finder
-			utility_mod_advanced_explosives
-			utility_mod_camouflage
-			utility_mod_underway_replenishment
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
+			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
+			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
 			utility_mod_dew_point_defense
+		}
+		ship_mod_slot_utility_3 = {
+			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_range_finder
 			utility_mod_drone_complement
-			utility_mod_torpedo_nets
-			utility_mod_fire_suppression
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
+			utility_mod_underway_replenishment
 		}
 	}
 }
@@ -1384,21 +1465,21 @@ ship_type_networked_air_defense_cruiser = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 315
+		ship_power_projection_add = 308
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 6500
+		ship_hit_points_max_add = 5900
 		ship_crew_max_add = 300
 		ship_movement_speed_add = 9
-		ship_supply_capacity_add = 100
-		ship_hull_damage_add = 350
-		ship_crew_damage_add = 110
-		ship_armor_add = 250
+		ship_supply_capacity_add = 80
+		ship_hull_damage_add = 215
+		ship_crew_damage_add = 75
+		ship_armor_add = 150
 		ship_critical_hit_chance_add = 0.1
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 60
 		ship_screening_add = 500
 		ship_readiness_gain_add = 13
-		ship_accuracy_add = 24
+		ship_accuracy_add = 6
 		ship_visibility_add = 30
 		ship_detection_add = 250
 		ship_blockade_strength_add = 700
@@ -1408,6 +1489,8 @@ ship_type_networked_air_defense_cruiser = {
 		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.6
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.4
 		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.2
+		# Point defense and countermeasures as standard (2026-11-03 design)
+		ship_suffered_accuracy_mult = -0.25
 	}
 
 	construction_goods = {
@@ -1433,31 +1516,34 @@ ship_type_networked_air_defense_cruiser = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_light_cruiser_armor_light
-			ship_mod_light_cruiser_armor_medium
-			ship_mod_light_cruiser_armor_high
+			ship_mod_networked_air_defense_cruiser_armor_light
+			ship_mod_networked_air_defense_cruiser_armor_medium
+			ship_mod_networked_air_defense_cruiser_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_light_cruiser_guns_light
-			ship_mod_light_cruiser_guns_medium
-			ship_mod_light_cruiser_guns_high
+			ship_mod_networked_air_defense_cruiser_guns_light
+			ship_mod_networked_air_defense_cruiser_guns_medium
+			ship_mod_networked_air_defense_cruiser_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_light_cruiser_propulsion_light
-			ship_mod_light_cruiser_propulsion_medium
-			ship_mod_light_cruiser_propulsion_high
+			ship_mod_networked_air_defense_cruiser_propulsion_light
+			ship_mod_networked_air_defense_cruiser_propulsion_medium
+			ship_mod_networked_air_defense_cruiser_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_light_cruiser_range_light
-			ship_mod_light_cruiser_range_medium
-			ship_mod_light_cruiser_range_high
+			ship_mod_networked_air_defense_cruiser_range_light
+			ship_mod_networked_air_defense_cruiser_range_medium
+			ship_mod_networked_air_defense_cruiser_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_aegis_air_defense
-			utility_mod_fire_control_system
-			utility_mod_range_finder
+			utility_mod_ciws
 			utility_mod_advanced_explosives
-			utility_mod_searchlights
+			utility_mod_precision_warheads
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
+			utility_mod_surface_search_radar
 		}
 	}
 }
@@ -1480,19 +1566,19 @@ ship_type_stealth_attack_submarine = {
 	modifier = {
 		ship_power_projection_add = 105
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 6000
+		ship_hit_points_max_add = 5250
 		ship_crew_max_add = 200
 		ship_movement_speed_add = 10
-		ship_supply_capacity_add = 140
-		ship_hull_damage_add = 320
-		ship_crew_damage_add = 110
-		ship_armor_add = 50
+		ship_supply_capacity_add = 60
+		ship_hull_damage_add = 180
+		ship_crew_damage_add = 80
+		ship_armor_add = 23
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 5
 		ship_screening_add = 5
 		ship_readiness_gain_add = 13
-		ship_accuracy_add = 12
+		ship_accuracy_add = 7
 		ship_visibility_add = 3
 		ship_detection_add = 120
 		ship_blockade_strength_add = 200
@@ -1524,29 +1610,29 @@ ship_type_stealth_attack_submarine = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_nuclear_submarine_armor_light
-			ship_mod_nuclear_submarine_armor_medium
-			ship_mod_nuclear_submarine_armor_high
+			ship_mod_stealth_attack_submarine_armor_light
+			ship_mod_stealth_attack_submarine_armor_medium
+			ship_mod_stealth_attack_submarine_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_nuclear_submarine_guns_light
-			ship_mod_nuclear_submarine_guns_medium
-			ship_mod_nuclear_submarine_guns_high
+			ship_mod_stealth_attack_submarine_guns_light
+			ship_mod_stealth_attack_submarine_guns_medium
+			ship_mod_stealth_attack_submarine_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_nuclear_submarine_propulsion_light
-			ship_mod_nuclear_submarine_propulsion_medium
-			ship_mod_nuclear_submarine_propulsion_high
+			ship_mod_stealth_attack_submarine_propulsion_light
+			ship_mod_stealth_attack_submarine_propulsion_medium
+			ship_mod_stealth_attack_submarine_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_nuclear_submarine_range_light
-			ship_mod_nuclear_submarine_range_medium
-			ship_mod_nuclear_submarine_range_high
+			ship_mod_stealth_attack_submarine_range_light
+			ship_mod_stealth_attack_submarine_range_medium
+			ship_mod_stealth_attack_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_sonar_suite
 			utility_mod_camouflage
 			utility_mod_drone_complement
+			utility_mod_sonar_suite
 		}
 	}
 }
@@ -1562,27 +1648,25 @@ ship_type_autonomous_swarm_submarine = {
 	modifier = {
 		ship_power_projection_add = 150
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 7500
+		ship_hit_points_max_add = 6425
 		ship_crew_max_add = 100
 		ship_movement_speed_add = 12
-		ship_supply_capacity_add = 150
-		ship_hull_damage_add = 600
-		ship_crew_damage_add = 180
-		ship_armor_add = 80
+		ship_supply_capacity_add = 60
+		ship_hull_damage_add = 305
+		ship_crew_damage_add = 120
+		ship_armor_add = 33
 		ship_critical_hit_chance_add = 0.15
 		ship_critical_hit_multiplier_add = 0.5
 		ship_vulnerability_add = 5
 		ship_screening_add = 10
 		ship_readiness_gain_add = 14
-		ship_accuracy_add = 14
+		ship_accuracy_add = 8
 		ship_visibility_add = 3
 		ship_detection_add = 200
 		ship_blockade_strength_add = 350
 
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 6.0
 		ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult = 5.0
-		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.4
-		ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult = -0.3
 	}
 
 	construction_goods = {
@@ -1606,36 +1690,37 @@ ship_type_autonomous_swarm_submarine = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_nuclear_submarine_armor_light
-			ship_mod_nuclear_submarine_armor_medium
-			ship_mod_nuclear_submarine_armor_high
+			ship_mod_autonomous_swarm_submarine_armor_light
+			ship_mod_autonomous_swarm_submarine_armor_medium
+			ship_mod_autonomous_swarm_submarine_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_nuclear_submarine_guns_light
-			ship_mod_nuclear_submarine_guns_medium
-			ship_mod_nuclear_submarine_guns_high
+			ship_mod_autonomous_swarm_submarine_guns_light
+			ship_mod_autonomous_swarm_submarine_guns_medium
+			ship_mod_autonomous_swarm_submarine_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_nuclear_submarine_propulsion_light
-			ship_mod_nuclear_submarine_propulsion_medium
-			ship_mod_nuclear_submarine_propulsion_high
+			ship_mod_autonomous_swarm_submarine_propulsion_light
+			ship_mod_autonomous_swarm_submarine_propulsion_medium
+			ship_mod_autonomous_swarm_submarine_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_nuclear_submarine_range_light
-			ship_mod_nuclear_submarine_range_medium
-			ship_mod_nuclear_submarine_range_high
+			ship_mod_autonomous_swarm_submarine_range_light
+			ship_mod_autonomous_swarm_submarine_range_medium
+			ship_mod_autonomous_swarm_submarine_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_drone_complement
 			utility_mod_camouflage
-			utility_mod_sonar_suite
 			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_drone_complement
+			utility_mod_sonar_suite
 		}
 	}
 }
 
 
-### ANTIMATTER BATTLESHIP — era 12, antimatter_production
+### ANTIMATTER BATTLESHIP — era 13, antimatter_production
 ### Capital, terminal. Mass-driver / antimatter-armed late-game flagship.
 ship_type_antimatter_battleship = {
 	ship_group = ship_group_capital_ships
@@ -1645,28 +1730,33 @@ ship_type_antimatter_battleship = {
 	combat_power_multiplier = 14.0
 
 	modifier = {
-		ship_power_projection_add = 1350
+		ship_power_projection_add = 1180
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 28000
+		ship_hit_points_max_add = 23525
 		ship_crew_max_add = 1400
 		ship_movement_speed_add = 12
-		ship_supply_capacity_add = 600
-		ship_hull_damage_add = 2800
-		ship_crew_damage_add = 1100
-		ship_armor_add = 2000
+		ship_supply_capacity_add = 290
+		ship_hull_damage_add = 1345
+		ship_crew_damage_add = 490
+		ship_armor_add = 850
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.25
 		ship_vulnerability_add = 200
 		ship_screening_add = 30
 		ship_readiness_gain_add = 14
-		ship_accuracy_add = 30
+		ship_accuracy_add = 8
 		ship_visibility_add = 200
 		ship_detection_add = 500
 		ship_blockade_strength_add = 10000
 
 		ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult = 0.7
 		ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult = 0.6
-		ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult = -0.1
+		# Capital ships fire poorly at small, fast ships, as the base game's do
+		ship_battle_against_ship_type_asw_destroyer_accuracy_mult = -0.5
+		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = -0.5
+		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = -0.6
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = -0.6
 	}
 
 	construction_goods = {
@@ -1692,37 +1782,44 @@ ship_type_antimatter_battleship = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_hypersonic_missile_platform_armor_light
-			ship_mod_hypersonic_missile_platform_armor_medium
-			ship_mod_hypersonic_missile_platform_armor_high
+			ship_mod_antimatter_battleship_armor_light
+			ship_mod_antimatter_battleship_armor_medium
+			ship_mod_antimatter_battleship_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_hypersonic_missile_platform_guns_light
-			ship_mod_hypersonic_missile_platform_guns_medium
-			ship_mod_hypersonic_missile_platform_guns_high
+			ship_mod_antimatter_battleship_guns_light
+			ship_mod_antimatter_battleship_guns_medium
+			ship_mod_antimatter_battleship_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_hypersonic_missile_platform_propulsion_light
-			ship_mod_hypersonic_missile_platform_propulsion_medium
-			ship_mod_hypersonic_missile_platform_propulsion_high
+			ship_mod_antimatter_battleship_propulsion_light
+			ship_mod_antimatter_battleship_propulsion_medium
+			ship_mod_antimatter_battleship_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_hypersonic_missile_platform_range_light
-			ship_mod_hypersonic_missile_platform_range_medium
-			ship_mod_hypersonic_missile_platform_range_high
+			ship_mod_antimatter_battleship_range_light
+			ship_mod_antimatter_battleship_range_medium
+			ship_mod_antimatter_battleship_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_ballistic_missile_bay
-			utility_mod_fire_control_system
-			utility_mod_range_finder
-			utility_mod_advanced_explosives
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
 			utility_mod_composite_armor_plating
 		}
 		ship_mod_slot_utility_2 = {
-			utility_mod_dew_point_defense
-			utility_mod_drone_complement
-			utility_mod_fire_suppression
 			utility_mod_camouflage
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
+		}
+		ship_mod_slot_utility_3 = {
+			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_ballistic_missile_bay
+			utility_mod_range_finder
+			utility_mod_drone_complement
+			utility_mod_fire_control_system
+			utility_mod_aegis_air_defense
 		}
 	}
 }
@@ -1738,13 +1835,13 @@ ship_type_orbital_support_amphibious_mothership = {
 
 	modifier = {
 		ship_construction_progress_max_add = 25
-		ship_hit_points_max_add = 11000
+		ship_hit_points_max_add = 9100
 		ship_crew_max_add = 1200
 		ship_movement_speed_add = 12
-		ship_supply_capacity_add = 1200
-		ship_hull_damage_add = 150
-		ship_crew_damage_add = 50
-		ship_armor_add = 300
+		ship_supply_capacity_add = 490
+		ship_hull_damage_add = 80
+		ship_crew_damage_add = 30
+		ship_armor_add = 140
 		ship_critical_hit_chance_add = 0.05
 		ship_critical_hit_multiplier_add = 0.1
 		ship_vulnerability_add = 250
@@ -1784,37 +1881,40 @@ ship_type_orbital_support_amphibious_mothership = {
 
 	modifications = {
 		ship_mod_slot_armor = {
-			ship_mod_expeditionary_sea_base_armor_light
-			ship_mod_expeditionary_sea_base_armor_medium
-			ship_mod_expeditionary_sea_base_armor_high
+			ship_mod_orbital_support_amphibious_mothership_armor_light
+			ship_mod_orbital_support_amphibious_mothership_armor_medium
+			ship_mod_orbital_support_amphibious_mothership_armor_high
 		}
 		ship_mod_slot_guns = {
-			ship_mod_expeditionary_sea_base_guns_light
-			ship_mod_expeditionary_sea_base_guns_medium
-			ship_mod_expeditionary_sea_base_guns_high
+			ship_mod_orbital_support_amphibious_mothership_guns_light
+			ship_mod_orbital_support_amphibious_mothership_guns_medium
+			ship_mod_orbital_support_amphibious_mothership_guns_high
 		}
 		ship_mod_slot_propulsion = {
-			ship_mod_expeditionary_sea_base_propulsion_light
-			ship_mod_expeditionary_sea_base_propulsion_medium
-			ship_mod_expeditionary_sea_base_propulsion_high
+			ship_mod_orbital_support_amphibious_mothership_propulsion_light
+			ship_mod_orbital_support_amphibious_mothership_propulsion_medium
+			ship_mod_orbital_support_amphibious_mothership_propulsion_high
 		}
 		ship_mod_slot_range = {
-			ship_mod_expeditionary_sea_base_range_light
-			ship_mod_expeditionary_sea_base_range_medium
-			ship_mod_expeditionary_sea_base_range_high
+			ship_mod_orbital_support_amphibious_mothership_range_light
+			ship_mod_orbital_support_amphibious_mothership_range_medium
+			ship_mod_orbital_support_amphibious_mothership_range_high
 		}
 		ship_mod_slot_utility_1 = {
-			utility_mod_landing_skiffs
-			utility_mod_drone_complement
+			utility_mod_fire_suppression
+			utility_mod_damage_control_teams
 			utility_mod_extended_sick_bay
 			utility_mod_camouflage
-			utility_mod_helicopter_pad
+			utility_mod_ciws
+			utility_mod_electronic_countermeasures
+			utility_mod_dew_point_defense
 		}
 		ship_mod_slot_utility_2 = {
-			utility_mod_dew_point_defense
-			utility_mod_fire_suppression
-			utility_mod_torpedo_nets
 			utility_mod_advanced_explosives
+			utility_mod_precision_warheads
+			utility_mod_drone_complement
+			utility_mod_landing_skiffs
+			utility_mod_helicopter_pad
 		}
 	}
 }

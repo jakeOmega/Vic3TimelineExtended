@@ -10,7 +10,7 @@
 # sanctions, carbon border adjustment mechanisms, green conditionality
 # in trade deals and international lending.
 # =================================================================
-enforce_emissions_reduction = {
+enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
 	kind = directed
 	cost = 200

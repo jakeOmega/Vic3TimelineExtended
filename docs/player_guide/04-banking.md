@@ -28,7 +28,7 @@ Every country has the entry from the start of the game, but its financial
 cycle starts only once you have researched Stock Exchange and own an Urban
 Center of level 5 or higher. Until then the entry shows the cycle as Not
 Started, with the two conditions on hover. You see your Monetary Policy
-readings, Credit Standing and Rate You Pay among them, but the banking tools
+readings, Credit Standing and Rate Paid among them, but the banking tools
 and the central bank's controls stay grayed, and nothing in the cycle happens:
 no crashes, banking events or contagion. When you meet both conditions during
 the game, a notice tells you the cycle has begun. It starts at Stable with no momentum or bubble,
@@ -42,6 +42,11 @@ The same panels appear as a Banking tab in the Budget panel, and a change made
 in one shows in the other. The tab ends with an Open Journal Entry button,
 which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
+
+Another country's Banking tab, in National Info ([Introduction](01-introduction.md)),
+shows its phase, momentum and bubble pressure, the four bars, its Monetary
+Policy readings, the policies it has in force and its history. It has none of
+the buttons and no Available Interventions.
 
 ![The Banking tab of the Budget panel: the four bars, the overview's icons, Active Policies and the start of Monetary Policy.](images/banking_tab.png)
 
@@ -112,7 +117,7 @@ point, and a surplus lowers it (the Government Fiscal Policy Effect).
 Policies, laws, events and, under the full Banking System, your policy stance
 push the readings directly. Fiat Money and Digital Currency add 0.2 bubble
 pressure a month, and Digital Currency and Decentralized Cryptocurrency make the
-cycle more volatile. Wealth Concentration moves it too: Great Family Fortunes
+cycle more volatile. Dynastic Wealth moves it too: Great Family Fortunes
 adds up to 0.5 bubble pressure a month and Dispersed Wealth takes up to 0.53
 off (see [Who inherits](06-politics.md#who-inherits)).
 
@@ -253,8 +258,8 @@ weekly balance, once your cycle has started. Hover it for the phase's
 word and the same tooltip, with a crash-risk warning while that risk is high,
 and click it to open the Banking tab.
 
-Below the overview come five sections. All start open except the explanations,
-and each heading opens or closes its section:
+Below the overview come four sections. Each heading opens or closes its
+section:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -262,10 +267,14 @@ and each heading opens or closes its section:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
-Each tool's name is underlined: hover it for what the tool does, its full name
-and what it requires. A grayed button means you cannot use the tool now, and
+The "?" at the right of the tab's header, and at the top of the journal entry, opens Banking's Help page, How Banking Works. It explains the cycle,
+crashes and the intervention budget, and under the full Banking System the
+policy rate and the stance, the mandates, gold and the peg, the exchange rate,
+international arrangements, what borrowing costs and prices.
+
+Hover a tool's name for what the tool does, its full name and what it
+requires. A grayed button means you cannot use the tool now, and
 its tooltip says why. Enabling a tool moves it to Active Policies. Some rows
 carry a shortened name: under Directed Credit each row names only its sector,
 and Counter-cyclical Buffer stands for Enable Counter-cyclical Buffer. The
@@ -555,7 +564,7 @@ The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg 
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-its reading and what moves it; How Banking Works has the rules behind each
+its reading and what moves it; the Help page has the rules behind each
 group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 
@@ -695,7 +704,7 @@ fade after a return to Neutral.
 
 ### What your government pays to borrow
 
-Rate You Pay shows the yearly interest on your debt. It adds up the market yield
+Rate Paid shows the yearly interest on your debt. It adds up the market yield
 (the higher of your policy rate and the Reference Rate plus expected
 inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
@@ -878,12 +887,12 @@ a war or crisis and fades after the controls come off.
 ### Hyperinflation and dollarization
 
 When inflation reaches 50%, Not Worth the Paper offers three answers. Bond
-fortunes vanish whichever you choose: every state's Wealth Concentration ([Who
+fortunes vanish whichever you choose: every state's Dynastic Wealth ([Who
 inherits](06-politics.md#who-inherits)) falls 5 when the crisis fires.
 
 | Option | Effect |
 |---|---|
-| Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; Wealth Concentration falls 5 more; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
+| Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; Dynastic Wealth falls 5 more; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
 | Dollarize: "Let them keep the foreign money. They already have." | A Dollarized Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
 | Wait: "It will pass. Everything passes." | Nothing; if inflation is still 50% or more in two years, the crisis fires again and takes another 5 |
 
@@ -912,7 +921,10 @@ The last two are hostile: a larger power can demand them only of a country in
 default. If the stronger party leads a power bloc, each article also gives it
 leverage generation over the weaker, from 150 to 500 by article, which builds
 the Leverage Advantage it needs to invite that country into its bloc (see [Other
-power bloc changes](09-diplomacy.md#other-power-bloc-changes)). A country may
+power bloc changes](09-diplomacy.md#other-power-bloc-changes)). Bloc or not, the
+stronger party also builds Involvement in the regions where the weaker is local:
+up to 2,000 from either peg or a receivership, and 1,000 from a swap line or a
+guarantee (see [Treaty articles](09-diplomacy.md#treaty-articles)). A country may
 receive only one swap line at a time. A treaty pegger at Peg Confidence 20 gets
 The Peg Under Siege: impose capital controls for a year (+40 confidence), break
 the peg by leaving the treaty, or re-peg lower. AI countries look for a swap line when

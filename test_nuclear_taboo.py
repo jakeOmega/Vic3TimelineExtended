@@ -15,6 +15,7 @@ import sys
 import unittest
 from pathlib import Path
 
+from gui_test_helpers import history_charts
 from test_nuclear_deterrence import block, loc_keys, loc_value, read, sgui_ops, strip_comments
 
 ROOT = Path(__file__).resolve().parent
@@ -796,10 +797,12 @@ class TestPanel(unittest.TestCase):
         self.assertIn("te_history_record_sample = { METRIC = nd_taboo VALUE = global_var:nd_taboo }", record)
         self.assertIn("te_history_record_sample = { METRIC = nd_taboo_tgt VALUE = global_var:nd_taboo_target }", record)
         self.assertIn("nd_taboo_record_history = yes", block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_country_monthly"))
-        for metric in ("nd_taboo", "nd_taboo_tgt"):
-            self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_{metric}' )", self.gui, metric)
-        section = self.gui[self.gui.index("nd_taboo_hist_closed"):]
-        self.assertGreaterEqual(section.count('blockoverride "marker_pips" {}'), 2)
+        # each chart is its generated wrapper's (gen_te_history_charts.py)
+        charts = history_charts(self.gui[self.gui.index("nd_taboo_hist_closed"):])
+        self.assertEqual(len(charts), 2)
+        for metric, chart in zip(("nd_taboo", "nd_taboo_tgt"), charts):
+            self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_{metric}' )", chart, metric)
+            self.assertIn('blockoverride "marker_pips" {}', chart, metric)
 
     def test_custom_loc_targets_have_loc(self):
         keys = loc_keys()

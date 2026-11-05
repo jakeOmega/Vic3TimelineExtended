@@ -66,6 +66,7 @@ methods:
 | Reinforced Concrete Buildings | 6 |
 | Advanced Construction | 10 |
 | Nanomaterial Buildings | 16 |
+| Self-Replicating Construction | 24 |
 
 ### Construction maintenance and retooling
 
@@ -76,7 +77,7 @@ building:
 | Rate per level | Buildings |
 |---|---|
 | 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the tech metals mines (lithium, nickel and cobalt, rare earths, platinum group metals), every other mine once it runs a mechanized pump; Railways, Ports and Power Plants on their early methods |
-| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries; Railways, Ports and Power Plants on their middle methods |
+| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries, Public Housing; Railways, Ports and Power Plants on their middle methods |
 | 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, HVDC Undersea Interconnectors, Oil Rigs; Railways and Ports on their latest methods |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
@@ -185,7 +186,7 @@ normal retooling costs; penalties already removed stay removed.
 With the rule disabled, construction works as in the base game, but the
 Construction Site takes the Construction Sector's place. The government builds,
 expands and downsizes Construction Sites like any government building, and each
-level provides 1 to 16 points a week by production method, the same tiers as the
+level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
 point your queues spend. Construction Sites are built from the state view.
 Every country also gets Base Construction, 5 points a week, so a country without
@@ -385,9 +386,12 @@ Transportation is produced by:
 - Railways, on every train method. In a power bloc with tier III or higher of
 the Transportation Infrastructure principle, each railway switches its steam,
 electric or diesel trains to a stronger version on its own, which carries
-20–28% more and adds more infrastructure. That switch costs no retooling.
-- Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
-Passenger Ships, which add more Transportation for a few more inputs.
+20–28% more and adds more infrastructure. That switch costs no retooling. The
+last train method, Vactrain Freight (from the era 12 technology Vactrains), runs
+on Electricity and burns no oil.
+- Railways' Rolling Stock (passenger carriages up to Maglev Trains and
+Vactrains) and ports' Passenger Ships, which add more Transportation for a few
+more inputs.
 - Highways and Airports, and Urban Centers' public transit.
 - Railway, logistics and fulfillment company buildings.
 
@@ -588,8 +592,8 @@ down by source.
 
 ### The Strategic Reserve panel
 
-The journal entry's panel has an overview, the Reserve Inventory and a
-collapsed How the Strategic Reserve Works. Before you have a hub the entry
+The journal entry's panel has an overview and the Reserve Inventory, with a "?"
+at its top right that opens the Help page. Before you have a hub the entry
 shows only a line telling you how to get one. Once the hub stands there is no
 status line, because the overview shows how the hub is doing.
 
@@ -640,9 +644,10 @@ Year, 5 Years and 20 Years ranges. Each bar is a share of capacity, so building
 Silos lowers the bars of an unchanged stock. Policy Settings comes last,
 collapsed until you open it or click the policy icon.
 
-How the Strategic Reserve Works sits at the foot of the entry, collapsed. It
-explains the hub and silos, rates, status, decay, reserve policies, presets and
-settings, sales income and the fill history.
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page,
+How the Strategic Reserve Works. The page explains the hub and
+silos, rates, status, decay, reserve policies, presets and settings, sales
+income and the fill history.
 
 ### Storing and releasing reserve goods
 

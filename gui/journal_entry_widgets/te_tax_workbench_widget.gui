@@ -23,10 +23,19 @@
 ###                             in its fixed_bottom, so it stays on screen.
 ###
 ### EDITING RULES (te_tax_overview_widget.gui's apply too)
-### * Every number is a guarded view of the PLAYER's draft,
-###   GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_*'): 0 or -1 with no
+### * Every number is a guarded view of the shown country's draft,
+###   Country.MakeScope.ScriptValue('te_tax_view_dr_*'): 0 or -1 with no
 ###   draft open. A row shown only in some state tests a display gate or a 0/1
 ###   code; no threshold is copied from script.
+### * The workbench is the player's own (spec
+###   2026-11-02-charts-help-national-info § 6.4: the draft is private), so its
+###   root takes te_own_country_only and another country's panel (National
+###   Info) has none. The draft summary is drawn only where the player's own
+###   panel is (the journal entry, the tabs' footers) and keeps GetPlayer, as
+###   the Budget tab's fixed_bottom has no Country. te_tax_instrument_row,
+###   which the light code's public section reuses, keeps its − and + in
+###   fixed slots under te_own_country_only, so another country's rows line
+###   up with their head.
 ### * The "Law" column is the rate existing law will have in the draft's
 ###   commencement month (te_tax_base_dr_<key>): where an untouched tax starts
 ###   from, and what the change, the bill's class and its support are measured
@@ -86,7 +95,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_col_law"
 				tooltip = "te_tax_wb_col_law_tt"
 			}
@@ -148,7 +156,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = left|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
@@ -188,29 +195,39 @@ types te_tax_workbench_widget_types
 				block "row_draft" {}
 			}
 		}
-		button_icon_minus_action = {
+		widget = {
 			size = { 22 22 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			### Click a step, shift-click to zero, right-click to take the tax out of the draft.
-			click_modifiers = {
-				ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+
+			button_icon_minus_action = {
+				using = te_own_country_only
+				size = { 22 22 }
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				### Click a step, shift-click to zero, right-click to take the tax out of the draft.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				}
+				onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 			}
-			onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 		}
-		button_icon_plus_action = {
+		widget = {
 			size = { 22 22 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			### Click a step, shift-click to the highest rate, right-click to take the tax out of the draft.
-			click_modifiers = {
-				ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+
+			button_icon_plus_action = {
+				using = te_own_country_only
+				size = { 22 22 }
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				### Click a step, shift-click to the highest rate, right-click to take the tax out of the draft.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+				onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
-			onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 		}
 		widget = {
 			size = { 90 26 }
@@ -263,16 +280,16 @@ types te_tax_workbench_widget_types
 		button_icon_minus_action = {
 			size = { 22 22 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
 		}
 		button_icon_plus_action = {
 			size = { 22 22 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
 		}
 	}
 
@@ -344,9 +361,9 @@ types te_tax_workbench_widget_types
 			size = { 80 26 }
 			parentanchor = vcenter
 			block "good_button_text" {}
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 		}
 	}
 
@@ -391,7 +408,6 @@ types te_tax_workbench_widget_types
 				align = left|nobaseline
 				elide = right
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_imp"
 				tooltip = "te_tax_wb_cu_col_imp_tt"
 			}
@@ -405,7 +421,6 @@ types te_tax_workbench_widget_types
 				align = left|nobaseline
 				elide = right
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_exp"
 				tooltip = "te_tax_wb_cu_col_exp_tt"
 			}
@@ -461,29 +476,28 @@ types te_tax_workbench_widget_types
 						autoresize = yes
 						align = center|nobaseline
 						using = te_tax_fontsize_row
-						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
 						block "imp_changed" {}
 					}
 				}
 				button_icon_minus_action = {
-					visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
 					size = { 22 22 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 				}
 				button_icon_plus_action = {
-					visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
 					size = { 22 22 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 				}
 			}
 		}
@@ -508,29 +522,28 @@ types te_tax_workbench_widget_types
 						autoresize = yes
 						align = center|nobaseline
 						using = te_tax_fontsize_row
-						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
 						block "exp_changed" {}
 					}
 				}
 				button_icon_minus_action = {
-					visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
 					size = { 22 22 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
 				}
 				button_icon_plus_action = {
-					visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' )]"
 					size = { 22 22 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+					onrightclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
 				}
 			}
 		}
@@ -546,7 +559,9 @@ types te_tax_workbench_widget_types
 	### state as the saved scope te_tax_st
 	### to te_tax_relief_state_sgui, the Grand Monuments rows' shape
 	### (gm_choice_button). Tooltips read only GetPlayer or the State (a
-	### datamodel item). 2 + 170 + 4 + 60 + 4 + 76 + 4 + 68 + 4 + 70 + 2 = 464;
+	### datamodel item's tooltip has only its item, gotcha #24), so the button
+	### reads GetPlayer in its click too, as its hover does: the row is drawn
+	### only in the workbench, the player's own (te_own_country_only). 2 + 170 + 4 + 60 + 4 + 76 + 4 + 68 + 4 + 70 + 2 = 464;
 	### a name longer than its cell shows whole on hover.
 	type te_tax_relief_state_row = flowcontainer {
 		direction = horizontal
@@ -576,7 +591,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_relief_state_pop"
 				tooltip = "te_tax_wb_relief_state_pop_tt"
 			}
@@ -590,7 +604,6 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = te_tax_fontsize_row
-				default_format = "#tooltippable"
 				text = "te_tax_wb_relief_state_tax"
 				tooltip = "te_tax_wb_relief_state_tax_tt"
 			}
@@ -628,6 +641,7 @@ types te_tax_workbench_widget_types
 	### WORKBENCH (open: the live draft, style guide rule 1)
 	### ======================================================================
 	type te_tax_workbench_section = flowcontainer {
+		using = te_own_country_only
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -654,29 +668,29 @@ types te_tax_workbench_widget_types
 			# No draft: say so, and open one (from the bill under debate, if
 			# there is one, to revise it).
 			flowcontainer = {
-				visible = "[Not( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				visible = "[Not( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 6
 
 				te_tax_text = {
-					text = "[SelectLocalization( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_wb_none_bill', 'te_tax_wb_none' )]"
+					text = "[SelectLocalization( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_wb_none_bill', 'te_tax_wb_none' )]"
 				}
 				button = {
 					using = default_button
 					using = te_tax_fontsize_row
 					parentanchor = hcenter
 					size = { 480 32 }
-					text = "[SelectLocalization( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_wb_new_revision', 'te_tax_wb_new' )]"
-					enabled = "[GetScriptedGui('te_tax_cmd_draft_new_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					onclick = "[GetScriptedGui('te_tax_cmd_draft_new_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_new_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_new_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					text = "[SelectLocalization( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_wb_new_revision', 'te_tax_wb_new' )]"
+					enabled = "[GetScriptedGui('te_tax_cmd_draft_new_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_draft_new_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_new_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_new_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				}
 			}
 
 			# The draft, one accordion per group of taxes.
 			flowcontainer = {
-				visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
@@ -688,7 +702,7 @@ types te_tax_workbench_widget_types
 				# Op = the instrument's code (1 wage ... 5 cons), 6 the goods, 7
 				# relief, 8 customs.
 				flowcontainer = {
-					visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
@@ -700,7 +714,7 @@ types te_tax_workbench_widget_types
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_wage_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_wage"
 						}
@@ -711,14 +725,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_div_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_div"
 						}
@@ -729,14 +743,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_land_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_land"
 						}
@@ -747,14 +761,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_head_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_head"
 						}
@@ -765,14 +779,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_cons_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_cons"
 						}
@@ -783,14 +797,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_goods_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_goods"
 						}
@@ -801,14 +815,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_relief_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_relief"
 						}
@@ -819,14 +833,14 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 							}
 						}
 					}
 					te_tax_rebase_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
 						blockoverride "rebase_text" {
 							text = "te_tax_rv_rebase_customs"
 						}
@@ -837,9 +851,9 @@ types te_tax_workbench_widget_types
 								size = { 96 28 }
 								parentanchor = vcenter
 								text = "te_tax_rv_accept"
-								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 							}
 						}
 					}
@@ -883,7 +897,7 @@ types te_tax_workbench_widget_types
 							text = "te_tax_wb_draft_wage"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_wage_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_wage"
 						}
 					}
@@ -900,7 +914,7 @@ types te_tax_workbench_widget_types
 							text = "te_tax_wb_draft_div"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_div_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_div"
 						}
 					}
@@ -939,7 +953,7 @@ types te_tax_workbench_widget_types
 							text = "te_tax_wb_draft_land"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_land_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_land"
 						}
 					}
@@ -956,7 +970,7 @@ types te_tax_workbench_widget_types
 							text = "te_tax_wb_draft_head"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_head_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_head"
 						}
 					}
@@ -997,7 +1011,7 @@ types te_tax_workbench_widget_types
 							text = "te_tax_wb_draft_cons"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_cons_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_cons"
 						}
 					}
@@ -1060,13 +1074,13 @@ types te_tax_workbench_widget_types
 							tooltip = "te_tax_wb_row_agrel_tt"
 						}
 						blockoverride "row_law" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_agrel' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_agrel' )]"
 						}
 						blockoverride "row_draft" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_agrel' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_agrel' )]"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_agrel"
 						}
 					}
@@ -1077,13 +1091,13 @@ types te_tax_workbench_widget_types
 							tooltip = "te_tax_wb_row_regrel_tt"
 						}
 						blockoverride "row_law" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_regrel' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_regrel' )]"
 						}
 						blockoverride "row_draft" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_regrel' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_regrel' )]"
 						}
 						blockoverride "row_delta" {
-							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+							visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
 							text = "te_tax_wb_delta_regrel"
 						}
 					}
@@ -1093,11 +1107,11 @@ types te_tax_workbench_widget_types
 					# the commencement month); once it changes it, the draft's list,
 					# each with Drop.
 					te_tax_text = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' )]"
 						text = "te_tax_wb_relief_states"
 					}
 					flowcontainer = {
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
 						direction = vertical
 						ignoreinvisible = yes
 						datamodel = "[AccessPlayer.AccessStates]"
@@ -1117,10 +1131,10 @@ types te_tax_workbench_widget_types
 						}
 					}
 					flowcontainer = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
 						direction = vertical
 						ignoreinvisible = yes
-						datamodel = "[GetPlayer.MakeScope.GetList('te_tax_dr_relief_states')]"
+						datamodel = "[Country.MakeScope.GetList('te_tax_dr_relief_states')]"
 
 						item = {
 							te_tax_relief_state_row = {
@@ -1143,16 +1157,16 @@ types te_tax_workbench_widget_types
 						using = te_tax_fontsize_row
 						parentanchor = hcenter
 						size = { 480 30 }
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), 'te_tax_wb_relief_choose', 'te_tax_wb_relief_choose_again' )]"
-						enabled = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+						text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), 'te_tax_wb_relief_choose', 'te_tax_wb_relief_choose_again' )]"
+						enabled = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 					}
 
 					# The incorporated states, as the last Choose States listed them:
 					# open once the draft changes regional relief, closable.
 					te_tax_subsection_header = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
 						blockoverride "left_text" {
 							text = "te_tax_wb_sub_relief_states"
 						}
@@ -1167,11 +1181,11 @@ types te_tax_workbench_widget_types
 						}
 					}
 					flowcontainer = {
-						visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), Not(GetVariableSystem.Exists('te_tax_wb_relief_states_closed')) )]"
+						visible = "[And( NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), Not(GetVariableSystem.Exists('te_tax_wb_relief_states_closed')) )]"
 						direction = vertical
 						ignoreinvisible = yes
 						spacing = 1
-						datamodel = "[GetPlayer.MakeScope.GetList('te_tax_dr_relief_candidates')]"
+						datamodel = "[Country.MakeScope.GetList('te_tax_dr_relief_candidates')]"
 
 						item = {
 							te_tax_relief_state_row = {
@@ -1209,23 +1223,23 @@ types te_tax_workbench_widget_types
 					spacing = 2
 
 					te_tax_text = {
-						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' ) )]"
+						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' ) )]"
 						text = "te_tax_wb_customs_native"
 					}
 					te_tax_text = {
-						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)2' ) )]"
+						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)2' ) )]"
 						text = "te_tax_wb_customs_member"
 					}
 					te_tax_text = {
-						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' ) )]"
+						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)1' ) )]"
 						text = "te_tax_wb_customs_intro"
 					}
 					te_tax_text = {
-						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)3' ) )]"
+						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)3' ) )]"
 						text = "te_tax_wb_customs_pending"
 					}
 					flowcontainer = {
-						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' ) )]"
+						visible = "[And( GetVariableSystem.Exists('te_tax_wb_customs_open'), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' ) )]"
 						direction = vertical
 						ignoreinvisible = yes
 						spacing = 1
@@ -1317,7 +1331,6 @@ types te_tax_workbench_widget_types
 								elide = right
 								align = left|nobaseline
 								using = te_tax_fontsize_row
-								default_format = "#tooltippable"
 								text = "te_tax_wb_due"
 								tooltip = "te_tax_wb_due_tt"
 							}
@@ -1337,71 +1350,71 @@ types te_tax_workbench_widget_types
 						button_icon_minus_action = {
 							size = { 22 22 }
 							parentanchor = vcenter
-							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_due_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_due_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_due_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_due_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 						}
 						button_icon_plus_action = {
 							size = { 22 22 }
 							parentanchor = vcenter
-							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							tooltip = "[Concatenate( GetScriptedGui('te_tax_due_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_due_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_due_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_due_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 						}
 					}
 
 					te_tax_text = {
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' )]"
 						text = "te_tax_wb_sunset_none"
 					}
 					te_tax_sunset_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_wage_on'), '(CFixedPoint)0' )]"
 						datacontext = "[GetScriptedGui('te_tax_step_wage_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_inst_wage"
 						}
 						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_wage' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_wage_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_wage' )]"
 						}
 					}
 					te_tax_sunset_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_div_on'), '(CFixedPoint)0' )]"
 						datacontext = "[GetScriptedGui('te_tax_step_div_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_inst_div"
 						}
 						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_div' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_div_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_div' )]"
 						}
 					}
 					te_tax_sunset_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_land_on'), '(CFixedPoint)0' )]"
 						datacontext = "[GetScriptedGui('te_tax_step_land_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_inst_land"
 						}
 						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_land' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_land_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_land' )]"
 						}
 					}
 					te_tax_sunset_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_head_on'), '(CFixedPoint)0' )]"
 						datacontext = "[GetScriptedGui('te_tax_step_head_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_inst_head"
 						}
 						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_head' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_head_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_head' )]"
 						}
 					}
 					te_tax_sunset_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_on'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_cons_on'), '(CFixedPoint)0' )]"
 						datacontext = "[GetScriptedGui('te_tax_step_cons_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_inst_cons"
 						}
 						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_cons' )]"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_dr_cons_sun'), '(CFixedPoint)0' ), 'te_tax_wb_sun_permanent', 'te_tax_wb_sun_cons' )]"
 						}
 					}
 				}
@@ -1463,7 +1476,6 @@ types te_tax_workbench_widget_types
 					blockoverride "row_value" {
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_sum_revenue_none', SelectLocalization( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' ) ), 'te_tax_sum_revenue_range', SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_nobase_any'), '(CFixedPoint)0' ), 'te_tax_sum_revenue_partial', 'te_tax_sum_revenue_value' ) ) )]"
 						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', 'te_tax_sum_revenue_lines_tt' )]"
-						default_format = "#tooltippable"
 					}
 				}
 				# Customs levels the draft changes (plan Task 15; the customs option only).

@@ -1,6 +1,6 @@
 # Military and war
 
-The mod carries the army and navy through to era 12. It adds 25 battalion types,
+The mod carries the army and navy through to era 13. It adds 25 battalion types,
 two new unit groups (Heavy Tanks and Aircraft) and 19 ship types, and it rewards
 armies that mix their arms. Military Bases fortify states against invasion and
 missiles, several of the mod's systems feed war support, and mobilization drives
@@ -46,8 +46,8 @@ the upgrade options of the older units in their line, so you can upgrade
 battalions in place. The base game's Heavy Tanks (Mobile Armor, era 5) move from
 the artillery group to the new Heavy Tanks group, with lower stats than in the
 base game, and aircraft form a group of their own. Each group gains three to
-five units, from Armored Infantry and Propeller Aircraft in era 6 to the Utility
-Fog Phalanx and Orbital Weapons Platforms in era 12, and later units come in
+five units, from Armored Infantry and Propeller Aircraft in era 6 to the Orbital
+Weapons Platforms of era 12 and the Utility Fog Phalanx of era 13, and later units come in
 smaller battalions, down to 100 for the orbital ones. [Combat unit
 list](20-appendix-reference-lists.md#combat-unit-list) gives each unit's
 technology, era and battalion size.
@@ -75,7 +75,7 @@ method costs little in peacetime. Switch back to a fast one before a long war.
 |---|---|---|---|
 | Officer Academies | Combined Arms (era 6) | 26 | 30% of the staff are officers. Academy Officer Corps raises the Armed Forces' political strength by up to 20% and their attraction by up to 10%, in proportion to the share of your regular battalions trained this way |
 | Expeditionary Logistics | Predictive Logistics (era 8) | 10 | Cuts the base goods surcharge while the battalion is mobilized by a tenth. Mobilization options' own goods are unchanged |
-| Neural Grafting | Bioenhanced Soldiers (era 11) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 120 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 25% |
+| Neural Grafting | Bioenhanced Soldiers (era 12) and the Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation law | 120 | Buys Drugs and Electronic Components, and raises its servicemen's mortality by 25% |
 | Reserve Cadre | Public Works Programs (era 6) and the National Militia or Mass Conscription law | 12 | Each staffed level gives the state two reserve battalions. Each one raises the state's conscription rate and its conscription-center limit by enough for one more conscript battalion, so it still counts in a state already at the limit |
 | Political Commissars | Mass Media (era 6) and the Single-Party State or Council Republic law | 20 | 5% of the staff are officers. Commissar Indoctrination raises attraction to the interest groups in government by up to 15%, in proportion to the share of your regular battalions trained this way |
 
@@ -93,8 +93,8 @@ Logistics or Reserve Cadre.
 
 Nineteen ship types extend the navy from era 6, with escorts, submarines,
 carriers, battle-line ships and troop transports in most eras: from the Fleet
-Carrier and ASW Destroyer of era 6 to the Antimatter Battleship and Orbital
-Support Mothership of era 12. [Ship list](20-appendix-reference-lists.md#ship-list)
+Carrier and ASW Destroyer of era 6 to the Orbital Support Mothership of era 12
+and the Antimatter Battleship of era 13. [Ship list](20-appendix-reference-lists.md#ship-list)
 gives each ship's class, role and technology, and the technology that makes it
 obsolete.
 
@@ -105,12 +105,34 @@ Aircraft, the Troopship with Combined Arms, the Destroyer and Light Cruiser with
 Sonar, the Submarine with Advanced Submarine Technology and the Aircraft Carrier
 with Nuclear Energy.
 
-In the ship designer, nine of the new ships bring their own armor, guns,
-propulsion and range modifications in three tiers; the others reuse those of a
-related ship. Eight new utility modifications join the base game's, from the
-Sonar Suite (Sonar) to Composite Armor Plating (Modern Material Science); [Ship
-utility modification list](20-appendix-reference-lists.md#ship-utility-modification-list)
-gives each one's technology and effect and the ships that mount it.
+In the ship designer, each new ship has its own armor, guns, propulsion and
+range modifications in three tiers, sized to the ship as the base game sizes its
+own: going from light to heavy modules buys about two-thirds more hull damage,
+two and a half times the armor and a third more hit points, as it does on a
+base-game ship of the same class.
+
+Thirteen new utility modifications join the base game's. All but the Sonar
+Suite and Underway Replenishment succeed an earlier utility on the same stat, as
+Damage Control Teams succeed Fire Suppression and Composite Armor Plating
+succeeds both: a successor arrives later, does more, costs more and can't be
+fitted alongside what it succeeds. The new ships don't offer Torpedo Nets or
+Searchlights. On a new ship with two or three utility slots, protection
+(against hull and crew damage) and countermeasures (against being hit) each keep
+to one slot, so two of either can't be stacked. The four battle-line ships
+have three utility slots. [Ship utility modification
+list](20-appendix-reference-lists.md#ship-utility-modification-list) gives each
+one's technology and effect, what it succeeds and the ships that mount it.
+
+Hit chances in a late war depend on what is shooting at what. Battle-line ships
+fire poorly at the new destroyers and submarines, as the base game's capital
+ships do at torpedo craft, and the cruiser escorts carry point defense that
+lowers the accuracy of every ship firing at them. A countermeasure lowers it
+further: an Antimatter Battleship hits a Pulsed Laser Escort with nearly every
+shot, and misses a quarter to over half of them once the escort mounts DEW
+Point Defense. Anti-Submarine Warfare takes back most of the penalty against
+submarines, which then rely on Camouflage. The new ships' own accuracy is close to the base game's, and naval
+technologies add to it, so they still hit base-game ships with almost every
+shot.
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
@@ -259,7 +281,7 @@ and those in no camp, oppose nobody, so their entry stays inactive.
 
 | Camp | Laws |
 |---|---|
-| Democratic | Census Suffrage, Universal Suffrage, Wealth Voting or Landed Voting; Presidential Republic, Parliamentary Republic or Monarchy; neither Single-Party State nor Autocracy |
+| Democratic | Census Suffrage, Universal Suffrage, Liquid Democracy, Wealth Voting or Landed Voting; Presidential Republic, Parliamentary Republic or Monarchy; neither Single-Party State nor Autocracy |
 | Communist | Council Republic, with Command Economy or Cooperative Ownership |
 | Fascist | Corporate State with Single-Party State, or Autocracy with Single-Party State and Ancestral, Cultural or Racialized Citizenship |
 | Authoritarian | Autocracy, Single-Party State or Oligarchy, when not communist or fascist |

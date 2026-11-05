@@ -89,7 +89,7 @@ A country's drive is the best of four, `sr_drive_level` (country value):
 |---|---|---|---|
 | 0 | Chemical | (the Space Program) | In a window; outside one at the premium with Asteroid Mining, when the approach's test passes (unchanged) |
 | 1 | Fusion | `fusion_power` (era 11, military) | As chemical: windows still matter |
-| 2 | Fusion torch | `compact_fusion_reactors` (Muon-Catalyzed Fusion Reactors, era 12) | Any month (today's "fusion drives" rule, unchanged) |
+| 2 | Fusion torch | `compact_fusion_reactors` (Compact Fusion Reactors, era 12) | Any month (today's "fusion drives" rule, unchanged) |
 | 3 | Antimatter | `antimatter_production` and an Antimatter Containment Facility (`building_antimatter_facility`) | Any month |
 
 The window rule's `sr_launch_has_fusion` gains the antimatter drive, so the two

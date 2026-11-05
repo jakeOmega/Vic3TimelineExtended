@@ -12,7 +12,29 @@ most can be switched off with a game rule.
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed.
+same panels as their journal entries, and one for the seabed. Two more rows of
+tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
+and Military panels, the same as there, so every system is in one place. Full Screen, at
+the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
+left there, brings it back to the width of the other panels. The tab you chose
+stays chosen when you switch.
+
+Each system has a Help page that explains how it works, with a heading for
+each topic. The "?" opens it: at the right of the tab's header, and at the top
+right of the system's journal entry and of a state's Demographics subtab. Press
+Escape or click outside the page to close it.
+
+National Info, the base game's Census Data window under a new name, shows
+another country's panels. Open it from the foot of that country's Politics tab,
+or for your own country from the Population panel. A row of tabs over the
+window holds Pops, the base game's list, then a tab for each of the mod's
+systems a country shows the world, Demographics and the Seabed among them. For another
+country a tab shows its figures and none of its buttons; for your own it is the
+same tab as in the Timeline Extended window, buttons included. A tab is grayed
+where its system isn't running in that country, and the tab you chose stays
+chosen when you open another country's window, where it runs. Another country's
+charts open full size the same way, and an empty chart there says when the
+country keeps no history: only played countries and major powers do.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -33,6 +55,10 @@ and caps. They are rounded, and they can change between versions of the mod. The
 game's tooltips show the exact values for your country, and many of the mod's
 journal entries and panels break their numbers down line by line when you hover
 over them.
+
+Many panels chart a system's history month by month or year by year. The round
+button beside a chart's title opens that chart alone, across most of the screen,
+with the same range buttons and hovers. Escape or a click outside closes it.
 
 The Markdown source of this guide is kept in the mod's repository, and the
 [chapters](https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide)
@@ -88,10 +114,10 @@ turn a default system off.
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](12-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](11-influence.md) |
 | Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](11-influence.md) |
-| Social Movements | Enabled | The five social-movement journal entries (civil rights, human augmentation, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
+| Social Movements | Enabled | The six social-movement journal entries (civil rights, human augmentation, morphological freedom, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
-| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Wealth Concentration keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
+| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
@@ -100,8 +126,9 @@ turn a default system off.
 
 ## Reading the Budget breakdown
 
-The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
-and expandable lists. Groups start collapsed; click an arrow to see their
+The Budget panel's Breakdown tab, also the Timeline Extended window's Budget
+Breakdown tab, shows weekly income and expenses as pie charts and expandable
+lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
 Colors and percentages match across the pies and lists. Hover a tax, tariff,
@@ -136,8 +163,8 @@ central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
-refunds offset each other inside that group. Open
-How the Breakdown Works at the bottom for the accounting details.
+refunds offset each other inside that group. The "?" in the tab's header
+opens the Help page with the accounting details.
 
 ## The Nation tab
 
@@ -145,7 +172,7 @@ The Timeline Extended window opens on its Nation tab, unless the tab you last
 chose is open. The Nation tab gathers what your country carries for good, and it
 is open in every game from the first day.
 
-At the top, five boxes: Legislative Override Capacity, Wealth Concentration and
+At the top, five boxes: Legislative Override Capacity, Dynastic Wealth and
 the score it is heading for, Construction Cost, Global Technology, and Judicial
 Independence and its ceiling. The first names the strongest Forceful Legislation
 option open to you, which also depends on the authority you produce.
@@ -153,7 +180,11 @@ option open to you, which also depends on the authority you produce.
 Below them are five sections: Governance, Society, Economy, Science and Space,
 and International. Each starts with its scores, if it has any. Legislative
 Override Capacity's figure names every source on hover, and the lines on its bar
-mark where Forceful Legislation's options open, at 0, 2 and 4.
+mark where Forceful Legislation's options open, at 0, 2 and 4. Once a United
+Nations exists, International starts with your place in it: a member, a
+permanent member, suspended, or outside. Once you have joined it adds your
+International Standing, kept if you leave, and while you are a member your UN
+Dues, with any months in arrears.
 
 Under the scores, each section has a row for each kind of effect the mod's
 permanent effects give your country, grouped under small headings: "Arable
@@ -167,17 +198,23 @@ appears once one of those permanent effects adds to it. A state, building or
 interest group row is what your country gives each of them; their own panels add
 their local sources.
 
-Where These Come From, collapsed at the bottom, lists the permanent effects
+Where These Come From, collapsed below the sections, lists the permanent effects
 themselves under the section whose systems granted them, and its heading gives
 how many there are. Hover one to see what it does at its current size.
 
-The Modifiers list in the country panel's Information tab leaves these effects
-out, and a line under it gives how many it left out. On your own country an
-arrow beside that line opens the Nation tab. The list keeps the timed effects,
-such as what an event has just done to you, and a few others: Nuclear Power,
-and what a foreign operation is doing to you. A system's weekly costs are in the
-Budget panel's Breakdown tab. Tooltips that break down a figure, such as
-legitimacy, still name every source.
+All Modifiers, collapsed under it, lists every modifier your country holds, as
+the base game's country panel does: the timed effects, such as what an event has
+just done to you, with the time each has left; the permanent effects the sections
+add up; and a few that no section covers, such as Nuclear Power and what a
+foreign operation is doing to you. Its heading gives how many there are.
+
+The country panel's Information tab doesn't list modifiers. Under its Modifiers
+heading, a line gives how many the country holds. On your own country an arrow
+beside that line opens the Nation tab; on another country's it opens that
+country's Nation tab in National Info, which shows all of it: the scores, the
+rows, the permanent effects, All Modifiers and the UN lines. A system's weekly
+costs are in the Budget panel's Breakdown tab. Tooltips that break down a
+figure, such as legitimacy, still name every source.
 
 ## How the guide is organized
 

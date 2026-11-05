@@ -563,7 +563,7 @@ class DelegationHint(unittest.TestCase):
 
     def test_the_hint_closes_the_tooltips_first_paragraph(self):
         tip = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_tt')
-        call = "[JournalEntry.GetCountry.GetCustom('te_mon_delegation_purchase_hint')]"
+        call = "[Country.GetCustom('te_mon_delegation_purchase_hint')]"
         self.assertEqual(tip.count(call), 1)
         self.assertLess(tip.index(call), tip.index('$TOOLTIP_DELIMITER$'))
 
@@ -581,7 +581,7 @@ class DelegationHint(unittest.TestCase):
 
     def test_the_hint_names_the_condition_rather_than_promising_purchases(self):
         hint = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint')
-        self.assertTrue(hint.startswith(' Your rate is on its floor and prices are falling'))
+        self.assertTrue(hint.startswith(' The rate is on its floor and prices are falling'))
         self.assertIn('whenever its rule asked for a lower rate than the floor allows', hint)
         self.assertNotIn('\\n', hint)
         self.assertEqual(TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint_none'), '')

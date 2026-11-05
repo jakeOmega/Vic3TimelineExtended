@@ -48,7 +48,7 @@ buildings:
   entities:
   - building_gm_name_carrier_anchor
   - building_grand_monument
-  reason: the name carrier's anchor is never built or shown (common/buildings/gm_name_carrier.txt); reviewed 2026-10-11
+  reason: the name carrier's anchor is never built or shown (common/buildings/08_zz_te_gm_name_carrier.txt); reviewed 2026-10-11
 - image: gfx/interface/icons/space_race_icons/colony_asteroid.dds
   entities:
   - building_sr_site_ceres

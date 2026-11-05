@@ -251,7 +251,7 @@ class RowTest(unittest.TestCase):
     def test_the_name_has_the_whole_line(self):
         self.assertRegex(self.row, r'minimumsize = \{ 480 -1 \}\s*maximumsize = \{ 480 -1 \}\s*autoresize = yes\s*'
                                    r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
-                                   r'default_format = "#tooltippable"\s*text = "gw_te_row_name"')
+                                   r'text = "gw_te_row_name"')
 
     def test_cells_fill_the_column_under_their_headings(self):
         row_line = self.row[self.row.index('text = "gw_te_row_name"') + 1:]

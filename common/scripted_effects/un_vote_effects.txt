@@ -43,8 +43,7 @@
 #
 # The late ballots (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md)
 # add un_res_last_call (every AI member still without a vote casts now; see
-# un_vote.6), un_res_deferred (human members that chose to decide later) and
-# the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
+# un_vote.6) and the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
 # their counts; un_chamber_display_effects.txt).
 #
 # Globals:
@@ -68,9 +67,9 @@
 # ============================================================================
 
 # Open a General Assembly vote on $TOPIC$. Stores scope:un_vote_target as the
-# resolution's target when it is saved, takes the vote lock, fires un_vote.1
-# to every other human member in 30 days, sends every member its lean at once,
-# and schedules the last call (un_vote.6, 360 days) and un_vote.2 (365 days)
+# resolution's target when it is saved, takes the vote lock, sends every
+# member its lean at once (un_resolutions_monthly_update sends the human
+# members un_vote.1 in the ninth month), and schedules the last call (un_vote.6, 360 days) and un_vote.2 (365 days)
 # for the proposer. Leaves scope:un_resolution pointing at the new container.
 # Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
 # Scope: proposing country
@@ -131,21 +130,14 @@ un_resolution_open = {
 	}
 	# The ballot (redesign phase 3; late ballots,
 	# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md). Human
-	# members get un_vote.1 in thirty days. Every member gets its un_vote.4 at
+	# members get un_vote.1 in the ninth month (un_resolutions_monthly_update;
+	# thirty days in until 2026-11-03). Every member gets its un_vote.4 at
 	# once, and every month from then on (un_resolutions_monthly_update): a
 	# human member sees its own lean, term by term, and every member sees each
 	# AI member's lean as a band from the first day. The AI votes in script, by
 	# the same lean, at month 9, 10 or 11 (un_vote_ai_draws); the last call
 	# (un_vote.6) five days before the results catches any AI member still
 	# without a vote.
-	every_country = {
-		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			NOT = { this = scope:un_res_proposer_scope }
-			is_ai = no
-		}
-		trigger_event = { id = un_vote.1 days = 30 }
-	}
 	un_vote_refresh_leans = yes
 	trigger_event = { id = un_vote.6 days = 360 }
 	trigger_event = { id = un_vote.2 days = 365 }
@@ -426,9 +418,16 @@ un_resolutions_monthly_update = {
 	#      (un_lobby_campaigns_monthly); then every member gets its un_vote.4:
 	#      its lean is written, and an AI member whose casting month has come
 	#      casts (un_vote_ai_cast_due).
-	#   c. A human member that chose to decide later is asked again at months 9
-	#      and 11 (un_vote.1 option D). Its trigger turns away one that has
-	#      voted since.
+	#   c. In the ninth month (owner, 2026-11-03; thirty days in until then),
+	#      every human member gets un_vote.1, once: the month counter passes 9
+	#      once. Its trigger turns away the proposer (on un_res_yes from the
+	#      start), a member that has voted in the chamber already, and one
+	#      without a vote (dues, suspended representation). Ninth is the AI's
+	#      first casting month, so both sides weigh their vote equally late.
+	#      A member that decides later is not asked again; the chamber's
+	#      buttons take its vote. (It was re-sent at months 9 and 11, to the
+	#      members on un_res_deferred, a list nothing writes now; a save's old
+	#      copy is archived and destroyed with its resolution.)
 	global_var:un_active_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
@@ -447,18 +446,11 @@ un_resolutions_monthly_update = {
 			un_lobby_ai_monthly = yes
 			un_vote_refresh_leans = yes
 			if = {
-				limit = {
-					has_variable_list = un_res_deferred
-					OR = {
-						var:un_res_months = 9
-						var:un_res_months = 11
-					}
-				}
-				every_in_list = {
-					variable = un_res_deferred
+				limit = { var:un_res_months = 9 }
+				every_country = {
 					limit = {
-						exists = this
 						is_ai = no
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
 					}
 					trigger_event = { id = un_vote.1 }
 				}
@@ -540,9 +532,11 @@ un_vote_apply_treaty_modifier = {
 	}
 	# Voting YES on decolonization is a public commitment — great powers
 	# that do so adopt the anti-colonial stance variable consumed by the
-	# je_colonial_empire bar (via colonial_gp_condemners_count). Setting
-	# the cooldown variable prevents decolonization_events.14 from firing
-	# afterward and letting the player re-deliberate the same stance.
+	# je_colonial_empire bar (via colonial_gp_condemners_count), through the
+	# stance's one core (decol_stance_core_anti: its influence cost while it
+	# counts, and the 24-month wait before the Colonial Empire tab can change
+	# it). Setting the cooldown variable prevents decolonization_events.14
+	# from firing afterward and letting the AI re-deliberate the same stance.
 	# Only a member that cast a ballot takes the stance: a yes voter (the
 	# proposer included), or a no voter that accepts the declaration anyway
 	# (un_vote.3 option B). A member that cast none — its vote suspended
@@ -556,20 +550,11 @@ un_vote_apply_treaty_modifier = {
 			}
 			country_rank >= rank_value:great_power
 		}
-		set_variable = gp_anti_colonial_stance
-		if = {
-			limit = { has_variable = gp_pro_colonial_stance }
-			remove_variable = gp_pro_colonial_stance
+		custom_tooltip = {
+			text = decol_stance_un_vote_tt
+			decol_stance_core_anti = yes
 		}
 		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
-		if = {
-			limit = { NOT = { has_modifier = gp_anti_colonial_policy_modifier } }
-			add_modifier = {
-				name = gp_anti_colonial_policy_modifier
-				days = 1095
-				is_decaying = yes
-			}
-		}
 	}
 	if = {
 		limit = {

@@ -26,6 +26,13 @@ in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. There, the progress bar shows only while you
 have a program, and the tab ends with an Open Journal Entry button.
 
+From the world's first warhead, another country's National Info has a Nuclear
+tab with what the world knows of it: its warheads as the world estimates them
+(none known before its first test), the nuclear guarantees it gives and holds,
+any crisis it is in, World Crises, the nuclear taboo's score and history, and
+Nuclear Powers. Its true count, program, posture, forces and reputation, and
+every button, are only on your own.
+
 ![The Nuclear tab of the Military panel for a country holding 12 warheads: the overview (an Unfunded program, warheads, credibility, doctrine, readiness, launch authority and the taboo bar), The Program at funding step 0 with its progress bar, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
 
 The overview is a grid of boxes, two to a row. Each box has an icon, a caption,
@@ -39,8 +46,10 @@ the reading in a word and one figure beneath it; hover a box for the detail.
 
 The Program sits directly above the entry's progress bar, which is progress
 toward your next warhead. The other sections follow below the bar. Every
-section starts open except How Nuclear Weapons Work, which holds the
-explanations, one heading per topic. Doctrine, readiness and launch authority
+section starts open. The "?" at the right of the tab's header, and at the top
+of the journal entry, opens the Help page, How Nuclear Weapons Work, with one
+heading per topic.
+Doctrine, readiness and launch authority
 each open their choices from a Change button beside their row, and Disavow our
 strikes is a switch of its own.
 
@@ -56,7 +65,6 @@ strikes is a switch of its own.
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
 | Delivery and Defense | Always | Your delivery capability and home defense |
 | Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag and public doctrine; your own row is tinted |
-| How Nuclear Weapons Work | Always | The explanations, collapsed |
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
@@ -455,7 +463,10 @@ below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 - Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't back with a nuclear threat a demand so large that it alone keeps an AI target from conceding. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
-open.
+open. Talks are open while a proposal to stand down or to trade awaits an
+answer, and for six weeks after one side answers The Exercise They Mistook by
+sharing its schedule (the threatening side accepting, if the other shared it).
+Either side can still make a proposal during those six weeks.
 
 <!-- screenshot: the Nuclear Crisis section during a Confrontation, with the pressure breakdown tooltip open -->
 

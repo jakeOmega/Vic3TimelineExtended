@@ -1,6 +1,6 @@
 # Global Warming GUI: Icons
 
-The Global Warming panels' overview and policy rows draw 19 icons of their own, plus a pie pair. They were placeholders during the style-guide pass, and PR #586 painted them. All of them live in `gfx/interface/icons/gw_icons/`. Two marks stay vanilla by design: the in-force check and Treaty-Bound. Fossil-Fuel Tariffs and Carbon Removal Support had shared another policy's icon, so at a glance they read as that policy (GW-12, 2026-10-27); they showed placeholders until icon batch 7 (2026-10-30) painted their own.
+The Global Warming panels' overview and policy rows draw 21 icons of their own (7 tier codes, 2 roles, the penalty and 11 policies), plus a pie pair. They were placeholders during the style-guide pass, and PR #586 painted them. All of them live in `gfx/interface/icons/gw_icons/`. Two marks stay vanilla by design: the in-force check and Treaty-Bound. Fossil-Fuel Tariffs and Carbon Removal Support had shared another policy's icon, so at a glance they read as that policy (GW-12, 2026-10-27); they showed placeholders until icon batch 7 (2026-10-30) painted their own. Aerosol Injection (Geoengineering) borrowed the UN's climate topic icon until icon batch 9 painted its own, `policy_aerosol_injection.dds`.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/global_warming_widget.gui`, chosen by a display value or a scripted GUI:
 - the overview's cells and pies are in `te_gw_overview_panel`;
@@ -58,6 +58,7 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Fossil-Fuel Divestment | a black oil barrel, a gold coin flying up and away from it (the list's red arrow was left out) | `policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | a small red-brick building front with a bright green leaf on its wall | `policy_green_building_codes.dds` |
 | Fossil-Fuel Tariffs | a red-and-white striped barrier gate over a small coal wagon | `policy_fossil_fuel_tariffs.dds` |
+| Aerosol Injection | a small white jet between a pale sun and the curve of the globe (icon batch 9; the UN's climate topic icon until then) | `policy_aerosol_injection.dds` |
 
 Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not. It is vanilla's `gfx/interface/icons/generic_icons/green_checkmark.dds`, kept.
 

@@ -1,0 +1,734 @@
+# Local Climate: a climate record per state, and comfort as migration attraction
+
+Date: 2026-11-01. Owner request, reached in conversation: remove the arable land
+minimum for mass migration targets, and in its place represent how climate
+shaped where people chose to live. Coasts held denser populations than equally
+fertile interiors because their temperatures were milder, and the US South
+stayed thinner than its land suggests until air conditioning. Each state gets a
+small climate record (a handful of numbers) that feeds a comfort score, comfort
+feeds migration attraction, technology eases each kind of discomfort at its own
+time, and global warming moves the record. Calls the owner did not make are
+marked *(designer's call)*; the builder may revisit those with a stated reason.
+
+## 1. Why
+
+- **The arable land minimum is a poor guard, and it shuts out small places.**
+  `MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 10` (vanilla `NPops`) keeps a state
+  below 10 arable land from ever being a mass migration target. That excludes
+  city-states, treaty ports and partial states, whose share of a region's arable
+  land is small: Hamburg's two provinces of Elbe hold about 5 of the region's
+  30. It also stops guarding late in the game, because the mod's technologies
+  multiply arable land several times over and most marginal land clears 10
+  (owner).
+- **Removing it opens deserts and mountains** unless something else says where
+  people want to live. That something should be climate.
+- **Climate drew people historically**, and nothing in the base game or the mod
+  says so today. Vanilla's desert traits cut farming, construction and
+  infrastructure but not migration, and vanilla's malaria traits sit only on
+  Africa, Indonesia and the Pacific islands, so the US South carries no
+  disease mark.
+- **Base appeal is not the score to reuse.** The conversation started from
+  "rebrand or split base tourism appeal into comfort". Base appeal is a
+  tourist's score: it rates Wyoming 90 and Alaska 80 for Yellowstone and the
+  glaciers, exactly the places people did not settle. Comfort needs its own
+  numbers.
+
+## 2. Goals, non-goals, anti-goals
+
+**Goals**
+
+1. Every land state region has a climate record: summer heat, summer
+   humidity, winter cold, aridity, malaria, latitude.
+2. The record produces a comfort penalty in migration attraction, so harsh
+   climates draw fewer migrants, both within a market and as mass migration
+   targets (the owner's reading: mass migration attraction is mostly ordinary
+   migration attraction).
+3. Technology eases each part of the penalty on its own schedule: cold early,
+   disease and water in between, heat late (air conditioning).
+4. Global warming shifts the record's temperatures, so hot places get less
+   comfortable and cold ones more.
+5. The state panel shows the record and what it costs the state, following the
+   mod's state panel tiles (Homeland Dynamics, Migration Crowding, the tourism
+   card).
+6. The arable land minimum for mass migration targets goes. The penalty for
+   countries with few target states stays at vanilla's (owner, 2026-11-01):
+   a one-state country keeps 40% of its score, so removing the floor lets
+   city-states in without letting one outdraw a continent.
+
+**Non-goals (v1)**
+
+- Agriculture reading the climate record. This is v2 (owner): it overlaps
+  vanilla's desert and soil traits and the mod's arable land technologies.
+- Any change to base tourism appeal. Comfort does not feed tourism. If a later
+  version ties sun and beach tourism to the record, the climate part of base
+  appeal has to come out first, or it counts twice.
+- The Demographics census reading the record's malaria. The census keeps its
+  own malaria factor from vanilla's traits *(designer's call)*: switching it is
+  a recalibration of a fitted system, and it belongs with v2. Until then the
+  Local Climate tile can mark Georgia malarial while the census does not.
+- Air conditioning as electricity demand ("tech or something", owner). v1
+  makes it a technology effect; making hot states consume power for cooling
+  is a v2 candidate for the power grid system.
+- AI work. Migration is the engine's; the carriers are ordinary technologies.
+- A game rule *(designer's call)*: the define change cannot follow a rule, so
+  turning comfort off would leave the floor gone and nothing in its place.
+  Migration Crowding has no rule either.
+- A terrain or ruggedness field (owner, 2026-11-01). Altitude enters through
+  the main settled area's temperatures and aridity: a high, cold or dry
+  plateau pays, and a mountain state with a mild main town pays little and
+  is left to jobs.
+- A counterweight on country attraction (owner, 2026-11-01). Which countries
+  win mass migrations once comfort is in is left to emerge, and the play-test
+  checks it (§ 5.3, § 9).
+
+**Anti-goals**: what would make this a failure even if it works
+
+- **Climate as an eligibility gate.** No state is barred from anything by its
+  climate. It is a penalty in attraction, per the mod's soft-caps default.
+- **Scenic wilderness as a magnet.** This is why base appeal is not reused.
+- **Swamping jobs and wages.** A booming hot state still draws people (Gulf
+  oil towns, 20th-century Houston). Comfort shifts the balance and must not
+  overrule the economy.
+- **Double counting** with Migration Crowding (density) or with the census's
+  malaria deaths.
+- **Micromanagement.** There is nothing to toggle, no building to manage and no
+  decision to take.
+
+## 3. What exists today (facts this rests on)
+
+- **Migration attraction's scale** (vanilla `NPops`): +2 per point of average
+  standard of living, up to +30 from available jobs, up to +10 from
+  subsistence jobs, down to −50 from unemployment. A state receives
+  intra-market migration only above 1.25 × the market's average attraction
+  (`MIGRATION_PULL_HIGH_THRESHOLD`). A pop in a mass migration moves only to a
+  state that beats home by 10 (`MASS_MIGRATION_MIN_DIFFERENCE_IN_MIGRATION_ATTRACTION_TO_MOVE`).
+- **The mass migration target defines** (vanilla `NPops`; the mod overrides
+  none): `MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 10` is a hard filter on each
+  state. `MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY = 4` and
+  `MASS_MIGRATION_FEW_TARGET_STATES_PENALTY = 0.2` cut a country's target score
+  by 20% for each eligible state below 4, so one eligible state keeps 40%.
+  Each country's piece of a split region is its own state, and a piece gets a
+  share of the region's arable land
+  (`docs/vanilla/vanilla_states_reference.md` § 1.2).
+- **Precedent: Migration Crowding** (`docs/systems/mod_systems/pops_and_migration.md`):
+  a state modifier (`migration_crowding`, `state_migration_pull_mult`)
+  re-applied from `on_yearly_pulse_state` with a script-value multiplier, its
+  own state panel tile, no game rule. Local Climate follows the same shape.
+- **Precedent: per-region tables.** `base_tourism_appeal_value`
+  (`common/script_values/tourism.txt`) is a `state_region = s:X` if-chain over
+  671 regions, each with a one-line reason. `gen_tourism_heritage.py` turns a
+  CSV in `scripts/generators/data/` into a generated script value keyed the
+  same way, with a staleness test.
+- **Global warming's temperature** is world-wide, not per state:
+  `temperature_anomaly_display` is the felt anomaly (warming less the aerosol
+  mask), `gw_unmasked_temperature` the warming emissions caused
+  (`docs/systems/mod_systems/global_warming.md`).
+- **Malaria in the mod today**: the Demographics census multiplies infection
+  deaths in states with vanilla's malaria traits, and `malaria_prevention`
+  (vanilla, era 4) carries `state_malaria_control_add = 1` for it
+  (`te_demog_tech_injections.txt`). `quinine` (era 2) carries nothing for the
+  census, because it protected colonists rather than the people who lived
+  there.
+- **No mod content mentions air conditioning.** Era 6 has `personal_appliances`
+  and `rural_electrification`; era 7 has `prefabricated_construction` and
+  `modern_urban_planning`.
+
+## 4. The climate record
+
+**Keyed on the state region** (`state_region = s:X`), like base appeal. Every
+piece of a split region therefore has the region's climate. Sea regions
+(`map_data/state_regions/99_seas.txt`) get no row. A state with no row reads as
+neutral: no penalty, and the tile says "no climate data".
+
+**Fields.** Real-world units, so a reader can check a row against climate
+normals *(designer's call)*:
+
+| Field | Meaning | Example: Georgia |
+|---|---|---|
+| `summer_mean_c` | Warmest month's mean temperature, °C, integer | 28 |
+| `summer_humidity` | The warmest month's mean dew point as a class: 0 dry (under 10 °C), 1 moderate (10–16), 2 humid (16–20), 3 oppressive (over 20). A dry-summer Mediterranean climate is 0 or 1 | 3 |
+| `winter_mean_c` | Coldest month's mean temperature, °C, integer | 8 |
+| `aridity` | Water for settlement at the reference place: 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river whose valley holds the main settled area counts as ample, so the Nile valley is 0; a desert whose settled area a lesser river or a large oasis waters is 1 (Lima, Isfahan); a desert of small oases and wells is 2 (Ghardaia; ruled 2026-11-01 at the merge) | 0 |
+| `malaria` | Malaria as of 1836: 0 none, 1 seasonal or local, 2 endemic | 2 |
+| `latitude` | Signed degrees of the reference place, integer | 32 |
+| `ref_place` | The place the figures describe (CSV only) | Savannah |
+| `reason` | One line, as base appeal's comments (CSV only) | Hot, humid coastal lowland, endemic malaria |
+
+- **Heat is the warmest month's mean, read with its dew point** *(designer's
+  call)*. The builder check found that a daily maximum read with a Köppen
+  humidity class ranks Seville (36 °C maximum, dry summer) worse than Savannah
+  (33 °C, oppressive). That is the wrong way round for comfort, and no choice
+  of constants fixes it. With the mean and the dew point, Savannah (28, class
+  3) reads worse than Seville (28, class 1), and Kolkata (31, class 3) worse
+  than both.
+- **Aridity is its own field** *(designer's call)*. Dry heat is easier to bear
+  than humid heat, so a desert's comfort term alone is moderate, yet the
+  floor's job was to keep deserts out. What keeps people out of a desert is
+  water, and dams, irrigation and later desalination fixed that (the Sun Belt
+  needed both air conditioning and water projects).
+
+- **The figures describe where the people are:** the region's largest city or
+  main settled area, not its geographic center. A coastal city's milder
+  temperatures are why a coast scores better, so the coast needs no field of
+  its own *(designer's call)*.
+- **Malaria is historical, not vanilla's traits.** In 1836 it was endemic in
+  the US South, much of Italy, the Balkans, the Low Countries' coasts and
+  England's fens. The row must at least agree with vanilla where vanilla has a
+  trait: `state_trait_malaria` means 1 or more, `state_trait_severe_malaria`
+  means 2. A test checks this.
+- **Latitude is cheap and factual.** Phase 3 needs it for the strength of
+  warming, and v2 agriculture will probably want it.
+
+**Source and production.** One CSV,
+`scripts/generators/data/local_climate.csv`, 675 rows. It is filled by
+subagents in bulk, each with its own scratch directory and a slice of regions,
+from climate normals they know for each region's reference place. The owner
+prefers subscription subagents to paid API calls for bulk work. A generator,
+`scripts/generators/gen_local_climate.py`, writes
+`common/script_values/local_climate_generated.txt`: one state-scope script
+value per numeric field (`te_climate_summer_mean`, `te_climate_summer_humidity`,
+`te_climate_winter_mean`, `te_climate_aridity`, `te_climate_malaria`,
+`te_climate_latitude`), each an if-chain on `state_region`. It runs yearly and from the panel, so the chain's
+length doesn't matter. `--check` mode and a staleness test, as
+`gen_tourism_heritage.py` has.
+
+**Validation**, in the test: every land region of the mod's
+`map_data/state_regions/` has exactly one row; values sit in range (summer
+−10…45, winter −50…30, summer ≥ winter); humidity, aridity and malaria are in
+their classes; the vanilla malaria traits agree; every region with one of
+vanilla's desert traits (`state_trait_sahara_desert` and the like) has aridity
+1 or more, except the three named in `DESERT_TRAIT_EXCEPTIONS`, whose people live
+by a great river or outside the desert (Aswan, Perth, the Top End; ruled at the
+PR #1307 review). A plausibility pass also flags
+rows whose latitude and temperatures disagree badly (a 60° region with a
+30 °C winter), for a person to look at.
+
+## 5. Comfort
+
+*Heat v2 (§ 11) replaced the heat term, moved the penalty from attraction points to a
+percentage of migration attraction, and gave winters alone the latitude's
+amplification; § 12 made winter's mildness a signed term with London neutral, so
+comfort can be a small bonus. § 5's formula and § 5.3's targets are phase 2's, kept
+as the record.*
+
+**Shape.** Comfort is a penalty, never a bonus *(designer's call)*: a mild
+climate costs nothing, and a harsh one costs migration attraction. Inside a
+market a penalty is not quite the same as favoring mild places: vanilla compares
+a state's attraction with multiples of the market's average
+(`MIGRATION_PULL_HIGH_THRESHOLD` 1.25, `MIGRATION_PULL_LOW_THRESHOLD` 0.75), so
+a penalty every state shares loosens both thresholds by a quarter of it.
+Attraction floors at 0 (owner, 2026-11-01), so nothing inverts, but a penalty
+that pins a market's poorer states at 0 erases the gaps between them, and pops
+don't move for a gap under 5 points
+(`MARKET_MIGRATION_MIN_DIFFERENCE_IN_MIGRATION_ATTRACTION_TO_MOVE`), so internal
+migration there stalls. Hot, poor markets in the early eras (Bengal about 21,
+Cuba about 15) are where that can bite; the
+play-test list checks their internal migration (found at the whole-branch
+review).
+Across countries, a penalty keeps a desert from being picked without inflating
+anyone's attraction.
+
+```
+heat     = max(0, summer − H0) × (1 + k_hum × summer_humidity) × (1 − heat_relief)
+cold     = max(0, C0 − winter) × (1 − cold_relief)
+dry      = W × aridity × (1 − water_relief)
+disease  = D × malaria × (1 − disease_relief)
+penalty  = min(P_max, w_heat × heat + w_cold × cold + dry + disease)
+```
+
+- `summer` and `winter` are the record's figures plus warming against today's normals (phase 3; § 6).
+- `H0` (the summer mean where heat starts to cost), `C0` (the winter mean where
+  cold starts to cost), `k_hum`, `W`, `D`, the weights and `P_max` are tuning
+  constants at the head of the script values file. The builder sets them by
+  the calibration in § 5.3.
+- The four terms stay separate all the way to the panel, because each has its
+  own fixes and the player needs to see which one is costing them.
+
+### 5.1 How it is applied
+
+- **`state_migration_pull_add`, not `_mult`** *(designer's call)*. A penalty
+  in attraction points reads as "this climate is worth N points of standard of
+  living to a migrant" (2 points of attraction per point of standard of
+  living). A multiplier would also scale with the economy, and on a state
+  whose attraction is negative (heavy unemployment) a negative multiplier
+  would move it toward zero, turning the penalty into a bonus.
+- **One static modifier**, `local_climate_discomfort`
+  (`state_migration_pull_add = -1`), applied with `multiplier = <penalty>`.
+  The penalty is never negative, so no signed multiplier is needed.
+- **Dynamic-modifier pattern**: a state on-action on `on_yearly_pulse_state`
+  calls `te_update_local_climate_modifier`, which removes the old copy
+  (`remove_modifier_if_exists_effect`) and adds the new one, as
+  `migration_crowding_on_action` does. Its refresh is that pulse, plus a
+  first application on the state's monthly pulse for a state that has none
+  yet (no `var:te_climate_penalty_applied`). So 1836 has it within a month,
+  as do an old save and a newly colonized state. It can't be seeded from
+  `on_game_started`: `add_modifier`'s multiplier is read against ROOT, which
+  that hook doesn't have, and the engine would silently apply ×1
+  (`scripting_best_practices.md` § "`add_modifier { multiplier = var:X }`
+  Resolves Against ROOT"). A newly researched relief shows within a year. A
+  state that changes hands keeps its penalty until its next yearly pulse,
+  which is fine.
+- The refresh stores the penalty it applied
+  (`var:te_climate_penalty_applied`), so the panel can show what is in force,
+  as Migration Crowding stores `migration_crowding_mult_applied`.
+
+### 5.2 Relief from technology
+
+Four new modifier types, registered in `common/modifier_type_definitions/`,
+percent-styled, 0–1, with names and descriptions in loc:
+`state_climate_heat_relief_add`, `state_climate_cold_relief_add`,
+`state_climate_water_relief_add` and `state_climate_disease_relief_add`. The script values read each with
+`modifier:<type>` and clamp it to 1. They are modifiers rather than
+`has_technology` checks so that the engine's breakdown names every source on
+hover, and so that a law, building or event can grant relief later.
+
+Carriers are `INJECT:`s on existing technologies, as
+`te_demog_tech_injections.txt` does. A new technology is added only if no
+existing one fits. The schedule (owner: cold is addressable earlier; owner,
+2026-11-01: by the end of the game comfort is essentially fully mitigated
+everywhere):
+
+| Relief | Historical eras (1–7) | Modern eras (8–10) | Future eras (11–13) |
+|---|---|---|---|
+| Cold | To about 0.6. `railways` (era 2, coal by rail heats homes), an era 3 building technology for central heating, `rural_electrification` (era 6) | To about 0.8 by era 10: insulation and heat pumps. `advanced_structural_engineering` (era 10) | To 1.0. `compact_fusion_reactors` (era 12, heat too cheap to meter), then the shared capstone |
+| Disease | 1.0 by era 4. `quinine` (era 2), about half: migrants arrive without immunity, like the colonists it protected. `malaria_prevention` (era 4), the rest | Done | Done |
+| Heat | To about 0.8. `electrical_generation` (era 3, electric fans), `personal_appliances` (era 6, window units), an era 7 construction technology (central air in new housing) | To about 0.9 by era 10: cheap clean power for cooling. `clean_energy_technologies` (era 9) | To 1.0. `smart_grids` (era 11), then the shared capstone |
+| Water | To about 0.7. Eras 4–6 dams, irrigation and pumped supply, era 7 desalination. No water technology exists in vanilla or the mod; the builder picks engineering and chemistry carriers or adds one | To about 0.85 by era 10: desalination on cheap clean power. `clean_energy_technologies` (era 9) | To 1.0. `fusion_power` (era 11), then the shared capstone |
+
+- **The shared capstone** is one era 13 technology that finishes cold, heat
+  and water at once, `programmable_matter` or `molecular_assemblers`
+  (habitats built and climate-controlled to order) *(designer's call)*.
+- **Today (era 10) still has a residual**, as the real world does: Siberia
+  and northern Canada are still emptying, and desert cities are still dear to
+  supply. The residual goes in the future eras.
+- **Each figure is the sum of the carriers so far**, clamped to 1 in the
+  script values. There are no separate caps.
+
+The builder confirms each carrier by reading the technology tree
+(`common/technology/technologies/`, vanilla's and the mod's `era_*.txt`) and
+may swap one for a better fit. The candidates are named here only to fix the
+eras. `state_climate_disease_relief_add` is separate from the census's
+`state_malaria_control_add`, so quinine can help migrants without changing
+the census (§ 2). Disease relief adds the two (ruled at the build), so Malaria
+Prevention's Malaria Control eases the malaria cost too.
+
+### 5.3 Calibration (before any number is final)
+
+Per the mod's evidence-based tuning rule, the builder produces a table before
+fixing constants. For a set of anchor regions it shows the penalty in 1836 and at
+eras 4, 7, 10 and 13, beside the same states' standard-of-living and jobs terms
+from an observer save. Suggested anchors: Georgia, Louisiana, Massachusetts,
+Ohio, Arizona, California, Florida; Île-de-France, Lazio, Andalusia; Moscow,
+Yakutia; Egypt's Nile valley, the Sahara, Arabia; Bengal, the Deccan; coastal
+and interior Brazil; Quebec.
+
+Targets, in attraction points (1 SoL = 2 attraction), for the builder to
+confirm against that table:
+
+- A mild maritime climate (the Home Counties, Île-de-France): 0. A coastal
+  Mediterranean one (Catalonia): a few points for its humid summer. Lazio
+  carries the Roman Campagna's malaria in 1836, about −9, until Malaria
+  Prevention. A hot, dry-summer interior (Lower Andalusia at Seville): a heat
+  cost well under Georgia's.
+- Georgia in 1836: about −12 to −16 (6–8 SoL). With malaria and heat eased by
+  era 7: about −3.
+- Bengal in 1836: about −20 to −25, worse than Georgia, as its climate is.
+  Its density comes from history and rice, which comfort doesn't undo:
+  comfort moves the margin of migration, not the pops the game starts with.
+- The Sahara or the Arabian interior before relief: about −30, most of it the
+  dry term. Arizona: about −30 in 1836, about −5 once air conditioning and
+  water projects arrive. Yakutia before relief: about −30, and about −15
+  after the historical eras.
+- Era 10, a country with the technologies: Yakutia about −6, the Sahara
+  about −5, Georgia about 0. Era 13 with the capstone: 0 everywhere. A
+  country that lags in technology still pays, so the gap between rich and
+  poor countries shows in comfort too.
+- `P_max` around −40, so climate alone never outweighs a full jobs bonus plus
+  a good standard of living.
+
+**A country column too.** A country's mass migration attraction is "largely
+based on the average migration attraction of eligible states" (vanilla's
+`concept_mass_migration_pull_desc`). Removing the floor makes every
+incorporated, well-connected state eligible, so comfort moves which
+*country* a mass migration picks, not just which state. The table shows each
+anchor country's average with and without comfort: the United States (its
+South in the average), Argentina, Brazil, Canada, Australia, Russia, a
+city-state.
+
+**A known consequence.** Hot-to-hot mass migrations of the period, such as
+Indians to Mauritius, Natal and the Caribbean or Chinese to Malaya, weaken,
+because temperate target countries win the average. A state modifier can't
+tell a migrant from a hot homeland apart from any other, so acclimatization
+isn't representable. `P_max` and the jobs term are what keep those flows
+alive; the calibration table should show they survive at a reduced size.
+
+What should come out: the US North keeps drawing more migrants than the South
+until the mid-20th century, and the Sun Belt gains after air conditioning.
+Deserts are not picked as mass migration targets early on. Coasts outdraw
+interiors of similar wealth. The owner's standard is verisimilitude, not an
+exact fit.
+
+### 5.4 The defines
+
+In an `NPops = { }` block of `common/defines/extra_defines.txt`, shipped in the
+same PR as comfort and never before it:
+
+```
+MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 1
+```
+
+It was 0 in #1308, which the engine rejects at load (`defines.cpp:167 … Must be
+greater than 0`), so that build kept vanilla's floor. 1 is below every state
+region's arable land (the least is 2), so it has the same effect as no floor.
+
+`MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY` and
+`MASS_MIGRATION_FEW_TARGET_STATES_PENALTY` stay at vanilla's 4 and 0.2
+(owner, 2026-11-01; § 2 goal 6).
+
+The same PR fixes `docs/vanilla/vanilla_economy_reference.md` § 8.5. It says a
+mass migration target needs 30% market access, but the define
+(`MASS_MIGRATION_STATE_MIN_MARKET_ACCESS`) is 0.7 in 1.13.9 and in the
+installed game. It also describes the arable land floor, which the mod now
+removes.
+
+## 6. Global warming (phase 3)
+
+- `summer` and `winter` in § 5 become the record's figures plus
+  `(temperature_anomaly_display − te_climate_normals_warming) × amplification(latitude)`.
+  The felt anomaly is used because an aerosol haze cools the air people live
+  in *(designer's call)*. The record holds today's normals, which already carry
+  about 1.1 °C of warming, so `te_climate_normals_warming = 1.1`: a region reads
+  its record exactly when the world's anomaly reaches today's, and 1836, at
+  anomaly 0, runs 1.1 °C × amplification colder *(owner, 2026-11-01)*. To keep
+  § 5.3's 1836 targets with the colder start, `H0` is 22 °C, not the 23 °C
+  first calibrated against the normals themselves. With the Global Warming rule
+  off the anomaly stays 0, and every region keeps its 1836 climate.
+- Amplification rises with latitude: about 1 in the tropics and about 2.5
+  above the Arctic Circle, as observed warming runs. The builder picks a
+  simple curve and states it.
+- Warming then raises the heat term and lowers the cold term, so Siberia gains
+  and the Gulf loses. The panel's hover shows the shift.
+- Relief multiplies the warmed temperatures too. Once a country holds full
+  heat relief, warming costs its states no comfort, though it keeps costing
+  through global warming's own effects. A country without the technologies
+  feels the full shift.
+- This is one term in two script values plus a hover line. The builder may
+  ship it in phase 2's PR *(designer's call)*.
+
+## 7. The state panel
+
+A **Local Climate** tile in the state panel's status grid, built as a type in
+`gui/te_state_panel_widgets.gui` with an instance in `gui/states_panel.gui`,
+like the Migration Crowding tile. It follows `docs/guides/gui_style_guide.md`:
+a brief label and value per row, the detail on hover, the parts of a total as
+signed rows.
+
+- **Phase 1 (readings):** Summer (°C), Humidity (Dry, Moderate, Humid or
+  Sultry), Winter (°C), Water (Ample, Limited or Scarce), Malaria (None,
+  Seasonal or Endemic), as built. Each
+  row's hover says what the reading means and that the figures describe the
+  region's main settled area. The reference place is not named in game
+  *(designer's call)*: naming it would take about 675 generated place-name
+  keys and their translations, and vanilla's hub names (Georgia's city hub is
+  Macon, not Savannah) would name a different place from the one measured.
+- **Phase 2 (comfort):** a Comfort row, the migration attraction the climate
+  costs (red), and each reading row's hover adds its term: the raw penalty,
+  the relief in force with its sources
+  (`GetValueWithBreakdownFor('state_climate_heat_relief_add')` and so on),
+  and the result.
+- **Phase 3:** the summer and winter hovers add the warming shift.
+- The tile's name is a concept, `concept_local_climate`, with a `_desc` that
+  explains the record and comfort.
+- **Naming** *(designer's call)*: "Local Climate", never bare "Climate", which
+  already names the global warming panels, the Market panel's Climate tab and
+  the player guide's chapter 15.
+- Layout inside the 260 px tile (rows, bars or plain values) is the builder's,
+  within the style guide. Placeholder icons are fine, listed as the style guide
+  asks.
+
+## 8. Phases
+
+1. **The record and its readings.** CSV, generator, generated script values,
+   tests, the tile's five reading rows, the concept, the system doc. No
+   gameplay effect.
+2. **Comfort.** The penalty script values and constants, the static modifier
+   and its yearly refresh and first application, the four relief types and their
+   carriers, the calibration table, the defines, the Comfort row and the term
+   hovers, the player guide section, the economy reference fix.
+3. **Global warming.** Amplification, the shifted temperatures, the hover
+   lines, a line in player guide chapter 15. It may fold into phase 2.
+
+v2, separately: agriculture from the record; the census's malaria from the
+record; air conditioning as electricity demand; climate in tourism.
+
+## 9. House plumbing (constraints, not discoveries)
+
+- `docs/systems/mod_systems/local_climate.md`, with a row in
+  `docs/systems/mod_systems.md` (`test_mod_systems_index.py`), and a row in
+  `state_and_nation_panels.md`'s tile table.
+- The generated file goes in `docs/auto_generated_files.md` and in
+  `scripts/nightly_audit_select.py`'s `EXCLUDED_REGISTRY_GLOBS`, with the CSV
+  under `INTENTIONALLY_NOT_EXCLUDED` (`test_nightly_audit_select`).
+- `local_climate_discomfort` is a permanent state modifier and needs a
+  `NOT_ON_COUNTRY` line in `scripts/generators/gen_nation_tab.py`. The four
+  relief types are carried by technologies, so they need type-registry lines
+  (`TYPE_ROWS` or `NOT_A_ROW`). Rerun the generator; `test_nation_tab.py`
+  names what is missing.
+- Loc for the modifier, the four types, the concept and every tile key, then
+  `organize_loc.py`. `loc_coverage_audit` and `concept_reference_audit` run in
+  CI.
+- Player guide (`docs/player_guide/08-states.md`): a Local climate section
+  beside Migration crowding at its depth, with a line in chapter 15 in
+  phase 3. Rebuild the PDF.
+- A play-test list, `docs/testing/local-climate-playtest.md`: the tile
+  renders; in an observer run, the US South's net migration until 1930 is
+  below the North's; a city-state or a partial state is picked as a mass
+  migration target once the define changes (`is_mass_migration_target` on a
+  state with under 10 arable land); no desert is a mass migration target
+  before era 4; the destination countries' shares of mass migrations to 1914,
+  against an observer run without comfort. Where an engine fact is unverified, a once-a-game
+  `TE_SELF_CHECK` line per the house pattern: for example, the count of mass
+  migration targets under 10 arable land, logged ten years in.
+- The UTF-8 BOM on every new `.txt` and `.gui`, tabs in brace files
+  (`format_paradox_tabs.py`), and an entry in `docs/superpowers/README.md`.
+
+## 10. Left to the builder
+
+The tuning constants (by § 5.3); the final carrier technologies (by § 5.2's
+eras); the amplification curve; the tile's layout; the CSV's production
+split across subagents; icons.
+
+## 11. Heat v2: the hottest days, a curve, and percent (2026-11-01)
+
+### 11.1 Why
+
+After phase 2 the owner found Hawaii's penalty, all of it heat, about as bad as
+northern Sweden's before any technology. Two faults: a warm month's mean can't
+tell a steady 27 °C (Honolulu) from a summer that swings between 15 and 38 °C,
+and the cost was linear in temperature, though heat stress isn't: around 31 °C
+wet-bulb the body can't shed heat at all, so the last degrees should cost far
+more than the first. The owner agreed to heat from each region's hottest days,
+from station data for all 675 regions, and a capped curve that steepens
+moderately.
+
+The owner's 1892 breakdowns (a save ahead of its era on technology) showed
+migration attraction floors at 0 and that the mod's points sit beside large
+standard-of-living terms: Bihar about 26 before its percentages, Georgia 33,
+New York 44, and West Bengal at 0 from mass unemployment. A points penalty
+every state of a hot, poor market shares can pin its poorer states at 0 and
+erase the gaps pops move for (§ 5). A percentage scales each state's
+attraction instead, so gaps survive in proportion: a pair 20 apart stays 10
+apart at −50%. Percentages add to a state's others before they multiply, so a
+climate cut weighs less where buildings, laws and decrees already add a lot
+(Georgia's +48% in the save), and more where famine, turmoil, pollution, a
+blockade or devastation already cut, which can take a hot state to 0 outright.
+The owner ruled out a further cap: a crowded, hot state with nothing else going
+for it should lose people and draw none.
+
+### 11.2 Data
+
+- **Fields.** `hot_day_c` is the mean over years of each year's highest daily
+  maximum. `heat_index` is the mean over years of each year's highest daily
+  0.7 × wet-bulb + 0.3 × maximum, the wet-bulb by Stull's formula from the
+  day's maximum and its mean dew point; the blend leans on the wet-bulb, which
+  sets whether sweat can cool the body, and keeps some dry heat. `heat_source`
+  says where a row's figures come from.
+- **Pull.** Wolfram `WeatherData`, daily maximum temperature and dew point,
+  2010–2020, at the first of the six stations nearest each region's reference
+  place with at least six years holding 300 days of both (2000–2020 where none
+  had). Better stations replaced the nearest for South Tyrol, Calabria,
+  Piedmont and New York (LaGuardia). The Eastern Himalayas take the Himalayas'
+  Kathmandu figures (`analog:STATE_HIMALAYAS`).
+- **The fit.** A least-squares fit of each figure on the record's other fields
+  (RMSE 1.3 for the index, 2.2 for the hot day). A row whose station is over
+  150 km away or 300 m above or below the place, and whose figure differs from
+  the fit by 2.5 or more, takes the fit (`heat_source = fit`): Eritrea,
+  Darfur, Amhara, Gonder, Kazembe, Congo Orientale, East Angola, La Paz,
+  Potosí, Goiás, Yemen, Isfahan, the Central Highlands, Beijing, Sakhalin and
+  Irkutsk. Adelaide and Melbourne keep their stations' high figures, which are
+  real heat waves. STATE_OROMIA's place is Ankober and STATE_AMHARA's Jimma,
+  which look swapped but follow vanilla's map: Shewa's capital sits in
+  STATE_OROMIA.
+- **Kept.** `summer_mean_c` stays in the CSV for the generator's checks and
+  plausibility list; the formula no longer reads it. `summer_humidity` stays as
+  the tile's Humidity word, a description: the index carries humidity.
+
+### 11.3 Formula
+
+```
+summer warming = anomaly − normals            (te_climate_summer_warming)
+winter warming = summer warming × amp(|lat|)  (te_climate_winter_warming)
+x        = max(0, heat_index + 0.8 × summer warming − 26)
+heat     = (4.1 x + 0.36 x²) × (1 − heat_relief)
+cold     = 1.6 × max(0, 0 − (winter + winter warming)) × (1 − cold_relief)
+dry      = 16 × aridity × (1 − water_relief)
+disease  = 5 × malaria × (1 − disease_relief)
+penalty  = min(80, heat + cold + dry + disease)   percent of migration attraction
+```
+
+- **The curve.** The eighth degree over 26 costs a little over twice the first
+  (slope 9.5 against 4.5 points of percent). 26 is about where an index starts
+  to tell against a mild summer: London 25.4 and Stockholm 23.7 pay nothing,
+  Paris's 27.6 a little.
+- **0.8 per degree.** The index rises a little slower than air temperature as
+  the world warms, relative humidity holding roughly steady.
+- **Winters alone take amplification** *(designer's call)*. Arctic
+  amplification is mostly a cold-season effect. With it on the hot days,
+  Yakutsk (index 25.4, amplification 2.3) crossed 26 under warming and its
+  cost rose with warming, against § 6. The cost of the call: 1836 Paris is
+  1.1 °C colder on its hottest days, not 1.9, so it pays 3% rather than 0.
+- **Applied** as `local_climate_discomfort` with `state_migration_pull_mult =
+  -0.01`, times the penalty, from the yearly refresh; added above 0.5, the
+  tile's gate too, since a smaller cut would show as −0%.
+
+### 11.4 Calibration
+
+Targets, in percent in 1836 unless an era is given (`test_local_climate_comfort.py`
+pins them): Georgia about 27, falling to 2–8 by era 7; West Bengal about 50, so
+two of its states 10 points apart stay about 5 apart, the gap pops need; the Home Counties, Île-de-France and
+Catalonia near 0; Hawaii under Norrland and under Paris (the owner's case);
+Yakutsk 55–75; Oman at the cap. Outcome, with every carrier to each era:
+
+| Region | Heat | Cold | Dry | Malaria | 1836 | Era 4 | Era 7 | Era 10 |
+|---|---|---|---|---|---|---|---|---|
+| Georgia (Savannah) | 17.6 | 0 | 0 | 10 | 27.6 | 15.8 | 3.5 | 1.8 |
+| West Bengal (Calcutta) | 40.3 | 0 | 0 | 10 | 50.3 | 36.3 | 8.1 | 4.0 |
+| Massachusetts (Boston) | 6.5 | 5.8 | 0 | 0 | 12.4 | 9.1 | 3.6 | 1.8 |
+| Arizona (Tucson) | 12.6 | 0 | 32 | 0 | 44.6 | 37.0 | 12.1 | 6.1 |
+| Lazio (Rome) | 7.6 | 0 | 0 | 10 | 17.6 | 6.8 | 1.5 | 0.8 |
+| Île-de-France (Paris) | 3.1 | 0 | 0 | 0 | 3.1 | 2.8 | 0.6 | 0.3 |
+| Hawaii (Honolulu) | 1.3 | 0 | 0 | 0 | 1.3 | 1.2 | | |
+| Norrland (Sundsvall) | 0 | 13.7 | 0 | 0 | 13.7 | 7.5 | | |
+| Yakutsk | 0 | 64.9 | 0 | 0 | 64.9 | 35.7 | 25.9 | 13.0 |
+| Oman (Muscat) | 53.1 | 0 | 32 | 5 | 80 | 73.4 | | |
+
+Across all 675 regions in 1836: median 19.6%, 42 at 0 and 48 under 0.5 (no
+modifier), 44 at 50 or more, 4 at the cap. Every region costs nothing at era 13.
+
+### 11.5 Old saves
+
+A state carries phase 2's points in `te_climate_penalty_applied` until its
+yearly refresh, and the new modifier reads them as percent meanwhile. That errs
+low almost everywhere (Georgia −15%, against −28%) but high where phase 2's heat
+overcounted a steady climate: Hawaii shows about −8% against −1%, Bermuda −10%
+against −4%; 12 regions err high in 1836. No repair: it lasts at most a year.
+
+## 12. Winter's mildness: London neutral, a small bonus (2026-11-01)
+
+### 12.1 Why
+
+The owner asked whether the Home Counties should be maximally comfortable. Under
+§ 11 cold cost only below a 0 °C winter mean, so London (5 °C) tied for best with
+47 other regions: Funchal, Medellín and Cape Town, but also Glasgow, Inverness
+and the Falklands, while Barcelona and San Francisco paid a little for heat or
+malaria. People prefer mild winters, and the preference shows strongly once
+incomes allow it: the US Sun Belt, Britons retiring to Spain; winter warmth is
+among the strongest predictors of where Americans moved between 1970 and 2000
+(Rappaport 2007, "Moving to nice weather"). The owner chose London as the
+neutral point, with a small bonus for milder winters (Madeira), and asked that
+this part shrink with technology but go fully only in eras 11+ ("personal
+heating or somesuch").
+
+### 12.2 Formula
+
+```
+winter'  = winter + winter warming
+cold     = 0.94 × max(0, 0 − winter') × (1 − cold_relief)                  frost
+share    = max(0, 1 − heat_raw / 20)                       a hot summer cancels the draw
+winter   = 0.6 × (max(0, 3 − winter') − max(0, min(winter', 15) − 3) × share)
+           × (1 − winter_relief)                                           signed
+penalty  = min(80, heat + cold + winter + dry + disease)                   no floor
+```
+
+- 3 °C is London's coldest-month mean in 1836 (5 °C less 2.07 of amplified
+  cooling), so London is neutral then and gains a little as the world warms.
+- The bonus stops growing at 15 °C, so it is at most 7.2%, against costs up to
+  80% *(designer's call: asymmetric magnitudes)*.
+- **A hot summer cancels the draw** (owner, 2026-11-01). The bonus shrinks with
+  the heat cost before relief and is gone at 20%. Without it, heat relief (0.8
+  by era 7) outran winter relief (0.2), and 191 regions netted a bonus in era 7,
+  95 of them hot and humid: Khartoum, with a 49 °C hottest day, read +2% while
+  London read 0 (#1313's review). People who prize mild winters avoid hot,
+  humid summers too (Rappaport). Before relief, since a cooled house doesn't
+  make the summer outside milder. A harsh winter's cost is untouched.
+- The frost weight fell from 1.6 to 0.94 so Yakutsk, which now also pays the
+  winter term, stays near 65%.
+- **Applied** as two fixed-sign modifiers: `local_climate_discomfort`
+  (−0.01 × the penalty) or `local_climate_amenity` (+0.01 × `te_climate_bonus`,
+  the penalty's negative part), each above 0.5. Nobody has seen a negative
+  multiplier work, and monetary policy's `te_fx_weak`/`_strong` made the same
+  choice.
+
+### 12.3 Relief
+
+A new type, `state_climate_winter_relief_add` (Winter Relief), closes the gap
+from both sides: a raw winter's cost and a mild one's draw shrink together, as
+heated, insulated homes make any winter bearable and a mild one matters less.
+So a carrier lowers a mild-wintered state's pull a little (Malta's 0.5 at
+Water-tube Boiler) while it raises a cold one's, as the owner chose ("the whole
+winter measure, bonus and cost together, shrinks").
+
+| Technology | Era | Winter relief | Why |
+|---|---|---|---|
+| Water-tube Boiler | 2 | 0.1 | a heated house |
+| Rural Electrification | 6 | 0.1 | light and heat through long evenings |
+| Advanced Structural Engineering | 10 | 0.2 | insulated homes |
+| Modern Material Science | 11 | 0.2 | heated, insulating fabrics: the owner's "personal heating" |
+| Compact Fusion Reactors | 12 | 0.2 | streets and arcades heated through winter |
+| Programmable Matter | 13 | 0.2 | habitats climate-controlled to order |
+
+So 0.2 by era 7 and 0.4 by era 10, against frost relief's 0.6 and 0.8, and
+gone only at era 13.
+
+### 12.4 Calibration
+
+Percent, negative a bonus, every carrier to each era:
+
+| Region | 1836 | Era 4 | Era 7 | Era 10 |
+|---|---|---|---|---|
+| Madeira (Funchal) | −7.1 | −6.4 | −5.6 | −4.2 |
+| Hawaii (Honolulu) | −5.4 | −4.8 | −5.1 | −3.9 |
+| Cape Colony | −4.5 | −4.1 | −3.7 | −2.8 |
+| Catalonia (Barcelona) | 0.4 | 0.4 | −1.6 | −1.3 |
+| Home Counties (London) | 0 | 0 | 0 | 0 |
+| Lowlands (Glasgow) | 0.8 | 0.7 | 0.6 | 0.5 |
+| Île-de-France (Paris) | 3.7 | 3.3 | 1.1 | 0.7 |
+| Massachusetts (Boston) | 14.0 | 11.4 | 5.9 | 3.7 |
+| Georgia (Savannah) | 27.3 | 15.6 | 3.3 | 1.6 |
+| West Bengal (Calcutta) | 50.3 | 36.3 | 8.1 | 4.0 |
+| Blue Nile (Khartoum) | 22.6 | 15.8 | 3.1 | 1.4 |
+| Moscow | 16.1 | 11.4 | 9.4 | 6.2 |
+| Yakutsk | 64.2 | 44.5 | 36.1 | 23.3 |
+
+- **The Sun Belt.** In 1836 Georgia costs more than Massachusetts; by era 7 air
+  conditioning has eased the South's heat while the North's winters still
+  count, and the order turns. The test pins it.
+- **Bengal** stays at 50: its summer cancels its mild winter's draw (§ 11.4's
+  target holds).
+- **Siberia** stays costly into the late eras (Yakutsk 23% at era 10), as the
+  Russian Far North emptied once subsidies stopped.
+- Across 675 regions in 1836: median 19.2%, 39 with a bonus over 0.5, 12
+  neither, 45 at 50 or more, 4 at the cap, the largest bonus 7.2. In era 7, 87
+  have a bonus, none of them a hot state.
+
+### 12.5 Not built: cool summers
+
+The owner asked about the Falklands, which stay cheap (2%): their winter is
+Glasgow's, and their problem is that summer never comes (warmest month 10 °C).
+A cool-summer cost would misfire on the Andes, where Bogotá, Quito and Cuzco
+(summers of 14–15 °C) were great population centers; what separates them from
+Stanley is the rest of the year, which the winter term already reads. The real
+cost of a cool summer is farming (no wheat), which belongs with agriculture
+from climate, set aside for later.
+
+### 12.6 Data: the fit per figure
+
+#1312's review found far stations' hottest days wrong for their places (Kumasi
+39.2 °C, Mbandaka 37.5 °C), because § 11.2's fit rule had been applied to the
+heat index only. It now applies to each figure on its own: a far or high
+station that misses the fit by 2.5 or more on a figure gives way to the fit for
+that figure (`heat_source` `CODE:Nkm;fit_hot_day` or `;fit_index`). Khartoum,
+Bauchi, Kumasi and Mbandaka took the fit's hot day, Caracas its heat index
+(its station is 861 m below the city), and Barquisimeto both. Mogadishu keeps
+Wajir's 39.4 °C from 584 km inland, 2.2 from a fit that can't see the coast.
+An `analog:` row must now copy its source's figures.

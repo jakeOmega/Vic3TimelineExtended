@@ -25,6 +25,7 @@ stand, the owner proved wrong, or the system is off).
 | `TE_SELF_CHECK OK/BROKEN monument_piece_rejoins` | A trophy that is a piece of the standing monument (the Parthenon's marbles in Attica) reads as one, so it will rejoin it. | The cross-scope flag comparison in `gm_state_stands_for_moving` (`var:gm_landmark = scope:gm_tr_moving.var:gm_tr_landmark`) does not hold. Stage the trophy's landmark on the origin state first with `set_variable = { name = gm_tr_ret_landmark value = scope:gm_tr_moving.var:gm_tr_landmark }` (the cross-scope read `gm_tr_copy_to_state` proves) and compare same-scope, `var:gm_landmark = var:gm_tr_ret_landmark` (as `te_tax_display_values.txt` compares two variables). Do the same for the secondaries in `gm_tr_rejoins_secondary`. |
 | `TE_SELF_CHECK OK/BROKEN monument_artifact_stands_apart` | A returned artifact with a monument already standing (the Luxor Obelisk in Upper Egypt) reads as apart from it, so it will stand beside it. | The same comparison, read the other way: with both BROKEN the comparison is always false or always true. |
 | `TE_SELF_CHECK OK/BROKEN gm_occupation_read` | Logged at the first monthly pass, in a save already under way too (log triage, 2026-10-16). A monument state whose owner is at peace counts its provinces (at least one) and finds its owner holding half of them, so the trophies' occupation read works: `gm_state_tr_holds_half`, a script value's `every_province` with a saved country. Before, `random_province` ran from the state, which the engine rejects, and no occupier was ever found. | Counts no provinces: read the state's own `controller` link (`controller = $WHO$` in `gm_state_tr_occupied_by`, `controller ?= { save_scope_as = gm_tr_occupier }` in `gm_state_tr_find_occupier`), whatever it returns under partial occupation. Counts them but the owner holds under half: the script value can't see the temporary scope, so store the country on the state first (`set_variable = { name = gm_tr_who value = <country> }` in the effects, compared with `var:gm_tr_who`) and drop the trigger form, which the Carry It Off buttons read from a scripted GUI. |
+| `TE_SELF_CHECK OK/BROKEN monument_least_grandeur` | Logged once a game, at the first monthly pass that finds a state whose least grand monument stands beside its first one (2026-10-31, Clear It Away). The least grandeur the script value reads (`gm_state_least_grandeur`: an `ordered_in_list` summed in a script value, a `max` inside its `if`) equals the one effects take, and that monument's `gm_mon_least_gap`, a container's value reading its state's through `var:gm_tr_origin = { subtract = … }`, is 0. So Clear It Away shows on the right row. | `least` 0 or wrong: write the least grandeur into a state variable in the monthly pass (`gm_monument_pass`, which walks every state's list) and after every Clear It Away, Pull Down and promotion, and have both values read it. `least` right but the gap not 0: compare in the container's own scope with a variable copied onto it in the same pass. |
 
 ## Returns
 
@@ -71,6 +72,21 @@ GUI has stacked a type's icons over another type inside one widget before, so th
 | **A civil war.** Have a civil war's winner take such a state. | The rows are back within a month (the pass rebuilds the lists). | Rows missing for good: check `gm_mon_lists_written`. |
 | **Pictures.** A returned landmark whose picture was drawn later. | It shows the right picture within a month. | |
 | **An observer** (log triage 2026-10-25). Type `observe`, open the state view of a state with a monument, a monument beside it and a trophy on display, then the market panel. | The cards and the market tabs look as a player's do, without Carry It Off. error.log has no `gm_trophy_sguis.txt:19` or `:55`, `gm_monument_sguis.txt:15`, or `te_system_tab_sguis.txt:223` or `:269` line. | A line still logged every frame: `And` evaluates its second argument after all. Wrap the button in a container whose `visible` is `Not( GetMetaPlayer.IsObserver )` (`gui_modding_guide.md`, gotcha 42), and fix the guide's note. |
+
+## Clear It Away (2026-10-31)
+
+Owner, 2026-10-31: once six monuments stand in one of the player's states (a construction site among them, the most
+construction allows), the least grand of them, contested ones aside, has Clear It Away (`gm_clear_sgui` on the state's
+first monument, `gm_mon_clear_sgui` beside it; `monument_events.33` does the work, `gm_state_run_clear`). The
+reads it rests on are the `monument_least_grandeur` self-check above.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The button.** In a state of yours with six monuments, open the state card and Our Monuments. | Clear It Away on the least grand one's row only (on both its state-card place and its journal-entry row), none in a state with five. Its hover names its grandeur; a landmark's adds the red line. | On no row: the self-check. On every row: `gm_state_disp_clearable` / `gm_mon_disp_clearable` read 1 regardless. |
+| **Beside.** Clear away a monument beside the first. | Its row goes, the first and the others stay, the building stays at level 1, and the site's build tooltip no longer says six stand. No legitimacy, no approval change. `TE_MONUMENTS: cleared away a monument beside another`. | The row stays a month: the lists were not cut at once. |
+| **The first.** Clear away the state's first monument when it is the least grand. | The grandest of the others becomes the state's monument with its name, picture and dedication; the building stays. `TE_MONUMENTS: cleared away the monument of …`. | An empty state: `gm_state_promote_secondary` did not run. |
+| **Contested.** Make the least grand one contested. | It has no Clear It Away (its Pull Down, Rededicate and Keep as Heritage stay); the button moves to the next least grand. | |
+| **Busy.** Press it while a ceremony or naming is open in the state. | Greyed: *Nothing is under way here*. | |
 
 ## Civil wars (2026-10-25, #1136)
 

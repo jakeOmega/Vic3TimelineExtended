@@ -112,8 +112,10 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 		has_journal_entry = je_colonial_empire
 	}
 
-	# Four condemners: crosses the -1.0 tier-4 escalation without reaching the
-	# -2.0 tier-6 one, so the Great-power pressure row should read about -3.4.
+	# Every other great power condemns: each -0.45 against a peer (scaled by
+	# prestige, 0.25-2), plus the -0.75 isolation at a third of great-power
+	# prestige and the further -1.5 consensus at two thirds, so the Great-power
+	# pressure row and International Pressure's table fill out.
 	option = {
 		name = te_debug_colonial_empire.2.a
 		default_option = yes
@@ -121,9 +123,13 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 			limit = {
 				NOT = { this = ROOT }
 				country_rank >= rank_value:great_power
-				NOT = { has_variable = gp_anti_colonial_stance }
 			}
+			# Every other great power, a condemner already included: the
+			# stance's 24-month wait, so the AI's monthly review
+			# (decol_stance_monthly) leaves a colonial great power's
+			# condemnation in place while the table is checked.
 			set_variable = gp_anti_colonial_stance
+			decol_stance_start_cooldown = yes
 		}
 		colonial_empire_refresh_display = yes
 	}

@@ -264,6 +264,10 @@ passed:
 | Four Degrees | 4.0 °C |
 | Out of the Furnace, Off the Brink, The Heat Recedes, A Cooler Decade, Below the Line | Warming falls back below 4.0, 3.0, 2.0, 1.0 and 0.5 °C |
 | Near Baseline | Warming falls back below 0.1 °C, after having reached 0.5 °C |
+| Termination Shock | The last country running Aerosol Injection stops, with at least 0.25 °C of warming masked |
+
+The recovery events read the warming beneath any aerosol haze, so a mask alone
+never fires them.
 
 Four Degrees offers no good choice. Each option spares you one of three harms
 (mortality and standard of living, farm throughput, or building throughput) and

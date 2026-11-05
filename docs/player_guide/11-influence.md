@@ -23,7 +23,10 @@ rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
 show the same panels, and a change made in one shows in the other. The tab is
 grayed until the journal entry opens; hover it for what is still missing. It
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Cultural Hegemony tab with that country's tier, rank, share, Hegemony Bonus,
+programs and breakdown, and the same Top Cultural Powers, political models and history as
+yours; the funding and program buttons are only on your own.
 
 ![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programs, and where our pull comes from.](images/hegemony_tab.png)
 
@@ -40,9 +43,12 @@ and the share the next tier starts at, the model's share of world culture and
 its push abroad, the benchmark's strength. Last comes Programs, with the
 Ministry of Culture's icon: how many of the four programs are running and your
 funding level against its cap, or No Ministry in red while you lack the law.
-Hover it for each program and the funding cost.
+Hover it for each program and the funding cost. Beside it, Hegemony Bonus shows
+whether you carry the Cultural Hegemony modifier and its strength, which is your
+share at the last monthly update; hover it for each of the modifier's effects at
+that strength (see [What cultural dominance gives](#what-cultural-dominance-gives)).
 
-The sections below all start open except the explanations:
+The sections below all start open:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -51,7 +57,10 @@ The sections below all start open except the explanations:
 | Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, the Pull Multiplier closes the components, and Raw Score stands under the rule. |
 | Political Models of the World | Open | The pie of the world's political models and its legend, by short name. Hover a model for its full name and the laws that put a country in it. |
 | History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years, its legend by short name. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
-| How Cultural Hegemony Works | Collapsed | The explanations: cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Cultural Hegemony Works. It explains cultural
+share and tiers, the programs, where pull comes from, the top cultural powers,
+political models and the Foreign Cultural Benchmark.
 
 ### Cultural share and influence tiers
 
@@ -80,7 +89,7 @@ country as a bar.
 
 | Component | How it counts |
 |---|---|
-| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State and LGBTQ+ Rights laws, Romanticism, Realism and Film change it through the Cultural Pull from Art modifier. |
+| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State, LGBTQ+ Rights and Bodily Autonomy laws, Romanticism, Realism and Film change it through the Cultural Pull from Art modifier. |
 | Prestige | Your prestige divided by 5, capped at your percentage share of world prestige. Recognized countries only. |
 | Standard of Living | Your average standard of living minus the world average (−5 to +20): in full for great powers, half for major powers, a quarter for minor powers, nothing below. |
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
@@ -252,16 +261,19 @@ arrow for which way it last moved. Hover any of them for the detail: the
 standing's meaning, the funding level's name and cost, the capacity breakdown,
 this month's Tradecraft and why it last changed.
 
-The sections below are open by default, except the explanations at the foot:
+The sections below are open by default:
 
 | Section | Starts | Shows |
 |---|---|---|
 | Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: the target's flag, its icon, its name and target (hover it for what it does), its phase, its own Detection Risk (hover it for the breakdown), what its exposure would count as, the priority stepper and Stand down. |
 | Funding | Open | A line while funded with nothing running, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
 | Agent Networks | Open, once you have a network | A table with a line for each network: the target's flag (hover it for the country, click it to open the country) and name, its strength with a bar and an arrow for growing or decaying, your operations there, the head start a new one would get, and what it reports (None, Partial or Full; hover it for the report). Hover the name for what the network adds to catching that country's operations. |
-| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
+| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; the standing order for caught foreign operations (Ask, Ask if severe, Expose or Watch; click to change it); then Last Caught while an exposure stands. |
 | Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
-| How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence, watching and intelligence standing. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Covert Warfare Works. It explains operations,
+funding, detection, networks, Tradecraft, counterintelligence, watching and
+intelligence standing.
 
 ### Intelligence capacity and operation slots
 
@@ -283,9 +295,11 @@ though high funding still hides most of them. Capacity also gives separatism
 and coup resistance (the Intelligence Capacity modifier), growing up to a
 capacity of 125.
 
-Each operation occupies one slot. Beyond the rank and ministry slots, Mainframe
-Computers, Computer Networks, Cyber Warfare and Quantum Computing each add one,
-to a maximum of ten. You can run one operation of each type at first, and one
+Each operation fills one slot for each level of its
+[priority](#operation-phases-and-priority): one at priority 1, three at
+priority 3. Beyond the rank and ministry slots, Mainframe Computers, Computer
+Networks, Cyber Warfare and Quantum Computing each add one, to a maximum of
+ten. You can run one operation of each type at first, and one
 more of each type with Mainframe Computers, with Cyber Warfare and with a
 [Veteran](#tradecraft) agency.
 
@@ -352,7 +366,7 @@ have agencies of their own.
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement | 100 |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement | 100 |
 | Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) | 100 |
-| Nuclear Program Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
+| Nuclear Program Sabotage | Target's nuclear program 20% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
 | Space Program Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
@@ -394,7 +408,7 @@ technology in that tree that the target has and you could research now. Once
 the target has nothing left that you could take, the operation ends.
 
 Each theft is 5% of the technology's era cost at base strength, 10% once fully
-operational, and 16% fully operational at priority 3. Progress that reaches a
+operational, and 20% fully operational at priority 3. Progress that reaches a
 technology's cost completes it. Each operation's row shows how much it has
 stolen and the latest technology.
 
@@ -415,16 +429,22 @@ strength.
 
 Each row also has a priority stepper from 1 to 3; hover the word Priority for
 what the current level multiplies. Priority multiplies what the operation does,
-but costs and exposure rise faster:
+but costs and exposure rise faster, and each level fills another operation slot,
+so each step up needs a free one:
 
-| Priority | Effect | Share of upkeep | Detection risk |
-|---|---|---|---|
-| 1 | ×1 | 1 | Base |
-| 2 | ×1.35 | 1.6 | +2 points |
-| 3 | ×1.6 | 2.4 | +4 points |
+| Priority | Effect | Slots | Share of upkeep | Detection risk |
+|---|---|---|---|---|
+| 1 | ×1 | 1 | 1 | Base |
+| 2 | ×1.65 | 2 | 1.6 | +2 points |
+| 3 | ×2 | 3 | 2.4 | +4 points |
+
+A slot spent on a second operation does more than one spent on priority, so
+priority pays when the per-type limit or the targets worth hitting run out.
+Stepping down frees the slot at once. If you lose slots, your operations keep
+their priorities, but none can rise until a slot is free again.
 
 Priority 3 needs an Established agency; a fully operational operation at
-priority 3 works at 3.2 times base strength. A click changes detection risk at
+priority 3 works at four times base strength. A click changes detection risk at
 once, in either direction, but the effects only at the start of the next month.
 Raising priority raises upkeep at once; lowering it cuts upkeep only when the
 effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
@@ -534,10 +554,26 @@ figures.
 
 A country that catches your operation decides first whether to expose it. If it
 runs a Covert Warfare journal entry of its own, a player gets an event, A
-Foreign Operation Uncovered, and chooses between "Expose them" and "Let it run,
-and watch"; a country without the entry exposes at once, and the AI chooses by
+Foreign Operation Uncovered, with three ways to expose it and "Let it run, and
+watch"; a country without the entry exposes at once, and the AI chooses by
 chance (see [How the AI runs covert
 operations](#how-the-ai-runs-covert-operations)).
+
+The three exposures differ in what follows once the exposure is settled:
+
+| Option | What follows |
+|---|---|
+| Expose them and shore up our counterintelligence | Counterintelligence Alert: +6 intelligence capacity and more separatism and coup resistance, fading over five years. A second exposure renews it rather than adding a second. |
+| Expose them and expel their diplomats | −25 relations; the sponsor's network inside your country loses another 25, and any network you run inside theirs loses 25 when they answer in kind. |
+| Expose them and turn it against them | A network of up to 25 inside the sponsor's country. Without a Covert Warfare journal entry by then, you shore up instead. |
+
+A notification reports the follow-up once it lands. If you would rather not be
+asked each time, the Counterintelligence section's standing order settles every
+catch for you: Ask (the event each time), Ask if severe (the event only for the
+severe operations, the rest exposed), Expose (every catch exposed, shoring up)
+or Watch (every catch let run, with a notification, and listed under Known
+Foreign Operations). The notifications sit in one group, Counterintelligence,
+which Message Settings can mute.
 
 Exposing makes the operation public: you answer for it as described under
 [Detection and exposure](#detection-and-exposure), and the operation ends. It
@@ -550,30 +586,27 @@ chose it.
 
 If the country lets the operation run, you are not told, and it keeps working
 against that country at full strength. In return its network inside yours stops
-decaying and grows each month, by 4 to 6.4 depending on the operation's
+decaying and grows each month, by 4 to 8 depending on the operation's
 priority (more with Tradecraft, more slowly above half strength), and the
 operation is not caught again. The country can expose it whenever it likes from
 Known Foreign Operations, a section of its Covert Warfare journal entry and
 Covert tab that lists each operation it watches with your flag and name and the
 months watched. The exposure goes out at once; while another exposure of your
 operations is still open, the button is grayed until you have answered for it.
+When you expose from there yourself, the follow-up is shoring up your
+counterintelligence.
 
-A country that exposes your operation gets the Foreign Interference Detected
-event, which names you and the operation. It can shore up its
-counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
-more separatism and coup resistance, fading over five years), retaliate in kind
-(a network of up to 25 inside your country, if it has a Covert Warfare journal
-entry of its own), or expel your diplomats (−25 relations; your network inside
-its country loses another 25, and any network it runs inside yours loses 25 when
-you answer in kind). The event fires at most once every two years per country,
-whether or not that country has a Covert Warfare journal entry.
+A country that exposed your operation without choosing a follow-up (one without
+a Covert Warfare journal entry, or an AI) gets the Foreign Interference Detected
+event, which names you and the operation, and offers the same three follow-ups.
+That event fires at most once every two years per country.
 
 When you are the target, the Spy Caught icon and the Last Caught line in the
 Counterintelligence section show the latest operation exposed against you, and
 who ran it, for ten years, and Known Foreign Operations names the sponsor of
 each operation you watch. Outside these two sections and the events A Foreign
-Operation Uncovered and Foreign Interference Detected, nothing names the country
-behind an operation. You can also see an operation's effects among your own
+Operation Uncovered and Foreign Interference Detected and the notifications that
+follow an exposure, nothing names the country behind an operation. You can also see an operation's effects among your own
 modifiers, get an unsigned Election Interference Detected notification with
 each confidence hit, and count the operations against you through a strong
 network of your own.
@@ -589,10 +622,11 @@ Each unused slot becomes Domestic Intelligence Focus: +2 intelligence capacity,
 more separatism and coup resistance, calmer movements and better colonial
 garrisons. You also have three covert defenses, economic, military and
 ideological, each added to your capacity against operations of its kind. Strict
-IP Protection and Central Bank Independence raise economic defense and Publicly
-Funded Elections ideological defense, by 10 each; No IP Protection, Unregulated
-Banking and No Campaign Finance Laws lower them. A friend's Counterintelligence
-Support raises all three at once, by 8 each at base strength and up to 26 fully
+IP Protection, Central Bank Independence and State Monopoly (Frontier AI
+Control) raise economic defense and Publicly Funded Elections ideological
+defense, by 10 each; No IP Protection, Unregulated Banking, Private Labs, Open
+Weights and No Campaign Finance Laws lower them. A friend's Counterintelligence
+Support raises all three at once, by 8 each at base strength and up to 32 fully
 operational at priority 3. Against an agency of about 100 capacity, 10 points
 of defense add about 1.5 points to its Detection Risk. The Intelligence Sharing
 Pact treaty article adds intelligence capacity and lends the weaker partner part

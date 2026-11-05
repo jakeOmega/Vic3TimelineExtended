@@ -6,7 +6,7 @@ a fight is a war of reconquest whose goal never self-enforces. The engine logs
 nothing when a goal grows a mirror, a record outlives its war, or a deferred
 legacy runs early, so the wiring is pinned here
 (docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
-§ 4; mod_systems.md § Wars of Independence).
+§ 4; mod_systems/decolonization.md § Wars of Independence).
 """
 
 import os
@@ -282,9 +282,9 @@ class PanelTests(unittest.TestCase):
         for n in (1, 2, 3):
             with self.subTest(record=n):
                 self.assertRegex(gui, r"te_ce_war_row = \{\s*blockoverride \"row_visible\" \{\s*visible = \"\[EqualTo_CFixedPoint\( "
-                                      r"JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('decol_iw_disp_slot_" + str(n)
+                                      r"Country\.MakeScope\.ScriptValue\('decol_iw_disp_slot_" + str(n)
                                       + r"'\), '\(CFixedPoint\)1' \)\]\"\s*\}\s*blockoverride \"row_context\" \{\s*datacontext = "
-                                      r"\"\[JournalEntry\.GetCountry\.MakeScope\.Var\('decol_iw_state_" + str(n) + r"'\)\.GetState\]\"")
+                                      r"\"\[Country\.MakeScope\.Var\('decol_iw_state_" + str(n) + r"'\)\.GetState\]\"")
         sgui = _def(_read("common", "scripted_guis", "colonial_empire_sguis.txt"), "colonial_empire_open_talks_sgui")
         self.assertIn("saved_scopes = { ce_state }", sgui)
         self.assertIn("decol_iw_state_can_open_talks = yes", _block(sgui, "is_valid"))

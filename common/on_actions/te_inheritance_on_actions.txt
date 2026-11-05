@@ -2,7 +2,7 @@
 #  INHERITANCE — on actions
 #  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Effects: common/scripted_effects/te_inheritance_effects.txt.
-#  Docs: docs/systems/mod_systems.md § Inheritance.
+#  Docs: docs/systems/mod_systems/inheritance.md § Inheritance.
 # ======================================================================
 
 # Every 1836 state starts at its own target, and the country's figure is

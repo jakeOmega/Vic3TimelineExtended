@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# Plan a New Capital (docs/superpowers/specs/2026-10-08-demographics-design.md §5.1's lever; mod_systems.md
+# Plan a New Capital (docs/superpowers/specs/2026-10-08-demographics-design.md §5.1's lever; mod_systems/demographics.md
 # § Demographics, "The urban pattern's effects and the Planned Capital decision")
 # Washington, Canberra, Brasília, Abuja and Astana: a seat of government built away from the country's great city. The
 # decision opens a choice of up to three sites (te_demog_capital.1); the chosen site becomes the capital at once, the

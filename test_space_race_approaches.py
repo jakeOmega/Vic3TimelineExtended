@@ -85,12 +85,36 @@ class NoDriftTest(unittest.TestCase):
                                  ["value", "=", "sr_progress", "min", "=", "0.5"])
                 risk = _block(values, f"sr_risk_shown_{m}")
                 self.assertNotIn("sr_safe_", risk)
-                self.assertIn("NOT = { sr_has_failure_cooldown = yes }", risk)
+                self.assertIn(f"value = sr_risk_pct_{m}", risk)
+                self.assertNotIn("cooldown", risk)
 
     def test_standard_has_its_own_status_codes(self):
         body = _block(_read(EFFECTS), "sr_set_milestone_status_base")
-        self.assertIn("set_variable = { name = sr_$MILESTONE$_last_status value = 5 }", body)
-        self.assertIn("set_variable = { name = sr_$MILESTONE$_last_status value = 0 }", body)
+        for code in (0, 1, 2):
+            self.assertIn(f"set_variable = {{ name = sr_$MILESTONE$_last_status value = {code} }}", body)
+        # The shielded codes 3 to 5 went with the post-setback cooldown (2026-10-31).
+        for code in (3, 4, 5):
+            self.assertNotIn(f"last_status value = {code} }}", body)
+
+
+class NoCooldownTest(unittest.TestCase):
+    """The post-setback cooldown skipped the roll for six months on every
+    milestone, so switching them all to Ambitious after a failure was free
+    progress. It went on 2026-10-31 (owner): nothing sets or reads it but the
+    monthly old-save strip."""
+
+    def test_nothing_sets_or_reads_the_cooldown(self):
+        strip = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
+        for sub in ("common", "events"):
+            for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
+                text = _read(path)
+                with self.subTest(path=os.path.relpath(path, REPO)):
+                    self.assertNotIn("sr_has_failure_cooldown", text)
+                    if os.path.samefile(path, strip):
+                        self.assertIn("remove_variable = sr_failure_cooldown", text)
+                        self.assertNotIn("name = sr_failure_cooldown", text)
+                    else:
+                        self.assertNotIn("sr_failure_cooldown", text)
 
 
 class StandardControlTest(unittest.TestCase):

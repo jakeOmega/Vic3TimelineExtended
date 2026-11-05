@@ -1,13 +1,13 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Journal Entry (Command Center)
 # ============================================================================
-# Three custom widgets carry the interface, all from
+# Two custom widgets carry the interface, both from
 # gui/journal_entry_widgets/covert_operations_widget.gui, whose types a future
 # system tab can compose too (docs/guides/gui_style_guide.md rule 9):
-# widget_je_covert_overview (standing, funding, Tradecraft, slots, capacity),
-# widget_je_covert_status (Operations, Agent Networks, Funding, Detection Risk,
-# Counterintelligence) and widget_je_covert_reference (How Covert Warfare
-# Works). The entry has no status_desc: the intelligence-standing verdict it
+# widget_je_covert_overview (the "?" to the Help page, then standing, funding,
+# Tradecraft, slots, capacity) and widget_je_covert_status (Operations, Agent
+# Networks, Funding, Detection Risk, Counterintelligence). The entry has no
+# status_desc: the intelligence-standing verdict it
 # printed is the overview's standing icon's tooltip, and its empty-state
 # pointer to the diplomatic actions is the Operations section's.
 #
@@ -34,11 +34,6 @@ je_covert_warfare = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
 		name = "widget_je_covert_status"
 		container = "custom_widget_container_2"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
-		name = "widget_je_covert_reference"
-		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {

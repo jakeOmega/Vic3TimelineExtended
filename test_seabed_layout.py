@@ -8,10 +8,14 @@ The width budget is test_banking_layout.py's (the style guide's rule 3): GUI
 units per character for each font, plus 10%, read from this file's own
 te_seabed_fontsize_* templates.
 """
+import glob
 import os
 import re
 import unittest
 
+from gui_test_helpers import (READ, _close, _strip_comments, assert_wide_matches_narrow, guard_spans, in_spans,
+                              load_loc, loc_closure, mod_types, panel_loc_keys, panel_view, type_closure, unguarded)
+from scripts.generators import gen_te_systems_window as window_gen
 from test_banking_layout import MARGIN, _all_loc, _block_from, _custom_options, _read, _type_body
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -164,9 +168,17 @@ class SeabedPanelTest(unittest.TestCase):
     def setUpClass(cls):
         cls.gui = _read(GUI)
 
-    def test_four_sections_in_order(self):
-        at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins", "how")]
+    def test_three_sections_in_order(self):
+        at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins")]
         self.assertEqual(at, sorted(at))
+
+    def test_how_it_works_is_the_help_page(self):
+        """How Seabed Licenses Work is the Help page alone (te_seabed_help_popup,
+        on te_popup = help_seabed), which the "?" in the tab's header opens: the
+        link panel is gone (test_te_help_pages.py)."""
+        self.assertNotIn("te_seabed_how_panel", self.gui)
+        self.assertNotIn("te_seabed_how_open", self.gui)
+        self.assertIn('text = "te_seabed_how_sub_pools"', _type_body(self.gui, "te_seabed_help_body"))
 
     def test_every_basin_lists_its_claimants(self):
         """Audit SEA-3's later step: each basin's rivals are one datamodel of
@@ -191,7 +203,7 @@ class SeabedPanelTest(unittest.TestCase):
     def test_rivals_collapse_flags_are_open_named(self):
         """Rule 7: a section that starts collapsed names its flag _open."""
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.gui))
-        self.assertEqual(flags, {"te_seabed_how_open"} | {f"te_seabed_rivals_{b}_open" for b in BASINS})
+        self.assertEqual(flags, {f"te_seabed_rivals_{b}_open" for b in BASINS})
 
     def test_type_sizes_are_the_templates(self):
         self.assertEqual(_SIZES, {"row": 17, "heading": 20, "overview": 16})
@@ -208,6 +220,175 @@ class SeabedPanelTest(unittest.TestCase):
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
         keys |= set(re.findall(r", '(te_seabed_\w+)'", self.gui))
         self.assertEqual(sorted(k for k in keys if k not in loc and not k.endswith("_sgui")), [])
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's Seabed tab leaves out, and what it keeps
+    (National Info; spec 2026-11-02-charts-help-national-info §§ 6.4, 6.5,
+    6.7). Left out, under te_own_country_only: the policy buttons, each basin's
+    claimants with Relinquish and Claim Again, and the chevron that opens
+    them. Kept: the overview and the Ocean Basins table. The claimant list
+    is the viewer's (te_seabed_rank_listed leaves the viewer out, its own row
+    drawn apart), so read for another country it would draw that country twice
+    and leave the player out. What another country's panel draws is the walk
+    test_te_system_tab_bodies.py's BindingTest makes (panel_view)."""
+
+    PRIVATE = ("te_seabed_policy_button", "te_seabed_claim_button", "te_seabed_rival_head", "te_seabed_rival_row",
+               "te_seabed_rival_us")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view({"te_seabed_wide_sections"}, cls.types)
+
+    def test_the_players_own_parts_are_left_out(self):
+        drawn = type_closure({"te_seabed_wide_sections"}, self.types)
+        for name in self.PRIVATE:
+            with self.subTest(type=name):
+                self.assertIn(name, drawn, "the player's own panel still draws it")
+                self.assertNotIn(name, self.view.open, f"another country's panel draws {name}")
+
+    def test_the_policy_panel_is_the_players(self):
+        body = self.types["te_seabed_policy_panel"].body
+        self.assertIn((0, len(body)), guard_spans(body), "the guard on the policy panel's root")
+        # an instance's own visible would replace the guard's (gotcha #17)
+        for host in ("te_seabed_wide_sections", "te_seabed_tab_body"):
+            self.assertRegex(self.types[host].body, r"\bte_seabed_policy_panel = \{\}", host)
+
+    def test_each_basins_claimants_are_the_players(self):
+        body = self.types["te_seabed_basins_panel"].body
+        spans = guard_spans(body)
+        for b in BASINS:
+            with self.subTest(basin=b):
+                for anchor in (f"GetList('te_seabed_rk_list_{b}')", f"te_seabed_relinquish_{b}_sgui",
+                               f"te_seabed_claim_again_{b}_sgui", f"te_seabed_us_shown_{b}"):
+                    self.assertTrue(in_spans(body.index(anchor), spans), f"{anchor} outside te_own_country_only")
+                # the basin's own row stays: another country's Free, Pool and Weight
+                self.assertFalse(in_spans(body.index(f"'te_seabed_free_{b}'"), spans))
+                self.assertFalse(in_spans(body.index(f"'te_seabed_bar_{b}_1'"), spans))
+
+    def test_the_chevron_is_the_players(self):
+        body = self.types["te_seabed_basin_row"].body
+        self.assertTrue(in_spans(body.index('block "basin_toggle"'), self.view.skip["te_seabed_basin_row"]))
+        self.assertFalse(in_spans(body.index('block "basin_name"'), self.view.skip["te_seabed_basin_row"]))
+
+    # The other half (spec § 6.4's Shown column, "its policy, basins, mines and
+    # claims"): what another country's panel still draws, so a guard that hides
+    # too much fails too. A type whose root carries the guard is in view.open
+    # but draws nothing, so each must also keep its root out of view.skip.
+    SHOWN = ("te_seabed_overview_panel", "te_seabed_ov_cell", "te_seabed_ov_word", "te_seabed_ov_fig",
+             "te_seabed_basins_panel", "te_seabed_basin_head", "te_seabed_basin_row", "te_seabed_pool_bar",
+             "te_seabed_legend_chip", "te_seabed_panel")
+    BOXES = ("room", "licences", "longhaul", "claims", "policy", "regime")
+
+    def test_another_country_sees_its_policy_basins_mines_and_claims(self):
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, self.view.open, f"another country's panel doesn't draw {name}")
+                body = self.types[name].body
+                self.assertNotIn((0, len(body)), self.view.skip[name], f"{name}'s root is the player's own")
+        keys = panel_loc_keys({"te_seabed_wide_sections"}, self.types, load_loc())
+        shown = [f"te_seabed_ov_{box}_{part}" for box in self.BOXES for part in ("cap", "word", "tt")]
+        shown += ["te_seabed_basins_header", "te_seabed_basins_asof", "te_seabed_legend_ours", "te_seabed_legend_claims"]
+        shown += [f"te_seabed_col_{c}" for c in ("basin", "free", "pool", "weight", "next")]
+        for b in BASINS:
+            shown += [f"te_seabed_basin_{b}", f"te_seabed_basin_tt_{b}", f"te_seabed_free_{b}", f"te_seabed_pool_tt_{b}",
+                      f"te_seabed_weight_pct_{b}", f"te_seabed_weight_tt_{b}", f"te_seabed_next_{b}"]
+        self.assertEqual([k for k in shown if k not in keys], [], "another country's panel doesn't render these")
+
+
+class ScriptTooltipTest(unittest.TestCase):
+    """The text a read-only scripted GUI's tooltip prints for another
+    country's panel reads the shown country, not the player. The Free
+    figure's hover is te_seabed_build_in_sgui's ExecuteTooltip: its lines
+    come from the effect's custom_tooltip keys, which no panel's loc closure
+    reaches, so BindingTest can't see them. They read the scripted GUI's root
+    (SCOPE.GetRootScope, covert_last_exposed_sgui's form)."""
+
+    TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip)")
+    PRINTS = re.compile(r"\bcustom_tooltip(?:_no_bullet)?\s*=\s*(?:\{[^{}]*?\btext\s*=\s*)?([\w.$\-]+)")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view({"te_seabed_wide_sections"}, cls.types)
+        cls.loc = load_loc()
+        cls.sguis = cls._blocks("scripted_guis")
+        cls.effects = cls._blocks("scripted_effects")
+
+    @staticmethod
+    def _blocks(folder):
+        out = {}
+        for path in sorted(glob.glob(os.path.join(REPO, "common", folder, "*.txt"))):
+            text = _strip_comments(_read(path))
+            for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{", text):
+                out[m.group(1)] = text[m.end():_close(text, m.end() - 1)]
+        return out
+
+    def _drawn_sguis(self):
+        """The scripted GUIs whose tooltip another country's panel shows, from
+        the parts it draws and the loc they render."""
+        found = set()
+        for name in self.view.open:
+            found |= set(self.TOOLTIP.findall(unguarded(self.types[name].body, self.view.skip[name])))
+        for key in panel_loc_keys({"te_seabed_wide_sections"}, self.types, self.loc):
+            found |= set(self.TOOLTIP.findall(self.loc[key]))
+        return found
+
+    def _printed(self, body, depth=0):
+        """The loc keys an effect body prints, through the scripted effects it
+        calls, their $X$ arguments filled in."""
+        self.assertLess(depth, 8)
+        keys = set(self.PRINTS.findall(body))
+        for m in re.finditer(r"\b(\w+)\s*=\s*\{([^{}]*)\}", body):
+            if m.group(1) in self.effects:
+                callee = self.effects[m.group(1)]
+                for arg, value in re.findall(r"(\w+)\s*=\s*([\w.\-]+)", m.group(2)):
+                    callee = callee.replace(f"${arg}$", value)
+                keys |= self._printed(callee, depth + 1)
+        return keys
+
+    def test_no_datacontext_tooltip_is_drawn_unguarded(self):
+        """The policy and claim buttons' ScriptedGui.*Tooltip (a datacontext's
+        scripted GUI, which _drawn_sguis can't name) sit under the guard."""
+        for name in self.view.open:
+            with self.subTest(type=name):
+                self.assertNotRegex(unguarded(self.types[name].body, self.view.skip[name]),
+                                    r"(?<![\w'])ScriptedGui\.(?:ExecuteTooltip|IsValidTooltip)")
+
+    def test_the_printed_lines_read_the_shown_country(self):
+        sguis = self._drawn_sguis()
+        self.assertIn("te_seabed_build_in_sgui", sguis)
+        printed = set()
+        for sgui in sorted(sguis):
+            body = self.sguis[sgui]
+            parts = list(re.finditer(r"\b(?:effect|is_valid)\s*=\s*\{", body))
+            self.assertTrue(parts, sgui)
+            for part in parts:
+                printed |= self._printed(body[part.end():_close(body, part.end() - 1)])
+        builds = {f"te_seabed_build_in_{part}_{b}" for part in ("head", "more", "none") for b in BASINS}
+        self.assertLessEqual(builds, printed, "the walk reaches the Free hover's lines")
+        self.assertEqual(sorted(k for k in printed if k not in self.loc), [])
+        reads = {k: READ.findall(self.loc[k]) for k in loc_closure(printed, self.loc, own=False)}
+        self.assertEqual({k: r for k, r in reads.items() if r}, {})
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_seabed_wide_sections, the window's full-screen Seabed tab (spec
+    2026-11-02-te-window-wide-mode § 7): the overview and policy, then the
+    basins, in two columns (te_ui_columns_two), since a third would hold
+    nothing now that How Seabed Licenses Work is the Help page."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_seabed_wide_sections", layout=("te_seabed_tab_body", "te_seabed_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_seabed_overview_panel", "te_seabed_policy_panel"],
+            ["te_seabed_basins_panel"]])
+        self.assertIn("type te_seabed_wide_sections = te_ui_columns_two", _read(GUI))
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "seabed")
+        self.assertEqual((tab.layout, tab.wide), ("te_seabed_tab_layout", "te_seabed_wide_sections"))
 
 
 if __name__ == "__main__":

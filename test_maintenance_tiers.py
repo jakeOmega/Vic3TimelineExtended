@@ -2,7 +2,7 @@
 _light, _heavy, _intensive), the mines' equipment-driven group (_mine), the
 method-driven group of power plants, railways and ports (_graded), every tier
 switched off by the no-maintenance settings of free_market_construction_rule,
-and every group hidden in the PM panels (docs/systems/mod_systems.md,
+and every group hidden in the PM panels (docs/systems/mod_systems/construction.md,
 "Maintenance tiers")."""
 import json
 import os
@@ -39,7 +39,8 @@ GRADED_BUILDINGS = {
         "pm_electric_trains": 1, "pm_electric_trains_principle_transport_3": 1,
         "pm_diesel_trains": 1, "pm_diesel_trains_principle_transport_3": 1,
         "pm_centralized_traffic_control": 1, "pm_containerized_cargo": 2,
-        "pm_automated_loading_and_unloading": 2, "pm_autonomous_trains": 2}),
+        "pm_automated_loading_and_unloading": 2, "pm_autonomous_trains": 2,
+        "pm_vactrain_freight": 2}),
     "building_port": ("pmg_base_building_port", {
         "pm_modern_port": 1, "pm_container_ports": 2, "pm_global_ports": 2, "pm_magnetic_drive_ports": 2}),
 }
@@ -70,7 +71,10 @@ def _top_level_blocks(text):
 
 def _buildings():
     blocks = {}
-    for fn in ("extra_buildings.txt", "grand_monuments.txt", "te_construction_market_site.txt"):
+    for fn in ("01_zz_te_industry.txt", "03_zz_te_mines.txt", "05_zz_te_military_base.txt",
+               "06_zz_te_clean_power.txt", "07_zz_te_government.txt", "08_zz_te_grand_monuments.txt",
+               "08_zz_te_tourism.txt", "11_zz_te_infrastructure.txt", "extra_buildings.txt",
+               "te_construction_market_site.txt"):
         for name, body in _top_level_blocks(_read("common", "buildings", fn)).items():
             blocks[name] = blocks.get(name, "") + body
     return blocks
@@ -208,7 +212,8 @@ class MaintenanceTiers(unittest.TestCase):
                                       "building_state_youth_centers", "building_software_industry",
                                       "building_lithium_mine"],
             "pmg_maintenance": ["building_steel_mill", "building_motor_industry",
-                                "building_skyscraper", "building_construction_sector"],
+                                "building_skyscraper", "building_construction_sector",
+                                "building_public_housing"],
             "pmg_maintenance_heavy": ["building_highway", "building_airport",
                                       "building_network_infrastructure", "building_hydro_plant",
                                       "building_renewable_energy_plant", "building_oil_rig"],

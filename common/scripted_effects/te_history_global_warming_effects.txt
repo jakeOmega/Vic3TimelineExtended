@@ -24,7 +24,7 @@
 # charting the global list would mean editing shared infrastructure. Storing the
 # anomaly per tracked country instead costs one extra variable on a container
 # that already exists, and buys a shared x-axis with this country's own share
-# series. See docs/systems/mod_systems.md, "History Store and Charts".
+# series. See docs/systems/mod_systems/history_charts.md, "History Store and Charts".
 #
 # NO MARKERS. Policy adoption/repeal would be the natural marker, but the text
 # that explains a marker pip lives in te_history_marker_tooltip in the shared

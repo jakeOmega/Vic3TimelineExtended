@@ -59,7 +59,7 @@ SOURCES = {
         )),
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
         "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
-        "climate": ("Climate Policy", ("renewable_investment_cost_modifier",)),
+        "climate": ("Climate Policy", ("renewable_investment_cost_modifier", "aerosol_injection_cost_modifier")),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),
@@ -505,9 +505,6 @@ def chart(side):
                 f"\t\t\tblockoverride \"label_width\" {{ minimumsize = {{ {LABEL_WIDTH - depth * 14} 28 }} maximumsize = {{ {LABEL_WIDTH - depth * 14} -1 }} }}",
                 f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}"{swatch_alpha} }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}',
                 f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]"{f" using = {template}" if template else ""} }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}']
-        if not tooltip:
-            # The hover is the amount's, so the label is plain text.
-            out += ['\t\t\tblockoverride "label_format" {}']
         if node.children:
             f = flag(side, key)
             out += ["\t\t\tblockoverride \"toggle\" {", "\t\t\t\tbutton = {", "\t\t\t\t\tsize = { 18 24 }", "\t\t\t\t\tparentanchor = vcenter",

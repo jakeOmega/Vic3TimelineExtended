@@ -102,7 +102,8 @@ Expression = namedtuple("Expression", "trigger dop_laws amendment tooltip")
 EXPRESSIONS = [
     Expression(
         "collective_governance_is_popular",
-        {"law_landed_voting", "law_wealth_voting", "law_census_voting", "law_universal_suffrage"},
+        {"law_landed_voting", "law_wealth_voting", "law_census_voting", "law_universal_suffrage",
+         "law_liquid_democracy"},
         "amendment_collective_direct_democracy",
         "COLLECTIVE_GOVERNANCE_TT_POPULAR",
     ),

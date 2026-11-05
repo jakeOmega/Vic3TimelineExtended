@@ -77,8 +77,8 @@ class WordTipTest(unittest.TestCase):
                 self.assertIn(text, words)
                 self.assertEqual(words[text][0], tip)
                 self.assertIn(tip, loc)
-                # underlined like every other hoverable label (style guide)
-                self.assertIn('default_format = "#tooltippable"', words[text][1])
+                # not underlined, as vanilla's readings aren't (style guide rule 3)
+                self.assertNotIn("#tooltippable", words[text][1])
 
     def test_the_not_started_cell_keeps_the_cell_tooltip_only(self):
         words = _words()

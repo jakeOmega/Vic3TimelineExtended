@@ -277,7 +277,7 @@ Migration attraction is a per-state score that drives both flows. Pops generally
 | Per 10,000 unemployed (capped at 500,000 / -50) | −1 |
 | State has no pops at all | +100 |
 
-State traits and various modifiers further multiply the sum. The 75% factor on subsistence reflects the fact that a peasant moving into a subsistence farm is not really "employed" the way a wage worker is.
+State traits and various modifiers further multiply the sum. The total floors at 0: a state's attraction is never negative, however much unemployment or a modifier takes away (owner, from the in-game breakdown, 2026-11-01; no define or loc text states it). The 75% factor on subsistence reflects the fact that a peasant moving into a subsistence farm is not really "employed" the way a wage worker is.
 
 For **intra-market** moves only, attraction is further boosted for a specific pop:
 
@@ -333,7 +333,7 @@ Mass migration triggers when a culture experiences enough turmoil in its homelan
 - At least 100,000 potential emigrants exist.
 - Pops without a cultural homeland (e.g. Ashkenazi) can never mass migrate.
 
-When a mass migration triggers, the engine searches for an eligible target state across countries: incorporated, 30%+ market access, 10+ arable land, owner has ≤30% turmoil in the migrating culture. Target countries must trade with the source on the world market, and the migrating culture must have ≥30 acceptance under the target's Citizenship laws. Higher acceptance ratios produce up to 5× more migration. Pops arrive in the chosen state and its neighbors.
+When a mass migration triggers, the engine searches for an eligible target state across countries: incorporated, with at least the market access `NPops` `MASS_MIGRATION_STATE_MIN_MARKET_ACCESS` sets (it gates origin states too) and, in vanilla, the arable land `MASS_MIGRATION_TARGET_MIN_ARABLE_LAND` sets, and the owner has ≤30% turmoil in the migrating culture. This mod lowers the arable land floor to 1, below every state region's (the engine rejects 0 at load), so city-states and small partial states can be targets; Local Climate's comfort penalty on migration attraction keeps deserts back instead (`docs/systems/mod_systems/local_climate.md`). Target countries must trade with the source on the world market, and the migrating culture must have ≥30 acceptance under the target's Citizenship laws. Higher acceptance ratios produce up to 5× more migration. Pops arrive in the chosen state and its neighbors.
 
 Each combination of culture and country has a small weekly chance of triggering a mass migration based on cultural turmoil and on how far below SoL 10 / 5 the culture's average SoL sits.
 
@@ -608,7 +608,7 @@ Pre-1.5 manual trade routes are gone. In 1.13, trade between *separate* markets 
 - **Consume Merchant Marine** at a rate that scales with their PM tier.
 - Stack additively per state, gated by trade laws.
 
-Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously. A market with none can neither import nor export, so its prices settle on domestic supply and demand alone. Where they may be built is the state-scope trigger `trade_center_construction_allowed` (the buildings' `can_build_government`/`can_build_private`). Isolationism forbids them (`country_disallow_trade_bool`), and the Canton System and Sakoku confine them to Guangdong and Kyushu (`country_disallow_trade_outside_canton_bool`, `country_disallow_trade_outside_kyushu_bool`). This mod seeds a level-1 Trade Center for AI market leaders that have none (`docs/systems/mod_systems.md` § "Transport goods").
+Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously. A market with none can neither import nor export, so its prices settle on domestic supply and demand alone. Where they may be built is the state-scope trigger `trade_center_construction_allowed` (the buildings' `can_build_government`/`can_build_private`). Isolationism forbids them (`country_disallow_trade_bool`), and the Canton System and Sakoku confine them to Guangdong and Kyushu (`country_disallow_trade_outside_canton_bool`, `country_disallow_trade_outside_kyushu_bool`). This mod seeds a level-1 Trade Center for AI market leaders that have none (`docs/systems/mod_systems/transport_goods.md` § "Transport goods").
 
 **Tolls and strait access** were reworked in 1.13.7: toll rates were halved, changing a toll/strait-access setting now starts a 6-month cooldown (with a 7-day grace window to revert), and tolls apply per trade center rather than only at the world-market-hub state. Port-connection Merchant Marine costs were also reworked — each country pays a share of shipping-lane costs proportional to what its market areas actually purchase from other market areas, paid to the market owner.
 
@@ -746,7 +746,7 @@ In "The Great Wave" the navy was integrated into the economic loop. **Convoys ar
 
 In vanilla, **Merchant Marine** is a market good produced by Ports and consumed by Trade Centers and overseas market access. Running short doesn't cause a discrete cliff: the shortage **raises the good's price**, which makes Trade Centers less profitable, which causes them to **downsize their trade routes** and reduce consumption. The system rebalances via the standard supply-and-demand price loop, not a hard cap.
 
-This **mod** keeps Merchant Marine as shipping between markets: its only production-method consumers are Trade Centers, and its producers are Ports, airports (air cargo) and shipping and trading company buildings. Freight inside a state is the local **Transportation** good, which Railways, Highways, Airports and land logistics companies produce and most industry consumes (rail and road tiers, cold chain, construction, automation, retail). Cross-references: `docs/systems/mod_systems.md` § "Transport goods" for the model and the classification.
+This **mod** keeps Merchant Marine as shipping between markets: its only production-method consumers are Trade Centers, and its producers are Ports, airports (air cargo) and shipping and trading company buildings. Freight inside a state is the local **Transportation** good, which Railways, Highways, Airports and land logistics companies produce and most industry consumes (rail and road tiers, cold chain, construction, automation, retail). Cross-references: `docs/systems/mod_systems/transport_goods.md` § "Transport goods" for the model and the classification.
 
 There's a prestige-good variant (`prestige_good_generic_merchant_marine`) that select shipping companies emit at full Prosperity.
 

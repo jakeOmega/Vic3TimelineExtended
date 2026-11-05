@@ -53,6 +53,7 @@ CONSTRUCTION_PMS = frozenset({
     "pm_reinforced_concrete_buildings",
     "pm_advanced_construction",
     "pm_nanomaterial_buildings",
+    "pm_self_replicating_construction",
     "pm_prefabricated_building_components",
     "pm_tower_cranes",
     "pm_computer_aided_design",
@@ -63,6 +64,7 @@ CONSTRUCTION_PMS = frozenset({
     "pm_te_direct_construction_reinforced_concrete",
     "pm_te_direct_construction_advanced",
     "pm_te_direct_construction_nanomaterial",
+    "pm_te_direct_construction_self_replicating",
 })
 
 RAILWAY_BASE_PMS = frozenset({

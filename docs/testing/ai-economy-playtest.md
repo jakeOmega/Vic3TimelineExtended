@@ -100,7 +100,7 @@ Mecklenburg-Strelitz in January 1836 it read 0.048 where the pops held 0.195 of 
 (Demographics' `unemployment_rate_read`, `docs/testing/demographics-playtest.md` § Log triage 2026-10-17). Owner's call:
 fix it. Every mod reader outside the Demographics census now reads `te_state_unemployment_share`: the engine's figure,
 read live, over the workforce's share of the state's people, which a yearly walk of each state's pops counts
-(`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems.md`).
+(`common/script_values/te_unemployment_values.txt`; § Unemployment as a Share of the Workforce in `mod_systems/pops_and_migration.md`).
 Their thresholds now mean a share of the workforce, so each bites at about a quarter of the unemployment it did. The
 Settlement Authority's was raised from 5% to 10% as well (owner, 2026-10-17). The Demographics census stores the same
 conversion at its walk (`te_dg_unemp`), which its youth bulge, event wave, pension AI and panel read (owner, 2026-10-17:
@@ -108,7 +108,7 @@ one source); its own count stays beside it (`te_dg_unemp_walk`) for its self-che
 
 | Reader | Threshold | Effect |
 |---|---|---|
-| Settlement Authority `ai_value` (`common/buildings/resettlement.txt`) | any of the AI's states above 10% (5% until the owner raised it, 2026-10-17) | +300 on an open frontier |
+| Settlement Authority `ai_value` (`common/buildings/07_zz_te_resettlement.txt`) | any of the AI's states above 10% (5% until the owner raised it, 2026-10-17) | +300 on an open frontier |
 | Greenest Grass Campaign `ai_weight` (`common/decrees/extra_decrees.txt`) | 10% or more | × 0 |
 | Recruitment Drive `ai_weight` (the same file) | above 10% | +50 |
 | `migration_attraction_script_value` (`common/script_values/extra_script_values.txt`), the mass-migration destination's order | above 10% | × 0 |
@@ -193,3 +193,19 @@ Industry's freight is now local Transportation (× 50/30), Merchant Marine is bo
 | **Railway and port levels.** Where levels grow, and the world's port levels against the #1050 saves. | Railways grow where Transportation is dear. Port levels fall several-fold to match trade's demand; no state piles up levels with a large surplus. | Ports still piling up: something else still buys Merchant Marine (list its consumers in a save). |
 | **Retooling.** Passenger-group switching and the `pm_retooling` share on ports and railways. | Not above the #933/#1050 baselines. | Ports flipping between passenger tiers: reconsider `most_productive` on `pmg_water_personal_transport` with the new inputs. |
 | **Bankruptcy.** Bankrupt AI countries. | No more than the 80–83 of about 110 in the #1050 saves. | More: rank their deficits by building type. |
+
+## Public Housing (2026-10-31)
+
+`building_public_housing` (`common/buildings/07_zz_te_government.txt`) raises its state's crowding threshold through Urban
+Engineering. Its `ai_value` is 0 until the state's `migration_crowding_ratio` passes 0.1, then 300 + 2,000 × the
+ratio, at most 4,300, and its group is `most_productive` with each method's `ai_value` double the last
+(`docs/systems/mod_systems/pops_and_migration.md` § Public Housing). No self-check: the modifier is the one the
+technologies already grant, and the tile's breakdown shows it.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The threshold.** Build two levels in a crowded state and hover the Migration Crowding tile. | Urban Engineering's breakdown lists Public Housing at +100 a staffed level (Model Dwellings, since 2026-11-02), and the threshold rises by 100,000 people a level × (1 + tolerance) at the next yearly refresh. | No line: the state modifier doesn't reach the state from a government building's method; check `state_modifiers` on the method. |
+| **The AI builds it.** Observer run to about 1900; count AI Public Housing levels in the states with the highest crowding ratio (`building="building_public_housing"` records under `building_manager` in a plain-text save). | Some levels in the most crowded states, none in states below their threshold. | None anywhere: the construction AI ignores the value (`scripting_best_practices.md` § AI and Cost-Only Buildings); add a monthly AI pass that queues a level in the most crowded state with `start_building_construction`, as the Grid Transfer Station's does. |
+| **The level cap (2026-11-02).** With Urban Planning but not Paved Roads, open the build menu's Government group and hover Paved Roads in the technology tree. | The building shows a maximum of 12 levels in each state, and Paved Roads' tooltip lists Public Housing Max Level +3. | No maximum, or no line: `state_building_public_housing_max_level_add` isn't registered (`mod_entity_modifier_types.txt`) or the building lacks `has_max_level = yes`. |
+| **The AI's method.** The same run, after Steel-Frame Buildings. | AI housing on the newest method it has the technology and goods for, not stuck on Model Dwellings. | It holds the first method: `most_productive` with cost-only methods doesn't follow `ai_value`; try `ai_selection` unset. |
+| **The icon (icon batch 8).** Open the building panel and the build menu's Government group. | Public Housing shows its own icon: a brick courtyard block of six-story apartment buildings with a pale concrete tower behind, not the Urban Center's. | The `icon` line in `07_zz_te_government.txt` or the DDS (`building_icons/building_public_housing.dds`). |

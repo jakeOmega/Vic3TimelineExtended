@@ -4,6 +4,8 @@ request_influence = {
 	kind = directed
 	maintenance_paid_by = source_country
 	cost = 500
+	max_target_involvement = 2000
+	target_involvement_applies_to = source_country
 
 	flags = {
 		can_be_renegotiated
@@ -117,6 +119,8 @@ crisis_resolution = {
 	cost = 500
 	relations_progress_per_day = 3
 	relations_improvement_max = 80
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	usage_limit = once_per_side
 
@@ -215,6 +219,8 @@ extend_influence = {
 	kind = directed
 	maintenance_paid_by = source_country
 	cost = 500
+	max_target_involvement = 2000
+	target_involvement_applies_to = target_country
 
 	target_modifier = {
 		country_treaty_leverage_generation_add = 500
@@ -317,6 +323,8 @@ education_aid = {
 	cost = 100
 	relations_progress_per_day = 3
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	# This modifier applies to the country receiving aid (the target).
 	target_modifier = {
@@ -429,6 +437,8 @@ healthcare_aid = {
 	cost = 100
 	relations_progress_per_day = 3
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	source_modifier = {
 		country_institution_cost_institution_health_system_mult = 0.1
@@ -543,6 +553,8 @@ security_aid = {
 	cost = 100
 	relations_progress_per_day = 3
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	source_modifier = {
 		country_institution_cost_institution_police_mult = 0.1
@@ -660,6 +672,8 @@ development_assistance = {
 	cost = 200
 	relations_progress_per_day = 3
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	# The target's poor benefit, the regime is stabilised, and the source gains
 	# leverage from the client's growing dependence.
@@ -762,6 +776,8 @@ science_aid = {
 	cost = 100
 	relations_progress_per_day = 3
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	usage_limit = once_per_side
 
@@ -867,6 +883,8 @@ science_aid_2 = {
 	cost = 100
 	relations_progress_per_day = 6
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	usage_limit = once_per_side
 
@@ -995,7 +1013,7 @@ science_aid_2 = {
 # TREATY ARTICLE: suppress_subject_liberty
 # ---------------------------------
 # This article allows an overlord to suppress the liberty desire of their subject.
-suppress_subject_liberty = {
+suppress_subject_liberty = {  # REVIEWED 2026-11-03 (involvement): the overlord already gains Involvement through the subject relation itself
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/suppress_subject_liberty.dds"
 	kind = directed
 	# The overlord (target) pays: it is buying the subject's loyalty
@@ -1126,7 +1144,7 @@ suppress_subject_liberty = {
 # supports that, and it disarmed the country whose column did NOT list the
 # article. The follow-on event treaty_article_events.5 always assumed
 # source = the disarmed country.
-nuclear_disarmament = {
+nuclear_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds"
 	kind = directed
 	# The demander wants it, so the demander pays.
@@ -1442,6 +1460,8 @@ nuclear_program_aid = {
 	kind = directed
 	maintenance_paid_by = source_country
 	cost = 500
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	target_modifier = {
 		country_receiving_nuclear_program_aid_bool = yes
@@ -1640,6 +1660,8 @@ intelligence_sharing_pact = {
 	# Improves relations over time, showing growing trust.
 	relations_progress_per_day = 1.0
 	relations_improvement_max = 60
+	max_target_involvement = 1000
+	target_involvement_applies_to = mutual
 
 	usage_limit = once_per_treaty
 
@@ -1796,6 +1818,8 @@ joint_military_exercises = {
 	# The act of training together builds trust and improves relations.
 	relations_progress_per_day = 0.5
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = mutual
 
 	usage_limit = once_per_treaty
 
@@ -2021,7 +2045,7 @@ joint_military_exercises = {
 # Gated behind principle_group_multilateral_institutions: forcing a sovereign state
 # into an IGO by treaty is a hegemon-with-machinery move, reserved for blocs that
 # have invested in the institution.
-join_united_nations = {
+join_united_nations = {  # REVIEWED 2026-11-03 (involvement): an imposed obligation to join a third party, which gives neither side a presence in the other
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/join_united_nations.dds"
 	kind = directed
 	maintenance_paid_by = source_country
@@ -2164,7 +2188,7 @@ join_united_nations = {
 # country's program. The follow-on event treaty_article_events.8 and the AI's
 # inherent_accept_score below always assumed this direction; only the
 # modifier block and the hooks had it the other way round, until 2026-09-24.
-nuclear_program_pause = {
+nuclear_program_pause = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_program_pause.dds"
 	kind = directed
 	# The demander wants it, so the demander pays.
@@ -2433,7 +2457,7 @@ nuclear_program_pause = {
 # dispersed among target's states proportionally by population.
 # Causes disruption (radicals, bureaucracy) in both countries.
 # Historical: Greco-Turkish population exchange, German expulsions post-WW2.
-population_transfer = {
+population_transfer = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, like vanilla's state, ship and money transfers, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/population_transfer.dds"
 	kind = directed
 	cost = 150

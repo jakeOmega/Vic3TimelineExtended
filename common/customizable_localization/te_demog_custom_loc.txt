@@ -2,7 +2,9 @@
 # DEMOGRAPHICS — the census's inputs while the census doesn't run
 # ============================================================================
 # Every modifier type in common/modifier_type_definitions/demographics_modifier_types.txt
-# is read only by the census. Under the Demographics rule's Disabled setting no
+# but one is read only by the census (Malaria Control, state_malaria_control_add, also eases
+# Local Climate's malaria cost, so it carries no tag; test_demographics_modifiers.py's
+# READ_BEYOND_THE_CENSUS). Under the Demographics rule's Disabled setting no
 # census runs, yet the techs, laws and institutions that carry those types still
 # list their lines. So each type's name ends in te_demog_census_off_name and its
 # description in te_demog_census_off_desc (te_modifiers_l_english.yml): empty

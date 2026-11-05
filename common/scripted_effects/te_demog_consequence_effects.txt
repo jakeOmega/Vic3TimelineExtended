@@ -76,7 +76,7 @@ te_demog_consequences_refresh = {
 }
 
 # THIS = ROOT = a state: the one refresh site of the four modifiers. Removed and re-applied (the dynamic-modifier
-# scaling pattern, docs/systems/mod_systems.md); one of the conscription pair at most; none at a multiplier of 0.
+# scaling pattern, docs/systems/mod_systems/dynamic_modifier_pattern.md); one of the conscription pair at most; none at a multiplier of 0.
 te_demog_consequences_apply = {
 	te_demog_consequences_remove = yes
 	if = {

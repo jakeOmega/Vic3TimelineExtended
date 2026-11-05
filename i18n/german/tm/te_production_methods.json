@@ -404,8 +404,8 @@
   "de": "Fortgeschrittene erneuerbare Energie"
  },
  "pm_base_building_compact_modular_fusion_power": {
-  "en": "Muon-Catalyzed Fusion Power",
-  "de": "Myonenkatalysierte Fusionsenergie"
+  "en": "Compact Fusion Power",
+  "de": "Kompakte Fusionsenergie"
  },
  "pm_base_building_hydro_power": {
   "en": "Hydro Power",
@@ -4276,16 +4276,16 @@
   "de": "Fundidora-Hochofen Monterrey"
  },
  "pm_fusion_battery_appliances": {
-  "en": "Fusion Battery Appliances",
-  "de": "Fusionsbatterie-Haushaltsgeräte"
+  "en": "Microfusion Appliances",
+  "de": "Mikrofusions-Haushaltsgeräte"
  },
  "pm_fusion_battery_motors": {
-  "en": "Fusion Battery Motors",
-  "de": "Fusionsbatterie-Motoren"
+  "en": "Microfusion Motors",
+  "de": "Mikrofusionsmotoren"
  },
  "pm_fusion_battery_vehicles": {
-  "en": "Fusion Battery Vehicles",
-  "de": "Fusionsbatterie-Fahrzeuge"
+  "en": "Microfusion Vehicles",
+  "de": "Mikrofusionsfahrzeuge"
  },
  "pm_fusion_ssto_craft": {
   "en": "Fusion SSTO Craft",

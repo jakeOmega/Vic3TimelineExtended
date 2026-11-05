@@ -1653,6 +1653,11 @@ decolonization_events.14 = {
 		NOR = {
 			has_variable = gp_colonial_policy_cooldown
 		}
+		# A player is asked once; after that the stance changes from the
+		# Colonial Empire tab of the Timeline Extended window (owner,
+		# 2026-11-03: the tab, not a recurring event). The AI is asked every
+		# three years, as before.
+		decol_stance_question_due = yes
 		any_country = {
 			NOT = { this = root }
 			any_scope_state = {
@@ -1663,36 +1668,58 @@ decolonization_events.14 = {
 
 	immediate = {
 		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
+		set_variable = decol_stance_asked
 	}
 
+	# Each option is the panel's button of the same stance
+	# (decolonization_stance_effects.txt): the stance, held while we are a great
+	# power at its influence cost, the 24-month wait before the next change and
+	# the reactions at home. Re-choosing the stance we hold costs nothing more.
+
 	# Option A: Condemn colonialism
-	# Retuned for proposal #9: non-overlord GPs (USSR, USA, post-1945 China)
-	# should pick anti-colonial stance with high reliability so AI overlords
-	# face a steady stream of GP condemnation pressure even early.
+	# Proposal #9: a great power without colonies condemns with high
+	# reliability, so AI empires face a steady stream of condemnation.
+	# Issue #1370 (owner, 2026-11-03): an empire never condemns the colonialism
+	# it practices, and a power with a stake in colonialism, at home or through
+	# a partner, condemns it less often. A segregated or slaveholding power is a
+	# less convincing anti-colonial champion until it reforms: the USA, Brazil
+	# and Belgium start on Racialized Citizenship (law_racial_segregation), and
+	# Brazil and the Ottoman Empire (TUR) on the Slave Trade, so each counts as
+	# regressive until it changes the law, and slavery halves Condemn again.
+	# The adds come first and the factors last, so no add lifts a factor = 0
+	# (the tests are in decolonization_stance_triggers.txt; self-check
+	# ai_condemn_factor_order). Support gains 8 each for a colonizing law, an
+	# illiberal government and a partner of an empire (owner, 2026-11-03: the
+	# AI backs colonialism more often with those). Condemn : Neutral : Support
+	# for a power without colonies (Condemn 26 to 39 with the adds; Support 3
+	# beside a friendly colonial holder), with Condemn's and Support's shares:
+	#   typical                     26-39      : 1 : 0-3     87-98%, 0-10%
+	#   illiberal, or Resettlement  26-39      : 1 : 8-11    68-81%, 17-29%
+	#   both                        26-39      : 1 : 16-19   57-70%, 29-41%
+	#   regressive                  13-19.5    : 5 : 0-3     62-80%, 0-14%
+	#   Exploitation (regressive)   13-19.5    : 5 : 8-11    45-60%, 25-38%
+	#   Exploitation, illiberal     13-19.5    : 5 : 16-19   35-48%, 40-51%
+	#   slaveholding                6.5-9.75   : 5 : 0-3     45-66%, 0-21%
+	#   slaveholding, illiberal     6.5-9.75   : 5 : 8-11    29-43%, 35-49%
+	#   beside an empire            13-19.5    : 1 : 8-11    52-68%, 28-44%
+	#   beside, illiberal           13-19.5    : 1 : 16-19   39-53%, 44-58%
+	#   beside, regressive          6.5-9.75   : 5 : 8-11    29-43%, 35-49%
+	#   beside, slaveholding        3.25-4.88  : 5 : 8-11    17-27%, 45-57%
+	# An empire: 0 : 1 (5 if regressive) : 10-13, and 8 more for each of a
+	# colonizing law, an illiberal government and a partner empire: Support
+	# 91-93%, 67-72% when regressive, 78-81% under Colonial Exploitation.
 	option = {
 		name = decolonization_events.14.a
-		default_option = yes
+		trigger = { decol_stance_affordable = yes }
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 8
 			# Big bonus for non-overlords — the geopolitical leverage play
 			modifier = {
 				trigger = {
-					NOT = {
-						any_scope_state = {
-							is_overseas_colonial_state = yes
-						}
-					}
+					NOT = { decol_holds_colonial_empire = yes }
 				}
 				add = 15
-			}
-			# Strong penalty for overlords — they almost never pick this
-			modifier = {
-				trigger = {
-					any_scope_state = {
-						is_overseas_colonial_state = yes
-					}
-				}
-				add = -10
 			}
 			# Geopolitical-rivalry bonus: condemn the colonial powers we don't like
 			modifier = {
@@ -1727,58 +1754,74 @@ decolonization_events.14 = {
 				}
 				add = 3
 			}
+			# A regressive regime (colonial exploitation, a hierarchy of
+			# peoples, slavery, a jingoist ruler, colonialists in government)
+			# is in no position to condemn it: half the weight (Neutral +4).
+			modifier = {
+				trigger = { decol_ai_regressive = yes }
+				factor = 0.5
+			}
+			# Slavery halves it again (owner, 2026-11-03): a slaveholding power
+			# at a quarter, another regressive one at a half.
+			modifier = {
+				trigger = { decol_ai_slaveholding = yes }
+				factor = 0.5
+			}
+			# Nor one whose ally, defensive-pact or bloc partner, subject or
+			# overlord runs an empire: half the weight (Support +8).
+			modifier = {
+				trigger = { decol_ai_partner_holds_empire = yes }
+				factor = 0.5
+			}
+			# An empire never condemns colonialism: a colony, a colonial
+			# subject or its Colonial Empire entry (decol_stance_monthly drops
+			# a condemnation an AI empire already holds).
+			modifier = {
+				trigger = { decol_holds_colonial_empire = yes }
+				factor = 0
+			}
+			# A stance costs influence: start one only with the cost and a
+			# spare in hand (decol_stance_ai_can_hold).
+			modifier = {
+				trigger = { NOT = { decol_stance_ai_can_hold = yes } }
+				factor = 0
+			}
 		}
-		set_variable = gp_anti_colonial_stance
-		if = {
-			limit = { has_variable = gp_pro_colonial_stance }
-			remove_variable = gp_pro_colonial_stance
-		}
-		add_modifier = {
-			name = gp_anti_colonial_policy_modifier
-			days = 1095
-			is_decaying = yes
-		}
-		# Intelligentsia and trade unions approve - progressive stance
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Landowners and industrialists lose colonial markets
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		# Self-check ai_condemn_factor_order (decolonization_stance_effects.txt)
+		decol_selfcheck_empire_condemned = yes
+		decol_stance_take_anti = yes
 	}
 
 	# Option B: Remain neutral
 	option = {
 		name = decolonization_events.14.b
+		default_option = yes
 		ai_chance = {
 			base = 1
-		}
-		custom_tooltip = {
-			text = GP_NEUTRAL_STANCE_TT
-			if = {
-				limit = { has_variable = gp_anti_colonial_stance }
-				remove_variable = gp_anti_colonial_stance
-			}
-			if = {
-				limit = { has_variable = gp_pro_colonial_stance }
-				remove_variable = gp_pro_colonial_stance
+			# A regressive regime that will not condemn colonialism mostly
+			# stays out (option A's factor)
+			modifier = {
+				trigger = { decol_ai_regressive = yes }
+				add = 4
 			}
 		}
-		# Cautious approach - no strong reactions either way
-		add_loyalists = { value = very_small_radicals }
+		decol_selfcheck_empire_declined = yes
+		decol_stance_take_neutral = yes
 	}
 
 	# Option C: Support colonial interests - increasingly unpopular
 	option = {
 		name = decolonization_events.14.c
+		trigger = { decol_stance_affordable = yes }
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 0
+			# An empire backs the colonial powers (5 before 2026-11-03)
 			modifier = {
 				trigger = {
-					any_scope_state = {
-						is_overseas_colonial_state = yes
-					}
+					decol_holds_colonial_empire = yes
 				}
-				add = 5
+				add = 10
 			}
 			modifier = {
 				trigger = {
@@ -1792,24 +1835,32 @@ decolonization_events.14 = {
 				}
 				add = 3
 			}
+			# And so does a partner of one: stand by our ally's empire
+			# (option A's factor; 5 before 2026-11-03)
+			modifier = {
+				trigger = { decol_ai_partner_holds_empire = yes }
+				add = 8
+			}
+			# A power whose own Colonization law founds colonies (Colonial
+			# Resettlement or Colonial Exploitation) backs those who hold them
+			modifier = {
+				trigger = { decol_ai_colonial_laws = yes }
+				add = 8
+			}
+			# And so does an illiberal one: an unelected government, or one
+			# that outlaws dissent, has little use for self-determination (a
+			# Council Republic never counts: decol_ai_illiberal)
+			modifier = {
+				trigger = { decol_ai_illiberal = yes }
+				add = 8
+			}
+			modifier = {
+				trigger = { NOT = { decol_stance_ai_can_hold = yes } }
+				factor = 0
+			}
 		}
-		set_variable = gp_pro_colonial_stance
-		if = {
-			limit = { has_variable = gp_anti_colonial_stance }
-			remove_variable = gp_anti_colonial_stance
-		}
-		add_modifier = {
-			name = gp_pro_colonial_policy_modifier
-			days = 1095
-			is_decaying = yes
-		}
-		# Landowners and industrialists approve - colonial markets
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Intelligentsia and trade unions dismayed
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		add_radicals = { value = small_radicals pop_type = academics }
+		decol_selfcheck_empire_declined = yes
+		decol_stance_take_pro = yes
 	}
 }
 
@@ -3074,6 +3125,9 @@ decolonization_events.201 = {
 			text = je_colonial_empire_fail_tt
 			decol_wave_start = yes
 		}
+		# Refreshed, not stacked: the entry can run again (the re-entry pass,
+		# ce_reentry_monthly), and a same-name add_modifier stacks.
+		remove_modifier_if_exists_effect = { MODIFIER = colonial_empire_collapsed_modifier }
 		add_modifier = {
 			name = colonial_empire_collapsed_modifier
 			days = long_modifier_time
@@ -3200,6 +3254,10 @@ decolonization_events.204 = {
 			text = je_colonial_empire_negotiated_tt
 			decol_wave_start = yes
 		}
+		# Refreshed, not stacked: the entry can run again (the re-entry pass,
+		# ce_reentry_monthly), .206 grants the same modifier, and a same-name
+		# add_modifier stacks.
+		remove_modifier_if_exists_effect = { MODIFIER = negotiated_withdrawal_modifier }
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time
@@ -3320,6 +3378,8 @@ decolonization_events.206 = {
 		trigger = { has_variable = decol_chosen_releases }
 		default_option = yes
 		ai_chance = { base = 5 }
+		# Refreshed, not stacked (as in .204, which grants it too).
+		remove_modifier_if_exists_effect = { MODIFIER = negotiated_withdrawal_modifier }
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time
@@ -3336,6 +3396,9 @@ decolonization_events.206 = {
 		trigger = { NOT = { has_variable = decol_chosen_releases } }
 		default_option = yes
 		ai_chance = { base = 5 }
+		# Refreshed, not stacked: a voluntary end can come again after the
+		# re-entry pass gives the entry back.
+		remove_modifier_if_exists_effect = { MODIFIER = post_imperial_modifier }
 		add_modifier = {
 			name = post_imperial_modifier
 			days = long_modifier_time

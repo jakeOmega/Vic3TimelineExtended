@@ -206,37 +206,30 @@ Design: `docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-des
 it departs). Everything here needs the Space Race rule at Full Colonies; under Simple Colonies and Races Only none of
 it shows. The console is `event te_debug_space_race.6` (log our fleets and every location's forces; 100 strength of
 each role at Earth; land our fleets now; fill propellant and supply; our fleets' drive one up; our first colony's
-integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; the two upkeep
-probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC`, `TE_SR_COMBAT` and `TE_SR_PROBE`.
+integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; start an
+interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC` and `TE_SR_COMBAT`.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
+| `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… units=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
-| `TE_SR_PROBE upkeep_inputs candidate=… before=… after=…` | console options k and l, fourteen days apart | see the probe below | | |
+| `TE_SELF_CHECK OK/BROKEN xfer_step_scope … slot=… role=… [amount=…]` | once a game, the first − or + clicked in a fleet's Transfer popup | the step code, the third chained `AddScope` (`scope:step`, after `op` and `pick`), reached `sr_fleet_xfer_step_sgui`; `slot` is the fleet's slot, `role` the row's code (1 warships … 6 marines), `amount` the figure after the click | no step code matched: the third scope didn't arrive, and the amount didn't move. **No line at all** after a click means `op` or `pick` didn't arrive (no case of `sr_fl_by_op` or `sr_fl_xfer_step_at` matched) or the button never ran | for BROKEN, pass two scopes: `pick` = role × 100 + step code, decoded in `sr_fl_xfer_step_at`; for no line, check the button's `enabled` and the Into buttons, which use `op` and `pick` too |
 
 **What checks itself, and what needs a hand.**
 
 - **Logged with no input:** start a game at Full Colonies and grep `error.log` and `debug.log` for the new files
   (`sr_fleet*`, `sr_fleets_generated*`, `space_race_events.txt`, `covert_operations.txt`): script errors in them show at
   load. `ship_construction` logs by itself once any country has run a Space Command at half staff for a month: an AI
-  space power in an observer run, or you.
+  space power in an observer run, or you. Its first form fired on 2026-10-31 and printed nothing (its `rate=` read
+  `THIS.MakeScope.ScriptValue`, which `debug_log` drops the line for); the fixed line's marker is
+  `sr_sc_checked_v2`, so a save that already ran the old one checks again.
 - **Logged after one action:**
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
-  - The probe needs console options k and l, and a read of the input tooltip.
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
   - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
 - **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
   and a month's combat, and j an occupation, which shortens most of them.
-
-**The upkeep probe (open call, owner).** The fleets' upkeep ships as `sr_fleet_upkeep_goods`, the three good-specific
-input multipliers (Launch Capacity, Advanced Materials, electricity), which the mod already uses. The design prefers
-`sr_fleet_upkeep`, the generic `building_goods_input_mult`, which follows any change to the methods, but the owner
-recalls trouble with it. With a Space Command (or, before one, a Space Program) built: option k, wait fourteen days,
-read the Space Command's input tooltip and the two `TE_SR_PROBE` lines (the market's Launch Capacity buy orders before
-and after; a jump of about half the building's bill means the candidate worked). Then option l and the same. If the
-generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep` and record the answer in
-`docs/guides/scripting_best_practices.md`.
 
 1. **The rule.** Under Simple Colonies, no Space Command building, no Space Command, Fleets or Colony Defences
    sections, no Survey Colony Defences operation, and `.94`'s Send a garrison works as slice 5 built it. Switch to Full.
@@ -246,17 +239,19 @@ generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep`
    built last month and the levels; the home fleet appears at Earth in Fleets; `ship_construction` logs OK.
 3. **The build mix.** Each role's button steps 0, 1, 2, 3, 0; the next month's construction follows the weights
    (option a's per-role figures, or the strength hover).
-4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep, +1% for every 10 strength at
-   full, and the section's Upkeep figure matches. Nothing else's inputs change.
-5. **Orders.** Pick a destination (the button steps through the other eight; its hover gives the leg's months and
-   km/s), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
+4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep on its six maintenance goods,
+   +900% for every 10 strength at full, and the section's Upkeep figure matches (the UI pass section, PR 7, has the
+   detail). The methods' other inputs don't change.
+5. **Orders.** Pick a destination in the Fleet Destination popup (its rows give each trip's months and propellant;
+   the PR 3 section below), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
    at Earth outside Mars's window, for instance). In transit the row reads "→ Mars" and its landing month; on landing
    `fleet_leg` logs OK and the months flown match `docs/engine/launch_windows_report.md`.
 6. **Docking and refits.** A fleet back at Earth refills propellant and supply, repairs 20% of its damage a month, and
    refits to a newer drive (Refit shows three months). A fleet at our colony with a Spaceport repairs 10% a level, and
    refills propellant by 25% a month only on a world that makes it (Utopia Planitia, Ceres, Europa, Ganymede, Callisto,
    Titan, Enceladus, Rhea, Triton, Pluto). Away from a dock, supply counts down; at zero the fleet loses 5% a month.
-7. **Merge, detach, marines.** Merge two fleets at one location; detach half of one into a free slot. At Earth the
+7. **Transfer, marines.** Move all of one fleet into another at its location, then part of one into a new fleet, in
+   the Transfer popup (the PR 4 section below, which took in Merge and Detach). At Earth the
    carriers fill with marines (2 battalions a point of carrier strength); Land puts them at our colony there (Colony
    Defences shows them), Embark takes them back.
 8. **Garrisons under Full.** Answer a demand for self-government (`.94`, option b of `te_debug_space_race.5`) with a
@@ -280,11 +275,11 @@ generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep`
     Colony Defences, and our Locations row, read Blockaded / Blockading; their settlers and modules stop arriving,
     a mining or shipping specialization's modifier goes to nothing while an observatory's keeps running, and its
     Extraplanetary Base room drops out.
-14. **Assault and seizure.** Close in on an enemy's colony (the target button steps through hostile worlds; its hover
-    gives the target's Defences as a range, exact with Survey Colony Defences): its Defences fire back and its
-    integrity falls; at 0, with more marines than its garrison and militia, "<World> Occupied" to both sides. It
-    gives its holder nothing, shows Occupied with the occupier's flag, and the war-support breakdown shows "Colonies
-    occupied in space". At the peace it returns ("<World> Returned"), unless a Cede Colony article took it.
+14. **Assault and seizure.** Close in on an enemy's colony (the target button opens Fleet Target, the PR 3 section
+    below; its hover gives the target's Defences as a range, exact with Survey Colony Defences): its Defences fire
+    back and its integrity falls; at 0, with more marines than its garrison and militia, "<World> Occupied" to both
+    sides. It gives its holder nothing, shows Occupied with the occupier's flag, and the war-support breakdown shows
+    "Colonies occupied in space". At the peace it returns ("<World> Returned"), unless a Cede Colony article took it.
 15. **Liberation.** The holder closing in with more marines than the occupier's garrison frees it ("Liberated").
 16. **Destruction.** Toggle To destroy and close in for three months with no enemy fleet stationed: "<World>
     Destroyed", the destroyer's infamy +20, its UN record's "Hostile acts in space" +20, its own colonies +10
@@ -312,12 +307,11 @@ No new self-check: the script sees everything here, and the two engine questions
 choices) are read by eye. `TE_SR_COMBAT interdiction begun …` lines log each interdiction, one for each side.
 
 1. **The Interdict posture.** A fleet at a location where a country at peace with us, and not our ally (no alliance or
-   defensive pact), holds a colony: the posture button steps Station → Stand off → Close in (only with a hostile world
-   there) → Interdict → Station, and its hover names the price when Interdict is next. Where only allies or enemies
-   hold colonies, Interdict is skipped. The target button, while interdicting, steps through the worlds of countries
-   we may interdict.
+   defensive pact), holds a colony: the Interdict posture button can be clicked, and its hover names the price (the
+   posture buttons are in the PR 3 section below). Where only allies or enemies hold colonies, Interdict is greyed.
+   While interdicting, Fleet Target lets us target only the worlds of countries we may interdict.
 2. **The price.** Entering Interdict: our infamy +5, our UN record's "Hostile acts in space" +10, once for that fleet
-   and that country (stepping the target to another country's world pays again; staying put pays nothing more).
+   and that country (targeting another country's world pays again; staying put pays nothing more).
 3. **The blockade.** With none of the target's fleets there, from the next month its colonies at that location read
    Interdicted in its Colony Defences and Locations, and ours reads Interdicting; settlers and modules stop arriving,
    a mining specialization stops, an observatory keeps running, and its Extraplanetary Base room drops out (as step 13
@@ -403,7 +397,7 @@ us put a fleet of 100 of each role at Earth (with none of ours there, a blockade
 
 The colonization sections' share of the GUI and localization audit (`docs/audits/gui_audit/space_seabed.md`, SPC-1 to SPC-19). No self-check: everything here is display and fails visibly (a blank, a raw key, a row in the wrong view). The race-wide items and the `sr_powers_list` self-check are in `docs/testing/space-race-playtest.md` under the same date.
 
-1. **The overview cells (`te_banking_ov_cell`, hovers through `sr_colony_overview_sgui`'s `ExecuteTooltip`: new).** Under Simple Colonies: Colonies reads Loyal with "N of 34 held"; push a colony to autonomy 75 (`event te_debug_space_race.2` or wait) and it reads the colony's name in red, "wants self-rule", then "+N more want it" with a second; its hover lists them by name. Modules reads "N queued", or Queue empty (red once the fabrication stock is full). Next Window reads "in N months", "Open now", "Any month" with a torch drive, or "No site left". Under Full Colonies a Defense cell joins them: Calm, then, with an enemy fleet standing off a colony, Blockaded and the colony's name, its hover listing every threatened colony and an inbound hostile fleet's landing.
+1. **The overview cells (`te_banking_ov_cell`, hovers through `sr_colony_overview_sgui`'s `ExecuteTooltip`: new).** Under Simple Colonies: Colonies reads Loyal with "N of 34 held"; push a colony to autonomy 50 (`event te_debug_space_race.2` or wait) and it reads the colony's name in red, "wants self-rule", then "+N more want it" with a second; its hover lists them by name. Modules reads "N queued", or Queue empty (red once the fabrication stock is full). Next Window reads "in N months", "Open now", "Any month" with a torch drive, or "No site left". Under Full Colonies a Defense cell joins them: Calm, then, with an enemy fleet standing off a colony, Blockaded and the colony's name, its hover listing every threatened colony and an inbound hostile fleet's landing.
 2. **The Colonies view switch (`GetVariableSystem.Set` / `HasValue` on `sr_colony_view`).** People is the default; each button shows its view's figures above the rows and its columns on each row's second line, the active button greyed. Defenses shows only under Full Colonies; an occupied colony appears there, with its occupier, and in no other view. Under Races Only, the switch is gone and each row is the icon and name.
 3. **A colony's name hover (`AddLocalizationIf` of whole keys, each with its `GetStaticModifier(...).GetDesc`).** Lists the specializations we hold there at their levels, nothing for one we don't, and no stray blank lines.
 4. **A colony's drift hover (`AddLocalizationIf` chains with `te_tt_newline`).** The total, the pull of home, its people, its distance by our drive; the no-contact, charter, garrison, war and destroyed-colony lines only when they apply, each with its figure. The total matches the row's Drift figure.
@@ -461,7 +455,7 @@ The first build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.
 2. **The method.** With Cislunar Infrastructure, the Space Program's Solar Colonization method and Module Fabrication's Orbital Assembly unlock; Solar Colonization reads 10,000 Launch Capacity a week at full staff. Begin Solar Colonization shows with Cislunar Infrastructure and is still possible only after the Moon Base and the Mars Landing.
 3. **Switching early by hand.** Before the Moon Base and the Mars Landing, switch the method in the building panel: the bill rises from 5,000 to 10,000, the Moon Base and the Mars Landing keep running (the method carries the Mars Mission's), and Solar System Colonization does not start. This is the intended intermediate state (a method has no `possible`), not a bug. Watch an AI too: the method group picks the most productive method, so an AI with Cislunar Infrastructure and no Moon Base may switch on its own and pay 10,000 a week for nothing. The second build ends this, since the method then opens colonization itself.
 4. **The cost factor.** Solar System Colonization's Space Program Cost reads ×8 for a country with the Mars Landing (15 innovation × 8 a funding level); a country holding a colony by treaty without the Mars Landing pays ×5, and its cost re-posts when its Mars Landing completes.
-5. **The era-10 base.** With In-Situ Resource Utilization, an Extraplanetary Base can be built and starts on Regolith Processing (15 Electronic Components, 15 Wireless Telecommunication Gear, 5 Digital Access and 60 Launch Capacity for 175 Structural Metals, 95 Tech-Critical Metals and 50 Glass and Plastics a level); the Asteroid Mine method waits for Asteroid Mining. Under Simple or Full Colonies, the Modules view reads room 0 until Asteroid Mining or a colony, and a level built then works at −50%; Asteroid Mining adds the near-Earth 10. AI governments and private investors don't build a base with no room.
+5. **The era-10 base.** With In-Situ Resource Utilization, an Extraplanetary Base can be built and starts on Regolith Processing (15 Electronic Components, 15 Wireless Telecommunication Gear, 5 Digital Access and 60 Launch Capacity for 175 Structural Metals, 95 Tech-Critical Metals and 50 Glass and Plastics a level); the Asteroid Mine method waits for Asteroid Mining. Under Simple or Full Colonies, the Modules view reads room 0 until Asteroid Mining or a colony, and a level built then works at −75%; Asteroid Mining adds the near-Earth 10. AI governments and private investors don't build a base with no room.
 6. **An old save (`te_repair_lunar_technologies`).** Load a save from before this build in which a country runs Solar Colonization or Orbital Assembly on Directed Energy Weapons, and one holds Asteroid Mining. In the first month, `debug.log` has a `TE_LUNAR_TECH_REPAIR` line for each, and they hold Cislunar Infrastructure and In-Situ Resource Utilization. Before that month ends, watch the colonizing country's Space Program: if the engine moved it off Solar Colonization at the load (its technology unresearched for a moment), its colonization entry fails (the program lost), and a colonizer with no colony yet loses its progress toward its first colony with the entry's `on_fail`. Fallback for that: switch back by hand after the first month (the AI through Begin Solar Colonization); nothing in script runs before the first monthly pulse.
 7. **Orbital Foundries.** Space Colonization's fabrication method reads Orbital Foundries in the method group, the Colony Modules section's fabrication tooltip and the method's own description.
 8. **Art (icon batch 7).** The three technologies show their own icons in the tree: Cislunar Infrastructure an orbital station with a lander docked, In-Situ Resource Utilization a tracked regolith processor, Nuclear Thermal Propulsion a reactor engine. None repeats Reusable Rocketry's, Asteroid Mining's or Fusion Power's.
@@ -510,15 +504,15 @@ Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§
 
 Design § 8 of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md`, Full Colonies only: Close in at Earth on a lunar world, its blockade while the holder's Earth is blockaded, no interdiction at Earth, and the AI's lunar offence. Before this build no lunar world could be blockaded: the generic blockade step needs an enemy standing off, and nobody stands off at Earth. No new self-check: everything here is script arithmetic on records the console logs (`event te_debug_space_race.6`, option a; `TE_SR_COMBAT` lines for seizures and destructions). A setup: two countries at war, one holding a lunar colony (found one with `event te_debug_space_race.2` or `.3`), the other with a fleet at Earth (option b) with assault carriers.
 
-1. **The Earth posture options.** As the attacker, at war with a lunar colony's holder: the fleet row at Earth shows the posture and target buttons, and only then (at peace, or with no hostile lunar colony, they are hidden). The posture button steps Station → Close in → Station; its hover is the Earth text; the target button steps through the hostile lunar colonies only. A free lunar colony is offered too, and closing in on it costs its 10 infamy once.
+1. **The Earth posture options.** As the attacker, at war with a lunar colony's holder: the fleet row at Earth shows the posture and target buttons, and only then (at peace, or with no hostile lunar colony, they are hidden). The posture buttons offer Station and Close in only (Stand off and Interdict greyed, "not at Earth"), their hovers in the Earth text; Fleet Target lets us target the hostile lunar colonies only. A free lunar colony is offered too, and closing in on it costs its 10 infamy once.
 2. **Close in, then seize.** Close in on the enemy's lunar colony: its Defenses fire on our fleet (losses in the battle report), and every enemy fleet at Earth, its Orbital Battlestation and its batteries fire on it too. Integrity falls (to skip the wait, option h from the holder's seat sets its first colony's integrity to 0). With the holder's fleets and battlestation gone from Earth and more marines than its garrison and militia, the colony is occupied the next month (`.102` to both sides) and goes back at the peace. While a fleet of the holder is stationed at Earth, or its battlestation stands, nothing is seized.
 3. **Close in, then destroy.** Toggle Destroy on a closing-in fleet: three months with more fire than the colony's Defenses, and no enemy fleet stationed at Earth, destroy it (`.103`, 20 infamy, ruined for 25 years). A fleet that can no longer close in (peace, the colony taken) goes back to Station, not Stand off.
 4. **The lunar blockade.** As the holder, with no fleet of ours at Earth and an enemy fleet there (option o): Earth's Locations row reads Earth Blockaded, and from the next month our lunar colonies read Blockaded in the Defenses view, their settlers and module shipments stop, their shipping specializations (Shackleton's Propellant Depot, Peary's Solar Power, Tranquility Base's two, Imbrium's two) give nothing, their Extraplanetary Base room drops out, and research ones keep running. Holding Shackleton with its depot, this is also the `propellant_depots_bool` self-check's blockaded path (build 2a's table above): the premium lines in Next Windows go, and the line should read OK once a blockaded holder read the boolean no. Launch the reserve: the blockade of Earth and of the Moon lifts together the month after. Our battlestation and batteries fire but don't lift it.
-5. **No interdiction at Earth.** At peace with a lunar colony's holder, a fleet at Earth shows no posture or target buttons, and the posture button anywhere else still offers Interdict only where a non-ally holds a colony.
+5. **No interdiction at Earth.** At peace with a lunar colony's holder, a fleet at Earth shows no posture or target buttons, and the posture buttons anywhere else still offer Interdict only where a non-ally holds a colony.
 6. **The AI's lunar offence.** As a lunar holder at war with an AI fleet power, with no fleet of ours at Earth (option o gives the AI one): within a month or two the AI's strongest fleet at Earth closes in on our lunar colony with the most people and modules, if its marines outnumber our garrison and militia (otherwise it stays stationed), and never toggles Destroy. Launch the reserve: with a fleet of ours at Earth the AI's fleet goes back to Station the next month. With two enemies at war with the AI, one of them with a fleet at Earth, the AI doesn't close in on the other's lunar colony (it couldn't seize it). In an observer run, note whether AI wars produce lunar occupations at all.
 7. **Orbital Superiority while closing in.** At war, with our fleets at Earth outmatching the enemy's, the Orbital Superiority modifier keeps its strength when one of those fleets closes in on a lunar colony.
 8. **The AI's Moon while its fleets are away.** In an observer run or at war with an AI that holds a lunar colony: when its offence or defence has sent every fleet of its own away from Earth, and an enemy fleet reaches Earth, does it lose the Moon? Its defence has no Earth arm (it never comes home for a lunar colony), and only Auto's reserve or its reserve rule puts a fleet back up. Record how often an AI loses a lunar colony this way; an Earth arm in its defence is the fix if it does.
-9. **A free lunar colony's price.** At peace, with a free colony on the Moon: the home fleet's Target button picks it for nothing (its hover has no price line). Stepping the posture to Close in then shows the price in the posture hover and charges it once; while closing in, the Target hover's last line names the price, and stepping to another free colony charges it again.
+9. **A free lunar colony's price.** At peace, with a free colony on the Moon: the home fleet's Target button picks it for nothing (its hover has no price line). Close in's hover then shows the price, and the click charges it once; while closing in, the Target hover's last line names the price, and targeting another free colony charges it again.
 
 ## Lunar colonization, build 3a: Nuclear Thermal Propulsion's premium (2026-10-29)
 
@@ -531,14 +525,366 @@ Design § 9 of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md`:
 
 ## Colony management (2026-10-30)
 
-Design: `docs/superpowers/specs/2026-10-30-colony-management-design.md` (the owner's play-test notes on the Colonies section). Simple and Full Colonies. No new self-check: the one engine fact the build leans on, a `unit_` field in a modifier on a journal entry reaching the army, is what vanilla's `modifiers_while_active` already do (the Caucasus war entries' `unit_offense_*`), and item 6 looks at it. Grep `debug.log` for `TE_SR_MODULES` for a colony's own builds.
+Design: `docs/superpowers/specs/2026-10-30-colony-management-design.md` (the owner's play-test notes on the Colonies section). Simple and Full Colonies. The `unit_` field the Training Ground puts on the journal entry reaching the army is what vanilla's `modifiers_while_active` already do (the Caucasus war entries' `unit_offense_*`), and item 6 looks at it. Grep `debug.log` for `TE_SR_MODULES` for a colony's own builds. The follow-up (#1258) made the slot and drive technologies markers, which two self-checks read:
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN drive_marker country=… level=…` | once a game, a month after a country running colonization first has Fusion Power | Fusion Power's `country_sr_drive_fusion_bool` (a script-only boolean) reaches the country and `sr_drive_level` reads 1 or more | the country reads no fusion drive: `modifier:` does not read a technology's script-only boolean, so every drive is lost | drop `script_only = yes` from the three drive types, as Nuclear Thermal Propulsion's boolean is declared; failing that, read `has_technology_researched` again in `sr_drive_level`, `sr_launch_has_fusion` and `sr_launch_has_antimatter`, keeping the markers for the tooltips |
+| `TE_SELF_CHECK OK/BROKEN slot_marker country=… modifier=… seen=…` | once a game, a month after a country holding a colony first has a slot technology | the technology's `country_sr_colony_slots_add` reaches the country (`modifier` 1 or more) and its first colony's `sr_site_slots_<key>` reads it through the holder's scope (`seen` equal to it) | `modifier` 0: the technology's script-only count does not reach the country; `seen` below it: the scope switch (`global_var:sr_site_holder_<key> = { add = modifier:… }`) reads nothing | `modifier` 0: as `drive_marker`'s fallback, drop `script_only = yes`; `seen` short: read the holder's technologies again in `sr_site_slots_<key>` (`gen_solar_sites._slot_values`), keeping the marker for the tooltips |
+
 
 1. **Drift colors.** In the Autonomy view a colony whose autonomy is rising shows its drift in red, one falling in green; the hover's terms the same way, and its last line says where the colony settles.
 2. **Settling.** A colony with a hover reading "settles near 30%" moves toward 30 from either side over the following years, and a chartered colony settles near 0 instead of drifting back up.
 3. **Next Windows.** On chemical rockets, with stage-4 and stage-5 worlds unclaimed and targetable: the Uranus, Neptune and Kuiper Belt rows are absent, and the line under the table counts them. Each row's transit matches `docs/engine/launch_windows_report.md` for the month; with a fusion drive the Window column reads Any month, and with Asteroid Mining a closed window reads the premium and the months. The Staged in Orbit hover lists the same destinations.
 4. **Slots and the price past them.** Queue modules at a 2-slot colony until its Slots reads 3/2 (red): the hover's next price reads 300; the module past the slots leaves fabrication's stock 200 lower when it is built, the next 300 lower. Five past the slots, the + buttons grey out with the room line crossed. With Advanced Nanofabrication the colony reads one more slot.
-5. **Facilities.** Build one of each at a fully crewed colony: the entry shows Off-World Research Stations, Cultural Centers, Resorts, Black Sites, Training Grounds and Materials Foundries at multiplier 1; the colony's Bases rises by 10 with a Mining Complex; Module Fabrication's rate rises by 4 with an Orbital Yard (and Space Command's month by 0.5 under Full Colonies); the nuclear Command Reliability target rises by 4 with a Nuclear Command Center; the colony's drift hover shows −0.15 for its Administration. Blockade the colony: the Mining Complex, Yard, Resort and Foundry stop, the rest keep running.
+5. **Facilities.** Build one of each at a fully crewed colony: the entry shows Off-World Research Stations, Cultural Centers, Resorts, Black Sites, Training Grounds and Materials Foundries at multiplier 1; the colony's Bases rises by 50 with a Mining Complex; Module Fabrication's rate rises by 4 with an Orbital Yard (and Space Command's month by 0.5 under Full Colonies); the nuclear Command Reliability target rises by 4 with a Nuclear Command Center; the colony's drift hover shows −0.15 for its Administration. Blockade the colony: the Mining Complex, Yard, Resort and Foundry stop, the rest keep running.
 6. **The Training Ground reaches the army.** With Off-World Training Grounds on the entry, a battalion's experience gain in the military panel's breakdown includes it. If it doesn't, move `sr_module_train` from the entry to the country, refreshed and removed by `sr_mod_refresh_facilities`.
 7. **A colony's own modules.** A colony at autonomy 50 with 30,000 people shows Building climbing by 1.5 a month; at 100% it gains a module (`TE_SR_MODULES <key> built a module of its own`), Building restarts at 0, and a specialization level shows in its modifiers at once. A colony with no slot or specialization level left holds at 100%.
-8. **A colony's page.** Click a colony's name: only that colony shows, with People, Modules, Autonomy and (Full) Defenses one under another, each with its heads; Back returns to the list, and so does any view button. Every button on the page works as it does in the list.
+8. **A colony's page.** Click a colony's name, or the arrow beside it (which shows on the list, not the page): only that colony shows, with People, Modules, Autonomy and (Full) Defenses one under another, each heading with its control on the right (Settlers and the priority button, Clear, Abandon), the figures in tiles two to a row with an icon each, and the fifteen modules one to a line with their full names (a site's specializations by name) and nothing cut short. Hover a tile: its breakdown, as the list's figure gave. Back returns to the list, and so does any view button. Every button on the page works as it does in the list. Nothing on the panel is underlined but a word inside a tooltip.
 9. **The AI.** In an observer run, an AI outside the top three that holds a colony sets Emigration to Steady with a positive income, queues a module a year, and answers a self-government demand with a charter; it lets a colony go only after losing its Space Program. Cede Colony: asking an AI for its empty lunar outpost shows about −60 for the colony in the acceptance breakdown, and for a large built-up colony −200.
+10. **Solar System's second line.** Under Simple Colonies, each site in Solar System shows the module icon with its slots as ours (its size's plus our Colony Module Slots) and the Extraplanetary Base icon with its room and grade ("300 (+30%)" at 16 Psyche); each hover says what it means, and the base hover's Base Grade is a link to its concept, as in the Mining Complex's hover and a colony's Bases hover. Under Races Only the line is gone.
+11. **The technologies' tooltips.** Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization and Molecular Assemblers each list +1 Colony Module Slots, and each adds a slot at every colony we hold (the Modules view's Slots, the page's Slots tile). Fusion Power lists Fusion Drive for Colony Fleets, Muon-Catalyzed Fusion Reactors Fusion Torch for Colony Fleets and Antimatter Production Antimatter Drive for Colony Fleets, and Next Windows' transit falls with each as before.
+12. **The race to the Moon.** Hover Solar System Colonization's reward in the milestone grid: the race to the Moon is named as the old Moon Base milestone's prize and the one race among the sites; a lunar site's hover in Solar System points to it.
+
+## Extraplanetary Bases: −75% past the room and a flat crew (2026-10-31)
+
+Owner, 2026-10-31: a level past all of a country's room works at −75% (`gen_solar_sites.OVERFLOW_GRADE`, −50% before), and the base's four base methods hire a flat crew in `unscaled` (800 on Regolith Processing, 1,000 on the others) with `building_job_attractiveness_mult = 5`, as the `pm_ai_managed_*` crews. That an `unscaled` crew counts once a building and that goods still follow every level is what that prototype's self-checks read (`ai-managed-flat-staff-playtest.md`); no new self-check.
+
+1. **Past the room.** Under Simple or Full Colonies, with room for 10 (Asteroid Mining, no colony) and 20 levels, the Extraplanetary Base Room modifier reads −37.5% Extraplanetary Base throughput, and the Modules view's room hover and Base Grade's concept −75% past the room.
+2. **The crew.** A base of 20 levels or more on the Asteroid Mine shows about 500 machinists, 400 engineers and 100 academics, and no more after another level. Its output is the method's per level × its levels (× throughput), as the output tooltip lists, once the crew is in.
+3. **The crew fills.** A month or two after a base is built or grows, its staff reads at or near the crew; if many bases sit well below it, look for a state short of engineers before raising the attractiveness.
+
+## Taking a module down (2026-10-31)
+
+Owner, 2026-10-31: on a colony's page each module has a minus button that takes one level down over 12 months
+(`sr_mod_dismantle_months`), one level at a time a world (`sr_colony_dismantle_sgui`; the record is the holder's
+`sr_md_type_<key>` and `sr_md_left_<key>`, the work `sr_md_month_<key>` from `sr_mod_month`). It rests on nothing new
+the engine has to prove (a variable counted down by the entry's pulse, the generated level write the landing already
+uses), so no self-check. Console: `event te_debug_space_race.4`, option *Finish every module level we are taking down
+now*; `TE_SR_MODULES <key>: a module level of type N dismantled` in `debug.log`.
+
+1. **A level comes down.** Under Simple or Full Colonies, with a Research Station at level 2 on a colony, open the
+   colony's page and press its minus button. A red line under its name reads *Coming down, months left: 12*, one less
+   each month; the button greys on every other module of that colony (*Nothing else is being taken down*). Twelve
+   months on the level reads 1, Slots one fewer, and Research Station's entry modifier its new size the same month.
+2. **Stop it.** Press the minus button again on the module coming down: the line goes, the level stays.
+3. **The founding specialization.** Its minus button is greyed at level 1 (*the outpost itself*); at level 2 it takes
+   it to 1. The other specialization goes to 0, and its modifier leaves the entry.
+4. **A Habitat.** With the colony's people above the room one Habitat fewer would leave, its minus button is greyed.
+   With room to spare, start it: settlers stop at the smaller room (the colony's emigration weight falls), growth
+   stops there, and when it comes down no one is lost.
+5. **Under fire (Full Colonies).** While an enemy fleet blockades the colony, the months left stand still; when the
+   colony is occupied or ceded, the line goes and the level stands. Taken back, it has the level.
+6. **Lunar worlds.** A Moon colony's page shows no Spaceport row's minus button.
+
+## A colony's page: its own icons (icon batch 8, 2026-10-31)
+
+Thirteen tiles and module rows on a colony's page had vanilla or borrowed placeholders (`space_race_gui_icons.md` §
+A colony's page has the table). No script reads them.
+
+1. **The tiles (34 px).** Open a colony's page under Full Colonies: Crews shows a colonist in an orange suit with a
+   wrench; Modules Crewed the silver module with a people mark; Autonomy the Habitat's dome flying a teal flag; the
+   Autonomy section's Status the dome with a red wax seal; Defenses a grey gun turret on rock; Integrity the dome
+   with a crack down it; the Defenses section's Status the dome with a radar dish. Each reads at its size, the crack
+   included.
+2. **The module rows (24 px).** Habitat a blue dome over lit windows, Spaceport a gold lander on an orange-ringed pad,
+   Research Station a silver observatory with a brass telescope, Cultural Center two gold theater masks, Training
+   Ground a marine in sand-tan leaping, Nuclear Command Center a blast door with a yellow radiation sign, Defenses the
+   turret. None is a speck or reads as something else.
+
+## The owner's UI pass: quick changes (2026-10-31)
+
+No post-setback cooldown, self-government at 50, the grade beside Bases, the queue in its own box, Solar System lower
+(`docs/systems/mod_systems/space_race.md` § Key Mechanics, § Colony modules and Extraplanetary Base room).
+
+1. **No Shielded state.** Force an Ambitious failure (`event te_debug_space_race.1`, option j, on a milestone set to
+   Ambitious) and answer it: the overview keeps reading Ambitious with its risk, never "Shielded", and the next month
+   rolls as usual. The console's "Clear the setback cooldown" option is gone.
+2. **An old save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the
+   overview reads its approach again (until then a Safe or Standard one may read Ambitious), and
+   `sr_failure_cooldown` is gone from the country.
+3. **Self-government at 50.** A colony whose autonomy reaches 50 fires `space_race_events.94` (Demands
+   Self-Government), and the overview's Colonies cell names it in red from 50.
+4. **The grade beside Bases.** The Colonies section's Modules view: each colony's Bases reads its room and grade,
+   "160 (+5%)", the minus a true minus at the outer moons; a colony's page shows both in the Base Room tile. Nothing
+   elides.
+5. **The queue's box.** Queue two modules: under the base room, a "Queue (2)" heading, then a darker box with "Next
+   module in N mo" and the two places, and a gap before the colonies' rows. Fill all eight shipment slots with stock
+   in hand: it reads "slots full". With no fabrication method and too little in stock: "stopped", in red; with the stock covering the head, it still reads "in 1 mo" and the module is built. The months match the stock, the
+   rate and the head's price (100, more past the colony's slots).
+6. **Superseded by the tabs (PR 8).** Solar System is now its own tab, above How Solar Colonization Works: the tabs'
+   section below.
+
+## The owner's UI pass: tabs (PR 8, 2026-10-31)
+
+Solar System Colonization's four tabs (UI pass design § 11; `docs/systems/mod_systems/space_race.md` § Tabs).
+**Fallback** if the tab row misbehaves in one host: drop the wrappers' `visible`, which brings back the one long panel.
+
+1. **The default.** A new session opens Solar System Colonization on Mission Control: the approach, funding, setbacks,
+   Next Windows and Rivals, with the overview above the tab row. The Mission Control button is greyed.
+2. **Each tab.** Fleets shows Colony Fleets, and under Full Colonies Space Command and Space Fleets; Colonies shows
+   Colonies; Solar System shows Solar System and How Solar Colonization Works. Each tab's button greys while it is
+   shown; the labels read in full.
+3. **Remembered.** Pick Colonies, close the journal and reopen it: still on Colonies. The same in the Timeline Extended
+   window's Space Race tab, which shares the choice.
+4. **Both hosts.** The tab row and every tab draw in the journal entry and in the Timeline Extended window.
+5. **Other milestones.** The Moon Base, Mars Landing and the rest keep their one panel, with no tab row.
+6. **The window's Mission Control.** In the Timeline Extended window's Space Race tab, Mission Control shows no Orbital
+   Debris row (the window's empty `sr_debris` override reaches it one container deeper now); the journal's does.
+7. **The guide's screenshot.** Retake `docs/player_guide/images/solar_system_colonization_tab.png` on the Mission
+   Control tab, with the tab row in view, and check its caption in `16-space.md`.
+
+## The owner's UI pass: the Base Room cell (PR 5, 2026-10-31)
+
+The colonization overview's Base Room cell and the refresh when a base is built (UI pass design § 8;
+`docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
+
+1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
+   levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
+2. **Queued levels.** Queue 20 levels: the cell reads "120 +20 / 400" at once (owner, 2026-11-04; it had read "120 / 400"
+   with the queue left out), the hover counts them, the Modules view gains "Extraplanetary Base levels
+   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
+   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at -75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
+   10,000 or more (Mining Complexes) or 1,000 levels queued, the cell shows their sum instead ("12000 / 14335").
+3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+   next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
+   `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
+4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
+   the country's Extraplanetary Base Room modifier before and after: one copy, at the new average, not two.
+5. **No stutter.** With the panel open and many states holding bases, scrolling the overview stays smooth (the levels,
+   queue and room are read live, each a loop over our buildings). Fallback if it stutters: read copies the refresh
+   stores.
+## The owner's UI pass: the popup and the colony target (PR 2, 2026-10-31)
+
+The mod's first centred popup (`te_ui_popup` in `gui/te_widget_library.gui`, the `te_popups` root in `gui/te_popups.gui`)
+and the colony target popup it carries (`docs/systems/mod_systems/space_race.md` § Popups; UI pass design §§ 3, 5).
+**Fallback** if the popup layer misbehaves: draw `te_sr_target_popup_body` inline in Colony Fleets, under the row that
+opened it.
+
+1. **It opens over both hosts.** Colony Fleets' Choose (Change once there is a target) opens Colony Target in the middle
+   of the screen, the rest dimmed, over the journal panel and over the Timeline Extended window's Space Race tab.
+2. **It closes three ways.** Escape closes the popup and leaves the journal panel or the Timeline Extended window open
+   behind it; a click outside the popup closes it; so does its close button. Reopen it each time.
+3. **The rows read.** With the popup open from either host, every listed site shows its slots, base room and grade,
+   holder, inbound fleets and launch window (slots, room and fleets under Simple and Full Colonies; "Any month" at the
+   Moon and Mercury; "Open now", "In N months", or with
+   depots "+N% now, N mo" elsewhere), with figures, not raw keys or zeros. The count reads "N of 40 sites can be
+   targeted"; Show all lists all 40.
+4. **Target and Clear.** Target on a site closes the popup; Colony Fleets names the site, with Change and Clear, and
+   Solar System's row reads Our target. Reopened with Change, the popup shows that site's button as Clear. Both
+   clicks run once (the choice, then the close, on one button). A site beyond the Moon before the Mars Landing is
+   greyed, its hover naming the Mars Landing.
+5. **Solar System is a list to read.** Its rows have no button; the row ends after the inbound fleets.
+6. **The entry closing under it** (hard to reach on purpose; note it if seen). With the popup open while the
+   colonization entry goes away, the popup says "Solar System Colonization isn't running." instead of an empty frame.
+7. **The screen behind takes nothing.** The shell carries `filter_mouse = left|right|wheel`, as vanilla's windows do.
+   With the popup open, the wheel and a right-click outside its body neither scroll the journal panel nor move the
+   map; a left-click there closes the popup.
+8. **The launcher.** The Timeline Extended launcher (`layer = top`) draws over the dim. Note whether it still opens the
+   window while the popup is up; that's acceptable either way.
+9. **A long window figure fits.** With depots and a closed window, a site's window reads "+N% now, N mo" in full,
+   months included, not cut off with an ellipsis.
+
+## The owner's UI pass: the Earth alert (PR 6, 2026-10-31)
+
+Hostile fleets bound for Earth (UI pass design § 9; `docs/systems/mod_systems/space_race.md` § Earth orbit): the
+quiet feed notice `sr_earth_hostile_notice`, the loud `space_race_events.111`, and the overview's Hostile Fleet cell,
+all under Full Colonies. **Fallback** if the feed notice doesn't show: a popup in `.106`'s shape for the quiet case
+too.
+
+1. **The quiet notice.** At war with a fleet power, with a stronger fleet of ours at Earth, watch one of its fleets set
+   out for Earth: one notice in the feed, "A Hostile Fleet Is Bound for Earth", naming the country, not a popup and
+   not every month after. Its color is the feed's bad one.
+2. **The loud notice.** With no fleet of ours at Earth and Earth not blockaded (or ours weaker than theirs there plus
+   what is coming), a hostile fleet setting out for Earth brings the popup Earth Is Threatened, once, with the
+   country's name, the months to its landing and both strengths as figures, not zeros. No feed notice for that fleet.
+   **Not when already blockaded:** with Earth blockaded, their fleets flying home bring feed notices, not popups.
+3. **Loud later in the leg.** With a quiet notice heard, take our fleet away from Earth while theirs is on the way:
+   the popup comes the next month, once.
+4. **A war declared mid-flight.** A country's fleet already on its way to Earth (coming home, say) when it declares
+   war on us: the notice comes the next month.
+5. **Two loud fleets in one month.** Two hostile fleets that would each tip the balance set out the same month: one
+   popup, naming one fleet's country, and a feed notice for the other fleet; no second popup the month after. With
+   one of them heard quietly before (item 3's setup), the popup names the other, the one we hadn't heard of.
+6. **The cell.** While a hostile fleet is on its way, the overview's third row shows Hostile Fleet, "Earth in N mo"
+   and "theirs vs ours" (theirs at Earth and on the way); red in the loud case. The hover has a line a country, its name, fleets, strength
+   and first landing, with the figures not zeros (they're read in that country's scope). Gone once they land or the
+   war ends, and absent under Races Only and Simple Colonies.
+7. **Two powers' notices.** Fleets of two different powers set out for Earth the same month, each quiet: the two feed
+   notices name different countries (each saves its owner before it posts; unverified that a notice keeps it).
+8. **No stutter at war.** At war with several fleet powers, scrolling the overview stays smooth (the cell walks their
+   nine slots each frame). Fallback: read copies the step stores.
+
+## The owner's UI pass: fleet upkeep and Space Command (PR 7, 2026-10-31)
+
+The maintenance line and no fleet orders without a Space Command (UI pass design § 10;
+`docs/systems/mod_systems/space_race.md` § Upkeep). Self-check `fleet_upkeep_line` above.
+
+1. **The line.** Any Space Command's input tooltip lists 20 Electronic Components, 20 Wired and 20 Wireless
+   Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals at full staff, under every yard method,
+   and the same at one level as at four. With no fleet, nothing more.
+2. **The upkeep.** With a fleet of 100 strength at full (10 units), each of the six reads +9,000% on the building
+   (Fleet Upkeep), and the panel's Upkeep reads +9000%. At full staff Industrial Robotics reads 1,820 a week (20 ×
+   91): the unscaled line takes the multiplier. Launch Capacity, Advanced Materials and electricity show no Fleet Upkeep
+   line. Switching the yards to Orbital Shipyards changes none of the six.
+3. **No Space Command.** Demolish Space Command with a fleet at Earth: Space Fleets' red note shows; Go, the posture
+   button and the target button are greyed, each saying why; a refit under way stops counting down and resumes when a
+   Space Command is built again; a damaged fleet isn't repaired, but its supply and propellant refill. A fleet in
+   flight lands. An AI at war without one sends no fleets.
+4. **Occupation.** With Space Command's state occupied, the same as 3. (Unasked: the occupied building still pays its
+   line and the upkeep while its staff work.)
+5. **Two Space Commands.** A nation runs one since "Pausing Space Command" below: annexing or forming a country that
+   holds a second one dismantles the smaller within a month (item 5 there), and the one kept carries the whole Fleet
+   Upkeep (at 10 units, +9,000%).
+
+## Pausing Space Command (2026-10-31)
+
+Pause and Resume, the AI's fiscal pause, one Space Command a nation and half fire without one
+(`docs/systems/mod_systems/space_race.md` § *Fleets, Space Command and combat*: the Pause, One Space Command a nation
+and No Space Command bullets). All under Full Colonies. No self-check line: each rests on a read below.
+
+1. **Pause.** With a Space Command running Fusion Yards and a fleet, press Pause: the button turns to Resume, Built a
+   month reads Paused at once, and the building's modifiers list Construction Paused. At the next monthly step
+   nothing is built: Fleet strength at full doesn't rise, nor the Reserve with Auto off. A fleet still takes Go,
+   posture and target orders, Launch still sends a reserve up, and with Auto on a reserve built before the pause still
+   launches itself. Resume: the button reads Resuming, the inputs stay cut, and the next step builds nothing (Built a
+   month still Paused); then Construction Paused comes off, and the step after builds the full month's figure again.
+   A click on Resuming before the step cancels it: still paused after the step.
+2. **The inputs' tooltip read (unverified engine fact).** Paused, the building's input tooltip shows Launch Capacity
+   and Advanced Materials at 0, each with a −100% Construction Paused line, while the six maintenance goods keep
+   their lines and Fleet Upkeep. **Fallback** if a −100% sum doesn't zero an input (it shows a small figure, or
+   the building still buys it in the market panel): fold the method's own +100% into the cut, as the uploaded minds'
+   Nexus does (`te_demog_um_nexus_good`: the multiplier × (1 + the building's other bonuses on that good)).
+3. **Below −100%.** Run Torch or Antimatter Yards under Green Building Codes (the Global Warming entry's
+   `green_building_codes_modifier`, −2.5% electricity on every building) and pause: electricity sums to −102.5%. It
+   should read 0, not a negative figure, and the building shouldn't sell electricity or show a negative input.
+   That is the only other source on the three goods that reaches a Space Command (`/modifier-grants`: the others sit
+   on Deep-Sea Mines, the Nexus and grid stations). **Fallback** if it goes negative: the cut at −1 minus the
+   building's other bonuses on the good, read as `prev.modifier:goods_input_electricity_mult` at the apply.
+4. **The AI's pause (observer).** In an observer run past 2000 with AI fleet powers, find one in default or in
+   deficit at peace: its Space Command carries Construction Paused (the building's modifiers), and its reserve and
+   fleets stop growing. It resumes no sooner than six months later, and only once out of default with a surplus, or
+   at war. An AI in deficit at war keeps building. Watch that a budget near zero doesn't flip it every month.
+5. **One Space Command a nation.** Annex or form a country with a Space Command while you hold one: within a month
+   the one with fewer levels is dismantled, and the feed says "Space Command Dismantled", naming its state and the
+   one kept (the state names, not blanks). With the same levels, the one in your market capital stays. Two removed
+   the same month bring two notices, each naming its own state (each saves its state before it posts; unverified that
+   a notice keeps it). The month a building is dismantled may build that month from both (the modifier sum can lag a
+   day): note it if Built a month jumps once.
+   **At the source** (review of #1287, I2): move the market capital (its Space Program follows) and open the build
+   menu there: Space Command is refused, its hover reading "We have no other Space Command: a nation runs one, so
+   expand the one we have, or demolish it first". The old one, now outside the Space Program's state, still expands.
+   Demolish it, and the new capital can build one. **The AI (observer):** an AI that annexes a Space Command with more
+   levels than its own keeps the annexed one and expands it there, up to its cap; Space Command shouldn't keep
+   appearing and vanishing in its capital.
+6. **Half fire.** At war, fight a battle at a location with a Space Command and note a month's losses on both sides
+   (the battle report). Demolish Space Command, or have its state occupied, and fight a comparable month: our fleets
+   deal about half the losses, take the same, and Space Fleets' note and the orders' hover say they fight at half
+   strength. At Earth, Orbital Superiority falls by about half the margin, and an inbound hostile fleet that our
+   fleet's full strength would hold now brings the Earth Is Threatened popup. That popup and the overview's Hostile
+   Fleet hover still print ours at full strength, and add "Without a Space Command our fleets fight at half
+   strength." The battlestation and the batteries fire as before.
+7. **No month built for free (review of #1287, I1).** A month is built in one lump at the country's monthly step,
+   so Resume waits for the step, and that step builds nothing. Pause the day after a step (Built a month just
+   changed) and Resume the day before the next: that step builds nothing, Construction Paused comes off after it,
+   and only the step after builds. Pausing mid-month bills the days since the last step for nothing, at most a
+   month's inputs. **The owner's alternative** (zero waste, a slower crisis pause): both a pause and a resume wait
+   for the step.
+
+## The owner's UI pass: Transfer (PR 4, 2026-10-31)
+
+A fleet's Transfer popup, which took in Merge and Detach (UI pass design § 6; `docs/systems/mod_systems/space_race.md`
+§ Popups, Transfer). Full Colonies. Self-check `xfer_step_scope` above. **Fallback** if the − and + keys don't reach the
+scripted GUI: one scripted GUI per step size, as the construction market has.
+
+1. **It opens.** A fleet at a location with another fleet of ours there, or a free slot and some strength, has
+   Transfer in its orders line; it opens Transfer in the middle of the screen, from the journal panel and from the
+   Timeline Extended window. Each role and the marines start at half, rounded; Into has New fleet greyed as already
+   chosen (or, with all nine slots full, the first fleet there). The row's figures read, not zeros or raw keys.
+2. **The keys, on a scripted GUI's button** (the construction market's, there on a GUI-local value): on a role of a
+   few hundred (`event te_debug_space_race.6`, "Add 100 strength of each role", adds 100 a use), a click on + adds 1,
+   Shift+click 10, Ctrl+click 100, and Alt+click 1,000, which stops at all of it; a right-click sets all of it. On −,
+   the same down, and a right-click sets none. Each click moves the figure once. Note whether Shift, Ctrl and Alt need
+   the button's hover first.
+3. **The three-scope call.** The first click logs `TE_SELF_CHECK OK xfer_step_scope` with the popup's slot, the row's
+   role code and the new amount. BROKEN means the third scope didn't arrive; no line at all means the first two didn't,
+   or the button never ran (the table says which fallback).
+4. **Held to what is there.** Set warships to all, then let a battle cut them (or `event te_debug_space_race.6`'s
+   combat now) with the popup open: the amount reads the new strength, never more, and Transfer moves no more than
+   that.
+5. **Into another fleet.** With two fleets at one location, Into lists the other by its drive and strength
+   ("Fusion 12", as its Fleets row), and choosing it greys it; a fleet elsewhere has no button, and a line of Into with
+   none hides. Other fleet reads that fleet's figures with the amounts added. Transfer moves them; the other fleet
+   keeps its posture, and with ships joining takes the slower drive, the later refit and the lower share of propellant
+   and supply. All of every row into it: the first fleet is gone and the second holds both, as Merge did. Two fleets
+   with the same drive and strength read alike (a known limit).
+6. **A damaged role keeps its ratio.** Damage a fleet (a battle), then move half its warships into a new fleet: in
+   each fleet's strength hover, the warships' now over full is the old fleet's ratio, and the two fleets' warships add
+   up to the old figures, now and at full. A fleet closing in or interdicting splits off a new fleet at Stand off
+   (it has no target).
+7. **The refusals.** Transfer greys, with the reason on hover: everything at 0; all of a fleet into a new fleet (it
+   would keep nothing); marines moved into a fleet whose assault carriers can't hold them, or carriers moved away from
+   the marines they carry; the other fleet destroyed before the click (a battle, or `event te_debug_space_race.6`'s
+   "Run this month's combat now" with a stronger enemy there: its Into button goes, and Transfer says the fleet it goes
+   into isn't here). A fleet already past its carriers' room (carriers lost in battle) can still move marines out.
+   With every ship chosen, the marines row shows all of them and its − and + grey.
+8. **The fleet gone.** With the popup open, let a battle destroy the fleet (a stronger enemy fleet there, then
+   `event te_debug_space_race.6`'s "Run this month's combat now"; the popup's dim covers every other window, so the
+   fleet can't be sent away from under it): the popup says "This fleet has left, or is gone." and nothing in it acts.
+   Transfer closes the popup.
+9. **No Space Command.** Transfer still works without one (Merge and Detach did); the owner may want it gated.
+
+## The owner's UI pass: the fleet popups and posture buttons (PR 3, 2026-10-31)
+
+Fleet Destination, Fleet Target and the posture buttons on a fleet's row (UI pass design §§ 4, 7;
+`docs/systems/mod_systems/space_race.md` § Fleets, Orders), under Full Colonies. Both popups use PR 2's shell; its
+items above (layer, Escape, click outside, mouse filter) apply to them too. **Fallback** if a body shows the wrong
+slot: one body, read from a country variable the opening click sets (design § 3's rejected route; mind the same-click
+gotcha).
+
+1. **Nine bodies switch with the slot.** With three fleets at different locations, open each one's destination button
+   in turn: the popup names that fleet's location, strength, propellant and supply, and lists every location but its
+   own. The same from the Timeline Extended window's Space Race tab (Fleets tab): identical rows and figures.
+2. **The rows read.** Each row has the trip's months and propellant to a tenth, red where the fleet carries less (the
+   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else; our colonies
+   there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing cut off with an ellipsis.
+3. **Choosing, then Go.** Choose on a row closes the popup, and the fleet's destination button names the location;
+   reopened, that row reads Chosen. Go then works as before, and stays greyed where the propellant is short. Both of
+   Choose's clicks run once (the choice, then the close).
+4. **Why it can't leave.** A refitting fleet's popup says it is refitting; with Earth blockaded, a fleet at Earth's
+   says the launches are barred; with no Space Command in a state we control, it says so (before a refit). Each can
+   still choose.
+5. **A fleet gone under the popup.** With the popup open, let the month tick on a fleet that loses its last battle
+   (`event te_debug_space_race.6`'s "Run this month's combat now"): the popup reads "This fleet has left, or is gone." and has no buttons.
+6. **The posture buttons.** Away from Earth, a fleet's row shows Station, Stand off, Close in and Interdict on their
+   own line under its orders, the one in force lit (not greyed). Each other one sets its posture on one click; a
+   greyed one's hover gives the reason (no hostile site here; no site of a country at peace with us; never at Earth).
+   Hovering the lit one says what the fleet does in that posture. No hover is cut off or overflows the screen (the
+   longest, Interdict's and Close in's at Earth, are about 490 characters).
+7. **A posture's price is charged once.** Close in on a free colony: 10 infamy and the UN record once; click Station
+   and Close in again on the same site: nothing more. With no target and a free colony the first hostile site here,
+   Close in's hover lists the free colony's price before the click, and the click charges it. Interdict a country's site: 5 infamy once; Station, then
+   Interdict the same country: charged again (a new interdiction).
+8. **At Earth.** With an enemy's lunar colony, the posture line shows at Earth: Station and Close in can be chosen,
+   Stand off and Interdict greyed with "not at Earth". With none, no posture line at Earth.
+9. **Fleet Target.** The target button opens the sites at the fleet's location with their holders (flag, Ours, Free,
+   Occupied, Unclaimed). Target on a hostile site closes the popup and the row's target names it; reopened, it reads
+   Targeted. Closing in, targeting a free colony charges its price; interdicting, a new country's site charges the
+   interdiction's. A site the posture can't take is greyed with the reason.
+10. **No stutter.** Opening and closing either popup, and scrolling Fleet Target at Jupiter (six sites), stays smooth:
+    the target popup holds 360 rows, 9 slots × 40 worlds, all but a few hidden. Fallback if it stutters: one body per
+    location, the slot read from a country variable. Scroll Space Fleets with nine fleets at locations too: each row
+    now asks four posture buttons' `IsValid` (36 a frame for nine fleets), where the step button asked one. Fallback
+    if that stutters: the four buttons' state from one display value a fleet, set monthly and on each order.
+11. **The two buttons' gates (#1298).** The destination and target buttons grey on `sr_fleet_pick_sgui` and
+    `sr_fleet_target_sgui`, which lost their effects (never run) in #1298. No precedent: vanilla never calls
+    `IsValidTooltip`, and every other effect-less scripted GUI is read only through `IsValid`. Hover a greyed
+    target button (no hostile site at the fleet's location, or no Space Command in a state we control): it opens
+    with the failed reason, crossed ("A site here is held by a country at war with us…" or "We have a Space Command
+    in a state we control…"), then the target. Hover an enabled one: the same lines ticked. The destination button
+    can't grey (its orders line shows only at a location, the gate's one condition), so its hover must open with the
+    ticked "The fleet is at a location, not in transit", then the leg; the leg alone is a fail. A missing line or a
+    raw key means `IsValidTooltip` renders nothing for a scripted GUI with no `effect`. Fallback: give each gate
+    `effect = { custom_tooltip = sr_fl_not_at_location_tt }` (the target gate: `sr_fl_no_target_tt`), a text-only
+    effect that changes nothing.

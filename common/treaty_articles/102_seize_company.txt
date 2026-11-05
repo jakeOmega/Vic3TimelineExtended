@@ -4,7 +4,7 @@
 # to another country. The source country is the one whose company is seized.
 # The target country receives the company.
 # =================================================================
-seize_company = {
+seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, like vanilla's state, ship and money transfers, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/seize_company.dds"
 	kind = directed
 	# The receiving country (target) pays, as vanilla's demands do: the country

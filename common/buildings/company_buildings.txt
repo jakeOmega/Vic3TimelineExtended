@@ -19619,3 +19619,127 @@ building_rosen_association_hq = {
 		te_company_flagship_builder_owns_state = yes
 	}
 }
+
+# --- InGen ---
+building_ingen_biological_preserve = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_ingen.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
+	production_method_groups = {
+		pmg_ingen_biological_preserve
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_ingen
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_ingen_biological_preserve
+			}
+			owner = {
+				NOT = {
+					any_scope_state = {
+						has_building = building_ingen_biological_preserve
+					}
+				}
+			}
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = building_company_one_site_tt
+			OR = {
+				any_scope_building = {
+					is_building_type = building_ingen_biological_preserve
+				}
+				owner = {
+					NOT = {
+						any_scope_state = {
+							any_scope_building = {
+								is_building_type = building_ingen_biological_preserve
+							}
+						}
+					}
+				}
+			}
+		}
+		te_company_flagship_builder_owns_state = yes
+	}
+}
+
+# --- RejoovenEsense ---
+building_rejoovenesense_compound = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rejoovenesense.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	ai_value = { value = te_company_flagship_ai_value }
+	production_method_groups = {
+		pmg_rejoovenesense_compound
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_government = {
+		te_company_flagship_builder_owns_state = yes
+	}
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_rejoovenesense
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_rejoovenesense_compound
+			}
+			owner = {
+				NOT = {
+					any_scope_state = {
+						has_building = building_rejoovenesense_compound
+					}
+				}
+			}
+		}
+	}
+	possible = {
+		custom_tooltip = {
+			text = building_company_one_site_tt
+			OR = {
+				any_scope_building = {
+					is_building_type = building_rejoovenesense_compound
+				}
+				owner = {
+					NOT = {
+						any_scope_state = {
+							any_scope_building = {
+								is_building_type = building_rejoovenesense_compound
+							}
+						}
+					}
+				}
+			}
+		}
+		te_company_flagship_builder_owns_state = yes
+	}
+}

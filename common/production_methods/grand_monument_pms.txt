@@ -49,7 +49,7 @@
 
 # Entry point and fallback: a monument whose meaning is not yet settled.
 pm_monument_undedicated = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_undedicated.dds"
 	is_hidden_when_unavailable = yes
 	is_default = yes
 
@@ -68,7 +68,7 @@ pm_monument_undedicated = {
 
 # Regime: to the Crown. Fits while the government is crowned.
 pm_monument_crown = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_crown.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -86,7 +86,7 @@ pm_monument_crown = {
 
 # Regime: to the republic. Fits while the government is republican.
 pm_monument_republic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_republic.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -104,7 +104,7 @@ pm_monument_republic = {
 
 # Regime: to the revolution. Fits under a Single-Party State or a Council Republic.
 pm_monument_revolution = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_revolution.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -122,7 +122,7 @@ pm_monument_revolution = {
 
 # Ruler: to the leader. Fits while the honoured character still rules.
 pm_monument_leader = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_leader.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -140,7 +140,7 @@ pm_monument_leader = {
 
 # Faith: a grand shrine to the state religion.
 pm_monument_religious = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_religious.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -159,7 +159,7 @@ pm_monument_religious = {
 # Timeless: to the nation. The key is the old Civic Monument's, so monuments
 # in older saves keep their dedication (§8).
 pm_monument_civic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_civic.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -177,7 +177,7 @@ pm_monument_civic = {
 
 # Timeless: a memorial to the fallen.
 pm_monument_war_memorial = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_war_memorial.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -195,7 +195,7 @@ pm_monument_war_memorial = {
 
 # Timeless: a grand opera house.
 pm_monument_artistic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_artistic.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -213,7 +213,7 @@ pm_monument_artistic = {
 
 # Timeless: botanical gardens.
 pm_monument_naturalist = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_naturalist.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -231,7 +231,7 @@ pm_monument_naturalist = {
 
 # Timeless: a grand observatory.
 pm_monument_scientific = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_scientific.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -249,7 +249,7 @@ pm_monument_scientific = {
 
 # Timeless: a great exhibition hall.
 pm_monument_industrial = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_industrial.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -271,7 +271,7 @@ pm_monument_industrial = {
 
 # Timeless: a grand stadium.
 pm_monument_athletic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_athletic.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -300,7 +300,7 @@ pm_monument_athletic = {
 # carried in a site's records (gm_arch_seed_site); the ceremony never offers
 # it, so a monument a player builds can't take it (call 6).
 pm_monument_historic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_monument_historic.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_production_methods = {
@@ -316,7 +316,7 @@ pm_monument_historic = {
 	}
 }
 
-# The construction site (grand_monument_site.txt): nothing in, nothing out.
+# The construction site (08_zz_te_grand_monument_site.txt): nothing in, nothing out.
 pm_grand_monument_site = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_grand_monument_site.dds"
 }

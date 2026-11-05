@@ -1,7 +1,7 @@
 ﻿# Sovereign debt crises as a process (#800): the chosen restructuring and the
 # conditional rescue. The effects are in
 # common/scripted_effects/banking_debt_effects.txt, the events in
-# events/banking_debt_events.txt; mod_systems.md § Banking Cycle has the design.
+# events/banking_debt_events.txt; mod_systems/banking_cycle.md § Banking Cycle has the design.
 
 # ---- Restructuring: the write-offs -------------------------------------------
 # clear_scaled_debt clears that multiple of the credit limit, and scaled_debt is

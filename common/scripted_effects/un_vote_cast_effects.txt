@@ -4,8 +4,8 @@
 # THE single implementation of what casting a vote does. Three callers:
 #
 #   1. events/un_vote_events.txt, un_vote.1 options A / B / C — the popup that
-#      reaches every human member 30 days after a resolution opens (and again
-#      at months 9 and 11 to one that chose to decide later).
+#      reaches every human member once, in the ninth month of a resolution's
+#      session.
 #   2. common/scripted_guis/un_chamber_sguis.txt, un_chamber_vote_sgui — the
 #      Vote in Favour / Vote Against / Veto controls on the chamber widget's
 #      active-resolution card, available to a human member from the day the

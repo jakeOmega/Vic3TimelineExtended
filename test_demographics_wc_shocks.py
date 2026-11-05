@@ -516,7 +516,7 @@ class TestReturnOnCapital(unittest.TestCase):
         eng.vars["te_dg_wc_rg"] = 0.0
         self.assertEqual(eng.value("te_demog_wc_rg_on"), 1.0)
         loc = _loc()
-        for key, scope, figures in (("te_demog_wc_t_rg_tt", "GetPlayer", "te_demog_wc_t_rg_figures"),
+        for key, scope, figures in (("te_demog_wc_t_rg_tt", "Country", "te_demog_wc_t_rg_figures"),
                                     ("te_demog_st_wc_t_rg_tt", "State.GetOwner", "te_demog_st_wc_t_rg_figures")):
             self.assertNotIn("te_dg_wc_r'", loc[key], "the figures sit in the named key")
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_rg_on')", loc[key])
@@ -569,7 +569,7 @@ class TestReturnOnCapital(unittest.TestCase):
 
     def test_both_panels_show_the_term(self):
         widgets = _text(WIDGETS)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
         self.assertIn("State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
         keys = _loc_keys()
         for key in ("te_demog_wc_t_rg", "te_demog_wc_t_rg_tt", "te_demog_st_wc_t_rg_tt"):

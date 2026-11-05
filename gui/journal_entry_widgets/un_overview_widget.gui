@@ -58,7 +58,6 @@ types un_overview_widget_types
 			autoresize = yes
 			align = hcenter|nobaseline
 			using = un_fontsize_overview
-			default_format = "#tooltippable"
 			block "label" {}
 		}
 	}
@@ -738,7 +737,6 @@ types un_overview_widget_types
 							elide = right
 							align = left|nobaseline
 							using = un_fontsize_overview
-							default_format = "#tooltippable"
 							text = "je_un_ov_authority_label"
 						}
 					}
@@ -842,7 +840,6 @@ types un_overview_widget_types
 					align = hcenter|nobaseline
 					elide = right
 					using = un_fontsize_row
-					default_format = "#tooltippable"
 					tooltip = "je_un_ov_stats_tt"
 					text = "je_un_ov_stats"
 				}
@@ -858,7 +855,6 @@ types un_overview_widget_types
 
 					textbox = {
 						using = un_fontsize_overview
-						default_format = "#tooltippable"
 						autoresize = yes
 						parentanchor = hcenter
 						align = hcenter|nobaseline

@@ -1,0 +1,245 @@
+﻿# Country definitions for the mod's releasable city-states
+# (common/country_creation/te_city_states.txt). All recognized: they are trading
+# ports, most released late in the game by a recognized power.
+
+NYC = { # New York
+	color = { 232 120 40 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yankee }
+	capital = STATE_NEW_YORK
+}
+
+SFO = { # San Francisco
+	color = { 214 170 60 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yankee }
+	capital = STATE_CALIFORNIA
+}
+
+SGP = { # Singapore
+	color = { 200 40 50 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { malay min yue tamil }
+	capital = STATE_MALAYA
+}
+
+HKG = { # Hong Kong
+	color = { 170 30 60 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yue }
+	capital = STATE_SHAOZHOU
+}
+
+SHG = { # Shanghai
+	color = { 60 90 160 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { han }
+	capital = STATE_SUZHOU
+}
+
+CST = { # Constantinople
+	color = { 120 50 130 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { turkish greek armenian }
+	capital = STATE_EASTERN_THRACE
+}
+
+MCU = { # Macau
+	color = { 30 130 100 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yue portuguese }
+	capital = STATE_GUANGDONG
+}
+
+KUW = { # Kuwait
+	color = { 40 140 70 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { bedouin }
+	capital = STATE_BASRA
+}
+
+FIU = { # Fiume
+	color = { 150 40 60 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { north_italian croat }
+	capital = STATE_CROATIA
+}
+
+BOM = { # Bombay
+	color = { 225 140 40 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { marathi gujarati }
+	capital = STATE_BOMBAY
+}
+
+GOA = { # Goa
+	color = { 70 150 90 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { marathi portuguese }
+	capital = STATE_BOMBAY
+}
+
+PDY = { # Pondicherry
+	color = { 90 110 190 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { tamil french }
+	capital = STATE_MADRAS
+}
+
+ADN = { # Aden
+	color = { 50 70 140 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yemenite }
+	capital = STATE_YEMEN
+}
+
+DXB = { # Dubai
+	color = { 190 50 50 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { bedouin }
+	capital = STATE_ABU_DHABI
+}
+
+TAN = { # Tangier
+	color = { 200 70 70 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { maghrebi }
+	capital = STATE_AL_RIF
+}
+
+LAG = { # Lagos
+	color = { 40 120 70 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { yoruba }
+	capital = STATE_YORUBA_STATES
+}
+
+DKR = { # Dakar
+	color = { 60 160 90 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { wolof }
+	capital = STATE_SENEGAL
+}
+
+DJI = { # Djibouti
+	color = { 110 170 210 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { afar somali }
+	capital = STATE_ERITREA
+}
+
+OCL = { # Calabar
+	color = { 200 160 40 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { ibibio }
+	capital = STATE_NIGER_DELTA
+}
+
+GYE = { # Guayaquil
+	color = { 100 170 220 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { north_andean }
+	capital = STATE_ECUADOR
+}
+
+CTG = { # Cartagena
+	color = { 200 60 40 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { north_andean afro_caribeno }
+	capital = STATE_ANTIOQUIA
+}
+
+BUE = { # Buenos Aires
+	color = { 130 190 230 }
+
+	country_type = recognized
+
+	tier = city_state
+
+	cultures = { platinean }
+	capital = STATE_BUENOS_AIRES
+}

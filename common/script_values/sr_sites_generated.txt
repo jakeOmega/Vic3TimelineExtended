@@ -1363,15 +1363,20 @@ sr_cf_target_goal = {
 sr_site_crew_per_level = { value = 5000 }
 
 # Per world, any scope: its base room (people, before Habitats), its room (+50% of
-# the base a Habitat level, slice 4 design § 3), its people, its free room, and
+# the base a Habitat level, slice 4 design § 3, and on a world that takes it the
+# share its Terraforming has done, era 13 spec § 7.11), its people, its free room (of the
+# room held while a Habitat comes down, sr_site_room_held_<key>), and
 # the module levels above the first its people can crew. Country scope:
 # THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
+# Any scope: its growth a month, sr_site_growth_<key>, 1 + 0.002 and its
+# holder's country_sr_colony_growth_add (Self-Directed Evolution, era 13 spec § 7.3).
 sr_site_base_room_valles_marineris = { value = 50000 }
 sr_site_room_valles_marineris = {
 	value = sr_site_hab_value_valles_marineris
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_valles_marineris
 	multiply = sr_site_base_room_valles_marineris
 }
 sr_site_pop_value_valles_marineris = {
@@ -1379,7 +1384,7 @@ sr_site_pop_value_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_pop_valles_marineris } value = global_var:sr_site_pop_valles_marineris }
 }
 sr_site_free_room_valles_marineris = {
-	value = sr_site_room_valles_marineris
+	value = sr_site_room_held_valles_marineris
 	subtract = sr_site_pop_value_valles_marineris
 	min = 0
 }
@@ -1391,6 +1396,10 @@ sr_site_crews_valles_marineris = {
 	value = sr_site_pop_value_valles_marineris
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_valles_marineris = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_valles_marineris = {
 	value = 2
@@ -1407,6 +1416,7 @@ sr_site_room_olympus_mons = {
 	value = sr_site_hab_value_olympus_mons
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_olympus_mons
 	multiply = sr_site_base_room_olympus_mons
 }
 sr_site_pop_value_olympus_mons = {
@@ -1414,7 +1424,7 @@ sr_site_pop_value_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_pop_olympus_mons } value = global_var:sr_site_pop_olympus_mons }
 }
 sr_site_free_room_olympus_mons = {
-	value = sr_site_room_olympus_mons
+	value = sr_site_room_held_olympus_mons
 	subtract = sr_site_pop_value_olympus_mons
 	min = 0
 }
@@ -1426,6 +1436,10 @@ sr_site_crews_olympus_mons = {
 	value = sr_site_pop_value_olympus_mons
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_olympus_mons = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_olympus_mons = {
 	value = 2
@@ -1442,6 +1456,7 @@ sr_site_room_hellas_planitia = {
 	value = sr_site_hab_value_hellas_planitia
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_hellas_planitia
 	multiply = sr_site_base_room_hellas_planitia
 }
 sr_site_pop_value_hellas_planitia = {
@@ -1449,7 +1464,7 @@ sr_site_pop_value_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_hellas_planitia } value = global_var:sr_site_pop_hellas_planitia }
 }
 sr_site_free_room_hellas_planitia = {
-	value = sr_site_room_hellas_planitia
+	value = sr_site_room_held_hellas_planitia
 	subtract = sr_site_pop_value_hellas_planitia
 	min = 0
 }
@@ -1461,6 +1476,10 @@ sr_site_crews_hellas_planitia = {
 	value = sr_site_pop_value_hellas_planitia
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_hellas_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_hellas_planitia = {
 	value = 2
@@ -1477,6 +1496,7 @@ sr_site_room_utopia_planitia = {
 	value = sr_site_hab_value_utopia_planitia
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_utopia_planitia
 	multiply = sr_site_base_room_utopia_planitia
 }
 sr_site_pop_value_utopia_planitia = {
@@ -1484,7 +1504,7 @@ sr_site_pop_value_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_utopia_planitia } value = global_var:sr_site_pop_utopia_planitia }
 }
 sr_site_free_room_utopia_planitia = {
-	value = sr_site_room_utopia_planitia
+	value = sr_site_room_held_utopia_planitia
 	subtract = sr_site_pop_value_utopia_planitia
 	min = 0
 }
@@ -1496,6 +1516,10 @@ sr_site_crews_utopia_planitia = {
 	value = sr_site_pop_value_utopia_planitia
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_utopia_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_utopia_planitia = {
 	value = 2
@@ -1512,6 +1536,7 @@ sr_site_room_arcadia_planitia = {
 	value = sr_site_hab_value_arcadia_planitia
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_arcadia_planitia
 	multiply = sr_site_base_room_arcadia_planitia
 }
 sr_site_pop_value_arcadia_planitia = {
@@ -1519,7 +1544,7 @@ sr_site_pop_value_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_pop_arcadia_planitia } value = global_var:sr_site_pop_arcadia_planitia }
 }
 sr_site_free_room_arcadia_planitia = {
-	value = sr_site_room_arcadia_planitia
+	value = sr_site_room_held_arcadia_planitia
 	subtract = sr_site_pop_value_arcadia_planitia
 	min = 0
 }
@@ -1531,6 +1556,10 @@ sr_site_crews_arcadia_planitia = {
 	value = sr_site_pop_value_arcadia_planitia
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_arcadia_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_arcadia_planitia = {
 	value = 2
@@ -1554,7 +1583,7 @@ sr_site_pop_value_ceres = {
 	if = { limit = { has_global_variable = sr_site_pop_ceres } value = global_var:sr_site_pop_ceres }
 }
 sr_site_free_room_ceres = {
-	value = sr_site_room_ceres
+	value = sr_site_room_held_ceres
 	subtract = sr_site_pop_value_ceres
 	min = 0
 }
@@ -1566,6 +1595,10 @@ sr_site_crews_ceres = {
 	value = sr_site_pop_value_ceres
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_ceres = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_ceres = {
 	value = 2
@@ -1589,7 +1622,7 @@ sr_site_pop_value_vesta = {
 	if = { limit = { has_global_variable = sr_site_pop_vesta } value = global_var:sr_site_pop_vesta }
 }
 sr_site_free_room_vesta = {
-	value = sr_site_room_vesta
+	value = sr_site_room_held_vesta
 	subtract = sr_site_pop_value_vesta
 	min = 0
 }
@@ -1601,6 +1634,10 @@ sr_site_crews_vesta = {
 	value = sr_site_pop_value_vesta
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_vesta = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_vesta = {
 	value = 2
@@ -1624,7 +1661,7 @@ sr_site_pop_value_psyche = {
 	if = { limit = { has_global_variable = sr_site_pop_psyche } value = global_var:sr_site_pop_psyche }
 }
 sr_site_free_room_psyche = {
-	value = sr_site_room_psyche
+	value = sr_site_room_held_psyche
 	subtract = sr_site_pop_value_psyche
 	min = 0
 }
@@ -1636,6 +1673,10 @@ sr_site_crews_psyche = {
 	value = sr_site_pop_value_psyche
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_psyche = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_psyche = {
 	value = 2
@@ -1659,7 +1700,7 @@ sr_site_pop_value_pallas = {
 	if = { limit = { has_global_variable = sr_site_pop_pallas } value = global_var:sr_site_pop_pallas }
 }
 sr_site_free_room_pallas = {
-	value = sr_site_room_pallas
+	value = sr_site_room_held_pallas
 	subtract = sr_site_pop_value_pallas
 	min = 0
 }
@@ -1671,6 +1712,10 @@ sr_site_crews_pallas = {
 	value = sr_site_pop_value_pallas
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_pallas = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_pallas = {
 	value = 2
@@ -1694,7 +1739,7 @@ sr_site_pop_value_hygiea = {
 	if = { limit = { has_global_variable = sr_site_pop_hygiea } value = global_var:sr_site_pop_hygiea }
 }
 sr_site_free_room_hygiea = {
-	value = sr_site_room_hygiea
+	value = sr_site_room_held_hygiea
 	subtract = sr_site_pop_value_hygiea
 	min = 0
 }
@@ -1706,6 +1751,10 @@ sr_site_crews_hygiea = {
 	value = sr_site_pop_value_hygiea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_hygiea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_hygiea = {
 	value = 2
@@ -1729,7 +1778,7 @@ sr_site_pop_value_io = {
 	if = { limit = { has_global_variable = sr_site_pop_io } value = global_var:sr_site_pop_io }
 }
 sr_site_free_room_io = {
-	value = sr_site_room_io
+	value = sr_site_room_held_io
 	subtract = sr_site_pop_value_io
 	min = 0
 }
@@ -1741,6 +1790,10 @@ sr_site_crews_io = {
 	value = sr_site_pop_value_io
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_io = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_io = {
 	value = 2
@@ -1764,7 +1817,7 @@ sr_site_pop_value_europa = {
 	if = { limit = { has_global_variable = sr_site_pop_europa } value = global_var:sr_site_pop_europa }
 }
 sr_site_free_room_europa = {
-	value = sr_site_room_europa
+	value = sr_site_room_held_europa
 	subtract = sr_site_pop_value_europa
 	min = 0
 }
@@ -1776,6 +1829,10 @@ sr_site_crews_europa = {
 	value = sr_site_pop_value_europa
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_europa = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_europa = {
 	value = 2
@@ -1792,6 +1849,7 @@ sr_site_room_ganymede = {
 	value = sr_site_hab_value_ganymede
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_ganymede
 	multiply = sr_site_base_room_ganymede
 }
 sr_site_pop_value_ganymede = {
@@ -1799,7 +1857,7 @@ sr_site_pop_value_ganymede = {
 	if = { limit = { has_global_variable = sr_site_pop_ganymede } value = global_var:sr_site_pop_ganymede }
 }
 sr_site_free_room_ganymede = {
-	value = sr_site_room_ganymede
+	value = sr_site_room_held_ganymede
 	subtract = sr_site_pop_value_ganymede
 	min = 0
 }
@@ -1811,6 +1869,10 @@ sr_site_crews_ganymede = {
 	value = sr_site_pop_value_ganymede
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_ganymede = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_ganymede = {
 	value = 2
@@ -1827,6 +1889,7 @@ sr_site_room_callisto = {
 	value = sr_site_hab_value_callisto
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_callisto
 	multiply = sr_site_base_room_callisto
 }
 sr_site_pop_value_callisto = {
@@ -1834,7 +1897,7 @@ sr_site_pop_value_callisto = {
 	if = { limit = { has_global_variable = sr_site_pop_callisto } value = global_var:sr_site_pop_callisto }
 }
 sr_site_free_room_callisto = {
-	value = sr_site_room_callisto
+	value = sr_site_room_held_callisto
 	subtract = sr_site_pop_value_callisto
 	min = 0
 }
@@ -1846,6 +1909,10 @@ sr_site_crews_callisto = {
 	value = sr_site_pop_value_callisto
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_callisto = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_callisto = {
 	value = 2
@@ -1869,7 +1936,7 @@ sr_site_pop_value_himalia = {
 	if = { limit = { has_global_variable = sr_site_pop_himalia } value = global_var:sr_site_pop_himalia }
 }
 sr_site_free_room_himalia = {
-	value = sr_site_room_himalia
+	value = sr_site_room_held_himalia
 	subtract = sr_site_pop_value_himalia
 	min = 0
 }
@@ -1881,6 +1948,10 @@ sr_site_crews_himalia = {
 	value = sr_site_pop_value_himalia
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_himalia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_himalia = {
 	value = 2
@@ -1904,7 +1975,7 @@ sr_site_pop_value_amalthea = {
 	if = { limit = { has_global_variable = sr_site_pop_amalthea } value = global_var:sr_site_pop_amalthea }
 }
 sr_site_free_room_amalthea = {
-	value = sr_site_room_amalthea
+	value = sr_site_room_held_amalthea
 	subtract = sr_site_pop_value_amalthea
 	min = 0
 }
@@ -1916,6 +1987,10 @@ sr_site_crews_amalthea = {
 	value = sr_site_pop_value_amalthea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_amalthea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_amalthea = {
 	value = 2
@@ -1932,6 +2007,7 @@ sr_site_room_venus = {
 	value = sr_site_hab_value_venus
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_venus
 	multiply = sr_site_base_room_venus
 }
 sr_site_pop_value_venus = {
@@ -1939,7 +2015,7 @@ sr_site_pop_value_venus = {
 	if = { limit = { has_global_variable = sr_site_pop_venus } value = global_var:sr_site_pop_venus }
 }
 sr_site_free_room_venus = {
-	value = sr_site_room_venus
+	value = sr_site_room_held_venus
 	subtract = sr_site_pop_value_venus
 	min = 0
 }
@@ -1951,6 +2027,10 @@ sr_site_crews_venus = {
 	value = sr_site_pop_value_venus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_venus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_venus = {
 	value = 2
@@ -1974,7 +2054,7 @@ sr_site_pop_value_mercury = {
 	if = { limit = { has_global_variable = sr_site_pop_mercury } value = global_var:sr_site_pop_mercury }
 }
 sr_site_free_room_mercury = {
-	value = sr_site_room_mercury
+	value = sr_site_room_held_mercury
 	subtract = sr_site_pop_value_mercury
 	min = 0
 }
@@ -1986,6 +2066,10 @@ sr_site_crews_mercury = {
 	value = sr_site_pop_value_mercury
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_mercury = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_mercury = {
 	value = 2
@@ -2002,6 +2086,7 @@ sr_site_room_titan = {
 	value = sr_site_hab_value_titan
 	multiply = 0.5
 	add = 1
+	add = sr_site_terra_share_titan
 	multiply = sr_site_base_room_titan
 }
 sr_site_pop_value_titan = {
@@ -2009,7 +2094,7 @@ sr_site_pop_value_titan = {
 	if = { limit = { has_global_variable = sr_site_pop_titan } value = global_var:sr_site_pop_titan }
 }
 sr_site_free_room_titan = {
-	value = sr_site_room_titan
+	value = sr_site_room_held_titan
 	subtract = sr_site_pop_value_titan
 	min = 0
 }
@@ -2021,6 +2106,10 @@ sr_site_crews_titan = {
 	value = sr_site_pop_value_titan
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_titan = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_titan = {
 	value = 2
@@ -2044,7 +2133,7 @@ sr_site_pop_value_enceladus = {
 	if = { limit = { has_global_variable = sr_site_pop_enceladus } value = global_var:sr_site_pop_enceladus }
 }
 sr_site_free_room_enceladus = {
-	value = sr_site_room_enceladus
+	value = sr_site_room_held_enceladus
 	subtract = sr_site_pop_value_enceladus
 	min = 0
 }
@@ -2056,6 +2145,10 @@ sr_site_crews_enceladus = {
 	value = sr_site_pop_value_enceladus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_enceladus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_enceladus = {
 	value = 2
@@ -2079,7 +2172,7 @@ sr_site_pop_value_rhea = {
 	if = { limit = { has_global_variable = sr_site_pop_rhea } value = global_var:sr_site_pop_rhea }
 }
 sr_site_free_room_rhea = {
-	value = sr_site_room_rhea
+	value = sr_site_room_held_rhea
 	subtract = sr_site_pop_value_rhea
 	min = 0
 }
@@ -2091,6 +2184,10 @@ sr_site_crews_rhea = {
 	value = sr_site_pop_value_rhea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_rhea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_rhea = {
 	value = 2
@@ -2114,7 +2211,7 @@ sr_site_pop_value_mimas = {
 	if = { limit = { has_global_variable = sr_site_pop_mimas } value = global_var:sr_site_pop_mimas }
 }
 sr_site_free_room_mimas = {
-	value = sr_site_room_mimas
+	value = sr_site_room_held_mimas
 	subtract = sr_site_pop_value_mimas
 	min = 0
 }
@@ -2126,6 +2223,10 @@ sr_site_crews_mimas = {
 	value = sr_site_pop_value_mimas
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_mimas = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_mimas = {
 	value = 2
@@ -2149,7 +2250,7 @@ sr_site_pop_value_iapetus = {
 	if = { limit = { has_global_variable = sr_site_pop_iapetus } value = global_var:sr_site_pop_iapetus }
 }
 sr_site_free_room_iapetus = {
-	value = sr_site_room_iapetus
+	value = sr_site_room_held_iapetus
 	subtract = sr_site_pop_value_iapetus
 	min = 0
 }
@@ -2161,6 +2262,10 @@ sr_site_crews_iapetus = {
 	value = sr_site_pop_value_iapetus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_iapetus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_iapetus = {
 	value = 2
@@ -2184,7 +2289,7 @@ sr_site_pop_value_titania = {
 	if = { limit = { has_global_variable = sr_site_pop_titania } value = global_var:sr_site_pop_titania }
 }
 sr_site_free_room_titania = {
-	value = sr_site_room_titania
+	value = sr_site_room_held_titania
 	subtract = sr_site_pop_value_titania
 	min = 0
 }
@@ -2196,6 +2301,10 @@ sr_site_crews_titania = {
 	value = sr_site_pop_value_titania
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_titania = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_titania = {
 	value = 2
@@ -2219,7 +2328,7 @@ sr_site_pop_value_oberon = {
 	if = { limit = { has_global_variable = sr_site_pop_oberon } value = global_var:sr_site_pop_oberon }
 }
 sr_site_free_room_oberon = {
-	value = sr_site_room_oberon
+	value = sr_site_room_held_oberon
 	subtract = sr_site_pop_value_oberon
 	min = 0
 }
@@ -2231,6 +2340,10 @@ sr_site_crews_oberon = {
 	value = sr_site_pop_value_oberon
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_oberon = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_oberon = {
 	value = 2
@@ -2254,7 +2367,7 @@ sr_site_pop_value_miranda = {
 	if = { limit = { has_global_variable = sr_site_pop_miranda } value = global_var:sr_site_pop_miranda }
 }
 sr_site_free_room_miranda = {
-	value = sr_site_room_miranda
+	value = sr_site_room_held_miranda
 	subtract = sr_site_pop_value_miranda
 	min = 0
 }
@@ -2266,6 +2379,10 @@ sr_site_crews_miranda = {
 	value = sr_site_pop_value_miranda
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_miranda = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_miranda = {
 	value = 2
@@ -2289,7 +2406,7 @@ sr_site_pop_value_ariel = {
 	if = { limit = { has_global_variable = sr_site_pop_ariel } value = global_var:sr_site_pop_ariel }
 }
 sr_site_free_room_ariel = {
-	value = sr_site_room_ariel
+	value = sr_site_room_held_ariel
 	subtract = sr_site_pop_value_ariel
 	min = 0
 }
@@ -2301,6 +2418,10 @@ sr_site_crews_ariel = {
 	value = sr_site_pop_value_ariel
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_ariel = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_ariel = {
 	value = 2
@@ -2324,7 +2445,7 @@ sr_site_pop_value_triton = {
 	if = { limit = { has_global_variable = sr_site_pop_triton } value = global_var:sr_site_pop_triton }
 }
 sr_site_free_room_triton = {
-	value = sr_site_room_triton
+	value = sr_site_room_held_triton
 	subtract = sr_site_pop_value_triton
 	min = 0
 }
@@ -2336,6 +2457,10 @@ sr_site_crews_triton = {
 	value = sr_site_pop_value_triton
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_triton = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_triton = {
 	value = 2
@@ -2359,7 +2484,7 @@ sr_site_pop_value_proteus = {
 	if = { limit = { has_global_variable = sr_site_pop_proteus } value = global_var:sr_site_pop_proteus }
 }
 sr_site_free_room_proteus = {
-	value = sr_site_room_proteus
+	value = sr_site_room_held_proteus
 	subtract = sr_site_pop_value_proteus
 	min = 0
 }
@@ -2371,6 +2496,10 @@ sr_site_crews_proteus = {
 	value = sr_site_pop_value_proteus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_proteus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_proteus = {
 	value = 2
@@ -2394,7 +2523,7 @@ sr_site_pop_value_pluto = {
 	if = { limit = { has_global_variable = sr_site_pop_pluto } value = global_var:sr_site_pop_pluto }
 }
 sr_site_free_room_pluto = {
-	value = sr_site_room_pluto
+	value = sr_site_room_held_pluto
 	subtract = sr_site_pop_value_pluto
 	min = 0
 }
@@ -2406,6 +2535,10 @@ sr_site_crews_pluto = {
 	value = sr_site_pop_value_pluto
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_pluto = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_pluto = {
 	value = 2
@@ -2429,7 +2562,7 @@ sr_site_pop_value_eris = {
 	if = { limit = { has_global_variable = sr_site_pop_eris } value = global_var:sr_site_pop_eris }
 }
 sr_site_free_room_eris = {
-	value = sr_site_room_eris
+	value = sr_site_room_held_eris
 	subtract = sr_site_pop_value_eris
 	min = 0
 }
@@ -2441,6 +2574,10 @@ sr_site_crews_eris = {
 	value = sr_site_pop_value_eris
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_eris = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_eris = {
 	value = 2
@@ -2464,7 +2601,7 @@ sr_site_pop_value_makemake = {
 	if = { limit = { has_global_variable = sr_site_pop_makemake } value = global_var:sr_site_pop_makemake }
 }
 sr_site_free_room_makemake = {
-	value = sr_site_room_makemake
+	value = sr_site_room_held_makemake
 	subtract = sr_site_pop_value_makemake
 	min = 0
 }
@@ -2476,6 +2613,10 @@ sr_site_crews_makemake = {
 	value = sr_site_pop_value_makemake
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_makemake = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_makemake = {
 	value = 2
@@ -2499,7 +2640,7 @@ sr_site_pop_value_haumea = {
 	if = { limit = { has_global_variable = sr_site_pop_haumea } value = global_var:sr_site_pop_haumea }
 }
 sr_site_free_room_haumea = {
-	value = sr_site_room_haumea
+	value = sr_site_room_held_haumea
 	subtract = sr_site_pop_value_haumea
 	min = 0
 }
@@ -2511,6 +2652,10 @@ sr_site_crews_haumea = {
 	value = sr_site_pop_value_haumea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_haumea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_haumea = {
 	value = 2
@@ -2534,7 +2679,7 @@ sr_site_pop_value_sedna = {
 	if = { limit = { has_global_variable = sr_site_pop_sedna } value = global_var:sr_site_pop_sedna }
 }
 sr_site_free_room_sedna = {
-	value = sr_site_room_sedna
+	value = sr_site_room_held_sedna
 	subtract = sr_site_pop_value_sedna
 	min = 0
 }
@@ -2546,6 +2691,10 @@ sr_site_crews_sedna = {
 	value = sr_site_pop_value_sedna
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_sedna = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_sedna = {
 	value = 2
@@ -2569,7 +2718,7 @@ sr_site_pop_value_shackleton = {
 	if = { limit = { has_global_variable = sr_site_pop_shackleton } value = global_var:sr_site_pop_shackleton }
 }
 sr_site_free_room_shackleton = {
-	value = sr_site_room_shackleton
+	value = sr_site_room_held_shackleton
 	subtract = sr_site_pop_value_shackleton
 	min = 0
 }
@@ -2581,6 +2730,10 @@ sr_site_crews_shackleton = {
 	value = sr_site_pop_value_shackleton
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_shackleton = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_shackleton = {
 	value = 2
@@ -2604,7 +2757,7 @@ sr_site_pop_value_peary = {
 	if = { limit = { has_global_variable = sr_site_pop_peary } value = global_var:sr_site_pop_peary }
 }
 sr_site_free_room_peary = {
-	value = sr_site_room_peary
+	value = sr_site_room_held_peary
 	subtract = sr_site_pop_value_peary
 	min = 0
 }
@@ -2616,6 +2769,10 @@ sr_site_crews_peary = {
 	value = sr_site_pop_value_peary
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_peary = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_peary = {
 	value = 2
@@ -2639,7 +2796,7 @@ sr_site_pop_value_tranquility = {
 	if = { limit = { has_global_variable = sr_site_pop_tranquility } value = global_var:sr_site_pop_tranquility }
 }
 sr_site_free_room_tranquility = {
-	value = sr_site_room_tranquility
+	value = sr_site_room_held_tranquility
 	subtract = sr_site_pop_value_tranquility
 	min = 0
 }
@@ -2651,6 +2808,10 @@ sr_site_crews_tranquility = {
 	value = sr_site_pop_value_tranquility
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_tranquility = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_tranquility = {
 	value = 2
@@ -2674,7 +2835,7 @@ sr_site_pop_value_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_pop_marius_hills } value = global_var:sr_site_pop_marius_hills }
 }
 sr_site_free_room_marius_hills = {
-	value = sr_site_room_marius_hills
+	value = sr_site_room_held_marius_hills
 	subtract = sr_site_pop_value_marius_hills
 	min = 0
 }
@@ -2686,6 +2847,10 @@ sr_site_crews_marius_hills = {
 	value = sr_site_pop_value_marius_hills
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_marius_hills = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_marius_hills = {
 	value = 2
@@ -2709,7 +2874,7 @@ sr_site_pop_value_daedalus = {
 	if = { limit = { has_global_variable = sr_site_pop_daedalus } value = global_var:sr_site_pop_daedalus }
 }
 sr_site_free_room_daedalus = {
-	value = sr_site_room_daedalus
+	value = sr_site_room_held_daedalus
 	subtract = sr_site_pop_value_daedalus
 	min = 0
 }
@@ -2721,6 +2886,10 @@ sr_site_crews_daedalus = {
 	value = sr_site_pop_value_daedalus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_daedalus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_daedalus = {
 	value = 2
@@ -2744,7 +2913,7 @@ sr_site_pop_value_imbrium = {
 	if = { limit = { has_global_variable = sr_site_pop_imbrium } value = global_var:sr_site_pop_imbrium }
 }
 sr_site_free_room_imbrium = {
-	value = sr_site_room_imbrium
+	value = sr_site_room_held_imbrium
 	subtract = sr_site_pop_value_imbrium
 	min = 0
 }
@@ -2756,6 +2925,10 @@ sr_site_crews_imbrium = {
 	value = sr_site_pop_value_imbrium
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_imbrium = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_imbrium = {
 	value = 2
@@ -2979,6 +3152,10 @@ sr_site_admin_value_valles_marineris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_valles_marineris } value = global_var:sr_site_admin_valles_marineris }
 }
+sr_site_terra_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_valles_marineris } value = global_var:sr_site_terra_valles_marineris }
+}
 sr_site_levels_valles_marineris = {
 	value = sr_site_lvl_a_value_valles_marineris
 	add = sr_site_lvl_b_value_valles_marineris
@@ -2994,6 +3171,7 @@ sr_site_levels_valles_marineris = {
 	add = sr_site_bunker_value_valles_marineris
 	add = sr_site_foundry_value_valles_marineris
 	add = sr_site_admin_value_valles_marineris
+	add = sr_site_terra_value_valles_marineris
 }
 sr_site_extra_levels_valles_marineris = {
 	value = sr_site_levels_valles_marineris
@@ -3045,12 +3223,13 @@ sr_site_generic_built_valles_marineris = {
 	add = sr_site_bunker_value_valles_marineris
 	add = sr_site_foundry_value_valles_marineris
 	add = sr_site_admin_value_valles_marineris
+	add = sr_site_terra_value_valles_marineris
 }
-# Valles Marineris's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Valles Marineris's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_valles_marineris = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_valles_marineris = { value = sr_site_slots_valles_marineris add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3069,6 +3248,7 @@ sr_site_generic_pending_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_valles_marineris } add = global_var:sr_site_ship_bunker_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_valles_marineris } add = global_var:sr_site_ship_foundry_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } add = global_var:sr_site_ship_admin_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -3086,9 +3266,10 @@ sr_site_train_staffed_valles_marineris = { value = sr_site_train_value_valles_ma
 sr_site_bunker_staffed_valles_marineris = { value = sr_site_bunker_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
 sr_site_foundry_staffed_valles_marineris = { value = sr_site_foundry_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
 sr_site_admin_staffed_valles_marineris = { value = sr_site_admin_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
+sr_site_terra_staffed_valles_marineris = { value = sr_site_terra_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_valles_marineris = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_valles_marineris multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_valles_marineris = {
@@ -3126,6 +3307,8 @@ sr_mod_slots_used_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_valles_marineris } add = global_var:sr_site_ship_foundry_valles_marineris }
 	if = { limit = { has_variable = sr_mq_admin_valles_marineris } add = var:sr_mq_admin_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } add = global_var:sr_site_ship_admin_valles_marineris }
+	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
 }
 # The next module THIS queues at Valles Marineris costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -3195,6 +3378,10 @@ sr_site_admin_value_olympus_mons = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_olympus_mons } value = global_var:sr_site_admin_olympus_mons }
 }
+sr_site_terra_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_olympus_mons } value = global_var:sr_site_terra_olympus_mons }
+}
 sr_site_levels_olympus_mons = {
 	value = sr_site_lvl_a_value_olympus_mons
 	add = sr_site_lvl_b_value_olympus_mons
@@ -3210,6 +3397,7 @@ sr_site_levels_olympus_mons = {
 	add = sr_site_bunker_value_olympus_mons
 	add = sr_site_foundry_value_olympus_mons
 	add = sr_site_admin_value_olympus_mons
+	add = sr_site_terra_value_olympus_mons
 }
 sr_site_extra_levels_olympus_mons = {
 	value = sr_site_levels_olympus_mons
@@ -3261,12 +3449,13 @@ sr_site_generic_built_olympus_mons = {
 	add = sr_site_bunker_value_olympus_mons
 	add = sr_site_foundry_value_olympus_mons
 	add = sr_site_admin_value_olympus_mons
+	add = sr_site_terra_value_olympus_mons
 }
-# Olympus Mons's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Olympus Mons's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_olympus_mons = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_olympus_mons = { value = sr_site_slots_olympus_mons add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3285,6 +3474,7 @@ sr_site_generic_pending_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_olympus_mons } add = global_var:sr_site_ship_bunker_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_olympus_mons } add = global_var:sr_site_ship_foundry_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } add = global_var:sr_site_ship_admin_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -3302,9 +3492,10 @@ sr_site_train_staffed_olympus_mons = { value = sr_site_train_value_olympus_mons 
 sr_site_bunker_staffed_olympus_mons = { value = sr_site_bunker_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 sr_site_foundry_staffed_olympus_mons = { value = sr_site_foundry_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 sr_site_admin_staffed_olympus_mons = { value = sr_site_admin_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
+sr_site_terra_staffed_olympus_mons = { value = sr_site_terra_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_olympus_mons = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_olympus_mons multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_olympus_mons = {
@@ -3342,6 +3533,8 @@ sr_mod_slots_used_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_olympus_mons } add = global_var:sr_site_ship_foundry_olympus_mons }
 	if = { limit = { has_variable = sr_mq_admin_olympus_mons } add = var:sr_mq_admin_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } add = global_var:sr_site_ship_admin_olympus_mons }
+	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
 }
 # The next module THIS queues at Olympus Mons costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -3411,6 +3604,10 @@ sr_site_admin_value_hellas_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_hellas_planitia } value = global_var:sr_site_admin_hellas_planitia }
 }
+sr_site_terra_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_hellas_planitia } value = global_var:sr_site_terra_hellas_planitia }
+}
 sr_site_levels_hellas_planitia = {
 	value = sr_site_lvl_a_value_hellas_planitia
 	add = sr_site_lvl_b_value_hellas_planitia
@@ -3426,6 +3623,7 @@ sr_site_levels_hellas_planitia = {
 	add = sr_site_bunker_value_hellas_planitia
 	add = sr_site_foundry_value_hellas_planitia
 	add = sr_site_admin_value_hellas_planitia
+	add = sr_site_terra_value_hellas_planitia
 }
 sr_site_extra_levels_hellas_planitia = {
 	value = sr_site_levels_hellas_planitia
@@ -3476,12 +3674,13 @@ sr_site_generic_built_hellas_planitia = {
 	add = sr_site_bunker_value_hellas_planitia
 	add = sr_site_foundry_value_hellas_planitia
 	add = sr_site_admin_value_hellas_planitia
+	add = sr_site_terra_value_hellas_planitia
 }
-# Hellas Planitia's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Hellas Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_hellas_planitia = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_hellas_planitia = { value = sr_site_slots_hellas_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3500,6 +3699,7 @@ sr_site_generic_pending_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_hellas_planitia } add = global_var:sr_site_ship_bunker_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_hellas_planitia } add = global_var:sr_site_ship_foundry_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } add = global_var:sr_site_ship_admin_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -3517,9 +3717,10 @@ sr_site_train_staffed_hellas_planitia = { value = sr_site_train_value_hellas_pla
 sr_site_bunker_staffed_hellas_planitia = { value = sr_site_bunker_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 sr_site_foundry_staffed_hellas_planitia = { value = sr_site_foundry_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 sr_site_admin_staffed_hellas_planitia = { value = sr_site_admin_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
+sr_site_terra_staffed_hellas_planitia = { value = sr_site_terra_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_hellas_planitia = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_hellas_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_hellas_planitia = {
@@ -3557,6 +3758,8 @@ sr_mod_slots_used_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_hellas_planitia } add = global_var:sr_site_ship_foundry_hellas_planitia }
 	if = { limit = { has_variable = sr_mq_admin_hellas_planitia } add = var:sr_mq_admin_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } add = global_var:sr_site_ship_admin_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
 }
 # The next module THIS queues at Hellas Planitia costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -3626,6 +3829,10 @@ sr_site_admin_value_utopia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_utopia_planitia } value = global_var:sr_site_admin_utopia_planitia }
 }
+sr_site_terra_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_utopia_planitia } value = global_var:sr_site_terra_utopia_planitia }
+}
 sr_site_levels_utopia_planitia = {
 	value = sr_site_lvl_a_value_utopia_planitia
 	add = sr_site_lvl_b_value_utopia_planitia
@@ -3641,6 +3848,7 @@ sr_site_levels_utopia_planitia = {
 	add = sr_site_bunker_value_utopia_planitia
 	add = sr_site_foundry_value_utopia_planitia
 	add = sr_site_admin_value_utopia_planitia
+	add = sr_site_terra_value_utopia_planitia
 }
 sr_site_extra_levels_utopia_planitia = {
 	value = sr_site_levels_utopia_planitia
@@ -3693,12 +3901,13 @@ sr_site_generic_built_utopia_planitia = {
 	add = sr_site_bunker_value_utopia_planitia
 	add = sr_site_foundry_value_utopia_planitia
 	add = sr_site_admin_value_utopia_planitia
+	add = sr_site_terra_value_utopia_planitia
 }
-# Utopia Planitia's slots: 4 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Utopia Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_utopia_planitia = {
 	value = 4
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_utopia_planitia = { value = sr_site_slots_utopia_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3717,6 +3926,7 @@ sr_site_generic_pending_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_utopia_planitia } add = global_var:sr_site_ship_bunker_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_utopia_planitia } add = global_var:sr_site_ship_foundry_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } add = global_var:sr_site_ship_admin_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -3734,9 +3944,10 @@ sr_site_train_staffed_utopia_planitia = { value = sr_site_train_value_utopia_pla
 sr_site_bunker_staffed_utopia_planitia = { value = sr_site_bunker_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 sr_site_foundry_staffed_utopia_planitia = { value = sr_site_foundry_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 sr_site_admin_staffed_utopia_planitia = { value = sr_site_admin_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
+sr_site_terra_staffed_utopia_planitia = { value = sr_site_terra_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_utopia_planitia = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_utopia_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_utopia_planitia = {
@@ -3774,6 +3985,8 @@ sr_mod_slots_used_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_utopia_planitia } add = global_var:sr_site_ship_foundry_utopia_planitia }
 	if = { limit = { has_variable = sr_mq_admin_utopia_planitia } add = var:sr_mq_admin_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } add = global_var:sr_site_ship_admin_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
 }
 # The next module THIS queues at Utopia Planitia costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -3843,6 +4056,10 @@ sr_site_admin_value_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_arcadia_planitia } value = global_var:sr_site_admin_arcadia_planitia }
 }
+sr_site_terra_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_arcadia_planitia } value = global_var:sr_site_terra_arcadia_planitia }
+}
 sr_site_levels_arcadia_planitia = {
 	value = sr_site_lvl_a_value_arcadia_planitia
 	add = sr_site_lvl_b_value_arcadia_planitia
@@ -3858,6 +4075,7 @@ sr_site_levels_arcadia_planitia = {
 	add = sr_site_bunker_value_arcadia_planitia
 	add = sr_site_foundry_value_arcadia_planitia
 	add = sr_site_admin_value_arcadia_planitia
+	add = sr_site_terra_value_arcadia_planitia
 }
 sr_site_extra_levels_arcadia_planitia = {
 	value = sr_site_levels_arcadia_planitia
@@ -3908,12 +4126,13 @@ sr_site_generic_built_arcadia_planitia = {
 	add = sr_site_bunker_value_arcadia_planitia
 	add = sr_site_foundry_value_arcadia_planitia
 	add = sr_site_admin_value_arcadia_planitia
+	add = sr_site_terra_value_arcadia_planitia
 }
-# Arcadia Planitia's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Arcadia Planitia's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_arcadia_planitia = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_arcadia_planitia = { value = sr_site_slots_arcadia_planitia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -3932,6 +4151,7 @@ sr_site_generic_pending_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_arcadia_planitia } add = global_var:sr_site_ship_bunker_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_arcadia_planitia } add = global_var:sr_site_ship_foundry_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } add = global_var:sr_site_ship_admin_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -3949,9 +4169,10 @@ sr_site_train_staffed_arcadia_planitia = { value = sr_site_train_value_arcadia_p
 sr_site_bunker_staffed_arcadia_planitia = { value = sr_site_bunker_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 sr_site_foundry_staffed_arcadia_planitia = { value = sr_site_foundry_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 sr_site_admin_staffed_arcadia_planitia = { value = sr_site_admin_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
+sr_site_terra_staffed_arcadia_planitia = { value = sr_site_terra_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_arcadia_planitia = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_arcadia_planitia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_arcadia_planitia = {
@@ -3989,6 +4210,8 @@ sr_mod_slots_used_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_arcadia_planitia } add = global_var:sr_site_ship_foundry_arcadia_planitia }
 	if = { limit = { has_variable = sr_mq_admin_arcadia_planitia } add = var:sr_mq_admin_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } add = global_var:sr_site_ship_admin_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
 }
 # The next module THIS queues at Arcadia Planitia costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -4125,11 +4348,11 @@ sr_site_generic_built_ceres = {
 	add = sr_site_foundry_value_ceres
 	add = sr_site_admin_value_ceres
 }
-# Ceres's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ceres's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ceres = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ceres = { value = sr_site_slots_ceres add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4167,7 +4390,7 @@ sr_site_foundry_staffed_ceres = { value = sr_site_foundry_value_ceres multiply =
 sr_site_admin_staffed_ceres = { value = sr_site_admin_value_ceres multiply = sr_site_staffing_ceres }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ceres = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_ceres multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ceres = {
@@ -4341,11 +4564,11 @@ sr_site_generic_built_vesta = {
 	add = sr_site_foundry_value_vesta
 	add = sr_site_admin_value_vesta
 }
-# 4 Vesta's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 4 Vesta's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_vesta = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_vesta = { value = sr_site_slots_vesta add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4383,7 +4606,7 @@ sr_site_foundry_staffed_vesta = { value = sr_site_foundry_value_vesta multiply =
 sr_site_admin_staffed_vesta = { value = sr_site_admin_value_vesta multiply = sr_site_staffing_vesta }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_vesta = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_vesta multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_vesta = {
@@ -4557,11 +4780,11 @@ sr_site_generic_built_psyche = {
 	add = sr_site_foundry_value_psyche
 	add = sr_site_admin_value_psyche
 }
-# 16 Psyche's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 16 Psyche's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_psyche = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_psyche = { value = sr_site_slots_psyche add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4599,7 +4822,7 @@ sr_site_foundry_staffed_psyche = { value = sr_site_foundry_value_psyche multiply
 sr_site_admin_staffed_psyche = { value = sr_site_admin_value_psyche multiply = sr_site_staffing_psyche }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_psyche = {
-	value = 60
+	value = 300
 	add = { value = sr_site_mine_staffed_psyche multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_psyche = {
@@ -4773,11 +4996,11 @@ sr_site_generic_built_pallas = {
 	add = sr_site_foundry_value_pallas
 	add = sr_site_admin_value_pallas
 }
-# 2 Pallas's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 2 Pallas's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_pallas = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_pallas = { value = sr_site_slots_pallas add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -4815,7 +5038,7 @@ sr_site_foundry_staffed_pallas = { value = sr_site_foundry_value_pallas multiply
 sr_site_admin_staffed_pallas = { value = sr_site_admin_value_pallas multiply = sr_site_staffing_pallas }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pallas = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_pallas multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_pallas = {
@@ -4990,11 +5213,11 @@ sr_site_generic_built_hygiea = {
 	add = sr_site_foundry_value_hygiea
 	add = sr_site_admin_value_hygiea
 }
-# 10 Hygiea's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# 10 Hygiea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_hygiea = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_hygiea = { value = sr_site_slots_hygiea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5032,7 +5255,7 @@ sr_site_foundry_staffed_hygiea = { value = sr_site_foundry_value_hygiea multiply
 sr_site_admin_staffed_hygiea = { value = sr_site_admin_value_hygiea multiply = sr_site_staffing_hygiea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_hygiea = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_hygiea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_hygiea = {
@@ -5206,11 +5429,11 @@ sr_site_generic_built_io = {
 	add = sr_site_foundry_value_io
 	add = sr_site_admin_value_io
 }
-# Io's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Io's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_io = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_io = { value = sr_site_slots_io add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5248,7 +5471,7 @@ sr_site_foundry_staffed_io = { value = sr_site_foundry_value_io multiply = sr_si
 sr_site_admin_staffed_io = { value = sr_site_admin_value_io multiply = sr_site_staffing_io }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_io = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_io multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_io = {
@@ -5421,11 +5644,11 @@ sr_site_generic_built_europa = {
 	add = sr_site_foundry_value_europa
 	add = sr_site_admin_value_europa
 }
-# Europa's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Europa's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_europa = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_europa = { value = sr_site_slots_europa add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5463,7 +5686,7 @@ sr_site_foundry_staffed_europa = { value = sr_site_foundry_value_europa multiply
 sr_site_admin_staffed_europa = { value = sr_site_admin_value_europa multiply = sr_site_staffing_europa }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_europa = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_europa multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_europa = {
@@ -5570,6 +5793,10 @@ sr_site_admin_value_ganymede = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_ganymede } value = global_var:sr_site_admin_ganymede }
 }
+sr_site_terra_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_ganymede } value = global_var:sr_site_terra_ganymede }
+}
 sr_site_levels_ganymede = {
 	value = sr_site_lvl_a_value_ganymede
 	add = sr_site_lvl_b_value_ganymede
@@ -5585,6 +5812,7 @@ sr_site_levels_ganymede = {
 	add = sr_site_bunker_value_ganymede
 	add = sr_site_foundry_value_ganymede
 	add = sr_site_admin_value_ganymede
+	add = sr_site_terra_value_ganymede
 }
 sr_site_extra_levels_ganymede = {
 	value = sr_site_levels_ganymede
@@ -5635,12 +5863,13 @@ sr_site_generic_built_ganymede = {
 	add = sr_site_bunker_value_ganymede
 	add = sr_site_foundry_value_ganymede
 	add = sr_site_admin_value_ganymede
+	add = sr_site_terra_value_ganymede
 }
-# Ganymede's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ganymede's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ganymede = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ganymede = { value = sr_site_slots_ganymede add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5659,6 +5888,7 @@ sr_site_generic_pending_ganymede = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_ganymede } add = global_var:sr_site_ship_bunker_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_ganymede } add = global_var:sr_site_ship_foundry_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } add = global_var:sr_site_ship_admin_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -5676,9 +5906,10 @@ sr_site_train_staffed_ganymede = { value = sr_site_train_value_ganymede multiply
 sr_site_bunker_staffed_ganymede = { value = sr_site_bunker_value_ganymede multiply = sr_site_staffing_ganymede }
 sr_site_foundry_staffed_ganymede = { value = sr_site_foundry_value_ganymede multiply = sr_site_staffing_ganymede }
 sr_site_admin_staffed_ganymede = { value = sr_site_admin_value_ganymede multiply = sr_site_staffing_ganymede }
+sr_site_terra_staffed_ganymede = { value = sr_site_terra_value_ganymede multiply = sr_site_staffing_ganymede }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ganymede = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_ganymede multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ganymede = {
@@ -5716,6 +5947,8 @@ sr_mod_slots_used_ganymede = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_ganymede } add = global_var:sr_site_ship_foundry_ganymede }
 	if = { limit = { has_variable = sr_mq_admin_ganymede } add = var:sr_mq_admin_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } add = global_var:sr_site_ship_admin_ganymede }
+	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
 }
 # The next module THIS queues at Ganymede costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -5785,6 +6018,10 @@ sr_site_admin_value_callisto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_callisto } value = global_var:sr_site_admin_callisto }
 }
+sr_site_terra_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_callisto } value = global_var:sr_site_terra_callisto }
+}
 sr_site_levels_callisto = {
 	value = sr_site_lvl_a_value_callisto
 	add = sr_site_lvl_b_value_callisto
@@ -5800,6 +6037,7 @@ sr_site_levels_callisto = {
 	add = sr_site_bunker_value_callisto
 	add = sr_site_foundry_value_callisto
 	add = sr_site_admin_value_callisto
+	add = sr_site_terra_value_callisto
 }
 sr_site_extra_levels_callisto = {
 	value = sr_site_levels_callisto
@@ -5850,12 +6088,13 @@ sr_site_generic_built_callisto = {
 	add = sr_site_bunker_value_callisto
 	add = sr_site_foundry_value_callisto
 	add = sr_site_admin_value_callisto
+	add = sr_site_terra_value_callisto
 }
-# Callisto's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Callisto's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_callisto = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_callisto = { value = sr_site_slots_callisto add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -5874,6 +6113,7 @@ sr_site_generic_pending_callisto = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_callisto } add = global_var:sr_site_ship_bunker_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_callisto } add = global_var:sr_site_ship_foundry_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } add = global_var:sr_site_ship_admin_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -5891,9 +6131,10 @@ sr_site_train_staffed_callisto = { value = sr_site_train_value_callisto multiply
 sr_site_bunker_staffed_callisto = { value = sr_site_bunker_value_callisto multiply = sr_site_staffing_callisto }
 sr_site_foundry_staffed_callisto = { value = sr_site_foundry_value_callisto multiply = sr_site_staffing_callisto }
 sr_site_admin_staffed_callisto = { value = sr_site_admin_value_callisto multiply = sr_site_staffing_callisto }
+sr_site_terra_staffed_callisto = { value = sr_site_terra_value_callisto multiply = sr_site_staffing_callisto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_callisto = {
-	value = 30
+	value = 150
 	add = { value = sr_site_mine_staffed_callisto multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_callisto = {
@@ -5931,6 +6172,8 @@ sr_mod_slots_used_callisto = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_callisto } add = global_var:sr_site_ship_foundry_callisto }
 	if = { limit = { has_variable = sr_mq_admin_callisto } add = var:sr_mq_admin_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } add = global_var:sr_site_ship_admin_callisto }
+	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
 }
 # The next module THIS queues at Callisto costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -6067,11 +6310,11 @@ sr_site_generic_built_himalia = {
 	add = sr_site_foundry_value_himalia
 	add = sr_site_admin_value_himalia
 }
-# Himalia's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Himalia's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_himalia = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_himalia = { value = sr_site_slots_himalia add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6109,7 +6352,7 @@ sr_site_foundry_staffed_himalia = { value = sr_site_foundry_value_himalia multip
 sr_site_admin_staffed_himalia = { value = sr_site_admin_value_himalia multiply = sr_site_staffing_himalia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_himalia = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_himalia multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_himalia = {
@@ -6283,11 +6526,11 @@ sr_site_generic_built_amalthea = {
 	add = sr_site_foundry_value_amalthea
 	add = sr_site_admin_value_amalthea
 }
-# Amalthea's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Amalthea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_amalthea = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_amalthea = { value = sr_site_slots_amalthea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6325,7 +6568,7 @@ sr_site_foundry_staffed_amalthea = { value = sr_site_foundry_value_amalthea mult
 sr_site_admin_staffed_amalthea = { value = sr_site_admin_value_amalthea multiply = sr_site_staffing_amalthea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_amalthea = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_amalthea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_amalthea = {
@@ -6432,6 +6675,10 @@ sr_site_admin_value_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_venus } value = global_var:sr_site_admin_venus }
 }
+sr_site_terra_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_venus } value = global_var:sr_site_terra_venus }
+}
 sr_site_levels_venus = {
 	value = sr_site_lvl_a_value_venus
 	add = sr_site_lvl_b_value_venus
@@ -6447,6 +6694,7 @@ sr_site_levels_venus = {
 	add = sr_site_bunker_value_venus
 	add = sr_site_foundry_value_venus
 	add = sr_site_admin_value_venus
+	add = sr_site_terra_value_venus
 }
 sr_site_extra_levels_venus = {
 	value = sr_site_levels_venus
@@ -6498,12 +6746,13 @@ sr_site_generic_built_venus = {
 	add = sr_site_bunker_value_venus
 	add = sr_site_foundry_value_venus
 	add = sr_site_admin_value_venus
+	add = sr_site_terra_value_venus
 }
-# Venus Cloud Habitat's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Venus Cloud Habitat's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_venus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_venus = { value = sr_site_slots_venus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6522,6 +6771,7 @@ sr_site_generic_pending_venus = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_venus } add = global_var:sr_site_ship_bunker_venus }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_venus } add = global_var:sr_site_ship_foundry_venus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_venus } add = global_var:sr_site_ship_admin_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -6539,9 +6789,10 @@ sr_site_train_staffed_venus = { value = sr_site_train_value_venus multiply = sr_
 sr_site_bunker_staffed_venus = { value = sr_site_bunker_value_venus multiply = sr_site_staffing_venus }
 sr_site_foundry_staffed_venus = { value = sr_site_foundry_value_venus multiply = sr_site_staffing_venus }
 sr_site_admin_staffed_venus = { value = sr_site_admin_value_venus multiply = sr_site_staffing_venus }
+sr_site_terra_staffed_venus = { value = sr_site_terra_value_venus multiply = sr_site_staffing_venus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_venus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_venus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_venus = {
@@ -6579,6 +6830,8 @@ sr_mod_slots_used_venus = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_venus } add = global_var:sr_site_ship_foundry_venus }
 	if = { limit = { has_variable = sr_mq_admin_venus } add = var:sr_mq_admin_venus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_venus } add = global_var:sr_site_ship_admin_venus }
+	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
 }
 # The next module THIS queues at Venus Cloud Habitat costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -6716,11 +6969,11 @@ sr_site_generic_built_mercury = {
 	add = sr_site_foundry_value_mercury
 	add = sr_site_admin_value_mercury
 }
-# Mercury's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mercury's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_mercury = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_mercury = { value = sr_site_slots_mercury add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6758,7 +7011,7 @@ sr_site_foundry_staffed_mercury = { value = sr_site_foundry_value_mercury multip
 sr_site_admin_staffed_mercury = { value = sr_site_admin_value_mercury multiply = sr_site_staffing_mercury }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_mercury = {
-	value = 40
+	value = 200
 	add = { value = sr_site_mine_staffed_mercury multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_mercury = {
@@ -6865,6 +7118,10 @@ sr_site_admin_value_titan = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_titan } value = global_var:sr_site_admin_titan }
 }
+sr_site_terra_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_titan } value = global_var:sr_site_terra_titan }
+}
 sr_site_levels_titan = {
 	value = sr_site_lvl_a_value_titan
 	add = sr_site_lvl_b_value_titan
@@ -6880,6 +7137,7 @@ sr_site_levels_titan = {
 	add = sr_site_bunker_value_titan
 	add = sr_site_foundry_value_titan
 	add = sr_site_admin_value_titan
+	add = sr_site_terra_value_titan
 }
 sr_site_extra_levels_titan = {
 	value = sr_site_levels_titan
@@ -6931,12 +7189,13 @@ sr_site_generic_built_titan = {
 	add = sr_site_bunker_value_titan
 	add = sr_site_foundry_value_titan
 	add = sr_site_admin_value_titan
+	add = sr_site_terra_value_titan
 }
-# Titan's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Titan's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_titan = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_titan = { value = sr_site_slots_titan add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -6955,6 +7214,7 @@ sr_site_generic_pending_titan = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_titan } add = global_var:sr_site_ship_bunker_titan }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_titan } add = global_var:sr_site_ship_foundry_titan }
 	if = { limit = { has_global_variable = sr_site_ship_admin_titan } add = global_var:sr_site_ship_admin_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
 }
 # A slot module built for it now costs this: past its slots, the n-th past
 # sr_module_points x (1 + n).
@@ -6972,9 +7232,10 @@ sr_site_train_staffed_titan = { value = sr_site_train_value_titan multiply = sr_
 sr_site_bunker_staffed_titan = { value = sr_site_bunker_value_titan multiply = sr_site_staffing_titan }
 sr_site_foundry_staffed_titan = { value = sr_site_foundry_value_titan multiply = sr_site_staffing_titan }
 sr_site_admin_staffed_titan = { value = sr_site_admin_value_titan multiply = sr_site_staffing_titan }
+sr_site_terra_staffed_titan = { value = sr_site_terra_value_titan multiply = sr_site_staffing_titan }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titan = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_titan multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_titan = {
@@ -7012,6 +7273,8 @@ sr_mod_slots_used_titan = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_titan } add = global_var:sr_site_ship_foundry_titan }
 	if = { limit = { has_variable = sr_mq_admin_titan } add = var:sr_mq_admin_titan }
 	if = { limit = { has_global_variable = sr_site_ship_admin_titan } add = global_var:sr_site_ship_admin_titan }
+	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
 }
 # The next module THIS queues at Titan costs this (design § 5): past its slots,
 # a hundred points more than the last.
@@ -7148,11 +7411,11 @@ sr_site_generic_built_enceladus = {
 	add = sr_site_foundry_value_enceladus
 	add = sr_site_admin_value_enceladus
 }
-# Enceladus's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Enceladus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_enceladus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_enceladus = { value = sr_site_slots_enceladus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7190,7 +7453,7 @@ sr_site_foundry_staffed_enceladus = { value = sr_site_foundry_value_enceladus mu
 sr_site_admin_staffed_enceladus = { value = sr_site_admin_value_enceladus multiply = sr_site_staffing_enceladus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_enceladus = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_enceladus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_enceladus = {
@@ -7364,11 +7627,11 @@ sr_site_generic_built_rhea = {
 	add = sr_site_foundry_value_rhea
 	add = sr_site_admin_value_rhea
 }
-# Rhea's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Rhea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_rhea = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_rhea = { value = sr_site_slots_rhea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7406,7 +7669,7 @@ sr_site_foundry_staffed_rhea = { value = sr_site_foundry_value_rhea multiply = s
 sr_site_admin_staffed_rhea = { value = sr_site_admin_value_rhea multiply = sr_site_staffing_rhea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_rhea = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_rhea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_rhea = {
@@ -7579,11 +7842,11 @@ sr_site_generic_built_mimas = {
 	add = sr_site_foundry_value_mimas
 	add = sr_site_admin_value_mimas
 }
-# Mimas's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mimas's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_mimas = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_mimas = { value = sr_site_slots_mimas add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7621,7 +7884,7 @@ sr_site_foundry_staffed_mimas = { value = sr_site_foundry_value_mimas multiply =
 sr_site_admin_staffed_mimas = { value = sr_site_admin_value_mimas multiply = sr_site_staffing_mimas }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_mimas = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_mimas multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_mimas = {
@@ -7795,11 +8058,11 @@ sr_site_generic_built_iapetus = {
 	add = sr_site_foundry_value_iapetus
 	add = sr_site_admin_value_iapetus
 }
-# Iapetus's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Iapetus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_iapetus = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_iapetus = { value = sr_site_slots_iapetus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -7837,7 +8100,7 @@ sr_site_foundry_staffed_iapetus = { value = sr_site_foundry_value_iapetus multip
 sr_site_admin_staffed_iapetus = { value = sr_site_admin_value_iapetus multiply = sr_site_staffing_iapetus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_iapetus = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_iapetus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_iapetus = {
@@ -8011,11 +8274,11 @@ sr_site_generic_built_titania = {
 	add = sr_site_foundry_value_titania
 	add = sr_site_admin_value_titania
 }
-# Titania's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Titania's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_titania = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_titania = { value = sr_site_slots_titania add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8053,7 +8316,7 @@ sr_site_foundry_staffed_titania = { value = sr_site_foundry_value_titania multip
 sr_site_admin_staffed_titania = { value = sr_site_admin_value_titania multiply = sr_site_staffing_titania }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titania = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_titania multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_titania = {
@@ -8226,11 +8489,11 @@ sr_site_generic_built_oberon = {
 	add = sr_site_foundry_value_oberon
 	add = sr_site_admin_value_oberon
 }
-# Oberon's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Oberon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_oberon = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_oberon = { value = sr_site_slots_oberon add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8268,7 +8531,7 @@ sr_site_foundry_staffed_oberon = { value = sr_site_foundry_value_oberon multiply
 sr_site_admin_staffed_oberon = { value = sr_site_admin_value_oberon multiply = sr_site_staffing_oberon }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_oberon = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_oberon multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_oberon = {
@@ -8441,11 +8704,11 @@ sr_site_generic_built_miranda = {
 	add = sr_site_foundry_value_miranda
 	add = sr_site_admin_value_miranda
 }
-# Miranda's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Miranda's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_miranda = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_miranda = { value = sr_site_slots_miranda add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8483,7 +8746,7 @@ sr_site_foundry_staffed_miranda = { value = sr_site_foundry_value_miranda multip
 sr_site_admin_staffed_miranda = { value = sr_site_admin_value_miranda multiply = sr_site_staffing_miranda }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_miranda = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_miranda multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_miranda = {
@@ -8657,11 +8920,11 @@ sr_site_generic_built_ariel = {
 	add = sr_site_foundry_value_ariel
 	add = sr_site_admin_value_ariel
 }
-# Ariel's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Ariel's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_ariel = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_ariel = { value = sr_site_slots_ariel add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8699,7 +8962,7 @@ sr_site_foundry_staffed_ariel = { value = sr_site_foundry_value_ariel multiply =
 sr_site_admin_staffed_ariel = { value = sr_site_admin_value_ariel multiply = sr_site_staffing_ariel }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ariel = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_ariel multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_ariel = {
@@ -8873,11 +9136,11 @@ sr_site_generic_built_triton = {
 	add = sr_site_foundry_value_triton
 	add = sr_site_admin_value_triton
 }
-# Triton's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Triton's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_triton = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_triton = { value = sr_site_slots_triton add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -8915,7 +9178,7 @@ sr_site_foundry_staffed_triton = { value = sr_site_foundry_value_triton multiply
 sr_site_admin_staffed_triton = { value = sr_site_admin_value_triton multiply = sr_site_staffing_triton }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_triton = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_triton multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_triton = {
@@ -9089,11 +9352,11 @@ sr_site_generic_built_proteus = {
 	add = sr_site_foundry_value_proteus
 	add = sr_site_admin_value_proteus
 }
-# Proteus's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Proteus's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_proteus = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_proteus = { value = sr_site_slots_proteus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9131,7 +9394,7 @@ sr_site_foundry_staffed_proteus = { value = sr_site_foundry_value_proteus multip
 sr_site_admin_staffed_proteus = { value = sr_site_admin_value_proteus multiply = sr_site_staffing_proteus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_proteus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_proteus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_proteus = {
@@ -9305,11 +9568,11 @@ sr_site_generic_built_pluto = {
 	add = sr_site_foundry_value_pluto
 	add = sr_site_admin_value_pluto
 }
-# Pluto-Charon's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Pluto-Charon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_pluto = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_pluto = { value = sr_site_slots_pluto add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9347,7 +9610,7 @@ sr_site_foundry_staffed_pluto = { value = sr_site_foundry_value_pluto multiply =
 sr_site_admin_staffed_pluto = { value = sr_site_admin_value_pluto multiply = sr_site_staffing_pluto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pluto = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_pluto multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_pluto = {
@@ -9521,11 +9784,11 @@ sr_site_generic_built_eris = {
 	add = sr_site_foundry_value_eris
 	add = sr_site_admin_value_eris
 }
-# Eris's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Eris's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_eris = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_eris = { value = sr_site_slots_eris add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9563,7 +9826,7 @@ sr_site_foundry_staffed_eris = { value = sr_site_foundry_value_eris multiply = s
 sr_site_admin_staffed_eris = { value = sr_site_admin_value_eris multiply = sr_site_staffing_eris }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_eris = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_eris multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_eris = {
@@ -9736,11 +9999,11 @@ sr_site_generic_built_makemake = {
 	add = sr_site_foundry_value_makemake
 	add = sr_site_admin_value_makemake
 }
-# Makemake's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Makemake's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_makemake = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_makemake = { value = sr_site_slots_makemake add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9778,7 +10041,7 @@ sr_site_foundry_staffed_makemake = { value = sr_site_foundry_value_makemake mult
 sr_site_admin_staffed_makemake = { value = sr_site_admin_value_makemake multiply = sr_site_staffing_makemake }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_makemake = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_makemake multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_makemake = {
@@ -9952,11 +10215,11 @@ sr_site_generic_built_haumea = {
 	add = sr_site_foundry_value_haumea
 	add = sr_site_admin_value_haumea
 }
-# Haumea's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Haumea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_haumea = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_haumea = { value = sr_site_slots_haumea add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -9994,7 +10257,7 @@ sr_site_foundry_staffed_haumea = { value = sr_site_foundry_value_haumea multiply
 sr_site_admin_staffed_haumea = { value = sr_site_admin_value_haumea multiply = sr_site_staffing_haumea }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_haumea = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_haumea multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_haumea = {
@@ -10167,11 +10430,11 @@ sr_site_generic_built_sedna = {
 	add = sr_site_foundry_value_sedna
 	add = sr_site_admin_value_sedna
 }
-# Sedna's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Sedna's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_sedna = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_sedna = { value = sr_site_slots_sedna add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10209,7 +10472,7 @@ sr_site_foundry_staffed_sedna = { value = sr_site_foundry_value_sedna multiply =
 sr_site_admin_staffed_sedna = { value = sr_site_admin_value_sedna multiply = sr_site_staffing_sedna }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_sedna = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_sedna multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_sedna = {
@@ -10378,11 +10641,11 @@ sr_site_generic_built_shackleton = {
 	add = sr_site_foundry_value_shackleton
 	add = sr_site_admin_value_shackleton
 }
-# Shackleton Crater's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Shackleton Crater's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_shackleton = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_shackleton = { value = sr_site_slots_shackleton add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10419,7 +10682,7 @@ sr_site_foundry_staffed_shackleton = { value = sr_site_foundry_value_shackleton 
 sr_site_admin_staffed_shackleton = { value = sr_site_admin_value_shackleton multiply = sr_site_staffing_shackleton }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_shackleton = {
-	value = 15
+	value = 75
 	add = { value = sr_site_mine_staffed_shackleton multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_shackleton = {
@@ -10586,11 +10849,11 @@ sr_site_generic_built_peary = {
 	add = sr_site_foundry_value_peary
 	add = sr_site_admin_value_peary
 }
-# Peary Crater's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Peary Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_peary = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_peary = { value = sr_site_slots_peary add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10627,7 +10890,7 @@ sr_site_foundry_staffed_peary = { value = sr_site_foundry_value_peary multiply =
 sr_site_admin_staffed_peary = { value = sr_site_admin_value_peary multiply = sr_site_staffing_peary }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_peary = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_peary multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_peary = {
@@ -10795,11 +11058,11 @@ sr_site_generic_built_tranquility = {
 	add = sr_site_foundry_value_tranquility
 	add = sr_site_admin_value_tranquility
 }
-# Tranquility Base's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Tranquility Base's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_tranquility = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_tranquility = { value = sr_site_slots_tranquility add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -10836,7 +11099,7 @@ sr_site_foundry_staffed_tranquility = { value = sr_site_foundry_value_tranquilit
 sr_site_admin_staffed_tranquility = { value = sr_site_admin_value_tranquility multiply = sr_site_staffing_tranquility }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_tranquility = {
-	value = 20
+	value = 100
 	add = { value = sr_site_mine_staffed_tranquility multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_tranquility = {
@@ -11002,11 +11265,11 @@ sr_site_generic_built_marius_hills = {
 	add = sr_site_foundry_value_marius_hills
 	add = sr_site_admin_value_marius_hills
 }
-# Marius Hills's slots: 3 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Marius Hills's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_marius_hills = {
 	value = 3
-	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_marius_hills = { value = sr_site_slots_marius_hills add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11043,7 +11306,7 @@ sr_site_foundry_staffed_marius_hills = { value = sr_site_foundry_value_marius_hi
 sr_site_admin_staffed_marius_hills = { value = sr_site_admin_value_marius_hills multiply = sr_site_staffing_marius_hills }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_marius_hills = {
-	value = 25
+	value = 125
 	add = { value = sr_site_mine_staffed_marius_hills multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_marius_hills = {
@@ -11209,11 +11472,11 @@ sr_site_generic_built_daedalus = {
 	add = sr_site_foundry_value_daedalus
 	add = sr_site_admin_value_daedalus
 }
-# Daedalus Crater's slots: 1 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Daedalus Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_daedalus = {
 	value = 1
-	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_daedalus = { value = sr_site_slots_daedalus add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11250,7 +11513,7 @@ sr_site_foundry_staffed_daedalus = { value = sr_site_foundry_value_daedalus mult
 sr_site_admin_staffed_daedalus = { value = sr_site_admin_value_daedalus multiply = sr_site_staffing_daedalus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_daedalus = {
-	value = 10
+	value = 50
 	add = { value = sr_site_mine_staffed_daedalus multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_daedalus = {
@@ -11418,11 +11681,11 @@ sr_site_generic_built_imbrium = {
 	add = sr_site_foundry_value_imbrium
 	add = sr_site_admin_value_imbrium
 }
-# Mare Imbrium's slots: 2 by its size, +1 with each of the holder's advanced_nanofabrication, molecular_assemblers; up to 4 modules past them.
+# Mare Imbrium's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
+# up to 4 modules past them.
 sr_site_slots_imbrium = {
 	value = 2
-	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = advanced_nanofabrication } } add = 1 }
-	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = molecular_assemblers } } add = 1 }
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_slots_add } }
 }
 sr_site_slots_max_imbrium = { value = sr_site_slots_imbrium add = 4 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
@@ -11459,7 +11722,7 @@ sr_site_foundry_staffed_imbrium = { value = sr_site_foundry_value_imbrium multip
 sr_site_admin_staffed_imbrium = { value = sr_site_admin_value_imbrium multiply = sr_site_staffing_imbrium }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_imbrium = {
-	value = 25
+	value = 125
 	add = { value = sr_site_mine_staffed_imbrium multiply = sr_mod_mine_room floor = yes }
 }
 sr_mod_spec_used_imbrium = {
@@ -11971,6 +12234,19 @@ sr_mod_units_admin = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_admin_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_admin_staffed_imbrium }
 }
+# Terraforming
+sr_mod_units_terra = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_terra_staffed_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_terra_staffed_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_terra_staffed_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_terra_staffed_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_terra_staffed_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_terra_staffed_ganymede }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_terra_staffed_callisto }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_terra_staffed_venus }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_terra_staffed_titan }
+}
 # The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a slot module
 # (code 3 on) the world's sr_mod_generic_cost_<key>, a specialization level the base.
 sr_mq_head_cost = {
@@ -12018,6 +12294,53 @@ sr_mq_head_cost = {
 		else_if = { limit = { var:sr_mq_1_site = 39 } value = sr_mod_generic_cost_daedalus }
 		else_if = { limit = { var:sr_mq_1_site = 40 } value = sr_mod_generic_cost_imbrium }
 	}
+}
+
+# Country scope, the slot_marker self-check's reading (colony management design
+# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,
+# read through that world's own slots (the holder's scope), or -1 with none.
+sr_site_slots_tech_seen = {
+	value = -1
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_slots_valles_marineris subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_slots_olympus_mons subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_slots_hellas_planitia subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_slots_utopia_planitia subtract = 4 }
+	else_if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_slots_arcadia_planitia subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_slots_ceres subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_slots_vesta subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_slots_psyche subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_slots_pallas subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_slots_hygiea subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_slots_io subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_slots_europa subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_slots_ganymede subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_slots_callisto subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_slots_himalia subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_slots_amalthea subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_slots_venus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_slots_mercury subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_slots_titan subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_slots_enceladus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_slots_rhea subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_slots_mimas subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_slots_iapetus subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_slots_titania subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_slots_oberon subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_slots_miranda subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_slots_ariel subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_slots_triton subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_slots_proteus subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_slots_pluto subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_slots_eris subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_slots_makemake subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_slots_haumea subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_slots_sedna subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_slots_shackleton subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_slots_peary subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_slots_tranquility subtract = 2 }
+	else_if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_slots_marius_hills subtract = 3 }
+	else_if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_slots_daedalus subtract = 1 }
+	else_if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_slots_imbrium subtract = 2 }
 }
 
 # Country scope: the module levels past the first at the colonies THIS holds, the
@@ -12112,6 +12435,754 @@ sr_ebase_room_total = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_ebase_room_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_ebase_room_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_ebase_room_imbrium }
+}
+
+# ===== Terraforming (era 13 spec § 7.11) =====
+# A share (+100% of a world's base room) takes sr_terra_level_months of
+# a staffed level's work; up to sr_terra_max_levels at a world at once, counting
+# queue and shipments; the whole job is sr_terra_full_months.
+sr_terra_level_months = { value = 300 }
+sr_terra_max_levels = { value = 3 }
+sr_terra_full_months = { value = 900 }
+sr_mod_ai_terra_fill = { value = 0.5 }
+
+# Per world that takes it, any scope:
+#   sr_site_terra_done_value_<key>  the months of work done there (the world's own
+#                                   record, sr_site_terra_done_<key>: it stays through
+#                                   a cession, a release and a level coming down)
+#   sr_site_terra_share_<key>       the share of its base room that work adds
+#   sr_site_terra_rate_<key>        a month's work: its staffed levels, none occupied
+# Country scope: sr_mod_terra_used_<key>, its levels built, in THIS's queue and on
+# their way (every shipper's), against sr_terra_max_levels.
+sr_site_terra_done_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_valles_marineris } value = global_var:sr_site_terra_done_valles_marineris }
+}
+sr_site_terra_share_valles_marineris = {
+	value = sr_site_terra_done_value_valles_marineris
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_valles_marineris = {
+	value = sr_site_terra_staffed_valles_marineris
+	if = { limit = { has_global_variable = sr_site_occupier_valles_marineris } value = 0 }
+}
+sr_mod_terra_used_valles_marineris = {
+	value = sr_site_terra_value_valles_marineris
+	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
+}
+sr_site_terra_done_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_olympus_mons } value = global_var:sr_site_terra_done_olympus_mons }
+}
+sr_site_terra_share_olympus_mons = {
+	value = sr_site_terra_done_value_olympus_mons
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_olympus_mons = {
+	value = sr_site_terra_staffed_olympus_mons
+	if = { limit = { has_global_variable = sr_site_occupier_olympus_mons } value = 0 }
+}
+sr_mod_terra_used_olympus_mons = {
+	value = sr_site_terra_value_olympus_mons
+	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
+}
+sr_site_terra_done_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_hellas_planitia } value = global_var:sr_site_terra_done_hellas_planitia }
+}
+sr_site_terra_share_hellas_planitia = {
+	value = sr_site_terra_done_value_hellas_planitia
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_hellas_planitia = {
+	value = sr_site_terra_staffed_hellas_planitia
+	if = { limit = { has_global_variable = sr_site_occupier_hellas_planitia } value = 0 }
+}
+sr_mod_terra_used_hellas_planitia = {
+	value = sr_site_terra_value_hellas_planitia
+	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
+}
+sr_site_terra_done_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_utopia_planitia } value = global_var:sr_site_terra_done_utopia_planitia }
+}
+sr_site_terra_share_utopia_planitia = {
+	value = sr_site_terra_done_value_utopia_planitia
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_utopia_planitia = {
+	value = sr_site_terra_staffed_utopia_planitia
+	if = { limit = { has_global_variable = sr_site_occupier_utopia_planitia } value = 0 }
+}
+sr_mod_terra_used_utopia_planitia = {
+	value = sr_site_terra_value_utopia_planitia
+	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
+}
+sr_site_terra_done_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_arcadia_planitia } value = global_var:sr_site_terra_done_arcadia_planitia }
+}
+sr_site_terra_share_arcadia_planitia = {
+	value = sr_site_terra_done_value_arcadia_planitia
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_arcadia_planitia = {
+	value = sr_site_terra_staffed_arcadia_planitia
+	if = { limit = { has_global_variable = sr_site_occupier_arcadia_planitia } value = 0 }
+}
+sr_mod_terra_used_arcadia_planitia = {
+	value = sr_site_terra_value_arcadia_planitia
+	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
+}
+sr_site_terra_done_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_ganymede } value = global_var:sr_site_terra_done_ganymede }
+}
+sr_site_terra_share_ganymede = {
+	value = sr_site_terra_done_value_ganymede
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_ganymede = {
+	value = sr_site_terra_staffed_ganymede
+	if = { limit = { has_global_variable = sr_site_occupier_ganymede } value = 0 }
+}
+sr_mod_terra_used_ganymede = {
+	value = sr_site_terra_value_ganymede
+	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
+}
+sr_site_terra_done_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_callisto } value = global_var:sr_site_terra_done_callisto }
+}
+sr_site_terra_share_callisto = {
+	value = sr_site_terra_done_value_callisto
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_callisto = {
+	value = sr_site_terra_staffed_callisto
+	if = { limit = { has_global_variable = sr_site_occupier_callisto } value = 0 }
+}
+sr_mod_terra_used_callisto = {
+	value = sr_site_terra_value_callisto
+	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
+}
+sr_site_terra_done_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_venus } value = global_var:sr_site_terra_done_venus }
+}
+sr_site_terra_share_venus = {
+	value = sr_site_terra_done_value_venus
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_venus = {
+	value = sr_site_terra_staffed_venus
+	if = { limit = { has_global_variable = sr_site_occupier_venus } value = 0 }
+}
+sr_mod_terra_used_venus = {
+	value = sr_site_terra_value_venus
+	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
+}
+sr_site_terra_done_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_done_titan } value = global_var:sr_site_terra_done_titan }
+}
+sr_site_terra_share_titan = {
+	value = sr_site_terra_done_value_titan
+	divide = sr_terra_level_months
+}
+sr_site_terra_rate_titan = {
+	value = sr_site_terra_staffed_titan
+	if = { limit = { has_global_variable = sr_site_occupier_titan } value = 0 }
+}
+sr_mod_terra_used_titan = {
+	value = sr_site_terra_value_titan
+	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
+}
+
+# ===== Dismantling (owner, 2026-10-31) =====
+# Per world, any scope:
+#   sr_md_floor_<a|b>_<key>      1 for the founding specialization, else 0: a
+#                                dismantle never takes the outpost's own level
+#   sr_md_room_less_hab_<key>    its room with one Habitat fewer
+#   sr_site_room_held_<key>      its room, less a Habitat's share while its holder
+#                                takes one down: what growth and settlers fill
+sr_md_floor_a_valles_marineris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 1 } value = 1 } }
+sr_md_floor_b_valles_marineris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 2 } value = 1 } }
+sr_md_room_less_hab_valles_marineris = {
+	value = sr_site_hab_value_valles_marineris
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_valles_marineris
+	multiply = sr_site_base_room_valles_marineris
+}
+sr_site_room_held_valles_marineris = {
+	value = sr_site_room_valles_marineris
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 3 } } value = sr_md_room_less_hab_valles_marineris }
+}
+sr_md_floor_a_olympus_mons = { value = 0 if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 1 } value = 1 } }
+sr_md_floor_b_olympus_mons = { value = 0 if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 2 } value = 1 } }
+sr_md_room_less_hab_olympus_mons = {
+	value = sr_site_hab_value_olympus_mons
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_olympus_mons
+	multiply = sr_site_base_room_olympus_mons
+}
+sr_site_room_held_olympus_mons = {
+	value = sr_site_room_olympus_mons
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 3 } } value = sr_md_room_less_hab_olympus_mons }
+}
+sr_md_floor_a_hellas_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 1 } value = 1 } }
+sr_md_floor_b_hellas_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_hellas_planitia = {
+	value = sr_site_hab_value_hellas_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_hellas_planitia
+	multiply = sr_site_base_room_hellas_planitia
+}
+sr_site_room_held_hellas_planitia = {
+	value = sr_site_room_hellas_planitia
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 3 } } value = sr_md_room_less_hab_hellas_planitia }
+}
+sr_md_floor_a_utopia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 1 } value = 1 } }
+sr_md_floor_b_utopia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_utopia_planitia = {
+	value = sr_site_hab_value_utopia_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_utopia_planitia
+	multiply = sr_site_base_room_utopia_planitia
+}
+sr_site_room_held_utopia_planitia = {
+	value = sr_site_room_utopia_planitia
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 3 } } value = sr_md_room_less_hab_utopia_planitia }
+}
+sr_md_floor_a_arcadia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 1 } value = 1 } }
+sr_md_floor_b_arcadia_planitia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 2 } value = 1 } }
+sr_md_room_less_hab_arcadia_planitia = {
+	value = sr_site_hab_value_arcadia_planitia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_arcadia_planitia
+	multiply = sr_site_base_room_arcadia_planitia
+}
+sr_site_room_held_arcadia_planitia = {
+	value = sr_site_room_arcadia_planitia
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 3 } } value = sr_md_room_less_hab_arcadia_planitia }
+}
+sr_md_floor_a_ceres = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 1 } value = 1 } }
+sr_md_floor_b_ceres = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 2 } value = 1 } }
+sr_md_room_less_hab_ceres = {
+	value = sr_site_hab_value_ceres
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ceres
+}
+sr_site_room_held_ceres = {
+	value = sr_site_room_ceres
+	if = { limit = { global_var:sr_site_holder_ceres ?= { has_variable = sr_md_type_ceres var:sr_md_type_ceres = 3 } } value = sr_md_room_less_hab_ceres }
+}
+sr_md_floor_a_vesta = { value = 0 if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 1 } value = 1 } }
+sr_md_floor_b_vesta = { value = 0 if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 2 } value = 1 } }
+sr_md_room_less_hab_vesta = {
+	value = sr_site_hab_value_vesta
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_vesta
+}
+sr_site_room_held_vesta = {
+	value = sr_site_room_vesta
+	if = { limit = { global_var:sr_site_holder_vesta ?= { has_variable = sr_md_type_vesta var:sr_md_type_vesta = 3 } } value = sr_md_room_less_hab_vesta }
+}
+sr_md_floor_a_psyche = { value = 0 if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 1 } value = 1 } }
+sr_md_floor_b_psyche = { value = 0 if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 2 } value = 1 } }
+sr_md_room_less_hab_psyche = {
+	value = sr_site_hab_value_psyche
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_psyche
+}
+sr_site_room_held_psyche = {
+	value = sr_site_room_psyche
+	if = { limit = { global_var:sr_site_holder_psyche ?= { has_variable = sr_md_type_psyche var:sr_md_type_psyche = 3 } } value = sr_md_room_less_hab_psyche }
+}
+sr_md_floor_a_pallas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 1 } value = 1 } }
+sr_md_floor_b_pallas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 2 } value = 1 } }
+sr_md_room_less_hab_pallas = {
+	value = sr_site_hab_value_pallas
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pallas
+}
+sr_site_room_held_pallas = {
+	value = sr_site_room_pallas
+	if = { limit = { global_var:sr_site_holder_pallas ?= { has_variable = sr_md_type_pallas var:sr_md_type_pallas = 3 } } value = sr_md_room_less_hab_pallas }
+}
+sr_md_floor_a_hygiea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 1 } value = 1 } }
+sr_md_floor_b_hygiea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 2 } value = 1 } }
+sr_md_room_less_hab_hygiea = {
+	value = sr_site_hab_value_hygiea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_hygiea
+}
+sr_site_room_held_hygiea = {
+	value = sr_site_room_hygiea
+	if = { limit = { global_var:sr_site_holder_hygiea ?= { has_variable = sr_md_type_hygiea var:sr_md_type_hygiea = 3 } } value = sr_md_room_less_hab_hygiea }
+}
+sr_md_floor_a_io = { value = 0 if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 1 } value = 1 } }
+sr_md_floor_b_io = { value = 0 if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 2 } value = 1 } }
+sr_md_room_less_hab_io = {
+	value = sr_site_hab_value_io
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_io
+}
+sr_site_room_held_io = {
+	value = sr_site_room_io
+	if = { limit = { global_var:sr_site_holder_io ?= { has_variable = sr_md_type_io var:sr_md_type_io = 3 } } value = sr_md_room_less_hab_io }
+}
+sr_md_floor_a_europa = { value = 0 if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 1 } value = 1 } }
+sr_md_floor_b_europa = { value = 0 if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 2 } value = 1 } }
+sr_md_room_less_hab_europa = {
+	value = sr_site_hab_value_europa
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_europa
+}
+sr_site_room_held_europa = {
+	value = sr_site_room_europa
+	if = { limit = { global_var:sr_site_holder_europa ?= { has_variable = sr_md_type_europa var:sr_md_type_europa = 3 } } value = sr_md_room_less_hab_europa }
+}
+sr_md_floor_a_ganymede = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 1 } value = 1 } }
+sr_md_floor_b_ganymede = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 2 } value = 1 } }
+sr_md_room_less_hab_ganymede = {
+	value = sr_site_hab_value_ganymede
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_ganymede
+	multiply = sr_site_base_room_ganymede
+}
+sr_site_room_held_ganymede = {
+	value = sr_site_room_ganymede
+	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 3 } } value = sr_md_room_less_hab_ganymede }
+}
+sr_md_floor_a_callisto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 1 } value = 1 } }
+sr_md_floor_b_callisto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 2 } value = 1 } }
+sr_md_room_less_hab_callisto = {
+	value = sr_site_hab_value_callisto
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_callisto
+	multiply = sr_site_base_room_callisto
+}
+sr_site_room_held_callisto = {
+	value = sr_site_room_callisto
+	if = { limit = { global_var:sr_site_holder_callisto ?= { has_variable = sr_md_type_callisto var:sr_md_type_callisto = 3 } } value = sr_md_room_less_hab_callisto }
+}
+sr_md_floor_a_himalia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 1 } value = 1 } }
+sr_md_floor_b_himalia = { value = 0 if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 2 } value = 1 } }
+sr_md_room_less_hab_himalia = {
+	value = sr_site_hab_value_himalia
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_himalia
+}
+sr_site_room_held_himalia = {
+	value = sr_site_room_himalia
+	if = { limit = { global_var:sr_site_holder_himalia ?= { has_variable = sr_md_type_himalia var:sr_md_type_himalia = 3 } } value = sr_md_room_less_hab_himalia }
+}
+sr_md_floor_a_amalthea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 1 } value = 1 } }
+sr_md_floor_b_amalthea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 2 } value = 1 } }
+sr_md_room_less_hab_amalthea = {
+	value = sr_site_hab_value_amalthea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_amalthea
+}
+sr_site_room_held_amalthea = {
+	value = sr_site_room_amalthea
+	if = { limit = { global_var:sr_site_holder_amalthea ?= { has_variable = sr_md_type_amalthea var:sr_md_type_amalthea = 3 } } value = sr_md_room_less_hab_amalthea }
+}
+sr_md_floor_a_venus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 1 } value = 1 } }
+sr_md_floor_b_venus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 2 } value = 1 } }
+sr_md_room_less_hab_venus = {
+	value = sr_site_hab_value_venus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_venus
+	multiply = sr_site_base_room_venus
+}
+sr_site_room_held_venus = {
+	value = sr_site_room_venus
+	if = { limit = { global_var:sr_site_holder_venus ?= { has_variable = sr_md_type_venus var:sr_md_type_venus = 3 } } value = sr_md_room_less_hab_venus }
+}
+sr_md_floor_a_mercury = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 1 } value = 1 } }
+sr_md_floor_b_mercury = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 2 } value = 1 } }
+sr_md_room_less_hab_mercury = {
+	value = sr_site_hab_value_mercury
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mercury
+}
+sr_site_room_held_mercury = {
+	value = sr_site_room_mercury
+	if = { limit = { global_var:sr_site_holder_mercury ?= { has_variable = sr_md_type_mercury var:sr_md_type_mercury = 3 } } value = sr_md_room_less_hab_mercury }
+}
+sr_md_floor_a_titan = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 1 } value = 1 } }
+sr_md_floor_b_titan = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 2 } value = 1 } }
+sr_md_room_less_hab_titan = {
+	value = sr_site_hab_value_titan
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	add = sr_site_terra_share_titan
+	multiply = sr_site_base_room_titan
+}
+sr_site_room_held_titan = {
+	value = sr_site_room_titan
+	if = { limit = { global_var:sr_site_holder_titan ?= { has_variable = sr_md_type_titan var:sr_md_type_titan = 3 } } value = sr_md_room_less_hab_titan }
+}
+sr_md_floor_a_enceladus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 1 } value = 1 } }
+sr_md_floor_b_enceladus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 2 } value = 1 } }
+sr_md_room_less_hab_enceladus = {
+	value = sr_site_hab_value_enceladus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_enceladus
+}
+sr_site_room_held_enceladus = {
+	value = sr_site_room_enceladus
+	if = { limit = { global_var:sr_site_holder_enceladus ?= { has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 3 } } value = sr_md_room_less_hab_enceladus }
+}
+sr_md_floor_a_rhea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 1 } value = 1 } }
+sr_md_floor_b_rhea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 2 } value = 1 } }
+sr_md_room_less_hab_rhea = {
+	value = sr_site_hab_value_rhea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_rhea
+}
+sr_site_room_held_rhea = {
+	value = sr_site_room_rhea
+	if = { limit = { global_var:sr_site_holder_rhea ?= { has_variable = sr_md_type_rhea var:sr_md_type_rhea = 3 } } value = sr_md_room_less_hab_rhea }
+}
+sr_md_floor_a_mimas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 1 } value = 1 } }
+sr_md_floor_b_mimas = { value = 0 if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 2 } value = 1 } }
+sr_md_room_less_hab_mimas = {
+	value = sr_site_hab_value_mimas
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mimas
+}
+sr_site_room_held_mimas = {
+	value = sr_site_room_mimas
+	if = { limit = { global_var:sr_site_holder_mimas ?= { has_variable = sr_md_type_mimas var:sr_md_type_mimas = 3 } } value = sr_md_room_less_hab_mimas }
+}
+sr_md_floor_a_iapetus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 1 } value = 1 } }
+sr_md_floor_b_iapetus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 2 } value = 1 } }
+sr_md_room_less_hab_iapetus = {
+	value = sr_site_hab_value_iapetus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_iapetus
+}
+sr_site_room_held_iapetus = {
+	value = sr_site_room_iapetus
+	if = { limit = { global_var:sr_site_holder_iapetus ?= { has_variable = sr_md_type_iapetus var:sr_md_type_iapetus = 3 } } value = sr_md_room_less_hab_iapetus }
+}
+sr_md_floor_a_titania = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 1 } value = 1 } }
+sr_md_floor_b_titania = { value = 0 if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 2 } value = 1 } }
+sr_md_room_less_hab_titania = {
+	value = sr_site_hab_value_titania
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_titania
+}
+sr_site_room_held_titania = {
+	value = sr_site_room_titania
+	if = { limit = { global_var:sr_site_holder_titania ?= { has_variable = sr_md_type_titania var:sr_md_type_titania = 3 } } value = sr_md_room_less_hab_titania }
+}
+sr_md_floor_a_oberon = { value = 0 if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 1 } value = 1 } }
+sr_md_floor_b_oberon = { value = 0 if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 2 } value = 1 } }
+sr_md_room_less_hab_oberon = {
+	value = sr_site_hab_value_oberon
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_oberon
+}
+sr_site_room_held_oberon = {
+	value = sr_site_room_oberon
+	if = { limit = { global_var:sr_site_holder_oberon ?= { has_variable = sr_md_type_oberon var:sr_md_type_oberon = 3 } } value = sr_md_room_less_hab_oberon }
+}
+sr_md_floor_a_miranda = { value = 0 if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 1 } value = 1 } }
+sr_md_floor_b_miranda = { value = 0 if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 2 } value = 1 } }
+sr_md_room_less_hab_miranda = {
+	value = sr_site_hab_value_miranda
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_miranda
+}
+sr_site_room_held_miranda = {
+	value = sr_site_room_miranda
+	if = { limit = { global_var:sr_site_holder_miranda ?= { has_variable = sr_md_type_miranda var:sr_md_type_miranda = 3 } } value = sr_md_room_less_hab_miranda }
+}
+sr_md_floor_a_ariel = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 1 } value = 1 } }
+sr_md_floor_b_ariel = { value = 0 if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 2 } value = 1 } }
+sr_md_room_less_hab_ariel = {
+	value = sr_site_hab_value_ariel
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ariel
+}
+sr_site_room_held_ariel = {
+	value = sr_site_room_ariel
+	if = { limit = { global_var:sr_site_holder_ariel ?= { has_variable = sr_md_type_ariel var:sr_md_type_ariel = 3 } } value = sr_md_room_less_hab_ariel }
+}
+sr_md_floor_a_triton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 1 } value = 1 } }
+sr_md_floor_b_triton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 2 } value = 1 } }
+sr_md_room_less_hab_triton = {
+	value = sr_site_hab_value_triton
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_triton
+}
+sr_site_room_held_triton = {
+	value = sr_site_room_triton
+	if = { limit = { global_var:sr_site_holder_triton ?= { has_variable = sr_md_type_triton var:sr_md_type_triton = 3 } } value = sr_md_room_less_hab_triton }
+}
+sr_md_floor_a_proteus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 1 } value = 1 } }
+sr_md_floor_b_proteus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 2 } value = 1 } }
+sr_md_room_less_hab_proteus = {
+	value = sr_site_hab_value_proteus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_proteus
+}
+sr_site_room_held_proteus = {
+	value = sr_site_room_proteus
+	if = { limit = { global_var:sr_site_holder_proteus ?= { has_variable = sr_md_type_proteus var:sr_md_type_proteus = 3 } } value = sr_md_room_less_hab_proteus }
+}
+sr_md_floor_a_pluto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 1 } value = 1 } }
+sr_md_floor_b_pluto = { value = 0 if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 2 } value = 1 } }
+sr_md_room_less_hab_pluto = {
+	value = sr_site_hab_value_pluto
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pluto
+}
+sr_site_room_held_pluto = {
+	value = sr_site_room_pluto
+	if = { limit = { global_var:sr_site_holder_pluto ?= { has_variable = sr_md_type_pluto var:sr_md_type_pluto = 3 } } value = sr_md_room_less_hab_pluto }
+}
+sr_md_floor_a_eris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 1 } value = 1 } }
+sr_md_floor_b_eris = { value = 0 if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 2 } value = 1 } }
+sr_md_room_less_hab_eris = {
+	value = sr_site_hab_value_eris
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_eris
+}
+sr_site_room_held_eris = {
+	value = sr_site_room_eris
+	if = { limit = { global_var:sr_site_holder_eris ?= { has_variable = sr_md_type_eris var:sr_md_type_eris = 3 } } value = sr_md_room_less_hab_eris }
+}
+sr_md_floor_a_makemake = { value = 0 if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 1 } value = 1 } }
+sr_md_floor_b_makemake = { value = 0 if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 2 } value = 1 } }
+sr_md_room_less_hab_makemake = {
+	value = sr_site_hab_value_makemake
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_makemake
+}
+sr_site_room_held_makemake = {
+	value = sr_site_room_makemake
+	if = { limit = { global_var:sr_site_holder_makemake ?= { has_variable = sr_md_type_makemake var:sr_md_type_makemake = 3 } } value = sr_md_room_less_hab_makemake }
+}
+sr_md_floor_a_haumea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 1 } value = 1 } }
+sr_md_floor_b_haumea = { value = 0 if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 2 } value = 1 } }
+sr_md_room_less_hab_haumea = {
+	value = sr_site_hab_value_haumea
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_haumea
+}
+sr_site_room_held_haumea = {
+	value = sr_site_room_haumea
+	if = { limit = { global_var:sr_site_holder_haumea ?= { has_variable = sr_md_type_haumea var:sr_md_type_haumea = 3 } } value = sr_md_room_less_hab_haumea }
+}
+sr_md_floor_a_sedna = { value = 0 if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 1 } value = 1 } }
+sr_md_floor_b_sedna = { value = 0 if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 2 } value = 1 } }
+sr_md_room_less_hab_sedna = {
+	value = sr_site_hab_value_sedna
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_sedna
+}
+sr_site_room_held_sedna = {
+	value = sr_site_room_sedna
+	if = { limit = { global_var:sr_site_holder_sedna ?= { has_variable = sr_md_type_sedna var:sr_md_type_sedna = 3 } } value = sr_md_room_less_hab_sedna }
+}
+sr_md_floor_a_shackleton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_shackleton global_var:sr_site_spec_shackleton = 1 } value = 1 } }
+sr_md_floor_b_shackleton = { value = 0 if = { limit = { has_global_variable = sr_site_spec_shackleton global_var:sr_site_spec_shackleton = 2 } value = 1 } }
+sr_md_room_less_hab_shackleton = {
+	value = sr_site_hab_value_shackleton
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_shackleton
+}
+sr_site_room_held_shackleton = {
+	value = sr_site_room_shackleton
+	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_variable = sr_md_type_shackleton var:sr_md_type_shackleton = 3 } } value = sr_md_room_less_hab_shackleton }
+}
+sr_md_floor_a_peary = { value = 0 if = { limit = { has_global_variable = sr_site_spec_peary global_var:sr_site_spec_peary = 1 } value = 1 } }
+sr_md_floor_b_peary = { value = 0 if = { limit = { has_global_variable = sr_site_spec_peary global_var:sr_site_spec_peary = 2 } value = 1 } }
+sr_md_room_less_hab_peary = {
+	value = sr_site_hab_value_peary
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_peary
+}
+sr_site_room_held_peary = {
+	value = sr_site_room_peary
+	if = { limit = { global_var:sr_site_holder_peary ?= { has_variable = sr_md_type_peary var:sr_md_type_peary = 3 } } value = sr_md_room_less_hab_peary }
+}
+sr_md_floor_a_tranquility = { value = 0 if = { limit = { has_global_variable = sr_site_spec_tranquility global_var:sr_site_spec_tranquility = 1 } value = 1 } }
+sr_md_floor_b_tranquility = { value = 0 if = { limit = { has_global_variable = sr_site_spec_tranquility global_var:sr_site_spec_tranquility = 2 } value = 1 } }
+sr_md_room_less_hab_tranquility = {
+	value = sr_site_hab_value_tranquility
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_tranquility
+}
+sr_site_room_held_tranquility = {
+	value = sr_site_room_tranquility
+	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_variable = sr_md_type_tranquility var:sr_md_type_tranquility = 3 } } value = sr_md_room_less_hab_tranquility }
+}
+sr_md_floor_a_marius_hills = { value = 0 if = { limit = { has_global_variable = sr_site_spec_marius_hills global_var:sr_site_spec_marius_hills = 1 } value = 1 } }
+sr_md_floor_b_marius_hills = { value = 0 if = { limit = { has_global_variable = sr_site_spec_marius_hills global_var:sr_site_spec_marius_hills = 2 } value = 1 } }
+sr_md_room_less_hab_marius_hills = {
+	value = sr_site_hab_value_marius_hills
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_marius_hills
+}
+sr_site_room_held_marius_hills = {
+	value = sr_site_room_marius_hills
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_variable = sr_md_type_marius_hills var:sr_md_type_marius_hills = 3 } } value = sr_md_room_less_hab_marius_hills }
+}
+sr_md_floor_a_daedalus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_daedalus global_var:sr_site_spec_daedalus = 1 } value = 1 } }
+sr_md_floor_b_daedalus = { value = 0 if = { limit = { has_global_variable = sr_site_spec_daedalus global_var:sr_site_spec_daedalus = 2 } value = 1 } }
+sr_md_room_less_hab_daedalus = {
+	value = sr_site_hab_value_daedalus
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_daedalus
+}
+sr_site_room_held_daedalus = {
+	value = sr_site_room_daedalus
+	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_variable = sr_md_type_daedalus var:sr_md_type_daedalus = 3 } } value = sr_md_room_less_hab_daedalus }
+}
+sr_md_floor_a_imbrium = { value = 0 if = { limit = { has_global_variable = sr_site_spec_imbrium global_var:sr_site_spec_imbrium = 1 } value = 1 } }
+sr_md_floor_b_imbrium = { value = 0 if = { limit = { has_global_variable = sr_site_spec_imbrium global_var:sr_site_spec_imbrium = 2 } value = 1 } }
+sr_md_room_less_hab_imbrium = {
+	value = sr_site_hab_value_imbrium
+	subtract = 1
+	min = 0
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_imbrium
+}
+sr_site_room_held_imbrium = {
+	value = sr_site_room_imbrium
+	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_variable = sr_md_type_imbrium var:sr_md_type_imbrium = 3 } } value = sr_md_room_less_hab_imbrium }
 }
 
 # ===== Autonomy and free colonies (slice 5 design §§ 2-3) =====

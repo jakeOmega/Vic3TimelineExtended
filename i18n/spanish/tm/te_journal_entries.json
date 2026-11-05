@@ -108,8 +108,8 @@
   "es": "#R Referente#!"
  },
  "je_ch_ov_benchmark_tt": {
-  "en": "#title [concept_foreign_cultural_benchmark]#!\\nWe trail the leading cultural power, and our people measure our government against it.\\nStrength: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
-  "es": "#title [concept_foreign_cultural_benchmark]#!\\nNos quedamos por detrás de la potencia cultural líder y nuestra población compara a nuestro gobierno con ella.\\nIntensidad: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
+  "en": "#title [concept_foreign_cultural_benchmark]#!\\nWe trail the leading cultural power, and our people measure our government against it.\\nStrength: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
+  "es": "#title [concept_foreign_cultural_benchmark]#!\\nNos quedamos por detrás de la potencia cultural líder y nuestra población compara a nuestro gobierno con ella.\\nIntensidad: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
  },
  "je_ch_ov_leaders_label": {
   "en": "Leading Powers",
@@ -180,16 +180,16 @@
   "es": "Tecnocrática"
  },
  "je_ch_ov_model_tt": {
-  "en": "#title [concept_ch_exported_model]#!\\n[JournalEntry.GetCountry.GetCustom('ch_exported_model_text')] [JournalEntry.GetCountry.GetCustom('ch_exported_model_owner')]\\nShare of World Culture: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
-  "es": "#title [concept_ch_exported_model]#!\\n[JournalEntry.GetCountry.GetCustom('ch_exported_model_text')] [JournalEntry.GetCountry.GetCustom('ch_exported_model_owner')]\\nCuota de la cultura mundial: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
+  "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
+  "es": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nCuota de la cultura mundial: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
  },
  "je_ch_ov_rank_label": {
   "en": "World Rank",
   "es": "Rango mundial"
  },
  "je_ch_ov_share_label": {
-  "en": "Share #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_display')|1]%#!",
-  "es": "Cuota #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_display')|1]%#!"
+  "en": "Share #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!",
+  "es": "Cuota #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!"
  },
  "je_ch_ov_share_tt": {
   "en": "#title [concept_cultural_pull_share]#!\\nOur raw [concept_cultural_pull] as a percentage of every country's raw pull added together.\\nSince Last Month: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_delta')|+1]\\n[concept_cultural_pull_raw_score]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! of a world total of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!\\n#lore The world total is every other country's pull at the last recount, about twice a year and after every war, plus ours as it stands. So the share can step without our own output changing.#!",
@@ -232,74 +232,74 @@
   "es": "La financiación y todos los programas requieren la ley [GetLawType('law_ministry_of_culture').GetName]."
  },
  "je_ch_prog_outreach_tt": {
-  "en": "#title International Cultural Outreach#!\\nWhile it runs:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCost: @money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week, the price of one funding step",
-  "es": "#title Difusión cultural internacional#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCoste: @money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/semana, el precio de un escalón de financiación"
+  "en": "#title International Cultural Outreach#!\\nWhile it runs:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCost: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week, the price of one funding step",
+  "es": "#title Difusión cultural internacional#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCoste: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/semana, el precio de un escalón de financiación"
  },
  "je_ch_prog_protectionism_tt": {
   "en": "#title $je_ch_widget_prog_protectionism$#!\\nWhile it runs:\\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]",
   "es": "#title $je_ch_widget_prog_protectionism$#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]"
  },
  "je_ch_widget_bd_art_dr_tt": {
-  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, counts as #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! after [concept_ch_art_diminishing_returns].\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
-  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, cuenta como #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! tras los [concept_ch_art_diminishing_returns|l].\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, counts as #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! after [concept_ch_art_diminishing_returns].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, cuenta como #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! tras los [concept_ch_art_diminishing_returns|l].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
  },
  "je_ch_widget_bd_art_mult_tt": {
   "en": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ It scales the Art Production line above.",
   "es": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ Multiplica la línea de Producción artística situada encima."
  },
  "je_ch_widget_bd_art_tt": {
-  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output: [JournalEntry.GetCountry.MakeScope.ScriptValue('country_fine_art_production_display')|0] of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nA dominant share runs into [concept_ch_art_diminishing_returns].\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
-  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes: [JournalEntry.GetCountry.MakeScope.ScriptValue('country_fine_art_production_display')|0] de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nUna cuota dominante se topa con los [concept_ch_art_diminishing_returns|l].\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] of [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nA dominant share runs into [concept_ch_art_diminishing_returns].\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] de [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nUna cuota dominante se topa con los [concept_ch_art_diminishing_returns|l].\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
  },
  "je_ch_widget_bd_infamy_tt": {
-  "en": "#title [concept_ch_infamy]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_infamy_min')|0], an infamy of 100.#!",
-  "es": "#title [concept_ch_infamy]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_infamy_min')|0], una infamia de 100.#!"
+  "en": "#title [concept_ch_infamy]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], an infamy of 100.#!",
+  "es": "#title [concept_ch_infamy]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], una infamia de 100.#!"
  },
  "je_ch_widget_bd_instability_tt": {
-  "en": "#title [concept_ch_instability]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_instability_min')|0]: full turmoil and a civil war.#!",
-  "es": "#title [concept_ch_instability]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_instability_min')|0]: agitación total y una guerra civil.#!"
+  "en": "#title [concept_ch_instability]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: full turmoil and a civil war.#!",
+  "es": "#title [concept_ch_instability]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: agitación total y una guerra civil.#!"
  },
  "je_ch_widget_bd_megaprojects_tt": {
-  "en": "#title [concept_ch_megaprojects]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], all seven megaprojects.#!",
-  "es": "#title [concept_ch_megaprojects]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], con los siete megaproyectos.#!"
+  "en": "#title [concept_ch_megaprojects]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], all seven megaprojects.#!",
+  "es": "#title [concept_ch_megaprojects]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], con los siete megaproyectos.#!"
  },
  "je_ch_widget_bd_modifiers_tt": {
-  "en": "#title [concept_ch_modifiers]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!",
-  "es": "#title [concept_ch_modifiers]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!"
+  "en": "#title [concept_ch_modifiers]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!",
+  "es": "#title [concept_ch_modifiers]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!"
  },
  "je_ch_widget_bd_monuments_tt": {
-  "en": "#title [concept_ch_monuments]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_monuments_max')|0], twenty monuments.#!",
-  "es": "#title [concept_ch_monuments]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_monuments_max')|0], con veinte monumentos.#!"
+  "en": "#title [concept_ch_monuments]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0], twenty monuments.#!",
+  "es": "#title [concept_ch_monuments]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0], con veinte monumentos.#!"
  },
  "je_ch_widget_bd_mult_tt": {
   "en": "#title [Concept('concept_ch_modifier_bonus','Pull Multiplier')]#!\\nRaises the sum of the lines above by this much.",
   "es": "#title [Concept('concept_ch_modifier_bonus','Multiplicador de atractivo')]#!\\nAumenta en esta medida la suma de las líneas de arriba."
  },
  "je_ch_widget_bd_prestige_tt": {
-  "en": "#title [concept_ch_prestige]#!\\nOur prestige: [JournalEntry.GetCountry.MakeScope.ScriptValue('prestige_display')|0] of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_prestige_total_display')|0] worldwide.\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!",
-  "es": "#title [concept_ch_prestige]#!\\nNuestro prestigio: [JournalEntry.GetCountry.MakeScope.ScriptValue('prestige_display')|0] de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_prestige_total_display')|0] en todo el mundo.\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!"
+  "en": "#title [concept_ch_prestige]#!\\nOur prestige: [Country.MakeScope.ScriptValue('prestige_display')|0] of [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] worldwide.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!",
+  "es": "#title [concept_ch_prestige]#!\\nNuestro prestigio: [Country.MakeScope.ScriptValue('prestige_display')|0] de [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] en todo el mundo.\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!"
  },
  "je_ch_widget_bd_raw_tt": {
-  "en": "#title [concept_cultural_pull_raw_score]#!\\nWorld Total: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
-  "es": "#title [concept_cultural_pull_raw_score]#!\\nTotal mundial: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
+  "en": "#title [concept_cultural_pull_raw_score]#!\\nWorld Total: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
+  "es": "#title [concept_cultural_pull_raw_score]#!\\nTotal mundial: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
  },
  "je_ch_widget_bd_sol_tt": {
   "en": "#title [concept_ch_sol]#!\\nOur standard of living: [JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] against a world average of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1].\\n#lore The bar runs from [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_min')|0] to [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_max')|0], zero at the centre line.#!",
   "es": "#title [concept_ch_sol]#!\\nNuestro nivel de vida: [JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] frente a una media mundial de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1].\\n#lore La barra va de [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_min')|0] a [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_max')|0], con el cero en la línea central.#!"
  },
  "je_ch_widget_bd_tech_tt": {
-  "en": "#title [concept_ch_tech_leadership]#!\\nWorld firsts, decaying each year.\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!",
-  "es": "#title [concept_ch_tech_leadership]#!\\nPrimicias mundiales, que decaen cada año.\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!"
+  "en": "#title [concept_ch_tech_leadership]#!\\nWorld firsts, decaying each year.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!",
+  "es": "#title [concept_ch_tech_leadership]#!\\nPrimicias mundiales, que decaen cada año.\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!"
  },
  "je_ch_widget_board_header": {
   "en": "Top Cultural Powers",
   "es": "Principales potencias culturales"
  },
- "je_ch_widget_board_us": {
-  "en": "Our Rank: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
-  "es": "Nuestro puesto: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! de [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ "je_ch_widget_board_us_ours": {
+  "en": "Our Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "es": "Nuestro puesto: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! de [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
  },
- "je_ch_widget_breakdown_header": {
+ "je_ch_widget_breakdown_header_ours": {
   "en": "Where Our Pull Comes From",
   "es": "De dónde procede nuestro atractivo"
  },
@@ -524,8 +524,8 @@
   "es": "Límite mensual"
  },
  "je_colonial_empire_drift_cap_tt": {
-  "en": "Stability moves at most ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way. This is what the limit takes off the rows above.",
-  "es": "La estabilidad varía como máximo ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] al mes en cualquiera de los dos sentidos. Esto es lo que el límite resta a las filas de arriba."
+  "en": "Stability moves at most ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way. This is what the limit takes off the rows above.",
+  "es": "La estabilidad varía como máximo ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] al mes en cualquiera de los dos sentidos. Esto es lo que el límite resta a las filas de arriba."
  },
  "je_colonial_empire_drift_domestic": {
   "en": "War and [concept_turmoil]",
@@ -540,8 +540,12 @@
   "es": "Presión de las [Concept('concept_great_power', 'grandes potencias')|E]"
  },
  "je_colonial_empire_drift_gp_tt": {
-  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against ours; International Pressure lists them. Updated monthly.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; the figure beside it is exact.#!",
-  "es": "La condena y el apoyo de las grandes potencias, cada uno ponderado por su [concept_prestige|l] frente al nuestro; Presión internacional los enumera. Se actualiza cada mes.\\n#lore La barra abarca de [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] a [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; la cifra que figura a su lado es exacta.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_gp_tt_ours', 'je_colonial_empire_drift_gp_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_gp_tt_ours', 'je_colonial_empire_drift_gp_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_gp_tt_ours": {
+  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against ours; International Pressure lists them. Updated monthly.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; the figure beside it is exact.#!",
+  "es": "La condena y el apoyo de las grandes potencias, cada uno ponderado por su [concept_prestige|l] frente al nuestro; Presión internacional los enumera. Se actualiza cada mes.\\n#lore La barra abarca de [Country.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] a [Country.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; la cifra que figura a su lado es exacta.#!"
  },
  "je_colonial_empire_drift_igs_tt": {
   "en": "Powerful Landowners and Armed Forces steady the empire; powerful Intelligentsia and Trade Unions erode it.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_igs_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_igs_max')|1]; the figure beside it is exact.#!",
@@ -552,8 +556,12 @@
   "es": "Leyes y eventos"
  },
  "je_colonial_empire_drift_laws_tt": {
-  "en": "#header Laws, technologies and events#!\\nWhat our laws, some technologies and the modifiers recent events left behind add or take away. Hover the stability bar for each source.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; the figure beside it is exact.#!",
-  "es": "#header Leyes, tecnologías y eventos#!\\nLo que suman o restan nuestras leyes, algunas tecnologías y los modificadores que dejaron los eventos recientes. Pasa el cursor sobre la barra de estabilidad para ver cada fuente.\\n#lore La barra abarca de [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] a [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; la cifra que figura a su lado es exacta.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_laws_tt_ours', 'je_colonial_empire_drift_laws_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_laws_tt_ours', 'je_colonial_empire_drift_laws_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_laws_tt_ours": {
+  "en": "#header Laws, technologies and events#!\\nWhat our laws, some technologies and the modifiers recent events left behind add or take away. Hover the stability bar for each source.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; the figure beside it is exact.#!",
+  "es": "#header Leyes, tecnologías y eventos#!\\nLo que suman o restan nuestras leyes, algunas tecnologías y los modificadores que dejaron los eventos recientes. Pasa el cursor sobre la barra de estabilidad para ver cada fuente.\\n#lore La barra abarca de [Country.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] a [Country.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; la cifra que figura a su lado es exacta.#!"
  },
  "je_colonial_empire_drift_overreach_tt": {
   "en": "Holding more colonies than the metropole can support. Updated monthly.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_max')|1]; the figure beside it is exact.#!",
@@ -564,8 +572,12 @@
   "es": "Programas"
  },
  "je_colonial_empire_drift_policies_tt": {
-  "en": "What our running programmes add, each shown on its row under Colonial Programmes.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; the figure beside it is exact.#!",
-  "es": "Lo que aportan nuestros programas en marcha, cada uno en su fila bajo Programas coloniales.\\n#lore La barra abarca de [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] a [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; la cifra que figura a su lado es exacta.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_policies_tt_ours', 'je_colonial_empire_drift_policies_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_policies_tt_ours', 'je_colonial_empire_drift_policies_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_policies_tt_ours": {
+  "en": "What our running programmes add, each shown on its row under Colonial Programmes.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; the figure beside it is exact.#!",
+  "es": "Lo que aportan nuestros programas en marcha, cada uno en su fila bajo Programas coloniales.\\n#lore La barra abarca de [Country.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] a [Country.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; la cifra que figura a su lado es exacta.#!"
  },
  "je_colonial_empire_drift_rank": {
   "en": "Rank",
@@ -596,26 +608,38 @@
   "es": "Posesiones coloniales"
  },
  "je_colonial_empire_holdings_subjects": {
-  "en": "Colonial Subjects: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
-  "es": "Súbditos coloniales: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+  "en": "Colonial Subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "es": "Súbditos coloniales: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
  },
  "je_colonial_empire_holdings_subjects_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_subjects_tt_ours', 'je_colonial_empire_holdings_subjects_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_subjects_tt_ours', 'je_colonial_empire_holdings_subjects_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_subjects_tt_ours": {
   "en": "#header Colonial subjects#!\\nOur subjects, and their own subjects, that count as colonial: every colony and chartered company, and a protectorate separated from our capital by sea whose people share no [concept_heritage_trait] with ours. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
   "es": "#header Súbditos coloniales#!\\nNuestros súbditos, y los súbditos de estos, que cuentan como coloniales: toda colonia y compañía privilegiada, y todo protectorado separado de nuestra capital por mar cuyo pueblo no comparta [concept_heritage_trait|l] con el nuestro. Cualquiera de ellos mantiene activa esta anotación. No mueven por sí mismos la barra de estabilidad, pero en la banda En tensión y las inferiores su [concept_liberty_desire|l] sube cada mes. Se actualiza cada mes."
  },
  "je_colonial_empire_holdings_territories": {
-  "en": "Territories: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
-  "es": "Territorios: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, de ellos colonias: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
+  "en": "Territories: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
+  "es": "Territorios: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, de ellos colonias: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
  },
  "je_colonial_empire_holdings_territories_tt": {
-  "en": "#header Our territories#!\\nEvery state we hold that is separated from our capital by sea (not joined to it over land through our own states), is not a [concept_homeland] of our cultures, has at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and is not settled land: no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. Each can be released from its row, and Planned Full Decolonization releases them all. A territory shares its row with the states one release would take with it.\\nThe ones with the colony icon lit are or hold colonies: they meet the indigenous, the living-standards or the unincorporated test, and any one of them keeps this entry running. The others count only for release. Updated monthly.",
-  "es": "#header Nuestros territorios#!\\nTodo estado que poseemos que esté separado de nuestra capital por mar (sin unirse a ella por tierra a través de nuestros propios estados), que no sea [concept_homeland|l] de nuestras culturas, que tenga al menos #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! habitantes, más del #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! de ellos de un pueblo que no comparta [concept_heritage_trait|l] con el nuestro, y que no sea tierra de colonos: como máximo el #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! de su población es de nuestras culturas principales. Cada uno puede liberarse desde su fila, y la Descolonización total planificada los libera todos. Un territorio comparte su fila con los estados que se llevaría consigo una liberación.\\nLos que tienen el icono de colonia iluminado son colonias o contienen colonias: cumplen la prueba indígena, la del nivel de vida o la de no incorporación, y cualquiera de ellos mantiene activa esta anotación. Los demás solo cuentan para la liberación. Se actualiza cada mes."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_territories_tt_ours', 'je_colonial_empire_holdings_territories_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_territories_tt_ours', 'je_colonial_empire_holdings_territories_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_territories_tt_ours": {
+  "en": "#header Our territories#!\\nEvery state we hold that is separated from our capital by sea (not joined to it over land through our own states), is not a [concept_homeland] of our cultures, has at least #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and is not settled land: no more than #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. Each can be released from its row, and Planned Full Decolonization releases them all. A territory shares its row with the states one release would take with it.\\nThe ones with the colony icon lit are or hold colonies: they meet the indigenous, the living-standards or the unincorporated test, and any one of them keeps this entry running. The others count only for release. Updated monthly.",
+  "es": "#header Nuestros territorios#!\\nTodo estado que poseemos que esté separado de nuestra capital por mar (sin unirse a ella por tierra a través de nuestros propios estados), que no sea [concept_homeland|l] de nuestras culturas, que tenga al menos #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! habitantes, más del #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! de ellos de un pueblo que no comparta [concept_heritage_trait|l] con el nuestro, y que no sea tierra de colonos: como máximo el #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! de su población es de nuestras culturas principales. Cada uno puede liberarse desde su fila, y la Descolonización total planificada los libera todos. Un territorio comparte su fila con los estados que se llevaría consigo una liberación.\\nLos que tienen el icono de colonia iluminado son colonias o contienen colonias: cumplen la prueba indígena, la del nivel de vida o la de no incorporación, y cualquiera de ellos mantiene activa esta anotación. Los demás solo cuentan para la liberación. Se actualiza cada mes."
  },
  "je_colonial_empire_holdings_wars": {
-  "en": "Wars of Independence: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
-  "es": "Guerras de independencia: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
+  "en": "Wars of Independence: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
+  "es": "Guerras de independencia: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
  },
  "je_colonial_empire_holdings_wars_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_wars_tt_ours', 'je_colonial_empire_holdings_wars_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_wars_tt_ours', 'je_colonial_empire_holdings_wars_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_wars_tt_ours": {
   "en": "#header Wars of independence#!\\nEvery war we are fighting to keep a colony: a territory whose declaration we chose to fight, a colonial subject at war for its independence, or a colony's secession. Each drains [concept_colonial_stability], and the years of all of them together cost [concept_legitimacy]. Updated monthly.",
   "es": "#header Guerras de independencia#!\\nToda guerra que libramos para conservar una colonia: un territorio cuya declaración decidimos combatir, un súbdito colonial en guerra por su independencia o la secesión de una colonia. Cada una drena la [concept_colonial_stability|l], y los años de todas ellas juntas cuestan [concept_legitimacy|l]. Se actualiza cada mes."
  },
@@ -624,20 +648,20 @@
   "es": "Todo el imperio"
  },
  "je_colonial_empire_how_bar_1": {
-  "en": "The bar runs from 0 to 100 and moves once a month by the sum of everything acting on it, but never by more than ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] either way, so no single shock can empty it. Hover the bar at the top for every term with its current value; Why Stability Is Moving adds them up by group.",
-  "es": "La barra va de 0 a 100 y se mueve una vez al mes según la suma de todo lo que actúa sobre ella, pero nunca más de ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] en ninguno de los dos sentidos, de modo que ninguna sacudida aislada puede vaciarla. Pasa el cursor sobre la barra de arriba para ver cada término con su valor actual; «Por qué se mueve la estabilidad» los suma por grupos."
+  "en": "The bar runs from 0 to 100 and moves once a month by the sum of everything acting on it, but never by more than ±[GetPlayer.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] either way, so no single shock can empty it. Hover the bar at the top for every term with its current value; Why Stability Is Moving adds them up by group.",
+  "es": "La barra va de 0 a 100 y se mueve una vez al mes según la suma de todo lo que actúa sobre ella, pero nunca más de ±[GetPlayer.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] en ninguno de los dos sentidos, de modo que ninguna sacudida aislada puede vaciarla. Pasa el cursor sobre la barra de arriba para ver cada término con su valor actual; «Por qué se mueve la estabilidad» los suma por grupos."
  },
  "je_colonial_empire_how_bar_2": {
-  "en": "Where the bar stands sets the [concept_colonial_band]. On the overview's bar a thin line marks where the next band begins, and a lighter stretch shows where the bar is heading in [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #G green#! while it rises, #R red#! while it falls. Each band puts its own modifier on this journal entry; hover the band at the top to see it. In the lower three bands our colonial subjects gain [concept_liberty_desire], and in the lowest two civil rights movements radicalize.",
-  "es": "El nivel de la barra determina la [concept_colonial_band|l]. En la barra de la vista general, una línea fina marca dónde empieza la siguiente banda, y un tramo más claro muestra hacia dónde se dirige la barra en [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_projection_months')|0] meses al ritmo de este mes: #G verde#! si sube, #R rojo#! si baja. Cada banda aplica su propio modificador a esta anotación en el diario; pasa el cursor sobre la banda de arriba para verlo. En las tres bandas inferiores nuestros súbditos coloniales ganan [concept_liberty_desire|l], y en las dos más bajas los movimientos por los derechos civiles se radicalizan."
+  "en": "Where the bar stands sets the [concept_colonial_band]. On the overview's bar a thin line marks where the next band begins, and a lighter stretch shows where the bar is heading in [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #G green#! while it rises, #R red#! while it falls. Each band puts its own modifier on this journal entry; hover the band at the top to see it. In the lower three bands our colonial subjects gain [concept_liberty_desire], and in the lowest two civil rights movements radicalize.",
+  "es": "El nivel de la barra determina la [concept_colonial_band|l]. En la barra de la vista general, una línea fina marca dónde empieza la siguiente banda, y un tramo más claro muestra hacia dónde se dirige la barra en [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] meses al ritmo de este mes: #G verde#! si sube, #R rojo#! si baja. Cada banda aplica su propio modificador a esta anotación en el diario; pasa el cursor sobre la banda de arriba para verlo. En las tres bandas inferiores nuestros súbditos coloniales ganan [concept_liberty_desire|l], y en las dos más bajas los movimientos por los derechos civiles se radicalizan."
  },
  "je_colonial_empire_how_bar_3": {
   "en": "The entry is won by holding the bar at 100 long enough (the overview counts the months once the empire is Solidified), or by taking the Imperial Federation Act or the Civilizing Mission Compact. It fails if the bar reaches 0, and ends without penalty once we hold no colony or colonial subject.",
   "es": "La anotación se gana manteniendo la barra en 100 el tiempo suficiente (la vista general cuenta los meses una vez que el imperio está consolidado), o adoptando la Ley de Federación Imperial o el Pacto de la Misión civilizadora. Fracasa si la barra llega a 0 y termina sin penalización cuando ya no tenemos ninguna colonia ni súbdito colonial."
  },
  "je_colonial_empire_how_decolonization": {
-  "en": "Each territory in Colonial Holdings has a Release button, and each colonial subject has Release and, for a colony, Dominion. A button opens a decision on that one target before anything happens; Reconsider is always offered, and is the default. A released territory leaves with every neighbouring state of ours where its people are at home. It can go by our own grant, or at a Round Table Conference if none of its people is severely unaccepted and we have more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [concept_authority]: the Landowners resent it, but the new country starts on better terms with us and stability recovers for longer. Freeing a subject makes it a former colony, as a released territory is. Raising a colony to a dominion is vanilla's own step up in autonomy: it stays our subject but no longer counts as colonial. Planned Full Decolonization releases every territory at once. One decision can be open at a time.",
-  "es": "Cada territorio de Posesiones coloniales tiene un botón Liberar, y cada súbdito colonial tiene Liberar y, si es una colonia, Dominio. Un botón abre una decisión sobre ese único objetivo antes de que ocurra nada; Reconsiderar siempre se ofrece y es la opción predeterminada. Un territorio liberado se va con todos los estados vecinos nuestros donde su pueblo está en su tierra. Puede irse por concesión nuestra, o en una Conferencia de la Mesa Redonda si ninguno de sus habitantes está gravemente no aceptado y tenemos más de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! de [concept_authority|l]: los Terratenientes lo ven con resentimiento, pero el nuevo país empieza en mejores términos con nosotros y la estabilidad se recupera durante más tiempo. Liberar a un súbdito lo convierte en antigua colonia, igual que un territorio liberado. Elevar una colonia a dominio es el propio paso de autonomía del juego base: sigue siendo nuestro súbdito, pero deja de contar como colonial. La Descolonización total planificada libera todos los territorios a la vez. Solo puede haber una decisión abierta a la vez."
+  "en": "Each territory in Colonial Holdings has a Release button, and each colonial subject has Release and, for a colony, Dominion. A button opens a decision on that one target before anything happens; Reconsider is always offered, and is the default. A released territory leaves with every neighbouring state of ours where its people are at home. It can go by our own grant, or at a Round Table Conference if none of its people is severely unaccepted and we have more than #v [GetPlayer.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [concept_authority]: the Landowners resent it, but the new country starts on better terms with us and stability recovers for longer. Freeing a subject makes it a former colony, as a released territory is. Raising a colony to a dominion is vanilla's own step up in autonomy: it stays our subject but no longer counts as colonial. Planned Full Decolonization releases every territory at once. One decision can be open at a time.",
+  "es": "Cada territorio de Posesiones coloniales tiene un botón Liberar, y cada súbdito colonial tiene Liberar y, si es una colonia, Dominio. Un botón abre una decisión sobre ese único objetivo antes de que ocurra nada; Reconsiderar siempre se ofrece y es la opción predeterminada. Un territorio liberado se va con todos los estados vecinos nuestros donde su pueblo está en su tierra. Puede irse por concesión nuestra, o en una Conferencia de la Mesa Redonda si ninguno de sus habitantes está gravemente no aceptado y tenemos más de #v [GetPlayer.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! de [concept_authority|l]: los Terratenientes lo ven con resentimiento, pero el nuevo país empieza en mejores términos con nosotros y la estabilidad se recupera durante más tiempo. Liberar a un súbdito lo convierte en antigua colonia, igual que un territorio liberado. Elevar una colonia a dominio es el propio paso de autonomía del juego base: sigue siendo nuestro súbdito, pero deja de contar como colonial. La Descolonización total planificada libera todos los territorios a la vez. Solo puede haber una decisión abierta a la vez."
  },
  "je_colonial_empire_how_header": {
   "en": "How the Colonial Empire Works",
@@ -680,24 +704,28 @@
   "es": "Hasta tres territorios coloniales declaran la independencia, con dos meses de diferencia, y cada declaración puede concederse, negociarse o combatirse; el imperio conserva sus vínculos con los que deja marchar."
  },
  "je_colonial_empire_ov_act": {
-  "en": "Months Solidified: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
-  "es": "Meses consolidados: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
+  "en": "Months Solidified: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
+  "es": "Meses consolidados: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
  },
  "je_colonial_empire_ov_act_tt": {
-  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies we own ourselves, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
-  "es": "La Ley de Federación Imperial y el Pacto de la Misión civilizadora, decisiones que completan esta anotación al instante, requieren [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] meses seguidos en la banda Consolidada. También exigen el rango de gran potencia, al menos cuatro colonias propias, Explotación colonial o Reasentamiento colonial, un conjunto de leyes acorde y suficiente [concept_authority|l] y [concept_prestige|l]. Cualquier mes por debajo de Consolidada reinicia la cuenta."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_act_tt_ours', 'je_colonial_empire_ov_act_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_act_tt_ours', 'je_colonial_empire_ov_act_tt_theirs' )]"
+ },
+ "je_colonial_empire_ov_act_tt_ours": {
+  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies we own ourselves, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
+  "es": "La Ley de Federación Imperial y el Pacto de la Misión civilizadora, decisiones que completan esta anotación al instante, requieren [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] meses seguidos en la banda Consolidada. También exigen el rango de gran potencia, al menos cuatro colonias propias, Explotación colonial o Reasentamiento colonial, un conjunto de leyes acorde y suficiente [concept_authority|l] y [concept_prestige|l]. Cualquier mes por debajo de Consolidada reinicia la cuenta."
  },
  "je_colonial_empire_ov_assimilation_off_tt": {
   "en": "#header $je_colonial_empire_row_assimilation$#!\\nNot running",
   "es": "#header $je_colonial_empire_row_assimilation$#!\\nNo está en marcha"
  },
  "je_colonial_empire_ov_assimilation_on_tt": {
-  "en": "#header $je_colonial_empire_row_assimilation$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3",
-  "es": "#header $je_colonial_empire_row_assimilation$#!\\n#G En marcha#! en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! de 3"
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3",
+  "es": "#header $je_colonial_empire_row_assimilation$#!\\n#G En marcha#! en el nivel #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! de 3"
  },
  "je_colonial_empire_ov_band_tt": {
-  "en": "[Concept('concept_colonial_band','Band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')]\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title While in this band:#!\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]",
-  "es": "[Concept('concept_colonial_band','Banda')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')]\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title Mientras se esté en esta banda:#!\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]"
+  "en": "[Concept('concept_colonial_band','Band')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title While in this band:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]",
+  "es": "[Concept('concept_colonial_band','Banda')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title Mientras se esté en esta banda:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]"
  },
  "je_colonial_empire_ov_consensus": {
   "en": "#R Consensus#!",
@@ -712,8 +740,8 @@
   "es": "#header $je_colonial_empire_row_garrison$#!\\nNo está en marcha"
  },
  "je_colonial_empire_ov_garrison_on_tt": {
-  "en": "#header $je_colonial_empire_row_garrison$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3",
-  "es": "#header $je_colonial_empire_row_garrison$#!\\n#G En marcha#! en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! de 3"
+  "en": "#header $je_colonial_empire_row_garrison$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3",
+  "es": "#header $je_colonial_empire_row_garrison$#!\\n#G En marcha#! en el nivel #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! de 3"
  },
  "je_colonial_empire_ov_heading_tt": {
   "en": "#header Where it is heading#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The #G green#! stretch on the bar is the rise to come, the #R red#! stretch what would be lost. The rate is assessed again every month.",
@@ -724,24 +752,28 @@
   "es": "Colonias: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Súbditos coloniales: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
  },
  "je_colonial_empire_ov_held_tt": {
-  "en": "#header Why this entry runs#!\\nIt runs while we hold at least one colony or colonial subject, and ends without penalty once we hold neither.\\n• A colony is a territory overseas, not a [concept_homeland] of our cultures, with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures, where another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and poorly accepted, or the [concept_sol] is below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! of our average.\\n• A colonial subject is a colony or chartered company of ours or of our subjects, or a protectorate with land overseas whose people share no heritage with ours.\\nColonial Holdings, below, lists each one with its buttons.",
-  "es": "#header Por qué sigue en marcha esta anotación#!\\nSigue en marcha mientras tengamos al menos una colonia o un súbdito colonial, y termina sin penalización cuando no tengamos ninguno.\\n• Una colonia es un territorio de ultramar que no es [concept_homeland|l] de nuestras culturas, con al menos #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! habitantes, de los cuales como máximo el #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! pertenece a nuestras culturas principales, en el que otra cultura supera el #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! de la población y está mal aceptada, o en el que el [concept_sol|l] está por debajo del #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! de nuestra media.\\n• Un súbdito colonial es una colonia o compañía privilegiada nuestra o de nuestros súbditos, o un protectorado con tierras de ultramar cuyo pueblo no comparte herencia con el nuestro.\\nPosesiones coloniales, más abajo, enumera cada uno con sus botones."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]"
+ },
+ "je_colonial_empire_ov_held_tt_ours": {
+  "en": "#header Why this entry runs#!\\nIt runs while we hold at least one colony or colonial subject, and ends without penalty once we hold neither.\\n• A colony is a territory overseas, not a [concept_homeland] of our cultures, with at least #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, no more than #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures, where another culture is more than #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and poorly accepted, or the [concept_sol] is below #v [Country.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! of our average.\\n• A colonial subject is a colony or chartered company of ours or of our subjects, or a protectorate with land overseas whose people share no heritage with ours.\\nColonial Holdings, below, lists each one with its buttons.",
+  "es": "#header Por qué sigue en marcha esta anotación#!\\nSigue en marcha mientras tengamos al menos una colonia o un súbdito colonial, y termina sin penalización cuando no tengamos ninguno.\\n• Una colonia es un territorio de ultramar que no es [concept_homeland|l] de nuestras culturas, con al menos #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! habitantes, de los cuales como máximo el #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! pertenece a nuestras culturas principales, en el que otra cultura supera el #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! de la población y está mal aceptada, o en el que el [concept_sol|l] está por debajo del #v [Country.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! de nuestra media.\\n• Un súbdito colonial es una colonia o compañía privilegiada nuestra o de nuestros súbditos, o un protectorado con tierras de ultramar cuyo pueblo no comparte herencia con el nuestro.\\nPosesiones coloniales, más abajo, enumera cada uno con sus botones."
  },
  "je_colonial_empire_ov_hold": {
-  "en": "Months at 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
-  "es": "Meses en 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
+  "en": "Months at 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
+  "es": "Meses en 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
  },
  "je_colonial_empire_ov_hold_tt": {
-  "en": "The entry is won when [concept_colonial_stability] holds at 100 for [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] months in a row. Any month below 100 starts the count again.",
-  "es": "La anotación se gana cuando la [concept_colonial_stability|l] se mantiene en 100 durante [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] meses seguidos. Cualquier mes por debajo de 100 reinicia la cuenta."
+  "en": "The entry is won when [concept_colonial_stability] holds at 100 for [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] months in a row. Any month below 100 starts the count again.",
+  "es": "La anotación se gana cuando la [concept_colonial_stability|l] se mantiene en 100 durante [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] meses seguidos. Cualquier mes por debajo de 100 reinicia la cuenta."
  },
  "je_colonial_empire_ov_invest_off_tt": {
   "en": "#header $je_colonial_empire_row_invest$#!\\nNot running",
   "es": "#header $je_colonial_empire_row_invest$#!\\nNo está en marcha"
  },
  "je_colonial_empire_ov_invest_on_tt": {
-  "en": "#header $je_colonial_empire_row_invest$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3",
-  "es": "#header $je_colonial_empire_row_invest$#!\\n#G En marcha#! en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! de 3"
+  "en": "#header $je_colonial_empire_row_invest$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3",
+  "es": "#header $je_colonial_empire_row_invest$#!\\n#G En marcha#! en el nivel #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! de 3"
  },
  "je_colonial_empire_ov_isolation": {
   "en": "#O Isolated#!",
@@ -752,28 +784,28 @@
   "es": "#header Aislamiento diplomático#!\\nLas [Concept('concept_great_power','grandes potencias')] que condenan reúnen un tercio del [concept_prestige|l] de todas las grandes potencias y el nuestro. Mientras su cuota no baje, la [concept_colonial_stability|l] sufre una pérdida adicional cada mes."
  },
  "je_colonial_empire_ov_legend_condemn": {
-  "en": "Condemning: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
-  "es": "Condenan: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
+  "en": "Condemning: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
+  "es": "Condenan: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
  },
  "je_colonial_empire_ov_legend_note": {
   "en": "#lore Isolation and consensus count only the condemning share.#!",
   "es": "#lore El aislamiento y el consenso solo cuentan la cuota de quienes condenan.#!"
  },
  "je_colonial_empire_ov_legend_support": {
-  "en": "Supporting: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
-  "es": "Apoyan: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
+  "en": "Supporting: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
+  "es": "Apoyan: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
  },
  "je_colonial_empire_ov_next": {
-  "en": "Next [Concept('concept_colonial_band','band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!",
-  "es": "Siguiente [Concept('concept_colonial_band','banda')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
+  "en": "Next [Concept('concept_colonial_band','band')]: [Country.GetCustom('colonial_empire_next_band_name')] at #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!",
+  "es": "Siguiente [Concept('concept_colonial_band','banda')]: [Country.GetCustom('colonial_empire_next_band_name')] en #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
  },
  "je_colonial_empire_ov_programmes_label": {
   "en": "Programmes",
   "es": "Programas"
  },
  "je_colonial_empire_ov_stability_value": {
-  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
-  "es": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mes)"
+  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "es": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mes)"
  },
  "je_colonial_empire_ov_tick_eta": {
   "en": "In about #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! months at this month's rate.",
@@ -844,6 +876,10 @@
   "es": "Por qué se mueve la estabilidad"
  },
  "je_colonial_empire_status_collapsing": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_collapsing_ours', 'je_colonial_empire_status_collapsing_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_collapsing_ours', 'je_colonial_empire_status_collapsing_theirs' )]"
+ },
+ "je_colonial_empire_status_collapsing_ours": {
   "en": "#R Colonial empire is on the verge of collapse!#! Immediate action is needed or we will lose everything.",
   "es": "#R ¡El imperio colonial está al borde del colapso!#! Hace falta actuar de inmediato o lo perderemos todo."
  },
@@ -864,6 +900,10 @@
   "es": "Se abre mientras tengamos una colonia de ultramar o un súbdito colonial."
  },
  "je_colonial_empire_status_pending": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_pending_ours', 'je_colonial_empire_status_pending_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_pending_ours', 'je_colonial_empire_status_pending_theirs' )]"
+ },
+ "je_colonial_empire_status_pending_ours": {
   "en": "Our officials are still taking stock of the empire.",
   "es": "Nuestros funcionarios aún están haciendo balance del imperio."
  },
@@ -876,6 +916,10 @@
   "es": "#Y Las posesiones coloniales son estables.#! La integración avanza, aunque quedan desafíos."
  },
  "je_colonial_empire_status_strained": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]"
+ },
+ "je_colonial_empire_status_strained_ours": {
   "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
   "es": "#O El imperio colonial está sometido a tensión.#! El aumento de las tensiones y la presión internacional amenazan nuestro dominio."
  },
@@ -948,6 +992,10 @@
   "es": "#header Todos los súbditos coloniales, de mayor a menor PIB#!"
  },
  "je_colonial_empire_subjects_none": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]"
+ },
+ "je_colonial_empire_subjects_none_ours": {
   "en": "#lore We hold no colonial subject.#!",
   "es": "#lore No tenemos ningún súbdito colonial.#!"
  },
@@ -1004,8 +1052,8 @@
   "es": "Principal"
  },
  "je_colonial_empire_territory_head_primary_tt": {
-  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
-  "es": "La parte de su población que pertenece a nuestras culturas principales, en el conjunto de los estados que se irían juntos. #R Rojo#! cuando la prueba indígena convierte a uno de ellos en colonia. Por encima del #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! un territorio es tierra de colonos, no una colonia, y no aparece en la lista."
+  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
+  "es": "La parte de su población que pertenece a nuestras culturas principales, en el conjunto de los estados que se irían juntos. #R Rojo#! cuando la prueba indígena convierte a uno de ellos en colonia. Por encima del #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! un territorio es tierra de colonos, no una colonia, y no aparece en la lista."
  },
  "je_colonial_empire_territory_head_sol": {
   "en": "SoL",
@@ -1036,16 +1084,16 @@
   "es": "[concept_sol] medio #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; la línea está en #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, el [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] de nuestra media nacional.\\nLa prueba del nivel de vida, en cada uno de sus estados: por debajo de la línea y con alguna población que no sea de nuestras culturas principales. #G No cumplida.#!"
  },
  "je_colonial_empire_tt_assimilation": {
-  "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
-  "es": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Aportación a la barra:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! al mes en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! de 3. Cada nivel suma #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; el programa completo, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
+  "es": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Aportación a la barra:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! al mes en el nivel #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! de 3. Cada nivel suma #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; el programa completo, #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
  },
  "je_colonial_empire_tt_garrison": {
-  "en": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]",
-  "es": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Aportación a la barra:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! al mes en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! de 3. Cada nivel suma #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; el programa completo, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]",
+  "es": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Aportación a la barra:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! al mes en el nivel #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! de 3. Cada nivel suma #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; el programa completo, #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
  },
  "je_colonial_empire_tt_invest": {
-  "en": "#header $je_colonial_empire_row_invest$#!\\n$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]",
-  "es": "#header $je_colonial_empire_row_invest$#!\\n$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Aportación a la barra:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! al mes en el nivel #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! de 3. Cada nivel suma #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; el programa completo, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]",
+  "es": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\n\\n#bold Aportación a la barra:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! al mes en el nivel #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! de 3. Cada nivel suma #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; el programa completo, #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title El programa completo, en el nivel 3 (cada nivel aplica un tercio):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]"
  },
  "je_colonial_empire_voluntary_fail_tt": {
   "en": "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero.",
@@ -1068,26 +1116,50 @@
   "es": "Meses"
  },
  "je_colonial_empire_war_head_months_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_months_tt_ours', 'je_colonial_empire_war_head_months_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_months_tt_ours', 'je_colonial_empire_war_head_months_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_head_months_tt_ours": {
   "en": "Months at war. #R Red#! while our [concept_war_support] in it is at the red line, #v 25#! or below.",
   "es": "Meses en guerra. #R Rojo#! mientras nuestro [concept_war_support|l] en ella esté en la línea roja, #v 25#! o menos."
  },
  "je_colonial_empire_war_head_name": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_ours', 'je_colonial_empire_war_head_name_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_ours', 'je_colonial_empire_war_head_name_theirs' )]"
+ },
+ "je_colonial_empire_war_head_name_ours": {
   "en": "Fighting us",
   "es": "Luchan contra nosotros"
  },
  "je_colonial_empire_war_head_name_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_tt_ours', 'je_colonial_empire_war_head_name_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_tt_ours', 'je_colonial_empire_war_head_name_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_head_name_tt_ours": {
   "en": "The country at war with us for its independence, and on hover where it rose.",
   "es": "El país en guerra con nosotros por su independencia y, al pasar el cursor, dónde se alzó."
  },
  "je_colonial_empire_war_months_bad_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_bad_tt_ours', 'je_colonial_empire_war_months_bad_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_bad_tt_ours', 'je_colonial_empire_war_months_bad_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_months_bad_tt_ours": {
   "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is at the red line or below: a year of that, four years in, and the home front breaks.",
   "es": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! meses de guerra (mes pasado). Nuestro [concept_war_support|l] en ella está en la línea roja o por debajo: un año así, cuatro años después del inicio, y el frente interno se quiebra."
  },
  "je_colonial_empire_war_months_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_tt_ours', 'je_colonial_empire_war_months_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_tt_ours', 'je_colonial_empire_war_months_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_months_tt_ours": {
   "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is above the red line.",
   "es": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! meses de guerra (mes pasado). Nuestro [concept_war_support|l] en ella está por encima de la línea roja."
  },
  "je_colonial_empire_war_name_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_name_tt_ours', 'je_colonial_empire_war_name_tt_theirs' )]",
+  "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_name_tt_ours', 'je_colonial_empire_war_name_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_name_tt_ours": {
   "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nAt war with us for #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! great powers arm them.",
   "es": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nEn guerra con nosotros desde hace #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! meses; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! grandes potencias los arman."
  },
@@ -1376,24 +1448,24 @@
   "es": "Nuestra [concept_intelligence_capacity|l] también detecta las operaciones que se ejecutan contra nosotros. Cada cupo de operaciones sin usar se redirige a la contrainteligencia, y la financiación a partir del nivel 2 añade capacidad. Tres defensas encubiertas —económica, militar e ideológica— proceden de las leyes y del Apoyo de contrainteligencia de un amigo; cada una se suma a nuestra capacidad frente a operaciones de su tipo, igual que la de un objetivo frente a las nuestras.\\n\\nCuando se expone una operación extranjera contra nosotros, su patrocinador figura en Última captura durante diez años, y una que dejamos seguir figura en Operaciones extranjeras conocidas mientras dura. Aparte de los eventos que informan de una captura y de una exposición, nada más nombra al país que está detrás de una operación contra nosotros, aunque una red sólida dentro de su servicio puede contarlas."
  },
  "je_iw_how_detection": {
-  "en": "Each operation against another country has its own monthly [concept_operation_detection], shown on its row; Counterintelligence Support is open and has none. It starts at the base risk, falls with [concept_funding_stealth] and with our network in the target, rises with priority, with the target's counterintelligence (its [concept_intelligence_capacity] plus its [concept_target_defenses] against that kind of operation, compared with ours) and with any network the target holds inside our own service, and is then cut by our [concept_covert_efficiency]. At most one operation is caught a month.\\n\\nAn exposed operation ends. It costs [concept_infamy] and relations, more for a more hostile operation and for one that has run longer, it costs [concept_tradecraft], and it costs its network #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength.",
-  "es": "Cada operación contra otro país tiene su propio [concept_operation_detection|l] mensual, que se muestra en su fila; el Apoyo de contrainteligencia es público y no tiene ninguno. Parte del riesgo base, baja con el [concept_funding_stealth|l] y con nuestra red en el objetivo, sube con la prioridad, con la contrainteligencia del objetivo (su [concept_intelligence_capacity|l] más sus [concept_target_defenses|l] contra ese tipo de operación, comparadas con las nuestras) y con cualquier red que el objetivo tenga dentro de nuestro propio servicio, y después se reduce con nuestro [concept_covert_efficiency|l]. Como máximo se descubre una operación al mes.\\n\\nUna operación expuesta termina. Cuesta [concept_infamy|l] y relaciones, más cuanto más hostil sea la operación y cuanto más tiempo lleve en marcha, cuesta [concept_tradecraft|l], y su red pierde #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza."
+  "en": "Each operation against another country has its own monthly [concept_operation_detection], shown on its row; Counterintelligence Support is open and has none. It starts at the base risk, falls with [concept_funding_stealth] and with our network in the target, rises with priority, with the target's counterintelligence (its [concept_intelligence_capacity] plus its [concept_target_defenses] against that kind of operation, compared with ours) and with any network the target holds inside our own service, and is then cut by our [concept_covert_efficiency]. At most one operation is caught a month.\\n\\nAn exposed operation ends. It costs [concept_infamy] and relations, more for a more hostile operation and for one that has run longer, it costs [concept_tradecraft], and it costs its network #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength.",
+  "es": "Cada operación contra otro país tiene su propio [concept_operation_detection|l] mensual, que se muestra en su fila; el Apoyo de contrainteligencia es público y no tiene ninguno. Parte del riesgo base, baja con el [concept_funding_stealth|l] y con nuestra red en el objetivo, sube con la prioridad, con la contrainteligencia del objetivo (su [concept_intelligence_capacity|l] más sus [concept_target_defenses|l] contra ese tipo de operación, comparadas con las nuestras) y con cualquier red que el objetivo tenga dentro de nuestro propio servicio, y después se reduce con nuestro [concept_covert_efficiency|l]. Como máximo se descubre una operación al mes.\\n\\nUna operación expuesta termina. Cuesta [concept_infamy|l] y relaciones, más cuanto más hostil sea la operación y cuanto más tiempo lleve en marcha, cuesta [concept_tradecraft|l], y su red pierde #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza."
  },
  "je_iw_how_funding": {
-  "en": "Every operation needs [concept_covert_funding] of at least 1, so stepping down to 0 ends them all; the step down warns first. Each level from 2 up adds [concept_funding_stealth], which cuts every operation's [concept_operation_detection], and adds [concept_intelligence_capacity], as the Funding Levels table shows. The weekly cost grows with our [Concept('concept_gdp', 'GDP')], the level and the operations running, each weighted by its priority, and a base share is paid even with no operation running: the defensive benefits are part of what funding buys. From level [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0], idle networks decay half as fast.",
-  "es": "Toda operación necesita una [concept_covert_funding|l] de al menos 1, así que bajar a 0 las termina todas; el botón de bajar avisa antes. Cada nivel a partir del 2 añade [concept_funding_stealth|l], que reduce el [concept_operation_detection|l] de cada operación, y añade [concept_intelligence_capacity|l], como muestra la tabla de Niveles de financiación. El coste semanal crece con nuestro [Concept('concept_gdp', 'PIB')], el nivel y las operaciones en curso, cada uno ponderado por su prioridad, y se paga una parte base incluso sin ninguna operación en marcha: los beneficios defensivos forman parte de lo que compra la financiación. A partir del nivel [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0], las redes inactivas decaen a la mitad de velocidad."
+  "en": "Every operation needs [concept_covert_funding] of at least 1, so stepping down to 0 ends them all; the step down warns first. Each level from 2 up adds [concept_funding_stealth], which cuts every operation's [concept_operation_detection], and adds [concept_intelligence_capacity], as the Funding Levels table shows. The weekly cost grows with our [Concept('concept_gdp', 'GDP')], the level and the operations running, each weighted by its priority, and a base share is paid even with no operation running: the defensive benefits are part of what funding buys. From level [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0], idle networks decay half as fast.",
+  "es": "Toda operación necesita una [concept_covert_funding|l] de al menos 1, así que bajar a 0 las termina todas; el botón de bajar avisa antes. Cada nivel a partir del 2 añade [concept_funding_stealth|l], que reduce el [concept_operation_detection|l] de cada operación, y añade [concept_intelligence_capacity|l], como muestra la tabla de Niveles de financiación. El coste semanal crece con nuestro [Concept('concept_gdp', 'PIB')], el nivel y las operaciones en curso, cada uno ponderado por su prioridad, y se paga una parte base incluso sin ninguna operación en marcha: los beneficios defensivos forman parte de lo que compra la financiación. A partir del nivel [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0], las redes inactivas decaen a la mitad de velocidad."
  },
  "je_iw_how_header": {
   "en": "How Covert Warfare Works",
   "es": "Cómo funciona la guerra encubierta"
  },
  "je_iw_how_ops": {
-  "en": "We launch [concept_covert_operations] from another country's [Concept('concept_diplomatic_action', 'diplomatic actions')], and each takes an [Concept('concept_operation_slots', 'operation slot')]. An operation does nothing while Preparatory, works at base strength once Establishing, and at #G ×[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#! once Fully Operational; its row shows the months to the next phase. A strong [Concept('concept_agent_network', 'network')] in the target gives a new operation a head start. Counterintelligence Support, which lends our service to a friend, gets none and plants no network there.\\n\\nPriority, from 1 to [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0], multiplies what an operation does, what it costs and how easily it is caught. A click changes detection at once and the effects at the start of next month. Raising it raises upkeep at once; lowering it cuts upkeep only once the effects have followed. Priority [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0] needs an #bold Established#! agency.\\n\\n#bold Stand down#! ends an operation now, with no [concept_infamy] and no diplomatic fallout: those are the price of being caught, not of calling it off. The slot is freed at once and the months invested are lost.",
-  "es": "Lanzamos [concept_covert_operations|l] desde las [Concept('concept_diplomatic_action', 'acciones diplomáticas')] de otro país, y cada una ocupa un [Concept('concept_operation_slots', 'cupo de operaciones')]. Una operación no hace nada mientras está Preparatoria, funciona a intensidad base cuando está En implantación y a #G ×[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#! cuando está Plenamente operativa; su fila muestra los meses que faltan para la siguiente fase. Una [Concept('concept_agent_network', 'red')] sólida en el objetivo da ventaja inicial a una operación nueva. El Apoyo de contrainteligencia, que presta nuestro servicio a un amigo, no obtiene ninguna y no implanta ninguna red allí.\\n\\nLa prioridad, de 1 a [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0], multiplica lo que hace una operación, lo que cuesta y la facilidad con que se la descubre. Un clic cambia la detección al instante y los efectos al comienzo del mes siguiente. Subirla eleva el mantenimiento al instante; bajarla solo reduce el mantenimiento cuando los efectos la han seguido. La prioridad [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0] requiere una agencia de nivel #bold Consolidado#!.\\n\\n#bold Retirarse#! termina una operación al instante, sin [concept_infamy|l] ni consecuencias diplomáticas: eso es el precio de ser descubierto, no de cancelarla. El cupo se libera de inmediato y los meses invertidos se pierden."
+  "en": "We launch [concept_covert_operations] from another country's [Concept('concept_diplomatic_action', 'diplomatic actions')], and each takes an [Concept('concept_operation_slots', 'operation slot')]. An operation does nothing while Preparatory, works at base strength once Establishing, and at #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#! once Fully Operational; its row shows the months to the next phase. A strong [Concept('concept_agent_network', 'network')] in the target gives a new operation a head start. Counterintelligence Support, which lends our service to a friend, gets none and plants no network there.\\n\\nPriority, from 1 to [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0], multiplies what an operation does, what it costs and how easily it is caught. A click changes detection at once and the effects at the start of next month. Raising it raises upkeep at once; lowering it cuts upkeep only once the effects have followed. Priority [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0] needs an #bold Established#! agency.\\n\\n#bold Stand down#! ends an operation now, with no [concept_infamy] and no diplomatic fallout: those are the price of being caught, not of calling it off. The slot is freed at once and the months invested are lost.",
+  "es": "Lanzamos [concept_covert_operations|l] desde las [Concept('concept_diplomatic_action', 'acciones diplomáticas')] de otro país, y cada una ocupa un [Concept('concept_operation_slots', 'cupo de operaciones')]. Una operación no hace nada mientras está Preparatoria, funciona a intensidad base cuando está En implantación y a #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#! cuando está Plenamente operativa; su fila muestra los meses que faltan para la siguiente fase. Una [Concept('concept_agent_network', 'red')] sólida en el objetivo da ventaja inicial a una operación nueva. El Apoyo de contrainteligencia, que presta nuestro servicio a un amigo, no obtiene ninguna y no implanta ninguna red allí.\\n\\nLa prioridad, de 1 a [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0], multiplica lo que hace una operación, lo que cuesta y la facilidad con que se la descubre. Un clic cambia la detección al instante y los efectos al comienzo del mes siguiente. Subirla eleva el mantenimiento al instante; bajarla solo reduce el mantenimiento cuando los efectos la han seguido. La prioridad [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0] requiere una agencia de nivel #bold Consolidado#!.\\n\\n#bold Retirarse#! termina una operación al instante, sin [concept_infamy|l] ni consecuencias diplomáticas: eso es el precio de ser descubierto, no de cancelarla. El cupo se libera de inmediato y los meses invertidos se pierden."
  },
  "je_iw_how_standing": {
-  "en": "Our [concept_intelligence_capacity] is rated against the world's best: #bold Fortress#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]%, #bold Hardened#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%, #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%, #bold Exposed#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_1')|0]%, and #bold Vulnerable#! below that. The overview's first icon shows the rating.",
-  "es": "Nuestra [concept_intelligence_capacity|l] se compara con la mejor del mundo: #bold Fortaleza#! a partir del [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]%, #bold Blindada#! a partir del [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%, #bold Defendida#! a partir del [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%, #bold Expuesta#! a partir del [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_1')|0]%, y #bold Vulnerable#! por debajo de eso. El primer icono de la vista general muestra la calificación."
+  "en": "Our [concept_intelligence_capacity] is rated against the world's best: #bold Fortress#! from [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]%, #bold Hardened#! from [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%, #bold Defended#! from [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%, #bold Exposed#! from [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_1')|0]%, and #bold Vulnerable#! below that. The overview's first icon shows the rating.",
+  "es": "Nuestra [concept_intelligence_capacity|l] se compara con la mejor del mundo: #bold Fortaleza#! a partir del [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]%, #bold Blindada#! a partir del [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%, #bold Defendida#! a partir del [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%, #bold Expuesta#! a partir del [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_1')|0]%, y #bold Vulnerable#! por debajo de eso. El primer icono de la vista general muestra la calificación."
  },
  "je_iw_how_sub_ci": {
   "en": "Counterintelligence",
@@ -1428,12 +1500,12 @@
   "es": "Vigilancia"
  },
  "je_iw_how_tradecraft": {
-  "en": "[concept_tradecraft] is our agency's experience, from 0 to [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0]. Operations past their preparatory phase raise it each month, an exposed operation lowers it, and with no operation running it drifts down. Counterintelligence Support counts for none of this. Each tier adds to our [concept_intelligence_capacity] and makes our networks grow #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! faster.\\n#bold Fledgling#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Established#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: priority [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Seasoned#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Regime Change and Nuclear Programme Sabotage; #bold Veteran#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: one more operation of each type.\\nFalling below a tier never ends a running operation. Hover Tradecraft in the overview for this month's figures.",
-  "es": "Las [concept_tradecraft|l] son la experiencia de nuestra agencia, de 0 a [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0]: aumentan cada mes con las operaciones que han pasado su fase preparatoria, bajan con una operación expuesta y, sin ninguna operación en marcha, van disminuyendo. El Apoyo de contrainteligencia no cuenta para nada de esto. Cada nivel suma a nuestra [concept_intelligence_capacity|l] y hace que nuestras redes crezcan un #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! más rápido.\\n#bold Novato#! a partir de [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Consolidado#! a partir de [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: prioridad [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Curtido#! a partir de [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Cambio de régimen y Sabotaje del programa nuclear; #bold Veterano#! a partir de [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: una operación más de cada tipo.\\nBajar de un nivel nunca termina una operación en curso. Pasa el cursor por Técnicas de espionaje en la vista general para ver las cifras de este mes."
+  "en": "[concept_tradecraft] is our agency's experience, from 0 to [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_max')|0]. Operations past their preparatory phase raise it each month, an exposed operation lowers it, and with no operation running it drifts down. Counterintelligence Support counts for none of this. Each tier adds to our [concept_intelligence_capacity] and makes our networks grow #G [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! faster.\\n#bold Fledgling#! at [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Established#! at [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: priority [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Seasoned#! at [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Regime Change and Nuclear Programme Sabotage; #bold Veteran#! at [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: one more operation of each type.\\nFalling below a tier never ends a running operation. Hover Tradecraft in the overview for this month's figures.",
+  "es": "Las [concept_tradecraft|l] son la experiencia de nuestra agencia, de 0 a [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_max')|0]: aumentan cada mes con las operaciones que han pasado su fase preparatoria, bajan con una operación expuesta y, sin ninguna operación en marcha, van disminuyendo. El Apoyo de contrainteligencia no cuenta para nada de esto. Cada nivel suma a nuestra [concept_intelligence_capacity|l] y hace que nuestras redes crezcan un #G [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! más rápido.\\n#bold Novato#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Consolidado#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: prioridad [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Curtido#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Cambio de régimen y Sabotaje del programa nuclear; #bold Veterano#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: una operación más de cada tipo.\\nBajar de un nivel nunca termina una operación en curso. Pasa el cursor por Técnicas de espionaje en la vista general para ver las cifras de este mes."
  },
  "je_iw_how_watching": {
-  "en": "When our counterintelligence catches an operation and we run a covert service of our own, we may expose it at once or let it run and watch it. Exposing it is the exposure described under Detection: its sponsor pays the costs, our public turns on the sponsor's friends at home, and the operation ends. Letting it run costs us, because the operation keeps doing its full harm, and its sponsor is not told. In return our network inside the sponsor stops decaying and grows each month, by #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! to #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! the busier the operation is, more slowly above half strength.\\n\\nA watched operation is not caught again. It is listed under Known Foreign Operations with its sponsor, how long we have watched it and an Expose button that works at any time; while another exposure of that sponsor's operations is still open, the button is greyed until the sponsor has answered for it, which can take weeks.",
-  "es": "Cuando nuestra contrainteligencia descubre una operación y gestionamos un servicio encubierto propio, podemos exponerla de inmediato o dejarla seguir y vigilarla. Exponerla es la exposición descrita en Detección: su patrocinador paga los costes, nuestra opinión pública se vuelve contra los amigos del patrocinador en nuestro país, y la operación termina. Dejarla seguir nos cuesta, porque la operación sigue haciendo todo su daño, y a su patrocinador no se le avisa. A cambio, nuestra red dentro del patrocinador deja de decaer y crece cada mes, de #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! a #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! según lo activa que sea la operación, más despacio por encima de la mitad de fuerza.\\n\\nUna operación vigilada no se vuelve a descubrir. Figura en Operaciones extranjeras conocidas con su patrocinador, cuánto tiempo la hemos vigilado y un botón Exponer que funciona en cualquier momento; mientras otra exposición de las operaciones de ese patrocinador siga abierta, el botón aparece atenuado hasta que el patrocinador haya respondido por ella, lo que puede llevar semanas."
+  "en": "When our counterintelligence catches an operation and we run a covert service of our own, we may expose it at once or let it run and watch it. Exposing it is the exposure described under Detection: its sponsor pays the costs, our public turns on the sponsor's friends at home, and the operation ends. Letting it run costs us, because the operation keeps doing its full harm, and its sponsor is not told. In return our network inside the sponsor stops decaying and grows each month, by #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! to #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! the busier the operation is, more slowly above half strength.\\n\\nA watched operation is not caught again. It is listed under Known Foreign Operations with its sponsor, how long we have watched it and an Expose button that works at any time; while another exposure of that sponsor's operations is still open, the button is greyed until the sponsor has answered for it, which can take weeks.",
+  "es": "Cuando nuestra contrainteligencia descubre una operación y gestionamos un servicio encubierto propio, podemos exponerla de inmediato o dejarla seguir y vigilarla. Exponerla es la exposición descrita en Detección: su patrocinador paga los costes, nuestra opinión pública se vuelve contra los amigos del patrocinador en nuestro país, y la operación termina. Dejarla seguir nos cuesta, porque la operación sigue haciendo todo su daño, y a su patrocinador no se le avisa. A cambio, nuestra red dentro del patrocinador deja de decaer y crece cada mes, de #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! a #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! según lo activa que sea la operación, más despacio por encima de la mitad de fuerza.\\n\\nUna operación vigilada no se vuelve a descubrir. Figura en Operaciones extranjeras conocidas con su patrocinador, cuánto tiempo la hemos vigilado y un botón Exponer que funciona en cualquier momento; mientras otra exposición de las operaciones de ese patrocinador siga abierta, el botón aparece atenuado hasta que el patrocinador haya respondido por ella, lo que puede llevar semanas."
  },
  "je_iw_known_expose_button": {
   "en": "Expose",
@@ -1476,8 +1548,8 @@
   "es": "Redes de agentes"
  },
  "je_iw_net_header_tooltip": {
-  "en": "Every country we have run operations against keeps a network of agents that outlives the operations. It grows while operations run there, #v faster with more of them#! and #v slower above half strength#!, and decays once they stop — #v half as fast#! at funding level [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] or above. A burned operation costs its network #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength. Counterintelligence Support neither builds nor feeds a network.\\n\\nA strong network lowers the detection risk of every operation in that country (up to #G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! points before efficiency) and gives a new operation there a head start of up to #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! months. It also raises the detection risk of every operation that country runs against us (up to #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! points before their efficiency), because our agents inside their service hear of it.\\n\\nA strong network also reports on the service it has penetrated: from strength #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! its [concept_intelligence_capacity] and technology count, from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! how many operations it is running against us - the only way to learn of an operation our counterintelligence has not caught.",
-  "es": "Cada país contra el que hemos ejecutado operaciones conserva una red de agentes que sobrevive a las operaciones. Crece mientras se ejecutan operaciones allí, #v más rápido cuantas más haya#! y #v más despacio por encima de la mitad de fuerza#!, y decae cuando cesan —#v a la mitad de velocidad#! con un nivel de financiación de [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] o superior. Una operación quemada cuesta a su red #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza. El Apoyo de contrainteligencia no construye ni alimenta ninguna red.\\n\\nUna red sólida reduce el riesgo de detección de toda operación en ese país (hasta #G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! puntos antes de aplicar la eficiencia) y da a una operación nueva allí una ventaja inicial de hasta #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! meses. También aumenta el riesgo de detección de toda operación que ese país ejecute contra nosotros (hasta #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! puntos antes de aplicar su eficiencia), porque nuestros agentes dentro de su servicio se enteran.\\n\\nUna red sólida también informa sobre el servicio que ha penetrado: a partir de una fuerza de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! cuentan su [concept_intelligence_capacity|l] y su número de tecnologías, y a partir de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! cuántas operaciones ejecuta contra nosotros: la única forma de enterarse de una operación que nuestra contrainteligencia no ha descubierto."
+  "en": "Every country we have run operations against keeps a network of agents that outlives the operations. It grows while operations run there, #v faster with more of them#! and #v slower above half strength#!, and decays once they stop — #v half as fast#! at funding level [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] or above. A burned operation costs its network #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength. Counterintelligence Support neither builds nor feeds a network.\\n\\nA strong network lowers the detection risk of every operation in that country (up to #G -[GetPlayer.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! points before efficiency) and gives a new operation there a head start of up to #G [GetPlayer.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! months. It also raises the detection risk of every operation that country runs against us (up to #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! points before their efficiency), because our agents inside their service hear of it.\\n\\nA strong network also reports on the service it has penetrated: from strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! its [concept_intelligence_capacity] and technology count, from #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! how many operations it is running against us - the only way to learn of an operation our counterintelligence has not caught.",
+  "es": "Cada país contra el que hemos ejecutado operaciones conserva una red de agentes que sobrevive a las operaciones. Crece mientras se ejecutan operaciones allí, #v más rápido cuantas más haya#! y #v más despacio por encima de la mitad de fuerza#!, y decae cuando cesan —#v a la mitad de velocidad#! con un nivel de financiación de [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] o superior. Una operación quemada cuesta a su red #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza. El Apoyo de contrainteligencia no construye ni alimenta ninguna red.\\n\\nUna red sólida reduce el riesgo de detección de toda operación en ese país (hasta #G -[GetPlayer.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! puntos antes de aplicar la eficiencia) y da a una operación nueva allí una ventaja inicial de hasta #G [GetPlayer.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! meses. También aumenta el riesgo de detección de toda operación que ese país ejecute contra nosotros (hasta #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! puntos antes de aplicar su eficiencia), porque nuestros agentes dentro de su servicio se enteran.\\n\\nUna red sólida también informa sobre el servicio que ha penetrado: a partir de una fuerza de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! cuentan su [concept_intelligence_capacity|l] y su número de tecnologías, y a partir de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! cuántas operaciones ejecuta contra nosotros: la única forma de enterarse de una operación que nuestra contrainteligencia no ha descubierto."
  },
  "je_iw_net_row_benefit": {
   "en": "Head start for a new operation: #v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! months",
@@ -1896,8 +1968,8 @@
   "es": "La barra sólida llega hasta el valor más bajo entre la puntuación y su objetivo, y el tramo pálido hasta el más alto. El tramo pálido no es verde ni rojo en ningún caso, porque un tabú más fuerte tiene dos caras: pesa sobre un arsenal y sobre las amenazas, y protege a los países que no tienen uno. La flecha indica hacia dónde va."
  },
  "je_nuclear_ov_taboo_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mes)"
+  "en": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
+  "es": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mes)"
  },
  "je_nuclear_ov_warheads_label": {
   "en": "Warheads #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_stockpile')|0]#!",
@@ -1952,8 +2024,8 @@
   "es": "#tooltip_header Financiación del programa#!\\n$TOOLTIP_DELIMITER$\\nCada nivel de financiación compra una unidad más de avance de ojivas al mes, pagada con [concept_innovation|l] semanal. Un nivel vale:\\n[GetStaticModifier('nuclear_weapon_program_funding').GetDesc]"
  },
  "je_nuclear_program_widget_funding_value": {
-  "en": "Step #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
-  "es": "Escalón #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/semana"
+  "en": "Step #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
+  "es": "Escalón #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/semana"
  },
  "je_nuclear_program_widget_next_label": {
   "en": "Next warhead in",
@@ -1992,8 +2064,8 @@
   "es": "#tooltip_header Producción de ojivas#!\\n$TOOLTIP_DELIMITER$\\nAvance hacia la siguiente ojiva, por mes; el pulso semanal aplica una cuarta parte.[JournalEntry.GetCountry.GetCustom('nuclear_program_rate_note')][JournalEntry.GetCountry.GetCustom('nuclear_program_aid_note')]"
  },
  "je_nuclear_program_widget_rate_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / mes"
+  "en": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
+  "es": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / mes"
  },
  "je_nuclear_program_widget_taboo_burden_label": {
   "en": "Burden of our arsenal",
@@ -2004,8 +2076,8 @@
   "es": "#tooltip_header La carga de la bomba#!\\n$TOOLTIP_DELIMITER$\\nEl mundo contempla las armas nucleares con horror y se lo reprocha a quienes las conservan: a partir de un tabú de 40, cuanto mayor es nuestro arsenal (hasta cincuenta ojivas), más pesada es la carga. Vuelve en nuestra contra el prestigio de la bomba, nos quita la potestad que nos aportó y pone a nuestros grupos de interés partidarios de la contención en contra del propio arsenal. Mantén el arsenal por debajo de un tope, o renuncia a él, para aligerarla. Ahora es del #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#!."
  },
  "je_nuclear_program_widget_taboo_burden_value": {
-  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
-  "es": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! de prestigio · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! de potestad"
+  "en": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
+  "es": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! de prestigio · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! de potestad"
  },
  "je_nuclear_program_widget_taboo_costs_tt": {
   "en": "#tooltip_header What the Taboo Costs#!\\n$TOOLTIP_DELIMITER$\\nWhat a nuclear act costs us today. Every figure moves with the taboo: at zero, nothing; at its height, a first use makes a state a pariah. An answer to a strike on us, or on a country we protect, costs no infamy.",
@@ -2036,24 +2108,24 @@
   "es": "Primer uso contra una ciudad"
  },
  "je_nuclear_program_widget_taboo_strategic_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamy · relations #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamia · relaciones #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamy · relations #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamia · relaciones #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!"
  },
  "je_nuclear_program_widget_taboo_tactical_label": {
   "en": "First use in battle",
   "es": "Primer uso en combate"
  },
  "je_nuclear_program_widget_taboo_tactical_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamy · relations #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamia · relaciones #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamy · relations #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamia · relaciones #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!"
  },
  "je_nuclear_program_widget_taboo_threat_label": {
   "en": "A public ultimatum",
   "es": "Un ultimátum público"
  },
  "je_nuclear_program_widget_taboo_threat_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! de infamia"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! de infamia"
  },
  "je_opium_international_opium_convention_tt": {
   "en": "The International Opium Convention has been signed (23 January 1912)",
@@ -2928,8 +3000,8 @@
   "es": "Rivales muestra a todas las demás potencias que ejecutan el mismo hito y lo hacen avanzar: jugadores y potencias de IA entre las tres primeras de la clasificación mundial. Una potencia de IA fuera de las tres primeras puede tener un programa que nunca avanza, por lo que se omite. Las cinco primeras reciben cada una una estimación de su progreso, una banda alrededor de un marcador: los programas se anuncian, sus calendarios no. La banda es de ±25% del objetivo, y la cifra real siempre queda dentro; el lugar del marcador dentro de la banda se vuelve a sortear una vez al año. Una red de inteligencia en el país del rival reduce la banda a ±10% con fuerza 50 y a ±5% con 75. Los demás rivales se enumeran al pasar el cursor."
  },
  "je_space_race_widget_how_setbacks": {
-  "en": "Each month, every running milestone rolls against its [concept_sr_setback_risk], which stays between 1% and 50% a month. A setback costs months of progress at the pace the programme had when it struck: Standard and Safe suffer minor setbacks of 1 to 4 months, Ambitious real failures of 4 to 6 months of its faster pace. Most responses to an Ambitious failure also start a six-month post-setback review: no milestone can suffer another setback, and progress continues at full pace. A setback never takes more progress than the milestone has and never ends it. In Solar System Colonization it takes one colony's progress at most, so fleets staged in orbit are safe. The estimate ignores setbacks.",
-  "es": "Cada mes, todo hito en marcha hace una tirada contra su [concept_sr_setback_risk|l], que se mantiene entre el 1% y el 50% mensual. Un contratiempo cuesta meses de progreso, al ritmo que tenía el programa cuando se produjo: Estándar y Seguro sufren contratiempos menores de 1 a 4 meses; Ambicioso, fallos reales de 4 a 6 meses de su ritmo más rápido. La mayoría de las respuestas a un fallo Ambicioso también inician una revisión posterior al contratiempo de seis meses: ningún hito puede sufrir otro contratiempo, y el progreso continúa a pleno ritmo. Un contratiempo nunca quita más progreso del que tiene el hito y nunca le pone fin. En la Colonización del sistema solar quita como mucho el progreso de una colonia, así que las flotas en espera en órbita están a salvo. La estimación ignora los contratiempos."
+  "en": "Each month, every running milestone rolls against its [concept_sr_setback_risk], which stays between 1% and 50% a month. A setback costs months of progress at the pace the program had when it struck: Standard and Safe suffer minor setbacks of 1 to 4 months, Ambitious real failures of 4 to 6 months of its faster pace. A setback never takes more progress than the milestone has and never ends it. In Solar System Colonization it takes one colony's progress at most, so fleets staged in orbit are safe. The estimate ignores setbacks.",
+  "es": "Cada mes, todo hito en marcha hace una tirada contra su [concept_sr_setback_risk|l], que se mantiene entre el 1% y el 50% mensual. Un contratiempo cuesta meses de progreso, al ritmo que tenía el programa cuando se produjo: Estándar y Seguro sufren contratiempos menores de 1 a 4 meses; Ambicioso, fallos reales de 4 a 6 meses de su ritmo más rápido. Un contratiempo nunca quita más progreso del que tiene el hito y nunca le pone fin. En la Colonización del sistema solar quita como mucho el progreso de una colonia, así que las flotas en espera en órbita están a salvo. La estimación ignora los contratiempos."
  },
  "je_space_race_widget_how_sub_approach": {
   "en": "Approach and Pace",
@@ -3160,24 +3232,24 @@
   "es": "#tooltippable En espera en órbita#!"
  },
  "je_space_race_widget_ov_staged_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! flotas"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
+  "es": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! flotas"
  },
  "je_space_race_widget_ov_transit_label": {
   "en": "Transit",
   "es": "Tránsito"
  },
  "je_space_race_widget_ov_transit_tt": {
-  "en": "#bold To go:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$",
-  "es": "#bold Falta:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$"
+  "en": "#bold To go:#! [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$",
+  "es": "#bold Falta:#! [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$"
  },
  "je_space_race_widget_ov_worlds": {
   "en": "Worlds: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34",
   "es": "Mundos: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34"
  },
- "je_space_race_widget_ov_worlds_tt": {
-  "en": "#bold Ours:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Claimed worldwide:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] of 34\\nOurs run clockwise from twelve o'clock, then other powers' claims, then the worlds no one holds. Each world can be claimed once, by anyone.",
-  "es": "#bold Nuestros:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Reclamados en todo el mundo:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] de 34\\nLos nuestros van en sentido horario desde las doce en punto, luego las reclamaciones de otras potencias y luego los mundos que nadie tiene. Cada mundo puede reclamarse una vez, por cualquiera."
+ "je_space_race_widget_ov_worlds_tt_ours": {
+  "en": "#bold Ours:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Claimed worldwide:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] of 34\\nOurs run clockwise from twelve o'clock, then other powers' claims, then the worlds no one holds. Each world can be claimed once, by anyone.",
+  "es": "#bold Nuestros:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Reclamados en todo el mundo:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] de 34\\nLos nuestros van en sentido horario desde las doce en punto, luego las reclamaciones de otras potencias y luego los mundos que nadie tiene. Cada mundo puede reclamarse una vez, por cualquiera."
  },
  "je_space_race_widget_pace_interstellar_results": {
   "en": "Nothing can be done to hurry this. The probe is coasting, and the signal it sends will take another 4.37 years to cross back to Earth after it arrives.",
@@ -3328,48 +3400,48 @@
   "es": "Perfil de la misión"
  },
  "je_space_race_widget_prog_interstellar_0": {
-  "en": "#bold Interstellar Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]",
-  "es": "#bold Sonda interestelar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]"
+  "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_prog_interstellar_probe')]",
+  "es": "#bold Sonda interestelar#! — [Country.GetCustom('sr_prog_interstellar_probe')]"
  },
  "je_space_race_widget_prog_interstellar_1": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_running$\\nOnce launched, the probe coasts for 132 months before its data reaches us.",
   "es": "#bold Sonda interestelar#! — $sr_prog_state_running$\\nUna vez lanzada, la sonda va a la deriva durante 132 meses antes de que sus datos nos lleguen."
  },
  "je_space_race_widget_prog_interstellar_2": {
-  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data reaches us in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos nos llegan en [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
+  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos nos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
  },
  "je_space_race_widget_prog_interstellar_3": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
   "es": "#bold Sonda interestelar#! — $sr_prog_state_signal_received$"
  },
  "je_space_race_widget_prog_mars_landing": {
-  "en": "#bold Mars Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]",
-  "es": "#bold Aterrizaje en Marte#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]"
+  "en": "#bold Mars Landing#! — [Country.GetCustom('sr_prog_mars_landing')]",
+  "es": "#bold Aterrizaje en Marte#! — [Country.GetCustom('sr_prog_mars_landing')]"
  },
  "je_space_race_widget_prog_moon_base": {
   "en": "#bold Moon Base#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]",
   "es": "#bold Base lunar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]"
  },
  "je_space_race_widget_prog_moon_landing": {
-  "en": "#bold Moon Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]",
-  "es": "#bold Alunizaje#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]"
+  "en": "#bold Moon Landing#! — [Country.GetCustom('sr_prog_moon_landing')]",
+  "es": "#bold Alunizaje#! — [Country.GetCustom('sr_prog_moon_landing')]"
  },
  "je_space_race_widget_prog_orbital": {
-  "en": "#bold Orbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]",
-  "es": "#bold Vuelo orbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]"
+  "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_prog_orbital')]",
+  "es": "#bold Vuelo orbital#! — [Country.GetCustom('sr_prog_orbital')]"
  },
  "je_space_race_widget_prog_probe": {
-  "en": "#bold Deep-Space Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]",
-  "es": "#bold Sonda de espacio profundo#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]"
+  "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_prog_probe')]",
+  "es": "#bold Sonda de espacio profundo#! — [Country.GetCustom('sr_prog_probe')]"
  },
  "je_space_race_widget_prog_solar_colonization": {
-  "en": "#bold Solar System Colonization#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]",
-  "es": "#bold Colonización del sistema solar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]"
+  "en": "#bold Solar System Colonization#! — [Country.GetCustom('sr_prog_solar_colonization')]",
+  "es": "#bold Colonización del sistema solar#! — [Country.GetCustom('sr_prog_solar_colonization')]"
  },
  "je_space_race_widget_prog_suborbital": {
-  "en": "#bold Suborbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]",
-  "es": "#bold Vuelo suborbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]"
+  "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_prog_suborbital')]",
+  "es": "#bold Vuelo suborbital#! — [Country.GetCustom('sr_prog_suborbital')]"
  },
  "je_space_race_widget_programme_header": {
   "en": "Programme",
@@ -3380,8 +3452,8 @@
   "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mes#!)"
  },
  "je_space_race_widget_progress_interstellar_results": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 meses"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
+  "es": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 meses"
  },
  "je_space_race_widget_progress_mars_landing": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo#!)",
@@ -3448,36 +3520,36 @@
   "es": "#header Vuelo suborbital#!\\n#bold Si somos la primera nación en lograrlo:#!\\n[GetStaticModifier('sr_first_suborbital').GetDesc]\\n#bold Si otra potencia llega antes:#!\\n[GetStaticModifier('sr_suborbital').GetDesc]"
  },
  "je_space_race_widget_risk_interstellar_probe": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mes"
  },
  "je_space_race_widget_risk_mars_landing": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mes"
  },
  "je_space_race_widget_risk_moon_base": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mes"
  },
  "je_space_race_widget_risk_moon_landing": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mes"
  },
  "je_space_race_widget_risk_orbital": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mes"
  },
  "je_space_race_widget_risk_probe": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mes"
  },
  "je_space_race_widget_risk_solar_colonization": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mes"
  },
  "je_space_race_widget_risk_suborbital": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
  },
  "je_space_race_widget_rival_more_interstellar_probe": {
   "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] more",

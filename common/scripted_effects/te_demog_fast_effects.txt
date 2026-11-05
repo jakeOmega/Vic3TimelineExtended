@@ -210,7 +210,7 @@ te_demog_fast_refresh_rates = {
 				}
 			}
 		}
-		# removed and re-applied, the mod's refresh pattern (docs/systems/mod_systems.md, the
+		# removed and re-applied, the mod's refresh pattern (docs/systems/mod_systems/dynamic_modifier_pattern.md, the
 		# dynamic-modifier scaling pattern)
 		if = {
 			limit = { has_modifier = te_demog_fast_births }

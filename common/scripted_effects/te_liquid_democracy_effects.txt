@@ -1,0 +1,68 @@
+﻿# Liquid Democracy (law_liquid_democracy, extra_laws.txt; era 13 spec § 7.4).
+# Docs: docs/systems/mod_systems/governance_laws.md § Liquid Democracy.
+
+# The Continuous Vote (te_continuous_vote), re-derived once a year from the law
+# and Neural Lace. Its one add site: the old copy goes first, since a same-name
+# add_modifier stacks. A revolution's winner inherits no modifiers, so its
+# first pulse here restores the Continuous Vote if it holds both.
+#
+# Country scope. Called from te_liquid_democracy_yearly_pulse
+# (te_liquid_democracy_on_actions.txt).
+te_refresh_continuous_vote = {
+	remove_modifier_if_exists_effect = { MODIFIER = te_continuous_vote }
+	if = {
+		limit = {
+			has_law = law_type:law_liquid_democracy
+			has_technology_researched = neural_lace
+		}
+		add_modifier = { name = te_continuous_vote }
+	}
+}
+
+# Once a game (CLAUDE.md "In-game checks"): does the engine hold elections under
+# a mod Distribution of Power law that carries Universal Suffrage's voting power?
+# No mod voting law existed before this one, and vanilla's own rule is unread:
+# Anarchy holds campaigns without a franchise (scripting_best_practices.md).
+# OK at the first campaign that starts under the law anywhere; BROKEN when a
+# country has held it six years, longer than a four-year cycle and its
+# campaign, and no campaign has started under it anywhere. Fallback:
+# docs/testing/era-13-playtest.md § Phase 3: Liquid Democracy.
+#
+# Country scope. te_ld_selfcheck_campaign from on_election_campaign_start,
+# te_ld_selfcheck_yearly from te_liquid_democracy_yearly_pulse.
+te_ld_selfcheck_campaign = {
+	if = {
+		limit = {
+			has_law = law_type:law_liquid_democracy
+			NOT = { has_global_variable = te_ld_selfcheck_done }
+		}
+		set_global_variable = te_ld_selfcheck_done
+		debug_log = "TE_SELF_CHECK OK liquid_democracy_elections country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (an election campaign started under the law)"
+	}
+}
+
+te_ld_selfcheck_yearly = {
+	if = {
+		limit = { has_law = law_type:law_liquid_democracy }
+		if = {
+			limit = { has_variable = te_ld_years_held }
+			change_variable = { name = te_ld_years_held add = 1 }
+		}
+		else = {
+			set_variable = { name = te_ld_years_held value = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_ld_years_held }
+		remove_variable = te_ld_years_held
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ld_selfcheck_done }
+			has_variable = te_ld_years_held
+			var:te_ld_years_held >= 6
+		}
+		set_global_variable = te_ld_selfcheck_done
+		debug_log = "TE_SELF_CHECK BROKEN liquid_democracy_elections country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] years=[THIS.Var('te_ld_years_held').GetValue|0] (held the law six yearly pulses with no election campaign started under it anywhere)"
+	}
+}

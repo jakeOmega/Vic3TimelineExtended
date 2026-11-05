@@ -55,6 +55,67 @@ sr_sc_may_build_government = {
 	}
 }
 
+# Country scope. Its fleets take orders (Space Race UI pass design § 10): a
+# Space Command level in a state it controls. Without one they can't depart
+# (every sr_fl_<n>_may_depart_<loc>), change posture or target, start a refit
+# or repair, and a refit under way pauses (sr_fl_month_at); the AI's offence
+# waits too (sr_fl_ai_attack). Fleets in flight land, fight where they are at
+# the posture they had, and refill. The upkeep sits on Space Command, so this
+# is what stops a country demolishing it to keep its fleet for nothing. An
+# occupied Space Command's state stops them too, as it stops construction.
+sr_sc_operational = {
+	has_building = building_space_command
+	any_scope_state = {
+		sr_state_held_by_owner = yes
+		has_building = building_space_command
+		any_scope_building = {
+			is_building_type = building_space_command
+			level >= 1
+		}
+	}
+}
+
+# Country scope. Space Command's construction is paused (owner, 2026-10-31):
+# the player's Pause (sr_sc_pause_sgui) or the AI's fiscal review
+# (sr_sc_ai_pause_review). Building is the variable's absence, the default.
+sr_sc_is_paused = {
+	has_variable = sr_sc_paused
+}
+
+# Country scope. Paused, with a resume asked for (sr_sc_resume_pending): the
+# next monthly step builds nothing and then ends the pause (sr_sc_month).
+sr_sc_is_resuming = {
+	has_variable = sr_sc_resume_pending
+}
+
+# Country scope, an AI's pause: in default, or in deficit at peace. At war only
+# default pauses it: a war puts most countries in deficit, and a deficit pause
+# would stop the fleets being built for the space war. The fiscal terms of
+# sr_sc_may_build_government's AI branch, turned round.
+sr_sc_ai_should_pause = {
+	OR = {
+		in_default = yes
+		AND = {
+			net_fixed_income < 0
+			is_at_war = no
+		}
+	}
+}
+
+# Country scope, an AI's resume: out of default with a positive weekly income,
+# or at war out of default (a deficit at war doesn't pause it, so it doesn't
+# keep one paused either), and six months after it paused (sr_sc_pause_hold,
+# a timed country variable), so a budget that hovers near zero doesn't flip it
+# every month.
+sr_sc_ai_may_resume = {
+	in_default = no
+	OR = {
+		net_fixed_income > 0
+		is_at_war = yes
+	}
+	NOT = { has_variable = sr_sc_pause_hold }
+}
+
 # Country scope. The ship_construction self-check's subject (design § 18): a
 # Space Command at half staff or more in a state its owner controls.
 sr_sc_qualifies = {
@@ -360,5 +421,29 @@ sr_battery_sweep_subject = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
 		sr_battery_sweep_qualifies = yes
+	}
+}
+
+# Country scope, the Earth alert (UI pass design § 9): hostile fleets are in
+# flight to Earth and their landing would tip the balance there. Either we
+# have no fleet at Earth and it isn't blockaded already (a blockade has its own
+# notice, space_race_events.106, and every hostile fleet's home is Earth, so a
+# leg coming home to a blockade it already holds changes nothing); or ours at
+# Earth (sr_fl_at_earth, at its readiness: half without a Space Command,
+# sr_fl_at_earth_ready) holds against the hostile fleets there now
+# (sr_loc_ai_enemy_fleets_earth) but not against those and the inbound
+# together (sr_earth_hostile_total).
+sr_earth_alert_loud = {
+	sr_loc_hostile_inbound_strength_earth > 0
+	OR = {
+		AND = {
+			NOT = { has_variable = sr_fl_at_earth }
+			NOT = { sr_earth_blockaded = yes }
+		}
+		AND = {
+			has_variable = sr_fl_at_earth
+			sr_fl_at_earth_ready >= sr_loc_ai_enemy_fleets_earth
+			sr_earth_hostile_total > sr_fl_at_earth_ready
+		}
 	}
 }

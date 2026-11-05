@@ -538,7 +538,7 @@ with rural assessment and head tax both collected (the Poll range).
 Expect the draft summary's Revenue row equal to the sum of the Revenue Estimate table's
 Change column (`Add_CFixedPoint` of four `Multiply_CFixedPoint`s), a range when Poll is
 shared, "in part" when a changed line has no base and "Not estimated" before the first
-snapshot; the provisions' names underlined with who benefits on hover; a passed bill's
+snapshot; the provisions' names with who benefits on hover (not underlined since 2026-10-30); a passed bill's
 relief in the review's timeline. Keep and break a promise (PT-28): its history row names
 the group ("A promise to the Rural Folk was kept."), and a row that changed the code
 shows its version.

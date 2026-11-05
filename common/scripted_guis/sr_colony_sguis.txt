@@ -10,8 +10,9 @@
 # (sr_cf_pick_auto, sr_emig_ai_review).
 # ============================================================================
 
-# Solar System: send our next colony fleet to the world, or, on our target,
-# let the programme choose again.
+# The colony target popup (te_sr_target_popup; UI pass design § 5): send our
+# next colony fleet to the world, or, on our target, let the programme choose
+# again.
 sr_colony_target_sgui = {
 	scope = country
 	saved_scopes = { site }
@@ -70,7 +71,7 @@ sr_colony_target_sgui = {
 }
 
 # Colony Fleets: Clear, beside our target (audit SPC-7): the programme chooses
-# again, as Clear on the world's Solar System row does.
+# again, as Clear on our target's row in the colony target popup does.
 sr_cf_target_clear_sgui = {
 	scope = country
 
@@ -100,7 +101,8 @@ sr_cf_target_clear_sgui = {
 # The colonization overview's cells (audit SPC-6), display only: never
 # Executed. scope:op 1 lists the colonies demanding self-government
 # (sr_ov_list_restless, gen_solar_sites), 2 what threatens our colonies
-# (sr_ov_list_defense, gen_space_fleets).
+# (sr_ov_list_defense, gen_space_fleets), 3 the powers at war with us with a
+# fleet in flight to Earth (sr_ov_list_earth, gen_space_fleets).
 sr_colony_overview_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -121,6 +123,10 @@ sr_colony_overview_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 2 }
 			sr_ov_list_defense = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			sr_ov_list_earth = yes
 		}
 	}
 }
@@ -255,6 +261,24 @@ sr_colony_module_sgui = {
 					text = sr_mod_req_slot_room_tt
 					sr_mod_scope_slot_room = yes
 				}
+				# Terraforming (code 16; era 13 spec § 7.11): the technology's marker, at
+				# most three at a world at once, and only while the world is unfinished.
+				# Only the worlds that take it have its button.
+				trigger_if = {
+					limit = { scope:op = 16 }
+					custom_tooltip = {
+						text = sr_mod_req_terra_tech_tt
+						modifier:country_sr_terraforming_bool = yes
+					}
+					custom_tooltip = {
+						text = sr_mod_req_terra_room_tt
+						sr_mod_scope_terra_room = yes
+					}
+					custom_tooltip = {
+						text = sr_mod_req_terra_open_tt
+						sr_mod_scope_terra_open = yes
+					}
+				}
 			}
 		}
 	}
@@ -373,6 +397,14 @@ sr_colony_module_sgui = {
 				sr_mod_queue_from_scope = yes
 			}
 		}
+		# Terraforming (era 13 spec § 7.11).
+		else_if = {
+			limit = { scope:op = 16 }
+			custom_tooltip = {
+				text = sr_mod_queue_terra_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
 		# Past the world's slots the module costs more fabrication (design § 5).
 		if = {
 			limit = {
@@ -441,6 +473,72 @@ sr_colony_module_queue_up_sgui = {
 		custom_tooltip = {
 			text = sr_mq_up_tt
 			sr_mq_move_up_from_scope = yes
+		}
+	}
+}
+
+# Dismantling (owner, 2026-10-31), on a colony's page: scope:op (a module's
+# code, as sr_colony_module_sgui's) starts one level of that module at the world
+# (scope:site) coming down, over sr_mod_dismantle_months; on the module already
+# coming down there, it stops. One at a time a world. Losing the world or its
+# occupation ends the order; a blockade holds it. A founding specialization
+# keeps its first level, and a Habitat stays while its people need its room.
+sr_colony_dismantle_sgui = {
+	scope = country
+	saved_scopes = { site op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { sr_md_scope_is_this = yes }
+			always = yes
+		}
+		# Each condition its own line (the failing one gets the cross).
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_cf_req_held_tt
+				sr_cf_scope_site_held = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_not_occupied_tt
+				sr_md_scope_not_occupied = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_idle_tt
+				sr_md_scope_idle = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_level_tt
+				sr_md_scope_above_floor = yes
+			}
+			custom_tooltip = {
+				text = sr_md_req_room_tt
+				sr_md_scope_room_kept = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_md_scope_is_this = yes }
+			custom_tooltip = {
+				text = sr_md_stop_tt
+				sr_md_cancel_from_scope = yes
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = sr_md_start_tt
+				sr_md_start_from_scope = yes
+			}
 		}
 	}
 }

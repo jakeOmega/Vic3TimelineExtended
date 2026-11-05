@@ -254,8 +254,8 @@ group to cover automation without a Cartesian product of PM selections.
 Production capture now generates 74 building types, 70 source groups and 342
 tier variants. `pm_carbon_capture.py` owns explicit exceptions and cost anchors;
 its coverage report lists every inclusion/exception. Automation uses separate
-controls, including steel boilers; no Cartesian-product gating. Three existing
-shield icons serve as tier artwork. State credits are subtracted once per
+controls, including steel boilers; no Cartesian-product gating. Each tier and the
+No step has its own icon (the `carbon_capture` category in `icon_prompts.py`). State credits are subtracted once per
 location's market and divided by the display scale. No new yearly building sweep.
 Tiny sources retain fractional operating costs and capture values to avoid free
 capture from rounding. Modern coal Tier II uses 12 electricity rather than the

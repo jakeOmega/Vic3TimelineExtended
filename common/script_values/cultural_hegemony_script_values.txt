@@ -642,6 +642,81 @@ ch_benchmark_legitimacy_display = {
 	multiply = cultural_hegemony_foreign_benchmark_legitimacy
 }
 
+# ---- Hegemony Bonus: the overview cell and its hover --------------------------
+# What the cultural_hegemony_effect modifier gives at the strength the last
+# monthly pulse applied. The modifier sits on the journal entry, so only the
+# entry's own modifier strip showed it; these let every host of the panels
+# (the Society tab, the Timeline Extended window, another country's National
+# Info) print it through Country.
+#
+# The strength is the multiplier the pulse applied, and 0 while the entry
+# carries no modifier: the pulse removes it below 1% share but keeps
+# ch_effect_mult_cached, so the variable alone would show a stale strength.
+ch_bonus_strength_display = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = ch_effect_mult_cached
+			je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }
+		}
+		add = var:ch_effect_mult_cached
+	}
+}
+
+# Each field of cultural_hegemony_effect at multiplier 1 (1% of world cultural
+# influence), named ch_bonus_unit_<field>. Keep each equal to its field in
+# common/static_modifiers/extra_modifiers.txt: a script value cannot read a
+# static modifier, and test_cultural_hegemony_layout.HegemonyBonusTest fails
+# when the two differ or a field has no unit, display value and hover line.
+ch_bonus_unit_country_mass_migration_attraction_mult = 0.0025
+ch_bonus_unit_goods_output_tourism_mult = 0.01
+ch_bonus_unit_goods_trade_advantage_fine_art_mult = 0.01
+ch_bonus_unit_country_loyalists_from_legitimacy_mult = 0.01
+ch_bonus_unit_country_leverage_generation_mult = 0.01
+ch_bonus_unit_country_diplomatic_reputation_add = 0.1
+ch_bonus_unit_country_infamy_decay_mult = 0.01
+ch_bonus_unit_state_assimilation_mult = 0.05
+
+ch_bonus_country_mass_migration_attraction_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_mass_migration_attraction_mult
+}
+
+ch_bonus_goods_output_tourism_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_goods_output_tourism_mult
+}
+
+ch_bonus_goods_trade_advantage_fine_art_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_goods_trade_advantage_fine_art_mult
+}
+
+ch_bonus_country_loyalists_from_legitimacy_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_loyalists_from_legitimacy_mult
+}
+
+ch_bonus_country_leverage_generation_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_leverage_generation_mult
+}
+
+ch_bonus_country_diplomatic_reputation_add_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_diplomatic_reputation_add
+}
+
+ch_bonus_country_infamy_decay_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_infamy_decay_mult
+}
+
+ch_bonus_state_assimilation_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_state_assimilation_mult
+}
+
 # How much of the foreign benchmark still lands: 1 minus
 # country_ideology_resistance_mult, floored at 0.
 # Scope: country (the benchmark's add_modifier runs in the JE's monthly pulse,

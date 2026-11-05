@@ -15,7 +15,10 @@ import pm_emissions as emissions
 u = emissions.unwrap
 METHODS = Path("common/production_methods/carbon_capture_generated_pms.txt")
 GROUPS = Path("common/production_method_groups/carbon_capture_generated_groups.txt")
-BUILDINGS = Path("common/buildings/carbon_capture_generated_injects.txt")
+# Named to load after every other building file: an INJECT appends its groups in
+# file order, so a capture group lands after the production groups the mod
+# injects into the same vanilla building (extra_buildings.txt), as in the panel.
+BUILDINGS = Path("common/buildings/zz_te_carbon_capture_injects.txt")
 LOC = Path("localization/english/te_production_methods_l_english.yml")
 REPORT = Path("docs/systems/carbon_capture_coverage.md")
 PREFIX = "pmg_carbon_capture_"
@@ -23,8 +26,10 @@ MANDATE = "law_managed_fossil_phaseout"
 TIERS = ((1, Decimal("0.25"), "Partial Carbon Capture", "clean_energy_technologies"),
          (2, Decimal("0.50"), "Carbon Capture and Storage", "carbon_capture_and_storage"),
          (3, Decimal("0.75"), "Advanced Carbon Capture", "modern_material_science"))
-# Existing shield icons distinguish the three tiers without adding new assets.
-ICONS = ("cat_shield_green_p1", "cat_shield_green_p2", "cat_shield_gold_p3")
+# The ladder's icons (icon batch 13; the carbon_capture category in
+# scripts/image_pipeline/icon_prompts.py): one per tier, and the "No" step's ring and bar.
+ICONS = ("carbon_capture_partial", "carbon_capture_storage", "carbon_capture_advanced")
+NONE_ICON = "carbon_capture_none"
 EXCLUDED_BUILDINGS = {
     **dict.fromkeys(("building_airport", "building_highway", "building_port", "building_railway",
                     "building_fishing_wharf", "building_whaling_station", "building_logging_camp",
@@ -186,7 +191,7 @@ def plan_outputs(state, root):
                 label = "$" + attached[0] + "$"
         loc.append(f' {group}:0 "Carbon Capture ({label})"')
         loc.append(f' {none}:0 "No Carbon Capture"')
-        methods.extend([f"{none} = {{", '\ttexture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"'])
+        methods.extend([f"{none} = {{", f'\ttexture = "gfx/interface/icons/production_method_icons/{NONE_ICON}.dds"'])
         if exempt:
             # Not-applicable unlocks on the exempt source methods; gate the
             # default on the rest so the group never offers both.
@@ -199,7 +204,7 @@ def plan_outputs(state, root):
             names.append(na)
             loc.extend([f' {na}:0 "Capture Not Applicable"',
                         f' {na}_desc:0 "This production method has no eligible stationary fuel emissions to capture."'])
-            methods.extend([f"{na} = {{", '\ttexture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"',
+            methods.extend([f"{na} = {{", f'\ttexture = "gfx/interface/icons/production_method_icons/{NONE_ICON}.dds"',
                             "\tis_hidden_when_unavailable = yes",
                             "\tunlocking_production_methods = { " + " ".join(exempt) + " }", "}", ""])
         for (coal, oil), pms in sorted(classes.items()):
@@ -229,7 +234,7 @@ def plan_outputs(state, root):
                 methods.extend(["\t\t}", "\t}", "}", ""])
                 loc.extend([f' {name}:0 "{title} ({fuel_text})"',
                             f' {name}_desc:0 "Captures {fraction * 100:g}% of this production group\'s fuel emissions. Staffing and throughput scale removal and operating costs."'])
-        groups.extend([f"{group} = {{", '\ttexture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"',
+        groups.extend([f"{group} = {{", '\ttexture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"',
                        "\tproduction_methods = {", *(f"\t\t{name}" for name in names), "\t}", "}", ""])
     outputs, owned = {}, set()
     for path in sorted((root / "common/buildings").glob("*.txt")):

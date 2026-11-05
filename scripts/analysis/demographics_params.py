@@ -281,13 +281,14 @@ PENSION_BILL_BAND = (0.15, 0.30)
 # The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
 # HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.
 # Below 1836's need the term is negative (a young country's system costs a little less), on a fixed-sign pair.
-# HEALTH_TECHS are all six of chronic treatment's carriers (TREATMENT_CAP's comment), so full technology costs +0.30
-# (owner, 2026-10-20; the first three alone until then): molecular nanotech treats with expensive advanced materials, and
-# the bill is a good sink for an ultra-wealthy late-game country.
+# HEALTH_TECHS are all seven of chronic treatment's carriers (TREATMENT_CAP's comment), so full technology costs +0.35
+# (era 13 spec call 18, 2026-10-31, which added Rejuvenation Therapies; six and +0.30 from the owner's call of
+# 2026-10-20, the first three alone before it): molecular nanotech treats with expensive advanced materials, and the
+# bill is a good sink for an ultra-wealthy late-game country.
 HEALTH_NEED_WEIGHT = 0.8      # step 2's fit (0.5 proposed): rich today +0.35 to +0.5 with its technologies
 HEALTH_NEED_CAP = 1.0
 HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine", "genetic_engineering",
-                "molecular_assemblers", "biological_immortality")
+                "rejuvenation_therapies", "molecular_assemblers", "biological_immortality")
 HEALTH_TECH_STEP = 0.05
 # Work deaths follow the participation model (§2.5): women's share of the census's own workers aged WORK_SPLIT_AGES
 # (first, last), from the last count; before one, the share the sexes' rates give (women_worker_share). Under Full
@@ -525,9 +526,11 @@ CH_BENCHMARK_MAX = 3.0   # cultural_hegemony_foreign_benchmark_max (cultural_heg
 BASE_ACCESS = 0.4
 # chronic 0.99 (owner, 2026-10-20; was 0.85, phase 2 step 4's headroom): as infection's, the technologies alone reach
 # it in the last era. modern_pharmaceuticals 0.3 (era 8), telemedicine 0.2 (era 10) and personalized_medicine 0.2 (era 11)
-# make 0.70; genetic_engineering 0.05 (era 11), molecular_assemblers 0.12 and biological_immortality 0.12 (era 12) take
-# it to 0.99. The augmentation laws' flat lines (Medical Augmentation Only 0.10; Unrestricted, Regulated Market and
-# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS counts all six (2026-10-20).
+# make 0.70; genetic_engineering 0.05 (era 11) 0.75; rejuvenation_therapies 0.15 (era 12) about 0.90; molecular_assemblers
+# 0.04 and biological_immortality 0.05 (era 13) the cap, 0.99 (era 13 spec call 6, 2026-10-31: near-total elimination
+# waits for era 13; until then the two carried 0.12 each in era 12). The augmentation laws' flat lines (Medical
+# Augmentation Only 0.10; Unrestricted, Regulated Market and Mandatory 0.05) bring it there sooner and past it only cap.
+# The health bill's HEALTH_TECHS counts all seven (era 13 spec call 18).
 # infection 0.99 (#1045; was 0.95): the base game's carriers reach 0.94 by era 7 (medical_degrees 0.03, pharmaceuticals
 # 0.07, modern_nursing 0.08, antibiotics 0.4, modern_vaccines 0.25, antibiotic_mass_production 0.11), which matches the
 # rich world of eras 9-10; the late carriers take the rest (personalized_medicine 0.03 in era 11, advanced_nanofabrication
@@ -592,7 +595,8 @@ CAUSE_SHORT = {"infection": "inf", "work": "work", "external": "ext", "maternal"
 # deaths of every job that remains, under any law. The step stores each sum, clamped, as te_dg_in_saf_<short>; a step
 # from before stored none, so the factor reads 1 until the state's next step. Carriers (their own era_N.txt definitions):
 # work, Prefabricated Construction 0.15, Industrial Robotics 0.35, Containerization 0.15, Knowledge Economy 0.25 (0.90 by
-# era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers);
+# era 9: x0.05 with Workplace Safety at level 5, near today's rich-world 2-4 deaths a year per 100,000 workers), and
+# Self-Directed Evolution 0.05 in era 13 (bodies built for heat, cold, depth and vacuum; era 13 spec § 7.3), the cap;
 # accidents and violence, Modern Urban Planning 0.20, Computer-Aided Design 0.10, Cellular Networks 0.10 (0.40), and
 # Autonomous Vehicles 0.10 in era 11 (0.50; 2026-10-16: the late-game design's §1.4 proposal, traffic deaths, built here
 # rather than as a laws line, since self-driving cars save lives whatever the laws).
@@ -807,8 +811,9 @@ DEATH_CAUSE_TAGS = {
         "drugs_shortage_rationing", "addiction_public_health_modifier", "institutional_reform_modifier",
         "gm_national_sig_olympic", "gm_boon_tech_athletic", "augment_health_panic", "nd_weapons_accident_contamination",
         "te_demog_wave_almshouses", "te_demog_wave_villages_alone",
-        "company_roche", "company_cochlear", "company_novo_nordisk", "company_biocon",
+        "company_roche", "company_cochlear", "company_novo_nordisk", "company_biocon", "company_rejoovenesense",
         "pm_roche_tower", "pm_cochlear_global_hq", "pm_novo_nordisk_kalundborg_plant", "pm_biocon_park",
+        "pm_rejoovenesense_compound",
     ),
     # accidents and violence: disasters, massacres, crackdowns, ordeals, suicide
     "ext": (
@@ -994,13 +999,15 @@ PRO_NATALIST_LAW = "law_pro_natalist_subsidies"
 # Biological Immortality's pull (§1.4): each year a treated body above LX_PULL_TO closes this share of its gap to it,
 # state_rejuvenation_add. Both are census-only state types (demographics_modifier_types.txt) on the technologies below
 # (call 3: the ladder 0.9 at era 10, 0.75 at era 11, 0 at era 12; call 4: the pull 3% a year). 2026-10-16 (owner): 0.05 of
-# Biological Immortality's line moved to Synthetic Biology, so era 11 reaches 0.70 and era 12 still 0.
+# Biological Immortality's line moved to Synthetic Biology, so era 11 reaches 0.70. Era 13 spec (2026-10-31, call 6):
+# Rejuvenation Therapies takes 0.20 of it, so era 12 reaches half speed, 0.50, and Biological Immortality (now era 13)
+# stops ageing with the remaining 0.50.
 AGEING_RATE_TYPE = "state_ageing_rate_add"
 REJUVENATION_TYPE = "state_rejuvenation_add"
 LATE_TYPES = (AGEING_RATE_TYPE, REJUVENATION_TYPE)
 DEMOG_TYPES = DEMOG_TYPES + LATE_TYPES
 AGEING_RATE_LINES = {"mrna_therapeutics": -0.10, "personalized_medicine": -0.10, "genetic_engineering": -0.05,
-                     "synthetic_biology": -0.05, "biological_immortality": -0.70}
+                     "synthetic_biology": -0.05, "rejuvenation_therapies": -0.20, "biological_immortality": -0.50}
 REJUVENATION_LINES = {"biological_immortality": 0.03}
 # Who is treated (§1.2-§1.3, call 8): a treated share te_dg_s<j> and their mean deficit te_dg_d<j> (calendar less
 # biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 60), adults only: a cohort

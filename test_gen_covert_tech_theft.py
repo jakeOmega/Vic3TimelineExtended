@@ -12,16 +12,16 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 import gen_covert_tech_theft as gen  # noqa: E402
 
-LIVE = gen.Constants(share=Decimal("0.05"), full=Decimal("2"), pri2=Decimal("1.35"), pri3=Decimal("1.6"))
+LIVE = gen.Constants(share=Decimal("0.05"), full=Decimal("2"), pri2=Decimal("1.65"), pri3=Decimal("2"))
 
 
 class AmountTest(unittest.TestCase):
     def test_era_7_amounts(self):
-        self.assertEqual(gen.amounts(65000, LIVE), [3250, 4388, 5200, 6500, 8775, 10400])
+        self.assertEqual(gen.amounts(65000, LIVE), [3250, 5363, 6500, 6500, 10725, 13000])
 
     def test_half_rounds_up(self):
-        # 17,500 x 0.05 x 2.7 = 2,362.5
-        self.assertEqual(gen.amounts(17500, LIVE)[4], 2363)
+        # 17,500 x 0.05 x 3.3 = 2,887.5
+        self.assertEqual(gen.amounts(17500, LIVE)[4], 2888)
 
 
 class CatalogTest(unittest.TestCase):
@@ -36,13 +36,13 @@ class CatalogTest(unittest.TestCase):
 
     def test_era_costs(self):
         costs = gen.read_era_costs(ROOT)
-        self.assertEqual(sorted(costs), list(range(1, 13)))
-        self.assertEqual((costs[1], costs[7], costs[12]), (7500, 65000, 2000000))
+        self.assertEqual(sorted(costs), list(range(1, 14)))
+        self.assertEqual((costs[1], costs[7], costs[12], costs[13]), (7500, 65000, 1500000, 3000000))
 
     def test_categories_and_eras(self):
         self.assertEqual((self.by_key["railways"].category, self.by_key["railways"].era), ("production", 2))
         self.assertEqual((self.by_key["ICBMs"].category, self.by_key["ICBMs"].era), ("military", 7))
-        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 13)))
+        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 14)))
 
     def test_excludes_society_and_unresearchable(self):
         self.assertNotIn("mass_media", self.by_key)  # society: no operation steals it
@@ -348,7 +348,7 @@ class ReviewFixTest(unittest.TestCase):
         self.assertIn("set_variable = { name = iw_stolen_total value = 0 }", text)
 
     def test_system_doc_drops_retired_spread_pick(self):
-        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        doc = "".join(p.read_text(encoding="utf-8") for p in (ROOT / "docs/systems/mod_systems").glob("*.md"))
         self.assertNotIn("covert_op_target_ahead_in_tech", doc)
         self.assertNotIn("Military espionage's conditional tech spread", doc)
 
@@ -356,7 +356,7 @@ class ReviewFixTest(unittest.TestCase):
         guide = (ROOT / "docs/player_guide/11-influence.md").read_text(encoding="utf-8")
         section = guide[guide.index("#### Stealing technology") : guide.index("Hover over an operation before launching it")]
         self.assertIn("if it is in that tree and the target has researched it", " ".join(section.split()))
-        self.assertIn("16% fully operational at priority 3", " ".join(section.split()))
+        self.assertIn("20% fully operational at priority 3", " ".join(section.split()))
 
 
 class RowTest(unittest.TestCase):

@@ -11,6 +11,9 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import (_block_at, _strip_comments, assert_wide_matches_narrow, enclosing_block, load_loc,
+                              markup_reads, mod_types, own_props, panel_loc_keys, panel_view, unguarded)
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "cultural_hegemony_widget.gui")
@@ -25,18 +28,25 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "cultural_hegemony_gui_icons.md")
 
 STATUS = ["te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"]   # board first (owner, 2026-09-29)
-REFERENCE = ["te_ch_sec_history", "te_ch_sec_how"]
+REFERENCE = ["te_ch_sec_history"]
 COMPOSERS = ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_ch_overview_panel", "te_ch_sec_board"],
+                ["te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"],
+                ["te_ch_sec_history"]]
 ROOTS = {   # named root -> (container, composer)
     "widget_je_ch_overview": ("custom_widget_container_1", "te_ch_overview_panel"),
     "widget_je_ch_status": ("custom_widget_container_2", "te_ch_status_sections"),
     "widget_je_ch_reference": ("custom_widget_container_3", "te_ch_reference_sections"),
 }
+# The composers' gate: the tab's own, on the shown country (the journal
+# entry's roots keep [JournalEntry.IsActive]).
+TAB_GATE = "GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 OLD_FLAGS = ["ch_breakdown_open", "ch_board_open", "ch_models_open", "ch_hist_open"]
 OLD_TYPES = ["te_ch_summary_panel", "te_ch_programmes_panel", "te_ch_standing_panel", "ch_reading_row"]
 
 # Explanations that live in How Cultural Hegemony Works, never in a live section.
-HOW_KEYS = ["je_ch_how_share", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_how_board",
+HOW_KEYS = ["je_ch_how_share", "je_ch_how_bonus", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_how_board",
             "je_ch_widget_models_legend", "je_ch_how_models", "je_ch_how_benchmark"]
 
 # The overview's art (PR #586; docs/systems/cultural_hegemony_gui_icons.md).
@@ -45,10 +55,13 @@ CH_PIES = "gfx/interface/journal_entry_widgets/ch_model_pie/"
 TIER_ICONS = ["tier_negligible", "tier_minor", "tier_moderate", "tier_significant", "tier_major", "tier_hegemon"]
 # Textures the overview keeps from vanilla on purpose, and the Ministry of
 # Culture's own institution icon on the programs cell (CH-9): the programs
-# need the Ministry, so its icon is the cell's, not a placeholder.
+# need the Ministry, so its icon is the cell's, not a placeholder. The
+# Hegemony Bonus cell draws the cultural_hegemony_effect modifier's own icon,
+# the one the journal entry's modifier strip shows for it.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds", "gfx/interface/icons/generic_icons/trend_up.dds",
                 "gfx/interface/icons/generic_icons/trend_down.dds", "gfx/interface/icons/generic_icons/trend_nochange.dds",
-                "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"}
+                "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds",
+                "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"}
 
 
 def _read(path):
@@ -109,9 +122,17 @@ class OrderTest(unittest.TestCase):
             self.assertEqual(found, expected, composer)
 
     def test_composers_gate_on_an_active_entry(self):
+        """The composers read the tab's own gate on the shown country
+        (has_journal_entry, active entries only), which another country's
+        National Info has with no entry (charts-help-national-info spec § 6.3);
+        the journal entry's roots keep the entry's own (below)."""
         for composer in COMPOSERS:
             with self.subTest(composer=composer):
-                self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(self.gui, composer))
+                self.assertIn(f'visible = "[{TAB_GATE}]"', _type_body(self.gui, composer))
+                self.assertNotIn("JournalEntry", _strip_comments(_type_body(self.gui, composer)))
+        wide = _strip_comments(_type_body(self.gui, "te_ch_wide_sections"))
+        self.assertEqual(wide.count(f'visible = "[{TAB_GATE}]"'), 2)
+        self.assertNotIn("JournalEntry", wide)
 
     def test_the_entry_attaches_three_thin_roots(self):
         je = _read(JE)
@@ -120,20 +141,27 @@ class OrderTest(unittest.TestCase):
                 self.assertRegex(je, rf'name = "{root}"\s*container = "{container}"')
                 body = _root(self.gui, root)
                 self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [composer])
+                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py),
+                # under the "?" at the top of the entry (test_te_help_pages.py)
+                expected = ["te_help_row", "te_je_country"] if container == "custom_widget_container_1" else ["te_je_country"]
+                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), expected)
+                self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer])
         self.assertEqual(je.count('gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"'), 3)
 
     def test_the_tab_composes_the_same_sections_then_the_link(self):
+        """The tab's body (te_ch_tab_body), which the Society panel's tab and
+        the Timeline Extended window's both mount (test_te_system_tab_bodies.py
+        checks the mounts and the frame's blocks: the gate on a parent of the
+        GetPlayerJournalEntry datacontext, the link after every section)."""
         tab = _read(TAB)
         start = tab.index('name = "te_society_ch_tab"')
-        body = tab[start:tab.index("### END MOD ###", start)]
+        self.assertIn("te_ch_tab_body = {}", tab[start:tab.index("### END MOD ###", start)])
+        body = _type_body(_read(WIDGET), "te_ch_tab_body")
         found = re.findall(r"^\t+(te_ch_\w+) = \{\}", body, re.M)
         self.assertEqual(found, COMPOSERS)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_ch_reference_sections"))
-        # The gate sits on a parent of the widget carrying the GetPlayerJournalEntry datacontext.
-        gate = body.index("GetScriptedGui('te_society_ch_tab_sgui').IsShown")
-        self.assertLess(gate, body.index("GetPlayerJournalEntry('je_cultural_hegemony')"))
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
+        self.assertIn("GetScriptedGui('te_society_ch_tab_sgui').IsShown", body)
+        self.assertIn("GetPlayerJournalEntry('je_cultural_hegemony')", body)
 
     def test_the_greyed_tab_keeps_its_unlock_checklist(self):
         tab = _read(TAB)
@@ -157,7 +185,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"ch_programmes_closed", "ch_breakdown_closed", "ch_board_closed",
-                                 "ch_models_closed", "ch_hist_closed", "ch_how_open"})
+                                 "ch_models_closed", "ch_hist_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -171,9 +199,18 @@ class FlagTest(unittest.TestCase):
     def test_each_section_owns_its_flag(self):
         for sec, flag in (("te_ch_sec_programmes", "ch_programmes_closed"), ("te_ch_sec_breakdown", "ch_breakdown_closed"),
                           ("te_ch_sec_board", "ch_board_closed"), ("te_ch_sec_models", "ch_models_closed"),
-                          ("te_ch_sec_history", "ch_hist_closed"), ("te_ch_sec_how", "ch_how_open")):
+                          ("te_ch_sec_history", "ch_hist_closed")):
             with self.subTest(section=sec):
                 self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec))
+
+    def test_how_it_works_is_the_help_page(self):
+        """How Cultural Hegemony Works is the Help page
+        (te_cultural_hegemony_help_popup, on te_popup = help_cultural_hegemony), which only the "?" opens: the link
+        at the panel's foot is gone, and its collapse flag with it (test_te_help_pages.py)."""
+        text = _strip_comments(self.text)
+        self.assertNotIn("te_ch_sec_how", text)
+        self.assertIn("type te_cultural_hegemony_help_body = flowcontainer {", text)
+        self.assertNotIn("ch_how_open", self.text)
 
     def test_no_old_flag_survives(self):
         for path in (WIDGET, TAB):
@@ -187,7 +224,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.gui = _read(WIDGET)
 
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(self.gui, "te_ch_sec_how")
+        how = _type_body(self.gui, "te_cultural_hegemony_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         # It opens on a heading, not an empty line.
@@ -227,7 +264,7 @@ class StateGatedTest(unittest.TestCase):
     def test_our_rank_line_only_outside_the_top_ten(self):
         board = _type_body(self.gui, "te_ch_sec_board")
         gate = self._visible_of(board, 'text = "je_ch_widget_board_us"')
-        self.assertEqual(gate, "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+        self.assertEqual(gate, "GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope"
                                ".ScriptValue('ch_rank_self_display'), '(CFixedPoint)11' )")
 
     def test_ministry_line_only_without_the_ministry(self):
@@ -273,7 +310,7 @@ class OverviewTest(unittest.TestCase):
     def _coded(self, value):
         """{code: (texture, label key)} for the cells gated on ScriptValue(value) == code."""
         found = {}
-        pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+        pat = (rf"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('{value}'\), "
                rf"'\(CFixedPoint\)(-?\d+)' \)\]\"")
         for m in re.finditer(pat, self.ov):
             # the cell whose `visible` this is: the block opened on the line above
@@ -335,7 +372,8 @@ class DisplayDataTest(unittest.TestCase):
 
     def test_every_read_is_guarded(self):
         values = _read(VALUES)
-        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code", "ch_disp_leader_count"):
+        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code", "ch_disp_leader_count",
+                     "ch_bonus_strength_display"):
             body = _block(values, name)
             for kind, var in re.findall(r"\b(var|global_var):(\w+)", body):
                 with self.subTest(value=name, var=var):
@@ -365,17 +403,17 @@ class ControlsTest(unittest.TestCase):
         for op in range(10):
             scope = f"AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) ).End"
             with self.subTest(op=op):
-                self.assertIn(f"enabled = \"[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).{scope} )]\"", gui)
-                self.assertIn(f"onclick = \"[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).{scope} )]\"", gui)
-                self.assertIn(f"tooltip = \"[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).{scope} ), "
-                              f"Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).{scope} ) ) )]\"", gui)
+                self.assertIn(f"enabled = \"[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).{scope} )]\"", gui)
+                self.assertIn(f"onclick = \"[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).{scope} )]\"", gui)
+                self.assertIn(f"tooltip = \"[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).{scope} ), "
+                              f"Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).{scope} ) ) )]\"", gui)
 
     def test_the_enable_disable_swap_never_rests_on_a_saved_scope(self):
         gui = _read(WIDGET)
         for prog in ("world_exposition", "cultural_institutes", "global_media_campaign", "cultural_protectionism"):
             with self.subTest(programme=prog):
-                self.assertIn(f"visible = \"[Not(GetScriptedGui('ch_active_{prog}_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]\"", gui)
-                self.assertIn(f"visible = \"[GetScriptedGui('ch_active_{prog}_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\"", gui)
+                self.assertIn(f"visible = \"[Not(GetScriptedGui('ch_active_{prog}_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]\"", gui)
+                self.assertIn(f"visible = \"[GetScriptedGui('ch_active_{prog}_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]\"", gui)
 
     def test_the_funding_row_shares_the_programme_rows_columns(self):
         gui = _read(WIDGET)
@@ -429,7 +467,7 @@ class ChIconsTest(unittest.TestCase):
 
     def test_each_tier_draws_its_own_icon(self):
         found = {}
-        pat = (r"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('ch_disp_tier_code'\), "
+        pat = (r"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('ch_disp_tier_code'\), "
                r"'\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"")
         for m in re.finditer(pat, self.ov):
             found[int(m.group(1))] = m.group(2)
@@ -468,17 +506,30 @@ class LeaderFlagsTest(unittest.TestCase):
     def test_each_flag_reads_its_seat_behind_a_gate_on_its_parent(self):
         for n in (1, 2, 3):
             with self.subTest(seat=n):
+                # The player's copy, the same three powers for every country:
+                # only a player holds the seats (ch_leaders_display_write), so
+                # each read is a world read under its `# world:` line
+                # (test_te_system_tab_bodies.py; charts-help-national-info spec § 6.7).
+                # Both sit in a container an observer's view hides, since an
+                # observer has no GetPlayer (gotcha #42's proven form, not an And).
                 m = re.search(
-                    r"visible = \"\[GreaterThanOrEqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
-                    rf"'\(CFixedPoint\){n}' \)\]\"\s*flag = \{{\s*parentanchor = center\s*"
-                    rf"datacontext = \"\[JournalEntry\.GetCountry\.MakeScope\.Var\('ch_leader_seat_{n}'\)\.GetState\.GetCountry\]\"",
+                    r"widget = \{\s*size = \{ 70 48 \}\s*visible = \"\[Not\( GetMetaPlayer\.IsObserver \)\]\"\s*"
+                    r"widget = \{\s*size = \{ 70 48 \}\s*# world: [^\n]+\n\s*"
+                    r"visible = \"\[GreaterThanOrEqualTo_CFixedPoint\( "
+                    r"GetPlayer\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
+                    rf"'\(CFixedPoint\){n}' \)\]\"\s*flag = \{{\s*parentanchor = center\s*# world: [^\n]+\n\s*"
+                    rf"datacontext = \"\[GetPlayer\.MakeScope\.Var\('ch_leader_seat_{n}'\)\.GetState\.GetCountry\]\"",
                     self.ov)
                 self.assertTrue(m, f"seat {n}")
         self.assertEqual(len(re.findall(r"\bflag = \{", self.ov)), 3)
 
     def test_the_slots_keep_their_width(self):
-        # each gated 70x48 widget sits in an ungated 70x48 slot
-        self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 70 48 \}\s*widget = \{\s*size = \{ 70 48 \}\s*visible", self.ov)), 3)
+        # each gated 70x48 widget sits in a 70x48 observer container, in an
+        # ungated 70x48 slot
+        self.assertEqual(len(re.findall(
+            r"widget = \{\s*size = \{ 70 48 \}\s*(?:#[^\n]*\n\s*)*"
+            r"widget = \{\s*size = \{ 70 48 \}\s*visible = \"\[Not\( GetMetaPlayer\.IsObserver \)\]\"\s*"
+            r"widget = \{\s*size = \{ 70 48 \}\s*(?:# world: [^\n]+\n\s*)?visible", self.ov)), 3)
         # and the block holding them is never hidden, or row 2 is centred
         # without it and runs past the panel when it appears (gotcha #43)
         block = self.ov[:self.ov.index('text = "je_ch_ov_leaders_label"')]
@@ -635,7 +686,7 @@ class ArtMultiplierTest(unittest.TestCase):
         sec = _type_body(_read(WIDGET), "te_ch_sec_breakdown")
         m = re.search(r"ch_bar_subrow = \{\s*tooltip = \"je_ch_widget_bd_art_mult_tt\"\s*blockoverride \"row_visible\" \{\s*visible = \"\[(.*?)\]\"", sec, re.S)
         self.assertTrue(m)
-        self.assertIn("NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display'), '(CFixedPoint)0' )", m.group(1))
+        self.assertIn("NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_art_mult_pct_display'), '(CFixedPoint)0' )", m.group(1))
         self.assertLess(sec.index("je_ch_widget_bd_art_dr_tt"), m.start())
         self.assertLess(m.start(), sec.index("je_ch_widget_bd_prestige_tt"))
 
@@ -672,15 +723,18 @@ STATIC_LABELS = (
     + [(f"je_ch_ov_tier_{n}", 106, "overview", ()) for n in range(6)]
     + [("je_ch_ov_rank_label", 106, "overview", ()), ("je_ch_ov_benchmark_label", 106, "overview", ()),
        ("je_ch_ov_leaders_label", 222, "overview", ())]
-    + [(k, 440, "large", ()) for k in ("je_ch_widget_programmes_header", "je_ch_widget_breakdown_header",
+    + [(k, 440, "large", ()) for k in ("je_ch_widget_programmes_header", "je_ch_widget_breakdown_header_ours",
+                                        "je_ch_widget_breakdown_header_theirs",
                                         "je_ch_widget_board_header", "je_ch_widget_models_header",
                                         "je_ch_widget_history_header", "je_ch_how_header")]
     # The board's head (CH-2), in its columns.
     + [("je_ch_board_head_rank", 26, "row", ()), ("je_ch_board_head_country", 208, "row", ()),
        ("je_ch_board_head_share", 60, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
        ("je_ch_board_head_model", 50, "row", ())]
-    # The programs cell (CH-9): Banking's cell, its lines in a 154 column at 16.
-    + [("je_ch_ov_prog_label", 154, "overview", ()), ("je_ch_ov_prog_no_ministry", 154, "overview", ())]
+    # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 234, two
+    # to the row, its lines in a 150 column at 16.
+    + [("je_ch_ov_prog_label", 150, "overview", ()), ("je_ch_ov_prog_no_ministry", 150, "overview", ())]
+    + [(f"je_ch_ov_bonus_{k}", 150, "overview", ()) for k in ("label", "active", "none", "from")]
 )
 # Dynamic text, at its longest: the political models' short names (the longest are
 # "Constitutional", "Military Junta" and "Technocratic"; the full names, up to
@@ -692,7 +746,8 @@ DYNAMIC_LABELS = (
     + [("je_ch_ov_rank_value", 106, "heading", ("999", "999")),
        ("je_ch_ov_share_label", 156, "overview", ("100.0",)),               # 180 cell less the 20 px arrow and 4 spacing
        ("je_ch_widget_funding_value", 80, "row", ("10", "10")),
-       ("je_ch_widget_board_us", 474, "row", ("999", "999")),
+       ("je_ch_widget_board_us_ours", 474, "row", ("999", "999")),
+       ("je_ch_widget_board_us_theirs", 474, "row", ("999", "999")),
        ("je_ch_widget_bd_art_value", 60, "row", ("150.0",)),
        ("je_ch_widget_bd_prestige_value", 60, "row", ("100.0",)),
        ("je_ch_widget_bd_sol_value", 60, "row", ("-5.0",)),
@@ -709,7 +764,8 @@ DYNAMIC_LABELS = (
        ("ch_board_row_rank", 26, "row", ("10",)), ("ch_board_row_share", 60, "row", ("100.0",)),
        ("ch_board_row_change", 48, "row", ("+12.3",)),
        # The programs cell's word and funding line.
-       ("je_ch_ov_prog_running", 154, "overview", ("4",)), ("je_ch_ov_prog_funding", 154, "overview", ("10", "10"))]
+       ("je_ch_ov_prog_running", 150, "overview", ("4",)), ("je_ch_ov_prog_funding", 150, "overview", ("10", "10")),
+       ("je_ch_ov_bonus_strength", 150, "overview", ("100.0",))]
     + [(f"je_ch_widget_models_share_{m}", 60, "row", ("100.0",)) for m in MODEL_KEYS]
 )
 
@@ -854,7 +910,7 @@ class BoardTest(unittest.TestCase):
 
     def test_the_us_marker_compares_ranks_without_a_saved_scope(self):
         self.assertIn("EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), "
-                      "JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display') )", self.row)
+                      "Country.MakeScope.ScriptValue('ch_rank_self_display') )", self.row)
 
     def test_every_model_has_its_swatch_and_hover(self):
         for code, model in enumerate(MODEL_KEYS, 1):
@@ -931,7 +987,7 @@ class FundingCapTest(unittest.TestCase):
         progs = _type_body(_read(WIDGET), "te_ch_sec_programmes")
         cell = progs[progs.index('text = "je_ch_widget_funding_value"') - 300:progs.index('text = "je_ch_widget_funding_value"') + 120]
         self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', cell)
-        self.assertIn('default_format = "#tooltippable"', cell)
+        self.assertNotIn("#tooltippable", cell)  # style guide rule 3
         loc = _loc()
         tip = loc["je_ch_widget_funding_value_tt"]
         for part in ("institution_ministry_of_culture", "mass_media", "television",
@@ -996,6 +1052,315 @@ class ProgramsCellTest(unittest.TestCase):
             self.assertIn(f"$je_ch_widget_prog_{p}_status$", listing)
         # Below the leaders: the owner's board-first order and leader flags stand.
         self.assertLess(ov.index("ch_leader_seat_3"), ov.index("te_banking_ov_cell = {"))
+
+
+class HegemonyBonusTest(unittest.TestCase):
+    """The cultural_hegemony_effect modifier sits on the journal entry, so only
+    the entry's own modifier strip showed it; the overview's Hegemony Bonus cell
+    shows it in every host, its effects at the strength applied on hover."""
+
+    MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+        cls.loc = _loc()
+        cls.ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
+        body = _strip_comments(_block(_read(cls.MODIFIERS), "cultural_hegemony_effect"))
+        cls.fields = {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+
+    def test_the_modifier_has_fields(self):
+        self.assertGreaterEqual(len(self.fields), 8)
+        self.assertIn("country_mass_migration_attraction_mult", self.fields)
+
+    def test_each_unit_equals_its_modifier_field(self):
+        # A script value cannot read a static modifier, so the units restate it.
+        units = {k: float(v) for k, v in re.findall(r"(?m)^ch_bonus_unit_(\w+) = (-?[\d.]+)", self.values)}
+        self.assertEqual(units, self.fields)
+
+    def test_each_field_has_its_display_value_and_hover_line(self):
+        listing = self.loc["je_ch_ov_bonus_tt_list"]
+        for field in self.fields:
+            with self.subTest(field=field):
+                body = _block(self.values, f"ch_bonus_{field}_display")
+                self.assertIn("value = ch_bonus_strength_display", body)
+                self.assertIn(f"multiply = ch_bonus_unit_{field}", body)
+                self.assertIn(f"${field}$: [Country.MakeScope.ScriptValue('ch_bonus_{field}_display')|+=1", listing)
+
+    def test_the_strength_is_what_the_pulse_applied_and_zero_without_the_modifier(self):
+        body = _block(self.values, "ch_bonus_strength_display")
+        self.assertIn("has_variable = ch_effect_mult_cached", body)
+        self.assertIn("je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }", body)
+        self.assertIn("add = var:ch_effect_mult_cached", body)
+        self.assertIn("add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached }",
+                      _read(JE))
+
+    def test_the_cell_sits_beside_the_programs_in_a_row_that_fits(self):
+        text = _read(WIDGET)
+        row = gui_tree.node_after(gui_tree.parse(text), text, "### Row 3:", "flowcontainer")
+        self.assertEqual(row.prop("parentanchor").value, "hcenter")
+        cells = gui_tree.widgets(row)
+        self.assertEqual([c.kind for c in cells], ["te_banking_ov_cell"] * 2)
+        self.assertEqual([c.prop("tooltip").value for c in cells], ["je_ch_ov_prog_tt", "je_ch_ov_bonus_tt"])
+        for cell in cells:
+            self.assertIsNone(cell.prop("visible"))   # both always show: one width (gotcha #43)
+            self.assertEqual(gui_tree.size(cell), (234, 70))
+        self.assertEqual(row.prop("spacing").value, "4")
+        self.assertLessEqual(234 * 2 + 4, 474)
+
+    def test_the_cells_states_are_gated_on_the_strength(self):
+        cell = self.ov[self.ov.index('tooltip = "je_ch_ov_bonus_tt"'):]
+        on = "GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )"
+        for key, gate in (("je_ch_ov_bonus_active", f"[{on}]"), ("je_ch_ov_bonus_strength", f"[{on}]"),
+                          ("je_ch_ov_bonus_none", f"[Not( {on} )]"), ("je_ch_ov_bonus_from", f"[Not( {on} )]")):
+            with self.subTest(key=key):
+                i = cell.index(f'text = "{key}"')
+                opener = cell.rindex("te_banking_ov_word = {", 0, i)
+                self.assertIn(f'visible = "{gate}"', cell[opener:i])
+        self.assertEqual(cell.count("alpha = 0.4"), 1)
+        self.assertIn(on, self.loc["je_ch_ov_bonus_tt"])
+        self.assertIn("'je_ch_ov_bonus_tt_list', 'je_ch_ov_bonus_tt_none'", self.loc["je_ch_ov_bonus_tt"])
+
+    def test_the_hover_reads_the_shown_country_not_the_entry(self):
+        # Another country's National Info has no JournalEntry (gotcha #35).
+        for key in ("je_ch_ov_bonus_tt", "je_ch_ov_bonus_tt_list", "je_ch_ov_bonus_tt_none", "je_ch_ov_bonus_strength"):
+            with self.subTest(key=key):
+                self.assertNotIn("JournalEntry", self.loc[key])
+                self.assertNotIn("GetPlayer", self.loc[key])
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_ch_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_ch_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_ch_wide_sections",
+                                             layout=("te_ch_tab_body", "te_ch_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["cultural_hegemony"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_ch_tab_body", "te_ch_tab_layout", "te_ch_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(WIDGET)), "te_ch_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
+
+# ---- Another country's panel (charts-help-national-info plan, PR F4) ------------
+WIDE = {"te_ch_wide_sections"}
+# A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
+# print, which neither BindingTest nor te_rebind_country.py follows.
+# What gates a world read for an observer (who has no GetPlayer): the observer
+# test (or GetPlayer.IsValid) first in the widget's `visible`, alone or leading
+# an And; a wrapper widget gated on the test alone counts too.
+OBSERVER_GATE = re.compile(
+    r'visible = "\[(?:And\( )?(?:Not\( GetMetaPlayer\.IsObserver \)|GetPlayer\.IsValid\b)')
+SGUI_TOOLTIP = re.compile(r"\b(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's National Info shows of Cultural Hegemony (spec
+    § 6.4 of docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md):
+    its score, rank, programs and where its pull comes from, and the board,
+    the models and the history, the same world for every country; never a
+    control. Read as that panel draws te_ch_wide_sections
+    (gui_test_helpers.panel_view: guarded parts and overridden block defaults
+    left out) and the loc it renders. Both ways: the hidden parts are gone,
+    and the shown ones are still drawn, so over-guarding fails too."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(WIDE, cls.types)
+        cls.loc = load_loc()
+        cls.keys = panel_loc_keys(WIDE, cls.types, cls.loc)
+
+    def _drawn(self, name):
+        """A type's body as another country's panel draws it, its guarded parts blanked."""
+        self.assertIn(name, self.view.open, f"{name}: another country's panel draws it")
+        return " ".join(unguarded(self.types[name].body, self.view.skip[name]).split())
+
+    # -- hidden: the controls ------------------------------------------------------
+    def test_no_control(self):
+        progs = self._drawn("te_ch_sec_programmes")
+        for gone in ("ScriptedGui.Execute(", "ScriptedGui.IsValid(", "button_icon_minus_action",
+                     "button_icon_plus_action", "ch_action_button", 'text = "ch_policy_'):
+            self.assertNotIn(gone, progs, gone)
+        self.assertNotIn("ch_action_button", self.view.open)
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            for side in ("on", "off"):
+                self.assertNotIn(f"ch_policy_{op}_{side}", self.keys)
+        # the funding step's hover is the panel's copy; the effects' own stays the player's
+        self.assertNotIn("ch_policy_funding_step_tt", self.keys)
+        self.assertIn("ch_policy_funding_step_tt_ni", self.keys)
+        # the player's panel keeps them all
+        own = self.types["te_ch_sec_programmes"].body
+        self.assertEqual(own.count("ScriptedGui.Execute("), 10)
+        self.assertEqual(own.count("using = te_own_country_only"), 5)
+
+    def test_the_controls_keep_their_slot_for_the_player(self):
+        """One 112 x 28 slot per row, under the guard, which one of its two
+        buttons always fills: the row is as wide as before (style rule 8)."""
+        progs = _strip_comments(_type_body(_read(WIDGET), "te_ch_sec_programmes"))
+        slots = re.findall(r'blockoverride "programme_controls" \{\s*widget = \{\s*size = \{ 112 28 \}\s*'
+                           r"parentanchor = vcenter\s*using = te_own_country_only\s*"
+                           r"ch_action_button = \{[^{}]*\}\s*ch_action_button = \{[^{}]*\}\s*\}\s*\}", progs)
+        self.assertEqual(len(slots), 4)
+        stepper = progs[progs.index('text = "je_ch_widget_funding_value"'):progs.index("button_icon_minus_action")]
+        self.assertRegex(stepper, r"widget = \{\s*size = \{ 112 28 \}\s*parentanchor = vcenter\s*"
+                                  r"using = te_own_country_only\s*flowcontainer = \{")
+        row = _strip_comments(_type_body(_read(WIDGET), "ch_programme_row"))
+        self.assertIn('block "programme_controls" {}', row)
+        self.assertNotIn("ch_action_button", row)
+
+    def test_no_scripted_gui_text_is_printed(self):
+        """The text a scripted GUI's ExecuteTooltip or IsValidTooltip prints
+        (custom_tooltip keys in ch_possible_* and ch_effect_*) reads ROOT and
+        the player, and no gate follows it. The panel prints it only on the
+        guarded buttons; a public hover that did would need its keys checked."""
+        for name in sorted(self.view.open):
+            with self.subTest(type=name):
+                self.assertIsNone(SGUI_TOOLTIP.search(unguarded(self.types[name].body, self.view.skip[name])))
+        for key in sorted(self.keys):
+            with self.subTest(key=key):
+                self.assertIsNone(SGUI_TOOLTIP.search(self.loc[key]))
+
+    # -- shown: the country's standing, its programs, its pull; the world's board,
+    #    models and history ---------------------------------------------------------
+    def test_the_overview_is_shown(self):
+        ov = self._drawn("te_ch_overview_panel")
+        for read in ("ScriptValue('ch_disp_tier_code')", "ScriptValue('ch_rank_self_display')",
+                     "ScriptValue('ch_disp_model_code')", "GetScriptedGui('ch_benchmark_sgui')",
+                     "ScriptValue('ch_disp_share_frac')", "ScriptValue('ch_disp_share_trend')",
+                     "GetScriptedGui('ch_ministry_missing_sgui')", "te_banking_ov_cell"):
+            self.assertIn(read, ov, read)
+        # every tier's cell, not just one: a guarded cell would leave that tier blank
+        codes = re.findall(r"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('ch_disp_tier_code'\), "
+                           r"'\(CFixedPoint\)(\d+)' \)\]\" blockoverride \"icon_texture\"", ov)
+        self.assertEqual(sorted(map(int, codes)), list(range(len(TIER_ICONS))))
+        for key in ("je_ch_ov_tier_tt", "je_ch_ov_rank_value", "je_ch_widget_rank_tt", "je_ch_ov_model_tt",
+                    "je_ch_ov_benchmark_tt", "je_ch_ov_share_label", "je_ch_ov_share_tt", "je_ch_ov_leaders_label",
+                    "je_ch_ov_prog_running", "je_ch_ov_prog_funding", "je_ch_ov_prog_tt_list",
+                    "ch_tier_blurb_hegemon", "je_ch_ov_model_owner_theirs", "ch_model_owner_us_theirs",
+                    "ch_model_owner_them_theirs"):
+            self.assertIn(key, self.keys, key)
+
+    def test_the_leader_flags_are_the_worlds(self):
+        """The three leading powers: the player's copy, drawn for every country
+        on six `# world:` lines (spec § 6.7)."""
+        ov = self._drawn("te_ch_overview_panel")
+        self.assertEqual(ov.count("flag = {"), 3)
+        world = [f for f in markup_reads(WIDE, self.types) if f.world]
+        self.assertEqual(sorted((f.where, f.what) for f in world), [("te_ch_overview_panel", "GetPlayer")] * 6)
+        self.assertEqual(sum("ch_disp_leader_count" in f.text for f in world), 3)
+        self.assertEqual(sorted(re.search(r"ch_leader_seat_\d", f.text).group(0) for f in world
+                                if "ch_leader_seat_" in f.text), ["ch_leader_seat_1", "ch_leader_seat_2",
+                                                                  "ch_leader_seat_3"])
+
+    def test_every_world_read_is_gated_for_an_observer(self):
+        """National Info opens to an observer, for whom GetPlayer is no country,
+        so a world read of the player's copy logs every frame it draws
+        (gui_modding_guide.md, the observer paragraph). Each sits under a
+        `visible` that tests Not( GetMetaPlayer.IsObserver ) first: its own
+        line's, or a block's around it."""
+        world = [f for f in markup_reads(WIDE, self.types) if f.world]
+        self.assertEqual(len(world), 6)
+        for f in world:
+            with self.subTest(at=f"{f.path}:{f.line}"):
+                body = self.types[f.where].body
+                k = f.line - self.types[f.where].line
+                start = sum(len(line) + 1 for line in body.split("\n")[:k])
+                gated = bool(OBSERVER_GATE.search(body.split("\n")[k]))
+                pos = start
+                while not gated:
+                    a, b = enclosing_block(body, pos)
+                    if (a, b) == (0, len(body)):
+                        break
+                    gated = bool(OBSERVER_GATE.search(own_props(body[a + 1:b])))
+                    pos = a
+                self.assertTrue(gated, f"{f.text.strip()[:100]}: no observer gate over it")
+
+    def test_the_programs_are_shown(self):
+        """Each program's Running or Idle, from the country's own entry's
+        modifiers (ch_active_<programme>: je:je_cultural_hegemony), and the
+        funding level against its cap."""
+        progs = self._drawn("te_ch_sec_programmes")
+        self.assertIn('text = "je_ch_widget_funding_value"', progs)
+        self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', progs)
+        self.assertIn('tooltip = "ch_policy_funding_step_tt_ni"', progs)
+        self.assertEqual(progs.count("ch_programme_row = {"), 4)
+        self.assertIn("ch_programme_row", self.view.open)
+        # drawn, not only reached: the overview's hover splices the same status
+        # keys ($je_ch_widget_prog_<op>_status$ in je_ch_ov_prog_tt_list), so the
+        # loc closure alone misses a guard on the row's cells or an instance's
+        row = self._drawn("ch_programme_row")
+        for block in ('block "programme_label"', 'block "programme_status"'):
+            self.assertIn(block, row, block)  # its default {} is blanked, as the instances override it
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            self.assertIn(f'blockoverride "programme_status" {{ text = "je_ch_widget_prog_{op}_status" }}', progs, op)
+            self.assertIn(f'blockoverride "programme_label" {{ text = "je_ch_widget_prog_{op}" ', progs, op)
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            self.assertIn(f"je_ch_widget_prog_{op}_status", self.keys, op)
+            self.assertIn(f"je_ch_widget_prog_{op}", self.keys, op)
+        for key in ("ch_policy_status_active", "ch_policy_status_idle", "je_ch_prog_needs_ministry",
+                    "je_ch_widget_funding_value", "je_ch_widget_funding_value_tt"):
+            self.assertIn(key, self.keys, key)
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "cultural_hegemony_triggers.txt"))
+        for prog in ("world_exposition", "cultural_institutes", "global_media_campaign", "cultural_protectionism"):
+            self.assertIn("je:je_cultural_hegemony ?= { has_modifier", _block(triggers, f"ch_active_{prog}"), prog)
+
+    def test_the_breakdown_is_shown(self):
+        bd = self._drawn("te_ch_sec_breakdown")
+        self.assertEqual(bd.count("ch_bar_row = {"), 12)
+        for name in ("ch_bar_row", "ch_bar_subrow", "ch_pull_bar"):
+            self.assertIn(name, self.view.open)
+        for part in ("art", "art_dr", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "infamy",
+                     "instability", "mult", "raw"):
+            self.assertIn(f"je_ch_widget_bd_{part}_tt", self.keys, part)
+        self.assertIn("je_ch_widget_breakdown_header_theirs", self.keys)
+
+    def test_the_board_models_and_history_are_shown(self):
+        board = self._drawn("te_ch_sec_board")
+        self.assertIn("GetGlobalVariable('ch_board_store').GetList('ch_board')", board)
+        for name in ("ch_board_head", "ch_board_row", "te_ch_sec_models", "ch_model_legend_row",
+                     "te_ch_sec_history", "te_hist_ch_models", "te_ch_hist_model_key"):
+            self.assertIn(name, self.view.open, name)
+        self.assertIn("EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), "
+                      "Country.MakeScope.ScriptValue('ch_rank_self_display') )", self._drawn("ch_board_row"),
+                      "the arrow marks the shown country's row")
+        self.assertEqual(self._drawn("te_ch_sec_models").count("ch_model_legend_row = {"), 15)
+        for key in ("je_ch_widget_board_us_theirs", "ch_board_row_tt", "ch_model_hist_since",
+                    "je_ch_widget_models_pie_tt", "je_ch_widget_models_share_liberal", "ch_model_hist_title"):
+            self.assertIn(key, self.keys, key)
+
+    def test_the_players_own_labels_are_left_out(self):
+        for key in ("je_ch_widget_board_us_ours", "je_ch_widget_breakdown_header_ours", "je_ch_ov_model_owner_ours",
+                    "ch_model_owner_us", "ch_model_owner_them"):
+            self.assertNotIn(key, self.keys, f"{key}: the player's own")
+
+    def test_the_player_keeps_ours(self):
+        """The exported model's owner splits as the two labels do: "(ours)" and
+        "(not ours)" for the player, as before, the third person for another
+        country, from a twin of the custom loc."""
+        loc = self.loc
+        self.assertEqual(loc["ch_model_owner_us"], "#G (ours)#!")
+        self.assertEqual(loc["ch_model_owner_them"], "#lore (not ours)#!")
+        self.assertIn("SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', "
+                      "'je_ch_ov_model_owner_theirs' )", loc["je_ch_ov_model_tt"])
+        self.assertEqual(loc["je_ch_ov_model_owner_ours"], "[Country.GetCustom('ch_exported_model_owner')]")
+        self.assertEqual(loc["je_ch_ov_model_owner_theirs"], "[Country.GetCustom('ch_exported_model_owner_theirs')]")
+        custom = _read(os.path.join(REPO, "common", "customizable_localization", "cultural_hegemony_custom_loc.txt"))
+        ours, theirs = _block(custom, "ch_exported_model_owner"), _block(custom, "ch_exported_model_owner_theirs")
+        self.assertEqual(theirs.replace("_theirs", ""), ours, "the same branches")
+
 
 if __name__ == "__main__":
     unittest.main()

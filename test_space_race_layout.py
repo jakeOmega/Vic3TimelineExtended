@@ -8,6 +8,7 @@ explanations live in How the Space Race Works, that each milestone's root reads
 only its own milestone's data, and that the overview's display values are
 guarded and follow the single derivation sites they mirror.
 """
+import functools
 import glob
 import os
 import re
@@ -19,6 +20,10 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
+from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, gui_keys, guard_spans,  # noqa: E402
+                              in_spans, load_loc, loc_closure, mod_types, panel_loc_keys, panel_view,
+                              type_closure, unguarded)
+from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
@@ -69,7 +74,6 @@ COLONY_KINDS = {
 }
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
-REFERENCE = ["te_sr_sec_how"]
 OLD_FLAGS = [f"sr_panel_rivals_{m}" for m in CONTROLLED] + \
             [f"sr_panel_programme_{m}" for m in ALL]
 HOW_KEYS = ["je_space_race_widget_how_approach", "je_space_race_widget_how_funding",
@@ -78,6 +82,10 @@ HOW_KEYS = ["je_space_race_widget_how_approach", "je_space_race_widget_how_fundi
             "je_space_race_widget_how_powers", "je_space_race_widget_how_orbit"]
 IS_SHOWN_OP0 = ("ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
                 ".AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )")
+# The overview reads the shown Country (National Info, spec
+# 2026-11-02-charts-help-national-info § 6.4); the entry's own sections still
+# read the entry.
+OV_SHOWN_OP0 = IS_SHOWN_OP0.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope")
 
 
 def _read(path):
@@ -118,6 +126,18 @@ def _type_body(text, name):
     return text[m.end():_close(text, m.end() - 1)]
 
 
+def _instances(section, type_name):
+    """The bodies of every `type_name = { ... }` instance in a section."""
+    out = []
+    for m in re.finditer(rf"\b{type_name} = \{{", section):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(section[i], 0)
+            i += 1
+        out.append(section[m.end():i])
+    return out
+
+
 def _root(text, name):
     """A journal root as the journal renders it: the wrapper, and the body of the
     milestone's own type it wraps (te_sr_<m>_overview, te_sr_<m>_status), which
@@ -127,7 +147,8 @@ def _root(text, name):
     start = text.rfind("flowcontainer = {", 0, m.start())
     brace = text.index("{", start)
     root = text[start:_close(text, brace) + 1]
-    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+    # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+    for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
         root += "\n" + _type_body(text, wrapped)
     return root
 
@@ -146,6 +167,16 @@ def _loc(key):
     raise AssertionError(f"no loc {key}")
 
 
+@functools.lru_cache(maxsize=None)
+def _all_loc():
+    """Every English loc key and its text, the last file in name order winning."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True)):
+        for m in re.finditer(r'^ (\w+):\d* "(.*)"\s*$', _read(path), re.M):
+            out[m.group(1)] = m.group(2)
+    return out
+
+
 def _milestones_named(text):
     """The milestone tokens a stretch of text mentions, longest names first so
     'interstellar_probe' is not also read as 'probe'."""
@@ -159,10 +190,9 @@ def _milestones_named(text):
 
 
 class OrderTest(unittest.TestCase):
-    def test_status_and_reference_order(self):
+    def test_status_order(self):
         gui = _read(GUI)
-        for composer, expected in (("te_sr_status_sections", STATUS),
-                                   ("te_sr_reference_sections", REFERENCE)):
+        for composer, expected in (("te_sr_status_sections", STATUS),):
             found = re.findall(r"^\t\t(te_sr_sec_\w+) = \{", _type_body(gui, composer), re.M)
             self.assertEqual(found, expected, composer)
 
@@ -176,7 +206,8 @@ class OrderTest(unittest.TestCase):
 
     def test_the_overview_is_the_top_container(self):
         """Overview in container 1 (above the status line), live sections in 2,
-        the reference in 3, as the UN entry attaches them."""
+        as the UN entry attaches them. How the Space Race Works, once a
+        reference root in 3, is the Help page the overview's "?" opens."""
         je = _read(JE)
         for m in ALL:
             with self.subTest(milestone=m):
@@ -185,7 +216,6 @@ class OrderTest(unittest.TestCase):
                 expected = [(f"widget_je_space_race_{m}_overview", "custom_widget_container_1")]
                 if m in CONTROLLED:
                     expected.append((f"widget_je_space_race_{m}", "custom_widget_container_2"))
-                expected.append(("widget_je_space_race_reference", "custom_widget_container_3"))
                 # the bars-on-top marker: the overview draws the progress, so the
                 # entry's own goal bar at the foot is hidden (gui/journal_entry.gui)
                 expected.append(("widget_te_je_bars_on_top_marker", "custom_widget_container_7"))
@@ -213,7 +243,7 @@ class RootTest(unittest.TestCase):
         names = re.findall(r'name = "(widget_je_space_race_\w+)"', self.gui)
         expected = {f"widget_je_space_race_{m}_overview" for m in ALL}
         expected |= {f"widget_je_space_race_{m}" for m in CONTROLLED}
-        expected.add("widget_je_space_race_reference")
+        self.assertNotIn("widget_je_space_race_reference", self.gui + _read(JE))
         self.assertEqual(set(names), expected)
         self.assertEqual(len(names), len(expected))
         for name in names:
@@ -224,7 +254,7 @@ class RootTest(unittest.TestCase):
 
     def test_composers_and_number_columns_are_fixed_width(self):
         for composer in ("te_sr_overview_milestone", "te_sr_overview_transit",
-                         "te_sr_status_sections", "te_sr_reference_sections"):
+                         "te_sr_status_sections"):
             self.assertIn("minimumsize = { 520 -1 }", _type_body(self.gui, composer).split("\n\n")[0], composer)
         bar = _type_body(self.gui, "te_sr_ov_bar_row")
         # round 3: the label column fits "Next Colony" (test_space_race_labels.py)
@@ -273,10 +303,12 @@ class FlagTest(unittest.TestCase):
         # two live sections per milestone; solar colonization's Colony Fleets,
         # Solar System and its "show all" toggle, Colonies (audit SPC-5: one
         # table for what Our Colonies, Settlers, Colony Modules, Colony
-        # Autonomy and Colony Defences showed) and How Solar Colonization
-        # Works; the shared reference; the Space Race tab's Space Powers and
-        # Orbit; and under Full Colonies Space Command, Space Fleets and
-        # Locations (slice 6)
+        # Autonomy and Colony Defences showed); the Space Race tab's Space
+        # Powers and Orbit; and under Full Colonies Space Command, Space Fleets
+        # and Locations (slice 6); and the colony target popup's "show all"
+        # (UI pass design § 5); and the colonies another country holds
+        # (National Info, te_sr_sec_colonies_brief). How the Space Race Works
+        # and How Solar Colonization Works have none: they are the Help page.
         self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
@@ -290,13 +322,19 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(negated, 1, f)
                 self.assertGreaterEqual(bare, 2, f)
 
-    def test_live_sections_open_and_how_it_works_collapsed(self):
+    def test_live_sections_open_and_how_it_works_the_help_page(self):
         for m in CONTROLLED:
             root = _root(self.text, f"widget_je_space_race_{m}")
             self.assertIn(f"'sr_panel_control_{m}_closed'", root)
             self.assertIn(f"'sr_panel_rivals_{m}_closed'", root)
-        self.assertIn("Toggle('sr_panel_how_open')", _type_body(self.text, "te_sr_sec_how"))
         self.assertIn("Toggle('sr_panel_colonies_closed')", _type_body(self.text, "te_sr_sec_colonies"))
+        # How the Space Race Works and How Solar Colonization Works are the
+        # Help page alone (te_space_race_help_popup, on te_popup =
+        # help_space_race), which the "?" on each overview and in the tab's
+        # header opens: both link sections and the reference composer are gone
+        # (test_te_help_pages.py)
+        for gone in ("te_sr_sec_how", "te_sr_reference_sections", "sr_panel_how_open", "sr_panel_how_colonies_open"):
+            self.assertNotIn(gone, self.text, gone)
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -325,8 +363,9 @@ class GatingTest(unittest.TestCase):
     def test_overview_risk_and_progress_follow_the_scripted_gui(self):
         body = _type_body(self.gui, "te_sr_overview_milestone")
         # row 1 while running (the state cells and the risk cell) and the progress row
-        self.assertEqual(body.count(f'visible = "[{IS_SHOWN_OP0}]"'), 2)
-        self.assertEqual(body.count(f'visible = "[Not( {IS_SHOWN_OP0} )]"'), 1)  # row 1 while idle
+        self.assertEqual(body.count(f'visible = "[{OV_SHOWN_OP0}]"'), 2)
+        self.assertEqual(body.count(f'visible = "[Not( {OV_SHOWN_OP0} )]"'), 1)  # row 1 while idle
+        self.assertNotIn("JournalEntry", body)
 
     def test_row_1_is_two_rows_of_fixed_contents(self):
         # One row, 318 idle and 480 running, was centred at its first width and
@@ -339,7 +378,7 @@ class GatingTest(unittest.TestCase):
         panel = next(c for c in gui_tree.widgets(types["te_sr_overview_milestone"]) if c.kind == "te_sr_panel")
         running, idle = gui_tree.widgets(panel)[:2]
         gate = [(row.prop("visible") or gui_tree.Prop("visible", "", 0, True)).value for row in (running, idle)]
-        self.assertEqual(gate, [f"[{IS_SHOWN_OP0}]", f"[Not( {IS_SHOWN_OP0} )]"])
+        self.assertEqual(gate, [f"[{OV_SHOWN_OP0}]", f"[Not( {OV_SHOWN_OP0} )]"])
         for row in (running, idle):
             self.assertEqual((row.prop("direction").value, row.prop("parentanchor").value), ("horizontal", "hcenter"))
             self.assertEqual([(c.kind, c.name) for c in row.children if c.kind == "block"], [("block", "sr_third_cells")])
@@ -363,12 +402,14 @@ class GatingTest(unittest.TestCase):
         for m in CONTROLLED:
             root = _root(self.gui, f"widget_je_space_race_{m}_overview")
             sv = f"ScriptValue('sr_disp_status_{m}')"
-            self.assertIn(f"LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint)1' )", root)
-            for code in (2, 3, 4):
-                self.assertIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint){code}' )", root)
+            self.assertIn(f"LessThanOrEqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint)1' )", root)
+            for code in (2, 3):
+                self.assertIn(f"EqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint){code}' )", root)
+            # Code 4, shielded, went with the post-setback cooldown (2026-10-31).
+            self.assertNotIn(f"EqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint)4' )", root)
             risk = f"ScriptValue('sr_risk_shown_{m}')"
-            self.assertIn(f"NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )", root)
-            self.assertIn(f"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
+            self.assertIn(f"NotEqualTo_CFixedPoint( Country.MakeScope.{risk}, '(CFixedPoint)0' )", root)
+            self.assertIn(f"[EqualTo_CFixedPoint( Country.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
 
 
 def _colony_sites():
@@ -450,14 +491,17 @@ class ColoniesTest(unittest.TestCase):
                 self.assertNotIn("te_sr_sec_colonies", _type_body(self.gui, f"te_sr_{m}_status"), m)
 
     def test_the_colonization_panel_order(self):
-        """Colony Fleets, then Solar System with its Target buttons (SPC-7),
-        then Colonies, Space Command, Space Fleets and How Solar Colonization
-        Works; the old per-aspect sections are gone (SPC-5)."""
+        """Colony Fleets, Colonies, Space Command, Space Fleets, then Solar
+        System (moved down by the owner, 2026-10-31); the old per-aspect
+        sections are gone (SPC-5), and How Solar Colonization Works is the
+        Help page."""
         status = _type_body(self.gui, "te_sr_solar_colonization_status")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
-        self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+) = \{\}", status, re.M),
-                         ["te_sr_sec_colony_fleets", "te_sr_sec_solar_system", "te_sr_sec_colonies",
-                          "te_sr_sec_space_command", "te_sr_sec_space_fleets", "te_sr_sec_how_colonies"])
+        # Across the tabs (UI pass design § 11), Mission Control's own launch
+        # windows aside.
+        self.assertEqual([s for s in re.findall(r"^\t+(te_sr_sec_\w+) = \{\}", status, re.M) if s != "te_sr_sec_windows"],
+                         ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
+                          "te_sr_sec_colonies", "te_sr_sec_solar_system"])
         self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colony_fleets = {}"))
         for gone in ("te_sr_sec_settlers", "te_sr_sec_modules", "te_sr_sec_autonomy", "te_sr_sec_colony_defences",
                      "te_sr_settler_row", "te_sr_module_row", "te_sr_autonomy_row", "te_sr_defence_row"):
@@ -564,13 +608,46 @@ class ColoniesTest(unittest.TestCase):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
 
+    def test_the_slots_hover_reads_the_slots_modifier(self):
+        """Colony management design § 5: a world's Slots hover gives its size's
+        slots and our Colony Module Slots from the modifier itself, so a new
+        source of the modifier shows there without an edit."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(world=k):
+                hover = self.loc[f"je_space_race_widget_slots_tt_{k}"]
+                self.assertIn(f"#v {site.slots}#! here for its size", hover)
+                self.assertIn(f"GetModifier.GetValueWithBreakdownFor('{gss.SLOTS_MODIFIER}')", hover)
+                self.assertIn(f"${gss.SLOTS_MODIFIER}$", hover)
+
+    def test_the_drift_and_its_terms_are_colored_as_a_cost(self):
+        """Colony management design § 4.1: more autonomy is the holder's loss, so
+        the drift and every term in its hover, the conditional lines too, read
+        signed with positive red (|=-2), never |+=2's positive green."""
+        lines = sorted(k for k in self.loc if k.startswith("sr_aut_line_"))
+        self.assertEqual(lines, ["sr_aut_line_charter", "sr_aut_line_destroyed", "sr_aut_line_garrison",
+                                 "sr_aut_line_nocontact", "sr_aut_line_war"])
+        for key in lines:
+            with self.subTest(line=key):
+                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), ["=-2"])
+        for site in gss.SITES:
+            k = site.key
+            drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
+            with self.subTest(world=k):
+                self.assertEqual(set(re.findall(r"'(sr_aut_line_\w+)'", drift)), set(lines))
+                # Every figure but the last line's level, where it settles.
+                formats = re.findall(r"ScriptValue\('(\w+)'\)\|([^\]]*)\]", drift)
+                self.assertEqual([f for v, f in formats if v != f"sr_disp_aut_target_{k}"],
+                                 ["=-2"] * (len(formats) - 1))
+                self.assertIn(f"ScriptValue('sr_disp_aut_target_{k}')|0]", drift)
+
     def test_next_window_reads_the_moon_at_stage_0(self):
         """Lunar colonization 2b: at stage 0 the Next Window cell's third line
         names the Moon, which needs no window, not 'stage 0 of 5'."""
         cell = _enclosing(self.gui, 'tooltip = "je_space_race_widget_ovc_window_tt"', "te_banking_ov_cell = {")
         third = cell[cell.index('blockoverride "third_line"'):]
-        stage = "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
-        waits = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
+        stage = "GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
+        waits = "EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
         # and, the Moon full without our Mars Landing, why the bar holds (design § 4)
         self.assertEqual(re.findall(r'visible = "\[(.*)\]"\n\s*text = "(\w+)"', third),
                          [(f"And( {stage}, Not( {waits} ) )", "je_space_race_widget_ovc_window_fig"),
@@ -585,15 +662,20 @@ class ColoniesTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_space_race_works(self):
         gui = _read(GUI)
-        how = _type_body(gui, "te_sr_sec_how")
+        how = _type_body(gui, "te_space_race_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
-        # audit SPC-4: the colony sections' rules are in How Solar Colonization
-        # Works, collapsed, at the foot of the colonization panel
-        how_colonies = _type_body(gui, "te_sr_sec_how_colonies")
-        self.assertIn("Toggle('sr_panel_how_colonies_open')", how_colonies)
+        # audit SPC-4: the colony sections' rules are How Solar Colonization
+        # Works, on the same Help page under that name, after the Space Race's
+        # own topics, which the "?" opens from every host. The rule's
+        # topics are gated on the player, not an entry (test_te_help_pages.py).
+        at = how.index('text = "je_space_race_widget_howc_header"')
+        self.assertGreater(at, how.index(f'"{HOW_KEYS[-1]}"'))
+        how_colonies = how[at:]
         for topic in ("fleets", "windows", "settlers", "modules", "autonomy", "space_command", "defences"):
             self.assertIn(f'"je_space_race_widget_howc_{topic}"', how_colonies, topic)
+        for rule, n in (("sr_disp_colonies_contested", 6), ("sr_disp_colonies_full", 4)):
+            self.assertEqual(how_colonies.count(f"GetPlayer.MakeScope.ScriptValue('{rule}')"), n, rule)
         for sec in ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_overview_milestone",
                     "te_sr_overview_transit", "te_sr_sec_colonies", "te_sr_sec_colony_fleets",
                     "te_sr_sec_solar_system", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
@@ -602,6 +684,26 @@ class HowItWorksTest(unittest.TestCase):
             self.assertNotIn("te_sr_note", body, f"{sec} carries an explanation")
             for key in HOW_KEYS:
                 self.assertNotIn(key, body, sec)
+
+    def test_each_colony_topic_shows_under_its_rule(self):
+        """Each Solar Colonization topic's heading and note carry its own
+        colonies rule (or none), read on the player: swapping two topics'
+        gates keeps the counts above but fails here."""
+        rules = {"fleets": None, "windows": None, "settlers": "sr_disp_colonies_contested",
+                 "modules": "sr_disp_colonies_contested", "autonomy": "sr_disp_colonies_contested",
+                 "space_command": "sr_disp_colonies_full", "defences": "sr_disp_colonies_full"}
+        how = _strip_comments(_type_body(_read(GUI), "te_space_race_help_body"))
+        gates = {}
+        for kind, name, inner in _children(how):
+            m = re.search(r'text = "je_space_race_widget_howc_(\w+)"', inner) if kind == "widget" else None
+            if m and m.group(1) != "header":
+                gate = re.search(r'visible = "(.*)"', inner)
+                gates[m.group(1)] = gate.group(1) if gate else None
+        expected = {}
+        for topic, rule in rules.items():
+            shown = None if rule is None else f"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{rule}'), '(CFixedPoint)1' )]"
+            expected[f"sub_{topic}"] = expected[topic] = shown
+        self.assertEqual(gates, expected)
 
     def test_the_old_long_labels_are_gone(self):
         """The funding label's "(each level draws on innovation)" is in the concept
@@ -614,42 +716,29 @@ class HowItWorksTest(unittest.TestCase):
             self.assertTrue(_loc(c) and _loc(f"{c}_desc"), c)
 
 
-class HoverMarkTest(unittest.TestCase):
-    """A value row's label is underlined when the row has a tooltip, and only
-    then (style guide rule 3; audit SPC-12): te_sr_value_row underlines by
-    default through its "label_format" block, and a row with no tooltip
-    overrides the block empty, so a new row with a hover is marked for free."""
+class NoUnderlineTest(unittest.TestCase):
+    """Style guide rule 3 (owner, 2026-10-30): as in vanilla, a hover's label
+    or figure is not underlined. The Space Race panel underlined nearly every
+    hover under the rule of 2026-10-27; only a word inside running text may
+    open its own tooltip, through a concept link or the inline
+    #tooltippable;tooltip: form."""
 
-    def _rows(self):
-        gui = _read(GUI)
-        out = []
-        for m in re.finditer(r"\bte_sr_value_row = \{", gui):
-            body = gui[m.end():_close(gui, m.end() - 1)]
-            depth, top = 0, []
-            for line in body.split("\n"):
-                if depth == 0:
-                    top.append(line.strip())
-                depth += line.count("{") - line.count("}")
-            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
-            out.append((label.group(1) if label else body[:80], any(t.startswith("tooltip") for t in top), body))
-        return out
+    FILES = (GUI, os.path.join(REPO, "gui", "sr_launch_window_widgets.gui"),
+             os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui"),
+             os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui"))
 
-    def test_the_type_underlines_by_default(self):
-        row = _type_body(_read(GUI), "te_sr_value_row")
-        self.assertRegex(row, r'block "label_format" \{\s*default_format = "#tooltippable"\s*\}\s*block "row_label"')
+    def test_no_widget_underlines_its_text(self):
+        for path in self.FILES:
+            with self.subTest(file=os.path.basename(path)):
+                text = re.sub(r"#[^\n]*", "", _read(path).replace("#tooltippable", "@TT@"))
+                self.assertNotIn("@TT@", text)
 
-    def test_a_row_without_a_tooltip_drops_the_underline(self):
-        rows = self._rows()
-        self.assertGreaterEqual(len(rows), 15)
-        for label, has_tooltip, body in rows:
-            with self.subTest(row=label):
-                overridden = 'blockoverride "label_format" {}' in body
-                self.assertEqual(overridden, not has_tooltip, label)
-
-    def test_labels_do_not_underline_themselves(self):
-        for label, _, _ in self._rows():
-            with self.subTest(row=label):
-                self.assertNotIn("#tooltippable", _loc(label))
+    def test_no_panel_text_wraps_itself_in_an_underline(self):
+        keys = [k for k in _all_loc() if re.match(r"(je_space_race|sr_|te_sr)", k)]
+        self.assertGreater(len(keys), 500)
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertNotRegex(_all_loc()[key], r"#tooltippable(?!;tooltip:)")
 
 
 class ProgrammeRowTest(unittest.TestCase):
@@ -663,7 +752,12 @@ class ProgrammeRowTest(unittest.TestCase):
                 self.assertTrue(cell.lstrip().startswith("}"), "the interstellar cell takes no overrides")
                 names.append("interstellar")
             else:
-                names.append(re.search(r'tooltip = "je_space_race_widget_prog_(\w+)"', cell).group(1))
+                # the player's words, or a neutral twin for another country
+                # (I3); solar colonization's says nothing of who was first
+                m = re.search(r"tooltip = \"\[SelectLocalization\( Country\.IsLocalPlayer, "
+                              r"'je_space_race_widget_prog_(\w+)', 'je_space_race_widget_prog_\1_ni' \)\]\"", cell)
+                m = m or re.search(r'tooltip = "je_space_race_widget_prog_(solar_colonization)"', cell)
+                names.append(m.group(1))
         self.assertEqual(names, ROW)
         for m, cell in zip(names, cells):
             if m == "interstellar":
@@ -709,12 +803,14 @@ class InterstellarCellTest(unittest.TestCase):
             with self.subTest(state=n):
                 visibles = re.findall(r'visible = "(.*)"', icon)
                 self.assertEqual(len(visibles), 1, "one visible per widget")
-                m = re.fullmatch(r"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\."
+                m = re.fullmatch(r"\[EqualTo_CFixedPoint\( Country\.MakeScope\."
                                  r"ScriptValue\('sr_disp_prog_interstellar'\), '\(CFixedPoint\)(\d)' \)\]",
                                  visibles[0])
                 self.assertIsNotNone(m, visibles[0])
                 codes.append(int(m.group(1)))
-                self.assertIn(f'tooltip = "je_space_race_widget_prog_interstellar_{n}"', icon)
+                self.assertIn(f"tooltip = \"[SelectLocalization( Country.IsLocalPlayer, "
+                              f"'je_space_race_widget_prog_interstellar_{n}', "
+                              f"'je_space_race_widget_prog_interstellar_{n}_ni' )]\"", icon)
                 self.assertIn(f'texture = "{SR_ICONS}{INTERSTELLAR_STATES[n]}.dds"', icon)
                 self.assertNotIn("alpha", icon, "the art carries the state; no state is faded")
         # Each state tests equality with a code of its own, so no two show at once.
@@ -771,8 +867,10 @@ class SpacePowersTest(unittest.TestCase):
     def test_our_row_then_the_list(self):
         rows = re.split(r"\bte_sr_power_row = \{", self.section)[1:]
         self.assertEqual(len(rows), 2)
-        self.assertIn('datacontext = "[GetPlayer.GetCapital]"', rows[0])
-        self.assertIn("te_sr_power_lead_own = {}", rows[0])
+        # The shown country's row reads Country (National Info); its exact
+        # progress column is the player's own.
+        self.assertIn('datacontext = "[Country.GetCapital]"', rows[0])
+        self.assertRegex(rows[0], r"te_sr_power_lead_own = \{\s*using = te_own_country_only\s*\}")
         self.assertRegex(self.section, r'datamodel = "\[GetPlayer\.MakeScope\.GetList\(\'sr_powers_list\'\)\]"\s*'
                                        r'item = \{\s*te_sr_power_row = \{\s*datacontext = "\[Scope\.GetState\]"')
         self.assertIn("te_sr_power_lead_band = {}", rows[1])
@@ -886,8 +984,12 @@ class OrbitTest(unittest.TestCase):
     def test_rows_and_their_sources(self):
         body = _type_body(_read(GUI), "te_sr_sec_orbit")
         self.assertIn("te_sr_debris_row = {}", body)
-        self.assertEqual(re.findall(r'text = "(je_space_race_widget_orbit_\w+_label)"', body),
+        self.assertEqual(re.findall(r'text = "(?:\[SelectLocalization\( Country\.IsLocalPlayer, \')?'
+                                    r'(je_space_race_widget_orbit_\w+_label)', body),
                          [f"je_space_race_widget_orbit_{r}_label" for r in ("satellites", "strikes", "moratorium", "strike")])
+        # "Our Satellites" is the player's; another country's reads "Satellites" (I3)
+        self.assertIn("text = \"[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_orbit_satellites_label', "
+                      "'je_space_race_widget_orbit_satellites_ni_label' )]\"", body)
         self.assertNotIn("JournalEntry", body)
 
     def test_debris_shows_once_in_the_tab(self):
@@ -907,12 +1009,15 @@ class OrbitTest(unittest.TestCase):
 
     def test_the_debris_row_reads_the_player(self):
         """Mission Control's debris row is also the Orbit section's, outside
-        any journal entry: every key it renders roots on GetPlayer."""
+        any journal entry: every key it renders roots on the shown Country,
+        which every mount supplies (gotcha #45), so National Info shows another
+        country's."""
         for key in ("te_debris_row", "te_debris_row_tt", "te_debris_row_tt_cleaners",
                     "te_debris_row_tt_hazardous", "te_debris_row_tt_kessler"):
             with self.subTest(key=key):
                 self.assertNotIn("JournalEntry", _loc(key))
-                self.assertIn("GetPlayer", _loc(key))
+                self.assertNotIn("GetPlayer", _loc(key))
+                self.assertIn("Country.", _loc(key))
 
     def test_the_satellite_codes_match_the_hover(self):
         values = _read(os.path.join(REPO, "common", "script_values", "te_orbital_debris_values.txt"))
@@ -949,6 +1054,33 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
                 "gfx/interface/icons/generic_icons/up_up.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
+# A colony's page (space_race_gui_icons.md, "A colony's page"): art that already
+# shows the thing, vanilla's or the mod's, and the page's own icons (icon batch 8).
+PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
+    "generic_icons/population.dds", "generic_icons/battalions.dds", "state_status_icons/has_construction.dds",
+    "generic_icons/trend_nochange.dds", "building_icons/building_government_administration.dds",
+    "building_icons/building_space_mine.dds", "building_icons/building_space_command.dds",
+    "building_icons/building_tourism_industry.dds", "covert_icons/operation_slot.dds",
+    "building_icons/building_advanced_material_fabricator.dds")}
+# In page order: the caption or module name that follows each icon, its file in
+# SR_ICONS, and the placeholder it replaced. The Defenses icon is on the module
+# row and the Defenses tile.
+PAGE_ICONS = (
+    ("je_space_race_widget_ch_crews", "page_crews.dds", "character_trait_icons/engineer.dds"),
+    ("je_space_race_widget_page_staffing", "page_crewed.dds", "generic_icons/employment_not_full.dds"),
+    ("je_space_race_widget_mod_name_hab", "module_hab.dds", "building_icons/urban_center.dds"),
+    ("je_space_race_widget_mod_name_port", "module_port.dds", "building_icons/building_port.dds"),
+    ("je_space_race_widget_mod_name_def", "module_def.dds", "building_icons/building_naval_fortification.dds"),
+    ("je_space_race_widget_mod_name_lab", "module_lab.dds", "building_icons/building_university.dds"),
+    ("je_space_race_widget_mod_name_culture", "module_culture.dds", "building_icons/building_arts_academy.dds"),
+    ("je_space_race_widget_mod_name_train", "module_train.dds", "building_icons/building_barracks.dds"),
+    ("je_space_race_widget_mod_name_bunker", "module_bunker.dds", "building_icons/building_nuclear_plant.dds"),
+    ("je_space_race_widget_ch_autonomy", "page_autonomy.dds", "diplomatic_action_icons/liberty_desire.dds"),
+    ("je_space_race_widget_page_status", "page_aut_status.dds", "ai_strategy_icons/subject_maintain_autonomy.dds"),
+    ("je_space_race_widget_ch_defences", "module_def.dds", "building_icons/building_naval_fortification.dds"),
+    ("je_space_race_widget_ch_integrity", "page_integrity.dds", "state_status_icons/has_devastation.dds"),
+    ("je_space_race_widget_page_status", "page_def_status.dds", "state_status_icons/colony.dds"),
+)
 
 
 def _enclosing(text, anchor, opener):
@@ -972,11 +1104,10 @@ class SpaceRaceIconsTest(unittest.TestCase):
         return re.findall(r'texture = "([^"]+)"', cell)
 
     def test_each_state_draws_its_own_icon(self):
-        for anchor, name in (('tooltip = "je_space_race_widget_ov_idle_tt"', "state_idle"),
+        for anchor, name in (("je_space_race_widget_ov_idle_tt', 'je_space_race_widget_ov_idle_tt_ni' )]\"", "state_idle"),
                              ('tooltip = "sr_pace_note_standard"', "state_standard"),
                              ('tooltip = "sr_pace_note_safe"', "state_safe"),
                              ('tooltip = "sr_pace_note_ambitious"', "state_ambitious"),
-                             ('tooltip = "sr_pace_note_shielded"', "state_shielded"),
                              ('block "sr_risk_lit"', "risk"),
                              ('block "sr_risk_unlit"', "risk"),
                              ('tooltip = "sr_rivals_first_open"', "first"),
@@ -1009,8 +1140,29 @@ class SpaceRaceIconsTest(unittest.TestCase):
         journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL}
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
-                self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT,
+                self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
+                                or path in PAGE_KEPT,
                                 f"placeholder left: {path}")
+
+    def test_a_colony_page_s_own_icons(self):
+        """Icon batch 8: each tile and module row on a colony's page draws its own
+        icon (the caption or module name after it says which), and the placeholder
+        it replaced is gone from the page."""
+        page = _type_body(self.gui, "te_sr_colony_row")
+        pairs, icon = [], None
+        for line in page.splitlines():
+            m = re.search(rf'texture = "{re.escape(SR_ICONS)}((?:page|module)_\w+\.dds)"', line)
+            if m:
+                icon = m.group(1)
+                continue
+            m = re.search(r'text = "([^"]+)"', line)
+            if m and icon:
+                pairs.append((m.group(1), icon))
+                icon = None
+        self.assertEqual(pairs, [(caption, f) for caption, f, _ in PAGE_ICONS])
+        for _, f, old in PAGE_ICONS:
+            with self.subTest(placeholder=old):
+                self.assertNotIn(f'texture = "gfx/interface/icons/{old}"', page)
 
     def test_every_icon_exists_once_the_art_is_in(self):
         tracked = set(subprocess.run(["git", "-C", REPO, "ls-files", SR_ICONS],
@@ -1059,7 +1211,7 @@ class DisplayValuesTest(unittest.TestCase):
         for m in CONTROLLED:
             body = _block(self.values, f"sr_disp_status_{m}")
             self.assertIn(f"var:sr_{m}_last_status", body)
-            self.assertIn("max = 4", body)
+            self.assertIn("max = 3", body)
 
     def test_programme_codes_follow_the_tooltip_order(self):
         """first (4) → done (3) → running (1) → taken (2), as sr_prog_<m> tests.
@@ -1121,18 +1273,18 @@ class PaceBreakdownTest(unittest.TestCase):
         self.assertNotIn("pace_tt", row)
         self.assertIn('block "sr_progress_tooltip" {}', row)
 
-    def test_every_milestone_headline_marks_its_rate_as_hoverable(self):
+    def test_every_milestone_headline_ends_on_its_rate(self):
         for m in CONTROLLED:
             with self.subTest(milestone=m):
                 text = _loc(f"je_space_race_widget_progress_{m}")
                 self.assertRegex(
-                    text, rf"\(#tooltippable \+\[JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo#!\)$")
+                    text, rf"\(\+\[Country\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo\)$")
 
     def test_the_tooltip_breaks_down_both_figures_and_states_the_pace(self):
         tip = _loc("je_space_race_widget_pace_tt")
         for key in (self.ADD, self.MULT):
             self.assertIn(
-                f"[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('{key}')]", tip)
+                f"[Country.GetModifier.GetValueWithBreakdownFor('{key}')]", tip)
         self.assertLess(tip.index(self.ADD), tip.index(self.MULT))
         self.assertIn("ScriptValue('sr_progress')", tip)
 
@@ -1161,9 +1313,574 @@ class LocTest(unittest.TestCase):
 
     def test_the_pace_sentence_is_the_state_icon_tooltip(self):
         overview = _type_body(_read(GUI), "te_sr_overview_milestone")
-        for note in ("standard", "safe", "ambitious", "shielded"):
+        for note in ("standard", "safe", "ambitious"):
             self.assertIn(f'tooltip = "sr_pace_note_{note}"', overview)
         self.assertNotRegex(_read(CUSTOM_LOC), r"(?m)^sr_\w+_pace = \{")
+
+
+class QueueNextModuleTest(unittest.TestCase):
+    """The queue's Next module row (the owner, 2026-10-31) follows how
+    sr_mod_month builds: its loop asks the launch site, the stock against the
+    head's price, a free shipment slot and the queue, never the month's rate,
+    so a head the stock covers is built with no fabrication and must not read
+    "stopped" (review of #1274)."""
+
+    def test_the_build_loop_never_asks_the_rate(self):
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_colony_module_effects.txt"))
+        loop = _block(effects, "sr_mod_month").split("while = {", 1)[1]
+        start = loop.index("limit = {") + len("limit = {")
+        depth, end = 1, start
+        while depth:
+            depth += {"{": 1, "}": -1}.get(loop[end], 0)
+            end += 1
+        limit = loop[start:end]
+        for term in ("sr_launch_site_lost", "sr_mq_head_cost", "sr_ms_has_free_slot", "sr_mq_1_site"):
+            self.assertIn(term, limit)
+        self.assertNotIn("sr_mod_fab_rate", limit)
+
+    def test_stopped_only_when_nothing_can_build(self):
+        state = _block(_read(DISPLAY), "sr_disp_mq_next_state")
+        lost, covered, no_rate = (state.index("sr_launch_site_lost = yes"),
+                                  state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
+                                  state.index("NOT = { sr_mod_fab_rate > 0 }"))
+        # The launch site first, then a covered head (built, or waiting for a
+        # slot), and only then no rate: stopped.
+        self.assertLess(lost, covered)
+        self.assertLess(covered, no_rate)
+        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+
+class TabTest(unittest.TestCase):
+    """The colonization status's tabs (UI pass design § 11): a row of four
+    buttons on the client-side sr_tab (absent for Mission Control), and one
+    wrapper per tab around its sections, inside te_sr_solar_colonization_status
+    so both hosts draw them."""
+
+    TABS = (("mission", "[Not( GetVariableSystem.Exists('sr_tab') )]", ["te_sr_status_sections"]),
+            ("fleets", "[GetVariableSystem.HasValue('sr_tab', 'fleets')]",
+             ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets"]),
+            ("colonies", "[GetVariableSystem.HasValue('sr_tab', 'colonies')]", ["te_sr_sec_colonies"]),
+            ("system", "[GetVariableSystem.HasValue('sr_tab', 'system')]", ["te_sr_sec_solar_system"]))
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.status = _type_body(cls.gui, "te_sr_solar_colonization_status")
+
+    def _wrapper(self, visible):
+        i = self.status.index(f'visible = "{visible}"')
+        opener = self.status.rindex("flowcontainer = {", 0, i)
+        depth, j = 0, opener + len("flowcontainer = ")
+        while True:
+            depth += {"{": 1, "}": -1}.get(self.status[j], 0)
+            if depth == 0:
+                return self.status[opener:j]
+            j += 1
+
+    def test_each_tab_holds_its_sections(self):
+        starts = []
+        for key, visible, sections in self.TABS:
+            with self.subTest(tab=key):
+                body = self._wrapper(visible)
+                found = [x for x in re.findall(r"^\t+(te_sr_sec_\w+|te_sr_status_sections) = \{", body, re.M)
+                         if x != "te_sr_sec_windows"]
+                self.assertEqual(found, sections)
+                starts.append(self.status.index(body))
+        self.assertEqual(starts, sorted(starts), "the tabs' wrappers are out of order")
+        # Every section sits in a tab: none left at the status's own level.
+        self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+|te_sr_status_sections) = \{", self.status, re.M), [])
+
+    def test_each_wrapper_has_one_visible(self):
+        """A second visible on a widget overrides the first (gui gotcha #17)."""
+        for key, visible, _ in self.TABS:
+            with self.subTest(tab=key):
+                body = self._wrapper(visible)
+                own = re.search(rf'(?m)^(\t*)visible = "{re.escape(visible)}"', body).group(1)
+                self.assertEqual(len(re.findall(rf"(?m)^{own}visible = ", body)), 1)
+
+    def test_the_default_tab_is_mission_control(self):
+        first = re.search(r'flowcontainer = \{\s*visible = "([^"]+)"\s*direction = vertical', self.status)
+        self.assertEqual(first.group(1), "[Not( GetVariableSystem.Exists('sr_tab') )]")
+
+    def test_each_button_sets_its_tab_and_greys_on_it(self):
+        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        buttons = _instances(row, r"te_sr_tab_button(?:_wide)?")
+        self.assertEqual(len(buttons), 4)
+        # Mission Control and Solar System need the wide button (the labels
+        # test measures each type, not the instance that uses it).
+        types = re.findall(r"\b(te_sr_tab_button(?:_wide)?) = \{", row)
+        wants = (("mission", "GetVariableSystem.Exists('sr_tab')", "[GetVariableSystem.Clear('sr_tab')]", "te_sr_tab_button_wide"),
+                 ("fleets", "Not( GetVariableSystem.HasValue('sr_tab', 'fleets') )", "[GetVariableSystem.Set('sr_tab', 'fleets')]", "te_sr_tab_button"),
+                 ("colonies", "Not( GetVariableSystem.HasValue('sr_tab', 'colonies') )", "[GetVariableSystem.Set('sr_tab', 'colonies')]", "te_sr_tab_button"),
+                 ("system", "Not( GetVariableSystem.HasValue('sr_tab', 'system') )", "[GetVariableSystem.Set('sr_tab', 'system')]", "te_sr_tab_button_wide"))
+        self.assertEqual(types, [w[3] for w in wants])
+        for button, (key, enabled, onclick, _) in zip(buttons, wants):
+            with self.subTest(tab=key):
+                self.assertIn(f'enabled = "[{enabled}]"', button)
+                self.assertIn(f'onclick = "{onclick}"', button)
+                self.assertIn(f'text = "je_space_race_widget_tab_{key}"', button)
+                self.assertIn(f'tooltip = "je_space_race_widget_tab_{key}_tt"', button)
+        # Set and Clear, never Toggle (FlagTest counts Toggle's flags).
+        self.assertNotIn("Toggle('sr_tab')", self.gui)
+
+    def test_the_tab_row_shows_while_the_entry_runs(self):
+        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        m = re.search(r'flowcontainer = \{\s*direction = horizontal\s*parentanchor = hcenter\s*spacing = 4\s*visible = "([^"]+)"', row)
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(1), "[JournalEntry.IsActive]")
+        # Four buttons in the panel's 520: two of 96, two of 148, three gaps.
+        widths = {t: int(re.search(r"size = \{ (\d+) 28 \}", _type_body(self.gui, t)).group(1))
+                  for t in ("te_sr_tab_button", "te_sr_tab_button_wide")}
+        used = [widths["te_sr_tab_button_wide" if "_wide = {" in m.group(0) else "te_sr_tab_button"]
+                for m in re.finditer(r"\bte_sr_tab_button(?:_wide)? = \{", row)]
+        self.assertLessEqual(sum(used) + 4 * (len(used) - 1), 520)
+
+class ColonyTargetOpenerTest(unittest.TestCase):
+    """Colony Fleets opens the colony target popup (UI pass design § 5): Change
+    beside our target, with Clear kept; Choose on the two automatic rows."""
+
+    OPEN = "onclick = \"[GetVariableSystem.Set('te_popup', 'sr_target')]\""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(GUI))
+
+    def _rows(self):
+        section = _type_body(self.text, "te_sr_sec_colony_fleets")
+        out = []
+        for m in re.finditer(r"\bte_sr_cf_dest_row = \{", section):
+            out.append(section[m.end():_close(section, m.end() - 1)])
+        return out
+
+    def test_each_destination_row_opens_the_picker(self):
+        rows = self._rows()
+        self.assertEqual(len(rows), 3)
+        target, *automatic = rows
+        self.assertIn(self.OPEN, target)
+        self.assertIn('text = "je_space_race_widget_cf_change"', target)
+        self.assertIn("GetScriptedGui('sr_cf_target_clear_sgui').Execute", target)
+        self.assertLess(target.index("je_space_race_widget_cf_change"), target.index("sr_cf_target_clear_sgui"))
+        for row in automatic:
+            with self.subTest(row=row[:80]):
+                self.assertIn(self.OPEN, row)
+                self.assertIn('text = "je_space_race_widget_cf_choose"', row)
+                self.assertNotIn("sr_cf_target_clear_sgui", row)
+
+    def test_the_row_fits(self):
+        row = _type_body(self.text, "te_sr_cf_dest_row")
+        widths = [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", row)]
+        self.assertEqual(len(widths), 2)            # the label and the value
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        margin = int(re.search(r"margin = \{ (\d+) \d+ \}", row).group(1))
+        # Two 66-wide buttons on the target row, the most it holds.
+        self.assertLessEqual(sum(widths) + 2 * 66 + 3 * spacing + 2 * margin, 480)
+
+class EarthAlertCellTest(unittest.TestCase):
+    """The overview's Hostile Fleet cell (UI pass design § 9): under Full
+    Colonies, while a hostile fleet is bound for Earth; red on 2."""
+
+    def test_the_cell_reads_the_alert_values(self):
+        gui = _read(GUI)
+        m = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
+        self.assertIsNotNone(m, "no Hostile Fleet cell")
+        shows = ("ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1'",
+                 "GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
+                 "'(CFixedPoint)1' )")
+        # Shown by its own visible, and its row (shared with Base Room) shows
+        # while either cell does.
+        row = gui.rindex("flowcontainer = {", 0, m.start())
+        row_shown = re.match(r'flowcontainer = \{\s*visible = "([^"]+)"', gui[row:]).group(1)
+        self.assertTrue(row_shown.startswith("[Or( "), row_shown)
+        for cond in shows:
+            self.assertIn(cond, m.group(1))
+            self.assertIn(cond, row_shown)
+        self.assertIn("ScriptValue('sr_disp_ebase_shown')", row_shown)
+        brace = gui.index("{", m.start())
+        depth, i = 0, brace
+        while True:
+            depth += {"{": 1, "}": -1}.get(gui[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        cell = gui[brace:i]
+        loud = "EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )"
+        self.assertRegex(cell, rf'visible = "\[{re.escape(loud)}\]"\s*text = "je_space_race_widget_ovc_earth_word_loud"')
+        self.assertRegex(cell, rf'visible = "\[Not\( {re.escape(loud)} \)\]"\s*text = "je_space_race_widget_ovc_earth_word"')
+        self.assertIn('text = "je_space_race_widget_ovc_earth_fig"', cell)
+        loc = "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))
+        self.assertRegex(loc, r'(?m)^ je_space_race_widget_ovc_earth_word_loud:0 "#R ')
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's Space Race tab leaves out, and what it keeps
+    (National Info; spec 2026-11-02-charts-help-national-info §§ 6.4, 6.7).
+    Left out, under te_own_country_only: each milestone's live sections
+    (Mission Control's approach, funding and setbacks, the Rivals, the colony
+    fleets and Space Command) and Open Journal Entry, which read the player's
+    entry; the overview's approach and setback-risk cells and its exact
+    progress bar; solar colonization's staging and "what needs us" cells; the
+    exact-progress column of the country's own Space Powers row; the other
+    powers' rows, which are the viewer's list and the viewer's estimates; and
+    the strike readiness row, the player's own case for a strike. What another
+    country's panel draws is the walk test_te_system_tab_bodies.py's
+    BindingTest makes (panel_view)."""
+
+    ROOT = {"te_sr_wide_sections"}
+    PRIVATE = ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_rival_row", "te_sr_status_sections",
+               "te_sr_power_lead_own", "te_sr_power_lead_band", "te_sr_ov_staged", "te_sr_sec_colonies",
+               "te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
+               "te_sr_sec_solar_system", "te_sr_action_button") + tuple(f"te_sr_{m}_status" for m in CONTROLLED)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(cls.ROOT, cls.types)
+        cls.loc = load_loc()
+        cls.keys = panel_loc_keys(cls.ROOT, cls.types, cls.loc)
+
+    def _hidden(self, type_name, anchor):
+        """Whether the anchor's end (inside a widget it opens) is left out."""
+        body = self.types[type_name].body
+        self.assertIn(anchor, body, type_name)
+        return in_spans(body.index(anchor) + len(anchor), self.view.skip[type_name])
+
+    def test_the_players_own_parts_are_left_out(self):
+        drawn = type_closure(self.ROOT, self.types)
+        for name in self.PRIVATE:
+            with self.subTest(type=name):
+                self.assertIn(name, drawn, "the player's own panel still draws it")
+                self.assertNotIn(name, self.view.open, f"another country's panel draws {name}")
+
+    def test_the_entrys_sections_and_link_are_the_players(self):
+        body = self.types["te_sr_window_milestones"].body
+        spans = self.view.skip["te_sr_window_milestones"]
+        self.assertEqual(spans, guard_spans(body))
+        frames = [m.start() for m in re.finditer(r"\bte_system_tab_frame = \{", body)] + [len(body)]
+        self.assertEqual(len(frames) - 1, len(ALL))
+        for m, start, end in zip(ALL, frames, frames[1:]):
+            with self.subTest(milestone=m):
+                frame = body[start:end]
+                self.assertIn('blockoverride "tab_country" {}', frame)
+                entry = start + frame.index(f"GetPlayerJournalEntry('je_space_race_{m}')")
+                self.assertTrue(in_spans(entry, spans), "the entry's datacontext outside the guard")
+                self.assertTrue(in_spans(start + frame.index("OpenJournalEntryPanel"), spans))
+                overview = "te_sr_overview_transit = {}" if m in window_gen.SR_TRANSIT else f"te_sr_{m}_overview = {{}}"
+                self.assertFalse(in_spans(start + frame.index(overview), spans), "the overview is the player's")
+
+    def test_the_overviews_private_cells_are_the_players(self):
+        for anchor in ('block "sr_status_standard"', 'block "sr_risk_lit"', "te_sr_ov_bar_row = {"):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden("te_sr_overview_milestone", anchor))
+        for anchor in ('block "sr_third_cells"', "te_sr_ov_band_row = {", "te_sr_ov_programme = {}"):
+            with self.subTest(anchor=anchor):
+                self.assertFalse(self._hidden("te_sr_overview_milestone", anchor))
+        # the band shows only for another country, the bar only for the player:
+        # one of the two whenever the row shows
+        body = self.types["te_sr_overview_milestone"].body
+        band = body[body.index("te_sr_ov_band_row = {"):]
+        self.assertEqual(re.search(r'visible = "(.*)"', band).group(1), "[Not( Country.IsLocalPlayer )]")
+        solar = "te_sr_solar_colonization_overview"
+        for anchor in ("te_sr_ov_staged = {", 'tooltip = "je_space_race_widget_ovc_colonies_tt"',
+                       'tooltip = "je_space_race_widget_ovc_earth_tt"'):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden(solar, anchor))
+        self.assertFalse(self._hidden(solar, "te_sr_ov_pie = {"))
+
+    def test_the_other_powers_are_the_players(self):
+        for anchor in ("GetList('sr_powers_list')", '"je_space_race_widget_powers_others"',
+                       "te_sr_power_lead_own = {"):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden("te_sr_sec_powers", anchor))
+        self.assertFalse(self._hidden("te_sr_sec_powers", 'datacontext = "[Country.GetCapital]"'))
+        self.assertTrue(self._hidden("te_sr_sec_orbit", 'tooltip = "te_orbit_strike_tt"'))
+        self.assertFalse(self._hidden("te_sr_sec_orbit", "te_sr_debris_row = {}"))
+
+    def test_no_empty_row_for_another_country(self):
+        """A guarded part whose own row has a visible sits in a wrapper that
+        also asks Country.IsLocalPlayer, so another country's column keeps no
+        empty row (spacing) where it would be."""
+        solar = self.types["te_sr_solar_colonization_overview"].body
+        for value, inner in (("sr_launch_staged_shown", "te_sr_ov_staged"),
+                             ("sr_disp_colonies_contested", "flowcontainer")):
+            with self.subTest(part=inner):
+                self.assertRegex(solar, rf'flowcontainer = \{{\s*visible = "\[And\( Country\.IsLocalPlayer, [^"]*'
+                                        rf"ScriptValue\('{value}'\)[^\"]*\]\"[^{{}}]*{inner} = \{{\s*"
+                                        r"using = te_own_country_only")
+
+    # The other half (spec § 6.4's Shown column: "milestones reached, program
+    # icons, colonies and a progress band"): what another country's panel
+    # still draws, so a guard that hides too much fails too. A type whose root
+    # carries the guard is in view.open but draws nothing, so each must also
+    # keep its root out of view.skip.
+    SHOWN = ("te_sr_window_milestones", "te_sr_overview_milestone", "te_sr_overview_transit", "te_sr_ov_first",
+             "te_sr_ov_icon_label", "te_sr_ov_band_row", "te_sr_ov_pie", "te_sr_ov_programme", "te_sr_ov_prog_cell",
+             "te_sr_ov_prog_cell_interstellar", "te_sr_sec_powers", "te_sr_power_row", "te_sr_power_cell",
+             "te_sr_power_cell_interstellar", "te_sr_sec_orbit", "te_sr_debris_row", "te_sr_sec_colonies_brief",
+             "te_sr_colony_brief_rows", "te_sr_colony_brief_row", "te_sr_value_row", "te_sr_panel") \
+        + tuple(f"te_sr_{m}_overview" for m in CONTROLLED)
+
+    def test_another_country_sees_its_milestones_program_colonies_and_band(self):
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, self.view.open, f"another country's panel doesn't draw {name}")
+                body = self.types[name].body
+                self.assertNotIn((0, len(body)), self.view.skip[name], f"{name}'s root is the player's own")
+        shown = [f"je_space_race_widget_band_{m}" for m in CONTROLLED] + ["je_space_race_widget_band_tt"]
+        shown += [f"je_space_race_widget_power_prog_{m}" for m in CONTROLLED if m != "interstellar_probe"]
+        shown += ["je_space_race_widget_power_prog_interstellar", "je_space_race_widget_ov_first_claimed",
+                  "je_space_race_widget_ov_first_open", "je_space_race_widget_ov_programme_tt_ni",
+                  "je_space_race_widget_ov_idle", "je_space_race_widget_ov_idle_tt_ni", "je_space_race_widget_ov_stage",
+                  "je_space_race_widget_ov_worlds_tt_theirs", "te_window_space_race_idle_note_theirs",
+                  "je_space_race_widget_colonies_header", "je_space_race_widget_colonies_held_label",
+                  "je_space_race_widget_colonies_held_figure", "je_space_race_widget_colonies_brief_empty",
+                  "je_space_race_widget_orbit_satellites_ni_label", "je_space_race_widget_orbit_strikes_label",
+                  "je_space_race_widget_orbit_moratorium_label", "te_debris_row", "te_debris_row_tt",
+                  "te_debris_row_tt_cleaners_ni", "te_orbit_satellites_tt_ni", "te_orbit_strikes_tt",
+                  "te_orbit_moratorium_tt_ni", "je_space_race_widget_profile_solar_colonization_ni"]
+        shown += [f"te_orbit_satellites_tt_{w}_ni" for w in ("disrupted", "cooldown", "exposed", "none")]
+        shown += [f"je_space_race_widget_prog_{m}_ni" for m in ROW if m not in ("interstellar", "solar_colonization")]
+        shown += ["je_space_race_widget_prog_solar_colonization"]
+        shown += [f"je_space_race_widget_prog_interstellar_{n}_ni" for n in range(4)]
+        self.assertEqual([k for k in shown if k not in self.keys], [], "another country's panel doesn't render these")
+        # and the player's own words, which it doesn't: the rewards (what
+        # winning would earn us), and the keys whose "we"/"our" the player
+        # keeps while another country reads the _ni twin (I3)
+        mine = ["je_space_race_widget_ov_worlds_tt_ours", "te_window_space_race_idle_note_ours",
+                "je_space_race_widget_ov_risk_tt", "je_space_race_widget_pace_tt",
+                "je_space_race_widget_powers_others", "te_orbit_strike_tt"]
+        mine += [f"je_space_race_widget_reward_{m}" for m in RACING]
+        mine += [k[:-len("_ni")] for k in shown if k.endswith("_ni")]
+        mine += ["je_space_race_widget_orbit_satellites_label"]
+        for key in mine:
+            with self.subTest(key=key):
+                self.assertNotIn(key, self.keys)
+
+    # Another country's progress is the estimate, never the exact figure, and
+    # nothing of its plans (spec § 6.4; review of #1367, I4). The band's three
+    # values and its text read only the open band, sr_disp_rival_* with the
+    # country as viewer and rival; and the parts another country sees (the
+    # band row, the Program row, the first-to-finish cell, the country's own
+    # Space Powers row, Orbit and the colonies brief, with what the overviews
+    # pass into them) read none of the player's own figures. Both branches of
+    # a SelectLocalization on Country.IsLocalPlayer count: the parts are
+    # shared, and the player's exact figure has its own row, the bar.
+    EXACT = re.compile(r"^(sr_progress_\w+|sr_disp_progress_frac_(?!interstellar_results$)\w+|sr_pace_rate_\w+"
+                       r"|sr_risk_shown_\w+|sr_disp_status_\w+|sr_funding_\w+|sr_disp_cost_\w+|sr_launch_staged_\w+)$")
+    SHARED = ("te_sr_ov_band_row", "te_sr_ov_programme", "te_sr_ov_first", "te_sr_power_row", "te_sr_sec_orbit",
+              "te_sr_sec_colonies_brief")
+    FED = ("sr_third_cells", "sr_band_text", "sr_band_lo", "sr_band_hi", "sr_band_est")  # overviews' blockoverrides
+
+    @staticmethod
+    def _overrides(body, name):
+        return [body[m.end() - 1:_close(body, m.end() - 1) + 1]
+                for m in re.finditer(rf'blockoverride "{name}" \{{', body)]
+
+    def test_the_band_is_the_estimate(self):
+        gui = _read(GUI)
+        for m in CONTROLLED:
+            body = _type_body(gui, f"te_sr_{m}_overview")
+            for part in ("lo", "hi", "est"):
+                with self.subTest(milestone=m, value=part):
+                    got = [re.sub(r"\s+", " ", o) for o in self._overrides(body, f"sr_band_{part}")]
+                    self.assertEqual(got, ["{ value = \"[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope )."
+                                           f"AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_{part}_{m}')"
+                                           " )]\" }"])
+            with self.subTest(milestone=m, value="text"):
+                self.assertEqual([re.sub(r"\s+", " ", o) for o in self._overrides(body, "sr_band_text")],
+                                 [f'{{ text = "je_space_race_widget_band_{m}" }}'])
+                band = self.loc[f"je_space_race_widget_band_{m}"]
+                self.assertEqual(re.findall(r"'(\w+)'", band), ["sr_rival", f"sr_disp_rival_lo_{m}",
+                                                                "sr_rival", f"sr_disp_rival_hi_{m}"])
+                self.assertEqual(band.count("GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', "
+                                            "Country.MakeScope )"), 2)
+        # the band's hover reads nothing but the band
+        for key in loc_closure({"je_space_race_widget_band_tt"}, self.loc):
+            with self.subTest(hover=key):
+                self.assertEqual([n for n in re.findall(r"'(\w+)'", self.loc[key])
+                                  if n != "sr_rival" and not n.startswith("sr_disp_rival_")], [])
+        self.assertIn('tooltip = "je_space_race_widget_band_tt"', self.types["te_sr_ov_band_row"].body)
+
+    def test_the_shared_parts_read_no_exact_figure(self):
+        drawn = sorted(t for t in type_closure(self.SHARED, self.types) if t in self.view.open)
+        texts = {t: unguarded(self.types[t].body, self.view.skip[t]) for t in drawn}
+        gui = _read(GUI)
+        for m in CONTROLLED:
+            body = _type_body(gui, f"te_sr_{m}_overview")
+            for name in self.FED:
+                for n, text in enumerate(self._overrides(body, name)):
+                    texts[f"te_sr_{m}_overview {name} {n}"] = unguarded(text)
+        keys = set()
+        for text in texts.values():
+            keys |= gui_keys(text, self.loc)
+        keys = loc_closure(keys, self.loc)
+        found = [(where, n) for where, text in sorted(texts.items()) for n in re.findall(r"'([\w.\-]+)'", text)
+                 if self.EXACT.match(n)]
+        found += [(k, n) for k in sorted(keys) for n in re.findall(r"'([\w.\-]+)'", self.loc[k]) if self.EXACT.match(n)]
+        self.assertEqual(found, [], "an exact figure or the player's plans in a part another country sees")
+        # what the walk covers, so the check can't pass on nothing
+        for name in ("te_sr_ov_band_row", "te_sr_ov_prog_cell", "te_sr_ov_prog_cell_interstellar", "te_sr_ov_first",
+                     "te_sr_power_cell", "te_sr_sec_orbit", "te_sr_debris_row", "te_sr_colony_brief_row"):
+            self.assertIn(name, drawn)
+        for key in ("je_space_race_widget_band_tt", "je_space_race_widget_band_suborbital",
+                    "je_space_race_widget_prog_suborbital", "je_space_race_widget_prog_suborbital_ni",
+                    "je_space_race_widget_prog_interstellar_2", "je_space_race_widget_power_prog_suborbital",
+                    "te_orbit_satellites_tt_ni", "te_debris_row_tt", "je_space_race_widget_ov_first_claimed"):
+            self.assertIn(key, keys)
+        self.assertTrue(self.EXACT.match("sr_disp_progress_frac_suborbital"))
+        self.assertFalse(self.EXACT.match("sr_disp_progress_frac_interstellar_results"))
+
+    # The player's own words (I3, review of #1367): each key that speaks as
+    # "we" keeps its text from before National Info, and another country's
+    # panel reads a neutral twin, <key>_ni, chosen on Country.IsLocalPlayer
+    # where the key is used. The phrase pinned is the one the twin drops.
+    OURS = {
+        "je_space_race_widget_orbit_satellites_label": "Our Satellites",
+        "te_orbit_satellites_tt": "#header Our Satellites#!",
+        "te_orbit_satellites_tt_disrupted": "has disrupted our orbital network",
+        "te_orbit_satellites_tt_cooldown": "We were struck",
+        "te_orbit_satellites_tt_exposed": "at war with us",
+        "te_orbit_satellites_tt_none": "We have nothing in orbit",
+        "te_asat_moratorium_detail_bound": "In force, and we are a party",
+        "te_asat_moratorium_detail_not_bound": "In force, but we are not a party",
+        "te_debris_row_tt_cleaners": "Ours: #v [Country.MakeScope.ScriptValue('te_debris_removal_country')|2]#!",
+        "je_space_race_widget_ov_programme_tt": "a flag marks one we were first to",
+        "je_space_race_widget_ov_idle_tt": "The colonies we hold keep their modifiers.",
+        "je_space_race_widget_prog_interstellar_1": "before its data reaches us",
+        "je_space_race_widget_prog_interstellar_2": "Its data reaches us in",
+        "je_space_race_solar_colonization_status_complete": "Our civilization's presence",
+        "sr_prog_state_first": "#G achieved, and we were first#!",
+        "sr_prog_state_signal_received": "#G the signal has reached us#!",
+    }
+
+    def test_the_player_keeps_ours(self):
+        loc, gui = self.loc, _read(GUI)
+        for key, phrase in self.OURS.items():
+            with self.subTest(key=key):
+                self.assertIn(phrase, loc[key])
+                self.assertNotIn("JournalEntry", loc[key])
+                self.assertNotIn("GetPlayer", loc[key])
+        # the twins, and where each is chosen
+        label = "je_space_race_widget_orbit_satellites"
+        self.assertEqual(loc[f"{label}_ni_label"], "Satellites")
+        self.assertIn(f"SelectLocalization( Country.IsLocalPlayer, '{label}_label', '{label}_ni_label' )", gui)
+        for key in ("te_orbit_satellites_tt", "te_orbit_moratorium_tt", "je_space_race_widget_ov_programme_tt",
+                    "je_space_race_widget_ov_idle_tt", "je_space_race_widget_profile_solar_colonization") + tuple(
+                    f"je_space_race_widget_prog_{m}" for m in ROW[:6]) + tuple(
+                    f"je_space_race_widget_prog_interstellar_{n}" for n in range(4)):
+            with self.subTest(dispatch=key):
+                self.assertIn(f"tooltip = \"[SelectLocalization( Country.IsLocalPlayer, '{key}', '{key}_ni' )]\"", gui)
+                self.assertIn(f"{key}_ni", loc)
+        for word in ("disrupted", "cooldown", "exposed", "none"):
+            with self.subTest(sub=word):
+                self.assertIn(f"'te_orbit_satellites_tt_{word}' )", loc["te_orbit_satellites_tt"])
+                self.assertIn(f"'te_orbit_satellites_tt_{word}_ni' )", loc["te_orbit_satellites_tt_ni"])
+                self.assertNotRegex(loc[f"te_orbit_satellites_tt_{word}_ni"], r"\b(we|We|us|our|Our)\b")
+        self.assertEqual(loc["te_orbit_satellites_tt_ni"].replace("_ni'", "'"),
+                         loc["te_orbit_satellites_tt"].replace("#header Our Satellites#!", "#header Satellites#!"))
+        self.assertIn("[AddLocalizationIf( Country.IsLocalPlayer, 'te_debris_row_tt_cleaners' )]"
+                      "[AddLocalizationIf( Not( Country.IsLocalPlayer ), 'te_debris_row_tt_cleaners_ni' )]",
+                      loc["te_debris_row_tt_cleaners_line"])
+        self.assertIn("'te_debris_row_tt_cleaners_line'", loc["te_debris_row_tt"])
+        # the Program row's hovers for another country use the third-person
+        # sr_power_prog_<m>, the Space Powers row's
+        for m in ROW[:6]:
+            with self.subTest(prog=m):
+                self.assertIn(f"[Country.GetCustom('sr_power_prog_{m}')]", loc[f"je_space_race_widget_prog_{m}_ni"])
+        self.assertIn("$sr_power_state_data_received$", loc["je_space_race_widget_prog_interstellar_3_ni"])
+        # the custom loc twins: the same branches, the _ni keys in place of the player's
+        debris = _read(os.path.join(REPO, "common", "customizable_localization", "te_orbital_debris_custom_loc.txt"))
+        self.assertEqual(_block(debris, "te_asat_moratorium_detail_ni").replace("_ni\n", "\n"),
+                         _block(debris, "te_asat_moratorium_detail"))
+        self.assertIn("GetCustom('te_asat_moratorium_detail_ni')", loc["te_orbit_moratorium_tt_ni"])
+        custom = _read(CUSTOM_LOC)
+        flat = lambda b: re.sub(r"\s+", " ", _strip_comments(b)).strip()
+        self.assertEqual(flat(_block(custom, "sr_solar_colonization_profile_ni")).replace("_complete_ni", "_complete"),
+                         flat(_block(custom, "sr_solar_colonization_profile")))
+        self.assertIn("GetCustom('sr_solar_colonization_profile_ni')",
+                      loc["je_space_race_widget_profile_solar_colonization_ni"])
+        # the rewards are the player's alone, as before
+        for m in RACING:
+            with self.subTest(reward=m):
+                self.assertIn("#bold If we are the first nation to do this:#!", loc[f"je_space_race_widget_reward_{m}"])
+                self.assertIn(f"SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_{m}', "
+                              "'te_tt_blank' )", gui)
+        self.assertEqual(loc["te_tt_blank"], "")
+
+    def test_another_countrys_colonies_read_it(self):
+        """te_sr_colony_brief_rows (gen_solar_sites.py): one row per site,
+        shown while the country holds it, with its settlers under Simple and
+        Full Colonies, all read on Country."""
+        rows = self.types["te_sr_colony_brief_rows"].body
+        self.assertEqual(rows.count("te_sr_colony_brief_row = {"), len(gss.SITES))
+        for s in gss.SITES:
+            with self.subTest(site=s.key):
+                self.assertIn(f"[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_{s.key}'), "
+                              "'(CFixedPoint)1' )]", rows)
+                self.assertIn(f'text = "sr_site_name_{s.key}"', rows)
+        self.assertEqual(READ.findall(rows), [])
+        brief = self.types["te_sr_sec_colonies_brief"].body
+        self.assertIn('visible = "[Not( Country.IsLocalPlayer )]"', brief)
+        self.assertEqual(READ.findall(brief), [])
+
+
+class ScriptTooltipTest(unittest.TestCase):
+    """The text a read-only scripted GUI's tooltip prints for another
+    country's panel reads the shown country, not the player (spec
+    2026-11-02-charts-help-national-info § 6.4). Orbit's Strikes hover is
+    te_asat_record_sgui's ExecuteTooltip: its lines come from the effect's
+    custom_tooltip keys, which no panel's loc closure reaches, so BindingTest
+    can't see them. They read the scripted GUI's root (SCOPE.GetRootScope, the
+    form covert_last_exposed_sgui ships), or nothing at all."""
+
+    TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
+    PRINTS = re.compile(r"\bcustom_tooltip(?:_no_bullet)?\s*=\s*(?:\{[^{}]*?\btext\s*=\s*)?([\w.$\-]+)")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(PrivateTest.ROOT, cls.types)
+        cls.loc = load_loc()
+        cls.sguis = {}
+        for path in sorted(glob.glob(os.path.join(REPO, "common", "scripted_guis", "*.txt"))):
+            text = _strip_comments(_read(path))
+            for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{", text):
+                cls.sguis[m.group(1)] = text[m.end():_close(text, m.end() - 1)]
+
+    def test_no_datacontext_tooltip_is_drawn_unguarded(self):
+        for name in self.view.open:
+            with self.subTest(type=name):
+                self.assertNotRegex(unguarded(self.types[name].body, self.view.skip[name]),
+                                    r"(?<![\w'])ScriptedGui\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
+
+    def test_the_printed_lines_read_the_shown_country(self):
+        found = set()
+        for name in self.view.open:
+            found |= set(self.TOOLTIP.findall(unguarded(self.types[name].body, self.view.skip[name])))
+        for key in panel_loc_keys(PrivateTest.ROOT, self.types, self.loc):
+            found |= set(self.TOOLTIP.findall(self.loc[key]))
+        self.assertEqual(found, {"te_asat_record_sgui"})
+        printed = set(self.PRINTS.findall(self.sguis["te_asat_record_sgui"]))
+        self.assertEqual(printed, {"te_asat_record_last", "te_asat_record_last_unnamed", "te_asat_record_none"})
+        reads = {k: READ.findall(self.loc[k]) for k in loc_closure(printed, self.loc, own=False)}
+        self.assertEqual({k: r for k, r in reads.items() if r}, {})
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_sr_wide_sections, the window's full-screen Space Race (spec
+    2026-11-02-te-window-wide-mode § 7): the milestones under way, then Space
+    Powers and Orbit, each column under the gate its narrow run carries, in
+    two columns (te_ui_columns_two): How the Space Race Works, once the
+    third, is the Help page."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_sr_window_milestones"],
+            ["te_sr_sec_powers", "te_sr_sec_orbit"]])
+        self.assertIn("type te_sr_wide_sections = te_ui_columns_two", _read(GUI))
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "space_race")
+        self.assertEqual((tab.layout, tab.wide), ("te_sr_tab_layout", "te_sr_wide_sections"))
 
 
 if __name__ == "__main__":

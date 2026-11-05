@@ -1,4 +1,4 @@
-﻿# Unemployment as a share of the workforce (docs/systems/mod_systems.md § Unemployment as a Share of the Workforce).
+﻿# Unemployment as a share of the workforce (docs/systems/mod_systems/pops_and_migration.md § Unemployment as a Share of the Workforce).
 #
 # The engine's state_unemployment_rate is not a share of the workforce. In Mecklenburg-Strelitz in January 1836 it
 # read 0.048 where the pops held 0.195 of their workforce with no workplace (the Demographics self-check
@@ -47,7 +47,7 @@ te_unemp_k_wf_share_fallback = { value = 0.25 }
 # read: scripting_best_practices.md, "The op slots accept ...").
 te_unemp_engine_read = { value = state_unemployment_rate }
 
-# ---- A country's slack, summed from its states' walks (Construction Cost Scaling, docs/systems/mod_systems.md) ----
+# ---- A country's slack, summed from its states' walks (Construction Cost Scaling, docs/systems/mod_systems/construction.md) ----
 # THIS = a country. Each state's counts are from its last walk (te_unemp_share_refresh: up to a year old). These iterate
 # every state, so read them from an effect, never from a GUI: the pulse stores what the tooltip shows (te_cc_slack,
 # te_cc_peasants).

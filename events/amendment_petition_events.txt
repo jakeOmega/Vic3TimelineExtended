@@ -25,7 +25,7 @@
 #  Pools: common/on_actions/amendment_petition_on_actions.txt, one per
 #  event, each a yearly roll of 2.5–25% while the country qualifies.
 #  Triggers: common/scripted_triggers/amendment_petition_triggers.txt.
-#  Docs: docs/systems/mod_systems.md § Amendment Petitions.
+#  Docs: docs/systems/mod_systems/amendments.md § Amendment Petitions.
 # ======================================================================
 
 # ======================================================================

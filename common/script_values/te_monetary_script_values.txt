@@ -3301,7 +3301,7 @@ te_mon_premium_monetisation = {
 
 # --- Display only: the inflation line of the rate-paid sum (§10) ------------
 
-# Headline inflation with its sign flipped, so the Rate You Pay tooltip can
+# Headline inflation with its sign flipped, so the Rate Paid tooltip can
 # print the §10 build-up as a column that adds up: market yield, plus credit
 # standing, plus risk premium, PLUS this. Rendering `-[...te_inflation...]`
 # instead would print "--1.0%" in the deflation band, which is the one band

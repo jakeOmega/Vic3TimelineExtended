@@ -1,7 +1,7 @@
 ﻿# ======================================================================
 #  INHERITANCE — scripted triggers (country scope)
 #  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
-#  Docs: docs/systems/mod_systems.md § Inheritance.
+#  Docs: docs/systems/mod_systems/inheritance.md § Inheritance.
 # ======================================================================
 
 # The law in force carries Undivided Farm Succession.

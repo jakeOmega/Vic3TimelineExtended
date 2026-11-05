@@ -1,8 +1,11 @@
-﻿# Flag aliases for the mod's major-formation India / Indonesia tags.
-# BHA reuses vanilla BHT artwork; NUS reuses vanilla IDN artwork. These
-# matter because if no flag_definition exists for a tag the engine falls
-# back to looking up the tag string as a COA_KEY (which doesn't exist for
-# BHA / NUS and would produce a blank/error flag).
+﻿# Flag aliases for the mod's major-formation India / Indonesia / China tags.
+# BHA reuses vanilla BHT artwork; NUS reuses vanilla IDN artwork; ZHO restates
+# vanilla CHI's definitions, so a formed China flies the Qing, republican,
+# communist or other flag its government calls for. These matter because if no
+# flag_definition exists for a tag the engine falls back to looking up the tag
+# string as a COA_KEY (which doesn't exist for BHA / NUS / ZHO and would
+# produce a random flag). The other formables' flags are coats of arms named
+# after their tags: common/coat_of_arms/coat_of_arms/te_formable_countries.txt.
 
 BHA = {
 	flag_definition = {
@@ -17,5 +20,69 @@ NUS = {
 		coa = IDN
 		subject_canton = IDN
 		priority = 1
+	}
+}
+
+ZHO = { # China (major formation): vanilla CHI's flags, kept in step by hand
+	flag_definition = {
+		coa = CHI_han_empire
+		coa_with_overlord_canton = CHI_han_empire
+		priority = 5
+		trigger = {
+			scope:actor ?= {
+				NOT = { country_has_primary_culture = cu:manchu }
+				country_has_monarchy_law = yes
+			}
+		}
+	}
+	flag_definition = {
+		coa = CHI
+		subject_canton = CHI
+		coa_with_overlord_canton = CHI_subject
+		allow_overlord_canton = yes
+		priority = 1
+	}
+	flag_definition = {
+		coa = CHI_absolute_monarchy
+		subject_canton = CHI_absolute_monarchy
+		coa_with_overlord_canton = CHI_subject
+		allow_overlord_canton = yes
+		priority = 20
+		trigger = {
+			coa_def_absolute_monarchy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = CHI_republic
+		subject_canton = CHI_republic
+		allow_overlord_canton = yes
+		priority = 10
+		trigger = {
+			coa_def_republic_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = CHI_dictatorship
+		subject_canton = CHI_dictatorship
+		priority = 20
+		trigger = {
+			coa_def_dictatorship_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = CHI_theocracy
+		subject_canton = CHI_theocracy
+		subject_canton = CHI_absolute_monarchy
+		priority = 20
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	flag_definition = {
+		coa = CHI_communist
+		priority = 1500
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
 	}
 }

@@ -18,7 +18,7 @@
 ###                            world's first warhead).
 ### The notes these sections used to carry (how a strike's odds combine, what
 ### the leaderboard's estimates are) are in "How Nuclear Weapons Work"
-### (te_nuclear_sec_how, nuclear_layout_widget.gui).
+### (the Help page, te_nuclear_weapons_help_body, nuclear_layout_widget.gui).
 ###
 ### WHERE THE NUMBERS COME FROM. Nothing here computes anything. Every value is
 ### a display-only script value in common/script_values/extra_script_values.txt
@@ -116,11 +116,6 @@ types nuclear_program_widget_types
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
-			### Underlined, since the row carries a tooltip (style rule 3). A row
-			### without one overrides this block empty.
-			block "label_format" {
-				default_format = "#tooltippable"
-			}
 			block "row_label" {}
 		}
 
@@ -161,15 +156,14 @@ types nuclear_program_widget_types
 		button_icon_minus_action = {
 			size = { 24 24 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 		}
 
 		textbox = {
 			text = "je_nuclear_program_widget_funding_value"
 			tooltip = "je_nuclear_program_widget_funding_tt"
-			default_format = "#tooltippable"
 			size = { 246 24 }
 			align = center|nobaseline
 			using = te_nuclear_fontsize_row
@@ -180,9 +174,9 @@ types nuclear_program_widget_types
 		button_icon_plus_action = {
 			size = { 24 24 }
 			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 		}
 	}
 
@@ -200,7 +194,7 @@ types nuclear_program_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/backgrounds/white.dds"
 			color = { 0.9 0.75 0.35 0.2 }
-			visible = "[ObjectsEqual( State.GetOwner, GetPlayer.Self )]"
+			visible = "[ObjectsEqual( State.GetOwner, Country.Self )]"
 		}
 		flowcontainer = {
 			direction = horizontal
@@ -294,9 +288,8 @@ types nuclear_program_widget_types
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
 			elide = right
-			default_format = "#tooltippable"
 			text = "je_nuclear_program_widget_powers_head_warheads"
-			tooltip = "je_nuclear_program_widget_powers_head_warheads_tt"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_nuclear_program_widget_powers_head_warheads_tt', 'je_nuclear_program_widget_powers_head_warheads_tt_theirs' )]"
 		}
 	}
 
@@ -316,59 +309,69 @@ types nuclear_program_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nuclear_program_has_programme_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nuclear_program_has_programme_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nuclear_program_section_header = {
-			blockoverride "left_text" {
-				text = "je_nuclear_program_widget_programme_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nuclear_program_section_header = {
+				blockoverride "left_text" {
+					text = "je_nuclear_program_widget_programme_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nuclear_program_programme_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nuclear_program_programme_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nuclear_program_programme_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nuclear_program_programme_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nuclear_program_programme_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nuclear_program_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nuclear_program_programme_closed'))]"
-			}
-		}
 
-		nuclear_program_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nuclear_program_programme_closed'))]"
+				nuclear_program_funding_row = {}
 
-			nuclear_program_funding_row = {}
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_rate_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_rate_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_rate_tt"
+					}
+				}
 
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_rate_label"
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_next_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_next_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_next_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_rate_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_rate_tt"
-				}
-			}
 
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_next_label"
-				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_next_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_next_tt"
-				}
-			}
-
-			nuclear_program_row = {
-				blockoverride "label_format" {}
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_first_device_label"
-				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_first_device_value"
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_first_device_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_first_device_value"
+					}
 				}
 			}
 		}
@@ -383,7 +386,7 @@ types nuclear_program_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		nuclear_program_section_header = {
 			blockoverride "left_text" {
@@ -413,56 +416,68 @@ types nuclear_program_widget_types
 					text = "je_nuclear_program_widget_taboo_score_value"
 				}
 				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				}
 			}
 
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_taboo_strategic_label"
-				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_taboo_strategic_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_taboo_costs_tt"
-				}
-			}
+			### What a nuclear act costs the country, and the burden of its arsenal:
+			### the player's own (spec 2026-11-02-charts-help-national-info § 6.4).
+			### The burden is drawn only while armed, so for another country it would
+			### say whether a secret arsenal exists. The rows are never all hidden for
+			### the player, so the wrapper takes no space of its own.
+			flowcontainer = {
+				using = te_own_country_only
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
 
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_taboo_tactical_label"
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_taboo_strategic_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_taboo_strategic_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_taboo_tactical_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_taboo_costs_tt"
-				}
-			}
 
-			nuclear_program_row = {
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_taboo_threat_label"
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_taboo_tactical_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_taboo_tactical_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_taboo_threat_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_taboo_costs_tt"
-				}
-			}
 
-			nuclear_program_row = {
-				visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_label" {
-					text = "je_nuclear_program_widget_taboo_burden_label"
+				nuclear_program_row = {
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_taboo_threat_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_taboo_threat_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_taboo_costs_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "je_nuclear_program_widget_taboo_burden_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "je_nuclear_program_widget_taboo_burden_tt"
+
+				nuclear_program_row = {
+					visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "je_nuclear_program_widget_taboo_burden_label"
+					}
+					blockoverride "row_value" {
+						text = "je_nuclear_program_widget_taboo_burden_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "je_nuclear_program_widget_taboo_burden_tt"
+					}
 				}
 			}
 
@@ -474,7 +489,9 @@ types nuclear_program_widget_types
 
 			### The taboo's history (a subsection, open: the owner's rule for history
 			### charts, 2026-09-29) — the shared chart types and range variable
-			### (te_history_chart.gui), as the UN chart uses.
+			### (te_history_chart.gui), as the UN chart uses. Each chart is its
+			### te_hist_<id> wrapper, generated from its fragment in
+			### scripts/generators/te_history_charts/nuclear_weapons.gui.in.
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
@@ -546,7 +563,7 @@ types nuclear_program_widget_types
 				}
 
 				textbox = {
-					visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+					visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
 					parentanchor = hcenter
 					autoresize = yes
 					multiline = yes
@@ -555,69 +572,9 @@ types nuclear_program_widget_types
 					text = "te_hist_since"
 				}
 
-				te_history_chart = {
-					blockoverride "chart_title" {
-						text = "nd_taboo_hist_title"
-					}
-					blockoverride "chart_legend" {
-						text = "nd_taboo_hist_legend"
-					}
-					# The store's marker pips belong to other systems.
-					blockoverride "marker_pips" {}
-					blockoverride "bar_tooltip" {
-						tooltip = "nd_taboo_hist_tt"
-					}
-					blockoverride "bar_body" {
-						te_history_bar_unsigned = {
-							visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo' )]"
-							blockoverride "values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ) ) )]"
-							}
-							blockoverride "cover_values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ), '(CFixedPoint)4' ) ) )]"
-							}
-							blockoverride "color" {
-								color = { 0.80 0.45 0.25 1.0 }
-							}
-						}
-					}
-				}
+				te_hist_nd_taboo = {}
 
-				te_history_chart = {
-					blockoverride "chart_title" {
-						text = "nd_taboo_hist_target_title"
-					}
-					blockoverride "chart_legend" {
-						text = "nd_taboo_hist_target_legend"
-					}
-					# The store's marker pips belong to other systems.
-					blockoverride "marker_pips" {}
-					blockoverride "bar_tooltip" {
-						tooltip = "nd_taboo_hist_target_tt"
-					}
-					blockoverride "bar_body" {
-						te_history_bar_unsigned = {
-							visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo_tgt' )]"
-							blockoverride "values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ) ) )]"
-							}
-							blockoverride "cover_values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ), '(CFixedPoint)4' ) ) )]"
-							}
-							blockoverride "color" {
-								color = { 0.55 0.55 0.70 1.0 }
-							}
-						}
-					}
-				}
+				te_hist_nd_taboo_tgt = {}
 			}
 		}
 	}
@@ -633,6 +590,7 @@ types nuclear_program_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
+		using = te_own_country_only
 
 		nuclear_program_section_header = {
 			blockoverride "left_text" {
@@ -690,7 +648,7 @@ types nuclear_program_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[And( GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('nd_powers_listed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+		visible = "[And( GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('nd_powers_listed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 		nuclear_program_section_header = {
 			blockoverride "left_text" {

@@ -105,6 +105,21 @@ widget = { text = "[Localize('LABEL')] # { } \\"quoted\\""
 }''')
         self.assertEqual({('loc_keys', 'TYPO'), ('script_values', 'typo')}, set(self.errors(self.run_audit())))
 
+    def test_an_overrides_vanilla_line_is_vanillas_reference(self):
+        # A full-file override with its vanilla base committed: a key one of vanilla's own lines names is vanilla's
+        # (pop_browser_panel.gui's "STATE", which vanilla's loc has only as "state"); one the mod adds still errors.
+        self.write('vanilla_parsed/localization_english.json', json.dumps({'VANILLA': 'Text'}))
+        self.write('test_fixtures/vanilla_gui/test.gui', 'widget = {\n\ttext = "STATE"\n}\n')
+        self.gui('widget = {\n\ttext = "STATE"\n\ttooltip = "TYPO"\n}\n')
+        result = self.run_audit()
+        self.assertEqual([('loc_keys', 'TYPO')], self.errors(result))
+        kept = [f for f in result.flags if f.name == 'STATE']
+        self.assertEqual(['warn'], [f.severity for f in kept])
+        self.assertEqual(audit.VANILLAS_DETAIL, kept[0].detail)
+        # without the fixture it is the mod's line
+        (self.root / 'test_fixtures/vanilla_gui/test.gui').unlink()
+        self.assertEqual({('loc_keys', 'STATE'), ('loc_keys', 'TYPO')}, set(self.errors(self.run_audit())))
+
     def test_scripted_constant_is_not_a_script_value(self):
         self.write('vanilla_parsed/common/script_values.json', json.dumps({}))
         self.write('common/script_values/consts.txt', '@only_const = 3\nreal_value = { value = @only_const }\n')

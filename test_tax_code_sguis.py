@@ -523,7 +523,7 @@ class SuccessorPreviewTest(unittest.TestCase):
         from test_tax_code_layout import loc
         review, table = gui(REVIEW), loc()
         for slot in ("a", "b"):
-            state = f"GetPlayer.MakeScope.ScriptValue('te_tax_view_p{slot}_state')"
+            state = f"Country.MakeScope.ScriptValue('te_tax_view_p{slot}_state')"
             for key in KEYS:
                 with self.subTest(slot=slot, key=key):
                     self.assertIn(f"SelectLocalization( EqualTo_CFixedPoint( {state}, '(CFixedPoint)2' ), "

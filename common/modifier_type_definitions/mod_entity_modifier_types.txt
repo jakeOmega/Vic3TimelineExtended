@@ -534,6 +534,36 @@ goods_input_electricity_mult = {
 	}
 }
 
+# Space Command's maintenance line, the fleets' upkeep (sr_fleet_upkeep_goods, Space Race UI pass design § 10)
+goods_input_telephones_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+# Space Command's maintenance line, the fleets' upkeep (sr_fleet_upkeep_goods, Space Race UI pass design § 10)
+goods_input_digital_assets_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+# Space Command's maintenance line, the fleets' upkeep (sr_fleet_upkeep_goods, Space Race UI pass design § 10)
+goods_input_robotics_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
 # uploaded minds (2026-10-19): the Mind Upload Nexus's inputs follow its hosted minds under Full (te_demog_um_nexus_*)
 goods_input_electronic_components_mult = {
 	color = bad
@@ -1687,6 +1717,13 @@ country_building_grid_transfer_station_require_subsidies_bool = {
 state_building_resettlement_colony_max_level_add = {
 	color = good
 	percent = no
+}
+
+# Public Housing's level cap, from technology (07_zz_te_government.txt)
+state_building_public_housing_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
 }
 
 # Phase 1 vanilla company building max levels
@@ -3104,6 +3141,18 @@ state_building_biontech_mainz_campus_max_level_add = {
 }
 
 state_building_rosen_association_hq_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ingen_biological_preserve_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rejoovenesense_compound_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

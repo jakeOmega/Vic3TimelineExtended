@@ -2,7 +2,7 @@
 against every site that lists operation types by hand.
 
 Adding an operation type touches about fourteen hand-kept places — see
-docs/systems/mod_systems.md § Covert Warfare System, "Adding an operation
+docs/systems/mod_systems/covert_warfare.md § Covert Warfare System, "Adding an operation
 type". OPS is the single list. Each test checks one site against it in both
 directions (no type missing, no stale extra), so a half-added type fails here,
 naming the site, instead of in a play test. The widget's stand-down buttons
@@ -425,7 +425,8 @@ class DocCountTests(unittest.TestCase):
     STALE = re.compile(r"\bnine\b|\b9 (?:covert|diplomatic)\b", re.IGNORECASE)
 
     def test_no_covert_line_still_says_nine(self):
-        for rel in ("docs/systems/mod_systems.md", "docs/systems/journal_entry_systems.md",
+        systems = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / "docs/systems/mod_systems").glob("*.md"))
+        for rel in (*systems, "docs/systems/journal_entry_systems.md",
                     "common/diplomatic_actions/un_lobbying.txt", "README.md"):
             lines = (ROOT / rel).read_text(encoding="utf-8-sig").splitlines()
             for n, line in enumerate(lines, 1):
@@ -434,7 +435,7 @@ class DocCountTests(unittest.TestCase):
                         self.assertNotRegex(line, self.STALE)
 
     def test_covert_doc_claims_match_the_actions(self):
-        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        doc = (ROOT / "docs/systems/mod_systems/covert_warfare.md").read_text(encoding="utf-8")
         # The per-type list now has an executable form.
         self.assertNotIn("there is no single shared list", doc)
         self.assertIn("test_covert_op_registry.py", doc)

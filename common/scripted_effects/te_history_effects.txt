@@ -5,7 +5,7 @@
 # (gui/journal_entry_widgets/te_history_chart.gui) render. Nothing in this file
 # knows about banking, reserves or the UN: a new series is one
 # `te_history_record_sample` call plus one chart instance. See
-# docs/systems/mod_systems.md, "History store and charts".
+# docs/systems/mod_systems/history_charts.md, "History store and charts".
 #
 # DATA MODEL — one script container per (country, month), NOT per metric:
 #

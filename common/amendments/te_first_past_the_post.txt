@@ -1,9 +1,9 @@
 ﻿# First Past the Post: plurality voting squeezes politics into two parties.
 #
 # While this amendment is on the voting law, every party's join_weight gives
-# the two largest parties +5 and every other party -20
-# (te_fptp_major_party_join_weight / te_fptp_minor_party_join_weight,
-# common/script_values/te_fptp_values.txt). The terms sit in each party's
+# the two largest parties +10, less 1 for each group joining first, in place
+# of vanilla's party-size multipliers, so they never fill up; every other
+# party gets -20 (te_fptp_values.txt). The terms sit in each party's
 # join_weight: the vanilla parties' through the generated
 # common/parties/zz_te_party_join_weights.txt (which also drops vanilla's
 # culture-based usa_two_party_system terms), the mod's three in their own

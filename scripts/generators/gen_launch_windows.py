@@ -223,7 +223,7 @@ class Drive:
 DRIVES = (
     Drive("chemical", "Chemical", "the Space Program"),
     Drive("fusion", "Fusion", "Fusion Power", budget_kms=30.0),
-    Drive("torch", "Fusion torch", "Muon-Catalyzed Fusion Reactors", accel_g=0.01, cap_kms=400.0),
+    Drive("torch", "Fusion torch", "Compact Fusion Reactors", accel_g=0.01, cap_kms=400.0),
     Drive("antimatter", "Antimatter", "Antimatter Production and an Antimatter Containment Facility",
           accel_g=0.03, cap_kms=2000.0),
 )

@@ -2343,7 +2343,7 @@ pm_un_headquarters = {
 }
 
 pm_hq_sovereign_empire = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_sovereign_empire.dds"
 
 	unlocking_identity = identity_sovereign_empire
 	is_hidden_when_unavailable = yes
@@ -2371,7 +2371,7 @@ pm_hq_sovereign_empire = {
 }
 
 pm_hq_military_treaty = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_military_treaty.dds"
 
 	unlocking_identity = identity_military_treaty_organization
 	is_hidden_when_unavailable = yes
@@ -2395,7 +2395,7 @@ pm_hq_military_treaty = {
 }
 
 pm_hq_trade_league = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_trade_league.dds"
 
 	unlocking_identity = identity_trade_league
 	is_hidden_when_unavailable = yes
@@ -2417,7 +2417,7 @@ pm_hq_trade_league = {
 }
 
 pm_hq_religious_convocation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_religious_convocation.dds"
 
 	unlocking_identity = identity_religious
 	is_hidden_when_unavailable = yes
@@ -2444,7 +2444,7 @@ pm_hq_religious_convocation = {
 }
 
 pm_hq_ideological_union = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_ideological_union.dds"
 
 	unlocking_identity = identity_ideological_union
 	is_hidden_when_unavailable = yes
@@ -2469,7 +2469,7 @@ pm_hq_ideological_union = {
 }
 
 pm_hq_cultural_coalition = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p6.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_cultural_coalition.dds"
 
 	unlocking_identity = identity_cultural
 	is_hidden_when_unavailable = yes
@@ -2492,7 +2492,7 @@ pm_hq_cultural_coalition = {
 }
 
 pm_hq_diplomatic_framework = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p7.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_diplomatic_framework.dds"
 
 	unlocking_identity = identity_diplomatic
 	is_hidden_when_unavailable = yes
@@ -11936,6 +11936,79 @@ pm_rosen_association_hq = {
 			building_employment_academics_add = 600
 			building_employment_machinists_add = 400
 			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- InGen ---
+pm_ingen_biological_preserve = {
+	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			goods_output_tourism_mult = 0.20
+			building_livestock_ranch_throughput_add = 0.15
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 30                           # Price:   20, Total cost:   600.0 (37.50%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (37.50%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (25.00%)
+			# Output goods
+			goods_output_tourism_add = 50                        # Price:  100, Total cost:  5000.0 (76.92%)
+			goods_output_meat_add = 50                           # Price:   30, Total cost:  1500.0 (23.08%)
+			# Total input cost: 1600.0
+			# Total output cost: 6500.0
+			# Profit: 4900.0
+			# Profit margin: 306.25%
+			# Zero profit price multiplier: 0.25
+			# Employment: 2000
+			# Wage breakeven: 2.45
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_shopkeepers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+			building_employment_laborers_add = 200
+		}
+	}
+}
+
+# --- RejoovenEsense ---
+pm_rejoovenesense_compound = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			# the census's rejuvenation (demographics late game): treated bodies here wind back toward 35 faster,
+			# beside Biological Immortality's 0.03
+			state_rejuvenation_add = 0.02
+			state_mortality_mult = -0.10
+			state_death_cause_chr_mult = -0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (72.73%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (27.27%)
+			# Output goods
+			goods_output_opium_add = 70                          # Price:   50, Total cost:  3500.0 (53.85%)
+			goods_output_services_add = 100                      # Price:   30, Total cost:  3000.0 (46.15%)
+			# Total input cost: 1100.0
+			# Total output cost: 6500.0
+			# Profit: 5400.0
+			# Profit margin: 490.91%
+			# Zero profit price multiplier: 0.17
+			# Employment: 2000
+			# Wage breakeven: 2.70
+		}
+		level_scaled = {
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 300
+			building_employment_shopkeepers_add = 300
 		}
 	}
 }

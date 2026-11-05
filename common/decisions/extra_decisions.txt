@@ -226,6 +226,7 @@ imperial_federation_act_civilizing_mission = {
 		# Broad-franchise DP
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}
@@ -284,6 +285,7 @@ mandate_system_decision = {
 		# Broad-franchise DP — selling this requires legitimacy
 		OR = {
 			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
 		}
@@ -392,7 +394,7 @@ nd_taboo_resume_programme = {
 # raised around the call as st_res_relocate_hub_to_capital_effect does, and
 # the hub's one-per-country guard accepts it.
 #
-# ai_chance mirrors the hub's ai_value shape (common/buildings/strategic_reserve.txt):
+# ai_chance mirrors the hub's ai_value shape (common/buildings/07_zz_te_strategic_reserve.txt):
 # great and major powers, more at peace, and any country above
 # st_res_ai_hub_min_gdp whether at war or not. A smaller country gets 0, as
 # it gets no ai_value.
@@ -458,16 +460,17 @@ te_decision_establish_strategic_reserve = {
 }
 
 # ============================================================================
-# Found a Space Program (mod_systems.md § Space Race)
-# Places the Space Program in the market capital at once, for free, on Earth
-# Orbit. The programme's expense is its weekly Launch Capacity bill, which
-# climbs with every mission (te_decision_space_mission_* below).
-#
-# The building's possible is `owner.market_capital ?= THIS`, so it stands only
-# in the capital of a market we lead: a member of another country's market
-# has a market capital in a foreign state, and the decision must not build
-# there (te_decision_tt_leads_market). create_building checks the unlocking
-# technology, Guided Missiles.
+# Found a Space Program (mod_systems/space_race.md § Space Race)
+# Places the Space Program at once, for free, on Earth Orbit, in our capital,
+# the one state the building's possible allows (sr_space_program_site,
+# space_race_triggers.txt). Until 2026-11-03 it went in the market capital of
+# a market we led, so a member of another country's market could not found
+# one at all (owner: a country without its own market should still have a
+# space programme, and one rule, the capital, for everyone). Every country has
+# a capital, so `possible` asks only for the technology, which create_building
+# checks too. The programme's expense
+# is its weekly Launch Capacity bill, which climbs with every mission
+# (te_decision_space_mission_* below).
 #
 # ai_chance: only an AI that would race (sr_ai_should_participate, the top
 # three by ranking; any other makes no progress but would pay the bill, as
@@ -487,16 +490,12 @@ te_decision_found_space_program = {
 
 	possible = {
 		has_technology_researched = guided_missiles
-		custom_tooltip = {
-			text = te_decision_tt_leads_market
-			market_capital ?= { owner = ROOT }
-		}
 	}
 
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_create_space_program
-			market_capital = {
+			capital = {
 				create_building = {
 					building = building_space_program
 					level = 1
@@ -520,7 +519,7 @@ te_decision_found_space_program = {
 }
 
 # ============================================================================
-# Begin the next space mission (mod_systems.md § Space Race)
+# Begin the next space mission (mod_systems/space_race.md § Space Race)
 # One decision per mission. Each switches the Space Program to that mission's
 # production method; a player can still switch by hand in the building panel.
 #
@@ -864,7 +863,7 @@ te_decision_space_mission_deep_space = {
 te_decision_space_mission_interstellar = {
 	is_shown = {
 		sr_space_race_on = yes
-		has_technology_researched = compact_fusion_reactors
+		has_technology_researched = aneutronic_fusion
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
@@ -913,7 +912,7 @@ te_decision_space_mission_interstellar = {
 }
 
 # ============================================================================
-# Restructure the Public Debt (#800, mod_systems.md § Banking Cycle)
+# Restructure the Public Debt (#800, mod_systems/banking_cycle.md § Banking Cycle)
 # A country whose debt the markets price (banking_sovereign_debt_is_priced,
 # where the debt-load premium starts) or that is in default opens talks with
 # its creditors, and chooses the haircut there (banking_debt_events.1): 10%,

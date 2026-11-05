@@ -1,0 +1,620 @@
+# Era 13 play-test checklist
+
+What the next play-test of the era 13 technology tree should look at
+(`docs/superpowers/specs/2026-10-31-era-13-technology-tree-design.md`). In-game
+checks don't gate the merge (CLAUDE.md, "In-game checks"); this list collects
+what only the game can show. Phases 1 (the split) and 2 (the AI wave) are in.
+Phase 3's items add their own checks here as they land.
+
+Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
+
+## Phase 1: the split
+
+1. **The tree.** Open the technology panel in a new game. Each of the three
+   trees draws a thirteenth era column after era 12. Era 12 lists 12
+   technologies and era 13 lists 9. No technology sits left of a prerequisite,
+   and no arrow crosses back an era.
+2. **Costs.** An era 12 technology shows 1,500,000 research before modifiers,
+   and an era 13 one 3,000,000. The tree's "researching ahead" surcharge still
+   applies across eras 12 and 13.
+3. **The new technologies.**
+   - Rejuvenation Therapies (after Personalized Medicine) lists chronic
+     treatment, ageing rate, its share of the absorbed deaths line and
+     character health in its tooltip.
+   - Post-Work Society (after Universal Basic Income) lists its three
+     modifiers.
+   - Both show their own icons.
+4. **The rename.** Compact Fusion Reactors reads that way in the tree, in the
+   Fusion Plant's Compact Fusion Power method, in the launch-window footers
+   and in the drives concept. No "Muon-Catalyzed" is left in English; German
+   and Spanish show their new names.
+5. **The Post-Scarcity Transition.** In a new game the entry stays hidden at
+   Universal Basic Income and appears with Post-Work Society. Its statuses
+   still name Post-Scarcity Economy as the next technology.
+6. **RejoovenEsense** can be formed with Rejuvenation Therapies (era 12)
+   rather than Biological Immortality.
+7. **Old saves.**
+   - Load a save from before this change in which a country holds
+     Biological Immortality or Post-Scarcity Economy. In the first month it is
+     given Rejuvenation Therapies or Post-Work Society (a
+     `TE_ERA13_TECH_REPAIR` line each), and nothing else.
+   - A country holding only era 12 technologies gets nothing.
+   - An active Post-Scarcity Transition stays active and keeps its timer
+     (spec § 5.3: accepted, not repaired).
+8. **Global Technological Development.** With a great power holding
+   Biological Immortality, the modifier's tooltip rises by 300 for it, not
+   200.
+9. **Covert tech theft.** A theft of an era 13 technology grants era 13's
+   amounts (150,000 to 600,000 by phase and priority), and an era 12 one era
+   12's new amounts.
+
+## Phase 2: the AI wave
+
+1. **The tree.** Era 11 lists 24 technologies. AI Agents follows Generative
+   AI. Self-Driving Laboratories and Humanoid Robotics follow AI Agents.
+   Autonomous Weapons follows Swarm Technology and JADC2. Artificial General
+   Intelligence's arrows come from Self-Driving Laboratories and Humanoid
+   Robotics. The four new technologies show their own icons.
+2. **The moved unlocks.**
+   - AI Agents' tooltip names the Automated Bureaucracy law and Fully
+     Automated Content Creation.
+   - Self-Driving Laboratories names AI Assisted Research.
+   - Humanoid Robotics names Robotic Service Providers and Neuromorphic
+     Computing.
+   - Autonomous Weapons names Robotic Soldiers.
+   - None of them shows on its old technology any more: Brain-Computer
+     Interfaces, Generative AI, AGI and JADC2.
+3. **Innovation cap.** AI Agents +100, Self-Driving Laboratories +200, AGI
+   +300, Neural Lace +100, Mind Backups +200.
+4. **Administration by Algorithm** (`society_technology_events.27`) fires
+   after AI Agents, not Generative AI.
+5. **Old saves** (a save from before phase 2):
+   - An AGI holder is given AI Agents, Self-Driving Laboratories and Humanoid
+     Robotics.
+   - A country running AI Assisted Research, Neuromorphic Computing or Fully
+     Automated Content Creation keeps the method and gets its technology and
+     AI Agents.
+   - A country under Automated Bureaucracy keeps the law and gets AI Agents.
+   - A country fielding Robotic Soldiers keeps them and gets Autonomous
+     Weapons.
+   - One `TE_ERA13_TECH_REPAIR` line per grant. Whether the engine moved the
+     building or dropped the battalions before the first month is the open
+     question: if it did, record which, and the repair needs a day-one
+     on-action instead.
+6. **Law consistency.** A country holding Automated Bureaucracy without AI
+   Agents stays on it: a held law's technology is not a violation.
+
+## Gate: the observer runs (spec § 4.1)
+
+Phase 1 ends with an AI-observer run on main before this change and one after,
+each read with `scripts/analysis/save_world_report.py` at intervals to 2136.
+Record, for the three leading great powers, the year each enters eras 11, 12
+and 13 and finishes era 13. Record the early eras' entry years too (spec § 8:
+the lag around eras 6 and 7). The pacing target is a leading great power
+finishing era 13 by about 2136. Phase 2 shipped § 4.2's proposed innovation
+budget before the runs, so the "after" run should be made with phase 2 in.
+The budget is then sized to land the target: trimmed if the leaders still run
+ahead, raised if they fall short.
+
+| Run | Eras 6, 7 entered | Era 11 entered | Era 12 entered | Era 13 entered | Era 13 finished |
+|---|---|---|---|---|---|
+| Before (main at 6b71e07) | | | | | |
+| After (phases 1 and 2) | | | | | |
+
+## Phase 3: Automation Policy
+
+1. **The group.** In a new game the Economy laws list Automation Policy with
+   Unrestricted Automation in force for every country, and its three other
+   laws greyed out until Humanoid Robotics. The group's tooltip shows the
+   automated share (0% before the first count). A country released or formed
+   later holds Unrestricted Automation, or its creator's law; record which.
+2. **The share.** With Humanoid Robotics, a country whose Tooling Workshops or
+   Urban Centers run Robotic Assembly Lines or Robotic Service Providers shows
+   a share above 0% after the next month, and it rises as more buildings take
+   robotic or AI-managed methods. Check it against the buildings' levels for
+   one small country.
+3. **Human Labor Quotas.**
+   - The preview names the withdrawn methods. After enactment no building runs
+     one: each AI-managed or robotic factory falls back to an earlier
+     automation tier, Urban Centers to E-Commerce or earlier, Railways to
+     Automated Loading and Unloading, farms to Automated Mechanical
+     Harvesters. Record which method the engine picks (the first in the
+     group, or the best still allowed) and whether the switch charges
+     retooling.
+   - Grep `debug.log` for `TE_SELF_CHECK OK|BROKEN automation_quotas`. BROKEN
+     means levels still run a withdrawn method two months on: the law then
+     needs a scripted switch.
+   - Employment rises and output falls in the affected buildings. The withdrawn
+     methods can't be picked in the building panel while the law holds.
+4. **Robot Tax.** The month after enactment the country carries Robot Tax in
+   the Nation tab's Economy list, with tax collection +10% and capitalists'
+   investment-pool contribution −0.05 at a share of 100%, scaled by the share.
+   The budget's tax lines rise to match. Repealing it removes the modifier at
+   the next month.
+5. **Automation Dividend.** The modifier gives the lower strata +2 and the
+   middle strata +1 standard of living at a share of 100%, scaled by the
+   share, and 1.5 times that with Universal Basic Income or Post-Scarcity
+   Economy. The Nation tab's living-standards rows show the two strata lines.
+   Only one of the two scaled modifiers is ever held, and neither stacks from
+   month to month.
+6. **Interest groups.** The Trade Unions approve of Human Labor Quotas and the
+   Industrialists of Unrestricted Automation in the law's tooltip. Watch
+   whether AI countries enact the quotas, and what it costs their output.
+7. **The observer run** (spec § 7.1 sizes the magnitudes from it): for the
+   leading great powers, the share at eras 11, 12 and 13, which Automation
+   Policy law each holds, and its tax income and lower-strata standard of
+   living beside a country under Unrestricted Automation.
+8. **Human Labor Quotas' own lines** (owner, 2026-11-04). The law's tooltip
+   lists Trade Unions +10% political strength and −10% radicals from
+   political movements, and the country's modifiers show both while it
+   holds. Neo-Luddite Terrorism (`post_scarcity_events.4`) never fires under
+   the quotas.
+9. **Displaced Workers** (owner, 2026-11-04). Under Unrestricted Automation,
+   move a few buildings onto robotic methods. Nothing shows until the twelfth
+   monthly count after the first; then the law group's tooltip quotes the
+   year's rise in points and, if it is above 0, the Nation tab's Economy list
+   shows Displaced Workers: −3 Trade Unions approval and +10% radicals at a
+   rise of 10 points, scaled by the rise, at most three times that. Enacting
+   Robot Tax halves it at the next month; the Dividend or the quotas remove
+   it. A save from before the change starts from its share as it stands, so
+   it shows no displacement for the first year. Record the AI's rises: if
+   great powers routinely rise 20 points or more a year, the full size may
+   want a larger rise.
+10. **The marker** (owner, 2026-11-05). The share reads each method's own
+    Robotic or AI-Managed line (`building_robotic_or_ai_managed_bool`), not a
+    list of methods. Hover a robotic or AI-managed method (Robotic Assembly
+    Lines in a Tooling Workshop, AI Managed Fab, Autonomous Logistics): its
+    tooltip lists **Robotic or AI-Managed**, and the hover explains the share
+    and the quotas. A method that isn't one (Industrial Robotics, AI Assisted
+    Research) has no such line. Grep `debug.log` for
+    `TE_SELF_CHECK OK|BROKEN automation_marker` (below).
+11. **Autonomous Logistics** (owner, 2026-11-05). A Trade Center of level 5 or
+    more on Autonomous Logistics (Smart Grids) employs about 1,000 clerks
+    and no shopkeepers, at any level; on Just-in-Time Logistics it
+    employs 800 clerks and 200 shopkeepers a level, as before. Its Merchant
+    Marine input and weekly trades still grow with its level once the crew is
+    hired. Its levels count toward the automated share. Under Human Labor
+    Quotas it can't be picked, and a Trade Center on it moves to a method
+    still allowed; record which (item 3).
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … automation_marker` | once a game: the first monthly count of a country with a building on one of three sample methods (Robotic Assembly Lines in a Tooling Workshop, Robotic Service Providers in an Urban Center, Autonomous Logistics in a Trade Center), once every one of those levels or none reads the marker; a count in between waits a month | `marked` equals `sample`: a method's `unscaled` script-only building line reaches its building's `modifier:` read, so `te_ap_runs_automated_method` counts the buildings that run one | `marked=0`: no building reads the line, so the automated share is 0 everywhere and Robot Tax, the Dividend and Displaced Workers do nothing | First check `debug.log` for `Unknown modifier type: building_robotic_or_ai_managed_bool` (the type didn't load). Otherwise restore the method list in `te_ap_runs_automated_method` (the trigger as it was before this change, one `is_building_type` and `has_active_production_method` block per group, with Autonomous Logistics on `building_trade_center` added), keep the marker for its tooltip line, and have `test_automation_policy.py` hold the list to the marked methods |
+
+No `automation_marker` line after a few years of Humanoid Robotics means no
+country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
+
+## Phase 3: Morphological Freedom and Bodily Autonomy
+
+1. **The technology.** Morphological Freedom sits in era 12's society column
+   after Human Augmentation and the LGBTQ+ Rights Movement, with Genetic
+   Engineering's icon until its own is painted. Its tooltip names Licensed
+   Modification and Morphological Freedom, and +3% services output.
+2. **The law group.**
+   - In a new game every country holds Natural Form in the laws panel's
+     Bodily Autonomy group (Human Rights), beside Human Augmentation.
+   - Load a save from before this change: every country holds Natural Form,
+     and none holds two laws in the group
+     (`scripts/analysis/save_country_probe.py --law-conflicts` on the next
+     save).
+   - A country released or formed later also holds Natural Form.
+   - The three laws show their own icons.
+3. **The acceptance hook.** Under Universal Citizenship with Civil Rights
+   Movement and Social Justice Movements researched, enact Morphological
+   Freedom and read a pop's acceptance breakdown three ways: a culture that
+   shares a heritage trait with a primary culture, one that shares only a
+   heritage group, and one that shares neither. The third shows +10 from the
+   law. If it now reads higher than the first, the engine does not give a
+   shared-trait pop the higher no-shared figure, and the hook inverts heritage
+   under the four citizenship laws that leave little gap (Subjecthood,
+   Cultural, Assimilatory, Universal). Record which.
+4. **Interest groups.** With the technology, open Licensed Modification's
+   enactment: the Devout and the Rural Folk oppose it, the Intelligentsia
+   support it. Morphological Freedom: the Devout strongly opposed, the
+   Intelligentsia strongly in favor, Industrialists split between their
+   ideologies. Natural Form moves no group's approval before the technology.
+5. **The debate.**
+   - It appears with the technology under the Social Movements rule, and not
+     for a decentralized country, with Civil Rights' icon until its own.
+   - Each law shows its status line.
+   - Enacting Morphological Freedom completes it and opens The Chosen Body at
+     once (a popup).
+   - With Natural Form held for twenty years, The Body as Given opens at once
+     instead; with Licensed Modification held, An Unsettled Question appears
+     and no event.
+   - After a revolution, a finished debate does not start again on the winner.
+6. **Events.** Over a twenty-year debate, count the events: no two within two
+   years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
+   Ears Now once each, at most eight in all. Old Enough to Choose and Everyone
+   Has Ears Now never come under Natural Form, and The Pulpits Speak only with
+   a powerful Devout group, whose name it shows.
+
+## Phase 3: Frontier AI Control
+
+1. **A new game.** The laws panel shows Frontier AI Control among the power
+   structure groups from 1836, every country on No Frontier AI Policy, and no
+   other law of the group enactable. The six laws show their own icons.
+2. **The opening.** The day a country researches AI Agents (or gets it by
+   spread) it moves to Private Labs, with no enactment. No Frontier AI Policy then reads as not enactable, with its
+   tooltip.
+3. **Tooltips.** Each law lists its lines: innovation, Economic Covert Defense,
+   authority, intelligence capacity, diplomatic reputation, technology spread,
+   the interest group lines and International Oversight's UN Authority Target
+   +0.50. Open Weights' enactment tooltip names the 100 and the 300;
+   International Oversight's says it falls to National Licensing.
+4. **International Oversight.** With the United Nations rule off the law is not
+   in the panel. A non-member sees it greyed with "We are a member of the
+   United Nations". A member enacts it; then pressing Leave the United Nations
+   shows the line that the law falls to National Licensing, and the law is
+   National Licensing the same day. The same on the UN's dissolution, for every
+   member holding it.
+5. **Open Weights' world share.** With a great or major power holding Open
+   Weights, the Global Technological Development tooltip of every country,
+   recognized or not, rises by 100 at the next yearly pulse (up to 300 with
+   three or more holders). A minor power's Open Weights adds nothing.
+6. **Interest groups.** In a late game, the Armed Forces back State Monopoly,
+   the Industrialists Private Labs and the Intelligentsia Open Weights in the
+   law panel's interest group view, and most others National Licensing.
+7. **Old saves.** Load a save from before this change. Every country holds No
+   Frontier AI Policy (the group's first law), with no `two laws are active in
+   the same group` assert in `error.log`, and each AI Agents holder moves to
+   Private Labs at its next technology, law change or yearly pulse.
+8. **New countries.** A country released or formed after AI Agents holds a law
+   of the group (copied from its parent or the placeholder), and one that is
+   not a UN member does not keep International Oversight past its next yearly
+   pulse.
+
+## Phase 3: Liquid Democracy
+
+1. **The tree.** Liquid Democracy follows Universal Digital Identity in era
+   12's society tree, with +10% voting power and its own icon.
+2. **The law.** It sits in Distribution of Power beside Algorithmic
+   Governance, with its own icon. Its enactment
+   tooltip shows the Continuous Vote line and the modifier's three effects,
+   and nothing is granted on enactment.
+3. **A voting law.**
+   - Enact it from Universal Suffrage: elections and parties carry on, the
+     government type stays a democratic one (Presidential or Parliamentary
+     Republic, Constitutional Monarchy), and Women's Suffrage, Elected
+     Bureaucrats and the campaign finance law in force all stay.
+   - Enact it from Algorithmic Governance: parties come back and an election
+     campaign starts.
+   - A country holding the Tradition of Free Elections keeps it (the amendment
+     re-attaches on the new law). Voting Age amendments and First Past the
+     Post drop, by design.
+   - Under Collective Governance it becomes a Direct Democracy, with the
+     Direct Democracy amendment.
+4. **The Continuous Vote.** With Neural Lace, the Continuous Vote appears in
+   the Nation tab's Governance list within a year of enactment or of
+   researching Neural Lace (the yearly pulse), not in the country panel's
+   list, and it doesn't stack from year to year. It goes at once when the law
+   is repealed. After a revolution that the law's holders win, it comes back
+   at the winner's next yearly pulse.
+5. **Interest groups.** An Anarchist or Optimist Transhumanist leader's group
+   backs it over Universal Suffrage; groups with Republican, Liberal or Social
+   Democrat leaders prefer Universal Suffrage and back going back to it.
+   Radicals and Populists rate the two the same.
+6. **Law consistency.** An anarchist country that loses Cooperative Ownership
+   with the technology researched moves to Liquid Democracy, not Universal
+   Suffrage.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … liquid_democracy_elections` | once a game: OK at the first election campaign that starts under the law (`on_election_campaign_start`); BROKEN at the yearly pulse of a country that has held it six years, if no campaign has started under it anywhere | The engine holds elections under a mod Distribution of Power law with Universal Suffrage's voting power | It doesn't: no campaign in six years under the law, more than a four-year cycle and its campaign | Check what the engine keys elections on (the party emergence the law's `on_activate` runs, or a list of vanilla laws). If nothing a mod law can carry starts them, remake the law as a variant of Universal Suffrage (`parent = law_universal_suffrage`, shown only with the technology), which takes its stances and passes every `has_law_or_variant` check for it |
+
+No line after a few years means no country has held the law long enough; enact it in a test game.
+
+## Phase 3: Geoengineering
+
+Stratospheric Aerosol Injection, the climate policy Geoengineering unlocks
+(`docs/systems/mod_systems/global_warming.md` § Geoengineering). `event
+te_debug_gw.1` reaches every state below in minutes: **c** or **d** for the
+warming, **j** to adopt everything (Aerosol Injection included), **n** to run a
+year of the mask (`GW_AEROSOL` in `debug.log`), **k** then **n** for termination
+shock.
+
+1. **The tree.** Geoengineering sits in era 12's society column after
+   Environmental Movement and Globalization, on Environmental Movement's icon,
+   and its description names the policy. Its effects list "Enables Stratospheric
+   Aerosol Injection" (hover: the 1.0 °C gate, the 2 °C cap, the cost) and the
+   weather modification: droughts −10% impact and duration, hailstorms −20%
+   impact. After researching it, a state's harvest-condition tooltip shows the
+   three lines (a technology's state lines reach the states, as Modern
+   Sewerage's flood line does).
+2. **The row.** Mitigation Policies ends with Aerosol Injection under National,
+   on the UN's climate icon. Before the technology, Adopt is greyed with the
+   technology crossed; below 1.0 °C beneath the haze, with "Warming beneath any
+   aerosol haze has reached 1.0 °C" crossed. The adopt tooltip shows the
+   policy's line (Environmental Movement radicalism +10), the weekly expense at
+   1% of GDP a year and the objection line. Around the World counts it.
+3. **The cost.** The Budget panel's Breakdown lists it under Climate Policy at
+   about 1% of GDP a year, and the figure follows GDP month to month without
+   stacking (one copy of Aerosol Injection: Running Cost in the country's
+   modifiers).
+4. **The mask.** After adopting, the overview's table gains an Aerosol Mask row
+   that grows a little each month (for a country with a fifth of world GDP,
+   about −0.6 °C after a year, heading to −1.00 °C). The temperature headline,
+   the bar, the tier and the Warming Penalty cell fall with it; the Climate
+   Warming modifier's multiplier is the masked reading. The row's hover gives
+   the warming beneath, which keeps rising with emissions.
+5. **Termination shock.** Repeal it with no other deployer: the mask shrinks
+   month by month (two thirds back within a year), Termination Shock fires for
+   every country once if 0.25 °C or more is coming back, and its modifier is
+   scaled by the degrees returning. Re-adopt and repeal again: it fires again.
+6. **Objection.** On adopting, countries in the monsoon regions and those whose
+   will is a band short (the `l` option's `aerosol=` figure below 45) lose 10
+   relations with us; each January while it runs, 5 more. No relations change
+   with ourselves, and no `Attempted to create relations between a country and
+   itself` assertion in `error.log`.
+7. **Weakened Monsoon.** With a mask up, India, Indochina, Indonesia, southern
+   China and West African countries carry Weakened Monsoon on the entry, scaled
+   by the mask; it goes when the mask reaches 0.
+8. **No false recovery.** A mask that pushes the felt reading below 3, 2 or
+   1 °C fires none of the recovery events (The Heat Recedes and the rest); they
+   still fire when the warming beneath falls.
+9. **AI.** In an observer run past 3 °C, some AIs adopt it (laissez-faire
+   exporters first), none adopts while in default, none adopts once the mask
+   is at its 2 °C ceiling, and a deployer doesn't drop it once its mask works.
+   Record when the first AI deploys and whether a termination shock happens.
+10. **Civil war.** A revolution that wins in a deploying country keeps the
+    policy (the row stays lit within a month) and its cost.
+
+## Phase 3: AI Tutors
+
+1. **The tree.** AI Tutors sits in era 11's society column, its arrow from
+   Digital Education (era 9), with its own icon. Its tooltip lists qualifications +10%, literacy growth,
+   education access +10 and the Ministry of Thought Control's maximum
+   investment +1.
+2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
+   Ministry of Thought Control, not +3. Under the Ministry of Thought Control
+   law with Cyber Warfare, Brain-Computer Interfaces, Human Augmentation and AI
+   Tutors researched, the ministry's maximum investment reads 9. In an old
+   save, a country at level 9 without AI Tutors now has a ceiling of 8: record
+   whether the engine lowers its investment at once or holds it until it
+   changes (no repair grants AI Tutors for it).
+3. **Education access.** A state's education access rises by 10 points when
+   AI Tutors completes, and its breakdown names the technology.
+4. **Lessons Between the Lines** (`event society_technology_events.36` in a
+   country under Unregulated Internet with AI Tutors). It shows the
+   whistleblower picture. The first option gives Open Curricula, capitalist
+   radicals, and the Intelligentsia's and Industrialists' approval lines; the
+   second gives Contracted Curriculum and the reverse approvals.
+5. **The Ministry's Syllabus** (`event society_technology_events.37`). Its
+   description names the Ministry of Thought Control, the Ministry of
+   Propaganda, or the censors under State-Controlled Internet alone. The
+   second option radicalizes bureaucrats.
+6. **The loyalty line.** Contracted Curriculum and The State Syllabus show a
+   Monthly Loyalists line of 0.1%. The type sets no `decimals`, so confirm it
+   doesn't render as 0%. After either, an incorporated state's pops gain
+   loyalists each month, even in a country without a Ministry of Thought
+   Control (the state's Monthly Loyalists breakdown names the modifier), and
+   the line fades over ten years.
+7. **Once each.** Neither event comes back in the same country, whichever
+   option was taken.
+
+## Phase 3: Aneutronic Fusion
+
+1. **The tree.** Aneutronic Fusion sits in era 13's military column after
+   Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
+   from Compact Fusion Reactors. It has its own icon. Its tooltip names Aneutronic Fusion Power, Fusion
+   Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
+   no longer names the Interstellar Mission.
+2. **Aneutronic Fusion Power.** A Fusion Plant offers it after Compact Fusion
+   Power, with its own icon. A level employs 950 (450
+   laborers, 300 machinists, 100 engineers, 100 academics) and makes 16,000
+   electricity before throughput. Its description shows in the tooltip.
+3. **The AI-managed option on it.** With Smart Grids, a Fusion Plant on
+   Aneutronic Fusion Power shows one AI Managed Power Plant option, and on it
+   the building employs only the 1,000-engineer crew, with no laborers,
+   machinists or academics left. Switching the base back to Compact Fusion
+   Power swaps it for the reactor option (one AI-managed option either way).
+   Centralized Control and Integrated Smart Systems leave 30 laborers and 20
+   machinists a level on the new base, never a negative count.
+4. **Fusion Torch Reclamation.** A Steel Mill offers it after Microgravity
+   Alloying: 50 iron and 600 electricity for 600 steel a level, 3,000 staff,
+   pollution 10. Bespoke Alloys can run beside it, and its carbon-capture group
+   shows only the not-applicable option.
+5. **The Interstellar Probe** in a new game: the Interstellar Mission method,
+   Begin the Interstellar Mission and the inactive Interstellar Probe entry
+   all wait for Aneutronic Fusion. A country with Compact Fusion Reactors and
+   the Deep-Space Probe and Mars Landing done sees none of them.
+6. **Old saves** (a save from before this change):
+   - A Microfusion Cells holder is given Aneutronic Fusion in the first month.
+   - A Compact Fusion Reactors holder whose Space Program runs the
+     Interstellar Mission is given it too, whether its probe is running,
+     finished or not yet started.
+   - A Compact Fusion Reactors holder on a lower mission gets nothing.
+   - One `TE_ERA13_TECH_REPAIR` line per grant.
+   - **A probe under way keeps its progress.** Its entry's `possible` now
+     names Aneutronic Fusion, so it may deactivate before the repair month and
+     re-activate on the grant. Record whether the bar comes back where it was,
+     or at 0 (the monthly milestone cleanup ran between them), and whether the
+     engine moved the Space Program off the Interstellar Mission at the load
+     (the entry would then fail with Program Discontinued). Either one means
+     the repair needs a day-one on-action.
+
+## Phase 3: Vactrains
+
+1. **The tree.** Vactrains sits in era 12's production column, after
+   Autonomous Vehicles (era 11) and Quantum Materials, with its own icon. Its tooltip names two Railway
+   methods, Vactrains and Vactrain Freight, and no modifiers.
+2. **Rolling Stock.** On a railway in a state with Electricity, Vactrains
+   follows Maglev Trains in the passenger group: 160 Transportation and +15
+   infrastructure a level, on steel, electronic components, tech metals and
+   electricity. In a state with no Electricity it can't be picked
+   (`required_input_goods`), and the AI's railways stay on Maglev Trains there.
+3. **Freight.** Vactrain Freight follows Autonomous Trains in the base group:
+   170 Transportation and 60 infrastructure a level, 10 engineers, on
+   electricity, electronic components, tech metals and digital assets. Its
+   tooltip shows no emissions or pollution line.
+4. **Maintenance.** A railway switched to Vactrain Freight settles on Heavy
+   Maintenance (0.15 construction a level); one switched from steam trains
+   straight to it steps up through Standard within a few days, as for
+   Containerized Cargo.
+5. **The AI.** Both groups are `most_productive`, so AI railways in electrified
+   states move to the two methods after the technology, each switch a
+   five-year retool. Watch that railways in states short of Electricity are
+   not pulled onto them and starved.
+6. **Retooling waiver.** A railway in a Transport principle tier 3 bloc that
+   switches from a diesel variant to Vactrain Freight pays the full
+   Retooling: the change is not read as the principle swap
+   (`te_state_railway_train_code` 13 to 8).
+
+## Phase 3: Von Neumann Machines
+
+1. **The tree.** Von Neumann Machines sits in era 13's production column with
+   arrows from Molecular Assemblers and Orbital Manufacturing, and its own icon. Its tooltip names
+   Self-Replicating Construction and Self-Replicating Miners and lists +100
+   maximum weekly construction progress.
+2. **Construction Sector (market game).** Self-Replicating Construction is the
+   last method of the base group, after Nanomaterial Buildings, and makes 24
+   construction a level before throughput (Nanomaterial Buildings: 16). It
+   has its own icon. All four automation methods stay selectable on it
+   (Prefabricated Building Components, Tower Cranes, Computer-Aided Design, 3D
+   Printed Buildings), and none takes its employment below zero. The
+   construction principle's method applies to it. An AI sector moves up to it
+   once the technology arrives (the group is `most_productive`).
+3. **Construction Site (direct game).** The site lists eight tiers, the new one
+   hidden until researched, and gives 24 points a level on it. The construction
+   panel's Construction Capacity hover reads "from 1 a week for Wooden
+   Buildings to 24 for Self-Replicating Construction". An AI site on the new
+   tier that the AI downsizes comes back on the new tier at the next weekly
+   pulse (the guard's tier 8). In a market game the direct tier never shows.
+4. **Extraplanetary Base.** Self-Replicating Miners is the last base method,
+   after Resort Colony, with its own icon. Its
+   crew (400 engineers, 100 academics) fills at any level. With neither
+   logistics upgrade the method's tooltip shows 320 Launch Capacity a level;
+   Fusion Tugs and Tethered Launch each still cut it by 30%. The
+   `logistics_input_cut` self-check reads OK on a base running it, since the
+   method carries no launch multiplier of its own. An AI base on Mining Colony
+   switches to it (the group's default `most_profitable`).
+
+## Phase 3: Advanced Fission
+
+1. **The tree.** Advanced Fission sits in era 11's military tree after Nuclear
+   Energy, on Nuclear Energy's icon until its own is painted.
+2. **The method.** A Nuclear Plant offers Generation IV Reactors beside Nuclear
+   Power once Advanced Fission is researched. At the same staff it makes 3,500
+   electricity a level (Nuclear Power 2,000) and buys Advanced Materials. The
+   AI-managed reactor automation still shows for a plant on either method.
+3. **The AI switches.** An AI Nuclear Plant moves to Generation IV Reactors
+   within a year of the technology, where Advanced Materials are on its market.
+
+## Phase 3: Terraforming
+
+The Terraforming colony module (`docs/systems/mod_systems/space_race.md` §
+Colony modules), under Simple or Full Colonies. `event te_debug_space_race.4`
+logs every colony's modules and work done (**a**, `TE_SR_MODULES … terraformed=N/900
+months`), fills the stock (**b**), queues one of each module the first colony
+allows (**c**), lands shipments now (**e**) and runs ten years of terraforming
+at this month's pace (**i**).
+
+1. **The tree.** Terraforming sits in era 13's society column with arrows from
+   Space Colonization and Geoengineering, on Space Colonization's icon until
+   its own is painted. Its tooltip lists Terraforming for Colonies, whose hover
+   names Mars, Venus, Titan, Ganymede and Callisto.
+2. **The line.** Before the technology a Mars colony's Modules view shows the
+   usual three lines of cells and no Terraforming line. After it, a fourth
+   line shows on the Martian sites, Venus, Titan, Ganymede and Callisto only:
+   the Terr cell, then "Terraformed +0% no work under way". A colony's page
+   shows a Terraforming row (Mars icon) and a Terraformed tile beside Base
+   Room. Nothing of it shows on Europa, the Moon or any other world.
+3. **The queue.** The cell's + queues a level; the hover's lines tick for the
+   technology, fewer than three levels and an unfinished world. A fourth level
+   at the same world is refused with the second line crossed, counting queued
+   and shipped levels. The queue lists it as Terraforming.
+4. **The work.** With a level landed and staffed, the line reads "+N% … years to
+   go" and the figure climbs 4% a year (about 0.33% a month) a level; the
+   colony's people / room in the People view climbs with it, and settlers keep
+   landing past the old room. Option **i** adds ten years at once (+40% a
+   staffed level). A colony short of crews climbs at its Modules Crewed share.
+5. **Finished.** At +300% the line reads "finished", the levels stand down
+   (`TE_SR_MODULES <key>: terraformed; its Terraforming levels stand down`), the
+   Slots figure falls by three and Module Upkeep drops. The + button's third line
+   is crossed. The room stays at +300%.
+6. **The work is the world's.** Cede a terraforming colony (Cede Colony): the new
+   holder's row shows the same +N% and the work goes on, even without the
+   technology. Take a Terraforming level down on the colony's page: the room
+   stays where it was. Release a world with work done, found it again: its room
+   starts at the terraformed figure.
+7. **Occupation.** Under Full Colonies an occupied world's figure stops rising;
+   it resumes when the occupation ends.
+8. **The AI.** In an observer run to the late game, an AI with the technology
+   queues Terraforming at a Martian, Venusian, Titan, Ganymede or Callisto
+   colony whose people fill half its room, within its slots (option **a**, run as
+   its tag, lists the levels).
+9. **Self-check.** The marker is read as the drive markers are, so
+   `TE_SELF_CHECK OK drive_marker` covers it; no check of its own.
+
+## Phase 3: Self-Directed Evolution
+
+1. **The tree.** Self-Directed Evolution sits in era 13's society column with
+   arrows from Morphological Freedom and Rejuvenation Therapies, on Synthetic
+   Biology's icon until its own is painted. Its tooltip names Clade
+   Citizenship and lists Colony Growth a Month +0.1% and, with the
+   Demographics rule, Safer Work +5%.
+2. **The law.**
+   - Clade Citizenship is the fourth law of Bodily Autonomy, after
+     Morphological Freedom, on Unrestricted Augmentation's icon. Its tooltip
+     shows +10 acceptance without a shared heritage trait, +15% migration
+     pull, +5% Cultural Pull from Art and the parity line ("Heritage no longer
+     divides our people").
+   - Interest groups: on Morphological Freedom, open Clade Citizenship's
+     enactment. The Intelligentsia neither back nor oppose it (strongly
+     approving of both laws), the Devout and the Rural Folk strongly oppose
+     it, and a group led by a transhumanist backs it. On Natural Form or
+     Licensed Modification the Intelligentsia back it.
+3. **The heritage parity.** Under Universal Citizenship with Civil Rights
+   Movement and Social Justice Movements, enact Clade Citizenship and wait for
+   the month's pulse.
+   - The Nation tab's Society section lists Heritage Parity: Shared Heritage
+     Trait and Heritage Parity: Shared Heritage Group, and its Acceptance
+     rows read 30 for all three heritage figures (each row's hover breaks it
+     down). No Heritage Parity: No Shared Heritage shows, since no shared
+     heritage is already the highest at 30.
+   - Read a pop's acceptance breakdown three ways: a culture that shares a
+     heritage trait with a primary culture, one that shares only a heritage
+     group, and one that shares neither. All three show the same heritage
+     line, 30.
+   - Change to Racialized Citizenship (or start a test country on it): after
+     the next pulse the figures read 60 for all three.
+   - Repeal the law: within a month the parity modifiers are gone and the
+     figures fall back to the Citizenship law's and the technologies'.
+4. **The debate.** If the Morphological Freedom Debate is still running when
+   Self-Directed Evolution arrives, enacting Clade Citizenship shows its
+   status line for a moment and completes the debate with The Chosen Body.
+5. **Colonies** (Simple or Full Colonies). A colony of ours grows by about 0.3%
+   a month after the technology, against 0.2% before (its people, month on
+   month, on the Colonies section's People view); a free colony stays at 0.2%.
+6. **The census** (Demographics rule at Full). A state's Work row in Causes of
+   Death shows Safety ×0.05 after the technology (×0.10 before), and the
+   hover lists Self-Directed Evolution among the technologies.
+7. **Prescribed Form** (owner, 2026-11-04). With Morphological Freedom, the
+   law is in the Bodily Autonomy group with Mandatory Augmentation's icon.
+   - Its tooltip lists +50 authority, the bureaucracy population cost line,
+     +25% assimilation, −10% Cultural Pull from Art and −10% migration pull,
+     and the parity line. Note the bureaucracy cost it adds in the budget at
+     era 12 (about 9% of the population part was the aim).
+   - Under Universal Citizenship with both technologies, enacting it changes
+     no heritage figure (all three already read 20). Under Racialized
+     Citizenship all three read 60 after the next pulse, and the Nation tab
+     lists the Heritage Parity rows.
+   - The Morphological Freedom Debate, if running, fails at once with no
+     event and does not come back.
+   - Interest groups: the fascist and ethno-nationalist leaders' groups back
+     it, the jingoist and authoritarian ones approve, the Intelligentsia and
+     the Devout oppose it.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … clade_heritage_parity` | once a game, the month after a country's parity first closed a gap of at least 1 point; or at once if all three heritage figures read 0 under the law | The country's `modifier:` reads of the three heritage figures carry its laws', technologies' and the parity's own lines, so the lifts land and all three read the same | The three still differ a month on (the lifts never landed, or a read misses a line), or they read 0 (the read returns nothing). A Citizenship law or heritage line that changed in that same month also reads BROKEN, which its numbers show | Drop the parity modifiers and give the law a static line on all three figures, +10 each over Morphological Freedom's, which ranks heritage as the Citizenship law does and never inverts it |
+
+No line after a few years means no country has held the law: its own +10 for
+no shared heritage leaves a gap to close under every Citizenship law, so enact
+it in a test game.

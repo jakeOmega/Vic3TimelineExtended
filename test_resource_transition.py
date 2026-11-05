@@ -170,12 +170,14 @@ class ConstructionBanTest(unittest.TestCase):
 
     def test_no_other_building_is_touched(self):
         """Clean generation, synthetics and other mines stay buildable."""
-        text = _read(BUILDINGS)
+        # Every mod building file: the clean plants, synthetics and new mines sit in
+        # their sectors' NN_zz_te_*.txt files, not in extra_buildings.txt.
+        text = "\n".join(_read(path) for path in sorted(glob.glob(os.path.join(REPO, "common", "buildings", "*.txt"))))
         users = re.findall(r"(?m)^(?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?(\w+) = \{", text)
         gated = [u for u in users if "rt_fossil_construction_allowed_here" in _top_level(
             text, next(p for p in (f"INJECT:{u}", f"REPLACE:{u}", f"REPLACE_OR_CREATE:{u}", u)
                        if re.search(rf"(?m)^{re.escape(p)} = \{{", text)))]
-        self.assertEqual(sorted(gated), sorted(INDUSTRIES.values()))
+        self.assertEqual(sorted(set(gated)), sorted(INDUSTRIES.values()))
 
 
 class ProgrammeTest(unittest.TestCase):

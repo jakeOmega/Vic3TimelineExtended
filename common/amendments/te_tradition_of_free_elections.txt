@@ -13,6 +13,9 @@
 #     can attach the tradition to it at 5/5 progress, and an interest group can
 #     sponsor it when Anarchy is enacted;
 #   - the tradition no longer lowers the chance of enacting Anarchy.
+# The mod's own voting law, Liquid Democracy (extra_laws.txt), is an allowed law
+# too, marked # TE the same way; its on_activate re-attaches the tradition as
+# vanilla's four do.
 # The re-attach on enacting Anarchy, which vanilla's four voting laws do in their
 # on_activate (inherit_free_elections_effect), is te_free_elections_from_law_scope
 # (common/on_actions/extra_on_actions.txt), not an edit of law_anarchy: a REPLACE
@@ -38,6 +41,7 @@ REPLACE:amendment_tradition_of_free_elections = {
 		law_census_voting
 		law_universal_suffrage
 		law_anarchy # TE: Anarchy holds elections
+		law_liquid_democracy # TE: the mod's voting law
 	}
 
 	modifier = {

@@ -649,3 +649,64 @@ gm_state_unrecorded = {
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_newcomer }
 }
+
+# ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
+# Container scope. A monument beside another that Clear Away may take: not
+# contested (that one's three choices are its own), with no order of its own.
+gm_mon_clear_eligible = {
+	has_tag = gm_monument
+	NOT = { has_variable = gm_tr_contested }
+	NOT = { has_variable = gm_mon_order }
+}
+
+# State scope. The state's own monument may be cleared away: finished,
+# dedicated and recorded, not contested.
+gm_state_primary_clear_eligible = {
+	gm_state_is_dedicated = yes
+	has_variable = gm_levels
+	NOT = { gm_state_is_contested = yes }
+}
+
+# State scope. A monument beside the state's own may be cleared away.
+gm_state_has_clear_eligible_secondary = {
+	has_variable_list = gm_monuments_here
+	any_in_list = {
+		variable = gm_monuments_here
+		gm_mon_clear_eligible = yes
+	}
+}
+
+# State scope. The state's own monument is the least grand that may go (a tie
+# shows the button on each of them).
+gm_state_primary_is_least = {
+	gm_state_primary_clear_eligible = yes
+	gm_state_primary_grandeur <= gm_state_least_grandeur
+}
+
+# Container scope. This monument beside another is the least grand that may go.
+gm_mon_is_least = {
+	gm_mon_clear_eligible = yes
+	gm_mon_least_gap <= 0
+}
+
+# State scope. Nothing is under way here that clearing a monument away would
+# cut across: a ceremony, an unveiling or a naming, a method put back, a gift's
+# rebuild, a building made or removed today, a newcomer still settling, another
+# order for a monument here, or a clearing already ordered.
+gm_state_clear_quiet = {
+	NOT = { has_variable = gm_ceremony_pending }
+	NOT = { has_variable = gm_unveil_pending }
+	NOT = { has_variable = gm_name_choice_open }
+	NOT = { has_variable = gm_being_named }
+	NOT = { has_variable = gm_restore_pm }
+	NOT = { has_variable = gm_gift }
+	NOT = { has_variable = gm_rebuilding }
+	NOT = { has_variable = gm_newcomer }
+	NOT = {
+		has_variable_list = gm_monuments_here
+		any_in_list = {
+			variable = gm_monuments_here
+			has_variable = gm_mon_order
+		}
+	}
+}

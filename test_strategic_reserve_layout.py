@@ -11,6 +11,8 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow, history_charts
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "strategic_reserve_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_strategic_reserve.txt")
@@ -23,10 +25,8 @@ CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 STATUS = ["te_st_res_sec_inventory"]
-REFERENCE = ["te_st_res_sec_how"]
 ROOTS = {"widget_je_strategic_reserve_overview": ("custom_widget_container_1", "te_st_res_overview_panel"),
-         "widget_je_strategic_reserve_inventory": ("custom_widget_container_2", "te_st_res_status_sections"),
-         "widget_je_strategic_reserve_reference": ("custom_widget_container_3", "te_st_res_reference_sections")}
+         "widget_je_strategic_reserve_inventory": ("custom_widget_container_2", "te_st_res_status_sections")}
 # The keys the panel used before the pass; a survivor means a half-renamed flag.
 OLD_FLAGS = ["st_res_row_expanded_", "st_res_policy_open_"]
 HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income", "history"]
@@ -91,24 +91,45 @@ def _loc():
 class OrderTest(unittest.TestCase):
     def test_composers_order_the_sections(self):
         widget = _read(WIDGET)
-        for composer, expected in (("te_st_res_status_sections", STATUS),
-                                   ("te_st_res_reference_sections", REFERENCE)):
+        for composer, expected in (("te_st_res_status_sections", STATUS),):
             body = _type_body(widget, composer)
             self.assertEqual(re.findall(r"^\t\t(te_st_res_sec_\w+) = \{", body, re.M), expected, composer)
             self.assertIn('visible = "[JournalEntry.IsActive]"', body, composer)
 
-    def test_the_entry_attaches_three_gated_roots(self):
+    def test_the_entry_attaches_two_gated_roots(self):
+        """The overview and the inventory. How the Strategic Reserve Works,
+        once a third root, is the Help page the overview's "?" opens
+        (test_te_help_pages.py)."""
         je, widget = _read(JE), _read(WIDGET)
         for name, (container, composer) in ROOTS.items():
             self.assertRegex(je, rf'name = "{name}"\s*container = "{container}"', name)
             root = _body(widget, rf'flowcontainer = \{{\s*name = "{name}"')
             self.assertIn('visible = "[JournalEntry.IsActive]"', root, f"{name} lost its IsActive gate (gotcha #14)")
             self.assertIn(f"{composer} = {{}}", root, name)
+        for gone in ("widget_je_strategic_reserve_reference", "te_st_res_reference_sections"):
+            self.assertNotIn(gone, je + widget, gone)
 
     def test_the_overview_cannot_be_collapsed(self):
         overview = _type_body(_read(WIDGET), "te_st_res_overview_panel")
         self.assertNotIn("GetVariableSystem", overview)
         self.assertIn('visible = "[JournalEntry.IsActive]"', overview)
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Strategic Reserve tab (spec
+    2026-11-02-te-window-wide-mode § 7): two columns of 520, the overview,
+    then the inventory, under the gates the narrow tab gives them (How the
+    Strategic Reserve Works, once the second column, is the Help page)."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_two_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_st_res_wide_sections",
+                                             layout=("te_st_res_tab_body", "te_st_res_tab_layout"))
+        self.assertEqual(columns, [["te_st_res_overview_panel"], STATUS])
+        self.assertIn("type te_st_res_wide_sections = te_ui_columns_two {", _read(WIDGET))
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "strategic_reserve").wide, "te_st_res_wide_sections")
 
 
 class FlagTest(unittest.TestCase):
@@ -134,13 +155,19 @@ class FlagTest(unittest.TestCase):
         for f in OLD_FLAGS:
             self.assertNotIn(f"'{f}", self.text, f)
 
-    def test_inventory_open_and_how_it_works_collapsed(self):
+    def test_inventory_open(self):
         inventory = _type_body(self.text, "te_st_res_sec_inventory")
         self.assertIn("GetVariableSystem.Toggle('st_res_inventory_closed')", inventory)
         self.assertIn("visible = \"[Not(GetVariableSystem.Exists('st_res_inventory_closed'))]\"", inventory)
-        how = _type_body(self.text, "te_st_res_sec_how")
-        self.assertIn("GetVariableSystem.Toggle('st_res_how_open')", how)
-        self.assertIn("visible = \"[GetVariableSystem.Exists('st_res_how_open')]\"", how)
+
+    def test_how_it_works_is_the_help_page(self):
+        """How the Strategic Reserve Works is the Help page alone
+        (te_strategic_reserve_help_popup, on te_popup = help_strategic_reserve),
+        which the "?" at the top of the entry and in the tab's header opens:
+        the link section is gone (test_te_help_pages.py)."""
+        for gone in ("te_st_res_sec_how", "st_res_how_open"):
+            self.assertNotIn(gone, self.text, gone)
+        self.assertIn("type te_strategic_reserve_help_body", self.text)
 
     def test_rows_and_their_settings_start_collapsed(self):
         for g in _goods():
@@ -252,7 +279,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.loc = _loc()
 
     def test_one_heading_and_note_per_topic(self):
-        how = _type_body(self.widget, "te_st_res_sec_how")
+        how = _type_body(self.widget, "te_strategic_reserve_help_body")
         self.assertEqual(re.findall(r'text = "je_strategic_reserve_how_sub_(\w+)"', how), HOW_TOPICS)
         self.assertEqual(re.findall(r'text = "je_strategic_reserve_how_(?!sub_|header)(\w+)"', how), HOW_TOPICS)
         for t in HOW_TOPICS:
@@ -557,7 +584,9 @@ class HistoryTest(unittest.TestCase):
         self.assertIn('block "row_history" {}', chart_box)
         for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
             g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
-            chart = _body(row, r'blockoverride "row_history" \{')
+            # the good's chart is its generated wrapper's (gen_te_history_charts.py)
+            self.assertEqual(_body(row, r'blockoverride "row_history" \{').strip(), f"te_hist_st_res_{g} = {{}}", g)
+            (chart,) = history_charts(_body(row, r'blockoverride "row_history" \{'))
             self.assertIn(f'tooltip = "st_res_hist_tt_{g}"', chart, g)
             self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_st_res_{g}' )", chart, g)
             self.assertIn('blockoverride "marker_pips" {}', chart, g)
@@ -648,7 +677,8 @@ STATIC_CELLS = (
        ("st_res_row_settings_header", 398, "heading", ()),
        ("je_strategic_reserve_inv_header", 480, "large", ()),
        ("je_strategic_reserve_how_header", 480, "large", ()),
-       ("st_res_hist_title", 484, "large", ())]
+       # the chart's title, beside its open button (gen_te_history_charts.SMALL's title_w)
+       ("st_res_hist_title", 456, "large", ())]
     + [(f"st_res_row_label_{k}", 170, "row", ()) for k in
        ("stored", "rate", "last", "decay", "price", "policy")]
     + [(f"st_res_policy_short_{k}", 138, "row", ()) for k in
@@ -854,6 +884,9 @@ class MarketTabTest(unittest.TestCase):
         cls.market = _read(MARKET)
         cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
         cls.content = _te_blocks(cls.market, "### TE: Reserve tab (te_strategic_reserve) ###")
+        # the tab's body, which the Timeline Extended window's tab mounts too
+        # (test_te_system_tab_bodies.py checks the mounts)
+        cls.body = _type_body(_read(WIDGET), "te_st_res_tab_body")
 
     def _sr_buttons(self):
         return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("sixth_button")}
@@ -874,27 +907,25 @@ class MarketTabTest(unittest.TestCase):
         self.assertIn("te_tab_buttons_six = {", self.market)
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
-        body = self.content[0]
-        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        found = re.findall(r"^\t+(te_\w+) = \{\}", self.body, re.M)
         self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_st_res_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # the link back to the entry is the frame's, after every section
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.body)
+        self.assertIn("te_st_res_tab_body = {", self.content[0])
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
-        body = self.content[0]
-        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_strategic_reserve')]\"")
-        gate = body.index(f'visible = "[And( {SR_TAB_GATE}, {OWN_MARKET} )]"')
-        self.assertLess(gate, dc)
-        self.assertLess(body.index('text = "je_strategic_reserve"'), gate)   # the header sits outside it
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
-
-    def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self.content[0]
-        dc = body.index("GetPlayerJournalEntry('je_strategic_reserve')")
-        head = body[dc:body.index("te_st_res_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's blocks: the header outside the gate, the gate on the
+        datacontext's parent (te_system_tab_frame, its fixed 520 column). The
+        body's gate is the tab's; the panel adds the own-market test."""
+        self.assertRegex(_read(WIDGET), r"type te_st_res_tab_body = te_system_tab_frame \{")
+        gate = self.body[self.body.index('blockoverride "tab_gate"'):self.body.index('blockoverride "tab_entry"')]
+        self.assertRegex(gate, r'block "te_st_res_tab_gate" \{\s*visible = "\[' + re.escape(SR_TAB_GATE) + r'\]"\s*\}')
+        self.assertIn("datacontext = \"[GetPlayerJournalEntry('je_strategic_reserve')]\"",
+                      self.body[self.body.index('blockoverride "tab_entry"'):])
+        head = self.body[self.body.index('blockoverride "tab_header"'):self.body.index('blockoverride "tab_gate"')]
+        self.assertIn('text = "je_strategic_reserve"', head)
+        self.assertRegex(self.content[0], r'blockoverride "te_st_res_tab_gate" \{\s*visible = "\[And\( '
+                         + re.escape(f"{SR_TAB_GATE}, {OWN_MARKET}") + r' \)\]"\s*\}')
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         halves = self._sr_buttons()
@@ -992,8 +1023,12 @@ class MarketTabTest(unittest.TestCase):
             self.assertRegex(_body(buttons, rf"(?m)^{name} = \{{"), r"visible = \{\s*is_ai = yes", name)
 
     def test_the_types_read_nothing_from_the_panel(self):
-        """No section type reads the Market panel's ambient Market or Country."""
-        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", _read(WIDGET))
+        """No section type reads the Market panel's ambient Market or Country.
+        The tab's body aside: its gate and datacontext are the tab's, read
+        through the player as in every host (test_te_system_tab_bodies.py)."""
+        text = _read(WIDGET)
+        text = text.replace("type te_st_res_tab_body = te_system_tab_frame {" + _type_body(text, "te_st_res_tab_body"), "")
+        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", text)
         self.assertEqual(ambient, [])
 
     def test_one_visible_per_widget(self):

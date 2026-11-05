@@ -136,7 +136,7 @@ Names: 7 `deployment`, 8 `claims`, 9 `covert_ops`, 10 `orbital`.
 
 **Files:** the site list, `common/buildings/extra_buildings.txt` (the site's `possible`), `test_nuclear_disputes.py`.
 
-- `nd_dispute_orbital_by = { TARGET }`: `$TARGET$ = { any_scope_state = { has_building = building_orbital_battlestation_construction_site } }`. The battlestation grants nuclear defense to every state its owner holds (`mod_systems.md`, strike odds), so it weakens deterrence. That answers the spec's "design pass" note. Ledger this as a ruling.
+- `nd_dispute_orbital_by = { TARGET }`: `$TARGET$ = { any_scope_state = { has_building = building_orbital_battlestation_construction_site } }`. The battlestation grants nuclear defense to every state its owner holds (`mod_systems/nuclear.md`, strike odds), so it weakens deterrence. That answers the spec's "design pass" note. Ledger this as a ruling.
 - `nd_crisis_concede_orbital`: in each of the target's states with the site, `remove_building = building_orbital_battlestation_construction_site` and `set_variable = { name = orbital_battlestation_progress_var value = 0 }` (the wonder helper's own completion sequence, `extra_effects.txt`). Then `set_variable = { name = nd_crisis_orbital_freeze value = scope:nd_issuer days = 3650 }` on the target.
 - In the site's `possible`: `custom_tooltip = { text = nd_tt_orbital_frozen owner = { NOT = { has_variable = nd_crisis_orbital_freeze } } }`.
 - Revalidate (R7): a war turns it into 2. Nothing else.
@@ -229,7 +229,7 @@ Names: 7 `deployment`, 8 `claims`, 9 `covert_ops`, 10 `orbital`.
 - `docs/systems/nuclear_crisis_design.md`: a new §0.16, and §0.3's dispute table.
 - `docs/player_guide/14-nuclear.md`: the dispute table and the AI paragraph. `17-reference.md` if the glossary names disputes. Rebuild the PDF.
 - `docs/testing/nuclear-playtest.md`: items 55 and on, plus a `nd_concession_<N>` self-check row naming each code's fallback.
-- `docs/systems/mod_systems.md`: the crisis paragraph.
+- `docs/systems/mod_systems/nuclear.md`: the crisis paragraph.
 - `docs/systems/journal_entry_systems.md` (CRLF): the crisis area line.
 - The spec's status line: 4b built, trades are 4c.
 - `docs/guides/scripting_best_practices.md`: any lesson.

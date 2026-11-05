@@ -51,11 +51,6 @@ je_space_race_suborbital = {
 		name = "widget_je_space_race_suborbital"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -90,6 +85,8 @@ je_space_race_suborbital = {
 
 	immediate = {
 		set_variable = { name = sr_active_suborbital value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = suborbital }
 		if = { limit = { NOT = { has_variable = sr_progress_suborbital } } set_variable = { name = sr_progress_suborbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_suborbital } } set_variable = { name = sr_funding_suborbital value = 1 } }
 		sr_sync_suborbital_entry = yes
@@ -214,11 +211,6 @@ je_space_race_orbital = {
 		name = "widget_je_space_race_orbital"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -240,6 +232,8 @@ je_space_race_orbital = {
 
 	immediate = {
 		set_variable = { name = sr_active_orbital value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = orbital }
 		if = { limit = { NOT = { has_variable = sr_progress_orbital } } set_variable = { name = sr_progress_orbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_orbital } } set_variable = { name = sr_funding_orbital value = 1 } }
 		sr_sync_orbital_entry = yes
@@ -370,11 +364,6 @@ je_space_race_moon_landing = {
 		name = "widget_je_space_race_moon_landing"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -396,6 +385,8 @@ je_space_race_moon_landing = {
 
 	immediate = {
 		set_variable = { name = sr_active_moon_landing value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = moon_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_moon_landing } } set_variable = { name = sr_progress_moon_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_moon_landing } } set_variable = { name = sr_funding_moon_landing value = 1 } }
 		sr_sync_moon_landing_entry = yes
@@ -526,11 +517,6 @@ je_space_race_probe = {
 		name = "widget_je_space_race_probe"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -553,6 +539,8 @@ je_space_race_probe = {
 
 	immediate = {
 		set_variable = { name = sr_active_probe value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = probe }
 		if = { limit = { NOT = { has_variable = sr_progress_probe } } set_variable = { name = sr_progress_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_probe } } set_variable = { name = sr_funding_probe value = 1 } }
 		sr_sync_probe_entry = yes
@@ -691,11 +679,6 @@ je_space_race_moon_base = {
 		name = "widget_je_space_race_moon_base"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -712,6 +695,8 @@ je_space_race_moon_base = {
 
 	immediate = {
 		set_variable = { name = sr_active_moon_base value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = moon_base }
 		if = { limit = { NOT = { has_variable = sr_progress_moon_base } } set_variable = { name = sr_progress_moon_base value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_moon_base } } set_variable = { name = sr_funding_moon_base value = 1 } }
 		sr_sync_moon_base_entry = yes
@@ -846,11 +831,6 @@ je_space_race_mars_landing = {
 		name = "widget_je_space_race_mars_landing"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -873,6 +853,8 @@ je_space_race_mars_landing = {
 
 	immediate = {
 		set_variable = { name = sr_active_mars_landing value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = mars_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_mars_landing } } set_variable = { name = sr_progress_mars_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_mars_landing } } set_variable = { name = sr_funding_mars_landing value = 1 } }
 		sr_sync_mars_landing_entry = yes
@@ -980,7 +962,8 @@ je_space_race_mars_landing = {
 
 # ===========================================
 # 7. INTERSTELLAR PROBE
-# Prereq: Outer System Probe + Mars Landing + compact_fusion_reactors tech + Interstellar Mission PM
+# Prereq: Outer System Probe + Mars Landing + aneutronic_fusion tech + Interstellar Mission PM
+# (compact_fusion_reactors until era 13 spec phase 3, 2026-10-31; old saves: te_repair_era_13_technologies)
 # The culminating probe mission, requires the most advanced space program tier
 # ===========================================
 je_space_race_interstellar_probe = {
@@ -1003,11 +986,6 @@ je_space_race_interstellar_probe = {
 		name = "widget_je_space_race_interstellar_probe"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -1021,13 +999,13 @@ je_space_race_interstellar_probe = {
 		sr_space_race_on = yes
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = compact_fusion_reactors
+		has_technology_researched = aneutronic_fusion
 	}
 
 	possible = {
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
-		has_technology_researched = compact_fusion_reactors
+		has_technology_researched = aneutronic_fusion
 		modifier:country_sr_interstellar_mission_program_bool = yes
 		NOT = { has_variable = sr_completed_interstellar_probe }
 		is_great_or_major_power = yes
@@ -1035,6 +1013,8 @@ je_space_race_interstellar_probe = {
 
 	immediate = {
 		set_variable = { name = sr_active_interstellar_probe value = yes }
+		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+		sr_power_fuzz_first = { MILESTONE = interstellar_probe }
 		if = { limit = { NOT = { has_variable = sr_progress_interstellar_probe } } set_variable = { name = sr_progress_interstellar_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_interstellar_probe } } set_variable = { name = sr_funding_interstellar_probe value = 1 } }
 		sr_sync_interstellar_probe_entry = yes
@@ -1144,17 +1124,12 @@ je_space_race_interstellar_results = {
 	group = je_group_foreign_affairs
 
 	# The panel (gui/journal_entry_widgets/space_race_widget.gui): the transit
-	# and the programme above the status line, How the Space Race Works last.
+	# and the programme above the status line, under the "?" to the Help page.
 	# There is nothing to adjust while the probe coasts, so no live sections.
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_interstellar_results_overview"
 		container = "custom_widget_container_1"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
 	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
@@ -1279,11 +1254,6 @@ je_space_race_solar_colonization = {
 		name = "widget_je_space_race_solar_colonization"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -1377,6 +1347,8 @@ je_space_race_solar_colonization = {
 				}
 			}
 			set_variable = { name = sr_active_solar_colonization value = yes }
+			# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
+			sr_power_fuzz_first = { MILESTONE = solar_colonization }
 			# Progress survives only while a colony is held. Then `possible`'s
 			# first branch always holds, so the entry never deactivates, and
 			# the only re-run is a revolution's inheritance, which keeps the
@@ -1496,19 +1468,16 @@ je_space_race_solar_colonization = {
 					limit = { sr_ai_should_participate = yes }
 					# Every approach moves and rolls; Standard is neither variable.
 					change_variable = { name = sr_progress_solar_colonization add = sr_progress }
-					if = {
-						limit = { NOT = { sr_has_failure_cooldown = yes } }
-						random = {
-							chance = sr_risk_pct_solar_colonization
-							set_variable = { name = sr_failed_solar_colonization value = yes }
-							sr_count_setback_base = { MILESTONE = solar_colonization }
-							if = {
-								limit = { has_variable = sr_ambitious_solar_colonization }
-								sr_fire_ambitious_failure_event = { MILESTONE = solar_colonization }
-							}
-							else = {
-								sr_fire_safe_setback_event = { MILESTONE = solar_colonization }
-							}
+					random = {
+						chance = sr_risk_pct_solar_colonization
+						set_variable = { name = sr_failed_solar_colonization value = yes }
+						sr_count_setback_base = { MILESTONE = solar_colonization }
+						if = {
+							limit = { has_variable = sr_ambitious_solar_colonization }
+							sr_fire_ambitious_failure_event = { MILESTONE = solar_colonization }
+						}
+						else = {
+							sr_fire_safe_setback_event = { MILESTONE = solar_colonization }
 						}
 					}
 					# The month's launch (Global Commons § 5.2, sr_launch_window_effects.txt):

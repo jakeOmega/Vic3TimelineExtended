@@ -1,0 +1,171 @@
+﻿# ============================================================================
+# AUTOMATION POLICY — triggers (era 13 spec § 7.1)
+# ============================================================================
+# Laws: common/laws/te_automation_policy_laws.txt. Values:
+# common/script_values/te_automation_policy_values.txt.
+#
+# WHICH METHODS COUNT AS ROBOTIC OR AI-MANAGED. A method counts where robots
+# or AI do work people did: in each group, the first robotic or AI-run tier
+# and every tier above it, so Human Labor Quotas never moves a building to a
+# method that employs fewer people. Each such method marks itself with two
+# lines: `building_robotic_or_ai_managed_bool = yes` in its
+# building_modifiers' `unscaled` block (the type is in
+# common/modifier_type_definitions/te_automation_policy_modifier_types.txt),
+# which te_ap_runs_automated_method reads, and
+# `disallowing_laws = { law_human_labor_quotas }`. Each group keeps an
+# ungated first method, so no building is left without one. A new method
+# takes both lines, and its building joins te_ap_automatable_building;
+# test_automation_policy.py checks the two lines name the same methods, the
+# ladder, every group's fallback and the building list. The 40 methods:
+#
+#   Factory automation, the robotic tier up (Robotics, era 8, and later):
+#     Tooling Workshop, Furniture Manufactory, Motor Industry: Robotic
+#       Assembly Lines and the AI-managed tier.
+#     Automotive Industry: Robotic Assembly Lines, Intelligent Manufacturing
+#       Systems (Supply Chain Management, above robotic assembly in the same
+#       group), Self-Optimizing Production.
+#     Aerospace Industry: Robotic Assembly Handling, AI-Optimized Operations.
+#     Food Industry: Robotic Food Processing.
+#   Factory automation, the AI-managed tier (Artificial General Intelligence):
+#     Arms Industry and Artillery Foundry, Munition Plant, Chemical Plant and
+#     the Synthetics Plants, Explosives Factory, Electronics (the fab), Textile
+#     Mill.
+#   AI-run infrastructure: the AI-managed Power Plant trio and its Aneutronic
+#     Fusion variant (Smart Grids), Autonomous Logistics at the Trade Center
+#     (Smart Grids, with a flat crew in place of International Trading's
+#     per-level staff),
+#     Autonomous Networks (Smart Grids), Fully Automated Content Creation (AI
+#     Agents) and AI-Mediated Mind Sharing (Telepathic Communities) in the
+#     Software Industry, Automated Labs at the University and the automated
+#     Deep-Sea Mine, capped and uncapped (AGI).
+#   Robots and self-driving machines in services, transport and farming:
+#     Robotic Service Providers (Humanoid Robotics) and Drone Delivery Systems
+#     (Autonomous Vehicles) in Urban Centers; Autonomous Trains and Vactrain
+#     Freight (Vactrains), the
+#     Autonomous Highway and Automated Harvesters and Planters (Autonomous
+#     Vehicles).
+#
+# Left out on purpose:
+#   - base methods that set what a building makes and from what, not who does
+#     the work: Industrial Robotics and Nanobot Assemblers (Tooling Workshop),
+#     Robotic Ship Assembly (Shipyard, whose later Advanced Metamaterials
+#     method employs fewer still and would have to go too), Automated Chemical
+#     Reactors (the same staff as every fertilizer method);
+#   - methods that make robots or chips: the Robotics Industry's base methods
+#     (its electronics automation, the AI-managed fab, counts), Neuromorphic
+#     Computing;
+#   - methods that assist people rather than replace them: AI Assisted
+#     Research;
+#   - mining machinery, not robots or AI: Ore Sorting and Separation
+#     (Robotics), Laser Excavation, Smart Miners;
+#   - government staffing, which its own laws set: AI Governance, Automated
+#     Casework (Automated Bureaucracy);
+#   - ownership methods: Automated Trading, the Manor House's AI ownership.
+# ============================================================================
+
+# Building scope. The building runs one of the robotic or AI-managed methods
+# above: one of its active methods carries the marker. Its levels count toward
+# the automated share. The line sits in `unscaled`, so it holds at any
+# staffing, and a building counts once however many of its groups run one.
+# Only production methods carry it: a building's modifier: read also carries
+# its country's lines (scripting_best_practices.md), so one on a law or a
+# technology would mark every building. Whether a method's line reaches the
+# read is the self-check automation_marker (te_ap_marker_selfcheck,
+# common/scripted_effects/te_automation_policy_effects.txt).
+te_ap_runs_automated_method = {
+	modifier:building_robotic_or_ai_managed_bool = yes
+}
+
+# Building scope. TEMPORARY, for the automation_marker self-check only: the
+# building runs one of three sample methods, named directly as
+# te_ap_runs_automated_method named all of them before the marker. Robotic
+# Assembly Lines in a Tooling Workshop (a per-level staff), Robotic Service
+# Providers in an Urban Center, and Autonomous Logistics in a Trade Center (a
+# flat crew).
+te_ap_marker_sample = {
+	OR = {
+		AND = {
+			is_building_type = building_tooling_workshop
+			has_active_production_method = pm_robotic_assembly_lines_building_tooling_workshop
+		}
+		AND = {
+			is_building_type = building_urban_center
+			has_active_production_method = pm_robotic_service_providers
+		}
+		AND = {
+			is_building_type = building_trade_center
+			has_active_production_method = pm_trade_center_trade_quantity_advanced_4
+		}
+	}
+}
+
+# Building scope. The building has one of those methods in one of its groups:
+# its levels make up the share's base, automated or not.
+te_ap_automatable_building = {
+	OR = {
+		is_building_type = building_tooling_workshop
+		is_building_type = building_furniture_manufactory
+		is_building_type = building_motor_industry
+		is_building_type = building_automotive_industry
+		is_building_type = building_aerospace_industry
+		is_building_type = building_food_industry
+		is_building_type = building_arms_industry
+		is_building_type = building_artillery_foundry
+		is_building_type = building_munition_plant
+		is_building_type = building_chemical_plant
+		is_building_type = building_synthetics_plant
+		is_building_type = building_synthetics_plant_biomass
+		is_building_type = building_synthetics_plant_coal
+		is_building_type = building_synthetics_plant_drinks
+		is_building_type = building_synthetics_plant_fruit
+		is_building_type = building_synthetics_plant_meat
+		is_building_type = building_synthetics_plant_oil
+		is_building_type = building_synthetics_plant_opium
+		is_building_type = building_synthetics_plant_rubber
+		is_building_type = building_synthetics_plant_silk
+		is_building_type = building_synthetics_plant_sugar
+		is_building_type = building_synthetics_plant_wood
+		is_building_type = building_explosives_factory
+		is_building_type = building_electrics_industry
+		is_building_type = building_electrics_industry_appliances
+		is_building_type = building_electrics_industry_radio
+		is_building_type = building_electronic_components_and_semiconductor_industry
+		is_building_type = building_robotics_industry
+		is_building_type = building_textile_mill
+		is_building_type = building_power_plant
+		is_building_type = building_hydro_plant
+		is_building_type = building_nuclear_plant
+		is_building_type = building_fusion_plant
+		is_building_type = building_renewable_energy_plant
+		is_building_type = building_network_infrastructure
+		is_building_type = building_software_industry
+		is_building_type = building_university
+		is_building_type = building_ocean_mine
+		is_building_type = building_urban_center
+		is_building_type = building_railway
+		is_building_type = building_highway
+		is_building_type = building_wheat_farm
+		is_building_type = building_rye_farm
+		is_building_type = building_maize_farm
+		is_building_type = building_millet_farm
+		is_building_type = building_rice_farm
+		is_building_type = building_trade_center
+	}
+}
+
+# Country scope. The law whose modifier reads the automated share is in force.
+te_ap_share_law = {
+	OR = {
+		has_law = law_type:law_robot_tax
+		has_law = law_type:law_automation_dividend
+	}
+}
+
+# Country scope. Universal Basic Income or Post-Scarcity Economy is in force:
+# the Automation Dividend rides on payments that already reach everyone.
+te_ap_dividend_welfare_law = {
+	OR = {
+		has_law = law_type:law_universal_basic_income
+		has_law = law_type:law_post-scarcity
+	}
+}

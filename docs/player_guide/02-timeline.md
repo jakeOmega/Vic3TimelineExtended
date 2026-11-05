@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds seven more eras, numbered 6 to 12, with 171 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 191 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -11,12 +11,15 @@ technologies start. The one exception is the International Space Station
 wonder, which needs a Moon landing from the space race. The repeatable [Grand
 Monument](#grand-monuments) has a game rule of its own.
 
-## Eras six to twelve
+## Eras six to thirteen
 
 The technology tree continues past the base game's fifth era. Eras 6 to 9 follow
-the twentieth century, and eras 10 to 12 run from the present into the future.
-The game shows eras only by number; the periods below are the ones the mod's
-technologies were chosen to fit, so treat them as a rough guide.
+the twentieth century, and eras 10 to 13 run from the present into the future.
+The game shows eras only by number. The years for eras 6 to 9 are the periods
+the mod's technologies were chosen to fit, so treat them as a rough guide. The
+later eras are told apart by how far off their technologies are. Era 11's are on
+today's roadmaps. Era 12's are known to be possible, with no near-term path to
+them. Era 13's need breakthroughs nobody yet knows how to plan for.
 
 ![Part of the production tree in eras 6 to 8, from Modern Materials and Television down to Cellular Networks and Personal Computers. The numeral under each icon is its era.](images/tech_tree_production_era_6_7_8.jpg)
 
@@ -26,22 +29,25 @@ technologies were chosen to fit, so treat them as a rough guide.
 | 7 | 1946–1967 | 65,000 | 29 | Transistors, nuclear power, jets, the Green Revolution, missiles and satellites |
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
-| 10 | the present to about 2030 | 450,000 | 17 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | about 2030–2060 | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
-| 12 | after 2060 | 2,000,000 | 18 | General AI, nanofabrication, megaprojects in orbit, antimatter, mind uploading, post-scarcity |
+| 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
+| 11 | the near future | 800,000 | 26 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 12 | the medium-term future | 1,500,000 | 16 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
+| 13 | the speculative future | 3,000,000 | 13 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
 ### Research costs in the new eras
 
 Each technology costs its era's base research cost, before the usual modifiers.
 The base game's last era costs 17,500 per technology; era 6 is only a small step
-up at 20,000, but era 7 more than triples it, and an era 12 technology costs a
-hundred times as much as an era 6 one. The base game's surcharge for researching
+up at 20,000, but era 7 more than triples it, and an era 13 technology costs
+150 times as much as an era 6 one. The base game's surcharge for researching
 ahead of unresearched technologies in the same tree still applies, and it grows
 with the number of eras between them.
 
 Your innovation has to grow to match. Many of the new technologies raise the
-weekly innovation cap by 10 to 100 each, adding between 250 and 1,000 per era
-through era 11. Five [wonders](#wonders) raise it further, and new University
+weekly innovation cap by 10 to 300 each, adding between 250 and 1,000 per era
+through era 11, 500 in era 12 and 200 in era 13. Self-Driving Laboratories (era
+11) and Artificial General Intelligence (era 12) give the largest steps. Five
+[wonders](#wonders) raise it further, and new University
 production methods (National Labs, Academic Computing and AI Assisted Research)
 raise the innovation each university produces.
 
@@ -69,8 +75,9 @@ Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
-Drugs](#pharmaceutical-industries-and-drugs)). Containerization,
-Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
+Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
+Genetic Modification, Corporate Genetic Licensing and Open-Source Genetics laws.
+Containerization, Fiber Optics, Cellular Networks, Microprocessor, Stealth
 Technology and Video Games are also here.
 
 Era 9 is the internet age. World Wide Web opens the internet laws, Clean Energy
@@ -88,19 +95,34 @@ Resource Utilization the Extraplanetary Base.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
-Extraplanetary Base's Asteroid Mine method, and Fusion Power the Fusion Plant. Genetic Engineering
-unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
+Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
+Advanced Fission a second, more productive base method for the Nuclear Plant.
+Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
 the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
-Interfaces and Human Augmentation bring augmentation laws.
+Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
+the AI that works on its own: AI Agents (the Automated Bureaucracy law and
+Fully Automated Content Creation), Self-Driving Laboratories (the University's
+AI Assisted Research), Humanoid Robotics (Robotic Service Providers and
+Neuromorphic Computing) and Autonomous Weapons (Robotic Soldiers). Artificial
+General Intelligence in era 12 needs Self-Driving Laboratories and Humanoid
+Robotics.
 
-Era 12 is the far future. Artificial General Intelligence adds AI-managed
-production methods to many industries, and Molecular Assemblers, Programmable
-Matter and Orbital Manufacturing add a final tier to many more. Space Elevator,
-Space-Based Solar Power, Orbital Weapon Platforms, Antimatter Production, Mind
+Era 12 is the medium-term future. Artificial General Intelligence adds AI-managed
+production methods to many industries, and Orbital Manufacturing and Advanced
+Nanofabrication add a late tier to many more. Compact Fusion Reactors brings the
+fusion torch, Space-Based Solar Power and Orbital Weapon Platforms each unlock a
+[megaproject](#megaprojects), and Bioenhanced Soldiers brings the Mandatory
+Augmentation law. Rejuvenation Therapies halves the pace of aging for those in
+longevity care, and Post-Work Society opens the [Post-Scarcity
+Transition](07-social-movements.md#movement-journal-entries-at-a-glance).
+
+Era 13 is the speculative future. Molecular Assemblers and Programmable Matter
+add a final tier to many industries. Space Elevator, Antimatter Production, Mind
 Backups, Molecular Assemblers and Telepathic Communities each unlock a
-[megaproject](#megaprojects). Space Colonization, Biological Immortality and
-Post-Scarcity Economy are among the last technologies in the tree.
+megaproject. Self-Directed Evolution brings the Clade Citizenship law, and
+Biological Immortality and Post-Scarcity Economy are among the last
+technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
 Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
@@ -109,14 +131,18 @@ Tourism Industry with Romanticism.
 ### Global technological development
 
 The further the world's leading powers advance, the faster everyone else
-catches up. Once a year, every country checks a list of 54 mid-century and later
-technologies, from Television and Cryptography to Space Colonization. Each one
+catches up. Once a year, every country checks a list of 55 mid-century and later
+technologies, from Television and Cryptography to Post-Scarcity Economy. Each one
 that any great power has researched adds a bonus to technology spread, the
 trickle of innovation that pulls you toward technologies others already have.
 The bonuses add up, and the later the technology, the more it is worth: the
-earliest tier adds a small step, and the last tier (Artificial Intelligence,
-Space Colonization and their peers) adds ten times as much. Only great powers count, so a technology first reached by a
-minor country does not move the world's pace until a great power follows.
+earliest tier adds a small step, era 12's (Artificial Intelligence, Space
+Colonization and their peers) ten times as much, and era 13's two (Biological
+Immortality and Post-Scarcity Economy) fifteen times. Only great powers count, so a technology first reached by a
+minor country does not move the world's pace until a great power follows. One
+law adds to the bonus too: each major power or greater that holds Open Weights
+([Who builds frontier AI](06-politics.md#who-builds-frontier-ai)) adds 100, up
+to 300.
 
 The bonus appears on your country as the Global Technological Development
 modifier, and every country gets the same one, recognized or not. It is a
@@ -125,8 +151,8 @@ gains the most from it, because spread only works on technologies you lack. The
 leaders gain little, since spread only ever feeds technologies someone has
 already researched. The further ahead the great powers pull, the larger the
 bonus, but it closes the gap less than that suggests. The bonus is a flat amount
-of spread, and technology costs climb much faster than its tiers do: an era 12
-technology costs a hundred times as much as an era 6 one. So the same bonus
+of spread, and technology costs climb much faster than its tiers do: an era 13
+technology costs 150 times as much as an era 6 one. So the same bonus
 pays for less of each technology as the eras go on. The tooltip on the modifier shows your current figure. It sits alongside the
 usual sources of spread (literacy, laws and power bloc principles) and is
 separate from [agricultural diffusion](#agricultural-diffusion), which grants
@@ -167,6 +193,23 @@ Each of the four also raises the Schools institution's maximum investment by one
 level. Funding schools and the laws that raise education access are how a
 country holds its literacy against the drop.
 
+AI Tutors (era 11, after Digital Education) works the other way. A personal
+tutor for every child adds 10 points of education access, speeds literacy growth
+and raises qualifications by 10%, so pops retrain for new jobs sooner. With all
+five researched, education access ends 30 points down rather than 40.
+
+What the tutors teach is the catch. AI Tutors raises the Ministry of Thought
+Control's maximum investment by one level, and two events can follow, each at
+most once. Under Unregulated Internet, a private tutoring platform is caught
+steering its pupils' politics. Under State-Controlled Internet, or with a
+Ministry of Propaganda or of Thought Control, the state has written the syllabus
+every tutor will teach. Each event trades loyalty against trust and research.
+Controlling the lessons turns a small share of your people loyalist every month
+for ten years, fading, at a cost in legitimacy and research speed. Opening them
+up gives legitimacy and research speed instead, pleases the Intelligentsia, and
+radicalizes whoever lost control of them: the platform's capitalist owners or
+the ministry's bureaucrats.
+
 ### Technologies that open the mod's systems
 
 Several of the new technologies first bring a system from another chapter into
@@ -182,8 +225,9 @@ view. Each system also needs its game rule, and some have further conditions.
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](07-social-movements.md) |
 | Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](07-social-movements.md) |
 | Mental Health Awareness | 10 | The mental health journal entry | [Social movements](07-social-movements.md) |
-| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
 | Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](07-social-movements.md) |
+| Post-Work Society | 12 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
+| Morphological Freedom | 12 | The morphological freedom journal entry and the Bodily Autonomy laws | [Social movements](07-social-movements.md#the-morphological-freedom-debate) |
 
 Some society technologies also start occasional narrative events (Second Wave
 Feminism, Contraceptive Pill, Social Media and others), covered in [Social
@@ -272,25 +316,31 @@ existing mine costs about £260,000 a level in
 years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
 Extraplanetary Base (In-Situ Resource Utilization) costs 20,000 construction per
-level. It starts on Regolith Processing, which makes Structural Metals,
+level. Its staff is the same at any size: a large base needs no more workers
+than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-and after Space Colonization the base can switch to the Resort Colony production
-method, which produces art and tourism instead. With
+and Space Colonization the larger Mining Colony, or the Resort Colony production
+method, which produces art and tourism instead. Von Neumann Machines (era 13)
+brings Self-Replicating Miners, which build their copies from the ore they dig:
+against a Mining Colony, a level uses a third less Launch Capacity and mines a
+quarter more of each good. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
-from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −50% past it (see
+from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
 The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
 Extraplanetary Base's, and at base prices earns more per level: about three
 times as much in era 11, and still more than a Mining Colony after Advanced
 Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
-Capacity, and in era 12 two production method groups each cut that bill by 30%:
-Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (not
-an elevator of your own), and Transport in Space, whose Fusion Tugs need
-Muon-Catalyzed Fusion Reactors. A Mining Colony with Fusion Tugs already earns
+Capacity, and two late production method groups each cut that bill by 30%:
+Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
+Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
+13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. With the Global Commons rule off, the Deep-Sea Mine has no
+as much again. Self-Replicating Miners with neither upgrade earn more than a
+Mining Colony with both, and the upgrades add less to them, since they launch
+less. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
 
 ### Seabed licenses
@@ -419,7 +469,9 @@ new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
 researched Abyssal Plain Mining, every other coastal state, whoever owns it,
 shows its basin in an Ocean Basin tile, so you can see which pool a port there
-would weigh in.
+would weigh in. Another country's National Info has a Seabed tab with that
+country's overview and Ocean Basins table; the policy buttons and the claimant
+lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
@@ -450,7 +502,7 @@ too.
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Transportation, and airports some Merchant Marine too ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
-| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
+| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; Military Base ([Military and war](13-military.md)); and Public Housing, which raises its state's crowding threshold ([States and population](08-states.md#migration-crowding)). |
 
 ### Pharmaceutical Industries and Drugs
 
@@ -506,7 +558,7 @@ Launch Systems.
 
 ### Companies added by the mod
 
-The mod adds 93 company types. 82 are flavored companies, mostly real firms of
+The mod adds 95 company types. 84 are flavored companies, mostly real firms of
 the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
@@ -521,10 +573,13 @@ the leading producer of their good. Japan can found Saudi Aramco and the United
 States can found Volkswagen if they meet those conditions. Generic companies
 need a large enough building of their industry.
 
-Biotechnology companies, the generic one and eight flavored ones such as
+Biotechnology companies, the generic one and ten flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
 ([Economic law groups](06-politics.md#economic-law-groups)), which
-Biotechnology unlocks.
+Gene Splicing unlocks, a technology earlier than Biotechnology. Three of them come from fiction and unlock late: the
+Rosen Association's androids with Genetic Engineering, InGen's resurrected
+species with Synthetic Biology, and RejoovenEsense's longevity treatments with
+Rejuvenation Therapies.
 
 ## Wonders
 
@@ -570,7 +625,7 @@ changes](09-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
-Megaprojects are the far-future wonders of era 12, too large to build with
+Megaprojects are the wonders of eras 12 and 13, too large to build with
 construction points alone. Instead you feed a construction site vast quantities
 of goods and specialists for one to four years.
 
@@ -700,7 +755,10 @@ shows, and any boon it carries, have run out.
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active, and it
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Grand Monuments tab with that country's monuments, national effects, trophies,
+works abroad and digs; the buttons, an open opportunity and Interest Group
+Approval are only on your own.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
@@ -741,10 +799,13 @@ These sections follow:
 | Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | The four monument policy buttons first. Then a row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total; hover a group for the monuments it approves of, those it objects to, the contested ones it resents and its fading record. Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. |
-| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
+| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy, trophies and archaeology. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Grand Monuments Work. It explains grandeur and
+steps, what counts where, contested monuments, hard times, opportunities,
+unique dedications, names, the monument policy, trophies and archaeology.
 
 Every monument, whatever it honors, gives:
 
@@ -777,7 +838,7 @@ from 75 to 225 by 1936.
 | Grandeur at dedication | +25 years | +50 years | +100 years |
 |---|---|---|---|
 | 5 | 7.5 | 10 | 15 |
-| 10 | 15 | 20 | 30 |
+| 10 | 15 | 20 | 20 |
 | 25 | 37.5 | 50 | 75 |
 
 It ages while its message stands or while it is kept as heritage, and not at
@@ -796,6 +857,15 @@ a dedication, unveiling or naming is under way, or once six monuments stand
 there, the site among them; the build tooltip names the reason. Levels already
 under construction always go on. The AI raises new monuments in other states
 before it builds beside one.
+
+Once six stand in one of your states, the least grand of them, contested ones
+aside, has a Clear It Away button on its row and on the state's monument card.
+It is gone for good, with its grandeur and everything it gave, and a site can be
+started again, so you can replace a small monument with a grander one. Nothing
+else follows: no interest group objects and no legitimacy comes of it, as Pull
+Down's does for a contested monument. If it was the state's first monument, the
+grandest of the others takes its place. A historical monument can be cleared
+away too, and its tooltip warns you. The AI never clears one away.
 
 ### Several monuments in one state
 
@@ -821,8 +891,8 @@ Awaiting a Decision, has Pull Down, Rededicate and Keep as Heritage; rededicatin
 makes it the state's first monument, at half its levels. An army that
 holds the state carries monuments off one at a time, with the Carry It Off on
 the first one's details or on another's row, and the rest stay. If the first
-monument is pulled down or carried off whole, the largest of the others takes
-its place.
+monument is pulled down, cleared away or carried off whole, the largest of the
+others takes its place.
 
 ### Monument dedications
 

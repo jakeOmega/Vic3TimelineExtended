@@ -52,7 +52,7 @@ There are three independent axes, stored separately: `nd_doctrine` 1–5, `nd_re
 
 | Doctrine | First use is permitted against an enemy we are at war with when… |
 |---|---|
-| 1 No first use | never; retaliation only. Leaving it counts as a **repudiation**: credibility −20, infamy +10, a 10-year decaying `nd_pledge_broken_mod`, and dovish groups disapprove. A launch nobody ordered breaks the pledge without moving the doctrine (#448); `nuclear_incident.6` then lets the government reaffirm it or repudiate it at half price (#803, `mod_systems.md`) |
+| 1 No first use | never; retaliation only. Leaving it counts as a **repudiation**: credibility −20, infamy +10, a 10-year decaying `nd_pledge_broken_mod`, and dovish groups disapprove. A launch nobody ordered breaks the pledge without moving the doctrine (#448); `nuclear_incident.6` then lets the government reaffirm it or repudiate it at half price (#803, `mod_systems/nuclear.md`) |
 | 2 Existential deterrence (default) | their side holds an annexation or subjugation goal against us (annex, reunify, protectorate, dominion, tributary, personal union, crown land, chartered company), or holds goals on our incorporated states while we are losing to them |
 | 3 Flexible first use | any of the above, or we are losing to them, or they hold goals on any of our incorporated states |
 | 4 Nuclear compellence | any of the above, or they defied a public ultimatum of ours (`nd_defied_us`), or they are the target of our crisis at stage 2 or higher |
@@ -131,6 +131,8 @@ A crisis has three stages: 1, a private warning; 2, confrontation (a public ulti
 - fire the issuer's deadline event (10 weeks private, 8 public);
 - send the target a pressure event every six weeks from stage 2 on, unless talks are open;
 - expire the crisis after 52 weeks.
+
+**Talks (#1230, 2026-11-02).** Talks are open (`nd_crisis_talks_open`, on the issuer's record) in two cases. Either a proposal to stand down or to trade awaits an answer (`nd_crisis_talks = 1`), or an exercise notice opened them: the exerciser's own notice in its own crisis (`nuclear_incident.10.a`), or the issuer accepting the target's invitation (`.12.a`). A notice sets `nd_crisis_talks_weeks` to `nd_crisis_notice_talks_weeks_value` (6, as long as an exercise runs), and the weekly tick counts it down. Open talks pause the pressure events, take 15 off the danger and work as a hotline (hold +10, incident weight ×0.5). Only a waiting proposal blocks another (`nd_crisis_no_proposal_pending`), so either side can offer a stand-down or a trade while notice talks last. A refused proposal, or a trade that lapses, closes both kinds and restarts the pressure cadence. When notice talks run out, the cadence is not reset, so a pressure event that fell due during them goes out that week. Before #1230 a notice set `nd_crisis_talks = 1` and nothing cleared it: pressure stopped for the rest of the crisis, and so did every proposal.
 
 **Transit and the notice (owner rulings 2026-10-06).** The opening threat reaches the target 14, 17 or 21 days after it is made (`nd_crisis_send_event_in_transit`, a literal delay per `random_list` branch: `trigger_event` takes one integer). For `nd_crisis_transit_weeks_value` (3) weekly ticks the clock waits: `nd_crisis_weeks` and `nd_crisis_pressure_weeks` don't advance, so the deadline, the pressure cadence and the year's expiry all start from the delivery. Revalidation, the figures and the acute check still run. Why: an AI target answered `nuclear_crisis.1` the moment it arrived, so in the 2026-10-06 observer run 23 of 31 yields came the same day, too fast for guarantors, the UN or a player to react. At the opening, every other armed country gets a notice (`nd_crisis_notify_nuclear_powers`): `nd_crisis_ultimatum_issued` for a public ultimatum, `nd_crisis_warning_reported` (an intelligence report) for a private warning. The notice names what a third party can do in the transit weeks: a Nuclear Guarantee for the target from an armed country lowers its yield pressure (`nd_yp_protector_value`, recomputed weekly). It can't open a crisis of its own against the issuer, which is already in one.
 
@@ -436,7 +438,7 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 
 ### 0.9 In-game checklist
 
-1. On a **new game**, "Nuclear Weapons" activates for a great power with the `nuclear_weapons` tech; the posture panel and the upkeep event appear the week its first warhead exists. A demoted power holding warheads keeps the entry and its upkeep, but its programme panel disappears and its funding (and the funding modifier) drops to zero. A non-nuclear crisis target gets the entry for the crisis and loses it when the crisis ends. The entry goes away on disarmament unless the country is in a crisis. In a save that had the old `je_nuclear_deterrence` entry, the posture modifiers (and upkeep) are back on the merged entry within a week (`nd_rebuild_posture_modifiers`), and in a save older than that, an armed country with the programme entry is put under a posture for the first time. The container-4 sections draw in the order `nuclear_layout_widget.gui` sets (crisis first while there is one, then posture, forces, at home, reputation, the taboo, delivery and defence, the nuclear powers, then the collapsed How Nuclear Weapons Work).
+1. On a **new game**, "Nuclear Weapons" activates for a great power with the `nuclear_weapons` tech; the posture panel and the upkeep event appear the week its first warhead exists. A demoted power holding warheads keeps the entry and its upkeep, but its programme panel disappears and its funding (and the funding modifier) drops to zero. A non-nuclear crisis target gets the entry for the crisis and loses it when the crisis ends. The entry goes away on disarmament unless the country is in a crisis. In a save that had the old `je_nuclear_deterrence` entry, the posture modifiers (and upkeep) are back on the merged entry within a week (`nd_rebuild_posture_modifiers`), and in a save older than that, an armed country with the programme entry is put under a posture for the first time. The container-4 sections draw in the order `nuclear_layout_widget.gui` sets (crisis first while there is one, then posture, forces, at home, reputation, the taboo, delivery and defence, the nuclear powers; How Nuclear Weapons Work is the Help page, behind the "?").
 2. The posture panel's buttons work, grey out with the right reason, and show the upkeep a change would cost.
 3. The weekly figure on `nd_upkeep_cost` matches `nd_upkeep_weekly_cached` and follows a readiness change within the same month.
 4. AI nuclear powers settle on varied postures, not all warfighting and not all routine.
@@ -451,7 +453,7 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 13. The leaderboard shows estimates that differ from the true counts, and they change only once a year.
 14. `error.log` stays quiet while a crisis action's confirmation box is open, even though its tooltip re-walks `accept_effect` every frame.
 15. The Exercise They Mistook (`.10`): an AI opponent's readiness target goes to High Alert at once. A player opponent that could raise its alert gets `.11` instead, and its readiness moves only if it picks "go to our highest alert"; `.10`'s text says it is deciding. An unarmed or locked opponent gets the variant with no alert claim.
-16. In `.10`, "send them the schedule" from the crisis **target** sends the issuer `.12` (only while its talks flag is 0). Talks open, and the pressure events stop, only if the issuer accepts; from the issuer's side the option opens talks on its own record as before.
+16. In `.10`, "send them the schedule" from the crisis **target** sends the issuer `.12` (only while its talks are closed). Talks open, and the pressure events stop, only if the issuer accepts; from the issuer's side the option opens talks on its own record as before. Either way they last six weeks: "Propose a mutual stand-down" and "Offer a trade" stay available meanwhile, and the pressure events resume after them (#1230).
 17. The ultimatum's confirmation box shows the infamy and relations, what the crisis is about and what conceding costs, whether the threat is backed or a bluff, the pressure factors, the stakes and "follow it in the journal entry"; `error.log` stays quiet while it is open.
 18. Existential Deterrence in a minor war reads "A bluff", and the panel's pressure breakdown shows −25 for it.
 19. Every crisis event's options show their numbers.
@@ -530,7 +532,7 @@ The order agreed with the owner for closing the §11 gap ("handle annexation, ci
 
 ### 0.11 The nuclear taboo
 
-One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weapons are: born at 20 with the first warhead, moved each month toward a target of named parts, knocked down by use and worn by threats, and scaling every nuclear cost up to making possession itself a burden. The design, with every owner ruling, is `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`; `mod_systems.md` § Nuclear Weapons has the summary. Built 2026-09-26; nothing here has run in a game yet.
+One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weapons are: born at 20 with the first warhead, moved each month toward a target of named parts, knocked down by use and worn by threats, and scaling every nuclear cost up to making possession itself a burden. The design, with every owner ruling, is `docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md`; `mod_systems/nuclear.md` § Nuclear Weapons has the summary. Built 2026-09-26; nothing here has run in a game yet.
 
 #### Where it lives
 
@@ -569,7 +571,7 @@ One world score, `global_var:nd_taboo` (0-100), for how unthinkable nuclear weap
 | `events/un_vote_events.txt`, `common/scripted_effects/un_docket_effects.txt`, `events/un_events.txt` | the Assembly's verdict: `un_vote.2` books it (`nd_taboo_verdict`); `un_docket_effects.txt` sets `nd_taboo_verdict_pending` (730 days) when the docket takes up a nuclear grievance; `un_events.2` option A tags the resolution `un_res_nuclear_grievance` |
 | `localization/english/te_miscellaneous_l_english.yml`, `te_events_l_english.yml`, `te_journal_entries_l_english.yml`, `te_concepts_l_english.yml` | loc |
 | `test_nuclear_deterrence.py` | pressure parts, IG vars, go-public pin |
-| `docs/systems/nuclear_crisis_design.md`, `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md`, `docs/README.md` | what shipped |
+| `docs/systems/nuclear_crisis_design.md`, `docs/systems/mod_systems/nuclear.md`, `docs/systems/journal_entry_systems.md`, `docs/README.md` | what shipped |
 
 #### Deviations from the spec
 
@@ -776,7 +778,7 @@ Success is not measured by how often bombs fall. It is measured by varied, under
 
 ## 2. Existing implementation and seams
 
-Read [mod_systems.md](mod_systems.md) and [journal_entry_systems.md](journal_entry_systems.md) before implementation.
+Read [mod_systems/nuclear.md](mod_systems/nuclear.md) and [journal_entry_systems.md](journal_entry_systems.md) before implementation.
 
 | Existing component | Evidence / reuse |
 |---|---|

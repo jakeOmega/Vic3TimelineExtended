@@ -269,7 +269,7 @@ The spec's late-primate crowding read (`migration_crowding_mult_applied`) is not
   - `06-politics.md`: the table's header becomes "Effect at 80 (or 20)", with the new rows, a Great Fortunes / Dispersed Wealth sentence naming bubble pressure, and "a state at 65 gets half; past 80 the effects keep growing" in place of the 75 sentence.
   - `17-reference.md:132`: the same in a line.
   - `04-banking.md:113`: add that Great Family Fortunes adds up to 0.5 bubble pressure a month and Dispersed Wealth takes up to 0.4 off.
-  - `mod_systems.md` § Inheritance (1558, 1564): the new formulas and sizes, pointing to the spec.
+  - `mod_systems/inheritance.md` § Inheritance (1558, 1564): the new formulas and sizes, pointing to the spec.
 
 - [ ] **Step 7: Run** the Step 2 tests plus `test_demographics_wc_shocks test_hidden_state_modifiers test_nation_tab`, then `python3 scripts/generators/gen_nation_tab.py --check`, `python3 scripts/analysis/check_player_guide_style.py --strict`, `python3 organize_loc.py --check` and `python3 scripts/format_paradox_tabs.py --check common/static_modifiers/te_inheritance_modifiers.txt common/script_values/te_inheritance_values.txt`. Expected: all PASS (if `gen_nation_tab --check` fails, run the generator and include its output).
 

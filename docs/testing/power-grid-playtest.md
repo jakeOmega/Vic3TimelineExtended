@@ -1,7 +1,7 @@
 # Power grids: play-test checklist
 
 What the next play-test should look at in the power grid: the Grid Transfer Station, the Grid Power good and the
-monthly balancing (`docs/systems/mod_systems.md` § Power Grids). In-game checks do not gate a merge (CLAUDE.md,
+monthly balancing (`docs/systems/mod_systems/power_grids.md` § Power Grids). In-game checks do not gate a merge (CLAUDE.md,
 "In-game checks: self-checks and the play-test list"): a PR lands on the offline gate and adds what only the game can
 show here. Each PR adds its own section, newest last, and a fixed item is struck through with the commit that fixed it.
 

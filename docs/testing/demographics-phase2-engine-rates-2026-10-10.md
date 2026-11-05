@@ -511,7 +511,7 @@ fell 1.5M below its own baseline (its actual change was −280k, −174k and +80
 
    Severe pops sat at food security 0.08–0.19 (starvation value 0.53–0.79), not 0. Flicker isn't the cause: severe
    pops stay severe 86% of months, people-weighted. The walk now reads severe starvation in 0.05 steps of food security,
-   as it reads mild (`mod_systems.md`, "Starvation, per pop"). Applied to this run (first order, from 1 January
+   as it reads mild (`mod_systems/demographics.md`, "Starvation, per pop"). Applied to this run (first order, from 1 January
    snapshots), that takes 377k, 446k and 391k off Germany's 1898–1900 residuals as run, which brings the two
    full-famine windows to about the pre-famine baseline (−249k a year against about −250k). The +556k left in 1898
    is the onset's timing, which the trapezoid addresses.

@@ -406,8 +406,9 @@ class PartiesEndpointTests(unittest.TestCase):
                 self.assertEqual(rows[key]["terms_order"], "source")
                 self.assertEqual(terms[0], "base_value")
                 self.assertEqual(terms[-1], "te_fptp_minor_party_join")
-                self.assertEqual(terms[terms.index("te_fptp_major_party_join") + 1],
-                                 "from_influential_supporting_member")
+                at = terms.index("te_fptp_major_party_join")
+                self.assertEqual(terms[at + 1 : at + 3],
+                                 ["te_fptp_major_party_crowding", "from_influential_supporting_member"])
 
 
 # A party's icon is a block, and vanilla's paths start with a slash.

@@ -17,6 +17,8 @@ import unittest
 from collections import namedtuple
 from pathlib import Path
 
+from mod_state import split_loc_line
+
 ROOT = Path(__file__).resolve().parent
 
 RULES = "common/game_rules/extra_game_rules.txt"
@@ -28,7 +30,7 @@ MODIFIERS = "common/static_modifiers/gm_modifiers.txt"
 CONCEPTS = "common/game_concepts/extra_concepts.txt"
 PMS = "common/production_methods/grand_monument_pms.txt"
 PMG = "common/production_method_groups/grand_monument_pmgs.txt"
-BUILDING = "common/buildings/grand_monuments.txt"
+BUILDING = "common/buildings/08_zz_te_grand_monuments.txt"
 EFFECTS = "common/scripted_effects/gm_effects.txt"
 ON_ACTIONS = "common/on_actions/monument_events_on_actions.txt"
 CIVIL_WAR_ON_ACTIONS = "common/on_actions/te_civil_war_on_actions.txt"
@@ -38,6 +40,11 @@ JE = "common/journal_entries/je_grand_monuments.txt"
 CULTURAL = "common/script_values/cultural_hegemony_script_values.txt"
 CUSTOM_LOC = "common/customizable_localization/gm_custom_loc.txt"
 MESSAGES = "common/messages/extra_messages.txt"
+# Awaiting Dedication's row: the site, then Dedicate in a slot of its 200 under
+# te_own_country_only (another country's National Info shows the site alone).
+DEDICATE_SLOT = ("gm_site_row = {} flowcontainer = { using = te_own_country_only direction = vertical "
+                 "ignoreinvisible = yes parentanchor = hcenter minimumsize = { 200 -1 } maximumsize = { 200 -1 } "
+                 "gm_dedicate_button = {} }")
 SGUIS = "common/scripted_guis/gm_sguis.txt"
 WIDGET = "gui/journal_entry_widgets/grand_monuments_widget.gui"
 DEBUG_EVENTS = "events/te_debug_monuments_events.txt"
@@ -193,10 +200,12 @@ def _load_loc():
     if _LOC is None:
         _LOC = {}
         for path in sorted((ROOT / "localization/english").glob("*.yml")):
+            # mod_state.split_loc_line: a line may end in a trailing comment
+            # (gm_boon_defeat's `# REVIEWED ... (personal_text)`).
             for line in path.read_text(encoding="utf-8-sig").splitlines():
-                m = re.match(r'\s*([\w.$\'-]+):\d*\s+"(.*)"\s*$', line)
-                if m:
-                    _LOC[m.group(1)] = (m.group(2), path.name)
+                got = split_loc_line(line)
+                if got:
+                    _LOC[got[0]] = (got[1], path.name)
     return _LOC
 
 
@@ -1787,12 +1796,12 @@ class WidgetTests(unittest.TestCase):
     def setUp(self):
         self.gui = read(WIDGET)
 
-    # The three roots of the style-guide pass (2026-09-29): the overview above
-    # the status description, the live sections below it, How Grand Monuments
-    # Work at the foot (test_grand_monuments_layout.py checks their contents).
+    # The roots of the style-guide pass (2026-09-29): the overview above the
+    # status description, the live sections below it (test_grand_monuments_layout.py
+    # checks their contents). How Grand Monuments Work, once a third root at the
+    # foot, is the Help page the "?" on the overview opens.
     ROOTS = (("widget_je_gm_overview", "custom_widget_container_1"),
-             ("widget_je_gm_status", "custom_widget_container_2"),
-             ("widget_je_gm_reference", "custom_widget_container_3"))
+             ("widget_je_gm_status", "custom_widget_container_2"))
 
     def test_mounted(self):
         je = squash(read(JE))
@@ -1806,7 +1815,7 @@ class WidgetTests(unittest.TestCase):
         # Every named root carries the gate itself, not only the composer it wraps.
         for name, _ in self.ROOTS:
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
-        self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
+        self.assertIn('datamodel = "[Country.MakeScope.GetList(\'gm_states\')]"', g)
         # Our Monuments lists every finished monument but the contested, which
         # Awaiting a Decision lists (GM-3, owner 2026-10-27).
         self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[And( EqualTo_CFixedPoint( '
@@ -1899,7 +1908,7 @@ class LocFixTests(unittest.TestCase):
         self.assertNotIn("gm_je_tt_culture_cap", L)
         self.assertNotIn("gm_je_tt_culture_next", L)
         tt = L["gm_je_tt_culture"]
-        self.assertIn("Next step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!", tt)
+        self.assertIn("Next step at #v [Country.MakeScope.ScriptValue('gm_display_n_culture')|0]#!", tt)
         self.assertNotIn("at most", tt)
         self.assertNotIn("+5", L["gm_je_how_grandeur"])
         self.assertIn('tooltip = "gm_je_tt_culture"', read(WIDGET))
@@ -2697,7 +2706,9 @@ class UsabilityTests(unittest.TestCase):
         self.assertIn("'gm_je_com_where_line_fixed', 'gm_je_com_where_line_any'", L["gm_je_com_where_line"])
         for rel in (WIDGET, "gui/te_state_panel_widgets.gui"):
             gui = squash(read(rel))
-            self.assertIn("ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]", gui, rel)
+            # The panel's row also tests the player's own country (the line is
+            # the player's: test_grand_monuments_layout.ControlsGateTest).
+            self.assertIn("ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )", gui, rel)
             self.assertIn('text = "gm_row_com_counts"', gui, rel)
         counts = squash(block(read(COM_VALUES), "gm_state_disp_com_counts"))
         self.assertIn("gm_state_com_counts = yes", counts)
@@ -3346,7 +3357,7 @@ class PolicyTests(unittest.TestCase):
 
 # ==== v2 phase 2: typed names (§3.5) =================================================
 CARRIER_COMPANY = "common/company_types/gm_name_carrier_company.txt"
-CARRIER_BUILDING = "common/buildings/gm_name_carrier.txt"
+CARRIER_BUILDING = "common/buildings/08_zz_te_gm_name_carrier.txt"
 NAMING_SGUIS = ("gm_name_start_sgui", "gm_name_mark_old_sgui", "gm_name_use_sgui", "gm_name_cancel_sgui",
                 "gm_clear_name_sgui")
 
@@ -4543,13 +4554,13 @@ class LandmarkLineTests(unittest.TestCase):
                          "value = 0 if = { limit = { gm_state_is_landmark = yes } value = 1 }")
 
     def test_row_and_card(self):
-        row = squash(read(WIDGET))  # raw: strip_comments would eat "#tooltippable"
-        self.assertIn(f'gm_row_line = {{ visible = "{self.VISIBLE}" default_format = "#tooltippable" '
+        row = squash(read(WIDGET))
+        self.assertIn(f'gm_row_line = {{ visible = "{self.VISIBLE}" '
                       f'tooltip = "gm_row_landmark_tt" text = "gm_row_landmark" }}', row)
         card = squash(read("gui/te_state_panel_widgets.gui"))
         self.assertIn(f'visible = "{self.VISIBLE}" autoresize = yes multiline = yes minimumsize = {{ 350 -1 }} '
                       f'maximumsize = {{ 350 -1 }} align = left|nobaseline using = fontsize_medium '
-                      f'default_format = "#tooltippable" tooltip = "gm_row_landmark_tt" text = "gm_row_landmark"', card)
+                      f'tooltip = "gm_row_landmark_tt" text = "gm_row_landmark"', card)
         L = loc()
         self.assertEqual(L["gm_row_landmark"], "Historical monument")
         self.assertIn("[State.GetCustom('gm_landmark_desc')]", L["gm_row_landmark_tt"])
@@ -6021,7 +6032,7 @@ class SignatureNameTests(unittest.TestCase):
         L = loc()
         gui = read("gui/gm_trophy_widgets.gui")
         line = ('gm_tr_line = { visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('
-                "'gm_tr_disp_has_sig'), '(CFixedPoint)1' )]\" default_format = \"#tooltippable\" "
+                "'gm_tr_disp_has_sig'), '(CFixedPoint)1' )]\" "
                 'tooltip = "gm_tr_sig_tt" text = "gm_tr_row_sig" }')
         self.assertEqual(squash(gui).count(line), 4, "the three trophy rows and a monument beside another")
         self.assertEqual(L["gm_tr_row_sig"], "[ScriptContainer.GetCustom('gm_tr_sig_line')]")
@@ -6117,10 +6128,10 @@ class SignatureSpecialTests(unittest.TestCase):
             self.assertIn(f"gm_com_source_is = {{ SRC = {s.source} }} }} localization_key = gm_com_special_line_{s.key}",
                           line, s.key)
             self.assertIn(f"$gm_sig_{s.key}$", L[f"gm_com_special_line_{s.key}"])
-        for key, ctx in (("gm_com_accept_tt", "ROOT.GetCountry"), ("gm_je_com_reward_tt", "JournalEntry.GetCountry")):
+        for key, ctx in (("gm_com_accept_tt", "ROOT.GetCountry"), ("gm_je_com_reward_tt", "Country")):
             self.assertIn(f"[{ctx}.GetCustom('gm_com_special_line')]", L[key])
         for key, ctx in (("gm_com_decline_tt", "ROOT.GetCountry"),
-                         ("gm_button_com_let_pass_tooltip", "JournalEntry.GetCountry")):
+                         ("gm_button_com_let_pass_tooltip", "Country")):
             self.assertIn(f"[{ctx}.GetCustom('gm_com_special_pass_line')]", L[key])
         once = squash(block(read(SIG_CUSTOM_LOC), "gm_com_special_pass_line"))
         for s in SPECIAL_SIGS:
@@ -6347,7 +6358,7 @@ class OptionReasonTests(unittest.TestCase):
 
 # ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
 
-SITE_BUILDING = "common/buildings/grand_monument_site.txt"
+SITE_BUILDING = "common/buildings/08_zz_te_grand_monument_site.txt"
 
 
 class SiteBuildingTests(unittest.TestCase):
@@ -6992,7 +7003,7 @@ class SitePanelTests(unittest.TestCase):
             self.assertIn(key, loc(), key)
         sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
                                     .split("type te_gm_sec_monuments", 1)[0]))
-        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
+        self.assertIn(DEDICATE_SLOT, sec)
         mon = squash(strip_comments(read(WIDGET).split("type te_gm_sec_monuments = flowcontainer {", 1)[1]))
         self.assertIn("visible = \"[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
                       "'(CFixedPoint)1' ), NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), "
@@ -7454,12 +7465,12 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn("gm_dedicate_button = {}", card)
         sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
                                     .split("type te_gm_sec_monuments", 1)[0]))
-        self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
                       "'gm_disp_count_awaiting'), '(CFixedPoint)0' )]\"", sec)
-        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]\"", sec)
+        self.assertIn("datamodel = \"[Country.MakeScope.GetList('gm_states')]\"", sec)
         self.assertIn("datacontext = \"[Scope.GetState]\" visible = \"[EqualTo_CFixedPoint( State.MakeScope"
                       ".ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' )]\"", sec)
-        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
+        self.assertIn(DEDICATE_SLOT, sec)
         # The section's gate and its rows read the same trigger.
         values = read(VALUES)
         self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_disp_count_awaiting")))

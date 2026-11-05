@@ -23,7 +23,7 @@
 # railway or power plant at base price. Spread over five years (a downgrade,
 # usually a price swing) that is a 23-150% better AI score per level for those
 # buildings; over twenty years (an upgrade), 6-38%. 0.6 and 0.9 ask for 67% and
-# 11%. Arithmetic and observer-game evidence: docs/systems/mod_systems.md
+# 11%. Arithmetic and observer-game evidence: docs/systems/mod_systems/construction.md
 # § Construction as a Market Good, "AI production-method switching".
 # Only AI choices read these; players are untouched.
 NAI = {
@@ -67,6 +67,14 @@ NPops = {
 	WORKING_ADULT_RATIO_SKEW_MAXIMUM = 1000000
 
 	CULTURAL_FERVOR_ASSIMILATIOM_EFFECT = 0.0075						# REVIEWED 2026-05-16: mirrors vanilla typo in 00_defines.txt:1520 (terminal M not N)
+
+	# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.4): arable land floor for a
+	# mass migration target (vanilla's is 10). Climate comfort now steers mass migration through migration
+	# attraction, so a city-state or a small partial state can be picked too. The few-target-states penalty stays
+	# vanilla's (owner, 2026-11-01). local_climate_log_on_action logs how many targets fall under 10.
+	# 1, not 0: the engine rejects 0 at load ("Must be greater than 0", defines.cpp:167, 2026-11-01), and the
+	# define then doesn't take. Every state region has at least 2 arable land, so 1 lets them all in.
+	MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 1
 }
 
 NPowerBlocs = {

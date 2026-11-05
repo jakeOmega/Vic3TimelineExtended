@@ -1718,6 +1718,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_ingen_biological_preserve
+			NOT = {
+				owner = {
+					has_company = company_ingen
+				}
+			}
+		}
+		remove_building = building_ingen_biological_preserve
+	}
+	if = {
+		limit = {
 			has_building = building_ingolstadt_power_station
 			NOT = {
 				owner = {
@@ -2661,6 +2672,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_ramirez_vila_real_cannery
+	}
+	if = {
+		limit = {
+			has_building = building_rejoovenesense_compound
+			NOT = {
+				owner = {
+					has_company = company_rejoovenesense
+				}
+			}
+		}
+		remove_building = building_rejoovenesense_compound
 	}
 	if = {
 		limit = {

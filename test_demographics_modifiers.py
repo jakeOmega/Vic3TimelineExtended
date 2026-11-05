@@ -231,15 +231,16 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_modern_safety_sits_on_the_era_7_to_9_technologies(self):
         """Modern safety (owner, 2026-10-16): work safety from building, robots, container ports and office work, 0.90 by
-        era 9; accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and
-        self-driving cars in era 11, 0.50."""
+        era 9, and bodies built for the work in era 13 (Self-Directed Evolution, era 13 spec § 7.3), the cap 0.95;
+        accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and self-driving
+        cars in era 11, 0.50."""
         carried = {}
         for c in self.carriers:
             if c.type in P.SAFETY_TYPES.values():
                 carried.setdefault(c.type, {})[c.key] = c.value
         self.assertEqual(carried, {
             P.SAFETY_TYPES["work"]: {"prefabricated_construction": 0.15, "robotics": 0.35, "containerization": 0.15,
-                                     "knowledge_economy": 0.25},
+                                     "knowledge_economy": 0.25, "self_directed_evolution": 0.05},
             P.SAFETY_TYPES["external"]: {"modern_urban_planning": 0.2, "computer_aided_design": 0.1,
                                          "cellular_networks": 0.1, "autonomous_vehicles": 0.1}})
         self.assertLessEqual(max(sum(v.values()) for v in carried.values()), P.SAFETY_MAX)
@@ -541,16 +542,32 @@ class TestCensusOffNames(unittest.TestCase):
         cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", types)
         cls.loc, cls.custom = _rule_loc()
 
+    # Types something besides the census reads, so they work with the census off and carry no tag.
+    READ_BEYOND_THE_CENSUS = {
+        "state_malaria_control_add": "Local Climate's disease relief (te_climate_relief_disease) reads it under every "
+                                     "Demographics setting",
+    }
+
     def test_every_census_type_ends_in_the_tag(self):
         self.assertGreater(len(self.types), 40)
         for name in self.types:
+            if name in self.READ_BEYOND_THE_CENSUS:
+                continue
             self.assertTrue(self.loc.get(name, "").endswith(self.NAME), name)
             self.assertTrue(self.loc.get(name + "_desc", "").endswith(self.DESC), name + "_desc")
 
     def test_no_other_modifier_carries_the_tag(self):
         """An engine line or a Wealth Concentration term works with the census off, so its name has no tag."""
         tagged = {k for k, v in self.loc.items() if self.NAME in v or self.DESC in v}
-        self.assertEqual(tagged, set(self.types) | {t + "_desc" for t in self.types})
+        census_only = set(self.types) - set(self.READ_BEYOND_THE_CENSUS)
+        self.assertEqual(tagged, census_only | {t + "_desc" for t in census_only})
+
+    def test_malaria_control_works_with_the_census_off(self):
+        """Malaria Prevention's Malaria Control also eases Local Climate's malaria cost, census or not, so its
+        name and description never say it does nothing."""
+        self.assertEqual(self.loc["state_malaria_control_add"], "Malaria Control")
+        self.assertIn("[concept_local_climate]", self.loc["state_malaria_control_add_desc"])
+        self.assertNotIn("census_off", self.loc["state_malaria_control_add_desc"])
 
     def test_the_tag_shows_only_while_the_census_doesnt_run(self):
         for entry, key in (("te_demog_census_off_name", "te_demog_census_off_tag"),

@@ -101,6 +101,8 @@ concept_sr_space_command = {
 concept_sr_drive = {}
 concept_sr_launch_window = {}
 concept_sr_module = {}
+# How rich a site's ground is for Extraplanetary Bases (the owner, 2026-10-30).
+concept_sr_base_grade = {}
 concept_sr_colony_autonomy = {}
 concept_sr_free_colony = {}
 concept_sr_blockade = {}
@@ -178,6 +180,9 @@ concept_te_construction_queue_cap = {
 }
 concept_migration_crowding = {
 	texture = "gfx/interface/icons/generic_icons/population.dds"
+}
+concept_local_climate = {
+	texture = "gfx/interface/icons/state_status_icons/local_climate.dds"
 }
 concept_urban_engineering = {
 	texture = "gfx/interface/icons/building_icons/urban_center.dds"
@@ -329,8 +334,8 @@ concept_subjugation_strength = {
 }
 
 # Inheritance: the wealth-concentration score (te_inh_concentration,
-# docs/systems/mod_systems.md § Inheritance)
+# docs/systems/mod_systems/inheritance.md § Inheritance)
 concept_inheritance_concentration = {}
 
-# the census's health-care access (docs/systems/mod_systems.md § Demographics, Causes of Death)
+# the census's health-care access (docs/systems/mod_systems/demographics.md § Demographics, Causes of Death)
 concept_health_care_access = {}

@@ -184,7 +184,9 @@ class GateTest(unittest.TestCase):
         self.assertNotRegex(_own(r.body), r"\bvisible =")    # its 40 stay: see GeometryTest
 
     def test_the_gate_is_the_budget_tabs(self):
-        tab = _read(BUDGET)
+        # the Budget tab's content is te_banking_tab_body (C1 of the wide-mode plan)
+        tab = _read(BUDGET) + _read(os.path.join(REPO, "gui", "journal_entry_widgets", "banking_layout_widget.gui"))
+        self.assertIn("te_banking_tab_body = {}", _read(BUDGET))
         self.assertIn("GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope )"
                       ".End )", tab)
         self.assertIn("GetPlayerJournalEntry('je_banking_cycle')", tab)
@@ -297,15 +299,22 @@ class ReuseTest(unittest.TestCase):
         self.assertEqual(key, "banking_dash_top_phase_tt")
         header = re.match(r"(#header [^#]+#!)\\n\$(\w+)\$$", loc["banking_dash_phase_tt"])
         self.assertIsNotNone(header, "banking_dash_phase_tt is its header and its body")
-        self.assertEqual(header.group(2), "banking_dash_phase_tt_body")
-        self.assertIn(header.group(2), loc)
+        # The panel's body is a copy on Country, which another country's panel
+        # (National Info) supplies; the top bar's reads the entry, which its own
+        # datacontext supplies, so the two are split (te_rebind_country.py).
+        self.assertEqual(header.group(2), "banking_dash_phase_tt_body_ni")
         self.assertEqual(loc[key],
-                         f"{header.group(1)}\\n{PHASE_WORD} {CRASH_RISK}\\n$TOOLTIP_DELIMITER$\\n${header.group(2)}$")
+                         f"{header.group(1)}\\n{PHASE_WORD} {CRASH_RISK}\\n$TOOLTIP_DELIMITER$\\n$banking_dash_phase_tt_body$")
+        self.assertEqual(loc["banking_dash_phase_tt_body_ni"],
+                         loc["banking_dash_phase_tt_body"].replace("JournalEntry.GetCountry.", "Country.")
+                         .replace("where in the phase you are", "where in the phase the country is"))
 
     def test_the_crash_risk_line_is_the_overviews_badge(self):
         badge = _type_body(self.dash, "te_banking_crash_risk_badge")
         self.assertIn("GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( "
-                      "JournalEntry.GetCountry.MakeScope ).End )", badge)
+                      "Country.MakeScope ).End )", badge)
+        self.assertIn(CRASH_RISK.replace("JournalEntry.GetCountry.", "Country.")[len("[AddLocalizationIf( "):]
+                      .split(", 'banking")[0], badge)
         self.assertIn('tooltip = "banking_dash_ov_crash_risk_tt"', badge)
 
 

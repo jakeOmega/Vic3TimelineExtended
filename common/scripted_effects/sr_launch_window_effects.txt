@@ -86,7 +86,7 @@ sr_launch_month = {
 	sr_launch_restore_banked_fleets = yes
 	sr_launch_windows_ensure_cache = yes
 	sr_depots_self_check = yes
-	# A target (the Solar System list's Target button; sr_colony_fleet_effects.txt)
+	# A target (the colony target popup's Target button; sr_colony_fleet_effects.txt)
 	# that a rival claimed first is dropped: the programme picks for itself again.
 	if = {
 		limit = {

@@ -39,7 +39,7 @@ te_demog_wave_dividend_savings = {
 
 # ---- The Baby Boom (te_demog_wave.2) ----------------------------------------------------------------------------
 # §9: births +15% for ten years, decaying; applied at multiplier 1 (homes), 1.33333 (+20%, women home) or 0.66667 (+10%,
-# women at work). Under Full the census adds it at its own rate, as any line on the whole state (mod_systems.md §
+# women at work). Under Full the census adds it at its own rate, as any line on the whole state (mod_systems/demographics.md §
 # Demographics, "Added on top"), and the newborns enter its ring, so the cohort echoes a generation later.
 te_demog_wave_baby_boom = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds

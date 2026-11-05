@@ -1,10 +1,9 @@
 ﻿### Strategic Reserve — the journal entry's panel.
 ###
-### je_strategic_reserve.txt attaches the three named roots at the foot of
+### je_strategic_reserve.txt attaches the two named roots at the foot of
 ### this file:
 ###   widget_je_strategic_reserve_overview   container 1   te_st_res_overview_panel
 ###   widget_je_strategic_reserve_inventory  container 2   te_st_res_status_sections
-###   widget_je_strategic_reserve_reference  container 3   te_st_res_reference_sections
 ### The entry's status text sits between the overview and the inventory, and
 ### Cycle Step Size and Reset Reserve Rates are buttons in the inventory,
 ### beside the adjustment step; the journal entry's scripted buttons that did
@@ -14,9 +13,10 @@
 ### entry binds scripted buttons when it activates.
 ###
 ### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
-### inventory is open until closed (st_res_inventory_closed). How the
-### Strategic Reserve Works is collapsed until opened (st_res_how_open). Each
-### section is a type, and the two composers set their order, so the Market
+### inventory is open until closed (st_res_inventory_closed). The
+### explanations are on the Help page (te_strategic_reserve_help_popup, in
+### gui/te_popups.gui), which the "?" at the top of the entry opens. Each
+### section is a type, and the composers set their order, so the Market
 ### panel's Reserve tab (gui/market_panel.gui) shows the same pieces. Nothing
 ### here may read the panel's ambient Market or Country (MarketTabTest).
 ### Collapse flags say their default: *_closed is open until closed, *_open
@@ -268,8 +268,8 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### A column heading over the inventory: small, and underlined where it
-	### has a tooltip.
+	### A column heading over the inventory: small, with a tooltip where it
+	### needs one.
 	type st_res_col_heading = textbox {
 		autoresize = no
 		align = left|nobaseline
@@ -453,7 +453,7 @@ types strategic_reserve_widget_types
 	### so the instance shows the button while IsShown holds for its op and the
 	### selected look while it doesn't. 146 wide by default, so "Release High"
 	### and "Conservative" fit at 17; the presets set 222, two to a row.
-	type widget_je_st_res_policy_choice = widget { # REVIEWED 2026-10-27 (unmarked_hover): the hover is on the choice in force, drawn in vanilla's selected-tab look; the other choices are buttons with the same tooltip, and vanilla underlines neither a tab nor a button
+	type widget_je_st_res_policy_choice = widget {
 		block "choice_size" {
 			size = { 146 26 }
 		}
@@ -680,7 +680,6 @@ types strategic_reserve_widget_types
 			size = { 450 24 }
 			align = left|nobaseline
 			using = st_res_fontsize_row
-			default_format = "#tooltippable"
 			elide = right
 		}
 
@@ -916,7 +915,6 @@ types strategic_reserve_widget_types
 			blockoverride "stepper_label" {
 				text = "st_res_policy_label_ramp"
 				tooltip = "st_res_policy_label_ramp_tt"
-				default_format = "#tooltippable"
 			}
 			blockoverride "stepper_value" { block "policy_value_ramp" {} }
 			blockoverride "stepper_down" {
@@ -960,7 +958,9 @@ types strategic_reserve_widget_types
 	###   row_rate_tooltip, row_decay_tooltip
 	###                         the Rate Setting and Decay lines' hovers: what
 	###                         the hub actually trades, and the decay's sources
-	###   row_history           the good's te_history_chart
+	###   row_history           the good's history chart, te_hist_st_res_<good>
+	###                         (generated from the one fragment the goods share,
+	###                         scripts/generators/te_history_charts/strategic_reserve.gui.in)
 	###   row_settings_toggle, row_settings_open, row_settings_closed
 	###                         the settings' st_res_policy_<good>_open key
 	###   row_settings_shown    the settings' visible: the row expanded, or the
@@ -1160,7 +1160,7 @@ types strategic_reserve_widget_types
 
 			### The rate the buttons change (SR-1): the Policy Settings
 			### steppers' idiom, the value between - and +. 58 holds "-99.9K".
-			### Underlined for its hover; the figure's sign colors it.
+			### Its hover says what the rate is; the figure's sign colors it.
 			widget = {
 				size = { 58 28 }
 				parentanchor = vcenter
@@ -1173,7 +1173,6 @@ types strategic_reserve_widget_types
 					elide = right
 					align = center|nobaseline
 					using = st_res_fontsize_row
-					default_format = "#tooltippable"
 					block "row_rate_short" {}
 				}
 			}
@@ -1203,7 +1202,7 @@ types strategic_reserve_widget_types
 		### (style rule 5), set in under the name. `row_open` is the same block
 		### the expanded chevron reads. Rate Setting and Decay carry the two
 		### figures that exist nowhere else, the rate the hub actually trades
-		### and the decay's sources, so their labels are underlined.
+		### and the decay's sources, so their rows have a hover.
 		flowcontainer = {
 			direction = vertical
 			ignoreinvisible = yes
@@ -1220,7 +1219,6 @@ types strategic_reserve_widget_types
 				block "row_rate_tooltip" {}
 				blockoverride "row_label" {
 					text = "st_res_row_label_rate"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" { block "row_rate" {} }
 			}
@@ -1232,7 +1230,6 @@ types strategic_reserve_widget_types
 				block "row_decay_tooltip" {}
 				blockoverride "row_label" {
 					text = "st_res_row_label_decay"
-					default_format = "#tooltippable"
 				}
 				blockoverride "row_value" { block "row_decay" {} }
 			}
@@ -1262,7 +1259,7 @@ types strategic_reserve_widget_types
 
 		### The good's fill by month, while the row is expanded: the range
 		### buttons (the te_hist_range GUI variable every history chart shares)
-		### and the good's te_history_chart. Not set in, because the chart's
+		### and the good's history chart. Not set in, because the chart's
 		### plot is 496px, the inventory's whole width.
 		flowcontainer = {
 			direction = vertical
@@ -1468,14 +1465,12 @@ types strategic_reserve_widget_types
 				}
 				st_res_col_heading = {
 					size = { 92 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_stock"
 					tooltip = "je_strategic_reserve_inv_col_stock_tt"
 				}
 				### Over the status and policy icons (30 + 4 + 30).
 				st_res_col_heading = {
 					size = { 64 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_status"
 					tooltip = "je_strategic_reserve_inv_col_status_tt"
 				}
@@ -1483,7 +1478,6 @@ types strategic_reserve_widget_types
 				### and three 4px gaps).
 				st_res_col_heading = {
 					size = { 148 24 }
-					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_rate"
 					tooltip = "je_strategic_reserve_inv_col_rate_tt"
 				}
@@ -1549,33 +1543,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_grain_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_grain_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_grain"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_grain' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_grain = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_grain_open')]"
@@ -1678,33 +1646,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_ammunition_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_ammunition_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_ammunition"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_ammunition' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_ammunition = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_ammunition_open')]"
@@ -1807,33 +1749,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_oil_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_oil_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_oil"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_oil' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_oil = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_oil_open')]"
@@ -1936,33 +1852,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_small_arms_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_small_arms_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_small_arms"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_small_arms' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_small_arms = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_small_arms_open')]"
@@ -2065,33 +1955,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_artillery_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_artillery_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_artillery"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_artillery' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_artillery = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_artillery_open')]"
@@ -2194,33 +2058,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_aeroplanes_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_aeroplanes_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_aeroplanes"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_aeroplanes' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_aeroplanes = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_aeroplanes_open')]"
@@ -2323,33 +2161,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_tanks_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_tanks_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_tanks"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_tanks' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_tanks = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_tanks_open')]"
@@ -2452,33 +2264,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_fertilizer_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_fertilizer_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_fertilizer"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_fertilizer' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_fertilizer = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_fertilizer_open')]"
@@ -2528,104 +2314,99 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### "How the Strategic Reserve Works": every explanation, one heading per
-	### topic, collapsed until opened (style rule 1). The live sections above
-	### say what is happening; this says how it works.
-	type te_st_res_sec_how = flowcontainer {
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads GetPlayer only, never the entry, so it opens from
+	### any host (test_te_help_pages.py). Instanced only by
+	### te_strategic_reserve_help_popup.
+	type te_strategic_reserve_help_body = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
-		st_res_section_header = {
-			blockoverride "left_text" {
-				text = "je_strategic_reserve_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('st_res_how_open')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('st_res_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('st_res_how_open')]"
+		st_res_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_hub"
 			}
 		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_hub"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_rates"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_rates"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_status"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_status"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_decay"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_decay"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_policies"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_policies"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_presets"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_presets"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_income"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_income"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_history"
+			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_history"
+		}
+	}
 
-		st_res_panel = {
-			visible = "[GetVariableSystem.Exists('st_res_how_open')]"
-
-			st_res_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_hub"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_hub"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_rates"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_rates"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_status"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_status"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_decay"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_decay"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_policies"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_policies"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_presets"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_presets"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_income"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_income"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_history"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_history"
-			}
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_strategic_reserve_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_strategic_reserve')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_strategic_reserve_how_header"
+		}
+		blockoverride "popup_list" {
+			te_strategic_reserve_help_body = {}
 		}
 	}
 
 	### ======================================================================
 	### COMPOSERS. The one order of the sections, for the journal entry's
-	### roots below and for the Market panel's Reserve tab.
+	### roots below and for the tab's body (te_st_res_tab_body).
 	### ======================================================================
 
 	### What a returning player checks, open by default.
@@ -2639,15 +2420,77 @@ types strategic_reserve_widget_types
 		te_st_res_sec_inventory = {}
 	}
 
-	### How it all works, collapsed.
-	type te_st_res_reference_sections = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+	### ======================================================================
+	### THE TAB'S BODY (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Market
+	### panel's Reserve tab and the Timeline Extended window's Strategic
+	### Reserve tab. In the entry's order: the overview, the inventory, then
+	### the frame's Open Journal Entry.
+	### Not drawn: the status description (the no-hub line, which prints only
+	### while the entry is inactive) and the two scripted buttons (the AI's;
+	### the inventory's Cycle Step Size and Reset Reserve Rates are the
+	### player's). The entry has no goal bar and no scripted bars.
+	###
+	### The Market panel, which can show another market, fills two blocks:
+	### te_st_res_tab_elsewhere with a note on where the reserve trades, and
+	### te_st_res_tab_gate with the own-market test added to the tab's gate.
+	### The window always shows the player's own reserve.
+	### ======================================================================
+	type te_st_res_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_strategic_reserve"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
+				}
+			}
+		}
 
-		te_st_res_sec_how = {}
+		blockoverride "tab_before_gate" {
+			block "te_st_res_tab_elsewhere" {}
+		}
+
+		blockoverride "tab_gate" {
+			block "te_st_res_tab_gate" {
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_st_res_tab_layout" {
+				te_st_res_overview_panel = {}
+				te_st_res_status_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_market_strategic_reserve_open_journal_tt"
+		}
+	}
+
+	### The Timeline Extended window's full-screen Strategic Reserve tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout in two columns of
+	### 520 (te_ui_columns_two), the overview, then the inventory, each composer
+	### whole, so each section keeps its narrow gates. The window's wide mount
+	### puts it in te_st_res_tab_layout (gen_te_systems_window.py);
+	### test_strategic_reserve_layout.WideTest checks it against the narrow
+	### layout.
+	type te_st_res_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_st_res_overview_panel = {}
+		}
+
+		blockoverride "column_2" {
+			te_st_res_status_sections = {}
+		}
 	}
 }
 
@@ -2661,10 +2504,20 @@ types strategic_reserve_widget_types
 flowcontainer = {
 	name = "widget_je_strategic_reserve_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_st_res_overview_panel = {}
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
+		}
+	}
+
+	te_je_country = {
+		te_st_res_overview_panel = {}
+	}
 }
 
 flowcontainer = {
@@ -2673,14 +2526,7 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_st_res_status_sections = {}
-}
-
-flowcontainer = {
-	name = "widget_je_strategic_reserve_reference"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_st_res_reference_sections = {}
+	te_je_country = {
+		te_st_res_status_sections = {}
+	}
 }

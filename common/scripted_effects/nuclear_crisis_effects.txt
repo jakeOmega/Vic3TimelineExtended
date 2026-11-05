@@ -11,7 +11,9 @@
 #                5 alert, 6 a peacetime strike), nd_crisis_beneficiary (disputes 3 and 6), nd_crisis_stage
 #                (1 warning, 2 confrontation, 3 acute), nd_crisis_public,
 #                nd_crisis_weeks, nd_crisis_deadline, nd_crisis_deadline_fired,
-#                nd_crisis_danger, nd_crisis_counter, nd_crisis_talks,
+#                nd_crisis_danger, nd_crisis_counter, nd_crisis_talks
+#                (1 while a proposal awaits an answer), nd_crisis_talks_weeks
+#                (talks an exercise notice opened, counting down),
 #                nd_crisis_pressure_weeks, nd_crisis_backed (the target's
 #                guarantor stands with it), nd_crisis_abandoned (it declined)
 #   target only: nd_yield_pressure (written weekly by the tick)
@@ -871,6 +873,17 @@ nd_crisis_weekly_tick = {
 				}
 			}
 		}
+		# Talks an exercise notice opened run out (#1230). The pressure cadence
+		# is not reset: a pressure event that fell due while they lasted goes
+		# out the week they end.
+		if = {
+			limit = { has_variable = nd_crisis_talks_weeks }
+			change_variable = { name = nd_crisis_talks_weeks subtract = 1 }
+			if = {
+				limit = { var:nd_crisis_talks_weeks <= 0 }
+				remove_variable = nd_crisis_talks_weeks
+			}
+		}
 		nd_crisis_revalidate_dispute = yes
 	}
 	# Still open after revalidation?
@@ -914,7 +927,7 @@ nd_crisis_weekly_tick = {
 		else_if = {
 			limit = {
 				var:nd_crisis_stage >= 2
-				var:nd_crisis_talks = 0
+				nd_crisis_talks_open = no
 				var:nd_crisis_pressure_weeks >= nd_crisis_pressure_interval_weeks
 			}
 			set_variable = { name = nd_crisis_pressure_weeks value = 0 }
@@ -1144,6 +1157,10 @@ nd_crisis_clear_vars = {
 	if = {
 		limit = { has_variable = nd_crisis_talks }
 		remove_variable = nd_crisis_talks
+	}
+	if = {
+		limit = { has_variable = nd_crisis_talks_weeks }
+		remove_variable = nd_crisis_talks_weeks
 	}
 	if = {
 		limit = { has_variable = nd_crisis_pressure_weeks }
@@ -1745,6 +1762,10 @@ nd_world_crisis_detail_lines = {
 			var:nd_crisis_talks = 1
 		}
 		custom_tooltip_no_bullet = nd_wc_detail_talks
+	}
+	else_if = {
+		limit = { nd_crisis_talks_open = yes }
+		custom_tooltip_no_bullet = nd_wc_detail_talks_notice
 	}
 	if = {
 		limit = {
@@ -2619,7 +2640,8 @@ nd_crisis_act_refuse_trade = {
 	nd_crisis_talks_refused = yes
 }
 
-# Either party: a proposal refused. Talks close, and the pressure resumes.
+# Either party: a proposal refused. Talks close, those an exercise notice
+# opened included, and the pressure resumes.
 nd_crisis_talks_refused = {
 	if = {
 		limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
@@ -2635,6 +2657,10 @@ nd_crisis_talks_refused = {
 			scope:nd_issuer = {
 				set_variable = { name = nd_crisis_talks value = 0 }
 				set_variable = { name = nd_crisis_pressure_weeks value = 0 }
+				if = {
+					limit = { has_variable = nd_crisis_talks_weeks }
+					remove_variable = nd_crisis_talks_weeks
+				}
 			}
 		}
 	}
@@ -2730,6 +2756,10 @@ nd_crisis_act_accept_trade = {
 			scope:nd_issuer = {
 				set_variable = { name = nd_crisis_talks value = 0 }
 				set_variable = { name = nd_crisis_pressure_weeks value = 0 }
+				if = {
+					limit = { has_variable = nd_crisis_talks_weeks }
+					remove_variable = nd_crisis_talks_weeks
+				}
 			}
 		}
 	}
@@ -3163,12 +3193,18 @@ nd_guarantee_act_honour = {
 }
 
 # Guarantor scope, from nuclear_crisis.20's immediate: our survivors against the
-# attacker, for the walk-away weight (.20.c).
+# attacker, for the walk-away weight (.20.c). The scope is cleared after the
+# read: left saved, it stays in the event's scope, and Stand With Them's
+# preview (nd_crisis_preview) can't save its own temporary nd_sv_enemy while a
+# permanent one exists, which logged twice a frame while the event was open
+# (2026-10-31). It is saved permanently, not temporarily, so it replaces the
+# victim a strike's caller saved under the same name (nuke.txt).
 nd_guarantor_store_survivors = {
 	if = {
 		limit = { exists = scope:nd_guarantee_attacker }
 		scope:nd_guarantee_attacker = { save_scope_as = nd_sv_enemy }
 		set_variable = { name = nd_survivors_vs_attacker value = nd_survivors_vs_saved }
+		clear_saved_scope = nd_sv_enemy
 	}
 }
 

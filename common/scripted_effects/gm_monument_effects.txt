@@ -97,6 +97,8 @@ gm_monument_monthly = {
 			}
 		}
 		gm_monument_pass = yes
+		# Clear Away's reads, once a game (owner, 2026-10-31).
+		gm_clear_self_check = yes
 	}
 	# Every recorded primary's shadow, in a game with no secondary too (issue
 	# #936, § "A merged state" below).
@@ -1796,6 +1798,176 @@ gm_monument_self_check = {
 			}
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN monument_artifact_stands_apart (the Luxor Obelisk does not read as apart from the Obelisks of Karnak, so a returned artifact will be merged into the monument standing: take the fallback in docs/testing/grand-monuments-multiple-playtest.md)"
+			}
+		}
+	}
+}
+
+# ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
+# Once six monuments stand in a state, the most construction allows
+# (gm_state_can_build_site), its owner may clear away the least grand of them,
+# contested ones aside, to make room for a grander one. Its grandeur and what it
+# gave go with it; no ledger is written (Pull Down, a contested monument's, is
+# the political act). The click only orders it (gm_state_order_clear,
+# gm_mon_order_clear): a tooltip walks a button's effect every frame, so the
+# state's hidden event does the work (monument_events.33, gm_state_run_clear).
+
+# State scope. Clear away the state's own monument.
+gm_state_order_clear = {
+	set_variable = gm_clear_primary
+	set_variable = { name = gm_clear_by value = owner }
+	trigger_event = { id = monument_events.33 }
+}
+
+# Container scope. Clear away this monument beside another.
+gm_mon_order_clear = {
+	save_scope_as = gm_clear_pick
+	var:gm_tr_origin ?= {
+		set_variable = { name = gm_clear_target value = scope:gm_clear_pick }
+		set_variable = { name = gm_clear_by value = owner }
+		trigger_event = { id = monument_events.33 }
+	}
+}
+
+# State scope, from monument_events.33. The order runs if it is still its
+# owner's, six still stand, nothing is under way and what it names is still the
+# least grand; otherwise it is dropped (the player may ask again). Either way
+# the order is cleared.
+gm_state_run_clear = {
+	save_scope_as = gm_clear_state
+	owner = { save_scope_as = gm_clear_owner }
+	clear_saved_scope = gm_clear_mon
+	var:gm_clear_target ?= { save_scope_as = gm_clear_mon }
+	if = {
+		limit = {
+			var:gm_clear_by ?= { this = scope:gm_clear_owner }
+			gm_state_monument_count >= 6
+			gm_state_clear_quiet = yes
+		}
+		if = {
+			limit = {
+				has_variable = gm_clear_primary
+				gm_state_primary_is_least = yes
+				gm_state_has_secondary = yes
+			}
+			debug_log = "TE_MONUMENTS: cleared away the monument of [THIS.GetState.GetNameNoFormatting] (grandeur [THIS.ScriptValue('gm_state_primary_grandeur')|1]) country=[THIS.GetState.GetOwner.GetTagName]"
+			gm_state_clear_away_primary = yes
+		}
+		else_if = {
+			limit = {
+				exists = scope:gm_clear_mon
+				scope:gm_clear_mon = {
+					gm_mon_is_least = yes
+					var:gm_tr_origin ?= { this = scope:gm_clear_state }
+				}
+			}
+			debug_log = "TE_MONUMENTS: cleared away a monument beside another in [THIS.GetState.GetNameNoFormatting] country=[THIS.GetState.GetOwner.GetTagName]"
+			scope:gm_clear_mon = { gm_mon_clear_away_one = yes }
+		}
+	}
+	gm_remove_state_var = { VAR = gm_clear_primary }
+	gm_remove_state_var = { VAR = gm_clear_target }
+	gm_remove_state_var = { VAR = gm_clear_by }
+	owner = { trigger_event = { id = monument_events.20 } }
+}
+
+# State scope. The state's own monument goes as gm_state_tear_down takes it,
+# with no ledger: the largest beside it rises into the building that stays
+# (gm_state_promote_secondary). With six standing there are always four or more
+# beside it, and gm_state_run_clear asks for one, so the building is never
+# removed here (NoRebuildTests).
+gm_state_clear_away_primary = {
+	owner = {
+		remove_list_variable = { name = gm_states target = prev }
+	}
+	gm_clear_state = { KEEP_LANDMARK = no }
+	gm_state_promote_secondary = yes
+}
+
+# Container scope (scope:gm_clear_state its state). A monument beside another
+# goes as Pull Down takes it (gm_mon_tear_down_one), with no ledger.
+gm_mon_clear_away_one = {
+	save_scope_as = gm_mon_down
+	scope:gm_clear_state = {
+		remove_list_variable = { name = gm_monuments_here target = scope:gm_mon_down }
+		gm_tr_count_add = { VAR = gm_mon_here_count ADD = -1 }
+		owner = {
+			remove_list_variable = { name = gm_monuments_held target = scope:gm_mon_down }
+		}
+	}
+	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_down }
+	destroy_container = yes
+}
+
+# No scope, from gm_monument_monthly. TE_SELF_CHECK monument_least_grandeur,
+# once a game: the Clear Away button rests on three reads no play-test has seen,
+# an ordered_in_list summed in a script value, a max inside its if, and a
+# container's value reading its state's through a scope change
+# (gm_state_least_grandeur, gm_mon_least_gap). Checked against the same figures
+# taken by effects, on the first state where a monument beside another is less
+# grand than the state's own (so the list's path is the one read, and OK can't
+# be a false pass on a 0).
+gm_clear_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gm_clear_checked }
+			has_global_variable_list = gm_monuments
+		}
+		clear_saved_scope = gm_chk_mon
+		clear_saved_scope = gm_chk_state
+		random_in_global_list = {
+			variable = gm_monuments
+			limit = {
+				gm_mon_clear_eligible = yes
+				gm_mon_grandeur > 0
+				var:gm_tr_origin ?= { gm_state_primary_clear_eligible = yes }
+			}
+			save_scope_as = gm_chk_mon
+			var:gm_tr_origin = { save_scope_as = gm_chk_state }
+		}
+		if = {
+			limit = { exists = scope:gm_chk_state }
+			scope:gm_chk_state = {
+				set_variable = { name = gm_chk_primary value = gm_state_primary_grandeur }
+				clear_saved_scope = gm_chk_least
+				ordered_in_list = {
+					variable = gm_monuments_here
+					limit = { gm_mon_clear_eligible = yes }
+					order_by = gm_mon_grandeur_neg
+					position = 0
+					check_range_bounds = no
+					save_scope_as = gm_chk_least
+				}
+				scope:gm_chk_least ?= {
+					set_variable = { name = gm_chk_g value = gm_mon_grandeur }
+				}
+				if = {
+					limit = {
+						exists = scope:gm_chk_least
+						var:gm_chk_primary > scope:gm_chk_least.var:gm_chk_g
+					}
+					set_global_variable = gm_clear_checked
+					set_variable = { name = gm_chk_value value = gm_state_least_grandeur }
+					set_variable = { name = gm_chk_expect value = scope:gm_chk_least.var:gm_chk_g }
+					scope:gm_chk_least = { set_variable = { name = gm_chk_gap value = gm_mon_least_gap } }
+					if = {
+						limit = {
+							var:gm_chk_value = var:gm_chk_expect
+							scope:gm_chk_least = { var:gm_chk_gap = 0 }
+						}
+						debug_log = "TE_SELF_CHECK OK monument_least_grandeur state=[THIS.GetState.GetNameNoFormatting] least=[THIS.Var('gm_chk_value').GetValue|2] expected=[THIS.Var('gm_chk_expect').GetValue|2] primary=[THIS.Var('gm_chk_primary').GetValue|2] (the least grand monument here reads right, so Clear Away shows on it)"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN monument_least_grandeur state=[THIS.GetState.GetNameNoFormatting] least=[THIS.Var('gm_chk_value').GetValue|2] expected=[THIS.Var('gm_chk_expect').GetValue|2] primary=[THIS.Var('gm_chk_primary').GetValue|2] (gm_state_least_grandeur or gm_mon_least_gap reads wrong, so Clear Away shows on the wrong monument or none: take the fallback in docs/testing/grand-monuments-multiple-playtest.md)"
+					}
+					remove_variable = gm_chk_value
+					remove_variable = gm_chk_expect
+					scope:gm_chk_least = {
+						remove_variable = gm_chk_gap
+					}
+				}
+				scope:gm_chk_least ?= { remove_variable = gm_chk_g }
+				remove_variable = gm_chk_primary
 			}
 		}
 	}

@@ -78,13 +78,15 @@ so the first two to form become the two.
 Added to every party's `join_weight`, for the eleven vanilla parties through
 the generated INJECT and for the mod's three in their own files:
 
-- one of the two largest: `te_fptp_major_party_join_weight` = **+5** ("big
-  tent"), just ahead of vanilla's party-size chain (×2 with at most one prior
-  member for a group that isn't powerful, ×0.5 with two, ×0 with three or
-  more). After the chain it would be a flat +5 for every group once a party
-  had three members, whatever its fit; ahead of it, a party still fills up at
-  three groups and fit still picks the major. So the two majors hold at most
-  six groups between them.
+- one of the two largest: `te_fptp_major_party_join_weight` = **+10** ("big
+  tent"), less `te_fptp_major_party_crowding_weight` = **1** for each group
+  joining ahead (`scope:number`), *in place of* vanilla's party-size chain
+  (×2 with at most one prior member for a group that isn't powerful, ×0.5
+  with two, ×0 with three or more): the bonus opens an `if` and the chain's
+  head becomes an `else_if`, so a major skips the chain. A group with no view
+  of a major reaches +5 and joins it unless it dislikes the party by 5 or
+  more; groups with no preference split between the two; fit still picks
+  between them. *(Revised 2026-11-01, see below.)*
 - any other party: `te_fptp_minor_party_join_weight` = **−20**, after every
   multiplier, so it is the full size,
 
@@ -93,6 +95,18 @@ call: −20 is twice vanilla's −10 and the largest ordinary term vanilla uses;
 fits are mostly +2 to +10 a term, so a third party stays open to a group with
 a strong fit — a soft cap, not a ban. One can still overtake a collapsing major.)*
 The generated copies drop vanilla's `usa_two_party_system` terms.
+
+**Revision, 2026-11-01 (owner report).** As first built, the bonus was +5,
+just ahead of the chain, so a party still filled up at three groups. Two
+majors then held at most six of the eight interest groups and the −20 shut
+every other party, so at least two groups joined none; the owner's screenshot
+showed the Intelligentsia at Base −5 + 5 = 0, one short of joining either
+major. A bonus after the chain would not do: ×0 also wipes out a group's
+strong dislike of the party (vanilla's −100 slaver and abolitionist terms),
+so it would carry that group into a full party it opposes. So the majors skip
+the chain instead. The crowding term reads `scope:number` as a value, which
+vanilla only compares; if it doesn't read, it adds nothing and every group
+still joins a major (play-test list, row 2).
 
 ### Who has it
 
