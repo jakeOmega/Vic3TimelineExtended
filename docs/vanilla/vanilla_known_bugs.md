@@ -1175,6 +1175,14 @@ Failed to switch player to new country in play_as effect - no player for scoped 
 
 The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05).
 
+### `common/journal_entries/06_morocco_lands_of_anarchy.txt:99` — `owner = root` on an al-Rif state with no owner (1.15)
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+The Lands of Anarchy monthly pulse reads `scope:al_rif_state_scope ?= { if = { limit = { owner = root } … } }`; the `?=` guards the saved scope, not the state's owner, so once the state has none the `owner` link errors each month. The `else` branch runs, as it would for a foreign owner. Vanilla 1.15 (2026-11-05).
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
