@@ -1295,10 +1295,6 @@
   "en": "Covert Warfare",
   "es": "Guerra encubierta"
  },
- "je_group_environment": {
-  "en": "Environment",
-  "es": "Medio ambiente"
- },
  "je_group_soft_power": {
   "en": "Soft Power",
   "es": "Poder blando"
@@ -2339,45 +2335,13 @@
   "en": "Moon Base",
   "es": "Base lunar"
  },
- "je_space_race_moon_base_completion_header": {
-  "en": "Permanent Moon Base Established",
-  "es": "Base lunar permanente establecida"
- },
  "je_space_race_moon_base_desc": {
   "en": "Establish a permanent crewed outpost on the lunar surface.",
   "es": "Establece un puesto avanzado permanente con tripulación en la superficie lunar."
  },
- "je_space_race_moon_base_failure_header": {
-  "en": "Lunar Base Program Suspended",
-  "es": "Programa de base lunar suspendido"
- },
- "je_space_race_moon_base_first_outcome_header": {
-  "en": "If our flag flies first on a permanent Moon base",
-  "es": "Si nuestra bandera ondea primero en una base lunar permanente"
- },
- "je_space_race_moon_base_first_outcome_tt": {
-  "en": "A continuously crewed lunar outpost cements us as the era's space hegemon — [concept_prestige], research, influence, and [concept_cultural_pull] all swell.",
-  "es": "Un puesto lunar con tripulación continua nos consolida como hegemón espacial de la era: el [concept_prestige|l], la investigación, la influencia y el [concept_cultural_pull|l] se disparan."
- },
- "je_space_race_moon_base_on_completion_header": {
-  "en": "Our outpost on the Moon is permanent",
-  "es": "Nuestro puesto en la Luna es permanente"
- },
- "je_space_race_moon_base_on_failure_header": {
-  "en": "Our lunar base is on hold",
-  "es": "Nuestra base lunar queda en suspenso"
- },
  "je_space_race_moon_base_reason": {
   "en": "A permanent lunar outpost will serve as a stepping stone for deeper space exploration and a symbol of our civilization's ambition.",
   "es": "Un puesto lunar permanente servirá de trampolín para una exploración más profunda del espacio y de símbolo de la ambición de nuestra civilización."
- },
- "je_space_race_moon_base_setback_header": {
-  "en": "If the Moon base program is cancelled",
-  "es": "Si se cancela el programa de la base lunar"
- },
- "je_space_race_moon_base_setback_tt": {
-  "en": "Without an active orbital program, the lunar base goal is shelved and committed resources written off.",
-  "es": "Sin un programa orbital activo, el objetivo de la base lunar se aparca y los recursos comprometidos se dan por perdidos."
  },
  "je_space_race_moon_base_status": {
   "en": "A permanently crewed station on the lunar surface.",
@@ -2406,14 +2370,6 @@
  "je_space_race_moon_base_status_scientific": {
   "en": "#bold Purpose:#! Scientific Outpost\\nThe lunar base is dedicated to pure research and international collaboration.",
   "es": "#bold Finalidad:#! Puesto científico\\nLa base lunar se dedica a la investigación pura y a la colaboración internacional."
- },
- "je_space_race_moon_base_subsequent_outcome_header": {
-  "en": "If we follow others to a Moon base",
-  "es": "Si seguimos a otros hacia una base lunar"
- },
- "je_space_race_moon_base_subsequent_outcome_tt": {
-  "en": "Even a follow-on lunar base earns serious [concept_prestige] and research benefits, with a steady trickle of cultural and influence gains.",
-  "es": "Incluso una base lunar posterior gana un [concept_prestige|l] notable y beneficios de investigación, con un goteo constante de ganancias culturales y de influencia."
  },
  "je_space_race_moon_landing": {
   "en": "Moon Landing",

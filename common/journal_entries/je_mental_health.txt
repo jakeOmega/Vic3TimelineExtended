@@ -17,7 +17,7 @@
 		# stops being revolutionary (vanilla gates power-bloc invites, obligations
 		# and coups on it).
 		is_revolutionary = no
-		# Set by on_complete, on_fail and on_timeout. A revolution's winner gets a
+		# Set by the success, failure and timeout outcomes. A revolution's winner gets a
 		# fresh record of an entry the loser had finished, and without this it
 		# would re-activate: a completed or failed debate would end again at once,
 		# under the laws that ended it, and replay its outcome event; a timed-out
@@ -64,60 +64,80 @@
 		}
 	}
 
-	complete = {
-		has_law = law_type:law_rehabilitation_focused_criminal_justice
-		institution_investment_level = {
-			institution = institution_social_security
-			value >= 4
-		}
-	}
-
-	on_complete = {
-		set_variable = mental_health_crisis_resolved
-		trigger_event = { id = mental_health_events.200 }
-	}
-
-	invalid = {
-		is_country_type = decentralized
-	}
-
-	fail = {
-		# Fail if punitive justice is still in force after a decade of debate:
-		# half the timeout, so there is room to reform first. Penal Labor Camps is
-		# the harsher punitive law, so it fails too. This was gated on Decline of
-		# Organized Religion, an era-10 tech like the one that opens the entry, so
-		# it could fail the crisis the day it began (every country starts under
-		# Punishment-Focused).
-		# One legible line, not the raw age in days (GUI audit JE-8).
-		custom_tooltip = {
-			text = je_mental_health_fail_tt
-			OR = {
-				has_law = law_type:law_punishment_focused_criminal_justice
-				has_law = law_type:law_penal_labor_camps
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_mental_health_crisis_complete_conclusion_desc
+		trigger = {
+			has_law = law_type:law_rehabilitation_focused_criminal_justice
+			institution_investment_level = {
+				institution = institution_social_security
+				value >= 4
 			}
-			scope:journal_entry.journal_entry_age >= 3650
+		}
+		effect = {
+			set_variable = mental_health_crisis_resolved
+			trigger_event = { id = mental_health_events.200 }
 		}
 	}
 
-	on_fail = {
-		set_variable = mental_health_crisis_resolved
-		trigger_event = { id = mental_health_events.100 }
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_mental_health_crisis_fail_conclusion_desc
+		trigger = {
+			# Fail if punitive justice is still in force after a decade of debate:
+			# half the timeout, so there is room to reform first. Penal Labor Camps is
+			# the harsher punitive law, so it fails too. This was gated on Decline of
+			# Organized Religion, an era-10 tech like the one that opens the entry, so
+			# it could fail the crisis the day it began (every country starts under
+			# Punishment-Focused).
+			# One legible line, not the raw age in days (GUI audit JE-8).
+			custom_tooltip = {
+				text = je_mental_health_fail_tt
+				OR = {
+					has_law = law_type:law_punishment_focused_criminal_justice
+					has_law = law_type:law_penal_labor_camps
+				}
+				scope:journal_entry.journal_entry_age >= 3650
+			}
+		}
+		effect = {
+			set_variable = mental_health_crisis_resolved
+			trigger_event = { id = mental_health_events.100 }
+		}
+	}
+
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_mental_health_crisis_invalid_conclusion_desc
+		trigger = {
+			is_country_type = decentralized
+		}
+	}
+
+	outcome = {
+		header = JOURNAL_ENTRY_TIMEOUT
+		effect_header = JOURNAL_ENTRY_ON_TIMEOUT
+		flags = { timeout }
+		conclusion_desc = je_mental_health_crisis_timeout_conclusion_desc
+		effect = {
+			set_variable = mental_health_crisis_resolved
+			add_radicals = {
+				value = small_radicals
+				strata = lower
+			}
+			add_modifier = {
+				name = mental_health_neglect_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	timeout = 7300
-
-	on_timeout = {
-		set_variable = mental_health_crisis_resolved
-		add_radicals = {
-			value = small_radicals
-			strata = lower
-		}
-		add_modifier = {
-			name = mental_health_neglect_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
-	}
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes

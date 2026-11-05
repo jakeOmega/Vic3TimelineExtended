@@ -152,10 +152,6 @@
 	immediate = {
 	}
 
-	complete = {
-		always = no
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			gw_restore_carbon_removal_policy_effect = yes

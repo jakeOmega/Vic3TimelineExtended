@@ -806,7 +806,7 @@ class JournalEntryTest(unittest.TestCase):
         self.assertIn("var:te_tax_migrated >= 1", in_force)
 
     def test_never_completes_fails_or_times_out(self):
-        for field in ("complete", "on_complete", "fail", "on_fail", "invalid", "timeout", "can_deactivate"):
+        for field in ("outcome", "complete", "on_complete", "fail", "on_fail", "invalid", "timeout", "can_deactivate"):
             with self.subTest(field=field):
                 self.assertNotRegex(self.body, rf"(?m)^\t{field} =")
 

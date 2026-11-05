@@ -64,20 +64,24 @@ je_grand_monuments = {
 		}
 	}
 
-	invalid = {
-		OR = {
-			gm_system_enabled = no
-			AND = {
-				NOT = {
-					any_scope_state = { has_building = building_grand_monument }
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_grand_monuments_invalid_conclusion_desc
+		trigger = {
+			OR = {
+				gm_system_enabled = no
+				AND = {
+					NOT = {
+						any_scope_state = { has_building = building_grand_monument }
+					}
+					NOT = {
+						any_scope_state = { has_building = building_grand_monument_site }
+					}
+					gm_ledgers_idle = yes
+					NOT = { any_scope_state = { has_variable = gm_seen } }
+					NOT = { has_variable = gm_com_open }
+					NOT = { has_variable = gm_com_offered }
 				}
-				NOT = {
-					any_scope_state = { has_building = building_grand_monument_site }
-				}
-				gm_ledgers_idle = yes
-				NOT = { any_scope_state = { has_variable = gm_seen } }
-				NOT = { has_variable = gm_com_open }
-				NOT = { has_variable = gm_com_offered }
 			}
 		}
 	}
