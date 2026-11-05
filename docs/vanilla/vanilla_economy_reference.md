@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** economic systems work, written for AI agents that need context before touching mod content. This doc covers vanilla mechanics only — mod-specific systems (banking cycle, construction-cost scaling, migration crowding, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`.
 
-> **Last verified against vanilla:** 1.14.5. When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **This doc lives in the same repo as the patch runbook (`docs/guides/vanilla_patch_runbook.md`) — that runbook tells you to revisit this file on every vanilla bump.**
+> **Last verified against vanilla:** 1.15.0 (1.15 added the copper good, § 3; moved ship construction goods into hulls and modules, § 17.5; and lists uncollected taxes by state, § 12). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **This doc lives in the same repo as the patch runbook (`docs/guides/vanilla_patch_runbook.md`) — that runbook tells you to revisit this file on every vanilla bump.**
 >
 > **Verify before relying on names.** Building IDs, modifier names, and good IDs cited below should be verified via the mod state server (`/buildings`, `/raw/Building/<id>`, `/modifier-search?q=`, `/goods`) before you reference them in code. Vanilla renames things across patches.
 >
@@ -72,6 +72,7 @@ Goods are defined in `common/goods/00_goods.txt`. Every good has:
 - A **`traded_quantity`**, defining how many units one trade-route lane moves. Lower for heavier/bulkier goods, higher for staples.
 - A **`prestige_factor`** — base prestige awarded for being top of the leaderboard for that good (× 2 for each rank above the minimum). Military and high-end industrial goods carry larger factors than staples.
 - A **`consumption_tax_cost`** — per-good Authority cost to enable a consumption tax on the good. Crucially, this is a **flat cost**, *not* a flow scaled to consumption volume: enabling a tax on a good with `consumption_tax_cost = 400` reserves a flat 400 Authority for as long as the tax is on; turning it off frees the 400 back. High-`consumption_tax_cost` goods (services, grain) are expensive to tax; low-cost goods are cheap. This is the design lever that prevents universal consumption taxation — total Authority is finite, and each enabled tax burns a fixed slice of it.
+- **Copper** (since 1.15): an industrial good mined by `building_copper_mine`, a capped resource in vanilla's state regions. Vanilla 1.15 added it as an input to telephones, coal and oil power plants, arc-welded construction and refrigeration, mostly in place of part of an iron, tools or electricity input.
 - Optional flags: `local = yes` (services, transportation, electricity — *not tradeable across states*; price equilibrates only via local production), `fixed_price = yes` and `tradeable = no` (gold), `pop_consumption_can_add_infrastructure = yes` (automobiles), `obsession_chance` (luxury/intoxicants — affects pop demand stickiness).
 
 ### 3.1 Local goods are special
@@ -532,6 +533,8 @@ Tax laws in `common/laws/` enable some combination of these levers:
 
 Tax law families decide which dials are nonzero. Tax level (low / medium / high) scales them within a family.
 
+Not every tax is collected: a state's tax collection rate decides how much of what it owes arrives, and the rest is waste. Since 1.15 the budget panel lists the shortfall state by state, where it used to show one country-wide average.
+
 ### 12.2 Consumption tax is paid in Authority
 
 Important nuance: when the player enables a consumption tax on a good, the country **reserves a flat Authority cost** equal to the good's `consumption_tax_cost` (typically 100–500). This is *not* metered against consumption volume — it's a fixed reservation that lasts as long as the tax is on, and is freed instantly if the tax is turned off. Authority is a separate country resource (it also gates decrees, edicts, and IG suppression), and it is *finite*. This is the design lever that prevents universal consumption taxation — the ledger isn't measured in money, it's measured in a scarce political resource that the player must allocate per-good.
@@ -776,6 +779,8 @@ Supply Ships are a military asset attached to formations operating overseas. Ins
 The Ship Designer is a runtime UI exposed by the engine — it's not data-driven (no PMs configure it). Players tune hull size, armor, armament, and supply capacity per ship type via slot-level choices (low / medium / high, plus wildcard slots).
 
 Costs scale **non-linearly with total modification level**: low = 1, medium = 2, high = 3, wildcard = 1. The sum of these levels across slots, multiplied by the modifications' base costs and an exponential-growth term, drives the final Ship Construction cost. Roughly: an "all medium" ship costs ~2× an "all light" ship of the same type, an "all high" ship costs ~2× an "all medium" — the same exponential curve applies across all axes (armor / firepower / supply / etc.), not a different curve per stat. The Ship Designer UI displays this graph for the player.
+
+Since 1.15 a ship's construction goods are carried by its hull and by the modules fitted to it, so a design's goods bill depends on its modules.
 
 When the mod adds new `ship_type_*` entities, register the relevant `ship_battle_against_ship_type_<ship>_<axis>_<add|mult>` combinations explicitly per the rule in `docs/guides/scripting_best_practices.md` — vanilla auto-registration is patchy.
 
