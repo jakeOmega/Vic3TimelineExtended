@@ -1,0 +1,901 @@
+﻿### Power Grids: the Power Grids tab of the Timeline Extended window
+### (te_grid_tab_body, near the foot of this file, composes the three panels;
+### the window mounts it from gui/te_systems_window_generated.gui), and the
+### Power Grid section of a Grid Transfer Station's building panel
+### (te_grid_building_section, gui/building_details_panel.gui). An overview of
+### six boxes, two to a row; a card for each grid the country's stations are
+### on; and a table of its stations. The explanations are on the Help page
+### (gui/te_popups.gui), which the "?" in the tab's header opens. House style:
+### docs/guides/gui_style_guide.md. System: docs/systems/mod_systems/power_grids.md.
+###
+### DATA. No journal entry: every read is the shown country's, Country, which
+### the mount supplies (the window's, the player; National Info's, any
+### country), through Country.MakeScope: the guarded te_grid_tab_* script
+### values (power_grid_values.txt), which read 0 where a variable is missing,
+### under the tab's gate (te_window_power_grids_tab_sgui) on a parent in the
+### window. The grids are a datamodel of the country's list te_grid_hubs and
+### the stations one of te_grid_stations, both written by the monthly
+### balancing (te_grid_record_effect): each item is a state (Scope.GetState),
+### and its figures are its own, State.MakeScope (a hub's grid record,
+### te_grid_rec_*; a station's tile figures, te_grid_*_disp). A grid's
+### countries are its hub's list te_grid_rec_capitals, each flag read through
+### State.GetCountry (gotcha #15).
+###
+### ANOTHER COUNTRY (National Info). The tab has no control, so it shows
+### another country all of it.
+###
+### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
+### overview 16 (te_grid_fontsize_*, below; rule 3); test_power_grid_tab.py
+### holds every fixed cell to its longest text.
+
+template te_grid_fontsize_row {
+	fontsize = 17
+}
+
+template te_grid_fontsize_heading {
+	fontsize = 20
+}
+
+template te_grid_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
+types te_grid_widget_types
+{
+	type te_grid_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		minimumsize = { 520 -1 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	### A section's heading: its name at the left, a count at the right, a rule
+	### under both.
+	type te_grid_heading = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 480 30 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 300
+				align = left|nobaseline
+				using = te_grid_fontsize_heading
+				default_format = "#title"
+				block "heading_text" {}
+			}
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 180
+				align = right|nobaseline
+				using = te_grid_fontsize_row
+				block "heading_right" {}
+			}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### A heading on the Help page, with a faint rule under it.
+	type te_grid_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin_top = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = te_grid_fontsize_heading
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text on the Help page, and a section's one line when it
+	### has nothing to list.
+	type te_grid_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_grid_fontsize_row
+		default_format = "#lore"
+	}
+
+	### ----------------------------------------------------------------------
+	### The overview's box (rule 4; te_banking_ov_cell's shape): the icon in an
+	### inset box of its own down the left, and beside it the caption, the
+	### reading's word and a figure, in a 154 column at 16. Two to a row:
+	### 238 + 4 + 238 = 480.
+	### ----------------------------------------------------------------------
+	type te_grid_ov_cell = widget {
+		size = { 238 70 }
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		widget = {
+			size = { 52 52 }
+			position = { 6 0 }
+			parentanchor = left|vcenter
+
+			background = {
+				using = dark_area
+				alpha = 0.3
+			}
+
+			icon = {
+				size = { 44 44 }
+				parentanchor = center
+				block "icon" {}
+			}
+		}
+		textbox = {
+			position = { 78 2 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_grid_fontsize_overview
+			block "caption" {}
+		}
+		textbox = {
+			position = { 78 24 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_grid_fontsize_overview
+			block "word" {}
+		}
+		textbox = {
+			position = { 78 46 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_grid_fontsize_overview
+			block "fig" {}
+		}
+	}
+
+	### The overview: Stations and Grids, Sent and Received, Efficiency and
+	### Agreements (rule 4). Each box's hover says what it counts.
+	type te_grid_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_grid_panel = {
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				margin_top = 4
+				margin_bottom = 4
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_stations_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_stations_cap"
+						}
+						blockoverride "word" {
+							text = "te_grid_ov_stations_word"
+						}
+						blockoverride "fig" {
+							text = "te_grid_ov_stations_fig"
+						}
+					}
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_grids_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/production_method_icons/power_plant.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_grids_cap"
+						}
+						blockoverride "word" {
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_grids_disp'), '(CFixedPoint)0' ), 'te_grid_ov_grids_word', 'te_grid_ov_grids_word_none' )]"
+						}
+						blockoverride "fig" {
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_grids_disp'), '(CFixedPoint)0' ), 'te_grid_ov_grids_fig', 'te_grid_ov_grids_fig_none' )]"
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_sent_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/lens_toolbar_icons/trade_route_export_lens_option.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_sent_cap"
+						}
+						blockoverride "word" {
+							text = "te_grid_ov_sent_word"
+						}
+						blockoverride "fig" {
+							text = "te_grid_ov_sent_fig"
+						}
+					}
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_received_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/lens_toolbar_icons/trade_route_import_lens_option.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_received_cap"
+						}
+						blockoverride "word" {
+							text = "te_grid_ov_received_word"
+						}
+						blockoverride "fig" {
+							text = "te_grid_ov_received_fig"
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_efficiency_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/goods_icons/electricity.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_efficiency_cap"
+						}
+						blockoverride "word" {
+							text = "te_grid_ov_efficiency_word"
+						}
+						blockoverride "fig" {
+							text = "te_grid_ov_efficiency_fig"
+						}
+					}
+					te_grid_ov_cell = {
+						tooltip = "te_grid_ov_agreements_tt"
+						blockoverride "icon" {
+							texture = "gfx/interface/icons/lens_toolbar_icons/trade_agreement.dds"
+						}
+						blockoverride "caption" {
+							text = "te_grid_ov_agreements_cap"
+						}
+						blockoverride "word" {
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_partners_disp'), '(CFixedPoint)0' ), 'te_grid_ov_agreements_word', 'te_grid_ov_agreements_word_none' )]"
+						}
+						blockoverride "fig" {
+							text = "te_grid_ov_agreements_fig"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The grids (rule 1: live, open): a card for each grid the country's
+	### stations are on (te_grid_hubs), named for its hub. Its size, its supply
+	### against its demand, its price, what it sends and delivers a week, and,
+	### on a grid of more than one country, their flags.
+	### ----------------------------------------------------------------------
+
+	### A "Label: value" cell, half a row (236 + 8 + 236 = 480).
+	type te_grid_cell = textbox {
+		minimumsize = { 236 -1 }
+		maximumsize = { 236 -1 }
+		autoresize = yes
+		align = left|nobaseline
+		using = te_grid_fontsize_row
+	}
+
+	### One grid: an item of te_grid_hubs, its hub the datacontext (State).
+	type te_grid_card = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+		margin = { 0 4 }
+
+		widget = {
+			size = { 480 28 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 320
+				align = left|nobaseline
+				using = te_grid_fontsize_row
+				tooltip = "te_grid_card_name_tt"
+				text = "te_grid_card_name"
+			}
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 150
+				align = right|nobaseline
+				using = te_grid_fontsize_row
+				tooltip = "TE_STATE_GRID_ROW_SIZE_TT"
+				text = "te_grid_card_size"
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+
+			### A grid with no demand is never priced (te_grid_rec_price stays 1).
+			te_grid_cell = {
+				tooltip = "te_grid_card_supply_tt"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_demand_disp'), '(CFixedPoint)0' ), 'te_grid_card_supply', 'te_grid_card_supply_no_demand' )]"
+			}
+			te_grid_cell = {
+				tooltip = "te_grid_card_price_tt"
+				text = "te_grid_card_price"
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+
+			te_grid_cell = {
+				tooltip = "te_grid_card_sent_tt"
+				text = "te_grid_card_sent"
+			}
+			te_grid_cell = {
+				tooltip = "te_grid_card_delivered_tt"
+				text = "te_grid_card_delivered"
+			}
+		}
+		### Its countries' flags (te_grid_rec_capitals, each read through its
+		### capital), on a grid of more than one country; how many markets it
+		### crosses, on one of more than one.
+		flowcontainer = {
+			visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_countries_disp'), '(CFixedPoint)1' )]"
+			direction = horizontal
+			spacing = 8
+
+			textbox = {
+				minimumsize = { 110 -1 }
+				maximumsize = { 110 -1 }
+				autoresize = yes
+				parentanchor = top
+				align = left|nobaseline
+				using = te_grid_fontsize_row
+				tooltip = "te_grid_card_countries_tt"
+				text = "te_grid_card_countries"
+			}
+			fixedgridbox = {
+				addcolumn = 30
+				addrow = 24
+				maxhorizontalslots = 12
+				flipdirection = yes
+				datamodel = "[State.MakeScope.GetList('te_grid_rec_capitals')]"
+
+				item = {
+					widget = {
+						datacontext = "[Scope.GetState]"
+						size = { 30 24 }
+
+						tiny_flag = {
+							datacontext = "[State.GetCountry]"
+							parentanchor = center
+						}
+					}
+				}
+			}
+		}
+		textbox = {
+			visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_markets_disp'), '(CFixedPoint)1' )]"
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			tooltip = "te_grid_card_markets_tt"
+			text = "te_grid_card_markets"
+		}
+	}
+
+	type te_grid_grids_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_grid_panel = {
+			te_grid_heading = {
+				blockoverride "heading_text" {
+					text = "te_grid_grids_header"
+				}
+				blockoverride "heading_right" {
+					tooltip = "te_grid_grids_asof_tt"
+					text = "te_grid_grids_asof"
+				}
+			}
+			te_grid_note = {
+				visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_grids_disp'), '(CFixedPoint)0' ) )]"
+				text = "te_grid_grids_none"
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				datamodel = "[Country.MakeScope.GetList('te_grid_hubs')]"
+
+				item = {
+					te_grid_card = {
+						datacontext = "[Scope.GetState]"
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The stations (rule 1: live, open): every station of the country's
+	### (te_grid_stations), those on a grid first, grid by grid, then those on
+	### none. Each row is the state panel tile in brief, with the tile's hovers.
+	### State 150, Mode 88, Flow 62, Grid 120, Staff 52, and 2 between: 480.
+	### ----------------------------------------------------------------------
+	type te_grid_station_cells = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 2
+
+		textbox = {
+			minimumsize = { 150 -1 }
+			maximumsize = { 150 -1 }
+			autoresize = yes
+			multiline = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			block "cell_state" {}
+		}
+		textbox = {
+			minimumsize = { 88 -1 }
+			maximumsize = { 88 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			block "cell_mode" {}
+		}
+		textbox = {
+			minimumsize = { 62 -1 }
+			maximumsize = { 62 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = te_grid_fontsize_row
+			block "cell_flow" {}
+		}
+		textbox = {
+			minimumsize = { 120 -1 }
+			maximumsize = { 120 -1 }
+			autoresize = yes
+			multiline = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			block "cell_grid" {}
+		}
+		textbox = {
+			minimumsize = { 52 -1 }
+			maximumsize = { 52 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = te_grid_fontsize_row
+			block "cell_staff" {}
+		}
+	}
+
+	type te_grid_station_head = te_grid_station_cells {
+		blockoverride "cell_state" {
+			default_format = "#grey"
+			text = "te_grid_st_col_state"
+		}
+		blockoverride "cell_mode" {
+			default_format = "#grey"
+			tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+			text = "te_grid_st_col_mode"
+		}
+		blockoverride "cell_flow" {
+			default_format = "#grey"
+			tooltip = "te_grid_st_col_flow_tt"
+			text = "te_grid_st_col_flow"
+		}
+		blockoverride "cell_grid" {
+			default_format = "#grey"
+			tooltip = "te_grid_st_col_grid_tt"
+			text = "te_grid_st_col_grid"
+		}
+		blockoverride "cell_staff" {
+			default_format = "#grey"
+			tooltip = "te_grid_st_col_staff_tt"
+			text = "te_grid_st_col_staff"
+		}
+	}
+
+	### One station: an item of te_grid_stations, its state the datacontext.
+	### The list is as of the last run, so a state that has changed hands since
+	### waits for the next (gotcha #15's last sentence).
+	type te_grid_station_row = te_grid_station_cells {
+		visible = "[ObjectsEqual( State.GetOwner, Country.Self )]"
+
+		blockoverride "cell_state" {
+			tooltip = "TE_STATE_GRID_TT"
+			raw_text = "[State.GetNameNoFormatting]"
+		}
+		blockoverride "cell_mode" {
+			tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+			text = "te_grid_st_mode"
+		}
+		blockoverride "cell_flow" {
+			tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
+			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0' ), 'te_grid_st_flow', 'te_grid_st_none' )]"
+		}
+		blockoverride "cell_grid" {
+			tooltip = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' ), 'TE_STATE_GRID_ROW_HUB_TT', 'te_grid_st_no_grid_tt' )]"
+			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' ), 'te_grid_st_grid', 'te_grid_st_none' )]"
+		}
+		blockoverride "cell_staff" {
+			tooltip = "te_grid_st_staff_tt"
+			text = "te_grid_st_staff"
+		}
+	}
+
+	type te_grid_stations_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_grid_panel = {
+			te_grid_heading = {
+				blockoverride "heading_text" {
+					text = "te_grid_stations_header"
+				}
+				blockoverride "heading_right" {
+					tooltip = "te_grid_ov_stations_tt"
+					text = "te_grid_stations_count"
+				}
+			}
+			### The note and the table follow the list they show, which the
+			### monthly run writes: a station built since waits for the next.
+			te_grid_note = {
+				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_grid_stations') )]"
+				text = "te_grid_stations_none"
+			}
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_grid_stations') ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				margin_top = 4
+
+				te_grid_station_head = {}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[Country.MakeScope.GetList('te_grid_stations')]"
+
+					item = {
+						te_grid_station_row = {
+							datacontext = "[Scope.GetState]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### A Grid Transfer Station's building panel (gui/building_details_panel.gui,
+	### shown on that building type only): the state's grid in brief, the
+	### tile's rows with their hovers, and a link to the Power Grids tab for the
+	### player's own station. The datacontext is the building's state.
+	### ----------------------------------------------------------------------
+
+	### "Label: value", 200 and 280.
+	type te_grid_kv_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		block "row_visible" {}
+
+		textbox = {
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			block "row_tooltip" {}
+			block "row_label" {}
+		}
+		textbox = {
+			minimumsize = { 280 -1 }
+			maximumsize = { 280 -1 }
+			autoresize = yes
+			multiline = yes
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			default_format = "#v"
+			block "row_value" {}
+		}
+	}
+
+	type te_grid_building_section = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+		margin = { 0 6 }
+		minimumsize = { 480 -1 }
+
+		te_grid_kv_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_GRID_ROW_MODE"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_st_mode"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_GRID_ROW_MOVED"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_flow"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_GRID_ROW_HUB_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_GRID_ROW_HUB"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_hub"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_GRID_ROW_SIZE_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_GRID_ROW_SIZE"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_size"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_grid_bld_supply_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_grid_bld_supply_label"
+			}
+			### A grid nothing uses power on has no ratio (te_grid_region_demand).
+			blockoverride "row_value" {
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_region_demand_disp'), '(CFixedPoint)0' ), 'te_grid_bld_supply', 'te_grid_bld_supply_no_demand' )]"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_price_target_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_grid_bld_price_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_grid_bld_price_label"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_price"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "TE_STATE_GRID_ROW_EFFICIENCY_TT"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_GRID_ROW_EFFICIENCY"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_efficiency"
+			}
+		}
+		te_grid_kv_row = {
+			blockoverride "row_tooltip" {
+				tooltip = "te_grid_st_staff_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_grid_st_col_staff"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_st_staff"
+			}
+		}
+
+		### The player's own station: one click chooses the tab and opens the
+		### window, as the state view's Grand Monument card does.
+		button = {
+			visible = "[And( Not( GetMetaPlayer.IsObserver ), And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+			using = default_button
+			parentanchor = hcenter
+			size = { 300 32 }
+			text = "te_grid_bld_open_tab"
+			tooltip = "te_grid_bld_open_tab_tt"
+			onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'power_grids')]"
+			onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
+		}
+	}
+
+	### The Help page: every explanation, out of the live sections, one
+	### subheading per topic. It reads nothing, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_power_grids_help_popup.
+	type te_power_grids_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_grids"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_grids"
+		}
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_prices"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_prices"
+		}
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_losses"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_losses"
+		}
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_stations"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_stations"
+		}
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_links"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_links"
+		}
+		te_grid_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_grid_how_sub_markets"
+			}
+		}
+		te_grid_note = {
+			text = "te_grid_how_markets"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_power_grids_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_power_grids')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_grid_how_header"
+		}
+		blockoverride "popup_list" {
+			te_power_grids_help_body = {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The Power Grids tab of the Timeline Extended window (te_system_tab_frame,
+	### gui/te_system_tab_widgets.gui; the window mounts it from
+	### gui/te_systems_window_generated.gui). No journal entry: the panels read
+	### Country, the player's in the window (the frame's tab_country), under the
+	### tab's gate (te_window_power_grids_tab_sgui) on a parent, the header
+	### outside it, and no Open Journal Entry. te_grid_tab_layout is the block a
+	### wide mount overrides.
+	### ----------------------------------------------------------------------
+	type te_grid_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_grid_tab_header"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_power_grids')]"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_content" {
+			block "te_grid_tab_layout" {
+				te_grid_overview_panel = {}
+				te_grid_grids_panel = {}
+				te_grid_stations_panel = {}
+			}
+		}
+		blockoverride "tab_open_journal" {}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_grid_tab_layout's override in the window's full-screen frame:
+	### the overview and the grids, then the stations, in two columns of a fixed
+	### 520 (te_ui_columns_two). The tab's gate stays on the frame's parent.
+	type te_grid_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_grid_overview_panel = {}
+			te_grid_grids_panel = {}
+		}
+
+		blockoverride "column_2" {
+			te_grid_stations_panel = {}
+		}
+	}
+}

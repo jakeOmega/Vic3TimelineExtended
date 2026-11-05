@@ -235,3 +235,27 @@ it yet, so there is nothing to check in game until something does.
 | **The state's modifiers.** Open a state with a built station and hover its modifiers. | Power Grid Connection, from the Grid Transfer Station. | — |
 | **A new station joins.** Build a station beside a running one. | It joins at the first monthly run after it is built, as before this build. | It waits a further month: the state's modifiers lag the build by a day or more; harmless. It never joins: see `grid_connection`. |
 | **Under construction.** Queue a station. | Its state reads no connection until the station is built, and its tile doesn't show. | The connection reads while it is queued: harmless, since `te_grid_station_online` also needs the station built. |
+
+## The Power Grids tab and the grid record (2026-11-05)
+
+The Timeline Extended window's sixth tab on its first strip, Power Grids (`gui/te_grid_widgets.gui`), and the
+Power Grid section of a station's building panel read the grid record the monthly run writes
+(`te_grid_record_effect`; `power_grids.md` § The record). Script can't see what the GUI draws, so these are
+checks for the game alone.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The strip.** Open the Timeline Extended window, side panel and full screen. | Six tabs on the first strip, Power Grids last; "Grand Monuments" and "Colonial Empire" wrap or shrink, and nothing ends in "...". | A name clipped: shorten the label, or move Power Grids to a strip of its own (the owner's call). Slots overlapping: `te_tab_buttons_six` in the window's strip vbox. |
+| **Greyed.** Before Electrical Capacitors, hover the tab. | Greyed, its checklist one line: Electrical Capacitors, or a station held. Research it: the tab opens, the overview at zeros, Grids and Stations each their note. | — |
+| **Overview.** A month after two stations join a grid. | Stations on a grid and built; Grids 1 and its stations; Sent and Received with their station counts and figures a week; Efficiency's share and what is lost; Agreements. | Zeros with a grid running: the record wasn't written (`te_grid_hubs` on the country in a save), or a `te_grid_tab_*` value reads the wrong scope. |
+| **Grid cards.** A country on two grids (a mainland and a colony). | Two cards, each named for its hub, the same name as each member's tile Hub row. | No cards: the datamodel over `Country.MakeScope.GetList('te_grid_hubs')` drew nothing; read the list in a plain-text save. Blank names: see **Hub name** above. |
+| **Flags.** A grid joined to a partner's by an agreement. | The card's Countries row shows both flags, each naming its country on hover. | No flags: the nested datamodel over the hub's `te_grid_rec_capitals` drew nothing, or `State.GetCountry` off its item failed (try `State.GetOwner`). Fallback: drop the row; the count is in its hover. |
+| **No demand.** A grid none of whose states uses Electricity yet. | Supply: no demand. | Supply: 0%: `te_grid_rec_demand_disp` isn't read. |
+| **Stations.** The Stations table. | A row a station: state, mode, flow, grid, staffing, those on no grid last. A long state name wraps. A station finished mid-month: the note until the 1st, never a header with no rows. | No rows: the datamodel over `te_grid_stations`. Every row hidden: `ObjectsEqual( State.GetOwner, Country.Self )` fails inside the item; drop the gate (a state that changed hands then shows until the next run). |
+| **Agreements.** Sign a Grid Interconnection Agreement, then let it lapse. | Agreements counts it from the day it is signed, and drops it the day it ends. | Never counts: `every_scope_treaty` with `any_scope_article` in a script value (`te_grid_tab_partners_disp`); fall back to `te_grid_partners`. |
+| **Staff.** A station still hiring, and a full one. | Staff under 100%, then 100%. | 0% everywhere: `add = occupancy` in `te_grid_station_staffing_disp` reads nothing as a value (`occupancy` is a building trigger); read it as `te_grid_staffed`-style through a variable the run stores. |
+| **Building panel.** Open a station's building panel, then another building's. | A Power Grid section on the station only: Mode, Flow, Hub, Grid size, Supply (No demand on a grid nothing uses power on), Price here, Efficiency, Staff, and View Power Grids, which opens the tab. On another country's station, no button. | No section: `Building.IsBuildingType`. The button does nothing: the two `onclick`s. |
+| **Another country.** Open a partner's National Info, then its Power Grids tab. | Its grids and stations, nothing about "our". | Your own figures: a read of `GetPlayer` under the tab. |
+| **Full screen.** The tab full screen. | Two columns: the overview and the grids, then the stations. | — |
+| **Help.** The "?" in the tab's header. | How Power Grids Work, six headings. | — |
+| **Cleared.** Demolish every station of a test country. | By the next 1st its grid cards and stations are gone and In reach reads 0, Agreements still counts an agreement in force, and on a partner's grid the card no longer counts it; the tab stays open (the research). | Stale cards: the dispatch didn't fire with `te_grid_flow` left on a state, or `te_grid_record_clear_effect` skipped the country. |

@@ -1,6 +1,7 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
-window. One strip of five tabs: Nation (always open), the Space Race, Grand
-Monuments, the Colonial Empire and the Seabed (Global Commons).
+window. Its own strip of six tabs: Nation (always open), the Space Race, Grand
+Monuments, the Colonial Empire, the Seabed (Global Commons) and Power Grids;
+then the strips that mirror the vanilla panels' system tabs.
 Opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 The strip, the selection templates and the tabs' mounts are generated from the
@@ -46,7 +47,10 @@ RULES = {"space_race": "sr_space_race_on = yes",
 # read, its slot on its strip). Nation (always open, no rule) is the first
 # slot of the first strip, then these.
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
-ALL_TABS = [(t.key, RULES[t.key], SLOTS[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
+# The first strip's six (owner, 2026-11-05: Power Grids the sixth), on
+# te_tab_buttons_six.
+SLOTS_SIX = SLOTS + ["sixth"]
+ALL_TABS = [(t.key, RULES[t.key], SLOTS_SIX[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
             for t in gen.TABS[1:] if t.key in RULES]
 
 
@@ -94,17 +98,18 @@ MIRRORED = [
     ("covert_warfare", 3, "te_military_tab_covert_tt", "te_window_tab_covert_warfare_locked_tt",
      _shown("te_military_covert_tab_sgui"), "te_military_covert_tab_unlock_sgui", "te_covert_tab_body"),
 ]
-# spec § 5.1: three strips of five
-STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed"],
+# spec § 5.1: three strips of five, the first of six since Power Grids
+# (owner, 2026-11-05)
+STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed", "power_grids"],
                2: ["banking", "tax_code", "budget_breakdown", "strategic_reserve", "global_warming"],
                3: ["demographics", "cultural_hegemony", "united_nations", "nuclear_weapons", "covert_warfare"]}
 SR = gen.SR_MILESTONES   # je_space_race.txt order (test_the_gates_read_the_rule_and_the_entries)
 # The systems' full names (owner, 2026-09-30), and the width a tab's name gets:
 # five slots share 540 less vanilla tab_buttons' 3 px margins and two 5 px
 # dividers, 104.8 each, less tab_text_properties' 10 px margin each side (no
-# icon): 84.8.
+# icon): 84.8; six, on te_tab_buttons_six (the first strip), 67.3.
 FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
-              "grand_monuments": "Grand Monuments", "seabed": "Seabed",
+              "grand_monuments": "Grand Monuments", "seabed": "Seabed", "power_grids": "Power Grids",
               # the mirrored tabs: the entries' names (owner, 2026-11-02), not
               # the Market tabs' Climate and Reserve
               "banking": "Banking", "tax_code": "Tax Code", "budget_breakdown": "Budget Breakdown",
@@ -112,7 +117,11 @@ FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire":
               "demographics": "Demographics", "cultural_hegemony": "Cultural Hegemony",
               "united_nations": "United Nations", "nuclear_weapons": "Nuclear Weapons",
               "covert_warfare": "Covert Warfare"}
-NAME_WIDTH = (540 - 2 * 3 - 2 * 5) / 5 - 2 * 10
+def _name_width(slots):
+    return (540 - 2 * 3 - 2 * 5) / slots - 2 * 10
+
+
+NAME_WIDTH = _name_width(5)
 # tab_text_properties wraps a name (multiline = yes) and shrinks it from the
 # tab font's 17 down to fontsize_min = 12 before it elides.
 TAB_FONT, TAB_FONT_MIN = 17, 12
@@ -535,8 +544,9 @@ class StripTest(unittest.TestCase):
         cls.sguis = _read(TAB_SGUIS)
 
     def _strip(self, row=1):
-        """A strip of the registry: the strips type's row-th tab_buttons."""
-        at = [m.start() for m in re.finditer(r"\btab_buttons = \{", self.strips)]
+        """A strip of the registry: the strips type's row-th tab_buttons (or
+        te_tab_buttons_six, for a strip of six)."""
+        at = [m.start() for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", self.strips)]
         return _block_at(self.strips, at[row - 1])
 
     def _override(self, name, within):
@@ -568,7 +578,7 @@ class StripTest(unittest.TestCase):
 
     def test_nation_is_first_and_always_open(self):
         first = self._strip()
-        self.assertRegex(first, r'^tab_buttons = \{\s*### nation\s*blockoverride "first_button" \{\s*text = "te_window_tab_nation"')
+        self.assertRegex(first, r'^te_tab_buttons_six = \{\s*### nation\s*blockoverride "first_button" \{\s*text = "te_window_tab_nation"')
         click = self._override("first_button_click", first)
         self.assertNotIn("enabled =", click)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"", click)
@@ -577,25 +587,31 @@ class StripTest(unittest.TestCase):
         self.assertIn("using = te_systems_window_nation_unselected",
                       self._override("first_button_visibility_checked", first))
 
-    def test_three_strips_of_five(self):
-        """Spec § 5.1 (owner, 2026-11-02): the window's own five, then the
-        Budget and Market panels' five, then the Population, Society,
-        Diplomacy and Military panels' five, each vanilla's five-slot
-        tab_buttons with no gate of its own (Nation always shows). Only the
-        developer tax-probes tab keeps a strip of its own, after them."""
+    def test_three_strips(self):
+        """Spec § 5.1 (owner, 2026-11-02): the window's own, then the Budget
+        and Market panels' five, then the Population, Society, Diplomacy and
+        Military panels' five, each with no gate of its own (Nation always
+        shows). The window's own strip holds six since Power Grids (owner,
+        2026-11-05), on te_tab_buttons_six, vanilla's strip with a sixth slot
+        as the Budget, Diplomacy and Market panels use; the others are
+        vanilla's five-slot tab_buttons. Only the developer tax-probes tab
+        keeps a strip of its own, after them."""
         self.assertEqual({row: [t.key for t in gen.TABS if t.row == row] for row in (1, 2, 3)}, STRIP_ORDER)
-        self.assertEqual(len(gen.TABS), 15)
+        self.assertEqual(len(gen.TABS), 16)
         for row, keys in STRIP_ORDER.items():
             with self.subTest(strip=row):
                 strip = self._strip(row)
-                self.assertTrue(strip.startswith("tab_buttons = {"))
+                six = len(keys) == 6
+                self.assertTrue(strip.startswith("te_tab_buttons_six = {" if six else "tab_buttons = {"))
                 self.assertNotIn("visible =", strip.split("blockoverride")[0])
                 at = [strip.index(f'text = "{_tab(k).label}"') for k in keys]
                 self.assertEqual(at, sorted(at))
-                for slot in SLOTS:
+                for slot in (SLOTS_SIX if six else SLOTS):
                     self.assertIn(f'blockoverride "{slot}_button"', strip)
-                self.assertNotIn("sixth_button", strip)
-        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 4)
+                if not six:
+                    self.assertNotIn("sixth_button", strip)
+        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 3)
+        self.assertEqual(len(re.findall(r"\bte_tab_buttons_six = \{", _strip_comments(self.strips))), 1)
         last = self._strip(3)
         rest = self.strips[self.strips.index(last) + len(last):]
         self.assertNotIn("te_window_tab_", rest)
@@ -608,7 +624,7 @@ class StripTest(unittest.TestCase):
             with self.subTest(tab=key):
                 t = _tab(key)
                 self.assertEqual((t.row, t.body, t.label), (row, body, f"te_window_tab_{key}"))
-                slot = SLOTS[STRIP_ORDER[row].index(key)]
+                slot = SLOTS_SIX[STRIP_ORDER[row].index(key)]
                 within = self._strip(row)
                 click = self._override(f"{slot}_button_click", within)
                 self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_systems_window_tab', '{key}')]\"", click)
@@ -1100,8 +1116,8 @@ class WideTest(unittest.TestCase):
     def test_the_wide_strip_is_the_narrow_strips_side_by_side(self):
         narrow = _type_body(self.generated, "te_systems_window_strips_narrow")
         wide = _type_body(self.generated, "te_systems_window_strips_wide")
-        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\btab_buttons = \{", narrow)]
-        w = [_block_at(wide, m.start()) for m in re.finditer(r"\btab_buttons = \{", wide)]
+        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", narrow)]
+        w = [_block_at(wide, m.start()) for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", wide)]
         self.assertEqual(len(n), len(w))
         size = "minimumsize = { 540 -1 }\nmaximumsize = { 540 -1 }"
         for a, b in zip(n, w):
@@ -1113,10 +1129,10 @@ class WideTest(unittest.TestCase):
                              [ln.strip() for ln in a.splitlines() if ln.strip() and not ln.strip().startswith("visible")])
         # the system strips in one centered row, then the developer strip
         row = _block_at(wide, wide.index("hbox = {"))
-        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*tab_buttons = \{")
+        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*(?:te_tab_buttons_six|tab_buttons) = \{")
         self.assertRegex(row, r"\}\s*expand = \{\}\s*\}$")
-        self.assertEqual(row.count("tab_buttons = {"), len({t.row for t in gen.TABS}))
-        self.assertNotIn("visible", row.split("tab_buttons = {")[0])    # the system strips show to all
+        self.assertEqual(len(re.findall(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", row)), len({t.row for t in gen.TABS}))
+        self.assertNotIn("visible", re.split(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", row)[0])    # the system strips show to all
         # the developer strip's row carries its gate (its strip, as the wide
         # strips do, carries none)
         dev = _block_at(wide, wide.index("hbox = {", wide.index("TEMPORARY")))
@@ -1329,7 +1345,8 @@ class LocTest(unittest.TestCase):
 
     def test_each_tab_shows_its_full_name(self):
         """The tabs carry no icon, so a name gets its slot less
-        tab_text_properties' 10 px margins: 84.8 with five on the strip. A
+        tab_text_properties' 10 px margins: 84.8 with five on the strip, 67.3
+        with six. A
         two-word name such as "Colonial Empire" is wider than that on one line
         at 17, as vanilla's "Release Subject" and "Nation Formation" are on
         its own five-slot Diplomacy strip in this window; tab_text_properties
@@ -1347,8 +1364,9 @@ class LocTest(unittest.TestCase):
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)
+                width = _name_width(len(STRIP_ORDER[_tab(tab).row]))
                 for word in words:
-                    self.assertLessEqual(len(word) * per_char, NAME_WIDTH, word)
+                    self.assertLessEqual(len(word) * per_char, width, word)
                 if tab in RULES or tab == "nation":
                     # the mirrored tabs take the entries' names, the owner's
                     # call, however long; "Demographics" shrinks toward 12

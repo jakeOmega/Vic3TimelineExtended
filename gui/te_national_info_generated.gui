@@ -10,11 +10,11 @@
 ### column's (every tab but Pops).
 
 template te_ni_pops_selected {
-	visible = "[Not( Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) ) ) )]"
+	visible = "[Not( Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'power_grids'), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
 }
 
 template te_ni_pops_unselected {
-	visible = "[Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) ) )]"
+	visible = "[Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'power_grids'), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) )]"
 }
 
 template te_ni_demographics_selected {
@@ -97,12 +97,20 @@ template te_ni_nuclear_weapons_unselected {
 	visible = "[And( GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
 }
 
+template te_ni_power_grids_selected {
+	visible = "[And( GetVariableSystem.HasValue('te_ni_tab', 'power_grids'), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+}
+
+template te_ni_power_grids_unselected {
+	visible = "[Not( And( GetVariableSystem.HasValue('te_ni_tab', 'power_grids'), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+}
+
 template te_ni_strip_shown {
 	visible = yes
 }
 
 template te_ni_content_shown {
-	visible = "[Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) ) )]"
+	visible = "[Or( Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), GetVariableSystem.HasValue('te_ni_tab', 'nation') ), And( GetVariableSystem.HasValue('te_ni_tab', 'banking'), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'tax_code'), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'colonial_empire'), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ), Or( Or( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'cultural_hegemony'), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_ni_tab', 'nuclear_weapons'), Or( And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'power_grids'), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) )]"
 }
 
 types te_national_info_generated_types
@@ -353,6 +361,27 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_nuclear_weapons"
+			}
+
+			### power_grids
+			blockoverride "second_button" {
+				text = "te_window_tab_power_grids"
+			}
+			blockoverride "second_button_tooltip" {
+				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_power_grids_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_power_grids_locked_tt' ), GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
+			}
+			blockoverride "second_button_click" {
+				enabled = "[GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				onclick = "[GetVariableSystem.Set('te_ni_tab', 'power_grids')]"
+			}
+			blockoverride "second_button_visibility" {
+				using = te_ni_power_grids_selected
+			}
+			blockoverride "second_button_visibility_checked" {
+				using = te_ni_power_grids_unselected
+			}
+			blockoverride "second_button_selected" {
+				text = "te_window_tab_power_grids"
 			}
 		}
 		expand = {}
@@ -895,6 +924,55 @@ types te_national_info_generated_types
 				}
 
 				te_nuclear_wide_sections = {}
+			}
+		}
+
+		### power_grids
+		flowcontainer = {
+			name = "te_ni_power_grids_tab"
+			using = te_ni_power_grids_selected
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+
+			### The player's own country: the window's full-screen mount, with its gate,
+			### its entry and its controls.
+			flowcontainer = {
+				name = "te_ni_power_grids_own"
+				visible = "[Country.IsLocalPlayer]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_grid_tab_body = {
+					blockoverride "te_grid_tab_layout" {
+						te_grid_wide_sections = {}
+					}
+				}
+			}
+
+			### Another country: the tab's header, its readout if it has one, then its
+			### sections under the window's Country, with no journal entry and no frame.
+			flowcontainer = {
+				name = "te_ni_power_grids_other"
+				visible = "[Not( Country.IsLocalPlayer )]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+
+				default_header = {
+					using = default_list_position
+					blockoverride "text" {
+						text = "te_window_tab_power_grids"
+					}
+					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_power_grids')]"
+					}
+				}
+
+				te_grid_wide_sections = {}
 			}
 		}
 	}

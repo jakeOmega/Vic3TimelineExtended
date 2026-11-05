@@ -418,6 +418,27 @@ types building_panels
 			}
 		}
 
+		### MOD: Power Grids. A Grid Transfer Station's grid in brief, with a
+		### link to the Power Grids tab for the player's own (te_grid_building_section,
+		### gui/te_grid_widgets.gui), its datacontext the building's state.
+		flowcontainer = {
+			visible = "[Building.IsBuildingType('building_grid_transfer_station')]"
+			using = default_list_position
+			direction = vertical
+			minimumsize = { @panel_width -1 }
+
+			default_header_2texts = {
+				blockoverride "text1" {
+					text = "te_grid_bld_header"
+				}
+			}
+
+			te_grid_building_section = {
+				datacontext = "[Building.GetState]"
+			}
+		}
+		### END MOD: Power Grids
+
 		### BUILDING ASSETS
 		flowcontainer = {
 			visible = "[Not(IsDataModelEmpty(Building.GetBuildingAssets))]"

@@ -519,6 +519,19 @@ markets it also shows the Exports or Imports of the state's market across the
 border, and Pass-through on the station that takes the import in. Its hover
 has the grid's supply against its demand.
 
+The Power Grids tab of the Timeline Extended window opens once you research
+Electrical Capacitors. Its overview counts your stations and how many are on
+a grid, the grids they are on, the Electricity your stations send and receive
+a week, your transmission efficiency, and your Grid Interconnection Agreements,
+with the countries whose undersea cables reach yours but have no agreement with
+you. A card for each grid, named for its hub, gives its stations, its supply
+against its demand, its price, what it sends and delivers a week, and the flags
+of the countries on it. The Stations table lists each of your stations with its
+mode, flow, grid and staffing, those on no grid last. Most figures are the
+last monthly balancing's, so a new station joins them on the 1st. A station's
+building panel shows its own grid in brief,
+with a button to the tab, and National Info shows another country's tab.
+
 A station is worth building where power plants make more than the state uses,
 and where Electricity is dear. A state with no power uses none, because its
 buildings can't run the methods that need it; a station lets it receive power

@@ -362,7 +362,7 @@ class StripTest(unittest.TestCase):
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
         keys = self._strip_keys(strips)
-        self.assertEqual([len(k) for k in keys], [5, 5, 1])
+        self.assertEqual([len(k) for k in keys], [5, 5, 2])
         self.assertEqual(sum(keys, []), gen.NI_ORDER)
         # centered: the strips between two expands, as the full-screen frame's
         top = [name for _, name, _ in _children(strips)]

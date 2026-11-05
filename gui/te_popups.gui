@@ -82,5 +82,6 @@ widget = {
 	te_tax_code_help_popup = {}
 	te_space_race_help_popup = {}
 	te_global_warming_help_popup = {}
+	te_power_grids_help_popup = {}
 	### --- end Help pages ---------------------------------------------------
 }

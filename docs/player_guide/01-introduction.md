@@ -12,7 +12,8 @@ most can be switched off with a game rule.
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed. Two more rows of
+same panels as their journal entries, one for the seabed and one for your
+[power grids](03-economy.md#power-grids). Two more rows of
 tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
 and Military panels, the same as there, so every system is in one place. Full Screen, at
 the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
