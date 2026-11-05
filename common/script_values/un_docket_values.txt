@@ -38,6 +38,12 @@ un_docket_war_months = { value = 6 }
 # ...and some state of a member it attacked is devastated past this. The
 # devastation trigger reads 0..1, so 0.3 is 30%.
 un_docket_war_devastation = { value = 0.3 }
+# ...or the member's enemies hold this much of it (enemy_occupation, 0..1,
+# weighted; vanilla's war support reads the same score). Since vanilla 1.15
+# only battles devastate a state, and devastation recovers once the fighting
+# moves on, so a war won by quick occupation never reached the threshold
+# above. A quarter of the country is a war that has taken real ground.
+un_docket_war_occupation = { value = 0.25 }
 
 # ---- Scores (0..100): the gravest situation wins ---------------------------------------
 

@@ -30,6 +30,8 @@ NEVER_STRUCK = {"unification", "unification_leadership", "te_un_mandate_restore_
 # Goals only a subject can hold against its overlord; the struck actor is never
 # a subject (un_teeth_war_goal_surcharge leaves subjects alone).
 SUBJECT_ONLY = {"independence", "increase_autonomy"}
+# Goals several plays open with, each struck unless the play is one of its own (un_force_play_opens_with_*).
+SEVERAL = {"annex_country", "humiliation", "return_state"}
 
 
 def _strip(text):
@@ -90,6 +92,9 @@ class PlayTypeTests(unittest.TestCase):
                                         _block(triggers, "un_force_play_opens_with_annexation")))
         cls.humiliation = set(re.findall(r"is_diplomatic_play_type = (\w+)",
                                          _block(triggers, "un_force_play_opens_with_humiliation")))
+        # vanilla 1.15's dp_return_state_to_subject made return_state a goal of several plays
+        cls.return_state = set(re.findall(r"is_diplomatic_play_type = (\w+)",
+                                          _block(triggers, "un_force_play_opens_with_return_state")))
 
     def test_the_plays_were_read(self):
         self.assertIn("dp_conquer_state", self.plays)
@@ -103,10 +108,11 @@ class PlayTypeTests(unittest.TestCase):
     def test_the_annexation_and_humiliation_lists_are_every_play_that_opens_with_them(self):
         self.assertEqual(self.annexation, self.by_goal["annex_country"])
         self.assertEqual(self.humiliation, self.by_goal["humiliation"])
-        self.assertTrue({"annex_country", "humiliation"} <= self.held)
+        self.assertEqual(self.return_state, self.by_goal["return_state"])
+        self.assertTrue(SEVERAL <= self.held)
 
     def test_the_always_struck_goals_open_no_play(self):
-        for goal in self.held - {"annex_country", "humiliation"}:
+        for goal in self.held - SEVERAL:
             with self.subTest(goal=goal):
                 self.assertEqual(self.by_goal.get(goal, set()), set())
 
