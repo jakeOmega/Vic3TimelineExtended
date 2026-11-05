@@ -166,9 +166,11 @@ gm_com_send_offer = {
 		# never fired, or never closed) is forgotten by the world pass, so it
 		# cannot block every later opportunity.
 		set_variable = { name = gm_com_offer_watch value = yes months = 6 }
+		# Not over an entry shown but not yet active (gm_country_refresh says why).
 		if = {
 			limit = {
 				NOT = { has_journal_entry = je_grand_monuments }
+				NOT = { has_inactive_journal_entry = je_grand_monuments }
 			}
 			add_journal_entry = { type = je_grand_monuments }
 		}
