@@ -96,6 +96,29 @@
 # countries whose undersea cables reach its own or are reached by them, which
 # lets the agreement be signed between them (123_grid_interconnection.txt).
 #
+# The grid's record, for the Power Grids tab, kept from one run to the next
+# (te_grid_record_effect). A grid lasts a run, so its hub (te_grid_hub, a
+# member) carries it: te_grid_rec_supply / _demand (the sums of
+# te_grid_local_production / _consumption; a grid with no demand is never
+# priced, so its te_grid_rec_price is the default 1), te_grid_rec_price
+# (te_grid_price), te_grid_rec_sent (what its sending stations are ordered to
+# send a week) and te_grid_rec_delivered (what its receiving stations are
+# ordered to deliver, after losses), te_grid_rec_countries and
+# te_grid_rec_markets (how many own a station on it, and how many markets it
+# crosses), and the variable list te_grid_rec_capitals (the capitals of the
+# countries on it, for their flags: a country read straight off a GUI list is
+# unproven, gui_modding_guide.md gotcha #15; a country with no capital is
+# counted but has no flag). Its size and its supply against its demand are
+# the hub's te_grid_region_size and te_grid_region_ratio, as on every member.
+# Country variable lists: te_grid_hubs, the hubs of the grids its stations
+# are on; te_grid_stations, its built stations, those on a grid first, grid
+# by grid, then those that aren't online (the tile's Offline). Global lists
+# te_grid_record_hubs and te_grid_record_countries name what to clear at the
+# next run's start (te_grid_record_clear_effect), and the dispatch fires while
+# any state still holds a station's figures (power_grid_on_actions.txt): a
+# country that loses its last station, or a hub that stops being one, keeps
+# nothing from the run before.
+#
 # The flow modifiers are applied on the building with local-variable
 # multipliers: a `multiplier = var:` or script value there would resolve
 # against ROOT, the country (scripting_best_practices.md, #500).
@@ -109,6 +132,7 @@ te_grid_world_update_effect = {
 	te_grid_dispatch_info_effect = yes
 	te_grid_staffing_info_start_effect = yes
 	set_global_variable = { name = te_grid_cable_range_max value = 0 }
+	te_grid_record_clear_effect = yes
 
 	every_country = {
 		limit = {
@@ -119,6 +143,7 @@ te_grid_world_update_effect = {
 				}
 			}
 		}
+		add_to_global_variable_list = { name = te_grid_record_countries target = this }
 		# A state whose station is gone keeps no figures.
 		every_scope_state = {
 			limit = {
@@ -175,8 +200,76 @@ te_grid_world_update_effect = {
 		te_grid_close_region_effect = yes
 	}
 
+	# Each country's stations on no grid this month, those that aren't online
+	# (te_grid_idle_station_effect took their hub), after those on one.
+	every_in_global_list = {
+		variable = te_grid_record_countries
+		every_scope_state = {
+			limit = {
+				has_building = building_grid_transfer_station
+				NOT = { has_variable = te_grid_hub }
+			}
+			owner = {
+				add_to_variable_list = { name = te_grid_stations target = prev }
+			}
+		}
+	}
+
 	te_grid_staffing_info_end_effect = yes
 	te_grid_world_clear_effect = yes
+}
+
+# Any scope, at the start of a run. Clears last run's record: the figures on
+# every grid's hub and every country's lists (te_grid_record_effect).
+te_grid_record_clear_effect = {
+	# A state or country gone since (a split state merged back, an annexed
+	# country) has nothing left to clear.
+	every_in_global_list = {
+		variable = te_grid_record_hubs
+		limit = { exists = this }
+		te_grid_clear_record_effect = yes
+	}
+	clear_global_variable_list = te_grid_record_hubs
+	every_in_global_list = {
+		variable = te_grid_record_countries
+		limit = { exists = this }
+		clear_variable_list = te_grid_hubs
+		clear_variable_list = te_grid_stations
+	}
+	clear_global_variable_list = te_grid_record_countries
+}
+
+# State scope, a hub of the last run.
+te_grid_clear_record_effect = {
+	if = {
+		limit = { has_variable = te_grid_rec_supply }
+		remove_variable = te_grid_rec_supply
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_demand }
+		remove_variable = te_grid_rec_demand
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_price }
+		remove_variable = te_grid_rec_price
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_sent }
+		remove_variable = te_grid_rec_sent
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_delivered }
+		remove_variable = te_grid_rec_delivered
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_countries }
+		remove_variable = te_grid_rec_countries
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_markets }
+		remove_variable = te_grid_rec_markets
+	}
+	clear_variable_list = te_grid_rec_capitals
 }
 
 # Any scope. Clears the run's lists, the marks on their members and the grid's
@@ -750,6 +843,71 @@ te_grid_balance_region_effect = {
 		variable = te_grid_region
 		te_grid_set_station_flow_effect = yes
 	}
+
+	# Once the orders are set, the grid's record for the Power Grids tab.
+	te_grid_record_effect = yes
+}
+
+# Country scope, from te_grid_balance_region_effect once a grid's orders are
+# set (te_grid_command, te_grid_delivery): te_grid_region holds the grid,
+# scope:te_grid_hub_state its hub, and the balancing's locals its sums
+# (te_grid_sum_production, te_grid_sum_consumption) and the markets it crosses
+# (te_grid_rec_markets, te_grid_cross_market_effect). The figures go on the
+# hub, which every member names (te_grid_hub). Each member's owner lists the
+# hub once (te_grid_hubs) and the member (te_grid_stations), and the first
+# member of each owner counts it and lists its capital on the hub. What a
+# station moves is the tile's Flow (te_grid_electricity_moved_disp): this
+# month's order, what it is to send or deliver after losses, and nothing for
+# an order under a unit a week; a station with no staff counts in full, as on
+# the tile, though it moves nothing until it hires.
+te_grid_record_effect = {
+	set_local_variable = { name = te_grid_rec_sent value = 0 }
+	set_local_variable = { name = te_grid_rec_delivered value = 0 }
+	set_local_variable = { name = te_grid_rec_countries value = 0 }
+	scope:te_grid_hub_state = {
+		add_to_global_variable_list = { name = te_grid_record_hubs target = this }
+		clear_variable_list = te_grid_rec_capitals
+	}
+	every_in_global_list = {
+		variable = te_grid_region
+		if = {
+			limit = { var:te_grid_flow > 0 }
+			change_local_variable = { name = te_grid_rec_sent add = te_grid_electricity_moved_disp }
+		}
+		else_if = {
+			limit = { var:te_grid_flow < 0 }
+			change_local_variable = { name = te_grid_rec_delivered add = te_grid_electricity_moved_disp }
+		}
+		save_scope_as = te_grid_rec_member
+		owner = {
+			if = {
+				limit = {
+					NOT = { is_target_in_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state } }
+				}
+				add_to_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state }
+				change_local_variable = { name = te_grid_rec_countries add = 1 }
+				if = {
+					limit = { exists = capital }
+					capital = {
+						save_scope_as = te_grid_rec_capital
+					}
+					scope:te_grid_hub_state = {
+						add_to_variable_list = { name = te_grid_rec_capitals target = scope:te_grid_rec_capital }
+					}
+				}
+			}
+			add_to_variable_list = { name = te_grid_stations target = scope:te_grid_rec_member }
+		}
+	}
+	scope:te_grid_hub_state = {
+		set_variable = { name = te_grid_rec_supply value = local_var:te_grid_sum_production }
+		set_variable = { name = te_grid_rec_demand value = local_var:te_grid_sum_consumption }
+		set_variable = { name = te_grid_rec_price value = global_var:te_grid_price }
+		set_variable = { name = te_grid_rec_sent value = local_var:te_grid_rec_sent }
+		set_variable = { name = te_grid_rec_delivered value = local_var:te_grid_rec_delivered }
+		set_variable = { name = te_grid_rec_countries value = local_var:te_grid_rec_countries }
+		set_variable = { name = te_grid_rec_markets value = local_var:te_grid_rec_markets }
+	}
 }
 
 # Any scope, from te_grid_balance_region_effect: the sending price at the
@@ -783,6 +941,9 @@ te_grid_cross_market_effect = {
 		variable = te_grid_region
 		save_scope_as = te_grid_seed_state
 	}
+	# How many markets the grid crosses, for its record (te_grid_record_effect):
+	# one, or one per market settled below.
+	set_local_variable = { name = te_grid_rec_markets value = 1 }
 	if = {
 		limit = {
 			any_in_global_list = {
@@ -790,6 +951,7 @@ te_grid_cross_market_effect = {
 				NOT = { market = scope:te_grid_seed_state.market }
 			}
 		}
+		set_local_variable = { name = te_grid_rec_markets value = 0 }
 		every_in_global_list = {
 			variable = te_grid_region
 			set_variable = te_grid_market_pending
@@ -827,6 +989,7 @@ te_grid_cross_market_effect = {
 # member.
 te_grid_settle_market_effect = {
 	save_scope_as = te_grid_market_member
+	change_local_variable = { name = te_grid_rec_markets add = 1 }
 	set_local_variable = { name = te_grid_market_sum value = 0 }
 	every_in_global_list = {
 		variable = te_grid_region
