@@ -3,6 +3,12 @@
 
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# Activation needs both of these (vanilla journal_entries.md). The entry
 	# opens at 0.1 C of warming under the Global Warming game rule, or for any
 	# country holding a restrictive Resource Transition law (#660), with the

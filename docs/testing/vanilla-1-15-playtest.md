@@ -39,6 +39,9 @@ mobilization group, no `Duplicated key` for `law_communal_administration`, `buil
 `building_copper_mine_throughput_add` or `goods_output_fine_art_mult`, no `Province crossing multiple state
 regions`, and `grep -c "quote-escaping" debug.log` should be 0 (283 on the first launch), in English and in a German
 or Spanish game.
+- **No `missing an activation_description trigger` line** at load (29 mod entries logged one on the first 1.15
+  launch; each now has vanilla's default, #1408). In the journal, an inactive mod entry's activation hover reads as
+  it did.
 - **A new game's starting laws** (#1408): `error.log` has no `set_institution_investment_level … invalid institution
   type` line, and Britain, Bavaria and Switzerland hold Religious Schools with a schools level, not No Schools.
   Britain, France and Baden hold Interventionism, not Agrarianism. The north German states (Saxony, Brunswick,

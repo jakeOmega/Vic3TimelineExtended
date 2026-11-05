@@ -32,6 +32,12 @@ je_tax_code = {
 	icon = "gfx/interface/icons/event_icons/je_tax_code.dds"
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	widget = {
 		gui = "gui/journal_entry_widgets/te_tax_layout_widget.gui"
 		name = "widget_je_tax_code_overview"

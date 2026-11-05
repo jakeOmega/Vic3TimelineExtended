@@ -35,6 +35,12 @@ je_space_race_suborbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
 	# Space Race Works last. The vanilla button grid below is hidden from humans
@@ -199,6 +205,12 @@ je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
 	# Space Race Works last. The vanilla button grid below is hidden from humans
@@ -356,6 +368,12 @@ je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
 	# Space Race Works last. The vanilla button grid below is hidden from humans
@@ -512,6 +530,12 @@ je_space_race_moon_landing = {
 je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
 	group = je_group_foreign_affairs
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -679,6 +703,12 @@ je_space_race_moon_base = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
 	# Space Race Works last. The vanilla button grid below is hidden from humans
@@ -788,6 +818,12 @@ je_space_race_moon_base = {
 je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
 	group = je_group_foreign_affairs
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -948,6 +984,12 @@ je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
 	# Space Race Works last. The vanilla button grid below is hidden from humans
@@ -1105,6 +1147,12 @@ je_space_race_interstellar_results = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# The panel (gui/journal_entry_widgets/space_race_widget.gui): the transit
 	# and the programme above the status line, under the "?" to the Help page.
 	# There is nothing to adjust while the probe coasts, so no live sections.
@@ -1220,6 +1268,12 @@ je_space_race_interstellar_results = {
 je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
 	group = je_group_foreign_affairs
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
