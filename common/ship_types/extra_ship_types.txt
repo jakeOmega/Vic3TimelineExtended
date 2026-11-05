@@ -122,10 +122,10 @@ ship_type_asw_destroyer = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 1700
-		goods_input_iron_add = 800
-		goods_input_engines_add = 800
-		goods_input_radios_add = 250
+		goods_input_steel_add = 1050
+		goods_input_iron_add = 495
+		goods_input_engines_add = 495
+		goods_input_radios_add = 155
 	}
 
 	materiel_goods = {
@@ -218,9 +218,9 @@ ship_type_nuclear_submarine = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 2200
-		goods_input_engines_add = 900
-		goods_input_electronic_components_add = 350
+		goods_input_steel_add = 1380
+		goods_input_engines_add = 565
+		goods_input_electronic_components_add = 220
 	}
 
 	materiel_goods = {
@@ -307,11 +307,11 @@ ship_type_guided_missile_ship = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 2000
-		goods_input_iron_add = 900
-		goods_input_engines_add = 900
-		goods_input_electronic_components_add = 400
-		goods_input_ammunition_add = 200
+		goods_input_steel_add = 1240
+		goods_input_iron_add = 560
+		goods_input_engines_add = 560
+		goods_input_electronic_components_add = 250
+		goods_input_ammunition_add = 125
 	}
 
 	materiel_goods = {
@@ -405,11 +405,11 @@ ship_type_nuclear_supercarrier = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 4000
-		goods_input_iron_add = 1500
-		goods_input_engines_add = 1500
-		goods_input_electronic_components_add = 400
-		goods_input_aeroplanes_add = 200
+		goods_input_steel_add = 2490
+		goods_input_iron_add = 930
+		goods_input_engines_add = 930
+		goods_input_electronic_components_add = 250
+		goods_input_aeroplanes_add = 125
 	}
 
 	materiel_goods = {
@@ -512,11 +512,11 @@ ship_type_arsenal_ship = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 10200
-		goods_input_iron_add = 4100
-		goods_input_engines_add = 3400
-		goods_input_electronic_components_add = 2550
-		goods_input_ammunition_add = 1700
+		goods_input_steel_add = 6210
+		goods_input_iron_add = 2500
+		goods_input_engines_add = 2070
+		goods_input_electronic_components_add = 1550
+		goods_input_ammunition_add = 1040
 	}
 
 	materiel_goods = {
@@ -617,10 +617,10 @@ ship_type_expeditionary_sea_base = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 3200
-		goods_input_iron_add = 1400
-		goods_input_engines_add = 1100
-		goods_input_electronic_components_add = 350
+		goods_input_steel_add = 1980
+		goods_input_iron_add = 870
+		goods_input_engines_add = 680
+		goods_input_electronic_components_add = 215
 	}
 
 	materiel_goods = {
@@ -707,10 +707,10 @@ ship_type_expeditionary_fast_transport = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 1500
-		goods_input_iron_add = 600
-		goods_input_engines_add = 700
-		goods_input_electronic_components_add = 200
+		goods_input_steel_add = 975
+		goods_input_iron_add = 390
+		goods_input_engines_add = 455
+		goods_input_electronic_components_add = 130
 	}
 
 	materiel_goods = {
@@ -802,11 +802,11 @@ ship_type_hypersonic_missile_platform = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 16000
-		goods_input_iron_add = 7000
-		goods_input_engines_add = 5000
-		goods_input_electronic_components_add = 3600
-		goods_input_ammunition_add = 2400
+		goods_input_steel_add = 9750
+		goods_input_iron_add = 4260
+		goods_input_engines_add = 3050
+		goods_input_electronic_components_add = 2190
+		goods_input_ammunition_add = 1460
 	}
 
 	materiel_goods = {
@@ -902,10 +902,10 @@ ship_type_pulsed_laser_escort = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 4000
-		goods_input_iron_add = 1300
-		goods_input_engines_add = 1300
-		goods_input_electronic_components_add = 1500
+		goods_input_steel_add = 2500
+		goods_input_iron_add = 815
+		goods_input_engines_add = 815
+		goods_input_electronic_components_add = 940
 	}
 
 	materiel_goods = {
@@ -993,10 +993,10 @@ ship_type_swarm_coordination_vessel = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 4500
-		goods_input_iron_add = 1400
-		goods_input_engines_add = 1400
-		goods_input_electronic_components_add = 1800
+		goods_input_steel_add = 2810
+		goods_input_iron_add = 875
+		goods_input_engines_add = 875
+		goods_input_electronic_components_add = 1130
 	}
 
 	materiel_goods = {
@@ -1096,10 +1096,10 @@ ship_type_fleet_carrier = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 2800
-		goods_input_iron_add = 1100
-		goods_input_engines_add = 1100
-		goods_input_aeroplanes_add = 250
+		goods_input_steel_add = 1730
+		goods_input_iron_add = 680
+		goods_input_engines_add = 680
+		goods_input_aeroplanes_add = 155
 	}
 
 	materiel_goods = {
@@ -1192,10 +1192,10 @@ ship_type_amphibious_assault_ship = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 1900
-		goods_input_iron_add = 700
-		goods_input_engines_add = 700
-		goods_input_radios_add = 150
+		goods_input_steel_add = 1230
+		goods_input_iron_add = 455
+		goods_input_engines_add = 455
+		goods_input_radios_add = 97
 	}
 
 	materiel_goods = {
@@ -1286,10 +1286,10 @@ ship_type_marine_assault_ship = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 2400
-		goods_input_iron_add = 900
-		goods_input_engines_add = 900
-		goods_input_radios_add = 200
+		goods_input_steel_add = 1560
+		goods_input_iron_add = 585
+		goods_input_engines_add = 585
+		goods_input_radios_add = 130
 	}
 
 	materiel_goods = {
@@ -1387,11 +1387,11 @@ ship_type_stealth_battlecruiser = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 11050
-		goods_input_iron_add = 4750
-		goods_input_engines_add = 3750
-		goods_input_electronic_components_add = 2400
-		goods_input_ammunition_add = 1200
+		goods_input_steel_add = 6730
+		goods_input_iron_add = 2890
+		goods_input_engines_add = 2280
+		goods_input_electronic_components_add = 1460
+		goods_input_ammunition_add = 730
 	}
 
 	materiel_goods = {
@@ -1497,11 +1497,11 @@ ship_type_networked_air_defense_cruiser = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 3000
-		goods_input_iron_add = 1100
-		goods_input_engines_add = 1100
-		goods_input_electronic_components_add = 1000
-		goods_input_ammunition_add = 300
+		goods_input_steel_add = 1860
+		goods_input_iron_add = 680
+		goods_input_engines_add = 680
+		goods_input_electronic_components_add = 620
+		goods_input_ammunition_add = 185
 	}
 
 	materiel_goods = {
@@ -1593,9 +1593,9 @@ ship_type_stealth_attack_submarine = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 2800
-		goods_input_engines_add = 1100
-		goods_input_electronic_components_add = 600
+		goods_input_steel_add = 1750
+		goods_input_engines_add = 690
+		goods_input_electronic_components_add = 375
 	}
 
 	materiel_goods = {
@@ -1673,9 +1673,9 @@ ship_type_autonomous_swarm_submarine = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 3200
-		goods_input_engines_add = 1300
-		goods_input_electronic_components_add = 1400
+		goods_input_steel_add = 2010
+		goods_input_engines_add = 815
+		goods_input_electronic_components_add = 875
 	}
 
 	materiel_goods = {
@@ -1763,11 +1763,11 @@ ship_type_antimatter_battleship = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 25300
-		goods_input_iron_add = 11500
-		goods_input_engines_add = 8050
-		goods_input_electronic_components_add = 5750
-		goods_input_ammunition_add = 4150
+		goods_input_steel_add = 15410
+		goods_input_iron_add = 7010
+		goods_input_engines_add = 4900
+		goods_input_electronic_components_add = 3500
+		goods_input_ammunition_add = 2530
 	}
 
 	materiel_goods = {
@@ -1863,10 +1863,10 @@ ship_type_orbital_support_amphibious_mothership = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 5500
-		goods_input_iron_add = 2200
-		goods_input_engines_add = 1800
-		goods_input_electronic_components_add = 1000
+		goods_input_steel_add = 3410
+		goods_input_iron_add = 1360
+		goods_input_engines_add = 1120
+		goods_input_electronic_components_add = 620
 	}
 
 	materiel_goods = {

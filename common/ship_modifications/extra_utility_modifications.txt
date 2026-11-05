@@ -4,7 +4,9 @@
 # Each is the successor of a base-game utility on the same stat: unlocked later,
 # stronger on every stat the two share, and more goods (design:
 # docs/superpowers/specs/2026-11-03-ship-module-scaling-design.md;
-# test_ship_modules.py checks all three). A ship can't fit a successor beside its
+# test_ship_modules.py checks all three). Vanilla 1.15 raised its utilities' goods
+# 21-26x (Large Carronades 9x); each successor's goods rose by the largest factor any of
+# its predecessors took, so it keeps its margin. A ship can't fit a successor beside its
 # predecessor because every mod ship lists the two in the same utility slot, and
 # a slot holds one module (the test checks that too). Don't use incompatible_with
 # here: on a ship modification the engine reads the documented bare form
@@ -51,8 +53,8 @@ utility_mod_damage_control_teams = {
 	}
 
 	construction_goods = {
-		goods_input_tools_add = 6
-		goods_input_steel_add = 6
+		goods_input_tools_add = 150
+		goods_input_steel_add = 150
 	}
 
 	ai_weight = {
@@ -76,8 +78,8 @@ utility_mod_composite_armor_plating = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 12
-		goods_input_advanced_materials_add = 1
+		goods_input_steel_add = 300
+		goods_input_advanced_materials_add = 25
 	}
 
 	ai_weight = {
@@ -102,8 +104,8 @@ utility_mod_ciws = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 8
-		goods_input_ammunition_add = 8
+		goods_input_electronic_components_add = 210
+		goods_input_ammunition_add = 210
 	}
 
 	ai_weight = {
@@ -126,8 +128,8 @@ utility_mod_electronic_countermeasures = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_radios_add = 4
+		goods_input_electronic_components_add = 250
+		goods_input_radios_add = 84
 	}
 
 	ai_weight = {
@@ -151,8 +153,8 @@ utility_mod_dew_point_defense = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_steel_add = 8
+		goods_input_electronic_components_add = 310
+		goods_input_steel_add = 210
 	}
 
 	ai_weight = {
@@ -177,8 +179,8 @@ utility_mod_precision_warheads = {
 	}
 
 	construction_goods = {
-		goods_input_explosives_add = 8
-		goods_input_electronic_components_add = 6
+		goods_input_explosives_add = 175
+		goods_input_electronic_components_add = 130
 	}
 
 	ai_weight = {
@@ -201,8 +203,8 @@ utility_mod_ballistic_missile_bay = {
 	}
 
 	construction_goods = {
-		goods_input_ammunition_add = 12
-		goods_input_explosives_add = 6
+		goods_input_ammunition_add = 250
+		goods_input_explosives_add = 125
 	}
 
 	ai_weight = {
@@ -226,8 +228,8 @@ utility_mod_drone_complement = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_radios_add = 6
+		goods_input_electronic_components_add = 290
+		goods_input_radios_add = 145
 	}
 
 	ai_weight = {
@@ -253,8 +255,8 @@ utility_mod_aegis_air_defense = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 10
-		goods_input_radios_add = 5
+		goods_input_electronic_components_add = 260
+		goods_input_radios_add = 130
 	}
 
 	ai_weight = {
@@ -275,11 +277,11 @@ utility_mod_surface_search_radar = {
 
 	modifier = {
 		ship_battle_condition_accuracy_penalty_mult = -0.75
-		ship_detection_mult = 0.50
+		ship_detection_mult = 1.0
 	}
 
 	construction_goods = {
-		goods_input_radios_add = 10
+		goods_input_radios_add = 240
 	}
 
 	ai_weight = {
@@ -334,8 +336,8 @@ utility_mod_helicopter_pad = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 6
-		goods_input_aeroplanes_add = 4
+		goods_input_steel_add = 155
+		goods_input_aeroplanes_add = 105
 	}
 
 	ai_weight = {
