@@ -6,3 +6,10 @@ INJECT:modifier_woman_soldiers = {
 	state_working_adult_ratio_add = -0.05
 	state_demog_womens_work_ratio_add = 0.05
 }
+# Vanilla 1.15's Social Revolution (the communism journal entry's success, communism.6; a country modifier for
+# very_long_modifier_time): its +0.05 working-adult line moves to the women's-work family at its old value, as Woman
+# Soldiers' does. The revolution's women's work is the line it stands for.
+INJECT:modifier_social_revolution = {
+	state_working_adult_ratio_add = -0.05
+	state_demog_womens_work_ratio_add = 0.05
+}
