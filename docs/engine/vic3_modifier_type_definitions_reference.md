@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 8218 modifier entries.*
+*Auto-generated from 7293 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1419,6 +1419,8 @@ _An increase or decrease to amount of Political Strength gained from the Votes o
 
 ### `goods_input_{good}_add` (66 members)
 
+_The amount of aeroplanes! Aeroplanes consumed by buildings_
+
 - `goods_input_advanced_materials_add`, `goods_input_aeroplanes_add`, `goods_input_ammunition_add`, `goods_input_artillery_add`, `goods_input_automobiles_add`, `goods_input_clippers_add`
 - `goods_input_clothes_add`, `goods_input_coal_add`, `goods_input_coffee_add`, `goods_input_construction_add`, `goods_input_consumer_appliances_add`, `goods_input_copper_add`
 - `goods_input_digital_access_add`, `goods_input_digital_assets_add`, `goods_input_dye_add`, `goods_input_electricity_add`, `goods_input_electronic_components_add`, `goods_input_engines_add`
@@ -1447,6 +1449,8 @@ _An increase or decrease to amount of Political Strength gained from the Votes o
 
 ### `goods_output_{good}_add` (67 members)
 
+_The amount of aeroplanes! Aeroplanes produced by buildings_
+
 - `goods_output_advanced_materials_add`, `goods_output_aeroplanes_add`, `goods_output_ammunition_add`, `goods_output_artillery_add`, `goods_output_automobiles_add`, `goods_output_clippers_add`
 - `goods_output_clothes_add`, `goods_output_coal_add`, `goods_output_coffee_add`, `goods_output_construction_add`, `goods_output_consumer_appliances_add`, `goods_output_copper_add`
 - `goods_output_digital_access_add`, `goods_output_digital_assets_add`, `goods_output_dye_add`, `goods_output_electricity_add`, `goods_output_electronic_components_add`, `goods_output_engines_add`
@@ -1461,6 +1465,8 @@ _An increase or decrease to amount of Political Strength gained from the Votes o
 - `goods_output_wood_add`
 
 ### `goods_output_{good}_mult` (67 members)
+
+_A bonus or penalty to the amount of aeroplanes! output produced by buildings_
 
 - `goods_output_advanced_materials_mult`, `goods_output_aeroplanes_mult`, `goods_output_ammunition_mult`, `goods_output_artillery_mult`, `goods_output_automobiles_mult`, `goods_output_clippers_mult`
 - `goods_output_clothes_mult`, `goods_output_coal_mult`, `goods_output_coffee_mult`, `goods_output_construction_mult`, `goods_output_consumer_appliances_mult`, `goods_output_copper_mult`
@@ -1536,6 +1542,8 @@ _An increase or decrease to the chance for this Interest Group to select a Leade
 - `power_bloc_mandate_progress_per_unrecognized_power_member_mult`, `power_bloc_mandate_progress_per_unrecognized_regional_power_member_mult`
 
 ### `state_building_{building}_max_level_add` (338 members)
+
+_A bonus or penalty to the maximum level of Barracks buildings._
 
 - `state_building_afghan_nassaji_kabul_mills_max_level_add`, `state_building_airbus_lagardere_plant_max_level_add`, `state_building_airport_max_level_add`, `state_building_ajinomoto_kawasaki_plant_max_level_add`, `state_building_aker_oslo_shipyard_max_level_add`, `state_building_alibaba_cainiao_park_max_level_add`
 - `state_building_allatini_thessaloniki_flour_mill_max_level_add`, `state_building_alpine_donawitz_steelworks_max_level_add`, `state_building_altos_hornos_baracaldo_furnaces_max_level_add`, `state_building_amazon_fulfillment_center_max_level_add`, `state_building_anglo_persian_abadan_refinery_max_level_add`, `state_building_anglo_sicilian_licata_wharf_max_level_add`
@@ -1794,15 +1802,13 @@ _Cannon Artillery Offense_
 - `battle_offense_owned_province_mult` — **Home Offense** — Alters the Offense of a Military Unit fighting in territory owned by its Country
 - `battle_total_combat_width_mult` — **Total Combat Width** — A bonus or penalty to the total Combat Width for this side of the Battle
 
-### building (62)
+### building (57)
 
 - `building_cash_reserves_mult` — **Maximum Cash Reserves** — A bonus or penalty to the maximum Cash Reserves that Buildings can retain.
 - `building_company_government_dividends_add` — **Company Government Dividends** — An increase or decrease to the amount of Government Dividends paid by Company Headquarters.
 - `building_company_worker_dividends_add` — **Company Workforce Dividends** — An increase or decrease to the amount of Dividends paid to the Workforce by Building levels owned by Companies.
 - `building_economy_of_scale_level_cap_add` — **Economy of Scale Building Level Cap** — The maximum number of Building levels that can confer Economy of Scale effects.
-- `building_employment_deportee_add` — **Deportee Labor Positions**
 - `building_goods_input_mult` — **Goods Input** — An adjustment to the amount of Goods Consumed by a Building.
-- `building_grid_undersea_cable_range_add` — **Undersea Cable Range**
 - `building_group_bg_army_infrastructure_usage_mult`
 - `building_group_bg_arts_infrastructure_usage_mult`
 - `building_group_bg_canals_infrastructure_usage_mult`
@@ -1846,9 +1852,6 @@ _Cannon Artillery Offense_
 - `building_naval_administration_hiring_rate_mult` — **Naval Administration Hiring Speed** — How quickly Naval Administration buildings can hire new Sailors
 - `building_naval_administration_training_rate_add` — **Naval Administration Training Rate** — How much Manpower can be trained per week at Naval Administration buildings
 - `building_naval_administration_training_rate_mult` — **Naval Administration Training Rate** — How much Manpower can be trained per week at Naval Administration buildings
-- `building_resettlement_arrivals_add` — **Settlers arrived last month**
-- `building_resettlement_transit_deaths_add` — **Died in transit last month**
-- `building_robotic_or_ai_managed_bool` — **Robotic or AI-Managed**
 - `building_self_investment_chance_add` — **Building Self-Investment Chance** — An increase or decrease to the chance that the Workforce of Buildings will be the owners of new invested levels.
 - `building_subsistence_output_add` — **Subsistence Output** — An increase or decrease to the Subsistence Output of peasants! Peasants in the Building.
 - `building_subsistence_output_mult` — **Subsistence Output** — An increase or decrease to the Subsistence Output of peasants! Peasants in the Building.
@@ -1858,12 +1861,6 @@ _Cannon Artillery Offense_
 - `building_unincorporated_subsistence_output_mult` — **Subsistence Output in Unincorporated States** — An increase or decrease to the Subsistence Output of peasants! Peasants in Unincorporated States
 - `building_unincorporated_throughput_add` — **Throughput in Unincorporated States** — A bonus or penalty to the Throughput of buildings in Unincorporated States
 - `building_working_conditions_mult` — **Dangerous Working Conditions** — An increase or decrease in workplace hazard levels
-
-### building-group (3)
-
-- `building_group_bg_high_tech_construction_efficiency_add` — **$bg_high_tech$ Construction Efficiency**
-- `building_group_bg_power_construction_efficiency_add` — **$bg_power$ Construction Efficiency**
-- `building_group_te_construction_market_bg_employee_mult` — **Construction Site [concept_workforce]**
 
 ### character (41)
 
@@ -1909,9 +1906,8 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (654)
+### country (436)
 
-- `country_academy_trained_battalions_add` — **Academy-Trained Battalions**
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
 - `country_acceptance_no_shared_language_trait_add` — **Acceptance from no shared Language Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Language Trait with (one of) their Country’s Primary Cultures
@@ -1927,12 +1923,7 @@ _Cannon Artillery Offense_
 - `country_acceptance_shared_religious_trait_group_add` — **Acceptance from Religious Trait Groups** — The amount of Acceptance a Pop is subject to if their Religion shares a Trait Group with their Country’s State Religion
 - `country_acceptance_shared_tradition_trait_add` — **Acceptance from Tradition Trait** — The amount of Acceptance a Pop is subject to if their Culture shares a Tradition Trait with (one of) their Country’s Primary Cultures
 - `country_acceptance_state_religion_add` — **Acceptance from State Religion** — The amount of Acceptance a Pop is subject to if their Religion is the same as their Country State Religion
-- `country_add_anticolonial_ideology_to_igs_bool` — **Add Anticolonial Ideology to [GetInterestGroupVariant('ig_trade_unions',GetPlayer).GetNameWithCountryVariant] and [GetInterestGroupVariant('ig_intelligentsia',GetPlayer).GetNameWithCountryVariant].**
-- `country_add_multicultural_ideology_to_intelligentsia_bool` — **Add Multicultural Ideology to Intelligentsia**
 - `country_admiral_rank_impact_mult` — **Admiral Rank Impact** — An increase or decrease to the benefit that a Admiral gains (such as an increase in Command Limit) from their Rank.
-- `country_advanced_agri_stats_pb_principles_bool` — **Enables [GetTechnology('advanced_agricultural_statistics').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_aggressor_diplomatic_play_escalation_weekly_add` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated**
-- `country_aggressor_diplomatic_play_escalation_weekly_mult` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated**
 - `country_agitator_slots_add` — **Potential Agitators** — An increase or decrease to the number of potential Agitators a Country can maintain within its borders
 - `country_ahead_of_time_research_penalty_mult` — **Ahead of Time Penalty** — An increase or decrease to the research penalty from unresearched Technologies from previous Eras
 - `country_all_buildings_protected_bool` — **Disallow Downsizing All Buildings** — Whether all Buildings are legally protected from being downsized
@@ -1954,9 +1945,6 @@ _Cannon Artillery Offense_
 - `country_allow_voting_second_rate_citizen_bool` — **Gives Voting Rights to the acceptance_status_4! Second-class Citizen Status** — Pops in the acceptance_status_4! Second-class Citizen Status can take part in Elections
 - `country_allow_voting_violent_hostility_bool` — **Gives Voting Rights to the acceptance_status_1! Violent Hostility Status** — Pops in the acceptance_status_1! Violent Hostility Status can take part in Elections
 - `country_amenability_add` — **Country Amenability** — A bonus or penalty to the Amenability of all Interest Groups in the country
-- `country_amendment_lapses_at_peace_bool` — **Lapses at Peace**
-- `country_anti_war_pb_principles_bool` — **Enables [GetTechnology('anti_war_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_antimatter_facility_max_level_add` — **[concept_antimatter_facility] Slots**
 - `country_assimilation_cultural_erasure_mult` — **Assimilation for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to Assimilation for the acceptance_status_2! Cultural Erasure Status
 - `country_assimilation_delta_threshold_add` — **Cultural Assimilation Threshold** — A bonus or penalty to the threshold for Assimilation in this Country
 - `country_assimilation_full_acceptance_mult` — **Assimilation for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to Assimilation for the acceptance_status_5! Full Acceptance Status
@@ -1965,20 +1953,9 @@ _Cannon Artillery Offense_
 - `country_assimilation_violent_hostility_mult` — **Assimilation for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to Assimilation for the acceptance_status_1! Violent Hostility Status
 - `country_authority_add` — **aut! Authority** — How much aut! Authority is gained or the country has
 - `country_authority_cost_add` — **aut! Authority Cost** — Adds a flat cost to the country's aut! Authority usage
-- `country_authority_if_unelected_add` — **[concept_authority], without an Elected Government**
 - `country_authority_mult` — **aut! Authority** — The amount of aut! Authority is modified up or down
 - `country_authority_per_subject_add` — **aut! Authority per Subject** — The amount of aut! Authority which is scaled by the number of Subjects
-- `country_auto_surveillance_pb_principles_bool` — **Enables [GetTechnology('automated_surveillance').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_ban_slavery_no_infamy_bool` — **No Infamy from Ban Slavery** — Ban Slavery War Goals no longer generate Infamy
-- `country_bank_forecast_error_add` — **Central Bank Forecasting Error**
-- `country_banking_crash_chance_mult` — **[concept_banking_crash] Likelihood**
-- `country_banking_intervention_max_add` — **Maximum Banking Intervention Points**
-- `country_banking_lock_asset_relief_bool` — **Locks [Concept('concept_asset_relief_program', 'Asset Relief Program')]**
-- `country_banking_lock_capital_controls_bool` — **Locks [Concept('concept_capital_controls', 'Capital Controls')]**
-- `country_banking_lock_directed_credit_bool` — **Locks [Concept('concept_directed_credit', 'Directed Credit')]**
-- `country_banking_lock_export_credit_bool` — **Locks [Concept('concept_export_credit_facility', 'Export Credit Facility')]**
-- `country_banking_lock_open_market_ops_bool` — **Locks [Concept('concept_open_market_operations', 'Open Market Operations')]**
-- `country_banking_random_momentum_mult` — **[concept_banking_cycle] Volatility**
 - `country_birth_rate_cultural_erasure_mult` — **Birth Rate for the acceptance_status_2! Cultural Erasure Status** — How many children are born each year among Pops in the acceptance_status_2! Cultural Erasure Status
 - `country_birth_rate_full_acceptance_mult` — **Birth Rate for the acceptance_status_5! Full Acceptance Status** — How many children are born each year among Pops in the acceptance_status_5! Full Acceptance Status
 - `country_birth_rate_open_prejudice_mult` — **Birth Rate for the acceptance_status_3! Open Prejudice Status** — How many children are born each year among Pops in the acceptance_status_3! Open Prejudice Status
@@ -1990,63 +1967,27 @@ _Cannon Artillery Offense_
 - `country_brahmins_acceptance_min_add` — **Minimum Acceptance for the Brahmins Social Class** — A threshold describing the Acceptance value that Pops in the Brahmins Social Class won't be able to fall below
 - `country_brahmins_qualification_growth_other_class_mult` — **Qualification Growth outside the Brahmins Social Class for Brahmins** — A percentage increase or decrease to Qualification Growth for the Brahmins towards Professions in other Social Classes
 - `country_brahmins_qualification_growth_same_class_mult` — **Qualification Growth within Brahmins Social Class** — A percentage increase or decrease to Qualification Growth for the Brahmins Social Class towards Professions in the Brahmins Social Class
-- `country_bubble_pressure_monthly_add` — **Monthly [concept_bubble_pressure]**
 - `country_bureaucracy_add` — **bur! Bureaucracy** — How much bur! Bureaucracy the country has
 - `country_bureaucracy_cost_add` — **bur! Bureaucracy Cost** — Adds a flat cost to the country's bur! Bureaucracy usage
 - `country_bureaucracy_investment_cost_factor_mult` — **bur! Bureaucracy Institution Cost Multiplier** — An increase or reduction to the Bureaucracy cost of bringing a Institution Investment to the citizens
 - `country_bureaucracy_mult` — **bur! Bureaucracy** — The amount of bur! Bureaucracy is modified up or down
-- `country_can_create_unbacked_money_bool` — **Enables #bold Open-Market Operations#!**
 - `country_can_form_construction_company_bool` — **Can form Construction type Companies** — Can form Construction type Companies
 - `country_can_found_cossack_host_bool` — **Can Establish Cossack Hosts** — Allows the establishment of a Cossack Host in States
-- `country_can_join_united_nations_bool` — **Enables Founding the #bold United Nations#!**
 - `country_can_only_conscript_peasants_bool` — **Allows only Infantry Conscript Battalions** — Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
-- `country_can_use_asset_relief_bool` — **Enables #bold Asset Relief Program#!**
-- `country_can_use_bail_in_bool` — **Enables Bail-in Regime**
-- `country_can_use_biotech_companies_bool` — **Can Use Biotech Companies**
-- `country_can_use_countercyclical_buffer_bool` — **Enables #bold Countercyclical Buffer#!**
-- `country_can_use_cultural_assimilation_bool` — **Enables #bold Cultural [concept_assimilation] Program#!**
-- `country_can_use_deposit_guarantee_bool` — **Enables #bold Deposit Guarantee Expansion#!**
-- `country_can_use_directed_credit_electrification_bool` — **Enables Directed Credit: Electrification**
-- `country_can_use_emergency_liquidity_bool` — **Enables #bold Emergency Liquidity Program#!**
-- `country_can_use_export_credit_bool` — **Enables #bold Export Credit Facility#!**
-- `country_can_use_open_market_ops_bool` — **Enables #bold Open Market Operations#!**
 - `country_cannot_be_subjugated_bool` — **Cannot be Subjugated** — This country recently declared its Neutrality and cannot be subjugated
 - `country_cannot_be_target_for_law_imposition_bool` — **Cannot be targeted for Law Imposition** — Country cannot be targeted for new Law Imposition attempts while this is in effect
 - `country_cannot_cancel_law_enactment_bool` — **Disallow Cancel Law Enactment** — A penalty preventing a country from cancelling the enactment of any Laws currently in progress
 - `country_cannot_enact_laws_bool` — **Disallow Enacting Laws** — A penalty preventing a country from enacting any Laws
 - `country_cannot_join_power_bloc_bool` — **Cannot join Power Blocks** — This country recently declared its Neutrality and cannot join any Power Bloc
 - `country_cannot_start_law_enactment_bool` — **Disallow Start Law Enactment** — A penalty preventing a country from starting to enact any new Laws
-- `country_cellular_pb_principles_bool` — **Enables [GetTechnology('cellular_networks').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_civil_rights_pb_principles_bool` — **Enables [GetTechnology('civil_rights_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_clean_energy_pb_principles_bool` — **Enables [GetTechnology('clean_energy_technologies').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_colonial_assim_effectiveness_add` — **Colonial [concept_assimilation] Effectiveness**
-- `country_colonial_garrison_effectiveness_add` — **Colonial Garrison Effectiveness**
-- `country_colonial_invest_effectiveness_add` — **Colonial Investment Effectiveness**
-- `country_colonial_stability_drift_add` — **[concept_colonial_stability] Drift**
-- `country_combined_arms_bonus_enabled_bool` — **[concept_combined_arms] Doctrine**
-- `country_commissar_battalions_add` — **Battalions with Commissars**
 - `country_company_construction_efficiency_bonus_add` — **Company Construction Bonus** — An increase or decrease to the weekly Construction progress added by Companies to their associated Buildings
 - `country_company_throughput_bonus_add` — **Company Throughput Bonus** — An increase or decrease to the Throughput added by Companies to their associated Buildings
-- `country_constitutional_law_enactment_success_add` — **Enactment Success of Constitutional Laws**
 - `country_construction_add` — **construction! Construction** — The amount of construction! Construction produced by a Construction Sector
 - `country_construction_goods_cost_mult` — **Construction Goods Cost** — A bonus or penalty to the monetary cost of construction material necessities.
 - `country_consumption_tax_cost_mult` — **Consumption Tax Cost** — A bonus or penalty to the Authority cost of Consumption Taxes
 - `country_conversion_delta_threshold_add` — **Religious Conversion Threshold** — A bonus or penalty to the threshold for Conversion in this Country
 - `country_coup_resistance_add` — **Coup Resistance** — An increase or decrease to the Strength of a prospective Coup launched by this Commander
 - `country_coup_resistance_mult` — **Coup Resistance** — An increase or decrease to the ability of a country to Resist a prospective Coup
-- `country_court_challenges_ignored_bool` — **Courts Can’t Challenge the Government**
-- `country_court_reviews_forced_laws_bool` — **Courts Review Forced Laws**
-- `country_covert_defense_economic_add` — **Economic Covert Defense**
-- `country_covert_defense_ideological_add` — **Ideological Covert Defense**
-- `country_covert_defense_military_add` — **Military Covert Defense**
-- `country_covert_operation_efficiency_mult` — **Covert Operation Efficiency**
-- `country_covert_operation_slot_add` — **Covert Operation Slots**
-- `country_credit_standing_add` — **Credit Standing**
-- `country_credit_standing_floor_add` — **Credit Standing Floor**
-- `country_cultural_hegemony_art_mult` — **Cultural Pull from Art**
-- `country_cultural_program_max_funding_add` — **Cultural Program Maximum Funding Level**
-- `country_cultural_pull_add` — **[concept_cultural_pull]**
-- `country_cultural_pull_mult` — **[concept_cultural_pull]**
 - `country_dalit_acceptance_max_add` — **Maximum Acceptance for the Dalit Social Class** — A threshold describing the Acceptance value that Pops in the Dalit Social Class won't be able to exceed
 - `country_dalit_cultural_acceptance_add` — **Cultural Acceptance for the Dalit Social Class** — A flat increase or decrease to cultural Acceptance for the Dalit Social Class
 - `country_dalit_cultural_acceptance_mult` — **Cultural Acceptance for the Dalit Social Class** — A percentage increase or decrease to cultural Acceptance for the Dalit Social Class
@@ -2057,13 +1998,9 @@ _Cannon Artillery Offense_
 - `country_dalit_qualification_growth_other_class_mult` — **Qualification Growth outside the Dalit Social Class for Dalit** — A percentage increase or decrease to Qualification Growth for the Dalit towards Professions in other Social Classes
 - `country_dalit_qualification_growth_same_class_mult` — **Qualification Growth within Dalit Social Class** — A percentage increase or decrease to Qualification Growth for the Dalit Social Class towards Professions in the Dalit Social Class
 - `country_damage_relations_speed_mult` — **Damage Relations Speed** — A bonus or penalty to the efficiency of the Damage Relations diplomatic action.
-- `country_defender_diplomatic_play_escalation_weekly_add` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You**
-- `country_defender_diplomatic_play_escalation_weekly_mult` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You**
-- `country_digital_ed_pb_principles_bool` — **Enables [GetTechnology('digital_education').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_diplomatic_play_maneuvers_add` — **Maneuvers per Diplomatic Play** — A bonus or penalty to the number of Maneuvers the country can take in a diplomatic play.
 - `country_diplomatic_play_maneuvers_mult` — **Maneuvers per Diplomatic Play** — A multiplier to the number of Maneuvers the country can take in a diplomatic play.
 - `country_diplomatic_reputation_add` — **Diplomatic Reputation** — An increase or decrease to the tendency of other Countries to sign Treaties with or offer Diplomatic Play support to a Country.
-- `country_directed_credit_sectors_add` — **Directed Credit Priority Sectors**
 - `country_disable_investment_pool_bool` — **Disable Investment Pool (except for Companies)** — Disallow all reinvestment into and usage of the Investment Pool (except for Companies)
 - `country_disable_nationalization_bool` — **Disable Nationalization** — Prevent Buildings from being Nationalized
 - `country_disable_nationalization_without_compensation_bool` — **Disable Nationalization without compensation** — Prevent Buildings from being Nationalized without compensation being paid to the owning Pops
@@ -2085,19 +2022,13 @@ _Cannon Artillery Offense_
 - `country_disallow_trade_bool` — **Disable Trade Centers** — Disallow construction of Trade Centers
 - `country_disallow_trade_outside_canton_bool` — **Disable Trade Centers outside Western Guangdong** — Disallow construction of Trade Centers in States other than Western Guangdong
 - `country_disallow_trade_outside_kyushu_bool` — **Disable Trade Centers outside Kyushu** — Disallow construction of Trade Centers in States other than Kyushu
-- `country_economic_dependence_leverage_gain_mult` — **Leverage from [concept_economic_dependence]**
 - `country_economic_dependence_on_overlord_add` — **Economic Dependence on Overlord** — An increase or decrease to the Economic Dependence on the Overlord
 - `country_education_fervor_add` — **Education Institution Fervor** — A bonus or penalty to Fervor as a result of the country's Education Institution
 - `country_electoral_confidence_impact_mult` — **Electoral Confidence Impact** — An increase or decrease to the impact that low Electoral Confidence will have on a Country, such as decreasing its Legitimacy.
 - `country_electoral_confidence_over_time` — **Monthly Electoral Confidence Change** — A monthly increase or decrease to a Country’s Electoral Confidence
-- `country_env_movement_pb_principles_bool` — **Enables [GetTechnology('environmental_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_environmental_movement_radicalism_add` — **Environmental Movement Radicalism**
 - `country_expedition_events_explorer_mult` — **Expedition Opportunity** — The chance that more good things than bad will happen on Expeditions this country undertakes
 - `country_expenses_add` — **Government Expenses** — A flat increase or reduction of government expenses
-- `country_family_limitation_literacy_mult` — **Family Limitation Among the Literate[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `country_fervor_target_yi_add` — **Proportional Fervor for the Yi Culture** — A bonus or penalty to a specific culture's [concept_fervor], to be proportioned according the percentage of the culture's [Concept('concept_pop', 'Pops')] th...
-- `country_finance_momentum_monthly_add` — **Monthly [concept_banking_momentum]**
-- `country_finance_value_monthly_add` — **Monthly Financial Cycle Value**
 - `country_financial_districts_buy_farms_likelihood` — **Financial Districts investment into Plantations, Ranches, and Agriculture** — An increase or decrease to the chance for Financial Districts to invest into Plantations, Ranches, and Agriculture Buildings
 - `country_flagship_interest_gain_mult` — **Flagship Involvement Gain** — A bonus or penalty to the Involvement generated by the Flagship.
 - `country_forbid_electoral_fraud_bool` — **Forbid Electoral Manipulation** — Disables options to control the outcomes of Elections
@@ -2107,41 +2038,24 @@ _Cannon Artillery Offense_
 - `country_frankenstein_company_bool` — **Experimental Modules Operational** — Strange tidings have been reported from the Ingolstadt Electrical Factories.
 - `country_free_charters_add` — **Free Company Charters** — The amount of Company Charters a Country can hand out to their Companies for free
 - `country_general_rank_impact_mult` — **General Rank Impact** — An increase or decrease to the benefit that a General gains (such as an increase in Command Limit) from their Rank.
-- `country_gm_monument_ceremonial_share_add` — **Grandeur of Every Monument in Legitimacy and Authority**
-- `country_gm_monument_cultural_pull_mult` — **Cultural Pull from Monuments**
-- `country_gm_monument_education_step_add` — **Education Access per Step of Monument Grandeur**
-- `country_gm_monument_prestige_mult` — **Prestige from Monuments**
-- `country_gm_monument_tourism_mult` — **$tourism$ from Each Monument**
 - `country_gold_reserve_limit_mult` — **Gold reserve limit** — Once your Gold Reserves exceed this limit, the amount of gold you get to stockpile for every money! diminishes progressively
 - `country_government_buildings_protected_bool` — **Disallow Downsizing Government Buildings** — Whether government owned Buildings are legally protected from being downsized
 - `country_government_dividends_efficiency_add` — **Government Dividends Efficiency** — An increase or decrease to the amount of Dividends (after reinvestment) from Nationally Owned Building levels that are converted into Government Dividends an...
 - `country_government_dividends_reinvestment_add` — **Government Dividends Reinvestment** — An increase or decrease to the fraction of Dividends from Nationally Owned Building levels that is paid into the Investment Pool instead of being converted i...
 - `country_government_dividends_waste_add` — **Government Dividends Waste** — An increase or decrease to the amount of Government Dividends that are wasted instead of being paid into the Treasury
 - `country_government_wages_mult` — **Government Wages** — How much more or less than the Normal Wage government employees get paid.
-- `country_greenhouse_gas_emissions_mult` — **[concept_greenhouse_gas_emissions]**
-- `country_grid_transmission_efficiency_add` — **Grid Transmission Efficiency**
-- `country_gw_aerosol_injection_bool` — **Enables #bold Stratospheric Aerosol Injection#!**
 - `country_higher_diplomatic_acceptance_same_religion_bool` — **Higher Diplomatic Proposal Acceptance for Countries with same Religion** — Countries with the same state Religion will be more willing to accept diplomatic proposals
 - `country_higher_leverage_from_economic_dependence_bool` — **Increased Leverage from Economic Dependence** — Increased Leverage gain from Economic Dependence.
 - `country_homeland_infamy_reduction_bool` — **Reduced Infamy for Homelands** — Taking Homelands of our primary cultures generates even less Infamy
-- `country_homelands_can_change_bool` — **Homelands Can Change**
-- `country_household_greenhouse_gas_emissions_mult` — **Household Greenhouse Gas Emissions**
-- `country_icbm_pb_principles_bool` — **Enables [GetTechnology('ICBMs').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_ideology_resistance_mult` — **Ideology Resistance**
-- `country_igo_pb_principles_bool` — **Enables [GetTechnology('intergovernmental_organizations').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_improve_relations_speed_mult` — **Improve Relations Speed** — A bonus or penalty to the efficiency of the Improve Relations diplomatic action.
 - `country_infamy_decay_mult` — **Infamy Decay** — A bonus or penalty to Infamy decay
 - `country_infamy_generation_against_unrecognized_mult` — **Infamy Generation against Unrecognized Powers** — An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents targeting Unrecognized Powers.
 - `country_infamy_generation_mult` — **Infamy Generation** — An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents.
-- `country_inflation_anchoring_add` — **Inflation Anchoring**
-- `country_inflation_pressure_add` — **Price Pressure**
 - `country_influence_add` — **inf! Influence** — How much inf! Influence the country has
 - `country_influence_cost_add` — **inf! Influence Cost** — Adds a flat cost to the country's inf! Influence usage
 - `country_influence_mult` — **inf! Influence** — The amount of inf! Influence is modified up or down
 - `country_initiator_war_goal_maneuver_cost_mult` — **War Goal Maneuver cost for the Diplomatic Play Initiator** — An increase or decrease to the War Goal Maneuver cost for the Diplomatic Play Initiator
 - `country_institution_size_change_speed_mult` — **Institution Size Change Speed** — How fast you change the size of an institution
-- `country_intelligence_capacity_add` — **Intelligence Capacity**
-- `country_intelligence_capacity_mult` — **Intelligence Capacity**
 - `country_interest_tier_engaged_trade_advantage_mult` — **Engaged Interest Tier Trade Advantage** — A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Engaged
 - `country_interest_tier_hegemonic_trade_advantage_mult` — **Hegemonic Interest Tier Trade Advantage** — A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Hegemonic
 - `country_interest_tier_influential_trade_advantage_mult` — **Influential Interest Tier Trade Advantage** — A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Influential
@@ -2151,9 +2065,6 @@ _Cannon Artillery Offense_
 - `country_je_korea_action_cost` — **country_je_korea_action_cost** — country_je_korea_action_cost_desc
 - `country_join_power_bloc_member_in_defensive_plays_bool` — **Can call Power Bloc members with the Call Ally Sway in defensive Diplomatic Plays** — Can call Power Bloc members with the Call Ally Sway in defensive Diplomatic Plays
 - `country_join_power_bloc_member_in_plays_bool` — **Can call Power Bloc members with the Call Ally Sway in all Diplomatic Plays** — Can call Power Bloc members with the Call Ally Sway in all Diplomatic Plays
-- `country_judicial_independence_ceiling_add` — **[Concept('concept_judicial_independence','Judicial Independence')] Ceiling**
-- `country_judicial_independence_ceiling_mult` — **[Concept('concept_judicial_independence','Judicial Independence')] Ceiling**
-- `country_keynesian_pb_principles_bool` — **Enables [GetTechnology('keynesian_economics').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_kshatriyas_acceptance_max_add` — **Maximum Acceptance for the Kshatriyas Social Class** — A threshold describing the Acceptance value that Pops in the Kshatriyas Social Class won't be able to exceed
 - `country_kshatriyas_acceptance_min_add` — **Minimum Acceptance for the Kshatriyas Social Class** — A threshold describing the Acceptance value that Pops in the Kshatriyas Social Class won't be able to fall below
 - `country_kshatriyas_cultural_acceptance_add` — **Cultural Acceptance for the Kshatriyas Social Class** — A flat increase or decrease to cultural Acceptance for the Kshatriyas Social Class
@@ -2171,9 +2082,7 @@ _Cannon Artillery Offense_
 - `country_law_enactment_stall_mult` — **Enactment Stall Chance** — A multiplier to the chance that a law enactment will stall due to opposition
 - `country_law_enactment_success_add` — **Enactment Success Chance** — A flat percentage point increase to the likelihood of enacting a law
 - `country_leader_has_law_enactment_success_mult` — **Power Bloc Legal Synergy** — Increases or decreases the Enactment Success for Laws the Power Bloc Leader already has enacted.
-- `country_legislative_override_capacity_add` — **[Concept('concept_legislative_override_capacity','Legislative Override Capacity')]**
 - `country_legitimacy_base_add` — **Legitimacy** — An increase or decrease of the Government's Legitimacy
-- `country_legitimacy_from_votes_if_elected_add` — **[concept_legitimacy] from Votes, with an Elected Government**
 - `country_legitimacy_govt_leader_clout_add` — **Legitimacy based on Government Leader Clout** — The amount of Legitimacy the Government gains or loses based on the Clout of the Interest Group leading the government.
 - `country_legitimacy_govt_size_add` — **Government size allowance** — The number of Parties and Interest Groups that can be included In Government at one time without incurring Legitimacy penalties.
 - `country_legitimacy_govt_total_clout_add` — **Legitimacy based on Government Clout** — The amount of Legitimacy the Government gains or loses based on the total Clout of Interest Groups in the government.
@@ -2185,7 +2094,6 @@ _Cannon Artillery Offense_
 - `country_leverage_generation_mult` — **Leverage Generation** — An increase or decrease to the amount of Leverage the Country’s Power Bloc generates in other Countries while they are the Power Bloc Leader
 - `country_leverage_resistance_add` — **Leverage Resistance** — An increase or decrease to the amount of Leverage the Country always retains over itself, setting the bar higher for any Power Blocs that wish to invite them
 - `country_leverage_resistance_mult` — **Leverage Resistance** — An increase or decrease to the amount of Leverage the Country always retains over itself, setting the bar higher for any Power Blocs that wish to invite them
-- `country_leverage_threshold_change_add` — **[concept_power_bloc_leverage] Threshold Change**
 - `country_liberty_desire_add` — **Weekly Liberty Desire** — An increase or decrease to the amount of Liberty Desire the subject gains each week
 - `country_liberty_desire_decrease_mult` — **Weekly Liberty Desire Decrease** — Modifies the amount Liberty Desire decreases by, if it is decreasing
 - `country_liberty_desire_increase_mult` — **Weekly Liberty Desire Increase** — Modifies the amount Liberty Desire increases by, if it is increasing
@@ -2195,8 +2103,6 @@ _Cannon Artillery Offense_
 - `country_loan_interest_rate_mult` — **Loan interest rate** — A bonus or penalty to loan interest rate
 - `country_lobby_leverage_generation_mult` — **Leverage Generation from Political Lobbies** — An increase or decrease to the amount of Leverage generation from Political Lobbies aligned in favor of the Power Bloc Leader
 - `country_lobby_support` — **Lobby Support** — A bonus or penalty to the likelihood an Interest Group will remain in its Political Lobby
-- `country_longevity_care_banned_bool` — **Longevity Care Banned[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `country_longevity_care_price_fall_mult` — **Longevity Care Price Fall[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `country_loyalism_increases_cultural_erasure_mult` — **Loyalism increases for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
 - `country_loyalism_increases_full_acceptance_mult` — **Loyalism increases for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
 - `country_loyalism_increases_open_prejudice_mult` — **Loyalism increases for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
@@ -2214,48 +2120,21 @@ _Cannon Artillery Offense_
 - `country_military_wages_mult` — **Military Wages** — How much more or less than the Normal Wage military personnel get paid.
 - `country_minting_add` — **Minting** — A flat increase or decrease to Minting
 - `country_minting_mult` — **Minting** — A bonus or penalty to the total amount of Minting
-- `country_missile_defense_pb_principles_bool` — **Enables [GetTechnology('missile_defense_systems').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_modern_pharma_pb_principles_bool` — **Enables [GetTechnology('modern_pharmaceuticals').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_must_have_movement_to_enact_laws_bool` — **Must have Political Movement to Enact Laws** — A penalty preventing a country from enacting any Laws that do not have the support of a Political Movement
 - `country_nationalization_cost_non_members_mult` — **Cost for Nationalization** — Increases or decreases the cost of Nationalization of buildings owned by a Country outside of your Power Bloc
-- `country_ncw_pb_principles_bool` — **Enables [GetTechnology('network_centric_warfare').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_nd_automatic_answer_bool` — **A Strike on Our Cities Is Answered Automatically**
-- `country_nd_crew_strain_monthly_add` — **Crew Strain a Month**
-- `country_nd_crisis_danger_add` — **Danger in Our Crises**
-- `country_nd_custody_cost_mult` — **Cost of Holding the Warheads**
-- `country_nd_custody_loss_add` — **Warheads Lost When Custody Changes Hands**
-- `country_nd_decapitation_immune_bool` — **Answer Not Discounted for the Capital**
-- `country_nd_halt_chance_add` — **Chance of a Halt**
-- `country_nd_incident_rate_mult` — **Everyday Incident Rate**
-- `country_nd_launch_blocked_bool` — **Nothing Can Be Launched, Not Even in Retaliation**
-- `country_nd_launch_credit_add` — **Launch Credit**
-- `country_nd_order_required_bool` — **Nothing Is Launched Without the Government’s Order**
-- `country_nd_threat_pressure_add` — **Pressure Our Threats Exert**
-- `country_nd_unapproved_launch_bool` — **An Incident Can End in a Launch Without Our Approval**
 - `country_no_advantage_loss_from_lack_of_interest_bool` — **Ignores Trade Advantage penalty from Interests** — Whether our country ignores the Trade Advantage penalty applied against Markets where we lack an Interest
 - `country_non_state_religion_wages_mult` — **Wages for Non-State Religion Pops** — How much more or less Pops that do not follow the State Religion are paid.
-- `country_nuclear_disarmament_bool` — **Nuclear Disarmament**
-- `country_nuclear_program_pause_bool` — **Nuclear Program Freeze**
-- `country_nuclear_program_progress_mult` — **[concept_nuclear_program] Progress**
-- `country_nuclear_weapon_attack_success_add` — **[concept_nuclear_strike] Success Chance**
 - `country_opposition_ig_approval_add` — **Opposition Interest Group Approval** — A bonus or penalty to the Approval of Interest Groups in Opposition
-- `country_orbital_debris_removal_add` — **[concept_orbital_debris] Removal per Month**
-- `country_orbital_debris_removal_mult` — **[concept_orbital_debris] Removal**
 - `country_other_country_socialist_economy_hostility_impact_add` — **Socialist Economy Hostility Impact** — An increase or decrease to the hostility of other Countries to this Country’s economy when evaluating Strategies, Diplomatic Plays and Treaties
 - `country_other_country_socialist_economy_hostility_impact_mult` — **Socialist Economy Hostility Impact** — An increase or decrease to the hostility of other Countries to this Country’s economy when evaluating Strategies, Diplomatic Plays and Treaties
 - `country_other_country_socialist_government_hostility_impact_add` — **Socialist Government Hostility Impact** — An increase or decrease to the hostility of other Countries to this Country’s government when evaluating Strategies, Diplomatic Plays and Treaties
 - `country_other_country_socialist_government_hostility_impact_mult` — **Socialist Government Hostility Impact** — An increase or decrease to the hostility of other Countries to this Country’s government when evaluating Strategies, Diplomatic Plays and Treaties
 - `country_overlord_income_transfer_mult` — **Overlord Income Transfer** — An increase or decrease to the amount of Money the subject must give to their overlord
 - `country_overlord_law_enactment_success_add` — **Overlord Legal Synergy** — A flat percentage point increase to the likelihood of enacting a law the country's Overlord already has
-- `country_override_with_algorithmic_governance_add` — **[Concept('concept_legislative_override_capacity','Legislative Override Capacity')] under Algorithmic Governance**
 - `country_pact_leverage_generation_add` — **Leverage Generation from Diplomatic Pact** — An increase or decrease to the amount of Leverage generated between two Countries with this Diplomatic Pact when the dominant Country in the Diplomatic Pact ...
 - `country_pact_leverage_generation_mult` — **Leverage Generation from Diplomatic Pact** — An increase or decrease to the amount of Leverage generated between two Countries with this Diplomatic Pact when the dominant Country in the Diplomatic Pact ...
-- `country_participant_diplomatic_play_escalation_weekly_add` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined**
-- `country_participant_diplomatic_play_escalation_weekly_mult` — **Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined**
 - `country_party_whip_impact_add` — **Party Whip Impact on Ideological Incoherence** — A bonus or penalty to the effect that Party Whip has on the Ideological opinion of the rest of the Party members
 - `country_piracy_income_add` — **Piracy Income** — An increase or decrease of the value we can extract from pirated goods.
-- `country_policy_rate_drift_speed_mult` — **Policy Rate Adjustment Speed**
-- `country_policy_rate_floor_add` — **Lowest Policy Rate**
 - `country_political_strength_cultural_erasure_mult` — **Political Strength for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to Political Strength for Pops in this Status
 - `country_political_strength_full_acceptance_mult` — **Political Strength for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to Political Strength for Pops in this Status
 - `country_political_strength_open_prejudice_mult` — **Political Strength for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to Political Strength for Pops in this Status
@@ -2271,7 +2150,6 @@ _Cannon Artillery Offense_
 - `country_private_construction_allocation_mult` — **Private Construction Allocation** — An increase or decrease in the fraction of weekly Construction that will be preferentially allocated to Private Constructions over Government Constructions .
 - `country_production_tech_research_speed_mult` — **Production Research Speed** — A bonus or penalty to the speed at which Technology in the Production category is researched when spending Innovation
 - `country_production_tech_spread_mult` — **Technology Spread for Production** — The speed at which Production technologies spread from other countries
-- `country_public_works_pb_principles_bool` — **Enables [GetTechnology('public_works_programs').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_qualification_growth_cultural_erasure_mult` — **Qualifications advancement for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to the monthly Qualifications advancement for the acceptance_status_2! Cultural Erasure Status
 - `country_qualification_growth_full_acceptance_mult` — **Qualifications advancement for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to the monthly Qualifications advancement for the acceptance_status_5! Full Acceptance Status
 - `country_qualification_growth_open_prejudice_mult` — **Qualifications advancement for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to the monthly Qualifications advancement for the acceptance_status_3! Open Prejudice Status
@@ -2284,29 +2162,18 @@ _Cannon Artillery Offense_
 - `country_radicalism_increases_violent_hostility_mult` — **Radicalism increases for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to increases in Radicalism for Pops in this Status
 - `country_radicals_from_conquest_mult` — **Radicals from Conquest** — A bonus or penalty to the amount of Pops that will become Radical when we conquer States militarily
 - `country_radicals_from_legitimacy_mult` — **Radicals from low Legitimacy** — A change to the number of Radicals a Country gains from having low Legitimacy
-- `country_rapid_deploy_pb_principles_bool` — **Enables [GetTechnology('rapid_deployment_forces').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_receiving_nuclear_program_aid_bool` — **Receiving [concept_nuclear_program] Aid**
 - `country_reduced_liberty_desire_same_religion_bool` — **Reduced Liberty Desire for Same Religion** — Subjects with the same state Religion will have reduced Liberty Desire over time
 - `country_reform_or_revolution_reform_bonus_add` — **Proportional Reform or Revolution Reformist Progress** — An increase or decrease to the amount of monthly progress towards Reformism in the Reform or Revolution Journal Entry, proportional to the strength of this C...
 - `country_reform_or_revolution_revolution_bonus_add` — **Proportional Reform or Revolution Revolutionary Progress** — An increase or decrease to the amount of monthly progress towards Revolution in the Reform or Revolution Journal Entry, proportional to the strength of this ...
-- `country_remove_decentralized_claims_bool` — **Renounce [Concept('concept_claim', 'Claims')] on Decentralized States**
 - `country_resource_depletion_chance_mult` — **Resource Depletion Chance** — Increases the chance of depleting Resource Potentials
 - `country_resource_discovery_chance_mult` — **Resource Discovery Chance** — Increases the chance of discovering hidden Resource Potentials
 - `country_revolution_clock_time_add` — **Revolution Clock Time** — A bonus or penalty to how fast the revolution clock ticks
 - `country_revolution_progress_add` — **Revolution Progression Speed** — A bonus or penalty to how much progress is added to the revolution when the Revolution Clock strikes 12
 - `country_revolution_progress_mult` — **Revolution Progression Speed** — A bonus or penalty to how much progress is added to the revolution when the Revolution Clock strikes 12
-- `country_rights_law_enactment_success_add` — **Enactment Success of Rights Laws**
-- `country_risk_premium_add` — **Risk Premium**
 - `country_rlit_censorship_severity_add` — **Literary Censorship** — country_rlit_censorship_severity_add_desc
 - `country_rlit_cultural_prestige_add` — **Literary Prestige** — country_rlit_cultural_prestige_add_desc
 - `country_rlit_intellectual_freedom_add` — **Intellectual Freedom** — country_rlit_intellectual_freedom_add_desc
-- `country_robotics_pb_principles_bool` — **Enables [GetTechnology('robotics').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_sailors_max_add` — **Max Sailors** — The maximum amount of Sailors provided by Buildings for crewing Ships in a Country
-- `country_satcom_pb_principles_bool` — **Enables [GetTechnology('satellite_communications').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_seabed_claim_floor_add` — **Unused Seabed Claims Kept Each January**
-- `country_seabed_claim_weight_mult` — **Seabed Claim Weight**
-- `country_seabed_naval_weight_mult` — **Naval Power Projection in Seabed Claims**
-- `country_seabed_unilateral_relations_add` — **Relations a Year with Each Other Unilateral Claimant**
 - `country_secession_clock_time_add` — **Secession Clock Time** — A bonus or penalty to how fast the secession clock ticks
 - `country_secession_progress_add` — **Secession Progression Speed** — A bonus or penalty to how much progress is added to the secession when the Secession Clock strikes 12
 - `country_secession_progress_mult` — **Secession Progression Speed** — A bonus or penalty to how much progress is added to the secession when the Secession Clock strikes 12
@@ -2359,39 +2226,6 @@ _Cannon Artillery Offense_
 - `country_shudras_qualification_growth_same_class_mult` — **Qualification Growth within Shudras Social Class** — A percentage increase or decrease to Qualification Growth for the Shudras Social Class towards Professions in the Shudras Social Class
 - `country_society_tech_research_speed_mult` — **Society Research Speed** — A bonus or penalty to the speed at which Technology in the Society category is researched when spending Innovation
 - `country_society_tech_spread_mult` — **Technology Spread for Society** — The speed at which Society technologies spread from other countries
-- `country_sol_expectation_adaptation_rate_mult` — **[concept_sol_expectations] Adaptation Rate**
-- `country_sol_expectations_lower_offset_add` — **[concept_sol_expectations] [concept_lower_strata] Offset**
-- `country_sol_expectations_lower_offset_mult` — **[concept_sol_expectations] [concept_lower_strata] Offset Scale**
-- `country_sol_expectations_middle_offset_add` — **[concept_sol_expectations] [concept_middle_strata] Offset**
-- `country_sol_expectations_middle_offset_mult` — **[concept_sol_expectations] [concept_middle_strata] Offset Scale**
-- `country_sol_expectations_offset_mult` — **[concept_sol_expectations] Offset Scale**
-- `country_sol_expectations_shift_add` — **[concept_sol_expectations] Monthly Shift**
-- `country_sol_expectations_shift_max_add` — **[concept_sol_expectations] Shift Ceiling**
-- `country_sol_expectations_shift_min_add` — **[concept_sol_expectations] Shift Floor**
-- `country_sol_expectations_target_add` — **[concept_sol_expectations] Target Offset**
-- `country_sol_expectations_upper_offset_add` — **[concept_sol_expectations] [concept_upper_strata] Offset**
-- `country_sol_expectations_upper_offset_mult` — **[concept_sol_expectations] [concept_upper_strata] Offset Scale**
-- `country_solar_receiver_max_level_add` — **Available Solar Receiver Slots**
-- `country_space_race_max_funding_add` — **[concept_space_race] Funding Cap**
-- `country_space_race_progress_add` — **[concept_space_race] Monthly Progress**
-- `country_space_race_progress_mult` — **[concept_space_race] Progress**
-- `country_space_race_risk_mult` — **[concept_space_race] Failure Risk**
-- `country_sr_colony_growth_add` — **Colony Growth a Month**
-- `country_sr_colony_slots_add` — **Colony Module Slots**
-- `country_sr_deep_space_exploration_program_bool` — **Deep Space Exploration Program Active**
-- `country_sr_drive_antimatter_bool` — **Antimatter Drive for Colony Fleets**
-- `country_sr_drive_fusion_bool` — **Fusion Drive for Colony Fleets**
-- `country_sr_drive_torch_bool` — **Fusion Torch for Colony Fleets**
-- `country_sr_earth_orbit_program_bool` — **Earth Orbit Program Active**
-- `country_sr_interstellar_mission_program_bool` — **Interstellar Mission Program Active**
-- `country_sr_mars_mission_program_bool` — **Mars Mission Program Active**
-- `country_sr_module_fabrication_add` — **Colony Module Fabrication per Month**
-- `country_sr_moon_mission_program_bool` — **Moon Mission Program Active**
-- `country_sr_nuclear_thermal_launches_bool` — **Smaller Premium for Off-Window Launches**
-- `country_sr_propellant_depots_bool` — **Lunar Propellant Depots**
-- `country_sr_solar_colonization_program_bool` — **[concept_solar_colonization] Program Active**
-- `country_sr_terraforming_bool` — **Terraforming for Colonies**
-- `country_st_res_weekly_rate_cap_add` — **Strategic Reserve Weekly Rate Cap**
 - `country_standard_of_living_cultural_erasure_add` — **Standard of Living for the acceptance_status_2! Cultural Erasure Status** — Extra Standard of Living for the acceptance_status_2! Cultural Erasure Status
 - `country_standard_of_living_full_acceptance_add` — **Standard of Living for the acceptance_status_5! Full Acceptance Status** — Extra Standard of Living Wealth for the acceptance_status_5! Full Acceptance Status
 - `country_standard_of_living_open_prejudice_add` — **Standard of Living for the acceptance_status_3! Open Prejudice Status** — Extra Standard of Living for the acceptance_status_3! Open Prejudice Status
@@ -2458,17 +2292,8 @@ _Cannon Artillery Offense_
 - `country_strata_samurai_low_qualification_growth_mult` — **Qualification Growth for the Lower Samurai Social Class** — A percentage increase or decrease to Qualification Growth for the Lower Samurai Social Class
 - `country_strata_samurai_low_qualification_growth_other_class_mult` — **Qualification Growth outside the Lower Samurai Social Class for Lower Samurai** — A percentage increase or decrease to Qualification Growth for the Lower Samurai towards Professions in other Social Classes
 - `country_strata_samurai_low_qualification_growth_same_class_mult` — **Qualification Growth within Lower Samurai Social Class** — A percentage increase or decrease to Qualification Growth for the Lower Samurai Social Class towards Professions in the Lower Samurai Social Class
-- `country_strategic_nuclear_strikes_forbidden_bool` — **Strategic Nuclear Strikes Forbidden**
 - `country_subject_income_transfer_heathen_mult` — **Income transfer from Heathen Subjects** — An increase or decrease to the amount of Money Subjects must give to their Overlord if they don't follow the same State Religion as them.
 - `country_subject_income_transfer_mult` — **Income transfer from Subjects** — An increase or decrease to the amount of Money the subject must give to their overlord
-- `country_subjugation_cultural_strength_add` — **Subjugation Strength (Cultural)**
-- `country_subjugation_ideological_strength_add` — **Subjugation Strength (Ideological)**
-- `country_subjugation_military_strength_add` — **Subjugation Strength (Military)**
-- `country_subjugation_religious_strength_add` — **Subjugation Strength (Religious)**
-- `country_subjugation_sovereign_strength_add` — **Subjugation Strength (Sovereign Empire)**
-- `country_subjugation_strength_add` — **Subjugation Strength**
-- `country_subjugation_trade_strength_add` — **Subjugation Strength (Trade)**
-- `country_supply_chain_pb_principles_bool` — **Enables [GetTechnology('supply_chain_management').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_supply_ship_construction_progress_max_add` — **Supply Ship Max Construction Progress** — The maximum amount of construction progress a Country can apply to one Supply Ship shipbuilding project each week
 - `country_supply_ship_construction_progress_max_mult` — **Supply Ship Max Construction Progress** — The maximum amount of construction progress a Country can apply to one Supply Ship shipbuilding project each week
 - `country_supply_ship_construction_ratio_add` — **Supply Ship Construction Ratio** — The proportion of total ship_construction! Construction a Country allocates to building Supply Ships
@@ -2477,37 +2302,7 @@ _Cannon Artillery Offense_
 - `country_support_separatism_strength_mult` — **Support Separatism Strength** — A percentage increase or decrease to the strength of the Support Separatism Diplomatic Action
 - `country_suppression_attraction_factor` — **Suppression impact on Political Movement attraction** — A bonus or penalty to how attracted Pops are to a Political Movement as a result of Suppression
 - `country_suppression_cost_mult` — **Suppression cost** — An increase or decrease to the cost of Suppressing an Political Movement.
-- `country_tactical_nuclear_strikes_forbidden_bool` — **Tactical Nuclear Strikes Forbidden**
-- `country_tactical_nukes_pb_principles_bool` — **Enables [GetTechnology('tactical_nuclear_weapons').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_tax_income_add` — **Tax Income** — A flat bonus or penalty to tax income collected
-- `country_te_budget_expense_archaeology_add` — **Breakdown: Archaeological Digs**
-- `country_te_budget_expense_banking_add` — **Breakdown: Banking**
-- `country_te_budget_expense_climate_add` — **Breakdown: Climate Policy**
-- `country_te_budget_expense_colonial_add` — **Breakdown: Colonial Development**
-- `country_te_budget_expense_covert_add` — **Breakdown: Covert Actions**
-- `country_te_budget_expense_culture_add` — **Breakdown: Cultural Hegemony**
-- `country_te_budget_expense_drugs_add` — **Breakdown: Drug Shortage Response**
-- `country_te_budget_expense_family_add` — **Breakdown: Family Policy**
-- `country_te_budget_expense_nuclear_add` — **Breakdown: Nuclear Program**
-- `country_te_budget_expense_nuclear_taboo_add` — **Breakdown: Nuclear Civil Defense**
-- `country_te_budget_expense_pensions_add` — **Breakdown: Old-Age Pensions**
-- `country_te_budget_expense_space_add` — **Breakdown: Space Race**
-- `country_te_budget_expense_un_add` — **Breakdown: United Nations**
-- `country_te_budget_income_pension_reform_add` — **Breakdown: Pension Reform**
-- `country_te_budget_income_reserve_add` — **Breakdown: Strategic Reserve Sales**
-- `country_te_budget_income_tax_code_add` — **Breakdown: Spectrum Auctions**
-- `country_te_budget_income_un_add` — **Breakdown: United Nations**
-- `country_te_budget_income_war_tax_add` — **Breakdown: War Profit Tax**
-- `country_te_mon_asset_purchase_pressure_add` — **Price Pressure from Asset Purchases**
-- `country_te_mon_expected_inflation_add` — **Expected Inflation**
-- `country_te_mon_fx_debt_protection_add` — **Protection from Foreign-Currency Debt**
-- `country_te_mon_inflow_price_pressure_mult` — **Price Pressure from Gold Coming In**
-- `country_te_mon_inflow_pull_mult` — **Pull of Money Coming In**
-- `country_te_mon_minting_gdp_add` — **Money Created a Year, of GDP**
-- `country_te_mon_printing_pressure_add` — **Price Pressure from Printed Money**
-- `country_te_mon_rate_gap_pull_mult` — **Pull of the Rate Gap**
-- `country_te_mon_reserve_purchase_gdp_add` — **Gold Bought for the Bank, of Annual GDP, at Most**
-- `country_te_pb_principle_slots_add` — **Extra [concept_power_bloc_principle] Slots**
 - `country_tech_group_research_speed_mult` — **Technology Research Speed as a group** — A bonus or penalty to the research speed which scales with the number of countries that have already researched the current Technology
 - `country_tech_research_speed_mult` — **Technology Research Speed** — A bonus or penalty to the speed at which Technology is researched when spending Innovation
 - `country_tech_spread_add` — **Technology Spread** — The amount by which technologies spread from other countries to our own each week.
@@ -2517,12 +2312,6 @@ _Cannon Artillery Offense_
 - `country_treaty_leverage_generation_mult` — **Leverage Generation from Treaty** — An increase or decrease to the amount of Leverage generated between two Countries with this Treaty when the dominant Country in the Treaty is a Power Bloc Le...
 - `country_two_spains_conservative_drift_add` — **The Two Spains Conservative Progress** — An increase or decrease to the amount of monthly progress towards Conservative in the The Two Spains Journal Entry
 - `country_two_spains_liberal_drift_add` — **The Two Spains Liberal Progress** — An increase or decrease to the amount of monthly progress towards Liberal in the The Two Spains Journal Entry
-- `country_un_authority_target_add` — **UN Authority Target**
-- `country_un_institutional_alignment` — **UN Institutional Alignment**
-- `country_un_lobbying_fund_recipients_mult` — **UN Lobbying Effectiveness with Aid Recipients**
-- `country_un_lobbying_mult` — **UN Lobbying Effectiveness**
-- `country_un_membership_obligation_bool` — **UN Membership Obligation**
-- `country_unrecognized_become_recognized_bool` — **Become Recognized if Unrecognized**
 - `country_vaishyas_acceptance_max_add` — **Maximum Acceptance for the Vaishyas Social Class** — A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to exceed
 - `country_vaishyas_acceptance_min_add` — **Minimum Acceptance for the Vaishyas Social Class** — A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to fall below
 - `country_vaishyas_cultural_acceptance_add` — **Cultural Acceptance for the Vaishyas Social Class** — A flat increase or decrease to cultural Acceptance for the Vaishyas Social Class
@@ -2545,24 +2334,14 @@ _Cannon Artillery Offense_
 - `country_wage_cultural_erasure_mult` — **Wage for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to the Wage for the acceptance_status_2! Cultural Erasure Status.
 - `country_wage_full_acceptance_mult` — **Wage for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to the Wage for the acceptance_status_5! Full Acceptance Status.
 - `country_wage_open_prejudice_mult` — **Wage for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to the Wage for the acceptance_status_3! Open Prejudice Status.
-- `country_wage_pressure_add` — **Wage Pressure**
 - `country_wage_second_rate_citizen_mult` — **Wage for the acceptance_status_4! Second-class Citizen Status** — A bonus or penalty to the Wage for the acceptance_status_4! Second-class Citizen Status.
 - `country_wage_violent_hostility_mult` — **Wage for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to the Wage for the acceptance_status_1! Violent Hostility Status.
 - `country_war_support_battles_decrease_mult` — **War Support from Lost Battle** — An increase or decrease to the amount of War Support a Country loses in War from losing Battle
 - `country_war_support_battles_increase_mult` — **War Support from Won Battle** — An increase or decrease to the amount of War Support a Country gains in War from winning Battle
 - `country_war_support_casualties_mult` — **War Support from Casualties** — An increase or decrease to the amount of War Support a Country suffers in War due to Casualties inflicted on them
-- `country_wealth_concentration_economy_add` — **[concept_inheritance_concentration]: Economic Laws**
-- `country_wealth_concentration_inheritance_add` — **[concept_inheritance_concentration]: Inheritance Law**
-- `country_wealth_concentration_public_goods_add` — **[concept_inheritance_concentration]: Public Goods**
-- `country_wealth_concentration_slavery_add` — **[concept_inheritance_concentration]: Slavery**
-- `country_wealth_concentration_tax_add` — **[concept_inheritance_concentration]: Taxes on Wealth**
 - `country_weekly_innovation_add` — **Innovation** — The amount of innovation! Innovation gained or lost each week
 - `country_weekly_innovation_max_add` — **Maximum Innovation Investment** — The maximum amount of innovation! Innovation that can be invested into a Technology each week
 - `country_weekly_innovation_mult` — **Innovation** — The amount of innovation! Innovation gained or lost each week
-- `country_weekly_investment_pool_add` — **Weekly [concept_investment_pool] Change**
-- `country_weekly_investment_pool_mult` — **Weekly [concept_investment_pool] Income**
-- `country_workflow_opt_pb_principles_bool` — **Enables [GetTechnology('advanced_workflow_optimization').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
-- `country_www_pb_principles_bool` — **Enables [GetTechnology('world_wide_web').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]**
 - `country_yankee_and_dixie_cultures_obsessed_with_guns` — **Yankee and Dixie Cultures gain an Obsession with Small Arms** — Yankee and Dixie Cultures gain an Obsession with Small Arms
 - `country_yi_cultural_acceptance_add` — **Acceptance of Yi Culture** — A bonus or penalty to a specific culture's [concept_acceptance]
 
@@ -2619,30 +2398,6 @@ _Cannon Artillery Offense_
 - `political_movement_radicalism_from_enactment_approval_mult` — **Political Movement Activism Reduction from Approved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements approve of
 - `political_movement_radicalism_from_enactment_disapproval_mult` — **Political Movement Activism Increase from Disapproved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements disapprove of
 
-### power-bloc (21)
-
-- `power_bloc_banking_union_bool` — **One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily**
-- `power_bloc_can_enact_decree_cultural_emigration_initiative_bool` — **Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]**
-- `power_bloc_can_enact_greenest_grass_campaign_bool` — **Can Enact Greenest Grass Campaign**
-- `power_bloc_can_give_development_aid_bool` — **Members Can Give Development Assistance**
-- `power_bloc_can_give_education_aid_bool` — **Members Can Give Education Aid**
-- `power_bloc_can_give_healthcare_aid_bool` — **Members Can Give Healthcare Aid**
-- `power_bloc_can_give_humanitarian_aid_bool` — **Members Can Give Humanitarian Aid**
-- `power_bloc_can_give_science_aid_2_bool` — **Members Can Give Large Science Aid**
-- `power_bloc_can_give_science_aid_bool` — **Members Can Give Science Aid**
-- `power_bloc_can_give_security_aid_bool` — **Members Can Give Security Aid**
-- `power_bloc_can_use_crisis_resolution_bool` — **Leader Can Use Crisis Resolution [concept_diplomatic_action]**
-- `power_bloc_can_use_diplomatic_alignment_bool` — **Leader Can Use Diplomatic Alignment [concept_diplomatic_action]**
-- `power_bloc_can_use_extend_influence_bool` — **Can Use Extend Influence [concept_diplomatic_action]**
-- `power_bloc_can_use_join_united_nations_bool` — **Leader Can Require UN Membership**
-- `power_bloc_fiscal_backstop_bool` — **The leader is lender of last resort to every adopter, and their overvaluation premium is halved**
-- `power_bloc_leader_can_force_cultural_acceptance_bool` — **Leader Can Force Cultural Acceptance**
-- `power_bloc_leader_can_force_cultural_adoption_bool` — **Leader Can Force Cultural Adoption**
-- `power_bloc_leader_can_peacefully_annex_bool` — **Leader Can Peacefully Annex Subjects**
-- `power_bloc_monetary_cooperation_bool` — **The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month**
-- `power_bloc_reserve_currency_bool` — **The union’s money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium**
-- `power_bloc_shared_currency_bool` — **Members may adopt the leader’s currency**
-
 ### power_bloc (20)
 
 - `power_bloc_allow_foreign_investment_lower_rank_bool` — **Foreign Investment Rights in Power Bloc Member with lower Rank** — Countries within the same Power Bloc have Foreign Investment Rights in Power Bloc Member with lower Rank
@@ -2666,59 +2421,23 @@ _Cannon Artillery Offense_
 - `power_bloc_target_sway_cost_mult` — **Sway Maneuver cost for the Diplomatic Play Target** — An increase or decrease to the Sway Maneuver cost for the Diplomatic Play Target
 - `power_bloc_trade_advantage_add` — **Trade Advantage within Power Bloc** — An increase or decrease in overall Trade Advantage with Countries in the same Power Bloc
 
-### ship (107)
+### ship (71)
 
 - `ship_accuracy_add` — **Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_accuracy_mult` — **Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_armor_add` — **Ship Armor** — An increase or decrease to the amount of armor a Ship is equipped with, decreasing damage dealt to its hull
 - `ship_armor_mult` — **Ship Armor** — An increase or decrease to the amount of armor a Ship is equipped with, decreasing damage dealt to its hull
-- `ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult` — **$ship_type_amphibious_assault_ship$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult` — **$ship_type_amphibious_assault_ship$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_antimatter_battleship_accuracy_mult` — **$ship_type_antimatter_battleship$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult` — **$ship_type_antimatter_battleship$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_arsenal_ship_accuracy_mult` — **$ship_type_arsenal_ship$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_arsenal_ship_hull_damage_mult` — **$ship_type_arsenal_ship$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_asw_destroyer_accuracy_mult` — **$ship_type_asw_destroyer$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_asw_destroyer_hull_damage_mult` — **$ship_type_asw_destroyer$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult` — **$ship_type_autonomous_swarm_submarine$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult` — **$ship_type_autonomous_swarm_submarine$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult` — **Coastal Defense Ship Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 - `ship_battle_against_ship_type_destroyer_accuracy_add` — **Destroyer Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_against_ship_type_destroyer_accuracy_mult` — **Destroyer Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
-- `ship_battle_against_ship_type_dreadnought_accuracy_mult` — **$ship_type_dreadnought$ $ship_accuracy_add$**
 - `ship_battle_against_ship_type_dreadnought_hull_damage_mult` — **Dreadnought Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 - `ship_battle_against_ship_type_early_ironclad_hull_damage_mult` — **Early Ironclad Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-- `ship_battle_against_ship_type_expeditionary_sea_base_accuracy_mult` — **$ship_type_expeditionary_sea_base$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_expeditionary_sea_base_hull_damage_mult` — **$ship_type_expeditionary_sea_base$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_fleet_carrier_accuracy_mult` — **$ship_type_fleet_carrier$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_fleet_carrier_hull_damage_mult` — **$ship_type_fleet_carrier$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_guided_missile_ship_accuracy_mult` — **$ship_type_guided_missile_ship$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_guided_missile_ship_hull_damage_mult` — **$ship_type_guided_missile_ship$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult` — **$ship_type_hypersonic_missile_platform$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult` — **$ship_type_hypersonic_missile_platform$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_modern_ironclad_hull_damage_mult` — **Modern Ironclad Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 - `ship_battle_against_ship_type_monitor_hull_damage_mult` — **Monitor Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-- `ship_battle_against_ship_type_networked_air_defense_cruiser_accuracy_mult` — **$ship_type_networked_air_defense_cruiser$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_networked_air_defense_cruiser_hull_damage_mult` — **$ship_type_networked_air_defense_cruiser$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_nuclear_submarine_accuracy_mult` — **$ship_type_nuclear_submarine$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult` — **$ship_type_nuclear_submarine$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult` — **$ship_type_nuclear_supercarrier$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult` — **$ship_type_nuclear_supercarrier$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_orbital_support_amphibious_mothership_accuracy_mult` — **$ship_type_orbital_support_amphibious_mothership$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_orbital_support_amphibious_mothership_hull_damage_mult` — **$ship_type_orbital_support_amphibious_mothership$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult` — **Pre-Dreadnought Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-- `ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult` — **$ship_type_pulsed_laser_escort$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_pulsed_laser_escort_hull_damage_mult` — **$ship_type_pulsed_laser_escort$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult` — **$ship_type_stealth_attack_submarine$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult` — **$ship_type_stealth_attack_submarine$ $ship_hull_damage_add$**
-- `ship_battle_against_ship_type_stealth_battlecruiser_accuracy_mult` — **$ship_type_stealth_battlecruiser$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult` — **$ship_type_stealth_battlecruiser$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_submarine_accuracy_add` — **Submarine Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_against_ship_type_submarine_accuracy_mult` — **Submarine Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
-- `ship_battle_against_ship_type_submarine_hull_damage_mult` — **$ship_type_submarine$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_super_dreadnought_hull_damage_mult` — **Super Dreadnought Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-- `ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult` — **$ship_type_swarm_coordination_vessel$ $ship_accuracy_add$**
-- `ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult` — **$ship_type_swarm_coordination_vessel$ $ship_hull_damage_add$**
 - `ship_battle_against_ship_type_torpedo_boat_accuracy_add` — **Torpedo Boat Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_against_ship_type_torpedo_boat_accuracy_mult` — **Torpedo Boat Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_against_ship_type_torpedo_boat_destroyer_accuracy_add` — **Torpedo Boat Destroyer Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
@@ -2776,55 +2495,27 @@ _Cannon Artillery Offense_
 - `ship_vulnerability_add` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 - `ship_vulnerability_mult` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 
-### state (312)
+### state (223)
 
-- `state_ageing_rate_add` — **Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_allow_assimilation_in_homeland_bool` — **Assimilation in Homeland States Allowed** — Assimilation of Pops is allowed even if they are living in one of their Homeland States
 - `state_allow_assimilation_without_presence_bool` — **Assimilation to Primary Culture Always Allowed** — Assimilation to Primary Culture is allowed even if no Pops of that Culture are present in the State
 - `state_allow_conversion_without_presence_bool` — **Conversion to State Religion Always Allowed** — Conversion to the State Religion is allowed even if no Pops of that Religion are present in the State
-- `state_arable_land_mult` — **Arable Land**
 - `state_assimilation_mult` — **Assimilation** — A bonus or penalty to Assimilation
-- `state_atmospheric_carbon_capture_add` — **Atmospheric Carbon Removal**
-- `state_backup_external_mortality_mult` — **Deaths from Violence and Accidents in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_backup_work_mortality_mult` — **Deaths at Work in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_birth_limit_relief_add` — **Rural Exemption from the Birth Limit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_birth_rate_mult` — **Birth Rate** — How many children are born each year
 - `state_blockade_resistance_add` — **Blockade Resistance** — An increase or decrease to the Blockade Resistance of a State.
 - `state_bureaucracy_population_base_cost_factor_mult` — **bur! Bureaucracy Population Cost Multiplier** — An increase or reduction to the base administrative cost incurred by your incorporated Population
-- `state_child_labor_participation_add` — **Census: Children at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_chronic_mortality_mult` — **Deaths from Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_chronic_treatment_add` — **Treatment of Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_climate_cold_relief_add` — **Cold Relief**
-- `state_climate_disease_relief_add` — **Malaria Relief**
-- `state_climate_heat_relief_add` — **Heat Relief**
-- `state_climate_water_relief_add` — **Water Supply**
-- `state_climate_winter_relief_add` — **Winter Relief**
 - `state_colony_growth_creation_factor` — **Colonial Growth Generation** — The amount of colonial growth generated by Pops in Incorporated States.
 - `state_colony_growth_speed_mult` — **Colony Growth Speed** — A bonus or penalty to the final speed of colonial growth in a Colony.
 - `state_conscription_rate_add` — **Conscription Rate** — The portion of the Workforce that are Potential Conscripts
 - `state_conscription_rate_mult` — **Conscriptable Battalions** — A bonus or penalty to the number of Potential Conscripts from Conscription Rate
 - `state_construction_mult` — **State Construction Efficiency** — A bonus or penalty to the weekly Construction progress in a State
 - `state_contiguous_incorporation_speed_mult` — **Contiguous Incorporation Speed** — A bonus or penalty to the speed at which States that have a land or strait connection to the Capital State are Incorporated
-- `state_contraception_add` — **Contraception[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_control_strait_bool` — **Control Strait** — Whether the state has control over a strait, affecting trade and military movement.
 - `state_conversion_mult` — **Conversion** — A bonus or penalty to Conversion
-- `state_death_cause_chr_mult` — **Counted in Causes of Death under Chronic Illness[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_death_cause_ext_mult` — **Counted in Causes of Death under Accidents and Violence[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_death_cause_inf_mult` — **Counted in Causes of Death under Infection and Hunger[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_death_cause_war_mult` — **Counted in Causes of Death under War and Devastation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_death_cause_work_mult` — **Counted in Causes of Death under Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_decree_cost_mult` — **Decree Cost** — A bonus or penalty to the Authority cost of Decrees
-- `state_demog_absorbed_birth_rate_mult` — **$state_birth_rate_mult$[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]**
-- `state_demog_absorbed_mortality_mult` — **$state_mortality_mult$[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]**
-- `state_demog_ontop_birth_rate_mult` — **$state_birth_rate_mult$[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]**
-- `state_demog_ontop_mortality_mult` — **$state_mortality_mult$[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]**
-- `state_demog_ontop_mortality_wealth_mult` — **$state_mortality_wealth_mult$[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]**
-- `state_demog_replaced_ratio_add` — **$state_working_adult_ratio_add$[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_replaced_name_ingame','te_demog_census_off_none')]**
-- `state_demog_womens_work_ratio_add` — **[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_womens_name_ingame','te_demog_wf_plain')]**
 - `state_dependent_political_participation_add` — **Dependent Enfranchisement** — The fraction of Dependents that can join Interest Groups and vote.
 - `state_dependent_wage_add` — **Yearly Dependents Income** — An increase or decrease in Dependents Income
 - `state_dependent_wage_mult` — **Dependents Income** — An increase or decrease in Dependents Income
-- `state_desired_fertility_mult` — **Desired Family Size[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_devastation_decay_mult` — **Devastation Recovery** — A bonus or penalty to the speed at which States recover from Devastation.
 - `state_disallow_barracks_construction_bool` — **Disallow Army Building Construction** — Army Buildings cannot be constructed in the State, and no new Battalions can be raised there
 - `state_disallow_incorporation_bool` — **State Incorporation Disallowed** — Cannot Incorporate State due to a modifier
@@ -2833,17 +2524,11 @@ _Cannon Artillery Offense_
 - `state_expected_sol_from_literacy` — **Minimum Expected Standard of Living from Literacy** — An increase or decrease to the minimum Standard of Living Pops expect to enjoy, scaled by their Literacy
 - `state_expected_sol_mult` — **Minimum Expected Standard of Living** — An increase or decrease to the minimum Standard of Living Pops expect to enjoy
 - `state_export_advantage_mult` — **Trade Advantage for Exports** — An increase or decrease in Trade Advantage for exported Goods
-- `state_external_mortality_mult` — **Deaths from Violence and Accidents[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_external_safety_add` — **Safer Streets and Homes[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_family_migration_add` — **Families Among Migrants[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_fertility_means_add` — **Fertility Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_food_security_add` — **Food Security** — A bonus or penalty to the food security of all pops in a state
 - `state_fortification_bombardment_resistance_add` — **Naval Fortification Bombardment Resistance** — Resistance to port bombardment provided by Naval Fortification in a State.
-- `state_fortification_level_add` — **[concept_fortification_level]**
 - `state_fortification_naval_battle_mult` — **Naval Fortification Battle Defense** — A bonus or penalty to the defending units in a naval invasion battle provided by Naval Fortification in a State.
 - `state_fortification_naval_invasion_add` — **Naval Fortification Invasion Defense** — A bonus or penalty to the defense against naval invasion provided by Naval Fortification in a State.
 - `state_free_state_pop_support_movement_anti_slavery_mult` — **Abolitionist Movement Pop Attraction in non-Slave States** — state_free_state_pop_support_movement_anti_slavery_mult_desc
-- `state_greenhouse_gas_emissions_add` — **Greenhouse Gas Emissions**
 - `state_harvest_condition_disease_outbreak_duration_mult` — **disease_outbreak! Disease Outbreak Harvest Condition Duration** — An increase or decrease to the duration of Disease Outbreaks.
 - `state_harvest_condition_disease_outbreak_impact_mult` — **disease_outbreak! Disease Outbreak Harvest Condition Impact** — An increase or decrease to the impact of Disease Outbreaks.
 - `state_harvest_condition_drought_duration_mult` — **drought! Drought Harvest Condition Duration** — An increase or decrease to the duration of Droughts
@@ -2852,31 +2537,16 @@ _Cannon Artillery Offense_
 - `state_harvest_condition_earthquake_impact_mult` — **earthquake! Earthquake Harvest Condition Impact** — An increase or decrease to the impact of Earthquakes.
 - `state_harvest_condition_extreme_winds_duration_mult` — **extreme_winds! Extreme Winds Harvest Condition Duration** — An increase or decrease to the duration of Extreme Winds.
 - `state_harvest_condition_extreme_winds_impact_mult` — **extreme_winds! Extreme Winds Harvest Condition Impact** — An increase or decrease to the impact of Extreme Winds.
-- `state_harvest_condition_financial_panic_duration_mult` — **[GetHarvestConditionType('financial_panic').GetName] [concept_harvest_condition] Duration**
-- `state_harvest_condition_financial_panic_impact_mult` — **[GetHarvestConditionType('financial_panic').GetName] [concept_harvest_condition] Impact**
 - `state_harvest_condition_flood_duration_mult` — **flood! Flood Harvest Condition Duration** — An increase or decrease to the duration of Floods.
 - `state_harvest_condition_flood_impact_mult` — **flood! Flood Harvest Condition Impact** — An increase or decrease to the impact of Floods.
-- `state_harvest_condition_frost_duration_mult` — **[GetHarvestConditionType('frost').GetName] [concept_harvest_condition] Duration**
-- `state_harvest_condition_frost_impact_mult` — **[GetHarvestConditionType('frost').GetName] [concept_harvest_condition] Impact**
-- `state_harvest_condition_hailstorm_impact_mult` — **[GetHarvestConditionType('hailstorm').GetName] [concept_harvest_condition] Impact**
 - `state_harvest_condition_heatwave_duration_mult` — **heatwave! Heatwave Harvest Condition Duration** — An increase or decrease to the duration of Heatwaves.
 - `state_harvest_condition_heatwave_impact_mult` — **heatwave! Heatwave Harvest Condition Impact** — An increase or decrease to the impact of Heatwaves.
-- `state_harvest_condition_moderate_rainfall_impact_mult` — **[GetHarvestConditionType('moderate_rainfall').GetName] [concept_harvest_condition] Impact**
-- `state_harvest_condition_pollinator_surge_impact_mult` — **[GetHarvestConditionType('pollinator_surge').GetName] [concept_harvest_condition] Impact**
-- `state_harvest_condition_torrential_rains_duration_mult` — **[GetHarvestConditionType('torrential_rains').GetName] Duration**
-- `state_harvest_condition_torrential_rains_impact_mult` — **[GetHarvestConditionType('torrential_rains').GetName] [concept_harvest_condition] Impact**
 - `state_harvest_condition_tsunami_duration_mult` — **tsunami! Tsunami Harvest Condition Duration** — An increase or decrease to the duration of Tsunamis.
 - `state_harvest_condition_tsunami_impact_mult` — **tsunami! Tsunami Harvest Condition Impact** — An increase or decrease to the impact of Tsunamis.
 - `state_harvest_condition_wildfire_duration_mult` — **wildfire! Wildfire Harvest Condition Duration** — An increase or decrease to the duration of Wildfires.
 - `state_harvest_condition_wildfire_impact_mult` — **wildfire! Wildfire Harvest Condition Impact** — An increase or decrease to the impact of Wildfires.
-- `state_health_care_access_add` — **Health Care Access[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_homeland_change_speed_mult` — **[concept_homeland] Change Speed**
-- `state_homeland_creation_threshold_add` — **[concept_homeland] Creation Threshold**
-- `state_homeland_removal_speed_mult` — **[concept_homeland] Removal Speed**
-- `state_homeland_removal_threshold_add` — **[concept_homeland] Removal Threshold**
 - `state_import_advantage_mult` — **Trade Advantage for Imports** — An increase or decrease in Trade Advantage for imported Goods
 - `state_incorporation_speed_mult` — **Incorporation Speed** — A bonus or penalty to the speed at which States are Incorporated
-- `state_infection_treatment_add` — **Treatment of Infection[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_infrastructure_add` — **Infrastructure** — A bonus or penalty to the State’s Infrastructure
 - `state_infrastructure_from_aeroplanes_consumption_add`
 - `state_infrastructure_from_ammunition_consumption_add`
@@ -2934,12 +2604,7 @@ _Cannon Artillery Offense_
 - `state_infrastructure_from_wood_consumption_add`
 - `state_infrastructure_mult` — **Infrastructure** — A bonus or penalty to the State’s Infrastructure
 - `state_institution_impact_add` — **Impact of Institutions** — An increase or reduction to the Impact of Institutions in the State
-- `state_labor_participation_add` — **Census: People at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_late_marriage_farms_add` — **Late Marriage on the Farms[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_literacy_growth_add` — **Literacy Growth** — A bonus or penalty to the growth of Literacy in a State.
-- `state_longevity_care_cover_add` — **Longevity Care Through the Health System[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_longevity_care_floor_add` — **Minimum Longevity Care Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_longevity_care_market_reach_add` — **Longevity Care Market Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_lower_strata_birth_rate_mult` — **Birth Rate for the Lower Strata** — How many children are born each year among the Lower Strata
 - `state_lower_strata_expected_sol_add` — **Minimum Expected Standard of Living for the Lower Strata** — An increase or decrease to the minimum Standard of Living that Lower Strata Pops expect to enjoy
 - `state_lower_strata_standard_of_living_add` — **Standard of Living for the Lower Strata** — Extra Standard of Living added on top of Wealth
@@ -2949,51 +2614,34 @@ _Cannon Artillery Offense_
 - `state_loyalism_increases_second_rate_citizen_mult` — **Loyalism increases for the acceptance_status_4! Second-class Citizen Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
 - `state_loyalism_increases_violent_hostility_mult` — **Loyalism increases for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
 - `state_loyalists_from_political_movements_mult` — **Loyalists from Political Movements** — A bonus or penalty to how many Pops will become Loyalist when enacting laws that please Political Movements
-- `state_malaria_control_add` — **Malaria Control**
-- `state_male_labor_participation_add` — **Census: Men at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_market_access_price_impact` — **Market Access Price Impact** — An increase or decrease to the maximum influence of Market Access on the Local Price of a Good.
-- `state_maternal_mortality_mult` — **Maternal Deaths[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_maternal_treatment_add` — **Treatment in Childbirth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_max_trade_advantage_from_capacity_add` — **Maximum Trade Advantage from Capacity** — An increase or decrease in maximum Trade Advantage from Trade Capacity in a State
-- `state_means_literacy_add` — **Family Planning Knowledge[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_medical_diffusion_add` — **Spread of Medicine[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_metro_share_add` — **Metropolitan Share Target[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_middle_strata_birth_rate_mult` — **Birth Rate for the Middle Strata** — How many children are born each year among the Middle Strata
 - `state_middle_strata_expected_sol_add` — **Minimum Expected Standard of Living for the Middle Strata** — An increase or decrease to the minimum Standard of Living that Middle Strata Pops expect to enjoy
 - `state_middle_strata_standard_of_living_add` — **Standard of Living for the Middle Strata** — Extra Standard of Living added on top of Wealth
-- `state_migration_crowding_density_mult` — **[concept_migration_crowding] Tolerance**
 - `state_migration_pull_add` — **Migration Attraction** — A bonus or penalty to the state's ability to attract immigrants within its Market.
 - `state_migration_pull_mult` — **Migration Attraction** — A bonus or penalty to the state's ability to attract immigrants within its Market.
 - `state_migration_pull_unincorporated_mult` — **Migration Attraction in Unincorporated States** — A bonus or penalty to the urge to migrate to Unincorporated States
 - `state_migration_quota_mult` — **Migration Quota** — A bonus or penalty to the amount of people that emigrate from or immigrate to a State
-- `state_min_cultural_acceptance_delta_add` — **Minimum Local Acceptance**
 - `state_minimum_incorporated_subsistence_arable_land_add` — **Minimum Subsistence Land Share in Incorporated States** — An increase or decrease to the minimum fraction of a Incorporated State’s arable land which is reserved for Subsistence Buildings and cannot be used for othe...
-- `state_monthly_loyalists_add` — **Monthly [Concept('concept_loyalist','$concept_loyalists$')]**
 - `state_mortality_mult` — **Mortality** — An increase or decrease to the Mortality for all Pops
 - `state_mortality_turmoil_mult` — **Mortality per Turmoil** — An increase or decrease to pop Mortality per Turmoil
 - `state_mortality_wealth_mult` — **Mortality per Wealth** — An increase or decrease to pop Mortality per Wealth
-- `state_natural_fertility_mult` — **Natural Fertility[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_non_contiguous_incorporation_speed_mult` — **Non-Contiguous Incorporation Speed** — A bonus or penalty to the speed at which States that lack a land or strait connection to the Capital State are Incorporated
 - `state_non_homeland_colony_growth_speed_mult` — **Colony Growth Speed in non-Homeland States** — A bonus or penalty to the final speed of colonial growth in Colonies that are not the Homeland of any of your Primary Cultures.
 - `state_non_homeland_mortality_mult` — **Mortality in non-Homeland States** — An increase or decrease to the Mortality for Pops in States that are not the Homeland of any of your Primary Cultures.
-- `state_nuclear_weapon_defense_chance_add` — **[concept_nuclear_strike] Defense Chance**
-- `state_orbital_battery_fire_add` — **Fire on Hostile Fleets at Earth**
-- `state_orbital_debris_sweep_add` — **Low-Orbit Debris Swept in Peace**
 - `state_orthodox_lower_strata_conversion_rate_add` — **Monthly orthodox_text_icon! Orthodox Conversion** — An increase or decrease to the percentage of lower-strata Pops in a non-orthodox_text_icon! Orthodox Country that will Convert to Orthodox per month
 - `state_peasants_consumption_multiplier_add` — **Goods consumption for peasants! Peasants** — A bonus or penalty to goods consumption for peasants! Peasants
 - `state_peasants_education_access_add` — **Education Access for peasants! Peasants** — A bonus or penalty to education access for peasants! Peasants
 - `state_political_strength_from_wealth_mult` — **Political Strength from Wealth** — An increase or decrease to the amount of Political Strength of Pops from Wealth
 - `state_political_strength_from_welfare_mult` — **Political Strength when receiving Welfare** — An increase or decrease to the amount of Political Strength of Pops that are receiving Welfare Payments
 - `state_pollution_generation_add` — **Generated Pollution** — An increase or decrease to how much pollution is generated in a state
-- `state_pollution_generation_mult` — **Generated [concept_pollution_system]**
 - `state_pollution_reduction_health_mult` — **Pollution Health Effects Reduction** — An increase or decrease to the effects of Pollution Impact on the health of your population
 - `state_pop_pol_str_add` — **Universal Pop Political Strength** — A bonus or penalty to the total Political Strength of all Pops
 - `state_pop_pol_str_mult` — **Universal Pop Political Strength** — A bonus or penalty to the total Political Strength of all Pops
 - `state_pop_qualifications_mult` — **Qualifications** — A bonus or penalty to Qualifications
 - `state_pop_support_movement_anti_communist_add`
 - `state_pop_support_movement_anti_communist_mult`
-- `state_pop_support_movement_anti_war_mult` — **$movement_anti_war_name$ [concept_pop] Attraction**
-- `state_pop_support_movement_civil_rights_mult` — **$movement_civil_rights_name$ [concept_pop] Attraction**
 - `state_pop_support_movement_cossack_add`
 - `state_pop_support_movement_cossack_mult`
 - `state_pop_support_movement_cultural_majority_add` — **Cultural Majority Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
@@ -3032,13 +2680,10 @@ _Cannon Artillery Offense_
 - `state_pop_support_movement_slave_revolt_mult` — **Slave Revolt Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_tokugawa_loyalist_add`
 - `state_pop_support_movement_tokugawa_loyalist_mult`
-- `state_pop_support_movement_transhumanist_mult` — **$movement_transhumanist_name$ [concept_pop] Attraction**
 - `state_pop_support_movement_utilitarian_add` — **Utilitarian Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_utilitarian_mult` — **Utilitarian Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_yugoslav_national_add` — **state_pop_support_movement_yugoslav_national_add** — state_pop_support_movement_yugoslav_national_add_desc
 - `state_pop_support_movement_yugoslav_national_mult` — **German National Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
-- `state_power_grid_connection_bool` — **[concept_power_grid] Connection**
-- `state_power_grid_disrupted_bool` — **[concept_power_grid] Disruption**
 - `state_radicalism_increases_cultural_erasure_mult` — **Radicalism increases for the acceptance_status_2! Cultural Erasure Status** — A bonus or penalty to increases in Radicalism for Pops in this Status
 - `state_radicalism_increases_full_acceptance_mult` — **Radicalism increases for the acceptance_status_5! Full Acceptance Status** — A bonus or penalty to increases in Radicalism for Pops in this Status
 - `state_radicalism_increases_open_prejudice_mult` — **Radicalism increases for the acceptance_status_3! Open Prejudice Status** — A bonus or penalty to increases in Radicalism for Pops in this Status
@@ -3046,13 +2691,7 @@ _Cannon Artillery Offense_
 - `state_radicalism_increases_violent_hostility_mult` — **Radicalism increases for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to increases in Radicalism for Pops in this Status
 - `state_radicals_and_loyalists_from_sol_change_mult` — **Radicals and Loyalists from Standard of Living changes** — A bonus or penalty to how many Pops will become Radical or Loyalist from changes in Standard of Living
 - `state_radicals_from_political_movements_mult` — **Radicals from Political Movements** — A bonus or penalty to how many Pops will become Radical from Political Movements with high Movement Activism
-- `state_rejuvenation_add` — **Rejuvenation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_reserve_battalions_add` — **Reserve Battalions**
-- `state_resettlement_recruits_add` — **Recruited for resettlement last month**
-- `state_resettlement_transfer_add` — **Settlers Moved per Month**
-- `state_sex_ratio_at_birth_add` — **Boys per 100 Girls at Birth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_slave_import_mult` — **Slave Imports** — An increase or decrease to the amount of Slaves that a State can potentially import each week if Slave Trade is enacted
-- `state_sr_ship_construction_add` — **Fleet Strength Built a Month**
 - `state_standard_of_living_add` — **Standard of Living** — Extra Standard of Living added on top of Wealth
 - `state_subvention_export_add` — **Maximum Subventions on Exports** — An increase or decrease to the maximum Subventions that can be paid to Trade Centers that export Goods from our Market.
 - `state_subvention_import_add` — **Maximum Subventions on Imports** — An increase or decrease to the maximum Subventions that can be paid to Trade Centers that import Goods to our Market.
@@ -3074,21 +2713,12 @@ _Cannon Artillery Offense_
 - `state_upper_strata_birth_rate_mult` — **Birth Rate for the Upper Strata** — How many children are born each year among the Upper Strata
 - `state_upper_strata_expected_sol_add` — **Minimum Expected Standard of Living for the Upper Strata** — An increase or decrease to the minimum Standard of Living that Upper Strata Pops expect to enjoy
 - `state_upper_strata_standard_of_living_add` — **Standard of Living for the Upper Strata** — Extra Standard of Living added on top of wealth
-- `state_urban_fertility_relief_add` — **Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_urbanization_per_level_add` — **Urbanization per Urban Center** — The amount of Urbanization required in a State to create 1 level of Urban Center
 - `state_urbanization_per_level_mult` — **Urbanization per Urban Center** — Urbanization per Urban Center
-- `state_violence_against_minorities_bool` — **Violence Against Minorities**
-- `state_war_support_monthly_add` — **Monthly [concept_war_support]**
-- `state_war_support_monthly_add_religion` — **Fervor Monthly Add**
-- `state_wealth_concentration_land_add` — **[concept_inheritance_concentration]: Land Tenure**
 - `state_weekly_trades_add` — **Weekly Trades** — An increase or decrease to number of adjustments to Trade that a State can make each week.
 - `state_welfare_payments_add` — **Welfare Payments** — The fraction of the Normal Wage at which Pops receive Welfare Payments from the state
 - `state_welfare_payments_mult` — **Welfare Payments Multiplier** — The total sum of all Welfare Payments in the State are multiplied by this value
-- `state_work_capacity_mult` — **Census: Fitness for Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_work_mortality_mult` — **Deaths at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
-- `state_work_safety_add` — **Safer Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]**
 - `state_working_adult_ratio_add` — **Workforce Ratio** — The ratio of Workforce to Dependents
-- `state_yearly_cultural_acceptance_add` — **Annual Cultural Acceptance**
 - `state_yi_standard_of_living_add` — **[concept_sol] Modifier for Yi** — A bonus or penalty to a specific culture's [concept_sol]
 
 ### tax (6)

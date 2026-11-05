@@ -18,17 +18,7 @@ building|building_academics_mortality_mult|An increase or decrease in the Mortal
 building|building_academics_shares_add|An increase or decrease in an academics! Academics Pop Ownership Shares
 building|building_academics_shares_mult|
 building|building_academics_standard_of_living_add|A bonus or penalty to the Standard of Living for employed academics! Academics.
-building|building_advanced_material_fabricator_throughput_add|
-building|building_aerospace_industry_throughput_add|
-building|building_airport_throughput_add|
 building|building_angkor_wat_throughput_add|
-building|building_annual_antimatter_facility_progress|
-building|building_annual_consciousness_network_progress|
-building|building_annual_mind_upload_nexus_progress|
-building|building_annual_nanofabrication_center_progress|
-building|building_annual_orbital_battlestation_progress|
-building|building_annual_solar_collector_progress|
-building|building_annual_space_elevator_progress|
 building|building_argebam_throughput_add|
 building|building_aristocrats_fertility_mult|
 building|building_aristocrats_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire aristocrats! Aristocrats.
@@ -43,7 +33,6 @@ building|building_artillery_foundry_throughput_add|A bonus or penalty to both in
 building|building_automotive_industry_throughput_add|A bonus or penalty to both input and output of Automotive Industries
 building|building_banana_plantation_throughput_add|
 building|building_barrack_throughput_add|A bonus or penalty to both input and output of Barracks
-building|building_bauxite_mine_throughput_add|
 building|building_big_ben_throughput_add|
 building|building_bureaucrats_fertility_mult|
 building|building_bureaucrats_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire bureaucrats! Bureaucrats.
@@ -63,7 +52,6 @@ building|building_cathedral_of_christ_the_savior_throughput_add|
 building|building_central_park_throughput_add|
 building|building_chemical_plant_throughput_add|A bonus or penalty to both input and output of Fertilizer Plants
 building|building_chichen_itza_throughput_add|
-building|building_chromium_mine_throughput_add|
 building|building_clergymen_fertility_mult|
 building|building_clergymen_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire clergymen! Clergymen.
 building|building_clergymen_mortality_mult|
@@ -92,10 +80,7 @@ building|building_dye_plantation_throughput_add|A bonus or penalty to both input
 building|building_easter_island_heads_throughput_add|
 building|building_economy_of_scale_level_cap_add|The maximum number of Building levels that can confer Economy of Scale effects.
 building|building_eiffel_tower_throughput_add|
-building|building_electrics_industry_appliances_throughput_add|
-building|building_electrics_industry_radio_throughput_add|
 building|building_electrics_industry_throughput_add|A bonus or penalty to both input and output of Electrics Industries
-building|building_electronic_components_and_semiconductor_industry_throughput_add|
 building|building_employment_academics_add|Modifies the amount of academics! Academics a building can hire per level
 building|building_employment_academics_mult|
 building|building_employment_aristocrats_add|Modifies the amount of aristocrats! Aristocrats a building can hire per level
@@ -108,7 +93,6 @@ building|building_employment_clergymen_add|Modifies the amount of clergymen! Cl
 building|building_employment_clergymen_mult|
 building|building_employment_clerks_add|Modifies the amount of clerks! Clerks a building can hire per level
 building|building_employment_clerks_mult|
-building|building_employment_deportee_add|
 building|building_employment_engineers_add|Modifies the amount of engineers! Engineers a building can hire per level
 building|building_employment_engineers_mult|
 building|building_employment_farmers_add|Modifies the amount of farmers! Farmers a building can hire per level
@@ -147,7 +131,6 @@ building|building_fishing_wharf_throughput_add|A bonus or penalty to both input 
 building|building_food_industry_throughput_add|A bonus or penalty to both input and output of Food Industries
 building|building_forbidden_city_throughput_add|
 building|building_furniture_manufactory_throughput_add|A bonus or penalty to both input and output of Furniture Manufacturies
-building|building_fusion_plant_throughput_add|
 building|building_giza_necropolis_throughput_add|
 building|building_glassworks_throughput_add|A bonus or penalty to both input and output of Glassworks
 building|building_gold_field_throughput_add|A bonus or penalty to both input and output of Gold Fields
@@ -156,8 +139,6 @@ building|building_goods_input_mult|An adjustment to the amount of Goods Consumed
 building|building_government_administration_throughput_add|A bonus or penalty to both input and output of Government Administration
 building|building_gran_teatro_de_la_habana_throughput_add|
 building|building_grand_kremlin_palace_throughput_add|
-building|building_graphite_mine_throughput_add|
-building|building_grid_undersea_cable_range_add|
 building|building_group_bg_agriculture_academics_fertility_mult|
 building|building_group_bg_agriculture_academics_mortality_mult|
 building|building_group_bg_agriculture_academics_standard_of_living_add|
@@ -431,7 +412,6 @@ building|building_group_bg_banana_plantations_standard_of_living_add|
 building|building_group_bg_banana_plantations_tax_mult|
 building|building_group_bg_banana_plantations_throughput_add|
 building|building_group_bg_banana_plantations_unincorporated_throughput_add|
-building-group|building_group_bg_biotechnology_throughput_add|
 building|building_group_bg_bureaucracy_academics_fertility_mult|
 building|building_group_bg_bureaucracy_academics_mortality_mult|
 building|building_group_bg_bureaucracy_academics_standard_of_living_add|
@@ -540,7 +520,6 @@ building|building_group_bg_canals_standard_of_living_add|
 building|building_group_bg_canals_tax_mult|
 building|building_group_bg_canals_throughput_add|
 building|building_group_bg_canals_unincorporated_throughput_add|
-building-group|building_group_bg_clean_power_construction_efficiency_add|
 building|building_group_bg_coal_mining_academics_fertility_mult|
 building|building_group_bg_coal_mining_academics_mortality_mult|
 building|building_group_bg_coal_mining_academics_standard_of_living_add|
@@ -1410,7 +1389,6 @@ building|building_group_bg_heavy_industry_standard_of_living_add|
 building|building_group_bg_heavy_industry_tax_mult|
 building|building_group_bg_heavy_industry_throughput_add|A bonus or penalty to both input and output of Heavy Industries
 building|building_group_bg_heavy_industry_unincorporated_throughput_add|
-building-group|building_group_bg_high_tech_construction_efficiency_add|
 building|building_group_bg_infrastructure_academics_fertility_mult|
 building|building_group_bg_infrastructure_academics_mortality_mult|
 building|building_group_bg_infrastructure_academics_standard_of_living_add|
@@ -2682,7 +2660,6 @@ building|building_group_bg_power_clergymen_standard_of_living_add|
 building|building_group_bg_power_clerks_fertility_mult|
 building|building_group_bg_power_clerks_mortality_mult|
 building|building_group_bg_power_clerks_standard_of_living_add|
-building-group|building_group_bg_power_construction_efficiency_add|
 building|building_group_bg_power_employee_mult|
 building|building_group_bg_power_engineers_fertility_mult|
 building|building_group_bg_power_engineers_mortality_mult|
@@ -3967,12 +3944,8 @@ building|building_group_bg_wheat_farms_standard_of_living_add|
 building|building_group_bg_wheat_farms_tax_mult|
 building|building_group_bg_wheat_farms_throughput_add|
 building|building_group_bg_wheat_farms_unincorporated_throughput_add|
-building-group|building_group_te_construction_market_bg_employee_mult|
 building|building_hagia_sophia_throughput_add|
 building|building_halloween_castledracula_throughput_add|
-building|building_highway_throughput_add|
-building|building_hydro_plant_throughput_add|
-building|building_industrial_mineral_salt_mine_throughput_add|
 building|building_iron_mine_throughput_add|A bonus or penalty to both input and output of Iron Mines
 building|building_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire new employees.
 building|building_kaiserforum_1_throughput_add|
@@ -3990,7 +3963,6 @@ building|building_laborers_shares_mult|
 building|building_laborers_standard_of_living_add|A bonus or penalty to the Standard of Living for employed laborers! Laborers.
 building|building_lead_mine_throughput_add|A bonus or penalty to both input and output of Lead Mines
 building|building_level_bureaucracy_cost_add|Increasing amount of Bureaucracy spent per goverment owned building level
-building|building_lithium_mine_throughput_add|
 building|building_livestock_ranch_throughput_add|A bonus or penalty to both input and output of Livestock Ranches
 building|building_logging_camp_throughput_add|
 building|building_machinists_fertility_mult|
@@ -4001,7 +3973,6 @@ building|building_machinists_shares_mult|
 building|building_machinists_standard_of_living_add|A bonus or penalty to the Standard of Living for employed machinists! Machinists.
 building|building_machu_picchu_throughput_add|
 building|building_maize_farm_throughput_add|A bonus or penalty to both input and output of Maize Farms
-building|building_manganese_mine_throughput_add|
 building|building_manila_cathedral_monument_throughput_add|
 building|building_manila_cathedral_original_throughput_add|
 building|building_manila_cathedral_ruins_throughput_add|
@@ -4023,11 +3994,7 @@ building|building_naval_administration_training_rate_add|How much Manpower can b
 building|building_naval_administration_training_rate_mult|How much Manpower can be trained per week at Naval Administration buildings
 building|building_naval_fortification_throughput_add|
 building|building_naval_logistics_center_throughput_add|
-building|building_network_infrastructure_throughput_add|
-building|building_nickel_cobalt_mine_throughput_add|
-building|building_nuclear_plant_throughput_add|
 building|building_observatorygreenwich_throughput_add|
-building|building_ocean_mine_throughput_add|
 building|building_officers_fertility_mult|
 building|building_officers_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire officers! Officers.
 building|building_officers_mortality_mult|
@@ -4036,7 +4003,6 @@ building|building_officers_shares_mult|
 building|building_officers_standard_of_living_add|A bonus or penalty to the Standard of Living for employed officers! Officers.
 building|building_oil_rig_throughput_add|
 building|building_opium_plantation_throughput_add|A bonus or penalty to both input and output of Opium Plantations
-building|building_orbital_battlestation_throughput_add|
 building|building_panama_canal_throughput_add|
 building|building_paper_mill_throughput_add|A bonus or penalty to both input and output of Paper Mills
 building|building_peasants_fertility_mult|
@@ -4048,21 +4014,11 @@ building|building_peasants_standard_of_living_add|A bonus or penalty to the Stan
 building|building_pena_convent_throughput_add|
 building|building_pena_palace_throughput_add|
 building|building_petra_throughput_add|
-building|building_phosphate_mine_throughput_add|
-building|building_platinum_group_metals_mine_throughput_add|
 building|building_port_throughput_add|A bonus or penalty to both input and output of Port
-building|building_potash_mine_throughput_add|
 building|building_power_bloc_statue_throughput_add|
 building|building_power_plant_throughput_add|A bonus or penalty to both input and output of Power Plants
-building|building_precious_minor_base_metal_mine_throughput_add|
 building|building_railway_throughput_add|A bonus or penalty to both input and output of Railway
-building|building_rare_earth_metals_mine_throughput_add|
-building|building_renewable_energy_plant_throughput_add|
-building|building_resettlement_arrivals_add|
-building|building_resettlement_transit_deaths_add|
 building|building_rice_farm_throughput_add|A bonus or penalty to both input and output of Rice Farms
-building|building_robotic_or_ai_managed_bool|
-building|building_robotics_industry_throughput_add|
 building|building_rubber_plantation_throughput_add|A bonus or penalty to both input and output of Rubber Plantations
 building|building_rye_farm_throughput_add|A bonus or penalty to both input and output of Rye Farms
 building|building_sagrada_familia_cathedral_1_throughput_add|
@@ -4086,19 +4042,12 @@ building|building_slaves_mortality_mult|An increase or decrease in the Mortality
 building|building_slaves_shares_add|
 building|building_slaves_shares_mult|
 building|building_slaves_standard_of_living_add|A bonus or penalty to the Standard of Living for employed slaves! Slaves.
-building|building_software_industry_throughput_add|
-building|building_solar_collector_throughput_add|
-building|building_solar_receiver_throughput_add|
 building|building_soldiers_fertility_mult|
 building|building_soldiers_job_attractiveness_mult|A bonus or penalty to the wages a Building has to offer to be able to hire soldiers! Servicemen.
 building|building_soldiers_mortality_mult|
 building|building_soldiers_shares_add|An increase or decrease in a soldiers! Servicemen Pop Ownership Shares
 building|building_soldiers_shares_mult|
 building|building_soldiers_standard_of_living_add|A bonus or penalty to the Standard of Living for employed soldiers! Servicemen.
-building|building_space_elevator_throughput_add|
-building|building_space_mine_throughput_add|
-building|building_space_program_throughput_add|
-building|building_specialty_alloy_metal_mine_throughput_add|
 building|building_statue_of_liberty_throughput_add|
 building|building_steel_mill_throughput_add|A bonus or penalty to both input and output of Steel Mills
 building|building_subsistence_farm_throughput_add|A bonus or penalty to both input and output of Subsistence Farms
@@ -4111,15 +4060,6 @@ building|building_subsistence_rice_farm_throughput_add|
 building|building_suez_canal_throughput_add|
 building|building_sugar_plantation_throughput_add|A bonus or penalty to both input and output of Sugar Plantations
 building|building_sulfur_mine_throughput_add|A bonus or penalty to both input and output of Sulfur Mines
-building|building_synthetics_plant_biomass_throughput_add|
-building|building_synthetics_plant_coal_throughput_add|
-building|building_synthetics_plant_drinks_throughput_add|
-building|building_synthetics_plant_meat_throughput_add|
-building|building_synthetics_plant_oil_throughput_add|
-building|building_synthetics_plant_opium_throughput_add|
-building|building_synthetics_plant_rubber_throughput_add|
-building|building_synthetics_plant_silk_throughput_add|
-building|building_synthetics_plant_sugar_throughput_add|
 building|building_synthetics_plant_throughput_add|A bonus or penalty to both input and output of Synthetics Plants
 building|building_taj_mahal_throughput_add|
 building|building_tea_plantation_throughput_add|A bonus or penalty to both input and output of Tea Plantations
@@ -4128,14 +4068,6 @@ building|building_textile_mill_throughput_add|A bonus or penalty to both input a
 building|building_throughput_add|A bonus or penalty to the building's throughput.
 building|building_tobacco_plantation_throughput_add|A bonus or penalty to both input and output of Tobacco Plantations
 building|building_tooling_workshop_throughput_add|A bonus or penalty to both input and output of Tooling Workshops
-building|building_total_antimatter_facility_progress|
-building|building_total_consciousness_network_progress|
-building|building_total_mind_upload_nexus_progress|
-building|building_total_nanofabrication_center_progress|
-building|building_total_orbital_battlestation_progress|
-building|building_total_solar_collector_progress|
-building|building_total_space_elevator_progress|
-building|building_tourism_industry_throughput_add|
 building|building_trade_center_throughput_add|A bonus or penalty to both input and output of Trade Center
 building|building_training_rate_add|How much Manpower can be trained per week
 building|building_training_rate_mult|How much Manpower can be trained per week
@@ -4197,7 +4129,6 @@ country|country_abkhazian_cultural_acceptance_add|A bonus or penalty to a specif
 country|country_aborigine_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_academics_pol_str_mult|An increase or decrease in the Political Strength of academics! Academics
 country|country_academics_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of academics! Academics in Elections
-country|country_academy_trained_battalions_add|
 country|country_acceptance_homeland_add|The amount of Acceptance a Pop is subject to from living in Homeland
 country|country_acceptance_no_shared_heritage_trait_add|The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
 country|country_acceptance_no_shared_language_trait_add|The amount of Acceptance a Pop is subject to if their Culture does not share a Language Trait with (one of) their Country’s Primary Cultures
@@ -4213,10 +4144,7 @@ country|country_acceptance_shared_religious_trait_add|The amount of Acceptance a
 country|country_acceptance_shared_religious_trait_group_add|The amount of Acceptance a Pop is subject to if their Religion shares a Trait Group with their Country’s State Religion
 country|country_acceptance_shared_tradition_trait_add|The amount of Acceptance a Pop is subject to if their Culture shares a Tradition Trait with (one of) their Country’s Primary Cultures
 country|country_acceptance_state_religion_add|The amount of Acceptance a Pop is subject to if their Religion is the same as their Country State Religion
-country|country_add_anticolonial_ideology_to_igs_bool|
-country|country_add_multicultural_ideology_to_intelligentsia_bool|
 country|country_admiral_rank_impact_mult|An increase or decrease to the benefit that a Admiral gains (such as an increase in Command Limit) from their Rank.
-country|country_advanced_agri_stats_pb_principles_bool|
 country|country_aeroplanes_export_tariffs_rate_add|
 country|country_aeroplanes_import_tariffs_rate_add|
 country|country_aeroplanes_max_export_tariffs_level_add|
@@ -4229,8 +4157,6 @@ country|country_afro_antillean_cultural_acceptance_add|A bonus or penalty to a s
 country|country_afro_brazilian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_afro_caribbean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_afro_caribeno_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_aggressor_diplomatic_play_escalation_weekly_add|
-country|country_aggressor_diplomatic_play_escalation_weekly_mult|
 country|country_agitator_slots_add|An increase or decrease to the number of potential Agitators a Country can maintain within its borders
 country|country_ahead_of_time_research_penalty_mult|An increase or decrease to the research penalty from unresearched Technologies from previous Eras
 country|country_aimara_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4260,7 +4186,6 @@ country|country_allow_voting_violent_hostility_bool|Pops in the acceptance_stat
 country|country_amazonian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_amazonic_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_amenability_add|A bonus or penalty to the Amenability of all Interest Groups in the country
-country|country_amendment_lapses_at_peace_bool|
 country|country_amhara_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ammunition_export_tariffs_rate_add|
 country|country_ammunition_import_tariffs_rate_add|
@@ -4269,8 +4194,6 @@ country|country_ammunition_max_import_tariffs_level_add|
 country|country_ammunition_min_export_tariffs_level_add|
 country|country_ammunition_min_import_tariffs_level_add|
 country|country_anglo_canadian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_anti_war_pb_principles_bool|
-country|country_antimatter_facility_max_level_add|
 country|country_apache_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_aragonese_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_argentine_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4297,10 +4220,8 @@ country|country_athabaskan_cultural_acceptance_add|A bonus or penalty to a speci
 country|country_australian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_authority_add|How much aut! Authority is gained or the country has
 country|country_authority_cost_add|Adds a flat cost to the country's aut! Authority usage
-country|country_authority_if_unelected_add|
 country|country_authority_mult|The amount of aut! Authority is modified up or down
 country|country_authority_per_subject_add|The amount of aut! Authority which is scaled by the number of Subjects
-country|country_auto_surveillance_pb_principles_bool|
 country|country_automobiles_export_tariffs_rate_add|
 country|country_automobiles_import_tariffs_rate_add|
 country|country_automobiles_max_export_tariffs_level_add|
@@ -4318,15 +4239,6 @@ country|country_balinese_cultural_acceptance_add|A bonus or penalty to a specifi
 country|country_baluchi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_bambara_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ban_slavery_no_infamy_bool|Ban Slavery War Goals no longer generate Infamy
-country|country_bank_forecast_error_add|
-country|country_banking_crash_chance_mult|
-country|country_banking_intervention_max_add|
-country|country_banking_lock_asset_relief_bool|
-country|country_banking_lock_capital_controls_bool|
-country|country_banking_lock_directed_credit_bool|
-country|country_banking_lock_export_credit_bool|
-country|country_banking_lock_open_market_ops_bool|
-country|country_banking_random_momentum_mult|
 country|country_bashkir_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_basque_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_bassa_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4425,8 +4337,6 @@ country|country_brahmins_qualification_growth_same_class_mult|A percentage incre
 country|country_brazilian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_breton_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_british_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_bubble_pressure_monthly_add|
-country|country_building_airport_require_subsidies_bool|
 country|country_building_angkor_wat_require_subsidies_bool|
 country|country_building_argebam_require_subsidies_bool|
 country|country_building_arms_industry_require_subsidies_bool|
@@ -4471,10 +4381,8 @@ country|country_building_gold_mine_require_subsidies_bool|
 country|country_building_government_administration_require_subsidies_bool|
 country|country_building_gran_teatro_de_la_habana_require_subsidies_bool|
 country|country_building_grand_kremlin_palace_require_subsidies_bool|
-country|country_building_grid_transfer_station_require_subsidies_bool|
 country|country_building_hagia_sophia_require_subsidies_bool|
 country|country_building_halloween_castledracula_require_subsidies_bool|
-country|country_building_highway_require_subsidies_bool|
 country|country_building_iron_mine_require_subsidies_bool|
 country|country_building_kaiserforum_1_require_subsidies_bool|
 country|country_building_kaiserforum_2_require_subsidies_bool|
@@ -4533,7 +4441,6 @@ country|country_building_subsistence_rice_farm_require_subsidies_bool|
 country|country_building_suez_canal_require_subsidies_bool|
 country|country_building_sugar_plantation_require_subsidies_bool|
 country|country_building_sulfur_mine_require_subsidies_bool|
-country|country_building_synthetics_plant_coal_require_subsidies_bool|
 country|country_building_synthetics_plant_require_subsidies_bool|
 country|country_building_taj_mahal_require_subsidies_bool|
 country|country_building_tea_plantation_require_subsidies_bool|
@@ -4565,7 +4472,6 @@ country|country_buryat_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_byelorussian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_caddoan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_cajun_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_can_create_unbacked_money_bool|
 country|country_can_form_construction_company_bool|Can form Construction type Companies
 country|country_can_found_cossack_host_bool|Allows the establishment of a Cossack Host in States
 country|country_can_impose_same_lawgroup_army_model_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Army Model group on other Bloc Members
@@ -4575,21 +4481,8 @@ country|country_can_impose_same_lawgroup_colonization_in_power_bloc_bool|Allowed
 country|country_can_impose_same_lawgroup_distribution_of_power_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Distribution of Power group on other Bloc Members
 country|country_can_impose_same_lawgroup_education_system_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Education System group on other Bloc Members
 country|country_can_impose_same_lawgroup_governance_principles_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Governance Principles group on other Bloc Members
-country|country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool|
-country|country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool|
 country|country_can_impose_same_lawgroup_policing_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Policing group on other Bloc Members
-country|country_can_join_united_nations_bool|
 country|country_can_only_conscript_peasants_bool|Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
-country|country_can_use_asset_relief_bool|
-country|country_can_use_bail_in_bool|
-country|country_can_use_biotech_companies_bool|
-country|country_can_use_countercyclical_buffer_bool|
-country|country_can_use_cultural_assimilation_bool|
-country|country_can_use_deposit_guarantee_bool|
-country|country_can_use_directed_credit_electrification_bool|
-country|country_can_use_emergency_liquidity_bool|
-country|country_can_use_export_credit_bool|
-country|country_can_use_open_market_ops_bool|
 country|country_cannot_be_subjugated_bool|This country recently declared its Neutrality and cannot be subjugated
 country|country_cannot_be_target_for_law_imposition_bool|Country cannot be targeted for new Law Imposition attempts while this is in effect
 country|country_cannot_cancel_law_enactment_bool|A penalty preventing a country from cancelling the enactment of any Laws currently in progress
@@ -4602,7 +4495,6 @@ country|country_cariban_cultural_acceptance_add|A bonus or penalty to a specific
 country|country_caribeno_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_catalan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_caucasian_turk_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_cellular_pb_principles_bool|
 country|country_central_american_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_champa_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_chechen_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4613,8 +4505,6 @@ country|country_chilean_cultural_acceptance_add|A bonus or penalty to a specific
 country|country_chukchi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_chuvash_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_circassian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_civil_rights_pb_principles_bool|
-country|country_clean_energy_pb_principles_bool|
 country|country_clergymen_pol_str_mult|An increase or decrease in the Political Strength of clergymen! Clergymen
 country|country_clergymen_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of clergymen! Clergymen in Elections
 country|country_clerks_pol_str_mult|An increase or decrease in the Political Strength of clerks! Clerks
@@ -4644,21 +4534,12 @@ country|country_coffee_max_import_tariffs_level_add|
 country|country_coffee_min_export_tariffs_level_add|
 country|country_coffee_min_import_tariffs_level_add|
 country|country_colombian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_colonial_assim_effectiveness_add|
-country|country_colonial_garrison_effectiveness_add|
-country|country_colonial_invest_effectiveness_add|
-country|country_colonial_stability_drift_add|
 country|country_comanche_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_combined_arms_bonus_enabled_bool|
-country|country_combined_arms_pb_principles_bool|
-country|country_commissar_battalions_add|
 country|country_company_construction_efficiency_bonus_add|An increase or decrease to the weekly Construction progress added by Companies to their associated Buildings
 country|country_company_throughput_bonus_add|An increase or decrease to the Throughput added by Companies to their associated Buildings
-country|country_constitutional_law_enactment_success_add|
 country|country_construction_add|The amount of construction! Construction produced by a Construction Sector
 country|country_construction_goods_cost_mult|A bonus or penalty to the monetary cost of construction material necessities.
 country|country_consumption_tax_cost_mult|A bonus or penalty to the Authority cost of Consumption Taxes
-country|country_containerization_pb_principles_bool|
 country|country_conversion_delta_threshold_add|A bonus or penalty to the threshold for Conversion in this Country
 country|country_copper_export_tariffs_rate_add|
 country|country_copper_import_tariffs_rate_add|
@@ -4669,22 +4550,9 @@ country|country_copper_min_import_tariffs_level_add|
 country|country_corsican_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_coup_resistance_add|An increase or decrease to the Strength of a prospective Coup launched by this Commander
 country|country_coup_resistance_mult|An increase or decrease to the ability of a country to Resist a prospective Coup
-country|country_court_challenges_ignored_bool|
-country|country_court_reviews_forced_laws_bool|
-country|country_covert_defense_economic_add|
-country|country_covert_defense_ideological_add|
-country|country_covert_defense_military_add|
-country|country_covert_operation_efficiency_mult|
-country|country_covert_operation_slot_add|
-country|country_credit_standing_add|
-country|country_credit_standing_floor_add|
 country|country_cree_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_crimean_tatar_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_croat_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_cultural_hegemony_art_mult|
-country|country_cultural_program_max_funding_add|
-country|country_cultural_pull_add|
-country|country_cultural_pull_mult|
 country|country_czech_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_dagestani_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_dakota_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4701,15 +4569,10 @@ country|country_damage_relations_speed_mult|A bonus or penalty to the efficiency
 country|country_danish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_dayak_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_deccani_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_decolonization_pb_principles_bool|
-country|country_defender_diplomatic_play_escalation_weekly_add|
-country|country_defender_diplomatic_play_escalation_weekly_mult|
-country|country_digital_ed_pb_principles_bool|
 country|country_dinka_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_diplomatic_play_maneuvers_add|A bonus or penalty to the number of Maneuvers the country can take in a diplomatic play.
 country|country_diplomatic_play_maneuvers_mult|A multiplier to the number of Maneuvers the country can take in a diplomatic play.
 country|country_diplomatic_reputation_add|An increase or decrease to the tendency of other Countries to sign Treaties with or offer Diplomatic Play support to a Country.
-country|country_directed_credit_sectors_add|
 country|country_disable_investment_pool_bool|Disallow all reinvestment into and usage of the Investment Pool (except for Companies)
 country|country_disable_nationalization_bool|Prevent Buildings from being Nationalized
 country|country_disable_nationalization_without_compensation_bool|Prevent Buildings from being Nationalized without compensation being paid to the owning Pops
@@ -4744,7 +4607,6 @@ country|country_dye_min_export_tariffs_level_add|
 country|country_dye_min_import_tariffs_level_add|
 country|country_dyula_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_east_german_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_economic_dependence_leverage_gain_mult|
 country|country_economic_dependence_on_overlord_add|An increase or decrease to the Economic Dependence on the Overlord
 country|country_ecuadorian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_edo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4840,17 +4702,8 @@ country|country_enactment_success_chance_law_migration_controls_add|
 country|country_enactment_success_chance_law_militarized_police_add|
 country|country_enactment_success_chance_law_military_bureaucrats_add|
 country|country_enactment_success_chance_law_millet_system_add|
-country|country_enactment_success_chance_law_ministry_of_commerce_add|
-country|country_enactment_success_chance_law_ministry_of_consumer_protection_add|
-country|country_enactment_success_chance_law_ministry_of_culture_add|
-country|country_enactment_success_chance_law_ministry_of_propaganda_add|
-country|country_enactment_success_chance_law_ministry_of_religion_add|
-country|country_enactment_success_chance_law_ministry_of_science_add|
-country|country_enactment_success_chance_law_ministry_of_the_environment_add|
-country|country_enactment_success_chance_law_ministry_of_war_add|
 country|country_enactment_success_chance_law_monarchy_add|
 country|country_enactment_success_chance_law_multicultural_add|A flat percentage point increase to the likelihood of enacting the specific law
-country|country_enactment_success_chance_law_national_bank_add|
 country|country_enactment_success_chance_law_national_guard_add|
 country|country_enactment_success_chance_law_national_militia_add|
 country|country_enactment_success_chance_law_national_supremacy_add|
@@ -4929,8 +4782,6 @@ country|country_engines_max_export_tariffs_level_add|
 country|country_engines_max_import_tariffs_level_add|
 country|country_engines_min_export_tariffs_level_add|
 country|country_engines_min_import_tariffs_level_add|
-country|country_env_movement_pb_principles_bool|
-country|country_environmental_movement_radicalism_add|
 country|country_equatorial_bantu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_estonian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_evenki_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4949,7 +4800,6 @@ country|country_fabric_max_export_tariffs_level_add|
 country|country_fabric_max_import_tariffs_level_add|
 country|country_fabric_min_export_tariffs_level_add|
 country|country_fabric_min_import_tariffs_level_add|
-country|country_family_limitation_literacy_mult|
 country|country_fang_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_farmers_pol_str_mult|An increase or decrease in the Political Strength of farmers! Farmers
 country|country_farmers_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of farmers! Farmers in Elections
@@ -5284,8 +5134,6 @@ country|country_fervor_target_zulu_add|A bonus or penalty to a specific culture'
 country|country_filipino_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_filipino_hispanophone_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_filipino_mestizo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_finance_momentum_monthly_add|
-country|country_finance_value_monthly_add|
 country|country_financial_districts_buy_farms_likelihood|An increase or decrease to the chance for Financial Districts to invest into Plantations, Ranches, and Agriculture Buildings
 country|country_fine_art_export_tariffs_rate_add|
 country|country_fine_art_import_tariffs_rate_add|
@@ -5328,7 +5176,6 @@ country|country_furniture_max_import_tariffs_level_add|
 country|country_furniture_min_export_tariffs_level_add|
 country|country_furniture_min_import_tariffs_level_add|
 country|country_galician_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_gene_splicing_pb_principles_bool|
 country|country_general_rank_impact_mult|An increase or decrease to the benefit that a General gains (such as an increase in Command Limit) from their Rank.
 country|country_georgian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_glass_export_tariffs_rate_add|
@@ -5337,12 +5184,6 @@ country|country_glass_max_export_tariffs_level_add|
 country|country_glass_max_import_tariffs_level_add|
 country|country_glass_min_export_tariffs_level_add|
 country|country_glass_min_import_tariffs_level_add|
-country|country_globalization_pb_principles_bool|
-country|country_gm_monument_ceremonial_share_add|
-country|country_gm_monument_cultural_pull_mult|
-country|country_gm_monument_education_step_add|
-country|country_gm_monument_prestige_mult|
-country|country_gm_monument_tourism_mult|
 country|country_gold_export_tariffs_rate_add|
 country|country_gold_import_tariffs_rate_add|
 country|country_gold_max_export_tariffs_level_add|
@@ -5363,9 +5204,6 @@ country|country_grain_max_import_tariffs_level_add|
 country|country_grain_min_export_tariffs_level_add|
 country|country_grain_min_import_tariffs_level_add|
 country|country_greek_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_green_revolution_pb_principles_bool|
-country|country_greenhouse_gas_emissions_mult|
-country|country_grid_transmission_efficiency_add|
 country|country_griqua_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_groceries_export_tariffs_rate_add|
 country|country_groceries_import_tariffs_rate_add|
@@ -5376,7 +5214,6 @@ country|country_groceries_min_import_tariffs_level_add|
 country|country_guajiro_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_guarani_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_gujarati_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_gw_aerosol_injection_bool|
 country|country_hakka_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_han_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_haratin_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5395,23 +5232,16 @@ country|country_higher_leverage_from_economic_dependence_bool|Increased Leverage
 country|country_hindustani_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_hokan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_homeland_infamy_reduction_bool|Taking Homelands of our primary cultures generates even less Infamy
-country|country_homelands_can_change_bool|
-country|country_household_greenhouse_gas_emissions_mult|
 country|country_hungarian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_iberian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ibibio_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ibo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_icbm_pb_principles_bool|
 country|country_icelandic_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_ideology_resistance_mult|
-country|country_igo_pb_principles_bool|
 country|country_ilocano_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_improve_relations_speed_mult|A bonus or penalty to the efficiency of the Improve Relations diplomatic action.
 country|country_infamy_decay_mult|A bonus or penalty to Infamy decay
 country|country_infamy_generation_against_unrecognized_mult|An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents targeting Unrecognized Powers.
 country|country_infamy_generation_mult|An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents.
-country|country_inflation_anchoring_add|
-country|country_inflation_pressure_add|
 country|country_influence_add|How much inf! Influence the country has
 country|country_influence_cost_add|Adds a flat cost to the country's inf! Influence usage
 country|country_influence_mult|The amount of inf! Influence is modified up or down
@@ -5420,62 +5250,20 @@ country|country_institution_colonial_affairs_max_investment_add|A bonus or penal
 country|country_institution_cost_institution_colonial_affairs_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Colonial Affairs to the citizens
 country|country_institution_cost_institution_health_system_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Health System to the citizens
 country|country_institution_cost_institution_home_affairs_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Home Affairs to the citizens
-country|country_institution_cost_institution_migration_controls_mult|
-country|country_institution_cost_institution_ministry_of_commerce_mult|
-country|country_institution_cost_institution_ministry_of_consumer_protection_mult|
-country|country_institution_cost_institution_ministry_of_culture_mult|
-country|country_institution_cost_institution_ministry_of_foreign_affairs_mult|
-country|country_institution_cost_institution_ministry_of_intelligence_and_security_mult|
-country|country_institution_cost_institution_ministry_of_propaganda_mult|
-country|country_institution_cost_institution_ministry_of_religion_mult|
-country|country_institution_cost_institution_ministry_of_the_environment_mult|
-country|country_institution_cost_institution_ministry_of_urban_planning_mult|
-country|country_institution_cost_institution_ministry_of_war_mult|
-country|country_institution_cost_institution_national_bank_mult|
 country|country_institution_cost_institution_police_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Law Enforcement to the citizens
 country|country_institution_cost_institution_schools_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Education to the citizens
 country|country_institution_cost_institution_social_security_mult|An increase or reduction to the bur! Bureaucracy cost of bringing Social Security to the citizens
 country|country_institution_health_system_max_investment_add|A bonus or penalty to the maximum investment level of the Health System Institution
 country|country_institution_home_affairs_max_investment_add|A bonus or penalty to the maximum investment level of the Home Affairs Institution
 country|country_institution_impact_institution_health_system_mult|An increase or reduction to the Impact of bringing Health System to the citizens
-country|country_institution_impact_institution_ministry_of_commerce_mult|
-country|country_institution_impact_institution_ministry_of_foreign_affairs_mult|
-country|country_institution_impact_institution_ministry_of_intelligence_and_security_mult|
-country|country_institution_impact_institution_ministry_of_refugee_affairs_mult|
-country|country_institution_impact_institution_ministry_of_science_mult|
-country|country_institution_impact_institution_ministry_of_the_environment_mult|
-country|country_institution_impact_institution_ministry_of_war_mult|
-country|country_institution_impact_institution_national_bank_mult|
-country|country_institution_impact_institution_police_mult|
-country|country_institution_impact_institution_schools_mult|
-country|country_institution_migration_controls_max_investment_add|
-country|country_institution_ministry_of_commerce_max_investment_add|
-country|country_institution_ministry_of_consumer_protection_max_investment_add|
-country|country_institution_ministry_of_culture_max_investment_add|
-country|country_institution_ministry_of_foreign_affairs_max_investment_add|
-country|country_institution_ministry_of_intelligence_and_security_max_investment_add|
-country|country_institution_ministry_of_international_aid_max_investment_add|
-country|country_institution_ministry_of_labor_max_investment_add|
-country|country_institution_ministry_of_propaganda_max_investment_add|
-country|country_institution_ministry_of_refugee_affairs_max_investment_add|
-country|country_institution_ministry_of_religion_max_investment_add|
-country|country_institution_ministry_of_science_max_investment_add|
-country|country_institution_ministry_of_the_environment_max_investment_add|
-country|country_institution_ministry_of_thought_control_max_investment_add|
-country|country_institution_ministry_of_urban_planning_max_investment_add|
-country|country_institution_ministry_of_war_max_investment_add|
-country|country_institution_national_bank_max_investment_add|
 country|country_institution_police_max_investment_add|A bonus or penalty to the maximum investment level of the Law Enforcement Institution
 country|country_institution_schools_max_investment_add|A bonus or penalty to the maximum investment level of the Education Institution
 country|country_institution_size_change_speed_institution_colonial_affairs_mult|How fast you change the size of Colonial Affairs
-country|country_institution_size_change_speed_institution_ministry_of_the_environment_mult|
 country|country_institution_size_change_speed_institution_police_mult|How fast you change the size of Law Enforcement
 country|country_institution_size_change_speed_institution_schools_mult|How fast you change the size of Education
 country|country_institution_size_change_speed_mult|How fast you change the size of an institution
 country|country_institution_social_security_max_investment_add|A bonus or penalty to the maximum investment level of the Social Security Institution
 country|country_institution_workplace_safety_max_investment_add|A bonus or penalty to the maximum investment level of the Workplace Safety Office Institution
-country|country_intelligence_capacity_add|
-country|country_intelligence_capacity_mult|
 country|country_interest_tier_engaged_trade_advantage_mult|A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Engaged
 country|country_interest_tier_hegemonic_trade_advantage_mult|A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Hegemonic
 country|country_interest_tier_influential_trade_advantage_mult|A bonus or penalty to the Trade Advantage gained in Market Capitals where your Interest Tier is Influential
@@ -5502,8 +5290,6 @@ country|country_javan_cultural_acceptance_add|A bonus or penalty to a specific c
 country|country_je_korea_action_cost|country_je_korea_action_cost_desc
 country|country_join_power_bloc_member_in_defensive_plays_bool|Can call Power Bloc members with the Call Ally Sway in defensive Diplomatic Plays
 country|country_join_power_bloc_member_in_plays_bool|Can call Power Bloc members with the Call Ally Sway in all Diplomatic Plays
-country|country_judicial_independence_ceiling_add|
-country|country_judicial_independence_ceiling_mult|
 country|country_kachin_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kalmyk_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kannada_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5513,7 +5299,6 @@ country|country_karen_cultural_acceptance_add|A bonus or penalty to a specific c
 country|country_kashmiri_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kavango_bantu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kazak_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_keynesian_pb_principles_bool|
 country|country_khmer_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_khmu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kho_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5521,7 +5306,6 @@ country|country_khoisan_cultural_acceptance_add|A bonus or penalty to a specific
 country|country_kikuyu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kirgiz_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kissi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_knowledge_economy_pb_principles_bool|
 country|country_korean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kru_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_kshatriyas_acceptance_max_add|A threshold describing the Acceptance value that Pops in the Kshatriyas Social Class won't be able to exceed
@@ -5553,9 +5337,7 @@ country|country_lead_max_import_tariffs_level_add|
 country|country_lead_min_export_tariffs_level_add|
 country|country_lead_min_import_tariffs_level_add|
 country|country_leader_has_law_enactment_success_mult|Increases or decreases the Enactment Success for Laws the Power Bloc Leader already has enacted.
-country|country_legislative_override_capacity_add|
 country|country_legitimacy_base_add|An increase or decrease of the Government's Legitimacy
-country|country_legitimacy_from_votes_if_elected_add|
 country|country_legitimacy_govt_leader_clout_add|The amount of Legitimacy the Government gains or loses based on the Clout of the Interest Group leading the government.
 country|country_legitimacy_govt_size_add|The number of Parties and Interest Groups that can be included In Government at one time without incurring Legitimacy penalties.
 country|country_legitimacy_govt_total_clout_add|The amount of Legitimacy the Government gains or loses based on the total Clout of Interest Groups in the government.
@@ -5567,7 +5349,6 @@ country|country_leverage_generation_add|An increase or decrease to the amount of
 country|country_leverage_generation_mult|An increase or decrease to the amount of Leverage the Country’s Power Bloc generates in other Countries while they are the Power Bloc Leader
 country|country_leverage_resistance_add|An increase or decrease to the amount of Leverage the Country always retains over itself, setting the bar higher for any Power Blocs that wish to i...
 country|country_leverage_resistance_mult|An increase or decrease to the amount of Leverage the Country always retains over itself, setting the bar higher for any Power Blocs that wish to i...
-country|country_leverage_threshold_change_add|
 country|country_liberty_desire_add|An increase or decrease to the amount of Liberty Desire the subject gains each week
 country|country_liberty_desire_decrease_mult|Modifies the amount Liberty Desire decreases by, if it is decreasing
 country|country_liberty_desire_increase_mult|Modifies the amount Liberty Desire increases by, if it is increasing
@@ -5585,8 +5366,6 @@ country|country_loan_interest_rate_mult|A bonus or penalty to loan interest rate
 country|country_lobby_leverage_generation_mult|An increase or decrease to the amount of Leverage generation from Political Lobbies aligned in favor of the Power Bloc Leader
 country|country_lobby_support|A bonus or penalty to the likelihood an Interest Group will remain in its Political Lobby
 country|country_lomwe_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_longevity_care_banned_bool|
-country|country_longevity_care_price_fall_mult|
 country|country_loyalism_increases_cultural_erasure_mult|A bonus or penalty to increases in Loyalism for Pops in this Status
 country|country_loyalism_increases_full_acceptance_mult|A bonus or penalty to increases in Loyalism for Pops in this Status
 country|country_loyalism_increases_open_prejudice_mult|A bonus or penalty to increases in Loyalism for Pops in this Status
@@ -5632,11 +5411,8 @@ country|country_manowars_min_import_tariffs_level_add|
 country|country_maori_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_marathi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_mari_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_marketing_research_pb_principles_bool|
 country|country_mashriqi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_mass_media_pb_principles_bool|
 country|country_mass_migration_attraction_mult|A bonus or penalty to the chance for a Country to be selected as the target of a mass migration
-country|country_mass_surveillance_pb_principles_bool|
 country|country_max_companies_add|The number of Companies a Country can establish
 country|country_max_unassigned_admirals_add|The maximum number of idle Admirals that a Country can have at the same time.
 country|country_max_unassigned_generals_add|The maximum number of idle Generals that a Country can have at the same time.
@@ -5670,13 +5446,7 @@ country|country_minting_add|A flat increase or decrease to Minting
 country|country_minting_mult|A bonus or penalty to the total amount of Minting
 country|country_miskito_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_misri_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_missile_defense_pb_principles_bool|
 country|country_mixtec_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_modern_pharma_pb_principles_bool|
-country|country_modern_skyscrapers_pb_principles_bool|
-country|country_modern_tools_pb_principles_bool|
-country|country_modern_urban_planning_pb_principles_bool|
-country|country_modern_vaccines_pb_principles_bool|
 country|country_moluccan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_mon_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_mongo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5684,7 +5454,6 @@ country|country_mongol_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_mordvin_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_moro_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_mossi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_motorized_artillery_pb_principles_bool|
 country|country_muisca_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_muskogean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_must_have_movement_to_enact_laws_bool|A penalty preventing a country from enacting any Laws that do not have the support of a Political Movement
@@ -5693,20 +5462,6 @@ country|country_nahua_cultural_acceptance_add|A bonus or penalty to a specific c
 country|country_nationalization_cost_non_members_mult|Increases or decreases the cost of Nationalization of buildings owned by a Country outside of your Power Bloc
 country|country_navajo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_navy_goods_cost_mult|A bonus or penalty to the monetary cost of Goods consumed by the navy.
-country|country_ncw_pb_principles_bool|
-country|country_nd_automatic_answer_bool|
-country|country_nd_crew_strain_monthly_add|
-country|country_nd_crisis_danger_add|
-country|country_nd_custody_cost_mult|
-country|country_nd_custody_loss_add|
-country|country_nd_decapitation_immune_bool|
-country|country_nd_halt_chance_add|
-country|country_nd_incident_rate_mult|
-country|country_nd_launch_blocked_bool|
-country|country_nd_launch_credit_add|
-country|country_nd_order_required_bool|
-country|country_nd_threat_pressure_add|
-country|country_nd_unapproved_launch_bool|
 country|country_nepali_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_nez_perce_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_nguni_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5719,11 +5474,6 @@ country|country_north_german_cultural_acceptance_add|A bonus or penalty to a spe
 country|country_north_italian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_norwegian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_nuba_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_nuclear_disarmament_bool|
-country|country_nuclear_program_pause_bool|
-country|country_nuclear_program_progress_mult|
-country|country_nuclear_weapon_attack_success_add|
-country|country_nuclear_weapons_pb_principles_bool|
 country|country_nuer_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_nyamwezi_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_occitan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5743,8 +5493,6 @@ country|country_opium_max_import_tariffs_level_add|
 country|country_opium_min_export_tariffs_level_add|
 country|country_opium_min_import_tariffs_level_add|
 country|country_opposition_ig_approval_add|A bonus or penalty to the Approval of Interest Groups in Opposition
-country|country_orbital_debris_removal_add|
-country|country_orbital_debris_removal_mult|
 country|country_oriya_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_oromo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ossetian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5754,7 +5502,6 @@ country|country_other_country_socialist_government_hostility_impact_add|An incre
 country|country_other_country_socialist_government_hostility_impact_mult|An increase or decrease to the hostility of other Countries to this Country’s government when evaluating Strategies, Diplomatic Plays and Treaties
 country|country_overlord_income_transfer_mult|An increase or decrease to the amount of Money the subject must give to their overlord
 country|country_overlord_law_enactment_success_add|A flat percentage point increase to the likelihood of enacting a law the country's Overlord already has
-country|country_override_with_algorithmic_governance_add|
 country|country_ovimbundu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_pact_leverage_generation_add|An increase or decrease to the amount of Leverage generated between two Countries with this Diplomatic Pact when the dominant Country in the Diplom...
 country|country_pact_leverage_generation_mult|An increase or decrease to the amount of Leverage generated between two Countries with this Diplomatic Pact when the dominant Country in the Diplom...
@@ -5768,8 +5515,6 @@ country|country_paper_max_import_tariffs_level_add|
 country|country_paper_min_export_tariffs_level_add|
 country|country_paper_min_import_tariffs_level_add|
 country|country_paraguayan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_participant_diplomatic_play_escalation_weekly_add|
-country|country_participant_diplomatic_play_escalation_weekly_mult|
 country|country_party_whip_impact_add|A bonus or penalty to the effect that Party Whip has on the Ideological opinion of the rest of the Party members
 country|country_pashtun_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_patagonian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -5779,11 +5524,8 @@ country|country_peasants_pol_str_mult|An increase or decrease in the Political S
 country|country_peasants_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of peasants! Peasants in Elections
 country|country_persian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_peruvian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_pharmaceuticals_pb_principles_bool|
 country|country_piracy_income_add|An increase or decrease of the value we can extract from pirated goods.
 country|country_platinean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_policy_rate_drift_speed_mult|
-country|country_policy_rate_floor_add|
 country|country_polish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_political_strength_cultural_erasure_mult|A bonus or penalty to Political Strength for Pops in this Status
 country|country_political_strength_full_acceptance_mult|A bonus or penalty to Political Strength for Pops in this Status
@@ -5809,7 +5551,6 @@ country|country_private_construction_allocation_mult|An increase or decrease in 
 country|country_production_tech_research_speed_mult|A bonus or penalty to the speed at which Technology in the Production category is researched when spending Innovation
 country|country_production_tech_spread_mult|The speed at which Production technologies spread from other countries
 country|country_promethean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_public_works_pb_principles_bool|
 country|country_pueblo_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_qualification_growth_cultural_erasure_mult|A bonus or penalty to the monthly Qualifications advancement for the acceptance_status_2! Cultural Erasure Status
 country|country_qualification_growth_full_acceptance_mult|A bonus or penalty to the monthly Qualifications advancement for the acceptance_status_5! Full Acceptance Status
@@ -5831,24 +5572,17 @@ country|country_radios_max_import_tariffs_level_add|
 country|country_radios_min_export_tariffs_level_add|
 country|country_radios_min_import_tariffs_level_add|
 country|country_rajput_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_rapid_deploy_pb_principles_bool|
-country|country_receiving_nuclear_program_aid_bool|
 country|country_reduced_liberty_desire_same_religion_bool|Subjects with the same state Religion will have reduced Liberty Desire over time
 country|country_reform_or_revolution_reform_bonus_add|An increase or decrease to the amount of monthly progress towards Reformism in the Reform or Revolution Journal Entry, proportional to the strength...
 country|country_reform_or_revolution_revolution_bonus_add|An increase or decrease to the amount of monthly progress towards Revolution in the Reform or Revolution Journal Entry, proportional to the strengt...
-country|country_remove_decentralized_claims_bool|
 country|country_resource_depletion_chance_mult|Increases the chance of depleting Resource Potentials
 country|country_resource_discovery_chance_mult|Increases the chance of discovering hidden Resource Potentials
 country|country_revolution_clock_time_add|A bonus or penalty to how fast the revolution clock ticks
 country|country_revolution_progress_add|A bonus or penalty to how much progress is added to the revolution when the Revolution Clock strikes 12
 country|country_revolution_progress_mult|A bonus or penalty to how much progress is added to the revolution when the Revolution Clock strikes 12
-country|country_rights_law_enactment_success_add|
-country|country_risk_premium_add|
 country|country_rlit_censorship_severity_add|country_rlit_censorship_severity_add_desc
 country|country_rlit_cultural_prestige_add|country_rlit_cultural_prestige_add_desc
 country|country_rlit_intellectual_freedom_add|country_rlit_intellectual_freedom_add_desc
-country|country_robotics_pb_principles_bool|
-country|country_rocketry_pb_principles_bool|
 country|country_romanian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ruanda_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_rubber_export_tariffs_rate_add|
@@ -5864,13 +5598,8 @@ country|country_sailors_max_add|The maximum amount of Sailors provided by Buildi
 country|country_salish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sami_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sara_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_satcom_pb_principles_bool|
 country|country_scottish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_scottish_gaelic_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_seabed_claim_floor_add|
-country|country_seabed_claim_weight_mult|
-country|country_seabed_naval_weight_mult|
-country|country_seabed_unilateral_relations_add|
 country|country_secession_clock_time_add|A bonus or penalty to how fast the secession clock ticks
 country|country_secession_progress_add|A bonus or penalty to how much progress is added to the secession when the Secession Clock strikes 12
 country|country_secession_progress_mult|A bonus or penalty to how much progress is added to the secession when the Secession Clock strikes 12
@@ -5956,69 +5685,18 @@ country|country_small_arms_max_export_tariffs_level_add|
 country|country_small_arms_max_import_tariffs_level_add|
 country|country_small_arms_min_export_tariffs_level_add|
 country|country_small_arms_min_import_tariffs_level_add|
-country|country_social_media_pb_principles_bool|
 country|country_society_tech_research_speed_mult|A bonus or penalty to the speed at which Technology in the Society category is researched when spending Innovation
 country|country_society_tech_spread_mult|The speed at which Society technologies spread from other countries
-country|country_sol_expectation_adaptation_rate_mult|
-country|country_sol_expectations_lower_offset_add|
-country|country_sol_expectations_lower_offset_mult|
-country|country_sol_expectations_middle_offset_add|
-country|country_sol_expectations_middle_offset_mult|
-country|country_sol_expectations_offset_mult|
-country|country_sol_expectations_shift_add|
-country|country_sol_expectations_shift_max_add|
-country|country_sol_expectations_shift_min_add|
-country|country_sol_expectations_target_add|
-country|country_sol_expectations_upper_offset_add|
-country|country_sol_expectations_upper_offset_mult|
-country|country_solar_receiver_max_level_add|
 country|country_soldiers_pol_str_mult|An increase or decrease in the Political Strength of soldiers! Servicemen
 country|country_soldiers_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of soldiers! Servicemen in Elections
 country|country_somali_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_sonar_pb_principles_bool|
 country|country_songhai_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sorb_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sotho_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_south_andean_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_south_german_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_south_italian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_space_race_max_funding_add|
-country|country_space_race_progress_add|
-country|country_space_race_progress_mult|
-country|country_space_race_risk_mult|
 country|country_spanish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_sr_colony_growth_add|
-country|country_sr_colony_slots_add|
-country|country_sr_deep_space_exploration_program_bool|
-country|country_sr_drive_antimatter_bool|
-country|country_sr_drive_fusion_bool|
-country|country_sr_drive_torch_bool|
-country|country_sr_earth_orbit_program_bool|
-country|country_sr_interstellar_mission_program_bool|
-country|country_sr_mars_mission_program_bool|
-country|country_sr_module_fabrication_add|
-country|country_sr_moon_mission_program_bool|
-country|country_sr_nuclear_thermal_launches_bool|
-country|country_sr_propellant_depots_bool|
-country|country_sr_solar_colonization_program_bool|
-country|country_sr_terraforming_bool|
-country|country_st_res_aeroplanes_capacity_add|
-country|country_st_res_aeroplanes_decay_add|
-country|country_st_res_ammunition_capacity_add|
-country|country_st_res_ammunition_decay_add|
-country|country_st_res_artillery_capacity_add|
-country|country_st_res_artillery_decay_add|
-country|country_st_res_fertilizer_capacity_add|
-country|country_st_res_fertilizer_decay_add|
-country|country_st_res_grain_capacity_add|
-country|country_st_res_grain_decay_add|
-country|country_st_res_oil_capacity_add|
-country|country_st_res_oil_decay_add|
-country|country_st_res_small_arms_capacity_add|
-country|country_st_res_small_arms_decay_add|
-country|country_st_res_tanks_capacity_add|
-country|country_st_res_tanks_decay_add|
-country|country_st_res_weekly_rate_cap_add|
 country|country_standard_of_living_cultural_erasure_add|Extra Standard of Living for the acceptance_status_2! Cultural Erasure Status
 country|country_standard_of_living_full_acceptance_add|Extra Standard of Living Wealth for the acceptance_status_5! Full Acceptance Status
 country|country_standard_of_living_open_prejudice_add|Extra Standard of Living for the acceptance_status_3! Open Prejudice Status
@@ -6097,16 +5775,8 @@ country|country_strata_samurai_low_qualification_growth_add|A flat increase or d
 country|country_strata_samurai_low_qualification_growth_mult|A percentage increase or decrease to Qualification Growth for the Lower Samurai Social Class
 country|country_strata_samurai_low_qualification_growth_other_class_mult|A percentage increase or decrease to Qualification Growth for the Lower Samurai towards Professions in other Social Classes
 country|country_strata_samurai_low_qualification_growth_same_class_mult|A percentage increase or decrease to Qualification Growth for the Lower Samurai Social Class towards Professions in the Lower Samurai Social Class
-country|country_strategic_nuclear_strikes_forbidden_bool|
 country|country_subject_income_transfer_heathen_mult|An increase or decrease to the amount of Money Subjects must give to their Overlord if they don't follow the same State Religion as them.
 country|country_subject_income_transfer_mult|An increase or decrease to the amount of Money the subject must give to their overlord
-country|country_subjugation_cultural_strength_add|
-country|country_subjugation_ideological_strength_add|
-country|country_subjugation_military_strength_add|
-country|country_subjugation_religious_strength_add|
-country|country_subjugation_sovereign_strength_add|
-country|country_subjugation_strength_add|
-country|country_subjugation_trade_strength_add|
 country|country_sudanese_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sugar_export_tariffs_rate_add|
 country|country_sugar_import_tariffs_rate_add|
@@ -6123,7 +5793,6 @@ country|country_sulfur_min_export_tariffs_level_add|
 country|country_sulfur_min_import_tariffs_level_add|
 country|country_sulista_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_sumatran_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_supply_chain_pb_principles_bool|
 country|country_supply_ship_construction_progress_max_add|The maximum amount of construction progress a Country can apply to one Supply Ship shipbuilding project each week
 country|country_supply_ship_construction_progress_max_mult|The maximum amount of construction progress a Country can apply to one Supply Ship shipbuilding project each week
 country|country_supply_ship_construction_ratio_add|The proportion of total ship_construction! Construction a Country allocates to building Supply Ships
@@ -6135,8 +5804,6 @@ country|country_suppression_cost_mult|An increase or decrease to the cost of Sup
 country|country_swahili_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_swedish_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_szekely_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_tactical_nuclear_strikes_forbidden_bool|
-country|country_tactical_nukes_pb_principles_bool|
 country|country_tagalog_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_tajik_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_tamil_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -6149,34 +5816,6 @@ country|country_tanks_min_import_tariffs_level_add|
 country|country_tarascan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_tatar_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_tax_income_add|A flat bonus or penalty to tax income collected
-country|country_te_budget_expense_archaeology_add|
-country|country_te_budget_expense_banking_add|
-country|country_te_budget_expense_climate_add|
-country|country_te_budget_expense_colonial_add|
-country|country_te_budget_expense_covert_add|
-country|country_te_budget_expense_culture_add|
-country|country_te_budget_expense_drugs_add|
-country|country_te_budget_expense_family_add|
-country|country_te_budget_expense_nuclear_add|
-country|country_te_budget_expense_nuclear_taboo_add|
-country|country_te_budget_expense_pensions_add|
-country|country_te_budget_expense_space_add|
-country|country_te_budget_expense_un_add|
-country|country_te_budget_income_pension_reform_add|
-country|country_te_budget_income_reserve_add|
-country|country_te_budget_income_tax_code_add|
-country|country_te_budget_income_un_add|
-country|country_te_budget_income_war_tax_add|
-country|country_te_mon_asset_purchase_pressure_add|
-country|country_te_mon_expected_inflation_add|
-country|country_te_mon_fx_debt_protection_add|
-country|country_te_mon_inflow_price_pressure_mult|
-country|country_te_mon_inflow_pull_mult|
-country|country_te_mon_minting_gdp_add|
-country|country_te_mon_printing_pressure_add|
-country|country_te_mon_rate_gap_pull_mult|
-country|country_te_mon_reserve_purchase_gdp_add|
-country|country_te_pb_principle_slots_add|
 country|country_tea_export_tariffs_rate_add|
 country|country_tea_import_tariffs_rate_add|
 country|country_tea_max_export_tariffs_level_add|
@@ -6195,7 +5834,6 @@ country|country_telephones_max_export_tariffs_level_add|
 country|country_telephones_max_import_tariffs_level_add|
 country|country_telephones_min_export_tariffs_level_add|
 country|country_telephones_min_import_tariffs_level_add|
-country|country_television_pb_principles_bool|
 country|country_tension_decay_mult|A bonus or penalty to Tension decay
 country|country_thai_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_tibetan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -6234,13 +5872,6 @@ country|country_udmurt_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_ugrian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_uighur_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_ukrainian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
-country|country_un_authority_target_add|
-country|country_un_institutional_alignment|
-country|country_un_lobbying_fund_recipients_mult|
-country|country_un_lobbying_mult|
-country|country_un_membership_obligation_bool|
-country|country_unrecognized_become_recognized_bool|
-country|country_urbanization_pb_principles_bool|
 country|country_uruguayan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_uzbek_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_vaishyas_acceptance_max_add|A threshold describing the Acceptance value that Pops in the Vaishyas Social Class won't be able to exceed
@@ -6268,23 +5899,15 @@ country|country_voting_power_wealth_threshold_add|An increase or decrease to the
 country|country_wage_cultural_erasure_mult|A bonus or penalty to the Wage for the acceptance_status_2! Cultural Erasure Status.
 country|country_wage_full_acceptance_mult|A bonus or penalty to the Wage for the acceptance_status_5! Full Acceptance Status.
 country|country_wage_open_prejudice_mult|A bonus or penalty to the Wage for the acceptance_status_3! Open Prejudice Status.
-country|country_wage_pressure_add|
 country|country_wage_second_rate_citizen_mult|A bonus or penalty to the Wage for the acceptance_status_4! Second-class Citizen Status.
 country|country_wage_violent_hostility_mult|A bonus or penalty to the Wage for the acceptance_status_1! Violent Hostility Status.
 country|country_wallonian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_war_support_battles_decrease_mult|An increase or decrease to the amount of War Support a Country loses in War from losing Battle
 country|country_war_support_battles_increase_mult|An increase or decrease to the amount of War Support a Country gains in War from winning Battle
 country|country_war_support_casualties_mult|An increase or decrease to the amount of War Support a Country suffers in War due to Casualties inflicted on them
-country|country_wealth_concentration_economy_add|
-country|country_wealth_concentration_inheritance_add|
-country|country_wealth_concentration_public_goods_add|
-country|country_wealth_concentration_slavery_add|
-country|country_wealth_concentration_tax_add|
 country|country_weekly_innovation_add|The amount of innovation! Innovation gained or lost each week
 country|country_weekly_innovation_max_add|The maximum amount of innovation! Innovation that can be invested into a Technology each week
 country|country_weekly_innovation_mult|The amount of innovation! Innovation gained or lost each week
-country|country_weekly_investment_pool_add|
-country|country_weekly_investment_pool_mult|
 country|country_welsh_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_wine_export_tariffs_rate_add|
 country|country_wine_import_tariffs_rate_add|
@@ -6299,8 +5922,6 @@ country|country_wood_max_export_tariffs_level_add|
 country|country_wood_max_import_tariffs_level_add|
 country|country_wood_min_export_tariffs_level_add|
 country|country_wood_min_import_tariffs_level_add|
-country|country_workflow_opt_pb_principles_bool|
-country|country_www_pb_principles_bool|
 country|country_xhosa_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_yakut_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_yankee_and_dixie_cultures_obsessed_with_guns|Yankee and Dixie Cultures gain an Obsession with Small Arms
@@ -6315,8 +5936,6 @@ country|country_zapotec_cultural_acceptance_add|A bonus or penalty to a specific
 country|country_zhuang_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_zulu_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 |dummy_modifier_type|modifier_dummy_modifier_type
-goods-input|goods_input_advanced_materials_add|
-goods-input|goods_input_advanced_materials_mult|
 goods|goods_input_aeroplanes_add|The amount of aeroplanes! Aeroplanes consumed by buildings
 goods|goods_input_aeroplanes_mult|
 goods|goods_input_ammunition_add|The amount of ammunition! Ammunition consumed by buildings
@@ -6333,21 +5952,12 @@ goods|goods_input_coal_add|The amount of coal! Coal consumed by buildings
 goods|goods_input_coal_mult|
 goods|goods_input_coffee_add|
 goods|goods_input_coffee_mult|
-goods-input|goods_input_construction_add|
-goods-input|goods_input_construction_mult|
-goods-input|goods_input_consumer_appliances_add|
 goods|goods_input_copper_add|The amount of copper! Copper consumed by buildings
 goods|goods_input_copper_mult|
-goods-input|goods_input_digital_access_add|
-goods-input|goods_input_digital_access_mult|
-goods-input|goods_input_digital_assets_add|
-goods-input|goods_input_digital_assets_mult|
 goods|goods_input_dye_add|The amount of dye! Dye consumed by buildings
 goods|goods_input_dye_mult|
 goods|goods_input_electricity_add|The amount of electricity! Electricity consumed by buildings
 goods|goods_input_electricity_mult|
-goods-input|goods_input_electronic_components_add|
-goods-input|goods_input_electronic_components_mult|
 goods|goods_input_engines_add|The amount of engines! Engines consumed by buildings
 goods|goods_input_engines_mult|
 goods|goods_input_explosives_add|The amount of explosives! Explosives consumed by buildings
@@ -6370,8 +5980,6 @@ goods|goods_input_gold_add|
 goods|goods_input_gold_mult|
 goods|goods_input_grain_add|The amount of grain! Grain consumed by buildings
 goods|goods_input_grain_mult|
-goods-input|goods_input_grid_power_add|
-goods-input|goods_input_grid_power_mult|
 goods|goods_input_groceries_add|The amount of groceries! Groceries consumed by buildings
 goods|goods_input_groceries_mult|
 goods|goods_input_hardwood_add|The amount of hardwood! Hardwood consumed by buildings
@@ -6380,8 +5988,6 @@ goods|goods_input_iron_add|The amount of iron! Iron consumed by buildings
 goods|goods_input_iron_mult|
 goods|goods_input_ironclads_add|The amount of ironclads! Ironclads consumed by buildings
 goods|goods_input_ironclads_mult|
-goods-input|goods_input_launch_capacity_add|
-goods-input|goods_input_launch_capacity_mult|
 goods|goods_input_lead_add|The amount of lead! Lead consumed by buildings
 goods|goods_input_lead_mult|
 goods|goods_input_liquor_add|The amount of liquor! Liquor consumed by buildings
@@ -6390,14 +5996,12 @@ goods|goods_input_luxury_clothes_add|
 goods|goods_input_luxury_clothes_mult|
 goods|goods_input_luxury_furniture_add|
 goods|goods_input_luxury_furniture_mult|
-goods-input|goods_input_magnetic_drive_ships_add|
 goods|goods_input_manowars_add|The amount of manowars! Man-o-Wars consumed by buildings
 goods|goods_input_manowars_mult|
 goods|goods_input_meat_add|The amount of meat! Meat consumed by buildings
 goods|goods_input_meat_mult|
 goods|goods_input_merchant_marine_add|The amount of merchant_marine! Merchant Marine consumed by buildings
 goods|goods_input_merchant_marine_mult|
-goods-input|goods_input_motor_ships_add|
 goods|goods_input_oil_add|The amount of oil! Oil consumed by buildings
 goods|goods_input_oil_mult|The amount of oil! Oil consumed by buildings
 goods|goods_input_opium_add|The amount of opium! Opium consumed by buildings
@@ -6408,8 +6012,6 @@ goods|goods_input_porcelain_add|
 goods|goods_input_porcelain_mult|
 goods|goods_input_radios_add|The amount of radios! Radios consumed by buildings
 goods|goods_input_radios_mult|The amount of radios! Radios consumed by buildings
-goods-input|goods_input_robotics_add|
-goods-input|goods_input_robotics_mult|
 goods|goods_input_rubber_add|The amount of rubber! Rubber consumed by buildings
 goods|goods_input_rubber_mult|
 goods|goods_input_services_add|
@@ -6430,7 +6032,6 @@ goods|goods_input_tanks_add|The amount of tanks! Tanks consumed by buildings
 goods|goods_input_tanks_mult|The amount of tanks! Tanks consumed by buildings
 goods|goods_input_tea_add|
 goods|goods_input_tea_mult|
-goods-input|goods_input_tech_metals_add|
 goods|goods_input_telephones_add|The amount of telephones! Telephone consumed by buildings
 goods|goods_input_telephones_mult|
 goods|goods_input_tobacco_add|The amount of tobacco! Tobacco consumed by buildings
@@ -6443,8 +6044,6 @@ goods|goods_input_wine_add|The amount of wine! Wine consumed by buildings
 goods|goods_input_wine_mult|
 goods|goods_input_wood_add|The amount of wood! Wood consumed by buildings
 goods|goods_input_wood_mult|
-goods-output|goods_output_advanced_materials_add|
-goods-output|goods_output_advanced_materials_mult|
 goods_output|goods_output_aeroplanes_add|The amount of aeroplanes! Aeroplanes produced by buildings
 goods_output|goods_output_aeroplanes_mult|A bonus or penalty to the amount of aeroplanes! output produced by buildings
 goods_output|goods_output_ammunition_add|The amount of ammunition! Ammunition produced by buildings
@@ -6461,22 +6060,12 @@ goods_output|goods_output_coal_add|The amount of coal! Coal produced by buildin
 goods_output|goods_output_coal_mult|
 goods_output|goods_output_coffee_add|The amount of coffee! Coffee produced by buildings
 goods_output|goods_output_coffee_mult|
-goods-output|goods_output_construction_add|
-goods-output|goods_output_construction_mult|
-goods-output|goods_output_consumer_appliances_add|
-goods-output|goods_output_consumer_appliances_mult|
 goods_output|goods_output_copper_add|The amount of copper! Copper produced by buildings
 goods_output|goods_output_copper_mult|
-goods-output|goods_output_digital_access_add|
-goods-output|goods_output_digital_access_mult|
-goods-output|goods_output_digital_assets_add|
-goods-output|goods_output_digital_assets_mult|
 goods_output|goods_output_dye_add|The amount of dye! Dye produced by buildings
 goods_output|goods_output_dye_mult|
 goods_output|goods_output_electricity_add|The amount of electricity! Electricity produced by buildings
 goods_output|goods_output_electricity_mult|A bonus or penalty to the amount of electricity! Electricity produced by buildings
-goods-output|goods_output_electronic_components_add|
-goods-output|goods_output_electronic_components_mult|
 goods_output|goods_output_engines_add|The amount of engines! Engines produced by buildings
 goods_output|goods_output_engines_mult|A bonus or penalty to the amount of engines! output produced by buildings
 goods_output|goods_output_explosives_add|The amount of explosives! Explosives produced by buildings
@@ -6499,8 +6088,6 @@ goods_output|goods_output_gold_add|The amount of gold! Gold produced by buildin
 goods_output|goods_output_gold_mult|
 goods_output|goods_output_grain_add|The amount of grain! Grain produced by buildings
 goods_output|goods_output_grain_mult|
-goods-output|goods_output_grid_power_add|
-goods-output|goods_output_grid_power_mult|
 goods_output|goods_output_groceries_add|The amount of groceries! Groceries produced by buildings
 goods_output|goods_output_groceries_mult|
 goods_output|goods_output_hardwood_add|The amount of hardwood! Hardwood produced by buildings
@@ -6509,8 +6096,6 @@ goods_output|goods_output_iron_add|The amount of iron! Iron produced by buildin
 goods_output|goods_output_iron_mult|
 goods_output|goods_output_ironclads_add|The amount of ironclads! Ironclads produced by buildings
 goods_output|goods_output_ironclads_mult|A bonus or penalty to the amount of ironclads! Ironclads produced by buildings
-goods-output|goods_output_launch_capacity_add|
-goods-output|goods_output_launch_capacity_mult|
 goods_output|goods_output_lead_add|The amount of lead! Lead produced by buildings
 goods_output|goods_output_lead_mult|
 goods_output|goods_output_liquor_add|The amount of liquor! Liquor produced by buildings
@@ -6519,16 +6104,12 @@ goods_output|goods_output_luxury_clothes_add|The amount of luxury_clothes! Luxu
 goods_output|goods_output_luxury_clothes_mult|
 goods_output|goods_output_luxury_furniture_add|The amount of luxury_furniture! Luxury Furniture produced by buildings
 goods_output|goods_output_luxury_furniture_mult|
-goods-output|goods_output_magnetic_drive_ships_add|
-goods-output|goods_output_magnetic_drive_ships_mult|
 goods_output|goods_output_manowars_add|The amount of manowars! Man-o-Wars produced by buildings
 goods_output|goods_output_manowars_mult|A bonus or penalty to the amount of manowars! Man-o-Wars produced by buildings
 goods_output|goods_output_meat_add|The amount of meat! Meat produced by buildings
 goods_output|goods_output_meat_mult|
 goods_output|goods_output_merchant_marine_add|The amount of merchant_marine! Merchant Marine produced by buildings
 goods_output|goods_output_merchant_marine_mult|
-goods-output|goods_output_motor_ships_add|
-goods-output|goods_output_motor_ships_mult|
 goods_output|goods_output_oil_add|The amount of oil! Oil produced by buildings
 goods_output|goods_output_oil_mult|A bonus or penalty to the amount of oil! Oil produced by buildings
 goods_output|goods_output_opium_add|The amount of opium! Opium produced by buildings
@@ -6539,8 +6120,6 @@ goods_output|goods_output_porcelain_add|The amount of porcelain! Porcelain prod
 goods_output|goods_output_porcelain_mult|
 goods_output|goods_output_radios_add|The amount of radios! Radios produced by buildings
 goods_output|goods_output_radios_mult|A bonus or penalty to the amount of radio! Radio produced by buildings
-goods-output|goods_output_robotics_add|
-goods-output|goods_output_robotics_mult|
 goods_output|goods_output_rubber_add|The amount of rubber! Rubber produced by buildings
 goods_output|goods_output_rubber_mult|
 goods_output|goods_output_services_add|The amount of services! Services produced by buildings
@@ -6561,16 +6140,12 @@ goods_output|goods_output_tanks_add|The amount of tanks! Tanks produced by buil
 goods_output|goods_output_tanks_mult|A bonus or penalty to the amount of tanks! output produced by buildings
 goods_output|goods_output_tea_add|The amount of tea! Tea produced by buildings
 goods_output|goods_output_tea_mult|
-goods-output|goods_output_tech_metals_add|
-goods-output|goods_output_tech_metals_mult|
 goods_output|goods_output_telephones_add|The amount of telephones! Telephones produced by buildings
 goods_output|goods_output_telephones_mult|
 goods_output|goods_output_tobacco_add|The amount of tobacco! Tobacco produced by buildings
 goods_output|goods_output_tobacco_mult|
 goods_output|goods_output_tools_add|The amount of tools! Tools produced by buildings
 goods_output|goods_output_tools_mult|A bonus or penalty to the amount of tools! output produced by buildings
-goods-output|goods_output_tourism_add|
-goods-output|goods_output_tourism_mult|
 goods_output|goods_output_transportation_add|The amount of transportation! Transportation produced by buildings
 goods_output|goods_output_transportation_mult|
 goods_output|goods_output_wine_add|The amount of wine! Wine produced by buildings
@@ -6586,7 +6161,6 @@ goods|goods_trade_advantage_clothes_mult|
 goods|goods_trade_advantage_coal_mult|
 goods|goods_trade_advantage_coffee_mult|
 goods|goods_trade_advantage_copper_mult|
-country|goods_trade_advantage_digital_assets_mult|
 goods|goods_trade_advantage_dye_mult|
 goods|goods_trade_advantage_electricity_mult|
 goods|goods_trade_advantage_engines_mult|
@@ -6732,27 +6306,12 @@ political_movement|political_movement_radicalism_from_enactment_disapproval_mult
 power_bloc|power_bloc_allow_foreign_investment_lower_rank_bool|Countries within the same Power Bloc have Foreign Investment Rights in Power Bloc Member with lower Rank
 power_bloc|power_bloc_allow_port_access_bool|Gives Power Bloc members access to ports within the Bloc, even if they don't have Military Access
 power_bloc|power_bloc_allow_wider_migration_area_bool|Allows Migration to potentially also happen between members of a Power Bloc that don't share a Market, rather than only within a Country’s Market
-power-bloc|power_bloc_banking_union_bool|
-power-bloc|power_bloc_can_enact_decree_cultural_emigration_initiative_bool|
-power-bloc|power_bloc_can_enact_greenest_grass_campaign_bool|
-power-bloc|power_bloc_can_give_development_aid_bool|
-power-bloc|power_bloc_can_give_education_aid_bool|
-power-bloc|power_bloc_can_give_healthcare_aid_bool|
-power-bloc|power_bloc_can_give_humanitarian_aid_bool|
-power-bloc|power_bloc_can_give_science_aid_2_bool|
-power-bloc|power_bloc_can_give_science_aid_bool|
-power-bloc|power_bloc_can_give_security_aid_bool|
-power-bloc|power_bloc_can_use_crisis_resolution_bool|
-power-bloc|power_bloc_can_use_diplomatic_alignment_bool|
-power-bloc|power_bloc_can_use_extend_influence_bool|
-power-bloc|power_bloc_can_use_join_united_nations_bool|
 power_bloc|power_bloc_cohesion_add|An increase or decrease to the Cohesion of a Power Bloc
 power_bloc|power_bloc_cohesion_mult|An increase or decrease to the Cohesion of a Power Bloc
 power_bloc|power_bloc_cohesion_per_member_add|An increase or decrease to the Cohesion of a Power Bloc for every Power Bloc Member it has other than the Power Bloc Leader
 power_bloc|power_bloc_customs_union_bool|All members of the Power Bloc become part of the same Customs Union permanently
 power_bloc|power_bloc_disallow_embargo_bool|Cannot place Embargo on another Power Bloc member
 power_bloc|power_bloc_disallow_war_bool|Cannot start or join wars amongst Power Bloc members
-power-bloc|power_bloc_fiscal_backstop_bool|
 power_bloc|power_bloc_income_transfer_to_leader_factor|Base percentage of tax income transferred from Power Bloc Members to the Power Bloc Leader
 power_bloc|power_bloc_invite_acceptance_add|A bonus or penalty to the acceptance chance of a Power Bloc invitation
 power_bloc|power_bloc_invite_acceptance_decentralized_power_add|
@@ -6764,11 +6323,8 @@ power_bloc|power_bloc_invite_acceptance_unrecognized_major_power_add|A bonus or 
 power_bloc|power_bloc_invite_acceptance_unrecognized_power_add|
 power_bloc|power_bloc_invite_acceptance_unrecognized_regional_power_add|A bonus or penalty to the acceptance chance of a Power Bloc invitation
 power_bloc|power_bloc_leader_can_add_wargoal_bool|The Power Bloc Leader may add a War Goal of their own even when voluntarily supporting another Power Bloc Member
-power-bloc|power_bloc_leader_can_force_cultural_acceptance_bool|
-power-bloc|power_bloc_leader_can_force_cultural_adoption_bool|
 power_bloc|power_bloc_leader_can_force_state_religion_bool|The Power Bloc Leader may impose a change of State Religion on a Power Bloc Member whose faith differs from their own
 power_bloc|power_bloc_leader_can_make_subjects_bool|The Power Bloc Leader can use a Bloc Member Action to turn independent Power Bloc Members into Subjects
-power-bloc|power_bloc_leader_can_peacefully_annex_bool|
 power_bloc|power_bloc_leader_can_regime_change_bool|The Power Bloc Leader may execute a Regime Change on a Power Bloc Member that deviates from their ideology
 power_bloc|power_bloc_leader_can_spread_culture_to_pb_bool|Adds the largest Primary Culture of the Power Bloc Leader to a Power Bloc Member
 power_bloc|power_bloc_leverage_generation_mult|An increase or decrease to the Leverage a Power Bloc generates on all Countries.
@@ -6789,62 +6345,23 @@ power_bloc|power_bloc_mandate_progress_per_unrecognized_power_member_add|Determi
 power_bloc|power_bloc_mandate_progress_per_unrecognized_power_member_mult|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Power
 power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_add|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Regional Power
 power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_mult|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Regional Power
-power-bloc|power_bloc_monetary_cooperation_bool|
-power-bloc|power_bloc_reserve_currency_bool|
-power-bloc|power_bloc_shared_currency_bool|
 power_bloc|power_bloc_target_sway_cost_mult|An increase or decrease to the Sway Maneuver cost for the Diplomatic Play Target
 power_bloc|power_bloc_trade_advantage_add|An increase or decrease in overall Trade Advantage with Countries in the same Power Bloc
 ship|ship_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_accuracy_mult|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_armor_add|An increase or decrease to the amount of armor a Ship is equipped with, decreasing damage dealt to its hull
 ship|ship_armor_mult|An increase or decrease to the amount of armor a Ship is equipped with, decreasing damage dealt to its hull
-ship|ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult|
-ship|ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult|
-ship|ship_battle_against_ship_type_antimatter_battleship_accuracy_mult|
-ship|ship_battle_against_ship_type_antimatter_battleship_hull_damage_mult|
-ship|ship_battle_against_ship_type_arsenal_ship_accuracy_mult|
-ship|ship_battle_against_ship_type_arsenal_ship_hull_damage_mult|
-ship|ship_battle_against_ship_type_asw_destroyer_accuracy_mult|
-ship|ship_battle_against_ship_type_asw_destroyer_hull_damage_mult|
-ship|ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult|
-ship|ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult|
 ship|ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 ship|ship_battle_against_ship_type_destroyer_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_battle_against_ship_type_destroyer_accuracy_mult|An increase or decrease to the probability that the Ship will hit when attacking
-ship|ship_battle_against_ship_type_dreadnought_accuracy_mult|
 ship|ship_battle_against_ship_type_dreadnought_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 ship|ship_battle_against_ship_type_early_ironclad_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-ship|ship_battle_against_ship_type_expeditionary_sea_base_accuracy_mult|
-ship|ship_battle_against_ship_type_expeditionary_sea_base_hull_damage_mult|
-ship|ship_battle_against_ship_type_fleet_carrier_accuracy_mult|
-ship|ship_battle_against_ship_type_fleet_carrier_hull_damage_mult|
-ship|ship_battle_against_ship_type_guided_missile_ship_accuracy_mult|
-ship|ship_battle_against_ship_type_guided_missile_ship_hull_damage_mult|
-ship|ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult|
-ship|ship_battle_against_ship_type_hypersonic_missile_platform_hull_damage_mult|
 ship|ship_battle_against_ship_type_modern_ironclad_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 ship|ship_battle_against_ship_type_monitor_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-ship|ship_battle_against_ship_type_networked_air_defense_cruiser_accuracy_mult|
-ship|ship_battle_against_ship_type_networked_air_defense_cruiser_hull_damage_mult|
-ship|ship_battle_against_ship_type_nuclear_submarine_accuracy_mult|
-ship|ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult|
-ship|ship_battle_against_ship_type_nuclear_supercarrier_accuracy_mult|
-ship|ship_battle_against_ship_type_nuclear_supercarrier_hull_damage_mult|
-ship|ship_battle_against_ship_type_orbital_support_amphibious_mothership_accuracy_mult|
-ship|ship_battle_against_ship_type_orbital_support_amphibious_mothership_hull_damage_mult|
 ship|ship_battle_against_ship_type_pre_dreadnought_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-ship|ship_battle_against_ship_type_pulsed_laser_escort_accuracy_mult|
-ship|ship_battle_against_ship_type_pulsed_laser_escort_hull_damage_mult|
-ship|ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult|
-ship|ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult|
-ship|ship_battle_against_ship_type_stealth_battlecruiser_accuracy_mult|
-ship|ship_battle_against_ship_type_stealth_battlecruiser_hull_damage_mult|
 ship|ship_battle_against_ship_type_submarine_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_battle_against_ship_type_submarine_accuracy_mult|An increase or decrease to the probability that the Ship will hit when attacking
-ship|ship_battle_against_ship_type_submarine_hull_damage_mult|
 ship|ship_battle_against_ship_type_super_dreadnought_hull_damage_mult|An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-ship|ship_battle_against_ship_type_swarm_coordination_vessel_accuracy_mult|
-ship|ship_battle_against_ship_type_swarm_coordination_vessel_hull_damage_mult|
 ship|ship_battle_against_ship_type_torpedo_boat_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_battle_against_ship_type_torpedo_boat_accuracy_mult|An increase or decrease to the probability that the Ship will hit when attacking
 ship|ship_battle_against_ship_type_torpedo_boat_destroyer_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking
@@ -6915,7 +6432,6 @@ state|state_afro_antillean_standard_of_living_add|A bonus or penalty to a specif
 state|state_afro_brazilian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_afro_caribbean_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_afro_caribeno_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_ageing_rate_add|
 state|state_aimara_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_ainu_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_akan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -6931,7 +6447,6 @@ state|state_amhara_standard_of_living_add|A bonus or penalty to a specific cultu
 state|state_anglo_canadian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_animist_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_apache_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_arable_land_mult|
 state|state_aragonese_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_argentine_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_aristocrats_dependent_wage_mult|
@@ -6948,13 +6463,10 @@ state|state_assyrian_standard_of_living_add|A bonus or penalty to a specific cul
 state|state_asturleonese_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_athabaskan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_atheist_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
-state|state_atmospheric_carbon_capture_add|
 state|state_australian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_avadhi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_azande_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_azerbaijani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_backup_external_mortality_mult|
-state|state_backup_work_mortality_mult|
 state|state_baganda_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_bageli_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_baguirmi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -6972,7 +6484,6 @@ state|state_bengali_standard_of_living_add|A bonus or penalty to a specific cult
 state|state_berber_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_bidan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_bihari_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_birth_limit_relief_add|
 state|state_birth_rate_mult|How many children are born each year
 state|state_blockade_resistance_add|An increase or decrease to the Blockade Resistance of a State.
 state|state_boer_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -6982,344 +6493,10 @@ state|state_bosniak_standard_of_living_add|A bonus or penalty to a specific cult
 state|state_brazilian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_breton_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_british_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state-building|state_building_afghan_nassaji_kabul_mills_max_level_add|
-state-building|state_building_airbus_lagardere_plant_max_level_add|
-state-building|state_building_airport_max_level_add|
-state-building|state_building_ajinomoto_kawasaki_plant_max_level_add|
-state-building|state_building_aker_oslo_shipyard_max_level_add|
-state-building|state_building_alibaba_cainiao_park_max_level_add|
-state-building|state_building_allatini_thessaloniki_flour_mill_max_level_add|
-state-building|state_building_alpine_donawitz_steelworks_max_level_add|
-state-building|state_building_altos_hornos_baracaldo_furnaces_max_level_add|
-state-building|state_building_amazon_fulfillment_center_max_level_add|
-state-building|state_building_anglo_persian_abadan_refinery_max_level_add|
-state-building|state_building_anglo_sicilian_licata_wharf_max_level_add|
-state-building|state_building_ansaldo_sestri_ponente_works_max_level_add|
-state-building|state_building_antimatter_facility_max_level_add|
-state-building|state_building_anzin_colliery_max_level_add|
-state-building|state_building_ap_moller_copenhagen_wharf_max_level_add|
-state-building|state_building_apple_park_max_level_add|
-state-building|state_building_argentinian_wine_mendoza_bodega_max_level_add|
-state-building|state_building_armstrong_elswick_works_max_level_add|
-state-building|state_building_asml_veldhoven_campus_max_level_add|
-state-building|state_building_assam_company_nazira_tea_estate_max_level_add|
-state-building|state_building_axiom_space_hq_max_level_add|
-state-building|state_building_b_grimm_bangkok_warehouse_max_level_add|
-state-building|state_building_bacardi_santiago_distillery_max_level_add|
-state-building|state_building_bae_samlesbury_aerodrome_max_level_add|
 state|state_building_barrack_max_level_add|A bonus or penalty to the maximum level of Barracks buildings.
-state-building|state_building_basf_ludwigshafen_plant_max_level_add|
-state-building|state_building_basileiades_piraeus_works_max_level_add|
-state-building|state_building_bayer_leverkusen_plant_max_level_add|
-state-building|state_building_bengal_coal_raniganj_mine_max_level_add|
-state-building|state_building_bgi_national_genebank_max_level_add|
-state-building|state_building_bhp_broken_hill_mine_max_level_add|
-state-building|state_building_bhp_mount_whaleback_mine_max_level_add|
-state-building|state_building_biocon_park_max_level_add|
-state-building|state_building_biontech_mainz_campus_max_level_add|
-state-building|state_building_blackberry_rim_campus_max_level_add|
-state-building|state_building_boeing_everett_factory_max_level_add|
-state-building|state_building_bolckow_eston_ironworks_max_level_add|
-state-building|state_building_bombay_burmah_rangoon_timber_depot_max_level_add|
-state-building|state_building_bombay_dyeing_spring_mills_max_level_add|
-state-building|state_building_boston_dynamics_ai_institute_max_level_add|
-state-building|state_building_bp_refinery_complex_max_level_add|
-state-building|state_building_bunge_born_buenos_aires_grain_silo_max_level_add|
-state-building|state_building_bytedance_data_fortress_max_level_add|
-state-building|state_building_calcutta_electric_victoria_house_max_level_add|
-state-building|state_building_caribbean_petroleum_maracaibo_depot_max_level_add|
-state-building|state_building_carnegie_homestead_mill_max_level_add|
-state-building|state_building_catl_gigafactory_max_level_add|
-state-building|state_building_ccci_leopoldville_depot_max_level_add|
-state-building|state_building_cfr_bucharest_railway_works_max_level_add|
-state-building|state_building_cgv_haut_brion_estate_max_level_add|
-state-building|state_building_chr_hansen_copenhagen_laboratory_max_level_add|
-state-building|state_building_coats_ferguslie_mills_max_level_add|
-state-building|state_building_cochlear_global_hq_max_level_add|
-state-building|state_building_cockerill_seraing_works_max_level_add|
-state-building|state_building_colt_hartford_armory_max_level_add|
-state-building|state_building_consciousness_network_max_level_add|
 state|state_building_conscription_center_max_level_add|A bonus or penalty to the absolute maximum number of conscripted Battalions that can be raised from a single State, regardless of the Conscription ...
 state|state_building_construction_sector_max_level_add|A bonus or penalty to the maximum level of Construction Sector buildings.
-state-building|state_building_cordoba_railway_alta_gracia_works_max_level_add|
-state-building|state_building_cramp_philadelphia_shipyard_max_level_add|
-state-building|state_building_csfa_sicilian_sulfur_depot_max_level_add|
-state-building|state_building_dassault_merignac_plant_max_level_add|
-state-building|state_building_de_beers_sorting_office_max_level_add|
-state-building|state_building_disney_world_max_level_add|
-state-building|state_building_dmc_mulhouse_mills_max_level_add|
-state-building|state_building_douro_wine_lodge_max_level_add|
-state-building|state_building_dupont_experimental_station_max_level_add|
-state-building|state_building_duro_la_felguera_steelworks_max_level_add|
-state-building|state_building_eea_dock_sud_power_station_max_level_add|
-state-building|state_building_egyptian_rail_cairo_central_max_level_add|
-state-building|state_building_eic_trading_house_max_level_add|
-state-building|state_building_el_aguila_tampico_refinery_max_level_add|
-state-building|state_building_electricidad_caracas_power_house_max_level_add|
-state-building|state_building_elso_budapesti_steam_mill_max_level_add|
-state-building|state_building_eni_palazzo_max_level_add|
-state-building|state_building_ericsson_telefonplan_max_level_add|
-state-building|state_building_erste_brunner_maschinenwerk_max_level_add|
-state-building|state_building_espana_industrial_sants_mills_max_level_add|
-state-building|state_building_estaleiro_maua_niteroi_dockyard_max_level_add|
-state-building|state_building_estanifera_llallagua_tin_concentrator_max_level_add|
-state-building|state_building_ethiopian_railway_dire_dawa_depot_max_level_add|
-state-building|state_building_famae_santiago_arsenal_max_level_add|
-state-building|state_building_fanuc_forest_max_level_add|
-state-building|state_building_fcm_la_seyne_shipyard_max_level_add|
-state-building|state_building_ferranti_hollinwood_works_max_level_add|
-state-building|state_building_ferrari_maranello_factory_max_level_add|
-state-building|state_building_fiat_lingotto_factory_max_level_add|
-state-building|state_building_foochow_mawei_dockyard_max_level_add|
-state-building|state_building_ford_rouge_plant_max_level_add|
-state-building|state_building_franco_belge_raismes_works_max_level_add|
-state-building|state_building_fundicao_ipanema_sorocaba_foundry_max_level_add|
-state-building|state_building_fundidora_monterrey_blast_furnace_max_level_add|
-state-building|state_building_galician_boryslaw_oil_field_max_level_add|
-state-building|state_building_gavrilovic_petrinja_meatworks_max_level_add|
-state-building|state_building_gazprom_lakhta_center_max_level_add|
-state-building|state_building_ge_schenectady_works_max_level_add|
-state-building|state_building_genentech_dna_way_campus_max_level_add|
-state-building|state_building_generic_arsenal_max_level_add|
-state-building|state_building_generic_assay_office_max_level_add|
-state-building|state_building_generic_chem_works_max_level_add|
-state-building|state_building_generic_cold_storage_max_level_add|
-state-building|state_building_generic_colonial_depot_max_level_add|
-state-building|state_building_generic_data_fortress_max_level_add|
-state-building|state_building_generic_dry_dock_max_level_add|
-state-building|state_building_generic_dye_fiber_park_max_level_add|
-state-building|state_building_generic_electronics_lab_max_level_add|
-state-building|state_building_generic_export_warehouse_max_level_add|
-state-building|state_building_generic_fish_market_max_level_add|
-state-building|state_building_generic_foundry_complex_max_level_add|
-state-building|state_building_generic_furniture_showroom_max_level_add|
-state-building|state_building_generic_granary_complex_max_level_add|
-state-building|state_building_generic_hq_skyscraper_max_level_add|
-state-building|state_building_generic_industrial_zone_max_level_add|
-state-building|state_building_generic_logistics_hub_max_level_add|
-state-building|state_building_generic_lumber_yard_max_level_add|
-state-building|state_building_generic_machine_shop_max_level_add|
-state-building|state_building_generic_materials_lab_max_level_add|
-state-building|state_building_generic_media_hq_max_level_add|
-state-building|state_building_generic_mineral_refinery_max_level_add|
-state-building|state_building_generic_motor_works_max_level_add|
-state-building|state_building_generic_ordnance_depot_max_level_add|
-state-building|state_building_generic_ore_processing_max_level_add|
-state-building|state_building_generic_paper_mill_complex_max_level_add|
-state-building|state_building_generic_power_hub_max_level_add|
-state-building|state_building_generic_proving_grounds_max_level_add|
-state-building|state_building_generic_rd_complex_max_level_add|
-state-building|state_building_generic_resource_depository_max_level_add|
-state-building|state_building_generic_robotics_institute_max_level_add|
-state-building|state_building_generic_silk_exchange_max_level_add|
-state-building|state_building_generic_tank_farm_max_level_add|
-state-building|state_building_generic_textile_depot_max_level_add|
-state-building|state_building_generic_vintner_hall_max_level_add|
-state-building|state_building_getzner_bludenz_textile_works_max_level_add|
-state-building|state_building_googleplex_max_level_add|
-state-building|state_building_gotaverken_gothenburg_shipyard_max_level_add|
-state-building|state_building_gran_azucarera_aranjuez_refinery_max_level_add|
-state-building|state_building_great_indian_railway_jamalpur_works_max_level_add|
-state-building|state_building_grid_hvdc_interconnector_max_level_add|
-state-building|state_building_grid_transfer_station_max_level_add|
-state-building|state_building_guinness_st_james_gate_brewery_max_level_add|
-state-building|state_building_guthrie_singapore_agency_max_level_add|
-state-building|state_building_gwr_swindon_works_max_level_add|
-state-building|state_building_hanka_precision_hq_max_level_add|
-state-building|state_building_hanseong_jeongi_gwanghwamun_station_max_level_add|
-state-building|state_building_hanyang_arsenal_iron_works_max_level_add|
-state-building|state_building_hbc_york_factory_max_level_add|
-state-building|state_building_highway_max_level_add|
-state-building|state_building_hispano_suiza_barcelona_factory_max_level_add|
-state-building|state_building_hp_labs_max_level_add|
-state-building|state_building_huawei_ox_horn_campus_max_level_add|
-state-building|state_building_hughes_yuzovka_steelworks_max_level_add|
-state-building|state_building_hydro_plant_max_level_add|
-state-building|state_building_hyundai_ulsan_factory_max_level_add|
-state-building|state_building_ig_farben_buna_werke_max_level_add|
-state-building|state_building_ikea_almhult_campus_max_level_add|
-state-building|state_building_ilva_bagnoli_steelworks_max_level_add|
-state-building|state_building_imperial_arsenal_golden_horn_max_level_add|
-state-building|state_building_imperial_tobacco_wills_factory_max_level_add|
-state-building|state_building_infosys_mysore_campus_max_level_add|
-state-building|state_building_ingen_biological_preserve_max_level_add|
-state-building|state_building_ingolstadt_power_station_max_level_add|
-state-building|state_building_intel_ronler_acres_max_level_add|
-state-building|state_building_iranian_state_railway_veresk_station_max_level_add|
-state-building|state_building_izhevsk_arms_factory_max_level_add|
-state-building|state_building_jardine_princeps_house_max_level_add|
-state-building|state_building_jiangnan_nanjing_brocade_hall_max_level_add|
-state-building|state_building_jingdezhen_imperial_kiln_max_level_add|
-state-building|state_building_john_brown_clydebank_yard_max_level_add|
-state-building|state_building_john_holt_lagos_trading_house_max_level_add|
-state-building|state_building_jsr_yokkaichi_complex_max_level_add|
-state-building|state_building_jsw_vijayanagar_works_max_level_add|
-state-building|state_building_kablin_zarate_paper_mill_max_level_add|
-state-building|state_building_kaiping_tangshan_colliery_max_level_add|
-state-building|state_building_kinkozan_kiyomizu_kiln_max_level_add|
-state-building|state_building_kirgizian_copper_smelter_max_level_add|
-state-building|state_building_klanicko_belgrade_slaughterhouse_max_level_add|
-state-building|state_building_klein_galician_paper_mill_max_level_add|
-state-building|state_building_kouppas_piraeus_foundry_max_level_add|
-state-building|state_building_krupp_essen_works_max_level_add|
-state-building|state_building_la_rosada_buenos_aires_arsenal_max_level_add|
-state-building|state_building_lanfang_pontianak_kongsi_house_max_level_add|
-state-building|state_building_lee_wilson_plantation_depot_max_level_add|
-state-building|state_building_lilpop_warsaw_metalworks_max_level_add|
-state-building|state_building_lkab_kiruna_mine_max_level_add|
-state-building|state_building_lockheed_skunk_works_max_level_add|
-state-building|state_building_madura_mills_madurai_complex_max_level_add|
-state-building|state_building_manfred_weiss_csepel_works_max_level_add|
-state-building|state_building_mantero_como_silk_mill_max_level_add|
-state-building|state_building_mantetsu_dalian_railway_hub_max_level_add|
-state-building|state_building_maple_tottenham_court_showroom_max_level_add|
-state-building|state_building_markwald_bangkok_rice_mill_max_level_add|
-state-building|state_building_massey_harris_toronto_implement_works_max_level_add|
-state-building|state_building_mav_budapest_locomotive_works_max_level_add|
-state-building|state_building_megastructure_consortium_hq_max_level_add|
-state-building|state_building_meissen_porcelain_manufactory_max_level_add|
-state-building|state_building_mfo_oerlikon_works_max_level_add|
-state-building|state_building_michelin_clermont_ferrand_max_level_add|
-state-building|state_building_microsoft_redmond_campus_max_level_add|
-state-building|state_building_military_base_max_level_add|
-state-building|state_building_mind_upload_nexus_max_level_add|
-state-building|state_building_misr_mahalla_textile_complex_max_level_add|
-state-building|state_building_mitsubishi_nagasaki_shipyard_max_level_add|
-state-building|state_building_mitsui_trading_house_max_level_add|
-state-building|state_building_mokta_el_hadid_beni_saf_mine_max_level_add|
-state-building|state_building_monsanto_chesterfield_center_max_level_add|
-state-building|state_building_morozov_orekhovo_zuevo_mills_max_level_add|
-state-building|state_building_moscow_irrigation_cotton_depot_max_level_add|
-state-building|state_building_moser_karlsbad_glass_works_max_level_add|
-state-building|state_building_mozambique_company_beira_concession_max_level_add|
-state-building|state_building_nam_dinh_textile_plant_max_level_add|
-state-building|state_building_nanofabrication_center_max_level_add|
-state-building|state_building_national_park_max_level_add|
 state|state_building_naval_fortification_max_level_add|A bonus or penalty to the maximum level of Naval Fortification buildings.
-state-building|state_building_nederlandse_petroleum_pangkalan_depot_max_level_add|
-state-building|state_building_netflix_animation_studios_max_level_add|
-state-building|state_building_neurovault_hq_max_level_add|
-state-building|state_building_nhm_factorij_batavia_max_level_add|
-state-building|state_building_nintendo_development_center_max_level_add|
-state-building|state_building_nioc_masjed_soleyman_field_max_level_add|
-state-building|state_building_nobel_baku_refinery_max_level_add|
-state-building|state_building_noda_shoyu_goyogura_max_level_add|
-state-building|state_building_nokia_cable_works_max_level_add|
-state-building|state_building_norsk_hydro_rjukan_plant_max_level_add|
-state-building|state_building_novo_nordisk_kalundborg_plant_max_level_add|
-state-building|state_building_nvidia_endeavor_campus_max_level_add|
-state-building|state_building_ocmc_unsan_gold_mines_max_level_add|
-state-building|state_building_ocp_khouribga_mine_max_level_add|
-state-building|state_building_oevg_steyr_arms_works_max_level_add|
-state-building|state_building_ong_lung_sheng_tea_warehouse_max_level_add|
-state-building|state_building_openai_research_lab_max_level_add|
-state-building|state_building_opium_ghazipur_factory_max_level_add|
-state-building|state_building_oracle_cloud_data_center_max_level_add|
-state-building|state_building_orbital_battlestation_max_level_add|
-state-building|state_building_orient_express_sirkeci_terminal_max_level_add|
-state-building|state_building_oriental_dev_kunsan_granary_max_level_add|
-state-building|state_building_panama_company_culebra_cut_max_level_add|
-state-building|state_building_paradox_kvarnholmen_studio_max_level_add|
-state-building|state_building_pedro_domecq_jerez_bodega_max_level_add|
-state-building|state_building_pernambuco_recife_cotton_mill_max_level_add|
-state-building|state_building_perskhlopok_cotton_combines_max_level_add|
-state-building|state_building_persshelk_silk_reeling_house_max_level_add|
-state-building|state_building_peruvian_amazon_iquitos_depot_max_level_add|
-state-building|state_building_petrobras_cenpes_center_max_level_add|
-state-building|state_building_pfizer_rd_campus_max_level_add|
-state-building|state_building_philips_eindhoven_natlab_max_level_add|
-state-building|state_building_pirelli_bicocca_plant_max_level_add|
-state-building|state_building_portalis_lyon_silk_house_max_level_add|
-state-building|state_building_prussian_railway_directorate_max_level_add|
-state-building|state_building_public_housing_max_level_add|
-state-building|state_building_putilov_works_max_level_add|
-state-building|state_building_rac_sitka_trading_post_max_level_add|
-state-building|state_building_ralli_odessa_grain_elevator_max_level_add|
-state-building|state_building_ramirez_vila_real_cannery_max_level_add|
-state-building|state_building_rejoovenesense_compound_max_level_add|
-state-building|state_building_rekal_hq_max_level_add|
-state-building|state_building_reliance_jamnagar_refinery_max_level_add|
-state-building|state_building_renault_billancourt_plant_max_level_add|
-state-building|state_building_resettlement_colony_max_level_add|
-state-building|state_building_rheinmetall_unterluss_proving_ground_max_level_add|
-state-building|state_building_ricordi_galleria_vittorio_emanuele_max_level_add|
-state-building|state_building_roche_tower_max_level_add|
-state-building|state_building_rodriguez_arguelles_havana_tobacco_house_max_level_add|
-state-building|state_building_rolls_royce_derby_works_max_level_add|
-state-building|state_building_romanian_star_ploiesti_refinery_max_level_add|
-state-building|state_building_rosatom_mayak_association_max_level_add|
-state-building|state_building_roscosmos_vostochny_cosmodrome_max_level_add|
-state-building|state_building_rosen_association_hq_max_level_add|
-state-building|state_building_rossi_sao_leopoldo_arms_factory_max_level_add|
-state-building|state_building_saint_etienne_arms_manufactory_max_level_add|
-state-building|state_building_samsung_digital_city_max_level_add|
-state-building|state_building_san_miguel_manila_brewery_max_level_add|
-state-building|state_building_sandford_newcastle_natal_ironworks_max_level_add|
-state-building|state_building_sansinena_avellaneda_frigorifico_max_level_add|
-state-building|state_building_sao_paulo_railway_paranapiacaba_workshop_max_level_add|
-state-building|state_building_sap_headquarters_max_level_add|
-state-building|state_building_sassoon_bombay_docks_max_level_add|
-state-building|state_building_saudi_aramco_abqaiq_plant_max_level_add|
-state-building|state_building_schichau_elbing_shipyard_max_level_add|
-state-building|state_building_schneider_le_creusot_max_level_add|
-state-building|state_building_secn_ferrol_shipyard_max_level_add|
-state-building|state_building_sfct_hon_gai_collieries_max_level_add|
-state-building|state_building_shell_pernis_refinery_max_level_add|
-state-building|state_building_sherkat_shemali_cotton_gin_max_level_add|
-state-building|state_building_sherkate_eslamiya_isfahan_mill_max_level_add|
-state-building|state_building_shopify_fulfillment_hub_max_level_add|
-state-building|state_building_siam_electric_wat_liab_station_max_level_add|
-state-building|state_building_sibur_tobolsk_complex_max_level_add|
-state-building|state_building_siemens_erlangen_campus_max_level_add|
-state-building|state_building_skoda_pilsen_works_max_level_add|
-state-building|state_building_softbank_vision_fund_hq_max_level_add|
-state-building|state_building_solar_collector_max_level_add|
-state-building|state_building_sony_pictures_studios_max_level_add|
-state-building|state_building_space_elevator_max_level_add|
-state-building|state_building_spacex_starbase_max_level_add|
-state-building|state_building_standard_oil_refinery_max_level_add|
-state-building|state_building_state_youth_centers_max_level_add|
-state-building|state_building_steel_brothers_syriam_depot_max_level_add|
-state-building|state_building_stf_fiume_torpedo_works_max_level_add|
-state-building|state_building_strategic_reserve_hub_max_level_add|
-state-building|state_building_stt_haskoy_shipyard_max_level_add|
-state-building|state_building_sudamericana_valparaiso_pier_max_level_add|
-state-building|state_building_suez_company_ismailia_hq_max_level_add|
-state-building|state_building_sumitomo_besshi_mine_max_level_add|
-state-building|state_building_sunhwaguk_seoul_tobacco_factory_max_level_add|
-state-building|state_building_tashkent_railroad_workshops_max_level_add|
-state-building|state_building_tata_jamshedpur_works_max_level_add|
-state-building|state_building_tencent_seafront_towers_max_level_add|
-state-building|state_building_tessier_ashpool_hq_max_level_add|
-state-building|state_building_thonet_bystrice_bentwood_factory_max_level_add|
-state-building|state_building_thyssen_steelworks_max_level_add|
-state-building|state_building_tobacco_regie_cibali_factory_max_level_add|
-state-building|state_building_tokyo_electric_asakusa_station_max_level_add|
-state-building|state_building_toyota_kaikan_plant_max_level_add|
-state-building|state_building_trubia_cannon_foundry_max_level_add|
-state-building|state_building_tsmc_fab_18_max_level_add|
-state-building|state_building_turkish_petroleum_kirkuk_depot_max_level_add|
-state-building|state_building_tycho_manufacturing_hq_max_level_add|
-state-building|state_building_un_headquarters_max_level_add|
-state-building|state_building_uniao_fabril_barreiro_plant_max_level_add|
-state-building|state_building_united_fruit_great_white_fleet_terminal_max_level_add|
-state-building|state_building_united_tobacco_moscow_plant_max_level_add|
-state-building|state_building_universal_studios_hollywood_max_level_add|
-state-building|state_building_ursus_warsaw_tractor_plant_max_level_add|
-state-building|state_building_vale_carajas_mine_max_level_add|
-state-building|state_building_van_vlissingen_oostenburg_works_max_level_add|
-state-building|state_building_verizon_building_max_level_add|
-state-building|state_building_vodka_monopoly_warehouse_max_level_add|
-state-building|state_building_volkswagen_autostadt_max_level_add|
-state-building|state_building_wadia_bombay_dockyard_max_level_add|
-state-building|state_building_west_ural_oil_depot_max_level_add|
-state-building|state_building_white_star_albion_house_max_level_add|
-state-building|state_building_witkowitzer_ostrava_ironworks_max_level_add|
-state-building|state_building_worth_rue_de_la_paix_atelier_max_level_add|
-state-building|state_building_yasuda_atosanupuri_mine_max_level_add|
-state-building|state_building_ynchausti_manila_trading_house_max_level_add|
-state-building|state_building_yoyodyne_propulsion_hq_max_level_add|
-state-building|state_building_zastava_kragujevac_arsenal_max_level_add|
 state|state_bulgarian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_bundeli_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_bureaucracy_population_base_cost_factor_mult|An increase or reduction to the base administrative cost incurred by your incorporated Population
@@ -7405,10 +6582,7 @@ state|state_chechen_standard_of_living_add|A bonus or penalty to a specific cult
 state|state_cherokee_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_chewa_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_chhattisgarhi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_child_labor_participation_add|
 state|state_chilean_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_chronic_mortality_mult|
-state|state_chronic_treatment_add|
 state|state_chukchi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_chuvash_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_circassian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7424,11 +6598,6 @@ state|state_clerks_investment_pool_contribution_add|How much of their profits c
 state|state_clerks_investment_pool_efficiency_mult|An increase or decrease to how much the invested profits from clerks! Clerks will contribute to the Investment Pool
 state|state_clerks_mass_migration_disallowed_bool|
 state|state_clerks_mortality_mult|
-state|state_climate_cold_relief_add|
-state|state_climate_disease_relief_add|
-state|state_climate_heat_relief_add|
-state|state_climate_water_relief_add|
-state|state_climate_winter_relief_add|
 state|state_colombian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_colony_growth_creation_factor|The amount of colonial growth generated by Pops in Incorporated States.
 state|state_colony_growth_speed_mult|A bonus or penalty to the final speed of colonial growth in a Colony.
@@ -7438,47 +6607,22 @@ state|state_conscription_rate_add|The portion of the Workforce that are Potentia
 state|state_conscription_rate_mult|A bonus or penalty to the number of Potential Conscripts from Conscription Rate
 state|state_construction_mult|A bonus or penalty to the weekly Construction progress in a State
 state|state_contiguous_incorporation_speed_mult|A bonus or penalty to the speed at which States that have a land or strait connection to the Capital State are Incorporated
-state|state_contraception_add|
 state|state_control_strait_bool|Whether the state has control over a strait, affecting trade and military movement.
 state|state_conversion_mult|A bonus or penalty to Conversion
 state|state_corsican_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_cree_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_crimean_tatar_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_croat_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_custom_religion_animist_standard_of_living_add|
-state|state_custom_religion_buddhist_standard_of_living_add|
-state|state_custom_religion_christian_standard_of_living_add|
-state|state_custom_religion_custom_standard_of_living_add|
-state|state_custom_religion_eastern_standard_of_living_add|
-state|state_custom_religion_jewish_standard_of_living_add|
-state|state_custom_religion_muslim_standard_of_living_add|
 state|state_czech_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_dagestani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_dakota_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_danish_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_dayak_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_death_cause_chr_mult|
-state|state_death_cause_ext_mult|
-state|state_death_cause_inf_mult|
-state|state_death_cause_war_mult|
-state|state_death_cause_work_mult|
 state|state_deccani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_decree_cost_mult|A bonus or penalty to the Authority cost of Decrees
-state|state_demog_absorbed_birth_rate_mult|
-state|state_demog_absorbed_farmers_mortality_mult|
-state|state_demog_absorbed_laborers_mortality_mult|
-state|state_demog_absorbed_machinists_mortality_mult|
-state|state_demog_absorbed_mortality_mult|
-state|state_demog_absorbed_peasants_mortality_mult|
-state|state_demog_ontop_birth_rate_mult|
-state|state_demog_ontop_mortality_mult|
-state|state_demog_ontop_mortality_wealth_mult|
-state|state_demog_replaced_ratio_add|
-state|state_demog_womens_work_ratio_add|
 state|state_dependent_political_participation_add|The fraction of Dependents that can join Interest Groups and vote.
 state|state_dependent_wage_add|An increase or decrease in Dependents Income
 state|state_dependent_wage_mult|An increase or decrease in Dependents Income
-state|state_desired_fertility_mult|
 state|state_devastation_decay_mult|A bonus or penalty to the speed at which States recover from Devastation.
 state|state_dinka_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_disallow_barracks_construction_bool|Army Buildings cannot be constructed in the State, and no new Battalions can be raised there
@@ -7504,9 +6648,6 @@ state|state_ewe_standard_of_living_add|A bonus or penalty to a specific culture'
 state|state_expected_sol_from_literacy|An increase or decrease to the minimum Standard of Living Pops expect to enjoy, scaled by their Literacy
 state|state_expected_sol_mult|An increase or decrease to the minimum Standard of Living Pops expect to enjoy
 state|state_export_advantage_mult|An increase or decrease in Trade Advantage for exported Goods
-state|state_external_mortality_mult|
-state|state_external_safety_add|
-state|state_family_migration_add|
 state|state_fang_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_farmers_dependent_wage_mult|
 state|state_farmers_internal_migration_disallowed_bool|
@@ -7514,7 +6655,6 @@ state|state_farmers_investment_pool_contribution_add|How much of their profits 
 state|state_farmers_investment_pool_efficiency_mult|An increase or decrease to how much the invested profits from farmers! Farmers will contribute to the Investment Pool
 state|state_farmers_mass_migration_disallowed_bool|
 state|state_farmers_mortality_mult|An increase or decrease in the Mortality of farmers! Farmers
-state|state_fertility_means_add|
 state|state_filipino_hispanophone_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_filipino_mestizo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_filipino_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7524,7 +6664,6 @@ state|state_fluvian_bantu_standard_of_living_add|A bonus or penalty to a specifi
 state|state_fon_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_food_security_add|A bonus or penalty to the food security of all pops in a state
 state|state_fortification_bombardment_resistance_add|Resistance to port bombardment provided by Naval Fortification in a State.
-state|state_fortification_level_add|
 state|state_fortification_naval_battle_mult|A bonus or penalty to the defending units in a naval invasion battle provided by Naval Fortification in a State.
 state|state_fortification_naval_invasion_add|A bonus or penalty to the defense against naval invasion provided by Naval Fortification in a State.
 state|state_franco_canadian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7538,7 +6677,6 @@ state|state_gelugpa_standard_of_living_add|A bonus or penalty to a specific reli
 state|state_georgian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_gondi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_greek_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_greenhouse_gas_emissions_add|
 state|state_griqua_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_guajiro_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_guarani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7554,19 +6692,10 @@ state|state_harvest_condition_earthquake_duration_mult|An increase or decrease t
 state|state_harvest_condition_earthquake_impact_mult|An increase or decrease to the impact of Earthquakes.
 state|state_harvest_condition_extreme_winds_duration_mult|An increase or decrease to the duration of Extreme Winds.
 state|state_harvest_condition_extreme_winds_impact_mult|An increase or decrease to the impact of Extreme Winds.
-state|state_harvest_condition_financial_panic_duration_mult|
-state|state_harvest_condition_financial_panic_impact_mult|
 state|state_harvest_condition_flood_duration_mult|An increase or decrease to the duration of Floods.
 state|state_harvest_condition_flood_impact_mult|An increase or decrease to the impact of Floods.
-state|state_harvest_condition_frost_duration_mult|
-state|state_harvest_condition_frost_impact_mult|
-state|state_harvest_condition_hailstorm_impact_mult|
 state|state_harvest_condition_heatwave_duration_mult|An increase or decrease to the duration of Heatwaves.
 state|state_harvest_condition_heatwave_impact_mult|An increase or decrease to the impact of Heatwaves.
-state|state_harvest_condition_moderate_rainfall_impact_mult|
-state|state_harvest_condition_pollinator_surge_impact_mult|
-state|state_harvest_condition_torrential_rains_duration_mult|
-state|state_harvest_condition_torrential_rains_impact_mult|
 state|state_harvest_condition_tsunami_duration_mult|An increase or decrease to the duration of Tsunamis.
 state|state_harvest_condition_tsunami_impact_mult|An increase or decrease to the impact of Tsunamis.
 state|state_harvest_condition_wildfire_duration_mult|An increase or decrease to the duration of Wildfires.
@@ -7574,15 +6703,10 @@ state|state_harvest_condition_wildfire_impact_mult|An increase or decrease to th
 state|state_hausa_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_hawaiian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_hazara_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_health_care_access_add|
 state|state_herero_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_hindu_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_hindustani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_hokan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_homeland_change_speed_mult|
-state|state_homeland_creation_threshold_add|
-state|state_homeland_removal_speed_mult|
-state|state_homeland_removal_threshold_add|
 state|state_hungarian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_ibadi_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_iberian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7592,7 +6716,6 @@ state|state_icelandic_standard_of_living_add|A bonus or penalty to a specific cu
 state|state_ilocano_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_import_advantage_mult|An increase or decrease in Trade Advantage for imported Goods
 state|state_incorporation_speed_mult|A bonus or penalty to the speed at which States are Incorporated
-state|state_infection_treatment_add|
 state|state_infrastructure_add|A bonus or penalty to the State’s Infrastructure
 state|state_infrastructure_from_aeroplanes_consumption_add|
 state|state_infrastructure_from_ammunition_consumption_add|
@@ -7679,7 +6802,6 @@ state|state_kissi_standard_of_living_add|A bonus or penalty to a specific cultur
 state|state_korean_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_kru_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_kurdish_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_labor_participation_add|
 state|state_laborers_dependent_wage_mult|
 state|state_laborers_internal_migration_disallowed_bool|
 state|state_laborers_investment_pool_contribution_add|How much of their profits laborers! Laborers will invest
@@ -7688,14 +6810,10 @@ state|state_laborers_mass_migration_disallowed_bool|
 state|state_laborers_mortality_mult|An increase or decrease in the Mortality of laborers! Laborers
 state|state_lacustrine_bantu_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_lao_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_late_marriage_farms_add|
 state|state_latvian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_literacy_growth_add|A bonus or penalty to the growth of Literacy in a State.
 state|state_lithuanian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_lomwe_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_longevity_care_cover_add|
-state|state_longevity_care_floor_add|
-state|state_longevity_care_market_reach_add|
 state|state_lower_strata_birth_rate_mult|How many children are born each year among the Lower Strata
 state|state_lower_strata_expected_sol_add|An increase or decrease to the minimum Standard of Living that Lower Strata Pops expect to enjoy
 state|state_lower_strata_standard_of_living_add|Extra Standard of Living added on top of Wealth
@@ -7722,10 +6840,8 @@ state|state_maghrebi_standard_of_living_add|A bonus or penalty to a specific cul
 state|state_mahayana_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_makua_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_malagasy_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_malaria_control_add|
 state|state_malay_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_malayalam_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_male_labor_participation_add|
 state|state_maltese_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_manchu_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_mande_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7735,28 +6851,21 @@ state|state_marathi_standard_of_living_add|A bonus or penalty to a specific cult
 state|state_mari_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_market_access_price_impact|An increase or decrease to the maximum influence of Market Access on the Local Price of a Good.
 state|state_mashriqi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_maternal_mortality_mult|
-state|state_maternal_treatment_add|
 state|state_max_trade_advantage_from_capacity_add|An increase or decrease in maximum Trade Advantage from Trade Capacity in a State
 state|state_mayan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_mazanderani_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_means_literacy_add|
-state|state_medical_diffusion_add|
 state|state_melanesian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_metis_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_metro_share_add|
 state|state_mexican_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_miao_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_micronesian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_middle_strata_birth_rate_mult|How many children are born each year among the Middle Strata
 state|state_middle_strata_expected_sol_add|An increase or decrease to the minimum Standard of Living that Middle Strata Pops expect to enjoy
 state|state_middle_strata_standard_of_living_add|Extra Standard of Living added on top of Wealth
-state|state_migration_crowding_density_mult|
 state|state_migration_pull_add|A bonus or penalty to the state's ability to attract immigrants within its Market.
 state|state_migration_pull_mult|A bonus or penalty to the state's ability to attract immigrants within its Market.
 state|state_migration_pull_unincorporated_mult|A bonus or penalty to the urge to migrate to Unincorporated States
 state|state_migration_quota_mult|A bonus or penalty to the amount of people that emigrate from or immigrate to a State
-state|state_min_cultural_acceptance_delta_add|
 state|state_min_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_minimum_incorporated_subsistence_arable_land_add|An increase or decrease to the minimum fraction of a Incorporated State’s arable land which is reserved for Subsistence Buildings and cannot be use...
 state|state_miskito_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7766,7 +6875,6 @@ state|state_moluccan_standard_of_living_add|A bonus or penalty to a specific cul
 state|state_mon_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_mongo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_mongol_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_monthly_loyalists_add|
 state|state_mordvin_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_moro_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_mortality_mult|An increase or decrease to the Mortality for all Pops
@@ -7777,7 +6885,6 @@ state|state_muisca_standard_of_living_add|A bonus or penalty to a specific cultu
 state|state_muskogean_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_naga_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_nahua_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_natural_fertility_mult|
 state|state_navajo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_nepali_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_nez_perce_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7792,7 +6899,6 @@ state|state_north_german_standard_of_living_add|A bonus or penalty to a specific
 state|state_north_italian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_norwegian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_nuba_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_nuclear_weapon_defense_chance_add|
 state|state_nuer_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_nyamwezi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_occitan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7803,8 +6909,6 @@ state|state_officers_investment_pool_efficiency_mult|An increase or decrease to 
 state|state_officers_mass_migration_disallowed_bool|
 state|state_officers_mortality_mult|
 state|state_oodham_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_orbital_battery_fire_add|
-state|state_orbital_debris_sweep_add|
 state|state_oriental_orthodox_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_oriya_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_oromo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7835,7 +6939,6 @@ state|state_polish_standard_of_living_add|A bonus or penalty to a specific cultu
 state|state_political_strength_from_wealth_mult|An increase or decrease to the amount of Political Strength of Pops from Wealth
 state|state_political_strength_from_welfare_mult|An increase or decrease to the amount of Political Strength of Pops that are receiving Welfare Payments
 state|state_pollution_generation_add|An increase or decrease to how much pollution is generated in a state
-state|state_pollution_generation_mult|
 state|state_pollution_reduction_health_mult|An increase or decrease to the effects of Pollution Impact on the health of your population
 state|state_polynesian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_pop_pol_str_add|A bonus or penalty to the total Political Strength of all Pops
@@ -7847,12 +6950,10 @@ state|state_pop_support_movement_anti_communist_add|
 state|state_pop_support_movement_anti_communist_mult|
 state|state_pop_support_movement_anti_slavery_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_anti_slavery_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
-state|state_pop_support_movement_anti_war_mult|
 state|state_pop_support_movement_bonapartist_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_bonapartist_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_carlist_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_carlist_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
-state|state_pop_support_movement_civil_rights_mult|
 state|state_pop_support_movement_communist_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_communist_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_corporatist_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
@@ -7921,14 +7022,11 @@ state|state_pop_support_movement_socialist_add|An increase or decrease to the at
 state|state_pop_support_movement_socialist_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_tokugawa_loyalist_add|
 state|state_pop_support_movement_tokugawa_loyalist_mult|
-state|state_pop_support_movement_transhumanist_mult|
 state|state_pop_support_movement_utilitarian_add|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_utilitarian_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_pop_support_movement_yugoslav_national_add|state_pop_support_movement_yugoslav_national_add_desc
 state|state_pop_support_movement_yugoslav_national_mult|An increase or decrease to the attraction for Pops towards joining a Political Movement.
 state|state_portuguese_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_power_grid_connection_bool|
-state|state_power_grid_disrupted_bool|
 state|state_promethean_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_protestant_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_pueblo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -7941,10 +7039,6 @@ state|state_radicalism_increases_violent_hostility_mult|A bonus or penalty to in
 state|state_radicals_and_loyalists_from_sol_change_mult|A bonus or penalty to how many Pops will become Radical or Loyalist from changes in Standard of Living
 state|state_radicals_from_political_movements_mult|A bonus or penalty to how many Pops will become Radical from Political Movements with high Movement Activism
 state|state_rajput_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_rejuvenation_add|
-state|state_reserve_battalions_add|
-state|state_resettlement_recruits_add|
-state|state_resettlement_transfer_add|
 state|state_romanian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_ruanda_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_rundi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -8013,7 +7107,6 @@ state|state_sena_standard_of_living_add|A bonus or penalty to a specific culture
 state|state_senufo_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_sephardic_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_serb_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_sex_ratio_at_birth_add|
 state|state_shan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_shiite_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
 state|state_shinto_standard_of_living_add|A bonus or penalty to a specific religion's [concept_sol]
@@ -8052,7 +7145,6 @@ state|state_south_andean_standard_of_living_add|A bonus or penalty to a specific
 state|state_south_german_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_south_italian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_spanish_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_sr_ship_construction_add|
 state|state_standard_of_living_add|Extra Standard of Living added on top of Wealth
 state|state_subvention_export_add|An increase or decrease to the maximum Subventions that can be paid to Trade Centers that export Goods from our Market.
 state|state_subvention_import_add|An increase or decrease to the maximum Subventions that can be paid to Trade Centers that import Goods to our Market.
@@ -8105,33 +7197,24 @@ state|state_unincorporated_starting_wages_mult|How much more or less Pops in Uni
 state|state_upper_strata_birth_rate_mult|How many children are born each year among the Upper Strata
 state|state_upper_strata_expected_sol_add|An increase or decrease to the minimum Standard of Living that Upper Strata Pops expect to enjoy
 state|state_upper_strata_standard_of_living_add|Extra Standard of Living added on top of wealth
-state|state_urban_fertility_relief_add|
 state|state_urbanization_per_level_add|The amount of Urbanization required in a State to create 1 level of Urban Center
 state|state_urbanization_per_level_mult|Urbanization per Urban Center
 state|state_uruguayan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_uzbek_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_venezuelan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_vietnamese_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_violence_against_minorities_bool|
 state|state_visayan_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_wallonian_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_war_support_monthly_add|
-state|state_war_support_monthly_add_religion|
-state|state_wealth_concentration_land_add|
 state|state_weekly_trades_add|An increase or decrease to number of adjustments to Trade that a State can make each week.
 state|state_welfare_payments_add|The fraction of the Normal Wage at which Pops receive Welfare Payments from the state
 state|state_welfare_payments_mult|The total sum of all Welfare Payments in the State are multiplied by this value
 state|state_welsh_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_wolof_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_work_capacity_mult|
-state|state_work_mortality_mult|
-state|state_work_safety_add|
 state|state_working_adult_ratio_add|The ratio of Workforce to Dependents
 state|state_xhosa_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_yakut_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_yankee_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_yao_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
-state|state_yearly_cultural_acceptance_add|
 state|state_yemenite_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_yi_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
 state|state_yoruba_standard_of_living_add|A bonus or penalty to a specific culture's [concept_sol]
@@ -8157,20 +7240,12 @@ unit|unit_combat_unit_type_cuirassiers_offense_mult|Cuirassiers Offense
 unit|unit_combat_unit_type_dragoons_offense_mult|Dragoons Offense
 unit|unit_combat_unit_type_heavy_tank_offense_mult|Heavy Tanks Offense
 unit|unit_combat_unit_type_hussars_offense_mult|Hussars Offense
-unit|unit_combat_unit_type_jet_powered_fighters_defense_mult|
-unit|unit_combat_unit_type_jet_powered_fighters_offense_mult|
 unit|unit_combat_unit_type_lancers_offense_mult|Lancers Offense
 unit|unit_combat_unit_type_mechanized_infantry_offense_add|Mechanized Infantry Offense
 unit|unit_combat_unit_type_mobile_artillery_offense_mult|Mobile Artillery Offense
-unit|unit_combat_unit_type_orbital_tactical_vehicles_defense_mult|
-unit|unit_combat_unit_type_orbital_tactical_vehicles_offense_mult|
-unit|unit_combat_unit_type_orbital_weapons_platforms_defense_mult|
-unit|unit_combat_unit_type_orbital_weapons_platforms_offense_mult|
 unit|unit_combat_unit_type_shrapnel_artillery_offense_mult|Shrapnel Artillery Offense
 unit|unit_combat_unit_type_siege_artillery_offense_mult|Siege Artillery Offense
 unit|unit_combat_unit_type_squad_infantry_offense_add|Squad Infantry Offense
-unit|unit_combat_unit_type_stealth_aircraft_defense_mult|
-unit|unit_combat_unit_type_stealth_aircraft_offense_mult|
 unit|unit_combat_unit_type_trench_infantry_offense_add|Trench Infantry Offense
 unit|unit_defense_add|A Military Unit’s Defense
 unit|unit_defense_developed_add|A Military Unit’s Defense in Flat Terrain
