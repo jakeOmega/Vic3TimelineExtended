@@ -58,6 +58,13 @@ INJECT:law_universal_suffrage = {
 	}
 }
 
+# Labour Suffrage (1.15) enfranchises the lower strata, as Universal Suffrage does.
+INJECT:law_labour_suffrage = {
+	modifier = {
+		country_sol_expectations_lower_offset_add = 1
+	}
+}
+
 # === Welfare Laws — Shift Floor ===
 # Welfare sets a floor on how far expectations can drop. People with a
 # safety net won't fully adapt to starvation-level conditions.

@@ -131,6 +131,21 @@ INJECT:law_shinsengumi = {
 		country_cultural_pull_mult = -0.08
 	}
 }
+INJECT:law_okhrana = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
+INJECT:law_third_section = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
+INJECT:law_extraordinary_commission = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
 
 # ---- lawgroup_distribution_of_power ----
 INJECT:law_universal_suffrage = {
@@ -273,6 +288,11 @@ INJECT:law_millet_system = {
 	}
 }
 INJECT:law_people_of_the_book = {
+	modifier = {
+		country_cultural_hegemony_art_mult = -0.03
+	}
+}
+INJECT:law_caesaropapism = {
 	modifier = {
 		country_cultural_hegemony_art_mult = -0.03
 	}
@@ -2675,6 +2695,7 @@ law_no_campaign_finance_laws = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 }
 
@@ -2690,6 +2711,7 @@ law_unregulated_donations = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -2712,6 +2734,7 @@ law_donation_limits = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -2739,6 +2762,7 @@ law_publicly_funded_elections = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -4208,6 +4232,7 @@ law_ministry_of_religion = {
 
 	unlocking_laws = {
 		law_state_religion
+		law_caesaropapism # 1.15's State Religion variant: the church as a department of state
 		law_freedom_of_conscience
 	}
 

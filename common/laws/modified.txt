@@ -43,6 +43,7 @@ INJECT:law_elected_bureaucrats = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 }
 
@@ -64,6 +65,14 @@ INJECT:law_crownland_diets = {
 }
 
 INJECT:law_appointed_bureaucrats = {
+	disallowing_laws = {
+		law_algorithmic_governance
+	}
+}
+
+# Military Bureaucrats is vanilla's since 1.15 (officers run the
+# administration).
+INJECT:law_military_bureaucrats = {
 	disallowing_laws = {
 		law_algorithmic_governance
 	}
@@ -678,6 +687,14 @@ INJECT:law_state_religion = {
 	}
 }
 
+# Caesaropapism (1.15, a State Religion variant: the church run as a department
+# of state) carries its parent's line; a variant inherits stances, not modifiers.
+INJECT:law_caesaropapism = {
+	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = -0.05
+	}
+}
+
 INJECT:law_freedom_of_conscience = {
 	modifier = {
 		state_conversion_mult = -0.25
@@ -708,6 +725,30 @@ INJECT:law_state_atheism = {
 
 # Tourism impact from repressive/progressive laws
 INJECT:law_secret_police = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+		country_intelligence_capacity_add = 5
+	}
+}
+
+# 1.15's Secret Police variants (Okhrana, Third Section) carry its lines, and so
+# does the Extraordinary Commission, whose institution modifier is Secret
+# Police's with a class edge.
+INJECT:law_okhrana = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+		country_intelligence_capacity_add = 5
+	}
+}
+
+INJECT:law_third_section = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+		country_intelligence_capacity_add = 5
+	}
+}
+
+INJECT:law_extraordinary_commission = {
 	modifier = {
 		goods_output_tourism_mult = -0.30
 		country_intelligence_capacity_add = 5

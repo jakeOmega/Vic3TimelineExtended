@@ -55,12 +55,14 @@ un_regime_npt_guaranteed = {
 # ---- Human rights (UNHRC) -----------------------------------------------------------
 
 # A member whose laws the declaration condemns: an ethnostate, outlawed
-# dissent, penal labor camps, or slavery in any form.
+# dissent, penal labor camps, an extraordinary commission's revolutionary
+# terror, or slavery in any form.
 un_regime_human_rights_violator = {
 	OR = {
 		has_law = law_type:law_ethnostate
 		has_law = law_type:law_outlawed_dissent
 		has_law = law_type:law_penal_labor_camps
+		has_law = law_type:law_extraordinary_commission
 		has_law = law_type:law_slave_trade
 		has_law = law_type:law_legacy_slavery
 		has_law = law_type:law_debt_slavery
@@ -177,12 +179,14 @@ un_regime_cultural_hegemon = {
 # ---- Sovereignty (§7.1) -------------------------------------------------------------------
 
 # An interest group that resents the UN's reach: a nationalist, jingoist,
-# isolationist or sovereignist one.
+# militarist, isolationist or sovereignist one. Militarist is the Armed Forces'
+# ideology in Patriotic's place since 1.15.
 # Scope: interest group
 un_regime_ig_resents_un = {
 	OR = {
 		has_ideology = ideology:ideology_patriotic
 		has_ideology = ideology:ideology_jingoist
+		has_ideology = ideology:ideology_militarist
 		has_ideology = ideology:ideology_isolationist
 		has_ideology = ideology:ideology_sovereignist
 	}

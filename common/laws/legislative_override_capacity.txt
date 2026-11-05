@@ -80,6 +80,14 @@ INJECT:law_anarchy = {
 	}
 }
 
+# Labour Suffrage (1.15): Wealth Voting's authority (+100) and a vote share
+# between Wealth and Census Voting's, so Wealth Voting's value.
+INJECT:law_labour_suffrage = {
+	modifier = {
+		country_legislative_override_capacity_add = -1
+	}
+}
+
 # Bureaucracy
 INJECT:law_appointed_bureaucrats = {
 	modifier = {
@@ -90,6 +98,13 @@ INJECT:law_appointed_bureaucrats = {
 INJECT:law_elected_bureaucrats = {
 	modifier = {
 		country_legislative_override_capacity_add = -1
+	}
+}
+
+# Officers appointed by the centre, as Appointed Bureaucrats' officials are.
+INJECT:law_military_bureaucrats = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
 	}
 }
 
@@ -120,6 +135,25 @@ INJECT:law_secret_police = {
 }
 
 INJECT:law_shinsengumi = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+# 1.15: Secret Police's two Russian variants and the Extraordinary Commission.
+INJECT:law_okhrana = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_third_section = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
+INJECT:law_extraordinary_commission = {
 	modifier = {
 		country_legislative_override_capacity_add = 1
 	}
