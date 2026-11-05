@@ -269,8 +269,9 @@ levels of the buildings that have one. The tooltips of the law group and of
 those two laws show the share, counted once a month. The methods are factory
 automation from robotic assembly up and the AI-managed tier, AI-managed power
 plants and networks, Fully Automated Content Creation, Automated Labs, the
-automated Deep-Sea Mine, robot and drone services in Urban Centers, and
-self-driving trains, highways and harvesters.
+automated Deep-Sea Mine, robot and drone services in Urban Centers, Autonomous
+Logistics in Trade Centers, and self-driving trains, highways and harvesters.
+Each one says Robotic or AI-Managed in its tooltip.
 
 | Law | At an automated share of 100% | You pay |
 |---|---|---|

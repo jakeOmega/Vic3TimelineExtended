@@ -1,9 +1,10 @@
 """Automation Policy law group (era 13 spec § 7.1).
 
 Static checks on the script: the default law comes first and has no gate, the
-group is set for every 1836 country, Human Labor Quotas withdraws exactly the
-methods the automated share counts and leaves every group a method, the share's
-base is exactly the buildings those methods can run in, the three scaled
+group is set for every 1836 country, the automated share reads the methods'
+robotic or AI-managed marker and nothing else carries it, Human Labor Quotas
+withdraws exactly the marked methods and leaves every group a method, the
+share's base is exactly the buildings those methods can run in, the three scaled
 modifiers have one writer that removes them before re-adding them, the preview
 lines quote the modifiers' figures, Human Labor Quotas carries its political
 lines and ends Displaced Workers, and every ideology stance names all four
@@ -27,6 +28,7 @@ TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "te_automation_poli
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_automation_policy_effects.txt")
 VALUES = os.path.join(REPO, "common", "script_values", "te_automation_policy_values.txt")
 MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "te_automation_policy_modifiers.txt")
+MODIFIER_TYPES = os.path.join(REPO, "common", "modifier_type_definitions", "te_automation_policy_modifier_types.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_automation_policy_on_actions.txt")
 POST_SCARCITY_EVENTS = os.path.join(REPO, "events", "post_scarcity_events.txt")
 HAND_IDEOLOGIES = os.path.join(REPO, "common", "ideologies", "extra_ideologies.txt")
@@ -39,6 +41,9 @@ LAW_ORDER = ["law_unrestricted_automation", "law_robot_tax", "law_human_labor_qu
 QUOTAS = "law_human_labor_quotas"
 TECH = "humanoid_robotics"
 SCALED = ("te_automation_robot_tax", "te_automation_dividend", "te_automation_displacement")
+# The robotic or AI-managed marker: a method carries it in its
+# building_modifiers' unscaled block, and te_ap_runs_automated_method reads it.
+MARKER = "building_robotic_or_ai_managed_bool"
 # Groups whose methods form more than one ladder: the Deep-Sea Mine's capped
 # methods and the uncapped ones a game rule picks between.
 FAMILIES = {
@@ -101,8 +106,28 @@ def _percent(fraction):
 
 
 def _withdrawn_by_trigger():
-    return re.findall(r"has_active_production_method = (\w+)",
-                      _code(_top_level(_read(TRIGGERS), "te_ap_runs_automated_method")))
+    """The methods the automated share counts: those that carry the marker."""
+    return sorted(_marked().keys())
+
+
+def _marked():
+    """{method: where in it the marker sits}, over vanilla and the mod merged."""
+    out = {}
+    for name, pm in _merged()["PMs"].items():
+        if not isinstance(pm, dict):
+            continue
+        places = []
+        for side, block in pm.items():
+            block = _body(block)
+            if not isinstance(block, dict):
+                continue
+            for scaling, inner in block.items():
+                inner = _body(inner)
+                if isinstance(inner, dict) and MARKER in inner:
+                    places.append((side, scaling, _body(inner[MARKER])))
+        if places:
+            out[name] = places
+    return out
 
 
 def _automatable_by_trigger():
@@ -237,15 +262,15 @@ class QuotasTest(unittest.TestCase):
                                             "the reason, or, for a separate ladder in the same group, add the group "
                                             "to FAMILIES")
 
-    def test_each_method_is_checked_on_the_buildings_that_can_run_it(self):
-        """Vanilla pairs has_active_production_method with is_building_type;
-        each block of the trigger names exactly the buildings whose groups
-        hold its methods."""
+    def test_the_self_check_samples_are_marked_and_checked_where_they_run(self):
+        """te_ap_marker_sample names three marked methods, each on the
+        building types whose groups hold it, so the automation_marker
+        self-check compares the marker's read with buildings that really run
+        a marked method."""
         state = _merged()
-        trigger = _code(_top_level(_read(TRIGGERS), "te_ap_runs_automated_method"))
-        blocks = [_block_from(trigger, m.end()) for m in re.finditer(r"(?m)^\t\tAND = \{", trigger)]
-        self.assertEqual(sum(len(re.findall(r"has_active_production_method", b)) for b in blocks),
-                         len(re.findall(r"has_active_production_method", trigger)))
+        sample = _code(_top_level(_read(TRIGGERS), "te_ap_marker_sample"))
+        blocks = [_block_from(sample, m.end()) for m in re.finditer(r"(?m)^\t\tAND = \{", sample)]
+        self.assertEqual(len(blocks), 3)
         runs_in = {}
         for building, body in state["Buildings"].items():
             if not isinstance(body, dict):
@@ -253,14 +278,13 @@ class QuotasTest(unittest.TestCase):
             for group in _names(body.get("production_method_groups")):
                 for pm in _names((state["PM Groups"].get(group) or {}).get("production_methods")):
                     runs_in.setdefault(pm, set()).add(building)
-        checked = {}
+        marked = _marked()
         for block in blocks:
             types = set(re.findall(r"is_building_type = (\w+)", block))
-            for pm in re.findall(r"has_active_production_method = (\w+)", block):
-                self.assertLessEqual(types, runs_in.get(pm, set()), pm)
-                checked.setdefault(pm, set()).update(types)
-        for pm, types in checked.items():
-            self.assertEqual(types, runs_in[pm], pm)
+            (pm,) = re.findall(r"has_active_production_method = (\w+)", block)
+            self.assertIn(pm, marked)
+            self.assertTrue(types)
+            self.assertLessEqual(types, runs_in.get(pm, set()), pm)
 
     def test_the_share_counts_every_building_those_methods_run_in(self):
         state = _merged()
@@ -272,6 +296,70 @@ class QuotasTest(unittest.TestCase):
         listed = _automatable_by_trigger()
         self.assertEqual(len(listed), len(set(listed)))
         self.assertEqual(sorted(listed), sorted(buildings))
+
+
+class MarkerTest(unittest.TestCase):
+    """The automated share reads the methods' own marker, not a list of
+    methods (owner, 2026-11-05)."""
+
+    def test_the_trigger_reads_the_marker_alone(self):
+        trigger = _code(_top_level(_read(TRIGGERS), "te_ap_runs_automated_method"))
+        self.assertEqual(trigger.split(), [f"modifier:{MARKER}", "=", "yes"])
+
+    def test_the_type_is_a_script_only_building_boolean(self):
+        body = _code(_top_level(_read(MODIFIER_TYPES), MARKER))
+        self.assertIn("boolean = yes", body)
+        self.assertIn("script_only = yes", body)
+        self.assertNotIn("game_data", body)
+        self.assertTrue(_loc_value(MARKER))
+        self.assertTrue(_loc_value(f"{MARKER}_desc"))
+        for path in glob.glob(os.path.join(REPO, "common", "modifier_type_definitions", "*.txt")):
+            if path != MODIFIER_TYPES:
+                self.assertNotRegex(_code(_read(path)), rf"(?m)^{MARKER} = ", path)
+
+    def test_every_marker_is_yes_in_a_building_unscaled_block(self):
+        """unscaled holds at any staffing: in workforce_scaled an empty
+        building would read no marker, and a boolean takes only yes."""
+        marked = _marked()
+        self.assertTrue(marked)
+        for pm, places in sorted(marked.items()):
+            self.assertEqual(places, [("building_modifiers", "unscaled", "yes")], pm)
+
+    def test_only_production_methods_carry_the_marker(self):
+        """A building's modifier: read also carries its country's lines, so a
+        marker on a law, technology or static modifier would mark every
+        building."""
+        allowed = {MODIFIER_TYPES} | set(glob.glob(os.path.join(REPO, "common", "production_methods", "*.txt")))
+        carried = re.compile(rf"(?<![:\w]){MARKER}\s*=")
+        for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True) + \
+                glob.glob(os.path.join(REPO, "events", "**", "*.txt"), recursive=True):
+            if path not in allowed:
+                self.assertIsNone(carried.search(_code(_read(path))), os.path.relpath(path, REPO))
+
+    def test_the_header_counts_the_marked_methods(self):
+        header = _read(TRIGGERS)
+        m = re.search(r"The (\d+) methods:", header)
+        self.assertTrue(m)
+        self.assertEqual(int(m.group(1)), len(_marked()))
+
+    def test_autonomous_logistics_is_marked_with_a_flat_crew(self):
+        """Autonomous Logistics cancels International Trading's per-level
+        staff (800 clerks and 200 shopkeepers on either base method) and
+        hires a flat crew (owner, 2026-11-05)."""
+        state = _merged()
+        pm = state["PMs"]["pm_trade_center_trade_quantity_advanced_4"]
+        self.assertIn("pm_trade_center_trade_quantity_advanced_4", _marked())
+        modifiers = _body(pm["building_modifiers"])
+        level = {k: float(_body(v)) for k, v in _body(modifiers["level_scaled"]).items()}
+        for base in ("pm_trade_center", "pm_trade_center_principle_external_trade_2"):
+            self.assertIn(base, _names(state["PM Groups"]["pmg_base_building_trade_center"]["production_methods"]))
+            staff = {k: float(_body(v)) for k, v in
+                     _body(_body(state["PMs"][base]["building_modifiers"])["level_scaled"]).items()
+                     if k.startswith("building_employment_")}
+            self.assertEqual({k: -v for k, v in staff.items()},
+                             {k: v for k, v in level.items() if k.startswith("building_employment_")}, base)
+        unscaled = _body(modifiers["unscaled"])
+        self.assertGreater(float(_body(unscaled["building_employment_engineers_add"])), 0)
 
 
 class ScaledModifierTest(unittest.TestCase):

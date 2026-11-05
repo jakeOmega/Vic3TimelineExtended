@@ -45,14 +45,40 @@ te_ap_automatable_levels = {
 	}
 }
 
-# Levels of those that run one (te_ap_runs_automated_method). A building
-# counts once, however many of its groups run one.
+# Levels of those that run one (te_ap_runs_automated_method, which reads the
+# methods' marker). A building counts once, however many of its groups run one.
 te_ap_automated_levels = {
 	value = 0
 	every_scope_state = {
 		every_scope_building = {
 			limit = {
 				te_ap_automatable_building = yes
+				te_ap_runs_automated_method = yes
+			}
+			add = level
+		}
+	}
+}
+
+# TEMPORARY, for the automation_marker self-check (te_ap_marker_selfcheck):
+# levels of the country's buildings on the three sample methods
+# (te_ap_marker_sample), and those of them that read the marker.
+te_ap_marker_sample_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { te_ap_marker_sample = yes }
+			add = level
+		}
+	}
+}
+
+te_ap_marker_read_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				te_ap_marker_sample = yes
 				te_ap_runs_automated_method = yes
 			}
 			add = level

@@ -160,6 +160,31 @@ ahead, raised if they fall short.
    it shows no displacement for the first year. Record the AI's rises: if
    great powers routinely rise 20 points or more a year, the full size may
    want a larger rise.
+10. **The marker** (owner, 2026-11-05). The share reads each method's own
+    Robotic or AI-Managed line (`building_robotic_or_ai_managed_bool`), not a
+    list of methods. Hover a robotic or AI-managed method (Robotic Assembly
+    Lines in a Tooling Workshop, AI Managed Fab, Autonomous Logistics): its
+    tooltip lists **Robotic or AI-Managed**, and the hover explains the share
+    and the quotas. A method that isn't one (Industrial Robotics, AI Assisted
+    Research) has no such line. Grep `debug.log` for
+    `TE_SELF_CHECK OK|BROKEN automation_marker` (below).
+11. **Autonomous Logistics** (owner, 2026-11-05). A Trade Center of level 5 or
+    more on Autonomous Logistics (Smart Grids) employs about 1,000 engineers
+    and no clerks or shopkeepers, at any level; on Just-in-Time Logistics it
+    employs 800 clerks and 200 shopkeepers a level, as before. Its Merchant
+    Marine input and weekly trades still grow with its level once the crew is
+    hired. Its levels count toward the automated share. Under Human Labor
+    Quotas it can't be picked, and a Trade Center on it moves to a method
+    still allowed; record which (item 3).
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … automation_marker` | once a game: the first monthly count of a country with a building on one of three sample methods (Robotic Assembly Lines in a Tooling Workshop, Robotic Service Providers in an Urban Center, Autonomous Logistics in a Trade Center), once every one of those levels or none reads the marker; a count in between waits a month | `marked` equals `sample`: a method's `unscaled` script-only building line reaches its building's `modifier:` read, so `te_ap_runs_automated_method` counts the buildings that run one | `marked=0`: no building reads the line, so the automated share is 0 everywhere and Robot Tax, the Dividend and Displaced Workers do nothing | First check `debug.log` for `Unknown modifier type: building_robotic_or_ai_managed_bool` (the type didn't load). Otherwise restore the method list in `te_ap_runs_automated_method` (the trigger as it was before this change, one `is_building_type` and `has_active_production_method` block per group, with Autonomous Logistics on `building_trade_center` added), keep the marker for its tooltip line, and have `test_automation_policy.py` hold the list to the marked methods |
+
+No `automation_marker` line after a few years of Humanoid Robotics means no
+country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
 
 ## Phase 3: Morphological Freedom and Bodily Autonomy
 

@@ -4288,6 +4288,10 @@ pm_automated_labs = {
 			# Employment: 50
 			# Wage breakeven: -4.00
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = digital_access
@@ -4613,6 +4617,10 @@ pm_drone_delivery_systems = {
 			building_employment_machinists_add = 50
 			building_employment_academics_add = 900
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	state_modifiers = {
@@ -4662,6 +4670,10 @@ pm_robotic_service_providers = {
 
 		level_scaled = {
 			building_employment_academics_add = 10
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -6289,6 +6301,10 @@ pm_robotic_food_processing = {
 		level_scaled = {
 			building_employment_laborers_add = -3500
 			building_employment_machinists_add = -500
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 }
@@ -8053,6 +8069,7 @@ pm_ai_managed_chemical_plant = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -8114,6 +8131,7 @@ pm_ai_managed_explosives_factory = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -9774,6 +9792,10 @@ pm_automated_harvesters_and_planters = {
 			building_employment_farmers_add = -500
 			building_employment_engineers_add = -490
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -9901,6 +9923,10 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 			building_employment_laborers_add = -5000
 			building_employment_farmers_add = -1000
 			building_employment_engineers_add = -980
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -10577,6 +10603,10 @@ pm_robotic_assembly_lines = {
 			building_employment_machinists_add = -1000
 			building_employment_engineers_add = -500
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -10618,6 +10648,10 @@ pm_intelligent_manufacturing_systems = {
 			building_employment_shopkeepers_add = -250
 			building_employment_engineers_add = -500
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = digital_access
@@ -10654,6 +10688,10 @@ pm_self_optimizing_production  = {
 			building_employment_machinists_add = -1500
 			building_employment_shopkeepers_add = -490
 			building_employment_engineers_add = -1500
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -11079,6 +11117,10 @@ pm_autonomous_highway = {
 		level_scaled = {
 			# employment
 			building_employment_engineers_add = 20
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -11699,6 +11741,7 @@ pm_ai_managed_power_plant = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -11756,6 +11799,7 @@ pm_ai_managed_power_plant_reactor = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -11810,6 +11854,7 @@ pm_ai_managed_power_plant_aneutronic = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -11862,6 +11907,7 @@ pm_ai_managed_power_plant_hydro = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -12732,6 +12778,10 @@ pm_robotic_assembly_lines_building_furniture_manufactory = {
 			building_employment_laborers_add = -3000
 			building_employment_machinists_add = -1250
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -12786,6 +12836,10 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 			building_employment_machinists_add = -500
 			building_employment_engineers_add = -500
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -12838,6 +12892,10 @@ pm_robotic_assembly_lines_building_motor_industry = {
 			building_employment_machinists_add = -750
 			building_employment_engineers_add = -1000
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -12883,6 +12941,10 @@ pm_ai_managed_building_furniture_manufactory = {
 			building_employment_laborers_add = -3000
 			building_employment_machinists_add = -1250
 			building_employment_engineers_add = -740
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -12945,6 +13007,7 @@ pm_ai_managed_building_tooling_workshop = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13008,6 +13071,7 @@ pm_ai_managed_building_tooling_workshop_handling = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13064,6 +13128,7 @@ pm_ai_managed_building_motor_industry = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13119,6 +13184,7 @@ pm_ai_managed_building_motor_industry_turbine = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13182,6 +13248,7 @@ pm_ai_managed_building_arms_industry = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13247,6 +13314,7 @@ pm_ai_managed_building_artillery_foundry = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13312,6 +13380,7 @@ pm_ai_managed_building_munition_plant = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13374,6 +13443,7 @@ pm_ai_managed_building_munition_plant_shells = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -13530,6 +13600,10 @@ pm_ai_managed_textile_factory = {
 			building_employment_machinists_add = -1000
 			building_employment_engineers_add = -490
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = electricity
@@ -13669,6 +13743,7 @@ pm_ai_managed_fab = {
 			# +500%, as pm_grid_transfer_base: engineers take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -14586,6 +14661,10 @@ pm_autonomous_trains = {
 		level_scaled = {
 			building_employment_clerks_add = 10
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	state_modifiers = {
@@ -14632,6 +14711,10 @@ pm_vactrain_freight = {
 		}
 		level_scaled = {
 			building_employment_engineers_add = 10
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -15663,6 +15746,10 @@ pm_autonomous_networks = {
 			building_employment_machinists_add = -350
 			building_employment_engineers_add = -40
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 }
 
@@ -15937,6 +16024,10 @@ pm_fully_automated_content_creation = {
 			building_employment_clerks_add = -950
 			building_employment_shopkeepers_add = -500
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 }
 
@@ -15972,6 +16063,10 @@ pm_ai_mediated_mind_sharing = {
 			building_employment_engineers_add = -990
 			building_employment_clerks_add = -1000
 			building_employment_shopkeepers_add = -500
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 }
@@ -16415,6 +16510,10 @@ pm_robotic_assembly_handling = {
 			building_employment_engineers_add = -1700
 			building_employment_academics_add = -850
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 }
 
@@ -16451,6 +16550,10 @@ pm_ai_optimized_operations = {
 			building_employment_machinists_add = -2000
 			building_employment_engineers_add = -2000
 			building_employment_academics_add = -990
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -16811,6 +16914,10 @@ pm_automated_ocean_mine  = {
 			# employment
 			building_employment_academics_add = 10
 		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
 	}
 
 	required_input_goods = digital_access
@@ -16941,6 +17048,10 @@ pm_automated_ocean_mine_uncapped = {
 		level_scaled = {
 			# employment
 			building_employment_academics_add = 10
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 
@@ -19612,10 +19723,20 @@ pm_trade_center_trade_quantity_advanced_3 = {
 	}
 }
 
+# Autonomous Logistics: automated ports and AI routing run the Trade Center, so
+# it takes a flat crew instead of International Trading's per-level staff (as
+# the flat-crew pm_ai_managed_* methods do, #993). Both base methods
+# (pm_trade_center and pm_trade_center_principle_external_trade_2) employ 800
+# clerks and 200 shopkeepers a level, and no other group of the building
+# employs anyone, so the cut cancels the whole per-level workforce exactly. The
+# goods and the weekly trades stay workforce-scaled: with the crew hired, every
+# level still counts (ai_managed_flat_output).
 pm_trade_center_trade_quantity_advanced_4 = {
 	texture = "gfx/interface/icons/production_method_icons/pm_trade_center_trade_quantity_advanced_4.dds"
 
 	unlocking_technologies = { smart_grids }
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19627,8 +19748,21 @@ pm_trade_center_trade_quantity_advanced_4 = {
 			# Profit: -700.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: -1000
+			# Wage breakeven: 0.70
+		}
+
+		level_scaled = {
+			building_employment_clerks_add = -800
+			building_employment_shopkeepers_add = -200
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
+			building_robotic_or_ai_managed_bool = yes
 		}
 	}
 	state_modifiers = {

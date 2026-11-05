@@ -6,7 +6,9 @@ flat-staff-design.md) asks for 1,000 engineers a building, and the game hires sm
 groups unevenly. Like the Grid Transfer Station (power_grid_pms.txt), the crew's job
 is made very attractive (`building_job_attractiveness_mult`) so it fills and stays.
 The engine logs nothing for a crew that never fills, so a method added or split later
-has to carry the line too.
+has to carry the line too. That holds for any robotic or AI-managed method
+(`building_robotic_or_ai_managed_bool`) with a flat crew, such as the Trade Center's
+Autonomous Logistics, not only the `pm_ai_managed_*` ones.
 
 Run: python3 test_ai_managed_flat_staff.py
 """
@@ -18,6 +20,7 @@ from paradox_file_parser import ParadoxFileParser
 REPO = os.path.dirname(os.path.abspath(__file__))
 PMS = os.path.join(REPO, "common", "production_methods", "extra_pms.txt")
 MIN_ATTRACTIVENESS = 5  # +500%, as pm_grid_transfer_base
+MARKER = "building_robotic_or_ai_managed_bool"
 
 
 def _unwrap(value):
@@ -28,17 +31,20 @@ def _unwrap(value):
 
 
 def _flat_crew_methods():
-    """{method: its unscaled block} for each pm_ai_managed_* that hires in unscaled."""
+    """{method: its unscaled block} for each pm_ai_managed_* or marked method that
+    hires in unscaled."""
     parser = ParadoxFileParser()
     parser.parse_file(PMS)
     methods = {}
     for name, body in parser.data.items():
         body = _unwrap(body)
-        if not name.startswith("pm_ai_managed_") or not isinstance(body, dict):
+        if not isinstance(body, dict):
             continue
         modifiers = _unwrap(body.get("building_modifiers"))
         unscaled = _unwrap(modifiers.get("unscaled")) if isinstance(modifiers, dict) else None
-        if isinstance(unscaled, dict) and any(
+        if not isinstance(unscaled, dict) or not (name.startswith("pm_ai_managed_") or MARKER in unscaled):
+            continue
+        if any(
                 key.startswith("building_employment_") for key in unscaled):
             methods[name] = {key: _unwrap(value) for key, value in unscaled.items()}
     return methods
@@ -50,8 +56,10 @@ class FlatCrewAttractivenessTest(unittest.TestCase):
         cls.methods = _flat_crew_methods()
 
     def test_the_flat_crew_methods_are_found(self):
-        # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x4.
-        self.assertGreaterEqual(len(self.methods), 15, sorted(self.methods))
+        # Fab, chemical, explosives, arms, artillery, munition x2, motor x2, tooling x2, power x4,
+        # and the Trade Center's Autonomous Logistics.
+        self.assertGreaterEqual(len(self.methods), 16, sorted(self.methods))
+        self.assertIn("pm_trade_center_trade_quantity_advanced_4", self.methods)
 
     def test_every_flat_crew_is_a_very_attractive_job(self):
         for name, unscaled in sorted(self.methods.items()):

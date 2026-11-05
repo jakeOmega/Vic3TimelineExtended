@@ -19,7 +19,7 @@
 #   3. Each modifier is removed, then re-added with its multiplier while its
 #      law holds. A same-name add_modifier stacks, so the removal comes first,
 #      every month.
-#   4. The Human Labor Quotas self-check.
+#   4. The Human Labor Quotas and marker self-checks.
 # Variables only, and never removed while a modifier reads them, so a civil
 # war's winner keeps them and the next pulse rebuilds the modifier
 # (scripting_best_practices.md, "What a Civil War's Winner Inherits").
@@ -62,6 +62,7 @@ te_ap_monthly_update = {
 			}
 		}
 		set_variable = { name = te_ap_displacement_scale value = te_ap_displacement_scale_value }
+		te_ap_marker_selfcheck = yes
 	}
 	remove_modifier_if_exists_effect = { MODIFIER = te_automation_robot_tax }
 	remove_modifier_if_exists_effect = { MODIFIER = te_automation_dividend }
@@ -149,5 +150,46 @@ te_ap_quotas_selfcheck = {
 		limit = { has_variable = te_ap_quota_months }
 		remove_variable = te_ap_quota_months
 		remove_variable = te_ap_quota_before
+	}
+}
+
+# Country scope, from te_ap_monthly_update's count. TEMPORARY self-check
+# (CLAUDE.md, "In-game checks"): does a method's
+# building_robotic_or_ai_managed_bool line (`unscaled`, script-only) reach its
+# building's modifier: read? te_ap_runs_automated_method reads nothing else,
+# so if it doesn't, the automated share stays 0 everywhere and Robot Tax, the
+# Dividend and Displaced Workers do nothing, with nothing in any log. The
+# three sample methods are named directly (te_ap_marker_sample). Once a game,
+# the first country with levels on them logs:
+#   OK      every one of those levels reads the marker;
+#   BROKEN  none does (docs/testing/era-13-playtest.md, Self-checks).
+# A count in between (a building that changed method since its modifiers were
+# last summed) waits for the next month. The any_ guard keeps the two walks
+# to countries that have a sample building, and the global variable ends them
+# once a line is logged.
+te_ap_marker_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ap_marker_checked }
+			any_scope_building = { te_ap_marker_sample = yes }
+		}
+		set_variable = { name = te_ap_marker_sample_lv value = te_ap_marker_sample_levels }
+		set_variable = { name = te_ap_marker_read_lv value = te_ap_marker_read_levels }
+		if = {
+			limit = {
+				var:te_ap_marker_sample_lv > 0
+				var:te_ap_marker_read_lv >= var:te_ap_marker_sample_lv
+			}
+			set_global_variable = te_ap_marker_checked
+			debug_log = "TE_SELF_CHECK OK automation_marker country=[THIS.GetCountry.GetTagName] sample=[THIS.Var('te_ap_marker_sample_lv').GetValue|0] marked=[THIS.Var('te_ap_marker_read_lv').GetValue|0] (every level on the sample methods reads building_robotic_or_ai_managed_bool, so the automated share counts them) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				var:te_ap_marker_sample_lv > 0
+				var:te_ap_marker_read_lv <= 0
+			}
+			set_global_variable = te_ap_marker_checked
+			debug_log = "TE_SELF_CHECK BROKEN automation_marker country=[THIS.GetCountry.GetTagName] sample=[THIS.Var('te_ap_marker_sample_lv').GetValue|0] marked=[THIS.Var('te_ap_marker_read_lv').GetValue|0] (no level on the sample methods reads building_robotic_or_ai_managed_bool: the automated share reads 0 everywhere; see docs/testing/era-13-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
 	}
 }
