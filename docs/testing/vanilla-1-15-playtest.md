@@ -14,9 +14,10 @@ migration record that doc becomes), and an engine fact in `docs/guides/scripting
 ## Answered by the first observer game (2026-11-05)
 
 The `te_probe_115` journal entry answered C3, C5, C7, C19, C20 and C21's journal entry questions, and the copper
-self-check read OK. The answers are in the prep doc's § 2 and `scripting_best_practices.md` § "1.15 journal entries,
-scaling modifiers and once-only events (probed)". The probe and the check are deleted (#1408). The load-time lines
-below were clean in that game, in English.
+self-check read OK. So did `gm_world_base`, and `gm_world_gdp_1836` now holds that game's reading (404,100,000). The
+answers are in the prep doc's § 2 and `scripting_best_practices.md` § "1.15 journal entries, scaling modifiers and
+once-only events (probed)". The probe and the check are deleted (#1408). The load-time lines below were clean in that
+game, in English.
 
 ## Not probed (needs a player or a save)
 
@@ -133,7 +134,6 @@ or Spanish game.
 - A demilitarized zone renegotiated, and a seabed lease's quantity on renegotiation; the money transfer's
   contextual score.
 - Decolonization: a subject's war against the overlord's own revolutionaries or secessionists isn't tracked.
-- The first 1.15 new game: `TE_SELF_CHECK gm_world_base` (the `gm_world_gdp_1836` reset).
 - Ships: module costs in the ship designer; AI submarines built only under Jeune École or Merchant Navy and sailing
   in `submarine_raiding_fleet`.
 - The population transfer's timed modifiers decay (1.15 fixed scaled effects that read a saved scope).

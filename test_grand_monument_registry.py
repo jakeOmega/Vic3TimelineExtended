@@ -7117,15 +7117,16 @@ class RateTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
     world GDP in 1836 over world GDP when it is counted, times the grandeur a
     level adds in 1836 (owner, 2026-10-19: five), to the nearest thousandth and
-    at least 0.001. The 1836 figure is a constant (spec §5): 402,505,869, the
-    rate's own read at a new game's first pass (gm_world_base, 2026-10-25); the
-    first, 334,465,286 from a save's GDP records, read a sixth low."""
+    at least 0.001. The 1836 figure is a constant (spec §5): 404,148,929, the
+    rate's own read at a 1.15 new game's first pass (gm_world_base, 2026-11-05;
+    402,505,869 on 1.14.5); the first, 334,465,286 from a save's GDP records,
+    read a sixth low."""
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
 
     def test_the_rate(self):
-        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 402500000")
+        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 404100000")
         self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
                          "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
                          "divide = global_gdp_script_value min = 0.00001 }")
