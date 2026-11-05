@@ -1965,6 +1965,7 @@ The `te_probe_115` journal entry answered these in an observer game on 2026-11-0
 - **`scope:journal_entry` is set** in `on_weekly_pulse` (and the scripted effects it calls) and in an outcome's `effect`, and `has_journal_entry` still holds inside that effect.
 - **A concluded entry is gone to script.** Three days after it concluded, `has_journal_entry`, `exists = je:<key>` and `has_inactive_journal_entry` are all false; test a variable its outcome sets.
 - **`disable_evaluation` removes another country's inactive record.**
+- **Every entry declares `activation_description`**, a trigger block; vanilla's default is `always = yes` (369 of its 449 entries), and the rest list `custom_tooltip` lines saying how the entry activates. An entry without it logs `Journal entry X is missing an activation_description trigger!` at load (`journal_entry_type.cpp:697`; all 29 mod entries did on the first 1.15 launch). `test_convert_je_outcomes.py` fails on a mod entry without one.
 
 ## Event Targets vs Triggers/Effects Reference
 
