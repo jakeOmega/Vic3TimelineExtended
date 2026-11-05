@@ -12,8 +12,14 @@
 #   BROKEN  no copper mine exists anywhere: the same failure, after the engine
 #           removed the 1836 mines it found no cap for. Vanilla's 1836 history
 #           places copper mines, so a working game always has one to read.
+# Precedent is split: an INJECTed interest-group field replaced vanilla's
+# (female_commander_chance), while a key INJECTed inside an AI strategy's nested
+# subsidies block kept vanilla's value. building_group is a top-level field, closer
+# to the first (scripting_best_practices.md, READ IN GAME 2026-10-10 and 2026-10-16).
 # Fallback for BROKEN: a TRY_REPLACE of vanilla's whole building_copper_mine with
-# the group changed; the maintenance and tailings INJECTs still apply after it.
+# the group changed and the mod's maintenance and tailings groups folded into its
+# body. Whether a separate INJECT still lands on a TRY_REPLACE that sorts after it
+# is unprobed (load order fact 10).
 # Play-test row: docs/testing/vanilla-1-15-playtest.md, "Copper and lead".
 on_yearly_pulse_country = {
 	on_actions = {

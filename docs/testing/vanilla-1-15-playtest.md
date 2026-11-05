@@ -151,7 +151,8 @@ or Spanish game.
 **Copper and lead**
 - Katanga or Zambia: copper shows as a discoverable resource with vanilla's cap available from 1836. If the
   INJECTed `building_group` didn't take, the mine stays capped with no caps left, no copper mine can be built, and
-  `debug.log` says "can only support 0"; the fallback is a `TRY_REPLACE` of vanilla's entry with the group changed.
+  `debug.log` says "can only support 0"; the fallback is a `TRY_REPLACE` of vanilla's entry with the group changed and
+  the mod's maintenance and tailings groups written into it.
   The first year's `TE_SELF_CHECK OK|BROKEN copper_mine_discoverable` line answers it: OK, BROKEN with copper mines
   in the wrong group, or BROKEN with no copper mine left anywhere (vanilla's 1836 history has 15). The check is
   `common/on_actions/te_copper_mine_selfcheck_on_actions.txt`; delete the file once it reads OK.
