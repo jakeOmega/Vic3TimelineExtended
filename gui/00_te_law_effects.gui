@@ -1472,9 +1472,9 @@ types te_law_effects_change_law
 
 		### effects view toggle
 		### MOD: Tax law effects: a taxation law's effects text prices its revenue at every tax level each
-		### frame, so vanilla's view toggle, headers and texts go in a container hidden for one
-		flowcontainer = {
-			direction = vertical
+		### frame, so vanilla's view toggle, headers and texts go in a vbox hidden for one. Not a
+		### flowcontainer: it can't hold the toggle's hbox, and building that overflowed the stack (2026-11-05)
+		vbox = {
 			visible = "[Not(EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
 		### END MOD ###
 			hbox = {

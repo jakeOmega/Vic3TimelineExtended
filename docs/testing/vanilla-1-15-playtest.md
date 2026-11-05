@@ -135,7 +135,10 @@ or Spanish game.
   automatic-withdrawal checkbox.
 - Law panel with a taxation law selected: All effects shows the header and hover line, Comparative effects shows
   "Effects compared to current law:" and its hover line; frame rate stays normal in both. A non-tax law shows
-  vanilla's text in both views; its view toggle may sit further left than vanilla draws it.
+  vanilla's text in both views, and its view toggle sits at the same indent as a tax law's. Opening a law no
+  longer crashes the game, and error.log has no `can't have an hbox/vbox` line. Both launches of #1402 overflowed
+  the stack in the second the panel was built. If it still crashes there without that line, the other suspect is
+  the toggle's `visible`, the mod's first call of 1.15's `GetDeltaEffectDesc`: drop that half and relaunch.
 - Military panel: mobilization groups one card a row with their backgrounds; the Nuclear and Covert tabs.
 - Power bloc panel: principle slots 5-8 and the remove button; the formation panel's primary principles one a row.
 - Politics overview: the ruler's aptitude traits in the featured slots.
