@@ -56,11 +56,6 @@ gm_monument_monthly = {
 			set_variable = gm_premigration
 		}
 	}
-	# Old saves' held specials, once a round (signatures spec §5.6).
-	if = {
-		limit = { gm_system_enabled = yes }
-		gm_sig_seed_monthly = yes
-	}
 	if = {
 		limit = {
 			gm_system_enabled = yes

@@ -2843,10 +2843,6 @@ gm_form_name = {
 		localization_key = gm_form_tower
 	}
 	text = {
-		trigger = { has_variable = gm_form var:gm_form = flag:memorial }
-		localization_key = gm_form_memorial
-	}
-	text = {
 		trigger = { has_variable = gm_form var:gm_form = flag:mausoleum }
 		localization_key = gm_form_mausoleum
 	}
@@ -3344,10 +3340,6 @@ gm_com_form_phrase = {
 	text = {
 		trigger = { has_variable = gm_com_form var:gm_com_form = flag:obelisk }
 		localization_key = gm_com_form_obelisk
-	}
-	text = {
-		trigger = { has_variable = gm_com_form var:gm_com_form = flag:memorial }
-		localization_key = gm_com_form_memorial
 	}
 	text = {
 		trigger = { has_variable = gm_com_form var:gm_com_form = flag:mausoleum }

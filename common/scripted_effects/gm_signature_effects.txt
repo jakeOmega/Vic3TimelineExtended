@@ -695,62 +695,6 @@ gm_state_dedicate_sig_olympic = {
 	gm_state_sig_give = { SIG = olympic PARENT = athletic }
 }
 
-# ---- Old saves (§5.6) --------------------------------------------------------------
-# No scope, from gm_monument_monthly, once a round (gm_sig_seed_round against
-# gm_sig_seed_rounds, as gm_arch_seed_round). A save from before specials holds
-# none: each country gets one held special for every moment whose boon still
-# runs, an opportunity completed in the last ten years. No monument takes it
-# then; the next ceremony that can raise its parent offers it.
-gm_sig_seed_monthly = {
-	if = {
-		limit = {
-			OR = {
-				NOT = { has_global_variable = gm_sig_seed_round }
-				global_var:gm_sig_seed_round < gm_sig_seed_rounds
-			}
-		}
-		set_global_variable = { name = gm_sig_seed_round value = gm_sig_seed_rounds }
-		every_country = {
-			limit = { gm_boons_idle = no }
-			if = {
-				limit = {
-					has_variable = gm_boon_victory
-					var:gm_boon_victory > 0
-				}
-				gm_sig_hold = { SIG = to_victory }
-			}
-			if = {
-				limit = {
-					has_variable = gm_boon_defeat
-					var:gm_boon_defeat > 0
-				}
-				gm_sig_hold = { SIG = unknown_soldier }
-			}
-			if = {
-				limit = {
-					has_variable = gm_boon_great_power
-					var:gm_boon_great_power > 0
-				}
-				gm_sig_hold = { SIG = concert_of_nations }
-			}
-			if = {
-				limit = {
-					has_variable = gm_boon_space
-					var:gm_boon_space > 0
-				}
-				gm_sig_hold = { SIG = conquerors_of_space }
-			}
-			if = {
-				limit = {
-					has_variable = gm_boon_tech_athletic
-					var:gm_boon_tech_athletic > 0
-				}
-				gm_sig_hold = { SIG = olympic }
-			}
-		}
-	}
-}
-
 # ---- Debug (te_debug_monuments.8) ----------------------------------------------------
 # State scope. The next signature in SIGNATURES' order, on the monument's
 # dedication now so it counts; after the last, none.
