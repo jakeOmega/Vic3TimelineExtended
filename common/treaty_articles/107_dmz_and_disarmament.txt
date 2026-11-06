@@ -327,6 +327,9 @@ forced_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restrict
 	}
 
 	source_modifier = {
+		# vanilla 1.15: no warships while it stands (supply ships still allowed), so the
+		# fleet the article spares can't be rebuilt
+		country_disallow_military_ship_construction_bool = yes
 		country_military_wages_mult = -0.25
 		state_conscription_rate_mult = -0.5
 		country_prestige_add = -10

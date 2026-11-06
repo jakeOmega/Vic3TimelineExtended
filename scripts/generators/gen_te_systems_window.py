@@ -331,10 +331,10 @@ TABS: list[Tab] = [
             "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
 
-# The Space Race's nine entries, in je_space_race.txt's order. Each has its
+# The Space Race's eight entries, in je_space_race.txt's order. Each has its
 # overview and its live sections (te_sr_<m>_overview, te_sr_<m>_status), but
 # the waiting entry, which has the transit overview only.
-SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
                  "interstellar_probe", "interstellar_results", "solar_colonization"]
 SR_TRANSIT = {"interstellar_results"}
 # What a milestone's frame shows another country in place of its live sections

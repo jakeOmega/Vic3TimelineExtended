@@ -130,12 +130,16 @@ te_demog_pop_absorbed_deaths = {
 }
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
-# + -0.1 x its literacy (literacy_penalty) + the starvation penalties (each x the pop's
-# starvation value, in 0.05 steps of food security), floored at 0.
+# + its stratum's birth line (vanilla 1.15's state_<stratum>_strata_birth_rate_mult, on top of the census like
+# a class's mortality line; #1407) + -0.1 x its literacy (literacy_penalty) + the starvation
+# penalties (each x the pop's starvation value, in 0.05 steps of food security), floored at 0.
 # x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).
 te_demog_pop_birth_mult = {
 	value = 1
 	add = state.modifier:state_birth_rate_mult
+	if = { limit = { strata = lower } add = state.modifier:state_lower_strata_birth_rate_mult }
+	else_if = { limit = { strata = middle } add = state.modifier:state_middle_strata_birth_rate_mult }
+	else_if = { limit = { strata = upper } add = state.modifier:state_upper_strata_birth_rate_mult }
 	add = { value = literacy_rate multiply = -0.1 }
 	if = {
 		limit = { is_in_severe_starvation = yes }

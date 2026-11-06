@@ -145,11 +145,11 @@ class RefreshTest(unittest.TestCase):
         self.assertRegex(self.refresh, r"else_if = \{\s*limit = \{ has_variable = gw_emitters_fifth_emis \}\s*"
                                        r"remove_variable = gw_emitters_fifth_emis")
 
-    def test_the_old_slots_are_dropped(self):
-        self.assertIn("gw_top_emitters_drop_slots = yes", self.refresh)
-        drop = _body(self.effects, "gw_top_emitters_drop_slots")
+    def test_the_old_slots_are_gone(self):
+        """The old-save strip of the slot variables went with 1.15, which loads no older save (#1407)."""
+        self.assertNotIn("gw_top_emitters_drop_slots", self.effects)
         for var in [f"gw_emitter_{n}" for n in range(1, 6)] + ["gw_emitters_shown", "gw_emitters_own_slot"]:
-            self.assertRegex(drop, rf"limit = \{{ has_variable = {var} \}}\s*remove_variable = {var}", var)
+            self.assertNotRegex(self.effects, rf"\b{var}\b", var)
 
     def test_the_count_and_our_place(self):
         self.assertIn("set_variable = { name = gw_emitters_total value = 0 }", self.refresh)

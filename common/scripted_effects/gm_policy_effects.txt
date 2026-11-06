@@ -42,23 +42,6 @@ gm_policy_set = {
 	}
 }
 
-# Country scope, from gm_country_refresh before anything reads the policy: an
-# older save's Mothballed or Standard, both gone, reads as the default (Cultural
-# Promotion). The wait and the first-choice mark are kept, so a wait running
-# keeps running and no new one starts (spec § 6).
-gm_policy_migrate = {
-	if = {
-		limit = {
-			has_variable = gm_policy
-			OR = {
-				var:gm_policy = flag:mothballed
-				var:gm_policy = flag:standard
-			}
-		}
-		remove_variable = gm_policy
-	}
-}
-
 # Country scope, each month after the refresh (gm_country_monthly): whether
 # gm_national_education, held by the journal entry, reaches the states (spec
 # § 4.4: a JE-held state_* field is unverified). While the policy is another,

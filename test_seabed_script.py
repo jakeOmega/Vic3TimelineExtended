@@ -681,15 +681,14 @@ class PanelDataTest(unittest.TestCase):
     def test_every_player_gets_a_list_of_the_other_claimants(self):
         """Audit SEA-3's later step (the owner, 2026-10-27): each player's
         te_seabed_rk_list_<b>, every other claimant's capital, largest share
-        first, rebuilt at every sharing; the six global seats are gone, and an
-        older save's seats and counts are dropped."""
+        first, rebuilt at every sharing; the six global seats are gone, and with
+        them, since 1.15 loads no older save, the strip of their old copies (#1407)."""
         rank = strip_comments(block(read(EFFECTS), "te_seabed_rank_basin"))
         self.assertRegex(rank, r"is_player = yes\s+has_variable = te_seabed_shared\s+\}\s+"
                                r"te_seabed_rank_list = \{ B = \$B\$ \}")
-        for n in range(1, 7):
-            self.assertIn(f"te_seabed_rank_clear = {{ B = $B$ N = {n} }}", rank)
-        self.assertIn("remove_global_variable = te_seabed_rk_more_$B$", rank)
-        self.assertIn("remove_variable = te_seabed_rank_$B$", rank)
+        effects = read(EFFECTS)
+        for gone in ("te_seabed_rank_clear", "te_seabed_rank_seat_clear", "te_seabed_rk_more_", "te_seabed_rkcap"):
+            self.assertNotIn(gone, effects)
         lst = strip_comments(block(read(EFFECTS), "te_seabed_rank_list"))
         self.assertTrue(lst.lstrip().startswith("save_scope_as = te_seabed_rank_viewer"))
         self.assertLess(lst.index("clear_variable_list = te_seabed_rk_list_$B$"), lst.index("ordered_country"))
@@ -699,9 +698,6 @@ class PanelDataTest(unittest.TestCase):
                      "capital = { save_scope_as = te_seabed_rank_capital }",
                      "add_to_variable_list = { name = te_seabed_rk_list_$B$ target = scope:te_seabed_rank_capital }"):
             self.assertIn(line, walk)
-        for n in range(1, 7):
-            self.assertIn(f"te_seabed_rank_seat_clear = {{ B = $B$ N = {n} }}", lst)
-        self.assertIn("remove_variable = te_seabed_rkcap_count_$B$", lst)
         self.assertNotIn("te_seabed_rival_row_sgui", read(self.SGUIS))
         self.assertNotIn("te_seabed_rk_more_disp_", read(VALUES))
         self.assertNotIn("te_seabed_rkcap_count_disp_", read(VALUES))

@@ -1,4 +1,4 @@
-﻿### Space Race JE widgets — the milestone panels, mounted on nine journal entries.
+﻿### Space Race JE widgets — the milestone panels, mounted on eight journal entries.
 ###
 ### Every milestone entry attaches two named roots from this file, in the UN's
 ### shape (un_layout_widget.gui):
@@ -112,7 +112,7 @@
 ### wide (`minimumsize`), each panel's content 480, and rows of numbers use
 ### fixed columns, so nothing shifts when a value changes length.
 ###
-### Every root is gated on `[JournalEntry.IsActive]`: all nine entries carry
+### Every root is gated on `[JournalEntry.IsActive]`: all eight entries carry
 ### `is_shown_when_inactive`, so a widget is otherwise built for countries that
 ### hold none of the space race's variables — the failure mode that produced
 ### ~1,000 "Failed to fetch variable" errors on the UN chamber's first in-game
@@ -758,7 +758,7 @@ types space_race_widget_types
 	### OVERVIEW COMPOSERS
 	### ======================================================================
 
-	### The overview of a milestone with controls (eight entries). Row 1: the
+	### The overview of a milestone with controls (seven entries). Row 1: the
 	### state, the setback risk, and "the first" (or, for colonization, the
 	### stage); row 2: progress; then any extra rows (colonization's worlds
 	### pie); then the programme. The datacontext is the milestone's scripted
@@ -7273,11 +7273,6 @@ types space_race_widget_types
 			tooltip = "je_space_race_widget_power_est_tt"
 		}
 		te_sr_power_lead_text = {
-			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)5' )]"
-			text = "je_space_race_widget_power_lead_moon_base"
-			tooltip = "je_space_race_widget_power_est_tt"
-		}
-		te_sr_power_lead_text = {
 			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)6' )]"
 			text = "je_space_race_widget_power_lead_mars_landing"
 			tooltip = "je_space_race_widget_power_est_tt"
@@ -7322,11 +7317,6 @@ types space_race_widget_types
 		te_sr_power_lead_text = {
 			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)4' )]"
 			text = "je_space_race_widget_power_own_probe"
-			tooltip = "je_space_race_widget_power_own_tt"
-		}
-		te_sr_power_lead_text = {
-			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)5' )]"
-			text = "je_space_race_widget_power_own_moon_base"
 			tooltip = "je_space_race_widget_power_own_tt"
 		}
 		te_sr_power_lead_text = {
@@ -8523,152 +8513,6 @@ types space_race_widget_types
 		}
 	}
 
-	### moon_base: the overview, wrapped by the journal root
-	### widget_je_space_race_moon_base_overview.
-	type te_sr_moon_base_overview = flowcontainer {
-		parentanchor = hcenter
-		minimumsize = { 520 -1 }
-		ignoreinvisible = yes
-		datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
-
-		te_sr_overview_milestone = {
-			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "sr_risk_label" {
-				text = "je_space_race_widget_risk_moon_base"
-			}
-			blockoverride "sr_label_safe" {
-				text = "je_space_race_widget_ov_safe_moon_base"
-			}
-			blockoverride "sr_label_ambitious" {
-				text = "je_space_race_widget_ov_ambitious_moon_base"
-			}
-			blockoverride "sr_third_cells" {
-				te_sr_ov_first = {
-					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)1' )]"
-					}
-				}
-			}
-			blockoverride "sr_progress_label" {
-				text = "je_space_race_widget_ov_progress_label"
-			}
-			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base') )]"
-			}
-			# Another country's estimate (te_sr_ov_band_row): the country as
-			# its own viewer and rival, so the open band.
-			blockoverride "sr_band_lo" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base') )]"
-			}
-			blockoverride "sr_band_hi" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base') )]"
-			}
-			blockoverride "sr_band_est" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_moon_base') )]"
-			}
-			blockoverride "sr_band_text" {
-				text = "je_space_race_widget_band_moon_base"
-			}
-			blockoverride "sr_progress_text" {
-				text = "je_space_race_widget_progress_moon_base"
-			}
-			blockoverride "sr_progress_tooltip" {
-				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_moon_base', 'te_tt_blank' )]"
-			}
-		}
-	}
-
-	### moon_base: the live sections, wrapped by the journal root
-	### widget_je_space_race_moon_base.
-	type te_sr_moon_base_status = flowcontainer {
-		parentanchor = hcenter
-		minimumsize = { 520 -1 }
-		ignoreinvisible = yes
-		datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
-
-		te_sr_status_sections = {
-			blockoverride "status_debris" {
-				block "sr_debris" {
-					te_sr_debris_row = {}
-				}
-			}
-			blockoverride "sr_control_onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_control_moon_base_closed')]"
-			}
-			blockoverride "sr_control_showmore" {
-				visible = "[GetVariableSystem.Exists('sr_panel_control_moon_base_closed')]"
-			}
-			blockoverride "sr_control_showless" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_base_closed'))]"
-			}
-			blockoverride "sr_control_visible" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_base_closed'))]"
-			}
-			blockoverride "sr_funding_value" {
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_funding_moon_base_past_cap'), '(CFixedPoint)0' ), 'je_space_race_widget_funding_past_cap_moon_base', 'je_space_race_widget_funding_moon_base' )]"
-			}
-			blockoverride "sr_setbacks_value" {
-				text = "je_space_race_widget_setbacks_moon_base"
-			}
-			blockoverride "sr_eta_value" {
-				text = "je_space_race_widget_eta_moon_base"
-			}
-			blockoverride "sr_profile_text" {
-				text = "je_space_race_widget_profile_moon_base"
-			}
-			blockoverride "sr_rivals_onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_moon_base_closed')]"
-			}
-			blockoverride "sr_rivals_showmore" {
-				visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed')]"
-			}
-			blockoverride "sr_rivals_showless" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed'))]"
-			}
-			blockoverride "sr_rivals_visible" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed'))]"
-			}
-			blockoverride "sr_rivals_none" {
-				visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_moon_base') )]"
-			}
-			blockoverride "sr_rivals_datamodel" {
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_moon_base')]"
-			}
-			blockoverride "sr_rival_tooltip" {
-				tooltip = "je_space_race_widget_rival_tt_moon_base"
-			}
-			blockoverride "sr_rival_lo" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base') )]"
-			}
-			blockoverride "sr_rival_hi" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base') )]"
-			}
-			blockoverride "sr_rival_est" {
-				value = "[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_moon_base') )]"
-			}
-			blockoverride "sr_rival_range" {
-				text = "je_space_race_widget_rival_range_moon_base"
-			}
-		}
-	}
-
 	### mars_landing: the overview, wrapped by the journal root
 	### widget_je_space_race_mars_landing_overview.
 	type te_sr_mars_landing_overview = flowcontainer {
@@ -9674,40 +9518,6 @@ flowcontainer = {
 
 	te_je_country = {
 		te_sr_probe_status = {}
-	}
-}
-
-### moon_base
-
-flowcontainer = {
-	name = "widget_je_space_race_moon_base_overview"
-	visible = "[JournalEntry.IsActive]"
-	direction = vertical
-	parentanchor = hcenter
-	minimumsize = { 520 -1 }
-	ignoreinvisible = yes
-
-	### The "?" to the Help page, at the top of the entry (te_help_row).
-	te_help_row = {
-		blockoverride "help_onclick" {
-			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
-		}
-	}
-
-	te_je_country = {
-		te_sr_moon_base_overview = {}
-	}
-}
-
-flowcontainer = {
-	name = "widget_je_space_race_moon_base"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	minimumsize = { 520 -1 }
-	ignoreinvisible = yes
-
-	te_je_country = {
-		te_sr_moon_base_status = {}
 	}
 }
 

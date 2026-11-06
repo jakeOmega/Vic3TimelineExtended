@@ -1625,7 +1625,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_orbital": {"subject": "a polished silver sphere with four long swept-back whip antennas", "seed": 3},
         "je_space_race_moon_landing": {"subject": "a spindly gold-foil-wrapped lunar lander with four thin legs, standing on a small mound of grey moon dust", "seed": 0},
         "je_space_race_probe": {"subject": "a deep-space probe with a large gold parabolic dish, a long boom carrying a small instrument box, and a grey cylindrical power unit", "seed": 1},
-        "je_space_race_moon_base": {"subject": "a low moon habitat of two silver-grey rounded domes joined by a short tube, small square lit windows along its side, on a mound of grey moon dust", "seed": 2},
+        # The retired Moon Base (#1407) has no entry to wire any more, so it left the
+        # registry; its icon (event_icons/je_space_race_moon_base.dds, s2: "a low moon habitat of
+        # two silver-grey rounded domes") stays, for the record's programme row and notice.
         "je_space_race_mars_landing": {"subject": "a dark grey cone-shaped crew capsule standing on three legs, its hatch open with a small ladder, on a mound of rust-red rocky ground", "seed": 2},
         "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 1},
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},

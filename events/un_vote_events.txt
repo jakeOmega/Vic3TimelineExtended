@@ -2514,33 +2514,6 @@ un_vote.4 = {
 	}
 }
 
-# Before the late ballots this sent the AI members their ballots thirty days
-# after a resolution opened. un_resolution_open no longer queues it; an event
-# queued in a save from before the change still arrives, and now only
-# refreshes the leans, so no AI member votes early. Hidden.
-un_vote.5 = { # REVIEWED 2026-09-27: kept only for un_vote.5 events queued in saves from before the late ballots (it now refreshes leans); nothing queues it any more
-	type = country_event
-	hidden = yes
-
-	trigger = {
-		OR = {
-			scope:un_resolution ?= { has_tag = un_res_voting }
-			AND = {
-				NOT = { exists = scope:un_resolution }
-				global_var:un_active_resolution ?= { has_tag = un_res_voting }
-			}
-		}
-	}
-
-	immediate = {
-		if = {
-			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
-		}
-		un_vote_refresh_leans = yes
-	}
-}
-
 # The last call (spec §1). Five days before the proposer reports back, every AI
 # member still without a vote casts, whatever month it drew: above all a
 # member that joined after its month came. Hidden; queued to the proposer by

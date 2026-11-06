@@ -47,6 +47,7 @@ te_demog_town_farm_work = {
 	OR = {
 		is_building_type = building_banana_plantation
 		is_building_type = building_coffee_plantation
+		is_building_type = building_cossack_host
 		is_building_type = building_cotton_plantation
 		is_building_type = building_dye_plantation
 		is_building_type = building_livestock_ranch

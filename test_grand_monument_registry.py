@@ -1220,7 +1220,7 @@ class ContestTests(unittest.TestCase):
         body = squash(block(self.e, "gm_country_refresh"))
         # A monument, an open commission (v2 §2.7) or a trophy held or abroad
         # (trophies spec §6) keeps the pulse running.
-        self.assertTrue(body.startswith("gm_policy_migrate = yes gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
+        self.assertTrue(body.startswith("gm_init_ledgers = yes if = { limit = { OR = { any_scope_state = "
                                         "{ has_building = building_grand_monument } has_variable = gm_com_open "
                                         "gm_tr_country_has_any = yes gm_arch_country_has_any = yes } } set_variable = gm_active }"),
                         body[:240])
@@ -2178,8 +2178,7 @@ class CommissionSourceTests(unittest.TestCase):
         for gone in ("gm_com_petition_fits", "gm_com_any_petition_fits", "gm_com_ai_wants_more_time"):
             self.assertIsNone(block(read(COM_TRIGGERS), gone), gone)
         self.assertEqual(squash(block(self.e, "gm_com_close")), "gm_com_clear = yes")
-        self.assertNotIn("gm_com_cooldown", strip_comments(self.e).replace(
-            "gm_remove_state_var = { VAR = gm_com_cooldown }", ""))
+        self.assertNotIn("gm_com_cooldown", strip_comments(self.e))
         can = squash(block(read(COM_TRIGGERS), "gm_com_can_offer"))
         for s_ in ("NOT = { has_variable = gm_com_offered }", "NOT = { has_variable = gm_com_open }",
                    "NOT = { any_scope_state = { has_variable = gm_restore_pm "
@@ -2386,17 +2385,17 @@ class CommissionLifeTests(unittest.TestCase):
             self.assertIn(f"flag:{ig} }} localization_key = ig_{ig}", names, ig)
 
     def test_the_promise_ledger_is_retired(self):
-        """A Promise Kept gave way to the boons (2026-10-12). Its modifier
-        stays defined and removed, so a save that carries it sheds it."""
+        """A Promise Kept gave way to the boons (2026-10-12). Its modifier and
+        the strip of v2's ledger, kept for older saves, went with them
+        (#1407: vanilla 1.15 loads no save from before 2026-11-05)."""
         e = read(EFFECTS)
         for name in ("gm_init_ledgers", "gm_zero_ledgers", "gm_decay_ledgers", "gm_apply_national_modifiers"):
             self.assertNotIn("gm_promise_ledger", squash(block(e, name)), name)
         self.assertNotIn("gm_promise_ledger", squash(block(read(TRIGGERS), "gm_ledgers_idle")))
-        self.assertNotIn("gm_promise_ledger", strip_comments(read(COM_EFFECTS)).replace(
-            "gm_remove_state_var = { VAR = gm_promise_ledger }", ""))
-        self.assertIn("remove_modifier = gm_national_promise", squash(block(e, "gm_remove_national_modifiers")))
-        self.assertIsNotNone(block(read(MODIFIERS), "gm_national_promise"))
-        self.assertIn("gm_remove_state_var = { VAR = gm_promise_ledger }", squash(block(self.e, "gm_com_first_sight")))
+        self.assertNotIn("gm_promise_ledger", strip_comments(read(COM_EFFECTS)))
+        self.assertNotIn("gm_national_promise", strip_comments(e))
+        self.assertIsNone(block(read(MODIFIERS), "gm_national_promise"))
+        self.assertNotIn("gm_national_promise", loc())
 
     def test_rewards_and_no_cost(self):
         """Completing one gives the gift, the approval and the boon; nothing
@@ -2835,8 +2834,10 @@ FORMS = {
     "rock_hewn_church": ("heritage_geez",), "sun_stone": ("heritage_nahuatl",), "stela": ("heritage_mayan",),
     "sacred_oak": ("heritage_prussian",), "colonnade": ("heritage_aramaic",),
 }
-# Forms no skin offers any more. An old monument keeps one, so its noun and its
-# gm_form_name branch stay; its fit trigger and .24 option go.
+# Forms no skin offers any more (#909). Nothing sets one, so its noun, its name
+# branches, its fit trigger and its .24 option are gone; they were kept to name an
+# older save's monument until #1407 (vanilla 1.15 loads no save from before
+# 2026-11-05).
 RETIRED_FORMS = ("memorial",)
 # skin -> its default form, the first of its row in the plan's table.
 DEFAULT_FORM = {"generic": "column", "heritage_latin": "column", "heritage_greek": "pantheon",
@@ -2929,14 +2930,16 @@ class NameTests(unittest.TestCase):
         for faith in FAITHS:
             self.assertIn(f"var:gm_skin = flag:faith_{faith} }} localization_key = gm_skin_faith_{faith}", names)
 
-    def test_retired_forms_keep_their_noun_only(self):
+    def test_retired_forms_are_gone(self):
         L = loc()
-        names = squash(block(self.custom, "gm_form_name"))
         ev = squash(raw_block_at(self.events, r"(?m)^monument_events\.24\s*=\s*\{"))
         com = squash(block(self.t, "gm_state_com_form_fits"))
+        trophy = read("common/customizable_localization/gm_trophy_custom_loc.txt")
+        custom = strip_comments(self.custom) + strip_comments(trophy)
         for form in RETIRED_FORMS:
-            self.assertIn(f"gm_form_{form}", L, form)
-            self.assertIn(f"var:gm_form = flag:{form} }} localization_key = gm_form_{form}", names, form)
+            self.assertNotIn(f"gm_form_{form}", L, form)
+            self.assertNotIn(f"gm_com_form_{form}", L, form)
+            self.assertNotRegex(custom, rf"flag:{form}\b", form)
             self.assertIsNone(block(self.t, f"gm_state_form_fits_{form}"), form)
             self.assertNotIn(f"monument_events.24.{form} ", ev + " ", form)
             self.assertNotIn(f"flag:{form} ", com, form)
@@ -3124,16 +3127,17 @@ class PolicyTests(unittest.TestCase):
                 self.assertEqual(_policy_value(body, policy), factors[what], f"{policy} {what}")
 
     def test_upkeep_is_on_the_building(self):
-        """No policy changes upkeep now (policy spec 2026-10-23 § 5); the two
-        old policy modifiers stay defined only so the pulse removes them from
-        older saves."""
+        """No policy changes upkeep now (policy spec 2026-10-23 § 5). The two
+        old policy modifiers, kept for older saves' pulse to remove, are gone
+        (#1407: vanilla 1.15 loads no save from before 2026-11-05)."""
         mods = read(MODIFIERS)
         for old in ("gm_policy_upkeep_open", "gm_policy_upkeep_mothballed"):
-            self.assertIsNotNone(block(mods, old), old)
+            self.assertIsNone(block(mods, old), old)
+            self.assertNotIn(old, strip_comments(read(EFFECTS)), old)
+            self.assertNotIn(old, loc(), old)
         self.assertNotIn("building_grand_monument_throughput_add", strip_comments(mods))
         local = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
-        self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_upkeep remove_modifier = gm_policy_upkeep_open "
-                      "remove_modifier = gm_policy_upkeep_mothballed }", local)
+        self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_upkeep }", local)
         clear = squash(block(read(EFFECTS), "gm_clear_state"))
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = 0 }", clear)
         self.assertNotRegex(strip_comments(read(EFFECTS)), r"remove_variable = gm_local_tourism_steps\b")
@@ -3281,24 +3285,15 @@ class PolicyTests(unittest.TestCase):
         sig = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
         self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }", sig)
 
-    def test_migration_drops_old_flags_only(self):
-        body = squash(block(self.e, "gm_policy_migrate"))
-        for old in ("mothballed", "standard"):
-            self.assertIn(f"var:gm_policy = flag:{old}", body)
-        self.assertIn("remove_variable = gm_policy", body)
-        # An older save in its five-year wait keeps waiting (plan Review Focus 1).
-        for kept in ("gm_policy_cooldown", "gm_policy_chosen"):
-            self.assertNotIn(kept, body)
-        self.assertTrue(squash(strip_comments(block(read(EFFECTS), "gm_country_refresh")))
-                        .startswith("gm_policy_migrate = yes"))
+    def test_no_migration_of_the_old_flags(self):
+        # The older saves' Mothballed and Standard went with their migration
+        # (#1407: vanilla 1.15 loads no save from before 2026-11-05).
+        self.assertIsNone(block(self.e, "gm_policy_migrate"))
+        self.assertNotIn("gm_policy_migrate", strip_comments(read(EFFECTS)))
 
     def test_no_policy_reads_the_old_keys(self):
         for path in ROOT.glob("common/**/*.txt"):
             text = strip_comments(read(path.relative_to(ROOT).as_posix()))
-            if path.name == "gm_policy_effects.txt":
-                text = text.replace(block(text, "gm_policy_migrate"), "")
-            if path.name == "gm_policy_triggers.txt":
-                text = text.replace(block(text, "gm_policy_is"), "")
             self.assertNotRegex(text, r"P = (mothballed|standard)\b|flag:(mothballed|standard)\b", str(path))
             self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep|regime)\b", str(path))
         # Loc and GUI too: a deleted script value read there renders as 0 (mid-branch review).
@@ -3318,13 +3313,10 @@ class PolicyTests(unittest.TestCase):
                           for name in re.findall(r"ScriptValue\('(\w+)'\)", text) if name not in defined})
         self.assertEqual(missing, [])
 
-    def test_an_unmigrated_save_reads_as_the_default(self):
-        # Until the first monthly pulse migrates it, an older save's Mothballed or
-        # Standard reads as Cultural Promotion, so its button isn't valid and
-        # can't start a wait for nothing (mid-branch review, spec § 6).
+    def test_no_choice_reads_as_the_default(self):
+        # A country that never chose a policy reads as Cultural Promotion (STANDARD = yes).
         body = squash(block(read(POLICY_TRIGGERS), "gm_policy_is"))
-        self.assertIn("always = $STANDARD$ OR = { NOT = { has_variable = gm_policy } var:gm_policy = flag:standard "
-                      "var:gm_policy = flag:mothballed }", body)
+        self.assertIn("AND = { always = $STANDARD$ NOT = { has_variable = gm_policy } }", body)
 
     def test_hovers_name_cultural_promotions_factor(self):
         # The per-step figures don't add up to the headline without the x1.5 (mid-branch review).
@@ -6143,13 +6135,12 @@ class SignatureSpecialTests(unittest.TestCase):
             # A moment that comes once a game says that letting it pass loses it.
             self.assertEqual(f"gm_com_special_pass_{s.key}" in once, s.source in ("great_power", "space", "tech_athletic"))
 
-    def test_old_saves(self):
-        seed = squash(block(read(SIG_EFFECTS), "gm_sig_seed_monthly"))
-        self.assertIn("global_var:gm_sig_seed_round < gm_sig_seed_rounds", seed)
-        for s in SPECIAL_SIGS:
-            self.assertIn(f"limit = {{ has_variable = gm_boon_{s.source} var:gm_boon_{s.source} > 0 }} "
-                          f"gm_sig_hold = {{ SIG = {s.key} }}", seed, s.key)
-        self.assertIn("gm_sig_seed_monthly = yes", squash(block(read(MON_EFFECTS), "gm_monument_monthly")))
+    def test_no_old_save_seeding(self):
+        # A save from before specials got one held special per boon still running (§5.6); a new game has no boon
+        # running at its first pulse, so the seeding went with the older saves (#1407).
+        self.assertIsNone(block(read(SIG_EFFECTS), "gm_sig_seed_monthly"))
+        self.assertIsNone(block(read(SIG_VALUES), "gm_sig_seed_rounds"))
+        self.assertNotIn("gm_sig_seed", strip_comments(read(MON_EFFECTS)))
 
     def test_the_seized_event_names_it(self):
         ev = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.28\s*=\s*\{")))
@@ -6642,8 +6633,9 @@ class NoRebuildTests(unittest.TestCase):
                     self.assertNotRegex(body, rf"\b{name}\b", f"{name} in {rel} {block_name}")
                 self.assertNotRegex(body, r"SPEC_TYPE = building_grand_monument\b(?!_)", f"{rel} {block_name}")
                 self.assertNotIn("max = 200", body, f"{rel} {block_name}")
-        self.assertNotIn("set_variable = gm_tr_return_queued",
-                         squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_tr_return_home")))
+        # The queued returns an older save held went too (#1407).
+        self.assertNotRegex(strip_comments(read("common/scripted_effects/gm_trophy_effects.txt")),
+                            r"\bgm_tr_return_(queued|relations)\b|\bgm_tr_queued_home\b")
 
     def test_nothing_adds_levels_to_a_building(self):
         for rel, text in self.texts():
@@ -6966,8 +6958,7 @@ class UpkeepTests(unittest.TestCase):
                    if "name = gm_upkeep " in squash(body)]
         self.assertEqual(callers, ["gm_state_monthly"])
         remove = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
-        for name in ("gm_upkeep", "gm_policy_upkeep_open", "gm_policy_upkeep_mothballed"):
-            self.assertIn(f"remove_modifier = {name}", remove)
+        self.assertIn("remove_modifier = gm_upkeep", remove)
 
 
 class SitePanelTests(unittest.TestCase):

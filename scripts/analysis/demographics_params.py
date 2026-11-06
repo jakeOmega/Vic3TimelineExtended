@@ -696,6 +696,12 @@ ON_TOP_FACTOR_MIN = 0.01
 # a famine starts or ends inside the window and lags a one-off by half a window (demographics_model.window_events).
 WINDOW_START_WEIGHT = 0.5
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
+# Vanilla 1.15's birth lines by stratum (state_<stratum>_strata_birth_rate_mult; the Malthusian Foundations amendment's
+# -1% for the lower strata, Sweden's sweden_law_birth's -2%). The engine applies each to its stratum's pops, so the
+# walk reads it in te_demog_pop_birth_mult as it reads a class's mortality line: on top of the census at the bare
+# curve's weight, and in the window's events, so the residual no longer books the births they cut as migrants
+# (owner, 2026-11-06, #1407). The by-acceptance types are country-scoped and have no vanilla user.
+BIRTH_STRATA = ("lower", "middle", "upper")
 # Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
 # mortality lines on laws, technologies and institutions move to script-only types, one per field and family
 # (demographics_engine_line_types.txt). The mod re-applies both families while the census doesn't set a state's births

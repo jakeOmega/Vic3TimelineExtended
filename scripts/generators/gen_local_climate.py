@@ -67,8 +67,33 @@ DESERT_TRAIT_EXCEPTIONS = {
     "STATE_NORTHERN_TERRITORY": "its people live in the wet tropical Top End",
 }
 
+# Vanilla 1.15's cold (#1407): each state region's max_cold_effect, its cold at the peak of winter, which vanilla reads
+# as moderate from 0.5 and severe from 0.75 (NWinter's MODERATE_ / SEVERE_COLD_EFFECT_THRESHOLD) for its world market
+# access, supply ships and fleet speed. Nothing moves it at runtime, so Global Warming leaves it alone. The record's winter
+# and vanilla's cold agree across the map (a straight line through winter and latitude misses vanilla's figure by 0.12, root
+# mean square); cold_band_flags names a row that disagrees in kind, and each one it names here, with its reason, is accepted:
+COLD_MODERATE, COLD_SEVERE = 0.5, 0.75
+COLD_BAND_EXCEPTIONS = {
+    # A mountain region whose people live in a valley: vanilla's cold covers the high ground, the record the valley.
+    "STATE_HIMALAYAS": "its people live in the Kathmandu valley, below the snows vanilla's cold covers",
+    "STATE_EASTERN_HIMALAYAS": "its people live in Bhutan's valleys (Punakha), below the snows vanilla's cold covers",
+    "STATE_TAJIKISTAN": "its people live in the Hisor valley at Dushanbe, below the Pamirs vanilla's cold covers",
+    "STATE_ALASKA": "its people lived on the mild panhandle coast at Sitka, not the arctic interior",
+    # Vanilla's cold runs low across dry continental East Asia and the Armenian plateau, though the stations' winters
+    # are hard: the record is the station's.
+    "STATE_DZUNGARIA": "Urumqi's January is -12 C; vanilla's cold runs low on dry continental winters",
+    "STATE_HINGGAN": "Hohhot's January is -11 C; vanilla's cold runs low on dry continental winters",
+    "STATE_SHENGJING": "Mukden's January is -11 C; vanilla's cold runs low on dry continental winters",
+    "STATE_SOUTHERN_MANCHURIA": "Jilin's January is -17 C; vanilla's cold runs low on dry continental winters",
+    "STATE_KARS": "Kars's January is -11 C on the plateau; vanilla's cold runs low there",
+}
+# STATE_NORTH_RHINE is the one cold-wintered land region vanilla gives no cold pair at all (Cologne, 2 C; its
+# neighbors read 0.49 to 0.56). The mod's state-region copies pass vanilla's fields through unchanged
+# (test_state_regions_vanilla_sync), so it stays a vanilla gap; its winter of 2 C is under every band.
+
 STATE_RE = re.compile(r"(?m)^(STATE_\w+)\s*=\s*\{")
 TRAITS_RE = re.compile(r"traits\s*=\s*\{([^}]*)\}")
+COLD_RE = re.compile(r"(?m)^\s*max_cold_effect\s*=\s*([\d.]+)")
 
 
 def load_rows(path=CSV):
@@ -109,6 +134,34 @@ def region_traits(repo=REPO):
             t = TRAITS_RE.search(text, m.end(), end)
             traits[m.group(1)] = set(re.findall(r'"?(\w+)"?', t.group(1))) if t else set()
     return traits
+
+
+def region_cold(repo=REPO):
+    """STATE_X -> its max_cold_effect (vanilla's, passed through), 0 where its block has none."""
+    cold = {}
+    for _, text in _region_files(repo):
+        starts = list(STATE_RE.finditer(text))
+        for i, m in enumerate(starts):
+            end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
+            c = COLD_RE.search(text, m.end(), end)
+            cold[m.group(1)] = float(c.group(1)) if c else 0.0
+    return cold
+
+
+def cold_band_flags(rows, cold):
+    """{state: why} for each row whose winter disagrees in kind with vanilla's cold at the peak of winter: a winter
+    above freezing where vanilla's cold is severe, one milder than London's (3 C, the winter term's neutral) where it is
+    at least moderate, or one of -10 C or harder where it isn't moderate."""
+    flags = {}
+    for r in rows:
+        c, w = cold.get(r.state, 0.0), r.winter_mean_c
+        if c >= COLD_SEVERE and w > 0:
+            flags[r.state] = f"a {w} C winter under vanilla's severe cold ({c})"
+        elif c >= COLD_MODERATE and w > 3:
+            flags[r.state] = f"a {w} C winter under vanilla's moderate cold ({c})"
+        elif w <= -10 and c < COLD_MODERATE:
+            flags[r.state] = f"a {w} C winter where vanilla's cold is only {c}"
+    return flags
 
 
 def validate(rows, regions, traits):
@@ -167,6 +220,8 @@ def implausible(rows):
                          f"winter {r.winter_mean_c} °C (a highland?)")
         if r.summer_humidity == 3 and r.aridity == 2:
             notes.append(f"{r.state} ({r.ref_place}): oppressive summer humidity in a region scarce of water")
+    for state, why in cold_band_flags(rows, region_cold()).items():
+        notes.append(f"{state}: {why}{' (accepted: ' + COLD_BAND_EXCEPTIONS[state] + ')' if state in COLD_BAND_EXCEPTIONS else ''}")
     return notes
 
 

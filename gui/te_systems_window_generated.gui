@@ -1862,57 +1862,6 @@ types te_systems_window_generated_types
 			blockoverride "tab_open_journal" {}
 		}
 
-		### moon_base
-		te_system_tab_frame = {
-			blockoverride "tab_country" {}
-			visible = "[GetScriptedGui('te_window_space_race_moon_base_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-			blockoverride "tab_header" {
-				default_header = {
-					using = default_list_position
-					blockoverride "text" {
-						text = "je_space_race_moon_base"
-					}
-					te_help_button = {
-						visible = "[Not( GetMetaPlayer.IsObserver )]"
-						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
-					}
-				}
-			}
-			blockoverride "tab_content" {
-				te_sr_moon_base_overview = {}
-
-				### The player's own: the live sections and Open Journal Entry, under the entry.
-				flowcontainer = {
-					using = te_own_country_only
-					parentanchor = hcenter
-					direction = vertical
-					ignoreinvisible = yes
-
-					flowcontainer = {
-						datacontext = "[GetPlayerJournalEntry('je_space_race_moon_base')]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						te_sr_moon_base_status = {
-							blockoverride "sr_debris" {}
-						}
-						button = {
-							visible = "[JournalEntry.IsActive]"
-							using = default_button
-							parentanchor = hcenter
-							size = { 480 32 }
-							text = "te_system_tab_open_journal"
-							tooltip = "te_window_space_race_open_journal_tt"
-							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-						}
-					}
-				}
-			}
-			blockoverride "tab_open_journal" {}
-		}
-
 		### mars_landing
 		te_system_tab_frame = {
 			blockoverride "tab_country" {}

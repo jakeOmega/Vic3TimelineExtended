@@ -14,7 +14,7 @@ seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, li
 
 	flags = {
 		can_be_enforced
-		can_be_renegotiated
+		is_one_time
 	}
 
 	usage_limit = once_per_side_with_same_inputs
@@ -67,11 +67,11 @@ seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, li
 
 	# The source country's company is removed, the target country gains it.
 	on_entry_into_force = {
-		# From vanilla 1.15 a renegotiated treaty re-runs this hook, with
-		# scope:is_renegotiation set, for a carried-over copy and for one newly added
-		# in the renegotiation (treaty_articles.md, can_be_renegotiated). Only
-		# exists = input_company tells them apart: the company a carried-over copy
-		# seizes is gone by then, and a new or re-pointed one must still run.
+		# A one-off (is_one_time), so not renegotiable: a renegotiated treaty keeps
+		# the article locked and skips this hook for the carried-over copy (vanilla
+		# 1.15, treaty_articles.md). One a renegotiation adds still runs it, with
+		# scope:is_renegotiation set, and must. The guard skips a company already
+		# gone, so nothing runs on a stale input.
 		scope:article_options = {
 			if = {
 				limit = {

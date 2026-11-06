@@ -1,9 +1,8 @@
 ﻿# Space Race On-Actions
 
 # Once a month per country (not per journal entry): the inactive-milestone
-# cleanup, the revolution backstop, the post-race dividend, a player's Space
-# Powers standings and, until 2026-12-31, the retired failure cooldown's
-# old-save strip.
+# cleanup, the revolution backstop, the post-race dividend and a player's Space
+# Powers standings.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -50,10 +49,6 @@ space_race_on_action = {
 			sr_earth_notice_step = yes
 			sr_earth_alert_step = yes
 		}
-		# An old save's open Moon Base (lunar colonization design § 10): its
-		# progress moves onto Solar System Colonization before the cleanup on
-		# the next line deletes it (sr_launch_window_effects.txt).
-		sr_lunar_carry_moon_base = yes
 		sr_cleanup_inactive_space_race_milestones = yes
 		# A choice to colonize the Moon lasts while a lunar world is free
 		# (sr_site_effects.txt).
@@ -166,14 +161,6 @@ space_race_on_action = {
 		else_if = {
 			limit = { has_variable = sr_power_total }
 			sr_powers_clear = yes
-		}
-		# Old saves: the post-setback cooldown is gone (2026-10-31; remove this
-		# strip after 2026-12-31). Drop its counter and re-derive the statuses it
-		# shielded (3 to 5), which the panel no longer draws.
-		if = {
-			limit = { has_variable = sr_failure_cooldown }
-			remove_variable = sr_failure_cooldown
-			sr_refresh_milestone_statuses = yes
 		}
 	}
 }

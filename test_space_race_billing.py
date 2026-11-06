@@ -16,7 +16,7 @@ EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.t
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")
 
 

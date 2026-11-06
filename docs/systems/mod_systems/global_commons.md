@@ -32,7 +32,7 @@ Design: `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 
 | country | `te_seabed_policy_changed`, `te_seabed_policy_cost_cached`, `te_seabed_fee_cached` | the month of the last policy change (the lock; absent = free), and the two modifiers' multipliers |
 | country | `te_seabed_queued_<basin>`, `te_seabed_lic_now_<basin>` | licences on its queued levels (distant ones first) and all its licences, by basin, monthly |
 | country | `te_seabed_need_navy_<basin>`, `te_seabed_coast_<basin>`, `te_seabed_ports_<basin>`, `te_seabed_coast_all`, `te_seabed_dr_<basin>` | the "+1 licence" readout (-1 full, -2 no weight) and its inputs (coast counted with unincorporated states at half), yearly; `te_seabed_coast_states_<basin>` every coastal state there, which the Free hover lists |
-| player | list `te_seabed_rk_list_<basin>` | on each player, the basin's other claimants' capitals, largest share first, rebuilt at every sharing (`te_seabed_rank_list`; audit SEA-3, 2026-10-27). It replaced the six global seats `te_seabed_rk_<basin>_<n>`, `te_seabed_rk_more_<basin>` and the players' `te_seabed_rkcap_*`, which the sharing removes from an older save |
+| player | list `te_seabed_rk_list_<basin>` | on each player, the basin's other claimants' capitals, largest share first, rebuilt at every sharing (`te_seabed_rank_list`; audit SEA-3, 2026-10-27). It replaced the six global seats `te_seabed_rk_<basin>_<n>`, `te_seabed_rk_more_<basin>` and the players' `te_seabed_rkcap_*` |
 | global | `te_seabed_last_sharing_month` | the panel's "as of" |
 | global | `te_seabed_world_wait_<basin>` | the shares waiting for countries without the technology (the pool hover; their weight is in `te_seabed_world_w_<basin>`) |
 

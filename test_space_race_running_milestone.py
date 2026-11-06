@@ -17,11 +17,11 @@ import os
 import re
 import unittest
 
-from je_test_helpers import outcome_texts
-
 REPO = os.path.dirname(os.path.abspath(__file__))
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
+# The single-goal milestones with an entry (the Moon Base's went with vanilla
+# 1.15, #1407).
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe",
               "mars_landing", "interstellar_probe")
 
 
@@ -58,20 +58,11 @@ def _script_files():
 
 
 class RetiredFlagTests(unittest.TestCase):
-    def test_only_the_old_save_strip_mentions_the_retired_flag(self):
-        effects = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
-        hits = {}
+    def test_nothing_mentions_the_retired_flag(self):
+        # The old-save strip went with vanilla 1.15, which loads no older save
+        # (#1407): no script sets, reads or removes the flag.
         for path in _script_files():
-            n = len(re.findall(r"\bsr_active_milestone\b", _read(path)))
-            if n:
-                hits[os.path.relpath(path, REPO)] = n
-        self.assertEqual(hits, {os.path.relpath(effects, REPO): 2})
-        strip = _block(_read(effects), "sr_cleanup_inactive_space_race_milestones")
-        self.assertRegex(
-            strip,
-            r"limit\s*=\s*\{\s*has_variable\s*=\s*sr_active_milestone\s*\}\s*"
-            r"remove_variable\s*=\s*sr_active_milestone",
-        )
+            self.assertNotRegex(_read(path), r"\bsr_active_milestone\b", os.path.relpath(path, REPO))
 
     def test_retired_triggers_are_gone(self):
         for path in _script_files():
@@ -111,51 +102,26 @@ class RunningMilestoneTests(unittest.TestCase):
 
 class MoonBaseRetiredTests(unittest.TestCase):
     """The Moon Base milestone is retired (lunar colonization design § 7): the
-    first lunar colony takes its place. Its entry stays defined, its purpose
-    event keeps one option that does nothing, and the flavor events that ran
-    while it did narrate colonization before a first lunar colony instead."""
+    first lunar colony takes its place. The entry stayed defined for older
+    saves until vanilla 1.15, which loads none (#1407): now nothing of it is
+    left, and the flavor events that ran while it did narrate colonization
+    before a first lunar colony instead."""
 
     @classmethod
     def setUpClass(cls):
-        cls.je = _block(_read(os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")),
-                        "je_space_race_moon_base")
         cls.events = _read(os.path.join(REPO, "events", "space_race_events.txt"))
 
-    def test_an_old_copy_left_active_moves_nothing(self):
-        """Review M1: the pulse moves the bar only while the active flag stands,
-        which the carry removes; past it, the pulse only checks it is closed."""
-        pulse = _block(self.je, "on_monthly_pulse")
-        self.assertRegex(pulse, r"if = \{\s*limit = \{ has_variable = sr_active_moon_base \}\s*"
-                                r"sr_monthly_progress_update_effect = \{ MILESTONE = moon_base \}\s*\}\s*"
-                                r"else = \{\s*sr_lunar_carry_lingering_check = yes\s*\}")
-        windows = _read(os.path.join(REPO, "common", "scripted_effects", "sr_launch_window_effects.txt"))
-        self.assertIn("remove_variable = sr_active_moon_base", _block(windows, "sr_lunar_carry_moon_base"))
-        lingering = _block(windows, "sr_lunar_carry_lingering_check")
-        self.assertIn("NOT = { has_variable = sr_lunar_carry_grace }", lingering)
-        self.assertIn("TE_SELF_CHECK BROKEN lunar_migration still open", lingering)
-        self.assertIn("set_variable = { name = sr_lunar_carry_grace value = yes days = 62 }",
-                      _block(windows, "sr_lunar_carry_self_check"))
-        # the console's option c can log the carry again (review M3)
-        console = _read(os.path.join(REPO, "events", "te_debug_space_race_events.txt"))
-        c = console[console.index("name = te_debug_space_race.8.c"):]
-        for var in ("sr_lunar_carried", "sr_lunar_carry_grace"):
-            self.assertIn(f"remove_variable = {var}", c)
-
-    def test_the_entry_is_never_shown_possible_completed_or_failed(self):
-        for name in ("is_shown_when_inactive", "possible"):
-            with self.subTest(block=name):
-                self.assertEqual(_block(self.je, name).split(), ["always", "=", "no"])
-        # no outcome, so it can neither complete nor fail (1.15)
-        self.assertEqual(outcome_texts(self.je), [])
-        # an old save's open copy can still drop out, and the cleanup follow it
-        self.assertIn("can_deactivate = yes", self.je)
-
-    def test_the_purpose_event_does_nothing(self):
-        event = _block(self.events, "space_race_events.82")
-        self.assertEqual(len(re.findall(r"\boption\s*=\s*\{", event)), 1)
-        option = _block(event, "option")
-        # A lone option is an acknowledgement: empty_effect_audit doesn't flag it.
-        self.assertEqual(sorted(re.findall(r"(\w+)\s*=", option)), ["default_option", "name"])
+    def test_nothing_of_the_entry_is_left(self):
+        """Its entry, purpose event, controls, panel and old-save carry are gone;
+        the programme rows still draw its icon, the first lunar colony's record."""
+        gone = ("je_space_race_moon_base = {", "je:je_space_race_moon_base", "has_journal_entry = je_space_race_moon_base",
+                "space_race_events.82", "sr_milestone_moon_base_sgui", "sr_btn_safe_moon_base",
+                "sr_sync_moon_base_entry", "sr_moon_base_choice_made", "sr_lunar_carry", "sr_lunar_migrate")
+        for path in _script_files():
+            text = _read(path)
+            for name in gone:
+                with self.subTest(path=os.path.relpath(path, REPO), name=name):
+                    self.assertNotIn(name, text)
 
     def test_no_event_waits_on_the_moon_base(self):
         # .20's notice (MILESTONE = moon_base: the first lunar colony's) and .76's
