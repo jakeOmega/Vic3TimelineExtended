@@ -1041,4 +1041,64 @@ legacy_je_modifier_cleanup_effect = {
 		if = { limit = { has_modifier = ch_cultural_program_funding_cost } remove_modifier = ch_cultural_program_funding_cost }
 		if = { limit = { has_modifier = ch_world_exposition_cost } remove_modifier = ch_world_exposition_cost }
 	}
+	# The Banking cycle's modifiers sat on its entry. The planning pool and the
+	# two external charges now read caches an older save lacks: write each
+	# before its copy goes, or the line would pay nothing until its next
+	# refresh.
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = planning_treasury_pool_balance }
+			NOT = { has_variable = ce_pool_balance_cached }
+		}
+		banking_cycle_update_ce_pool_balance = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_sterilization_charge }
+			NOT = { has_variable = banking_external_sterilization_charge_cached }
+		}
+		banking_external_charge_sterilization = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_import_charge }
+			NOT = { has_variable = banking_external_import_charge_cached }
+		}
+		banking_external_charge_import = yes
+	}
+	je:je_banking_cycle ?= {
+		if = { limit = { has_modifier = financial_cycle_government_fiscal_policy_effect } remove_modifier = financial_cycle_government_fiscal_policy_effect }
+		if = { limit = { has_modifier = bubble_inertia_moderate } remove_modifier = bubble_inertia_moderate }
+		if = { limit = { has_modifier = bubble_inertia_high } remove_modifier = bubble_inertia_high }
+		if = { limit = { has_modifier = bubble_inertia_extreme } remove_modifier = bubble_inertia_extreme }
+		if = { limit = { has_modifier = bubble_inertia_moderate_coop } remove_modifier = bubble_inertia_moderate_coop }
+		if = { limit = { has_modifier = bubble_inertia_high_coop } remove_modifier = bubble_inertia_high_coop }
+		if = { limit = { has_modifier = bubble_inertia_extreme_coop } remove_modifier = bubble_inertia_extreme_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_panic } remove_modifier = financial_cycle_phase_panic }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn } remove_modifier = financial_cycle_phase_downturn }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation } remove_modifier = financial_cycle_phase_stagnation }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion } remove_modifier = financial_cycle_phase_expansion }
+		if = { limit = { has_modifier = financial_cycle_phase_boom } remove_modifier = financial_cycle_phase_boom }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy } remove_modifier = financial_cycle_phase_frenzy }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_cmd } remove_modifier = financial_cycle_phase_panic_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_cmd } remove_modifier = financial_cycle_phase_downturn_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_cmd } remove_modifier = financial_cycle_phase_stagnation_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_cmd } remove_modifier = financial_cycle_phase_expansion_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_cmd } remove_modifier = financial_cycle_phase_boom_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_cmd } remove_modifier = financial_cycle_phase_frenzy_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_coop } remove_modifier = financial_cycle_phase_panic_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_coop } remove_modifier = financial_cycle_phase_downturn_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_coop } remove_modifier = financial_cycle_phase_stagnation_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_coop } remove_modifier = financial_cycle_phase_expansion_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_coop } remove_modifier = financial_cycle_phase_boom_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_coop } remove_modifier = financial_cycle_phase_frenzy_coop }
+		if = { limit = { has_modifier = banking_stance_band_1 } remove_modifier = banking_stance_band_1 }
+		if = { limit = { has_modifier = banking_stance_band_2 } remove_modifier = banking_stance_band_2 }
+		if = { limit = { has_modifier = banking_stance_band_3 } remove_modifier = banking_stance_band_3 }
+		if = { limit = { has_modifier = banking_stance_band_4 } remove_modifier = banking_stance_band_4 }
+		if = { limit = { has_modifier = banking_stance_band_5 } remove_modifier = banking_stance_band_5 }
+		if = { limit = { has_modifier = planning_treasury_pool_balance } remove_modifier = planning_treasury_pool_balance }
+		if = { limit = { has_modifier = banking_external_sterilization_charge } remove_modifier = banking_external_sterilization_charge }
+		if = { limit = { has_modifier = banking_external_import_charge } remove_modifier = banking_external_import_charge }
+	}
 }

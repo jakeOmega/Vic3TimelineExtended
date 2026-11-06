@@ -404,6 +404,17 @@ rebels and the first fortnight. An entry-only declaration would have those
 countries borrow at 0%; a hybrid keeps the country branch and adds a home gate,
 so nothing gets shorter. The 38 tools have no mirror variables (follow-up).
 
+As built (PR 4): 33 declarations, each gated on the cycle latch
+(`has_variable = finance_cycle_value`); the phases read the existing
+`banking_cycle_is_<phase>` and economy triggers, whose edges equal the deleted
+chain. The pool and the two external charges read new caches
+(`ce_pool_balance_cached`, `banking_external_*_charge_cached`), written where
+the old adds ran; the old-save strip writes each before removing its copy. A
+charge now starts and stops on the entry update after Enable or Disable, so a
+tool's life nets between one weekly charge short and one over. The five
+multipliers old saves' copies name (`*_for_je`, `bubble_inertia_multiplier_script_value`)
+stay, uncalled, until the strip goes. No gate reads back one of these costs.
+
 ### 4.8 Grand Monuments (36 keys + 15 boons, on the entry)
 
 All of `gm_apply_national_modifiers` (`gm_effects.txt:1138-1182`): 27
