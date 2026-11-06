@@ -580,8 +580,8 @@
   "es": "Comprometido: cuenta para la aprobación en esta revisión. Persuasible: puntúa 0 o más, sin llegar a comprometerse. Opuesto: puntúa por debajo de 0. Línea roja: puntúa en la línea roja o por debajo. La puntuación de un grupo se vuelve a sopesar cada mes. Si el proyecto se aprueba, todo grupo que puntúe por debajo de 0 y no se haya comprometido desaprueba al gobierno durante un tiempo. Marginal: tiene demasiado poco peso para contar en uno u otro sentido, así que no cuenta para la aprobación."
  },
  "te_tax_ig_trust": {
-  "en": "Kept Promises",
-  "es": "Promesas cumplidas"
+  "en": "Trust",
+  "es": "Confianza"
  },
  "te_tax_ig_trust_tt": {
   "en": "The group's trust in the government's word: each promise kept with it raises this, and each one broken or renegotiated lowers it. A kept promise that only maintained what the group already had does not raise it. After #v [GetPlayer.MakeScope.ScriptValue('te_tax_obl_trust_recover_months')|0]#! months without either, it fades a step back toward neutral.",

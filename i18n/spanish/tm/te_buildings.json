@@ -1199,6 +1199,10 @@
   "en": "Infosys Mysore Campus",
   "es": "Campus Infosys Mysore"
  },
+ "building_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "es": "Reserva biológica de InGen"
+ },
  "building_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
   "es": "Central eléctrica de Ingolstadt"
@@ -1631,6 +1635,10 @@
   "en": "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give",
   "es": "Una bonificación o penalización a los insumos y a la producción de los edificios $building_orbital_battlestation$, y a las bonificaciones militares que otorgan"
  },
+ "building_orbital_defense_battery": {
+  "en": "Ground-to-Orbit Battery",
+  "es": "Batería tierra-órbita"
+ },
  "building_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
   "es": "Terminal Orient Express Sirkeci"
@@ -1747,6 +1755,10 @@
   "en": "Prussian Railway Directorate",
   "es": "Dirección de Ferrocarriles de Prusia"
  },
+ "building_public_housing": {
+  "en": "Public Housing",
+  "es": "Vivienda pública"
+ },
  "building_putilov_works": {
   "en": "Putilov Works",
   "es": "Fábricas Putilov"
@@ -1782,6 +1794,10 @@
  "building_rare_earth_metals_mine_throughput_add_desc": {
   "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
   "es": "[concept_throughput] del edificio $building_rare_earth_metals_mine$"
+ },
+ "building_rejoovenesense_compound": {
+  "en": "RejoovenEsense Compound",
+  "es": "Complejo RejoovenEsense"
  },
  "building_rekal_hq": {
   "en": "Rekal Memory Center",
@@ -1842,6 +1858,10 @@
  "building_ricordi_galleria_vittorio_emanuele": {
   "en": "Ricordi Galleria Publishing House",
   "es": "Editorial Ricordi Galleria"
+ },
+ "building_robotic_or_ai_managed_bool": {
+  "en": "Robotic or AI-Managed",
+  "es": "Robótico o gestionado por IA"
  },
  "building_robotics_industry": {
   "en": "Robotics Industry",
@@ -2043,6 +2063,10 @@
   "en": "Sony Pictures Studios",
   "es": "Estudios Sony Pictures"
  },
+ "building_space_command": {
+  "en": "Space Command",
+  "es": "Mando espacial"
+ },
  "building_space_elevator": {
   "en": "Space Elevator",
   "es": "Ascensor espacial"
@@ -2131,6 +2155,10 @@
   "en": "The colony on $sr_site_name_ceres$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_ceres$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
+ "building_sr_site_daedalus": {
+  "en": "$sr_site_name_daedalus$ Colony",
+  "es": "Colonia de $sr_site_name_daedalus$"
+ },
  "building_sr_site_enceladus": {
   "en": "$sr_site_name_enceladus$ Colony",
   "es": "Colonia de $sr_site_name_enceladus$"
@@ -2203,6 +2231,10 @@
   "en": "The colony on $sr_site_name_iapetus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_iapetus$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
+ "building_sr_site_imbrium": {
+  "en": "$sr_site_name_imbrium$ Colony",
+  "es": "Colonia de $sr_site_name_imbrium$"
+ },
  "building_sr_site_io": {
   "en": "$sr_site_name_io$ Colony",
   "es": "Colonia de $sr_site_name_io$"
@@ -2218,6 +2250,10 @@
  "building_sr_site_makemake_desc": {
   "en": "The colony on $sr_site_name_makemake$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_makemake$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
+ "building_sr_site_marius_hills": {
+  "en": "$sr_site_name_marius_hills$ Colony",
+  "es": "Colonia de $sr_site_name_marius_hills$"
  },
  "building_sr_site_mercury": {
   "en": "$sr_site_name_mercury$ Colony",
@@ -2267,6 +2303,10 @@
   "en": "The colony on $sr_site_name_pallas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_pallas$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
+ "building_sr_site_peary": {
+  "en": "$sr_site_name_peary$ Colony",
+  "es": "Colonia de $sr_site_name_peary$"
+ },
  "building_sr_site_pluto": {
   "en": "$sr_site_name_pluto$ Colony",
   "es": "Colonia de $sr_site_name_pluto$"
@@ -2307,6 +2347,10 @@
   "en": "The colony on $sr_site_name_sedna$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_sedna$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
+ "building_sr_site_shackleton": {
+  "en": "$sr_site_name_shackleton$ Colony",
+  "es": "Colonia de $sr_site_name_shackleton$"
+ },
  "building_sr_site_titan": {
   "en": "$sr_site_name_titan$ Colony",
   "es": "Colonia de $sr_site_name_titan$"
@@ -2322,6 +2366,10 @@
  "building_sr_site_titania_desc": {
   "en": "The colony on $sr_site_name_titania$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "es": "La colonia de $sr_site_name_titania$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
+ "building_sr_site_tranquility": {
+  "en": "$sr_site_name_tranquility$ Colony",
+  "es": "Colonia de $sr_site_name_tranquility$"
  },
  "building_sr_site_triton": {
   "en": "$sr_site_name_triton$ Colony",

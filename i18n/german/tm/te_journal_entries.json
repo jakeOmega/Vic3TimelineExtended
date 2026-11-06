@@ -43,6 +43,18 @@
   "en": "Boom & Bust Cycle",
   "de": "Boom-und-Bust-Zyklus"
  },
+ "je_ch_board_head_change": {
+  "en": "Change",
+  "de": "Änderung"
+ },
+ "je_ch_board_head_country": {
+  "en": "Country",
+  "de": "Land"
+ },
+ "je_ch_board_head_model": {
+  "en": "Model",
+  "de": "Modell"
+ },
  "je_ch_how_benchmark": {
   "en": "A country with this journal entry whose share trails the leading cultural power's by more than a few points carries the [concept_foreign_cultural_benchmark]: its people measure their government against the leader's, and [concept_legitimacy] falls. The wider the gap, the larger the loss. The leader never carries it. While we do, the overview shows it.",
   "de": "Ein Land mit diesem Journaleintrag, dessen Anteil um mehr als ein paar Punkte hinter dem der führenden Kulturmacht zurückbleibt, trägt den [Concept('concept_foreign_cultural_benchmark', 'Ausländischen Kultur-Vergleichswert')]: Seine Bevölkerung misst die eigene Regierung an der des Spitzenreiters, und die [concept_legitimacy] sinkt. Je größer der Abstand, desto größer der Verlust. Der Spitzenreiter trägt ihn nie. Solange wir ihn tragen, zeigt die Übersicht ihn an."
@@ -79,6 +91,10 @@
   "en": "Top Cultural Powers",
   "de": "Führende Kulturmächte"
  },
+ "je_ch_how_sub_bonus": {
+  "en": "Hegemony Bonus",
+  "de": "Hegemoniebonus"
+ },
  "je_ch_how_sub_models": {
   "en": "Political Models of the World",
   "de": "Politische Modelle der Welt"
@@ -102,6 +118,22 @@
  "je_ch_ov_benchmark_tt": {
   "en": "#title [concept_foreign_cultural_benchmark]#!\\nWe trail the leading cultural power, and our people measure our government against it.\\nStrength: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
   "de": "#title [concept_foreign_cultural_benchmark]#!\\nWir liegen hinter der führenden Kulturmacht zurück, und unsere Bevölkerung misst unsere Regierung an ihr.\\nStärke: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
+ },
+ "je_ch_ov_bonus_active": {
+  "en": "Active",
+  "de": "Aktiv"
+ },
+ "je_ch_ov_bonus_from": {
+  "en": "From 1% Share",
+  "de": "Ab 1% Anteil"
+ },
+ "je_ch_ov_bonus_label": {
+  "en": "Hegemony Bonus",
+  "de": "Hegemoniebonus"
+ },
+ "je_ch_ov_bonus_none": {
+  "en": "None",
+  "de": "Keiner"
  },
  "je_ch_ov_leaders_label": {
   "en": "Leading Powers",
@@ -175,6 +207,18 @@
   "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
   "de": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nAnteil an der Weltkultur: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nLänder, die es betreiben: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nDruck im Ausland: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
  },
+ "je_ch_ov_prog_funding": {
+  "en": "Funding [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]",
+  "de": "Finanzierung [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]"
+ },
+ "je_ch_ov_prog_label": {
+  "en": "Programs",
+  "de": "Programme"
+ },
+ "je_ch_ov_prog_running": {
+  "en": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! of 4 Running",
+  "de": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! von 4 laufend"
+ },
  "je_ch_ov_rank_label": {
   "en": "World Rank",
   "de": "Weltrang"
@@ -204,12 +248,16 @@
   "de": "Bedeutend"
  },
  "je_ch_ov_tier_4": {
-  "en": "Major Power",
+  "en": "Major",
   "de": "Mittelmacht"
  },
  "je_ch_ov_tier_5": {
   "en": "Hegemon",
   "de": "Hegemon"
+ },
+ "je_ch_ov_tier_next": {
+  "en": "Next: #v [Country.GetCustom('ch_next_tier_name')]#! from #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#! share",
+  "de": "Als Nächstes: #v [Country.GetCustom('ch_next_tier_name')]#! ab #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#! Anteil"
  },
  "je_ch_prog_institutes_tt": {
   "en": "#title $je_ch_widget_prog_institutes$#!\\nWhile it runs:\\n[GetStaticModifier('ch_cultural_institutes_program').GetDesc]",
@@ -295,9 +343,17 @@
   "en": "Our Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
   "de": "Unser Rang: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! von [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
  },
+ "je_ch_widget_board_us_theirs": {
+  "en": "Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "de": "Rang: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! von [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ },
  "je_ch_widget_breakdown_header_ours": {
   "en": "Where Our Pull Comes From",
   "de": "Woher unsere Anziehungskraft kommt"
+ },
+ "je_ch_widget_breakdown_header_theirs": {
+  "en": "Where Its Pull Comes From",
+  "de": "Woher die Anziehungskraft stammt"
  },
  "je_ch_widget_funding_label": {
   "en": "Program Funding",
@@ -354,6 +410,14 @@
  "je_civil_rights_complete_bar_tt": {
   "en": "Movement support reaches 100",
   "de": "Bewegungsunterstützung erreicht 100"
+ },
+ "je_civil_rights_months_line": {
+  "en": "\\n#bold Months run:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]",
+  "de": "\\n#bold Verstrichene Monate:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]"
+ },
+ "je_civil_rights_progress_lines": {
+  "en": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold If it wins now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold If it collapses now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]",
+  "de": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold Wenn sie jetzt siegt:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold Wenn sie jetzt zusammenbricht:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]"
  },
  "je_civil_rights_reason": {
   "en": "Discriminated communities are demanding equal treatment under the law.",
@@ -571,6 +635,26 @@
   "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programs let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
   "de": "Scheitert, wenn der Balken der Kolonialen Stabilität #R 0#! erreicht — das koloniale System bricht zusammen. Bis zu drei koloniale Gebiete erklären ihre Unabhängigkeit, die unruhigsten zuerst, im Abstand von zwei Monaten; jede Erklärung kann hingenommen, ausgehandelt oder bekämpft werden, und jedes Gebiet, das geht, nimmt die verbundenen Länder mit, die das [concept_homeland] seines Volkes sind. Der [concept_liberty_desire] unserer kolonialen Klientelländer schnellt in die Höhe, und dieser Journaleintrag kann zehn Jahre lang nicht zurückkehren. Sofern uns nicht jahrelange Entwicklungs- oder Assimilationsprogramme erlauben, den Rückzug auszuhandeln, kostet der Zusammenbruch zudem für Jahre [concept_prestige] und [concept_sol]."
  },
+ "je_colonial_empire_gp_effect": {
+  "en": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/mo",
+  "de": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/Mo."
+ },
+ "je_colonial_empire_gp_head_effect": {
+  "en": "Monthly",
+  "de": "Monatlich"
+ },
+ "je_colonial_empire_gp_head_name": {
+  "en": "Great Power",
+  "de": "Großmacht"
+ },
+ "je_colonial_empire_gp_head_share": {
+  "en": "Share",
+  "de": "Anteil"
+ },
+ "je_colonial_empire_gp_head_stance": {
+  "en": "Stance",
+  "de": "Haltung"
+ },
  "je_colonial_empire_history_header": {
   "en": "History",
   "de": "Verlauf"
@@ -671,6 +755,10 @@
   "en": "Colonial Programs",
   "de": "Kolonialprogramme"
  },
+ "je_colonial_empire_how_sub_stance": {
+  "en": "Our Stance on Colonialism",
+  "de": "Unsere Haltung zum Kolonialismus"
+ },
  "je_colonial_empire_negotiated_tt": {
   "en": "Up to three colonial territories declare independence, two months apart, each to be conceded, negotiated or fought, and the empire keeps its ties to those it lets go.",
   "de": "Bis zu drei koloniale Gebiete erklären im Abstand von zwei Monaten ihre Unabhängigkeit, die jeweils zugestanden, ausgehandelt oder bekämpft werden kann, und das Reich behält die Bindungen zu denen, die es ziehen lässt."
@@ -715,9 +803,21 @@
   "en": "#header $je_colonial_empire_row_garrison$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3",
   "de": "#header $je_colonial_empire_row_garrison$#!\\n#G Läuft#! auf Stufe #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! von 3"
  },
+ "je_colonial_empire_ov_gp_calm": {
+  "en": "No escalation",
+  "de": "Keine Eskalation"
+ },
+ "je_colonial_empire_ov_gp_net": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/Mo."
+ },
  "je_colonial_empire_ov_heading_tt": {
   "en": "#header Where it is heading#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The #G green#! stretch on the bar is the rise to come, the #R red#! stretch what would be lost. The rate is assessed again every month.",
   "de": "#header Wohin es sich bewegt#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] Monaten bei der Rate dieses Monats: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. Die #G grüne#! Strecke auf dem Balken ist der kommende Anstieg, die #R rote#! Strecke das, was verloren ginge. Die Rate wird jeden Monat neu bewertet."
+ },
+ "je_colonial_empire_ov_held_label": {
+  "en": "Holdings",
+  "de": "Besitzungen"
  },
  "je_colonial_empire_ov_held_tt": {
   "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]",
@@ -767,9 +867,21 @@
   "en": "Programs",
   "de": "Programme"
  },
+ "je_colonial_empire_ov_programmes_net": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/Mo."
+ },
+ "je_colonial_empire_ov_programmes_running": {
+  "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! of 3 running",
+  "de": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! von 3 laufend"
+ },
  "je_colonial_empire_ov_stability_value": {
   "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
   "de": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
+ },
+ "je_colonial_empire_ov_stability_value_ni": {
+  "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
  },
  "je_colonial_empire_ov_tick_eta": {
   "en": "In about #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! months at this month's rate.",
@@ -787,9 +899,33 @@
   "en": "#lore not yet assessed#!",
   "de": "#lore noch nicht bewertet#!"
  },
+ "je_colonial_empire_power_head_name": {
+  "en": "Colonial Power",
+  "de": "Kolonialmacht"
+ },
+ "je_colonial_empire_power_head_people": {
+  "en": "People",
+  "de": "Menschen"
+ },
+ "je_colonial_empire_power_head_stability": {
+  "en": "Stability",
+  "de": "Stabilität"
+ },
+ "je_colonial_empire_powers_header": {
+  "en": "The Colonial Powers",
+  "de": "Die Kolonialmächte"
+ },
+ "je_colonial_empire_pressure_consensus_value": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/Mo."
+ },
  "je_colonial_empire_pressure_header": {
   "en": "International Pressure",
   "de": "Internationaler Druck"
+ },
+ "je_colonial_empire_pressure_isolation_value": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/Mo."
  },
  "je_colonial_empire_programmes_header": {
   "en": "Colonial Programs",
@@ -803,17 +939,97 @@
   "en": "#bold Cultural Assimilation Program#!",
   "de": "#bold Kulturelles Assimilierungsprogramm#!"
  },
+ "je_colonial_empire_row_assimilation_short": {
+  "en": "Cultural Assimilation",
+  "de": "Kulturelle Assimilierung"
+ },
  "je_colonial_empire_row_garrison": {
   "en": "#bold Military Garrison#!",
   "de": "#bold Militärgarnison#!"
+ },
+ "je_colonial_empire_row_garrison_short": {
+  "en": "Military Garrison",
+  "de": "Militärgarnison"
  },
  "je_colonial_empire_row_invest": {
   "en": "#bold Colonial Development Investment#!",
   "de": "#bold Investitionen in koloniale Entwicklung#!"
  },
+ "je_colonial_empire_row_invest_short": {
+  "en": "Development Investment",
+  "de": "Entwicklungsinvestitionen"
+ },
  "je_colonial_empire_stability_header": {
   "en": "Why Stability Is Moving",
   "de": "Warum sich die Stabilität bewegt"
+ },
+ "je_colonial_empire_stance_anti": {
+  "en": "Condemns colonialism",
+  "de": "Verurteilt den Kolonialismus"
+ },
+ "je_colonial_empire_stance_btn_anti": {
+  "en": "Condemn",
+  "de": "Verurteilen"
+ },
+ "je_colonial_empire_stance_btn_neutral": {
+  "en": "Stay Neutral",
+  "de": "Neutral bleiben"
+ },
+ "je_colonial_empire_stance_btn_pro": {
+  "en": "Support",
+  "de": "Unterstützen"
+ },
+ "je_colonial_empire_stance_force_dormant": {
+  "en": "#O Dormant#!: not a great power",
+  "de": "#O Ruhend#!: keine Großmacht"
+ },
+ "je_colonial_empire_stance_force_label": {
+  "en": "In force",
+  "de": "In Kraft"
+ },
+ "je_colonial_empire_stance_force_yes": {
+  "en": "#G Yes#!, for #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence]",
+  "de": "#G Ja#!, für #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence]"
+ },
+ "je_colonial_empire_stance_header_ours": {
+  "en": "Our Stance on Colonialism",
+  "de": "Unsere Haltung zum Kolonialismus"
+ },
+ "je_colonial_empire_stance_header_theirs": {
+  "en": "Stance on Colonialism",
+  "de": "Haltung zum Kolonialismus"
+ },
+ "je_colonial_empire_stance_label": {
+  "en": "Stance",
+  "de": "Haltung"
+ },
+ "je_colonial_empire_stance_neutral": {
+  "en": "Neutral",
+  "de": "Neutral"
+ },
+ "je_colonial_empire_stance_next_label": {
+  "en": "Next change",
+  "de": "Nächste Änderung"
+ },
+ "je_colonial_empire_stance_next_wait": {
+  "en": "In #v [Country.MakeScope.ScriptValue('decol_stance_disp_months_left')|0]#! months",
+  "de": "In #v [Country.MakeScope.ScriptValue('decol_stance_disp_months_left')|0]#! Monaten"
+ },
+ "je_colonial_empire_stance_pro": {
+  "en": "Backs the colonial powers",
+  "de": "Stützt die Kolonialmächte"
+ },
+ "je_colonial_empire_stance_share": {
+  "en": "#v [Country.MakeScope.ScriptValue('decol_stance_disp_gp_share')|%0]#! of great-power prestige",
+  "de": "#v [Country.MakeScope.ScriptValue('decol_stance_disp_gp_share')|%0]#! des Großmachtprestiges"
+ },
+ "je_colonial_empire_stance_share_label": {
+  "en": "Prestige share",
+  "de": "Prestigeanteil"
+ },
+ "je_colonial_empire_stance_share_none": {
+  "en": "#lore None#!: not a great power",
+  "de": "#lore Keiner#!: keine Großmacht"
  },
  "je_colonial_empire_status_collapsing": {
   "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_collapsing_ours', 'je_colonial_empire_status_collapsing_theirs' )]",
@@ -927,6 +1143,18 @@
   "en": "#lore We hold no colonial subject.#!",
   "de": "#lore Wir haben kein koloniales Klientelland.#!"
  },
+ "je_colonial_empire_term_assimilation": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/Mo."
+ },
+ "je_colonial_empire_term_garrison": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/Mo."
+ },
+ "je_colonial_empire_term_invest": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/mo",
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/Mo."
+ },
  "je_colonial_empire_territories_none": {
   "en": "#lore No territory is eligible.#!",
   "de": "#lore Kein Gebiet kommt infrage.#!"
@@ -956,8 +1184,8 @@
   "de": "Jedes Gebiet, das die Dekolonisierungsentscheidungen anbieten können: auf dem Seeweg von unserer Hauptstadt getrennt (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), kein [concept_homeland] unserer Kulturen, mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern, von denen mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! zu einem Volk gehören, das mit uns kein [concept_heritage_trait] teilt, und höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! zu unseren primären Kulturen. Eine Entlassung nimmt jeden angrenzenden Staat von uns mit, in dem sein Volk zu Hause ist; diese Staaten teilen sich daher seine Zeile: #v +N#! nach dem Namen. Monatlich aktualisiert."
  },
  "je_colonial_empire_territory_head_primary": {
-  "en": "Primary",
-  "de": "Primär"
+  "en": "Ours",
+  "de": "Unsere"
  },
  "je_colonial_empire_territory_head_primary_tt": {
   "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
@@ -1038,6 +1266,10 @@
  "je_colonial_empire_war_head_name_ours": {
   "en": "Fighting us",
   "de": "Kämpft gegen uns"
+ },
+ "je_colonial_empire_war_head_name_theirs": {
+  "en": "Rebels",
+  "de": "Rebellen"
  },
  "je_colonial_empire_war_head_name_tt": {
   "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_tt_ours', 'je_colonial_empire_war_head_name_tt_theirs' )]",
@@ -1219,6 +1451,10 @@
   "en": "Total: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_display')|0]#! - #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the global best (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('global_max_ic_display')|0]#!)",
   "de": "Gesamt: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_display')|0]#! - #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! des weltweiten Bestwerts (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('global_max_ic_display')|0]#!)"
  },
+ "je_iw_catch_policy_label": {
+  "en": "Caught foreign operations",
+  "de": "Aufgedeckte Auslandsoperationen"
+ },
  "je_iw_ci_economic_label": {
   "en": "Economic defense",
   "de": "Wirtschaftliche Abwehr"
@@ -1274,6 +1510,10 @@
  "je_iw_detection_base_label": {
   "en": "Base risk",
   "de": "Grundrisiko"
+ },
+ "je_iw_detection_funding": {
+  "en": "#G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_ops_funding_detection_reduction_display')|0]#! points",
+  "de": "#G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_ops_funding_detection_reduction_display')|0]#! Punkte"
  },
  "je_iw_detection_header": {
   "en": "#bold Detection Risk#!",
@@ -1427,6 +1667,26 @@
   "en": "Counterintelligence exposed $covert_exposed_op_link$ run against us [SCOPE.GetRootScope.ScriptValue('covert_last_exposed_age_display')|0] months ago. The service behind it no longer exists.",
   "de": "Unsere Spionageabwehr deckte $covert_exposed_op_link$ auf, die vor [SCOPE.GetRootScope.ScriptValue('covert_last_exposed_age_display')|0] Monaten gegen uns durchgeführt wurde. Der dahinterstehende Dienst existiert nicht mehr."
  },
+ "je_iw_net_head_country": {
+  "en": "Country",
+  "de": "Land"
+ },
+ "je_iw_net_head_ops": {
+  "en": "Ops",
+  "de": "Ops"
+ },
+ "je_iw_net_head_report": {
+  "en": "Report",
+  "de": "Bericht"
+ },
+ "je_iw_net_head_start": {
+  "en": "Head Start",
+  "de": "Vorsprung"
+ },
+ "je_iw_net_head_strength": {
+  "en": "Strength",
+  "de": "Stärke"
+ },
  "je_iw_net_header": {
   "en": "Agent Networks",
   "de": "Agentennetzwerke"
@@ -1443,6 +1703,14 @@
   "en": "Our agents inside their service hear of the operations it runs against us. Each of those operations carries this many more points of monthly [concept_operation_detection], before their [concept_covert_efficiency] cuts it: #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! at full strength.\\n\\nOur counterintelligence still has to catch each one.",
   "de": "Unsere Agenten in ihrem Dienst hören von den Operationen, die dieser gegen uns führt. Jede dieser Operationen trägt so viele Punkte mehr an monatlichem [concept_operation_detection], bevor deren [concept_covert_efficiency] es senkt: #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! bei voller Stärke.\\n\\nUnsere Spionageabwehr muss trotzdem jede einzelne fassen."
  },
+ "je_iw_net_row_head_start_many": {
+  "en": "#v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! months",
+  "de": "#v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! Monate"
+ },
+ "je_iw_net_row_head_start_one": {
+  "en": "#v 1#! month",
+  "de": "#v 1#! Monat"
+ },
  "je_iw_net_row_intel_ops": {
   "en": "Their operations against us: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! running",
   "de": "Ihre Operationen gegen uns: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! laufend"
@@ -1452,12 +1720,24 @@
   "de": "Gezählt von unseren Agenten in ihrem Dienst beim letzten Monatsbericht, unabhängig davon, ob unsere eigene Spionageabwehr eine davon bemerkt hat. Jede Phase zählt, ab dem ersten Monat einer Operation.\\n\\nEs sagt aus, wie viele, nicht welche Operationen oder was sie tun. Unsere Spionageabwehr muss jede Einzelne dennoch fassen, um sie aufzudecken."
  },
  "je_iw_net_row_intel_service": {
-  "en": "Their service: #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! [concept_intelligence_capacity] (ours [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_total')|0]), #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! technologies (ours [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_techs_researched_display')|0])",
-  "de": "Ihr Dienst: #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! [concept_intelligence_capacity] (unsere: [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_total')|0]), #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! Technologien (unsere: [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_techs_researched_display')|0])"
+  "en": "Their service: #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! [concept_intelligence_capacity] (ours [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_total')|0]), #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! technologies (ours [GetPlayer.MakeScope.ScriptValue('covert_techs_researched_display')|0])",
+  "de": "Ihr Dienst: #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! [concept_intelligence_capacity] (unsere: [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_total')|0]), #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! Technologien (unsere: [GetPlayer.MakeScope.ScriptValue('covert_techs_researched_display')|0])"
  },
  "je_iw_net_row_intel_service_tooltip": {
   "en": "What our agents inside their service reported at the last monthly report; our own figures are today's.\\n\\nAt strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! the network also counts the [concept_covert_operations] they are running against us. A burn that drops it below a threshold loses that part of the report at once.",
   "de": "Was unsere Agenten in ihrem Dienst beim letzten Monatsbericht gemeldet haben; unsere eigenen Zahlen sind von heute.\\n\\nAb Stärke #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! zählt das Netzwerk zudem die [concept_covert_operations], die sie gegen uns laufen haben. Ein Enttarnungsverlust, der die Stärke unter einen Schwellenwert drückt, kostet diesen Teil des Berichts sofort."
+ },
+ "je_iw_net_row_report_0": {
+  "en": "None",
+  "de": "Keiner"
+ },
+ "je_iw_net_row_report_1": {
+  "en": "Partial",
+  "de": "Teilweise"
+ },
+ "je_iw_net_row_report_2": {
+  "en": "Full",
+  "de": "Vollständig"
  },
  "je_iw_net_row_title": {
   "en": "Network in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
@@ -1484,24 +1764,24 @@
   "de": "[concept_covert_operations] werden über die [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] eines anderen Landes gestartet, wo jede mit „Verdeckt“ vor ihrem Namen aufgeführt ist. Jede braucht einen freien [Concept('concept_operation_slots', 'Operationsplatz')] und [concept_covert_funding] von mindestens 1."
  },
  "je_iw_op_row_comms_disruption": {
-  "en": "#R Comms Disruption#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#R Kommunikationsstörung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_comms_disruption$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_comms_disruption$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_counterintel_support": {
-  "en": "#G Supporting Counterintelligence#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Unterstützt die Spionageabwehr#! [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('IN')]"
+  "en": "$iw_op_name_counterintel_support$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_counterintel_support$ [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('IN')]"
  },
  "je_iw_op_row_cultivate_assets": {
-  "en": "#G Cultivating Assets#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Kontakte aufbauen#! [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('IN')]"
+  "en": "$iw_op_name_cultivate_assets$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_cultivate_assets$ [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('IN')]"
  },
  "je_iw_op_row_cultivate_detail": {
   "en": "#G Recruiting sources:#! no effect on the target, and our network there grows #G ×[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_cultivate_mult')|1]#! as fast. Priority stays at 1.",
   "de": "#G Quellen anwerben:#! keine Wirkung auf das Ziel, und unser Netzwerk dort wächst #G ×[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_net_cultivate_mult')|1]#! so schnell. Die Priorität bleibt bei 1."
  },
  "je_iw_op_row_destabilization": {
-  "en": "#R Destabilization#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#R Destabilisierung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_destabilization$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_destabilization$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_detection": {
   "en": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! a month",
@@ -1520,36 +1800,40 @@
   "de": "Unsere [concept_intelligence_capacity] #v [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_display')|0]#! gegenüber den #R [ScriptContainer.GetVariableValue('iw_tgt_ic')|0]#! des Ziels, plus #R [ScriptContainer.GetVariableValue('iw_tgt_td')|0]#! [Concept('concept_target_defenses', 'Verteidigung')] gegen diese Art von Operation. Finanzierung, unser Netzwerk dort, Priorität und unser [concept_covert_efficiency] bestimmen den Rest. Ein Netzwerk des Ziels innerhalb unseres eigenen Dienstes schärft dessen Spionageabwehr zusätzlich."
  },
  "je_iw_op_row_election_interference": {
-  "en": "#Y Election Interference#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#Y Wahleinmischung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_election_interference$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_election_interference$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_financial_subversion": {
-  "en": "#Y Financial Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#Y Finanzielle Subversion#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_financial_subversion$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_financial_subversion$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_ideological_subversion": {
-  "en": "#Y Ideological Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#Y Ideologische Subversion#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_ideological_subversion$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_ideological_subversion$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
+ },
+ "je_iw_op_row_incite_autonomy": {
+  "en": "$iw_op_name_incite_autonomy$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_incite_autonomy$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_industrial_espionage": {
-  "en": "#G Industrial Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Industriespionage#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_industrial_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_industrial_espionage$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_influence_campaign": {
-  "en": "#Y Influence Campaign#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#Y Einflusskampagne#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_influence_campaign$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_influence_campaign$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_infrastructure_sabotage": {
-  "en": "#R [concept_infrastructure] Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#R Sabotage der [concept_infrastructure]#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_infrastructure_sabotage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_infrastructure_sabotage$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_military_espionage": {
-  "en": "#G Military Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Militärspionage#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_military_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_military_espionage$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_nuclear_sabotage": {
-  "en": "#R Nuclear Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#R Nuklearsabotage#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_nuclear_sabotage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_nuclear_sabotage$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_phase_est": {
   "en": "Phase: #Y Establishing#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Fully Operational",
@@ -1568,8 +1852,8 @@
   "de": "Arbeitet mit voller Stärke: #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#! ihrer Grundwirkung."
  },
  "je_iw_op_row_phase_prep": {
-  "en": "Phase: #R Preparatory#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Establishing",
-  "de": "Phase: #R Vorbereitend#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] Monate bis zum Aufbau"
+  "en": "[Concept('concept_operation_phase','Phase')]: #R Preparatory#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Establishing",
+  "de": "[Concept('concept_operation_phase','Phase')]: #R Vorbereitend#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] Monate bis zum Aufbau"
  },
  "je_iw_op_row_phase_prep_tt": {
   "en": "No effect yet. Once establishing, the operation works at base strength.",
@@ -1588,16 +1872,28 @@
   "de": "#bold Priorität 3 von [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0]#!\\nWirkung #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_effect_mult')|2]#!, Unterhalt #R ×[GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_cost_mult')|1]#!, Aufdeckung #R +[GetPlayer.MakeScope.ScriptValue('covert_op_priority_3_detect_display')|0]#! Punkte"
  },
  "je_iw_op_row_regime_change": {
-  "en": "#R Regime Change#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#R Regimewechsel#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_regime_change$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_regime_change$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
+ },
+ "je_iw_op_row_sabotage_colony": {
+  "en": "$iw_op_name_sabotage_colony$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_sabotage_colony$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_secure_material": {
-  "en": "#G Securing Loose Material#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Lose Materialien sichern#! [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('IN')]"
+  "en": "$iw_op_name_secure_material$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_secure_material$ [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('IN')]"
  },
  "je_iw_op_row_space_espionage": {
-  "en": "#G Space Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
-  "de": "#G Weltraumspionage#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
+  "en": "$iw_op_name_space_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_space_espionage$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
+ },
+ "je_iw_op_row_strength_line": {
+  "en": "Strength now: #v ×[ScriptContainer.MakeScope.ScriptValue('covert_op_effect_mult')|2]#!, for its phase and priority",
+  "de": "Aktuelle Stärke: #v ×[ScriptContainer.MakeScope.ScriptValue('covert_op_effect_mult')|2]#!, für ihre Phase und Priorität"
+ },
+ "je_iw_op_row_survey_defences": {
+  "en": "$iw_op_name_survey_defences$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "de": "$iw_op_name_survey_defences$ gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltNameNoFlag('AKK')]"
  },
  "je_iw_op_row_tech_stolen": {
   "en": "[concept_technology] stolen: #G [ScriptContainer.GetVariableValue('iw_stolen_total')|0]#! [concept_innovation], latest #v [ScriptContainer.GetCustom('covert_stolen_tech_name')]#!",
@@ -1668,8 +1964,8 @@
   "de": "Operationen"
  },
  "je_iw_slots_detail": {
-  "en": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display')|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! in use",
-  "de": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display')|0]#! von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! belegt"
+  "en": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display')|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! in use",
+  "de": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display')|0]#! von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! belegt"
  },
  "je_iw_slots_detail_tooltip": {
   "en": "#bold [concept_operation_slots]#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display')|0]#! in use, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_available_slots_display')|0]#! free. At most #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_ops_max_per_type_display')|0]#! of any one type.\\n\\n#bold Where the slots come from#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_operation_slot_add')]\\n\\n#italic An unused slot is not wasted: each one is redirected to counterintelligence.#!\\n#italic Up to one operation of each type, plus one each from Mainframe Computers and Cyber Warfare, plus one for a #bold Veteran#! agency (Tradecraft #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]#!).#!",
@@ -1711,6 +2007,14 @@
   "en": "Score #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0] - #bold [JournalEntry.GetCountry.GetCustom('covert_tradecraft_tier_name')]#!\\n[JournalEntry.GetCountry.GetCustom('covert_tradecraft_last_reason')]",
   "de": "Wert #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_display')|0]#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0] – #bold [JournalEntry.GetCountry.GetCustom('covert_tradecraft_tier_name')]#!\\n[JournalEntry.GetCountry.GetCustom('covert_tradecraft_last_reason')]"
  },
+ "je_iw_tradecraft_line_next": {
+  "en": "· next [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_floor')|0]",
+  "de": "· nächste [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_floor')|0]"
+ },
+ "je_iw_tradecraft_line_top": {
+  "en": "· top tier",
+  "de": "· oberste Stufe"
+ },
  "je_iw_tradecraft_tooltip": {
   "en": "#bold How Tradecraft moves#!\\nEach month, every operation past its preparatory phase adds up to #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_gain_per_op')|1]#!, and one still preparatory #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_prep_gain_fraction')|1]#! (at most [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_ops_counted')|0] operations' worth count; this month #v [JournalEntry.GetCountry.MakeScope.Var('iw_tradecraft_ops').GetValue|1]#!). Gains shrink above half; Counterintelligence Support adds nothing.\\nAn exposed operation costs #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_mild')|0]#! (espionage), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_moderate')|0]#! (meddling), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_severe')|0]#! (attacking the state) or #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_war')|0]#! (wartime sabotage). With no operation running but Counterintelligence Support, it drifts down by #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_decay')|2]#! a month.\\n\\n#bold Each tier#! adds to [concept_intelligence_capacity] and grows our networks #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! faster:\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_mult')]\\n\\n#bold Unlocks#!\\nFledgling at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Established#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: operations may run at priority 3; #bold Seasoned#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]; #bold Veteran#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: one more operation of each type.\\n#italic Nothing already running is ever ended when Tradecraft falls.#!",
   "de": "#bold Wie sich das Spionagehandwerk entwickelt#!\\nJeden Monat trägt jede Operation jenseits ihrer Vorbereitungsphase bis zu #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_gain_per_op')|1]#! bei, und eine noch vorbereitende #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_prep_gain_fraction')|1]#! (höchstens [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_ops_counted')|0] Operationen zählen; diesen Monat #v [JournalEntry.GetCountry.MakeScope.Var('iw_tradecraft_ops').GetValue|1]#!). Über der Hälfte schrumpfen die Zugewinne; die Unterstützung der Spionageabwehr trägt nichts bei.\\nEine aufgedeckte Operation kostet #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_mild')|0]#! (Spionage), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_moderate')|0]#! (Einmischung), #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_severe')|0]#! (Angriff auf den Staat) oder #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_loss_war')|0]#! (Sabotage im Krieg). Ohne laufende Operation außer der Unterstützung der Spionageabwehr sinkt es um #R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_decay')|2]#! im Monat.\\n\\n#bold Jede Stufe#! erhöht die [concept_intelligence_capacity] und lässt unsere Netzwerke #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! schneller wachsen:\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_mult')]\\n\\n#bold Freischaltungen#!\\nUnerfahren ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Etabliert#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: Operationen können mit Priorität 3 laufen; #bold Erfahren#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]; #bold Veteran#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: eine weitere Operation jeden Typs.\\n#italic Nichts bereits Laufendes wird jemals beendet, wenn das Spionagehandwerk sinkt.#!"
@@ -1730,6 +2034,10 @@
  "je_mental_health_status_rehab": {
   "en": "#G Rehabilitation-focused justice is in place,#! but comprehensive mental health infrastructure is still needed.",
   "de": "#G Eine auf Rehabilitation ausgerichtete Justiz ist etabliert,#! doch eine umfassende Infrastruktur für psychische Gesundheit fehlt noch."
+ },
+ "je_morphological_freedom": {
+  "en": "Morphological Freedom Debate",
+  "de": "Debatte über morphologische Freiheit"
  },
  "je_nuclear_how_header": {
   "en": "How Nuclear Weapons Work",
@@ -1771,6 +2079,10 @@
   "en": "Reputation",
   "de": "Ruf"
  },
+ "je_nuclear_how_sub_strike": {
+  "en": "Strikes",
+  "de": "Schläge"
+ },
  "je_nuclear_how_sub_taboo": {
   "en": "The Nuclear Taboo",
   "de": "Das Nukleare Tabu"
@@ -1779,13 +2091,37 @@
   "en": "The [concept_nuclear_taboo] is one score for the whole world, from 0 to 100, for how unthinkable nuclear weapons have become. Each month it moves a little toward a target set by the state of the world; hover the score for the target's parts. It falls when the bomb is used or brandished and rises with restraint. The higher it stands, the more a first use, a battlefield use or a public ultimatum costs, and from 40 up holding warheads is itself a burden.",
   "de": "Das [Concept('concept_nuclear_taboo','Nukleare Tabu')] ist ein einziger Wert für die ganze Welt, von 0 bis 100, dafür, wie undenkbar Nuklearwaffen geworden sind. Es bewegt sich jeden Monat ein Stück auf ein Ziel zu, das der Zustand der Welt vorgibt; fahren Sie mit der Maus über den Wert, um die Bestandteile des Ziels zu sehen. Es sinkt, wenn die Bombe eingesetzt oder zur Schau gestellt wird, und steigt mit Zurückhaltung. Je höher es steht, desto mehr kostet ein Ersteinsatz, ein Einsatz auf dem Schlachtfeld oder ein öffentliches Ultimatum, und ab 40 ist schon das Halten von Sprengköpfen eine Last."
  },
+ "je_nuclear_ov_authority_change_in": {
+  "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! mo",
+  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! Mo."
+ },
+ "je_nuclear_ov_change_now": {
+  "en": "Can change now",
+  "de": "Jetzt änderbar"
+ },
  "je_nuclear_ov_credibility_label": {
-  "en": "Credibility #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_credibility')|0]#!",
-  "de": "Glaubwürdigkeit #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_credibility')|0]#!"
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#! of 100",
+  "de": "#v [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#! von 100"
+ },
+ "je_nuclear_ov_crisis_caption": {
+  "en": "Nuclear Crisis",
+  "de": "Nukleare Krise"
+ },
+ "je_nuclear_ov_crisis_deadline": {
+  "en": "Deadline: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! wk",
+  "de": "Frist: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! Wo."
  },
  "je_nuclear_ov_crisis_tt": {
   "en": "#tooltip_header Nuclear Crisis#!\\n$TOOLTIP_DELIMITER$\\nStage: [JournalEntry.GetCountry.GetCustom('nd_crisis_stage_word')]\\nDanger: [JournalEntry.GetCountry.GetCustom('nd_crisis_danger_word')] #lore ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_crisis_danger')|0])#!\\nWeeks to the deadline: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#!\\n\\nThe opponent, the dispute and our moves are in the Nuclear Crisis section below.",
   "de": "#tooltip_header Nuklearkrise#!\\n$TOOLTIP_DELIMITER$\\nStadium: [JournalEntry.GetCountry.GetCustom('nd_crisis_stage_word')]\\nGefahr: [JournalEntry.GetCountry.GetCustom('nd_crisis_danger_word')] #lore ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_crisis_danger')|0])#!\\nWochen bis zur Frist: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#!\\n\\nDer Gegner, der Streitpunkt und unsere Züge stehen unten im Abschnitt Nuklearkrise."
+ },
+ "je_nuclear_ov_doctrine_change_in": {
+  "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! mo",
+  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! Mo."
+ },
+ "je_nuclear_ov_guarantees_caption": {
+  "en": "Guarantees",
+  "de": "Garantien"
  },
  "je_nuclear_ov_prog_0": {
   "en": "Unfunded",
@@ -1826,6 +2162,14 @@
  "je_nuclear_ov_prog_tt": {
   "en": "#tooltip_header Programme#!\\n$TOOLTIP_DELIMITER$\\n[JournalEntry.GetCountry.GetCustom('nuclear_program_status_line')]",
   "de": "#tooltip_header Programm#!\\n$TOOLTIP_DELIMITER$\\n[JournalEntry.GetCountry.GetCustom('nuclear_program_status_line')]"
+ },
+ "je_nuclear_ov_public_none": {
+  "en": "None known",
+  "de": "Keine bekannt"
+ },
+ "je_nuclear_ov_readiness_upkeep": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#! a week",
+  "de": "@money!#v [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#! pro Woche"
  },
  "je_nuclear_ov_taboo_bar_tt": {
   "en": "The solid bar runs to the lower of the score and its target, the pale stretch to the higher. It is pale either way, not green or red, because a stronger taboo is two-sided: it weighs on an arsenal and on threats, and shields countries without one. The arrow says which way it is going.",
@@ -1902,6 +2246,14 @@
  "je_nuclear_program_widget_odds_note": {
   "en": "#lore A strike's chance of landing is our delivery capability less the defender's interception, held inside a floor and a ceiling so that neither side is ever certain.#!",
   "de": "#lore Die Trefferchance eines Schlags ist unsere Trägerfähigkeit abzüglich des Abfangens durch den Verteidiger, gehalten zwischen einer Unter- und einer Obergrenze, sodass sich keine Seite je sicher sein kann.#!"
+ },
+ "je_nuclear_program_widget_powers_head_country": {
+  "en": "Country",
+  "de": "Land"
+ },
+ "je_nuclear_program_widget_powers_head_warheads": {
+  "en": "Warheads",
+  "de": "Sprengköpfe"
  },
  "je_nuclear_program_widget_powers_header": {
   "en": "Nuclear Powers",
@@ -2515,6 +2867,62 @@
   "en": "#bold Approach#!",
   "de": "#bold Vorgehensweise#!"
  },
+ "je_space_race_widget_autonomy_abandon": {
+  "en": "Abandon",
+  "de": "Aufgeben"
+ },
+ "je_space_race_widget_autonomy_status_both": {
+  "en": "Both",
+  "de": "Beides"
+ },
+ "je_space_race_widget_autonomy_status_charter": {
+  "en": "Charter",
+  "de": "Charta"
+ },
+ "je_space_race_widget_autonomy_status_garrison": {
+  "en": "Garrison",
+  "de": "Garnison"
+ },
+ "je_space_race_widget_autonomy_status_none": {
+  "en": "Ruled",
+  "de": "Regiert"
+ },
+ "je_space_race_widget_band_interstellar_probe": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_mars_landing": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_moon_landing": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_orbital": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_probe": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_solar_colonization": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_band_suborbital": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#! of the goal",
+  "de": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#! des Ziels"
+ },
+ "je_space_race_widget_cf_change": {
+  "en": "Change",
+  "de": "Ändern"
+ },
+ "je_space_race_widget_cf_choose": {
+  "en": "Choose",
+  "de": "Wählen"
+ },
  "je_space_race_widget_cf_destination_auto": {
   "en": "The programme chooses where our next colony fleet goes: a world of the current stage, drawn the month it leaves. Pick one with Target in the Solar System list.",
   "de": "Das Programm wählt, wohin unsere nächste Kolonieflotte fliegt: eine Welt der aktuellen Stufe, in dem Monat ausgelost, in dem sie abfliegt. Wählen Sie mit „Anvisieren“ in der Liste „Sonnensystem“ eine aus."
@@ -2528,8 +2936,16 @@
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] von 6"
  },
  "je_space_race_widget_cf_in_flight_label": {
-  "en": "Fleets in flight",
-  "de": "Flotten unterwegs"
+  "en": "[Concept('concept_sr_colony_fleet','Colony fleets')] in flight",
+  "de": "[Concept('concept_sr_colony_fleet','Kolonieflotten')] unterwegs"
+ },
+ "je_space_race_widget_cf_next_auto": {
+  "en": "chosen at launch",
+  "de": "beim Start gewählt"
+ },
+ "je_space_race_widget_cf_next_label": {
+  "en": "Next fleet",
+  "de": "Nächste Flotte"
  },
  "je_space_race_widget_cf_slot_1_eta": {
   "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])",
@@ -2555,17 +2971,57 @@
   "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])",
   "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])"
  },
+ "je_space_race_widget_cf_target_label": {
+  "en": "Our target",
+  "de": "Unser Ziel"
+ },
+ "je_space_race_widget_ch_autonomy": {
+  "en": "Autonomy",
+  "de": "Autonomie"
+ },
+ "je_space_race_widget_ch_build": {
+  "en": "Building",
+  "de": "Bau"
+ },
+ "je_space_race_widget_ch_crews": {
+  "en": "Crews",
+  "de": "Besatzungen"
+ },
+ "je_space_race_widget_ch_defences": {
+  "en": "Defenses",
+  "de": "Verteidigungsanlagen"
+ },
+ "je_space_race_widget_ch_drift": {
+  "en": "Drift",
+  "de": "Abdriften"
+ },
+ "je_space_race_widget_ch_integrity": {
+  "en": "Integrity",
+  "de": "Integrität"
+ },
+ "je_space_race_widget_ch_marines": {
+  "en": "Marines",
+  "de": "Marineinfanterie"
+ },
+ "je_space_race_widget_ch_people": {
+  "en": "People",
+  "de": "Menschen"
+ },
  "je_space_race_widget_colonies_empty": {
   "en": "We hold no colony yet. Each one we found is listed here under its stage, with the specialization we chose. Hover a colony for its permanent effects.",
   "de": "Wir besitzen noch keine Kolonie. Jede, die wir gründen, wird hier unter ihrer Stufe aufgeführt, mit der Spezialisierung, die wir gewählt haben. Fahren Sie über eine Kolonie, um ihre dauerhaften Effekte zu sehen."
  },
  "je_space_race_widget_colonies_header": {
-  "en": "Our Colonies",
-  "de": "Unsere Kolonien"
+  "en": "Colonies",
+  "de": "Kolonien"
  },
  "je_space_race_widget_colonies_held_label": {
   "en": "Colonies Held",
   "de": "Gehaltene Kolonien"
+ },
+ "je_space_race_widget_colonies_stage_0": {
+  "en": "Stage 0: The Moon",
+  "de": "Stufe 0: Der Mond"
  },
  "je_space_race_widget_colonies_stage_1": {
   "en": "Stage 1: Mars & Asteroids",
@@ -2591,9 +3047,77 @@
   "en": "Mission Control",
   "de": "Missionskontrolle"
  },
+ "je_space_race_widget_cv_autonomy": {
+  "en": "Autonomy",
+  "de": "Autonomie"
+ },
+ "je_space_race_widget_cv_back": {
+  "en": "Back",
+  "de": "Zurück"
+ },
+ "je_space_race_widget_cv_defences": {
+  "en": "Defenses",
+  "de": "Verteidigungsanlagen"
+ },
+ "je_space_race_widget_cv_modules": {
+  "en": "Modules",
+  "de": "Module"
+ },
+ "je_space_race_widget_cv_people": {
+  "en": "People",
+  "de": "Menschen"
+ },
+ "je_space_race_widget_def_status_calm": {
+  "en": "Calm",
+  "de": "Ruhig"
+ },
+ "je_space_race_widget_dp_choose": {
+  "en": "Choose",
+  "de": "Wählen"
+ },
+ "je_space_race_widget_dp_chosen": {
+  "en": "Chosen",
+  "de": "Gewählt"
+ },
+ "je_space_race_widget_dp_col_dv": {
+  "en": "km/s",
+  "de": "km/s"
+ },
+ "je_space_race_widget_dp_col_enemy": {
+  "en": "Enemy",
+  "de": "Feind"
+ },
+ "je_space_race_widget_dp_col_inbound": {
+  "en": "Inbound",
+  "de": "Im Anflug"
+ },
+ "je_space_race_widget_dp_col_months": {
+  "en": "Months",
+  "de": "Monate"
+ },
+ "je_space_race_widget_dp_col_ours": {
+  "en": "Ours",
+  "de": "Unsere"
+ },
+ "je_space_race_widget_dp_col_where": {
+  "en": "Location",
+  "de": "Standort"
+ },
+ "je_space_race_widget_dp_col_window": {
+  "en": "Window",
+  "de": "Fenster"
+ },
+ "je_space_race_widget_dp_title": {
+  "en": "Fleet Destination",
+  "de": "Reiseziel der Flotte"
+ },
  "je_space_race_widget_ebase_label": {
   "en": "Extraplanetary Base levels / room",
   "de": "Stufen / Raum des Außerplanetaren Stützpunkts"
+ },
+ "je_space_race_widget_ebase_queued_label": {
+  "en": "Extraplanetary Base levels queued",
+  "de": "Stufen des Außerplanetaren Stützpunkts in der Warteschlange"
  },
  "je_space_race_widget_ebase_tt": {
   "en": "#header Extraplanetary Base Room#!\\nThe near-Earth asteroids give room for 10 Extraplanetary Base levels, and each colony we hold adds its own, from 10 levels to 60 at 16 Psyche. Our levels work the best room first, at its grade: the metal asteroids raise their output, the outer moons lower it. A level past all of our room works at -50%. Our levels now work at [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% throughput on average.",
@@ -2687,9 +3211,101 @@
   "en": "#header Module Fabrication#!\\nThe Space Program's Module Fabrication method gives points each month: Orbital Assembly 5, Lunar Foundries 12, Fusion Shipyards 25. Like the rest of the programme, it gives more with the Space Program's throughput (its funding) and less while it is short of staff. Each queued module takes 100. Up to 200 points wait in stock while nothing is queued or every shipment slot is taken.",
   "de": "#header Modulfertigung#!\\nDie Methode Modulfertigung des Raumfahrtprogramms liefert jeden Monat Punkte: Orbitalmontage 5, Mondgießereien 12, Fusionswerften 25. Wie der Rest des Programms liefert sie mehr mit dem Durchsatz des Raumfahrtprogramms (seiner Finanzierung) und weniger, solange es unterbesetzt ist. Jedes Modul in der Warteschlange benötigt 100. Bis zu 200 Punkte warten auf Lager, solange nichts in der Warteschlange ist oder jeder Lieferplatz belegt ist."
  },
+ "je_space_race_widget_fl_col_drive": {
+  "en": "Drive",
+  "de": "Antrieb"
+ },
+ "je_space_race_widget_fl_col_dv": {
+  "en": "km/s",
+  "de": "km/s"
+ },
+ "je_space_race_widget_fl_col_marines": {
+  "en": "Marines",
+  "de": "Marineinfanterie"
+ },
+ "je_space_race_widget_fl_col_strength": {
+  "en": "Strength",
+  "de": "Stärke"
+ },
+ "je_space_race_widget_fl_col_supply": {
+  "en": "Supply",
+  "de": "Versorgung"
+ },
+ "je_space_race_widget_fl_col_where": {
+  "en": "Where",
+  "de": "Wo"
+ },
+ "je_space_race_widget_fl_destroy": {
+  "en": "Destroy",
+  "de": "Zerstören"
+ },
+ "je_space_race_widget_fl_embark": {
+  "en": "Embark",
+  "de": "Einschiffen"
+ },
+ "je_space_race_widget_fl_go": {
+  "en": "Go",
+  "de": "Los"
+ },
+ "je_space_race_widget_fl_land": {
+  "en": "Land",
+  "de": "Landen"
+ },
+ "je_space_race_widget_fl_posture_1": {
+  "en": "Station",
+  "de": "Stationieren"
+ },
+ "je_space_race_widget_fl_posture_2": {
+  "en": "Stand off",
+  "de": "Abstand halten"
+ },
+ "je_space_race_widget_fl_posture_3": {
+  "en": "Close in",
+  "de": "Heranrücken"
+ },
+ "je_space_race_widget_fl_posture_4": {
+  "en": "Interdict",
+  "de": "Sperren"
+ },
+ "je_space_race_widget_fl_refit": {
+  "en": "Refit",
+  "de": "Umrüsten"
+ },
+ "je_space_race_widget_fl_seize": {
+  "en": "Seize",
+  "de": "Einnehmen"
+ },
+ "je_space_race_widget_fl_transfer": {
+  "en": "Transfer",
+  "de": "Übertragen"
+ },
  "je_space_race_widget_fleets_header": {
   "en": "Colony Fleets",
   "de": "Kolonieflotten"
+ },
+ "je_space_race_widget_free_header": {
+  "en": "Free Colonies",
+  "de": "Freie Kolonien"
+ },
+ "je_space_race_widget_free_stop": {
+  "en": "Stop",
+  "de": "Stoppen"
+ },
+ "je_space_race_widget_free_supply": {
+  "en": "Supply",
+  "de": "Versorgung"
+ },
+ "je_space_race_widget_free_trade_label": {
+  "en": "Free colony trade",
+  "de": "Handel freier Kolonien"
+ },
+ "je_space_race_widget_ft_targeted": {
+  "en": "Targeted",
+  "de": "Anvisiert"
+ },
+ "je_space_race_widget_ft_title": {
+  "en": "Fleet Target",
+  "de": "Ziel der Flotte"
  },
  "je_space_race_widget_funding_label": {
   "en": "#bold Programme funding#! (each level draws on innovation)",
@@ -2763,6 +3379,58 @@
   "en": "Setbacks",
   "de": "Rückschläge"
  },
+ "je_space_race_widget_howc_header": {
+  "en": "How Solar Colonization Works",
+  "de": "So funktioniert die Besiedlung des Sonnensystems"
+ },
+ "je_space_race_widget_howc_sub_autonomy": {
+  "en": "Autonomy and Free Colonies",
+  "de": "Autonomie und freie Kolonien"
+ },
+ "je_space_race_widget_howc_sub_defences": {
+  "en": "Defenses and Seizure",
+  "de": "Verteidigungsanlagen und Einnahme"
+ },
+ "je_space_race_widget_howc_sub_fleets": {
+  "en": "Colony Fleets and Targets",
+  "de": "Kolonieflotten und Ziele"
+ },
+ "je_space_race_widget_howc_sub_modules": {
+  "en": "Modules",
+  "de": "Module"
+ },
+ "je_space_race_widget_howc_sub_settlers": {
+  "en": "Settlers and Crews",
+  "de": "Siedler und Besatzungen"
+ },
+ "je_space_race_widget_howc_sub_space_command": {
+  "en": "Space Command and Fleets",
+  "de": "Weltraumkommando und Flotten"
+ },
+ "je_space_race_widget_howc_sub_windows": {
+  "en": "Launch Windows",
+  "de": "Startfenster"
+ },
+ "je_space_race_widget_loc_col_inbound": {
+  "en": "Inbound",
+  "de": "Im Anflug"
+ },
+ "je_space_race_widget_loc_col_others": {
+  "en": "Others",
+  "de": "Andere"
+ },
+ "je_space_race_widget_loc_col_ours": {
+  "en": "Ours",
+  "de": "Unsere"
+ },
+ "je_space_race_widget_loc_col_where": {
+  "en": "Location",
+  "de": "Standort"
+ },
+ "je_space_race_widget_locations_header": {
+  "en": "Locations",
+  "de": "Standorte"
+ },
  "je_space_race_widget_mod_def_tt": {
   "en": "#header Defences#!\\nWill be what an enemy fleet closing on the colony has to beat. Space fleets are not in the game yet, so Defences do nothing for now. They take a slot and need a crew.",
   "de": "#header Verteidigungsanlagen#!\\nWerden das sein, was eine feindliche Flotte beim Anflug auf die Kolonie überwinden muss. Raumflotten gibt es im Spiel noch nicht, daher bewirken Verteidigungsanlagen vorerst nichts. Sie belegen einen Platz und brauchen eine Besatzung."
@@ -2770,6 +3438,62 @@
  "je_space_race_widget_mod_hab_tt": {
   "en": "#header Habitat#!\\nEach level adds half of the colony's starting room for people. Habitats need no crew: they house the crews.",
   "de": "#header Habitat#!\\nJede Stufe fügt die Hälfte des anfänglichen Raums der Kolonie für Menschen hinzu. Habitate brauchen keine Besatzung: Sie beherbergen die Besatzungen."
+ },
+ "je_space_race_widget_mod_name_admin": {
+  "en": "Administration",
+  "de": "Verwaltung"
+ },
+ "je_space_race_widget_mod_name_black": {
+  "en": "Black Site",
+  "de": "Geheimanlage"
+ },
+ "je_space_race_widget_mod_name_bunker": {
+  "en": "Nuclear Command Center",
+  "de": "Nuklearkommandozentrale"
+ },
+ "je_space_race_widget_mod_name_culture": {
+  "en": "Cultural Center",
+  "de": "Kulturzentrum"
+ },
+ "je_space_race_widget_mod_name_def": {
+  "en": "Defenses",
+  "de": "Verteidigungsanlagen"
+ },
+ "je_space_race_widget_mod_name_foundry": {
+  "en": "Materials Foundry",
+  "de": "Materialgießerei"
+ },
+ "je_space_race_widget_mod_name_hab": {
+  "en": "Habitat",
+  "de": "Habitat"
+ },
+ "je_space_race_widget_mod_name_lab": {
+  "en": "Research Station",
+  "de": "Forschungsstation"
+ },
+ "je_space_race_widget_mod_name_mine": {
+  "en": "Mining Complex",
+  "de": "Bergbaukomplex"
+ },
+ "je_space_race_widget_mod_name_port": {
+  "en": "Spaceport",
+  "de": "Raumhafen"
+ },
+ "je_space_race_widget_mod_name_resort": {
+  "en": "Off-World Resort",
+  "de": "Außerirdisches Resort"
+ },
+ "je_space_race_widget_mod_name_terra": {
+  "en": "Terraforming",
+  "de": "Terraforming"
+ },
+ "je_space_race_widget_mod_name_train": {
+  "en": "Training Ground",
+  "de": "Übungsgelände"
+ },
+ "je_space_race_widget_mod_name_yard": {
+  "en": "Orbital Yard",
+  "de": "Orbitalwerft"
  },
  "je_space_race_widget_mod_port_tt": {
   "en": "#header Spaceport#!\\nWill repair, refuel and resupply our space fleets at its location. Space fleets are not in the game yet, so a Spaceport does nothing for now. It takes a slot and needs a crew.",
@@ -2783,21 +3507,61 @@
   "en": "#header Module Upkeep#!\\nEvery module level past each colony's first raises the Space Program's Launch Capacity bill:\\n[GetStaticModifier('sr_module_upkeep').GetDesc]",
   "de": "#header Modulunterhalt#!\\nJede Modulstufe über der ersten jeder Kolonie erhöht die Rechnung für die Startkapazität des Raumfahrtprogramms:\\n[GetStaticModifier('sr_module_upkeep').GetDesc]"
  },
+ "je_space_race_widget_modules_col_admin": {
+  "en": "Gov",
+  "de": "Verw."
+ },
  "je_space_race_widget_modules_col_b": {
   "en": "II",
   "de": "II"
+ },
+ "je_space_race_widget_modules_col_bases": {
+  "en": "Bases",
+  "de": "Basen"
+ },
+ "je_space_race_widget_modules_col_black": {
+  "en": "Spy",
+  "de": "Spion"
+ },
+ "je_space_race_widget_modules_col_bunker": {
+  "en": "Nuke",
+  "de": "Atom"
+ },
+ "je_space_race_widget_modules_col_culture": {
+  "en": "Arts",
+  "de": "Kunst"
  },
  "je_space_race_widget_modules_col_def": {
   "en": "Def",
   "de": "Vert."
  },
+ "je_space_race_widget_modules_col_foundry": {
+  "en": "Mat",
+  "de": "Mat."
+ },
  "je_space_race_widget_modules_col_hab": {
   "en": "Hab",
   "de": "Hab."
  },
+ "je_space_race_widget_modules_col_lab": {
+  "en": "Lab",
+  "de": "Labor"
+ },
+ "je_space_race_widget_modules_col_mine": {
+  "en": "Mine",
+  "de": "Mine"
+ },
  "je_space_race_widget_modules_col_port": {
   "en": "Port",
   "de": "Hafen"
+ },
+ "je_space_race_widget_modules_col_resort": {
+  "en": "Tour",
+  "de": "Tour."
+ },
+ "je_space_race_widget_modules_col_slots": {
+  "en": "Slots",
+  "de": "Plätze"
  },
  "je_space_race_widget_modules_col_spec_tt": {
   "en": "#header Specializations I and II#!\\nThe two specializations the colony's founding event offered, in that order. They share four levels: one at 4, both at 2, or 1 and 3. Each level adds the specialization's bonus once more. Hover a colony's level to see what it gives.",
@@ -2807,13 +3571,41 @@
   "en": "Crew",
   "de": "Besatzung"
  },
+ "je_space_race_widget_modules_col_terra": {
+  "en": "Terr",
+  "de": "Terra"
+ },
+ "je_space_race_widget_modules_col_terraformed": {
+  "en": "Terraformed",
+  "de": "Terraformt"
+ },
+ "je_space_race_widget_modules_col_train": {
+  "en": "Camp",
+  "de": "Lager"
+ },
+ "je_space_race_widget_modules_col_yard": {
+  "en": "Yard",
+  "de": "Werft"
+ },
  "je_space_race_widget_modules_staffing_tt": {
   "en": "#header Staffing#!\\nThe share of the colony's modules its crews can run. Every level past the first needs a crew of 5,000 people, except Habitats, which house the crews. An understaffed colony's specializations give that share of their bonus. Artificial General Intelligence runs every module.",
   "de": "#header Besetzung#!\\nDer Anteil der Module der Kolonie, den ihre Besatzungen betreiben können. Jede Stufe nach der ersten braucht eine Besatzung von 5.000 Menschen, außer den Habitaten, die die Besatzungen beherbergen. Die Spezialisierungen einer unterbesetzten Kolonie liefern diesen Anteil ihres Bonus. Allgemeine Künstliche Intelligenz betreibt jedes Modul."
  },
  "je_space_race_widget_mq_header": {
-  "en": "Queue",
-  "de": "Warteschlange"
+  "en": "Queue ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])",
+  "de": "Warteschlange ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])"
+ },
+ "je_space_race_widget_mq_next_full": {
+  "en": "slots full",
+  "de": "Plätze voll"
+ },
+ "je_space_race_widget_mq_next_label": {
+  "en": "Next module",
+  "de": "Nächstes Modul"
+ },
+ "je_space_race_widget_mq_next_months": {
+  "en": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] mo",
+  "de": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] Mo."
  },
  "je_space_race_widget_offworld_label": {
   "en": "People off Earth",
@@ -2835,6 +3627,10 @@
   "en": "Our Satellites",
   "de": "Unsere Satelliten"
  },
+ "je_space_race_widget_orbit_satellites_ni_label": {
+  "en": "Satellites",
+  "de": "Satelliten"
+ },
  "je_space_race_widget_orbit_strike_label": {
   "en": "Our Anti-Satellite Strike",
   "de": "Unser Antisatellitenschlag"
@@ -2844,32 +3640,32 @@
   "de": "Bisherige Antisatellitenschläge"
  },
  "je_space_race_widget_ov_ambitious_interstellar_probe": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_mars_landing": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_moon_landing": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_orbital": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_probe": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_solar_colonization": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0] pro Woche"
  },
  "je_space_race_widget_ov_ambitious_suborbital": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0]/Wo."
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0] a week",
+  "de": "Ehrgeizig\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0] pro Woche"
  },
  "je_space_race_widget_ov_colony_label": {
   "en": "Next Colony",
@@ -2904,40 +3700,44 @@
   "de": "#bold [concept_sr_setback_risk]#!: die Wahrscheinlichkeit, jeden Monat, dass dieser Meilenstein einen Rückschlag erleidet. Der Wert steht auf 0%, solange sich das Programm in der Überprüfung nach einem Rückschlag befindet, da dann nicht gewürfelt wird."
  },
  "je_space_race_widget_ov_safe_interstellar_probe": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0] pro Woche"
  },
  "je_space_race_widget_ov_safe_mars_landing": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0] pro Woche"
  },
  "je_space_race_widget_ov_safe_moon_landing": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0] pro Woche"
  },
  "je_space_race_widget_ov_safe_orbital": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1] pro Woche"
  },
  "je_space_race_widget_ov_safe_probe": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0] pro Woche"
  },
  "je_space_race_widget_ov_safe_solar_colonization": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0] pro Woche"
  },
  "je_space_race_widget_ov_safe_suborbital": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/Wo."
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0] a week",
+  "de": "Sicher\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0] pro Woche"
  },
  "je_space_race_widget_ov_stage": {
-  "en": "Stage: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
-  "de": "Stufe: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] von 5"
+  "en": "Stage: [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
+  "de": "Stufe: [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] von 5"
+ },
+ "je_space_race_widget_ov_stage_moon": {
+  "en": "Stage: the Moon",
+  "de": "Stufe: der Mond"
  },
  "je_space_race_widget_ov_staged_label": {
-  "en": "#tooltippable Staged in Orbit#!",
-  "de": "#tooltippable Im Orbit bereitgestellt#!"
+  "en": "Staged in Orbit",
+  "de": "Im Orbit bereitgestellt"
  },
  "je_space_race_widget_ov_staged_value": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
@@ -2952,12 +3752,108 @@
   "de": "#bold Verbleibend:#! [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] Monate\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$"
  },
  "je_space_race_widget_ov_worlds": {
-  "en": "Worlds: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34",
-  "de": "Welten: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34"
+  "en": "Sites: [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] / [Country.MakeScope.ScriptValue('sr_sites_world_count')|0]",
+  "de": "Orte: [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] / [Country.MakeScope.ScriptValue('sr_sites_world_count')|0]"
  },
  "je_space_race_widget_ov_worlds_tt_ours": {
   "en": "#bold Ours:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Claimed worldwide:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] of 34\\nOurs run clockwise from twelve o'clock, then other powers' claims, then the worlds no one holds. Each world can be claimed once, by anyone.",
   "de": "#bold Unsere:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Weltweit vergeben:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] von 34\\nUnsere laufen im Uhrzeigersinn ab zwölf Uhr, danach die Ansprüche anderer Mächte, dann die Welten, die niemand hält. Jede Welt kann einmal beansprucht werden, von wem auch immer."
+ },
+ "je_space_race_widget_ovc_colonies_cap": {
+  "en": "Colonies",
+  "de": "Kolonien"
+ },
+ "je_space_race_widget_ovc_colonies_fig_calm": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_colonies_held')|0]#! of [Country.MakeScope.ScriptValue('sr_sites_world_count')|0] held",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_disp_colonies_held')|0]#! von [Country.MakeScope.ScriptValue('sr_sites_world_count')|0] gehalten"
+ },
+ "je_space_race_widget_ovc_colonies_fig_more": {
+  "en": "+[Country.MakeScope.ScriptValue('sr_disp_aut_restless_more')|0] more want it",
+  "de": "+[Country.MakeScope.ScriptValue('sr_disp_aut_restless_more')|0] weitere wollen es"
+ },
+ "je_space_race_widget_ovc_colonies_fig_one": {
+  "en": "wants self-rule",
+  "de": "will Selbstverwaltung"
+ },
+ "je_space_race_widget_ovc_colonies_word_calm": {
+  "en": "Loyal",
+  "de": "Loyal"
+ },
+ "je_space_race_widget_ovc_def_fig_calm": {
+  "en": "colonies secure",
+  "de": "Kolonien sicher"
+ },
+ "je_space_race_widget_ovc_def_fig_earth": {
+  "en": "launches stopped",
+  "de": "Starts gestoppt"
+ },
+ "je_space_race_widget_ovc_def_word_calm": {
+  "en": "Calm",
+  "de": "Ruhig"
+ },
+ "je_space_race_widget_ovc_defense_cap": {
+  "en": "Defense",
+  "de": "Verteidigung"
+ },
+ "je_space_race_widget_ovc_earth_cap": {
+  "en": "Hostile Fleet",
+  "de": "Feindliche Flotte"
+ },
+ "je_space_race_widget_ovc_earth_fig": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#! vs [Country.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#! gegen [Country.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]"
+ },
+ "je_space_race_widget_ovc_earth_word": {
+  "en": "Earth in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! mo",
+  "de": "Erde in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! Mo."
+ },
+ "je_space_race_widget_ovc_ebase_cap": {
+  "en": "Base Room",
+  "de": "Platz für Basen"
+ },
+ "je_space_race_widget_ovc_modules_cap": {
+  "en": "Modules",
+  "de": "Module"
+ },
+ "je_space_race_widget_ovc_modules_fig": {
+  "en": "stock #v [Country.MakeScope.ScriptValue('sr_disp_fab_stock')|D]#! / [Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap')|0]",
+  "de": "Vorrat #v [Country.MakeScope.ScriptValue('sr_disp_fab_stock')|D]#! / [Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap')|0]"
+ },
+ "je_space_race_widget_ovc_modules_word_empty": {
+  "en": "Queue empty",
+  "de": "Warteschlange leer"
+ },
+ "je_space_race_widget_ovc_modules_word_queued": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! queued",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! in der Warteschlange"
+ },
+ "je_space_race_widget_ovc_window_cap": {
+  "en": "Next Window",
+  "de": "Nächstes Fenster"
+ },
+ "je_space_race_widget_ovc_window_fig": {
+  "en": "stage [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
+  "de": "Stufe [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] von 5"
+ },
+ "je_space_race_widget_ovc_window_fig_mars": {
+  "en": "no $je_space_race_mars_landing$",
+  "de": "keine $je_space_race_mars_landing$"
+ },
+ "je_space_race_widget_ovc_window_fig_moon": {
+  "en": "the Moon",
+  "de": "der Mond"
+ },
+ "je_space_race_widget_ovc_window_word_any": {
+  "en": "Any month",
+  "de": "Jeder Monat"
+ },
+ "je_space_race_widget_ovc_window_word_in": {
+  "en": "in #v [Country.MakeScope.ScriptValue('sr_window_disp_next')|0]#! months",
+  "de": "in #v [Country.MakeScope.ScriptValue('sr_window_disp_next')|0]#! Monaten"
+ },
+ "je_space_race_widget_ovc_window_word_none": {
+  "en": "No site left",
+  "de": "Kein Ort übrig"
  },
  "je_space_race_widget_pace_interstellar_results": {
   "en": "Nothing can be done to hurry this. The probe is coasting, and the signal it sends will take another 4.37 years to cross back to Earth after it arrives.",
@@ -2966,6 +3862,22 @@
  "je_space_race_widget_pace_tt": {
   "en": "#header Progress per Month#!\\nEvery running milestone gains this much each month, whatever its approach: what is added, times one plus the multiplier, and never less than 0.5.\\n$TOOLTIP_DELIMITER$\\n#title Added each month:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplier:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Pace:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! a month",
   "de": "#header Fortschritt pro Monat#!\\nJeder laufende Meilenstein gewinnt jeden Monat so viel, unabhängig von seinem Ansatz: der Zuwachs mal eins plus dem Multiplikator, und nie weniger als 0,5.\\n$TOOLTIP_DELIMITER$\\n#title Monatlicher Zuwachs:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplikator:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Tempo:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! im Monat"
+ },
+ "je_space_race_widget_page_bases": {
+  "en": "Base Room",
+  "de": "Platz für Basen"
+ },
+ "je_space_race_widget_page_settlers": {
+  "en": "Settlers",
+  "de": "Siedler"
+ },
+ "je_space_race_widget_page_staffing": {
+  "en": "Modules Crewed",
+  "de": "Besetzte Module"
+ },
+ "je_space_race_widget_page_terraformed": {
+  "en": "Terraformed",
+  "de": "Terraformt"
  },
  "je_space_race_widget_power_est_tt": {
   "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands in this band of its furthest milestone's goal. The band is ±[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",
@@ -3052,8 +3964,8 @@
   "de": "#bold Marslandung#! — [State.GetCountry.GetCustom('sr_power_prog_mars_landing')]"
  },
  "je_space_race_widget_power_prog_moon_base": {
-  "en": "#bold Moon Base#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]",
-  "de": "#bold Mondbasis#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]"
+  "en": "#bold Lunar Colony#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]",
+  "de": "#bold Mondkolonie#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]"
  },
  "je_space_race_widget_power_prog_moon_landing": {
   "en": "#bold Moon Landing#! — [State.GetCountry.GetCustom('sr_power_prog_moon_landing')]",
@@ -3099,6 +4011,10 @@
   "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_prog_interstellar_probe')]",
   "de": "#bold Interstellare Sonde#! — [Country.GetCustom('sr_prog_interstellar_probe')]"
  },
+ "je_space_race_widget_prog_interstellar_0_ni": {
+  "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_power_prog_interstellar')]",
+  "de": "#bold Interstellare Sonde#! — [Country.GetCustom('sr_power_prog_interstellar')]"
+ },
  "je_space_race_widget_prog_interstellar_1": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_running$\\nOnce launched, the probe coasts for 132 months before its data reaches us.",
   "de": "#bold Interstellare Sonde#! — $sr_prog_state_running$\\nSobald gestartet, treibt die Sonde 132 Monate im freien Flug, bevor uns ihre Daten erreichen."
@@ -3111,25 +4027,49 @@
   "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
   "de": "#bold Interstellare Sonde#! — $sr_prog_state_signal_received$"
  },
+ "je_space_race_widget_prog_interstellar_3_ni": {
+  "en": "#bold Interstellar Probe#! — $sr_power_state_data_received$",
+  "de": "#bold Interstellare Sonde#! — $sr_power_state_data_received$"
+ },
  "je_space_race_widget_prog_mars_landing": {
   "en": "#bold Mars Landing#! — [Country.GetCustom('sr_prog_mars_landing')]",
   "de": "#bold Marslandung#! — [Country.GetCustom('sr_prog_mars_landing')]"
  },
+ "je_space_race_widget_prog_mars_landing_ni": {
+  "en": "#bold Mars Landing#! — [Country.GetCustom('sr_power_prog_mars_landing')]",
+  "de": "#bold Marslandung#! — [Country.GetCustom('sr_power_prog_mars_landing')]"
+ },
  "je_space_race_widget_prog_moon_base": {
-  "en": "#bold Moon Base#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]",
-  "de": "#bold Mondbasis#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]"
+  "en": "#bold Lunar Colony#! — [Country.GetCustom('sr_prog_moon_base')]",
+  "de": "#bold Mondkolonie#! — [Country.GetCustom('sr_prog_moon_base')]"
+ },
+ "je_space_race_widget_prog_moon_base_ni": {
+  "en": "#bold Lunar Colony#! — [Country.GetCustom('sr_power_prog_moon_base')]",
+  "de": "#bold Mondkolonie#! — [Country.GetCustom('sr_power_prog_moon_base')]"
  },
  "je_space_race_widget_prog_moon_landing": {
   "en": "#bold Moon Landing#! — [Country.GetCustom('sr_prog_moon_landing')]",
   "de": "#bold Mondlandung#! — [Country.GetCustom('sr_prog_moon_landing')]"
  },
+ "je_space_race_widget_prog_moon_landing_ni": {
+  "en": "#bold Moon Landing#! — [Country.GetCustom('sr_power_prog_moon_landing')]",
+  "de": "#bold Mondlandung#! — [Country.GetCustom('sr_power_prog_moon_landing')]"
+ },
  "je_space_race_widget_prog_orbital": {
   "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_prog_orbital')]",
   "de": "#bold Orbitalflug#! — [Country.GetCustom('sr_prog_orbital')]"
  },
+ "je_space_race_widget_prog_orbital_ni": {
+  "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_power_prog_orbital')]",
+  "de": "#bold Orbitalflug#! — [Country.GetCustom('sr_power_prog_orbital')]"
+ },
  "je_space_race_widget_prog_probe": {
   "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_prog_probe')]",
   "de": "#bold Tiefraumsonde#! — [Country.GetCustom('sr_prog_probe')]"
+ },
+ "je_space_race_widget_prog_probe_ni": {
+  "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_power_prog_probe')]",
+  "de": "#bold Tiefraumsonde#! — [Country.GetCustom('sr_power_prog_probe')]"
  },
  "je_space_race_widget_prog_solar_colonization": {
   "en": "#bold Solar System Colonization#! — [Country.GetCustom('sr_prog_solar_colonization')]",
@@ -3139,41 +4079,45 @@
   "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_prog_suborbital')]",
   "de": "#bold Suborbitalflug#! — [Country.GetCustom('sr_prog_suborbital')]"
  },
+ "je_space_race_widget_prog_suborbital_ni": {
+  "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_power_prog_suborbital')]",
+  "de": "#bold Suborbitalflug#! — [Country.GetCustom('sr_power_prog_suborbital')]"
+ },
  "je_space_race_widget_programme_header": {
   "en": "Program",
   "de": "Programm"
  },
  "je_space_race_widget_progress_interstellar_probe": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/Mo.)"
  },
  "je_space_race_widget_progress_interstellar_results": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
   "de": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 Monate"
  },
  "je_space_race_widget_progress_mars_landing": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/Mo.)"
  },
  "je_space_race_widget_progress_moon_landing": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/Mo.)"
  },
  "je_space_race_widget_progress_orbital": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_orbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_orbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/Mo.)"
  },
  "je_space_race_widget_progress_probe": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/Mo.)"
  },
  "je_space_race_widget_progress_solar_colonization": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/Mo.)"
  },
  "je_space_race_widget_progress_suborbital": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_suborbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_suborbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/Mo.#!)"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo)",
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/Mo.)"
  },
  "je_space_race_widget_reward_interstellar_probe": {
   "en": "#header Interstellar Probe#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_interstellar_probe').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_interstellar_probe').GetDesc]",
@@ -3271,6 +4215,58 @@
   "en": "Safe",
   "de": "Sicher"
  },
+ "je_space_race_widget_sc_auto_off": {
+  "en": "Auto: off",
+  "de": "Auto: aus"
+ },
+ "je_space_race_widget_sc_auto_on": {
+  "en": "Auto: on",
+  "de": "Auto: an"
+ },
+ "je_space_race_widget_sc_header": {
+  "en": "Space Command",
+  "de": "Weltraumkommando"
+ },
+ "je_space_race_widget_sc_launch": {
+  "en": "Launch",
+  "de": "Starten"
+ },
+ "je_space_race_widget_sc_mix_header": {
+  "en": "Build mix",
+  "de": "Baumix"
+ },
+ "je_space_race_widget_sc_pause": {
+  "en": "Pause",
+  "de": "Pause"
+ },
+ "je_space_race_widget_sc_rate_label": {
+  "en": "Built a month",
+  "de": "Pro Monat gebaut"
+ },
+ "je_space_race_widget_sc_rate_paused": {
+  "en": "Paused",
+  "de": "Pausiert"
+ },
+ "je_space_race_widget_sc_reserve_label": {
+  "en": "Reserve",
+  "de": "Reserve"
+ },
+ "je_space_race_widget_sc_resume": {
+  "en": "Resume",
+  "de": "Fortsetzen"
+ },
+ "je_space_race_widget_sc_resuming": {
+  "en": "Resuming",
+  "de": "Wird fortgesetzt"
+ },
+ "je_space_race_widget_sc_strength_label": {
+  "en": "Fleet strength",
+  "de": "Flottenstärke"
+ },
+ "je_space_race_widget_sc_upkeep_label": {
+  "en": "Upkeep",
+  "de": "Unterhalt"
+ },
  "je_space_race_widget_setbacks_label": {
   "en": "Setbacks So Far",
   "de": "Bisherige Rückschläge"
@@ -3299,6 +4295,22 @@
   "en": "Solar System",
   "de": "Sonnensystem"
  },
+ "je_space_race_widget_space_fleets_header": {
+  "en": "Space Fleets",
+  "de": "Weltraumflotten"
+ },
+ "je_space_race_widget_ss_all": {
+  "en": "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "de": "Alle [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] Orte angezeigt"
+ },
+ "je_space_race_widget_ss_filtered": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "de": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! von [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] Orten angezeigt"
+ },
+ "je_space_race_widget_ss_free": {
+  "en": "Free",
+  "de": "Frei"
+ },
  "je_space_race_widget_ss_inbound_tt": {
   "en": "#header Colony fleets on their way#!\\nThe first figure is how many fleets are flying to this world, the second the months until the first lands. Highlighted when the first is ours. The first to land claims the world; the others go on to another free world of the same planet or belt, or are lost.",
   "de": "#header Kolonieflotten unterwegs#!\\nDie erste Zahl nennt, wie viele Flotten zu dieser Welt fliegen, die zweite die Monate, bis die erste landet. Hervorgehoben, wenn die erste unsere ist. Die erste, die landet, beansprucht die Welt; die anderen fliegen zu einer anderen freien Welt desselben Planeten oder Gürtels weiter oder gehen verloren."
@@ -3306,6 +4318,10 @@
  "je_space_race_widget_ss_loc_asteroids": {
   "en": "The Asteroid Belt",
   "de": "Der Asteroidengürtel"
+ },
+ "je_space_race_widget_ss_loc_earth": {
+  "en": "The Moon",
+  "de": "Der Mond"
  },
  "je_space_race_widget_ss_loc_inner": {
   "en": "Mercury and Venus",
@@ -3335,9 +4351,21 @@
   "en": "Uranus",
   "de": "Uranus"
  },
+ "je_space_race_widget_ss_moon_race": {
+  "en": "The first nation to found a colony on the Moon with its own fleet wins the race to the Moon, whose prize is in Solar System Colonization's rewards.",
+  "de": "Die erste Nation, die mit eigener Flotte eine Kolonie auf dem Mond gründet, gewinnt den Wettlauf zum Mond, dessen Preis unter den Belohnungen der Besiedlung des Sonnensystems aufgeführt ist."
+ },
  "je_space_race_widget_ss_ours": {
   "en": "Ours",
   "de": "Unsere"
+ },
+ "je_space_race_widget_ss_show_all": {
+  "en": "Show all",
+  "de": "Alle anzeigen"
+ },
+ "je_space_race_widget_ss_show_fewer": {
+  "en": "Show fewer",
+  "de": "Weniger anzeigen"
  },
  "je_space_race_widget_ss_target": {
   "en": "Our target",
@@ -3363,13 +4391,265 @@
   "en": "Standard",
   "de": "Standard"
  },
+ "je_space_race_widget_tab_fleets": {
+  "en": "Fleets",
+  "de": "Flotten"
+ },
+ "je_space_race_widget_terra_finished": {
+  "en": "finished",
+  "de": "abgeschlossen"
+ },
+ "je_space_race_widget_terra_idle": {
+  "en": "no work under way",
+  "de": "keine Arbeiten im Gange"
+ },
+ "je_space_race_widget_terra_years_left": {
+  "en": "years to go",
+  "de": "Jahre verbleibend"
+ },
+ "je_space_race_widget_tp_all": {
+  "en": "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "de": "Alle [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] Orte angezeigt"
+ },
+ "je_space_race_widget_tp_count": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_tp_count')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites can be targeted",
+  "de": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_tp_count')|0]#! von [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] Orten können anvisiert werden"
+ },
+ "je_space_race_widget_tp_title": {
+  "en": "Colony Target",
+  "de": "Kolonieziel"
+ },
+ "je_space_race_widget_win_any": {
+  "en": "Any month",
+  "de": "Jeder Monat"
+ },
+ "je_space_race_widget_win_col_dest": {
+  "en": "Destination",
+  "de": "Ziel"
+ },
+ "je_space_race_widget_win_col_transit": {
+  "en": "Transit",
+  "de": "Flugzeit"
+ },
+ "je_space_race_widget_win_col_window": {
+  "en": "Next Window",
+  "de": "Nächstes Fenster"
+ },
+ "je_space_race_widget_win_paid_ceres": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_hygiea": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_jupiter": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_kuiper": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_mars": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_neptune": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_pallas": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_psyche": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_saturn": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_uranus": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_venus": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! Mo."
+ },
+ "je_space_race_widget_win_paid_vesta": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! mo",
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! Mo."
+ },
+ "je_space_race_widget_win_transit_ceres": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_ceres')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_ceres')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_hygiea": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_hygiea')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_hygiea')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_jupiter": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_jupiter')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_jupiter')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_kuiper": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_kuiper')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_kuiper')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_mars": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mars')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mars')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_mercury": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mercury')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mercury')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_neptune": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_neptune')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_neptune')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_pallas": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_pallas')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_pallas')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_psyche": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_psyche')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_psyche')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_saturn": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_saturn')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_saturn')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_uranus": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_uranus')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_uranus')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_venus": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_venus')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_venus')|0]#! Monate"
+ },
+ "je_space_race_widget_win_transit_vesta": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_vesta')|0]#! months",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_vesta')|0]#! Monate"
+ },
+ "je_space_race_widget_win_wait_ceres": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_hygiea": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_jupiter": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_kuiper": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_mars": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_neptune": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_pallas": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_psyche": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_saturn": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_uranus": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_venus": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! Monaten"
+ },
+ "je_space_race_widget_win_wait_vesta": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! months",
+  "de": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! Monaten"
+ },
  "je_space_race_widget_windows_header": {
-  "en": "#tooltippable Next Windows#!",
-  "de": "#tooltippable Nächste Fenster#!"
+  "en": "Next Windows",
+  "de": "Nächste Fenster"
  },
  "je_space_race_widget_windows_header_tt": {
   "en": "#header Launch Windows#!\\nChemical rockets reach each world on the cheapest transfer orbit, which lines up only once a synodic period: the month of the best departure and a month either side. Mars has one every 26 months. The Moon and Mercury need none.\\n\\nWith #bold Asteroid Mining#!, propellant depots let a fleet leave outside its window at the premium the extra propellant costs, when our approach judges the months it saves worth the months that progress costs. With #bold Muon-Catalyzed Fusion Reactors#! there are no windows at all.",
   "de": "#header Startfenster#!\\nChemische Raketen erreichen jede Welt auf der günstigsten Transferbahn, die sich nur einmal pro synodischer Periode ergibt: im Monat des besten Starts und einen Monat davor und danach. Der Mars hat alle 26 Monate eines. Der Mond und der Merkur brauchen keines.\\n\\nMit #bold Asteroidenbergbau#! lassen Treibstoffdepots eine Flotte außerhalb ihres Fensters aufbrechen, zu dem Aufpreis, den der zusätzliche Treibstoff kostet, wenn unser Ansatz die eingesparten Monate den Monaten Fortschritt wert findet, die der Aufpreis kostet. Mit #bold Myonenkatalysierten Fusionsreaktoren#! gibt es überhaupt keine Fenster."
+ },
+ "je_space_race_widget_xf_col_move": {
+  "en": "Move",
+  "de": "Verlegen"
+ },
+ "je_space_race_widget_xf_col_now": {
+  "en": "Now",
+  "de": "Jetzt"
+ },
+ "je_space_race_widget_xf_col_stay": {
+  "en": "Stays",
+  "de": "Bleibt"
+ },
+ "je_space_race_widget_xf_col_there": {
+  "en": "Other fleet",
+  "de": "Andere Flotte"
+ },
+ "je_space_race_widget_xf_go": {
+  "en": "Transfer",
+  "de": "Übertragen"
+ },
+ "je_space_race_widget_xf_new": {
+  "en": "New fleet",
+  "de": "Neue Flotte"
+ },
+ "je_space_race_widget_xf_role_carrier": {
+  "en": "Assault carriers",
+  "de": "Angriffsträger"
+ },
+ "je_space_race_widget_xf_role_marines": {
+  "en": "Marines",
+  "de": "Marineinfanterie"
+ },
+ "je_space_race_widget_xf_role_rapid": {
+  "en": "Rapid response",
+  "de": "Schnelle Eingreifschiffe"
+ },
+ "je_space_race_widget_xf_role_siege": {
+  "en": "Siege ships",
+  "de": "Belagerungsschiffe"
+ },
+ "je_space_race_widget_xf_role_strength": {
+  "en": "Strength",
+  "de": "Stärke"
+ },
+ "je_space_race_widget_xf_role_tender": {
+  "en": "Tenders",
+  "de": "Tender"
+ },
+ "je_space_race_widget_xf_role_war": {
+  "en": "Warships",
+  "de": "Kriegsschiffe"
+ },
+ "je_space_race_widget_xf_title": {
+  "en": "Transfer",
+  "de": "Übertragen"
+ },
+ "je_space_race_widget_xf_to_label": {
+  "en": "Into",
+  "de": "In"
  },
  "je_state_collapse": {
   "en": "State Collapse",
@@ -3488,8 +4768,20 @@
   "de": "#bold [concept_st_res_flow_cap]:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] Einheiten pro Woche je Ware"
  },
  "je_strategic_reserve_ov_cap_value": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
-  "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/Wo."
+  "en": "Cap [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
+  "de": "Obergrenze [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/Wo."
+ },
+ "je_strategic_reserve_ov_held_caption": {
+  "en": "Blocked",
+  "de": "Gesperrt"
+ },
+ "je_strategic_reserve_ov_held_third": {
+  "en": "and [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full",
+  "de": "und [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] voll"
+ },
+ "je_strategic_reserve_ov_hub_caption": {
+  "en": "Hub",
+  "de": "Knoten"
  },
  "je_strategic_reserve_ov_hub_none": {
   "en": "#R No Hub#!",
@@ -3523,6 +4815,14 @@
   "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
   "de": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/Wo."
  },
+ "je_strategic_reserve_ov_spend_label": {
+  "en": "Purchases",
+  "de": "Käufe"
+ },
+ "je_strategic_reserve_ov_spend_value": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/wk",
+  "de": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/Wo."
+ },
  "je_strategic_reserve_reason": {
   "en": "Your Strategic Reserve Hub lets you physically hoard strategic goods. Positive reserve rates make the hub buy from the market and add to the stockpile; negative rates make it release goods from the stockpile back onto the market. Stored goods decay slowly, so a large reserve is not free.",
   "de": "Ihr Knoten der Strategischen Reserve erlaubt es Ihnen, strategische Waren physisch zu horten. Positive Reserveraten lassen den Knoten vom Markt kaufen und dem Vorrat hinzufügen; negative Raten lassen ihn Waren aus dem Vorrat zurück auf den Markt geben. Gelagerte Waren verfallen langsam, eine große Reserve ist also nicht kostenlos."
@@ -3530,6 +4830,94 @@
  "je_strategic_reserve_status_no_hub": {
   "en": "No $building_strategic_reserve_hub$ exists. Build one in your capital, or take the decision #b $te_decision_establish_strategic_reserve$#!. Without a hub the reserve buys, sells and loses nothing, and any stock it holds waits for the next one.",
   "de": "Es existiert kein $building_strategic_reserve_hub$. Errichten Sie einen in Ihrer Hauptstadt oder fassen Sie den Beschluss #b $te_decision_establish_strategic_reserve$#!. Ohne Knoten kauft, verkauft und verliert die Reserve nichts, und ein vorhandener Bestand wartet auf den nächsten."
+ },
+ "je_te_map_room": {
+  "en": "Map Room",
+  "de": "Kartenraum"
+ },
+ "je_un_act_champion_label": {
+  "en": "Champion the Order",
+  "de": "Für die Ordnung eintreten"
+ },
+ "je_un_act_convene_label": {
+  "en": "Convene a Conference",
+  "de": "Konferenz einberufen"
+ },
+ "je_un_act_defund_development_label": {
+  "en": "Withdraw",
+  "de": "Zurückziehen"
+ },
+ "je_un_act_food_pledge_label": {
+  "en": "Pledge Grain",
+  "de": "Getreide zusagen"
+ },
+ "je_un_act_food_withdraw_label": {
+  "en": "Withdraw Our Pledge",
+  "de": "Unsere Zusage zurückziehen"
+ },
+ "je_un_act_found_label": {
+  "en": "Found the United Nations",
+  "de": "Die Vereinten Nationen gründen"
+ },
+ "je_un_act_fund_development_label": {
+  "en": "Fund Development",
+  "de": "Entwicklung finanzieren"
+ },
+ "je_un_act_join_label": {
+  "en": "Join the United Nations",
+  "de": "Den Vereinten Nationen beitreten"
+ },
+ "je_un_act_leave_cancel_label": {
+  "en": "Think Again",
+  "de": "Noch einmal überlegen"
+ },
+ "je_un_act_leave_confirm_label": {
+  "en": "Confirm: Leave the UN",
+  "de": "Bestätigen: UN verlassen"
+ },
+ "je_un_act_leave_label": {
+  "en": "Leave the UN…",
+  "de": "Die UN verlassen …"
+ },
+ "je_un_act_lift_sanctions_label": {
+  "en": "Lift Ours",
+  "de": "Unsere aufheben"
+ },
+ "je_un_act_pay_dues_label": {
+  "en": "Pay Our Dues",
+  "de": "Unsere Beiträge zahlen"
+ },
+ "je_un_act_prog_join_label": {
+  "en": "Join",
+  "de": "Beitreten"
+ },
+ "je_un_act_prog_leave_label": {
+  "en": "Leave",
+  "de": "Verlassen"
+ },
+ "je_un_act_raise_development_label": {
+  "en": "Raise",
+  "de": "Erhöhen"
+ },
+ "je_un_act_reduce_development_label": {
+  "en": "Reduce",
+  "de": "Senken"
+ },
+ "je_un_act_stop_championing_label": {
+  "en": "Stop Championing",
+  "de": "Nicht mehr eintreten"
+ },
+ "je_un_act_stop_undermining_label": {
+  "en": "Stop Undermining",
+  "de": "Untergraben beenden"
+ },
+ "je_un_act_undermine_label": {
+  "en": "Undermine the Order",
+  "de": "Die Ordnung untergraben"
+ },
+ "je_un_act_withhold_dues_label": {
+  "en": "Withhold Our Dues",
+  "de": "Unsere Beiträge zurückhalten"
  },
  "je_un_assembly_header": {
   "en": "General Assembly",
@@ -3660,8 +5048,8 @@
   "de": "\\n#R Wir stehen außerhalb der UN oder untergraben sie, daher zählt unsere positive Summe nichts.#! Sie würde voll zählen, wenn wir ein Mitglied wären, das die UN nicht untergräbt."
  },
  "je_un_auth_power_line": {
-  "en": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! of world power)",
-  "de": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! der weltweiten Macht)"
+  "en": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! of world prestige)",
+  "de": "[THIS.GetCountry.GetAltName('NOM')|U] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! des Weltprestiges)"
  },
  "je_un_auth_powers_champions": {
   "en": "#G Championing the order#!",
@@ -3752,16 +5140,16 @@
   "de": "#title Glaubwürdigkeit#! (−25 bis +25)\\nEin Konto der Bilanz der Versammlung. Angenommene Resolutionen erhöhen sie, gescheiterte Resolutionen senken sie. Vetos senken sie, gewichtet nach dem Vetogeber. Mitglieder, die die Organisation in UN-Ereignissen unterstützen oder ihr trotzen, zählen, gewichtet nach dem Mitglied, ebenso aufgehobene Sanktionen und verletzte Mandate. Jeder Eintrag halbiert sich alle zehn Jahre; die jüngsten sind unten aufgeführt."
  },
  "je_un_auth_tbl_delivery_detail": {
-  "en": "aid, peacekeeping, missions and mandates delivered$je_un_auth_tbl_delivery_hunger_detail$",
-  "de": "geleistete Hilfe, Friedenssicherung, Missionen und Mandate$je_un_auth_tbl_delivery_hunger_detail$"
+  "en": "the ledger, fading over years$je_un_auth_tbl_delivery_hunger_detail$",
+  "de": "die Bilanz, im Lauf der Jahre verblassend$je_un_auth_tbl_delivery_hunger_detail$"
  },
  "je_un_auth_tbl_delivery_hunger_detail": {
   "en": "; hunger [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_food_hunger_term')|+1], with #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_food_famine_pct')|1]%#! of the members' people in famine",
   "de": "; Hunger [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_food_hunger_term')|+1], mit #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_food_famine_pct')|1]%#! der Menschen der Mitglieder in einer Hungersnot"
  },
  "je_un_auth_tbl_delivery_hunger_tt": {
-  "en": "While the [concept_un_food_reserve] stands, the pillar also answers for hunger: it loses up to 10 points as the share of the members' people living in [concept_famine]-struck states rises to 5%, and gains 3 while that share is below half a percent.",
-  "de": "Solange die [concept_un_food_reserve] besteht, steht die Säule auch für den Hunger ein: Sie verliert bis zu 10 Punkte, wenn der Anteil der Menschen der Mitglieder, die in von [Concept('concept_famine','Hungersnöten')] betroffenen Staaten leben, auf 5% steigt, und gewinnt 3, solange dieser Anteil unter einem halben Prozent liegt."
+  "en": "While the [concept_un_food_reserve] stands, famine costs it up to 10 points, as the members' people in [concept_famine]-struck states reach 5%, and gains it 3 while they are under half a percent.",
+  "de": "Solange die [concept_un_food_reserve] besteht, verliert die Säule durch Hunger bis zu 10 Punkte, wenn der Anteil der Menschen der Mitglieder, die in von [Concept('concept_famine','Hungersnöten')] betroffenen Staaten leben, auf 5% steigt, und gewinnt 3, solange dieser Anteil unter einem halben Prozent liegt."
  },
  "je_un_auth_tbl_delivery_label": {
   "en": "Delivery",
@@ -3854,6 +5242,18 @@
  "je_un_auth_weight_tt": {
   "en": "#title Weight ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!\\nOur share of world [concept_prestige]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_power_share_pct')|1]%#!\\nA typical [concept_great_power]'s share: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_power_reference_share')|%0]#!\\nOur share over the typical one, at most #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight_cap')|0]#!.",
   "de": "#title Gewicht ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!\\nUnser Anteil am weltweiten [concept_prestige]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_power_share_pct')|1]%#!\\nDer Anteil einer typischen [Concept('concept_great_power','Großmacht')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_power_reference_share')|%0]#!\\nUnser Anteil im Verhältnis zum typischen, höchstens #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight_cap')|0]#!."
+ },
+ "je_un_budget_arrears_label": {
+  "en": "Members' GDP in arrears",
+  "de": "BIP der Mitglieder im Rückstand"
+ },
+ "je_un_budget_dues_label": {
+  "en": "All members' [concept_un_dues], a week",
+  "de": "[concept_un_dues] aller Mitglieder pro Woche"
+ },
+ "je_un_budget_lending_label": {
+  "en": "Left for emergency loans",
+  "de": "Übrig für Notkredite"
  },
  "je_un_chamber_ballot_intro": {
   "en": "#lore Every ballot on the record, side by side with any pledged vote. A pledge is an undertaking, not a vote — it is never counted in the tally above.#!",
@@ -4268,12 +5668,12 @@
   "de": "Die Chancen, dass der [concept_un_world_court] heute zu unseren Gunsten entscheiden würde, auf den nächsten Zehnerwert gerundet. Sie beginnen bei 50%. Machen unsere [concept_primary_cultures] mindestens die Hälfte der Bevölkerung des Staates aus, kommen 20% hinzu (bei einem Viertel 10%), und die des Inhabers nehmen ebenso viel weg. Ein [concept_homeland] von uns fügt 10% hinzu, eines des Inhabers nimmt 10% weg, ebenso die Tatsache, dass der Inhaber den Staat inkorporiert hat. Jeder Punkt Internationales Ansehen, den wir über dem Inhaber halten, fügt 0,3% hinzu, bis zu 15% in beide Richtungen. Jeder Punkt der Fallstärke des Inhabers fügt 0,15% hinzu, und jeder Punkt unserer nimmt 0,15% weg, jeweils bis zu 15%. Sie sinken nie unter 10% und steigen nie über 90%, und das Gericht berechnet sie neu, wenn es urteilt."
  },
  "je_un_chamber_deleg_bulk_against_label": {
-  "en": "Lobby Top Members Against",
-  "de": "Top-Mitglieder lobbyieren: dagegen"
+  "en": "Against",
+  "de": "Dagegen"
  },
  "je_un_chamber_deleg_bulk_for_label": {
-  "en": "Lobby Top Members For",
-  "de": "Top-Mitglieder lobbyieren: dafür"
+  "en": "For",
+  "de": "Dafür"
  },
  "je_un_chamber_deleg_campaign_against": {
   "en": "  Lobbied #R against#! by [SCOPE.sCountry('un_deleg_lobbyist').GetName]: [THIS.Var('un_lc_months').GetValue|0] full months, #R −[THIS.Var('un_lc_shift').GetValue|0]#!",
@@ -4304,12 +5704,16 @@
   "de": "Wie jedes KI-Mitglied zur laufenden Resolution steht. Die Einschätzung der Versammlung zu einem Mitglied ist eine Schätzung, die um bis zu 10 Punkte in beide Richtungen abweichen kann; bei einem Mitglied, das wir bearbeiten, kennen wir den wahren Stand. KI-Mitglieder stimmen im neunten, zehnten oder elften Monat der Sitzung ab, je nachdem, wo sie dann stehen. Kampagnen und Zusagen beeinflussen sie. „Top-Mitglieder lobbyieren: dafür“ und „Top-Mitglieder lobbyieren: dagegen“ starten eine Kampagne bei jedem aufgeführten Mitglied, das noch nicht als uns zugeneigt eingeschätzt wird, von oben in der Liste abwärts, bis unser Einfluss aufgebraucht ist."
  },
  "je_un_chamber_deleg_lobby_against_label": {
-  "en": "Lobby Against",
-  "de": "Dagegen lobbyieren"
+  "en": "Against",
+  "de": "Dagegen"
  },
  "je_un_chamber_deleg_lobby_for_label": {
-  "en": "Lobby For",
-  "de": "Dafür lobbyieren"
+  "en": "For",
+  "de": "Dafür"
+ },
+ "je_un_chamber_deleg_lobby_word": {
+  "en": "Lobby",
+  "de": "Lobbyieren"
  },
  "je_un_chamber_deleg_more": {
   "en": "#lore [THIS.Var('un_res_deleg_more').GetValue|0] more undecided or leaning members have no row.#!",
@@ -4324,12 +5728,16 @@
   "de": "#lore Die Delegationen wurden noch nicht eingeschätzt.#!"
  },
  "je_un_chamber_deleg_pledge_against_label": {
-  "en": "Pledge Against",
-  "de": "Gegenstimme zusagen"
+  "en": "Against",
+  "de": "Dagegen"
  },
  "je_un_chamber_deleg_pledge_for_label": {
-  "en": "Pledge For",
-  "de": "Zustimmung zusagen"
+  "en": "For",
+  "de": "Dafür"
+ },
+ "je_un_chamber_deleg_pledge_word": {
+  "en": "Pledge",
+  "de": "Zusagen"
  },
  "je_un_chamber_deleg_pledged_against": {
   "en": "  #v Pledged#! to vote #R against#!, to [SCOPE.sCountry('un_deleg_pledgee').GetName]",
@@ -4615,6 +6023,10 @@
   "en": "#bold Mandate No. [THIS.Var('un_mnd_seq').GetValue|0]#!",
   "de": "#bold Mandat Nr. [THIS.Var('un_mnd_seq').GetValue|0]#!"
  },
+ "je_un_chamber_mandate_propose_label": {
+  "en": "Propose the Mandate",
+  "de": "Das Mandat einbringen"
+ },
  "je_un_chamber_mandate_split": {
   "en": "    #v A divided region:#! [SCOPE.sCountry('un_chamber_split_holder').GetName] already holds part of [SCOPE.sStateRegion('un_chamber_split_region').GetName]. The mandate covers only the part [SCOPE.sCountry('un_chamber_split_target').GetName] holds.",
   "de": "    #v Eine geteilte Region:#! [SCOPE.sCountry('un_chamber_split_holder').GetName] hält bereits einen Teil von [SCOPE.sStateRegion('un_chamber_split_region').GetName]. Das Mandat erfasst nur den Teil, den [SCOPE.sCountry('un_chamber_split_target').GetName] hält."
@@ -4748,8 +6160,8 @@
   "de": "  #G Erfüllt#! im Jahr [THIS.Var('un_msn_end_year').GetValue|0], nach #v [THIS.Var('un_msn_months').GetValue|0]#! Monaten."
  },
  "je_un_chamber_mission_withdraw_label": {
-  "en": "Bring Our Contingent Home",
-  "de": "Unser Kontingent nach Hause holen"
+  "en": "Withdraw Contingent",
+  "de": "Kontingent abziehen"
  },
  "je_un_chamber_missions_header": {
   "en": "Missions in the Field",
@@ -4963,9 +6375,37 @@
   "en": "Propose a Resolution",
   "de": "Eine Resolution einbringen"
  },
+ "je_un_chamber_propose_header_plain": {
+  "en": "Propose a Resolution",
+  "de": "Eine Resolution einbringen"
+ },
+ "je_un_chamber_propose_header_ready": {
+  "en": "Propose a Resolution (#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_ready_count')|0] ready#!)",
+  "de": "Eine Resolution einbringen (#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_ready_count')|0] bereit#!)"
+ },
  "je_un_chamber_propose_intro": {
   "en": "#bold Business we may bring before the Assembly on our own motion.#! The floor takes one resolution at a time, and every topic below has its own conditions and its own cost. Sponsoring a resolution uses #bold 150#! [concept_influence] for two years, #bold 300#! if it acts against a member; a request for help uses none. After tabling on our own motion we must wait before tabling again: ten years, halved for a [Concept('concept_great_power', 'Great Power')], and lengthened or shortened by our International Standing.\\n",
   "de": "#bold Angelegenheiten, die wir aus eigenem Antrieb vor die Versammlung bringen können.#! Die Kammer behandelt jeweils nur eine Resolution, und jedes Thema unten hat eigene Bedingungen und eigene Kosten. Eine Resolution zu fördern bindet zwei Jahre lang #bold 150#! [concept_influence], #bold 300#!, wenn sie sich gegen ein Mitglied richtet; ein Hilfeersuchen bindet keinen. Nach einem Antrag aus eigenem Antrieb müssen wir warten, bevor wir erneut einen stellen: zehn Jahre, halbiert für eine [Concept('concept_great_power','Großmacht')] und verlängert oder verkürzt durch unser Internationales Ansehen.\\n"
+ },
+ "je_un_chamber_propose_nearest_arms_embargo": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_arms_embargo')|0]#! needed",
+  "de": "#bold Am nächsten:#! [SCOPE.sCountry('un_chamber_nearest').GetAltName('NOM')], [Concept('concept_un_case','Fallstärke')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! von #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_arms_embargo')|0]#! nötig"
+ },
+ "je_un_chamber_propose_nearest_ceasefire": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_ceasefire')|0]#! needed",
+  "de": "#bold Am nächsten:#! [SCOPE.sCountry('un_chamber_nearest').GetAltName('NOM')], [Concept('concept_un_case','Fallstärke')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! von #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_ceasefire')|0]#! nötig"
+ },
+ "je_un_chamber_propose_nearest_condemn": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_condemn')|0]#! needed",
+  "de": "#bold Am nächsten:#! [SCOPE.sCountry('un_chamber_nearest').GetAltName('NOM')], [Concept('concept_un_case','Fallstärke')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! von #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_condemn')|0]#! nötig"
+ },
+ "je_un_chamber_propose_nearest_credentials": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_credentials')|0]#! needed",
+  "de": "#bold Am nächsten:#! [SCOPE.sCountry('un_chamber_nearest').GetAltName('NOM')], [Concept('concept_un_case','Fallstärke')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! von #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_credentials')|0]#! nötig"
+ },
+ "je_un_chamber_propose_nearest_sanctions": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#! needed",
+  "de": "#bold Am nächsten:#! [SCOPE.sCountry('un_chamber_nearest').GetAltName('NOM')], [Concept('concept_un_case','Fallstärke')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! von #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#! nötig"
  },
  "je_un_chamber_propose_need_aid": {
   "en": "A state of ours is in want, and no aid program is already running",
@@ -5062,6 +6502,10 @@
  "je_un_chamber_propose_need_observer_request": {
   "en": "We hold elections, our delegation is seated, and no UN electoral observers are at work here already",
   "de": "Wir halten Wahlen ab, unsere Delegation ist zugelassen, und es sind noch keine UN-Wahlbeobachter bei uns tätig"
+ },
+ "je_un_chamber_propose_need_observer_request_seated": {
+  "en": "Our delegation is seated",
+  "de": "Unsere Delegation hat einen Sitz"
  },
  "je_un_chamber_propose_need_pandemic": {
   "en": "The Global Pandemic Response is not already in force",
@@ -5615,6 +7059,10 @@
   "en": "The docket also offers it when the world warms past 0.5, 1, 2 or 3 degrees.",
   "de": "Die Tagesordnung bietet es außerdem an, wenn sich die Welt über 0,5, 1, 2 oder 3 Grad hinaus erwärmt."
  },
+ "je_un_chamber_raised_colony_protection": {
+  "en": "The docket also offers it after a colony in space is seized or destroyed, or as Assembly business, to a member that holds a colony.",
+  "de": "Die Tagesordnung bietet es außerdem einem Mitglied mit Kolonie an, nachdem eine Kolonie im All eingenommen oder zerstört wurde, oder als Angelegenheit der Versammlung."
+ },
  "je_un_chamber_raised_decolonization": {
   "en": "The docket also offers it when a colonial empire collapses, or as Assembly business.",
   "de": "Die Tagesordnung bietet es außerdem an, wenn ein Kolonialreich zusammenbricht, oder als Angelegenheit der Versammlung."
@@ -5904,8 +7352,8 @@
   "de": "Die Abstimmung"
  },
  "je_un_chamber_sub_docket": {
-  "en": "The Docket",
-  "de": "Die Tagesordnung"
+  "en": "The [Concept('concept_un_docket','Docket')]",
+  "de": "Die [Concept('concept_un_docket','Tagesordnung')]"
  },
  "je_un_chamber_sub_dues": {
   "en": "Dues",
@@ -5926,6 +7374,14 @@
  "je_un_chamber_sub_missions_ended": {
   "en": "Ended",
   "de": "Beendet"
+ },
+ "je_un_chamber_sub_propose_ready": {
+  "en": "Ready to Table",
+  "de": "Bereit zur Vorlage"
+ },
+ "je_un_chamber_sub_propose_shelved": {
+  "en": "No Case Now",
+  "de": "Derzeit kein Fall"
  },
  "je_un_chamber_sub_reach": {
   "en": "The UN's Reach",
@@ -6211,6 +7667,10 @@
   "en": "Climate Accord",
   "de": "Klimaabkommen"
  },
+ "je_un_conv_name_colony_protection": {
+  "en": "Convention on the Settlement of Outer Space",
+  "de": "Übereinkommen über die Besiedlung des Weltraums"
+ },
  "je_un_conv_name_cultural_diversity": {
   "en": "Convention on Cultural Diversity",
   "de": "Konvention über kulturelle Vielfalt"
@@ -6268,8 +7728,8 @@
   "de": "Durchschnitt der Mitglieder (BIP pro Kopf)"
  },
  "je_un_dev_fund_eligible_label": {
-  "en": "#tooltippable Members qualifying#!",
-  "de": "#tooltippable Berechtigte Mitglieder#!"
+  "en": "Members qualifying",
+  "de": "Berechtigte Mitglieder"
  },
  "je_un_dev_fund_eligible_tt": {
   "en": "Members at or below the cutoff that hold their seat in the Assembly and pay their [concept_un_dues]. A member withholding its dues is not paid, however poor.",
@@ -6280,8 +7740,8 @@
   "de": "#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des durchschnittlichen [Concept('concept_gdp_per_capita','Bruttoinlandsprodukts pro Kopf')] der Mitglieder wären @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_base')|1]#! und lägen damit unter jedem Mitglied, das einen Sitz in der Versammlung hat und seine [concept_un_dues] zahlt. Daher steigt die Grenze auf den Wert des ärmsten solchen Mitglieds, @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_floor')|1]#!, und der Fonds zahlt immer an mindestens ein Mitglied. Die Zuschüsse werden nach Bevölkerung auf die Mitglieder bis zur Grenze aufgeteilt und jeden Monat neu berechnet."
  },
  "je_un_dev_fund_line_label": {
-  "en": "#tooltippable Cutoff (GDP per head)#!",
-  "de": "#tooltippable Grenze (BIP pro Kopf)#!"
+  "en": "Cutoff (GDP per head)",
+  "de": "Grenze (BIP pro Kopf)"
  },
  "je_un_dev_fund_line_share_tt": {
   "en": "The cutoff is #v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average [concept_gdp_per_capita], @money!#v [THIS.ScriptValue('un_disp_dev_fund_avg')|1]#!: a tenth under the founding charter, a quarter after Charter Reform I and half after Charter Reform II. It never falls below the poorest member that holds its seat and pays its [concept_un_dues], so the Fund always pays at least one member. A member at or below it with its seat and its dues paid receives a grant. The grants are shared by population and worked out again each month.",
@@ -7043,6 +8503,30 @@
   "en": "        Standing UN Force",
   "de": "        Ständige UN-Streitmacht"
  },
+ "je_un_our_vote_1": {
+  "en": "in favor",
+  "de": "dafür"
+ },
+ "je_un_our_vote_2": {
+  "en": "against",
+  "de": "dagegen"
+ },
+ "je_un_our_vote_3": {
+  "en": "veto",
+  "de": "Veto"
+ },
+ "je_un_our_vote_4": {
+  "en": "our motion: it counts in favor",
+  "de": "unser Antrag: zählt als Zustimmung"
+ },
+ "je_un_our_vote_5": {
+  "en": "none",
+  "de": "keine"
+ },
+ "je_un_our_vote_line": {
+  "en": "#bold Our Vote:#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' ), 'je_un_our_vote_0', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' ), 'je_un_our_vote_1', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' ), 'je_un_our_vote_2', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' ), 'je_un_our_vote_3', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' ), 'je_un_our_vote_4', 'je_un_our_vote_5' ) ) ) ) )]",
+  "de": "#bold Unsere Stimme:#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' ), 'je_un_our_vote_0', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' ), 'je_un_our_vote_1', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' ), 'je_un_our_vote_2', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' ), 'je_un_our_vote_3', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' ), 'je_un_our_vote_4', 'je_un_our_vote_5' ) ) ) ) )]"
+ },
  "je_un_ov_agencies_label": {
   "en": "Agencies",
   "de": "Organisationen"
@@ -7131,9 +8615,17 @@
   "en": "Security Council",
   "de": "Sicherheitsrat"
  },
+ "je_un_ov_crisis_fig": {
+  "en": "For #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_crisis_months')|0]#! months",
+  "de": "Seit #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_crisis_months')|0]#! Monaten"
+ },
  "je_un_ov_crisis_label": {
   "en": "#R Crisis#!",
   "de": "#R Krise#!"
+ },
+ "je_un_ov_dues_fig_3": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct')|1]%#! of GDP",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct')|1]%#! des BIP"
  },
  "je_un_ov_member_0": {
   "en": "No UN",
@@ -7163,6 +8655,30 @@
   "en": "Suspended",
   "de": "Ausgesetzt"
  },
+ "je_un_ov_member_conference": {
+  "en": "Opens in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! mo",
+  "de": "Öffnet in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! Mo."
+ },
+ "je_un_ov_motions_caption": {
+  "en": "Our Motions",
+  "de": "Unsere Anträge"
+ },
+ "je_un_ov_motions_free_fig": {
+  "en": "Floor free",
+  "de": "Plenum frei"
+ },
+ "je_un_ov_motions_held_fig": {
+  "en": "Until the vote",
+  "de": "Bis zur Abstimmung"
+ },
+ "je_un_ov_motions_wait_fig": {
+  "en": "Next in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! mo",
+  "de": "Nächster in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! Mo."
+ },
+ "je_un_ov_motions_wait_unknown": {
+  "en": "On cooldown",
+  "de": "In Wartezeit"
+ },
  "je_un_ov_pie_countries": {
   "en": "Countries #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_share_countries_pct')|0]%#!",
   "de": "Länder #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_share_countries_pct')|0]%#!"
@@ -7186,6 +8702,22 @@
  "je_un_ov_pie_pop_tt": {
   "en": "The members' share of the world's population, as of the last monthly update.",
   "de": "Der Anteil der Mitglieder an der Weltbevölkerung, Stand der letzten monatlichen Aktualisierung."
+ },
+ "je_un_ov_record_fig": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! of 100",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! von 100"
+ },
+ "je_un_ov_standing_0": {
+  "en": "#v Frozen#!",
+  "de": "#v Eingefroren#!"
+ },
+ "je_un_ov_standing_fig": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! of 100",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! von 100"
+ },
+ "je_un_ov_stats": {
+  "en": "[Concept('concept_un_represented','Represented')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_members')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_eligible')|0] · [Concept('concept_great_power','Great Powers')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gp_members')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gps')|0]",
+  "de": "[Concept('concept_un_represented','Vertreten')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_members')|0]#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_eligible')|0] · [Concept('concept_great_power','Großmächte')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gp_members')|0]#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gps')|0]"
  },
  "je_un_ov_status_no_un": {
   "en": "#v There is no $je_united_nations$.#! None has been founded, or the last one was dissolved.",
@@ -7252,40 +8784,56 @@
   "de": "Ab der Stufe Etabliert kostet jedes Kriegsziel, das der Initiator eines Diplomatiespiels ohne ein an dieses Diplomatiespiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Etabliert, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
  },
  "je_un_prog_arms": {
-  "en": "Signed arms control",
-  "de": "Rüstungskontrolle unterzeichnet"
+  "en": "Arms control",
+  "de": "Rüstungskontrolle"
  },
  "je_un_prog_climate": {
-  "en": "Bound by the Climate Accord",
-  "de": "Ans Klimaabkommen gebunden"
+  "en": "Climate Accord",
+  "de": "Klimaabkommen"
  },
  "je_un_prog_development": {
-  "en": "Funding development aid",
-  "de": "Finanziert Entwicklungshilfe"
+  "en": "Development Programs",
+  "de": "Entwicklungsprogramme"
+ },
+ "je_un_prog_head_count": {
+  "en": "Count",
+  "de": "Anzahl"
+ },
+ "je_un_prog_head_label": {
+  "en": "Program or convention",
+  "de": "Programm oder Übereinkommen"
+ },
+ "je_un_prog_head_ours": {
+  "en": "Ours",
+  "de": "Unsere"
  },
  "je_un_prog_heritage": {
-  "en": "In the heritage programme",
-  "de": "Im Kulturerbeprogramm"
+  "en": "Cultural Heritage Program",
+  "de": "Kulturerbeprogramm"
  },
  "je_un_prog_hr_champions": {
-  "en": "Championing human rights",
-  "de": "Setzt sich für Menschenrechte ein"
+  "en": "Human rights champions",
+  "de": "Verfechter der Menschenrechte"
  },
  "je_un_prog_hr_signatories": {
-  "en": "Signed the Declaration of Human Rights",
-  "de": "Menschenrechtserklärung unterzeichnet"
+  "en": "Declaration of Human Rights",
+  "de": "Erklärung der Menschenrechte"
  },
  "je_un_prog_npt": {
-  "en": "Signed the Non-Proliferation Treaty",
-  "de": "Atomwaffensperrvertrag unterzeichnet"
+  "en": "Non-Proliferation Treaty",
+  "de": "Atomwaffensperrvertrag"
+ },
+ "je_un_prog_ours_no": {
+  "en": "No",
+  "de": "Nein"
  },
  "je_un_prog_peacekeeping": {
   "en": "Contributing to peacekeeping",
   "de": "Beteiligt sich an der Friedenssicherung"
  },
  "je_un_prog_sanctions": {
-  "en": "Under sanction",
-  "de": "Unter Sanktionen"
+  "en": "Under [concept_un_sanctions]",
+  "de": "Unter [concept_un_sanctions]"
  },
  "je_un_programmes_header": {
   "en": "Programs and Conventions",
@@ -7316,8 +8864,8 @@
   "de": "Missachtung"
  },
  "je_un_record_expulsion": {
-  "en": "#tooltippable Case for expelling us#!",
-  "de": "#tooltippable Gründe für unseren Ausschluss#!"
+  "en": "Case for expelling us",
+  "de": "Gründe für unseren Ausschluss"
  },
  "je_un_record_expulsion_tt": {
   "en": "What every other member adds to its lean on a motion to expel us from a permanent seat: our veto record #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, our standing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and our service #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (−5 each for hosting the headquarters, running the development program, and running the peacekeeping program or serving in a mission; −10 at most). The motion needs two thirds of the members with a vote.",
@@ -7335,9 +8883,13 @@
   "en": "Nuclear weapons",
   "de": "Nuklearwaffen"
  },
+ "je_un_record_space": {
+  "en": "Hostile acts in space",
+  "de": "Feindselige Handlungen im All"
+ },
  "je_un_record_standing": {
-  "en": "#tooltippable Standing case#!",
-  "de": "#tooltippable Dauerfall#!"
+  "en": "Standing case",
+  "de": "Dauerfall"
  },
  "je_un_record_standing_tt": {
   "en": "A supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear program or arsenal, answerable for staying out. Joining ends it.\\n\\nIt holds a member to the same account for staying outside the Non-Proliferation Treaty with a nuclear program and no bomb yet, or with a bomb it built outside the treaty. Leaving the UN and joining again accedes to the treaty and ends it.",
@@ -7360,8 +8912,8 @@
   "de": "Sanktionen, bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#!"
  },
  "je_un_record_veto": {
-  "en": "#tooltippable Veto record#!",
-  "de": "#tooltippable Veto-Bilanz#!"
+  "en": "Veto record",
+  "de": "Veto-Bilanz"
  },
  "je_un_record_veto_tt": {
   "en": "Each veto we cast while the UN is not Moribund adds 5, and the record fades by 5% a year. For five years after a veto, any member may move to expel us from a permanent seat.",
@@ -7444,24 +8996,24 @@
   "de": "Monat #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months')|0]#! von 12"
  },
  "je_un_standing_effects_disgraced": {
-  "en": "  In force: #R $un_standing_disgraced_modifier$#! — $un_standing_disgraced_modifier_desc$",
-  "de": "  In Kraft: #R $un_standing_disgraced_modifier$#! — $un_standing_disgraced_modifier_desc$"
+  "en": "  In force: #R $un_standing_disgraced_modifier$#!\\n[GetStaticModifier('un_standing_disgraced_modifier').GetDesc]",
+  "de": "  In Kraft: #R $un_standing_disgraced_modifier$#!\\n[GetStaticModifier('un_standing_disgraced_modifier').GetDesc]"
  },
  "je_un_standing_effects_exemplary": {
-  "en": "  In force: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$",
-  "de": "  In Kraft: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$"
+  "en": "  In force: #G $un_standing_exemplary_modifier$#!\\n[GetStaticModifier('un_standing_exemplary_modifier').GetDesc]",
+  "de": "  In Kraft: #G $un_standing_exemplary_modifier$#!\\n[GetStaticModifier('un_standing_exemplary_modifier').GetDesc]"
  },
  "je_un_standing_effects_neutral": {
   "en": "  #v No standing modifier is in force. The Assembly neither rewards nor penalizes a member with an unremarkable record.#!",
   "de": "  #v Es gilt kein Ansehensmodifikator. Die Versammlung belohnt oder bestraft ein Mitglied mit unauffälliger Bilanz nicht.#!"
  },
  "je_un_standing_effects_poor": {
-  "en": "  In force: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$",
-  "de": "  In Kraft: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$"
+  "en": "  In force: #R $un_standing_poor_modifier$#!\\n[GetStaticModifier('un_standing_poor_modifier').GetDesc]",
+  "de": "  In Kraft: #R $un_standing_poor_modifier$#!\\n[GetStaticModifier('un_standing_poor_modifier').GetDesc]"
  },
  "je_un_standing_effects_respected": {
-  "en": "  In force: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$",
-  "de": "  In Kraft: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$"
+  "en": "  In force: #G $un_standing_respected_modifier$#!\\n[GetStaticModifier('un_standing_respected_modifier').GetDesc]",
+  "de": "  In Kraft: #G $un_standing_respected_modifier$#!\\n[GetStaticModifier('un_standing_respected_modifier').GetDesc]"
  },
  "je_un_standing_effects_withheld": {
   "en": "  #R The benefits our standing has earned are withheld.#! Nothing is applied while the suspension holds, however high the score.",
@@ -7680,12 +9232,12 @@
   "de": "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0] dafür#! · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0] dagegen#! von [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]"
  },
  "je_un_tally_rule_simple": {
-  "en": "Passes with more votes for than against.",
-  "de": "Wird angenommen, wenn mehr Stimmen dafür als dagegen abgegeben werden."
+  "en": "#bold Passage Rule:#! [concept_un_passage_majority]",
+  "de": "#bold Beschlussregel:#! [concept_un_passage_majority]"
  },
  "je_un_tally_rule_super": {
-  "en": "Passes only with two thirds of the members with a vote (the mark).",
-  "de": "Wird nur mit zwei Dritteln der stimmberechtigten Mitglieder angenommen (die Markierung)."
+  "en": "#bold Passage Rule:#! [concept_un_passage_two_thirds] (the line)",
+  "de": "#bold Beschlussregel:#! [concept_un_passage_two_thirds] (die Linie)"
  },
  "je_un_tally_tt": {
   "en": "The members with a vote: #G green#! have voted for, #R red#! against, gray have not yet voted. Members who lost their vote for arrears, or whose representation is suspended, are not counted.",
@@ -7715,6 +9267,14 @@
   "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_climate_binding_modifier').GetDesc]\\n#bold A high emitter#! (scaled): a party that leads a market putting out 10% or more of the world's [concept_greenhouse_gas_emissions]. The cut falls on its own states' emissions, so it slows [concept_global_warming_system]:\\n[GetStaticModifier('un_regime_climate_emitter_modifier').GetDesc]\\n#bold A low emitter#! (scaled, and multiplied by each degree of warming): any other party that leads no market, or leads one putting out under 2%:\\n[GetStaticModifier('un_regime_climate_adaptation_modifier').GetDesc]\\nThe leader of a market putting out 2% to 10% gets neither. These terms need the Global Warming rule.\\n$je_un_terms_scaled$",
   "de": "#bold Jede Vertragspartei#! (skaliert):\\n[GetStaticModifier('un_climate_binding_modifier').GetDesc]\\n#bold Ein hoher Emittent#! (skaliert): eine Vertragspartei, die einen Markt anführt, der 10% oder mehr der weltweiten [concept_greenhouse_gas_emissions] ausstößt. Die Senkung wirkt auf die Emissionen ihrer eigenen Staaten und bremst so die [concept_global_warming_system]:\\n[GetStaticModifier('un_regime_climate_emitter_modifier').GetDesc]\\n#bold Ein geringer Emittent#! (skaliert und mit jedem Grad Erwärmung multipliziert): jede andere Vertragspartei, die keinen Markt anführt oder einen anführt, der unter 2% ausstößt:\\n[GetStaticModifier('un_regime_climate_adaptation_modifier').GetDesc]\\nDer Anführer eines Marktes, der 2% bis 10% ausstößt, erhält keines von beiden. Diese Bedingungen setzen die Spielregel Globale Erwärmung voraus.\\n$je_un_terms_scaled$"
  },
+ "je_un_terms_colony_protection": {
+  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_colony_protection_modifier').GetDesc]\\n#bold A party whose fleets destroy a colony, or close in on a free one#! (not scaled): it pays #R twice#! the infamy and twice the case strength. Seizing a colony at war, and interdicting one, cost what they cost anyone. The convention forbids nothing.\\n$je_un_terms_scaled$",
+  "de": "#bold Jede Vertragspartei#! (skaliert):\\n[GetStaticModifier('un_colony_protection_modifier').GetDesc]\\n#bold Eine Vertragspartei, deren Flotten eine Kolonie zerstören oder sich einer freien nähern,#! (nicht skaliert): Sie zahlt #R doppelt#! so viel Verrufenheit und doppelt so viel Fallstärke. Eine Kolonie im Krieg einzunehmen und eine zu blockieren kostet, was es jeden anderen kostet. Die Konvention verbietet nichts.\\n$je_un_terms_scaled$"
+ },
+ "je_un_terms_colony_protection_tt": {
+  "en": "$je_un_terms_colony_protection$\\n\\n#lore Plus what every [concept_un_resolution] brings its proposer and the members.#!",
+  "de": "$je_un_terms_colony_protection$\\n\\n#lore Dazu kommt, was jede [concept_un_resolution] ihrem Antragsteller und den Mitgliedern einbringt.#!"
+ },
  "je_un_terms_common": {
   "en": "#bold Every resolution but an expulsion:#!\\nCarried in full, the proposer gains, for five years:\\n[GetStaticModifier('un_vote_success_reward').GetDesc]\\nIf it falls, UN credibility −1 and the proposer takes, for five years:\\n[GetStaticModifier('un_vote_failure_penalty').GetDesc]\\nA proposer that leads a [concept_power_bloc] gains #G 3#! [concept_power_bloc_leverage] in each bloc member sitting in the Assembly when the resolution carries in any form, and loses #R 3#! when it falls.\\nOnce it carries, every other member is asked to accept it. One that accepts gives a bloc-leading proposer #G 5#! leverage over it if they share the bloc; on a binding resolution that no veto has blocked or softened, other than a peacekeeping request, a court referral, a referendum or a petition to lift sanctions, a member that voted against it and accepts it gains 2 standing. One that voted against it and refuses loses 20 [concept_relations] with the proposer and gains 3 [concept_infamy], and a bloc-leading proposer loses 15 leverage over it if they share the bloc; on a binding resolution that no veto has blocked or softened, other than a court referral, a referendum or a petition to lift sanctions, it also loses 5 standing and gains a defiance record of 10.\\nThe question cannot be tabled again for five years, ten after an expulsion.",
   "de": "#bold Jede Resolution außer einem Ausschluss:#!\\nWird sie vollständig angenommen, erhält der Antragsteller fünf Jahre lang:\\n[GetStaticModifier('un_vote_success_reward').GetDesc]\\nScheitert sie, sinkt die UN-Glaubwürdigkeit um 1, und der Antragsteller trägt fünf Jahre lang:\\n[GetStaticModifier('un_vote_failure_penalty').GetDesc]\\nEin Antragsteller, der einen [concept_power_bloc] anführt, gewinnt #G 3#! [concept_power_bloc_leverage] gegenüber jedem Blockmitglied, das in der Versammlung sitzt, wenn die Resolution in irgendeiner Form angenommen wird, und verliert #R 3#!, wenn sie scheitert.\\nSobald sie angenommen ist, wird jedes andere Mitglied gebeten, sie zu akzeptieren. Wer akzeptiert, verschafft einem blockanführenden Antragsteller #G 5#! Einflusshebel über sich, wenn beide demselben Block angehören; bei einer verbindlichen Resolution, die kein Veto blockiert oder abgeschwächt hat, außer bei einem Friedenssicherungsersuchen, einer Verweisung an das Gericht, einem Referendum oder einem Antrag auf Aufhebung von Sanktionen, gewinnt ein Mitglied, das dagegen gestimmt hat und sie akzeptiert, 2 Ansehen. Wer dagegen gestimmt hat und ablehnt, verliert 20 [concept_relations] zum Antragsteller und gewinnt 3 [concept_infamy], und ein blockanführender Antragsteller verliert 15 Einflusshebel über ihn, wenn beide demselben Block angehören; bei einer verbindlichen Resolution, die kein Veto blockiert oder abgeschwächt hat, außer bei einer Verweisung an das Gericht, einem Referendum oder einem Antrag auf Aufhebung von Sanktionen, verliert er außerdem 5 Ansehen und erhält eine Missachtungsbilanz von 10.\\nDie Frage kann fünf Jahre lang nicht erneut eingebracht werden, nach einem Ausschluss zehn Jahre lang."
@@ -7732,8 +9292,8 @@
   "de": "#bold Zwei Drittel der stimmberechtigten Mitglieder#! entscheiden darüber, und kein Veto kann es aufhalten. Der Antrag ist gegenstandslos, wenn das Mitglied bis zur Abstimmung ausgetreten ist oder sein Fall unter 30 gefallen ist.\\n#bold Angenommen:#! Fünf Jahre lang oder bis sein Fall unter 30 fällt, ist die Vertretung des Mitglieds ausgesetzt. Es gibt keine Stimme ab, bringt keine Anträge ein, wird nicht befragt und nicht umworben. Es verliert die Vorteile der Mitgliedschaft, skaliert nach Autorität, und diese Privilegien:\\n[GetStaticModifier('un_member_privileges_modifier').GetDesc]\\nEs gibt jeden ständigen Sitz endgültig an die nächste [concept_great_power] in der Reihe ab, ebenso das Hauptquartier, wenn es eines beherbergt. Seine UN-Programme enden, es bezieht keinen Zuschuss des Weltentwicklungsfonds, sagt kein Getreide zu und entsendet keine Kontingente, und die [concept_un_standing_force] streicht seine Kriegsziele nicht: Es zahlt stattdessen den doppelten Zuschlag. Es zahlt weiterhin seine [concept_un_dues].\\nEs verliert 8 Ansehen (4, wenn es für seine eigene Aussetzung gestimmt hat), und der Antragsteller verliert 20 [concept_relations] zu ihm."
  },
  "je_un_terms_cultural_diversity": {
-  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nIts Ideology Resistance is resistance to the [concept_foreign_cultural_benchmark]: a party loses half the benchmark's [concept_legitimacy] at Established, a quarter at Strong and none at Supranational. Its minorities assimilate more slowly and their homelands fade more slowly.\\n#bold The cultural hegemon#!, first in [concept_cultural_pull], if it is a party (scaled):\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]\\nIt can be tabled only under Charter Reform I and while UNESCO stands.\\n$je_un_terms_scaled$",
-  "de": "#bold Jede Vertragspartei#! (skaliert):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nIhre Ideologische Widerstandskraft ist Widerstand gegen den [Concept('concept_foreign_cultural_benchmark','Ausländischen Kultur-Vergleichswert')]: Eine Vertragspartei verliert bei Etabliert die Hälfte der [concept_legitimacy] des Vergleichswerts, bei Stark ein Viertel und bei Supranational nichts. Ihre Minderheiten assimilieren sich langsamer, und ihre Heimatländer verblassen langsamer.\\n#bold Der Kulturhegemon#!, an der Spitze bei der [concept_cultural_pull], sofern er Vertragspartei ist (skaliert):\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]\\nSie kann nur unter der Charta-Reform I und solange die UNESCO besteht eingebracht werden.\\n$je_un_terms_scaled$"
+  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nIts Ideology Resistance is resistance to the [concept_foreign_cultural_benchmark]: a party loses half the benchmark's [concept_legitimacy] at Established, a quarter at Strong and none at Supranational.\\n#bold The cultural hegemon#!, first in [concept_cultural_pull], if it is a party (scaled):\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]\\nIt can be tabled only under Charter Reform I and while UNESCO stands.\\n$je_un_terms_scaled$",
+  "de": "#bold Jede Vertragspartei#! (skaliert):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nIhre Ideologische Widerstandskraft ist Widerstand gegen den [Concept('concept_foreign_cultural_benchmark','Ausländischen Kultur-Vergleichswert')]: Eine Vertragspartei verliert bei Etabliert die Hälfte der [concept_legitimacy] des Vergleichswerts, bei Stark ein Viertel und bei Supranational nichts.\\n#bold Der Kulturhegemon#!, an der Spitze bei der [Concept('concept_cultural_pull','Kulturellen Anziehungskraft')], sofern er Vertragspartei ist (skaliert):\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]\\nSie kann nur unter der Charta-Reform I und solange die UNESCO besteht eingebracht werden.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_decolonization": {
   "en": "#bold It has no parties: it binds every member, however it voted.#!\\n#bold Every member running a colonial empire#! (scaled):\\n[GetStaticModifier('un_regime_colonial_pressure_modifier').GetDesc]\\n#bold Every colony of a member#! (a [concept_colony], a chartered company or an overseas protectorate of another heritage), member or not (scaled):\\n[GetStaticModifier('un_regime_colony_liberty_modifier').GetDesc]\\n#bold Every country holding an overseas colony when it carries#!, member or not, for five years:\\n[GetStaticModifier('un_decolonization_pressure_modifier').GetDesc]\\n#bold Every member that accepts it#!, and its proposer, for five years:\\n[GetStaticModifier('un_decolonization_champion_modifier').GetDesc]\\n#bold A [concept_great_power] that voted on it and accepts it#! takes the anti-colonial stance: it counts as a condemner against every other colonial empire's [concept_colonial_stability], it can press colonial powers to let their colonies go, and for three years it carries, on its own empire too:\\n[GetStaticModifier('gp_anti_colonial_policy_modifier').GetDesc]\\nUnder Charter Reform II it opens the Supervised Self-Determination Referendum.\\n$je_un_terms_scaled$",
@@ -7840,8 +9400,8 @@
   "de": "#bold Angenommen:#! Die [concept_relations] des Antragstellers zum Ziel sinken um 30. Sofern das Ziel nicht für seine eigenen Sanktionen gestimmt hat, wird der Antragsteller der Durchsetzer, ohne Enddatum. Er darf keine Sanktionen mehr einbringen, bis sie enden. Sie selbst aufzuheben kostet UN-Glaubwürdigkeit:\\n[GetStaticModifier('un_sanctions_enforcer_modifier').GetDesc]\\nSofern das Ziel nicht für seine eigenen Sanktionen gestimmt hat, verliert es 6 Ansehen (3, wenn doch) und trägt, bis der Durchsetzer sie aufhebt, die Versammlung den Antrag des Ziels auf ihre Aufhebung annimmt, der Durchsetzer die UN verlässt oder nicht mehr existiert oder die UN sich auflöst (skaliert):\\n[GetStaticModifier('un_sanctions_target_modifier').GetDesc]\\nDrei Monate später entscheidet der Durchsetzer, wie scharf er sie durchsetzt: streng (Ansehen #G +2#!, Beziehungen zum Ziel −20), teilweise oder gar nicht (Ansehen #R −5#! und eine Missachtungsbilanz von 8).\\n#bold Ab der Stufe [concept_un_tier_strong]#! verliert jedes Mitglied im Rang einer [concept_major_power], das dafür gestimmt hat und diplomatische Relevanz für das Ziel hat, 30 Beziehungen zu ihm und verhängt, wo die Beziehungen Schlecht oder schlechter sind, ein [concept_embargo] gegen es; auf der Stufe [concept_un_tier_supranational] tut dies jedes solche Mitglied, wie auch immer es abgestimmt hat. Ein Mitglied, das sein UN-Embargo nach dem ersten Jahr aufgibt, solange die Sanktionen bestehen, erhält eine Missachtungsbilanz von 8 und kostet die UN Glaubwürdigkeit.\\nEin sanktioniertes Land darf keine Kontingente zu UN-Missionen entsenden.\\n#bold Mit Veto belegt:#! Die Beziehungen sinken um 10, und sofern das Ziel nicht dafür gestimmt hat, verliert es 3 Ansehen und trägt fünf Jahre lang freiwillige Sanktionen (skaliert). Es gibt keinen Durchsetzer und kein Embargo:\\n[GetStaticModifier('un_sanctions_voluntary_target_modifier').GetDesc]\\n$je_un_terms_scaled$"
  },
  "je_un_terms_scaled": {
-  "en": "#lore Shown at ×1. A term marked scaled is multiplied by [concept_un_enforcement]: ×0.5 at Contested, ×1 at Established, ×1.5 at Strong and ×2.5 at Supranational. At Moribund a convention's party terms fall to ×0.01 and every other scaled term to nothing.#!",
-  "de": "#lore Dargestellt bei ×1. Eine als skaliert gekennzeichnete Bedingung wird mit der [concept_un_enforcement] multipliziert: ×0,5 bei Umstritten, ×1 bei Etabliert, ×1,5 bei Stark und ×2,5 bei Supranational. Bei Marode sinken die Bedingungen einer Konvention für Vertragsparteien auf ×0,01 und jede andere skalierte Bedingung auf nichts.#!"
+  "en": "#lore Shown at ×1; terms marked scaled follow [concept_un_enforcement].#!",
+  "de": "#lore Dargestellt bei ×1; als skaliert gekennzeichnete Bedingungen folgen der [concept_un_enforcement].#!"
  },
  "je_un_terms_space": {
   "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_space_partnership_modifier').GetDesc]\\nOnce a party has finished the [concept_space_race], its progress bonus counts toward its commercial space dividend instead.\\n#bold The leader#! (scaled): a party with as many of the eight main [Concept('concept_space_milestone','milestones')] as any country in the world, members or not, once that is three or more:\\n[GetStaticModifier('un_regime_space_leader_modifier').GetDesc]\\n#bold A laggard#! (scaled): a party three or more milestones behind:\\n[GetStaticModifier('un_regime_space_laggard_modifier').GetDesc]\\n#bold A party with an $building_orbital_battlestation$#! (scaled). The treaty condemns the battlestation but does not forbid it:\\n[GetStaticModifier('un_regime_space_weapon_modifier').GetDesc]\\n$je_un_terms_scaled$",
@@ -7879,6 +9439,10 @@
   "en": "The United Nations is an intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that scale with [concept_un_authority].\\n\\n#bold [concept_un_authority]#! (0–100) follows the world. Each month it moves toward a target: a base plus six pillars. #bold Participation#! is how much of the world's power is in the UN. #bold Great-power commitment#! is who champions or undermines it. #bold Credibility#! is its record of resolutions carried, vetoed and defied. #bold Funding#! is who runs its programmes. #bold Peace and order#! covers wars between members and nuclear use. #bold Delivery#! is aid, peacekeeping and mandates delivered. Every act counts in proportion to the actor's share of world [concept_prestige]. See #bold Why UN Authority Is Moving#! below.\\n\\n#bold Membership benefits#! (from the Contested tier, authority 20 or more) scale with authority ÷ 50. At 50: #G +10% relations improvement speed, +1% research speed, +3% [concept_prestige]#!. At 100: twice that.\\n\\n#bold Security Council:#! five permanent seats carry the [concept_un_veto]. The founder takes one at the founding; the others go to the [Concept('concept_great_power','Great Power')] members with the most [concept_prestige] that hold none, never to whoever joined first: when the signing period closes a year after the founding, and whenever a seat falls vacant. A seat is lost by leaving, by ten years below great-power rank, or by a two-thirds expulsion vote. The permanent members are named in the chamber.\\n\\n#bold Headquarters:#! the founder hosts the UN and may build the United Nations Headquarters in its territory. If the host leaves, another member takes over.\\n\\n#bold Specialized agencies:#! ten are founded when the General Assembly adopts the matching convention (WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS, the ICC and the regime for the physical protection of nuclear material). The ICJ is founded when a country first accepts a World Court ruling against it.\\n\\n#bold Resolutions#! are tabled and voted on in the General Assembly chamber below. A permanent member can veto the binding ones.\\n\\n#bold Programmes#! (peacekeeping, development, human rights and arms control) each carry a cost, and count toward the UN's funding while they run.",
   "de": "Die Vereinten Nationen sind eine zwischenstaatliche Organisation zur Förderung internationaler Zusammenarbeit. Ihre Mitglieder erhalten diplomatische Vorteile, die mit der [concept_un_authority] skalieren.\\n\\n#bold [concept_un_authority]#! (0–100) folgt der Welt. Jeden Monat bewegt sie sich auf einen Zielwert zu: eine Basis plus sechs Säulen. #bold Beteiligung#! ist, wie viel Macht der Welt in der UN steckt. #bold Engagement der Großmächte#! ist, wer sich für sie einsetzt oder sie untergräbt. #bold Glaubwürdigkeit#! ist ihre Bilanz an angenommenen, mit Veto belegten und missachteten Resolutionen. #bold Finanzierung#! ist, wer ihre Programme trägt. #bold Frieden und Ordnung#! erfasst Kriege zwischen Mitgliedern und den Einsatz von Atomwaffen. #bold Leistung#! ist geleistete Hilfe, Friedenssicherung und erfüllte Mandate. Jede Handlung zählt im Verhältnis zum Anteil des Akteurs am weltweiten [concept_prestige]. Siehe #bold Warum sich die UN-Autorität verändert#! unten.\\n\\n#bold Mitgliedsvorteile#! (ab der Stufe Umstritten, Autorität 20 oder mehr) skalieren mit Autorität ÷ 50. Bei 50: #G +10% Tempo der Beziehungsverbesserung, +1% Forschungstempo, +3% [concept_prestige]#!. Bei 100: das Doppelte.\\n\\n#bold Sicherheitsrat:#! Fünf ständige Sitze tragen das [concept_un_veto]. Der Gründer erhält bei der Gründung einen davon; die übrigen gehen an die [Concept('concept_great_power','Großmacht')]-Mitglieder mit dem meisten [concept_prestige], die noch keinen halten — nie an die zuerst beigetretenen: wenn die Beitrittsfrist ein Jahr nach der Gründung endet, und immer wenn ein Sitz frei wird. Ein Sitz geht verloren durch Austritt, durch zehn Jahre unter Großmachtrang oder durch eine Zweidrittelmehrheit für den Ausschluss. Die ständigen Mitglieder werden in der Kammer genannt.\\n\\n#bold Hauptsitz:#! Der Gründer ist Gastgeber der UN und darf den Hauptsitz der Vereinten Nationen auf seinem Gebiet errichten. Verlässt der Gastgeber die Organisation, übernimmt ein anderes Mitglied.\\n\\n#bold Sonderorganisationen:#! Zehn werden gegründet, sobald die Generalversammlung das passende Übereinkommen annimmt (WHO, UNESCO, UNHRC, IAEO, UNEP, UNHCR, UNOOSA, ITLOS, der IStGH und das Regime für den physischen Schutz von Kernmaterial). Der IGH wird gegründet, sobald ein Land erstmals ein Urteil des Weltgerichtshofs gegen sich akzeptiert.\\n\\n#bold Resolutionen#! werden in der Kammer der Generalversammlung unten eingebracht und zur Abstimmung gestellt. Ein ständiges Mitglied kann bei den verbindlichen ein Veto einlegen.\\n\\n#bold Programme#! (Friedenssicherung, Entwicklung, Menschenrechte und Rüstungskontrolle) verursachen jeweils Kosten und zählen, solange sie laufen, zur Finanzierung der UN."
  },
+ "je_world_climate": {
+  "en": "World Climate",
+  "de": "Weltklima"
+ },
  "je_world_war": {
   "en": "The Gathering Storm",
   "de": "Der aufziehende Sturm"
@@ -7888,16 +9452,16 @@
   "de": "\\n#bold Unsere Ideologie:#! Autoritär"
  },
  "je_world_war_ideology_communist": {
-  "en": "\\n#bold Our Ideology:#! #R Communist#!",
-  "de": "\\n#bold Unsere Ideologie:#! #R Kommunistisch#!"
+  "en": "\\n#bold Our Ideology:#! Communist",
+  "de": "\\n#bold Unsere Ideologie:#! Kommunistisch"
  },
  "je_world_war_ideology_democratic": {
-  "en": "\\n#bold Our Ideology:#! #G Democratic#!",
-  "de": "\\n#bold Unsere Ideologie:#! #G Demokratisch#!"
+  "en": "\\n#bold Our Ideology:#! Democratic",
+  "de": "\\n#bold Unsere Ideologie:#! Demokratisch"
  },
  "je_world_war_ideology_fascist": {
-  "en": "\\n#bold Our Ideology:#! #R Fascist#!",
-  "de": "\\n#bold Unsere Ideologie:#! #R Faschistisch#!"
+  "en": "\\n#bold Our Ideology:#! Fascist",
+  "de": "\\n#bold Unsere Ideologie:#! Faschistisch"
  },
  "je_world_war_ideology_nonaligned": {
   "en": "\\n#bold Our Ideology:#! Non-Aligned",

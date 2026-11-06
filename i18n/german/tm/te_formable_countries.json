@@ -17,6 +17,10 @@
   "de": "der Afrikanischen Union",
   "base": "AFU"
  },
+ "AFU_DEF": {
+  "en": "African Union",
+  "de": "Afrikanische Union"
+ },
  "AFU_GEN": {
   "en": "African Union",
   "de": "der Afrikanischen Union",
@@ -59,6 +63,10 @@
   "en": "India",
   "de": "Indien",
   "base": "BHA"
+ },
+ "BHA_DEF": {
+  "en": "Union of India",
+  "de": "Indische Union"
  },
  "BHA_GEN": {
   "en": "India",
@@ -103,6 +111,10 @@
   "de": "Dar al-Islam",
   "base": "DAR"
  },
+ "DAR_DEF": {
+  "en": "Union of Dar-Al-Islam",
+  "de": "Union von Dar al-Islam"
+ },
  "DAR_GEN": {
   "en": "Dar-Al-Islam",
   "de": "Dar al-Islam",
@@ -145,6 +157,10 @@
   "en": "East African Federation",
   "de": "der Ostafrikanischen Föderation",
   "base": "EAF"
+ },
+ "EAF_DEF": {
+  "en": "East African Federation",
+  "de": "Ostafrikanische Föderation"
  },
  "EAF_GEN": {
   "en": "East African Federation",
@@ -189,6 +205,10 @@
   "de": "der Europäischen Union",
   "base": "EUN"
  },
+ "EUN_DEF": {
+  "en": "European Union",
+  "de": "Europäische Union"
+ },
  "EUN_GEN": {
   "en": "European Union",
   "de": "der Europäischen Union",
@@ -231,6 +251,10 @@
   "en": "Intermarium",
   "de": "Intermarium",
   "base": "INM"
+ },
+ "INM_DEF": {
+  "en": "Intermarium Federation",
+  "de": "Intermarium-Föderation"
  },
  "INM_GEN": {
   "en": "Intermarium",
@@ -275,6 +299,10 @@
   "de": "Indonesien",
   "base": "NUS"
  },
+ "NUS_DEF": {
+  "en": "State of Indonesia",
+  "de": "Staat Indonesien"
+ },
  "NUS_GEN": {
   "en": "Indonesia",
   "de": "Indonesiens",
@@ -317,6 +345,10 @@
   "en": "North American Union",
   "de": "der Nordamerikanischen Union",
   "base": "UNA"
+ },
+ "UNA_DEF": {
+  "en": "North American Union",
+  "de": "Nordamerikanische Union"
  },
  "UNA_GEN": {
   "en": "North American Union",
@@ -361,6 +393,10 @@
   "de": "der Vereinten Erde",
   "base": "UNE"
  },
+ "UNE_DEF": {
+  "en": "United Earth",
+  "de": "Vereinte Erde"
+ },
  "UNE_GEN": {
   "en": "United Earth",
   "de": "der Vereinten Erde",
@@ -403,6 +439,10 @@
   "en": "China",
   "de": "China",
   "base": "ZHO"
+ },
+ "ZHO_DEF": {
+  "en": "State of China",
+  "de": "Staat China"
  },
  "ZHO_GEN": {
   "en": "China",

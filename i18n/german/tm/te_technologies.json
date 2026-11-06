@@ -55,6 +55,10 @@
   "en": "With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.",
   "de": "Mit neuen Materialien wie leichten Verbundwerkstoffen und sogar Exoskeletten sind unsere Soldaten besser geschützt und beweglicher. Das dürfte ihre Überlebenschancen angesichts der Unannehmlichkeiten des Gefechts verbessern."
  },
+ "advanced_fission": {
+  "en": "Advanced Fission",
+  "de": "Fortgeschrittene Kernspaltung"
+ },
  "advanced_materials_armor": {
   "en": "Advanced Materials Armor",
   "de": "Panzerung aus fortgeschrittenen Materialien"
@@ -103,6 +107,14 @@
   "en": "Using the latest technology and data analysis, we can make our business processes more streamlined and automated. This cuts down on waste and should, in theory, make everyone more productive.",
   "de": "Mit modernster Technologie und Datenanalyse können wir unsere Geschäftsprozesse straffen und automatisieren. Das verringert Verschwendung und sollte theoretisch alle produktiver machen."
  },
+ "ai_agents": {
+  "en": "AI Agents",
+  "de": "KI-Agenten"
+ },
+ "ai_tutors": {
+  "en": "AI Tutors",
+  "de": "KI-Tutoren"
+ },
  "aluminum_mass_production": {
   "en": "Aluminum Mass Production",
   "de": "Aluminium-Massenproduktion"
@@ -110,6 +122,10 @@
  "aluminum_mass_production_desc": {
   "en": "We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.",
   "de": "Wir haben herausgefunden, wie man Aluminium im großen Maßstab herstellt. Dieses leichte Metall ist in allen möglichen Branchen nützlich, man wird es also bald überall antreffen."
+ },
+ "aneutronic_fusion": {
+  "en": "Aneutronic Fusion",
+  "de": "Aneutronische Fusion"
  },
  "animation": {
   "en": "Animation",
@@ -199,6 +215,10 @@
   "en": "Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.",
   "de": "Fahrzeuge, die selbst fahren können, sind keine Fantasie mehr. Sie könnten den Verkehr revolutionieren, unsere Straßen sicherer machen und vielleicht sogar Staus ein Ende setzen."
  },
+ "autonomous_weapons": {
+  "en": "Autonomous Weapons",
+  "de": "Autonome Waffen"
+ },
  "barcodes_and_scanners": {
   "en": "Barcodes and Scanners",
   "de": "Strichcodes und Scanner"
@@ -278,6 +298,10 @@
  "cellular_networks_desc": {
   "en": "The rise of cellular networks has meant we can now make phone calls from almost anywhere. This has changed the way we live and do business, for better or worse.",
   "de": "Der Aufstieg der Mobilfunknetze bedeutet, dass wir nun fast überall telefonieren können. Das hat verändert, wie wir leben und Geschäfte machen, im Guten wie im Schlechten."
+ },
+ "cislunar_infrastructure": {
+  "en": "Cislunar Infrastructure",
+  "de": "Cislunare Infrastruktur"
  },
  "civil_rights_movement": {
   "en": "Civil Rights Movement",
@@ -547,6 +571,10 @@
   "en": "By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.",
   "de": "Indem wir die Gene von Organismen manipulieren, können wir neue medizinische Behandlungen entwickeln und unsere Nutzpflanzen verbessern. Eine mächtige Technologie, die wir jedoch mit Vorsicht einsetzen müssen."
  },
+ "geoengineering": {
+  "en": "Geoengineering",
+  "de": "Geoengineering"
+ },
  "globalization": {
   "en": "Globalization",
   "de": "Globalisierung"
@@ -571,6 +599,10 @@
   "en": "Now our missiles can find their own way to the target. This makes them much more accurate and effective, which is bad news for the enemy.",
   "de": "Jetzt finden unsere Raketen selbst ihren Weg zum Ziel. Das macht sie viel treffsicherer und wirksamer, was schlechte Nachrichten für den Feind bedeutet."
  },
+ "humanoid_robotics": {
+  "en": "Humanoid Robotics",
+  "de": "Humanoide Robotik"
+ },
  "hydraulic_fracturing": {
   "en": "Hydraulic Fracturing",
   "de": "Hydraulisches Fracking"
@@ -586,6 +618,10 @@
  "hypersonic_weapons_desc": {
   "en": "Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems.",
   "de": "Waffen, die mehr als fünfmal so schnell wie der Schall fliegen können. Unglaublich schnell und präzise, und ein echtes Kopfzerbrechen für unsere bestehenden Verteidigungssysteme."
+ },
+ "in_situ_resource_utilization": {
+  "en": "In-Situ Resource Utilization",
+  "de": "In-situ-Ressourcennutzung"
  },
  "inertial_navigation_systems": {
   "en": "Inertial Navigation Systems",
@@ -682,6 +718,10 @@
  "laser_technology_desc": {
   "en": "The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses.",
   "de": "Der Laser hat seinen Weg in alle möglichen Anwendungen gefunden, von der Telekommunikation über die Medizin bis zur Fertigung. Ein präzises und mächtiges Werkzeug mit scheinbar endlosen Einsatzmöglichkeiten."
+ },
+ "liquid_democracy": {
+  "en": "Liquid Democracy",
+  "de": "Liquid Democracy"
  },
  "machine_learning": {
   "en": "Machine Learning",
@@ -843,6 +883,10 @@
   "en": "Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.",
   "de": "Man stelle sich Maschinen vor, die Dinge Atom für Atom bauen können. Diese molekularen Assembler könnten hochgradig maßgeschneiderte Güter mit unglaublicher Präzision herstellen und das Wesen der Fertigung von Grund auf verändern."
  },
+ "morphological_freedom": {
+  "en": "Morphological Freedom",
+  "de": "Morphologische Freiheit"
+ },
  "motorized_artillery": {
   "en": "Motorized Artillery",
   "de": "Motorisierte Artillerie"
@@ -898,6 +942,10 @@
  "nuclear_energy_desc": {
   "en": "By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.",
   "de": "Indem wir die Kraft der Kernreaktionen nutzbar machen, haben wir eine neue, mächtige Energiequelle gefunden. Sie hat unsere Industrien angetrieben und unsere Abhängigkeit von fossilen Brennstoffen verringert, bringt aber eigene Risiken mit sich."
+ },
+ "nuclear_thermal_propulsion": {
+  "en": "Nuclear Thermal Propulsion",
+  "de": "Nukleartermischer Antrieb"
  },
  "nuclear_weapons": {
   "en": "Nuclear Weapons",
@@ -987,6 +1035,10 @@
   "en": "What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.",
   "de": "Was, wenn wir in einer Welt lebten, in der es für alle genug gäbe? Eine Postknappheitswirtschaft, ermöglicht durch fortschrittliche Technologie, könnte materielle Not beseitigen und die eigentliche Bedeutung von Arbeit neu definieren."
  },
+ "post_work_society": {
+  "en": "Post-Work Society",
+  "de": "Postarbeitsgesellschaft"
+ },
  "precision_guided_munitions": {
   "en": "Precision Guided Munitions",
   "de": "Präzisionsgelenkte Munition"
@@ -1075,6 +1127,10 @@
   "en": "With satellites, we can now spy on any part of the world from space. This has revolutionized intelligence gathering, giving us an unprecedented view of our adversaries.",
   "de": "Mit Satelliten können wir nun jeden Teil der Welt aus dem All ausspähen. Das hat die Aufklärung revolutioniert und uns einen beispiellosen Einblick in unsere Gegner verschafft."
  },
+ "rejuvenation_therapies": {
+  "en": "Rejuvenation Therapies",
+  "de": "Verjüngungstherapien"
+ },
  "reusable_rocketry": {
   "en": "Reusable Rocketry",
   "de": "Wiederverwendbare Raketentechnik"
@@ -1122,6 +1178,14 @@
  "second_wave_feminism_desc": {
   "en": "This wave of feminism has fought for equality and personal rights for women. It has had a significant impact on our society, changing gender roles and legal norms.",
   "de": "Diese Welle des Feminismus hat für Gleichberechtigung und persönliche Rechte für Frauen gekämpft. Sie hat unsere Gesellschaft erheblich geprägt und Geschlechterrollen sowie Rechtsnormen verändert."
+ },
+ "self_directed_evolution": {
+  "en": "Self-Directed Evolution",
+  "de": "Selbstgesteuerte Evolution"
+ },
+ "self_driving_laboratories": {
+  "en": "Self-Driving Laboratories",
+  "de": "Selbstfahrende Labore"
  },
  "semiautomatic_rifle": {
   "en": "Semi-Automatic Rifle",
@@ -1299,6 +1363,10 @@
   "en": "Television has revolutionized entertainment and communication. It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time.",
   "de": "Das Fernsehen hat Unterhaltung und Kommunikation revolutioniert. Es ist zu einem mächtigen Medium geworden, um Informationen zu verbreiten und die öffentliche Meinung zu formen, ein flimmernder Bildschirm nach dem anderen."
  },
+ "terraforming": {
+  "en": "Terraforming",
+  "de": "Terraforming"
+ },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",
   "de": "Terrorismus und Terrorismusbekämpfung"
@@ -1339,6 +1407,10 @@
   "en": "Drones have changed the face of warfare. They allow us to conduct surveillance and precision strikes without risking the lives of our pilots, giving us a powerful new tool in our military arsenal.",
   "de": "Drohnen haben das Gesicht der Kriegsführung verändert. Sie erlauben uns Aufklärung und Präzisionsschläge, ohne das Leben unserer Piloten zu riskieren, und verschaffen uns ein mächtiges neues Werkzeug in unserem militärischen Arsenal."
  },
+ "vactrains": {
+  "en": "Vactrains",
+  "de": "Vakuumzüge"
+ },
  "video_games": {
   "en": "Video Games",
   "de": "Videospiele"
@@ -1354,6 +1426,10 @@
  "virtual_reality_desc": {
   "en": "Virtual reality technologies can create incredibly immersive experiences for entertainment, education, and training. It's a new way to interact with the digital world, and it's full of potential.",
   "de": "Virtual-Reality-Technologien können unglaublich immersive Erlebnisse für Unterhaltung, Bildung und Training schaffen. Eine neue Art, mit der digitalen Welt zu interagieren, voller Potenzial."
+ },
+ "von_neumann_machines": {
+  "en": "Von Neumann Machines",
+  "de": "Von-Neumann-Maschinen"
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",

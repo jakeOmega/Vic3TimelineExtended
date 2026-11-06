@@ -200,12 +200,12 @@
   "de": "Mindestens 1 freier Banken-Interventionspunkt"
  },
  "BANKING_POINTS_2": {
-  "en": "At least 2 free Banking Intervention Points",
-  "de": "Mindestens 2 freie Banken-Interventionspunkte"
+  "en": "At least #bold 2#! free intervention points",
+  "de": "Mindestens #bold 2#! freie Interventionspunkte"
  },
  "BANKING_POINTS_3": {
-  "en": "At least 3 free Banking Intervention Points",
-  "de": "Mindestens 3 freie Banken-Interventionspunkte"
+  "en": "At least #bold 3#! free intervention points",
+  "de": "Mindestens #bold 3#! freie Interventionspunkte"
  },
  "BANKING_POINTS_4": {
   "en": "At least 4 free Banking Intervention Points",
@@ -228,8 +228,8 @@
   "de": "Wenn eine Bank scheitert, tragen ihre Anleihegläubiger und Großeinleger den Verlust statt der Steuerzahler: Ihre Forderungen werden abgeschrieben und in neues Kapital der Bank umgewandelt. Das kostet die Staatskasse nichts und lehrt Kreditgeber, Risiken wieder richtig einzupreisen, doch die wohlhabenden Gläubiger, die dafür zahlen, sind wütend, und Schulden, die abgeschrieben werden können, kosten bei der Ausgabe mehr."
  },
  "CB_BANK_HOLIDAY_DESC": {
-  "en": "Close every bank in the country for up to ninety days, so a run has nowhere to run to. Examiners sort the sound banks from the insolvent while the doors are shut, and banks that reopen after the full term reopen to depositors who trust them again. Nobody can reach their money in the meantime, and commerce limps along on whatever cash is already in hand.",
-  "de": "Schließt für bis zu neunzig Tage jede Bank im Land, damit ein Ansturm ins Leere läuft. Während die Türen verschlossen sind, sondern Prüfer die soliden Banken von den insolventen, und Banken, die nach der vollen Frist wieder öffnen, öffnen für Einleger, die ihnen wieder vertrauen. In der Zwischenzeit kommt niemand an sein Geld, und der Handel hinkt mit dem Bargeld voran, das gerade zur Hand ist."
+  "en": "Close every bank in the country for up to ninety days, so a run has nowhere to run to. Nobody can reach their money in the meantime, and commerce limps along on whatever cash is already in hand.",
+  "de": "Schließt für bis zu neunzig Tage jede Bank im Land, damit ein Ansturm ins Leere läuft. In der Zwischenzeit kommt niemand an sein Geld, und der Handel hinkt mit dem Bargeld voran, das gerade zur Hand ist."
  },
  "CB_CAPITAL_CONTROLS_OUT": {
   "en": "Capital Controls (Outflows)",
@@ -464,8 +464,8 @@
   "de": "Notfall-Importfinanzierung"
  },
  "CB_EMERGENCY_IMPORT_FINANCING_DESC": {
-  "en": "Finance import credit during a financial crisis. Improves general import trade advantage; it does not create goods or bypass a blockade. Costs 0.05% of annual GDP on activation and each month, rising to 0.10% after 12 funded months. The surcharge recedes while inactive. Ends when the crisis passes or cash is insufficient.",
-  "de": "Finanziert Importkredite während einer Finanzkrise. Verbessert den allgemeinen Importhandelsvorteil; erzeugt keine Güter und umgeht keine Blockade. Kostet bei Aktivierung und danach jeden Monat 0,05% des jährlichen BIP, steigend auf 0,10% nach 12 finanzierten Monaten. Der Aufschlag sinkt bei Inaktivität. Endet, wenn die Krise vorüber ist oder die Mittel nicht mehr ausreichen."
+  "en": "In a financial crisis the treasury guarantees the trade credit importers can no longer get, so what the country already buys abroad keeps arriving. It creates no goods and breaks no blockade.",
+  "de": "In einer Finanzkrise bürgt die Staatskasse für den Handelskredit, den Importeure nicht mehr bekommen, sodass weiter ankommt, was das Land bereits im Ausland kauft. Dabei entstehen keine Güter, und eine Blockade wird nicht durchbrochen."
  },
  "CB_EMERGENCY_LIQUIDITY_DESC": {
   "en": "As the 'Lender of Last Resort,' we must open the vaults to provide credit to banks facing a run. It is an expensive and risky move that can reignite speculation, but it is often the fastest way to arrest a systemic panic and restore confidence.",
@@ -524,8 +524,8 @@
   "de": "Halbiert positive Goldzuflüsse sowie den Wechselkursertrag aus einer positiven Realzinslücke. Abflüsse bleiben unberührt. Weniger spekulativer Kredit bedeutet weniger Blasendruck, aber auch langsamere Investitionen und Reservebildung."
  },
  "CB_STERILIZE_INFLOWS_DESC": {
-  "en": "Offset three quarters of the inflation pressure from positive gold inflows, without cancelling foreign claims on the vault. Credit grows more slowly. Operations cost 0.01% of annual GDP on activation and each month and stop automatically if cash is unavailable. Outflow deflation is unchanged.",
-  "de": "Gleicht drei Viertel des Inflationsdrucks aus positiven Goldzuflüssen aus, ohne die ausländischen Ansprüche auf den Tresor aufzuheben. Der Kredit wächst langsamer. Die Maßnahmen kosten bei Aktivierung und danach jeden Monat 0,01% des jährlichen BIP und enden automatisch, wenn keine Barmittel verfügbar sind. Die Deflation durch Abflüsse bleibt unverändert."
+  "en": "The central bank sells bills of its own to soak up the money that gold arriving from abroad would otherwise add, so an inflow fills the vault without loosening credit at home. It does nothing about gold leaving, and the foreigners who brought the gold can still take it home.",
+  "de": "Die Zentralbank verkauft eigene Schuldverschreibungen, um das Geld abzuschöpfen, das aus dem Ausland eintreffendes Gold sonst hinzufügen würde, sodass ein Zufluss den Tresor füllt, ohne die Kredite im Inland zu lockern. Gegen abfließendes Gold hilft das nichts, und die Ausländer, die das Gold gebracht haben, können es weiterhin wieder mitnehmen."
  },
  "CE_ADMIN_CAMPAIGN_DESC": {
   "en": "Launch a bureau-wide efficiency drive, replacing or removing underperforming planners. Clears significant [concept_bubble_pressure] at the cost of intelligentsia and industrialist approval.",
@@ -548,8 +548,8 @@
   "de": "Richtet einen ständigen ministeriumsübergreifenden Ausschuss ein, der Verteilungskonflikte vorausschauend löst. Günstig und beständig; am besten schon vor Ausbruch einer Krise eingesetzt."
  },
  "CE_CULTURAL_ASSIMILATION_BODY": {
-  "en": "Direct the [concept_bureaucracy] to extend metropolitan language, schooling, and civic identity into colonial territories. A one-off payment from the [concept_treasury] for each level sets up the apparatus; ongoing [concept_bureaucracy] and [concept_authority] costs sustain it. The reward accelerates [concept_assimilation] and [concept_conversion] in the colonies — but the policy itself politicises the colonised, accelerating radicalism in those who resist it.",
-  "de": "Weist die [concept_bureaucracy] an, Sprache, Schulwesen und staatsbürgerliche Identität des Mutterlandes auf die Kolonialgebiete auszuweiten. Eine einmalige Zahlung aus der [concept_treasury] für jede Stufe setzt den Apparat in Gang; laufende Kosten an [concept_bureaucracy] und [concept_authority] erhalten ihn. Der Lohn ist beschleunigte [concept_assimilation] und [concept_conversion] in den Kolonien — doch die Politik selbst politisiert die Kolonisierten und beschleunigt den Radikalismus derer, die sich ihr widersetzen."
+  "en": "Direct the [concept_bureaucracy] to extend metropolitan language, schooling and civic identity into colonial territories.",
+  "de": "Weist die [concept_bureaucracy] an, Sprache, Schulwesen und staatsbürgerliche Identität des Mutterlandes auf die Kolonialgebiete auszuweiten."
  },
  "CE_DISABLE_ADMIN_CAMPAIGN": {
   "en": "End Performance Campaign",
@@ -668,8 +668,8 @@
   "de": "$je_colonial_empire_row_invest$ um eine Stufe erhöhen: #v [GetPlayer.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#! [concept_colonial_stability] im Monat, bei @money!#R [GetPlayer.MakeScope.ScriptValue('colonial_invest_level_cost')|D]#! pro Woche mehr Unterhalt und einem Drittel mehr der übrigen Wirkungen des Programms."
  },
  "CE_MILITARY_GARRISON_BODY": {
-  "en": "Station military forces in colonial territories to maintain order. Costs [concept_authority], army projection, and bureaucratic capacity. While it runs, [concept_infamy] decays more slowly — every diplomatic incident, every war, the infamy taken on starting the garrison, all linger longer — so the international reputation cost compounds across the run.",
-  "de": "Stationiert Streitkräfte in den Kolonialgebieten, um Ordnung zu halten. Kostet [concept_authority], militärische Machtprojektion und bürokratische Kapazität. Solange es läuft, baut sich [concept_infamy] langsamer ab — jeder Diplomatenzwischenfall, jeder Krieg und die beim Start der Garnison aufgenommene Verrufenheit wirken alle länger nach —, sodass sich die Kosten für das internationale Ansehen im Lauf der Zeit summieren."
+  "en": "Station military forces in colonial territories to maintain order. While it runs, [concept_infamy] decays more slowly, so the infamy taken on starting it, and every incident and war, lingers longer.",
+  "de": "Stationiert Streitkräfte in den Kolonialgebieten, um Ordnung zu halten. Solange es läuft, baut sich [concept_infamy] langsamer ab, sodass die beim Start aufgenommene Verrufenheit sowie jeder Zwischenfall und jeder Krieg länger nachwirken."
  },
  "CE_NEEDS_COLONIAL_STATES": {
   "en": "Must have colonial territories (non-[concept_homeland] states).",
@@ -6343,6 +6343,14 @@
   "en": "Export Credit Facility",
   "de": "Exportkreditfazilität"
  },
+ "banking_external_import_charge": {
+  "en": "Import Financing Bill",
+  "de": "Kosten der Importfinanzierung"
+ },
+ "banking_external_sterilization_charge": {
+  "en": "Inflow Sterilization Bill",
+  "de": "Kosten der Zuflusssterilisierung"
+ },
  "banking_foreign_borrowing_limits": {
   "en": "Limit Foreign-Currency Borrowing",
   "de": "Fremdwährungskredite begrenzen"
@@ -6358,6 +6366,10 @@
  "banking_mon_delegate_on_tt": {
   "en": "Hands the rate target to the central bank, which will set it from its mandate at each monthly update.",
   "de": "Überträgt den Zielzins der Zentralbank, die ihn bei jeder monatlichen Aktualisierung gemäß ihrem Mandat festlegt."
+ },
+ "banking_mon_mandate_cost_tt": {
+  "en": "From the next monthly update, then fixed for a year. A looser rule than the bank runs now costs, for each step looser:\\n[GetStaticModifier('te_mon_mandate_loosen_step').GetDesc]\\n#lore Fading over two years. $banking_dash_mon_mandate_inflation$, the $banking_dash_mon_mandate_dual$ and $banking_dash_mon_mandate_growth$ run from tightest to loosest; a tighter rule earns nothing at once.#!",
+  "de": "Gilt ab der nächsten Monatsaktualisierung und ist danach ein Jahr lang festgelegt. Eine lockerere Regel als die, nach der die Bank jetzt arbeitet, kostet für jede Stufe, um die sie lockerer ist:\\n[GetStaticModifier('te_mon_mandate_loosen_step').GetDesc]\\n#lore Klingt über zwei Jahre ab. $banking_dash_mon_mandate_inflation$, $banking_dash_mon_mandate_dual$ und $banking_dash_mon_mandate_growth$ reichen von der strengsten zur lockersten Regel; eine strengere Regel bringt nicht sofort etwas ein.#!"
  },
  "banking_mon_mandate_peg_set_tt": {
   "en": "Orders your central bank to hold the rate target on the world rate, to the tenth of a point (up to a point above it while the vault is short of gold), so that gold does not drain away, and to ignore your own cycle while it does. It takes effect at the next monthly update, and the mandate is then fixed for a year.",
@@ -6480,8 +6492,8 @@
   "de": "$banking_nonmod_lifted_label$ geht der Kostenanstieg für jeden Monat, den die Finanzierung ausgesetzt bleibt, um einen Monat zurück."
  },
  "banking_nonmod_emergency_import_financing_tt": {
-  "en": "$banking_nonmod_monthly_label$ costs #v 0.05%#! of annual GDP from the treasury, rising to #v 0.10%#! after #v 12#! funded months. Lifted automatically when the financial crisis ends or the treasury cannot pay.",
-  "de": "$banking_nonmod_monthly_label$ kostet die Staatskasse #v 0,05%#! des jährlichen BIP, steigend auf #v 0,10%#! nach #v 12#! finanzierten Monaten. Wird automatisch aufgehoben, wenn die Finanzkrise endet oder die Staatskasse nicht zahlen kann."
+  "en": "$banking_nonmod_monthly_label$ it costs #v 0.05%#! of annual GDP, rising to #v 0.10%#! after #v 12#! funded months, charged as a weekly government expense, a quarter of it a week. Lifted automatically when the financial crisis ends or the treasury cannot pay a month of it.",
+  "de": "$banking_nonmod_monthly_label$ kostet sie #v 0,05%#! des jährlichen BIP, steigend auf #v 0,10%#! nach #v 12#! finanzierten Monaten, abgebucht als wöchentliche Staatsausgabe, jede Woche ein Viertel davon. Wird automatisch aufgehoben, wenn die Finanzkrise endet oder die Staatskasse einen Monatsbetrag davon nicht zahlen kann."
  },
  "banking_nonmod_foreign_borrowing_limits_off_tt": {
   "en": "$banking_nonmod_lifted_label$ the protection unwinds by about #v 2%#! a month, as slowly as it was built.",
@@ -6512,8 +6524,8 @@
   "de": "$banking_nonmod_monthly_label$ wird jeder einströmende [concept_banking_gold_flow] #b halbiert#!, ebenso der Auftrieb, den ein realer Zinssatz über dem der Welt dem [concept_banking_exchange_rate] gibt. Nichts bremst abfließendes Geld oder Gold."
  },
  "banking_nonmod_sterilize_inflows_tt": {
-  "en": "$banking_nonmod_monthly_label$ #b three quarters#! of the [concept_banking_price_pressure] from gold coming in is offset, at #v 0.01%#! of annual GDP from the treasury. Operations stop if the treasury cannot pay.",
-  "de": "$banking_nonmod_monthly_label$ werden #b drei Viertel#! des [Concept('concept_banking_price_pressure', 'Inflationsdrucks')] durch einströmendes Gold ausgeglichen, zu Kosten von #v 0,01%#! des jährlichen BIP aus der Staatskasse. Die Operationen enden, wenn die Staatskasse nicht zahlen kann."
+  "en": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_sterilize_inflows').GetDesc]\\nIts bill, #v 0.01%#! of annual GDP a month, is charged as a weekly government expense, a quarter of it a week. Operations stop if the treasury cannot pay a month of it.",
+  "de": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_sterilize_inflows').GetDesc]\\nIhre Rechnung, #v 0,01%#! des jährlichen BIP pro Monat, wird als wöchentliche Staatsausgabe abgebucht, jede Woche ein Viertel davon. Die Operationen enden, wenn die Staatskasse einen Monatsbetrag davon nicht zahlen kann."
  },
  "banking_nonmod_war_end_label": {
   "en": "#title When the war ends:#!",
@@ -7316,8 +7328,8 @@
   "de": "Geldpolitischer Kurs"
  },
  "concept_banking_price_pressure": {
-  "en": "Inflationary Pressure",
-  "de": "Inflationsdruck"
+  "en": "Price Pressure",
+  "de": "Preisdruck"
  },
  "concept_banking_rate_paid": {
   "en": "Rate Paid",
@@ -7328,8 +7340,8 @@
   "de": "Zielzins"
  },
  "concept_banking_reference_rate": {
-  "en": "World Reference Rate",
-  "de": "Weltreferenzzins"
+  "en": "Reference Rate",
+  "de": "Referenzzins"
  },
  "concept_banking_risk_premium": {
   "en": "Risk Premium",
@@ -7403,6 +7415,10 @@
   "en": "Digital Rights",
   "de": "Digitale Rechte"
  },
+ "concept_emissions_reduction_treaty": {
+  "en": "Enforce Emissions Reduction",
+  "de": "Emissionsreduktion erzwingen"
+ },
  "concept_export_credit_facility": {
   "en": "Export Credit Facility",
   "de": "Exportkreditfazilität"
@@ -7463,9 +7479,61 @@
   "en": "Solar Collector",
   "de": "Sonnenkollektor"
  },
+ "concept_sr_base_grade": {
+  "en": "Base Grade",
+  "de": "Basisstufe"
+ },
+ "concept_sr_colony_autonomy": {
+  "en": "Colony Autonomy",
+  "de": "Kolonieautonomie"
+ },
+ "concept_sr_colony_fleet": {
+  "en": "Colony Fleet",
+  "de": "Kolonieflotte"
+ },
+ "concept_sr_free_colony": {
+  "en": "Free Colony",
+  "de": "Freie Kolonie"
+ },
+ "concept_sr_launch_window": {
+  "en": "Launch Window",
+  "de": "Startfenster"
+ },
+ "concept_sr_role_carrier": {
+  "en": "Assault Carrier",
+  "de": "Angriffsträger"
+ },
+ "concept_sr_role_rapid": {
+  "en": "Rapid Response Ship",
+  "de": "Schnelles Eingreifschiff"
+ },
+ "concept_sr_role_siege": {
+  "en": "Siege Ship",
+  "de": "Belagerungsschiff"
+ },
+ "concept_sr_role_tender": {
+  "en": "Tender",
+  "de": "Tender"
+ },
+ "concept_sr_role_warship": {
+  "en": "Warship",
+  "de": "Kriegsschiff"
+ },
  "concept_sr_setback_risk": {
   "en": "Setback Risk",
   "de": "Rückschlagrisiko"
+ },
+ "concept_sr_ship_role": {
+  "en": "Ship Role",
+  "de": "Schiffsrolle"
+ },
+ "concept_sr_space_command": {
+  "en": "Space Command",
+  "de": "Weltraumkommando"
+ },
+ "concept_sr_space_fleet": {
+  "en": "Space Fleet",
+  "de": "Weltraumflotte"
  },
  "concept_st_res_active_rate": {
   "en": "Active",
@@ -7491,9 +7559,17 @@
   "en": "State Collapse",
   "de": "Staatskollaps"
  },
+ "concept_tax_static_estimate": {
+  "en": "Static Estimate",
+  "de": "Statische Schätzung"
+ },
  "concept_te_construction_market": {
   "en": "Construction Market",
   "de": "Baumarkt"
+ },
+ "concept_te_construction_queue_cap": {
+  "en": "Queue Cap",
+  "de": "Warteschlangenobergrenze"
  },
  "concept_tourism_base_appeal": {
   "en": "Base Appeal",
@@ -10000,32 +10076,32 @@
   "de": "Ein Jahrhundert als Nation"
  },
  "gm_boon_centenary_desc": {
-  "en": "A monument to our founding draws the country's peoples together. From an opportunity we seized.",
-  "de": "Ein Denkmal für unsere Gründung führt die Völker des Landes zusammen. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument to the country's founding draws its peoples together. Won from an opportunity.",
+  "de": "Ein Denkmal für die Gründung des Landes führt seine Völker zusammen. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_defeat": {
   "en": "Lest We Forget",
   "de": "Damit wir nicht vergessen"
  },
  "gm_boon_defeat_desc": {
-  "en": "A memorial to the fallen lets the country grieve together instead of turning on its government. From an opportunity we seized.",
-  "de": "Ein Denkmal für die Gefallenen lässt das Land gemeinsam trauern, statt sich gegen seine Regierung zu wenden. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A memorial to the fallen lets the country grieve together instead of turning on its government. Won from an opportunity.",
+  "de": "Ein Denkmal für die Gefallenen lässt das Land gemeinsam trauern, statt sich gegen seine Regierung zu wenden. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_faith": {
   "en": "A Faith Proclaimed",
   "de": "Ein verkündeter Glaube"
  },
  "gm_boon_faith_desc": {
-  "en": "A great shrine to the new faith draws the doubtful in. From an opportunity we seized.",
-  "de": "Ein großer Schrein für den neuen Glauben zieht die Zweifelnden an. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A great shrine to the new faith draws the doubtful in. Won from an opportunity.",
+  "de": "Ein großer Schrein für den neuen Glauben zieht die Zweifelnden an. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_great_power": {
   "en": "A Seat Among the Powers",
   "de": "Ein Sitz unter den Mächten"
  },
  "gm_boon_great_power_desc": {
-  "en": "A monument marks our rise among the great powers, and the world takes note. From an opportunity we seized.",
-  "de": "Ein Denkmal kennzeichnet unseren Aufstieg unter die Großmächte, und die Welt nimmt Notiz davon. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument marks the country's rise among the great powers, and the world takes note. Won from an opportunity.",
+  "de": "Ein Denkmal kennzeichnet den Aufstieg des Landes unter die Großmächte, und die Welt nimmt Notiz davon. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_homecoming": {
   "en": "The Homecoming",
@@ -10048,40 +10124,40 @@
   "de": "Die neue Ordnung verkündet"
  },
  "gm_boon_regime_desc": {
-  "en": "A monument proclaims the new order, and those who welcome it are louder for a time. From an opportunity we seized.",
-  "de": "Ein Denkmal verkündet die neue Ordnung, und wer sie begrüßt, ist eine Zeit lang lauter. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument proclaims the new order, and those who welcome it are louder for a time. Won from an opportunity.",
+  "de": "Ein Denkmal verkündet die neue Ordnung, und wer sie begrüßt, ist eine Zeit lang lauter. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_reign": {
   "en": "The New Reign",
   "de": "Die neue Herrschaft"
  },
  "gm_boon_reign_desc": {
-  "en": "A monument marks the start of the reign, and the new ruler's word carries further for a time. From an opportunity we seized.",
-  "de": "Ein Denkmal kennzeichnet den Beginn der Herrschaft, und das Wort des neuen Herrschers reicht eine Zeit lang weiter. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument marks the start of the reign, and the new ruler's word carries further for a time. Won from an opportunity.",
+  "de": "Ein Denkmal kennzeichnet den Beginn der Herrschaft, und das Wort des neuen Herrschers reicht eine Zeit lang weiter. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_ruler_death": {
   "en": "A Nation in Mourning",
   "de": "Eine Nation in Trauer"
  },
  "gm_boon_ruler_death_desc": {
-  "en": "A mausoleum for the late ruler lends the government the dignity of their memory. From an opportunity we seized.",
-  "de": "Ein Mausoleum für den verstorbenen Herrscher verleiht der Regierung die Würde des Gedenkens. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A mausoleum for the late ruler lends the government the dignity of their memory. Won from an opportunity.",
+  "de": "Ein Mausoleum für den verstorbenen Herrscher verleiht der Regierung die Würde des Gedenkens. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_space": {
   "en": "The Space Age",
   "de": "Das Raumfahrtzeitalter"
  },
  "gm_boon_space_desc": {
-  "en": "A monument to our first in space fires a generation of engineers and scientists. From an opportunity we seized.",
-  "de": "Ein Denkmal für unseren ersten Erfolg im All begeistert eine Generation von Ingenieuren und Wissenschaftlern. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument to the country's first in space fires a generation of engineers and scientists. Won from an opportunity.",
+  "de": "Ein Denkmal für den ersten Erfolg des Landes im All begeistert eine Generation von Ingenieuren und Wissenschaftlern. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_tech_artistic": {
   "en": "A Golden Age of the Arts",
   "de": "Ein goldenes Zeitalter der Künste"
  },
  "gm_boon_tech_artistic_desc": {
-  "en": "A grand opera house gives the arts a home and an audience. From an opportunity we seized.",
-  "de": "Ein großes Opernhaus gibt den Künsten eine Heimat und ein Publikum. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A grand opera house gives the arts a home and an audience. Won from an opportunity.",
+  "de": "Ein großes Opernhaus gibt den Künsten eine Heimat und ein Publikum. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_tech_artistic_effect": {
   "en": "#G +10%#! $building_art_academy$ throughput",
@@ -10092,8 +10168,8 @@
   "de": "Eine Sportnation"
  },
  "gm_boon_tech_athletic_desc": {
-  "en": "A grand stadium makes a sporting people, and a healthier one. From an opportunity we seized.",
-  "de": "Ein großes Stadion macht aus dem Volk ein sportliches und ein gesünderes. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A grand stadium makes a sporting people, and a healthier one. Won from an opportunity.",
+  "de": "Ein großes Stadion macht aus dem Volk ein sportliches und ein gesünderes. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_tech_athletic_effect": {
   "en": "#G −5%#! mortality",
@@ -10104,8 +10180,8 @@
   "de": "Die Große Ausstellung"
  },
  "gm_boon_tech_industrial_desc": {
-  "en": "A great exhibition hall shows our manufacturers' best to the world. From an opportunity we seized.",
-  "de": "Eine große Ausstellungshalle zeigt der Welt das Beste unserer Hersteller. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A great exhibition hall shows the best of the country's manufacturers to the world. Won from an opportunity.",
+  "de": "Eine große Ausstellungshalle zeigt der Welt das Beste der Hersteller des Landes. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_tech_industrial_effect": {
   "en": "#G +5%#! $bg_manufacturing$ throughput",
@@ -10116,24 +10192,24 @@
   "de": "Die grüne Bewegung"
  },
  "gm_boon_tech_naturalist_desc": {
-  "en": "Botanical gardens turn the public's mind to clean air and water. From an opportunity we seized.",
-  "de": "Botanische Gärten lenken das Denken der Öffentlichkeit auf saubere Luft und sauberes Wasser. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "Botanical gardens turn the public's mind to clean air and water. Won from an opportunity.",
+  "de": "Botanische Gärten lenken das Denken der Öffentlichkeit auf saubere Luft und sauberes Wasser. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_tech_scientific": {
   "en": "An Age of Inquiry",
   "de": "Ein Zeitalter der Forschung"
  },
  "gm_boon_tech_scientific_desc": {
-  "en": "A grand observatory draws scholars from abroad, and their ideas with them. From an opportunity we seized.",
-  "de": "Eine große Sternwarte zieht Gelehrte aus dem Ausland an, und ihre Ideen mit ihnen. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A grand observatory draws scholars from abroad, and their ideas with them. Won from an opportunity.",
+  "de": "Eine große Sternwarte zieht Gelehrte aus dem Ausland an, und ihre Ideen mit ihnen. Aus einer Gelegenheit gewonnen."
  },
  "gm_boon_victory": {
   "en": "Victory Parade",
   "de": "Siegesparade"
  },
  "gm_boon_victory_desc": {
-  "en": "A monument to the victory keeps our triumph in the world's eye. From an opportunity we seized.",
-  "de": "Ein Denkmal für den Sieg hält unseren Triumph im Blick der Welt. Aus einer Gelegenheit, die wir ergriffen haben."
+  "en": "A monument to the victory keeps the triumph in the world's eye. Won from an opportunity.",
+  "de": "Ein Denkmal für den Sieg hält den Triumph im Blick der Welt. Aus einer Gelegenheit gewonnen."
  },
  "gm_button_clear_name": {
   "en": "Clear Name",
@@ -15675,6 +15751,22 @@
   "en": "still in its preparatory phase",
   "de": "noch in der Vorbereitungsphase"
  },
+ "iw_catch_policy_name_0": {
+  "en": "Ask",
+  "de": "Nachfragen"
+ },
+ "iw_catch_policy_name_1": {
+  "en": "Ask if severe",
+  "de": "Bei schweren Fällen nachfragen"
+ },
+ "iw_catch_policy_name_2": {
+  "en": "Expose",
+  "de": "Aufdecken"
+ },
+ "iw_catch_policy_name_3": {
+  "en": "Watch",
+  "de": "Beobachten"
+ },
  "iw_decrease_funding_button": {
   "en": "Decrease Covert Funding",
   "de": "Verdeckte Finanzierung verringern"
@@ -15716,32 +15808,32 @@
   "de": "routinemäßige Spionage"
  },
  "iw_exposure_tier_mild_note": {
-  "en": "\\n#lore If this is exposed, the world treats it as routine espionage: little infamy, a modest cooling with the target.#!",
-  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als routinemäßige Spionage: wenig Verrufenheit, eine leichte Abkühlung zum Ziel.#!"
+  "en": "#lore If this is exposed, the world treats it as routine espionage: little infamy, a modest cooling with the target.#!",
+  "de": "#lore Wird dies aufgedeckt, behandelt die Welt es als routinemäßige Spionage: wenig Verrufenheit, eine leichte Abkühlung zum Ziel.#!"
  },
  "iw_exposure_tier_moderate": {
   "en": "interference in the internal affairs of a sovereign state",
   "de": "Einmischung in die inneren Angelegenheiten eines souveränen Staates"
  },
  "iw_exposure_tier_moderate_note": {
-  "en": "\\n#lore If this is exposed, the world treats it as interference in another country's internal affairs: real infamy and a serious bilateral breach.#!",
-  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als Einmischung in die inneren Angelegenheiten eines anderen Landes: spürbare Verrufenheit und ein ernster bilateraler Bruch.#!"
+  "en": "#lore If this is exposed, the world treats it as interference in another country's internal affairs: real infamy and a serious bilateral breach.#!",
+  "de": "#lore Wird dies aufgedeckt, behandelt die Welt es als Einmischung in die inneren Angelegenheiten eines anderen Landes: spürbare Verrufenheit und ein ernster bilateraler Bruch.#!"
  },
  "iw_exposure_tier_severe": {
   "en": "an attempt to bring down a sitting government",
   "de": "ein Versuch, eine amtierende Regierung zu stürzen"
  },
  "iw_exposure_tier_severe_note": {
-  "en": "\\n#lore If this is exposed, the world treats it as an attempt to bring down a government: heavy infamy, a severe breach with the target, and every country tied to them cools towards us as well.#!",
-  "de": "\\n#lore Wird dies aufgedeckt, behandelt die Welt es als Versuch, eine Regierung zu stürzen: schwere Verrufenheit, ein schwerer Bruch mit dem Ziel, und jedes mit ihm verbundene Land kühlt uns gegenüber ebenfalls ab.#!"
+  "en": "#lore If this is exposed, the world treats it as an attempt to bring down a government: heavy infamy, a severe breach with the target, and every country tied to them cools towards us as well.#!",
+  "de": "#lore Wird dies aufgedeckt, behandelt die Welt es als Versuch, eine Regierung zu stürzen: schwere Verrufenheit, ein schwerer Bruch mit dem Ziel, und jedes mit ihm verbundene Land kühlt uns gegenüber ebenfalls ab.#!"
  },
  "iw_exposure_tier_war": {
   "en": "wartime sabotage",
   "de": "Kriegssabotage"
  },
  "iw_exposure_tier_war_note": {
-  "en": "\\n#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!",
-  "de": "\\n#lore Wird dies aufgedeckt, nachdem der Krieg begonnen hat, zuckt die Welt nur mit den Schultern – Sabotage zwischen Kriegsparteien kostet überhaupt nichts. Wird sie im Vorfeld aufgedeckt, gilt sie als Kriegstreiberei und kostet so viel Verrufenheit wie ein Versuch, eine Regierung zu stürzen.#!"
+  "en": "#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!",
+  "de": "#lore Wird dies aufgedeckt, nachdem der Krieg begonnen hat, zuckt die Welt nur mit den Schultern – Sabotage zwischen Kriegsparteien kostet überhaupt nichts. Wird sie im Vorfeld aufgedeckt, gilt sie als Kriegstreiberei und kostet so viel Verrufenheit wie ein Versuch, eine Regierung zu stürzen.#!"
  },
  "iw_funding_name_0": {
   "en": "Dormant",
@@ -15828,8 +15920,8 @@
   "de": "Unterstützung der Spionageabwehr"
  },
  "iw_op_name_cultivate_assets": {
-  "en": "Asset Cultivation",
-  "de": "Quellenanwerbung"
+  "en": "Cultivate Assets",
+  "de": "Netzwerk aufbauen"
  },
  "iw_op_name_destabilization": {
   "en": "Destabilization",
@@ -15846,6 +15938,10 @@
  "iw_op_name_ideological_subversion": {
   "en": "Ideological Subversion",
   "de": "Ideologische Subversion"
+ },
+ "iw_op_name_incite_autonomy": {
+  "en": "Incite Colonial Autonomy",
+  "de": "Koloniale Autonomie schüren"
  },
  "iw_op_name_industrial_espionage": {
   "en": "Industrial Espionage",
@@ -15871,13 +15967,21 @@
   "en": "Regime Change",
   "de": "Regimewechsel"
  },
+ "iw_op_name_sabotage_colony": {
+  "en": "Sabotage Colony",
+  "de": "Kolonie sabotieren"
+ },
  "iw_op_name_secure_material": {
-  "en": "Loose Material Search",
-  "de": "Suche nach ungesichertem Nuklearmaterial"
+  "en": "Secure Loose Material",
+  "de": "Loses Nuklearmaterial sichern"
  },
  "iw_op_name_space_espionage": {
   "en": "Space Program Espionage",
   "de": "Spionage im Raumfahrtprogramm"
+ },
+ "iw_op_name_survey_defences": {
+  "en": "Survey Colony Defenses",
+  "de": "Kolonieverteidigung auskundschaften"
  },
  "iw_op_name_unknown": {
   "en": "an unidentified operation",
@@ -20511,6 +20615,14 @@
   "en": "Ceres Deep-Space Waystation",
   "de": "Tiefraum-Zwischenstation Ceres"
  },
+ "sr_colony_daedalus_relay": {
+  "en": "Daedalus Deep-Space Relay",
+  "de": "Tiefraum-Relais Daedalus"
+ },
+ "sr_colony_daedalus_telescope": {
+  "en": "Daedalus Radio Telescope",
+  "de": "Radioteleskop Daedalus"
+ },
  "sr_colony_enceladus_astrobiology": {
   "en": "Enceladus Astrobiology Lab",
   "de": "Astrobiologie-Labor Enceladus"
@@ -20583,6 +20695,14 @@
   "en": "Iapetus Ridge Survey",
   "de": "Gratvermessung Iapetus"
  },
+ "sr_colony_imbrium_kreep": {
+  "en": "Imbrium KREEP Mining",
+  "de": "KREEP-Bergbau Imbrium"
+ },
+ "sr_colony_imbrium_massdriver": {
+  "en": "Imbrium Mass Driver",
+  "de": "Massenbeschleuniger Imbrium"
+ },
  "sr_colony_io_mining": {
   "en": "Io Mining Operations",
   "de": "Bergbaubetrieb auf Io"
@@ -20598,6 +20718,14 @@
  "sr_colony_makemake_solarwind": {
   "en": "Makemake Solar Wind Research",
   "de": "Sonnenwindforschung Makemake"
+ },
+ "sr_colony_marius_hardened": {
+  "en": "Marius Hills Hardened Installation",
+  "de": "Gehärtete Anlage Marius Hills"
+ },
+ "sr_colony_marius_lavatubes": {
+  "en": "Marius Hills Lava Tube City",
+  "de": "Lavaröhrenstadt Marius Hills"
  },
  "sr_colony_mercury_ice": {
   "en": "Mercury Polar Ice Extraction",
@@ -20647,6 +20775,14 @@
   "en": "Pallas Observatory",
   "de": "Observatorium Pallas"
  },
+ "sr_colony_peary_observatory": {
+  "en": "Peary Polar Observatory",
+  "de": "Polarobservatorium Peary"
+ },
+ "sr_colony_peary_solar": {
+  "en": "Peary Solar Power",
+  "de": "Solarenergie Peary"
+ },
  "sr_colony_pluto_harvesting": {
   "en": "Pluto-Charon Ice Harvesting",
   "de": "Eisgewinnung Pluto-Charon"
@@ -20687,6 +20823,14 @@
   "en": "Sedna Far Outpost",
   "de": "Fernaußenposten Sedna"
  },
+ "sr_colony_shackleton_depot": {
+  "en": "Shackleton Propellant Depot",
+  "de": "Treibstoffdepot Shackleton"
+ },
+ "sr_colony_shackleton_outpost": {
+  "en": "Shackleton Polar Outpost",
+  "de": "Polaraußenposten Shackleton"
+ },
  "sr_colony_titan_hydrocarbons": {
   "en": "Titan Hydrocarbon Harvesting",
   "de": "Kohlenwasserstoffgewinnung Titan"
@@ -20702,6 +20846,14 @@
  "sr_colony_titania_mining": {
   "en": "Titania Canyon Mining",
   "de": "Canyon-Bergbau Titania"
+ },
+ "sr_colony_tranquility_helium": {
+  "en": "Tranquility Helium-3 Extraction",
+  "de": "Helium-3-Gewinnung Tranquility"
+ },
+ "sr_colony_tranquility_heritage": {
+  "en": "Tranquility Heritage Site",
+  "de": "Kulturerbestätte Tranquility"
  },
  "sr_colony_triton_gateway": {
   "en": "Triton Gateway Base",
@@ -21203,6 +21355,10 @@
   "en": "Ceres",
   "de": "Ceres"
  },
+ "sr_site_name_daedalus": {
+  "en": "Daedalus Crater",
+  "de": "Daedalus-Krater"
+ },
  "sr_site_name_enceladus": {
   "en": "Enceladus",
   "de": "Enceladus"
@@ -21239,6 +21395,10 @@
   "en": "Iapetus",
   "de": "Iapetus"
  },
+ "sr_site_name_imbrium": {
+  "en": "Mare Imbrium",
+  "de": "Mare Imbrium"
+ },
  "sr_site_name_io": {
   "en": "Io",
   "de": "Io"
@@ -21246,6 +21406,10 @@
  "sr_site_name_makemake": {
   "en": "Makemake",
   "de": "Makemake"
+ },
+ "sr_site_name_marius_hills": {
+  "en": "Marius Hills",
+  "de": "Marius Hills"
  },
  "sr_site_name_mercury": {
   "en": "Mercury",
@@ -21271,6 +21435,10 @@
   "en": "2 Pallas",
   "de": "2 Pallas"
  },
+ "sr_site_name_peary": {
+  "en": "Peary Crater",
+  "de": "Peary-Krater"
+ },
  "sr_site_name_pluto": {
   "en": "Pluto-Charon",
   "de": "Pluto-Charon"
@@ -21291,6 +21459,10 @@
   "en": "Sedna",
   "de": "Sedna"
  },
+ "sr_site_name_shackleton": {
+  "en": "Shackleton Crater",
+  "de": "Shackleton-Krater"
+ },
  "sr_site_name_titan": {
   "en": "Titan",
   "de": "Titan"
@@ -21298,6 +21470,10 @@
  "sr_site_name_titania": {
   "en": "Titania",
   "de": "Titania"
+ },
+ "sr_site_name_tranquility": {
+  "en": "Tranquility Base",
+  "de": "Tranquility Base"
  },
  "sr_site_name_triton": {
   "en": "Triton",
@@ -21840,8 +22016,8 @@
   "de": "#bold Kaufen, wenn günstig#!\\nKauft jede Woche in die Reserve ein, solange der gemittelte nationale Marktpreis unter Ihrer Kaufschwelle liegt. Bei einer Reaktionsrampe von 0 wird mit vollem Fluss gekauft und gestoppt, sobald sich der Preis über diese Schwelle plus [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_buy_band')|0] Punkte erholt; bei einer Rampe über 0 skaliert der Fluss danach, wie weit der Preis unter der Schwelle liegt. Verkauft nie.\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
  },
  "st_res_policy_label_budget": {
-  "en": "Weekly purchase budget (@money! estimated)",
-  "de": "Wöchentliches Kaufbudget (@money! geschätzt)"
+  "en": "Weekly purchase budget (@money!)",
+  "de": "Wöchentliches Kaufbudget (@money!)"
  },
  "st_res_policy_label_budget_down_tooltip": {
   "en": "#bold Lower the weekly purchase budget#!\\nSpend less on purchases each week.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|0].\\n#italic Estimated: the hub pays for goods through its production method like any other building, so this cap is applied as units the budget can cover at the current price, after replacing this week's decay. It is a per-week cap, not a pot that carries over.#!\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]",
@@ -21864,8 +22040,8 @@
   "de": "#bold Die Kaufschwelle erhöhen#!\\nBeginnt den Kauf bei einem geringeren Abschlag oder über dem Grundpreis. Die Kaufschwelle kann nicht über +[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_buy_thr_ceiling')|0]% steigen und muss so weit unter der Freigabeschwelle bleiben, dass sich die beiden Bänder nie überschneiden.\\nSchritte von [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_thr_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
  },
  "st_res_policy_label_ceil_pct": {
-  "en": "Target stockpile (% of capacity)",
-  "de": "Zielbestand (% der Kapazität)"
+  "en": "Target stockpile (% full)",
+  "de": "Zielbestand (% voll)"
  },
  "st_res_policy_label_ceil_pct_down_tooltip": {
   "en": "#bold Lower the target stockpile#!\\nStop buying at a lower fill level.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_pct_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End )]",
@@ -21876,8 +22052,8 @@
   "de": "#bold Den Zielbestand erhöhen#!\\nWeiter bis zu einem höheren Füllstand kaufen.\\nSchritte von [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_pct_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
  },
  "st_res_policy_label_floor_pct": {
-  "en": "Protected stockpile (% of capacity)",
-  "de": "Geschützter Bestand (% der Kapazität)"
+  "en": "Protected stockpile (% full)",
+  "de": "Geschützter Bestand (% voll)"
  },
  "st_res_policy_label_floor_pct_down_tooltip": {
   "en": "#bold Lower the protected stockpile#!\\nProtect less stock, leaving more of the reserve available to sell.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_pct_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]",
@@ -22378,6 +22554,10 @@
  "st_res_row_small_arms_price": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_price_rel')|%0] (averaged [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_price_signal')|+0]%)",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_price_rel')|%0] (gemittelt [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_price_signal')|+0]%)"
+ },
+ "st_res_row_stock_markers_tt": {
+  "en": "#lore The marker on the bar is the target stockpile while the policy can buy, and the protected stockpile while it can sell.#!",
+  "de": "#lore Die Markierung auf dem Balken zeigt den Zielbestand, solange die Richtlinie kaufen kann, und den geschützten Bestand, solange sie verkaufen kann.#!"
  },
  "st_res_row_stop_tooltip": {
   "en": "#bold Stop#!\\nSet this good's reserve rate setting to exactly zero, parking the lane. The hub keeps buying just enough to offset decay so the stockpile holds its level. Other goods are not affected.\\n#italic Adjusting a rate by hand switches this good to the Manual policy.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]",
@@ -23247,6 +23427,10 @@
   "en": "Call our creditors to the table and ask them to accept less than they are owed. A tenth or a quarter can be negotiated while the markets price our debt; half only once we are in [concept_default]. Every haircut costs prestige, years of a higher risk premium and goodwill among the countries invested in us, and the larger ones shrink our [concept_credit] for years.",
   "de": "Unsere Gläubiger an den Verhandlungstisch rufen und sie bitten, weniger als das Geschuldete zu akzeptieren. Ein Zehntel oder ein Viertel lässt sich verhandeln, solange die Märkte unsere Schulden bewerten; die Hälfte erst, wenn wir [Concept('concept_default', 'zahlungsunfähig')] sind. Jeder Schuldenschnitt kostet Prestige, Jahre einer höheren Risikoprämie und Wohlwollen bei den Ländern, die in uns investiert haben, und die größeren mindern unseren [concept_credit] für Jahre."
  },
+ "te_decision_resume_solar_colonization": {
+  "en": "Resume $je_space_race_solar_colonization$",
+  "de": "$je_space_race_solar_colonization$ fortsetzen"
+ },
  "te_decision_space_mission_deep_space": {
   "en": "Begin $pm_deep_space_exploration$",
   "de": "$pm_deep_space_exploration$ beginnen"
@@ -23792,8 +23976,8 @@
   "de": "Gini"
  },
  "te_demog_gini_tt": {
-  "en": "#b Gini Coefficient#!\\nHow unequally income is spread over the people of every state together, from 0, everyone alike, towards 1. Beside it, each stratum's average income.\\n#grey A dash means this country has no Gini yet. It comes within a year, at the country's yearly update.#!",
-  "de": "#b Gini-Koeffizient#!\\nWie ungleich das Einkommen auf die Menschen aller Staaten zusammen verteilt ist, von 0, alle gleich, in Richtung 1. Daneben das Durchschnittseinkommen jeder Schicht.\\n#grey Ein Strich bedeutet, dass dieses Land noch keinen Gini hat. Er kommt innerhalb eines Jahres, bei der jährlichen Aktualisierung des Landes.#!"
+  "en": "#b Gini Coefficient#!\\nHow unequally income is spread over the people of every state together, from 0, everyone alike, towards 1. Beside it, each stratum's average income.",
+  "de": "#b Gini-Koeffizient#!\\nWie ungleich das Einkommen auf die Menschen aller Staaten zusammen verteilt ist, von 0, alle gleich, in Richtung 1. Daneben das Durchschnittseinkommen jeder Schicht."
  },
  "te_demog_health_bill_down": {
   "en": "Census: Health Care Needs",
@@ -26468,8 +26652,8 @@
   "de": "Bei dieser Stärke, unter „Voll“: Radikale aus Bewegungen +#v [State.MakeScope.ScriptValue('te_demog_youth_radicals_shown')|%0]#!, Auswirkungen der Unruhe +#v [State.MakeScope.ScriptValue('te_demog_youth_turmoil_shown')|%0]#! (Volkszählung: Jugendüberhang)."
  },
  "te_demog_st_youth_tt": {
-  "en": "#b Youth Bulge#!\\nYoung adults aged 20 to 29 are #v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! of the state's people, and #v [State.MakeScope.ScriptValue('te_demog_unemployment_census')|%0]#! of its workforce had no work at the census. Strength: #v [State.MakeScope.ScriptValue('te_demog_youth_bulge_shown')|%0]#!.\\n\\n$te_demog_youth_rule$\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_youth_effects'), '(CFixedPoint)0' ), 'te_demog_st_youth_effects', 'te_demog_youth_held' )]",
-  "de": "#b Jugendüberhang#!\\nJunge Erwachsene von 20 bis 29 Jahren machen #v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! der Menschen des Staates aus, und #v [State.MakeScope.ScriptValue('te_demog_unemployment_census')|%0]#! seiner Arbeitskräfte hatten bei der Volkszählung keine Arbeit. Stärke: #v [State.MakeScope.ScriptValue('te_demog_youth_bulge_shown')|%0]#!.\\n\\n$te_demog_youth_rule$\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_youth_effects'), '(CFixedPoint)0' ), 'te_demog_st_youth_effects', 'te_demog_youth_held' )]"
+  "en": "#b Youth Bulge#!\\nYoung adults aged 20 to 29 are #v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! of the state's people, and #v [State.MakeScope.ScriptValue('te_demog_unemployment_census')|%0]#! of its workforce had no work at the census. Strength: #v [State.MakeScope.ScriptValue('te_demog_youth_bulge_shown')|%0]#!.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_youth_effects'), '(CFixedPoint)0' ), 'te_demog_st_youth_effects', 'te_demog_youth_held' )]",
+  "de": "#b Jugendüberhang#!\\nJunge Erwachsene von 20 bis 29 Jahren machen #v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! der Menschen des Staates aus, und #v [State.MakeScope.ScriptValue('te_demog_unemployment_census')|%0]#! seiner Arbeitskräfte hatten bei der Volkszählung keine Arbeit. Stärke: #v [State.MakeScope.ScriptValue('te_demog_youth_bulge_shown')|%0]#!.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_youth_effects'), '(CFixedPoint)0' ), 'te_demog_st_youth_effects', 'te_demog_youth_held' )]"
  },
  "te_demog_st_youth_value": {
   "en": "#v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! aged 20–29",
@@ -26550,6 +26734,10 @@
  "te_demog_tab_first_census_tt": {
   "en": "The first census has been taken. It is taken at the turn of each year.",
   "de": "Die erste Volkszählung wurde durchgeführt. Sie findet zum Jahreswechsel jedes Jahres statt."
+ },
+ "te_demog_town_tt_how": {
+  "en": "A state's towns are its capital and whichever of its port, mining, farming and logging towns have work of their kind, ordered by the people at that work, farm, mine and logging work at a quarter. Their people are estimated: the largest holds the state's metropolitan share of its urban people, the next that share of the rest.\\n#lore A renamed town keeps the map's name. Click to open the state's Demographics subtab.#!",
+  "de": "Die Städte eines Staates sind seine Hauptstadt und alle seine Hafen-, Bergbau-, Landwirtschafts- und Holzfällerstädte, in denen es Arbeit ihrer Art gibt, geordnet nach den Menschen, die dort arbeiten; Landwirtschafts-, Bergbau- und Holzfällerarbeit zählt zu einem Viertel. Ihre Einwohner werden geschätzt: Die größte Stadt erhält den Metropolenanteil des Staates an seinen städtischen Menschen, die nächste diesen Anteil vom Rest.\\n#lore Eine umbenannte Stadt behält den Namen der Karte. Klicken, um den Unterreiter „Demografie“ des Staates zu öffnen.#!"
  },
  "te_demog_um_backup": {
   "en": "Backed Up",
@@ -27711,6 +27899,10 @@
   "en": "Supremacy of Statute",
   "de": "Vorrang des Gesetzes"
  },
+ "te_law_tax_delta_effects_label": {
+  "en": "Changes from the current law, with taxes at the current tax level",
+  "de": "Änderungen gegenüber dem derzeitigen Gesetz, bei der derzeitigen Steuerstufe"
+ },
  "te_law_tax_effects": {
   "en": "#tooltippable #tooltip:[Law.GetTooltipTag],te_law_tax_effects_tt $te_law_tax_effects_label$#!#!",
   "de": "#tooltippable #tooltip:[Law.GetTooltipTag],te_law_tax_effects_tt $te_law_tax_effects_label$#!#!"
@@ -28114,6 +28306,10 @@
  "te_monetisation_minting_desc": {
   "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
   "de": "Ihre Regierung bezahlt ihre Rechnungen mit Geld, das die Nationalbank für sie schafft, statt mit geliehenem oder eingenommenem Geld. Die Prägeanstalt läuft über das hinaus, was die Wirtschaft braucht, und der Überschuss landet in der Staatskasse. Es ist die schnellste Einnahmequelle, die ein Staat erschließen kann, und die teuerste: Pro finanziertem Pfund treibt sie die Preise etwa achtmal so stark wie das Leihen derselben Summe, und Kreditgeber lassen sich das bezahlen."
+ },
+ "te_nation_all_header": {
+  "en": "All Modifiers",
+  "de": "Alle Modifikatoren"
  },
  "te_nation_construction_base": {
   "en": "Base cost",
@@ -29550,6 +29746,10 @@
  "te_window_tab_nation_tt": {
   "en": "What your country carries for good: its standing scores, and the permanent rewards, memberships and policies the country panel's modifier list leaves out.",
   "de": "Was das eigene Land dauerhaft mit sich trägt: seine Ansehenswerte sowie die dauerhaften Belohnungen, Mitgliedschaften und Politiken, die die Modifikatorenliste der Länder-Tafel auslässt."
+ },
+ "te_window_tab_power_grids": {
+  "en": "Power Grids",
+  "de": "Stromnetze"
  },
  "te_window_tab_seabed": {
   "en": "Seabed",

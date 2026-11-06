@@ -75,9 +75,21 @@
   "en": "Ministry of Intelligence and Security",
   "de": "Geheimdienst- und Sicherheitsministerium"
  },
+ "institution_ministry_of_intelligence_and_security_agency": {
+  "en": "National Intelligence Agency",
+  "de": "Nationaler Nachrichtendienst"
+ },
+ "institution_ministry_of_intelligence_and_security_committee": {
+  "en": "Committee for State Security",
+  "de": "Komitee für Staatssicherheit"
+ },
  "institution_ministry_of_intelligence_and_security_desc": {
   "en": "The nation's intelligence services, gathering secrets and running covert operations.",
   "de": "Der Geheimdienst der Nation, der Geheimnisse sammelt und verdeckte Operationen durchführt."
+ },
+ "institution_ministry_of_intelligence_and_security_directorate": {
+  "en": "Directorate of State Security",
+  "de": "Direktion für Staatssicherheit"
  },
  "institution_ministry_of_international_aid": {
   "en": "Ministry of International Aid",
@@ -91,6 +103,18 @@
   "en": "Ministry of Labor",
   "de": "Arbeitsministerium"
  },
+ "institution_ministry_of_labor_commissariat": {
+  "en": "People's Commissariat of Labor",
+  "de": "Volkskommissariat für Arbeit"
+ },
+ "institution_ministry_of_labor_corporations": {
+  "en": "Ministry of Corporations",
+  "de": "Ministerium für Korporationen"
+ },
+ "institution_ministry_of_labor_department": {
+  "en": "Department of Labor",
+  "de": "Arbeitsministerium"
+ },
  "institution_ministry_of_labor_desc": {
   "en": "The ministry mediating between workers and employers.",
   "de": "Das Ministerium, das zwischen Arbeitnehmern und Arbeitgebern vermittelt."
@@ -99,9 +123,25 @@
   "en": "Ministry of Propaganda",
   "de": "Propagandaministerium"
  },
+ "institution_ministry_of_propaganda_agitprop": {
+  "en": "Department of Agitation and Propaganda",
+  "de": "Abteilung für Agitation und Propaganda"
+ },
  "institution_ministry_of_propaganda_desc": {
   "en": "Shaping public opinion in favor of the state and its policies.",
   "de": "Formt die öffentliche Meinung zugunsten des Staates und seiner Politik."
+ },
+ "institution_ministry_of_propaganda_guidance": {
+  "en": "Ministry of Guidance",
+  "de": "Ministerium für Lenkung"
+ },
+ "institution_ministry_of_propaganda_information": {
+  "en": "Ministry of Information",
+  "de": "Informationsministerium"
+ },
+ "institution_ministry_of_propaganda_popular_culture": {
+  "en": "Ministry of Popular Culture",
+  "de": "Ministerium für Volkskultur"
  },
  "institution_ministry_of_refugee_affairs": {
   "en": "Ministry of Refugee Affairs",
@@ -155,6 +195,18 @@
   "en": "Ministry of War",
   "de": "Kriegsministerium"
  },
+ "institution_ministry_of_war_defense": {
+  "en": "Ministry of Defense",
+  "de": "Verteidigungsministerium"
+ },
+ "institution_ministry_of_war_department": {
+  "en": "Department of War",
+  "de": "Kriegsministerium"
+ },
+ "institution_ministry_of_war_department_of_defense": {
+  "en": "Department of Defense",
+  "de": "Verteidigungsministerium"
+ },
  "institution_ministry_of_war_desc": {
   "en": "The ministry commanding the nation's armed forces and overseeing their supply.",
   "de": "Das Ministerium, das die Streitkräfte der Nation befehligt und ihre Versorgung überwacht."
@@ -163,8 +215,32 @@
   "en": "National Bank",
   "de": "Nationalbank"
  },
+ "institution_national_bank_bank_of_england": {
+  "en": "Bank of England",
+  "de": "Bank of England"
+ },
+ "institution_national_bank_bank_of_france": {
+  "en": "Bank of France",
+  "de": "Banque de France"
+ },
+ "institution_national_bank_bank_of_japan": {
+  "en": "Bank of Japan",
+  "de": "Bank of Japan"
+ },
+ "institution_national_bank_bank_of_the_united_states": {
+  "en": "Bank of the United States",
+  "de": "Bank der Vereinigten Staaten"
+ },
  "institution_national_bank_desc": {
   "en": "The central bank issuing the nation's currency and managing its reserves.",
   "de": "Die Zentralbank, die die Währung der Nation ausgibt und ihre Reserven verwaltet."
+ },
+ "institution_national_bank_federal_reserve": {
+  "en": "Federal Reserve",
+  "de": "Federal Reserve"
+ },
+ "institution_national_bank_state_bank": {
+  "en": "State Bank",
+  "de": "Staatsbank"
  }
 }

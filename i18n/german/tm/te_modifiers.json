@@ -460,8 +460,8 @@
   "de": "Wie viel dauerhaften Aufwärtsdruck auf die Preise eine glaubwürdige Zentralbank abfedert, bevor er sie erreicht. Sie gleicht den Nettodruck aus Löhnen und allen anderen dauerhaften Quellen bis zu diesem Betrag aus — und stets nur nach unten bis auf null, sodass sie die Preise nie von sich aus senkt. Einer Bank, der die Märkte zutrauen, ihr Ziel zu halten, ohne die Wirtschaft dafür abzuwürgen."
  },
  "country_inflation_pressure_add": {
-  "en": "Inflationary Pressure",
-  "de": "Inflationsdruck"
+  "en": "Price Pressure",
+  "de": "Preisdruck"
  },
  "country_inflation_pressure_add_desc": {
   "en": "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetization level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target.",
@@ -1143,6 +1143,10 @@
   "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
   "de": "Multiplikative Anpassung des Fehlschlagsrisikos beim [concept_space_race]. Der sichere Ansatz bei aktiven Meilensteinen verringert das Fehlschlagsrisiko auf Kosten eines langsameren Fortschritts."
  },
+ "country_sr_colony_slots_add": {
+  "en": "Colony Module Slots",
+  "de": "Koloniemodul-Plätze"
+ },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
   "de": "Koloniemodulfertigung pro Monat"
@@ -1376,8 +1380,8 @@
   "de": "Wie gut dieses Land bei der [concept_un_general_assembly] lobbyiert. Seine Kampagnen bewegen die Stimme eines Mitglieds um so viel schneller und weiter, und ein Mitglied, das eine von ihm erbetene Stimmzusage abwägt, rechnet denselben Anteil zu seinen Gunsten: +20 für je 25%."
  },
  "country_wage_pressure_add": {
-  "en": "Wage Pressure on Prices",
-  "de": "Lohndruck auf die Preise"
+  "en": "Wage Pressure",
+  "de": "Lohndruck"
  },
  "country_wage_pressure_add_desc": {
   "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labor and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarized#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",

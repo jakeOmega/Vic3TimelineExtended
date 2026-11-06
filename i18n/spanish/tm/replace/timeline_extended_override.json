@@ -87,6 +87,10 @@
   "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')] that support the same theme.",
   "es": "Grupos de cinco niveles de [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')|l] que apoyan un mismo tema."
  },
+ "copper": {
+  "en": "Conductive Metals",
+  "es": "Metales conductores"
+ },
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
   "es": "@bur![Nbsp]Coste de [concept_bureaucracy|l]: [GetInstitutionType('institution_home_affairs').GetName]"
@@ -118,6 +122,10 @@
  "goods_input_coal_add_desc": {
   "en": "The amount of @coal! $coal$ consumed by buildings",
   "es": "La cantidad de @coal! $coal$ que consumen los edificios"
+ },
+ "goods_input_copper_add": {
+  "en": "@copper! $copper$ input",
+  "es": "Insumo de $copper$ @copper!"
  },
  "goods_input_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Input",
@@ -206,6 +214,10 @@
  "goods_output_coal_add_desc": {
   "en": "The amount of @coal! $coal$ produced by buildings",
   "es": "La cantidad de @coal! $coal$ que producen los edificios"
+ },
+ "goods_output_copper_add": {
+  "en": "@copper! $copper$ output",
+  "es": "Producción de $copper$ @copper!"
  },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Output",
@@ -400,8 +412,8 @@
   "es": "Quién presta el servicio policial ordinario, quién lo paga y ante quién responde."
  },
  "lead": {
-  "en": "Conductive and Base Metals",
-  "es": "Metales conductores y básicos"
+  "en": "Base Metals",
+  "es": "Metales básicos"
  },
  "no_veterancy": {
   "en": "Recruit",

@@ -8215,6 +8215,10 @@
   "en": "Self-Replicating Assemblers",
   "de": "Selbstreplizierende Assembler"
  },
+ "pm_self_replicating_construction": {
+  "en": "Self-Replicating Construction",
+  "de": "Selbstreplizierender Bau"
+ },
  "pm_semiautomatic_rifles": {
   "en": "Semi-automatic Rifles",
   "de": "Halbautomatische Gewehre"
@@ -8452,8 +8456,8 @@
   "de": "Mit Fusionsenergie betriebene Orbitalwerften fertigen Koloniemodule im Dutzend. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
  },
  "pm_sr_fabrication_lunar_foundries": {
-  "en": "Lunar Foundries",
-  "de": "Mondgießereien"
+  "en": "Orbital Foundries",
+  "de": "Orbitalgießereien"
  },
  "pm_sr_fabrication_lunar_foundries_desc": {
   "en": "Foundries on the Moon cast module frames from lunar metal and launch them from its shallow gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",

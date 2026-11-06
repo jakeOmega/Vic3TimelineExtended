@@ -59,6 +59,10 @@
   "en": "Autonomous systems administer the state's institutions within mandates established by its political authorities. Human officials retain oversight, but routine administration and operational decisions are entrusted to machines.",
   "de": "Autonome Systeme verwalten die Institutionen des Staates im Rahmen von Mandaten, die seine politischen Autoritäten festgelegt haben. Menschliche Beamte behalten die Aufsicht, doch die Routineverwaltung und operative Entscheidungen werden Maschinen anvertraut."
  },
+ "law_automation_dividend": {
+  "en": "Automation Dividend",
+  "de": "Automatisierungsdividende"
+ },
  "law_auxiliary_fleet": {
   "en": "Auxiliary Fleet",
   "de": "Hilfsflotte"
@@ -98,6 +102,10 @@
  "law_civic_monolingualism_desc": {
   "en": "Compulsory schooling and public life operate in a single civic language. Proficiency becomes a gateway to citizenship, office, and social mobility.",
   "de": "Schulpflicht und öffentliches Leben laufen in einer einzigen Amtssprache ab. Ihre Beherrschung wird zum Schlüssel für Staatsbürgerschaft, Ämter und sozialen Aufstieg."
+ },
+ "law_clade_citizenship": {
+  "en": "Clade Citizenship",
+  "de": "Kladen-Bürgerschaft"
  },
  "law_command_cooperative_economy": {
   "en": "Command/Cooperative Economy",
@@ -323,6 +331,10 @@
   "en": "Exclusive charters and guild privileges govern market entry. Rents flow to the crown and corporations, trading dynamism for stability and control.",
   "de": "Exklusive Konzessionen und Zunftprivilegien regeln den Marktzugang. Die Erträge fließen der Krone und den Körperschaften zu, wodurch Dynamik gegen Stabilität und Kontrolle eingetauscht wird."
  },
+ "law_human_labor_quotas": {
+  "en": "Human Labor Quotas",
+  "de": "Quoten für menschliche Arbeit"
+ },
  "law_human_purity": {
   "en": "Human Purity",
   "de": "Menschliche Reinheit"
@@ -346,6 +358,10 @@
  "law_informal_government_secrecy_desc": {
   "en": "Limited transparency and accountability, with government information kept confidential and access restricted to certain officials or agencies.",
   "de": "Begrenzte Transparenz und Rechenschaftspflicht; Regierungsinformationen bleiben vertraulich, und der Zugang ist bestimmten Beamten oder Behörden vorbehalten."
+ },
+ "law_international_ai_oversight": {
+  "en": "International Oversight",
+  "de": "Internationale Aufsicht"
  },
  "law_intrusive_surveillance": {
   "en": "Intrusive Surveillance System",
@@ -371,6 +387,10 @@
   "en": "LGBTQ+ rights are neither criminalized nor protected, and authorities mostly ignore the issue. This leaves LGBTQ+ individuals vulnerable to [concept_lgbtq_rights_movement] gaps, leaving them [concept_discrimination] and mistreatment, with no legal recourse or support.",
   "de": "LGBTQ+-Rechte sind weder unter Strafe gestellt noch geschützt, und die Behörden ignorieren das Thema meist. Das setzt LGBTQ+-Personen Lücken im [concept_lgbtq_rights_movement] aus und macht sie schutzlos gegenüber [concept_discrimination] und Misshandlung, ohne rechtlichen Rückhalt oder Unterstützung."
  },
+ "law_licensed_modification": {
+  "en": "Licensed Modification",
+  "de": "Lizenzierte Modifikation"
+ },
  "law_limited_war": {
   "en": "Limited War",
   "de": "Begrenzter Krieg"
@@ -386,6 +406,10 @@
  "law_linguistic_purity_desc": {
   "en": "The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity.",
   "de": "Der Staat unterdrückt Minderheitensprachen im öffentlichen Leben und setzt eine einzige Nationalsprache als Zeichen von Loyalität und Identität durch."
+ },
+ "law_liquid_democracy": {
+  "en": "Liquid Democracy",
+  "de": "Liquid Democracy"
  },
  "law_littoral_defense": {
   "en": "Littoral Defense",
@@ -611,6 +635,10 @@
   "en": "Comprehensive data protection laws are in place, including limitations on government surveillance and private data collection. Exceptions exist for national security or public interest purposes, and enforcement may be inconsistent.",
   "de": "Umfassende Datenschutzgesetze sind in Kraft, einschließlich Beschränkungen staatlicher Überwachung und privater Datenerhebung. Ausnahmen bestehen für nationale Sicherheit oder das öffentliche Interesse, und die Durchsetzung kann uneinheitlich sein."
  },
+ "law_morphological_freedom": {
+  "en": "Morphological Freedom",
+  "de": "Morphologische Freiheit"
+ },
  "law_multilingual_federalism": {
   "en": "Multilingual Federalism",
   "de": "Mehrsprachiger Föderalismus"
@@ -619,6 +647,10 @@
   "en": "Multiple co-official languages are recognized by region, with rights to courts, schooling, and administration in the local tongue and a federal lingua franca for coordination.",
   "de": "Mehrere gleichberechtigte Amtssprachen werden je nach Region anerkannt, mit Rechten auf Gerichte, Schulwesen und Verwaltung in der jeweiligen Landessprache sowie einer föderalen Verkehrssprache zur Koordination."
  },
+ "law_national_ai_licensing": {
+  "en": "National Licensing",
+  "de": "Nationale Lizenzierung"
+ },
  "law_national_bank": {
   "en": "National Bank Established",
   "de": "Nationalbank gegründet"
@@ -626,6 +658,10 @@
  "law_national_bank_desc": {
   "en": "The National Bank oversees the country's monetary policy and the [concept_banking_cycle], ensuring economic stability and [concept_financial_regulation].",
   "de": "Die Nationalbank überwacht die Geldpolitik des Landes und den [concept_banking_cycle] und sichert wirtschaftliche Stabilität und [concept_financial_regulation]."
+ },
+ "law_natural_form": {
+  "en": "Natural Form",
+  "de": "Natürliche Form"
  },
  "law_neocameralism": {
   "en": "Neocameralism",
@@ -666,6 +702,10 @@
  "law_no_campaign_finance_laws_desc": {
   "en": "The state does not regulate political donations, as no formal elections take place.",
   "de": "Der Staat reguliert politische Spenden nicht, da keine förmlichen Wahlen stattfinden."
+ },
+ "law_no_frontier_ai_policy": {
+  "en": "No Frontier AI Policy",
+  "de": "Keine Frontier-KI-Politik"
  },
  "law_no_internet_policy": {
   "en": "No Internet Policy",
@@ -843,6 +883,10 @@
   "en": "Intellectual property protection is geared towards fostering innovation and collaboration, with a focus on open-source [Concept('concept_power_bloc_principle', 'principles')]. Creators are encouraged to share their work, while still retaining certain rights and receiving recognition for their contributions.",
   "de": "Der Schutz geistigen Eigentums ist darauf ausgerichtet, Innovation und Zusammenarbeit zu fördern, mit Schwerpunkt auf Open-Source-[Concept('concept_power_bloc_principle', 'Prinzipien')]. Urheber werden ermutigt, ihre Arbeit zu teilen, behalten dabei aber bestimmte Rechte und erhalten Anerkennung für ihre Beiträge."
  },
+ "law_open_weights": {
+  "en": "Open Weights",
+  "de": "Offene Gewichte"
+ },
  "law_partible": {
   "en": "Customary Inheritance",
   "de": "Gewohnheitsrechtliche Erbfolge"
@@ -875,6 +919,10 @@
   "en": "In this economic model, advanced technologies and efficient resource management have achieved [concept_post_scarcity_system], making scarcity a thing of the past. All essential goods and services are readily available to every citizen, nullifying traditional economic challenges tied to supply and demand.",
   "de": "In diesem Wirtschaftsmodell haben fortschrittliche Technologien und effizientes Ressourcenmanagement [concept_post_scarcity_system] erreicht, sodass Mangel der Vergangenheit angehört. Alle wesentlichen Güter und Dienstleistungen stehen jedem Bürger frei zur Verfügung, wodurch die klassischen wirtschaftlichen Herausforderungen von Angebot und Nachfrage entfallen."
  },
+ "law_prescribed_form": {
+  "en": "Prescribed Form",
+  "de": "Vorgeschriebene Form"
+ },
  "law_primogeniture": {
   "en": "Primogeniture & Entail",
   "de": "Primogenitur und Fideikommiss"
@@ -882,6 +930,10 @@
  "law_primogeniture_desc": {
   "en": "The eldest son inherits the estate whole, and entail binds each heir to pass it on undivided. The great houses last for generations; the younger sons make their way in the army, the church, the colonies and the city.",
   "de": "Der älteste Sohn erbt das Gut ungeteilt, und das Fideikommiss verpflichtet jeden Erben, es ungeteilt weiterzugeben. Die großen Häuser überdauern Generationen; die jüngeren Söhne suchen ihr Auskommen in Armee, Kirche, Kolonien und Stadt."
+ },
+ "law_private_ai_labs": {
+  "en": "Private Labs",
+  "de": "Private Labore"
  },
  "law_private_military_contractors": {
   "en": "Private Military Contractors",
@@ -994,6 +1046,14 @@
  "law_restorative_justice_desc": {
   "en": "A criminal justice system that focuses on repairing harm caused by criminal behavior.",
   "de": "Ein Strafrechtssystem, das sich auf die Wiedergutmachung von durch Straftaten verursachtem Schaden konzentriert."
+ },
+ "law_robot_tax": {
+  "en": "Robot Tax",
+  "de": "Robotersteuer"
+ },
+ "law_state_ai_monopoly": {
+  "en": "State Monopoly",
+  "de": "Staatsmonopol"
  },
  "law_state_controlled_internet": {
   "en": "State-Controlled Internet",
@@ -1195,6 +1255,10 @@
   "en": "[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.",
   "de": "[concept_human_augmentation_system] ist unreguliert, sodass Verbesserungstechnologien frei entwickelt, verbreitet und genutzt werden können. Das fördert rasche Fortschritte, kann aber erhebliche ethische, soziale und sicherheitstechnische Bedenken aufwerfen."
  },
+ "law_unrestricted_automation": {
+  "en": "Unrestricted Automation",
+  "de": "Uneingeschränkte Automatisierung"
+ },
  "law_unrestricted_extraction": {
   "en": "Unrestricted Extraction",
   "de": "Uneingeschränkte Förderung"
@@ -1227,6 +1291,14 @@
   "en": "Regulates market concentration, monopolies, mergers, and access to essential networks, balancing scale with contestability and consumer welfare.",
   "de": "Regelt Marktkonzentration, Monopole, Fusionen und den Zugang zu wesentlichen Netzen und wahrt das Gleichgewicht zwischen Größenvorteilen, Wettbewerbsfähigkeit und Verbraucherwohl."
  },
+ "lawgroup_automation_policy": {
+  "en": "Automation Policy",
+  "de": "Automatisierungspolitik"
+ },
+ "lawgroup_bodily_autonomy": {
+  "en": "Bodily Autonomy",
+  "de": "Körperliche Selbstbestimmung"
+ },
  "lawgroup_criminal_justice": {
   "en": "Criminal Justice",
   "de": "Strafrecht"
@@ -1258,6 +1330,10 @@
  "lawgroup_financial_regulation_desc": {
   "en": "Governs the behavior of banks and financial institutions, regulating the [concept_banking_cycle] and [concept_financial_regulation].",
   "de": "Regelt das Verhalten von Banken und Finanzinstituten und steuert den [concept_banking_cycle] und die [concept_financial_regulation]."
+ },
+ "lawgroup_frontier_ai_control": {
+  "en": "Frontier AI Control",
+  "de": "Kontrolle der Frontier-KI"
  },
  "lawgroup_genetic_rights": {
   "en": "Genetic Rights",

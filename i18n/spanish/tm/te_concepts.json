@@ -2699,6 +2699,10 @@
   "en": "A high-energy particle physics complex that produces antimatter for civilian and military use. Each level provides 5 sub-building slots for Antimatter Engines (power generation) and Antimatter Warhead Plants (weapons production).",
   "es": "Un complejo de física de partículas de alta energía que produce antimateria para uso civil y militar. Cada nivel ofrece 5 espacios de subedificios para Motores de antimateria (generación de energía) y Plantas de ojivas de antimateria (producción de armamento)."
  },
+ "concept_asat_strike": {
+  "en": "Anti-Satellite Strike",
+  "es": "Ataque antisatélite"
+ },
  "concept_asset_relief_program_desc": {
   "en": "Government purchase of distressed financial assets from private banks during a [concept_banking_crash], intended to restore solvency and confidence. Politically toxic — taxpayers fund what is widely perceived as a bailout of the financial sector.",
   "es": "Compra por el gobierno de activos financieros en dificultades a bancos privados durante un [concept_banking_crash|l], con la intención de restablecer la solvencia y la confianza. Políticamente tóxico: los contribuyentes financian lo que se percibe ampliamente como un rescate del sector financiero."
@@ -2979,6 +2983,14 @@
   "en": "A measure of how effectively a colonial power maintains control over its colonies (0–100). High stability indicates firm control; low stability risks colonial collapse. Stability is affected by colonial policy choices, global trends toward self-determination, and the relative military and economic power of the colonizer.",
   "es": "Una medida de la eficacia con que un poder colonial mantiene el control de sus colonias (0–100). Una estabilidad alta indica un control firme; una baja arriesga el colapso colonial. La estabilidad se ve afectada por las decisiones de política colonial, las tendencias globales hacia la autodeterminación y el poder militar y económico relativo del colonizador."
  },
+ "concept_colonial_subject": {
+  "en": "Colonial Subject",
+  "es": "Súbdito colonial"
+ },
+ "concept_colonial_territory": {
+  "en": "Colonial Territory",
+  "es": "Territorio colonial"
+ },
  "concept_combined_arms": {
   "en": "Combined Arms",
   "es": "Armas combinadas"
@@ -3228,8 +3240,8 @@
   "es": "El nivel más alto de fortificación, una estructura defensiva casi inexpugnable que favorece enormemente a los defensores en la batalla."
  },
  "concept_inheritance_concentration": {
-  "en": "Wealth Concentration",
-  "es": "Concentración de la riqueza"
+  "en": "Dynastic Wealth",
+  "es": "Riqueza dinástica"
  },
  "concept_inheritance_concentration_desc": {
   "en": "How much of the nation's wealth sits in great family fortunes, from 0 to 100. Each state has its own score, which drifts toward its own target, closing 3% of the gap each year, so a new law takes about a generation to show. The target starts at 50, and the Inheritance law and its amendments move it: Primogeniture & Entail +30, Freedom of Testation +10, Customary Inheritance 0, Forced Heirship −25, State as Universal Heir and Possession by Use −50; Estate Duties −30, the Birthright Endowment −20, Perpetual Dynastic Trusts +30 and Undivided Farm Succession +10. Land tenure in farming states, who owns the state's buildings, how unequal its incomes are, taxes on wealth, the economic laws, whether health care, schooling and ideas are provided or sold, the slavery law and, once the banking cycle has started, the return on capital against growth move it from there. Heavy war losses, a lost war that cost it a war goal, a winning revolution of the left, a banking crash, a hyperinflation crisis and land reform lower every state's score at once, and a banking frenzy raises them. A state's own score jumps when the state-owned share of its capital moves 10 points or more in a year, down as it rises and up as it falls, and devastation lowers it each year, by up to 10. The national figure is the states' average, weighted by where property is held.\\n\\nThe national figure sets the Aristocrats' and Capitalists' political strength, both up above 50 and both down below it, and the banking cycle's bubble pressure: great fortunes feed speculation, and many owners deciding apart steady it. Each state's own score acts in that state, refreshed at its yearly update. Above 50 its great houses invest more and their wealth buys more clout, fewer people qualify for better jobs, schooling is harder to reach and, in farming states, the young leave the land or turn to land reform. Below 50 the same wealth buys less clout, more people qualify, schooling is easier to reach and radicals find fewer followers. The effects are full at 80 and 20, and keep growing beyond.\\n\\nNow #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
@@ -3275,6 +3287,10 @@
   "en": "A social movement [concept_journal_entry] tracking the progression of LGBTQ+ rights from Active Persecution through Legal Limbo, Basic Protections, and Comprehensive Rights to Full Equality and Protection. Progress is driven by social attitudes, urbanization, and related law changes.",
   "es": "Una [concept_journal_entry|l] de movimiento social que sigue la progresión de los derechos LGBTQ+ desde la Persecución activa pasando por el Limbo legal, las Protecciones básicas y los Derechos integrales hasta la Plena igualdad y protección. El progreso depende de las actitudes sociales, la urbanización y los cambios de ley relacionados."
  },
+ "concept_local_climate": {
+  "en": "Local Climate",
+  "es": "Clima local"
+ },
  "concept_mental_health_crisis_desc": {
   "en": "Growing awareness of mental health issues in an industrializing and modernizing society. Tied to criminal justice reform, with progression from punishment-focused systems toward rehabilitation and restorative justice approaches.",
   "es": "Una conciencia creciente de los problemas de salud mental en una sociedad que se industrializa y se moderniza. Vinculada a la reforma de la justicia penal, con una progresión desde sistemas centrados en el castigo hacia enfoques de rehabilitación y de justicia restaurativa."
@@ -3294,6 +3310,10 @@
  "concept_ministry_system_desc": {
   "en": "A set of 16 custom [Concept('concept_institution', 'institutions')] representing government ministries: War, Commerce, Foreign Affairs, National Bank, Culture, Labor, Environment, Intelligence and Security, Refugee Affairs, Propaganda, Science, Thought Control, Consumer Protection, Urban Planning, Religion, and International Aid. Each ministry has multiple [Concept('concept_investment_level', 'investment levels')] that provide scaling modifiers. Ministry laws control which ministries are active.",
   "es": "Un conjunto de 16 [Concept('concept_institution', 'instituciones')] personalizadas que representan ministerios del gobierno: Guerra, Comercio, Asuntos Exteriores, Banco Nacional, Cultura, Trabajo, Medio Ambiente, Inteligencia y Seguridad, Asuntos de refugiados, Propaganda, Ciencia, Control del pensamiento, Protección del consumidor, Planificación urbana, Religión y Ayuda internacional. Cada ministerio tiene varios [Concept('concept_investment_level', 'niveles de inversión')] que proporcionan modificadores escalables. Las leyes de ministerios controlan qué ministerios están activos."
+ },
+ "concept_nuclear_credibility": {
+  "en": "Nuclear Credibility",
+  "es": "Credibilidad nuclear"
  },
  "concept_nuclear_doctrine": {
   "en": "Nuclear Doctrine",
@@ -3355,6 +3375,10 @@
   "en": "Each month, active [concept_covert_operations] against a country have a chance of being detected by it; Counterintelligence Support, being open, never is. Base detection chance is 10%, reduced by higher funding levels (up to -19% at level 5) and increased by the [concept_target_defenses]. An [Concept('concept_agent_network', 'agent network')] of yours inside the target lowers it; one of the target's inside your country raises it. Your [concept_covert_efficiency] further modifies the final chance. A detected operation goes to its target first. A target without a covert service of its own exposes it at once, which ends the operation and makes it public; one with a service may instead let it run and watch it, and expose it later. What an exposure costs in [concept_infamy] and [concept_relations] depends on how hostile the operation was and how long it had been running — each operation's own description says which tier it falls in. The target of an exposed operation can then bolster defenses or retaliate.",
   "es": "Cada mes, las [concept_covert_operations|l] activas contra un país tienen una probabilidad de ser detectadas por él; el Apoyo de contrainteligencia, al ser abierto, nunca lo es. La probabilidad base de detección es del 10%, reducida por niveles de financiación más altos (hasta -19% en el nivel 5) y aumentada por las [concept_target_defenses|l]. Una [Concept('concept_agent_network', 'red de agentes')] tuya dentro del objetivo la reduce; una del objetivo dentro de tu país la aumenta. Tu [concept_covert_efficiency|l] modifica además la probabilidad final. Una operación detectada pasa primero a su objetivo. Un objetivo sin servicio encubierto propio la expone de inmediato, lo que termina la operación y la hace pública; uno con servicio puede en cambio dejarla seguir y vigilarla, y exponerla más tarde. Lo que cuesta una exposición en [concept_infamy|l] y [concept_relations|l] depende de lo hostil que fuera la operación y de cuánto llevaba en marcha; la descripción de cada operación indica en qué nivel entra. El objetivo de una operación expuesta puede entonces reforzar sus defensas o tomar represalias."
  },
+ "concept_operation_phase": {
+  "en": "Operation Phase",
+  "es": "Fase de la operación"
+ },
  "concept_operation_slots": {
   "en": "Operation Slots",
   "es": "Cupos de operaciones"
@@ -3370,6 +3394,10 @@
  "concept_orbital_debris_desc": {
   "en": "Fragments of satellites and spent rockets in Earth orbit, measured by an index from 0 to 100: debris in low orbits, which drag clears within a few years, plus debris in high orbits, which stays for a century. Every running Space Program adds a little each month, and every anti-satellite strike adds 12. Every country that uses orbit pays for it in higher [concept_sr_setback_risk], slower space race progress and lower [concept_throughput] for its orbital buildings, but nothing stops. The tiers are Clear, Cluttered from 25, Hazardous from 50, when Space Elevators risk ribbon strikes, and Kessler Cascade from 75, when collisions add debris on their own until removal outpaces them. A Space Program can remove debris from Reusable Rocketry on, and a Space Elevator doubles what it removes.",
   "es": "Fragmentos de satélites y cohetes agotados en la órbita terrestre, medidos con un índice de 0 a 100: los restos en órbitas bajas, que el arrastre atmosférico elimina en pocos años, más los restos en órbitas altas, que permanecen un siglo. Cada Programa espacial en marcha añade un poco cada mes, y cada ataque antisatélite añade 12. Todo país que usa la órbita lo paga con un [concept_sr_setback_risk|l] mayor, un progreso más lento en la carrera espacial y menor [concept_throughput|l] en sus edificios orbitales, pero nada se lo impide. Los niveles son Despejado, Congestionado desde 25, Peligroso desde 50, cuando los Ascensores espaciales corren riesgo de impactos en la cinta, y Síndrome de Kessler desde 75, cuando las colisiones añaden restos por sí solas hasta que la retirada las supera. Un Programa espacial puede retirar restos a partir de Cohetería reutilizable, y un Ascensor espacial duplica lo que retira."
+ },
+ "concept_overseas_colony": {
+  "en": "Overseas Colony",
+  "es": "Colonia de ultramar"
  },
  "concept_pollution_system": {
   "en": "Pollution",
@@ -3463,6 +3491,10 @@
   "en": "Each Deep-Sea Mine level needs a seabed licence. The Pacific ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_pacific')|0]), Atlantic ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0]), Indian ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_indian')|0]), Southern ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_southern')|0]) and Arctic ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_arctic')|0]) basins each hold a fixed pool, divided every January by claim weight among the countries with Abyssal Plain Mining. A basin where we have coastal states counts those states twice (an unincorporated one at half), our port levels, and our [concept_naval_power_projection] divided by [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] in proportion to the coast there; any other basin counts a twentieth of that naval power projection term. Our seabed policy multiplies the weight.\\n\\nA licence is held by a level, built or queued, and stays with it for good: it changes hands with the state the mine stands in. What a country is entitled to and no level holds yet are its [concept_seabed_claim]s, which the next January can divide again. A level takes its own basin's licence first. When that basin's claims are used up it takes another basin's, at -25% throughput (Long-Haul Seabed Operations), until a local claim frees up.",
   "es": "Cada nivel de Mina de aguas profundas necesita una licencia del lecho marino. Las cuencas del Pacífico ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_pacific')|0]), del Atlántico ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0]), del Índico ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_indian')|0]), Austral ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_southern')|0]) y del Ártico ([GetPlayer.MakeScope.ScriptValue('te_seabed_pool_arctic')|0]) tienen cada una un fondo fijo, repartido cada enero según el peso de la reclamación entre los países con Minería de llanuras abisales. Una cuenca en la que tenemos estados costeros cuenta esos estados dos veces (uno no incorporado, a la mitad), los niveles de nuestros puertos y nuestra [concept_naval_power_projection|l] dividida entre [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] en proporción a nuestra costa allí; cualquier otra cuenca cuenta la vigésima parte de ese término de proyección de poder naval. Nuestra política del lecho marino multiplica el peso.\\n\\nUna licencia la tiene un nivel, construido o en cola, y se queda con él para siempre: cambia de manos con el estado en el que se encuentra la mina. Aquello a lo que un país tiene derecho y ningún nivel ocupa todavía son sus [Concept('concept_seabed_claim', 'reclamaciones del lecho marino')], que el siguiente enero puede volver a repartir. Un nivel toma primero la licencia de su propia cuenca. Cuando se agotan las reclamaciones de esa cuenca, toma la de otra, con un -25% de rendimiento (Operaciones de largo alcance en el lecho marino), hasta que quede libre una reclamación local."
  },
+ "concept_seabed_regime": {
+  "en": "Seabed Regime",
+  "es": "Régimen del lecho marino"
+ },
  "concept_sol_expectations": {
   "en": "Adaptive SoL Expectations",
   "es": "Expectativas adaptativas de nivel de vida"
@@ -3507,6 +3539,18 @@
   "en": "How a [concept_space_milestone] is run. #bold Standard#!, where every milestone starts, has no modifier and no cost. #bold Safe#! halves the [concept_sr_setback_risk] for as much innovation as one more funding level; #bold Ambitious#! adds half again to the pace for as much as two. They count for the whole program: a Safe milestone lowers the risk on every milestone, an Ambitious one speeds them all.",
   "es": "Cómo se desarrolla un [concept_space_milestone|l]. #bold Estándar#!, con el que empieza todo hito, no tiene modificador ni coste. #bold Seguro#! reduce a la mitad el [concept_sr_setback_risk|l] a cambio de tanta innovación como un nivel más de financiación; #bold Ambicioso#! suma otra mitad al ritmo a cambio de tanta como dos. Cuentan para todo el programa: un hito Seguro reduce el riesgo en todos los hitos, uno Ambicioso los acelera a todos."
  },
+ "concept_sr_blockade": {
+  "en": "Blockade",
+  "es": "Bloqueo"
+ },
+ "concept_sr_drive": {
+  "en": "Drive",
+  "es": "Propulsión"
+ },
+ "concept_sr_estimate": {
+  "en": "Program Estimate",
+  "es": "Estimación del programa"
+ },
  "concept_sr_funding": {
   "en": "Program Funding",
   "es": "Financiación del programa"
@@ -3514,6 +3558,18 @@
  "concept_sr_funding_desc": {
   "en": "The level at which a [concept_space_milestone] is funded, from 0 to a cap that rises with technology. Each level adds 0.5 a month to the pace of every running milestone and costs innovation every week.",
   "es": "El nivel con el que se financia un [concept_space_milestone|l], de 0 a un tope que aumenta con la tecnología. Cada nivel suma 0,5 al mes al ritmo de todo hito en marcha y cuesta innovación cada semana."
+ },
+ "concept_sr_integrity": {
+  "en": "Colony Integrity",
+  "es": "Integridad de la colonia"
+ },
+ "concept_sr_marines": {
+  "en": "Marines",
+  "es": "Infantes de marina"
+ },
+ "concept_sr_module": {
+  "en": "Colony Module",
+  "es": "Módulo de colonia"
  },
  "concept_sr_setback_risk_desc": {
   "en": "The chance each month that a running [concept_space_milestone] suffers a setback and loses some months of progress, between 1% and 50%. No roll is made during the six months of review after most Ambitious failures.",
@@ -3687,6 +3743,10 @@
   "en": "A 0–100 measure of how seriously the world treats the United Nations. Each month it moves toward a target computed from the world: who is in it, which great powers champion or undermine it, its record of resolutions carried and defied, who funds it, wars between members and nuclear use, and what it has delivered. Every act counts in proportion to the actor's share of world [concept_prestige]. Authority sets the UN's tier and its [concept_un_enforcement]: #R Moribund#! below 20, #Y Contested#! 20–45, #v Established#! 45–70, #G Strong#! 70–85, #B Supranational#! 85+. The [concept_un_charter] caps the target at 70 until it is reformed. Below 10 the UN is in crisis; at 0 it dissolves.",
   "es": "Una medida de 0–100 de lo en serio que el mundo se toma a las Naciones Unidas. Cada mes se mueve hacia un objetivo calculado a partir del mundo: quién forma parte de ella, qué grandes potencias la defienden o la socavan, su historial de resoluciones aprobadas y desafiadas, quién la financia, las guerras entre miembros y el uso nuclear, y lo que ha logrado. Cada acto cuenta en proporción a la cuota del actor en el [concept_prestige|l] mundial. La autoridad fija el nivel de la ONU y su [concept_un_enforcement|l]: #R Moribunda#! por debajo de 20, #Y Cuestionada#! 20–45, #v Consolidada#! 45–70, #G Fuerte#! 70–85, #B Supranacional#! 85+. La [concept_un_charter|l] limita el objetivo a 70 hasta que se reforme. Por debajo de 10 la ONU está en crisis; con 0 se disuelve."
  },
+ "concept_un_case": {
+  "en": "Case Strength",
+  "es": "Fuerza del caso"
+ },
  "concept_un_charter": {
   "en": "UN Charter",
   "es": "Carta de la ONU"
@@ -3706,6 +3766,10 @@
  "concept_un_development_fund_desc": {
   "en": "An institution of the United Nations, founded by a resolution of the [concept_un_general_assembly] under any [concept_un_charter]. It pays the members furthest below the members' average [concept_gdp_per_capita], and each charter reform strengthens it, with no new vote:\\n• #bold Founding charter:#! it pays out only the members' Development Programs contributions, to the members below a tenth of the average.\\n• #bold Charter Reform I:#! 5% of the UN budget (the [concept_un_dues] the paying members pay) as well, to the members below a quarter of the average.\\n• #bold Charter Reform II:#! a quarter of the UN budget as well, to the members below half the average.\\n\\nThe line never falls below the [concept_gdp_per_capita] of the poorest member with a seat in the Assembly that pays its own dues: when no such member is below the share, the line rises to that member's figure, so the Fund always pays at least one member.\\n\\nIts voluntary part is the members' contributions to UN development programs (Fund Development Programs, on the UN tab of the Diplomacy panel), which open only once the Fund stands. Any member with a seat in the Assembly that pays its dues and draws no grant may give, whatever its rank, at one of five sizes from Token (0.0625% of GDP a year) to Generous (1%), and its contribution pays the Fund's grants. Only a member with a seat in the Assembly that pays its own dues receives a grant, and the grants are shared by population. A recipient takes its grant into its [concept_investment_pool], or into its [concept_treasury] when its laws allow no investment pool or it has no banking system yet. The line and the grants are worked out again every month.\\n\\nThe richer members pay most of the dues that fund it and receive nothing back. The emergency lending facility lends from what the Fund and the Standing UN Force leave of the budget.",
   "es": "Una institución de las Naciones Unidas, fundada por una resolución de la [concept_un_general_assembly] bajo cualquier [concept_un_charter|l]. Paga a los miembros que más se alejan por debajo del [concept_gdp_per_capita|l] medio de los miembros, y cada reforma de la carta la refuerza, sin nueva votación:\\n• #bold Carta fundacional:#! solo paga las contribuciones de los miembros a los Programas de desarrollo, a los miembros por debajo de una décima parte de la media.\\n• #bold Reforma de la Carta I:#! además el 5% del presupuesto de la ONU (las [concept_un_dues|l] que pagan los miembros contribuyentes), a los miembros por debajo de una cuarta parte de la media.\\n• #bold Reforma de la Carta II:#! además una cuarta parte del presupuesto de la ONU, a los miembros por debajo de la mitad de la media.\\n\\nLa línea nunca cae por debajo del [concept_gdp_per_capita|l] del miembro más pobre con escaño en la Asamblea que paga sus propias cuotas: cuando ningún miembro así está por debajo de la proporción, la línea sube a la cifra de ese miembro, de modo que el Fondo siempre paga al menos a un miembro.\\n\\nSu parte voluntaria son las contribuciones de los miembros a los programas de desarrollo de la ONU (Financiar programas de desarrollo, en la pestaña ONU del panel Diplomacia), que solo se abren una vez que el Fondo existe. Cualquier miembro con escaño en la Asamblea que pague sus cuotas y no reciba ninguna subvención puede aportar, sea cual sea su rango, en uno de cinco tamaños, desde Simbólico (0,0625% del PIB al año) hasta Generoso (1%), y su contribución paga las subvenciones del Fondo. Solo recibe una subvención un miembro con escaño en la Asamblea que pague sus propias cuotas, y las subvenciones se reparten por población. Un receptor lleva su subvención a su [concept_investment_pool|l], o a su [concept_treasury|l] cuando sus leyes no permiten un fondo de inversión o aún no tiene sistema bancario. La línea y las subvenciones se vuelven a calcular cada mes.\\n\\nLos miembros más ricos pagan la mayor parte de las cuotas que lo financian y no reciben nada a cambio. El servicio de préstamos de emergencia presta con lo que el Fondo y la Fuerza permanente de la ONU dejan del presupuesto."
+ },
+ "concept_un_docket": {
+  "en": "Docket",
+  "es": "Orden del día"
  },
  "concept_un_dues": {
   "en": "UN Dues",
@@ -3730,6 +3794,10 @@
  "concept_un_general_assembly_desc": {
   "en": "The body of all UN members. Every represented member casts one vote on each proposed resolution; a member that lacks diplomatic autonomy keeps its seat, but its representation is suspended ([concept_un_suspended_representation]). Most resolutions pass on a simple majority of the votes cast. Recommendatory resolutions need only the GA. Binding resolutions also require Security Council consent — a [concept_un_veto] from any [concept_un_permanent_member] reduces them to a graduated form.",
   "es": "El órgano de todos los miembros de la ONU. Cada miembro representado emite un voto en cada resolución propuesta; un miembro que carece de autonomía diplomática conserva su escaño, pero su representación queda suspendida ([concept_un_suspended_representation|l]). La mayoría de las resoluciones se aprueban por mayoría simple de los votos emitidos. Las resoluciones recomendatorias solo necesitan la Asamblea General. Las resoluciones vinculantes requieren además el consentimiento del Consejo de Seguridad: un [concept_un_veto|l] de cualquier [concept_un_permanent_member|l] las reduce a una forma graduada."
+ },
+ "concept_un_lean": {
+  "en": "Lean",
+  "es": "Inclinación"
  },
  "concept_un_mission": {
   "en": "UN Mission",
@@ -3783,6 +3851,10 @@
   "en": "A member of the [concept_un_general_assembly] that conducts its own foreign policy, and so casts its own vote. The eligible nations are the independent countries and the dominions, protectorates and tributaries; a member that loses that standing keeps its seat but has [concept_un_suspended_representation].",
   "es": "Miembro de la [concept_un_general_assembly] que lleva su propia política exterior y, por tanto, emite su propio voto. Los países que pueden serlo son los países independientes y los dominios, protectorados y tributarios; un miembro que pierde esa condición conserva su escaño, pero queda con [concept_un_suspended_representation|l]."
  },
+ "concept_un_resolution": {
+  "en": "Resolution",
+  "es": "Resolución"
+ },
  "concept_un_resolution_binding_desc": {
   "en": "A resolution that compels action: sanctions, condemnations, peacekeeping deployments, the International Criminal Court, military mandates, charter reforms, and, once the charter allows them, World Court referrals, arms embargoes, binding ceasefires, supervised referendums and the Standing UN Force. Binding resolutions need [concept_un_security_council] consent — any [concept_un_permanent_member] can [concept_un_veto] them. A vetoed binding resolution that still has a majority passes only in a graduated or weak form (voluntary sanctions, observers, no court, a non-binding rebuke, an advisory opinion, a voluntary embargo, a one-off call for a ceasefire). Charter reform, a military mandate, a supervised referendum and the Standing UN Force have no graduated form: a veto blocks them outright.",
   "es": "Resolución que obliga a actuar: sanciones, condenas, despliegues de mantenimiento de la paz, la Corte Penal Internacional, mandatos militares, reformas de la carta y, cuando la carta lo permite, remisiones al Tribunal Mundial, embargos de armas, altos el fuego vinculantes, referendos supervisados y la Fuerza permanente de la ONU. Las resoluciones vinculantes necesitan el consentimiento del [concept_un_security_council]: cualquier [concept_un_permanent_member|l] puede ejercer sobre ellas su [concept_un_veto|l]. Una resolución vinculante vetada que aún tiene mayoría solo se aprueba en una forma gradual o débil (sanciones voluntarias, observadores, sin tribunal, una reprobación no vinculante, un dictamen consultivo, un embargo voluntario, un llamamiento puntual a un alto el fuego). La reforma de la carta, un mandato militar, un referendo supervisado y la Fuerza permanente de la ONU no tienen forma gradual: un veto los bloquea de plano."
@@ -3806,6 +3878,10 @@
  "concept_un_specialized_agencies_desc": {
   "en": "Standing organizations of the United Nations. Fifteen are founded when the General Assembly adopts the matching convention: WHO (pandemic response), UNESCO (heritage protection), UNHRC (human rights), IAEA (nuclear non-proliferation), UNEP (climate), UNHCR (refugees), UNOOSA (space cooperation), ITLOS (the law of the sea), the ICC (international criminal justice), the regime for the physical protection of nuclear material, the INCB (narcotics), the Convention on Cultural Diversity, the Treaty on the Prohibition of Nuclear Weapons, the ATS (the Antarctic Treaty) and UNODA (the anti-satellite moratorium). The ICJ (international court) is founded when a country first accepts a World Court ruling against it. An agency stands for its convention: the convention's terms bind the members that ratify it, and some reach every country, member or not. Hover an agency in the overview for its terms. The ICJ has no effects of its own.",
   "es": "Organismos permanentes de las Naciones Unidas. Quince se fundan cuando la Asamblea General adopta la convención correspondiente: la OMS (respuesta a la pandemia), la UNESCO (protección del patrimonio), el CDH (derechos humanos), el OIEA (no proliferación nuclear), el PNUMA (clima), el ACNUR (refugiados), la UNOOSA (cooperación espacial), el TIDM (el derecho del mar), la CPI (justicia penal internacional), el régimen de protección física del material nuclear, la JIFE (estupefacientes), la Convención sobre la diversidad cultural, el Tratado sobre la Prohibición de las Armas Nucleares, el STA (el Tratado Antártico) y la UNODA (la moratoria antisatélite). La CIJ (la corte internacional) se funda cuando un país acepta por primera vez un fallo del Tribunal Mundial en su contra. Cada organismo representa a su convención: las cláusulas de la convención obligan a los miembros que la ratifican, y algunas alcanzan a todos los países, sean miembros o no. Pasa el cursor sobre un organismo en la vista general para ver sus cláusulas. La CIJ no tiene efectos propios."
+ },
+ "concept_un_standing": {
+  "en": "International Standing",
+  "es": "Posición internacional"
  },
  "concept_un_standing_force_desc": {
   "en": "A body of troops held ready under the UN flag and paid from the UN's budget, founded once by a binding resolution of the [concept_un_general_assembly] under Charter Reform I. A [concept_major_power] member tables it; a [concept_un_veto] blocks it outright. It stands until the United Nations dissolves.\\n\\n#bold Missions#!\\nEvery [Concept('concept_un_mission_peacekeeping', 'peacekeeping')] and [Concept('concept_un_mission_stabilisation', 'stabilization')] mission counts the Force as one contributor, so its strength is 0.25 higher (up to the usual three). Such a mission no longer lapses when no member joins it within six months, and no longer fails when its last contributor goes home.\\n\\n#bold Budget#!\\nThe Force takes a tenth of what the paying members' [concept_un_dues] bring in each week, which the UN's lending facility can no longer lend.\\n\\n#bold War goals#!\\nFrom the Strong tier a war goal against a country that hosts an active peacekeeping or stabilization mission already costs twice the usual [concept_infamy] surcharge, Force or no Force. While the Force stands, at the [concept_un_tier_supranational] tier a member that adds such a goal to a play it started has it struck the moment it is added. The goal the play opens with cannot be struck, nor another goal of the same kind, nor a unification goal: these still pay the doubled surcharge. So does every goal of a country outside the UN, or of a member whose credentials are suspended.",
@@ -11011,6 +11087,10 @@
   "en": "Cabinet Authority Eroded",
   "es": "Autoridad del gabinete erosionada"
  },
+ "te_automation_displacement": {
+  "en": "Displaced Workers",
+  "es": "Trabajadores desplazados"
+ },
  "te_cede_colony": {
   "en": "Cede Colony",
   "es": "Ceder colonia"
@@ -11038,6 +11118,10 @@
  "te_construction_market_site_desc": {
   "en": "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method.",
   "es": "Con la regla de juego Construcción de libre mercado activada, las Obras de construcción aparecen por sí solas dondequiera que haya construcción en marcha y convierten la [concept_construction|l] comprada en puntos de construcción; nadie las edifica. Con la regla desactivada, este es tu sector de la construcción: el gobierno lo construye, amplía y reduce, y cada nivel aporta puntos de construcción según su método de producción."
+ },
+ "te_continuous_vote": {
+  "en": "Continuous Vote",
+  "es": "Voto continuo"
  },
  "te_debris_cleaner_prestige_desc": {
   "en": "Our Space Program clears debris that every country in orbit would otherwise have to fly through, and the world notices: +1% prestige for every 0.1 point we remove a month.",

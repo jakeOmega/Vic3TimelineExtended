@@ -8215,6 +8215,10 @@
   "en": "Self-Replicating Assemblers",
   "es": "Ensambladores autorreplicantes"
  },
+ "pm_self_replicating_construction": {
+  "en": "Self-Replicating Construction",
+  "es": "Construcción autorreplicante"
+ },
  "pm_semiautomatic_rifles": {
   "en": "Semi-automatic Rifles",
   "es": "Fusiles semiautomáticos"
@@ -8452,8 +8456,8 @@
   "es": "Los astilleros orbitales que funcionan con energía de fusión producen módulos coloniales por docenas. Solo con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
  },
  "pm_sr_fabrication_lunar_foundries": {
-  "en": "Lunar Foundries",
-  "es": "Fundiciones lunares"
+  "en": "Orbital Foundries",
+  "es": "Fundiciones orbitales"
  },
  "pm_sr_fabrication_lunar_foundries_desc": {
   "en": "Foundries on the Moon cast module frames from lunar metal and launch them from its shallow gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",

@@ -7,6 +7,10 @@
   "en": "African",
   "es": "africano"
  },
+ "AFU_DEF": {
+  "en": "African Union",
+  "es": "Unión Africana"
+ },
  "BHA": {
   "en": "India",
   "es": "India"
@@ -14,6 +18,10 @@
  "BHA_ADJ": {
   "en": "Indian",
   "es": "indio"
+ },
+ "BHA_DEF": {
+  "en": "Union of India",
+  "es": "Unión de la India"
  },
  "DAR": {
   "en": "Dar-Al-Islam",
@@ -23,6 +31,10 @@
   "en": "Islamic",
   "es": "islámico"
  },
+ "DAR_DEF": {
+  "en": "Union of Dar-Al-Islam",
+  "es": "Unión de Dar-Al-Islam"
+ },
  "EAF": {
   "en": "East African Federation",
   "es": "Federación de África Oriental"
@@ -30,6 +42,10 @@
  "EAF_ADJ": {
   "en": "East African",
   "es": "africano del este"
+ },
+ "EAF_DEF": {
+  "en": "East African Federation",
+  "es": "Federación de África Oriental"
  },
  "EUN": {
   "en": "European Union",
@@ -39,6 +55,10 @@
   "en": "European",
   "es": "europeo"
  },
+ "EUN_DEF": {
+  "en": "European Union",
+  "es": "Unión Europea"
+ },
  "INM": {
   "en": "Intermarium",
   "es": "Intermarium"
@@ -46,6 +66,10 @@
  "INM_ADJ": {
   "en": "Intermarian",
   "es": "del Intermarium"
+ },
+ "INM_DEF": {
+  "en": "Intermarium Federation",
+  "es": "Federación del Intermarium"
  },
  "NUS": {
   "en": "Indonesia",
@@ -55,6 +79,10 @@
   "en": "Indonesian",
   "es": "indonesio"
  },
+ "NUS_DEF": {
+  "en": "State of Indonesia",
+  "es": "Estado de Indonesia"
+ },
  "UNA": {
   "en": "North American Union",
   "es": "Unión Norteamericana"
@@ -62,6 +90,10 @@
  "UNA_ADJ": {
   "en": "North American",
   "es": "norteamericano"
+ },
+ "UNA_DEF": {
+  "en": "North American Union",
+  "es": "Unión Norteamericana"
  },
  "UNE": {
   "en": "United Earth",
@@ -71,6 +103,10 @@
   "en": "Terran",
   "es": "terrano"
  },
+ "UNE_DEF": {
+  "en": "United Earth",
+  "es": "Tierra Unida"
+ },
  "ZHO": {
   "en": "China",
   "es": "China"
@@ -78,6 +114,10 @@
  "ZHO_ADJ": {
   "en": "Chinese",
   "es": "chino"
+ },
+ "ZHO_DEF": {
+  "en": "State of China",
+  "es": "Estado de China"
  },
  "dp_leadership_african_union": {
   "en": "African Leadership",

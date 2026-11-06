@@ -584,8 +584,8 @@
   "de": "Zugesagt: zählt für diese Fassung zur Verabschiedung. Überzeugbar: Wertung von 0 oder mehr, aber unterhalb der Zusage. Ablehnend: Wertung unter 0. Rote Linie: Wertung an der Roten Linie oder darunter. Die Wertung einer Gruppe wird jeden Monat neu ermittelt. Wird die Vorlage verabschiedet, missbilligt jede Gruppe mit einer Wertung unter 0, die nicht zugesagt hat, die Regierung für einige Zeit. Randständig: zu wenig Politischer Druck, um in die eine oder andere Richtung zu zählen, daher nicht für die Verabschiedung gezählt."
  },
  "te_tax_ig_trust": {
-  "en": "Kept Promises",
-  "de": "Gehaltene Versprechen"
+  "en": "Trust",
+  "de": "Vertrauen"
  },
  "te_tax_ig_trust_tt": {
   "en": "The group's trust in the government's word: each promise kept with it raises this, and each one broken or renegotiated lowers it. A kept promise that only maintained what the group already had does not raise it. After #v [GetPlayer.MakeScope.ScriptValue('te_tax_obl_trust_recover_months')|0]#! months without either, it fades a step back toward neutral.",
