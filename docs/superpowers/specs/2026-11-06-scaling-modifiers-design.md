@@ -507,6 +507,54 @@ weekly pulse.
   penalty (carriers without an entry), `sr_commercial_space_dividend` (outlives
   the race), `sr_fleet_upkeep_goods` (a building modifier).
 
+As built (PR 7): 181 declarations on seven entries.
+- **Milestones: 48.** Seven billed entries, not eight: `je_space_race_interstellar_results`
+  has no funding, approach or choice, and the old code never billed it. Each of
+  the seven declares its own cost, funding pair and two approaches, so a country
+  pays one copy per running milestone, as before. Choices: 13, not 16; the three
+  others belonged to the retired Moon Base. `sr_<m>_cost`, `_effective` and
+  `_level` keep their `owner` wrappers, which an older save's copies name.
+- **Solar colonization: 133.** Seven by hand in `je_space_race.txt`, and the
+  generated 126 (the 80 specializations, the 40 discovery outcomes and the six
+  facilities) in a new file, `common/journal_entries/sr_sites_generated.txt`, an
+  `INJECT:je_space_race_solar_colonization`. A cross-file INJECT into a mod-only
+  entry merges (`scripting_best_practices.md` § Load Order, fact 8); whether it
+  appends repeated `scaling_modifiers_while_active` blocks is unprobed. The
+  existing `propellant_depots_bool` self-check covers it: Shackleton's depot is
+  a generated key and the only source of `country_sr_propellant_depots_bool`, so
+  its BROKEN line now names the INJECT, and it runs monthly for every country
+  instead of only in a launch month (review of PR 7), so a holder whose
+  programme has finished is read too. The fallback is the declarations written
+  into the entry itself. An INJECT that replaced the entry's own blocks instead
+  of appending would leave the depot OK and drop the 12 hand-written
+  declarations; the C7 row opens the entry to see both kinds. The 120 founding and discovery options call a
+  generated `sr_site_choose_<m>`: a `show_as_tooltip` add for the preview, then
+  the record, hidden. The 69 country blocks in `legacy_modifier_cleanup.txt` (68
+  colony keys and the trade reward) only remove now.
+- **Gone**: `sr_recalculate_cost` (each caller runs `sr_refresh_milestone_statuses`),
+  the clear and apply helpers, `sr_cost_modifiers_missing`, the on-action's
+  seven recalculation branches and their three caches, every `sr_sync_<m>_entry`
+  with `sr_sync_space_race_entries`, `sr_grant_colony_modifier`, the
+  `<m>_mult` records and the site show/hide helpers, `sr_emig_refresh_modifiers`
+  and `sr_mod_refresh_facilities`, and `sr_mod_seen_self_check`.
+- **Lag beyond the declarations**: the panel's pace and setback-risk figures read
+  `modifier:` sums, so they follow a click by days too, and a Safe switch lowers
+  the risk of a monthly roll only once it lands. Participation, the solar method
+  and the funding cap now reach the cost within days rather than at the monthly
+  pulse. No gate reads back a declared figure: the funding and approach buttons
+  read variables, and innovation is read only by AI weights.
+- **Old saves**: one `legacy_scaling_strip_space_race_<m>` per entry, monthly and
+  from a new weekly pulse on each. Nothing needed migrating: the `_held` records
+  date from 2026-09-26.
+- **Review fixes**: the Commercial Space dividend's first payment waits a month
+  after the race concludes (`sr_space_dividend_settled`), since the last
+  milestone's declared funding stays on solar colonization's open entry for a
+  few days and the dividend reads `country_space_race_progress_add`. The
+  fabrication self-check's Mass Driver exclusion reads `_held`, not the retired
+  `_mult`. The AI's fund-up and fund-down weights read `country_innovation`,
+  which now follows a click by days, so an AI near 25 or 50 may step twice
+  before the first lands; the cap bounds it, and an observer run is the check.
+
 ### 4.11 United Nations (48 keys + 5 mirrored flats)
 
 After founding every non-decentralized country holds the active entry

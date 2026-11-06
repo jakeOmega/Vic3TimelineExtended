@@ -160,8 +160,8 @@ sr_event_months_6 = {
 #   country for nothing, and the progress bonuses (Antimatter Engines alone
 #   reach +250%) would let the dividend run away.
 # - Funding is already out of it: sr_funding_progress (and its throughput twin,
-#   sr_funding_throughput) sits only on a billed entry
-#   (sr_apply_milestone_cost_modifiers_base), and nothing is billed then.
+#   sr_funding_throughput) is declared only while its entry is billed
+#   (je_space_race.txt), and nothing is billed then.
 # - Capped: the Space Elevator alone gives up to 20 points, twice what all 33
 #   progress-granting colony specialisations give together (9.25). At 5% a
 #   point a progress specialisation (0.28 on average) is worth about a quarter
@@ -307,9 +307,12 @@ sr_funding_past_cap_step_4 = { value = 1 divide = 5 }
 sr_funding_past_cap_step_5 = { value = 1 divide = 6 }
 sr_funding_past_cap_step_6 = { value = 1 divide = 7 }
 
-# Per-JE funding level values: the multiplier of sr_funding_throughput (every
-# level in full) and of the cost (sr_<m>_cost reads the variable itself).
-# Uses owner = { } wrapper for JE-to-country scope access
+# Per-JE funding level values: the value of the entry's sr_funding_throughput
+# declaration (every level in full) and of the cost (sr_<m>_cost reads the
+# variable itself). The owner = { } wrapper was for JE-to-country scope
+# access, when this was an added copy's multiplier; a declaration's root is
+# the country, where owner is the country itself (#1404), and an old save's
+# added copy still names these values until the strip removes it.
 sr_funding_suborbital_level = {
 	value = 0
 	owner = { if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital } }
@@ -350,9 +353,10 @@ sr_funding_solar_colonization_level = {
 #   pace, the ladder 1/2 + 1/3 + ... + 1/7 (0.50, 0.83, 1.08, 1.28, 1.45,
 #   1.59). A level past the sixth step, reachable only by a falling cap, adds
 #   nothing.
-# And in journal-entry scope, sr_funding_<m>_effective: the two added up, the
-# multiplier of the entry's sr_funding_progress. Every country read sits inside
-# owner = { }, as sr_funding_<m>_level's does (je_multiplier_scope_audit).
+# And sr_funding_<m>_effective: the two added up, the value of the entry's
+# sr_funding_progress declaration. Every country read sits inside owner = { },
+# as sr_funding_<m>_level's does, so it also reads right in journal-entry
+# scope (an old save's added copy).
 sr_funding_suborbital_within_cap = {
 	value = 0
 	if = { limit = { has_variable = sr_funding_suborbital } add = var:sr_funding_suborbital }
@@ -550,13 +554,15 @@ sr_funding_solar_colonization_effective = {
 	}
 }
 
-# Per-JE cost values for JE-scoped funding modifiers
-# Uses owner = { } wrapper for universal scope compatibility (country scope = no-op, JE scope = owner country)
+# Per-milestone cost values, which each milestone's entry declares as
+# sr_space_program_cost (je_space_race.txt; #1404) with the country as root.
+# The owner = { } wrapper is a no-op there; it stays because an older save's
+# added copies name these values until the old-save strip removes them.
 # The approach terms (safe 1, ambitious 2) count only for a country that
 # passes sr_ai_should_participate: an AI outside the top three makes no
 # progress (sr_monthly_progress_update_effect), so it pays nothing for the
-# approach it chose (owner ruling, PR #507). space_race_on_action recalculates
-# when that changes; players always pass.
+# approach it chose (owner ruling, PR #507). The declaration reads that live,
+# so the cost follows within days when it changes; players always pass.
 # Per-JE innovation cost multipliers (scaling with tech era), read by
 # sr_<m>_cost and by the approach-cost lines the panel and the buttons print
 # (sr_disp_cost_*_<m>, space_race_display_values.txt).
@@ -568,9 +574,9 @@ sr_cost_factor_mars_landing       = { value = 6   } # Era 10
 sr_cost_factor_interstellar_probe = { value = 12  } # Era 12
 # Era 10 to 11 (lunar colonization design § 4): 5, the retired Moon Base's,
 # until the country's own Mars Landing, then 8. Read through owner, so it holds in the
-# entry's scope (the cost modifier's multiplier) and in the country's (the
-# panel). The Mars Landing's completion re-posts the cost
-# (sr_complete_milestone_effect runs sr_recalculate_cost).
+# entry's scope (an old save's added cost copy) and in the country's (the
+# entry's declaration and the panel); the declaration follows the Mars
+# Landing within days (#1404).
 sr_cost_factor_solar_colonization = {
 	value = 5
 	owner = {

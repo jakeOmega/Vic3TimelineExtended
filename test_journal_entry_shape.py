@@ -261,14 +261,17 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
     legacy = rel == LEGACY_STRIP_FILE
     selfcheck = rel == SELFCHECK_FILE
 
-    def names(value: str) -> bool:
-        """The value is a declared modifier, or a template with a literal part that makes one
-        (`gm_boon_$SRC$`, the shape of the boons' retired adder; a bare `$MODIFIER$` matches anything)."""
+    def names(value: str, modifier_op: bool) -> bool:
+        """The value is a declared modifier, or, in an add, remove or has_modifier, a template whose literal part
+        names a family and makes one (`gm_boon_$SRC$`, the shape of the boons' retired adder). A template with one
+        literal token (`sr_$MILESTONE$`, the milestone rewards) or none (`$MODIFIER$`) would match any key."""
         if not value:
             return False
         if value in declared:
             return True
-        if "$" not in value or not re.sub(r"\$\w+\$", "", value):
+        if not modifier_op or "$" not in value:
+            return False
+        if len([t for t in re.sub(r"\$\w+\$", "", value).split("_") if t]) < 2:
             return False
         pattern = re.compile(re.sub(r"\\\$\w+\\\$", r"\\w+", re.escape(value)))
         return any(pattern.fullmatch(name) for name in declared)
@@ -279,7 +282,9 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
                 walk(node.children, node.key, declaration or node.key == "scaling_modifiers_while_active",
                      preview or node.key == "show_as_tooltip")
                 continue
-            if declaration or not names(node.value):
+            modifier_op = node.key in ("add_modifier", "remove_modifier", "has_modifier") or (
+                node.key == "name" and parent in ("add_modifier", "remove_modifier"))
+            if declaration or not names(node.value, modifier_op):
                 continue
             if node.key in ("has_variable", "remove_variable", "localization_key") or (
                     node.key == "name" and parent in ("set_variable", "change_variable", "clamp_variable")):
@@ -306,6 +311,8 @@ class ScalingModifierFixtureTest(unittest.TestCase):
         self.assertEqual(sites("e = { add_modifier = { name = gm_boon_$SRC$ } }"), [("add_modifier", "gm_boon_$SRC$")])
         self.assertEqual(sites("e = { remove_modifier = $MODIFIER$ }"), [])
         self.assertEqual(sites("e = { add_modifier = { name = gm_local_$KEY$ } }"), [])
+        self.assertEqual(sites("e = { add_modifier = gm_$X$ }"), [], "one literal token names no family")
+        self.assertEqual(sites("e = { has_global_variable = gm_boon_$SRC$ }"), [], "not a modifier operation")
 
     def test_has_add_and_remove_are_flagged(self):
         self.assertEqual(self.sites("e = { has_modifier = m }"), [("has_modifier", "m")])

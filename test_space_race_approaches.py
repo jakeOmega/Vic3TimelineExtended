@@ -127,9 +127,10 @@ class StandardControlTest(unittest.TestCase):
         effect = _block(_read(EFFECTS), "sr_effect_standard")
         for v in ("sr_safe_$MILESTONE$", "sr_ambitious_$MILESTONE$"):
             self.assertIn(f"remove_variable = {v}", effect)
-        for mod in ("sr_safe_approach", "sr_ambitious_approach"):
-            self.assertIn(f"remove_modifier = {mod}", effect)
-        self.assertIn("sr_recalculate_cost = yes", effect)
+        # The entry declares the approach modifiers from the variables (#1404):
+        # nothing here touches a modifier.
+        self.assertNotRegex(effect, r"(add|remove)_modifier|je:")
+        self.assertIn("sr_refresh_milestone_statuses = yes", effect)
         possible = _block(_read(TRIGGERS), "sr_possible_standard")
         self.assertIn("has_variable = sr_safe_$MILESTONE$", possible)
         self.assertIn("has_variable = sr_ambitious_$MILESTONE$", possible)
@@ -156,18 +157,19 @@ class CostTest(unittest.TestCase):
     def test_colonization_costs_5_until_the_mars_landing(self):
         """Lunar colonization design § 4: 5 (the retired Moon Base's factor) until the
         country's own Mars Landing, then 8, read through owner so it holds in the journal
-        entry's scope (the cost modifier's multiplier) as in the country's."""
+        entry's scope (an old save's added cost copy) as in the country's (the entry's
+        declaration and the panel)."""
         values = _read(VALUES)
         body = _block(values, "sr_cost_factor_solar_colonization").split()
         self.assertEqual(body, ["value", "=", "5", "owner", "=", "{", "if", "=", "{", "limit", "=", "{",
                                 "has_variable", "=", "sr_completed_mars_landing", "}", "add", "=", "3", "}", "}"])
         self.assertIn("multiply = sr_cost_factor_solar_colonization", _block(values, "sr_solar_colonization_cost"))
-        # The Mars Landing's completion re-posts the cost with the new factor.
-        effects = _read(EFFECTS)
-        complete = _block(effects, "sr_complete_milestone_effect_base")
-        self.assertLess(complete.index("set_variable = { name = sr_completed_$MILESTONE$ value = yes }"),
-                        complete.index("sr_complete_milestone_effect = yes"))
-        self.assertIn("sr_recalculate_cost = yes", _block(effects, "sr_complete_milestone_effect"))
+        # The entry's cost declaration reads it live, so the new factor follows
+        # the Mars Landing within days with no repost (#1404).
+        entry = _block(_read(JE), "je_space_race_solar_colonization")
+        self.assertRegex(entry, r"modifier = sr_space_program_cost\s*value = \{\s*value = 0\s*if = \{\s*"
+                                r"limit = \{ sr_milestone_billed_solar_colonization = yes \}\s*"
+                                r"add = sr_solar_colonization_cost\s*\}")
 
     def test_one_cost_level_is_the_modifier_s_innovation(self):
         modifier = _block(_read(MODIFIERS), "sr_space_program_cost")

@@ -3,16 +3,18 @@
 Its journal entry stays open with the production method switched off, because
 the colonies' modifiers live on it. It used to keep billing its funding and
 approach cost then, and its funding kept adding to the programme's pace, while
-its controls were hidden so the player could not lower it. The cost and the
-funding-progress modifiers are now applied only to a billed milestone, and the
-monthly pulse recalculates when the method changes, which no button reports.
+its controls were hidden so the player could not lower it. Each milestone's
+entry declares its cost and funding modifiers only while it is billed (#1404),
+and the engine re-reads the gate every few days, so a method switched off,
+which no button reports, needs no recalculation. The values are evaluated in
+test_space_race_scaling_modifiers.py.
 """
 import os
 import re
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
-EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
+JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
 
@@ -54,22 +56,26 @@ class BilledTest(unittest.TestCase):
         self.assertIn("has_variable = sr_active_solar_colonization", body)
         self.assertIn("modifier:country_sr_solar_colonization_program_bool = yes", body)
 
-    def test_costs_are_applied_only_to_a_billed_milestone(self):
-        body = _block(_read(EFFECTS), "sr_apply_milestone_cost_modifiers_base")
-        self.assertRegex(body, r"limit = \{ sr_milestone_billed_\$MILESTONE\$ = yes \}")
-        self.assertNotIn("has_variable = sr_active_$MILESTONE$", body)
-        for name in ("sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput"):
-            self.assertIn(f"name = {name}", body)
+    def test_costs_are_declared_only_on_a_billed_milestone(self):
+        je = _read(JE)
+        for m in MILESTONES:
+            entry = _block(je, f"je_space_race_{m}")
+            for name in ("sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput"):
+                with self.subTest(milestone=m, modifier=name):
+                    declared = re.search(r"scaling_modifiers_while_active = \{\s*modifier = " + name
+                                         + r"\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ (.*?) \}", entry)
+                    self.assertIsNotNone(declared)
+                    self.assertEqual(declared.group(1), f"sr_milestone_billed_{m} = yes")
+                    self.assertNotIn("has_variable = sr_active_", declared.group(1))
 
-    def test_the_billing_state_is_recorded_and_rechecked_monthly(self):
-        recalc = _block(_read(EFFECTS), "sr_recalculate_cost")
-        self.assertIn("limit = { sr_milestone_billed_solar_colonization = yes }", recalc)
-        self.assertIn("set_variable = { name = sr_cost_solar_running value = 1 }", recalc)
-        self.assertIn("set_variable = { name = sr_cost_solar_running value = 0 }", recalc)
-        pulse = _block(_read(ON_ACTIONS), "space_race_on_action")
-        self.assertIn("limit = { NOT = { has_variable = sr_cost_solar_running } }", pulse)
-        self.assertRegex(pulse, r"sr_milestone_billed_solar_colonization = yes\s*var:sr_cost_solar_running = 0")
-        self.assertRegex(pulse, r"NOT = \{ sr_milestone_billed_solar_colonization = yes \}\s*var:sr_cost_solar_running = 1")
+    def test_nothing_caches_the_billing_state(self):
+        """sr_cost_solar_running recorded what the last recalculation billed, and
+        the monthly pulse recalculated when it went stale. The declaration reads
+        the trigger itself."""
+        for path in (JE, TRIGGERS, ON_ACTIONS,
+                     os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")):
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotIn("sr_cost_solar_running", _read(path))
 
 
 if __name__ == "__main__":

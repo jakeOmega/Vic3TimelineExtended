@@ -13,8 +13,9 @@ country), ``sr_site_spec_<key>`` (1 or 2, the specialization chosen in the
 founding event), ``sr_site_region_<key>`` (the holder's capital state region),
 ``sr_site_mirror_<key>`` (the country whose variables show the site), and per
 discovery ``sr_site_disc_<d>`` (1 or 2) and ``sr_site_disc_<d>_pending``. The
-holder's ``<modifier>_held`` variables and its journal entry's modifiers are the
-projection, written by ``sr_site_sync_<key>``. Slice 5 adds ``sr_site_free_<key>``
+holder's ``<modifier>_held`` variables are the projection, written by
+``sr_site_sync_<key>``; its journal entry declares each modifier while the
+variable is held (1.15 ``scaling_modifiers_while_active``, #1404). Slice 5 adds ``sr_site_free_<key>``
 (a free colony: claimed, no holder), ``sr_site_autonomy_<key>`` and the rest of
 ``slice5_vars()``, all cleared by a release.
 
@@ -23,9 +24,13 @@ Outputs:
 - ``common/scripted_effects/sr_sites_generated.txt``: the founding draw and the
   stage check (``sr_launch_month`` calls the draw), and per world the sync,
   mirror, release, transfer and monthly step; the choice dispatcher
-  (``sr_site_choose_<modifier>``, called by ``sr_grant_colony_modifier``); the
-  migration, the revolution repoint, the panel snapshot, Cede Colony's apply and
-  the console's helpers.
+  (``sr_site_choose_<modifier>``, an option of the founding and discovery
+  events); the migration, the revolution repoint, the panel snapshot, Cede
+  Colony's apply and the console's helpers.
+- ``common/journal_entries/sr_sites_generated.txt``: the solar colonization
+  entry's declarations of the 80 specializations, the 40 discovery outcomes and
+  the six facilities (an ``INJECT:`` into the hand-written entry,
+  ``je_space_race.txt``).
 - ``common/scripted_triggers/sr_sites_generated.txt``: Cede Colony's input filter
   and ``sr_any_site_unclaimed``.
 - ``common/script_values/sr_sites_generated.txt``: ``sr_sites_held_count`` and the
@@ -59,6 +64,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EFFECTS_OUT = Path("common/scripted_effects/sr_sites_generated.txt")
 TRIGGERS_OUT = Path("common/scripted_triggers/sr_sites_generated.txt")
 VALUES_OUT = Path("common/script_values/sr_sites_generated.txt")
+ENTRY_OUT = Path("common/journal_entries/sr_sites_generated.txt")
 DISPLAY_OUT = Path("common/script_values/sr_sites_display_generated.txt")
 BUILDINGS_OUT = Path("common/buildings/sr_site_buildings_generated.txt")
 CUSTOM_LOC_OUT = Path("common/customizable_localization/sr_sites_generated_custom_loc.txt")
@@ -449,7 +455,8 @@ def ebase_tiers() -> list[Site | None]:
 
 
 def choices() -> list[tuple[str, Site, str, int]]:
-    """Every modifier sr_grant_colony_modifier receives: (modifier, site, kind, option)."""
+    """Every modifier an option of the founding and discovery events grants
+    (sr_site_choose_<modifier>): (modifier, site, kind, option)."""
     out = []
     for site in SITES:
         for option, modifier in enumerate(spec_modifiers(site), start=1):
@@ -585,27 +592,29 @@ def _mirror_on(site: Site) -> list[str]:
     # Each specialization at its level times the colony's staffing (slice 4
     # design § 3): the founding choice reads level 1, the other 0, until a
     # module raises them.
+    # The entry declares each one at sr_site_mult_<a|b>_<key> while it is held
+    # (render_entry_declarations).
     out = [f"sr_site_mirror_on_{k} = {{"]
     for slot, modifier in (("a", a), ("b", b)):
         out += ["\tif = {",
                 f"\t\tlimit = {{ sr_site_lvl_{slot}_value_{k} >= 1 }}",
-                f"\t\tsr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
+                f"\t\tsr_site_mark_held = {{ VAR = {modifier}_held }}",
                 "\t}",
                 "\telse = {",
-                f"\t\tsr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}",
+                f"\t\tsr_site_clear_held = {{ VAR = {modifier}_held }}",
                 "\t}"]
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_site_disc_{d} global_var:sr_site_disc_{d} = 1 }}",
-                f"\t\tsr_site_show_modifier = {{ MODIFIER = {da} }}",
-                f"\t\tsr_site_hide_modifier = {{ MODIFIER = {db} }}",
+                f"\t\tsr_site_mark_held = {{ VAR = {da}_held }}",
+                f"\t\tsr_site_clear_held = {{ VAR = {db}_held }}",
                 f"\t\tsr_site_set_discovery_done = {{ DISCOVERY = {d} }}",
                 "\t}",
                 "\telse_if = {",
                 f"\t\tlimit = {{ has_global_variable = sr_site_disc_{d} global_var:sr_site_disc_{d} = 2 }}",
-                f"\t\tsr_site_show_modifier = {{ MODIFIER = {db} }}",
-                f"\t\tsr_site_hide_modifier = {{ MODIFIER = {da} }}",
+                f"\t\tsr_site_mark_held = {{ VAR = {db}_held }}",
+                f"\t\tsr_site_clear_held = {{ VAR = {da}_held }}",
                 f"\t\tsr_site_set_discovery_done = {{ DISCOVERY = {d} }}",
                 "\t}",
                 "\telse_if = {",
@@ -619,12 +628,12 @@ def _mirror_on(site: Site) -> list[str]:
 def _unmirror(site: Site) -> list[str]:
     a, b = spec_modifiers(site)
     out = [f"sr_site_unmirror_{site.key} = {{",
-           f"\tsr_site_hide_modifier_at = {{ MODIFIER = {a} }}",
-           f"\tsr_site_hide_modifier_at = {{ MODIFIER = {b} }}"]
+           f"\tsr_site_clear_held = {{ VAR = {a}_held }}",
+           f"\tsr_site_clear_held = {{ VAR = {b}_held }}"]
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
-        out += [f"\tsr_site_hide_modifier = {{ MODIFIER = {da} }}",
-                f"\tsr_site_hide_modifier = {{ MODIFIER = {db} }}",
+        out += [f"\tsr_site_clear_held = {{ VAR = {da}_held }}",
+                f"\tsr_site_clear_held = {{ VAR = {db}_held }}",
                 f"\tsr_site_clear_discovery = {{ DISCOVERY = {d} }}"]
     out += [f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{site.key} }} remove_variable = sr_emig_prio_{site.key} }}"]
     # The world leaves the holder's module queue (slice 4 design § 7), and any
@@ -921,26 +930,29 @@ def _monthly(site: Site) -> list[str]:
 
 def render_dispatcher() -> list[str]:
     out = ["# ===== The choice dispatcher =====",
-           "# sr_grant_colony_modifier = { MODIFIER = m } calls sr_site_choose_<m>: a",
-           "# specialization records the world's choice, a discovery outcome the",
-           "# discovery's. ROOT is the country choosing. A world claimed under a save",
-           "# from before the record existed gets its holder here."]
+           "# sr_site_choose_<m>, an option of space_race_colony_events.1-40 or of",
+           "# space_race_discovery_events: a specialization records the world's choice, a",
+           "# discovery outcome the discovery's, and the world's sync marks <m>_held, which",
+           "# the entry's declaration reads (common/journal_entries/sr_sites_generated.txt).",
+           "# The option shows the modifier the entry declares from then on: a new colony's",
+           "# founding specialization is level 1, multiplier 1. ROOT = THIS is the country",
+           "# choosing. A world claimed under a save from before the record existed gets",
+           "# its holder here."]
     for modifier, site, kind, option in choices():
         k = site.key
-        out.append(f"sr_site_choose_{modifier} = {{")
-        out.append(f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_holder_{k} }} }} "
-                   f"set_global_variable = {{ name = sr_site_holder_{k} value = root }} }}")
+        out += [f"sr_site_choose_{modifier} = {{",
+                f"\tshow_as_tooltip = {{ je:je_space_race_solar_colonization ?= {{ add_modifier = {{ name = {modifier} }} }} }}",
+                "\thidden_effect = {",
+                f"\t\tset_variable = {{ name = {modifier}_held value = yes }}",
+                f"\t\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_holder_{k} }} }} "
+                f"set_global_variable = {{ name = sr_site_holder_{k} value = root }} }}"]
         if kind == "spec":
-            out.append(f"\tset_global_variable = {{ name = sr_site_spec_{k} value = {option} }}")
-            # The grant just added the modifier unscaled: level 1 of a fresh colony,
-            # multiplier 1, recorded so the sync adds no second copy (slice 4 design § 3).
-            out.append(f"\tset_variable = {{ name = {modifier}_mult value = 1 }}")
+            out.append(f"\t\tset_global_variable = {{ name = sr_site_spec_{k} value = {option} }}")
         else:
-            out.append(f"\tset_global_variable = {{ name = sr_site_disc_{kind} value = {option} }}")
-            out.append(f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{kind}_pending }} "
+            out.append(f"\t\tset_global_variable = {{ name = sr_site_disc_{kind} value = {option} }}")
+            out.append(f"\t\tif = {{ limit = {{ has_global_variable = sr_site_disc_{kind}_pending }} "
                        f"remove_global_variable = sr_site_disc_{kind}_pending }}")
-        out.append(f"\tsr_site_sync_{k} = yes")
-        out.append("}")
+        out += [f"\t\tsr_site_sync_{k} = yes", "\t}", "}"]
     return out
 
 
@@ -1077,7 +1089,7 @@ def render_debug() -> list[str]:
                 f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_colony_{k} }} }}",
                 f"\t\tset_global_variable = {{ name = sr_colony_{k} value = yes }}",
                 f"\t\tset_global_variable = {{ name = sr_site_holder_{k} value = root }}",
-                f"\t\tsr_grant_colony_modifier = {{ MODIFIER = {a} }}",
+                f"\t\tsr_site_choose_{a} = yes",
                 "\t\tsr_sites_stage_after_claim = yes",
                 "\t}"]
     out.append("}")
@@ -2007,15 +2019,20 @@ def _facility_serves(site: Site, facility: Facility) -> str:
 def render_facility_values() -> list[str]:
     out = ["", "# ===== Facilities (colony management design § 7) =====",
            "# Country scope: sr_mod_units_<type>, THIS's staffed levels of the facility at the",
-           "# colonies that serve it; entry scope (a modifier's multiplier, read through owner):",
-           "# sr_mod_units_<type>_entry."]
+           "# colonies that serve it, the solar colonization entry's declared value for its",
+           "# modifier (common/journal_entries/sr_sites_generated.txt)."]
     for f in FACILITIES:
         out += [f"# {f.name}", f"sr_mod_units_{f.key} = {{", "\tvalue = 0"]
         out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = sr_site_{f.key}_staffed_{s.key} }}" for s in SITES
                 if f.key in generic_types(s)]
         out.append("}")
         if f.modifier:
-            out += [f"sr_mod_units_{f.key}_entry = {{", "\tvalue = 0", f"\towner = {{ add = sr_mod_units_{f.key} }}", "}"]
+            # The old multiplier, read through owner from the entry's scope. Nothing
+            # calls it now; a save from before the declarations may still name it on
+            # the copy it added, until the old-save strip removes that copy.
+            out += ["# PENDING REMOVAL with the \"1.15 scaling modifiers\" block of "
+                    "legacy_je_modifier_cleanup_effect (after 2026-12-31)",
+                    f"sr_mod_units_{f.key}_entry = {{", "\tvalue = 0", f"\towner = {{ add = sr_mod_units_{f.key} }}", "}"]
     out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a slot module",
             "# (code 3 on) the world's sr_mod_generic_cost_<key>, a specialization level the base.",
             "sr_mq_head_cost = {",
@@ -2300,23 +2317,6 @@ def render_module_effects() -> list[str]:
             "sr_mod_ai_plan_all = {"]
     out += [f"\tsr_mod_ai_plan_{s.key} = yes" for s in SITES]
     out += ["}", "",
-            "# The facilities' entry modifiers (colony management design § 7), their one refresh",
-            "# site, from sr_emig_refresh_modifiers: removed first, then each at its staffed levels.",
-            "sr_mod_refresh_facilities = {",
-            "\tje:je_space_race_solar_colonization ?= {"]
-    for f in FACILITIES:
-        if f.modifier:
-            out.append(f"\t\tif = {{ limit = {{ has_modifier = sr_module_{f.key} }} remove_modifier = sr_module_{f.key} }}")
-    out += ["\t}", "\tif = {", "\t\tlimit = { sr_colonies_contested_enabled = yes }"]
-    for f in FACILITIES:
-        if f.modifier:
-            out += ["\t\tif = {",
-                    f"\t\t\tlimit = {{ sr_mod_units_{f.key} > 0 }}",
-                    "\t\t\tje:je_space_race_solar_colonization ?= {",
-                    f"\t\t\t\tadd_modifier = {{ name = sr_module_{f.key} multiplier = sr_mod_units_{f.key}_entry }}",
-                    "\t\t\t}",
-                    "\t\t}"]
-    out += ["\t}", "}", "",
             "# The module scripted GUI's world (scope:site) and type (scope:op: 1 the first",
             "# specialization, 2 the second, 3 Habitat, 4 Defences, 5 Spaceport, 6 on the facilities;",
             "# 0 clears the queue).",
@@ -2432,13 +2432,6 @@ def render_module_effects() -> list[str]:
             k = site.key
             out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} "
                        f"sr_site_terra_step_{k} = {{ MONTHS = 120 }} sr_site_sync_{k} = yes }}")
-    out += ["}", "",
-            "# The entry's backstop (sr_sync_solar_colonization_entry): every specialization",
-            "# THIS records, at its multiplier, in space_race_colony_events order.",
-            "sr_sites_sync_entry_specs = {"]
-    for site in SITES:
-        for slot, modifier in zip(("a", "b"), spec_modifiers(site)):
-            out.append(f"\tsr_sync_colony_spec_base = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{site.key} }}")
     out.append("}")
     return out
 
@@ -4225,9 +4218,88 @@ def render_gui() -> str:
     return "\n".join(out) + "\n"
 
 
+# ---------------------------------------------------------------------------
+# The entry's declarations (1.15 scaling_modifiers_while_active, #1404)
+# ---------------------------------------------------------------------------
+
+ENTRY = "je_space_race_solar_colonization"
+
+
+def _declaration(modifier: str, limit: str, value: str) -> list[str]:
+    """One scaling_modifiers_while_active block: VALUE while LIMIT holds, else 0."""
+    return ["\tscaling_modifiers_while_active = {",
+            f"\t\tmodifier = {modifier}",
+            "\t\tvalue = {",
+            "\t\t\tvalue = 0",
+            "\t\t\tif = {",
+            f"\t\t\t\tlimit = {{ {limit} }}",
+            f"\t\t\t\tadd = {value}",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}"]
+
+
+def entry_declarations() -> list[tuple[str, str, str]]:
+    """(modifier, limit, value) for every modifier the generated file declares:
+    each world's two specializations at sr_site_mult_<a|b>_<key> and its
+    discoveries' two outcomes at 1, while the holder's <modifier>_held record
+    (the world's sync) names it; each facility's at its staffed levels under
+    simple and full colonies."""
+    out = []
+    for site in SITES:
+        for slot, modifier in zip(("a", "b"), spec_modifiers(site)):
+            out.append((modifier, f"has_variable = {modifier}_held", f"sr_site_mult_{slot}_{site.key}"))
+        for d in site.discoveries:
+            for modifier in discovery_modifiers(d):
+                out.append((modifier, f"has_variable = {modifier}_held", "1"))
+    for f in FACILITIES:
+        if f.modifier:
+            out.append((f"sr_module_{f.key}",
+                        f"sr_colonies_contested_enabled = yes sr_mod_units_{f.key} > 0", f"sr_mod_units_{f.key}"))
+    return out
+
+
+def render_entry_declarations() -> str:
+    out = [HEADER.rstrip("\n"),
+           "# Solar System Colonization's per-world modifiers, from gen_solar_sites.SITES,",
+           f"# declared on {ENTRY} (1.15 scaling_modifiers_while_active, #1404;",
+           "# docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.10). The",
+           "# rest of the entry, its six population and autonomy modifiers and",
+           "# sr_solar_system_trade among them, is hand-written in je_space_race.txt.",
+           "#",
+           "# The value's root is the owning country. A world's modifier is on while the",
+           "# holder's <modifier>_held record names it: sr_site_sync_<key> marks it (the",
+           "# world's mirror, sr_sites_generated.txt) and clears it when the world goes or is",
+           "# occupied. A specialization is at its level times the colony's staffing and the",
+           "# charter's share (sr_site_mult_<a|b>_<key>), a discovery outcome at 1, a",
+           "# facility at its staffed levels at the colonies that serve us (sr_mod_units_<type>).",
+           "# A declaration applies only while the entry is active; a colony holder's always",
+           "# is (its `possible`). has_modifier cannot see a declared modifier: read the",
+           "# record instead.",
+           f"INJECT:{ENTRY} = {{ # REVIEWED 2026-11-06: generated declarations kept out of the hand-written entry; a cross-file INJECT onto a mod-only entry applies (scripting_best_practices.md § Load Order, facts 4 and 8)"]
+    site_of = {}
+    for site in SITES:
+        for m in spec_modifiers(site):
+            site_of[m] = site
+        for d in site.discoveries:
+            for m in discovery_modifiers(d):
+                site_of[m] = site
+    shown = None
+    for modifier, limit, value in entry_declarations():
+        site = site_of.get(modifier)
+        heading = f"# {site.name} ({site.key})" if site else "# The facilities (colony management design § 7)"
+        if heading != shown:
+            out += ["", f"\t{heading}"]
+            shown = heading
+        out += _declaration(modifier, limit, value)
+    out.append("}")
+    return "\n".join(out) + "\n"
+
+
 def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
     return {
         EFFECTS_OUT: render_effects(),
+        ENTRY_OUT: render_entry_declarations(),
         TRIGGERS_OUT: render_triggers(),
         VALUES_OUT: render_values(),
         DISPLAY_OUT: render_display(),
