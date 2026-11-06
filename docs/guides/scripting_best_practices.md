@@ -2975,7 +2975,7 @@ Vanilla 1.15 replaced `complete`/`on_complete`, `fail`/`on_fail`, `invalid`/`on_
 - **One-shot converter:** `scripts/generators/convert_je_outcomes.py` (`--check` reports an entry still in the old shape; `test_convert_je_outcomes.py`). Tests find an outcome by kind through `je_test_helpers.py` (`outcome_text`, `outcome_part`, `old_block(entry, "on_complete")`, and `outcome(entry_dict, kind)` for parsed entries).
 - **Other 1.15 shape changes beside it:** a journal entry group needs an `illustration`, a mobilization option group a `background` in place of `icon`, and a scripted progress bar's `double_sided_gold` is gone: a two-pole bar names `progress_texture`, `background_texture` and `marker = yes` (`<game>/common/scripted_progress_bars/`).
 - **The tooling assumes an `INJECT:` adds an outcome** to the entry's list, and that `REPLACE:outcome` replaces them: `paradox_file_parser.py` reads a repeated `outcome` as a list (read them through `loc_coverage_audit.je_outcomes`). What the engine does with an injected outcome is unverified; the play-test list asks.
-- **`has_journal_entry` reads active entries only** (`has_inactive_journal_entry` reads one shown but not yet active). An `add_journal_entry` guarded by `has_journal_entry` alone, on an entry the engine is about to activate, logs "<Country> already has a journal entry of type X" (`journal_entry_manager.cpp`, 1.14.5 and 1.15); guard on both (Grand Monuments).
+- **`has_journal_entry` reads active entries only**, and `has_inactive_journal_entry` the inactive copies. Every country holds an inactive copy of every country entry that has its own activation triggers (`is_shown_when_inactive`, `possible`), from the game's start, shown or not: the 1836 save of 2026-11-05 held 286 `je_meiji_restoration`, `je_grand_monuments` and `je_te_map_host` records each, one per country. An entry with neither trigger, the kind vanilla adds by effect, has no copy until added (`je_king_in_parliament`, `je_spanish_flu`: 0). `add_journal_entry` is refused while a copy exists ("<Country> already has a journal entry of type X", `journal_entry_manager.cpp`, 1.14.5 and 1.15), so on an entry with activation triggers it adds nothing while the copy is there; the entry comes in only through its triggers, at the engine's own check. A concluded entry's copy is gone (above), as is one `disable_evaluation` removed, so an add should work after either; untested. Guarding on both triggers (Grand Monuments) only silences the error. An add meant to take effect at once needs an entry with neither trigger.
 
 ## Useful Triggers & Accessors Reference
 
@@ -5416,14 +5416,24 @@ works (and one player sets it for all); `scope:journal_entry` does not resolve t
 probe painted blue, 2026-11-05). `map_color` takes `if` / `else_if` and inline factor blocks
 (`factor = { value = this.turmoil multiply = 2 }`, vanilla's Forest of Bayonets); a branch that matches nothing leaves
 the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`. No `.gui` switches the map on: vanilla's
-`mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. There is
-no `remove_journal_entry` effect: an entry leaves the journal by concluding, or by `can_deactivate = yes` with its
-`possible` failing and `is_shown_when_inactive` false. Read stored variables only, never walk pops, until the play-test
-says how often the map is evaluated. An entry with all three blocks loads with no log line, and so does a copy of vanilla's
-journal map mode with `is_visible = yes` (first launch, 2026-11-05). `map_color` is re-evaluated as the game runs.
-`add_journal_entry` doesn't put the entry in the journal at once: the Map Room appeared about a week later, so a button
-can't add an entry and open its page in one click. A contextless entry no country is involved in (`context = none`,
-active from the start) can host a map and be opened by a button, which needs no add at all. A pick shows at the next
-tick (paused, on unpause), the map goes when the page closes, and `SetTempMapModeByKey` on vanilla's journal map mode
-paints nothing (2026-11-05). The mod's maps and the open questions:
-`docs/systems/mod_systems/journal_map_modes.md`.
+`mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. An entry
+with all three blocks loads with no log line, and so does a copy of vanilla's journal map mode with `is_visible = yes`.
+Seen in game on 2026-11-05:
+
+- **The map shows while the page is open** and goes when it closes. `map_color` is re-evaluated as the game runs, and a
+  pick shows at the next tick (paused, at unpause). `SetTempMapModeByKey` on vanilla's journal map mode paints nothing.
+  Read stored variables only, never walk pops.
+- **A contextless entry nobody is involved in hosts a map best.** `context = none`, `should_be_involved` and
+  `should_show_when_not_involved` both `always = no`, `is_shown_when_inactive = { always = yes }`: active from the
+  game's start, in no journal, and a button opens its page at the first click.
+- **Its scripted buttons are locked**, though: the engine refuses a scripted button to a country not involved in its
+  entry ("Countries that are not involved in the Journal Entry may not take this action"). Put the page's controls in a
+  `widget` whose buttons call scripted GUIs with the player as root (the Map Room's picks). `add_involved_country`
+  would unlock them, but probably lists the entry in that country's journal.
+- **A country entry can't be added and opened by one click.** `add_journal_entry` is refused while the country holds an
+  inactive copy, which it always does for an entry with its own activation triggers (below), and such an entry
+  activates only at the engine's own check, which looks fortnightly (four activations fell on one date plus a multiple
+  of 14 days). There is no `remove_journal_entry` effect either: an entry leaves the journal by concluding, or by
+  `can_deactivate = yes` with its `possible` failing and `is_shown_when_inactive` false (that worked).
+
+The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.

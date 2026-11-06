@@ -1,44 +1,112 @@
-﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The map buttons outside the
-# journal: the Demographics tab's header and the map test strip (gui/te_map_widgets.gui). The effects are in
-# common/scripted_effects/te_journal_map_effects.txt. The AI never uses these: the map is a player's view.
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The Map Room's picks and the
+# test strip's probe, called from gui/te_map_widgets.gui (the te_jmap_pick_row type, on the Map Room's page and on the
+# strip) and from the Demographics tab's map button. The AI never uses these: the map is a player's view.
+#
+# The picks are scripted GUIs, not the entry's scripted buttons: the Map Room is contextless with nobody involved, and
+# the engine locks a scripted button for a country not involved in its entry (play-test check 14, 2026-11-05).
+# is_valid is false on the current pick, which the button draws pressed; is_shown hides the three census maps while
+# the census doesn't run.
 
-# The Demographics tab's map button: add the host entry (or keep it) and show life expectancy.
-te_jmap_show_demographics_sgui = {
+te_jmap_pick_turmoil_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 1 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 1 }
+	}
+}
+
+te_jmap_pick_literacy_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 2 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 2 }
+	}
+}
+
+# The census maps read each state's figures from the last census.
+te_jmap_pick_life_expectancy_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 3 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 3 }
+	}
+}
+
+te_jmap_pick_fertility_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 4 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 4 }
+	}
+}
+
+te_jmap_pick_median_age_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 5 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 5 }
+	}
+}
+
+# A test map (play-test check 3): it goes once the stripes and the contextless answer are in.
+te_jmap_pick_scope_probe_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 6 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 6 }
+	}
+}
+
+# The strip's Potential probe (check 7): toggle the variable that shows je_te_map_potential_probe in Potential.
+te_jmap_potential_probe_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
 	is_valid = { is_player = yes }
 	effect = {
-		te_jmap_open_host = { SEL = 3 }
+		if = {
+			limit = { has_variable = te_jmap_potential_probe }
+			remove_variable = te_jmap_potential_probe
+			debug_log = "TE_JMAP potential probe off date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			set_variable = te_jmap_potential_probe
+			debug_log = "TE_JMAP potential probe on date=[TimeKeeper.GetCurrentDate.GetString] (the entry should show in Potential at the engine's next check)"
+		}
 	}
 }
 
-# The test strip's activation-trigger route: set the variable and wait for the engine to activate the entry.
-te_jmap_request_host_sgui = {
+# Read-only: whether the probe entry exists for the player at all, inactive or active, so the strip's Open button
+# asks for it only then.
+te_jmap_potential_probe_held_sgui = {
 	scope = country
-	is_shown = { is_player = yes }
-	ai_is_valid = { always = no }
-	is_valid = { is_player = yes }
-	effect = {
-		te_jmap_request_host = { SEL = 1 }
+	is_shown = {
+		OR = {
+			has_journal_entry = je_te_map_potential_probe
+			has_inactive_journal_entry = je_te_map_potential_probe
+		}
 	}
-}
-
-# The test strip's close: the same as the entry's own Close button, from outside the entry.
-te_jmap_close_host_sgui = {
-	scope = country
-	is_shown = { is_player = yes }
-	ai_is_valid = { always = no }
-	is_valid = { has_variable = te_jmap_host_on }
-	effect = {
-		te_jmap_close_host = yes
-	}
-}
-
-# Read-only: whether the host entry is in the journal, so the map button can offer Open rather than Add.
-te_jmap_host_active_sgui = {
-	scope = country
-	is_shown = { has_journal_entry = je_te_map_host }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

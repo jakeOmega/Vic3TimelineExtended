@@ -1,42 +1,10 @@
 ﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The effects behind the map
-# buttons: the scripted GUIs in common/scripted_guis/te_journal_map_sguis.txt and je_te_map_host's scripted buttons.
-# Country scope throughout: the player's country.
-#
-# je_te_map_host is a map with no system of its own: it sits out of the journal until a button asks for it, and goes
-# back out when the player closes it. Two ways in, both under test (docs/testing/journal-map-modes-playtest.md):
-#   - te_jmap_open_host adds the entry at once (add_journal_entry ignores the entry's activation triggers);
-#   - te_jmap_request_host only sets the variable the entry's is_shown_when_inactive and possible read, and leaves the
-#     engine to activate it on its own schedule. How long that takes, paused and running, is one of the checks.
-# Either way the variable te_jmap_host_on holds the entry open: te_jmap_close_host removes it, `possible` fails, and the
-# entry (can_deactivate) goes back to inactive, which is_shown_when_inactive hides.
+# buttons: the scripted GUIs in common/scripted_guis/te_journal_map_sguis.txt. Country scope: the player's country.
 
-# The pick, in both places te_jmap_selector reads (common/script_values/te_journal_map_values.txt): on the country, and
-# globally, since a state's map_color may not be able to reach the country.
+# The Map Room's pick, read by te_jmap_selector (common/script_values/te_journal_map_values.txt). Global, because a
+# state's map_color reaches neither the entry nor a country (the scope probe painted blue, 2026-11-05), so every
+# player in a multiplayer game shares it.
 te_jmap_set_selector = {
-	set_variable = { name = te_jmap_sel value = $SEL$ }
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
-}
-
-te_jmap_open_host = {
-	te_jmap_set_selector = { SEL = $SEL$ }
-	set_variable = te_jmap_host_on
-	if = {
-		limit = { NOT = { has_journal_entry = je_te_map_host } }
-		add_journal_entry = { type = je_te_map_host }
-		debug_log = "TE_JMAP host added by add_journal_entry date=[TimeKeeper.GetCurrentDate.GetString] (the button's route; the entry's immediate logs when it activates)"
-	}
-}
-
-te_jmap_request_host = {
-	te_jmap_set_selector = { SEL = $SEL$ }
-	set_variable = te_jmap_host_on
-	debug_log = "TE_JMAP host requested through its activation triggers only date=[TimeKeeper.GetCurrentDate.GetString] (compare this line's date with the entry's activation line)"
-}
-
-te_jmap_close_host = {
-	if = {
-		limit = { has_variable = te_jmap_host_on }
-		remove_variable = te_jmap_host_on
-	}
-	debug_log = "TE_JMAP host closed date=[TimeKeeper.GetCurrentDate.GetString] (the variable is gone; the entry should go back out of the journal when the engine next checks it)"
+	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; the map follows at the next tick)"
 }

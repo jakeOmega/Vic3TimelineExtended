@@ -1,0 +1,30 @@
+﻿### The Map Room's page (je_te_map_room, common/journal_entries/te_journal_maps.txt; journal_map_modes.md).
+###
+###   widget_je_te_map_room   custom_widget_container_1 (above the description)
+###     The picks (te_jmap_pick_row, gui/te_map_widgets.gui): one button per map, the current one pressed.
+###
+### The Map Room is contextless and nobody is involved in it, so its own scripted buttons would be locked; these are
+### GUI buttons calling scripted GUIs with the player as root. Whether a widget draws on such a page is play-test
+### check 1 (vanilla's je_great_game_control, also contextless, carries one); the debug strip repeats the row.
+
+flowcontainer = {
+	name = "widget_je_te_map_room"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 4
+	margin_top = 6
+	margin_bottom = 6
+
+	textbox = {
+		parentanchor = hcenter
+		autoresize = yes
+		multiline = yes
+		max_width = 500
+		align = center|nobaseline
+		text = "te_jmap_room_pick_heading"
+	}
+
+	te_jmap_pick_row = {}
+}
