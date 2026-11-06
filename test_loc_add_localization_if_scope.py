@@ -24,7 +24,7 @@ SelectLocalization, and every hover logged "Promote 'THIS' returned nullptr"
 and showed no figure (649 lines, 2026-11-05). Grand Monuments' tear-down and
 rededicate hovers name six keys that read THIS (UNVERIFIED_THIS): a scripted
 button's tooltip may keep it, and no log has shown them failing, so they wait
-on an in-game look rather than a rewrite.
+on an in-game look rather than a rewrite (#1413).
 """
 
 import re
