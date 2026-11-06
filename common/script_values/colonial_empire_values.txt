@@ -279,29 +279,25 @@ colonial_overreach_ratio = {
 # colonial_programme_max_level, held in a country variable: colonial_invest_level,
 # colonial_garrison_level, colonial_assim_level. The top level is the full
 # programme and each level is an equal share of it, linearly: the bar term
-# (colonial_stability_term_*), the programme's static modifier (applied by
-# colonial_programmes_refresh_modifiers at a third, two thirds or all of its
-# values) and its costs all scale with the level.
+# (colonial_stability_term_*), the programme's static modifier (declared on
+# je_colonial_empire at a third, two thirds or all of its values:
+# colonial_*_modifier_scale below) and its costs all scale with the level.
 #
-# The level variables are also the record a revolution's winner inherits:
-# variables merge, modifiers do not, so the refresh rebuilds the modifiers from
-# the levels (decol_sync_programmes, decolonization.txt).
+# The level variables are the programmes' only state. A revolution's winner
+# inherits them (variables merge) and the inherited entry's declarations read
+# them, so nothing rebuilds a modifier.
 #
 # Read the levels through the *_level_value wrappers: before a country first
-# steps a programme the variable does not exist, and the widget and the bar
-# read these every frame. A save from before the levels holds a running
-# programme's modifier and no level until the entry's next monthly pulse
-# migrates it (decol_migrate_programmes); until then the wrapper reads the
-# modifier as the top level, so a step, the refresh and the bar all see the
-# programme it was running, not 0.
+# steps a programme the variable does not exist, and the widget, the bar and
+# the declarations read these every frame or every few days.
 #
 # SCOPE: country.
 # ============================================================================
 
 # The top level. Literal 3s that mean this value: the `< 3` gates in
-# colonial_empire_possible_*_up (colonial_empire_triggers.txt), the multiplier
-# ladder in colonial_programme_apply_modifier and the "/ 3" in the widget's
-# level labels (decolonization.txt, te_journal_entries_l_english.yml).
+# colonial_empire_possible_*_up (colonial_empire_triggers.txt), the ladders in
+# colonial_*_modifier_scale below and the "/ 3" in the widget's level labels
+# (decolonization.txt, te_journal_entries_l_english.yml).
 colonial_programme_max_level = 3
 
 colonial_invest_level_value = {
@@ -309,10 +305,6 @@ colonial_invest_level_value = {
 	if = {
 		limit = { has_variable = colonial_invest_level }
 		value = var:colonial_invest_level
-	}
-	else_if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		value = colonial_programme_max_level
 	}
 }
 
@@ -322,10 +314,6 @@ colonial_garrison_level_value = {
 		limit = { has_variable = colonial_garrison_level }
 		value = var:colonial_garrison_level
 	}
-	else_if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		value = colonial_programme_max_level
-	}
 }
 
 colonial_assim_level_value = {
@@ -334,9 +322,59 @@ colonial_assim_level_value = {
 		limit = { has_variable = colonial_assim_level }
 		value = var:colonial_assim_level
 	}
+}
+
+# The share of each programme's static modifier its entry declares
+# (scaling_modifiers_while_active, je_colonial_empire.txt): 0.333, 0.667 and 1
+# at levels 1, 2 and 3, the literal multipliers the monthly refresh added
+# before 1.15, and 0 at level 0, so the modifier is off the entry. A ladder,
+# not colonial_*_strength: the exact thirds that scale the bar term differ in
+# the fourth decimal (0.33333, 0.66666), and the modifiers keep their numbers.
+colonial_invest_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_invest_level_value >= 3 }
+		value = 1
+	}
 	else_if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		value = colonial_programme_max_level
+		limit = { colonial_invest_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_invest_level_value >= 1 }
+		value = 0.333
+	}
+}
+
+colonial_garrison_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_garrison_level_value >= 3 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_garrison_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_garrison_level_value >= 1 }
+		value = 0.333
+	}
+}
+
+colonial_assim_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_assim_level_value >= 3 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_assim_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_assim_level_value >= 1 }
+		value = 0.333
 	}
 }
 
@@ -468,9 +506,10 @@ colonial_invest_level_cost = {
 	divide = colonial_weeks_per_year
 }
 
-# The weekly running cost at the current level. colonial_programmes_refresh_modifiers
-# copies it into var:colonial_invest_cost_week, which is the expense modifier's
-# multiplier (a flat variable, so the stored multiplier never re-runs the sum).
+# The weekly running cost at the current level, 0 at level 0: the value of
+# colonial_development_investment_expense_modifier, declared on
+# je_colonial_empire. O(1) (the cached colonial GDP, never the state walk), so
+# the entry can re-read it every few days.
 colonial_invest_weekly_cost = {
 	value = colonial_invest_level_cost
 	multiply = colonial_invest_level_value
