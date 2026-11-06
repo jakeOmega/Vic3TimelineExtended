@@ -132,11 +132,19 @@ def _billed_ctx(m, level, cap, approach=None, player=True, rank=1, solar_method=
     return ctx
 
 
+# The solar entry's own colony declarations, written by hand beside the milestone keys
+# (test_sr_solar_scaling_modifiers.py; the generated 126 are an INJECT in another file).
+SOLAR_COLONY_KEYS = {"sr_solar_system_trade", "sr_emigration_programme", "sr_offworld_population",
+                     "sr_module_upkeep", "sr_free_colony_supply", "sr_free_colony_trade", "sr_colonial_garrisons"}
+
+
 class DeclarationShapeTest(unittest.TestCase):
     def test_each_billed_entry_declares_its_keys_once(self):
         for m in MILESTONES:
             declared = _declared(f"je_space_race_{m}")
             expected = set(BILLED) | set(APPROACHES) | set(CHOICES.get(m, (None, {}))[1])
+            if m == "solar_colonization":
+                expected |= SOLAR_COLONY_KEYS
             with self.subTest(milestone=m):
                 self.assertEqual(set(declared), expected)
                 for modifier, values in declared.items():
