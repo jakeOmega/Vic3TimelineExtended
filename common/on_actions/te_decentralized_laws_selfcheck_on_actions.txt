@@ -1,0 +1,50 @@
+﻿# TEMPORARY self-check (2026-11-05): do decentralized nations start on the
+# mod's law baseline?
+#
+# common/history/extra_history.txt gives every country a tech-free law in each
+# group the mod adds. Its every_country never reached decentralized nations, so
+# all 158 kept the first law the engine gives a group, five of them barred to
+# them (the 1837 save of the first new game after #1408). The history file now
+# repeats the baseline in an every_decentralized_country block, an iterator
+# vanilla has but never uses in history.
+#
+# decentralized_law_baseline, once, when a new game starts (history has run):
+#   OK      no decentralized nation holds any of the five: the block works.
+#   BROKEN  one still does: every_decentralized_country doesn't reach them in
+#           history either. error.log's "is not permitted to retain law" lines
+#           name them. Fall back to declaring each group's tech-free law first
+#           (the law panel's order changes, so that is the owner's call).
+# Nothing logs when the world has no decentralized nation (nothing to judge).
+#
+# Play-test row: docs/testing/vanilla-1-15-playtest.md. Delete this file once
+# it reads OK.
+on_game_started = {
+	on_actions = {
+		te_decentralized_law_baseline_selfcheck
+	}
+}
+
+te_decentralized_law_baseline_selfcheck = {
+	effect = {
+		if = {
+			limit = { any_decentralized_country = { is_country_type = decentralized } }
+			if = {
+				limit = {
+					any_decentralized_country = {
+						OR = {
+							has_law = law_type:law_minority_rights_violent_hostility
+							has_law = law_type:law_penal_labor_camps
+							has_law = law_type:law_total_war
+							has_law = law_type:law_state_secrets
+							has_law = law_type:law_intrusive_surveillance
+						}
+					}
+				}
+				debug_log = "TE_SELF_CHECK BROKEN decentralized_law_baseline (a decentralized nation still holds Violent Hostility, Penal Labor Camps, Total War, State Secrets or Intrusive Surveillance after history: every_decentralized_country in extra_history.txt didn't reach it; error.log's retention lines name them)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK OK decentralized_law_baseline (no decentralized nation holds any of the five placeholder laws after history: the history baseline reached them)"
+			}
+		}
+	}
+}

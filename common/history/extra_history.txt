@@ -65,6 +65,36 @@ GLOBAL = {
 		# overrides and starting scores follow in the country blocks.
 		te_jud_assign_court_by_rule = yes
 	}
+	# Decentralized nations take the same baseline. every_country's laws above
+	# never reached them, so each kept the first law the engine gives every
+	# group, and five of those are barred to them: Violent Hostility, Penal
+	# Labor Camps, Total War, State Secrets and Intrusive Surveillance (all
+	# 158 in a new game's 1837 save, 2026-11-05). They take no events and no
+	# monthly pulse, so the law sweep (te_fix_inconsistent_laws) never mends
+	# them later. The unconditional lines only; test_history_law_baseline.py
+	# keeps the two lists the same. Self-check:
+	# te_decentralized_laws_selfcheck_on_actions.txt.
+	every_decentralized_country = {
+		activate_law = law_type:law_partible
+		activate_law = law_type:law_minority_rights_discrimination
+		activate_law = law_type:law_minimal_privacy_protection
+		activate_law = law_type:law_traditional_rules_of_war
+		activate_law = law_type:law_informal_government_secrecy
+		activate_law = law_type:law_guilds_chartered_monopolies
+		activate_law = law_type:law_local_vernacular
+		activate_law = law_type:law_active_persecution
+		activate_law = law_type:law_punishment_focused_criminal_justice
+		activate_law = law_type:law_no_ip_protection
+		activate_law = law_type:law_commodity_money
+		activate_law = law_type:law_traditional_family_structure
+		activate_law = law_type:law_no_augmentation
+		activate_law = law_type:law_unrestricted_automation
+		activate_law = law_type:law_natural_form
+		activate_law = law_type:law_no_internet_policy
+		activate_law = law_type:law_no_frontier_ai_policy
+		activate_law = law_type:law_traditional_heredity
+		activate_law = law_type:law_unregulated_banking
+	}
 	# Only the Great Powers had Western-style ministerial bureaucracies of meaningful
 	# scale by 1836. Smaller recognized states had foreign/war ministers but with
 	# minimal staff (a handful of clerks). UK's War Office is fragmented at this

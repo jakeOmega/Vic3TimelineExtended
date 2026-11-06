@@ -48,6 +48,13 @@ or Spanish game.
   Britain, France and Baden hold Interventionism, not Agrarianism. The north German states (Saxony, Brunswick,
   Hamburg) keep Civic Monolingualism. The first 1.15 game had 36 countries on No Schools and 46 on Agrarianism from
   the law sweep running mid-history.
+- **Decentralized nations' starting laws** (2026-11-05): `debug.log` has `TE_SELF_CHECK OK decentralized_law_baseline`,
+  and `error.log` has no `is not permitted to retain law` line for Violent Hostility, Penal Labor Camps, Total War,
+  State Secrets or Intrusive Surveillance (the first new game after #1408 had 146–158 of each, every one a
+  decentralized nation). In a save, a decentralized nation such as Patagonia holds Discrimination, Punishment-Focused
+  Criminal Justice, Traditional Rules of War, Informal Government Secrecy and Minimal Privacy Protection. BROKEN: the
+  `every_decentralized_country` block in `extra_history.txt` doesn't reach them in history either; the fallback is
+  declaring each group's tech-free law first, which reorders the law panel (owner's call).
 
 **Journal entries** (`docs/audits/vanilla_1_15_migration.md` § 3)
 - Every mod entry's panel opens and lists its outcomes with headers, colors and effect previews; when one concludes,
