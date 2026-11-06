@@ -1327,7 +1327,7 @@ Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_cou
 
 What `NOT = { A B }` means is untested. The evidence leans to NAND, "not (A and B)": the engine doc says only "negates content of trigger", and seven of vanilla's eight "# Monarchs cannot be republicans" clauses in `01_character_ideologies.txt` write `NAND`, while Radical's writes a multi-child `NOT` under the same comment, so vanilla's authors use the two interchangeably (Radical's pre-ACW "Invalid for pre-ACW USA whilst Jacksonian Democrats are relevant" block reads the same way). Against it, `00_devout.txt` lists the two `lawgroup_church_and_state` laws `law_total_separation` and `law_state_atheism` in one `NOT`, which is vacuous as NAND. So write `NOR = { }` for "none of these" and `NAND = { }` for "not all of these"; both mean the same under either reading. The exception is a verbatim, test-pinned copy of a vanilla trigger, such as the Radical copy in `heir_education_triggers.txt`: it must say what its source says. To settle the question, fire `event te_debug_engine.1` from the console (`events/te_debug_engine_events.txt`): its `TE_PROBE_ENGINE not_multi=` line reads `NOT = { always = yes always = no }`, which passes if `NOT` is NAND and fails if it is NOR.
 
-**A multi-child `NOT` reads every child, so a guard inside one protects nothing (2026-10-18).** The seabed lease start's `NOT = { has_variable = te_seabed_lease_n_<b>  var:te_seabed_lease_n_<b> > 0 }` logged `Failed to fetch variable` on a first lease, where `has_variable` was false. A NAND that stops at its first false child would never have read the variable. That rules out only that one reading: NOR (an OR that stops at its first true child) and a NAND that reads every child both fit. Whether `NAND` and `NOR` stop early is untested too. So a guard and the read it guards never share a `NOT`, `NAND` or `NOR`. Write `trigger_if = { limit = { has_variable = X } NOT = { var:X > 0 } }`, which passes when X is unset and means the same under every reading. That seabed check and `gm_state_split_whole`'s pass count were both written as "not (set and over)". As NOR they would turn away a kept 0 (a re-lease from the same lessor would wait for the next sharing) or a count of 1. Both now use that `trigger_if`. The same console event's second part tests the short-circuits. Each `AND`/`OR`/`NAND`/`NOR`/`NOT` probe reads its own unset `te_dbg_eng_unset_<block>`, so error.log names every block that read past the child that settles it by variable, not by its unreliable line number.
+**A multi-child `NOT` reads every child, so a guard inside one protects nothing (2026-10-18).** The seabed lease start's `NOT = { has_variable = te_seabed_lease_n_<b>  var:te_seabed_lease_n_<b> > 0 }` logged `Failed to fetch variable` on a first lease, where `has_variable` was false. A NAND that stops at its first false child would never have read the variable. That rules out only that one reading: NOR (an OR that stops at its first true child) and a NAND that reads every child both fit. Whether `NAND` and `NOR` stop early is untested too. So a guard and the read it guards never share a `NOT`, `NAND` or `NOR`. Nor an `AND`, in a journal entry's `possible` or outcome at least: `gm_arch_country_has_any`'s `AND = { has_variable = X  var:X > 0 }` under an `OR` logged `Failed to fetch variable` 1,104 times in sixteen minutes (2026-11-05, issue #1418), probably from the panel's tooltip, which lists every child. Write `trigger_if = { limit = { has_variable = X } NOT = { var:X > 0 } }`, which passes when X is unset and means the same under every reading. That seabed check and `gm_state_split_whole`'s pass count were both written as "not (set and over)". As NOR they would turn away a kept 0 (a re-lease from the same lessor would wait for the next sharing) or a count of 1. Both now use that `trigger_if`. The same console event's second part tests the short-circuits. Each `AND`/`OR`/`NAND`/`NOR`/`NOT` probe reads its own unset `te_dbg_eng_unset_<block>`, so error.log names every block that read past the child that settles it by variable, not by its unreliable line number.
 
 ## Building Group Trigger Name
 
@@ -5414,17 +5414,27 @@ When a generator numbers its rows by position (Solar System Colonization's `gen_
 1.15's `map_color`, `map_color_second` (stripes) and `map_tooltip` on a journal entry run with **the state being painted
 as root**, once per state in the world. So `owner` is that state's country, not the player or the entry's owner: a map of
 the player's data, or a map whose look the player picks, needs a read every state can make. A global variable always
-works (and one player sets it for all); `scope:journal_entry` does not resolve there, nor its owner (the Map Room's scope
-probe painted blue, 2026-11-05). `map_color` takes `if` / `else_if` and inline factor blocks
+works (and one player sets it for all); `scope:journal_entry` does not resolve there, nor its owner, on a country entry
+or a contextless one (the scope probe painted blue twice, 2026-11-05). `map_color_second` stripes through the state's
+`owner` (vanilla's Great Game), but drew nothing under `owner ?= { is_player = yes }`, so `is_player` most likely
+doesn't resolve in the paint either. `map_color` takes `if` / `else_if` and inline factor blocks
 (`factor = { value = this.turmoil multiply = 2 }`, vanilla's Forest of Bayonets); a branch that matches nothing leaves
 the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`. No `.gui` switches the map on: vanilla's
 `mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. An entry
 with all three blocks loads with no log line, and so does a copy of vanilla's journal map mode with `is_visible = yes`.
 Seen in game on 2026-11-05:
 
-- **The map shows while the page is open** and goes when it closes. `map_color` is re-evaluated as the game runs, and a
-  pick shows at the next tick (paused, at unpause). `SetTempMapModeByKey` on vanilla's journal map mode paints nothing.
-  Read stored variables only, never walk pops.
+- **The map shows while the page is open, and only then.** It goes when the page closes; the lens toolbar's lock
+  doesn't keep it; a copy of vanilla's journal map mode listed in the dropdown paints nothing with no page open (and the
+  open page's map otherwise); `SetTempMapModeByKey` on it paints nothing; and a vanilla tab showing the entry's
+  content through `GetPlayerJournalEntry` (Banking's) doesn't trigger it. So a system shown in a tab needs a button
+  that opens its page.
+- **It repaints as the game runs, or when the page opens again.** `map_color` is re-evaluated each tick, so a changed
+  value shows at the next one; paused, reopening the page shows it at once. Read stored variables only, never walk
+  pops. Land no branch paints draws dark grey; water keeps its look.
+- **An inactive entry's page opens and paints.** A button holding `GetPlayerJournalEntry('<key>')` opens the inactive
+  copy every country holds of an entry with activation triggers, and its map paints, so a map button needn't wait
+  for the entry to activate. That page listed a long run of countries under Involved Countries.
 - **A contextless entry nobody is involved in hosts a map best.** `context = none`, `should_be_involved` and
   `should_show_when_not_involved` both `always = no`, `is_shown_when_inactive = { always = yes }`: active from the
   game's start, in no journal, and a button opens its page at the first click.
