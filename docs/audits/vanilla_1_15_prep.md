@@ -569,7 +569,7 @@ Two different uses, both depending on C7.
 Not candidates: anything on a state, building or interest group (UN mission and relief state modifiers, `gm_local_*`, tourism, crowding, the inheritance and Demographics state lines, the reserve's building flows, IG sovereignty modifiers), and country modifiers with no entry behind them (construction cost, judiciary, inheritance, Standard of Living expectations, orbital debris, `sr_commercial_space_dividend`, which outlives the race).
 
 Convert with care:
-- `planning_treasury_pool_balance` subtracts its own previous contribution (`scripting_best_practices.md`, the `add_modifier` visibility gotcha). Re-evaluated continuously, it could feed back on itself.
+- ~~`planning_treasury_pool_balance` subtracts its own previous contribution (`scripting_best_practices.md`, the `add_modifier` visibility gotcha). Re-evaluated continuously, it could feed back on itself.~~ Out of date (2026-11-06): its multiplier, `ce_treasury_pool_balance_multiplier` (`extra_script_values.txt`), is `−investment_pool_net_income` with no subtraction, because the modifier's own key is not in that engine read.
 - The FX modifiers re-add only when the gap moves past a step (`te_monetary_fx_effects.txt:355-367`). A continuous value loses that dead band unless the value is rounded to the step.
 - Tiered sets (`bubble_inertia_moderate/high/extreme`, with and without `_coop`) choose *which* modifier by threshold. They become one scaling modifier each, at 0 when out of band, or stay as they are.
 - A modifier that is only sometimes on needs `value = 0` when off, which works only if 0 hides it (C7).
