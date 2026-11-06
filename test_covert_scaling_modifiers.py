@@ -50,15 +50,18 @@ def _declarations():
     entry = next(n for n in nodes if n.key == "je_covert_warfare")
     out = {}
     for block in (c for c in entry.children if c.key == "scaling_modifiers_while_active"):
-        fields = {c.key: c.value for c in block.children}
-        out.setdefault(fields.get("modifier"), []).append(fields.get("value"))
+        fields = {c.key: c for c in block.children}
+        value = fields.get("value")
+        # Written as vanilla does, an inline block: value = { value = <name> }.
+        inner = [c.value for c in value.children if c.key == "value"] if value is not None and value.children else []
+        out.setdefault(fields.get("modifier").value, []).append(inner[0] if len(inner) == 1 else None)
     return out
 
 
 class DeclarationTests(unittest.TestCase):
     def _assert_declared(self, modifier):
         self.assertEqual(_declarations().get(modifier), [KEYS[modifier]],
-                         "%s: one declaration, value %s, called bare" % (modifier, KEYS[modifier]))
+                         "%s: one declaration, value { value = %s }" % (modifier, KEYS[modifier]))
 
     def test_the_entry_declares_exactly_the_five(self):
         self.assertEqual({k: v[0] for k, v in _declarations().items()}, KEYS)

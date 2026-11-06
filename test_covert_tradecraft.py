@@ -200,7 +200,7 @@ class MonthlyTests(unittest.TestCase):
         # tier as its value; the engine re-reads it about every four days.
         self.assertRegex(entry_text(_text(JE), "je_covert_warfare"),
                          r"scaling_modifiers_while_active = \{\s*modifier = iw_tradecraft_bonus"
-                         r"\s*value = covert_tradecraft_bonus_mult\s*\}")
+                         r"\s*value = \{ value = covert_tradecraft_bonus_mult \}\s*\}")
         loc = _all_loc()
         self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus:0 ")
         self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus_desc:0 ")

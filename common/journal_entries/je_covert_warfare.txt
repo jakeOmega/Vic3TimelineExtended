@@ -83,27 +83,27 @@ je_covert_warfare = {
 	# Defense from intelligence capacity (off below 1 total capacity).
 	scaling_modifiers_while_active = {
 		modifier = intelligence_capacity_defense
-		value = intelligence_capacity_modifier_mult
+		value = { value = intelligence_capacity_modifier_mult }
 	}
 	# Each unused operation slot redirected to domestic intelligence.
 	scaling_modifiers_while_active = {
 		modifier = iw_domestic_defense
-		value = covert_operations_available_slots
+		value = { value = covert_operations_available_slots }
 	}
 	# Counterintelligence from funding: funding level − 1, from level 2.
 	scaling_modifiers_while_active = {
 		modifier = iw_funding_defense
-		value = covert_ops_funding_ci_mult
+		value = { value = covert_ops_funding_ci_mult }
 	}
 	# The weekly expense, GDP-scaled; 0 at funding 0.
 	scaling_modifiers_while_active = {
 		modifier = covert_operation_funding_cost
-		value = covert_operation_cost_mult
+		value = { value = covert_operation_cost_mult }
 	}
 	# Tradecraft: one stack per tier above Untested.
 	scaling_modifiers_while_active = {
 		modifier = iw_tradecraft_bonus
-		value = covert_tradecraft_bonus_mult
+		value = { value = covert_tradecraft_bonus_mult }
 	}
 
 	immediate = {

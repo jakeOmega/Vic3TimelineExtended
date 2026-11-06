@@ -2550,7 +2550,7 @@ class TestProgrammeFunding(unittest.TestCase):
 
     def test_funding_is_declared_from_the_guarded_cost(self):
         value = scaling_declarations(strip_comments(read(JE)))["nuclear_weapon_program_funding"]
-        self.assertEqual(value, ["value = nuclear_program_display_weekly_cost"])
+        self.assertEqual(value, ["value = { value = nuclear_program_display_weekly_cost }"])
         values = strip_comments(read(EXTRA_VALUES))
         self.assertIn("value = nuclear_program_display_funding", block(values, "nuclear_program_display_weekly_cost"))
         self.assertIn("has_variable = nuclear_weapons_program_funding", block(values, "nuclear_program_display_funding"))

@@ -449,7 +449,7 @@ class TestPossession(unittest.TestCase):
         # Vanilla 1.15: the entry declares it with the live burden (country
         # root, O(1), 0 unarmed or below the floor); no pulse adds or caches it.
         declared = scaling_declarations(strip_comments(read(JE)))
-        self.assertEqual(declared["nd_taboo_possession_cost"], ["value = nd_taboo_burden_value"])
+        self.assertEqual(declared["nd_taboo_possession_cost"], ["value = { value = nd_taboo_burden_value }"])
         self.assertNotIn("nd_taboo_refresh_possession", self.effects)
         self.assertNotIn("nd_taboo_burden_cached", self.effects)
         self.assertIn("nd_taboo_country_monthly = yes", block(strip_comments(read(JE)), "on_monthly_pulse"))

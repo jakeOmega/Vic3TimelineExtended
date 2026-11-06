@@ -135,7 +135,7 @@ je_nuclear_program = {
 	# variable).
 	scaling_modifiers_while_active = {
 		modifier = nuclear_weapon_program_funding
-		value = nuclear_program_display_weekly_cost
+		value = { value = nuclear_program_display_weekly_cost }
 	}
 	# The arsenal's upkeep in money: the cached weekly figure the panel shows,
 	# refreshed by nd_apply_posture_modifiers (monthly and on every posture
@@ -157,7 +157,7 @@ je_nuclear_program = {
 	# taboo of 40). Live: it reads the stockpile and the world's taboo score.
 	scaling_modifiers_while_active = {
 		modifier = nd_taboo_possession_cost
-		value = nd_taboo_burden_value
+		value = { value = nd_taboo_burden_value }
 	}
 	# The posture: one doctrine modifier, and one readiness modifier at
 	# Heightened or High Alert (Recessed and Routine carry none).
