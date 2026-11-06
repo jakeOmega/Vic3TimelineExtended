@@ -149,7 +149,10 @@ or Spanish game.
   renegotiable, so a copy carried over from the old treaty is locked and doesn't seize or disband a second time.
 - The six one-off articles (Disband and Seize Company, Return Cultural Property, Surrender a Monument, Cede Colony,
   the population transfer) carry `is_one_time` (#1407): an AI that received mostly one-offs withdraws once the
-  binding period ends, so it stops paying their upkeep.
+  binding period ends, so it stops paying their upkeep. No vanilla article is both one-time and enforceable, and
+  these six are. Watch an AI that won a war on mostly one-offs plus Forced Disarmament or a demilitarized zone: if it
+  withdraws when the binding period ends, the restriction lifts with it. The loser could leave then anyway (neither
+  article has a `can_withdraw`), so this matters only where the loser would have stayed.
 - Forced Disarmament: the conceding country can't queue a warship (vanilla's "cannot construct military ships" reason
   names the article), and can still build supply ships. A demilitarized zone's state shows "Disallow Barracks
   Construction" (#1407).
