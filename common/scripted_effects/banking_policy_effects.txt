@@ -447,10 +447,16 @@ banking_effect_ce_disable_coordination_protocol = {
 	je:je_banking_cycle = { remove_modifier = planning_coordination_protocol }
 }
 
+# Each transfer rebalances the treasury-pool line at once: the cache the entry
+# declares planning_treasury_pool_balance from (banking_cycle_update_ce_pool_balance),
+# previewed here as the entry will declare it.
 banking_effect_ce_invest_pool_inject = {
 	te_history_record_banking_marker = { MARK = act_ce_invest_pool_inject }
 	add_treasury = ce_pool_inject_treasury_cost
 	add_investment_pool = ce_pool_transfer_amount
+	show_as_tooltip = {
+		add_modifier = { name = planning_treasury_pool_balance multiplier = ce_treasury_pool_balance_multiplier }
+	}
 	banking_cycle_update_ce_pool_balance = yes
 }
 
@@ -458,6 +464,9 @@ banking_effect_ce_invest_pool_withdraw = {
 	te_history_record_banking_marker = { MARK = act_ce_invest_pool_withdraw }
 	add_investment_pool = ce_pool_withdraw_pool_cost
 	add_treasury = ce_pool_withdraw_amount
+	show_as_tooltip = {
+		add_modifier = { name = planning_treasury_pool_balance multiplier = ce_treasury_pool_balance_multiplier }
+	}
 	banking_cycle_update_ce_pool_balance = yes
 }
 
@@ -579,7 +588,12 @@ banking_effect_cb_disable_restrict_inflows = {
 banking_effect_cb_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = on_cb_sterilize_inflows }
 	je:je_banking_cycle = { add_modifier = { name = banking_sterilize_inflows } }
-	# The bill is a weekly expense from now (banking_external_charge_sterilization).
+	# The bill is a weekly expense from now: the entry declares it from the
+	# cache banking_external_charge_sterilization writes (its header), so the
+	# tooltip previews it.
+	show_as_tooltip = {
+		add_modifier = { name = banking_external_sterilization_charge multiplier = banking_external_sterilization_weekly_charge }
+	}
 	banking_external_charge_sterilization = yes
 	set_variable = { name = banking_external_sterilization_funded value = 1 }
 	custom_tooltip = banking_nonmod_sterilize_inflows_tt
@@ -587,7 +601,7 @@ banking_effect_cb_sterilize_inflows = {
 banking_effect_cb_disable_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
 	je:je_banking_cycle = { remove_modifier = banking_sterilize_inflows }
-	je:je_banking_cycle ?= { remove_modifier_if_exists_effect = { MODIFIER = banking_external_sterilization_charge } }
+	set_variable = { name = banking_external_sterilization_charge_cached value = 0 }
 	set_variable = { name = banking_external_sterilization_funded value = 0 }
 }
 
@@ -616,13 +630,17 @@ banking_effect_cb_disable_fx_surrender = {
 banking_effect_cb_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_import_financing }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_import_financing } }
-	# The bill is a weekly expense from now (banking_external_charge_import).
+	# The bill is a weekly expense from now (banking_external_charge_import),
+	# previewed as the entry will declare it.
+	show_as_tooltip = {
+		add_modifier = { name = banking_external_import_charge multiplier = banking_external_import_weekly_charge }
+	}
 	banking_external_charge_import = yes
 	custom_tooltip = banking_nonmod_emergency_import_financing_tt
 }
 banking_effect_cb_disable_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = off_cb_emergency_import_financing }
 	je:je_banking_cycle = { remove_modifier = banking_emergency_import_financing }
-	je:je_banking_cycle ?= { remove_modifier_if_exists_effect = { MODIFIER = banking_external_import_charge } }
+	set_variable = { name = banking_external_import_charge_cached value = 0 }
 	custom_tooltip = banking_nonmod_emergency_import_financing_off_tt
 }
