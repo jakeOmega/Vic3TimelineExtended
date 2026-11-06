@@ -6261,7 +6261,7 @@
  },
  "je_un_conv_name_space": {
   "en": "International Space Cooperation",
-  "de": "Internationale Raumfahrtkooperation"
+  "de": "Internationale Weltraumkooperation"
  },
  "je_un_dev_fund_avg_label": {
   "en": "Members' average (GDP per head)",
@@ -7117,7 +7117,7 @@
  },
  "je_un_ov_agency_unoosa_tt": {
   "en": "#b UNOOSA#!: outer space affairs, for International Space Cooperation[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' )]\\n\\n$je_un_terms_space$",
-  "de": "#b UNOOSA#!: Weltraumangelegenheiten, für die Internationale Raumfahrtkooperation[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' )]\\n\\n$je_un_terms_space$"
+  "de": "#b UNOOSA#!: Weltraumangelegenheiten, für die Internationale Weltraumkooperation[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_unoosa'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' )]\\n\\n$je_un_terms_space$"
  },
  "je_un_ov_agency_who_tt": {
   "en": "#b WHO#!: World Health Organization, for the Global Pandemic Response[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_who'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' )]\\n\\n$je_un_terms_pandemic$",
