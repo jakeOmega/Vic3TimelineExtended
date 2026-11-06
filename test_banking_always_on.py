@@ -413,7 +413,9 @@ class SafetyNetTest(unittest.TestCase):
         self.assertIn(_norm("on_yearly_pulse_country = { on_actions = { te_banking_entry_selfcheck } }"), _norm(text))
         self.assertIn(_norm("on_monthly_pulse_country = { on_actions = { te_banking_entry_net } }"), _norm(text))
         net = _norm(_top_block(text, "te_banking_entry_net"))
-        self.assertIn("limit = { te_banking_entry_expected = yes NOT = { has_journal_entry = je_banking_cycle } } "
+        # No record at all: not over an inactive copy, which refuses the add (#1416).
+        self.assertIn("limit = { te_banking_entry_expected = yes NOT = { has_journal_entry = je_banking_cycle } "
+                      "NOT = { has_inactive_journal_entry = je_banking_cycle } } "
                       "add_journal_entry = { type = je_banking_cycle }", net)
         self.assertIn("change_global_variable = { name = te_banking_entry_net_added add = 1 }", net)
 
@@ -428,8 +430,11 @@ class SafetyNetTest(unittest.TestCase):
         # would otherwise hide an engine that left records out.
         self.assertIn("te_banking_entry_missing_count < 1 te_banking_entry_net_added_g < 1", _norm(event))
         self.assertIn("banking_entry_everywhere", _read(PLAYTEST))
-        # BROKEN names the countries still missing, one line each.
-        self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting]", event)
+        # BROKEN names the countries still missing, one line each, and whether
+        # each holds an inactive copy (the net leaves it) or no record (it adds).
+        for record in ("inactive", "none"):
+            self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] "
+                          f"record={record}", event)
 
 
 if __name__ == "__main__":

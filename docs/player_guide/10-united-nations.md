@@ -988,7 +988,8 @@ or if its host or state is gone. A mission has no time
 limit: one that is not done goes on for as long as it keeps contributors, so a
 member that keeps paying for its contingent can keep it in the field. Time
 works on the AI instead, which grows less willing to send a contingent to a
-mission the longer it has run. Success adds delivery and gives each
+mission the longer it has run, and is much less willing to send one to a
+peacekeeping or Stabilization mission its army can't reach. Success adds delivery and gives each
 contributor 3 standing and 15 relations with the host; failure takes
 delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.

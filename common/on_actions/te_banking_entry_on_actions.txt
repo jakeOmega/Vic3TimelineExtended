@@ -10,10 +10,19 @@
 # unread, so:
 #
 #   te_banking_entry_net       each country's monthly pulse adds the entry to a
-#                              country that should hold it and doesn't
-#                              (te_banking_entry_expected), counts the adds in
+#                              country that should hold it
+#                              (te_banking_entry_expected) and holds no record
+#                              of it, active or inactive, counts the adds in
 #                              te_banking_entry_net_added and logs each by
-#                              name. Monthly, not yearly, since 2026-10-17: the
+#                              name. Not while an inactive copy waits:
+#                              add_journal_entry is refused then, with an
+#                              error ("already has a journal entry of type",
+#                              scripting_best_practices.md, the
+#                              has_journal_entry bullet), and the engine
+#                              activates that copy itself
+#                              (test_add_journal_entry_guard.py holds every
+#                              add to that guard, #1416).
+#                              Monthly, not yearly, since 2026-10-17: the
 #                              owner's EU game read BROKEN missing=3
 #                              added_by_net=0, so the engine does leave records
 #                              out, and on a yearly net those countries waited
@@ -64,6 +73,7 @@ te_banking_entry_net = {
 			limit = {
 				te_banking_entry_expected = yes
 				NOT = { has_journal_entry = je_banking_cycle }
+				NOT = { has_inactive_journal_entry = je_banking_cycle }
 			}
 			add_journal_entry = { type = je_banking_cycle }
 			debug_log = "TE_BANKING: the safety net added je_banking_cycle to [THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"

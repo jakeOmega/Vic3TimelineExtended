@@ -645,6 +645,20 @@ included, from 5 levels to 9.
 | Ministry of Religion | Mass Media | State Religion (or a variant) or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
 | Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more; +0.15 UN Authority Target a level (see [What counts toward Policy](10-united-nations.md#what-counts-toward-policy)) |
 
+Five ministries take another name where it fits. The Ministry of War becomes
+the Ministry of Defense once you have Combined Arms, and a Department of War or
+of Defense in a presidential republic. The National Bank is a State Bank under
+State-Owned Banking, and otherwise the Bank of England, the Bank of France, the
+Bank of Japan, or in America the Bank of the United States (the Federal Reserve
+from 1913). Labor, Intelligence and Security, and Propaganda follow the form of
+government: a council republic has a People's Commissariat of Labor, a
+Committee for State Security and a Department of Agitation and Propaganda; a
+corporate state a Ministry of Corporations, a Directorate of State Security and
+a Ministry of Popular Culture; a presidential republic a Department of Labor
+and a National Intelligence Agency. Propaganda is the Ministry of Guidance in a
+theocracy and the Ministry of Information in a parliamentary or presidential
+republic. The laws keep their names.
+
 The Environmental Movement radicalizes while your Ministry of the Environment is
 missing or funded below its cap, and the Anti-War Movement does the same over
 the foreign affairs, international aid and refugee ministries (see [New

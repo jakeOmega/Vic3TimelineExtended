@@ -1634,13 +1634,9 @@ war_propaganda_support_script_value = {
 # version that lived here previously was silently dropped by the engine's
 # "Duplicated key" rule -- caught by mod_structure_audit).
 
-global_gdp_per_capita = {
-	value = global_gdp_script_value
-	divide = {
-		value = global_population
-		min = 1
-	}
-}
+# global_gdp_per_capita (world GDP over world population) was deleted in
+# 1.15: nothing read it, and vanilla's global_average_gdp_per_capita event
+# target (the average over playable countries) now covers it (#1445).
 
 curr_year = {
 	value = year

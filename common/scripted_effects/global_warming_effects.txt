@@ -647,3 +647,101 @@ gw_aerosol_clear_mask_effect = {
 		remove_global_variable = gw_g_aerosol_target
 	}
 }
+
+# ---- The World Climate entry (je_world_climate.txt, #1448) -----------------
+
+# The entry's monthly pulse (scope:journal_entry is the entry). Involves any
+# country should_be_involved missed: whether the engine re-checks it for a
+# country created after activation (a revolution's winner, a release, a
+# formable) is unprobed, and the entry is what carries Climate Warming to a
+# country. Vanilla je_global_test's fallback. Logs the first country it adds
+# once a game, the answer to that question (vanilla-1-15-playtest.md).
+gw_world_climate_involve_missing_effect = {
+	every_country = {
+		limit = {
+			NOT = { is_involved_in_journal_entry = je_world_climate }
+		}
+		save_temporary_scope_as = gw_wc_missing
+		scope:journal_entry = {
+			add_involved_country = scope:gw_wc_missing
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gw_wc_fallback_logged } }
+			set_global_variable = gw_wc_fallback_logged
+			debug_log = "TE_GW_WORLD fallback_involved country=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (should_be_involved had not involved it: the engine doesn't re-check it for a country created after activation, or is_involved_in_journal_entry misreads a contextless entry; see TE_SELF_CHECK gw_world_climate)"
+		}
+	}
+}
+
+# TEMPORARY self-check (#1448): does the World Climate entry's declaration
+# reach a country? Global scope, from global_warming_events_on_action, under
+# the Global Warming rule. Once the world has been at 0.1 C or more for two
+# monthly pulses (the entry activates at 0.1 C, at the engine's own check)
+# and is at 0.5 C or more, the largest economy's capital should read
+# state_harvest_condition_wildfire_duration_mult at 0.5 per degree, a field
+# only Climate Warming sets (vanilla and the mod; the floor allows a fifth
+# for the declaration's few days' lag), and the country should be involved
+# in the entry (is_involved_in_journal_entry, which gw_warming_felt reads).
+#   OK      both hold.
+#   BROKEN  reading below the floor (about 0: the declaration doesn't reach
+#           involved countries, or the entry never activated), or involved=0
+#           (the recurring climate events, gated on gw_warming_felt, have
+#           stopped). Fallback: the declaration back on je_global_warming and
+#           gw_warming_felt back on `has_journal_entry = je_global_warming`
+#           (the parent of #1448's commit).
+# Delete this effect, its call and gw_wc_chk_*_g once it reads OK in a game.
+gw_world_climate_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gw_wc_selfcheck_done }
+			temperature_anomaly_display >= 0.1
+		}
+		if = {
+			limit = { has_global_variable = gw_wc_chk_months }
+			change_global_variable = { name = gw_wc_chk_months add = 1 }
+		}
+		else = {
+			set_global_variable = { name = gw_wc_chk_months value = 1 }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = gw_wc_selfcheck_done }
+			has_global_variable = gw_wc_chk_months
+			global_var:gw_wc_chk_months >= 3
+			temperature_anomaly_display >= 0.5
+		}
+		ordered_country = {
+			limit = {
+				exists = capital
+				NOT = { is_country_type = decentralized }
+			}
+			order_by = gdp
+			max = 1
+			set_global_variable = gw_wc_selfcheck_done
+			set_global_variable = { name = gw_wc_chk_expected value = gw_wc_selfcheck_expected }
+			capital = {
+				set_global_variable = { name = gw_wc_chk_reading value = modifier:state_harvest_condition_wildfire_duration_mult }
+			}
+			if = {
+				limit = { is_involved_in_journal_entry = je_world_climate }
+				set_global_variable = { name = gw_wc_chk_involved value = 1 }
+			}
+			else = {
+				set_global_variable = { name = gw_wc_chk_involved value = 0 }
+			}
+			if = {
+				limit = {
+					is_involved_in_journal_entry = je_world_climate
+					capital = {
+						modifier:state_harvest_condition_wildfire_duration_mult >= gw_wc_selfcheck_floor
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK gw_world_climate (the World Climate entry's Climate Warming reaches the largest economy, country=[THIS.GetCountry.GetNameNoFormatting]: its capital reads wildfire_duration=[SCOPE.ScriptValue('gw_wc_chk_reading_g')|2] against expected=[SCOPE.ScriptValue('gw_wc_chk_expected_g')|2], involved=[SCOPE.ScriptValue('gw_wc_chk_involved_g')|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN gw_world_climate (country=[THIS.GetCountry.GetNameNoFormatting]: its capital reads wildfire_duration=[SCOPE.ScriptValue('gw_wc_chk_reading_g')|2] against expected=[SCOPE.ScriptValue('gw_wc_chk_expected_g')|2], involved=[SCOPE.ScriptValue('gw_wc_chk_involved_g')|0]. A reading near 0 means the contextless entry's declaration doesn't reach involved countries or the entry never activated; involved=0 means is_involved_in_journal_entry misreads it and the recurring climate events have stopped. Fallback: the declaration back on je_global_warming; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+	}
+}

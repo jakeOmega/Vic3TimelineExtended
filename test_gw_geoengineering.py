@@ -23,6 +23,7 @@ TRIGGERS = "common/scripted_triggers/global_warming_triggers.txt"
 MODIFIERS = "common/static_modifiers/extra_modifiers.txt"
 EXTRA_VALUES = "common/script_values/extra_script_values.txt"
 JE = "common/journal_entries/je_global_warming.txt"
+WORLD_JE = "common/journal_entries/je_world_climate.txt"
 ON_ACTIONS = "common/on_actions/extra_on_actions.txt"
 EVENTS = "events/environmentalism_events.txt"
 
@@ -44,9 +45,10 @@ def _round(x):
     return math.floor(x + 0.5)
 
 
-def _declared():
-    """modifier -> value for each scaling_modifiers_while_active block on je_global_warming (#1404)."""
-    entry = load(JE)["je_global_warming"]
+def _declared(path=JE, key="je_global_warming"):
+    """modifier -> value for each scaling_modifiers_while_active block on je_global_warming (#1404), or on
+    another entry."""
+    entry = load(path)[key]
     blocks = entry["scaling_modifiers_while_active"]
     return {d["modifier"]: d["value"] for d in (blocks if isinstance(blocks, list) else [blocks])}
 
@@ -133,15 +135,19 @@ class MaskedTemperatureTest(unittest.TestCase):
 
     def test_the_harms_read_the_felt_anomaly(self):
         """Climate Warming is a scaling modifier at the felt anomaly, floored at 0: with no mask the reading
-        can go negative, and a negative value would invert every harm."""
-        self.assertEqual(_declared()["global_warming"], {"value": "temperature_anomaly_display", "min": "0"})
+        can go negative, and a negative value would invert every harm. The contextless World Climate entry
+        declares it for every country (#1448), and the per-country entry no longer does."""
+        self.assertEqual(_declared(WORLD_JE, "je_world_climate")["global_warming"],
+                         {"value": "temperature_anomaly_display", "min": "0"})
+        self.assertNotIn("global_warming", _declared())
         self.assertIn("temperature_anomaly_display >= $THRESHOLD$", _text("common/scripted_effects/extra_effects.txt"))
 
     def test_the_warming_readers_test_its_inputs(self):
         """has_modifier can't see a scaling modifier, so the recurring events and their monthly roll read
-        gw_warming_felt: the entry active (the declaration applies only then) and the anomaly at least the
-        0.01 C it is quantized to, where the declared value is above 0."""
-        self.assertRegex(_text(TRIGGERS), r"gw_warming_felt = \{\s*has_journal_entry = je_global_warming\s*"
+        gw_warming_felt: the country involved in the World Climate entry (the declaration reaches only an
+        involved country, #1448) and the anomaly at least the 0.01 C it is quantized to, where the declared
+        value is above 0."""
+        self.assertRegex(_text(TRIGGERS), r"gw_warming_felt = \{\s*is_involved_in_journal_entry = je_world_climate\s*"
                                           r"temperature_anomaly_display >= 0\.01\s*\}")
         events = load(EVENTS)
         for number in (5, 6, 8, 9, 10, 11, 13, 14, 15, 16):

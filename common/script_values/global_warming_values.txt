@@ -577,3 +577,21 @@ gw_country_emis_from_states = {
 		add = var:gw_state_emis
 	}
 }
+
+# ---- TEMPORARY: the World Climate self-check (#1448) -----------------------
+# gw_world_climate_selfcheck_effect (global_warming_effects.txt). Climate
+# Warming sets state_harvest_condition_wildfire_duration_mult at 0.5 a degree
+# of the felt anomaly (extra_modifiers.txt), and nothing else sets the field.
+# The floor takes a fifth off for the declaration's lag. Delete with the check.
+gw_wc_selfcheck_expected = {
+	value = temperature_anomaly_display
+	multiply = 0.5
+}
+gw_wc_selfcheck_floor = {
+	value = gw_wc_selfcheck_expected
+	multiply = 0.8
+}
+# debug_log can't see the effect's scopes: it reads the copies in globals.
+gw_wc_chk_reading_g = { value = global_var:gw_wc_chk_reading }
+gw_wc_chk_expected_g = { value = global_var:gw_wc_chk_expected }
+gw_wc_chk_involved_g = { value = global_var:gw_wc_chk_involved }

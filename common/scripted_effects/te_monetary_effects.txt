@@ -487,6 +487,13 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_board_wrong_stance }
 		te_mon_mod_strip = { NAME = te_mon_union_adopter }
 		te_mon_mod_strip = { NAME = te_mon_union_pressure }
+		# No _applied zeroing for these three either (#1427): step 9b re-adds the
+		# banking union and the reserve whenever te_mon_mod_has misses them (their
+		# _applied flags are rewritten every pulse, never read as a gate), and the
+		# seigniorage through te_monetary_apply_fx_one, which re-adds a missing one.
+		te_mon_mod_strip = { NAME = te_mon_union_banking_union }
+		te_mon_mod_strip = { NAME = te_mon_union_reserve }
+		te_mon_mod_strip = { NAME = te_mon_union_seigniorage }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }

@@ -5008,6 +5008,20 @@ decolonization_events.70 = {
 				trigger = { colonial_garrison_level_value >= 2 }
 				add = 2
 			}
+			# 1.15 (#1450): a colony our army can't realistically get to is a
+			# war fought by its garrison alone.
+			modifier = {
+				trigger = {
+					exists = scope:decol_iw_territory
+					NOT = {
+						has_military_reach = {
+							target = scope:decol_iw_territory
+							min_reach = te_reach_realistic
+						}
+					}
+				}
+				factor = 0.5
+			}
 			modifier = {
 				trigger = {
 					has_variable = decol_iw_running

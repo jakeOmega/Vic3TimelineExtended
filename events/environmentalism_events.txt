@@ -179,10 +179,12 @@ environmentalism_events.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Environmentalist IG leader gains ideology
+		# The Intelligentsia lean towards an Environmentalist leader next time
+		# they choose one (a leader-chance modifier, not a conversion; #1446)
 		ig:ig_intelligentsia ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_radicals = { value = medium_radicals }
@@ -238,15 +240,18 @@ environmentalism_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Convert both Intelligentsia and Trade Union leaders to environmentalists
+		# The Reckoning converts the Intelligentsia's sitting leader outright: the
+		# one instant flip kept (#1446), for the one-off 3 C threshold. The Trade
+		# Unions only lean towards an Environmentalist leader next time.
 		ig:ig_intelligentsia ?= {
 			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
 		ig:ig_trade_unions ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_radicals = { value = large_radicals }
@@ -577,7 +582,9 @@ environmentalism_events.8 = {
 				add = 3
 			}
 		}
-		# Embrace green policies - environmentalist momentum + IG leader conversion
+		# Embrace green policies - environmentalist momentum, and the Intelligentsia
+		# lean towards an Environmentalist leader (a recurring event, so no
+		# outright conversion; #1446)
 		add_modifier = {
 			name = environmentalist_momentum_modifier
 			days = long_modifier_time
@@ -592,8 +599,9 @@ environmentalism_events.8 = {
 			}
 		}
 		ig:ig_intelligentsia ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1143,11 +1151,14 @@ environmentalism_events.15 = {
 				add = 3
 			}
 		}
-		# Side with environmentalists - even the industrialists must concede at 3 C
+		# Side with environmentalists - even the industrialists must concede at 3 C,
+		# so the Industrialists lean towards an Environmentalist leader (a
+		# recurring event, and their sitting leader stays who they are; #1446)
 		# Comes with severe economic and political fallout
 		ig:ig_industrialists ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }

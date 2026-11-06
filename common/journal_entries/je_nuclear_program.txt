@@ -442,10 +442,13 @@ je_nuclear_program = {
 	# (nuclear_custody_effects.txt, 2026-09-26) both sides of a civil war hold
 	# their own stockpile and ledger record from the outbreak, so the merge
 	# hands the winner none of the loser's arsenal; the settlement moves it
-	# explicitly and its follow-up (nuclear_custody.2) adds this entry at once
-	# for a winner without one. An armed rebel has had its own entry since the
-	# outbreak. So `no` costs nothing: inheriting the loser's record would only
-	# re-run `immediate` on an entry the winner already has or is given.
+	# explicitly, and being armed activates this entry's inactive copy at the
+	# engine's next check, within two weeks (its follow-up, nuclear_custody.2,
+	# adds the entry only to a winner holding no record: over a copy the add is
+	# refused, #1416). An armed rebel has had its own entry since the
+	# outbreak's first fortnight. So `no` costs nothing: inheriting the
+	# loser's record would only re-run `immediate` on an entry the winner
+	# already has or is given.
 	# Progress toward the next warhead, which `immediate` zeroes, is carried
 	# over by nd_custody_restore_progress.
 	can_revolution_inherit = no

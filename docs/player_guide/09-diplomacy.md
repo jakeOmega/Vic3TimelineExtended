@@ -253,8 +253,9 @@ strategy.
 
 A country is a candidate for you when it shares one of your primary cultures,
 holds no homeland of a culture you lack, owns a homeland state of yours that you
-claim and where your people still live, and either borders you or has a coast
-while you have one too. You can't both be subjects of the same overlord.
+claim and where your people still live, and either borders you or is within
+your reach: an army of yours could get there by land or by a sea route to its
+coast. You can't both be subjects of the same overlord.
 
 Your government must also give the cause a voice: Ancestral Citizenship,
 Cultural Citizenship, Universal Citizenship or Council Republic, a governing
@@ -301,7 +302,7 @@ from a strong no and wants friendly relations, cultural ties or a powerful
 kinsman's protection before it accepts.
 
 Integrate Decentralized Power, also from Decolonization, absorbs a decentralized
-nation without consent, if it borders you or you both have a coast. Until
+nation without consent, if it borders you or is within your reach. Until
 Globalization it works only on your own peoples; after it, on any. The AI
 absorbs at most one such nation a year.
 
@@ -482,7 +483,7 @@ to every identity. It needs a Subjugation Strength of at least 1.0, which means
 roughly that your prestige is twenty times the target's: ten times if your bloc
 is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
-army five times the target's). Its infamy grows with the target's population, up
+army five times the target's that can get to it). Its infamy grows with the target's population, up
 to 25; a Sovereign Empire pays half as much, so it reaches that cap only against
 far more populous targets.
 
@@ -527,7 +528,10 @@ fascism, the African Empire as a monarchy, and a theocracy or technate
 otherwise. Some names follow the ruler's culture or the country that formed it:
 the Empire of the Great Qing for a China with a Manchu monarch, the Ottoman or
 Safavid Caliphate, or Pax Americana for a United Earth formed by the United
-States.
+States. For the base game's Country Names on Map rule, which labels countries
+by their formal names, India is the Union of India, Indonesia the State of
+Indonesia, China the State of China, Intermarium the Intermarium Federation and
+Dar-Al-Islam the Union of Dar-Al-Islam; the other unions keep their names.
 
 ### India, Indonesia and Operation Polo <!-- style: allow title-case-heading -->
 

@@ -33,10 +33,22 @@
 #             te_tax_relief_follow_owner, from on_state_owner_change: a state
 #             whose new owner's code did not name it loses its relief marks
 #             and leaves the naming country's list.
+#   LIGHT     The light code (te_tax_code_light_on) has its own branch of the
+#             outbreak and of the win (#1469). At the outbreak the rebels
+#             receive every light token of the original's
+#             (te_tax_light_copy_code), and the hidden te_tax_light.4 sets
+#             their tax level to the code's and syncs them the next day. While
+#             the war lasts the sync keeps their code as it keeps a player's,
+#             each tax moving with the level their AI sets
+#             (te_tax_light_ai_uniform), so a rebel winner holds the nation's
+#             rates. At the win the winner's sync (te_tax_light.3) re-adds the
+#             view bands.
 #
-# Everything is gated on te_tax_code_full, written positively. Nothing here
-# removes a schema token, reads ROOT or writes native fiscal state:
-# collection is te_tax_sync_collection's alone (te_tax_collection_effects.txt).
+# The legislated parts are gated on te_tax_code_full, the light parts on
+# te_tax_code_light_on, each written positively. Nothing here removes a schema
+# token, reads ROOT or writes native fiscal state: collection is
+# te_tax_sync_collection's alone (te_tax_collection_effects.txt), and under the
+# light code the tax level is written only by te_tax_light_effects.txt.
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -51,6 +63,10 @@
 # it fires before or after the engine has finished setting the rebels' laws is
 # unread; a taxation law the engine gives them later is replaced by the
 # carrier again (te_tax.5), since the copy has made them a migrated country.
+# The light code's branch copies the same way (te_tax_light_copy_code) and
+# raises te_tax_light.4 for the tax level and the first sync; a taxation law
+# the engine gives the rebels later is clamped by the sync, as a player's law
+# change is (te_tax_light.3 from on_law_activated).
 te_tax_on_uprising = {
 	if = {
 		limit = {
@@ -75,17 +91,52 @@ te_tax_on_uprising = {
 		}
 	}
 	else_if = {
-		# The light code: the rebels start from their own taxation law and tax
-		# level (a revived tag's marker from an earlier life is cleared first).
+		# The light code (#1469): the rebels receive the original's code, as
+		# under the legislated code, so a rebel winner continues the nation's
+		# rates rather than a fresh migration of the rebels' own.
 		limit = {
 			te_tax_code_light_on = yes
 			exists = scope:target
 		}
-		scope:target = {
-			set_variable = { name = te_tax_light_on value = 0 }
-			trigger_event = { id = te_tax_light.2 }
+		if = {
+			limit = { te_tax_light_in_force = yes }
+			save_scope_as = te_tax_source
+			scope:target = {
+				te_tax_light_copy_code = yes
+				# After the copy, which writes te_tax_light_on last: te_tax_light.4
+				# needs the code in force, and an event raised without days may run at once.
+				trigger_event = { id = te_tax_light.4 }
+			}
+		}
+		else = {
+			# The original has no code yet: the rebels migrate from their own
+			# taxation law and tax level (a revived tag's marker from an earlier
+			# life is cleared first).
+			scope:target = {
+				set_variable = { name = te_tax_light_on value = 0 }
+				trigger_event = { id = te_tax_light.2 }
+			}
 		}
 	}
+}
+
+# The uprising's scope; scope:te_tax_source = the original, whose light code is
+# in force (#1469). Every light token of the original's, through the generated
+# te_tax_light_gen_copy_code (docs/systems/tax_code_schema.md, "Light
+# variables"): each tax's rate index, relief steps and step, each group's
+# running reaction, its rounded size and its band, the scratch values, and the
+# law and the tax level the code was last carried into. A rebel country starts
+# with no mod variables, and a revived tag's tokens from an earlier life are
+# overwritten; te_tax_light_gen_init then backfills any token the original
+# lacked. te_tax_light_on = 1 last, as the migration writes it. No modifier
+# and no native state here: the relief and the reactions are je_tax_code's
+# declarations, which read the variables, and the rebels' tax level and view
+# bands are te_tax_light.4's (te_tax_light_adopt_copied_code).
+te_tax_light_copy_code = {
+	te_tax_light_gen_copy_code = yes
+	te_tax_light_gen_init = yes
+	debug_log = "TE_TAX light_uprising_copy the uprising received the light code of the country it rose against; wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] level=[SCOPE.ScriptValue('te_tax_view_light_level')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	set_variable = { name = te_tax_light_on value = 1 }
 }
 
 # The uprising's scope; scope:te_tax_source = the original. Every country token
@@ -247,7 +298,10 @@ te_tax_repair_after_civil_war = {
 		# The light code: the winner keeps its variables but no modifier, so the
 		# sync adds the view bands back from them. The relief and the reactions
 		# are je_tax_code's scaling modifiers, which read the variables
-		# themselves.
+		# themselves. Both sides held every light token from the outbreak
+		# (te_tax_light_copy_code), so the merge keeps the winner's own code
+		# whole: a rebel winner's is the nation's, moved only by the tax level
+		# and any taxation law the rebels took during the war (#1469).
 		limit = { te_tax_light_in_force = yes }
 		trigger_event = { id = te_tax_light.3 }
 	}

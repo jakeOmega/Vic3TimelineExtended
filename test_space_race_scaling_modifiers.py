@@ -174,11 +174,17 @@ class DeclarationShapeTest(unittest.TestCase):
                     self.assertEqual(gate["add"], value.format(m=m))
 
     def test_approaches_follow_their_variable(self):
+        """Solar colonization's entry stays open for its colonies after the
+        programme stops, so its approach also needs the programme billed (#1472);
+        the other entries close when their milestone stops running."""
         for m in MILESTONES:
             for modifier, var in APPROACHES.items():
                 with self.subTest(milestone=m, modifier=modifier):
                     gate = dict((k, v) for k, _, v in _value(m, modifier)[1][2])
-                    self.assertEqual(gate["limit"], [("has_variable", "=", var.format(m=m))])
+                    expected = [("has_variable", "=", var.format(m=m))]
+                    if m == "solar_colonization":
+                        expected.append((f"sr_milestone_billed_{m}", "=", "yes"))
+                    self.assertEqual(gate["limit"], expected)
                     self.assertEqual(gate["add"], "1")
 
     def test_choices_follow_their_variable_while_the_milestone_runs(self):
@@ -289,6 +295,17 @@ class FlatValueTest(unittest.TestCase):
                     with self.subTest(milestone=m, approach=approach, modifier=kind):
                         self.assertEqual(SCRIPT.evaluate(_value(m, f"sr_{kind}_approach"), ctx),
                                          1 if approach == kind else 0)
+
+    def test_an_idle_solar_programme_carries_no_approach(self):
+        """With its method off, the solar entry stays open for the colonies but
+        bills nothing, so its approach is off too (#1472)."""
+        m = "solar_colonization"
+        for kind in ("safe", "ambitious"):
+            with self.subTest(modifier=kind):
+                ctx = _billed_ctx(m, 1, 3, kind, billed=False)
+                self.assertEqual(SCRIPT.evaluate(_value(m, f"sr_{kind}_approach"), ctx), 0)
+                ctx = _billed_ctx(m, 1, 3, kind)
+                self.assertEqual(SCRIPT.evaluate(_value(m, f"sr_{kind}_approach"), ctx), 1)
 
     def test_a_choice_is_on_exactly_while_its_milestone_runs(self):
         for m, (_, choices) in CHOICES.items():

@@ -1,6 +1,24 @@
 ﻿institution_ministry_of_war = {
 	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds"
 	background_texture = "gfx/interface/illustrations/institutions/institution_ministry_of_war.dds"
+	# 1.15 dynamic_name (#1451): the Ministry of Defense once Combined Arms
+	# joins the services, a Department under a presidential republic.
+	dynamic_name = {
+		first_valid = {
+			triggered_desc = {
+				desc = institution_ministry_of_war_department_of_defense
+				trigger = { has_law = law_type:law_presidential_republic has_technology_researched = combined_arms }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_war_defense
+				trigger = { has_technology_researched = combined_arms }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_war_department
+				trigger = { has_law = law_type:law_presidential_republic }
+			}
+		}
+	}
 	modifier = {
 		unit_army_experience_gain_add = 0.2
 		interest_group_ig_armed_forces_pol_str_mult = 0.05
@@ -42,6 +60,36 @@ institution_ministry_of_foreign_affairs = {
 institution_national_bank = {
 	icon = "gfx/interface/icons/institution_icons/institution_national_bank.dds"
 	background_texture = "gfx/interface/illustrations/institutions/institution_national_bank.dds"
+	# 1.15 dynamic_name (#1451): a State Bank under State-Owned Banking, else
+	# the central bank's own name in four countries.
+	dynamic_name = {
+		first_valid = {
+			triggered_desc = {
+				desc = institution_national_bank_state_bank
+				trigger = { has_law = law_type:law_state_owned_banking }
+			}
+			triggered_desc = {
+				desc = institution_national_bank_federal_reserve
+				trigger = { c:USA ?= THIS game_date >= 1913.12.23 }
+			}
+			triggered_desc = {
+				desc = institution_national_bank_bank_of_the_united_states
+				trigger = { c:USA ?= THIS }
+			}
+			triggered_desc = {
+				desc = institution_national_bank_bank_of_england
+				trigger = { c:GBR ?= THIS }
+			}
+			triggered_desc = {
+				desc = institution_national_bank_bank_of_france
+				trigger = { c:FRA ?= THIS }
+			}
+			triggered_desc = {
+				desc = institution_national_bank_bank_of_japan
+				trigger = { c:JAP ?= THIS }
+			}
+		}
+	}
 	modifier = {
 		# -0.15pp of structural premium a level. It was -0.3, hand-judged in
 		# monetary_policy_design.md §7.5 against VANILLA's cap of 5 levels
@@ -77,6 +125,23 @@ institution_ministry_of_culture = {
 institution_ministry_of_labor = {
 	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_labor.dds"
 	background_texture = "gfx/interface/illustrations/institutions/institution_ministry_of_labor.dds"
+	# 1.15 dynamic_name (#1451): follows the form of government.
+	dynamic_name = {
+		first_valid = {
+			triggered_desc = {
+				desc = institution_ministry_of_labor_commissariat
+				trigger = { has_law = law_type:law_council_republic }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_labor_corporations
+				trigger = { has_law = law_type:law_corporate_state }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_labor_department
+				trigger = { has_law = law_type:law_presidential_republic }
+			}
+		}
+	}
 	modifier = {
 	}
 }
@@ -98,6 +163,23 @@ institution_ministry_of_the_environment = {
 institution_ministry_of_intelligence_and_security = {
 	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_intelligence_and_security.dds"
 	background_texture = "gfx/interface/illustrations/institutions/institution_ministry_of_intelligence_and_security.dds"
+	# 1.15 dynamic_name (#1451): follows the form of government.
+	dynamic_name = {
+		first_valid = {
+			triggered_desc = {
+				desc = institution_ministry_of_intelligence_and_security_committee
+				trigger = { has_law = law_type:law_council_republic }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_intelligence_and_security_directorate
+				trigger = { has_law = law_type:law_corporate_state }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_intelligence_and_security_agency
+				trigger = { has_law = law_type:law_presidential_republic }
+			}
+		}
+	}
 	modifier = {
 		country_intelligence_capacity_add = 4
 		country_covert_operation_slot_add = 1
@@ -119,6 +201,27 @@ institution_ministry_of_refugee_affairs = {
 institution_ministry_of_propaganda = {
 	icon = "gfx/interface/icons/institution_icons/institution_ministry_of_propaganda.dds"
 	background_texture = "gfx/interface/illustrations/institutions/institution_ministry_of_propaganda.dds"
+	# 1.15 dynamic_name (#1451): follows the form of government.
+	dynamic_name = {
+		first_valid = {
+			triggered_desc = {
+				desc = institution_ministry_of_propaganda_agitprop
+				trigger = { has_law = law_type:law_council_republic }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_propaganda_popular_culture
+				trigger = { has_law = law_type:law_corporate_state }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_propaganda_guidance
+				trigger = { has_law = law_type:law_theocracy }
+			}
+			triggered_desc = {
+				desc = institution_ministry_of_propaganda_information
+				trigger = { OR = { has_law = law_type:law_parliamentary_republic has_law = law_type:law_presidential_republic } }
+			}
+		}
+	}
 	modifier = {
 		country_authority_add = 100
 		country_bolster_attraction_factor = 0.1

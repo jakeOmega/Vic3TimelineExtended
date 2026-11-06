@@ -145,7 +145,8 @@ active or inactive, for Britain, France, Spain, the Netherlands or the USA, agai
 countries. A monthly pass now adds the entry back (`ce_reentry_monthly`, `common/scripted_effects/decolonization.txt`,
 run from `colonial_geography_on_action` straight after the separation cache's step) once a country has been due it for a
 whole month (`ce_reentry_due`, `colonial_empire_triggers.txt`: the entry's research and `possible`, not decentralized,
-not a revolution's rebels, no entry running, and a year since a voluntary end). So a collapse waits ten years and a
+not a revolution's rebels, no record of the entry, active or inactive, and a year since a voluntary end; over an
+inactive record the add is refused, #1416). So a collapse waits ten years and a
 secured empire never returns, as the rules always said. A voluntary end sets no cooldown, but the pass waits a year after
 one (`ce_reentry_voluntary_hold`), a guard against a colony test that flickers. Every modifier an ending adds is now
 refreshed, not stacked, since a second ending is reachable. Search `debug.log` for `TE_CE_REENTRY` (one line per add)

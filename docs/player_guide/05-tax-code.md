@@ -92,9 +92,12 @@ the base game's; the move adds no reaction of its own.
 
 AI countries keep choosing their tax level as in the base game, and their taxes
 follow it: every tax at their law's rate for that level. Their interest groups
-react to each change as yours do. A country released from yours, a rebel country
-and a newly formed one start from their own law and tax level; when a revolution
-ends, the winner keeps its rates.
+react to each change as yours do. A country released from yours and a newly
+formed one start from their own law and tax level. Rebels start with your rates
+and your tax level, and while their war lasts each of their taxes moves with the
+tax level their AI sets. When the war ends, the winner keeps its own rates: a
+revolution that wins carries on with the rates the rebels took from you (see
+[After a revolution](06-politics.md#after-a-revolution)).
 
 ## The Legislated Tax Code game rule
 

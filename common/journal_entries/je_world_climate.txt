@@ -1,0 +1,89 @@
+﻿# ============================================================================
+# World Climate: one contextless entry carries Climate Warming for every
+# country (vanilla 1.15; #1448)
+# ============================================================================
+# docs/systems/mod_systems/global_warming.md, "The world climate entry".
+#
+# Climate Warming (global_warming, extra_modifiers.txt) scales with the
+# world's temperature, which reads only global variables
+# (temperature_anomaly_display, extra_script_values.txt), so it is the same
+# for every country. Each country's Global Warming entry used to declare it
+# (#1404); now this one entry does, once for the world, and 1.15 applies a
+# contextless entry's scaling modifiers to every country it involves. Its
+# `value` reads globals only, as je_multiplier_scope_audit requires of a
+# contextless entry. The policies, their buttons, the panels and the
+# country-specific declarations stay on je_global_warming.
+#
+# Involvement. should_be_involved takes every country, decentralized nations
+# and a revolution's rebels included, as je_global_warming did (it has no
+# country gate). Whether the engine re-checks should_be_involved for a
+# country created after activation (a revolution's winner, a release, a
+# formable) is unprobed, so the monthly pulse adds any country it misses,
+# vanilla je_global_test's fallback (add_involved_country). A revolution's
+# winner gets the modifier back by being involved: it needs no inherited
+# entry, and the entry can't be inherited.
+#
+# Unprobed, checked once a game (TE_SELF_CHECK OK|BROKEN gw_world_climate,
+# gw_world_climate_selfcheck_effect, global_warming_effects.txt): that the
+# declaration reaches an involved country's states, and that
+# is_involved_in_journal_entry, which gw_warming_felt reads, is true for it.
+# Fallback if BROKEN: put the declaration back on je_global_warming (git
+# history of #1448) and gw_warming_felt back on has_journal_entry.
+# Play-test row: docs/testing/vanilla-1-15-playtest.md, "1.15 opportunities".
+
+je_world_climate = {
+	icon = "gfx/interface/icons/event_icons/je_global_warming.dds"
+	group = je_group_internal_affairs
+	context = none
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	transferable = no
+	can_revolution_inherit = no
+
+	# Under the Global Warming rule only: with the rule off the temperature
+	# stays 0 (global_warming_events_on_action) and nothing here would apply.
+	is_shown_when_inactive = {
+		has_game_rule = global_warming_enabled
+	}
+	disable_evaluation = {
+		NOT = { has_game_rule = global_warming_enabled }
+	}
+
+	# The threshold je_global_warming opens at. Once active the entry stays
+	# active: it has no outcome, and a declaration at 0 is off (the aerosol
+	# mask can take the felt anomaly below 0.1).
+	possible = {
+		temperature_anomaly_display >= 0.1
+	}
+
+	should_be_involved = {
+		always = yes
+	}
+	should_show_when_not_involved = {
+		always = no
+	}
+	should_be_pinned_by_default_involved = no
+	should_be_pinned_by_default_uninvolved_or_context = no
+
+	# Climate Warming, at the felt anomaly (after any aerosol mask). Floored at
+	# 0: with no mask the reading can go negative, and a negative value would
+	# invert every harm. Moved from je_global_warming (#1448).
+	scaling_modifiers_while_active = {
+		modifier = global_warming
+		value = {
+			value = temperature_anomaly_display
+			min = 0
+		}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			gw_world_climate_involve_missing_effect = yes
+		}
+	}
+}

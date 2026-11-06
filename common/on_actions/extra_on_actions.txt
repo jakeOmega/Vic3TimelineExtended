@@ -1053,6 +1053,9 @@ global_warming_events_on_action = {
 			gw_refresh_global_counts_effect = yes
 			# The aerosol mask (Geoengineering) reads the counts just taken.
 			gw_aerosol_update_mask_effect = yes
+			# TEMPORARY (#1448): does the World Climate entry's Climate Warming
+			# reach a country? Once a game; TE_SELF_CHECK gw_world_climate.
+			gw_world_climate_selfcheck_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
 			# temperature_anomaly_display crosses each threshold upward. Runs in the

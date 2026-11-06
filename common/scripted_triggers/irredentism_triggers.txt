@@ -28,15 +28,23 @@ irr_claimed_populated_home_state = {
 }
 
 # Target scope, references ROOT (the unifier). Reachability gate: a union is
-# only feasible if the two nations share a land border OR both touch the sea
-# (sea-linkable by convoy). Filters out distant, landlocked, non-adjacent
-# targets that make unification nonsensical.
+# only feasible if the two nations share a land border OR ROOT can reach the
+# target (1.15, #1450: has_military_reach, true with any land route and
+# otherwise a strait-aware sea route to a coast within te_reach_union_link).
+# It replaced "both touch the sea", which linked any two coasts however far
+# apart. Filters out distant, landlocked, non-adjacent targets that
+# make unification nonsensical. The border test goes first: it is cheaper.
 irr_target_reachable = {
 	OR = {
 		is_adjacent_to_country = ROOT
 		AND = {
-			any_scope_state = { is_coastal = yes }
-			ROOT = { any_scope_state = { is_coastal = yes } }
+			save_temporary_scope_as = irr_reach_target
+			ROOT = {
+				has_military_reach = {
+					target = scope:irr_reach_target
+					min_reach = te_reach_union_link
+				}
+			}
 		}
 	}
 }

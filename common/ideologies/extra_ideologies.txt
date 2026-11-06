@@ -109,6 +109,13 @@
 					value = 2
 				}
 			}
+			# Leader-chance modifiers on the group (vanilla 1.15's pattern;
+			# environmentalist_leader_pull_modifier, #1446)
+			multiply = {
+				value = 1
+				add = modifier:interest_group_ideology_environmentalists_leader_chance_mult
+				desc = "EVENTS_AND_OTHER_EFFECTS"
+			}
 		}
 	}
 
@@ -139,6 +146,13 @@
 				multiply = {
 					value = 5
 				}
+			}
+			# Character scope here, so the group's modifier is read through
+			# interest_group, as vanilla 1.15's ideologies do
+			multiply = {
+				value = 1
+				add = interest_group.modifier:interest_group_ideology_environmentalists_leader_chance_mult
+				desc = "EVENTS_AND_OTHER_EFFECTS"
 			}
 		}
 	}

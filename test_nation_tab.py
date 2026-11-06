@@ -501,9 +501,12 @@ class TypeRowsTest(unittest.TestCase):
         # fed) fewer since the light tax code's relief did the same (#1404);
         # 29 types and 21 rows fewer since the UN's conventions, regime terms,
         # embargoes and programmes moved onto its entry as scaling modifiers
-        # (#1404), the only modifiers that carried them
-        self.assertGreaterEqual(len(self.carried), 116)
-        self.assertGreaterEqual(len(self._rows()), 85)
+        # (#1404), the only modifiers that carried them; two types and two rows
+        # (trade advantage, improve-relations speed) fewer since the UN's
+        # non-member pariah and NPT disarmament modifiers were found on its
+        # entry, not the country (#1474), the only ones the tab had carrying them
+        self.assertGreaterEqual(len(self.carried), 114)
+        self.assertGreaterEqual(len(self._rows()), 83)
         self.assertIn("state_arable_land_mult", self.carried)
         self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
                         <= set(self.carried["state_arable_land_mult"]))

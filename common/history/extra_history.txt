@@ -245,6 +245,14 @@ GLOBAL = {
 	}
 	c:SER = { # Serbia - Vuk Karadžić's vernacular reform
 		activate_law = law_type:law_feudal_contracts
+		# The reform is disallowed under No Schools, Serbia's vanilla start, so the
+		# first monthly law sweep swapped it for Local Vernacular (#1411). The
+		# Principality's schools of the 1830s were church schools, and Karadžić's
+		# reform was a literacy project: Religious Schools lets the seed stand.
+		if = {
+			limit = { has_law = law_type:law_no_schools }
+			activate_law = law_type:law_religious_schools
+		}
 		activate_law = law_type:law_state_led_language_reform
 		active_law:lawgroup_language_policy ?= {
 			add_amendment = {
