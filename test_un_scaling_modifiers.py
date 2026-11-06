@@ -199,12 +199,20 @@ def _script_files():
                     yield os.path.join(dirpath, f)
 
 
+# The old-save strip (legacy_scaling_strip_united_nations) sets a mirror from an older save's
+# added copy before removing it, as the deleted monthly reconcile did. It goes after 2026-12-31.
+LEGACY_STRIP = os.path.join("common", "scripted_effects", "legacy_modifier_cleanup.txt")
+
+
 def _writes(variable, ops=("set_variable", "remove_variable", "change_variable")):
-    """(file, top-level definition) of every write of ``variable`` in common/ and events/, by op."""
+    """(file, top-level definition) of every write of ``variable`` in common/ and events/, by op, the old-save
+    strip's migration left out."""
     out = {op: [] for op in ops}
     pattern = re.compile(r"\b(" + "|".join(ops) + r")\s*=\s*(?:\{\s*name\s*=\s*)?" + re.escape(variable) + r"\b")
     top = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
     for path in _script_files():
+        if os.path.relpath(path, REPO) == LEGACY_STRIP:
+            continue
         text = _read(path)
         if variable not in text:
             continue
@@ -213,6 +221,19 @@ def _writes(variable, ops=("set_variable", "remove_variable", "change_variable")
             owner = max((t for t in tops if t[0] <= m.start()), default=(0, "?"))[1]
             out[m.group(1)].append((os.path.relpath(path, REPO), owner))
     return out
+
+
+class OldSaveStripTests(unittest.TestCase):
+    def test_the_strip_sets_mirrors_and_never_clears_one(self):
+        text = _read(_path(*LEGACY_STRIP.split(os.sep)))
+        body = text.split("legacy_scaling_strip_united_nations = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertNotIn("remove_variable", body)
+        for key in (*PROGRAMMES, "un_human_rights_declaration_modifier", "un_law_of_sea_modifier",
+                    "un_regime_climate_emitter_modifier"):
+            with self.subTest(key=key):
+                self.assertIn(f"set_variable = {key}_on", body)
+                self.assertLess(body.index(f"set_variable = {key}_on"), body.index(f"remove_modifier = {key} "))
+        self.assertIn("set_variable = un_sanctions_target_on", body)
 
 
 class DeclarationTests(unittest.TestCase):
