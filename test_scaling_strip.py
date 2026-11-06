@@ -36,15 +36,19 @@ def _child(node: Node, key: str) -> Node | None:
 
 
 def _declaring_entries() -> dict[str, tuple[Node, set[str]]]:
-    """entry key -> (entry, the modifiers it declares)."""
-    out = {}
+    """entry key -> (the bare entry, the modifiers it declares). An `INJECT:<entry>` block's declarations
+    (Space Race's generated sr_sites_generated.txt) count towards the entry it merges into."""
+    bare, declared = {}, {}
     for path in sorted(JE_DIR.glob("*.txt")):
         for entry in _parse(path):
+            key = entry.key.split(":", 1)[1] if ":" in entry.key else entry.key
+            if ":" not in entry.key:
+                bare[key] = entry
             names = {_child(b, "modifier").value for b in entry.children
                      if b.key == "scaling_modifiers_while_active" and _child(b, "modifier") is not None}
             if names:
-                out[entry.key] = (entry, names)
-    return out
+                declared.setdefault(key, set()).update(names)
+    return {key: (bare[key], names) for key, names in declared.items()}
 
 
 def _strip_effects() -> dict[str, Node]:
