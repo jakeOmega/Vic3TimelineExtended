@@ -623,7 +623,7 @@ space_race_events.609 = {
 space_race_events.610 = {
 	type = country_event
 	placement = root
-	event_image = { texture = "gfx/event_pictures/probe_scorched_rock.dds" }
+	event_image = { texture = "gfx/event_pictures/probe_volcanic_world.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.610.t
@@ -1607,7 +1607,7 @@ space_race_events.625 = {
 space_race_events.626 = {
 	type = country_event
 	placement = root
-	event_image = { texture = "gfx/event_pictures/probe_greenhouse_world.dds" }
+	event_image = { texture = "gfx/event_pictures/probe_industrial_atmosphere.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.626.t
