@@ -7,7 +7,10 @@ Route reads through `owner = { }`, or precompute a persistent country variable
 and read it flat through `root.var:X`. Named script values and triggers are
 followed transitively; country-only triggers come from the engine scope catalog.
 
-Suppress on the multiplier line: `# REVIEWED YYYY-MM-DD: rationale`.
+A contextless entry's `scaling_modifiers_while_active` values are checked the same way
+(in a country-context entry the value's root is the owning country).
+
+Suppress on the multiplier (or `value`) line: `# REVIEWED YYYY-MM-DD: rationale`.
 
 ## Unreviewed Flags
 

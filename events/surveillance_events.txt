@@ -347,15 +347,14 @@ surveillance_events.4 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = automated_surveillance
 		has_technology_researched = cybersecurity
 		NOT = { has_law = law_type:law_strong_privacy_rights }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ai_predictive_policing_debate_happened }
-	}
-
-	immediate = {
-		set_variable = ai_predictive_policing_debate_happened
 	}
 
 	# Deploy predictive policing
