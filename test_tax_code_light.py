@@ -320,9 +320,10 @@ class GeneratedEffectsTest(unittest.TestCase):
                 self.assertIn(f"set_variable = {{ name = {rl} value = te_tax_light_idx_{key}_at_level }} "
                               f"change_variable = {{ name = {rl} subtract = var:te_tax_en_{key} }}", body)
                 self.assertIn(f"if = {{ limit = {{ var:{rl} < 0 }} set_variable = {{ name = {rl} value = 0 }} }}", body)
-                # Removed and re-added every call; the multiplier is a persistent variable.
-                self.assertIn(f"remove_modifier = te_tax_light_relief_{key}", body)
-                self.assertIn(f"add_modifier = {{ name = te_tax_light_relief_{key} multiplier = var:{rl} }}", body)
+                self.assertIn(f"else = {{ set_variable = {{ name = {rl} value = 0 }} }}", body)
+        # The variable only: je_tax_code declares the relief modifier from it
+        # (test_tax_code_scaling_modifiers.py), and an add here would double it.
+        self.assertNotIn("_modifier", body)
 
     def test_the_level_is_the_highest_step(self):
         body = flat(block(self.text, "te_tax_light_gen_steps"))
@@ -409,16 +410,18 @@ class GeneratedEffectsTest(unittest.TestCase):
         # IG_APPROVAL_FROM_RADICAL_LAW_CHANGE in vanilla 1.14.5's defines.
         self.assertEqual(4 * gen.MATERIAL_WEIGHT / gen.LIGHT_REACTION_DIVISOR, -gen.LIGHT_REACTION_CAP)
 
-    def test_apply_reactions_swaps_one_modifier_by_sign(self):
-        # Rounded first, so a modifier is added only for a whole point or more (never a "+0").
-        body = flat(block(self.text, "te_tax_light_gen_apply_reactions"))
+    def test_reaction_sizes_are_the_rounded_reaction_never_negative(self):
+        # Rounded first, so the entry declares a reaction only for a whole point or more (never a
+        # "+0"); its sign stays in the running reaction, which picks _pos or _neg
+        # (test_tax_code_scaling_modifiers.py). No modifier here: an add would double the declaration.
+        body = flat(block(self.text, "te_tax_light_gen_reaction_sizes"))
         for ig in gen.IGS:
             lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
             self.assertIn(f"set_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }} "
-                          f"if = {{ limit = {{ var:{mag} >= 1 }} add_modifier = {{ name = te_tax_light_react_{ig}_pos "
-                          f"multiplier = var:{mag} }} }} else_if = {{ limit = {{ var:{mag} <= -1 }} change_variable = "
-                          f"{{ name = {mag} multiply = -1 }} add_modifier = {{ name = te_tax_light_react_{ig}_neg "
-                          f"multiplier = var:{mag} }} }}", body)
+                          f"if = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} }} "
+                          f"else_if = {{ limit = {{ var:{mag} < 1 }} set_variable = {{ name = {mag} value = 0 }} }}", body)
+        self.assertNotIn("_modifier", body)
+        self.assertNotIn("te_tax_light_gen_apply_reactions", read(GEN_EFFECTS) + read(EFFECTS))
 
     def test_bands_read_the_relief_each_group_gets(self):
         # Thresholds less a tolerance: the weights are written to five places and a third rounds down.
@@ -470,7 +473,7 @@ class GeneratedEffectsTest(unittest.TestCase):
             self.assertIn(f"if = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} value = 0 }} }}", init)
         # No local variable anywhere a step's hidden effect reaches.
         for name in ("te_tax_light_gen_react", "te_tax_light_gen_relief", "te_tax_light_gen_steps",
-                     "te_tax_light_gen_apply_reactions", "te_tax_light_gen_bands", "te_tax_light_gen_set_level"):
+                     "te_tax_light_gen_reaction_sizes", "te_tax_light_gen_bands", "te_tax_light_gen_set_level"):
             self.assertNotIn("local_var", block(self.text, name), name)
         self.assertNotIn("local_var", strip_comments(read(EFFECTS)))
         self.assertNotIn("te_tax_gen_ig_views", strip_comments(read(EFFECTS)))
@@ -570,8 +573,8 @@ class SyncTest(unittest.TestCase):
         at = in_order(["else = {", "te_tax_light_gen_shift = yes", "te_tax_light_gen_steps = yes",
                        "limit = { var:te_tax_light_law > 0 } set_variable = { name = te_tax_light_level "
                        "value = var:te_tax_light_tgt } te_tax_light_gen_set_level = yes"], at)
-        # 3. Relief, reactions and views, for both.
-        in_order(["te_tax_light_gen_relief = yes", "te_tax_light_gen_apply_reactions = yes",
+        # 3. Relief steps, reaction sizes and views, for both.
+        in_order(["te_tax_light_gen_relief = yes", "te_tax_light_gen_reaction_sizes = yes",
                   "te_tax_light_gen_bands = yes"], at)
 
     def test_monthly_fades_then_syncs(self):

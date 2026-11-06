@@ -8,15 +8,20 @@
 # te_tax_migrated >= 1, or under the light setting te_tax_light_in_force, the
 # marker te_tax_light_on >= 1). The engine
 # activates it on its next check once both `is_shown_when_inactive` and
-# `possible` hold, as it does je_banking_cycle; nothing adds it by effect, so
-# the migration flow (te_tax.3) is unchanged. It never completes, fails or
-# times out: the code is permanent.
+# `possible` hold, as it does je_banking_cycle, so the migration flow (te_tax.3)
+# is unchanged. Under the light setting a monthly safety net
+# (te_tax_light_entry_net, common/on_actions/te_tax_on_actions.txt) adds it to a
+# country in force that the engine left without a record of it. It never
+# completes, fails or times out: the code is permanent.
 #
-# Display only. It holds no state, writes nothing and has no `immediate`: the
-# code lives in the country's te_tax_* variables (docs/systems/
-# tax_code_schema.md), which a revolution's winner inherits, and an inherited
-# copy of the entry re-running an `immediate` would have nothing to repair.
-# It has no scripted buttons and no progress bar, so no bars-on-top marker.
+# It holds no state, writes nothing and has no `immediate`: the code lives in
+# the country's te_tax_* variables (docs/systems/tax_code_schema.md), which a
+# revolution's winner inherits, and an inherited copy of the entry re-running
+# an `immediate` would have nothing to repair. Under the full code it is
+# display only. Under the light code it also carries the code's relief and the
+# interest groups' reactions to rate changes, as scaling modifiers (below), so
+# a country in force must hold it active. It has no scripted buttons and no
+# progress bar, so no bars-on-top marker.
 #
 # A save started before this entry existed does not get it: auto-activation
 # reaches only new games (scripting_best_practices.md, "JE Auto-Activation
@@ -83,4 +88,141 @@ je_tax_code = {
 
 	can_revolution_inherit = yes
 	should_update_on_player_command = yes
+
+	# The light code's relief and reactions (docs/systems/tax_code_schema.md,
+	# "Light code"), one declaration per modifier. Each value is generated
+	# (te_tax_light_generated_values.txt) and reads the country's variables,
+	# which the light sync writes: 0, and the modifier off the entry, under the
+	# full code, before the migration and whenever the sync would have removed
+	# it. test_tax_code_scaling_modifiers.py holds this list to the generator's.
+	# Relief: te_tax_light_rl_<key> steps of one step's rate below zero, while
+	# the law levies the tax.
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_relief_wage
+		value = {
+			value = te_tax_light_relief_wage_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_relief_div
+		value = {
+			value = te_tax_light_relief_div_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_relief_land
+		value = {
+			value = te_tax_light_relief_land_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_relief_head
+		value = {
+			value = te_tax_light_relief_head_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_relief_cons
+		value = {
+			value = te_tax_light_relief_cons_value
+		}
+	}
+	# Reactions: the running reaction's rounded size (te_tax_lr_mag_<ig>) on
+	# the side of its sign (te_tax_lr_<ig>), once it is a whole point.
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_armed_forces_pos
+		value = {
+			value = te_tax_light_react_armed_forces_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_armed_forces_neg
+		value = {
+			value = te_tax_light_react_armed_forces_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_devout_pos
+		value = {
+			value = te_tax_light_react_devout_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_devout_neg
+		value = {
+			value = te_tax_light_react_devout_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_industrialists_pos
+		value = {
+			value = te_tax_light_react_industrialists_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_industrialists_neg
+		value = {
+			value = te_tax_light_react_industrialists_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_intelligentsia_pos
+		value = {
+			value = te_tax_light_react_intelligentsia_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_intelligentsia_neg
+		value = {
+			value = te_tax_light_react_intelligentsia_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_landowners_pos
+		value = {
+			value = te_tax_light_react_landowners_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_landowners_neg
+		value = {
+			value = te_tax_light_react_landowners_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_petty_bourgeoisie_pos
+		value = {
+			value = te_tax_light_react_petty_bourgeoisie_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_petty_bourgeoisie_neg
+		value = {
+			value = te_tax_light_react_petty_bourgeoisie_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_rural_folk_pos
+		value = {
+			value = te_tax_light_react_rural_folk_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_rural_folk_neg
+		value = {
+			value = te_tax_light_react_rural_folk_neg_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_trade_unions_pos
+		value = {
+			value = te_tax_light_react_trade_unions_pos_value
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_react_trade_unions_neg
+		value = {
+			value = te_tax_light_react_trade_unions_neg_value
+		}
+	}
 }
