@@ -250,6 +250,14 @@ class ReplaceShadowTests(unittest.TestCase):
             "english/te_misc_l_english.yml": BOM + 'l_english:\n TE_ALPHA:0 "A"\n',
         }), [])
 
+    def test_any_folder_layout_counts_by_the_file_names_language(self):
+        problems = self._problems({
+            "replace/te_override_l_english.yml": BOM + 'l_english:\n TE_ALPHA:0 "A"\n',
+            "english/sub/te_misc_l_english.yml": BOM + 'l_english:\n TE_ALPHA:0 "A"\n',
+        })
+        self.assertEqual(len(problems), 1, problems)
+        self.assertIn("te_misc_l_english.yml:2: 'TE_ALPHA'", problems[0])
+
     def test_main_fails_on_a_shadowed_key(self):
         with _TempLoc({
             "english/replace/te_override_l_english.yml": BOM + 'l_english:\n TE_ALPHA:0 "A"\n',

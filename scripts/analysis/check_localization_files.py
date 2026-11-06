@@ -289,21 +289,25 @@ def _file_keys(path: str) -> dict[str, int]:
 
 def check_replace_shadows(paths: list[str]) -> list[str]:
     """Check 10: a key both a `replace/` file and an ordinary file of the same
-    language define. Reported on the ordinary copy, the one to delete."""
+    language define. Reported on the ordinary copy, the one to delete. The
+    language is the file name's `_l_<language>` suffix, as the game reads it,
+    so any folder layout counts."""
     overrides: dict[tuple[str, str], tuple[str, int]] = {}
     ordinary: list[tuple[str, str]] = []
     for path in paths:
-        parts = os.path.normpath(path).split(os.sep)
-        if "replace" in parts:
-            language_root = os.sep.join(parts[: parts.index("replace")])
+        suffix = _LANGUAGE_SUFFIX_RE.search(os.path.basename(path))
+        if suffix is None:
+            continue  # check_file reports the name
+        language = suffix.group(1)
+        if "replace" in os.path.normpath(path).split(os.sep):
             for key, line in _file_keys(path).items():
-                overrides.setdefault((language_root, key), (path, line))
+                overrides.setdefault((language, key), (path, line))
         else:
-            ordinary.append((os.path.dirname(os.path.normpath(path)), path))
+            ordinary.append((language, path))
     problems: list[str] = []
-    for language_root, path in ordinary:
+    for language, path in ordinary:
         for key, line in _file_keys(path).items():
-            hit = overrides.get((language_root, key))
+            hit = overrides.get((language, key))
             if hit:
                 problems.append(
                     f"{os.path.relpath(path, REPO_ROOT)}:{line}: '{key}' is also defined in "
