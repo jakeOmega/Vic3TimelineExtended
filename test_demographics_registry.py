@@ -3611,10 +3611,11 @@ class _OwnerEngine(_Engine):
     absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
     incorporation and the pop's starvation are trigger fixtures (is_incorporated, is_in_*_starvation)."""
 
-    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, workplace=None, **kwargs):
+    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, workplace=None, strata=None, **kwargs):
         super().__init__(fixtures, **kwargs)
         self.laws, self.techs, self.levels, self.pop_type = set(laws), set(techs), dict(levels or {}), pop_type
         self.workplace = workplace   # the pop's workplace's building group; None: not employed (calibration step 3)
+        self.strata = strata         # the pop's stratum (lower, middle, upper); None: no stratum line applies
 
     def _test(self, key, op, arg):
         if key in ("owner", "state"):
@@ -3638,6 +3639,8 @@ class _OwnerEngine(_Engine):
             return {">=": level >= float(n), ">": level > float(n), "=": level == float(n)}[vop]
         if key == "is_pop_type":
             return arg == self.pop_type
+        if key == "strata":
+            return arg == self.strata
         return super()._test(key, op, arg)
 
 
@@ -3868,6 +3871,22 @@ class TestPopMultiplierScript(unittest.TestCase):
                 self.assertAlmostEqual(self._term("te_demog_pop_death_mult", food),
                                        P.STARVATION_MILD["deaths"] * scale, places=6)
         self.assertEqual(self._term("te_demog_pop_death_mult", 0.6), 0.0)
+
+    def test_each_pop_reads_its_own_stratums_birth_line(self):
+        """Vanilla 1.15's birth lines by stratum (#1407): a pop adds its own stratum's line and no other's, as the death
+        multiplier adds its class's, so the window's births count what the Malthusian Foundations amendment cuts."""
+        text = _block(_text(GENERATED_VALUES), "te_demog_pop_birth_mult")
+        reads = dict.fromkeys(re.findall(r"(?:state|workplace)\.modifier:\w+", text), 0.0)
+        lines = {s: -0.01 * (i + 1) for i, s in enumerate(P.BIRTH_STRATA)}
+        for s, line in lines.items():
+            reads[f"state.modifier:state_{s}_strata_birth_rate_mult"] = line
+        for s, line in [*lines.items(), (None, 0.0)]:
+            with self.subTest(strata=s):
+                eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0, "wealth": 20.0, **reads},
+                                   pop_type="laborers", strata=s,
+                                   triggers={"is_in_severe_starvation": False, "is_in_mild_starvation": False,
+                                             "is_employed": False, "is_homeland_of_country_cultures": True})
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pop_birth_mult")), 1 + line, places=9)
 
     def test_a_severe_pops_births_floor_only_when_the_rest_runs_low(self):
         """Germany's famine (the probe): births read about -0.28 and literacy 0.5, so a severe pop at food security

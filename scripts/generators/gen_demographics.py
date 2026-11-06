@@ -1609,13 +1609,18 @@ def engine_rate_terms(o, root):
     unread = sorted(k for k in conditions if k not in reg)
     assert not unread, f"working_conditions rows the walk can't read: {unread}"
 
+    strata = [s for s in P.BIRTH_STRATA if f"state_{s}_strata_birth_rate_mult" in reg]
     o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
-    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties (each x the pop's")
-    o("# starvation value, in 0.05 steps of food security), floored at 0.")
+    o("# + its stratum's birth line (vanilla 1.15's state_<stratum>_strata_birth_rate_mult, on top of the census like")
+    o(f"# a class's mortality line; #1407) + {lit(literacy)} x its literacy (literacy_penalty) + the starvation")
+    o("# penalties (each x the pop's starvation value, in 0.05 steps of food security), floored at 0.")
     o("# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).")
     o("te_demog_pop_birth_mult = {")
     o("value = 1")
     o("add = state.modifier:state_birth_rate_mult")
+    for i, s in enumerate(strata):
+        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ strata = {s} }} "
+          f"add = state.modifier:state_{s}_strata_birth_rate_mult }}")
     o(f"add = {{ value = literacy_rate multiply = {lit(literacy)} }}")
     _starvation(o, "state_birth_rate_mult", mild, severe)
     o("min = 0")

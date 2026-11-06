@@ -290,6 +290,11 @@ VANILLA_115_DIGESTS = {
     ("generated_values", "te_demog_pop_death_mult"): "6b7b4a7cf211d3f81df710938255b5a73d44aa81b619c4e99af089535a99384a",
     ("generated_values", "te_demog_pr_start_lm"): "1dccef6a27dce009f9e165cfa57cfac0cb4745a0b2907dd1ef688167876d0293",
 }
+# Vanilla 1.15's birth lines by stratum (#1407, owner 2026-11-06): the walk's birth multiplier reads each pop's stratum
+# line, as the death multiplier reads its class's. The recorded cases carry no stratum line, so no number changes.
+STRATA_BIRTH_DIGESTS = {
+    ("generated_values", "te_demog_pop_birth_mult"): "ce7735ab70d6b04eae8aa4d24c77019b222ca5e93964753403003078c250f034",
+}
 
 
 def _ring300(name):
@@ -495,6 +500,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = WOMEN_WORKERS_DIGESTS.get((key, name), want)
                 want = RING300_DIGESTS.get((key, name), want)
                 want = VANILLA_115_DIGESTS.get((key, name), want)
+                want = STRATA_BIRTH_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
