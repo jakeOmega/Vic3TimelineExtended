@@ -56,7 +56,7 @@ te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 	}
 
 	# Repeal the Ministry of Culture. Within a month the journal entry's pulse
-	# should zero funding and strip all four programme modifiers.
+	# should zero funding and end all four programmes.
 	option = {
 		name = te_debug_ch.1.e
 		te_debug_ch_repeal_ministry = yes

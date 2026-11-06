@@ -47,12 +47,13 @@ cultural_pull_turmoil_factor = -10
 # Flat penalty for active civil war (revolution or secession)
 cultural_pull_civil_war_penalty = -20
 
-# Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
+# Hegemony effect scaling (its strength is the share itself, 0-100:
+# cultural_hegemony_modifier_mult)
 cultural_hegemony_modifier_max_mult = 100
 cultural_hegemony_foreign_benchmark_max = 3
-# Legitimacy lost at multiplier 1: keep equal to country_legitimacy_base_add in
+# Legitimacy lost at strength 1: keep equal to country_legitimacy_base_add in
 # the cultural_hegemony_foreign_benchmark static modifier (the overview tooltip
-# scales it by the multiplier the pulse actually applied)
+# scales it by the strength the entry declares, var:ch_benchmark_applied)
 cultural_hegemony_foreign_benchmark_legitimacy = 5
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
@@ -92,10 +93,10 @@ ch_program_funding_level_value = {
 	min = 0
 }
 
-# The cost of one funding level: GDP x 0.00005, the multiplier on a
-# country_expenses_add = 1 modifier, so that much a week. The World
-# Exposition (ch_effect_world_exposition) costs one level's worth: x1, not
-# x level, re-evaluated like every multiplier.
+# The cost of one funding level: GDP x 0.00005, the value of a
+# country_expenses_add = 1 modifier, so that much a week. International
+# Cultural Outreach (internally ch_world_exposition) costs one level's worth:
+# je_cultural_hegemony declares ch_world_exposition_cost at this while it runs.
 ch_program_funding_cost_mult = {
 	value = 0
 	add = gdp
@@ -105,8 +106,9 @@ ch_program_funding_cost_mult = {
 
 # The funding programme's weekly cost at its current level: one
 # ch_program_funding_cost_mult per level (owner decision, PR #510; it was flat
-# across levels from 8d81d261). The cost modifier's multiplier
-# (ch_refresh_funding_modifiers, through the _for_je wrapper below) and the
+# across levels from 8d81d261). The cost modifier's value (je_cultural_hegemony
+# declares ch_cultural_program_funding_cost at it, and ch_cultural_program_funding
+# at ch_program_funding_level_value, while ch_program_funding_in_force) and the
 # funding tooltip (ch_policy_funding_step_tt, through the displays below) read
 # this one value, so what is shown is what is paid. The AI's funding buttons
 # weigh cultural pull only; no affordability check reads a cost.
@@ -114,29 +116,6 @@ ch_program_funding_total_cost_mult = {
 	value = ch_program_funding_cost_mult
 	multiply = ch_program_funding_level_value
 	min = 0
-}
-
-# JE-multiplier wrappers. `add_modifier = { ... multiplier = X }` on a JE
-# re-evaluates X each tick at JE scope, where the country's vars and
-# accessors (gdp, var:ch_program_funding_level, modifier:...) are unreachable
-# directly. Walk JE→owner→country via `owner = { ... }` (same pattern as
-# `cultural_hegemony_modifier_mult` below). Country-scope callers (display
-# strings, button-effect `value = ch_program_funding_*` reads) keep using
-# the underlying SVs directly; the wrappers exist solely for JE multiplier
-# slots.
-ch_program_funding_level_value_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_level_value }
-}
-
-ch_program_funding_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_cost_mult }
-}
-
-ch_program_funding_total_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_total_cost_mult }
 }
 
 # The funding tooltip's two figures, in money a week: one level's cost and the
@@ -585,13 +564,24 @@ cultural_pull_total = {
 	max = 100
 }
 
-# Multiplier for the cultural_hegemony_effect static modifier
-# Equals cultural_pull_total directly (0-100 share percentage)
+# The strength of the cultural_hegemony_effect static modifier, which
+# je_cultural_hegemony declares at this (scaling_modifiers_while_active): the
+# country's share of world cultural pull in percent, from 1%, at most
+# cultural_hegemony_modifier_max_mult. It reads the monthly cache
+# (var:ch_total, ch_monthly_country_update), never cultural_pull_total itself:
+# the entry re-reads its declarations about every four days, and the live share
+# is a pass over every state's buildings.
 cultural_hegemony_modifier_mult = {
 	value = 0
-	owner = { add = cultural_pull_total }
+	if = {
+		limit = {
+			has_variable = ch_total
+			var:ch_total >= 1
+		}
+		add = var:ch_total
+	}
 	min = 0
-	max = 100
+	max = cultural_hegemony_modifier_max_mult
 }
 
 # Foreign benchmark multiplier: how much legitimacy this country loses to the
@@ -626,9 +616,11 @@ cultural_hegemony_benchmark_mult = {
 	}
 }
 
-# The multiplier the last monthly pulse actually applied (0 when none), for the
-# overview tooltip. cultural_hegemony_benchmark_mult is live, so the two differ
-# for up to a month after the gap moves.
+# The benchmark's strength as declared (0 when none), for the overview
+# tooltip: je_cultural_hegemony declares cultural_hegemony_foreign_benchmark at
+# var:ch_benchmark_applied, which its monthly pulse writes from
+# cultural_hegemony_benchmark_mult (0 below 0.1). The live value differs for up
+# to a month after the gap moves.
 ch_benchmark_applied_display = {
 	value = 0
 	if = {
@@ -649,17 +641,14 @@ ch_benchmark_legitimacy_display = {
 # (the Society tab, the Timeline Extended window, another country's National
 # Info) print it through Country.
 #
-# The strength is the multiplier the pulse applied, and 0 while the entry
-# carries no modifier: the pulse removes it below 1% share but keeps
-# ch_effect_mult_cached, so the variable alone would show a stale strength.
+# The strength is the value the entry declares the modifier at
+# (cultural_hegemony_modifier_mult: 0 below 1% share), and 0 while the entry is
+# not active, since a declaration applies only then.
 ch_bonus_strength_display = {
 	value = 0
 	if = {
-		limit = {
-			has_variable = ch_effect_mult_cached
-			je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }
-		}
-		add = var:ch_effect_mult_cached
+		limit = { has_journal_entry = je_cultural_hegemony }
+		add = cultural_hegemony_modifier_mult
 	}
 }
 

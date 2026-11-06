@@ -1372,10 +1372,11 @@ social_tensions_events.16 = {
 		}
 		# With cultural hegemony on, "foreign culture swamping ours" needs a real
 		# foreign hegemon ahead of us: the benchmark modifier je_cultural_hegemony
-		# puts on every country that trails the leader (never on the hegemon).
+		# declares for every country that trails the leader (never the hegemon),
+		# which ch_trails_hegemon tests.
 		OR = {
 			has_game_rule = cultural_hegemony_disabled
-			has_modifier = cultural_hegemony_foreign_benchmark
+			ch_trails_hegemon = yes
 		}
 		NOR = {
 			has_modifier = cultural_openness_modifier

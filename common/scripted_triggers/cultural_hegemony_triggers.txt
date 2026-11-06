@@ -60,9 +60,13 @@ ch_possible_world_exposition = {
 	}
 }
 
+# The four ch_possible_disable_<programme> below test the programme's variable
+# inside hidden_trigger: the widget draws a Disable control only while its
+# programme runs (ch_active_<programme>_sgui), so the test never fails where a
+# player sees it, and IsValidTooltip would print it as raw script.
 ch_possible_disable_world_exposition = {
 	has_journal_entry = je_cultural_hegemony
-	je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+	hidden_trigger = { ch_active_world_exposition = yes }
 }
 
 ch_possible_cultural_institutes = {
@@ -78,7 +82,7 @@ ch_possible_cultural_institutes = {
 
 ch_possible_disable_cultural_institutes = {
 	has_journal_entry = je_cultural_hegemony
-	je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+	hidden_trigger = { ch_active_cultural_institutes = yes }
 }
 
 ch_possible_global_media_campaign = {
@@ -92,7 +96,7 @@ ch_possible_global_media_campaign = {
 	}
 	custom_tooltip = {
 		text = CH_MEDIA_BLOCKED_BY_PROTECTIONISM
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program } }
+		NOT = { ch_active_cultural_protectionism = yes }
 	}
 	custom_tooltip = {
 		text = CH_MEDIA_INFLUENCE_TT
@@ -102,7 +106,7 @@ ch_possible_global_media_campaign = {
 
 ch_possible_disable_global_media_campaign = {
 	has_journal_entry = je_cultural_hegemony
-	je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+	hidden_trigger = { ch_active_global_media_campaign = yes }
 }
 
 ch_possible_cultural_protectionism = {
@@ -112,39 +116,73 @@ ch_possible_cultural_protectionism = {
 	}
 	custom_tooltip = {
 		text = CH_PROTECTIONISM_BLOCKED_BY_GLOBAL_MEDIA
-		NOT = { je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign } }
+		NOT = { ch_active_global_media_campaign = yes }
 	}
 }
 
 ch_possible_disable_cultural_protectionism = {
 	has_journal_entry = je_cultural_hegemony
-	je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+	hidden_trigger = { ch_active_cultural_protectionism = yes }
 }
 
 # ---- Widget row visibility (mirrors each scripted_button's `visible`) ----
 # The enable / disable controls in the widget swap on exactly the conditions the
 # journal-entry buttons swap on, so the pair can never both offer "Enable".
 
-# Is the programme running? The one positive check per programme, read by three
-# places that must agree: ch_shown_<programme> below (the journal-entry enable
-# button's `visible` swap), the disable button's `visible`, and
-# ch_active_<programme>_sgui's `is_shown`, which is what the widget's Enable /
-# Disable pair reads. `?=` rather than `=` so a country without the journal entry
-# answers "not running" instead of logging an invalid-scope read.
+# Is the programme running? The one positive check per programme. A programme
+# is a country variable, set by its ch_effect_<programme> and removed by its
+# ch_effect_disable_<programme> or the entry's monthly pulse once the Ministry
+# of Culture is gone; je_cultural_hegemony declares the programme's modifier
+# (scaling_modifiers_while_active) at 1 while this is true. has_modifier cannot
+# see a declared modifier, so nothing tests the modifier by name. A civil war's
+# winner inherits the variables (but no modifiers), so it keeps the programmes.
+# Read by: the entry's declarations, ch_shown_<programme> below (the
+# journal-entry enable button's `visible` swap), the disable button's `visible`
+# and `possible`, the two mutual exclusions, ch_prog_count
+# (ch_set_display_state) and ch_active_<programme>_sgui's `is_shown`, which is
+# what the widget's Enable / Disable pair reads. The entry test matches the
+# declaration, which applies only while the entry is active.
 ch_active_world_exposition = {
-	je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition }
+	has_journal_entry = je_cultural_hegemony
+	has_variable = ch_world_exposition_on
 }
 
 ch_active_cultural_institutes = {
-	je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program }
+	has_journal_entry = je_cultural_hegemony
+	has_variable = ch_cultural_institutes_on
 }
 
 ch_active_global_media_campaign = {
-	je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign }
+	has_journal_entry = je_cultural_hegemony
+	has_variable = ch_global_media_campaign_on
 }
 
 ch_active_cultural_protectionism = {
-	je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program }
+	has_journal_entry = je_cultural_hegemony
+	has_variable = ch_cultural_protectionism_on
+}
+
+# Is programme funding in force? je_cultural_hegemony declares
+# ch_cultural_program_funding and ch_cultural_program_funding_cost while it is:
+# the Ministry of Culture law and at least one funding step (the gate the old
+# monthly re-add had).
+ch_program_funding_in_force = {
+	has_law = law_type:law_ministry_of_culture
+	ch_program_funding_level_value >= 1
+}
+
+# Does this country trail the world's cultural hegemon? The Foreign Cultural
+# Benchmark (cultural_hegemony_foreign_benchmark) is on it exactly then:
+# je_cultural_hegemony declares the modifier at var:ch_benchmark_applied, which
+# the entry's monthly pulse writes every month (cultural_hegemony_benchmark_mult,
+# or 0 below 0.1). has_modifier cannot see a declared modifier: every reader of
+# the benchmark (events, AI weights, the overview's alert, UN votes, the
+# hegemon's baseline movement pressure) asks this instead.
+# Scope: country.
+ch_trails_hegemon = {
+	has_journal_entry = je_cultural_hegemony
+	has_variable = ch_benchmark_applied
+	var:ch_benchmark_applied >= 0.1
 }
 
 ch_shown_world_exposition = {
