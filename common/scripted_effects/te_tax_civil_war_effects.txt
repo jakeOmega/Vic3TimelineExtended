@@ -245,7 +245,9 @@ te_tax_repair_after_civil_war = {
 	}
 	else_if = {
 		# The light code: the winner keeps its variables but no modifier, so the
-		# sync adds the relief, reactions and views back from them.
+		# sync adds the view bands back from them. The relief and the reactions
+		# are je_tax_code's scaling modifiers, which read the variables
+		# themselves.
 		limit = { te_tax_light_in_force = yes }
 		trigger_event = { id = te_tax_light.3 }
 	}

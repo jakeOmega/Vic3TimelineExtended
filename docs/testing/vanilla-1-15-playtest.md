@@ -54,7 +54,12 @@ game, in English.
   an empty modifier declared at 1) still shows in the entry's list; the Budget Breakdown's Banking row still lists the
   planning pool's balance and both external charges; the momentum tooltip names the bubble inertia tier. Grand
   Monuments: a policy change moves the national effects on the entry within a few days; a boon shows on the entry
-  while its countdown runs; the dig gate's day-by-day check is in the archaeology play-test's "The gate." row.
+  while its countdown runs; the dig gate's day-by-day check is in the archaeology play-test's "The gate." row. Tax
+  Code, Light setting: a step moves the rate and the tax level at once and the Budget's collected rate within a few
+  days (note whether it lands at once, which would mean `should_update_on_player_command` re-reads the
+  declarations); the interest group reactions show on the entry, named as the source; under the full code and before
+  any step, the entry carries 21 declarations at 0, so it is where a zero row would show first. The two lag windows
+  have their own checks in `tax_code_schema.md` § "Light code checks".
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

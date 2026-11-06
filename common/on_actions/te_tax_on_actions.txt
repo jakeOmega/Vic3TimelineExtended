@@ -49,7 +49,9 @@
 # migration after the lobby, for a formed or released country and from the
 # monthly dispatch (te_tax_light.2), the monthly processor (te_tax_light.1) and
 # a sync after a taxation law is activated (te_tax_light.3). A released country
-# starts from its own law, so its marker is cleared first.
+# starts from its own law, so its marker is cleared first. Each country's own
+# monthly pulse also runs the entry's safety net (te_tax_light_entry_net, below):
+# the light code's relief and reactions are je_tax_code's scaling modifiers.
 #
 # Decentralized countries are left out of the three fan-outs (final review
 # A-Minor 1; extra_on_actions.txt's global-warming pulse does the same): their
@@ -234,6 +236,7 @@ on_monthly_pulse = {
 on_monthly_pulse_country = {
 	on_actions = {
 		te_tax_watchdog_on_action
+		te_tax_light_entry_net
 	}
 }
 
@@ -306,6 +309,35 @@ te_tax_watchdog_on_action = {
 				var:te_tax_next_month <= te_history_month_index
 			}
 			trigger_event = { id = te_tax.2 }
+		}
+	}
+}
+
+# Country scope. The light code's relief and the interest groups' reactions are
+# je_tax_code's scaling modifiers (scaling_modifiers_while_active), which apply
+# only while the entry is active, so a country with the code in force must hold
+# it. The engine activates it from the inactive record every country holds
+# under the rule, within two weeks of the migration; Banking's entry showed the
+# engine can leave a country without a record (te_banking_entry_net,
+# te_banking_entry_on_actions.txt: BROKEN missing=3 in the owner's EU game), and
+# such a country would collect without its relief and lose its reactions. So
+# each month this adds the entry to a migrated country with no record of it,
+# active or inactive. Not while an inactive copy waits: add_journal_entry is
+# refused then, with an error ("already has a journal entry of type",
+# scripting_best_practices.md), and the engine activates that copy itself.
+# Decentralized countries are left out, as in the dispatch: none is migrated.
+te_tax_light_entry_net = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_light_on = yes
+				te_tax_light_in_force = yes
+				NOT = { is_country_type = decentralized }
+				NOT = { has_journal_entry = je_tax_code }
+				NOT = { has_inactive_journal_entry = je_tax_code }
+			}
+			add_journal_entry = { type = je_tax_code }
+			debug_log = "TE_TAX light_entry_net the safety net added je_tax_code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }
