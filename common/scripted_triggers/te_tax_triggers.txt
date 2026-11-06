@@ -204,6 +204,19 @@ te_tax_light_in_force = {
 	var:te_tax_light_on >= 1
 }
 
+# The light sync's AI branch (te_tax_light_sync, te_tax_light_effects.txt): an
+# AI country's code follows its native tax level, every tax at its law's rate
+# there. The rebels of an uprising are left out while their war lasts
+# (te_cw_origin: written at the outbreak by te_civil_war_record_start, removed
+# when the war ends by te_civil_war_clear or the secession-end hook). They hold
+# the code of the country they rose against (te_tax_light_copy_code), which the
+# sync keeps as it keeps a player's, each tax moving with the level their AI
+# sets, so a rebel winner continues the nation's rates (#1469).
+te_tax_light_ai_uniform = {
+	is_ai = yes
+	NOT = { has_variable = te_cw_origin }
+}
+
 # The journal entry (je_tax_code's `possible`) and the Budget panel's Tax Code
 # tab (te_budget_tax_tab_unlock_sgui's `is_valid`) open once the code is in
 # force, full or light, so the greyed tab's checklist and the entry cannot
