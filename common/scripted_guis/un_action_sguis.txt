@@ -40,6 +40,11 @@ un_act_found_sgui = {
 		has_technology_researched = intergovernmental_organizations
 		country_rank >= rank_value:great_power
 		is_subject = no
+		# As joining (un_join_button): a founder is a member.
+		custom_tooltip = {
+			text = un_join_not_revolutionary_tt
+			is_revolutionary = no
+		}
 		custom_tooltip = {
 			text = un_refounding_cooldown_tt
 			NOT = { has_global_variable = un_refounding_cooldown }

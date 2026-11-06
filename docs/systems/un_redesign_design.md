@@ -1292,8 +1292,9 @@ credit, its conventions, and its terms under the regimes.
     while the mirror is set, so the variable is all there is. Nothing adds, removes, restores or
     reconciles it, its readers test the mirror, and a revolution's winner keeps it by
     construction. A loyalist winner would keep the rebels' as well, so an uprising may not
-    join the UN (the Join button, the charter's invitation, a treaty's enrolment and
-    `un_events.10` test `is_revolutionary = no`). The six programmes and stances, the two programme costs, and the sixteen
+    join or found the UN (the Join and Found buttons, the charter's invitation, a treaty's
+    enrolment, `un_events.10` and a founding conference's top power test
+    `is_revolutionary = no`). The six programmes and stances, the two programme costs, and the sixteen
     convention modifiers, at the UN's enforcement. Nine of them sat on the country before
     1.15 (the law of the sea, the ICC and the physical protection of nuclear material from
     #474, then six more); all sit on the entry now.

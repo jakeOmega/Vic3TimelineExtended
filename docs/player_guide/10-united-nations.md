@@ -43,8 +43,8 @@ building is demolished.
 Any country that conducts its own foreign policy may press Join the United
 Nations, under the overview's Membership cell: an independent country, or a dominion, protectorate or tributary.
 Puppets, vassals, colonies, personal unions, crown lands, chartered companies
-and decentralized nations cannot, nor can an uprising while it fights. No
-technology is needed.
+and decentralized nations cannot, nor can an uprising while it fights (it can't
+found one either). No technology is needed.
 
 Members get UN Membership Privileges at once: +10% relations improvement speed,
 +5 leverage generation, +3% prestige, +3% influence and slower escalation when

@@ -635,9 +635,10 @@ script value was deleted: an older save's copies name them all.
   older save kept after a member stopped paying.
 - **Rebels:** a revolution's winner inherits the loser's variables, and with no
   reconcile a government that won would keep the conventions and programmes of
-  rebels who had joined. An uprising may no longer join the UN (the Join
-  button, the charter's invitation, a treaty's enrolment, `un_events.10`), as
-  it may already not lobby in it (`un_lobbying.txt`).
+  rebels who had joined. An uprising may no longer join or found the UN (the
+  Join and Found buttons, the charter's invitation, a treaty's enrolment,
+  `un_events.10`, a founding conference's top power), as it may already not
+  lobby in it (`un_lobbying.txt`).
 - **Influence gates' tooltips:** the cost line keeps the cost, and a second
   line, shown only while a start in the past week is booked, names the booking
   (`un_influence_pending_tt`).

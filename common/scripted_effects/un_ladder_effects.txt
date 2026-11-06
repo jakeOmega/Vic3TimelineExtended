@@ -805,6 +805,7 @@ un_conference_conclude = {
 			has_global_variable = un_conference_top_power_joins
 			has_global_variable = un_conference_top_power
 			exists = global_var:un_conference_top_power
+			global_var:un_conference_top_power = { is_revolutionary = no }	# as the Join button
 		}
 		global_var:un_conference_top_power = {
 			un_join_organisation = yes

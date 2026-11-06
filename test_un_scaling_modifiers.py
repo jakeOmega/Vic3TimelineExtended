@@ -268,12 +268,15 @@ class UprisingTests(unittest.TestCase):
     may not join (review of PR 8)."""
 
     def test_every_way_in_turns_an_uprising_away(self):
-        for path, name in ((BUTTONS, "un_join_button"), (SGUIS, "un_act_join_sgui")):
+        for path, name in ((BUTTONS, "un_join_button"), (SGUIS, "un_act_join_sgui"),
+                           (BUTTONS, "un_found_button"), (SGUIS, "un_act_found_sgui")):
             with self.subTest(control=name):
                 gate = _block(_read(path), name)
                 self.assertIn("text = un_join_not_revolutionary_tt\n\t\t\tis_revolutionary = no", gate)
         self.assertIn("un_membership_eligible = yes\n\t\t\t\t\t\tis_revolutionary = no",
                       _read(JE))
+        self.assertIn("global_var:un_conference_top_power = { is_revolutionary = no }",
+                      _block(_read(LADDER), "un_conference_conclude"))
         events = _read(_path("events", "un_events.txt"))
         self.assertEqual(events.count("un_membership_eligible = yes\n\t\tis_revolutionary = no"), 1)
         self.assertEqual(events.count("un_membership_eligible = yes\n\t\t\tis_revolutionary = no"), 1)
