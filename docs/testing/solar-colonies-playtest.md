@@ -15,7 +15,7 @@ still reaches the milestones.
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK site_dead_holder <world>: …` | once a game, the first month a world's holder is no longer alive | which guard caught the dead holder: `exists` on the stored country, or `is_country_alive = no` on a stored country that still exists. Either is fine; record which | `TE_SELF_CHECK BROKEN site_dead_holder <world>: the heir did not take it`: the transfer to the capital region's owner left the dead holder on the record | if neither guard catches it (the world stays on a dead holder, no line), store the holder's tag as well and compare tags (`c:<TAG>` and `exists`) |
-| `TE_SELF_CHECK OK/BROKEN site_receiver_entry: …` | once a game, 70 days after a country without the Moon Base and Mars Landing received a colony | it holds Solar System Colonization and the colony | it has no entry (`add_journal_entry` or the widened `possible` failed) or lost the colony | put a received colony's modifiers on the country instead of the entry for a country that cannot hold the entry (`sr_site_show_modifier` would need a country branch) |
+| `TE_SELF_CHECK OK/BROKEN site_receiver_entry: …` | once a game, 70 days after a country without the Moon Base and Mars Landing received a colony | it holds Solar System Colonization and the colony | it has no entry (`add_journal_entry` or the widened `possible` failed) or lost the colony | put a received colony's modifiers on the country instead of the entry for a country that cannot hold the entry (the entry's declarations would need a country copy) |
 
 ## The record
 
@@ -125,7 +125,6 @@ module at our first colony and fabricate now; land our shipments now; recompute 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN module_fabrication country=… points=…` | once a game, a month after a Space Program first runs a fabrication method at half staff or more | the method's `country_sr_module_fabrication_add` reaches its country | the country has no points: the secondary group's workforce-scaled country modifier does not reach it | give the points from script instead: `sr_mod_fab_rate` reads which method the Space Program runs (`sr_mod_fabrication_runs`) and its occupancy |
-| `TE_SELF_CHECK OK/BROKEN modifier_seen_same_effect <modifier>` | once a game, the first time a world's sync re-adds a specialization at its multiplier (the first month after loading a save with colonies, or the first module landing) | `has_modifier` sees a modifier an `add_modifier` placed earlier in the same effect | it doesn't yet: every refresh must stay once per effect (the mod's code already assumes so) | none needed for this slice: `sr_site_show_modifier_at` tests its `_mult` record, not `has_modifier`; record the answer in `scripting_best_practices.md` |
 
 1. **The method group.** Under Simple Colonies, the Space Program's panel shows a third group, Module Fabrication,
    starting on No Module Fabrication. Orbital Assembly (Cislunar Infrastructure) shows +5 Colony Module Fabrication per
