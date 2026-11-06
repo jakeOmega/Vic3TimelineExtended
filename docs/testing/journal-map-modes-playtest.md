@@ -62,7 +62,7 @@ From #1417's list (its numbering), by the fourth session under Results:
 |---|---|---|
 | 1 | One click opens the Map Room, picks on the page | Yes: a widget draws on a contextless page. |
 | 2 | Picks on the page | Work, at the next tick, and the current pick's button draws pressed (`down` works). |
-| 3 | Scope probe | Blue: `scope:journal_entry` isn't set in a contextless entry's map either. No white stripes over the player's states: the stripe condition was `owner ?= { is_player = yes }`, and vanilla's own entries stripe through the state's `owner`, so most likely `is_player` doesn't resolve in the paint. The probe is gone. |
+| 3 | Scope probe | Blue: `scope:journal_entry` isn't set in a contextless entry's map either. No white stripes over the player's states: the stripe condition was `owner ?= { is_player = yes }` (**settled, eighth session:** the Map Room's Leading Cause stripes draw, so it was `is_player`), and vanilla's own entries stripe through the state's `owner`, so most likely `is_player` doesn't resolve in the paint. The probe is gone. |
 | 4 | Repaint while paused | (a) Reopening the page repaints. The picks now reopen it themselves (third-pass check 1). |
 | 5 | The map with the page closed | Neither: the lens toolbar's lock doesn't keep it (the map went back to political), and the listed copy painted nothing with no page open and the open page's map otherwise. The copy is gone; the see-through page is the answer instead. |
 | 6 | Does the Banking tab paint its map | No: only its button (opening the entry's page) does. |
@@ -249,6 +249,16 @@ The owner asked for the see-through page at 20% (it was 30%): the fade works, so
 `alpha` binds on the side panel's root. The sixth pass makes it 20% and asks again whether that is right. The same
 message asked for the systems' maps, each system tab's map button and a Map Room button in the Timeline Extended
 window (checks 9–20), and emissions as a share of the world's rather than an amount.
+
+### Eighth session, 2026-11-06 (#1487 merged)
+
+**The Leading Cause stripes draw** (the owner's screenshot, after running on a save from before the build): orange chronic
+illness stripes over most of Britain and France, whose pale fill is infection's, and Home Counties' hover reads
+"Leading cause of death: Chronic Illness, 38%" and "Close behind, in the stripes: Infection, 38%". So
+`map_color_second` draws on a contextless entry, and the fourth session's missing stripes were `is_player`, not the
+Map Room. The first look showed none: the save's 893 counted states held no `te_dg_dc_second` until their next yearly
+count (the census counts each state in its own month). Check 7's fade question, whether the palest causes read apart,
+is still open.
 
 ## Not tested here
 

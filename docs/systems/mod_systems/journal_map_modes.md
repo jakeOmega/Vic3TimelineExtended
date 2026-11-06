@@ -22,8 +22,9 @@ Vanilla 1.15 gives a journal entry three optional blocks (`game/common/journal_e
   `lerp = { min_color max_color factor }` with a 0–1 factor. It takes `if` / `else_if` like a script value (vanilla's
   ACW, Meiji and Hungry Forties entries branch on it), and a branch that matches nothing leaves the state unpainted.
 - `map_color_second` is the same, drawn as stripes over the first color (vanilla's Great Game and Forest of Bayonets
-  stripe through the state's `owner`). Under `owner ?= { is_player = yes }` it drew nothing (2026-11-05), so a map most
-  likely can't single out the player's own states.
+  stripe through the state's `owner`). It draws on a contextless entry too (the Map Room's Leading Cause, seen
+  2026-11-06), so the nothing it drew under `owner ?= { is_player = yes }` (2026-11-05) was `is_player`: a map can't
+  single out the player's own states.
 - `map_tooltip` is an effect block that only prints: `custom_tooltip_no_bullet = key` per branch. Its loc reaches the
   state as `[THIS.GetState…]` (`GetName`, `GetOwner.GetName`, `CalcTurmoil|v%1`, `GetLiteracy|%1v`,
   `MakeScope.Var('x').GetValue`).
