@@ -4400,8 +4400,8 @@
   "es": "Ventana"
  },
  "je_space_race_widget_dp_col_window_tt": {
-  "en": "#header Window#!\\nFrom Earth, whether the leg's [concept_sr_launch_window] is open, or the months until it opens. A closed window never stops a fleet: it only raises the leg's propellant. Legs that don't start at Earth show none.",
-  "es": "#header Ventana#!\\nDesde la Tierra, si la [concept_sr_launch_window|l] del tramo está abierta, o los meses que faltan para que se abra. Una ventana cerrada nunca detiene a una flota: solo aumenta el propelente del tramo. Los tramos que no parten de la Tierra no muestran ninguna."
+  "en": "#header Window#!\\nFrom Earth, whether the leg's [concept_sr_launch_window] is open, or the months until it opens. A closed window never stops a fleet: it only raises the leg's propellant. Legs that don't start at Earth show none, and neither does a fleet with torch or antimatter engines, which leaves in any month.",
+  "es": "#header Ventana#!\\nDesde la Tierra, si la [concept_sr_launch_window|l] del tramo está abierta, o los meses que faltan para que se abra. Una ventana cerrada nunca detiene a una flota: solo aumenta el propelente del tramo. Los tramos que no parten de la Tierra no muestran ninguna, y tampoco la muestra una flota con propulsión de antorcha o de antimateria, que parte en cualquier mes."
  },
  "je_space_race_widget_dp_dv_short_tt": {
   "en": "The fleet carries less propellant than this leg needs. Go stays grayed until it carries enough: it refills at Earth, or at a Spaceport on a site that makes propellant, and from Earth a leg needs less as its [concept_sr_launch_window] opens.",

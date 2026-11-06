@@ -4432,8 +4432,8 @@
   "de": "Fenster"
  },
  "je_space_race_widget_dp_col_window_tt": {
-  "en": "#header Window#!\\nFrom Earth, whether the leg's [concept_sr_launch_window] is open, or the months until it opens. A closed window never stops a fleet: it only raises the leg's propellant. Legs that don't start at Earth show none.",
-  "de": "#header Fenster#!\\nVon der Erde aus: ob das [concept_sr_launch_window] der Etappe offen ist oder wie viele Monate es bis zur Öffnung dauert. Ein geschlossenes Fenster hält eine Flotte nie auf: Es erhöht nur den Treibstoffbedarf der Etappe. Etappen, die nicht an der Erde beginnen, zeigen keines."
+  "en": "#header Window#!\\nFrom Earth, whether the leg's [concept_sr_launch_window] is open, or the months until it opens. A closed window never stops a fleet: it only raises the leg's propellant. Legs that don't start at Earth show none, and neither does a fleet with torch or antimatter engines, which leaves in any month.",
+  "de": "#header Fenster#!\\nVon der Erde aus: ob das [concept_sr_launch_window] der Etappe offen ist oder wie viele Monate es bis zur Öffnung dauert. Ein geschlossenes Fenster hält eine Flotte nie auf: Es erhöht nur den Treibstoffbedarf der Etappe. Etappen, die nicht an der Erde beginnen, zeigen keines, und eine Flotte mit Fackel- oder Antimaterieantrieb ebenso wenig: Sie bricht in jedem beliebigen Monat auf."
  },
  "je_space_race_widget_dp_dv_short_tt": {
   "en": "The fleet carries less propellant than this leg needs. Go stays grayed until it carries enough: it refills at Earth, or at a Spaceport on a site that makes propellant, and from Earth a leg needs less as its [concept_sr_launch_window] opens.",
