@@ -85,7 +85,7 @@ entry, in no country's journal.
   `te_update_tourism_modifier` stores monthly, 20%–100%) and Local Climate's comfort, 27 Base Comfort before any
   technology's relief (`te_climate_base_penalty`, stored by `te_update_local_climate_modifier` from
   `te_climate_penalty_raw`) and 28 Current Comfort after the owner's (`te_climate_penalty_applied`, the penalty in
-  force), both yearly and on one curve and palette, diverging at none: a mild winter's draw green down to −7.2, a cost
+  force), both yearly and on one curve and palette, diverging at none: a mild or sunny winter's draw green down to −10.8, a cost
   red, soft-capped at 30 to the cap of 80. The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
   expectancy, 10 infant mortality, 4 fertility, 5 median age, 14 aged 65 and over and 12 sex balance from a state's first
   seed; 9 births, 8 deaths and 7 natural change per 1,000, 13 net migration and 11 the leading cause of death only once

@@ -1,6 +1,6 @@
-"""Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12).
+"""Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12, § 13).
 
-The five relief types and the technologies that carry them, the comfort formula and its
+The six relief types and the technologies that carry them, the comfort formula and its
 calibration, and the modifier that applies the penalty.
 
     python3 test_local_climate_comfort.py
@@ -38,19 +38,23 @@ CONSTANTS = {
     "te_climate_dry_per_class": 16, "te_climate_malaria_per_class": 5, "te_climate_penalty_max": 80,
     "te_climate_amp_low_lat": 30, "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5,
     "te_climate_normals_warming": 1.1,
+    "te_climate_sun_neutral": 2.4, "te_climate_sun_full": 6, "te_climate_sun_per_hour": 1,
 }
 # Each term's raw value and the relief that eases it (the dry term's is water).
-TERMS = {"heat": "heat", "cold": "cold", "winter": "winter", "dry": "water", "disease": "disease"}
-# The terms that only cost; the winter term is signed (spec § 12).
+TERMS = {"heat": "heat", "cold": "cold", "winter": "winter", "dry": "water", "disease": "disease", "sun": "sun"}
+# The terms that only cost; the winter and sunshine terms are signed (spec § 12, § 13).
 COSTS = ("heat", "cold", "dry", "disease")
 
-KINDS = ("heat", "cold", "winter", "water", "disease")
+KINDS = ("heat", "cold", "winter", "water", "disease", "sun")
 # Spec § 5.2 as the owner left it on 2026-11-01: the historical eras' stage by era 7, the modern by
 # era 10, everything by era 13; malaria gone by era 4.
 STAGES = {"cold": {7: 0.6, 10: 0.8, 13: 1.0}, "heat": {7: 0.8, 10: 0.9, 13: 1.0},
           "water": {7: 0.7, 10: 0.85, 13: 1.0}, "disease": {4: 1.0, 13: 1.0},
           # Winter's mildness shrinks with heating but lasts into the era 11+ technologies (owner, 2026-11-01).
-          "winter": {4: 0.1, 7: 0.2, 10: 0.4, 11: 0.6, 12: 0.8, 13: 1.0}}
+          "winter": {4: 0.1, 7: 0.2, 10: 0.4, 11: 0.6, 12: 0.8, 13: 1.0},
+          # Sunshine only very late: a little from geoengineering's weather modification, the rest in era 13
+          # (owner, 2026-11-06).
+          "sun": {11: 0.0, 12: 0.3, 13: 1.0}}
 
 
 def loc_value(key):
@@ -213,7 +217,7 @@ class Formula(unittest.TestCase):
 
     def test_winter_axis(self):
         """Winters milder than London's in 1836 earn a small bonus and harsher ones cost, both per degree, the
-        bonus stopping at te_climate_winter_mild (owner, 2026-11-01; spec § 12). The one signed term."""
+        bonus stopping at te_climate_winter_mild (owner, 2026-11-01; spec § 12). Signed, as sunshine is (§ 13)."""
         self.assertEqual(values_body("te_climate_winter_harsh"),
                          "value = te_climate_winter_neutral subtract = te_climate_winter_eff min = 0 "
                          "multiply = te_climate_winter_per_degree")
@@ -241,6 +245,48 @@ class Formula(unittest.TestCase):
                     self.assertGreaterEqual(got["winter"], 0, (r.state, era))
         # Madeira's summer is mild, so it keeps its whole draw.
         self.assertAlmostEqual(cal.terms(self.rows["STATE_MADEIRA"], 1, c, s)["winter"], -7.1, delta=0.1)
+
+    def test_sun_axis(self):
+        """Winters sunnier than London's earn a small bonus and gloomier ones cost, both per hour of daily sun, the
+        bonus stopping at te_climate_sun_full and cancelled by a hot summer as winter's mildness is (owner,
+        2026-11-06; spec § 13): the Colorado Front Range draws on its sun, London and the Pacific Northwest don't."""
+        self.assertEqual(values_body("te_climate_sun_gloom"),
+                         "value = te_climate_sun_neutral subtract = te_climate_winter_sun min = 0 "
+                         "multiply = te_climate_sun_per_hour")
+        self.assertEqual(values_body("te_climate_sun_bright"),
+                         "value = te_climate_winter_sun max = te_climate_sun_full subtract = te_climate_sun_neutral "
+                         "min = 0 multiply = te_climate_sun_per_hour multiply = te_climate_summer_share")
+        self.assertEqual(values_body("te_climate_sun_raw"), "value = te_climate_sun_gloom subtract = te_climate_sun_bright")
+        c, s = self.c, self.s
+
+        def sun(state, era=1):
+            return cal.terms(self.rows[state], era, c, s)["sun"]
+
+        # London is the neutral point, measured the same way as every row; a region with no row reads it.
+        self.assertEqual(self.rows["STATE_HOME_COUNTIES"].winter_sun_h, c["te_climate_sun_neutral"])
+        self.assertEqual(sun("STATE_HOME_COUNTIES"), 0)
+        defaults = {field: default for _, field, default, _ in gen.VALUES if field}
+        self.assertEqual(defaults["winter_sun_h"], c["te_climate_sun_neutral"])
+        # Denver draws; Seattle, Vancouver and Glasgow don't; Bergen and the Arctic cost.
+        self.assertLess(sun("STATE_COLORADO"), -2.5)
+        for gloomy in ("STATE_WASHINGTON", "STATE_BRITISH_COLUMBIA", "STATE_LOWLANDS", "STATE_WESTERN_NORWAY", "STATE_KOLA"):
+            self.assertGreaterEqual(sun(gloomy), 0, gloomy)
+        self.assertLess(sun("STATE_LOWLANDS"), sun("STATE_KOLA"))
+        bonus_max = c["te_climate_sun_per_hour"] * (c["te_climate_sun_full"] - c["te_climate_sun_neutral"])
+        cost_max = c["te_climate_sun_per_hour"] * c["te_climate_sun_neutral"]
+        for r in self.rows.values():
+            got = cal.terms(r, 1, c, s)["sun"]
+            self.assertTrue(-bonus_max - 1e-9 <= got <= cost_max + 1e-9, (r.state, got))
+            # A summer that costs te_climate_winter_heat_cancel or more cancels the draw.
+            if cal.terms(r, 1, c, s)["heat"] >= c["te_climate_winter_heat_cancel"]:
+                self.assertGreaterEqual(got, 0, r.state)
+        # Not a large factor: the Front Range passes London only once the last eras have eased its dry land and
+        # its winters, and passes Seattle from the start of the modern eras.
+        p = self.penalty
+        self.assertGreater(p("STATE_COLORADO", 10, 1.1), p("STATE_HOME_COUNTIES", 10, 1.1))
+        self.assertLess(p("STATE_COLORADO", 11, 1.1), p("STATE_HOME_COUNTIES", 11, 1.1))
+        self.assertLess(p("STATE_COLORADO", 11, 1.1), p("STATE_WASHINGTON", 11, 1.1))
+        self.assertGreater(p("STATE_COLORADO", 7), p("STATE_WASHINGTON", 7))
 
     def test_amplification(self):
         c = self.c
@@ -274,8 +320,9 @@ class Formula(unittest.TestCase):
             ("STATE_SAHARA", 1, 35, 55), ("STATE_ARIZONA", 1, 35, 55),
             ("STATE_SAHARA", 10, 0, 10), ("STATE_ARIZONA", 10, 0, 10),
             ("STATE_YAKUTSK", 1, 55, 75), ("STATE_YAKUTSK", 7, 28, 42), ("STATE_YAKUTSK", 10, 15, 30),
-            ("STATE_MASSACHUSETTS", 1, 8, 18), ("STATE_HAWAIIAN_ISLANDS", 1, -8, -3), ("STATE_VICTORIA", 1, 2, 12),
-            ("STATE_MADEIRA", 1, -8, -5),
+            ("STATE_MASSACHUSETTS", 1, 8, 18), ("STATE_VICTORIA", 1, 2, 12),
+            # Winter sun adds to a mild winter's draw (spec § 13): Honolulu's 3.4 and Funchal's 2.8 on top.
+            ("STATE_HAWAIIAN_ISLANDS", 1, -11, -5), ("STATE_MADEIRA", 1, -11, -8),
         )
         for state, era, low, high in ranges:
             with self.subTest(state=state, era=era):
@@ -312,7 +359,8 @@ class Formula(unittest.TestCase):
     def test_penalty_bounds_under_warming(self):
         rows = list(self.rows.values()) + [neutral_row()]
         c = self.c
-        bonus_max = c["te_climate_winter_per_degree"] * (c["te_climate_winter_mild"] - c["te_climate_winter_neutral"])
+        bonus_max = (c["te_climate_winter_per_degree"] * (c["te_climate_winter_mild"] - c["te_climate_winter_neutral"])
+                     + c["te_climate_sun_per_hour"] * (c["te_climate_sun_full"] - c["te_climate_sun_neutral"]))
         for warming in (-1.0, 0.0, 2.0, 4.0):
             for era in (1, 10):
                 for r in rows:
@@ -436,7 +484,8 @@ def record_env(row, has_record=1):
     return {"te_climate_has_record": has_record, "te_climate_summer_humidity": row.summer_humidity,
             "te_climate_winter_mean": row.winter_mean_c, "te_climate_aridity": row.aridity,
             "te_climate_malaria": row.malaria, "te_climate_latitude": row.latitude,
-            "te_climate_hot_day": row.hot_day_c, "te_climate_heat_index": row.heat_index}
+            "te_climate_hot_day": row.hot_day_c, "te_climate_heat_index": row.heat_index,
+            "te_climate_winter_sun": row.winter_sun_h}
 
 
 class ScriptMatchesMirror(unittest.TestCase):
@@ -459,7 +508,7 @@ class ScriptMatchesMirror(unittest.TestCase):
                 for warming in self.WARMING:
                     env = {**record_env(row), **self.sums[era], "temperature_anomaly_display": warming}
                     mirror = cal.terms(row, era, self.c, self.s, warming)
-                    for name in ("heat", "cold", "winter", "dry", "disease", "penalty"):
+                    for name in ("heat", "cold", "winter", "dry", "disease", "sun", "penalty"):
                         sv = f"te_climate_{name}_term" if name != "penalty" else "te_climate_penalty"
                         diff = abs(self.sv.read(sv, env) - mirror[name])
                         if diff > worst[0]:
@@ -469,6 +518,7 @@ class ScriptMatchesMirror(unittest.TestCase):
                     bare = cal.terms(row, 0, self.c, self.s, warming)["penalty"]
                     for sv, want in (("te_climate_bonus", max(0.0, -mirror["penalty"])),
                                      ("te_climate_winter_draw", -mirror["winter"]),
+                                     ("te_climate_sun_draw", -mirror["sun"]),
                                      ("te_climate_penalty_raw", bare)):
                         diff = abs(self.sv.read(sv, env) - want)
                         if diff > worst[0]:
@@ -704,13 +754,16 @@ class Tile(unittest.TestCase):
                   ("te_state_climate_winter_tt", "cold_raw", "relief_cold", "cold_term"),
                   ("te_state_climate_winter_tt", "winter_draw_raw", "relief_winter", "winter_draw"),
                   ("te_state_climate_water_tt", "dry_raw", "relief_water", "dry_term"),
-                  ("te_state_climate_malaria_tt", "disease_raw", "relief_disease", "disease_term"))
+                  ("te_state_climate_malaria_tt", "disease_raw", "relief_disease", "disease_term"),
+                  ("te_state_climate_sun_tt", "sun_draw_raw", "relief_sun", "sun_draw"))
         for key, *values in hovers:
             text = loc_value(key) or ""
             for value in values:
                 self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{value}')", text, (key, value))
         self.assertEqual(values_body("te_climate_winter_draw"), "value = te_climate_winter_term multiply = -1")
         self.assertEqual(values_body("te_climate_winter_draw_raw"), "value = te_climate_winter_raw multiply = -1")
+        self.assertEqual(values_body("te_climate_sun_draw"), "value = te_climate_sun_term multiply = -1")
+        self.assertEqual(values_body("te_climate_sun_draw_raw"), "value = te_climate_sun_raw multiply = -1")
         self.assertEqual(values_body("te_climate_effect_now"), "value = te_climate_penalty_now multiply = -1")
         for key, season, warming in (("te_state_climate_hot_day_tt", "hot_day", "summer"),
                                      ("te_state_climate_winter_tt", "winter_mean", "winter")):
@@ -719,7 +772,7 @@ class Tile(unittest.TestCase):
             self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{season}')", text, key)
         self.assertIn("State.MakeScope.ScriptValue('te_climate_heat_index_eff')", loc_value("te_state_climate_hot_day_tt"))
         comfort = loc_value("te_state_climate_comfort_tt") or ""
-        for value in ("heat_term", "cold_term", "winter_draw", "dry_term", "disease_term", "effect_now"):
+        for value in ("heat_term", "cold_term", "winter_draw", "dry_term", "disease_term", "sun_draw", "effect_now"):
             self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{value}')", comfort, value)
         self.assertIn("[concept_migration_pull]", comfort)
         # The figures the text quotes come from the constants, so a retune can't leave them stale.
@@ -734,7 +787,7 @@ class Tile(unittest.TestCase):
 
     def test_rows_gate_on_the_record(self):
         rows = tile_rows()
-        self.assertEqual(len(rows), 9)
+        self.assertEqual(len(rows), 10)
         for gate, _ in rows:
             self.assertIn(HAS_RECORD, gate)
 

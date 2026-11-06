@@ -333,6 +333,7 @@ terraforming = {
 	modifier = {
 		# the colonies' Terraforming module (gen_solar_sites.TERRA_MARKER)
 		country_sr_terraforming_bool = yes
+		state_climate_sun_relief_add = 0.7 # Local Climate: orbital mirrors and cloud control give every winter its sun
 	}
 
 	ai_weight = {

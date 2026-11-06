@@ -24,7 +24,7 @@ tooltip breaks the numbers down.
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
+| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, winter sunshine, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
 | Dynastic Wealth | While the state carries a modifier from its Dynastic Wealth or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
@@ -124,18 +124,20 @@ tolerance multiplies the densities that open and close a resettlement frontier
 
 Every state region has a climate record, taken where most of its people live:
 the hottest day of a typical year and how hard such days are to bear, the
-warmest month's humidity, the coldest month's temperature, how much water
-there is, and how common malaria was in 1836. The
+warmest month's humidity, the coldest month's temperature, how many hours of
+sun a winter day gets, how much water there is, and how common malaria was in
+1836. The
 Local Climate tile shows it, and every part of a split region shares it.
 
 Migrants weigh the climate, so a harsh one cuts a state's migration pull, and
-through it the pull that draws mass migrations. Five things count:
+through it the pull that draws mass migrations. Six things count:
 
 | Part | When |
 |---|---|
 | Heat | The hottest days are hot and humid enough to strain the body; each degree costs more than the last |
 | Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little unless the summer is hot |
 | Frost | The coldest month averages below freezing, on top of Winter |
+| Sunshine | Measured against London's winter sun: a gloomier winter costs a little, a sunnier one adds a little unless the summer is hot |
 | Dry land | Water is limited (semi-arid country) or scarce (desert) |
 | Malaria | It was seasonal or endemic in 1836 |
 
@@ -148,10 +150,12 @@ The tile's Comfort row gives the total as a percentage of the state's
 migration pull, worked out again once a year, and hovering a reading shows what
 it costs before and after technology. In 1836 a hot, humid, malarial state
 such as Georgia loses about 27%, Bengal about 50% and Yakutsk about 64%;
-London loses nothing and Paris 4%. A mild winter with little else against it
-adds pull, at most about 7%: Madeira gains 7%, Hawaii 5% and Cape Town 5%. A
-hot summer cancels that, so Bengal's or Singapore's warm winter adds nothing.
-Climate never costs more than 80%.
+London loses nothing and Paris 4%. A mild, sunny winter with little else
+against it adds pull, at most about 11%: Madeira gains 10%, Hawaii 9% and Cape
+Town 8%. A hot summer cancels that, so Bengal's or Singapore's warm, bright
+winter adds nothing. Sunshine on its own counts for little: Denver's bright
+winters add 3%, Bergen's dark ones cost 1%, and London, Seattle and Vancouver
+sit near nothing. Climate never costs more than 80%.
 
 Technologies ease each cost, for the country that researches them:
 
@@ -161,8 +165,11 @@ Technologies ease each cost, for the country that researches them:
 - Malaria goes with Quinine and then Malaria Prevention.
 - Water follows mechanized farming, welding and chemistry.
 - Heat waits for the 20th century's appliances and air conditioning.
+- Sunshine's pull, gloomy against bright, lasts longest, since a warm, well-lit
+  house doesn't bring the sun out. Geoengineering's weather modification eases
+  it a little, and Terraforming ends it.
 
-By the last era none of the five costs or adds anything. On the way, air
+By the last era none of the six costs or adds anything. On the way, air
 conditioning eases the South's heat sooner than heating closes the gap between
 winters, so once central air arrives Georgia costs less than Massachusetts.
 
