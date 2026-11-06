@@ -1,4 +1,4 @@
-﻿# ======= Space Race - Approach Modifiers (applied per-JE when approach is selected)
+﻿# ======= Space Race - Approach Modifiers (declared on each milestone entry while its approach is selected, je_space_race.txt)
 sr_safe_approach = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_space_race_risk_mult = -0.5
@@ -12,10 +12,10 @@ sr_temporary_safety_review = {
 	country_space_race_progress_mult = -0.1
 	country_space_race_risk_mult = -0.25
 }
-# ======= Space Race - Funding Modifiers (applied per-JE by sr_apply_milestone_cost_modifiers_base)
-# The pace: multiplier = sr_funding_<m>_effective, the level up to the cap plus
+# ======= Space Race - Funding Modifiers (declared on each milestone entry while it is billed, je_space_race.txt)
+# The pace: value sr_funding_<m>_effective, the level up to the cap plus
 # the six-step ladder past it (1/2, 1/3, ... 1/7 of a level; lunar colonization
-# design § 5.1). The throughput: multiplier = sr_funding_<m>_level, every level
+# design § 5.1). The throughput: value sr_funding_<m>_level, every level
 # in full, past the cap too. Split 2026-10-29: one modifier carried both, so the
 # pace and the throughput could not be scaled apart.
 sr_funding_progress = {
@@ -540,7 +540,8 @@ sr_far_side = {
 }
 
 # ======= Space Race - JE-Scoped Choice Risk/Progress Modifiers =======
-# Applied to the JE when a milestone choice is made; auto-removed on JE completion.
+# Declared on the milestone's entry while it runs and the choice variable is set
+# (je_space_race.txt); gone with the entry on completion.
 # These make risk/progress tradeoffs visible to the player.
 
 # --- Orbital Astronaut Type (Event 80) ---

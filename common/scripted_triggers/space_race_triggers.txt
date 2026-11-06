@@ -283,13 +283,14 @@ sr_colonization_beyond_moon = {
 }
 
 # Whether a milestone's funding and approach are billed, and its funding adds
-# to the programme's pace (sr_apply_milestone_cost_modifiers_base). A running
-# milestone is billed; the six single-goal milestones run exactly while
-# sr_active_<m> is set, because losing their production method fails the
-# entry. Solar colonization stays open without it (its colonies' modifiers
-# live on the entry), and then it is not billed: the same test as its pulse
-# and its controls (owner, 2026-09-29: billing it with the method off was a
-# bug). Country scope.
+# to the programme's pace: the gate of its entry's three cost and funding
+# declarations (je_space_race.txt; #1404), and of the panel's funding
+# figures (space_race_display_values.txt). A running milestone is billed;
+# the six single-goal milestones run exactly while sr_active_<m> is set,
+# because losing their production method fails the entry. Solar colonization
+# stays open without it (its colonies' modifiers live on the entry), and then
+# it is not billed: the same test as its pulse and its controls (owner,
+# 2026-09-29: billing it with the method off was a bug). Country scope.
 sr_milestone_billed_suborbital = { has_variable = sr_active_suborbital }
 sr_milestone_billed_orbital = { has_variable = sr_active_orbital }
 sr_milestone_billed_moon_landing = { has_variable = sr_active_moon_landing }
@@ -297,48 +298,6 @@ sr_milestone_billed_probe = { has_variable = sr_active_probe }
 sr_milestone_billed_mars_landing = { has_variable = sr_active_mars_landing }
 sr_milestone_billed_interstellar_probe = { has_variable = sr_active_interstellar_probe }
 sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
-
-# Whether a billed milestone's entry lacks a cost or funding modifier
-# sr_apply_milestone_cost_modifiers_base would give it: a revolution's winner,
-# whose inherited entry re-ran `immediate` before `je:` could find it (Spain's
-# moon landing, 2026-10-10 observer run), so none of the three went on. It also
-# moves a save from before the funding split (2026-10-29) onto it: its entries
-# carry sr_funding_progress but not sr_funding_throughput. The monthly pulse
-# (space_race_on_action) then runs sr_recalculate_cost. A modifier whose
-# multiplier is 0 (funding cut to 0) does not count as missing, so it cannot
-# set off a recalculation every month. The multipliers read the country through
-# `owner`, so they hold in the entry's scope. Country scope.
-sr_cost_modifiers_missing_base = {
-	sr_milestone_billed_$MILESTONE$ = yes
-	je:je_space_race_$MILESTONE$ ?= {
-		OR = {
-			AND = {
-				sr_$MILESTONE$_cost > 0
-				NOT = { has_modifier = sr_space_program_cost }
-			}
-			AND = {
-				sr_funding_$MILESTONE$_effective > 0
-				NOT = { has_modifier = sr_funding_progress }
-			}
-			AND = {
-				sr_funding_$MILESTONE$_level > 0
-				NOT = { has_modifier = sr_funding_throughput }
-			}
-		}
-	}
-}
-
-sr_cost_modifiers_missing = {
-	OR = {
-		sr_cost_modifiers_missing_base = { MILESTONE = suborbital }
-		sr_cost_modifiers_missing_base = { MILESTONE = orbital }
-		sr_cost_modifiers_missing_base = { MILESTONE = moon_landing }
-		sr_cost_modifiers_missing_base = { MILESTONE = probe }
-		sr_cost_modifiers_missing_base = { MILESTONE = mars_landing }
-		sr_cost_modifiers_missing_base = { MILESTONE = interstellar_probe }
-		sr_cost_modifiers_missing_base = { MILESTONE = solar_colonization }
-	}
-}
 
 # A rival on milestone $MILESTONE$, seen from ROOT: another country running it
 # and actually moving it (sr_ai_should_participate — an AI outside the top

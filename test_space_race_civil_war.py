@@ -135,12 +135,17 @@ class ImmediateTests(unittest.TestCase):
         goal = _block(_block(JE, "je_space_race_interstellar_results"), "goal_add_value")
         self.assertIn("subtract = sr_interstellar_transit_value", goal)
 
-    def test_every_entry_rebuilds_its_own_modifiers(self):
-        for entry in ENTRIES:
+    def test_only_the_colonies_modifiers_are_rebuilt(self):
+        """Each milestone entry declares its approach, choice, cost and funding
+        modifiers from inherited variables (#1404,
+        test_space_race_scaling_modifiers.py), so only solar colonization's
+        colony modifiers are put back: by its `immediate`, and monthly."""
+        for entry in MILESTONES:
             with self.subTest(entry=entry):
-                self.assertIn(f"sr_sync_{entry}_entry = yes", _immediate(entry))
+                self.assertNotRegex(_immediate(entry), r"sr_sync_\w+_entry")
+        self.assertIn("sr_sync_solar_colonization_entry = yes", _immediate("solar_colonization"))
         pulse = _block(EFFECTS, "sr_sync_space_race_entries")
-        self.assertEqual(re.findall(r"sr_sync_(\w+)_entry = yes", pulse), list(ENTRIES))
+        self.assertEqual(re.findall(r"sr_sync_(\w+)_entry = yes", pulse), ["solar_colonization"])
         monthly = _block(ON_ACTIONS, "space_race_on_action")
         for call in ("sr_sync_space_race_entries = yes", "sr_sync_probe_data = yes"):
             with self.subTest(call=call):
@@ -151,7 +156,7 @@ class ImmediateTests(unittest.TestCase):
         # remove_modifier on an absent modifier logs an error on every call
         # (#469), and this runs monthly.
         names = re.findall(r"^(sr_sync_\w+) = \{", EFFECTS, re.M)
-        self.assertIn("sr_sync_approach_modifier_base", names)
+        self.assertIn("sr_sync_probe_data_base", names)
         for name in names:
             body = _block(EFFECTS, name)
             for m in re.finditer(r"remove_modifier\s*=\s*(\S+)", body):
@@ -187,55 +192,31 @@ class ImmediateTests(unittest.TestCase):
 
 
 class CostModifierTests(unittest.TestCase):
-    """The cost and funding modifiers come back for a revolution's winner.
+    """The cost and funding modifiers need no rebuilding for a revolution's winner.
 
-    sr_recalculate_cost puts them on every billed entry, and each entry's
-    `immediate` runs it. But when Spain's rebels won in the 2026-10-10
-    observer run, the inherited moon-landing entry's `immediate` could not
-    find its own entry by `je:` ("Failed to scope to journal entry by tag"),
-    so the winner ran the programme with neither modifier. The monthly pulse
-    now recalculates when a billed entry lacks one it should carry.
+    sr_recalculate_cost put them on every billed entry, and each entry's
+    `immediate` ran it. When Spain's rebels won in the 2026-10-10 observer run,
+    the inherited moon-landing entry's `immediate` could not find its own entry
+    by `je:` ("Failed to scope to journal entry by tag"), so the winner ran the
+    programme with neither modifier, and a monthly repair
+    (sr_cost_modifiers_missing) put them back. Since #1404 each entry declares
+    them from the funding and approach variables the winner inherits, and
+    nothing reaches an entry by `je:` to add them.
     """
 
-    def test_applying_skips_an_entry_it_cannot_find(self):
-        body = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
-        self.assertIn("je:je_space_race_$MILESTONE$ ?= {", body)
+    def test_each_entry_declares_them_from_its_own_variables(self):
+        for entry in ENTRIES:
+            body = _block(JE, f"je_space_race_{entry}")
+            for modifier, value in (("sr_space_program_cost", f"sr_{entry}_cost"),
+                                    ("sr_funding_progress", f"sr_funding_{entry}_effective"),
+                                    ("sr_funding_throughput", f"sr_funding_{entry}_level")):
+                with self.subTest(entry=entry, modifier=modifier):
+                    self.assertRegex(body, r"modifier = " + modifier + r"\s*value = \{\s*value = 0\s*if = \{\s*"
+                                     r"limit = \{ sr_milestone_billed_" + entry + r" = yes \}\s*add = " + value + r"\s*\}")
 
-    def test_every_entry_is_checked(self):
-        body = _definition(TRIGGERS, "sr_cost_modifiers_missing")
-        self.assertEqual(re.findall(r"sr_cost_modifiers_missing_base = \{ MILESTONE = (\w+) \}", body),
-                         list(ENTRIES))
-        self.assertTrue(body.strip().startswith("OR = {"))
-
-    def test_the_check_matches_what_is_applied(self):
-        applied = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
-        pairs = re.findall(r"name = (\w+)\s+multiplier = (\S+)", applied)
-        # The pace at the effective level, the throughput at the level itself
-        # (lunar colonization design § 5.1).
-        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_effective"),
-                                                ("sr_funding_throughput", "sr_funding_$MILESTONE$_level"),
-                                                ("sr_space_program_cost", "sr_$MILESTONE$_cost")]))
-        check = _definition(TRIGGERS, "sr_cost_modifiers_missing_base")
-        self.assertIn("sr_milestone_billed_$MILESTONE$ = yes", check)
-        entry = _block(check, "je:je_space_race_$MILESTONE$ ?")
-        # Either modifier missing is enough (OR, not AND): one can go
-        # without the other, for instance when a funding click lands while
-        # the entry cannot be found.
-        self.assertTrue(entry.strip().startswith("OR = {"), entry)
-        self.assertEqual(entry.count("AND = {"), len(pairs))
-        for modifier, multiplier in pairs:
-            with self.subTest(modifier=modifier):
-                # Missing only where the multiplier is not zero, so a zero
-                # funding or cost does not set off a recalculation every month.
-                self.assertRegex(entry, r"AND = \{\s*" + re.escape(multiplier) + r" > 0\s*"
-                                 r"NOT = \{ has_modifier = " + modifier + r" \}\s*\}")
-
-    def test_the_monthly_pulse_recalculates_when_one_is_missing(self):
-        monthly = _block(ON_ACTIONS, "space_race_on_action")
-        m = re.search(r"limit = \{ sr_cost_modifiers_missing = yes \}\s*sr_recalculate_cost = yes", monthly)
-        self.assertIsNotNone(m)
-        limits = _if_limits_around(monthly, m.end() - 1)
-        self.assertEqual(limits[0], " sr_space_race_participant = yes ")
+    def test_the_repair_is_gone(self):
+        self.assertNotIn("sr_cost_modifiers_missing", TRIGGERS + ON_ACTIONS + EFFECTS)
+        self.assertNotIn("sr_recalculate_cost", TRIGGERS + ON_ACTIONS + EFFECTS + JE)
 
 
 class RewardTests(unittest.TestCase):
@@ -266,18 +247,24 @@ class RewardTests(unittest.TestCase):
         effects = set(re.findall(r"\b(\w+)\s*=", body)) - {"if", "else", "limit", "has_variable", "name"}
         self.assertEqual(effects, {"add_modifier"})
 
-    def test_choice_modifiers_are_rebuilt_from_the_choice(self):
+    def test_choice_modifiers_follow_the_choice(self):
+        """Each option sets the choice's variable and previews its modifier; the
+        milestone's entry declares the modifier from the variable while it runs
+        (#1404), so a winner that inherits the variable has it."""
         for ev, entry in CHOICE_EVENTS.items():
             event = _block(EVENTS, f"space_race_events.{ev}")
             pairs = re.findall(
                 r"set_variable\s*=\s*\{\s*name\s*=\s*(\w+)\s+value\s*=\s*yes\s*\}\s*"
-                r"je:je_space_race_" + entry + r"\s*=\s*\{\s*add_modifier\s*=\s*(\w+)\s*\}", event)
+                r"show_as_tooltip\s*=\s*\{\s*je:je_space_race_" + entry
+                + r"\s*\?=\s*\{\s*add_modifier\s*=\s*(\w+)\s*\}\s*\}", event)
             self.assertGreaterEqual(len(pairs), 3, ev)
-            sync = _block(EFFECTS, f"sr_sync_{entry}_entry")
+            declared = _block(JE, f"je_space_race_{entry}")
             made = _block(TRIGGERS, f"sr_{entry}_choice_made")
             for var, mod in pairs:
                 with self.subTest(event=ev, choice=var):
-                    self.assertRegex(sync, r"CHOICE = " + var + r"\s+MODIFIER = " + mod + r"\b")
+                    self.assertRegex(declared, r"modifier = " + mod + r"\s*value = \{\s*value = 0\s*if = \{\s*"
+                                     r"limit = \{\s*has_variable = sr_active_" + entry + r"\s*has_variable = "
+                                     + var + r"\s*\}")
                     self.assertIn(f"has_variable = {var}", made)
 
     def test_probe_results_are_recorded(self):

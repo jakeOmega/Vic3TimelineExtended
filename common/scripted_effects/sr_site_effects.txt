@@ -320,7 +320,7 @@ sr_resume_solar_colonization = {
 			limit = { NOT = { has_variable = sr_funding_solar_colonization } }
 			set_variable = { name = sr_funding_solar_colonization value = 1 }
 		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 }
 

@@ -391,7 +391,7 @@ class FirstLunarColonyTest(unittest.TestCase):
             self.assertIn(line, body)
         # sr_was_first_moon_base, which .6's text reads, is set before the event.
         self.assertLess(body.index("sr_was_first_moon_base value = yes"), body.index("space_race_events.6"))
-        for repost in ("sr_recalculate_cost", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
+        for repost in ("sr_refresh_milestone_statuses", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
             self.assertNotIn(repost, body)
 
     def test_event_6_pays_the_reward_in_its_one_option(self):
@@ -486,7 +486,7 @@ class LunarMoonByChoiceTest(unittest.TestCase):
         started = resume[resume.index("has_journal_entry = je_space_race_solar_colonization"):]
         for line in ("set_variable = { name = sr_active_solar_colonization value = yes }",
                      "set_variable = { name = sr_funding_solar_colonization value = 1 }",
-                     "sr_recalculate_cost = yes"):
+                     "sr_refresh_milestone_statuses = yes"):
             self.assertIn(line, started)
         self.assertNotRegex(resume, r"remove_(variable|modifier)")
         # with the entry closed the marker opens it, and its immediate starts it
