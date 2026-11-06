@@ -60,7 +60,9 @@ innovation, innovation cap and prestige.
 > Lowering the production method, or losing the building, fails every running
 > milestone the new method no longer supports and wipes its progress. The event
 > Program Discontinued (or The Silent Gantry, if the building is gone) lists what
-> was lost. Solar System Colonization only pauses once you hold a colony.
+> was lost. Each one starts again from zero a month or two after your Space
+> Program can carry it again. Solar System Colonization only pauses once you
+> hold a colony.
 
 ### Moving to the next mission
 
