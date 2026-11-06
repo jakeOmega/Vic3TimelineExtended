@@ -5466,10 +5466,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -5513,10 +5513,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -5560,10 +5560,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -5607,10 +5607,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -5654,10 +5654,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -5701,10 +5701,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -5748,10 +5748,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -5795,10 +5795,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -5927,10 +5927,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -5974,10 +5974,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -6021,10 +6021,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -6068,10 +6068,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -6115,10 +6115,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -6162,10 +6162,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -6209,10 +6209,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -6256,10 +6256,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -6388,10 +6388,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -6435,10 +6435,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -6482,10 +6482,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -6529,10 +6529,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -6576,10 +6576,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -6623,10 +6623,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -6670,10 +6670,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -6717,10 +6717,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -6849,10 +6849,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -6896,10 +6896,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -6943,10 +6943,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -6990,10 +6990,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -7037,10 +7037,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -7084,10 +7084,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -7131,10 +7131,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -7178,10 +7178,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -7310,10 +7310,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -7357,10 +7357,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -7404,10 +7404,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -7451,10 +7451,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -7498,10 +7498,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -7545,10 +7545,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -7592,10 +7592,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -7639,10 +7639,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -7771,10 +7771,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -7818,10 +7818,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -7865,10 +7865,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -7912,10 +7912,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -7959,10 +7959,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -8006,10 +8006,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -8053,10 +8053,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -8100,10 +8100,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -8232,10 +8232,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -8279,10 +8279,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -8326,10 +8326,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -8373,10 +8373,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -8420,10 +8420,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -8467,10 +8467,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -8514,10 +8514,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -8561,10 +8561,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -8693,10 +8693,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -8740,10 +8740,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -8787,10 +8787,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -8834,10 +8834,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -8881,10 +8881,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -8928,10 +8928,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -8975,10 +8975,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -9022,10 +9022,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {
@@ -9154,10 +9154,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_inner')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_venus"
 					}
 					blockoverride "dr_worlds" {
@@ -9201,10 +9201,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_mars')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_mars"
 					}
 					blockoverride "dr_worlds" {
@@ -9248,10 +9248,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_asteroids')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_ceres"
 					}
 					blockoverride "dr_worlds" {
@@ -9295,10 +9295,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_jupiter')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_jupiter"
 					}
 					blockoverride "dr_worlds" {
@@ -9342,10 +9342,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_saturn')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_saturn"
 					}
 					blockoverride "dr_worlds" {
@@ -9389,10 +9389,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_uranus')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_uranus"
 					}
 					blockoverride "dr_worlds" {
@@ -9436,10 +9436,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_neptune')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_neptune"
 					}
 					blockoverride "dr_worlds" {
@@ -9483,10 +9483,10 @@ types sr_fleets_generated_rows_types
 						raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_kuiper')|1]#!"
 					}
 					blockoverride "dr_win_open_visible" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)0' ) )]"
 					}
 					blockoverride "dr_win_wait" {
-						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
+						visible = "[And3( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_loc_value'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_pace'), '(CFixedPoint)2' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper'), '(CFixedPoint)1' ) )]"
 						text = "je_space_race_widget_win_wait_kuiper"
 					}
 					blockoverride "dr_worlds" {

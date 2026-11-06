@@ -843,8 +843,11 @@ gotcha).
    in turn: the popup names that fleet's location, strength, propellant and supply, and lists every location but its
    own. The same from the Timeline Extended window's Space Race tab (Fleets tab): identical rows and figures.
 2. **The rows read.** Each row has the trip's months and propellant to a tenth, red where the fleet carries less (the
-   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else; our colonies
-   there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing cut off with an ellipsis.
+   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else and blank for a
+   fleet at a torch or antimatter pace (Compact Fusion Reactors, Antimatter Production; a fleet of rapid response hulls
+   alone runs one drive ahead, so on the fusion drive it reads blank too, and a chemical or fusion fleet still shows
+   the window); our colonies there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing
+   cut off with an ellipsis.
 3. **Choosing, then Go.** Choose on a row closes the popup, and the fleet's destination button names the location;
    reopened, that row reads Chosen. Go then works as before, and stays greyed where the propellant is short. Both of
    Choose's clicks run once (the choice, then the close).

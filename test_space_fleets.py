@@ -2962,6 +2962,7 @@ class DestinationPopupTest(unittest.TestCase):
         cls.sguis = _strip(_raw(SGUIS))
         cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
         cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.gen_values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
 
     def test_one_body_per_slot_and_one_row_per_location(self):
         self.assertEqual(len(self.slots), gsf.SLOTS)
@@ -3082,11 +3083,31 @@ class DestinationPopupTest(unittest.TestCase):
                         self.assertEqual((opened.strip(), wait.strip()), ("visible = no", "visible = no"))
                         continue
                     at_earth = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_loc_value'), '(CFixedPoint)1' )"
-                    self.assertIn(f"And( {at_earth}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                    gated = (f"Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                             f"'sr_fl_{n}_pace'), '(CFixedPoint)2' ) )")
+                    self.assertIn(f"And3( {at_earth}, {gated}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
                                   f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)0' ) )", opened)
-                    self.assertIn(f"And( {at_earth}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                    self.assertIn(f"And3( {at_earth}, {gated}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
                                   f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)1' ) )", wait)
                     self.assertIn(f'text = "je_space_race_widget_win_wait_{lc.body}"', wait)
+
+    def test_the_window_is_blank_at_a_torch_or_antimatter_pace(self):
+        """A torch or antimatter fleet (pace 2 and up, rapid response hulls' one
+        step ahead included) leaves in any month, so both window cells read its
+        pace and hide at 2; chemical and fusion keep the window."""
+        for n in range(1, gsf.SLOTS + 1):
+            pace = _block(self.gen_values, f"sr_fl_{n}_pace")
+            with self.subTest(slot=n):
+                self.assertIn(f"value = sr_fl_{n}_drive_value", pace)
+                self.assertRegex(pace, rf"limit = \{{ sr_fl_{n}_all_rapid = yes \}} add = 1")
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                if lc.code == gsf.EARTH:
+                    continue
+                with self.subTest(slot=n, location=lc.key):
+                    for cell in ("dr_win_open_visible", "dr_win_wait"):
+                        self.assertIn(f"ScriptValue('sr_fl_{n}_pace'), '(CFixedPoint)2' ) )",
+                                      _override_body(row, cell))
 
     def test_the_chosen_destination_is_marked(self):
         for n, slot in enumerate(self.slots, 1):
