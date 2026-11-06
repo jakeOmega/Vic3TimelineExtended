@@ -2,13 +2,13 @@
 # Global Commons, seabed basins: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 2.1
 # Scope: state. Sets the state variable te_seabed_basin to its basin, from the
 # naval exit of its state region (map_data/state_regions/*.txt -> 99_seas.txt
-# -> the generator's SEA_BASIN table): 1 Pacific, 2 Atlantic, 3 Indian,
-# 4 Arctic, 5 Southern. A landlocked state matches no branch and gets no
-# variable. Called by te_seabed_ensure_state_basin
+# -> the generator's SEA_BASIN table, then its STATE_BASIN_OVERRIDE pins):
+# 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern. A landlocked state
+# matches no branch and gets no variable. Called by te_seabed_ensure_state_basin
 # (te_global_commons_seabed_effects.txt) for coastal states without the
 # variable: the yearly pass and any recording that meets one (conquest and
 # splits make new state scopes).
-# 371 coastal state regions: Pacific 90, Atlantic 216, Indian 45, Arctic 9, Southern 11.
+# 371 coastal state regions: Pacific 91, Atlantic 216, Indian 45, Arctic 9, Southern 10.
 te_seabed_set_state_basin = {
 	if = {
 		limit = {  # Pacific
@@ -65,6 +65,7 @@ te_seabed_set_state_basin = {
 				state_region = s:STATE_NAURU
 				state_region = s:STATE_NORTHERN_TERRITORY
 				state_region = s:STATE_NORTH_BORNEO
+				state_region = s:STATE_NORTH_ISLAND
 				state_region = s:STATE_OAXACA
 				state_region = s:STATE_OKHOTSK
 				state_region = s:STATE_OREGON
@@ -405,7 +406,6 @@ te_seabed_set_state_basin = {
 				state_region = s:STATE_CAPE_COLONY
 				state_region = s:STATE_EASTERN_CAPE
 				state_region = s:STATE_NEW_SOUTH_WALES
-				state_region = s:STATE_NORTH_ISLAND
 				state_region = s:STATE_PATAGONIA
 				state_region = s:STATE_SOUTH_ATLANTIC_ISLANDS
 				state_region = s:STATE_SOUTH_AUSTRALIA
