@@ -23,10 +23,12 @@
 # a country in force must hold it active. It has no scripted buttons and no
 # progress bar, so no bars-on-top marker.
 #
-# A save started before this entry existed does not get it: auto-activation
-# reaches only new games (scripting_best_practices.md, "JE Auto-Activation
-# Requires BOTH"). The rule is new on this branch, so only a development save
-# from before Task 7 is affected.
+# Under the full code a save started before this entry existed does not get
+# it: auto-activation reaches only new games (scripting_best_practices.md, "JE
+# Auto-Activation Requires BOTH"). The rule is new on this branch, so only a
+# development save from before Task 7 is affected. Under the light code such a
+# save holds no copy of the entry, so te_tax_light_entry_net adds it (an add
+# to a country with no copy is untested in game, as for Banking's net).
 #
 # The widgets (gui/journal_entry_widgets/te_tax_layout_widget.gui) are the
 # Budget panel's Tax Code tab's own types: the overview with an Open Budget
