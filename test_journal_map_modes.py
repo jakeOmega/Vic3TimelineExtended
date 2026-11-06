@@ -207,7 +207,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 18)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 18)) + list(range(26, 31)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -228,11 +228,15 @@ class MapRoomTest(unittest.TestCase):
         return out
 
     def no_data(self, key):
-        """The selectors the last OR-only branch of key lists: the maps that show grey for a state with no figure."""
+        """The selectors key's OR-only branches list: the maps that show grey for a state with no figure. map_color has
+        one; map_tooltip one for the census and walk figures and one for the tourism and climate refreshes' figures,
+        whose wait is a month, not a census year."""
         part = block(self.room, key)
         ors = re.findall(r"\bOR\s*=\s*\{([^{}]*te_jmap_selector[^{}]*)\}", part)
         self.assertTrue(ors, f"{key}: no 'no data' branch")
-        return {int(n) for n in re.findall(r"te_jmap_selector\s*=\s*(\d+)", ors[-1])}
+        found = [int(n) for body in ors for n in re.findall(r"te_jmap_selector\s*=\s*(\d+)", body)]
+        self.assertEqual(len(found), len(set(found)), f"{key}: a selector in two 'no data' branches")
+        return set(found)
 
     def test_every_figure_map_has_a_no_data_branch(self):
         # a map whose branches all need a stored figure (has_variable) leaves a state with none unpainted (dark grey)
@@ -244,6 +248,7 @@ class MapRoomTest(unittest.TestCase):
             if all("has_variable" in b for b in bodies):
                 gated.add(sel)
         self.assertIn(3, gated)
+        self.assertTrue({26, 27, 28} <= gated, "tourism and the two climate maps read stored figures")
         self.assertEqual(self.no_data("map_color"), gated, "map_color's 'no data' OR")
         self.assertEqual(self.no_data("map_tooltip"), gated, "map_tooltip's 'no data' OR")
 
@@ -254,6 +259,23 @@ class MapRoomTest(unittest.TestCase):
             for key in ("map_color", "map_tooltip"):
                 for body in self.branches(key, sel):
                     self.assertRegex(body, r"var:te_dg_stepped\s*>\s*0", f"{key}, selector {sel}")
+
+    def test_the_stored_figures_are_written(self):
+        # tourism's Base Appeal and Local Climate's penalties are state_region chains too dear to evaluate per state as
+        # the map paints, so each refresh stores the figure the map reads (and the map's guard names it)
+        writes = {
+            "te_tourism_base_appeal": ("common/scripted_effects/extra_effects.txt", "te_update_tourism_modifier",
+                                       "tourism_bonus_from_base_appeal"),
+            "te_climate_base_penalty": ("common/scripted_effects/local_climate_effects.txt",
+                                        "te_update_local_climate_modifier", "te_climate_penalty_raw"),
+            "te_climate_penalty_applied": ("common/scripted_effects/local_climate_effects.txt",
+                                           "te_update_local_climate_modifier", "te_climate_penalty"),
+        }
+        for var, (rel, effect, value) in writes.items():
+            body = block(code(rel), effect)
+            self.assertRegex(body, r"set_variable\s*=\s*\{\s*name\s*=\s*" + var + r"\s+value\s*=\s*" + value + r"\s*\}",
+                             f"{effect} doesn't store {var}")
+            self.assertIn(f"has_variable = {var}", self.room, f"no map reads {var}")
 
     def test_the_current_pick_is_invalid_so_its_button_draws_pressed(self):
         for name, sel in self.picks().items():

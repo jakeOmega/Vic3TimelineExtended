@@ -28,13 +28,19 @@ Escape or click outside the page to close it.
 Two tabs have a map button left of the "?". Banking's opens its journal entry,
 which colors every country by the phase of its banking cycle. Demographics'
 opens the Map Room, a page of world maps with a button for each: Turmoil,
-Devastation, Urban People, Gini Coefficient and Dynastic Wealth and, from the
+Devastation, Urban People, GDP per Capita, Gini Coefficient, Dynastic Wealth,
+Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal and, from the
 census, Life Expectancy, Infant
 Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility,
 Median Age, Aged 65 and Over, Sex Balance and Net Migration. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
-of Death chart. Birth Rate, Death Rate, Natural Change, Net Migration and
-Leading Cause need a state's first full census year, so they start gray. Hover a
+of Death chart. The two comfort maps show what a state's Local Climate does to
+its migration attraction: Base Comfort before any technology eases it, Current
+Comfort after its owner's, both in the same colors so you can compare them.
+Crowding Penalty is the cut Migration Crowding makes, and Tourism Appeal the
+state's Base Appeal. Birth Rate, Death Rate, Natural Change, Net Migration and
+Leading Cause need a state's first full census year, so they start gray, and the
+two comfort maps and Tourism Appeal are gray for a game's first month. Hover a
 state for its figure. A journal entry's map shows only while its page is open,
 so the crossed-out eye at the top left of every journal page fades the page
 until you click it again or close the page, and the map shows through. The

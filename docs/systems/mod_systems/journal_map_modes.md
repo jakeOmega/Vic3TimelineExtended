@@ -7,7 +7,8 @@ built ahead of the in-game checks and answered most of them; the second (#1417) 
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
 worked. The fifth tries a shorter repaint, adds Devastation, Urban People, the Gini coefficient, Dynastic Wealth and
-eight more census maps, and drops Literacy, which vanilla's own literacy map mode shows.
+eight more census maps, and drops Literacy, which vanilla's own literacy map mode shows. A sixth (2026-11-06) adds
+Tourism Appeal, Base and Current Comfort, GDP per Capita and the Crowding Penalty.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -43,17 +44,20 @@ journal page has a see-through eye (below) to look past it. An inactive entry's 
 too.
 
 **Cheap reads only.** Every value runs once per state, as the game runs, so
-the maps read stored variables and engine figures, never walk pops. Each map's color comes from a factor, 0–1, on a
+the maps read stored variables and engine figures, never walk pops. A figure behind a long `state_region` chain is
+stored by the refresh that already computes it: tourism's Base Appeal (some 700 branches) and Local Climate's
+penalties (eight chains of 680). Each map's color comes from a factor, 0–1, on a
 fixed curve (life expectancy 25–80), so a color means the same thing in 1850 and 1950. Colors are named in
 `common/named_colors/te_journal_map_colors.txt`, one family per map.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
 `common/script_values/te_journal_map_scales_generated.txt`, `te_jmap_<map>_factor`). A script value takes no arguments
 and a paint runs no effect, so one shared curve can't be fed each map's figure (`te_sqrt`'s input is a variable an
-effect sets); the generator writes each map's tree from a table row instead, using one of three shapes: linear, a soft
+effect sets); the generator writes each map's tree from a table row instead, using one of four shapes: linear, a soft
 cap (straight to a soft bound, then `SLOPE_RATIO`, 4, times shallower to a hard one, so the common values get most of
-the color and the extremes still differ) and diverging (0.5 at a midpoint, each side straight or soft-capped). Changing
-a shape changes every map using it. Each tree reads its figure only inside an `if` on its `has_variable` guards (a
+the color and the extremes still differ), diverging (0.5 at a midpoint, each side straight or soft-capped) and doubling
+(the same share of the color per doubling, a logarithmic scale in straight pieces, for GDP per capita's hundredfold
+range). Changing a shape changes every map using it. Each tree reads its figure only inside an `if` on its `has_variable` guards (a
 guard in the same `AND` doesn't stop the read where the engine builds a tooltip, #1418). A three-color map's
 `map_color` splits at `factor < 0.5`, so its midpoint lives only in the table, and reads `_lower` and `_upper`, the
 factor doubled and doubled less 1.
@@ -71,12 +75,23 @@ entry, in no country's journal.
   (`common/script_values/te_journal_map_values.txt` lists the numbers). The world's: 1 turmoil, 6 devastation (both the
   engine's own figures, soft-capped at 20%), and from the yearly walk, which runs whatever the Demographics rule, 15
   urban people (`te_dg_urban_share`), 16 the Gini coefficient (`te_dg_gini`, 0.30–0.80) and 17 Dynastic Wealth
-  (`te_dg_wc`, 0–50–100, diverging where its effects turn from dispersed to concentrated property). The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
+  (`te_dg_wc`, 0–50–100, diverging where its effects turn from dispersed to concentrated property); 29 GDP per capita
+  (`gdp_per_capita`, the state's `gdp` over its people, a tenth of the color per doubling from £0.25 to £256: a rich
+  country stands near £1 in 1836, £8 in 1917, £60 in 2023) and 30 the Crowding Penalty (`migration_crowding_pull_pct`,
+  live, as the state panel's tile reads it, soft-capped at 45%, the 10× knee, to 145%), both engine figures; and two
+  figures a refresh stores for the map: 26 tourism's Base Appeal (`te_tourism_base_appeal`, the state panel's row, which
+  `te_update_tourism_modifier` stores monthly, 20%–100%) and Local Climate's comfort, 27 Base Comfort before any
+  technology's relief (`te_climate_base_penalty`, stored by `te_update_local_climate_modifier` from
+  `te_climate_penalty_raw`) and 28 Current Comfort after the owner's (`te_climate_penalty_applied`, the penalty in
+  force), both yearly and on one curve and palette, diverging at none: a mild winter's draw green down to −7.2, a cost
+  red, soft-capped at 30 to the cap of 80. The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
   expectancy, 10 infant mortality, 4 fertility, 5 median age, 14 aged 65 and over and 12 sex balance from a state's first
   seed; 9 births, 8 deaths and 7 natural change per 1,000, 13 net migration and 11 the leading cause of death only once
   the state has stepped a full year (`te_dg_stepped` above 0, as the panel gates them: a seed writes those rates as 0).
   Every map that reads a stored figure shows grey (`te_jmap_no_data`) for a state without one, through one `OR` branch
-  that lists them all. Each curve is fixed and historical. Soft caps: turmoil and devastation half the color by 20%,
+  that lists them all; the hover has two, "No census figures yet" for the census and walk maps and "No figure yet" for
+  tourism and the two comfort maps, whose refreshes run within a month (Local Climate's first application keys on
+  `te_climate_base_penalty`, so an older save fills Base Comfort within a month too). Each curve is fixed and historical. Soft caps: turmoil and devastation half the color by 20%,
   all at 100%; deaths per 1,000 70% of it from 5 to 40, all at 100. Diverging: infant mortality 0–50–300 (soft) to
   500, natural change −40 to −15 (soft), 0, +30 (soft) to +45, net migration ±20 (soft) to ±60, sex balance 80–100–130
   from the census's own effect thresholds, Dynastic Wealth 0–50–100. Linear: births 8–50, 65 and over 2–30%, Gini
@@ -147,8 +162,9 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
 
 Both map buttons clear the see-through flag before they open a page.
-- `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three and a row of two (Gini,
-  Dynastic Wealth), then the census's eleven three to a row.
+- `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three (Turmoil, Devastation,
+  Urban People), wealth (GDP per Capita, Gini, Dynastic Wealth), migration attraction (Base Comfort, Current Comfort,
+  Crowding Penalty) and Tourism Appeal alone, then the census's eleven three to a row.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
@@ -161,7 +177,9 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
    pick scripted GUI and its `te_jmap_pick_button` in `te_jmap_pick_row`, and loc for both. A map that reads a stored
-   figure joins both "no data" `OR`s (`test_journal_map_modes.py` checks it).
+   figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
+   figure behind a long `state_region` chain is stored by the refresh that already computes it, not read live
+   (tourism's and Local Climate's are the pattern).
 3. A "show on the map" button opens the entry's page (`te_jmap_banking_map_button` is the pattern), for a system in
    a tab too: a tab showing an entry's content doesn't trigger its map.
 4. Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) once one map is seen working in game.

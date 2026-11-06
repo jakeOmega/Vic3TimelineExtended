@@ -86,6 +86,24 @@ colors = {
 	te_jmap_old_low = hsv360 { 60 35 92 }
 	te_jmap_old_high = hsv360 { 280 55 38 }
 
+	# je_te_map_room: tourism's Base Appeal, 20% to 100% (dull sand to sea blue).
+	te_jmap_tourism_low = hsv360 { 42 20 74 }
+	te_jmap_tourism_high = hsv360 { 192 82 58 }
+
+	# je_te_map_room: Local Climate's comfort, both maps, diverging at none: a mild winter's draw green, cream at none,
+	# the cost red as the state panel's Comfort row draws it.
+	te_jmap_comfort_low = hsv360 { 135 58 52 }
+	te_jmap_comfort_mid = hsv360 { 50 6 92 }
+	te_jmap_comfort_high = hsv360 { 356 80 46 }
+
+	# je_te_map_room: GDP per capita, £0.25 to £256 a doubling at a time (pale straw to deep green).
+	te_jmap_gdppc_low = hsv360 { 52 22 94 }
+	te_jmap_gdppc_high = hsv360 { 155 85 34 }
+
+	# je_te_map_room: Migration Crowding's cut to migration attraction, none to 145% (cream to deep purple).
+	te_jmap_crowding_low = hsv360 { 45 8 92 }
+	te_jmap_crowding_high = hsv360 { 285 68 40 }
+
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }
 	te_jmap_bank_downturn = hsv360 { 14 72 78 }

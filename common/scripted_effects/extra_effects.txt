@@ -1332,7 +1332,10 @@ te_update_pollution_modifier = {
 	}
 }
 
-# Refreshes the tourism_output and tourism_throughput modifiers.
+# Refreshes the tourism_output and tourism_throughput modifiers. It also stores the state's
+# Base Appeal (te_tourism_base_appeal, 0-1, the state panel's row) for the Map Room's Tourism
+# Appeal map (common/journal_entries/te_journal_maps.txt): the score is a state_region chain
+# of some 700 branches, too dear for a map that evaluates every state as it paints.
 te_update_tourism_modifier = {
 	remove_modifier = tourism_output
 	remove_modifier = tourism_throughput
@@ -1344,6 +1347,7 @@ te_update_tourism_modifier = {
 		name = tourism_throughput
 		multiplier = total_tourism_throughput_bonus_percent
 	}
+	set_variable = { name = te_tourism_base_appeal value = tourism_bonus_from_base_appeal }
 }
 
 # Refreshes the migration_crowding modifier. The census reads the multiplier it applied

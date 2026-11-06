@@ -4,7 +4,7 @@
 Each map in je_te_map_room (common/journal_entries/te_journal_maps.txt) colors a
 state by a factor, 0 to 1, read from one of the state's figures. The factor is a
 piecewise-linear curve through a few knots, and every curve here comes from one
-of three shapes, so a shape changed below changes every map that uses it:
+of four shapes, so a shape changed below changes every map that uses it:
 
 - linear(lo, hi): straight from lo to hi.
 - soft_cap(lo, soft, hard): straight from lo to soft, then SLOPE_RATIO times
@@ -12,6 +12,9 @@ of three shapes, so a shape changed below changes every map that uses it:
   the extremes still differ instead of all saturating at one bound.
 - diverging(lower, mid, upper): 0.5 at mid, each side to its end; a side is a
   bound (straight) or a (soft, hard) pair (the soft cap's shape, mirrored below).
+- doubling(lo, hi): the same share of the color for each doubling from lo to hi,
+  a logarithmic scale in straight pieces, for a figure that grows a hundredfold
+  over the game (GDP per capita).
 
 A script value takes no arguments, and a map paint can run no effect, so a
 shared shape can't be one script value fed its input (te_sqrt's way, through
@@ -27,6 +30,7 @@ fails CI when the committed file is stale:
     python3 scripts/generators/gen_journal_map_scales.py [--check]
 """
 import argparse
+import math
 import os
 import sys
 
@@ -62,6 +66,13 @@ def diverging(lower, mid, upper):
     below = [(x, 0.5 - 0.5 * p) for x, p in reversed(_side(mid, lower))]
     above = [(x, 0.5 + 0.5 * p) for x, p in _side(mid, upper)[1:]]
     return below + above
+
+
+def doubling(lo, hi):
+    steps = round(math.log2(hi / lo))
+    if lo <= 0 or lo * 2 ** steps != hi:
+        raise ValueError(f"doubling({lo}, {hi}): hi must be lo times a power of two")
+    return [(lo * 2 ** k, k / steps) for k in range(steps + 1)]
 
 
 # name: te_jmap_<name>_factor. input: what the tree reads (a figure, or a script value of the state's).
@@ -100,6 +111,26 @@ SCALES = [
          note="Sex balance, men per 100 women aged 20-59, split at 100: the census's own bounds for its effects"),
     dict(name="mig", input="var:te_dg_mig_rate", guards=["te_dg_mig_rate"], three=True,
          knots=diverging((-20, -60), 0, (20, 60)), note="Net migration per 1,000 people last year, split at none"),
+    dict(name="tourism", input="var:te_tourism_base_appeal", guards=["te_tourism_base_appeal"], three=False,
+         knots=linear(0.2, 1), note="Tourism's Base Appeal, the state panel's row, 0-1 (stored monthly by "
+                                    "te_update_tourism_modifier); 0.2 is the score of a region the table doesn't list"),
+    # Local Climate's comfort penalty, in percent of migration attraction: one curve for both maps, so a color means
+    # the same before and after the owner's technologies. Negative is a mild winter's bonus, at most 7.2.
+    dict(name="comfort_base", input="var:te_climate_base_penalty", guards=["te_climate_base_penalty"], three=True,
+         knots=diverging(-7.2, 0, (30, 80)),
+         note="Local Climate's penalty before any relief, percent of migration attraction (stored yearly), split "
+              "at none; the most a mild winter draws is 7.2, the most climate takes 80"),
+    dict(name="comfort", input="var:te_climate_penalty_applied", guards=["te_climate_penalty_applied"], three=True,
+         knots=diverging(-7.2, 0, (30, 80)),
+         note="Local Climate's penalty in force, after the relief its owner's technologies give (stored yearly), "
+              "split at none"),
+    dict(name="gdppc", input="gdp_per_capita", guards=[], three=False, knots=doubling(0.25, 256),
+         note="GDP per capita, a year's GDP per person in pounds: a tenth of the color per doubling from 0.25 to "
+              "256 (a rich country about 1 in 1836, 8 in 1917, 60 today)"),
+    dict(name="crowding", input="migration_crowding_pull_pct", guards=[], three=False,
+         knots=soft_cap(0, 0.45, 1.45),
+         note="Migration Crowding's cut to migration attraction, 0-1 and past it, as the state panel's tile shows "
+              "it: 0.45 at ten times the floor density, 1.45 at twenty"),
 ]
 
 
