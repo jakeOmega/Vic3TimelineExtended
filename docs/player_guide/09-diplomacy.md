@@ -413,7 +413,7 @@ one mandate and lasts ten years; adjourning costs nothing.
 
 | Initiative | What it gives |
 |---|---|
-| Common Purpose | Cohesion rises at once by a fifth of its maximum, then +10 cohesion |
+| Common Purpose | Cohesion rises at once by a fifth of its maximum, and its target is 10 higher. Cohesion moves toward its target by at most 1 a week |
 | Recruitment Drive | +25 to the chance a country accepts the bloc's invitation |
 | Leverage Campaign | +25% leverage generation on every country |
 | Open Borders Accord | Port access and migration between members, as Navy III and Freedom of Movement III give |

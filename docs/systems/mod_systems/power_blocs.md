@@ -12,11 +12,11 @@ A use for mandates other than principles (#1442), for a bloc whose slots are ful
 
 **The button.** Convene a Summit sits beside the leader's mandate count (vanilla's AVAILABLE MANDATES row, shown only to the leader). `is_valid` is `te_pb_summit_can_pay` under a custom tooltip, so the button greys with its reason while the bloc holds no mandate. It spends nothing: it fires the event with `popup = yes`, and closing the event costs nothing.
 
-**The options.** Each initiative calls `te_pb_summit_pay` (`add_power_bloc_mandate = -1` under the cost line `te_pb_summit_cost_tt`, plus a `TE_PB_SUMMIT <kind> by=ai|player` log line) and lasts `long_modifier_time`. Three helpers grant the modifiers, each removing a running copy first, unseen, since a same-name `add_modifier` stacks: `te_pb_summit_grant_bloc_initiative` (on the bloc), `te_pb_summit_grant_leader_initiative` (the leader) and `te_pb_summit_grant_member_initiative` (every member, the leader included, at the summit: a country that joins later doesn't get it, and one that leaves keeps it until it runs out).
+**The options.** Each initiative calls `te_pb_summit_pay` (`add_power_bloc_mandate = -1` under the cost line `te_pb_summit_cost_tt`, plus a `TE_PB_SUMMIT <kind> by=ai|player` log line) and lasts `long_modifier_time`. Three helpers grant the modifiers, each removing a running copy first, unseen, since a same-name `add_modifier` stacks: `te_pb_summit_grant_bloc_initiative` (on the bloc), `te_pb_summit_grant_leader_initiative` (the leader) and `te_pb_summit_grant_member_initiative` (every member, the leader included, at the summit: a country that joins later doesn't get it, and one that leaves keeps it until it runs out). The bloc helper prints its own line, `<modifier>_grant_tt`, in place of the engine's: vanilla's `add_modifier` line leaves a power bloc's name blank (`scripting_best_practices.md`).
 
 | Option | Modifier (scope) | Effect | Offered |
 |---|---|---|---|
-| a | `te_pb_summit_rally` (bloc) | `add_cohesion_percent = 0.2` at once, `power_bloc_cohesion_add = 10` | Always, for the immediate cohesion |
+| a | `te_pb_summit_rally` (bloc) | `add_cohesion_percent = 0.2` at once (20 points), `power_bloc_cohesion_add = 10` on the target, which cohesion reaches at 1 a week | Always, for the immediate cohesion |
 | b | `te_pb_summit_recruitment` (bloc) | `power_bloc_invite_acceptance_add = 25` | While not running |
 | c | `te_pb_summit_leverage` (bloc) | `power_bloc_leverage_generation_mult = 0.25` | While not running |
 | e | `te_pb_summit_open_borders` (bloc) | `power_bloc_allow_port_access_bool`, `power_bloc_allow_wider_migration_area_bool` | While not running, and not when Navy III+ and Freedom of Movement III+ give both |
