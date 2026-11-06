@@ -418,6 +418,11 @@ def _stem(mod):
     return mod[len("un_"):-len("_modifier")]
 
 
+def _term(mod):
+    """A regime term's name in un_chamber_regime_line: un_regime_<term>_modifier."""
+    return mod[len("un_regime_"):-len("_modifier")]
+
+
 TERMS = {   # convention -> its regime terms, in display order
     "human_rights": ("un_regime_rights_violator_modifier",),
     "npt": ("un_regime_npt_inspection_modifier", "un_regime_npt_guarantee_modifier"),
@@ -485,7 +490,7 @@ class ObligationsTest(unittest.TestCase):
             nxt = min([i for i in later if i > head] + [len(self.regimes)])
             for mod in terms:
                 with self.subTest(term=mod):
-                    m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", self.regimes)
+                    m = re.search(rf"un_chamber_regime_line = \{{ TERM = {_term(mod)} LINE = (\w+) \}}", self.regimes)
                     self.assertTrue(m, mod)
                     self.assertTrue(head < m.start() < nxt, f"{mod} is not under {key}")
                     self.assertModifierHover(m.group(1), mod)
@@ -494,7 +499,7 @@ class ObligationsTest(unittest.TestCase):
         reach = _block(_read(CHAMBER_EFFECTS), "un_chamber_reach_lines")
         for mod, block in zip(OTHER_TERMS, (self.regimes, reach)):
             with self.subTest(term=mod):
-                m = re.search(rf"un_chamber_regime_line = \{{ MODIFIER = {mod} LINE = (\w+) \}}", block)
+                m = re.search(rf"un_chamber_regime_line = \{{ TERM = {_term(mod)} LINE = (\w+) \}}", block)
                 self.assertTrue(m, mod)
                 self.assertModifierHover(m.group(1), mod)
         self.assertModifierHover("je_un_chamber_regime_colony", "un_regime_colony_liberty_modifier")
@@ -727,7 +732,7 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertIn("$je_un_conv_name_icc$", outside)
 
     def test_a_member_colony_sees_its_decolonization_term(self):
-        self.assertIn("MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony", self.regimes)
+        self.assertIn("TERM = colony_liberty LINE = je_un_chamber_regime_colony", self.regimes)
 
     def test_one_name_per_convention(self):
         for k in CONV_KEYS:

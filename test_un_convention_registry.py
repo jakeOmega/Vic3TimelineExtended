@@ -889,8 +889,8 @@ class RegimeTests(unittest.TestCase):
         where = {}
         vars_ = "|".join(re.escape(c.in_force) for c in CONVENTIONS)
         for var, seg in _segments(refresh, rf"has_global_variable\s*=\s*({vars_})\b").items():
-            for mod in re.findall(r"\bname\s*=\s*(un_regime_\w+_modifier)", seg):
-                where.setdefault(mod, set()).add(var)
+            for term in re.findall(r"un_regime_term_on\s*=\s*\{\s*TERM\s*=\s*(\w+)", seg):
+                where.setdefault(f"un_regime_{term}_modifier", set()).add(var)
         for c in CONVENTIONS:
             for mod in c.regime_modifiers:
                 with self.subTest(key=c.key, modifier=mod):
@@ -944,14 +944,17 @@ class RegimeTests(unittest.TestCase):
 
     def test_every_term_is_cleared_listed_and_shown(self):
         expected = {m for c in CONVENTIONS for m in c.regime_modifiers}
-        cleared = set(re.findall(r"MODIFIER\s*=\s*(un_regime_\w+_modifier)",
-                                 _block(self.effects, "un_regime_clear_country")))
-        terms = set(re.findall(r"has_modifier\s*=\s*(un_regime_\w+_modifier)",
+        # Each term is a presence variable the entry declares its modifier
+        # from (#1404): un_regime_term_on / _off take the term's name.
+        cleared = {f"un_regime_{t}_modifier" for t in re.findall(
+            r"un_regime_term_off\s*=\s*\{\s*TERM\s*=\s*(\w+)", _block(self.effects, "un_regime_clear_country"))}
+        terms = set(re.findall(r"has_variable\s*=\s*(un_regime_\w+_modifier)_on",
                                _block(self.triggers, "un_regime_has_terms")))
         # Shown under Our Obligations: the conventions' terms, and the reach of a
         # Strong UN (intelligence sharing) in a group of its own.
         shown = _block(self.display, "un_chamber_regime_lines") + _block(self.display, "un_chamber_reach_lines")
-        lines = dict(re.findall(r"MODIFIER\s*=\s*(un_regime_\w+_modifier)\s+LINE\s*=\s*(\w+)", shown))
+        lines = {f"un_regime_{t}_modifier": line
+                 for t, line in re.findall(r"un_chamber_regime_line\s*=\s*\{\s*TERM\s*=\s*(\w+)\s+LINE\s*=\s*(\w+)", shown)}
         with self.subTest(site="un_regime_clear_country"):
             self.assertLessEqual(expected, cleared)
             self.assertLessEqual(cleared - expected, OTHER_REGIME_MODIFIERS)

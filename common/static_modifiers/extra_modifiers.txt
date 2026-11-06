@@ -4076,10 +4076,11 @@ un_mandate_war_support_modifier = {
 }
 
 # ---- UN redesign phase 5: convention regimes (un_regime_effects.txt) ----
-# Each is a unit value applied with multiplier = un_enforcement (E) by
-# un_regime_refresh_country, the single refresh site, except the climate
-# adaptation aid (x temperature anomaly x E) and shared intelligence (x the
-# steps above Established: 1 at Strong, 2 at Supranational).
+# Each is a unit value, declared by je_united_nations at un_enforcement (E)
+# while the presence variable un_regime_refresh_country sets (the single
+# refresh site) is held, except the climate adaptation aid (x temperature
+# anomaly x E) and shared intelligence (x the steps above Established: 1 at
+# Strong, 2 at Supranational).
 # Climate, a high emitter: the binding cut, paid in heavy-industry output.
 un_regime_climate_emitter_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds

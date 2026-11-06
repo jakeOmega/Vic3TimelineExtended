@@ -527,6 +527,180 @@
 			}
 		}
 	}
+	# The regime terms (un_regime_refresh_country decides them once an epoch
+	# and sets their presence variables): at E, the climate adaptation aid at
+	# the warming it offsets, intelligence sharing at the tier's steps above
+	# Strong. All sat on the country before 1.15.
+	scaling_modifiers_while_active = {
+		modifier = un_regime_climate_emitter_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_climate_emitter_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_climate_adaptation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_climate_adaptation_modifier_on }
+				add = un_regime_adaptation_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_npt_inspection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_npt_inspection_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_npt_guarantee_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_npt_guarantee_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_naval_curb_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_naval_curb_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_rights_violator_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_rights_violator_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_colonial_pressure_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_colonial_pressure_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_colony_liberty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_colony_liberty_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_refugee_host_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_refugee_host_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_refugee_source_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_refugee_source_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_leader_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_leader_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_laggard_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_laggard_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_weapon_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_weapon_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_heritage_site_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_heritage_site_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_cultural_hegemon_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_cultural_hegemon_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_antarctic_station_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_antarctic_station_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_shared_intelligence_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_shared_intelligence_modifier_on }
+				add = un_regime_strong_steps
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc

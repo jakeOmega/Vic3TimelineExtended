@@ -40,10 +40,11 @@
 #
 # Not mirrored, because the monthly pulse derives them from the above:
 # un_member_privileges_modifier, un_npt_disarmament_modifier, both pariah
-# modifiers, the un_standing_* tier, every un_regime_* modifier and
-# un_antarctic_policy_modifier (te_antarctic_policy_refresh). Declared from
-# variables of their own (je_united_nations): un_membership_benefits_modifier,
-# un_dues_modifier, un_development_patron_modifier and the rest of § 4.11.
+# modifiers, the un_standing_* tier and un_antarctic_policy_modifier
+# (te_antarctic_policy_refresh). Declared from variables of their own
+# (je_united_nations): un_membership_benefits_modifier, un_dues_modifier,
+# un_development_patron_modifier, every un_regime_* term (its presence
+# variable, un_regime_refresh_country) and the rest of § 4.11.
 #
 # WHEN THE ENTRY IS REBUILT. var:un_state_rebuild_pending marks an entry whose
 # modifiers may have been wiped. It is set by the entry's `immediate`, which
@@ -200,8 +201,9 @@ un_state_restore = {
 #     championing wins (un_undermines_the_order; the heal's rebuild drops the
 #     other mirror).
 #   - The regime stamp goes, so our next ordinary pulse re-reads our terms
-#     under the conventions (the un_regime_* modifiers are country modifiers,
-#     and the merge dropped them too) instead of waiting for the next epoch.
+#     under the conventions instead of waiting for the next epoch: the
+#     winner inherits the loser's presence variables (the entry declares the
+#     un_regime_* modifiers from them), which describe the loser.
 # Privileges are added here for a represented member so the independent case is
 # whole at once; a carried seat's come from the member block's monthly
 # reconcile, as do the benefits, the dues, the standing tier and NPT

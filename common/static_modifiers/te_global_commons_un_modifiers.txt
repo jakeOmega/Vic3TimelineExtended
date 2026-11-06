@@ -88,7 +88,8 @@ un_antarctic_policy_modifier = {
 # twice the infamy and twice the case strength (te_asat_moratorium_party,
 # which the strike reads), and a party running a debris-removal method counts
 # toward the Delivery pillar each year (te_asat_moratorium_delivery_yearly).
-# Re-applied at the UN's enforcement by the regime layer: the figure is at x1.
+# je_united_nations declares it at the UN's enforcement (un_convention_multiplier)
+# while the mirror is set: the figure is at x1.
 un_asat_moratorium_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05

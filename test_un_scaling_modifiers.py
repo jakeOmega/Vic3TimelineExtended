@@ -162,6 +162,21 @@ CONVENTION_MODIFIERS = tuple(c.member_modifier for c in RATIFIED)
 for _mod in CONVENTION_MODIFIERS:
     EXPECTED[_mod] = _gated(f"has_variable = {_mod}_on", "un_convention_multiplier")
 
+# The regime terms: un_regime_refresh_country decides them once an epoch and
+# sets their presence variables; the entry declares each at its multiplier,
+# read live.
+REGIME_MULTIPLIERS = {
+    "climate_emitter": "un_enforcement", "climate_adaptation": "un_regime_adaptation_multiplier",
+    "npt_inspection": "un_enforcement", "npt_guarantee": "un_enforcement", "naval_curb": "un_enforcement",
+    "rights_violator": "un_enforcement", "colonial_pressure": "un_enforcement",
+    "colony_liberty": "un_enforcement", "refugee_host": "un_enforcement", "refugee_source": "un_enforcement",
+    "space_leader": "un_enforcement", "space_laggard": "un_enforcement", "space_weapon": "un_enforcement",
+    "heritage_site": "un_enforcement", "cultural_hegemon": "un_enforcement",
+    "antarctic_station": "un_enforcement", "shared_intelligence": "un_regime_strong_steps",
+}
+for _term, _mult in REGIME_MULTIPLIERS.items():
+    EXPECTED[f"un_regime_{_term}_modifier"] = _gated(f"has_variable = un_regime_{_term}_modifier_on", _mult)
+
 PROGRAMMES = (
     "un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost",
     "un_development_contributor_modifier", "un_development_contributor_cost",
@@ -466,6 +481,51 @@ class ConventionTests(unittest.TestCase):
         for path in _script_files():
             with self.subTest(path=os.path.relpath(path, REPO)):
                 self.assertNotIn("un_regime_reapply", _read(path))
+
+
+REGIME_EFFECTS = _path("common", "scripted_effects", "un_regime_effects.txt")
+
+
+class RegimeTermTests(unittest.TestCase):
+    def test_the_refresh_starts_each_term_once_at_its_multiplier(self):
+        refresh = _block(_read(REGIME_EFFECTS), "un_regime_refresh_country")
+        found = re.findall(r"un_regime_term_on = \{ TERM = (\w+) MULT = (\w+) \}", refresh)
+        self.assertEqual(sorted(found), sorted(REGIME_MULTIPLIERS.items()))
+        self.assertNotIn("add_modifier = {\n\t\t\t\tname = un_regime_", refresh)
+        # The sovereignty reaction stays on the interest groups: no entry can
+        # declare an interest group's modifier.
+        self.assertIn("name = un_sovereignty_resentment_ig_modifier", refresh)
+        self.assertIn("name = un_sovereignty_welcome_ig_modifier", refresh)
+
+    def test_the_helpers_preview_and_write_the_presence_variable(self):
+        effects = _read(REGIME_EFFECTS)
+        self.assertEqual(_flat(_block(effects, "un_regime_term_on")),
+                         "show_as_tooltip = { je:je_united_nations ?= { add_modifier = { "
+                         "name = un_regime_$TERM$_modifier multiplier = $MULT$ } } } "
+                         "set_variable = un_regime_$TERM$_modifier_on")
+        self.assertEqual(_flat(_block(effects, "un_regime_term_off")),
+                         "if = { limit = { has_variable = un_regime_$TERM$_modifier_on } "
+                         "remove_variable = un_regime_$TERM$_modifier_on }")
+        clear = _block(effects, "un_regime_clear_country")
+        self.assertEqual(sorted(re.findall(r"un_regime_term_off = \{ TERM = (\w+) \}", clear)),
+                         sorted(REGIME_MULTIPLIERS))
+
+    def test_the_presence_variables_have_no_other_writers(self):
+        for term in REGIME_MULTIPLIERS:
+            with self.subTest(term=term):
+                self.assertEqual(_writes(f"un_regime_{term}_modifier_on"),
+                                 {"set_variable": [], "remove_variable": [], "change_variable": []})
+        # Leaving takes the liberty term off our colonies, through the helper.
+        ladder = _flat(_block(_read(LADDER), "un_membership_end_effect"))
+        self.assertIn("every_direct_subject = { limit = { has_variable = un_regime_colony_liberty_modifier_on } "
+                      "un_regime_term_off = { TERM = colony_liberty } }", ladder)
+
+    def test_the_cadence_is_kept(self):
+        # The epoch decides the terms (emitter shares and ranks would flicker);
+        # only the multiplier is live.
+        pulse = _flat(_block(_read(REGIME_EFFECTS), "un_regime_country_pulse"))
+        self.assertIn("NOT = { var:un_regime_stamp = global_var:un_regime_epoch }", pulse)
+        self.assertIn("un_regime_refresh_country = yes", pulse)
 
 
 if __name__ == "__main__":
