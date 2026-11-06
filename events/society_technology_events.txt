@@ -31,11 +31,20 @@ society_technology_events.1 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	# THE fire_only_once CANARY (#1404; common/on_actions/
+	# te_fire_only_once_selfcheck_on_actions.txt says what it watches). In a
+	# game started after the change the variable no longer guards the event, so
+	# fire_only_once alone keeps it to one firing; in an older save it still does.
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_women_workforce }
 		NOT = { has_modifier = ste_women_workforce_blocked }
-		NOT = { has_variable = ste_event_1_fired }
+		OR = {
+			has_global_variable = te_fire_only_once_canary_armed
+			NOT = { has_variable = ste_event_1_fired }
+		}
 		OR = {
 			has_law = law_type:law_women_in_the_workplace
 			has_law = law_type:law_women_own_property
@@ -43,6 +52,15 @@ society_technology_events.1 = {
 	}
 
 	immediate = {
+		# Held already: this event fired before for this nation, so the engine's
+		# fire record was lost (a save and load, or a revolution's winner).
+		if = {
+			limit = {
+				has_global_variable = te_fire_only_once_canary_armed
+				has_variable = ste_event_1_fired
+			}
+			debug_log = "TE_SELF_CHECK BROKEN fire_only_once_kept (society_technology_events.1 fired a second time for one nation in a game started after issue 1404: the engine's fire record didn't survive a save and load, or didn't pass to a revolution's winner. Put the once-guard variables back; docs/testing/vanilla-1-15-playtest.md, C20)"
+		}
 		set_variable = ste_event_1_fired
 	}
 
@@ -108,16 +126,15 @@ society_technology_events.2 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_equal_pay_reform }
 		NOT = { has_modifier = ste_equal_pay_rejected }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_2_fired }
 		has_law = law_type:law_women_in_the_workplace
-	}
-
-	immediate = {
-		set_variable = ste_event_2_fired
 	}
 
 	option = {
@@ -177,16 +194,15 @@ society_technology_events.3 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = contraceptive_pill
 		NOT = { has_modifier = ste_pill_available }
 		NOT = { has_modifier = ste_pill_restricted }
 		NOT = { has_modifier = ste_pill_subsidized }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_3_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_3_fired
 	}
 
 	option = {
@@ -276,15 +292,14 @@ society_technology_events.4 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_sexual_revolution_embraced }
 		NOT = { has_modifier = ste_sexual_revolution_backlash }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_4_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_4_fired
 	}
 
 	option = {
@@ -347,15 +362,14 @@ society_technology_events.5 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_divorce_reform }
 		NOT = { has_modifier = ste_divorce_tradition }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_5_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_5_fired
 	}
 
 	option = {
@@ -414,10 +428,13 @@ society_technology_events.6 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = video_games
 		NOT = { has_modifier = ste_gaming_industry_boom }
 		NOT = { has_modifier = ste_gaming_industry_regulated }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_6_fired }
 		any_scope_building = {
 			OR = {
@@ -426,10 +443,6 @@ society_technology_events.6 = {
 			}
 			level >= 2
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_6_fired
 	}
 
 	option = {
@@ -873,16 +886,15 @@ society_technology_events.9 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = globalization
 		NOT = { has_modifier = ste_outsourcing_embrace }
 		NOT = { has_modifier = ste_outsourcing_protect }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_9_fired }
 		country_rank >= rank_value:major_power
-	}
-
-	immediate = {
-		set_variable = ste_event_9_fired
 	}
 
 	option = {
@@ -1097,10 +1109,13 @@ society_technology_events.12 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = terrorism_and_anti_terrorism
 		NOT = { has_modifier = ste_mass_surveillance }
 		NOT = { has_modifier = ste_privacy_preserved }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_12_fired }
 		OR = {
 			has_technology_researched = cybersecurity
@@ -1111,10 +1126,6 @@ society_technology_events.12 = {
 			has_law = law_type:law_strong_privacy_rights
 			has_law = law_type:law_intrusive_surveillance
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_12_fired
 	}
 
 	option = {
@@ -1189,16 +1200,15 @@ society_technology_events.13 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = social_media
 		NOT = { has_modifier = ste_misinfo_regulate }
 		NOT = { has_modifier = ste_misinfo_free_speech }
 		NOT = { has_modifier = ste_misinfo_literacy }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_13_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_13_fired
 	}
 
 	option = {
@@ -1488,11 +1498,14 @@ society_technology_events.16 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = brain_computer_interfaces
 		NOT = { has_modifier = ste_bci_consumer_rollout }
 		NOT = { has_modifier = ste_bci_regulated_access }
 		NOT = { has_modifier = ste_bci_banned }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_16_fired }
 		# Every option below is gated on the augmentation law it agrees with; this
 		# guarantees one is always available.
@@ -1504,10 +1517,6 @@ society_technology_events.16 = {
 			has_law = law_type:law_unrestricted_augmentation
 			has_law = law_type:law_mandatory_augmentation
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_16_fired
 	}
 
 	option = {
@@ -1608,20 +1617,19 @@ society_technology_events.17 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = biohacking_and_human_augmentation
 		NOT = { has_modifier = ste_augmented_sports_separate }
 		NOT = { has_modifier = ste_augmented_sports_embrace }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_17_fired }
 		# Augmented athletes competing at home need a law that permits enhancement.
 		NOR = {
 			has_law = law_type:law_human_purity
 			has_law = law_type:law_no_augmentation
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_17_fired
 	}
 
 	option = {
@@ -1758,9 +1766,12 @@ society_technology_events.19 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		NOT = { has_modifier = ste_space_gov_direct }
 		NOT = { has_modifier = ste_space_gov_autonomy }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_19_fired }
 		OR = {
 			AND = {
@@ -1778,10 +1789,6 @@ society_technology_events.19 = {
 				}
 			}
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_19_fired
 	}
 
 	option = {
@@ -1838,16 +1845,15 @@ society_technology_events.20 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = telepathic_communities
 		NOT = { has_modifier = ste_hivemind_tolerate }
 		NOT = { has_modifier = ste_hivemind_integrate }
 		NOT = { has_modifier = ste_hivemind_suppress }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_20_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_20_fired
 	}
 
 	option = {
@@ -1928,10 +1934,13 @@ society_technology_events.21 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = telepathic_communities
 		NOT = { has_modifier = ste_telepathic_diplomacy }
 		NOT = { has_modifier = ste_telepathic_diplomacy_rejected }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_21_fired }
 		any_country = {
 			NOT = { this = root }
@@ -1940,7 +1949,6 @@ society_technology_events.21 = {
 	}
 
 	immediate = {
-		set_variable = ste_event_21_fired
 		save_scope_as = telepathic_proposer
 		random_country = {
 			limit = {
@@ -2299,16 +2307,15 @@ society_technology_events.25 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = generative_ai
 		NOT = { has_modifier = ste_deepfake_regulate }
 		NOT = { has_modifier = ste_deepfake_authenticate }
 		NOT = { has_modifier = ste_deepfake_ignore }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_25_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_25_fired
 	}
 
 	option = {
@@ -2397,16 +2404,15 @@ society_technology_events.26 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = artificial_intelligence
 		NOT = { has_modifier = ste_ai_safety_protocols }
 		NOT = { has_modifier = ste_ai_alignment_research }
 		NOT = { has_modifier = ste_ai_alignment_dismissed }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_26_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_26_fired
 	}
 
 	option = {
@@ -2468,16 +2474,15 @@ society_technology_events.27 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = ai_agents
 		NOT = { has_modifier = ste_algo_gov_adopt }
 		NOT = { has_modifier = ste_algo_gov_reject }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_27_fired }
 		NOT = { has_law = law_type:law_automated_bureaucracy }
-	}
-
-	immediate = {
-		set_variable = ste_event_27_fired
 	}
 
 	option = {
@@ -2534,6 +2539,8 @@ society_technology_events.28 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = genetic_engineering
 		NOT = { has_modifier = ste_designer_baby_ban }
@@ -2542,11 +2549,8 @@ society_technology_events.28 = {
 		NOT = { has_modifier = ste_designer_baby_state_eugenics }
 		NOT = { has_modifier = ste_designer_baby_open_source }
 		NOT = { has_modifier = ste_designer_baby_corporate }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_28_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_28_fired
 	}
 
 	option = {
@@ -2657,10 +2661,13 @@ society_technology_events.29 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = synthetic_biology
 		NOT = { has_modifier = ste_synthetic_crops_adopt }
 		NOT = { has_modifier = ste_synthetic_crops_ban }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_29_fired }
 		any_scope_building = {
 			OR = {
@@ -2669,10 +2676,6 @@ society_technology_events.29 = {
 			}
 			level >= 3
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_29_fired
 	}
 
 	option = {
@@ -2729,16 +2732,15 @@ society_technology_events.30 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = autonomous_vehicles
 		NOT = { has_modifier = ste_av_full_adoption }
 		NOT = { has_modifier = ste_av_cautious_rollout }
 		NOT = { has_modifier = ste_av_blocked }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_30_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_30_fired
 	}
 
 	option = {
@@ -2822,19 +2824,18 @@ society_technology_events.31 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = autonomous_vehicles
 		NOT = { has_modifier = ste_av_crash_pause }
 		NOT = { has_modifier = ste_av_crash_continue }
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ste_event_31_fired }
 		OR = {
 			has_modifier = ste_av_full_adoption
 			has_modifier = ste_av_cautious_rollout
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_31_fired
 	}
 
 	option = {

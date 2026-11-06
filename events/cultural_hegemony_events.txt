@@ -887,14 +887,13 @@ cultural_hegemony.8 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 10
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ch_milestone_significant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_significant
 	}
 
 	option = {
@@ -955,17 +954,16 @@ cultural_hegemony.9 = {
 	# be the leaderboard's #1 (ch_rank_1, set by the monthly ranking pass).
 	# The latch is set in `immediate`, so a country at 25% but not #1 keeps
 	# the milestone open and the JE pulse re-offers it once it takes the lead.
+	fire_only_once = yes
+
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 25
 		has_global_variable = ch_rank_1
 		exists = global_var:ch_rank_1
 		THIS = global_var:ch_rank_1
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ch_milestone_dominant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_dominant
 	}
 
 	option = {
