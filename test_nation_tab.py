@@ -497,9 +497,10 @@ class TypeRowsTest(unittest.TestCase):
         # Mine (2026-10-27), the only modifier that carried its type; two
         # fewer since Colonial Empire's programmes moved onto their entry as
         # scaling modifiers (#1404), which the tab doesn't list; three types
-        # fewer since the light tax code's relief did the same (#1404)
+        # and five rows (the five taxes' types, which only the light relief
+        # fed) fewer since the light tax code's relief did the same (#1404)
         self.assertGreaterEqual(len(self.carried), 145)
-        self.assertGreaterEqual(len(self._rows()), 111)
+        self.assertGreaterEqual(len(self._rows()), 106)
         self.assertIn("state_arable_land_mult", self.carried)
         self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
                         <= set(self.carried["state_arable_land_mult"]))

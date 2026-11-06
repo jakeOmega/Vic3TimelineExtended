@@ -7,8 +7,8 @@ interest groups over and choosing the month it takes effect. The rule is
 experimental and off by default. It has four settings: *Tax Code Disabled* keeps
 base-game taxes, *Tax Code Enabled* legislates domestic taxes, *Tax Code and
 Customs Enabled* also legislates tariffs and subsidies, and *Light Tax Code*
-keeps the taxation laws and lets you set each tax within your law's range, at
-once and without bills (see the [Introduction](01-introduction.md)). Choose it
+keeps the taxation laws and lets you set each tax within your law's range
+directly, without bills (see the [Introduction](01-introduction.md)). Choose it
 when you set up the campaign; it can't be switched later.
 
 Everything happens in the Tax Code journal entry, in the Domestic Affairs group,
