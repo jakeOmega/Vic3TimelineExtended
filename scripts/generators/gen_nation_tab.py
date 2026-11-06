@@ -149,7 +149,7 @@ SECTIONS = {
         # Orbital debris and its clearance
         "te_orbital_debris", "te_debris_*",
         # The Antarctic research station and the Antarctic regime
-        "te_antarctic_station_modifier", "un_antarctic_*", "un_regime_antarctic_station_modifier",
+        "te_antarctic_station_modifier", "un_antarctic_policy_modifier",
         # Seabed policy
         "te_seabed_policy_*",
         # Extraplanetary Base room from the near-Earth asteroids and colonies
@@ -158,15 +158,10 @@ SECTIONS = {
         "te_demog_um_research",
     ),
     "international": (
-        # UN conventions a country is bound by outside the organisation's entry
-        "un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
-        "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_nuclear_ban_modifier",
-        "un_physical_protection_modifier", "un_colony_protection_modifier",
-        # Membership and its absence, NPT disarmament
-        "un_membership_benefits_modifier", "un_nonmember_pariah_*", "un_npt_disarmament_modifier",
-        # Regime terms, embargoes, sanctions, mandates, development grants, observers
-        "un_regime_*", "un_arms_embargo_*", "un_sanctions_*", "un_mandate_war_support_modifier",
-        "un_dev_fund_*", "un_electoral_observers_modifier",
+        # The UN's absence, NPT disarmament, the sanctions a country enforces (the conventions, the
+        # regime terms, embargoes, the sanctions regime, membership's benefits, mandates, development
+        # grants and observers are declared on the UN's entry since #1404)
+        "un_nonmember_pariah_*", "un_npt_disarmament_modifier", "un_sanctions_enforcer_modifier",
         # Intelligence sharing and the nuclear taboo
         "intelligence_sharing_defense_shield_modifier", "nd_taboo_*",
         # A colonial subject's overlord in decline
@@ -239,12 +234,21 @@ NOT_ON_COUNTRY = {
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
     "un_founding_member_modifier": "je_united_nations", "un_headquarters_modifier": "je_united_nations",
     "un_permanent_member_modifier": "je_united_nations", "un_security_council_modifier": "je_united_nations",
-    "un_climate_binding_modifier": "je_united_nations", "un_heritage_program_modifier": "je_united_nations",
-    "un_nonproliferation_modifier": "je_united_nations", "un_pandemic_cooperation_modifier": "je_united_nations",
+    # Declared on the UN's entry since #1404 (je_united_nations.txt); a ratification, a start or a vote
+    # previews each with an add.
+    "un_regime_*": "je_united_nations", "un_arms_embargo_*": "je_united_nations",
+    "un_human_rights_*": "je_united_nations", "un_antarctic_treaty_modifier": "je_united_nations",
+    "un_sanctions_target_modifier": "je_united_nations",
+    "un_arms_control_participant_modifier": "je_united_nations", "un_asat_moratorium_modifier": "je_united_nations",
+    "un_champion_order_cost": "je_united_nations", "un_climate_binding_modifier": "je_united_nations",
+    "un_colony_protection_modifier": "je_united_nations", "un_cultural_diversity_modifier": "je_united_nations",
+    "un_heritage_program_modifier": "je_united_nations", "un_icc_member_modifier": "je_united_nations",
+    "un_law_of_sea_modifier": "je_united_nations", "un_membership_benefits_modifier": "je_united_nations",
+    "un_narcotics_control_modifier": "je_united_nations", "un_nonproliferation_modifier": "je_united_nations",
+    "un_nuclear_ban_modifier": "je_united_nations", "un_pandemic_cooperation_modifier": "je_united_nations",
+    "un_peacekeeping_contributor_modifier": "je_united_nations", "un_physical_protection_modifier": "je_united_nations",
     "un_refugee_program_modifier": "je_united_nations", "un_space_partnership_modifier": "je_united_nations",
-    "un_human_rights_*": "je_united_nations", "un_peacekeeping_contributor_modifier": "je_united_nations",
-    "un_development_*_modifier": "je_united_nations", "un_arms_control_participant_modifier": "je_united_nations",
-    "un_champion_order_cost": "je_united_nations", "un_undermine_order_cost": "je_united_nations",
+    "un_undermine_order_cost": "je_united_nations",
     "un_food_reserve_relief_state_modifier": "states", "un_mission_*_state_modifier": "states",
     "ww_*": "je_world_war",
     "antimatter_facility_progress": "the megaproject's building",
@@ -297,27 +301,20 @@ SOURCE_GROUPS = {
     "demography": ("te_demog_health_bill_*", "te_demog_family_limitation", "te_demog_lx_gap_politics",
                    "te_demog_pension_pos_*"),
     # The nonproliferation regime, the conventions on the bomb, the taboo
-    "nuclear_order": ("un_regime_npt_*", "un_nuclear_ban_modifier", "un_physical_protection_modifier",
-                      "un_npt_disarmament_modifier", "nd_taboo_*"),
+    "nuclear_order": ("un_npt_disarmament_modifier", "nd_taboo_*"),
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
-    "un_regimes": (
-        "un_regime_rights_violator_modifier", "un_regime_colon*", "un_regime_climate_*",
-        "un_regime_cultural_hegemon_modifier", "un_regime_heritage_site_modifier", "un_regime_naval_curb_modifier",
-        "un_regime_refugee_*", "un_regime_shared_intelligence_modifier", "un_regime_space_*",
-    ),
     "family_measures": ("te_demog_ms_*",),
     "civil_rights": ("cr_*",),
     # A colonial subject's overlord in decline, a great power's stance on colonialism
     "decolonization": ("colonial_overlord_*", "gp_*_colonial_policy_modifier"),
-    # Membership and its absence, a development grant, observers, a mandate's war support
-    "united_nations": ("un_membership_benefits_modifier", "un_nonmember_pariah_*", "un_dev_fund_*",
-                       "un_electoral_observers_modifier", "un_mandate_war_support_modifier"),
+    # The UN's absence
+    "united_nations": ("un_nonmember_pariah_*",),
     "monetary": ("te_mon_*", "te_monetary_rate_paid", "te_monetisation_minting", "te_capital_controls_fatigue"),
     # Inflation and exchange-rate bands
     "inflation": ("te_inflation_band_*", "te_fx_*"),
-    "sanctions": ("un_arms_embargo_*", "un_sanctions_*"),
+    "sanctions": ("un_sanctions_enforcer_modifier",),
     # A dynasty's continuity
     "inheritance": ("inh_*",),
     "tax_relief": ("te_tax_relief_*",),
@@ -335,9 +332,7 @@ SOURCE_GROUPS = {
     # Space race milestones, the probe's data, the dividend, Extraplanetary Base room, orbital debris
     "space": ("sr_*", "te_orbital_debris", "te_debris_*"),
     # The Antarctic station and regime, seabed policy
-    "commons": ("te_antarctic_*", "un_antarctic_*", "un_regime_antarctic_station_modifier", "te_seabed_*"),
-    "un_conventions": ("un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
-                       "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_colony_protection_modifier"),
+    "commons": ("te_antarctic_*", "un_antarctic_policy_modifier", "te_seabed_*"),
     # Intelligence sharing
     "foreign": ("intelligence_sharing_defense_shield_modifier",),
 }
@@ -346,10 +341,10 @@ MAX_GROUP = 32
 # A modifier no list places that shares a listed one's display name. The lists
 # match names (gotcha #40), so a list shows it too, under that name, and its
 # twin's group flag and its section's count count it as well, so the list and
-# its count agree. The World Development Fund's grant goes into the investment
-# pool, or into the treasury where the laws allow no pool (a budget carrier):
-# one grant, one name. test_nation_tab.py fails on any other shared name.
-SAME_NAME = {"un_dev_fund_treasury_grant_modifier": "un_dev_fund_pool_grant_modifier"}
+# its count agree. None since #1404: the one pair, the World Development Fund's
+# grant into the investment pool or into the treasury, is declared on the UN's
+# entry. test_nation_tab.py fails on any shared name not listed here.
+SAME_NAME: dict[str, str] = {}
 
 
 # ---------------------------------------------------------------------------
@@ -382,7 +377,7 @@ TYPE_ROWS = {
     },
     "society": {
         "living_standards": (
-            "state_standard_of_living_add", "state_lower_strata_standard_of_living_add",
+            "state_lower_strata_standard_of_living_add",
             "state_middle_strata_standard_of_living_add", "state_lower_strata_expected_sol_add",
             "state_middle_strata_expected_sol_add", "state_upper_strata_expected_sol_add",
             "country_sol_expectations_lower_offset_add",
@@ -390,7 +385,6 @@ TYPE_ROWS = {
         "acceptance": (
             "country_acceptance_not_homeland_add", "country_acceptance_shared_heritage_trait_add",
             "country_acceptance_shared_heritage_trait_group_add", "country_acceptance_no_shared_heritage_trait_add",
-            "state_assimilation_mult", "state_homeland_removal_speed_mult",
         ),
         "unrest": (
             "state_turmoil_effects_mult", "state_radicals_from_political_movements_mult",
@@ -401,31 +395,24 @@ TYPE_ROWS = {
         ),
         # Most only under the Demographics rule, whose measures carry them
         "demography": (
-            "state_mortality_mult", "state_desired_fertility_mult", "state_fertility_means_add",
+            "state_desired_fertility_mult", "state_fertility_means_add",
             "state_means_literacy_add", "state_birth_limit_relief_add", "state_urban_fertility_relief_add",
             "state_sex_ratio_at_birth_add", "state_maternal_mortality_mult", "state_demog_womens_work_ratio_add",
             "state_pop_support_movement_feminist_mult",
         ),
     },
     "economy": {
-        "production": (
-            "state_arable_land_mult", "state_construction_mult", "building_group_bg_agriculture_throughput_add",
-            "building_group_bg_heavy_industry_throughput_add",
-            "building_opium_plantation_throughput_add", "building_synthetics_plant_opium_throughput_add",
-            "building_tourism_industry_throughput_add",
-        ),
+        "production": ("state_arable_land_mult", "state_construction_mult"),
         "taxes": (
             "state_tax_collection_mult", "state_tax_waste_add", "building_group_bg_agriculture_tax_mult",
             "country_minting_add", "country_minting_mult",
         ),
         "investment": (
             "state_capitalists_investment_pool_efficiency_mult", "state_shopkeepers_investment_pool_efficiency_mult",
-            "country_private_construction_allocation_mult", "country_weekly_investment_pool_add",
-            "country_loan_interest_rate_add", "country_risk_premium_add",
+            "country_private_construction_allocation_mult", "country_loan_interest_rate_add", "country_risk_premium_add",
         ),
         "trade": (
             "state_trade_advantage_mult", "state_export_advantage_mult", "state_import_advantage_mult",
-            "country_military_goods_cost_mult", "country_port_connection_cost_mult",
         ),
     },
     "science_and_space": {
@@ -441,19 +428,15 @@ TYPE_ROWS = {
     "international": {
         "standing": (
             "country_prestige_add", "country_prestige_mult",
-            "country_prestige_from_navy_power_projection_mult", "country_cultural_pull_add",
             "country_cultural_pull_mult", "country_influence_mult", "country_influence_cost_add",
             "country_diplomatic_reputation_add", "country_improve_relations_speed_mult",
-            "country_leverage_generation_mult", "country_infamy_generation_mult",
-            "country_ideology_resistance_mult", "country_un_authority_target_add", "country_liberty_desire_add",
+            "country_leverage_generation_mult", "country_un_authority_target_add", "country_liberty_desire_add",
         ),
         "covert_defense": (
             "country_covert_defense_economic_add", "country_covert_defense_ideological_add",
             "country_covert_defense_military_add",
         ),
-        "war_support": ("country_war_support_casualties_mult", "country_war_support_battles_decrease_mult"),
-        "nuclear": ("country_nuclear_program_progress_mult", "state_nuclear_weapon_defense_chance_add"),
-        "commitments": ("country_greenhouse_gas_emissions_mult", "country_colonial_stability_drift_add"),
+        "commitments": ("country_colonial_stability_drift_add",),
     },
 }
 
@@ -483,9 +466,6 @@ NOT_A_ROW = {
                                             "(the Anti-Colonial Policy's hypocrite tax on them)",
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
-    "goods_trade_advantage_*_mult": "the arms embargo's own line in Where These Come From (seven goods)",
-    "state_death_cause_*_mult": "the Demographics tab's Causes of Death: a label beside a mortality line, which the "
-                                "mortality line's own row shows",
 }
 
 

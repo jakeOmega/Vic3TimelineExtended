@@ -106,22 +106,6 @@ te_nation_src_nuclear_order_count = {
 		limit = { has_modifier = un_npt_disarmament_modifier }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_nuclear_ban_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_physical_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_guarantee_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_inspection_modifier }
-		add = 1
-	}
 }
 
 # Used by: the monthly pulse, for te_nation_src_governance
@@ -149,67 +133,6 @@ te_nation_src_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = te_political_commissars_indoctrination }
-		add = 1
-	}
-}
-
-# Used by: the monthly pulse, for te_nation_src_un_regimes
-te_nation_src_un_regimes_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colonial_pressure_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_cultural_hegemon_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_naval_curb_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_source_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_laggard_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_leader_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_weapon_modifier }
 		add = 1
 	}
 }
@@ -329,31 +252,11 @@ te_nation_src_decolonization_count = {
 te_nation_src_united_nations_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
 		add = 1
 	}
 	if = {
 		limit = { has_modifier = un_nonmember_pariah_strong_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
 		add = 1
 	}
 }
@@ -476,19 +379,7 @@ te_nation_src_inflation_count = {
 te_nation_src_sanctions_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = un_arms_embargo_target_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_arms_embargo_voluntary_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_sanctions_enforcer_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -880,43 +771,6 @@ te_nation_src_commons_count = {
 		limit = { has_modifier = un_antarctic_policy_modifier }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_antarctic_treaty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_antarctic_station_modifier }
-		add = 1
-	}
-}
-
-# Used by: the monthly pulse, for te_nation_src_un_conventions
-te_nation_src_un_conventions_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_asat_moratorium_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_colony_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
 }
 
 # Used by: the monthly pulse, for te_nation_src_foreign
@@ -932,7 +786,7 @@ te_nation_src_foreign_count = {
 te_nation_list_governance_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_96520cb8 }
+		limit = { has_variable = te_nation_src_set_ba24916c }
 		if = {
 			limit = { var:te_nation_src_governance > 0 }
 			add = te_nation_src_governance_count
@@ -944,7 +798,7 @@ te_nation_list_governance_count = {
 te_nation_list_society_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_96520cb8 }
+		limit = { has_variable = te_nation_src_set_ba24916c }
 		if = {
 			limit = { var:te_nation_src_living_standards > 0 }
 			add = te_nation_src_living_standards_count
@@ -995,7 +849,7 @@ te_nation_list_society_count = {
 te_nation_list_economy_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_96520cb8 }
+		limit = { has_variable = te_nation_src_set_ba24916c }
 		if = {
 			limit = { var:te_nation_src_construction > 0 }
 			add = te_nation_src_construction_count
@@ -1035,7 +889,7 @@ te_nation_list_economy_count = {
 te_nation_list_science_and_space_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_96520cb8 }
+		limit = { has_variable = te_nation_src_set_ba24916c }
 		if = {
 			limit = { var:te_nation_src_transhumanism > 0 }
 			if = {
@@ -1058,14 +912,10 @@ te_nation_list_science_and_space_count = {
 te_nation_list_international_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_96520cb8 }
+		limit = { has_variable = te_nation_src_set_ba24916c }
 		if = {
 			limit = { var:te_nation_src_nuclear_order > 0 }
 			add = te_nation_src_nuclear_order_count
-		}
-		if = {
-			limit = { var:te_nation_src_un_regimes > 0 }
-			add = te_nation_src_un_regimes_count
 		}
 		if = {
 			limit = { var:te_nation_src_decolonization > 0 }
@@ -1078,10 +928,6 @@ te_nation_list_international_count = {
 		if = {
 			limit = { var:te_nation_src_sanctions > 0 }
 			add = te_nation_src_sanctions_count
-		}
-		if = {
-			limit = { var:te_nation_src_un_conventions > 0 }
-			add = te_nation_src_un_conventions_count
 		}
 		if = {
 			limit = { var:te_nation_src_foreign > 0 }
@@ -1431,14 +1277,6 @@ te_nation_types_governance_count = {
 		limit = { has_modifier = te_tax_ig_view_trade_unions_p2 }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
 }
 
 # Used by: the authority subheading
@@ -1647,14 +1485,6 @@ te_nation_group_legitimacy_count = {
 		limit = { has_modifier = te_judicial_independence }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_legitimacy_base_add row
@@ -1670,14 +1500,6 @@ te_nation_type_country_legitimacy_base_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_judicial_independence }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
 		add = 1
 	}
 }
@@ -2640,22 +2462,6 @@ te_nation_types_society_count = {
 		limit = { has_modifier = te_mon_real_wage_dividend }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_source_modifier }
-		add = 1
-	}
 }
 
 # Used by: the living_standards subheading
@@ -2695,27 +2501,6 @@ te_nation_group_living_standards_count = {
 	}
 	if = {
 		limit = { has_modifier = te_mon_real_wage_dividend }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_source_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_standard_of_living_add row
-te_nation_type_state_standard_of_living_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_source_modifier }
 		add = 1
 	}
 }
@@ -2841,10 +2626,6 @@ te_nation_group_acceptance_count = {
 		limit = { has_modifier = te_clade_parity_trait }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_acceptance_not_homeland_add row
@@ -2915,24 +2696,6 @@ te_nation_type_country_acceptance_no_shared_heritage_trait_add_count = {
 	}
 }
 
-# Used by: the state_assimilation_mult row
-te_nation_type_state_assimilation_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_homeland_removal_speed_mult row
-te_nation_type_state_homeland_removal_speed_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-}
-
 # Used by: the unrest subheading
 te_nation_group_unrest_count = {
 	value = 0
@@ -2976,10 +2739,6 @@ te_nation_group_unrest_count = {
 		limit = { has_modifier = te_demog_ms_crash_campaign }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
-		add = 1
-	}
 }
 
 # Used by: the state_turmoil_effects_mult row
@@ -2995,10 +2754,6 @@ te_nation_type_state_turmoil_effects_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = cr_suppression_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
 		add = 1
 	}
 }
@@ -3056,10 +2811,6 @@ te_nation_group_population_count = {
 		limit = { has_modifier = quiet_assimilation_path_modifier }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
-		add = 1
-	}
 }
 
 # Used by: the state_migration_pull_mult row
@@ -3067,10 +2818,6 @@ te_nation_type_state_migration_pull_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = imperial_federation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_refugee_host_modifier }
 		add = 1
 	}
 }
@@ -3141,19 +2888,6 @@ te_nation_group_demography_count = {
 	}
 	if = {
 		limit = { has_modifier = te_demog_ms_sex_education }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_mortality_mult row
-te_nation_type_state_mortality_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
 		add = 1
 	}
 }
@@ -3395,43 +3129,7 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_arms_embargo_target_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_arms_embargo_voluntary_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_strong_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -3461,22 +3159,6 @@ te_nation_group_production_count = {
 	}
 	if = {
 		limit = { has_modifier = too_much_private_construction }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
 		add = 1
 	}
 }
@@ -3511,55 +3193,6 @@ te_nation_type_state_construction_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = too_much_private_construction }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_group_bg_agriculture_throughput_add row
-te_nation_type_building_group_bg_agriculture_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_group_bg_heavy_industry_throughput_add row
-te_nation_type_building_group_bg_heavy_industry_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_opium_plantation_throughput_add row
-te_nation_type_building_opium_plantation_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_synthetics_plant_opium_throughput_add row
-te_nation_type_building_synthetics_plant_opium_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_tourism_industry_throughput_add row
-te_nation_type_building_tourism_industry_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
 		add = 1
 	}
 }
@@ -3745,10 +3378,6 @@ te_nation_group_investment_count = {
 		limit = { has_modifier = te_monetary_rate_paid }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		add = 1
-	}
 }
 
 # Used by: the state_capitalists_investment_pool_efficiency_mult row
@@ -3802,15 +3431,6 @@ te_nation_type_country_private_construction_allocation_mult_count = {
 	}
 }
 
-# Used by: the country_weekly_investment_pool_add row
-te_nation_type_country_weekly_investment_pool_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		add = 1
-	}
-}
-
 # Used by: the country_loan_interest_rate_add row
 te_nation_type_country_loan_interest_rate_add_count = {
 	value = 0
@@ -3853,23 +3473,7 @@ te_nation_group_trade_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_arms_embargo_target_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_arms_embargo_voluntary_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_strong_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -3879,10 +3483,6 @@ te_nation_type_state_trade_advantage_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = un_nonmember_pariah_strong_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -3925,28 +3525,6 @@ te_nation_type_state_import_advantage_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = te_mon_union_reserve }
-		add = 1
-	}
-}
-
-# Used by: the country_military_goods_cost_mult row
-te_nation_type_country_military_goods_cost_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_arms_embargo_target_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_arms_embargo_voluntary_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_port_connection_cost_mult row
-te_nation_type_country_port_connection_cost_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
 		add = 1
 	}
 }
@@ -4054,22 +3632,6 @@ te_nation_types_science_and_space_count = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_antarctic_station_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_laggard_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_leader_modifier }
-		add = 1
-	}
 }
 
 # Used by: the research subheading
@@ -4159,14 +3721,6 @@ te_nation_group_research_count = {
 		limit = { has_modifier = te_demog_um_research }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_antarctic_station_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_tech_research_speed_mult row
@@ -4234,14 +3788,6 @@ te_nation_type_country_tech_research_speed_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = te_demog_um_research }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_antarctic_station_modifier }
 		add = 1
 	}
 }
@@ -4355,14 +3901,6 @@ te_nation_group_space_and_seabed_count = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_space_laggard_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_leader_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_space_race_progress_mult row
@@ -4370,14 +3908,6 @@ te_nation_type_country_space_race_progress_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = te_orbital_debris }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_laggard_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_leader_modifier }
 		add = 1
 	}
 }
@@ -4599,46 +4129,6 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_antarctic_treaty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_asat_moratorium_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_colony_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
 		add = 1
 	}
@@ -4651,63 +4141,7 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_nuclear_ban_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_physical_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colonial_pressure_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_cultural_hegemon_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_naval_curb_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_guarantee_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_inspection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_weapon_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_sanctions_enforcer_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -4860,38 +4294,6 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_antarctic_treaty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_asat_moratorium_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_colony_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
 		add = 1
 	}
@@ -4900,43 +4302,7 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_nuclear_ban_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_physical_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_cultural_hegemon_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_naval_curb_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_weapon_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_sanctions_enforcer_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -5050,73 +4416,7 @@ te_nation_type_country_prestige_mult_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = un_antarctic_treaty_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_asat_moratorium_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_colony_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_nuclear_ban_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_physical_protection_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_rights_violator_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_space_weapon_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_prestige_from_navy_power_projection_mult row
-te_nation_type_country_prestige_from_navy_power_projection_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_naval_curb_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_cultural_pull_add row
-te_nation_type_country_cultural_pull_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_heritage_site_modifier }
 		add = 1
 	}
 }
@@ -5196,10 +4496,6 @@ te_nation_type_country_cultural_pull_mult_count = {
 		limit = { has_modifier = sr_suborbital }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_cultural_hegemon_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_influence_mult row
@@ -5223,10 +4519,6 @@ te_nation_type_country_influence_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
 		add = 1
 	}
 }
@@ -5271,27 +4563,11 @@ te_nation_type_country_diplomatic_reputation_add_count = {
 		limit = { has_modifier = mandate_system_modifier }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_space_weapon_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_improve_relations_speed_mult row
 te_nation_type_country_improve_relations_speed_mult_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_membership_benefits_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = un_nonmember_pariah_modifier }
 		add = 1
@@ -5307,24 +4583,6 @@ te_nation_type_country_leverage_generation_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = un_sanctions_enforcer_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_infamy_generation_mult row
-te_nation_type_country_infamy_generation_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_ideology_resistance_mult row
-te_nation_type_country_ideology_resistance_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
 }
@@ -5357,10 +4615,6 @@ te_nation_type_country_liberty_desire_add_count = {
 		limit = { has_modifier = te_mon_board_wrong_stance }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		add = 1
-	}
 }
 
 # Used by: the covert_defense subheading
@@ -5368,14 +4622,6 @@ te_nation_group_covert_defense_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
 		add = 1
 	}
 }
@@ -5387,10 +4633,6 @@ te_nation_type_country_covert_defense_economic_add_count = {
 		limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
-		add = 1
-	}
 }
 
 # Used by: the country_covert_defense_ideological_add row
@@ -5398,14 +4640,6 @@ te_nation_type_country_covert_defense_ideological_add_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_electoral_observers_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
 		add = 1
 	}
 }
@@ -5417,43 +4651,22 @@ te_nation_type_country_covert_defense_military_add_count = {
 		limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
 		add = 1
 	}
+}
+
+# Used by: the commitments subheading
+te_nation_group_commitments_count = {
+	value = 0
 	if = {
-		limit = { has_modifier = un_regime_shared_intelligence_modifier }
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
 		add = 1
 	}
 }
 
-# Used by: the war_support subheading
-te_nation_group_war_support_count = {
+# Used by: the country_colonial_stability_drift_add row
+te_nation_type_country_colonial_stability_drift_add_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_war_support_casualties_mult row
-te_nation_type_country_war_support_casualties_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_war_support_battles_decrease_mult row
-te_nation_type_country_war_support_battles_decrease_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
 		add = 1
 	}
 }
@@ -5471,32 +4684,6 @@ te_nation_group_nuclear_count = {
 	}
 	if = {
 		limit = { has_modifier = un_npt_disarmament_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_guarantee_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_npt_inspection_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_nuclear_program_progress_mult row
-te_nation_type_country_nuclear_program_progress_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_npt_inspection_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_nuclear_weapon_defense_chance_add row
-te_nation_type_state_nuclear_weapon_defense_chance_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_npt_guarantee_modifier }
 		add = 1
 	}
 }
@@ -5519,45 +4706,6 @@ te_nation_type_country_nuclear_program_pause_bool_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
-		add = 1
-	}
-}
-
-# Used by: the commitments subheading
-te_nation_group_commitments_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = gp_anti_colonial_policy_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colonial_pressure_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_greenhouse_gas_emissions_mult row
-te_nation_type_country_greenhouse_gas_emissions_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = un_regime_climate_emitter_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_colonial_stability_drift_add row
-te_nation_type_country_colonial_stability_drift_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = gp_anti_colonial_policy_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = un_regime_colonial_pressure_modifier }
 		add = 1
 	}
 }
