@@ -228,7 +228,39 @@ class CauseColorsTest(unittest.TestCase):
             self.assertLess(int(pale.group(2)), int(full.group(2)), f"te_jmap_cause_{short}_pale is paler")
             self.assertRegex(host, r'lerp = \{\s*min_color = "te_jmap_cause_' + short + r'_pale"\s*max_color = '
                              r'"te_jmap_cause_' + short + r'"\s*factor = te_jmap_cause_factor\s*\}', short)
-        self.assertNotRegex(host, r'value = "te_jmap_cause_', "a cause drawn flat, not by its share")
+        self.assertNotRegex(block(entry(HOST, "je_te_map_room"), "map_color"), r'value = "te_jmap_cause_',
+                            "a cause drawn flat, not by its share")
+
+    CAUSES = (("inf", 1), ("chr", 2), ("ext", 3), ("work", 4), ("mat", 5), ("kill", 7), ("war", 8))
+
+    def test_the_runner_up_stripes_at_half_the_leader(self):
+        # the runner-up cause (te_dg_dc_second) stripes the Leading Cause map in its pie color, and its hover line
+        # names it, once it took at least half the leader's deaths (owner, 2026-11-06)
+        room = entry(HOST, "je_te_map_room")
+        stripes, hover = block(room, "map_color_second"), block(room, "map_tooltip")
+        self.assertIsNotNone(stripes, "the Map Room draws no stripes")
+        for short, n in self.CAUSES:
+            gate = (r"te_jmap_selector = 11\b[^{}]*var:te_dg_dc_second = " + str(n) +
+                    r"\s+te_jmap_cause_second_ratio >= 0\.5\s*\}\s*")
+            self.assertRegex(stripes, gate + r'value = "te_jmap_cause_' + short + r'"', short)
+            self.assertRegex(hover, gate + r"custom_tooltip_no_bullet = te_jmap_tt_cause_second_" + short + r"\b",
+                             short)
+        self.assertEqual(len(re.findall(r"\bvalue = ", stripes)), len(self.CAUSES), "a stripe that isn't a cause's")
+
+    def test_the_census_stores_the_runner_up(self):
+        # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
+        effects = code("common/scripted_effects/te_demog_effects.txt")
+        total = re.search(r"^te_demog_cause_deaths_total = \{(.*?)^\}", effects, re.S | re.M).group(1)
+        lead = re.findall(r"te_demog_cause_deaths_lead = \{ SLICE = (\w+) CODE = (\d+) \}", total)
+        second = re.findall(r"te_demog_cause_deaths_second = \{ SLICE = (\w+) CODE = (\d+) \}", total)
+        self.assertEqual(second, lead)
+        self.assertEqual([(s, int(n)) for s, n in second], list(self.CAUSES))
+        self.assertLess(total.index("te_demog_cause_deaths_lead"), total.index("te_demog_cause_deaths_second"),
+                        "the runner-up is picked after the leader")
+        helper = re.search(r"^te_demog_cause_deaths_second = \{(.*?)^\}", effects, re.S | re.M).group(1)
+        self.assertIn("NOT = { var:te_dg_dc_lead = $CODE$ }", helper)
+        zero = re.search(r"^te_demog_cause_deaths_zero = \{(.*?)^\}", effects, re.S | re.M).group(1)
+        self.assertIn("set_variable = { name = te_dg_dc_second value = 0 }", zero)
 
 
 class MapRoomTest(unittest.TestCase):

@@ -1005,6 +1005,103 @@ je_te_map_room = {
 		}
 	}
 
+	# Stripes. 11, the leading cause of death: the runner-up's color (te_dg_dc_second, the pie's) where it took at least
+	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). No other map stripes, and a state no
+	# branch takes has none.
+	map_color_second = {
+		if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 1
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_inf"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 2
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_chr"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 3
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_ext"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 4
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_work"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 5
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_mat"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 7
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_kill"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 8
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_war"
+		}
+	}
+
 	# Root: the state under the cursor. Never runs as an effect; it only prints. Each figure that needs a choice of words
 	# is a branch of its own, not a SelectLocalization in the loc: a key named there loses THIS, and every hover logged
 	# "Promote 'THIS' returned nullptr" and printed nothing (2026-11-05).
@@ -1561,6 +1658,98 @@ je_te_map_room = {
 		}
 		else = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_pick
+		}
+		# 11's stripes, a line under the leader's: the runner-up, where the map stripes it.
+		if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 1
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_inf
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 2
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_chr
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 3
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_ext
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 4
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_work
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 5
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_mat
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 7
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_kill
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 8
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_war
 		}
 	}
 }

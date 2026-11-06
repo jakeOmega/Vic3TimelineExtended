@@ -46,8 +46,10 @@ network there.
 Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
 of Death chart, full where that cause took 90% of the deaths and paler as its
-share falls toward 30%; it, Birth Rate, Death Rate, Natural Change and Net
-Migration need a state's first full census year, so they start gray.
+share falls toward 30%. Stripes in a second cause's color mark a state where
+that cause took at least half as many deaths as the leader. Leading Cause,
+Birth Rate, Death Rate, Natural Change and Net Migration need a state's first
+full census year, so they start gray.
 
 Those eight systems' tabs, and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the eight (all but Ocean

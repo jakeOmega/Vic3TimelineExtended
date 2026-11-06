@@ -164,6 +164,8 @@ SAFETY_VARS = {"te_dg_in_saf_work", "te_dg_in_saf_ext"}
 # (te_demog_cause_deaths_store; a seed's are 0), from a new generated block (te_demog_cause_deaths_estimate) that reads the
 # step's rates and changes none of them, so every recorded number stays as it was
 CAUSE_DEATH_VARS = {f"te_dg_dc_{s}" for s in ("inf", "ext", "chr", "work", "mat", "war", "kill", "total", "fit", "lead")}
+# and the runner-up's code, for the Map Room's Leading Cause stripes (owner, 2026-11-06): a display figure, no number moves
+CAUSE_DEATH_VARS.add("te_dg_dc_second")
 # The deaths on top by cause (owner, 2026-10-22; the docstring): each cause's on the panel, and the start's parts by cause
 CAUSE_DEATH_VARS |= {f"te_dg_{k}_{c}" for k in ("sc", "st") for c in P.DEATH_CAUSES}
 CAUSE_DEATH_VARS |= {f"te_dg_dc_{c}_top" for c in P.DEATH_CAUSES}

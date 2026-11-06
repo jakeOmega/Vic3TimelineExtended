@@ -101,10 +101,16 @@ entry, in no country's journal.
   pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), each faded to
   a pale end of its own hue (`te_jmap_cause_<cause>_pale`) by the cause's share of last year's deaths
   (`te_jmap_cause_factor` on `te_demog_dc_lead_share`, linear from 30% to 90%; states ran 31–97% in 1838, 1940 and
-  2020 saves), so a state where a cause barely leads reads apart from one where it takes nearly all. Its hover is a
-  branch per cause. It is not a blend of the causes' colors: a `lerp` mixes two fixed colors, so mixing the top two
-  would need a stored runner-up and a branch per pair, and a mixed hue reads as another cause (infection's blue and
-  war's red make a purple near killed by events' lavender). 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
+  2020 saves), so a state where a cause barely leads reads apart from one where it takes nearly all. Where the
+  runner-up took at least half the leader's deaths (owner, 2026-11-06), the map stripes it over the leader in its own
+  pie color: the Map Room's only `map_color_second`, a branch per cause on `te_dg_dc_second` (the census stores the
+  next largest slice's code beside `te_dg_dc_lead`, `te_demog_cause_deaths_total`) and `te_jmap_cause_second_ratio`
+  (`te_demog_dc_second_share` over `te_demog_dc_lead_share`) at 0.5. A state whose last count came before the
+  runner-up was stored has no stripes until its next. Its hover is a branch per cause, and a second line per cause
+  names the runner-up where it is striped (a branch, not a `SelectLocalization`, for the reason `map_tooltip`'s header
+  gives). The colors aren't mixed: a `lerp` mixes two fixed colors, so a blend of the top two would need a branch per
+  pair, and a mixed hue reads as another cause (infection's blue and war's red make a purple near killed by events'
+  lavender). 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
   the unpainted map and "Pick a map" until the next pick. 18-25 are the systems' maps, each also on its own entry
   (below).
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country

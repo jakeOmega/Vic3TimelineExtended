@@ -96,9 +96,10 @@
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
 #                       the country's TFR weight), each with last year's in
 #                       te_dg_prev_<name> from the second census on
-#   te_dg_dc_inf, _ext, _chr, _work, _mat, _war, _kill, te_dg_dc_total, te_dg_dc_lead, te_dg_dc_fit
-#                       issue #1029: last step's deaths by cause, people, their sum and the largest's code, and the
-#                       estimate's fit (te_demog_cause_deaths_store, below); a seed sets them 0 and removes the fit
+#   te_dg_dc_inf, _ext, _chr, _work, _mat, _war, _kill, te_dg_dc_total, te_dg_dc_lead, te_dg_dc_second, te_dg_dc_fit
+#                       issue #1029: last step's deaths by cause, people, their sum, the largest's and the next
+#                       largest's codes, and the estimate's fit (te_demog_cause_deaths_store, below); a seed sets them 0
+#                       and removes the fit
 #   te_dg_dc_<c>_top    each cause's deaths on top of the census (inf, chr, ext, work, war; owner, 2026-10-22)
 #   te_dg_count_mi      the month of the state's last count (te_history_month_index), for its next count
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
@@ -210,7 +211,8 @@
 #   te_dg_prev_<name>   each of the figures above, as last year's (see the arrows)
 #   te_dg_pjf<b>, te_dg_pjm<b>  the player's bands twenty years ahead (te_demog_project)
 #   te_dg_dc_*          issue #1029: its states' deaths by cause summed over the states that have them (0 until one
-#                       does), with te_dg_dc_total and te_dg_dc_lead as a state's (te_demog_cause_deaths_country_store)
+#                       does), with te_dg_dc_total, te_dg_dc_lead and te_dg_dc_second as a state's
+#                       (te_demog_cause_deaths_country_store)
 #   te_dg_m_inf, _ext, _chr, _work, _mat, te_dg_acc  the cause multipliers and health-care access, its states'
 #                       weighted by people (maternal by births), for the legend's hovers
 #   te_dg_inf_ad        #1045: the adults' infection factor, its states' weighted by people x te_dg_m_inf (so with
@@ -2555,6 +2557,7 @@ te_demog_cause_deaths_zero = {
 	set_variable = { name = te_dg_dc_war_top value = 0 }
 	set_variable = { name = te_dg_dc_total value = 0 }
 	set_variable = { name = te_dg_dc_lead value = 0 }
+	set_variable = { name = te_dg_dc_second value = 0 }
 	if = {
 		limit = { has_variable = te_dg_dc_fit }
 		remove_variable = te_dg_dc_fit
@@ -2565,7 +2568,9 @@ te_demog_cause_deaths_zero = {
 # largest slice, te_dg_dc_lead: its code in the pie's clockwise order (te_demog_dc_cum_*), 1 infection and hunger, 2
 # chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 7 killed by events, 8 war and
 # devastation; 0 with no deaths. 6 was the deaths added on top, which count under their causes since 2026-10-22: the
-# codes keep their numbers, so a save's history keeps its colours. The first of a tie takes it.
+# codes keep their numbers, so a save's history keeps its colours. The first of a tie takes it. te_dg_dc_second is the
+# largest of the rest, in the same codes (0 when no other cause killed anyone): the Map Room's Leading Cause map stripes
+# it over the leader's color where it took at least half the leader's deaths (te_jmap_cause_second_ratio).
 te_demog_cause_deaths_total = {
 	set_variable = {
 		name = te_dg_dc_total
@@ -2588,6 +2593,15 @@ te_demog_cause_deaths_total = {
 	te_demog_cause_deaths_lead = { SLICE = mat CODE = 5 }
 	te_demog_cause_deaths_lead = { SLICE = kill CODE = 7 }
 	te_demog_cause_deaths_lead = { SLICE = war CODE = 8 }
+	set_variable = { name = te_dg_dc_second value = 0 }
+	set_local_variable = { name = te_dg_dc_max value = 0 }
+	te_demog_cause_deaths_second = { SLICE = inf CODE = 1 }
+	te_demog_cause_deaths_second = { SLICE = chr CODE = 2 }
+	te_demog_cause_deaths_second = { SLICE = ext CODE = 3 }
+	te_demog_cause_deaths_second = { SLICE = work CODE = 4 }
+	te_demog_cause_deaths_second = { SLICE = mat CODE = 5 }
+	te_demog_cause_deaths_second = { SLICE = kill CODE = 7 }
+	te_demog_cause_deaths_second = { SLICE = war CODE = 8 }
 }
 
 # One slice for te_demog_cause_deaths_total's largest: $SLICE$ the te_dg_dc_ name, $CODE$ its place in the pie's order.
@@ -2596,6 +2610,18 @@ te_demog_cause_deaths_lead = {
 		limit = { var:te_dg_dc_$SLICE$ > local_var:te_dg_dc_max }
 		set_local_variable = { name = te_dg_dc_max value = var:te_dg_dc_$SLICE$ }
 		set_variable = { name = te_dg_dc_lead value = $CODE$ }
+	}
+}
+
+# One slice for te_demog_cause_deaths_total's next largest, once te_dg_dc_lead is set: the leader's own slice is skipped.
+te_demog_cause_deaths_second = {
+	if = {
+		limit = {
+			NOT = { var:te_dg_dc_lead = $CODE$ }
+			var:te_dg_dc_$SLICE$ > local_var:te_dg_dc_max
+		}
+		set_local_variable = { name = te_dg_dc_max value = var:te_dg_dc_$SLICE$ }
+		set_variable = { name = te_dg_dc_second value = $CODE$ }
 	}
 }
 
