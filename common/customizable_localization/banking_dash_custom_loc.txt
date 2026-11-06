@@ -1207,7 +1207,8 @@ te_mon_ro_fx_state = {
 
 # The cycle phase: the phase's modifier, in the economy's own variant (the
 # market, command and cooperative economies each have six), as
-# banking_cycle_apply_phase_modifiers chooses it, with the phase's crash risk.
+# je_banking_cycle declares it (by the same banking_cycle_is_* triggers and
+# economic law), with the phase's crash risk.
 # Stable carries no modifier in any economy. The effect list is
 # [GetStaticModifier(...).GetDesc], so no figure is retyped here.
 banking_dash_phase_effects = {
@@ -1374,7 +1375,7 @@ banking_dash_momentum_effect = {
 # Bubble pressure: what the band does to the crash roll and, in a market
 # economy, to momentum (the crash thresholds are in
 # banking_cycle_check_and_execute_crash; the momentum push is
-# bubble_inertia_multiplier_script_value).
+# bubble_inertia_curve).
 banking_dash_bubble_effect = {
 	type = country
 	random_valid = no
@@ -1405,7 +1406,8 @@ banking_dash_bubble_effect = {
 }
 
 # Policy stance: the investment-pool modifier the band puts on the journal
-# entry (banking_stance_band_1..5, applied by banking_cycle_apply_stance_band).
+# entry (banking_stance_band_1..5, which je_banking_cycle declares from
+# te_mon_stance_band).
 # The momentum and bubble pushes come from te_mon_stance_momentum_effect and
 # te_mon_stance_bubble_effect, which the stance cell's own tooltip uses too.
 banking_dash_stance_pool_effect = {

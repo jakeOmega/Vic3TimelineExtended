@@ -215,8 +215,7 @@ KEEP_IN_LIST = {
 # Where the rest land. Listing them would cost a section's filter a comparison each and
 # show nothing.
 NOT_ON_COUNTRY = {
-    "banking_*": "je_banking_cycle", "bubble_inertia_*": "je_banking_cycle",
-    "financial_cycle_*": "je_banking_cycle", "cooperative_*": "je_banking_cycle",
+    "banking_*": "je_banking_cycle", "cooperative_*": "je_banking_cycle",
     "planning_*": "je_banking_cycle",
     "carbon_tax_modifier": "je_global_warming",
     "climate_adaptation_modifier": "je_global_warming", "emission_standards_modifier": "je_global_warming",
