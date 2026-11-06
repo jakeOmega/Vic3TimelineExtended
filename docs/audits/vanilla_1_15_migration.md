@@ -46,7 +46,8 @@ held 8,026 lines in 1,642 distinct messages, none tagged as known noise. No `TE_
 
 ## 3. What changed, by area
 
-**Journal entries.** A one-shot converter (`scripts/generators/convert_je_outcomes.py`, `--check`) turned the mod's
+**Journal entries.** A one-shot converter (`scripts/generators/convert_je_outcomes.py`, retired with #1404; its tree
+checks live on in `test_journal_entry_shape.py`) turned the mod's
 26 old-shape entries into 46 outcomes in 20 entries: 18 success, 14 failure, 8 hidden invalid, 6 timeout. A
 trigger that could never pass (`always = no`) got no outcome, which is why the prep's 49 became 46, and its dead
 loc went. Each outcome has its own `conclusion_desc`. The five vanilla entries the mod replaces (three tax code,
@@ -209,4 +210,5 @@ Filed as issues from the PR: the features in the prep's § 4 and § 7 (scaling m
 complete and fail); copper where the mod still lacks it (grid buildings, nuclear and fusion wiring, a Strategic
 Reserve good, a prestige good, vanilla's copper and lead split in the mod's munitions); `gui_reference_audit`'s
 built-in list with the game configured; `je_multiplier_scope_audit` and `scaling_modifiers_while_active`; and
-retiring `convert_je_outcomes.py` once nothing needs it.
+retiring `convert_je_outcomes.py` once nothing needs it. #1404 took up scaling modifiers, `disable_evaluation`,
+`fire_only_once` and the converter's retirement (`docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md`).
