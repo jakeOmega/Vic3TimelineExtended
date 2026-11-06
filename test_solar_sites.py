@@ -52,6 +52,7 @@ def _block(text, name):
 
 GENERATED = {
     gss.EFFECTS_OUT: "effects",
+    gss.ENTRY_OUT: "the entry's declarations",
     gss.TRIGGERS_OUT: "triggers",
     gss.VALUES_OUT: "values",
     gss.DISPLAY_OUT: "display values",
@@ -71,7 +72,7 @@ class TableTest(unittest.TestCase):
                 start = events.index(f"space_race_colony_events.{site.event} = {{")
                 nxt = events.find("\nspace_race_colony_events.", start + 10)
                 body = events[start:nxt if nxt > 0 else len(events)]
-                granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", body)
+                granted = re.findall(r"sr_site_choose_(\w+) = yes", body)
                 self.assertEqual(tuple(granted), gss.spec_modifiers(site))
 
     def test_every_specialization_modifier_is_a_site_s(self):
@@ -100,7 +101,7 @@ class TableTest(unittest.TestCase):
                            _raw("common", "scripted_effects", "space_race_discovery_effects.txt"))
         self.assertEqual(sorted(seeded), sorted(rolls))
         self.assertEqual(len(seeded), len(set(seeded)))
-        outcomes = set(re.findall(r"MODIFIER = (sr_discovery_\w+)", _raw("events", "space_race_discovery_events.txt")))
+        outcomes = set(re.findall(r"sr_site_choose_(sr_discovery_\w+) = yes", _raw("events", "space_race_discovery_events.txt")))
         table = {m for d in seeded for m in gss.discovery_modifiers(d)}
         self.assertEqual(table, outcomes)
 
@@ -189,14 +190,25 @@ class RecordTest(unittest.TestCase):
                     self.assertRegex(self.effects, rf"(?m)^sr_site_{kind}_{site.key} = \{{")
 
     def test_every_granted_modifier_has_a_dispatcher(self):
-        granted = set(re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}",
-                                 _raw("events", "space_race_colony_events.txt")
-                                 + _raw("events", "space_race_discovery_events.txt")))
+        events = _raw("events", "space_race_colony_events.txt") + _raw("events", "space_race_discovery_events.txt")
+        granted = set(re.findall(r"sr_site_choose_(\w+) = yes", events))
         self.assertEqual(len(granted), 120)
         dispatched = set(re.findall(r"(?m)^sr_site_choose_(\w+) = \{", self.effects))
         self.assertEqual(granted, dispatched)
-        grant = _block(_raw("common", "scripted_effects", "space_race_effects.txt"), "sr_grant_colony_modifier")
-        self.assertIn("hidden_effect = { sr_site_choose_$MODIFIER$ = yes }", grant)
+        self.assertNotIn("sr_grant_colony_modifier", events + _raw("common", "scripted_effects", "space_race_effects.txt"))
+        for modifier in granted:
+            body = _block(self.effects, f"sr_site_choose_{modifier}")
+            with self.subTest(modifier=modifier):
+                # The option's tooltip shows the modifier the entry then declares (a
+                # preview: has_modifier can't see a declared one, and nothing adds it);
+                # the record, the held mark and the sync are bookkeeping, hidden.
+                self.assertTrue(body.strip().startswith(
+                    "show_as_tooltip = { je:je_space_race_solar_colonization ?= "
+                    f"{{ add_modifier = {{ name = {modifier} }} }} }}"))
+                hidden = _block(body, "hidden_effect")
+                self.assertIn(f"set_variable = {{ name = {modifier}_held value = yes }}", hidden)
+                self.assertRegex(hidden, r"sr_site_sync_\w+ = yes\s*$")
+                self.assertNotIn("_mult", body)
 
     def test_the_draw_names_the_holder_after_the_claim(self):
         draw = _block(self.effects, "sr_establish_colony_effect")
@@ -228,7 +240,7 @@ class RecordTest(unittest.TestCase):
                 own |= set(gss.discovery_modifiers(d))
             for kind in ("mirror_on", "unmirror"):
                 body = _block(self.effects, f"sr_site_{kind}_{site.key}")
-                named = set(re.findall(r"MODIFIER = (\w+)", body))
+                named = set(re.findall(r"VAR = (\w+)_held", body))
                 with self.subTest(site=site.key, kind=kind):
                     self.assertEqual(named, own)
                     self.assertIn("set_variable = { name = sr_colony_count value = sr_sites_held_count }", body)
@@ -242,7 +254,7 @@ class RecordTest(unittest.TestCase):
                 self.assertIn("is_country_alive = yes", body)
 
     def test_the_shared_helpers_remove_only_what_is_there(self):
-        for name in ("sr_site_hide_modifier", "sr_site_hide_modifier_at", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
+        for name in ("sr_site_mark_held", "sr_site_clear_held", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
             body = _block(self.shared, name)
             for m in re.finditer(r"remove_(variable|modifier) = (\S+)", body):
                 with self.subTest(helper=name, target=m.group(2)):
@@ -391,7 +403,7 @@ class FirstLunarColonyTest(unittest.TestCase):
             self.assertIn(line, body)
         # sr_was_first_moon_base, which .6's text reads, is set before the event.
         self.assertLess(body.index("sr_was_first_moon_base value = yes"), body.index("space_race_events.6"))
-        for repost in ("sr_recalculate_cost", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
+        for repost in ("sr_refresh_milestone_statuses", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
             self.assertNotIn(repost, body)
 
     def test_event_6_pays_the_reward_in_its_one_option(self):
@@ -486,7 +498,7 @@ class LunarMoonByChoiceTest(unittest.TestCase):
         started = resume[resume.index("has_journal_entry = je_space_race_solar_colonization"):]
         for line in ("set_variable = { name = sr_active_solar_colonization value = yes }",
                      "set_variable = { name = sr_funding_solar_colonization value = 1 }",
-                     "sr_recalculate_cost = yes"):
+                     "sr_refresh_milestone_statuses = yes"):
             self.assertIn(line, started)
         self.assertNotRegex(resume, r"remove_(variable|modifier)")
         # with the entry closed the marker opens it, and its immediate starts it
@@ -525,9 +537,14 @@ class LunarMoonByChoiceTest(unittest.TestCase):
         done = done[:done.index("sr_complete_milestone_effect = yes")]
         self.assertRegex(done, r"OR = \{\s*NOT = \{ has_variable = sr_colonization_resumed \}\s*"
                                r"NOT = \{ sr_sites_lunar_open = yes \}\s*\}")
-        self.assertRegex(done, r"if = \{\s*limit = \{ je:je_space_race_solar_colonization \?= \{ NOT = \{ "
-                               r"has_modifier = sr_solar_system_trade \} \} \}\s*"
-                               r"je:je_space_race_solar_colonization = \{ add_modifier = \{ name = sr_solar_system_trade \} \}")
+        # The record alone: the entry declares Interplanetary Trade Networks from
+        # it, once however often the programme finishes (1.15 scaling modifiers).
+        self.assertIn("set_variable = { name = sr_completed_solar_colonization value = yes }", done)
+        self.assertNotIn("sr_solar_system_trade", done)
+        self.assertRegex(_block(entry, "je_space_race_solar_colonization"),
+                         r"scaling_modifiers_while_active = \{\s*modifier = sr_solar_system_trade\s*value = \{\s*"
+                         r"value = 0\s*if = \{\s*limit = \{ has_variable = sr_completed_solar_colonization \}\s*"
+                         r"add = 1\s*\}\s*\}\s*\}")
         self.assertIn("remove_variable = sr_colonization_resumed", done)
         # no launch-side reader treats the flag as "nothing left to claim"
         for path in (("common", "script_values", "sr_launch_window_values.txt"),
@@ -1036,7 +1053,11 @@ class MoonStageTest(unittest.TestCase):
         self.assertIn("country_sr_module_fabrication_add", _block(modifiers, "sr_colony_imbrium_massdriver"))
         check = _block(_strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt")),
                        "sr_mod_fabrication_self_check")
-        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_mult }", _block(check, "limit"))
+        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_held }", _block(check, "limit"))
+        # the record the declaration's gate reads, which the generated code writes (#1404)
+        generated = _raw("common", "scripted_effects", "sr_sites_generated.txt")
+        self.assertIn("sr_site_mark_held = { VAR = sr_colony_imbrium_massdriver_held }", generated)
+        self.assertNotIn("_mult", _block(check, "limit"))
         # the only specialization that fabricates
         fabricating = [m for s in gss.SITES for m in gss.spec_modifiers(s)
                        if "country_sr_module_fabrication_add" in _block(modifiers, m)]
@@ -1144,37 +1165,38 @@ class PopulationTest(unittest.TestCase):
         self.assertIn("count = local_var:sr_emig_batches", month)
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
-    def test_the_entry_s_modifiers_are_removed_first_and_read_through_owner(self):
-        refresh = _block(self.population, "sr_emig_refresh_modifiers")
-        for name in ("sr_emigration_programme", "sr_offworld_population"):
-            self.assertLess(refresh.index(f"remove_modifier = {name}"), refresh.index(f"name = {name} multiplier"))
-        for value in ("sr_emig_upkeep_units", "sr_offworld_bonus_units"):
-            self.assertIn("owner = {", _block(self.pop_values, value))
+    def test_the_entry_declares_its_population_modifiers(self):
+        # 1.15 scaling modifiers (#1404): the emigration programme's upkeep and
+        # the off-world bonus are declared on the entry from the country values
+        # the monthly refresh used to apply them at (test_sr_solar_scaling_modifiers
+        # pins all six); no refresh is left to call.
         je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
-        pulse = _block(_block(je, "je_space_race_solar_colonization"), "on_monthly_pulse")
-        for call in ("sr_emig_ai_review = yes", "sr_emig_month = yes", "sr_emig_refresh_modifiers = yes"):
+        entry = _block(je, "je_space_race_solar_colonization")
+        for name, limit, value in (
+                ("sr_emigration_programme", "sr_emig_level_value >= 1", "sr_emig_level_value"),
+                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units")):
+            with self.subTest(modifier=name):
+                self.assertRegex(entry, r"scaling_modifiers_while_active = \{\s*modifier = " + name + r"\s*value = \{"
+                                 r"\s*value = 0\s*if = \{\s*limit = \{\s*sr_colonies_contested_enabled = yes\s*"
+                                 + re.escape(limit) + r"\s*\}\s*add = " + value + r"\s*\}\s*\}\s*\}")
+        self.assertNotIn("sr_emig_refresh_modifiers", self.population)
+        pulse = _block(entry, "on_monthly_pulse")
+        for call in ("sr_emig_ai_review = yes", "sr_emig_month = yes"):
             self.assertIn(call, pulse)
 
-    def test_the_entry_s_modifiers_refresh_once_per_effect(self):
-        # Whether has_modifier sees an add_modifier made earlier in the same
-        # effect is unverified, so a second refresh in one effect could skip
-        # the removal and stack a copy: the AI's review sets the level in the
-        # same pulse that refreshes afterwards.
-        refresh = "sr_emig_refresh_modifiers = yes"
-        self.assertNotIn(refresh, _block(self.population, "sr_emig_set_level"))
-        self.assertNotIn(refresh, _block(self.population, "sr_emig_ai_review"))
-        step = _block(self.population, "sr_emig_step_level")
-        self.assertEqual(step.count(refresh), 1)
-        self.assertGreater(step.index(refresh), step.rindex("sr_emig_set_level"))
-        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
-        pulse = _block(_block(je, "je_space_race_solar_colonization"), "on_monthly_pulse")
-        self.assertEqual(pulse.count(refresh), 1)
-        self.assertGreater(pulse.index(refresh), pulse.index("sr_emig_ai_review = yes"))
-        debug = _strip(_raw("events", "te_debug_space_race_events.txt"))
-        for option in re.findall(r"(?ms)^\toption = \{\n(.*?)^\t\}", debug):
-            if "sr_emig_set_level" in option:
-                with self.subTest(option=option.split()[2]):
-                    self.assertEqual(option.count(refresh), 1)
+    def test_nothing_refreshes_the_entry_s_modifiers(self):
+        # The declarations follow their inputs (a level set by the AI's review or
+        # the Settlers button, a supply toggled, a module landed): the monthly
+        # refresh and its callers are gone, with the once-per-effect rule it needed.
+        for parts in (("common", "scripted_effects", "sr_colony_population_effects.txt"),
+                      ("common", "scripted_guis", "sr_colony_sguis.txt"),
+                      ("common", "journal_entries", "je_space_race.txt"),
+                      ("events", "te_debug_space_race_events.txt"),
+                      (str(gss.EFFECTS_OUT),)):
+            with self.subTest(file=parts[-1]):
+                text = _strip(_raw(*parts))
+                self.assertNotIn("sr_emig_refresh_modifiers", text)
+                self.assertNotIn("sr_mod_refresh_facilities", text)
 
     def test_every_settler_sent_lands(self):
         # A colony capped at its free room passes the rest on: passes share
@@ -1287,46 +1309,29 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"value = sr_site_lvl_{slot}_value_{k}", mult)
                     self.assertIn(f"multiply = sr_site_staffing_{k}", mult)
 
-    def test_the_mirror_shows_each_specialization_at_its_multiplier(self):
+    def test_the_mirror_marks_each_specialization_from_its_level(self):
+        # The record the entry's declaration reads (<modifier>_held) is marked
+        # while the level is at least 1, cleared otherwise; the declaration's
+        # value is the multiplier (test_sr_solar_scaling_modifiers).
         for site in gss.SITES:
             k = site.key
             body = _block(self.effects, f"sr_site_mirror_on_{k}")
             for slot, modifier in zip(("a", "b"), gss.spec_modifiers(site)):
                 with self.subTest(site=k, slot=slot):
-                    self.assertIn(f"sr_site_lvl_{slot}_value_{k} >= 1", body)
-                    self.assertIn(f"sr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
-                                  body)
-                    self.assertIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
+                    self.assertRegex(body, rf"if = \{{\s*limit = \{{ sr_site_lvl_{slot}_value_{k} >= 1 \}}\s*"
+                                           rf"sr_site_mark_held = \{{ VAR = {modifier}_held \}}\s*\}}\s*else = \{{\s*"
+                                           rf"sr_site_clear_held = \{{ VAR = {modifier}_held \}}\s*\}}")
 
-    def test_the_multiplier_is_tested_by_its_record_not_has_modifier(self):
-        show = _block(self.shared, "sr_site_show_modifier_at")
-        test = _block(show, "limit") if "limit" in show else ""
-        self.assertIn("NOT = { var:$MODIFIER$_mult = $MULT$ }", show)
-        self.assertNotIn("has_modifier", show[:show.index("je:je_space_race_solar_colonization")])
-        inner = show[show.index("je:je_space_race_solar_colonization"):]
-        self.assertLess(inner.index("remove_modifier = $MODIFIER$"), inner.index("add_modifier"))
-        self.assertIn("add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }", inner)
-        self.assertIn("owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }", inner)
-        self.assertTrue(test)
-        # The founding choice records multiplier 1 for the unscaled modifier the grant just added.
-        for modifier, site, kind, _ in gss.choices():
-            if kind != "spec":
-                continue
-            body = _block(self.effects, f"sr_site_choose_{modifier}")
-            with self.subTest(modifier=modifier):
-                self.assertLess(body.index(f"set_variable = {{ name = {modifier}_mult value = 1 }}"),
-                                body.index(f"sr_site_sync_{site.key} = yes"))
-        hide_at = _block(self.shared, "sr_site_hide_modifier_at")
-        self.assertIn("limit = { has_variable = $MODIFIER$_mult }\n\t\tremove_variable = $MODIFIER$_mult", hide_at)
-        # A discovery's modifier has no multiplier record: the plain hide mustn't read one,
-        # or the parse-time validator reports every discovery's <modifier>_mult as never set.
-        self.assertNotIn("_mult", _block(self.shared, "sr_site_hide_modifier"))
-        for site in gss.SITES:
-            body = _block(self.effects, f"sr_site_mirror_on_{site.key}") + _block(self.effects, f"sr_site_unmirror_{site.key}")
-            for d in site.discoveries:
-                for modifier in gss.discovery_modifiers(d):
-                    with self.subTest(site=site.key, modifier=modifier):
-                        self.assertNotIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
+    def test_no_multiplier_record_is_left(self):
+        # The <modifier>_mult record only spared a re-add whose multiplier had
+        # not changed; a declaration has none to spare (1.15 scaling modifiers, #1404).
+        for text in (self.shared, self.effects, _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))):
+            self.assertNotIn("_mult value", text)
+            self.assertNotIn("$MODIFIER$_mult", text)
+        for name in ("sr_site_show_modifier_at", "sr_site_hide_modifier_at", "sr_site_show_modifier",
+                     "sr_site_hide_modifier", "sr_mod_seen_self_check", "sr_sites_sync_entry_specs"):
+            with self.subTest(name=name):
+                self.assertNotRegex(self.shared + self.effects + self.modules, rf"(?m)^{name} = \{{")
 
     def test_release_clears_the_modules_and_the_unmirror_the_queue(self):
         for site in gss.SITES:

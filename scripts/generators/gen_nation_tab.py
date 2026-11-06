@@ -122,8 +122,9 @@ SECTIONS = {
         "agdiff_*",
         # The private share of construction
         "te_construction_market_private_share_modifier",
-        # The tax code: interest groups' views and reactions, relief
-        "te_tax_ig_view_*", "te_tax_light_react_*", "te_tax_light_relief_*", "te_tax_relief_*",
+        # The tax code: interest groups' views, relief (the light code's reactions
+        # and relief are its entry's scaling modifiers since #1404)
+        "te_tax_ig_view_*", "te_tax_relief_*",
         # Monetary arrangements, inflation and exchange rate bands, while the
         # country holds no banking entry (te_mon_mod_home; since #1020 only the
         # game's first fortnight and a running revolution's rebels): on the
@@ -214,8 +215,7 @@ KEEP_IN_LIST = {
 # Where the rest land. Listing them would cost a section's filter a comparison each and
 # show nothing.
 NOT_ON_COUNTRY = {
-    "banking_*": "je_banking_cycle", "bubble_inertia_*": "je_banking_cycle",
-    "financial_cycle_*": "je_banking_cycle", "cooperative_*": "je_banking_cycle",
+    "banking_*": "je_banking_cycle", "cooperative_*": "je_banking_cycle",
     "planning_*": "je_banking_cycle",
     "carbon_tax_modifier": "je_global_warming",
     "climate_adaptation_modifier": "je_global_warming", "emission_standards_modifier": "je_global_warming",
@@ -230,22 +230,11 @@ NOT_ON_COUNTRY = {
     "colonial_pressure_movement_radicalism": "political movements",
     "gm_*": "je_grand_monuments, a monument's state or building",
     "nd_posture_*": "interest groups",
+    # Previewed by an option (sr_site_choose_*); the entry declares them (#1404).
     "sr_colony_*": "je_space_race_solar_colonization", "sr_discovery_*": "je_space_race_solar_colonization",
-    "sr_solar_system_trade": "je_space_race_solar_colonization",
-    "sr_emigration_programme": "je_space_race_solar_colonization",
-    "sr_offworld_population": "je_space_race_solar_colonization",
-    "sr_module_upkeep": "je_space_race_solar_colonization",
-    "sr_module_lab": "je_space_race_solar_colonization", "sr_module_culture": "je_space_race_solar_colonization",
-    "sr_module_resort": "je_space_race_solar_colonization", "sr_module_black": "je_space_race_solar_colonization",
-    "sr_module_train": "je_space_race_solar_colonization", "sr_module_foundry": "je_space_race_solar_colonization",
-    "sr_free_colony_supply": "je_space_race_solar_colonization",
-    "sr_free_colony_trade": "je_space_race_solar_colonization",
-    "sr_colonial_garrisons": "je_space_race_solar_colonization",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "sr_space_command_paused": "a Space Command building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
-    "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
-    "sr_funding_throughput": "the running milestone's entry",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
     "un_founding_member_modifier": "je_united_nations", "un_headquarters_modifier": "je_united_nations",
@@ -313,7 +302,6 @@ SOURCE_GROUPS = {
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
-    "tax_reactions": ("te_tax_light_react_*",),
     "un_regimes": (
         "un_regime_rights_violator_modifier", "un_regime_colon*", "un_regime_climate_*",
         "un_regime_cultural_hegemon_modifier", "un_regime_heritage_site_modifier", "un_regime_naval_curb_modifier",
@@ -332,7 +320,7 @@ SOURCE_GROUPS = {
     "sanctions": ("un_arms_embargo_*", "un_sanctions_*"),
     # A dynasty's continuity
     "inheritance": ("inh_*",),
-    "tax_relief": ("te_tax_light_relief_*", "te_tax_relief_*"),
+    "tax_relief": ("te_tax_relief_*",),
     # The tax code's interest-group views, all eight groups' in one: each group's
     # four bands read the same ("Opposes the Tax Code"), and a list matches the
     # text, so a band split across two groups would show under the wrong flag
@@ -428,7 +416,6 @@ TYPE_ROWS = {
         ),
         "taxes": (
             "state_tax_collection_mult", "state_tax_waste_add", "building_group_bg_agriculture_tax_mult",
-            "tax_income_add", "tax_consumption_add", "tax_dividends_add", "tax_land_add", "tax_per_capita_add",
             "country_minting_add", "country_minting_mult",
         ),
         "investment": (

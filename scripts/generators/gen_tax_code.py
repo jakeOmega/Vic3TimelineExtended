@@ -4762,6 +4762,24 @@ def light_payers(instrument):
     return [ig for ig in ranked if exposure(ig)[instrument.key] >= LIGHT_PAYER_EXPOSURE]
 
 
+def light_scaling_values():
+    """[(modifier, value name, limit, variable read)] for each of je_tax_code's scaling modifiers:
+    every tax's relief, then each group's welcoming and resentful reaction. The entry's
+    hand-written declarations are held to this list by test_tax_code_scaling_modifiers.py."""
+    out = []
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        rl = f"te_tax_light_rl_{key}"
+        out.append((f"te_tax_light_relief_{key}", f"te_tax_light_relief_{key}_value",
+                    f"te_tax_light_levies_{key} = yes has_variable = {rl} var:{rl} > 0", rl))
+    for ig in IGS:
+        lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
+        for sign, comparison in (("pos", "> 0"), ("neg", "< 0")):
+            out.append((f"te_tax_light_react_{ig}_{sign}", f"te_tax_light_react_{ig}_{sign}_value",
+                        f"has_variable = {lr} var:{lr} {comparison} has_variable = {mag} var:{mag} >= 1", mag))
+    return out
+
+
 def _dec(value, places="0.00001"):
     return fmt(Decimal(value).quantize(Decimal(places)).normalize())
 
@@ -4868,6 +4886,16 @@ def _light_values():
                              f"add = {{ value = var:te_tax_light_rl_{key} multiply = {_dec(weight)} }} }}")
             lines.append("\t}")
         lines.append("}")
+    lines += ["", "# je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the",
+              "# engine reads each from the owning country about every four days, so the sync only writes",
+              "# the variables. te_tax_light_relief_<key>_value: the tax's relief steps",
+              "# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_react_<ig>_<pos|neg>_value:",
+              "# the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of",
+              "# its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the",
+              "# modifier off the entry: the gates under which the sync used to remove it."]
+    for _modifier, name, limit, read in light_scaling_values():
+        lines += [f"{name} = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ {limit} }} value = var:{read} }}", "}"]
     lines += ["", "# Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0",
               "# when absent."]
     lines += ["te_tax_view_light_on = {", "\tvalue = 0",
@@ -5013,8 +5041,9 @@ def light_effects():
     lines = [
         HEADER,
         "# The light code's per-tax and per-group parts (docs/systems/tax_code_schema.md, \"Light",
-        "# code\"), called only by te_tax_light_effects.txt. Country scope, ROOT = the country (a",
-        "# country event or the player's scripted GUI): the modifiers' multipliers read ROOT.",
+        "# code\"), called only by te_tax_light_effects.txt. Country scope. They write variables and",
+        "# swap the flat view-band modifiers; the relief and reaction modifiers are je_tax_code's",
+        "# scaling modifiers, which read the variables written here.",
         "",
         "# Every light token, with its default where absent. Never overwrites one.",
         "te_tax_light_gen_init = {",
@@ -5143,8 +5172,8 @@ def light_effects():
         "}",
         "",
         "# Relief: each levied tax's steps below the law's rate at the tax level (te_tax_light_rl_",
-        "# <key>), carried by te_tax_light_relief_<key> (one step's rate below zero) with that",
-        "# multiplier. Removed and re-added every call, so the modifier always matches the variable.",
+        "# <key>), 0 for a tax the law does not levy. je_tax_code declares te_tax_light_relief_<key>",
+        "# (one step's rate below zero) with this many steps (te_tax_light_relief_<key>_value).",
         "te_tax_light_gen_relief = {",
     ]
     for instrument in INSTRUMENTS:
@@ -5157,27 +5186,21 @@ def light_effects():
             f"\t\tif = {{ limit = {{ var:{rl} < 0 }} set_variable = {{ name = {rl} value = 0 }} }}",
             "\t}",
             f"\telse = {{ set_variable = {{ name = {rl} value = 0 }} }}",
-            f"\tif = {{ limit = {{ has_modifier = te_tax_light_relief_{key} }} remove_modifier = te_tax_light_relief_{key} }}",
-            f"\tif = {{ limit = {{ var:{rl} > 0 }} add_modifier = {{ name = te_tax_light_relief_{key} multiplier = var:{rl} }} }}",
         ]
     lines += [
         "}",
         "",
-        "# The running reactions as approval: te_tax_light_react_<ig>_pos or _neg with the rounded",
-        "# size (te_tax_lr_mag_<ig>, always positive) as multiplier, or neither when it rounds to 0.",
-        "te_tax_light_gen_apply_reactions = {",
+        "# The running reactions' rounded size (te_tax_lr_mag_<ig>, never negative), 0 when it rounds",
+        "# to 0. je_tax_code declares te_tax_light_react_<ig>_pos or _neg, by the sign of the running",
+        "# reaction te_tax_lr_<ig>, with this size (te_tax_light_react_<ig>_<pos|neg>_value).",
+        "te_tax_light_gen_reaction_sizes = {",
     ]
     for ig in IGS:
         lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
-        pos, neg = f"te_tax_light_react_{ig}_pos", f"te_tax_light_react_{ig}_neg"
         lines += [
-            f"\tif = {{ limit = {{ has_modifier = {pos} }} remove_modifier = {pos} }}",
-            f"\tif = {{ limit = {{ has_modifier = {neg} }} remove_modifier = {neg} }}",
             f"\tset_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }}",
-            f"\tif = {{ limit = {{ var:{mag} >= 1 }} add_modifier = {{ name = {pos} multiplier = var:{mag} }} }}",
-            f"\telse_if = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} "
-            f"add_modifier = {{ name = {neg} multiplier = var:{mag} }} }}",
-            f"\telse = {{ set_variable = {{ name = {mag} value = 0 }} }}",
+            f"\tif = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} }}",
+            f"\telse_if = {{ limit = {{ var:{mag} < 1 }} set_variable = {{ name = {mag} value = 0 }} }}",
         ]
     lines += [
         "}",
@@ -5230,8 +5253,8 @@ def light_effects():
 def light_static_modifiers():
     lines = [
         HEADER,
-        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"), each applied",
-        "# with a multiplier by te_tax_light_gen_relief and te_tax_light_gen_apply_reactions.",
+        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"), each declared",
+        "# on je_tax_code (scaling_modifiers_while_active) with its value from te_tax_light_generated_values.txt.",
         "",
         "# Relief: one index step's rate below zero per tax, x te_tax_light_rl_<key> steps. The base",
         "# game's mon_ease_taxes (common/static_modifiers/montenegrin_modifiers.txt) is a country",

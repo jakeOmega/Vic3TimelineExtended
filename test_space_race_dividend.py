@@ -182,6 +182,19 @@ class RefreshTests(unittest.TestCase):
         self.assertIn("sr_space_race_concluded = yes", limits)
         self.assertIn("sr_space_dividend_points > 0", limits)
 
+    def test_the_first_payment_waits_a_month(self):
+        # The last milestone's declared funding leaves its entry days after the
+        # race concludes (#1404), so the first month only records the wait.
+        body = _block(EFFECTS, "sr_refresh_space_dividend")
+        wait = body.index("set_variable = { name = sr_space_dividend_settled value = yes }")
+        limits = " ".join(_if_limits_around(body, wait))
+        for cond in ("sr_space_race_concluded = yes", "NOT = { has_variable = sr_space_dividend_settled }",
+                     "NOT = { has_variable = sr_space_dividend_announced }"):
+            self.assertIn(cond, limits)
+        add = body.index("add_modifier = { name = sr_commercial_space_dividend")
+        self.assertLess(wait, add)
+        self.assertRegex(body[wait:add], r"\}\s*\}\s*else_if\s*=\s*\{\s*limit", "the payment is the else branch")
+
     def test_announces_once_to_players(self):
         body = _block(EFFECTS, "sr_refresh_space_dividend")
         pos = body.index("id = space_race_events.77")

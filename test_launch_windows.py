@@ -675,9 +675,14 @@ class MoonTest(unittest.TestCase):
         self.assertIn("boolean = yes", _block(types, "country_sr_propellant_depots_bool"))
         modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
         self.assertIn("country_sr_propellant_depots_bool = yes", _block(modifiers, "sr_colony_shackleton_depot"))
-        # The self-check compares the boolean with the record each month (two strikes for BROKEN).
+        # The self-check compares the boolean with the record each month (two strikes for BROKEN), for
+        # every country, not only one launching: it is the canary for the colonies' INJECT too (#1404).
         effects = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
-        self.assertIn("sr_depots_self_check = yes", _block(effects, "sr_launch_month"))
+        self.assertNotIn("sr_depots_self_check = yes", _block(effects, "sr_launch_month"))
+        monthly = _block(_strip(_raw("common", "on_actions", "space_race_on_actions.txt")), "space_race_on_action")
+        self.assertEqual(monthly.count("sr_depots_self_check = yes"), 1)
+        self.assertNotRegex(monthly[:monthly.index("sr_depots_self_check = yes")].split("sr_ebase_refresh = yes")[-1],
+                            r"limit", "called at the pulse's top level, ungated")
         check = _block(effects, "sr_depots_self_check")
         self.assertIn("sr_depots_by_record = yes", check)
         self.assertIn("sr_depots_mismatch_months", check)

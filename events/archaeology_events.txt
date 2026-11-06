@@ -707,7 +707,8 @@ arch_events.2 = {
 # ROOT = the sponsor, scope:gm_arch_pick = the site (gm_arch_order_launch).
 # Checks again (a month can pass between an offer and its answer), the weekly
 # innovation the method diverts too (gm_arch_order_spared), starts the dig by
-# the method ordered, then the lists and the refresh that applies the cost.
+# the method ordered, then the lists and the refresh that writes the cost (the
+# entry declares the drain from it within days, #1404).
 arch_events.10 = {
 	type = country_event
 	hidden = yes

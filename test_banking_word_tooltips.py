@@ -108,17 +108,24 @@ class PhaseTest(unittest.TestCase):
     ECONOMY = {"": "", "_cmd": "has_law = law_type:law_command_economy",
                "_coop": "has_law = law_type:law_cooperative_ownership"}
 
+    # The economy test each phase declaration gates on (market_triggers.txt), by variant suffix.
+    DECLARED_ECONOMY = {"banking_is_market_economy": "", "banking_is_command_economy": "_cmd",
+                        "banking_is_cooperative_economy": "_coop"}
+
     def _applied(self):
-        """The modifier banking_cycle_apply_phase_modifiers adds, by economy
-        and phase: command, cooperative, then the market's else-branch."""
-        text = _read(os.path.join(REPO, "common", "scripted_effects", "banking_cycle_effects.txt"))
-        start = text.index("banking_cycle_apply_phase_modifiers = {")
-        body = _block_from(text, start)
-        body = body[body.index("# Phase modifier by economic law type"):]
-        names = re.findall(r"name = (financial_cycle_phase_\w+)", body)
-        self.assertEqual(len(names), 18)
-        return {suffix: dict(zip(PHASES, names[i * 6:(i + 1) * 6]))
-                for i, suffix in enumerate(("_cmd", "_coop", ""))}
+        """The modifier je_banking_cycle declares in each economy and phase (scaling_modifiers_while_active,
+        since 1.15), read from each declaration's own gate: its economy trigger and its banking_cycle_is_*."""
+        text = _read(os.path.join(REPO, "common", "journal_entries", "je_banking.txt"))
+        out = {suffix: {} for suffix in self.DECLARED_ECONOMY.values()}
+        for m in re.finditer(r"scaling_modifiers_while_active = \{\s*modifier = (financial_cycle_phase_\w+)", text):
+            body = _block_from(text, text.index("{", m.start()))
+            economies = [s for t, s in self.DECLARED_ECONOMY.items() if f"{t} = yes" in body]
+            phases = re.findall(r"banking_cycle_is_(\w+) = yes", body)
+            self.assertEqual((len(economies), len(phases)), (1, 1), m.group(1))
+            self.assertNotIn(phases[0], out[economies[0]], "two declarations for one phase")
+            out[economies[0]][phases[0]] = m.group(1)
+        self.assertEqual({s: sorted(p) for s, p in out.items()}, {s: sorted(PHASES) for s in out})
+        return out
 
     def test_each_economy_shows_the_modifier_it_gets(self):
         loc = _loc()

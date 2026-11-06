@@ -19,10 +19,11 @@ estimate the probability of extraterrestrial life or geological features.
 
 The event consumes its pending flag immediately and sets a permanent done flag,
 preventing repeats while the player considers the choices. Every option grants
-its own modest permanent journal-entry modifier through the existing
-`sr_grant_colony_modifier` ledger. Monthly entry synchronization restores missing
-rewards after a revolution, using the same inherited country records as ordinary
-colony specializations. Pending discoveries and timers are country variables,
+its own modest permanent journal-entry modifier through its generated
+dispatcher, `sr_site_choose_<modifier>`, as the colony specializations do: the
+solar colonization entry declares the outcome while its holder's
+`<modifier>_held` record is set (1.15 scaling modifiers, #1404), so a
+revolution's winner, which inherits the record, keeps it. Pending discoveries and timers are country variables,
 so they follow the game's normal revolution inheritance. No flags are cleared
 by milestone cleanup. Colony surveys continue when the expansion program is
 idle and after every site has been claimed. Existing saves receive no

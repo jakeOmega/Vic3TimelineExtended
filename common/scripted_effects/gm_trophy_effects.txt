@@ -1167,19 +1167,10 @@ gm_tr_count_add = {
 }
 
 # ---- The national pulse and the Homecoming (spec §3) -----------------------------------------
-# Country scope, from gm_country_monthly: a month off the Homecoming.
+# Country scope, from gm_country_monthly: a month off the Homecoming. The
+# journal entry declares gm_boon_homecoming while it runs (je_grand_monuments.txt).
 gm_tr_country_monthly = {
 	gm_tick_boon = { SRC = homecoming }
-}
-
-# Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
-gm_tr_add_national = {
-	gm_add_boon = { SRC = homecoming }
-}
-
-# Journal-entry scope, from gm_remove_national_modifiers.
-gm_tr_remove_national = {
-	remove_modifier = gm_boon_homecoming
 }
 
 # ---- The trophies of 1836 (loot spec 2026-10-12 §2) ---------------------------------------

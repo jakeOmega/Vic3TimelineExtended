@@ -26,10 +26,10 @@ game, in English.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
-  entry is `can_revolution_inherit = no`). Since #1404 the Strategic Reserve, Covert Warfare, Global Warming,
-  Nuclear Program, Colonial Empire and Cultural Hegemony entries declare their standing modifiers (design
-  `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md` § 4): open each entry and a country's modifier
-  tooltip. If a zero row shows, hide the scaling-modifier icon strip on the mod's entries in `gui/journal_entry.gui`.
+  entry is `can_revolution_inherit = no`). Since #1404 the entries converted in the design's § 4
+  (`docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md`, each system's "As built") declare their standing
+  modifiers: open each entry and a country's modifier tooltip. If a zero row shows, hide the scaling-modifier icon
+  strip on the mod's entries in `gui/journal_entry.gui`.
   Two once-a-game lines in `debug.log`:
   - `TE_SELF_CHECK OK|BROKEN scaling_live`: the Strategic Reserve's declared sales income reaches the country (needs a
     country with a staffed hub selling for two weeks with no panel change in between). BROKEN: put the weekly
@@ -50,7 +50,23 @@ game, in English.
   count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
   the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
   the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign
-  Cultural Benchmark on the entry, named as the source.
+  Cultural Benchmark on the entry, named as the source. Banking cycle: the Neutral stance (`banking_stance_band_3`,
+  an empty modifier declared at 1) still shows in the entry's list; the Budget Breakdown's Banking row still lists the
+  planning pool's balance and both external charges; the momentum tooltip names the bubble inertia tier. Grand
+  Monuments: a policy change moves the national effects on the entry within a few days; a boon shows on the entry
+  while its countdown runs; the dig gate's day-by-day check is in the archaeology play-test's "The gate." row. Tax
+  Code, Light setting: a step moves the rate and the tax level at once and the Budget's collected rate within a few
+  days (note whether it lands at once, which would mean `should_update_on_player_command` re-reads the
+  declarations); the interest group reactions show on the entry, named as the source; under the full code and before
+  any step, the entry carries 21 declarations at 0, so it is where a zero row would show first. The two lag windows
+  have their own checks in `tax_code_schema.md` § "Light code checks". Space Race: a funding step or an approach
+  switch moves the entry's Space Program Cost and the panel's pace within a few days. Open a colony holder's Solar
+  System Colonization entry: it should list both the Space Program Cost (declared in `je_space_race.txt`) and the
+  colony specializations and discoveries (declared in the generated INJECT,
+  `common/journal_entries/sr_sites_generated.txt`). One kind without the other means the INJECT replaced the
+  entry's own blocks or was dropped. After a load,
+  `debug.log` should name neither that file nor `je_space_race_solar_colonization` in an error. A Shackleton
+  depot holder keeps off-window launches (the `propellant_depots_bool` self-check).
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

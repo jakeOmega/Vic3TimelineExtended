@@ -239,7 +239,11 @@ commit; the implementation re-reads each site.
    monthly) with a removal date (`project_old_save_repair_removals`).
    `has_modifier` sees only the added copy, so the guard never touches the
    declaration. Lines in that file that *re-add* a key (the 68 colony keys,
-   `:342-899`) become remove-only.
+   `:342-899`) become remove-only. As built (PR 4, after its review): each
+   system's lines are one `legacy_scaling_strip_<system>` effect, which the
+   monthly strip calls and the system's entry also runs from its weekly pulse,
+   so an old copy stacks with its declaration for days rather than up to a
+   month (`test_scaling_strip.py`).
 8. **Keep the preview.** A button or event option that adds a modifier today
    shows its effects in the tooltip; one that only sets a variable shows
    nothing (`silent_variable_audit` flags an option that does). Each such site
@@ -404,6 +408,18 @@ rebels and the first fortnight. An entry-only declaration would have those
 countries borrow at 0%; a hybrid keeps the country branch and adds a home gate,
 so nothing gets shorter. The 38 tools have no mirror variables (follow-up).
 
+As built (PR 4): 33 declarations, each gated on the cycle latch
+(`has_variable = finance_cycle_value`) but the two charges, gated on their
+tool (no tool runs on a dormant entry); the phases read the existing
+`banking_cycle_is_<phase>` and economy triggers, whose edges equal the deleted
+chain. The pool and the two external charges read new caches
+(`ce_pool_balance_cached`, `banking_external_*_charge_cached`), written where
+the old adds ran; the old-save strip writes each before removing its copy. A
+charge now starts and stops on the entry update after Enable or Disable, so a
+tool's life nets between one weekly charge short and one over. The five
+multipliers old saves' copies name (`*_for_je`, `bubble_inertia_multiplier_script_value`)
+stay, uncalled, until the strip goes. No gate reads back one of these costs.
+
 ### 4.8 Grand Monuments (36 keys + 15 boons, on the entry)
 
 All of `gm_apply_national_modifiers` (`gm_effects.txt:1138-1182`): 27
@@ -420,6 +436,25 @@ fallback becomes "keep those four as country `add_modifier`s". Not candidates:
 company-slot timing). Tests: `test_grand_monument_registry.py`,
 `test_grand_monument_archaeology.py`, `test_grand_monument_trophies.py`.
 
+As built (PR 5): 51 declarations, the 15 boons including the Homecoming. A value
+is 0 within 0.001 of nothing (either side for an approval), as the old helpers
+left the modifier off. Every off-cycle caller of the apply already ran the whole
+refresh, which still writes the variables, so none needed a replacement. One
+gate reads a declared figure back: a dig's launch button checks weekly
+innovation against the method's diversion, so `gm_arch_begin_dig` books what a
+dig diverts for 14 days (`gm_arch_innovation_pending`) and the three launch gates
+add it (`gm_arch_innovation_gate_<method>`). Fourteen covers the 2-5 day lag and
+a weekly update of `country_innovation`, whose cadence is unprobed (review of
+PR 5). Until the booking runs out a landed drain counts twice, and each new
+launch restarts the timer for the whole sum; both only make the gate stricter,
+as does a suspended dig's innovation, which comes back days late. Four boons
+carry `state_*` fields too (centenary, faith, athletic and naturalist
+technologies), so `gm_education_reaches_states` answers for them as well. The
+boons' countdown variables share their modifiers' names, so the misuse test
+skips variable-name nodes. An older save's copies go through
+`legacy_scaling_strip_grand_monuments`, monthly and from the entry's weekly
+pulse; nothing needed migrating.
+
 ### 4.9 Tax Code, Light setting (21 keys, country → entry)
 
 Relief ×5 (`var:te_tax_light_rl_<key>`) and reactions ×16
@@ -431,6 +466,23 @@ Banking's (`te_banking_entry_net`: a monthly `add_journal_entry` for a country
 in force without the entry) and its "display-only" header and
 `tax_code_schema.md` are reworded. A step's relief lags its tax level by up to 4
 days. The view bands stay (the full code shares them).
+
+As built (PR 6): the 21 values are `te_tax_light_relief_<key>_value` and
+`te_tax_light_react_<ig>_<pos|neg>_value`, each restating its old add's gate: a
+relief while the law levies that tax and its variable is above 0, a reaction's
+rounded size on the side of the running reaction's sign once it is a whole
+point. The levies test is read at each entry update, not at the sync, so a law
+change ends a relief within days. `te_tax_light_gen_apply_reactions` now only
+writes the sizes and is `te_tax_light_gen_reaction_sizes`. The net,
+`te_tax_light_entry_net` on each country's monthly pulse, goes beyond Banking's
+in two ways: it skips decentralized countries (never migrated), and a country
+whose inactive copy waits (`add_journal_entry` is refused then, and the engine
+activates that copy). The entry already had `should_update_on_player_command =
+yes`; whether that update also re-reads its scaling modifiers, so a step's
+relief lands at once, is unprobed, and the loc says "within a few days". The
+Nation tab loses its 21 rows (the reactions section goes). An older save's
+copies go through `legacy_scaling_strip_tax_code`, monthly and from the entry's
+weekly pulse.
 
 ### 4.10 Space Race (24 + 12 + 80 keys)
 
@@ -454,6 +506,54 @@ days. The view bands stay (the full code shares them).
 - **Left**: `sr_orbital_superiority` and the extraplanetary base's room bonus and
   penalty (carriers without an entry), `sr_commercial_space_dividend` (outlives
   the race), `sr_fleet_upkeep_goods` (a building modifier).
+
+As built (PR 7): 181 declarations on seven entries.
+- **Milestones: 48.** Seven billed entries, not eight: `je_space_race_interstellar_results`
+  has no funding, approach or choice, and the old code never billed it. Each of
+  the seven declares its own cost, funding pair and two approaches, so a country
+  pays one copy per running milestone, as before. Choices: 13, not 16; the three
+  others belonged to the retired Moon Base. `sr_<m>_cost`, `_effective` and
+  `_level` keep their `owner` wrappers, which an older save's copies name.
+- **Solar colonization: 133.** Seven by hand in `je_space_race.txt`, and the
+  generated 126 (the 80 specializations, the 40 discovery outcomes and the six
+  facilities) in a new file, `common/journal_entries/sr_sites_generated.txt`, an
+  `INJECT:je_space_race_solar_colonization`. A cross-file INJECT into a mod-only
+  entry merges (`scripting_best_practices.md` § Load Order, fact 8); whether it
+  appends repeated `scaling_modifiers_while_active` blocks is unprobed. The
+  existing `propellant_depots_bool` self-check covers it: Shackleton's depot is
+  a generated key and the only source of `country_sr_propellant_depots_bool`, so
+  its BROKEN line now names the INJECT, and it runs monthly for every country
+  instead of only in a launch month (review of PR 7), so a holder whose
+  programme has finished is read too. The fallback is the declarations written
+  into the entry itself. An INJECT that replaced the entry's own blocks instead
+  of appending would leave the depot OK and drop the 12 hand-written
+  declarations; the C7 row opens the entry to see both kinds. The 120 founding and discovery options call a
+  generated `sr_site_choose_<m>`: a `show_as_tooltip` add for the preview, then
+  the record, hidden. The 69 country blocks in `legacy_modifier_cleanup.txt` (68
+  colony keys and the trade reward) only remove now.
+- **Gone**: `sr_recalculate_cost` (each caller runs `sr_refresh_milestone_statuses`),
+  the clear and apply helpers, `sr_cost_modifiers_missing`, the on-action's
+  seven recalculation branches and their three caches, every `sr_sync_<m>_entry`
+  with `sr_sync_space_race_entries`, `sr_grant_colony_modifier`, the
+  `<m>_mult` records and the site show/hide helpers, `sr_emig_refresh_modifiers`
+  and `sr_mod_refresh_facilities`, and `sr_mod_seen_self_check`.
+- **Lag beyond the declarations**: the panel's pace and setback-risk figures read
+  `modifier:` sums, so they follow a click by days too, and a Safe switch lowers
+  the risk of a monthly roll only once it lands. Participation, the solar method
+  and the funding cap now reach the cost within days rather than at the monthly
+  pulse. No gate reads back a declared figure: the funding and approach buttons
+  read variables, and innovation is read only by AI weights.
+- **Old saves**: one `legacy_scaling_strip_space_race_<m>` per entry, monthly and
+  from a new weekly pulse on each. Nothing needed migrating: the `_held` records
+  date from 2026-09-26.
+- **Review fixes**: the Commercial Space dividend's first payment waits a month
+  after the race concludes (`sr_space_dividend_settled`), since the last
+  milestone's declared funding stays on solar colonization's open entry for a
+  few days and the dividend reads `country_space_race_progress_add`. The
+  fabrication self-check's Mass Driver exclusion reads `_held`, not the retired
+  `_mult`. The AI's fund-up and fund-down weights read `country_innovation`,
+  which now follows a click by days, so an AI near 25 or 50 may step twice
+  before the first lands; the cap bounds it, and an observer run is the check.
 
 ### 4.11 United Nations (48 keys + 5 mirrored flats)
 

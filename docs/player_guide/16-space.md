@@ -317,8 +317,8 @@ progress, and two Safe ones bring every milestone down to the 1% floor. What
 stays with each milestone is its innovation cost and the kind of setback it
 suffers, which follows its own approach (see [Space race
 setbacks](#space-race-setbacks)). Setback risk never drops below 1% a month or
-rises above 50%. The panel's pace and risk figures are the ones the game uses,
-so check them after every change.
+rises above 50%. The panel's pace and risk figures are the ones the game uses.
+They follow a change within a few days, so check them a week after it.
 
 ### Mission profile choices
 

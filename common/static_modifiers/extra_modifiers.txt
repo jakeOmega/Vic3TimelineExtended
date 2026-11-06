@@ -506,7 +506,7 @@ financial_cycle_phase_frenzy = {
 	# BUBBLE 20 -> 8 (2026-09-22). Nearly every frenzy starts with bubble
 	# already past 60 (it is filled in boom), so this line decides how fast a
 	# frenzy locks in, not whether crashes happen: crash frequency moved ~1%.
-	# With the flatter inertia curve (bubble_inertia_multiplier_script_value)
+	# With the flatter inertia curve (bubble_inertia_curve)
 	# it gives maxed tools a few percent chance to escape a frenzy instead of
 	# none (banking_cycle_simulation.md §10). _cmd / _coop scaled x0.4 alike.
 	country_bubble_pressure_monthly_add = 8
@@ -5502,10 +5502,10 @@ planning_consolidation_order = {
 }
 
 # 9. Treasury → Investment Pool auto-balance (command economy only)
-# Automatically applied and recalibrated each month (and on inject/withdraw button press)
-# by banking_cycle_update_ce_pool_balance. The multiplier is computed so that the
-# investment pool's net monthly income equals zero: the state treasury funds all
-# planned investment directly.
+# Declared on je_banking_cycle (scaling_modifiers_while_active) at the value
+# banking_cycle_update_ce_pool_balance caches each month (and on an inject or
+# withdraw), computed so that the investment pool's net monthly income equals
+# zero: the state treasury funds all planned investment directly.
 # Base values:
 #   country_weekly_investment_pool_add = 1  (per week, scaled by multiplier)
 #   country_expenses_add = 1
@@ -6606,7 +6606,7 @@ bubble_inertia_extreme = {
 
 # Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §21):
 # a fifth of the market's pull, under the same bands and the same
-# bubble_inertia_multiplier_script_value. With none at all a cooperative economy
+# bubble_inertia_curve. With none at all a cooperative economy
 # almost never left Stable (0.6 crashes a century untooled, Boom or Frenzy 0.2%
 # of months); at a fifth it has about 2, the owner's target.
 bubble_inertia_moderate_coop = {
@@ -8099,9 +8099,9 @@ te_monetary_rate_paid = {
 # ============================================================================
 # Monetary Policy — policy stance bands (monetary_policy_design.md §8)
 # ============================================================================
-# Journal-entry-scope modifiers on je_banking_cycle, swapped when
-# te_mon_stance_band changes. Cheap money feeds the investment pool; tight
-# money starves it.
+# Journal-entry-scope modifiers on je_banking_cycle, which declares the one
+# te_mon_stance_band names (scaling_modifiers_while_active, since 1.15). Cheap
+# money feeds the investment pool; tight money starves it.
 #
 # These exist *instead of* one modifier scaled by the true stance gap: a scaled
 # modifier would print -0.125 x (policy - inflation - r*) in its tooltip, from
@@ -8112,8 +8112,8 @@ te_monetary_rate_paid = {
 #
 # Band 3 (neutral) carries no field on purpose: a 0 value would render as "+0%"
 # and trip modifier_visibility_audit, and there is nothing to say. It stays
-# defined so the swap logic always has exactly one band modifier to apply and
-# the JE reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
+# defined so the entry always declares exactly one band modifier and the JE
+# reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
 # does the same for the neutral tier of its own banded sets — tax_modifier_medium,
 # government_wages_medium and infamy_reputable in
 # vanilla common/static_modifiers/00_code_static_modifiers.txt are all empty.
@@ -8129,8 +8129,8 @@ banking_stance_band_2 = {
 }
 
 banking_stance_band_3 = {
-	# An EMPTY modifier that is still applied, so the entry always names the
-	# stance. It needs an icon all the same: the journal entry lists it, and a
+	# An EMPTY modifier that is still declared at 1, so the entry always names
+	# the stance. It needs an icon all the same: the journal entry lists it, and a
 	# modifier with none logs "Could not find texture ... '' not found".
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 }
@@ -8783,9 +8783,9 @@ te_mon_mandate_loosen_step = {
 }
 
 # The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
-# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, as the
-# multiplier, refreshed monthly by banking_external_charge_* (its header has
-# the rules), on the entry beside the tool. The mirror field puts them under
+# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, declared
+# on the entry beside the tool from the cache banking_external_charge_* writes
+# monthly (its header has the rules). The mirror field puts them under
 # Banking in the Budget Breakdown (gen_budget_breakdown.py's SOURCES).
 banking_external_sterilization_charge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds

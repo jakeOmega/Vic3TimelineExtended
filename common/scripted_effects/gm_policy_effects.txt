@@ -47,8 +47,9 @@ gm_policy_set = {
 # § 4.4: a JE-held state_* field is unverified). While the policy is another,
 # the modifier is off, so the capital's education access is the base. The first
 # month under Public Education with a whole step arms the check, since the
-# modifier a refresh adds shows from the next pulse; the month after, the
-# capital's access must have risen by at least half what the steps give. Under
+# entry's declaration follows the refresh's variables within days; the month
+# after, the capital's access must have risen by at least half what the steps
+# give. Under
 # it with under a step the modifier may already be on, so the check stands down
 # until the country comes to it again from another policy; a capital that moved
 # since the base does too. Once a game. Fallback in

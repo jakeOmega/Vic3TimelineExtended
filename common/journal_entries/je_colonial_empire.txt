@@ -398,6 +398,12 @@
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_colonial_empire = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = {
 			# --- Path-dependence tracking ---
