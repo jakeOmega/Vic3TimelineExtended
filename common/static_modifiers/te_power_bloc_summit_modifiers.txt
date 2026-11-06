@@ -1,0 +1,112 @@
+﻿# Power bloc summits (#1442): what a bloc leader buys with a spare mandate.
+# Each is granted by one option of te_pb_summit.1 for long_modifier_time (ten
+# years), removed first so a repeat refreshes rather than stacks. All but
+# te_pb_summit_home sit on the power bloc; te_pb_summit_home sits on the
+# leader. docs/systems/mod_systems/power_blocs.md has the design.
+
+# Rally the Bloc (option a): with an immediate add_cohesion_percent = 0.2.
+# Vanilla's principles move cohesion by 5 to 20; the UN's bloc vacuum gives 10.
+te_pb_summit_rally = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 10
+}
+
+# Recruitment Drive (option b). The Sovereign Empire identity's penalty is -30.
+te_pb_summit_recruitment = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_invite_acceptance_add = 25
+}
+
+# Leverage Campaign (option c). The UN's dissolution vacuum gives +20%.
+te_pb_summit_leverage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	power_bloc_leverage_generation_mult = 0.25
+}
+
+# Open Borders Accord (option e): the abilities of Navy III and Freedom of
+# Movement III, on loan. The option is hidden when the bloc's principles give
+# both (te_pb_summit_has_open_borders).
+te_pb_summit_open_borders = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	power_bloc_allow_port_access_bool = yes
+	power_bloc_allow_wider_migration_area_bool = yes
+}
+
+# A Mandate at Home (option g), on the leader.
+te_pb_summit_home = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 10
+	country_authority_add = 200
+}
+
+# ----------------------------------------------------------------------------
+# Identity initiatives: one a bloc identity, offered only to its leader, beside
+# the five above. Those marked "every member" are added to each member (the
+# leader included) at the summit, by te_pb_summit_grant_member_initiative: a
+# country that joins later doesn't get it, and one that leaves keeps what it
+# has. Several also improve relations between members at once
+# (te_pb_summit_member_relations).
+# ----------------------------------------------------------------------------
+
+# Military Treaty Organization, Joint Exercises (option i), every member.
+# The UN's peacekeeping deployment gives +10% experience.
+te_pb_summit_drills = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_army_experience_gain_mult = 0.25
+}
+
+# Religious, a council of the leader's faith (option j), every member. The
+# Religious identity's own member line is +33% conversion.
+te_pb_summit_council = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_conversion_mult = 0.25
+	country_acceptance_state_religion_add = 5
+	interest_group_ig_devout_approval_add = 2
+}
+
+# Trade League, Customs Harmonization (option k): on the bloc, as much trade
+# advantage as Market Unification I gives (100)...
+te_pb_summit_customs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	power_bloc_trade_advantage_add = 100
+}
+# ... and on every member, +10% trade advantage in its states.
+te_pb_summit_customs_members = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_trade_advantage_mult = 0.10
+}
+
+# Sovereign Empire, Imperial Conference (option l), on the leader, with
+# better relations between the leader and every other member. Vanilla's Tsar's
+# liberty-desire boost is -0.1 a week.
+te_pb_summit_imperial = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_liberty_desire_of_subjects_add = -0.1
+}
+
+# Ideological Union, Congress of the Movement (option m), every member: laws
+# the leader imposes pass more easily, so do members' own, and movements breed
+# fewer radicals. Vanilla's Installed Regime gives +100 imposed-law chance.
+te_pb_summit_congress = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_law_enactment_imposition_success_add = 0.25
+	country_law_enactment_success_add = 0.05
+	state_radicals_from_political_movements_mult = -0.25
+}
+
+# Cultural Commonwealth, Cultural Congress (option n), every member: kindred
+# cultures more accepted, prestige, and (under Cultural Hegemony) cultural pull.
+te_pb_summit_culture = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_acceptance_shared_heritage_trait_add = 5
+	country_acceptance_shared_language_trait_add = 5
+	country_prestige_mult = 0.05
+	country_cultural_pull_mult = 0.15
+}
+
+# Diplomatic Framework, Conference of Ambassadors (option o), every member.
+te_pb_summit_ambassadors = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_influence_mult = 0.10
+	country_infamy_decay_mult = 0.25
+}

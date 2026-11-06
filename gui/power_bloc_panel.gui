@@ -1,6 +1,7 @@
 ﻿# TE override of vanilla power_bloc_panel.gui (1.15.0): vanilla's file plus principle slots 5-8, their
-# locked-slot tooltips and the remove button (#787, #836), and principle_group widened to 550 for the
-# mod's five-level groups (tiers IV and V).
+# locked-slot tooltips and the remove button (#787, #836), principle_group widened to 550 for the
+# mod's five-level groups (tiers IV and V), and the Convene a Summit button beside the leader's
+# mandate count (#1442).
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
 # COPY-PASTED FOR NOW
 @panel_width_minus_20 = 520
@@ -1765,6 +1766,23 @@ types power_bloc_panel_types
 						elide = right
 						fontsize_min = 14
 						text = "AVAILABLE_MANDATES"
+					}
+
+					widget = {
+						size = { 10 1 }
+					}
+
+					# TE: Convene a Summit (#1442) opens te_pb_summit.1, where each initiative
+					# spends one mandate; greyed, with the reason, while the bloc holds none
+					button = {
+						using = default_button_action
+						size = { 180 35 }
+						parentanchor = vcenter
+						text = "te_pb_summit_button"
+						enabled = "[GetScriptedGui('te_pb_summit_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_pb_summit_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( Localize( 'te_pb_summit_button_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_pb_summit_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+						using = tooltip_above
 					}
 				}
 			}

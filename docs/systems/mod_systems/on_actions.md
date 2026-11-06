@@ -4,7 +4,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 ## On-Actions Reference
 
-The mod uses 55 on-action files under `common/on_actions/`; the index below lists the main ones. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
+The mod uses 70 on-action files under `common/on_actions/`; the index below lists the main ones. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
 
 ### File Index
 
@@ -26,6 +26,7 @@ The mod uses 55 on-action files under `common/on_actions/`; the index below list
 | `te_unemployment_on_actions.txt` | Each state's yearly walk for its workforce share, which `te_state_unemployment_share` divides the engine's unemployment by (§ Unemployment as a Share of the Workforce), a monthly fill for a state with none yet, and the self-check `unemployment_share_read` | Pulse |
 | `te_region_area_on_actions.txt` | Writes each state region's land area once per save (`te_region_area_generated.txt`) | Mixed |
 | `un_on_actions.txt` | UN formation and recurring member events | Pulse (monthly) |
+| `te_power_bloc_summit_on_actions.txt` | Power bloc summits: an AI bloc leader's monthly chance, from two stored mandates, to spend one on an initiative (`te_pb_summit.1`; [Power Blocs](power_blocs.md)) | Pulse (monthly) |
 | `wonder_events_on_actions.txt` | Wonder building narrative events | Pulse (monthly) |
 | `te_tax_on_actions.txt` | Legislated tax code (rule-gated): the global monthly dispatch of the processor `te_tax.1` on the 1st, the country-pulse watchdog, migration at game start and for formed and released countries, the carrier re-assert on `on_law_activated`, relief marks on state transfers; under the light setting its own handlers (`te_tax_light_*`): migration (`te_tax_light.2`), the monthly processor (`te_tax_light.1`) and a sync after a taxation law is activated (`te_tax_light.3`) | Mixed |
 | `te_civil_war_on_actions.txt` | The shared civil-war layer: outbreak, win and resolve hooks, which call each system's copy and repair (the tax code's `te_tax_on_uprising` and `te_tax_repair_after_civil_war` among them) | Immediate |

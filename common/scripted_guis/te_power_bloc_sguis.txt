@@ -77,3 +77,30 @@ te_pb_principle_slot_sources_sgui = {
 
 	effect = { }
 }
+
+# Convene a Summit (gui/power_bloc_panel.gui, beside the mandate count): opens
+# te_pb_summit.1, where each initiative spends one mandate (#1442). The button
+# spends nothing itself, so closing the event costs nothing. AI leaders reach
+# the event through te_pb_summit_ai_on_action instead.
+te_pb_summit_sgui = {
+	scope = country
+
+	is_shown = {
+		is_power_bloc_leader = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = te_pb_summit_needs_mandate_tt
+			te_pb_summit_can_pay = yes
+		}
+	}
+
+	effect = {
+		trigger_event = { id = te_pb_summit.1 popup = yes }
+	}
+}

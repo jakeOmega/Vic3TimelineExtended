@@ -404,10 +404,55 @@ Several principles give your bloc an article, action or decree.
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
 
+### Bloc summits
+
+A bloc leader can spend a mandate on something other than a principle. The
+Convene a Summit button sits beside your mandate count on the power bloc panel,
+grayed while the bloc holds none. It opens a summit where each initiative costs
+one mandate and lasts ten years; adjourning costs nothing.
+
+| Initiative | What it gives |
+|---|---|
+| Common Purpose | Cohesion rises at once by a fifth of its maximum, then +10 cohesion |
+| Recruitment Drive | +25 to the chance a country accepts the bloc's invitation |
+| Leverage Campaign | +25% leverage generation on every country |
+| Open Borders Accord | Port access and migration between members, as Navy III and Freedom of Movement III give |
+| Mandate at Home | +10 legitimacy and +200 authority for the leader |
+
+Each bloc identity adds one initiative of its own. Those marked "members" go to
+every country in the bloc at the time of the summit, you included; a country
+that joins later doesn't get them.
+
+| Identity | Initiative | What it gives |
+|---|---|---|
+| Military Treaty | Joint Exercises | Members: +25% army experience gain. Relations between every two members +20 |
+| Religious Convocation | A council of your faith | Members: +25% conversion, +5 acceptance for the state religion, Devout approval +2 |
+| Trade League | Customs Harmonization | The bloc: +100 trade advantage. Members: +10% trade advantage |
+| Sovereign Empire | Imperial Conference | You: −0.1 weekly liberty desire for all your subjects. Your relations with every other member +20 |
+| Ideological Union | Congress of the Movement | Members: +25% chance for laws you impose on them to pass, +5% for their own enactments, −25% radicals from political movements |
+| Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
+| Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
+
+The religious council takes its name from your state religion: an ecumenical
+council, a synod, the ulama in council, a rabbinical council, a Sangiti, a
+Dharma Sansad, a Sarbat Khalsa, or a plain council of the faith for any other.
+Cultural pull counts only under [Cultural Hegemony](11-influence.md#the-cultural-hegemony-journal-entry).
+
+An initiative already running isn't offered again until it ends, except Common
+Purpose, whose immediate cohesion can be worth a second mandate. The Open
+Borders Accord isn't offered when the bloc's principles already give both of
+its abilities. A summit is for the mandates left once your slots are full and
+upgraded: a principle tier is permanent, an initiative lasts ten years.
+
+An AI bloc leader holding two or more mandates may convene a summit in any
+month, and more often the more it holds: about one year in three with two, and
+almost every year at the cap of five. It prefers its identity's initiative, and
+favors Common Purpose when cohesion is low and the Recruitment Drive while the
+bloc has fewer than five members.
+
 ### Other power bloc changes
 
-A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
-a year: +3 per unspent mandate, up to +12. Example new bloc names include the
+Example new bloc names include the
 Global Accord for a Diplomatic Framework, the Anglosphere for a cultural bloc
 and the Concert of Arms for a Military Treaty. Any bloc can take the name of a
 historical league or standing body, such as the Congress System or the Central

@@ -6338,6 +6338,35 @@
  te_orbital_debris.1.t:0 "Ribbon Strike"
 
 #
+# TE_PB_SUMMIT
+#
+ te_pb_summit.1.a:0 "Reaffirm what binds us together."
+ te_pb_summit.1.b:0 "Open our doors to new members."
+ te_pb_summit.1.c:0 "Press our interests abroad, together."
+ te_pb_summit.1.d:0 "At our invitation, the heads of government of every member have gathered in our capital. Each delegation has arrived with its own list of demands, but our standing in the bloc lets us set the agenda, and the communiqué will commit them all to whatever we put first."
+ te_pb_summit.1.d_none:0 "The delegations have gathered, but our bloc holds no [concept_power_bloc_mandate] to spend, and without one the members will sign nothing binding. The summit can only adjourn."
+ te_pb_summit.1.e:0 "Open our harbors and borders to one another."
+ te_pb_summit.1.f:0 "\"Every capital wants its own paragraph,\" the protocol chief muttered, redrawing the seating plan for the third time that morning."
+ te_pb_summit.1.g:0 "Let our people see who leads this bloc."
+ te_pb_summit.1.h:0 "Adjourn without a communiqué."
+ te_pb_summit.1.i:0 "Drill our armies side by side."
+ te_pb_summit.1.j:0 "Convene a council of our faith."
+ te_pb_summit.1.j_buddhist:0 "Call a Sangiti of the bloc's monastic orders."
+ te_pb_summit.1.j_catholic:0 "Call an ecumenical council of the bloc's bishops."
+ te_pb_summit.1.j_hindu:0 "Convene a Dharma Sansad of the bloc's teachers."
+ te_pb_summit.1.j_islamic:0 "Gather the bloc's ulama in council."
+ te_pb_summit.1.j_jewish:0 "Convene a rabbinical council for the bloc."
+ te_pb_summit.1.j_orthodox:0 "Convene a holy synod of the bloc's churches."
+ te_pb_summit.1.j_protestant:0 "Summon a synod of the bloc's churches."
+ te_pb_summit.1.j_sikh:0 "Call a Sarbat Khalsa of the bloc's congregations."
+ te_pb_summit.1.k:0 "Bring our tariffs and customs into line."
+ te_pb_summit.1.l:0 "Hold an imperial conference."
+ te_pb_summit.1.m:0 "Convene a congress of the movement."
+ te_pb_summit.1.n:0 "Celebrate the culture we share."
+ te_pb_summit.1.o:0 "Convene a conference of ambassadors."
+ te_pb_summit.1.t:0 "A Summit of the Bloc"
+
+#
 # TE_PEG
 #
  te_peg.1.a:0 "Raise the rate until the gold comes back."
