@@ -11433,7 +11433,7 @@
  },
  "modern_election_events.32.d": {
   "en": "Citizens of [ROOT.GetCountry.GetNameNoFlag] living in orbital habitats and off-world colonies have transmitted a formal demand for electoral representation. They contribute taxes, serve in the military, and maintain their citizenship — yet they cannot cast a ballot that counts. The campaign must now grapple with a question the founders never anticipated: does democracy extend beyond the atmosphere?",
-  "es": "Ciudadanos de [ROOT.GetCountry.GetNameNoFlag] que viven en hábitats orbitales y colonias extraplanetarias han transmitido una exigencia formal de representación electoral. Pagan impuestos, sirven en el ejército y mantienen su ciudadanía, pero no pueden emitir una papeleta que cuente. La campaña debe ahora lidiar con una pregunta que los fundadores nunca previeron: ¿se extiende la democracia más allá de la atmósfera?"
+  "es": "Ciudadanos de [ROOT.GetCountry.GetNameNoFlag] que viven en hábitats orbitales y colonias extraterrestres han transmitido una exigencia formal de representación electoral. Pagan impuestos, sirven en el ejército y mantienen su ciudadanía, pero no pueden emitir una papeleta que cuente. La campaña debe ahora lidiar con una pregunta que los fundadores nunca previeron: ¿se extiende la democracia más allá de la atmósfera?"
  },
  "modern_election_events.32.f": {
   "en": "\\\"The petition arrived from the orbital habitat this morning.\\\"\\n\\n\\\"What does it ask?\\\"\\n\\n\\\"For the vote. They have citizenship. They pay taxes. Their children attend the same schools as our children, via the satellite link. They cannot cast a ballot. They are asking why. We do not have a good answer.\\\"",
@@ -21345,7 +21345,7 @@
  },
  "space_race_events.81.d": {
   "en": "Our probe is ready for its journey beyond Earth orbit. Three targets have been proposed. Venus, shrouded in clouds, could reveal whether a runaway greenhouse effect awaits our own world. Mars, with its ancient riverbeds and polar ice, is the most likely candidate for past life. The asteroid belt offers navigational and prospecting data that could accelerate future off-world industry.",
-  "es": "Nuestra sonda está lista para su viaje más allá de la órbita terrestre. Se han propuesto tres objetivos. Venus, envuelto en nubes, podría revelar si un efecto invernadero descontrolado aguarda a nuestro propio mundo. Marte, con sus antiguos lechos fluviales y sus hielos polares, es el candidato más probable a haber albergado vida en el pasado. El cinturón de asteroides ofrece datos de navegación y prospección que podrían acelerar la futura industria fuera de la Tierra."
+  "es": "Nuestra sonda está lista para su viaje más allá de la órbita terrestre. Se han propuesto tres objetivos. Venus, envuelto en nubes, podría revelar si un efecto invernadero descontrolado aguarda a nuestro propio mundo. Marte, con sus antiguos lechos fluviales y sus hielos polares, es el candidato más probable a haber albergado vida en el pasado. El cinturón de asteroides ofrece datos de navegación y prospección que podrían acelerar la futura industria extraterrestre."
  },
  "space_race_events.81.f": {
   "en": "\\\"Venus will teach us about our past. Mars will teach us about our future. The asteroids will teach us about our bank accounts.\\\"\\n\\n— Planetary Science Advisory Panel",

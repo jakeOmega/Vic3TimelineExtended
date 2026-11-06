@@ -445,7 +445,7 @@
  },
  "te_tax_how_passage_rule": {
   "en": "The bill can pass once committed groups hold more than #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_share')|%0]#! of the [concept_clout] of every group that is not marginal, [concept_legitimacy] is at least #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_legitimacy')|0]#!, and it has been debated for #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#! days since its last revision. A minor bill, which moves at most two taxes by at most two steps each and no goods or relief, needs #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! days. Revising the bill releases every commitment and starts the debate again. Groups that opposed a bill that passes disapprove of the government, fading over #v [GetPlayer.MakeScope.ScriptValue('te_tax_opposed_approval_days')|0]#! days.",
-  "de": "Die Vorlage kann verabschiedet werden, sobald die Gruppen, die zugesagt haben, mehr als #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_share')|%0]#! des [Concept('concept_clout','Politischen Drucks')] aller Gruppen halten, die nicht randständig sind, die [concept_legitimacy] mindestens #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_legitimacy')|0]#! beträgt und sie seit ihrer letzten Fassung #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#! Tage beraten wurde. Eine kleine Vorlage, die höchstens zwei Steuern um höchstens je zwei Schritte verändert und weder Waren noch Entlastung, braucht #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! Tage. Wird die Vorlage überarbeitet, werden alle Zusagen aufgehoben, und die Beratung beginnt von vorn. Gruppen, die sich gegen eine verabschiedete Vorlage gestellt haben, missbilligen die Regierung, wobei dies über #v [GetPlayer.MakeScope.ScriptValue('te_tax_opposed_approval_days')|0]#! Tage nachlässt."
+  "de": "Die Vorlage kann verabschiedet werden, sobald die Gruppen, die zugesagt haben, mehr als #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_share')|%0]#! des [Concept('concept_clout','Politischen Drucks')] aller Gruppen halten, die nicht randständig sind, die [concept_legitimacy] mindestens #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_legitimacy')|0]#! beträgt und sie seit ihrer letzten Fassung #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#! Tage beraten wurde. Eine kleine Vorlage, die höchstens zwei Steuern um höchstens je zwei Schritte verändert und weder Waren noch Entlastung, braucht #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! Tage. Wird die Vorlage überarbeitet, werden alle Zusagen aufgehoben, und die Beratung beginnt von vorn. Gruppen, die sich gegen eine beschlossene Vorlage gestellt haben, missbilligen die Regierung, wobei dies über #v [GetPlayer.MakeScope.ScriptValue('te_tax_opposed_approval_days')|0]#! Tage nachlässt."
  },
  "te_tax_how_promises": {
   "en": "To win an [concept_interest_group]'s commitment the government can promise it something besides the bill's own terms. A promise is recorded on the bill under debate and binds only if that revision passes: a revision or a withdrawn bill releases it. It starts when its bill takes effect, and lapses without penalty if that bill is dropped or replaced before then. A promise does nothing by itself; it records what the government must bring about.",
@@ -1169,7 +1169,7 @@
  },
  "te_tax_ov_code_tt": {
   "en": "The code's version rises by one at every change to it: a passed bill taking effect, a temporary rate expiring, the carry-over from the taxation law.\\n\\nNext change: [SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_code_next_tt', 'te_tax_ov_next_change_none' )]\\nLast change: [SelectLocalization( GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_last_change_value', 'te_tax_none' )]\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', 'te_tax_ov_snapshot_value_tt' )]",
-  "de": "Die Version der Steuerordnung steigt bei jeder Änderung um eins: das Inkrafttreten einer verabschiedeten Vorlage, das Auslaufen eines befristeten Satzes, die Übernahme aus dem Steuergesetz.\\n\\nNächste Änderung: [SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_code_next_tt', 'te_tax_ov_next_change_none' )]\\nLetzte Änderung: [SelectLocalization( GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_last_change_value', 'te_tax_none' )]\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', 'te_tax_ov_snapshot_value_tt' )]"
+  "de": "Die Version der Steuerordnung steigt bei jeder Änderung um eins: das Inkrafttreten einer beschlossenen Vorlage, das Auslaufen eines befristeten Satzes, die Übernahme aus dem Steuergesetz.\\n\\nNächste Änderung: [SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_code_next_tt', 'te_tax_ov_next_change_none' )]\\nLetzte Änderung: [SelectLocalization( GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_last_change_value', 'te_tax_none' )]\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', 'te_tax_ov_snapshot_value_tt' )]"
  },
  "te_tax_ov_code_word": {
   "en": "Version #v [Country.MakeScope.ScriptValue('te_tax_view_code_version')|0]#!",
@@ -1209,7 +1209,7 @@
  },
  "te_tax_ov_draft_rebase_tt": {
   "en": "The draft takes effect from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!. #R Changed since drafted:#! a passed bill or an outside change moved #v [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#! of its changes. Accept each at the top of Draft Reform.",
-  "de": "Der Entwurf tritt ab #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#! in Kraft. #R Seit dem Entwurf geändert:#! Eine verabschiedete Vorlage oder eine äußere Änderung hat #v [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#! seiner Änderungen verschoben. Nehmen Sie jede davon oben in „Reformentwurf“ an."
+  "de": "Der Entwurf tritt ab #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#! in Kraft. #R Seit dem Entwurf geändert:#! Eine beschlossene Vorlage oder eine äußere Änderung hat #v [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#! seiner Änderungen verschoben. Nehmen Sie jede davon oben in „Reformentwurf“ an."
  },
  "te_tax_ov_draft_soon": {
   "en": "#R Too soon#!",
@@ -1225,7 +1225,7 @@
  },
  "te_tax_ov_next_what_bill": {
   "en": "a passed bill takes effect",
-  "de": "eine verabschiedete Vorlage in Kraft tritt"
+  "de": "eine beschlossene Vorlage in Kraft tritt"
  },
  "te_tax_ov_next_what_none": {
   "en": "a scheduled change takes effect",
@@ -1341,11 +1341,11 @@
  },
  "te_tax_ov_passed_held_tt": {
   "en": "A passed bill is held back, and none of it applies. Passed Bills says why: one whose month went by can be moved to next month, one an outside change reached can only be dropped.",
-  "de": "Eine verabschiedete Vorlage ist zurückgehalten, und nichts davon wird angewendet. „Verabschiedete Vorlagen“ nennt den Grund: Eine, deren Monat verstrichen ist, kann auf den nächsten Monat verschoben werden; eine, die von einer äußeren Änderung getroffen wurde, kann nur gestrichen werden."
+  "de": "Eine beschlossene Vorlage ist zurückgehalten, und nichts davon wird angewendet. „Beschlossene Vorlagen“ nennt den Grund: Eine, deren Monat verstrichen ist, kann auf den nächsten Monat verschoben werden; eine, die von einer äußeren Änderung getroffen wurde, kann nur gestrichen werden."
  },
  "te_tax_ov_passed_none_tt": {
   "en": "No passed bill is waiting to take effect.",
-  "de": "Keine verabschiedete Vorlage wartet darauf, in Kraft zu treten."
+  "de": "Keine beschlossene Vorlage wartet darauf, in Kraft zu treten."
  },
  "te_tax_ov_snapshot_none_tt": {
   "en": "Economy snapshot: none yet. The first is taken the day after this country's taxes come under the code.",
@@ -2009,7 +2009,7 @@
  },
  "te_tax_sum_accept_tt": {
   "en": "A passed bill or a change made outside legislation moved these provisions since the draft changed them. Accept each under Changed Since Drafted, at the top of Draft Reform, before the draft can be introduced; the draft keeps its own values.",
-  "de": "Eine verabschiedete Vorlage oder eine Änderung außerhalb der Gesetzgebung hat diese Bestimmungen verschoben, seit der Entwurf sie geändert hat. Nehmen Sie jede davon unter „Seit dem Entwurf geändert“ oben in „Reformentwurf“ an, bevor der Entwurf eingebracht werden kann; der Entwurf behält seine eigenen Werte."
+  "de": "Eine beschlossene Vorlage oder eine Änderung außerhalb der Gesetzgebung hat diese Bestimmungen verschoben, seit der Entwurf sie geändert hat. Nehmen Sie jede davon unter „Seit dem Entwurf geändert“ oben in „Reformentwurf“ an, bevor der Entwurf eingebracht werden kann; der Entwurf behält seine eigenen Werte."
  },
  "te_tax_sum_changes": {
   "en": "Changes",

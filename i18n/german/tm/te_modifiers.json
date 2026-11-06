@@ -1121,7 +1121,7 @@
  },
  "country_seabed_claim_weight_mult": {
   "en": "Seabed Claim Weight",
-  "de": "Gewicht der Meeresbodenansprüche"
+  "de": "Meeresboden-Anspruchsgewicht"
  },
  "country_seabed_claim_weight_mult_desc": {
   "en": "Our claim weight in every ocean basin, which sets our share of each basin's [concept_seabed_licence]s.",
@@ -1133,7 +1133,7 @@
  },
  "country_seabed_naval_weight_mult_desc": {
   "en": "How much more our naval power projection counts in our seabed claim weight.",
-  "de": "Wie viel stärker unsere Marine-Machtprojektion in das Gewicht unserer Meeresbodenansprüche einfließt."
+  "de": "Wie viel stärker unsere Marine-Machtprojektion in unser Meeresboden-Anspruchsgewicht einfließt."
  },
  "country_seabed_unilateral_relations_add": {
   "en": "Relations a Year with Each Other Unilateral Claimant",

@@ -3717,7 +3717,7 @@
  },
  "concept_st_res_policy_desc": {
   "en": "A rule that sets a Strategic Reserve good's weekly rate for you, from the good's national market price against its base price, averaged over several weeks. Manual leaves the rate to you; Buy When Cheap buys below a threshold, Release When Expensive sells above one, and Stabilize Prices does both. Stockpile buys at or near base price and sells at war.",
-  "es": "Una regla que fija por ti la tasa semanal de un bien de la Reserva estratégica, a partir del precio del mercado nacional del bien frente a su precio base, promediado durante varias semanas. Manual deja la tasa en tus manos; Comprar cuando esté barato compra por debajo de un umbral, Liberar cuando esté caro vende por encima de uno, y Estabilizar precios hace ambas cosas. Acopio compra al precio base o cerca de él y vende en guerra."
+  "es": "Una regla que fija por ti la tasa semanal de un bien de la Reserva estratégica, a partir del precio del mercado nacional del bien frente a su precio base, promediado durante varias semanas. Manual deja la tasa en tus manos; Comprar cuando esté barato compra por debajo de un umbral, Liberar cuando esté caro vende por encima de uno, y Estabilizar precios hace ambas cosas. Acumular compra al precio base o cerca de él y vende en guerra."
  },
  "concept_st_res_rate_setting_desc": {
   "en": "The weekly amount you set for a good in the Strategic Reserve. A positive rate buys that many units a week from your national market into the reserve; a negative one releases that many onto it. Each click of a row's buttons moves it by the [concept_st_res_adjustment_step]. It holds from week to week until the reserve fills or empties, when the game lowers it to what is left and then to 0.",
@@ -10593,7 +10593,7 @@
  },
  "sr_extraplanetary_commercial": {
   "en": "Commercial Off-World Industry",
-  "es": "Industria comercial extraplanetaria"
+  "es": "Industria comercial extraterrestre"
  },
  "sr_extraplanetary_commercial_desc": {
   "en": "Extraplanetary mining operations stay a commercial enterprise, selling their output to the market instead of the space program, which lifts Extraplanetary Base output and advanced materials production.",
@@ -10601,7 +10601,7 @@
  },
  "sr_extraplanetary_integration": {
   "en": "Integrated Off-World Industry",
-  "es": "Industria extraplanetaria integrada"
+  "es": "Industria extraterrestre integrada"
  },
  "sr_extraplanetary_integration_desc": {
   "en": "Extraplanetary mining operations supply the space program with materials, reducing costs and accelerating progress.",
@@ -10829,7 +10829,7 @@
  },
  "sr_offworld_population": {
   "en": "Off-World Population",
-  "es": "Población fuera de la Tierra"
+  "es": "Población extraterrestre"
  },
  "sr_offworld_population_desc": {
   "en": "Our people living on other worlds lend the nation prestige and draw the world's eyes, more with every 100,000 of them, up to a million.",

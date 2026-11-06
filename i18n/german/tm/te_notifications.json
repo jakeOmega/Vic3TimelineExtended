@@ -321,7 +321,7 @@
  },
  "notification_gm_tr_lost_notice_desc": {
   "en": "[SCOPE.sCountry('gm_tr_taker').GetName] has carried off one of our Grand Monuments, or part of it, from [SCOPE.sState('gm_tr_notice_state').GetName]. It is listed under Held Abroad on the Grand Monuments tab, with the ways to get it back. The outrage stiffens our war support.",
-  "de": "[SCOPE.sCountry('gm_tr_taker').GetAltName('NOM')|U] hat eines unserer Großen Monumente oder einen Teil davon aus [SCOPE.sState('gm_tr_notice_state').GetName] fortgeschafft. Es steht auf dem Reiter „Große Monumente“ unter „Im Ausland gehalten“, samt den Wegen, es zurückzuholen. Die Empörung stärkt unsere Kriegsunterstützung."
+  "de": "[SCOPE.sCountry('gm_tr_taker').GetAltName('NOM')|U] hat eines unserer Großen Monumente oder einen Teil davon aus [SCOPE.sState('gm_tr_notice_state').GetName] fortgeschafft. Es steht auf dem Reiter „Große Monumente“ unter „Im Ausland gehalten“, samt den Wegen, es zurückzuholen. Die Empörung stärkt unseren Kriegswillen."
  },
  "notification_gm_tr_lost_notice_name": {
   "en": "Our Monument Carried Off",

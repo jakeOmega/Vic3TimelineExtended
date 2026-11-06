@@ -2041,7 +2041,7 @@
  },
  "NW_PROLIF_GUARANTEE_ACCEPT_TT": {
   "en": "[SCOPE.sCountry('nuclear_pg_guarantor').GetName] gives us a $nuclear_guarantee$, in force for ten years: we do not suffer the war-support drain of facing a nuclear-armed enemy without the bomb, and [SCOPE.sCountry('nuclear_pg_guarantor').GetNameNoFlag]'s arsenal counts in any nuclear crisis against us. [SCOPE.sCountry('nuclear_pg_guarantor').GetNameNoFlag] pays its upkeep.",
-  "de": "[SCOPE.sCountry('nuclear_pg_guarantor').GetAltName('NOM')|U] gibt uns eine $nuclear_guarantee$, die zehn Jahre gilt: Wir leiden nicht unter dem Schwund der Kriegsunterstützung, den es bedeutet, einem atomar bewaffneten Feind ohne eigene Bombe gegenüberzustehen, und das Arsenal [SCOPE.sCountry('nuclear_pg_guarantor').GetAltNameNoFlag('GEN')] zählt in jeder Nuklearkrise gegen uns mit. [SCOPE.sCountry('nuclear_pg_guarantor').GetAltNameNoFlag('NOM')|U] trägt den Unterhalt."
+  "de": "[SCOPE.sCountry('nuclear_pg_guarantor').GetAltName('NOM')|U] gibt uns eine $nuclear_guarantee$, die zehn Jahre gilt: Wir leiden nicht unter dem Schwund des Kriegswillens, den es bedeutet, einem atomar bewaffneten Feind ohne eigene Bombe gegenüberzustehen, und das Arsenal [SCOPE.sCountry('nuclear_pg_guarantor').GetAltNameNoFlag('GEN')] zählt in jeder Nuklearkrise gegen uns mit. [SCOPE.sCountry('nuclear_pg_guarantor').GetAltNameNoFlag('NOM')|U] trägt den Unterhalt."
  },
  "NW_PROLIF_GUARANTEE_DECLINE_TT": {
   "en": "No guarantee. [SCOPE.sCountry('nuclear_pg_guarantor').GetName] is told that we decline.",
@@ -3849,7 +3849,7 @@
  },
  "TE_STATE_SEABED_ROW_WEIGHT_TT": {
   "en": "#b Claim Weight Here#!\\nWhat this state adds to our claim weight in the $TE_STATE_SEABED_BASIN_NAME$ now:\\nCoast: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] for a coastal state, half that if unincorporated)\\nPort levels: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nNaval share: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (our [Concept('concept_naval_power_projection','naval power projection')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], doubled under Unilateral Licensing or the $te_seabed_regime_name_3$ regime, spread over our coast)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! for our policy\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Our weight in the $TE_STATE_SEABED_BASIN_NAME$ at the last sharing: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Each January's sharing counts it again.",
-  "de": "#b Anspruchsgewicht hier#!\\nWas dieser Staat derzeit zu unserem Anspruchsgewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ beiträgt:\\nKüste: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] für einen Küstenstaat, halb so viel, wenn nicht inkorporiert)\\nHafenstufen: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nMarineanteil: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (unsere [Concept('concept_naval_power_projection','Seemachtprojektion')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], verdoppelt unter Einseitiger Lizenzvergabe oder im Regime $te_seabed_regime_name_3$, verteilt über unsere Küste)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! für unsere Politik\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Unser Gewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ bei der letzten Aufteilung: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Die Aufteilung jedes Januars zählt es erneut."
+  "de": "#b Anspruchsgewicht hier#!\\nWas dieser Staat derzeit zu unserem Anspruchsgewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ beiträgt:\\nKüste: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] für einen Küstenstaat, halb so viel, wenn nicht inkorporiert)\\nHafenstufen: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nMarineanteil: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (unsere [Concept('concept_naval_power_projection','Marine-Machtprojektion')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], verdoppelt unter Einseitiger Lizenzvergabe oder im Regime $te_seabed_regime_name_3$, verteilt über unsere Küste)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! für unsere Politik\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Unser Gewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ bei der letzten Aufteilung: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Die Aufteilung jedes Januars zählt es erneut."
  },
  "TE_STATE_SEABED_TT": {
   "en": "#bold [concept_seabed_licence]s#!\\nAcross the country: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_total')|0]#! in use of our #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_entitled_total')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total')|0]#! of them from other basins\\nRoom to build: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_room_shown')|0]#!\\nEach basin's licenses and claims: the Seabed tab of the $te_systems_window_title$ window.",
@@ -5993,7 +5993,7 @@
  },
  "banking_dash_mon_standing_label": {
   "en": "Credit Standing",
-  "de": "Bonität"
+  "de": "Kreditwürdigkeit"
  },
  "banking_dash_mon_standing_tt": {
   "en": "#header Credit Standing#!\\nFloored at #v [Country.MakeScope.ScriptValue('te_mon_standing_floor')|2]%#!: standing earned past the floor buys nothing.\\n$TOOLTIP_DELIMITER$\\n#title Computed from the country's position:#!\\n#v [Country.MakeScope.ScriptValue('te_mon_access_premium')|1]%#! capital-market access: its finance technologies, and whether it has a stock exchange at all\\n$TOOLTIP_DELIMITER$\\n#title From laws, technologies and events:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_credit_standing_add')]",
@@ -12241,7 +12241,7 @@
  },
  "gm_je_how_trophies": {
   "en": "A country can carry off a monument, or part of one, from a state its armies hold in a war (half its provinces or more), or from its own unincorporated state if it did not raise the monument. A column, obelisk, statue or stele goes whole; an arch, gate or tower loses a quarter of its levels; a hall, mausoleum or civic building a tenth. A Grand Shrine is never taken, and a monument that loses a piece is spared for ten years. Taking one in a war costs [concept_infamy] and relations, and stiffens its owner's war support.",
-  "de": "Ein Land kann ein Monument oder einen Teil davon aus einem Staat fortschaffen, den seine Armeen in einem Krieg halten (die Hälfte seiner Provinzen oder mehr), oder aus seinem eigenen nicht eingegliederten Staat, wenn es das Monument nicht selbst errichtet hat. Eine Säule, ein Obelisk, eine Statue oder eine Stele wird ganz fortgeschafft; ein Triumphbogen, ein Tor oder ein Turm verliert ein Viertel seiner Stufen; eine Halle, ein Mausoleum oder ein ziviles Bauwerk ein Zehntel. Ein Großer Schrein wird nie genommen, und ein Monument, das ein Stück verliert, wird zehn Jahre lang verschont. Ein Monument in einem Krieg zu nehmen kostet [concept_infamy] und Beziehungen und stärkt die Kriegsunterstützung seines Eigentümers."
+  "de": "Ein Land kann ein Monument oder einen Teil davon aus einem Staat fortschaffen, den seine Armeen in einem Krieg halten (die Hälfte seiner Provinzen oder mehr), oder aus seinem eigenen nicht eingegliederten Staat, wenn es das Monument nicht selbst errichtet hat. Eine Säule, ein Obelisk, eine Statue oder eine Stele wird ganz fortgeschafft; ein Triumphbogen, ein Tor oder ein Turm verliert ein Viertel seiner Stufen; eine Halle, ein Mausoleum oder ein ziviles Bauwerk ein Zehntel. Ein Großer Schrein wird nie genommen, und ein Monument, das ein Stück verliert, wird zehn Jahre lang verschont. Ein Monument in einem Krieg zu nehmen kostet [concept_infamy] und Beziehungen und stärkt den Kriegswillen seines Eigentümers."
  },
  "gm_je_how_trophies_home": {
   "en": "A trophy stands in its taker's capital and counts for half its grandeur in standing grandeur, and the Armed Forces approve. Whoever owns the state it came from can get it back: occupy the state where it stands and carry it off, demand it with the Return Cultural Property treaty article (a war can enforce it), or wait for its holder to send it back. At home all its levels are rebuilt and its years come back with it, and the Homecoming gives legitimacy for ten years.",
@@ -16033,7 +16033,7 @@
  },
  "gm_tr_take_occupation_tt": {
   "en": "Carry off #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels to our capital, where they count for #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] and please the Armed Forces. We gain #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], relations with its owner fall by 30, and its people's war support rises by 10.",
-  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt fortschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Wir erhalten #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und die Kriegsunterstützung seiner Bevölkerung steigt um 10."
+  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt fortschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Wir erhalten #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und der Kriegswille seiner Bevölkerung steigt um 10."
  },
  "gm_tr_take_own_tt": {
   "en": "Carry off #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels to our capital, where they count for #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] and please the Armed Forces. A tenth of the state's people turn radical, and the country we took the state from, if it still stands, is angered.",
@@ -19089,7 +19089,7 @@
  },
  "nd_taboo_civil_defence_desc": {
   "en": "Shelters, sirens and drills. For ten years an enemy's arsenal drains our war support half as fast.",
-  "de": "Bunker, Sirenen und Übungen. Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserer Kriegsunterstützung."
+  "de": "Bunker, Sirenen und Übungen. Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserem Kriegswillen."
  },
  "nd_taboo_dismantle_note_on": {
   "en": "\\n\\nDismantling: #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! months left, #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! warheads taken apart this month.",
@@ -19329,7 +19329,7 @@
  },
  "nd_taboo_tt_shelters_war_support": {
   "en": "For ten years, an enemy's arsenal drains our war support half as fast",
-  "de": "Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserer Kriegsunterstützung"
+  "de": "Zehn Jahre lang zehrt das Arsenal eines Feindes nur halb so schnell an unserem Kriegswillen"
  },
  "nd_taboo_tt_strike_answer": {
   "en": "An answer to a nuclear strike: #G no#! [concept_infamy]. The nuclear taboo, now #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!, still falls — by half what a first use would cost it.",
@@ -19669,11 +19669,11 @@
  },
  "nd_tt_cwr_back_gov": {
   "en": "[SCOPE.sCountry('nd_cwr_gov').GetName]'s war support in its civil war #G +5#!",
-  "de": "Die Kriegsunterstützung [SCOPE.sCountry('nd_cwr_gov').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
+  "de": "Der Kriegswille [SCOPE.sCountry('nd_cwr_gov').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
  },
  "nd_tt_cwr_back_rebels": {
   "en": "[SCOPE.sCountry('nd_cwr_reb').GetName]'s war support in its civil war #G +5#!",
-  "de": "Die Kriegsunterstützung [SCOPE.sCountry('nd_cwr_reb').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
+  "de": "Der Kriegswille [SCOPE.sCountry('nd_cwr_reb').GetAltName('GEN')] in ihrem Bürgerkrieg #G +5#!"
  },
  "nd_tt_cwr_offer": {
   "en": "[SCOPE.sCountry('nd_cwr_gov').GetName] is offered our technicians and money to guard and count its warheads for as long as the war lasts. If it accepts, #G half#! as many of its warheads go missing whenever they change hands, and it may let us take them apart without losing one",
@@ -20273,7 +20273,7 @@
  },
  "nd_tt_standdown_terms": {
   "en": "Both sides stand down to #v Routine#!, held there for #v 24#! months, and pledge never to use nuclear weapons on each other; renouncing that pledge later costs #R 15#! credibility and #R 5#! infamy. The war or play goes on",
-  "de": "Beide Seiten stufen auf #v Routine#! zurück, bleiben dort #v 24#! Monate und verpflichten sich, niemals Nuklearwaffen gegeneinander einzusetzen; dieses Versprechen später zu widerrufen kostet #R 15#! Glaubwürdigkeit und #R 5#! Infamie. Der Krieg oder das Vorhaben geht weiter"
+  "de": "Beide Seiten stufen auf #v Routine#! zurück, bleiben dort #v 24#! Monate und verpflichten sich, niemals Nuklearwaffen gegeneinander einzusetzen; dieses Versprechen später zu widerrufen kostet #R 15#! Glaubwürdigkeit und #R 5#! Verrufenheit. Der Krieg oder das Vorhaben geht weiter"
  },
  "nd_tt_strain_down_20": {
   "en": "#v Crew strain#! falls by #G 20#!",
@@ -20309,7 +20309,7 @@
  },
  "nd_tt_talks_terms": {
   "en": "If they accept, both sides stand down to #v Routine#!, held there for #v 24#! months, and pledge never to use nuclear weapons on each other; renouncing that pledge later costs #R 15#! credibility and #R 5#! infamy. The war or play goes on",
-  "de": "Stimmen sie zu, stufen beide Seiten auf #v Routine#! zurück, bleiben dort #v 24#! Monate und verpflichten sich, niemals Nuklearwaffen gegeneinander einzusetzen; dieses Versprechen später zu widerrufen kostet #R 15#! Glaubwürdigkeit und #R 5#! Infamie. Der Krieg oder das Vorhaben geht weiter"
+  "de": "Stimmen sie zu, stufen beide Seiten auf #v Routine#! zurück, bleiben dort #v 24#! Monate und verpflichten sich, niemals Nuklearwaffen gegeneinander einzusetzen; dieses Versprechen später zu widerrufen kostet #R 15#! Glaubwürdigkeit und #R 5#! Verrufenheit. Der Krieg oder das Vorhaben geht weiter"
  },
  "nd_tt_then_back_down_private": {
   "en": "The outcome notice that follows settles our reputation: our [Concept('concept_nuclear_credibility','credibility')] falls by #R 5#!. Nothing was public, so nothing else",
@@ -20365,7 +20365,7 @@
  },
  "nd_tt_umbrella_withdrawn": {
   "en": "They are no longer under our nuclear umbrella: our arsenal no longer lifts the nuclear shadow from their war support or weighs in a crisis against them, and we are no longer asked to answer threats against them. While this stands their #v liberty desire#! grows by #R 0.1#! a week",
-  "de": "Sie stehen nicht mehr unter unserem nuklearen Schutzschirm: unser Arsenal nimmt ihrer Kriegsunterstützung nicht mehr den nuklearen Schatten und fällt in einer Krise gegen sie nicht mehr ins Gewicht, und wir werden nicht mehr aufgefordert, auf Drohungen gegen sie zu reagieren. Solange das gilt, wächst ihr #v Freiheitsdrang#! um #R 0,1#! pro Woche"
+  "de": "Sie stehen nicht mehr unter unserem nuklearen Schutzschirm: unser Arsenal nimmt ihrem Kriegswillen nicht mehr den nuklearen Schatten und fällt in einer Krise gegen sie nicht mehr ins Gewicht, und wir werden nicht mehr aufgefordert, auf Drohungen gegen sie zu reagieren. Solange das gilt, wächst ihr #v Freiheitsdrang#! um #R 0,1#! pro Woche"
  },
  "nd_tt_war_law_permits_strike": {
   "en": "No law of ours forbids a strategic nuclear strike (#v $law_humanitarian_regulations$#! and #v $law_limited_war$#! do) — unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting",
@@ -20957,7 +20957,7 @@
  },
  "nd_w_reputation_legend": {
   "en": "Aggression is a separate reputation from reliability: infamy records the first, credibility the second.",
-  "de": "Aggression ist ein eigenständiger Ruf, getrennt von Verlässlichkeit: Infamie erfasst das eine, Glaubwürdigkeit das andere."
+  "de": "Aggression ist ein eigenständiger Ruf, getrennt von Verlässlichkeit: Verrufenheit erfasst das eine, Glaubwürdigkeit das andere."
  },
  "nd_w_risk_label": {
   "en": "Incident exposure",
@@ -31057,7 +31057,7 @@
  },
  "te_demog_wf_womens_desc_full": {
   "en": "How far women's rights and the technologies that free women's time bring women into paid work. The demographic census counts it toward the share of a state's women of working age who work, which reaches the men's share at #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_womens_work_full')|+%0]#! in all. Until the census first counts a state, it applies there as plain $state_working_adult_ratio_add$.",
-  "de": "Wie weit Frauenrechte und die Technologien, die Frauen Zeit verschaffen, Frauen in die Erwerbsarbeit bringen. Die demografische Volkszählung rechnet diesen Effekt dem Anteil der Frauen im erwerbsfähigen Alter an, die in einem Staat arbeiten; bei insgesamt #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_womens_work_full')|+%0]#! erreicht dieser Anteil den der Männer. Bis die Volkszählung einen Staat zum ersten Mal zählt, wirkt der Effekt dort unverändert als $state_working_adult_ratio_add$."
+  "de": "Wie weit Frauenrechte und die Technologien, die Frauen Zeit verschaffen, Frauen in die Erwerbsarbeit bringen. Die demografische Volkszählung rechnet diesen Effekt dem Anteil der Frauen im Erwerbsalter an, die in einem Staat arbeiten; bei insgesamt #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_womens_work_full')|+%0]#! erreicht dieser Anteil den der Männer. Bis die Volkszählung einen Staat zum ersten Mal zählt, wirkt der Effekt dort unverändert als $state_working_adult_ratio_add$."
  },
  "te_demog_wf_womens_desc_plain": {
   "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it reads this effect as women's work instead.",
@@ -33949,7 +33949,7 @@
  },
  "te_seabed_how_weight": {
   "en": "In a basin where we have coastal states, our weight is twice those states, plus their port levels, plus our [Concept('concept_naval_power_projection','naval power projection')] divided by [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], in proportion to our coast there; an unincorporated state counts half, its ports in full. Anywhere else it is a twentieth of that naval power projection term, so a distant claim is small but never barred. An Antarctic research station adds [GetPlayer.MakeScope.ScriptValue('te_seabed_station_weight')|0] in the Southern basin.",
-  "de": "In einem Becken, in dem wir Küstenstaaten haben, entspricht unser Gewicht dem Doppelten der Zahl dieser Staaten, plus ihren Hafenstufen, plus unserer [Concept('concept_naval_power_projection','Seemachtprojektion')] geteilt durch [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], im Verhältnis zu unserer Küste dort; ein nicht inkorporierter Staat zählt zur Hälfte, seine Häfen voll. Überall sonst beträgt es ein Zwanzigstel dieses Seemachtprojektions-Anteils, sodass ein ferner Anspruch klein, aber nie ausgeschlossen ist. Eine Antarktis-Forschungsstation fügt im Becken des Südpolarmeers [GetPlayer.MakeScope.ScriptValue('te_seabed_station_weight')|0] hinzu."
+  "de": "In einem Becken, in dem wir Küstenstaaten haben, entspricht unser Gewicht dem Doppelten der Zahl dieser Staaten, plus ihren Hafenstufen, plus unserer [Concept('concept_naval_power_projection','Marine-Machtprojektion')] geteilt durch [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], im Verhältnis zu unserer Küste dort; ein nicht inkorporierter Staat zählt zur Hälfte, seine Häfen voll. Überall sonst beträgt es ein Zwanzigstel dieses Marine-Machtprojektionsanteils, sodass ein ferner Anspruch klein, aber nie ausgeschlossen ist. Eine Antarktis-Forschungsstation fügt im Becken des Südpolarmeers [GetPlayer.MakeScope.ScriptValue('te_seabed_station_weight')|0] hinzu."
  },
  "te_seabed_lease_antarctic_tt": {
   "en": "Neither country is barred from Southern claims by the Antarctic Treaty",
@@ -34145,7 +34145,7 @@
  },
  "te_seabed_ov_policy_tt": {
   "en": "Our seabed policy multiplies our claim weight in every basin: ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_survey')|2] under Scientific Survey, ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_sponsor')|0] under Sponsor Contractors and Unilateral Licensing, which also counts our naval power projection twice. A new policy's weight counts from the next sharing; its [concept_influence] from the day it is chosen. It holds #R [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_cost_value')|0]#! [concept_influence] now.\\nAny change holds the policy for #v 5#! years: next change from #v [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_unlock_year_disp')|0]#!. We may switch to Unilateral Licensing sooner if a rival in one of our home basins has switched to it since our last change, and drop to Scientific Survey sooner while our [concept_influence] is in deficit.",
-  "de": "Unsere Meeresbodenpolitik multipliziert unser Anspruchsgewicht in jedem Becken: ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_survey')|2] bei Wissenschaftlicher Erkundung, ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_sponsor')|0] bei Auftragnehmer-Sponsoring und bei Einseitiger Lizenzvergabe, die zudem unsere Seemachtprojektion doppelt zählt. Das Gewicht einer neuen Politik zählt ab der nächsten Aufteilung, die Bindung von [concept_influence] ab dem Tag der Wahl. Derzeit bindet sie #R [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_cost_value')|0]#! [concept_influence].\\nJede Änderung bindet die Politik für #v 5#! Jahre: nächste Änderung ab #v [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_unlock_year_disp')|0]#!. Wir dürfen früher zur Einseitigen Lizenzvergabe wechseln, wenn ein Rivale in einem unserer Heimatbecken seit unserer letzten Änderung dorthin gewechselt ist, und früher zur Wissenschaftlichen Erkundung zurückfallen, solange bei [concept_influence] ein Defizit besteht."
+  "de": "Unsere Meeresbodenpolitik multipliziert unser Anspruchsgewicht in jedem Becken: ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_survey')|2] bei Wissenschaftlicher Erkundung, ×[GetPlayer.MakeScope.ScriptValue('te_seabed_policy_factor_sponsor')|0] bei Auftragnehmer-Sponsoring und bei Einseitiger Lizenzvergabe, die zudem unsere Marine-Machtprojektion doppelt zählt. Das Gewicht einer neuen Politik zählt ab der nächsten Aufteilung, die Bindung von [concept_influence] ab dem Tag der Wahl. Derzeit bindet sie #R [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_cost_value')|0]#! [concept_influence].\\nJede Änderung bindet die Politik für #v 5#! Jahre: nächste Änderung ab #v [GetPlayer.MakeScope.ScriptValue('te_seabed_policy_unlock_year_disp')|0]#!. Wir dürfen früher zur Einseitigen Lizenzvergabe wechseln, wenn ein Rivale in einem unserer Heimatbecken seit unserer letzten Änderung dorthin gewechselt ist, und früher zur Wissenschaftlichen Erkundung zurückfallen, solange bei [concept_influence] ein Defizit besteht."
  },
  "te_seabed_ov_regime_cap": {
   "en": "Regime",

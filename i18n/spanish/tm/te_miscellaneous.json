@@ -24721,7 +24721,7 @@
  },
  "st_res_military_stockpile_sgui_effect_tt": {
   "en": "#bold Stockpile Military Goods:#! puts $ammunition$, $oil$, $small_arms$, $artillery$, $aeroplanes$ and $tanks$ on the Stockpile policy with the Stockpile preset, so they are bought at about base price in peacetime and sold into a war's price spike. Goods you have not unlocked are left alone.",
-  "es": "#bold Acopiar bienes militares:#! pone $ammunition$, $oil$, $small_arms$, $artillery$, $aeroplanes$ y $tanks$ en la política de Acopio con el ajuste predefinido de Acopio, de modo que se compran a un precio cercano al precio base en tiempos de paz y se venden cuando los precios se disparan en una guerra. Los bienes que no has desbloqueado no se tocan."
+  "es": "#bold Acumular bienes militares:#! pone $ammunition$, $oil$, $small_arms$, $artillery$, $aeroplanes$ y $tanks$ en la política Acumular con el ajuste predefinido Acumular, de modo que se compran a un precio cercano al precio base en tiempos de paz y se venden cuando los precios se disparan en una guerra. Los bienes que no has desbloqueado no se tocan."
  },
  "st_res_mode_blocked": {
   "en": "#R Blocked#!",
@@ -24833,7 +24833,7 @@
  },
  "st_res_panel_military_stockpile": {
   "en": "Military: Stockpile",
-  "es": "Militar: Acopio"
+  "es": "Militar: Acumular"
  },
  "st_res_panel_reset_rates": {
   "en": "Reset Rates",
@@ -24933,7 +24933,7 @@
  },
  "st_res_policy_label_ramp_tt": {
   "en": "#bold Response ramp#!, in percentage points past a threshold: how far past it the policy reaches its maximum weekly flow. At 0 it runs at full flow as soon as the price crosses. Stockpile buys at full flow whatever the ramp; the ramp shapes only its releases.",
-  "es": "#bold Rampa de respuesta#!, en puntos porcentuales más allá de un umbral: a qué distancia del umbral alcanza la política su flujo semanal máximo. Con 0, funciona a pleno flujo en cuanto el precio lo cruza. Acopio compra a pleno flujo sea cual sea la rampa; la rampa solo modula sus liberaciones."
+  "es": "#bold Rampa de respuesta#!, en puntos porcentuales más allá de un umbral: a qué distancia del umbral alcanza la política su flujo semanal máximo. Con 0, funciona a pleno flujo en cuanto el precio lo cruza. Acumular compra a pleno flujo sea cual sea la rampa; la rampa solo modula sus liberaciones."
  },
  "st_res_policy_label_ramp_up_tooltip": {
   "en": "#bold Soften the response#!\\nSpread the response over a wider price range: the flow rises from nothing at the threshold to the maximum this many points beyond it, so the reserve leans harder the further the price strays and eases off as it recovers. With a ramp above 0 the hysteresis band is not used — the response is already continuous.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_ramp_step')|0].\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]",
@@ -25001,7 +25001,7 @@
  },
  "st_res_policy_reason_holding": {
   "en": "#Y Holding#! — above your release threshold, but a stockpile at peace sells only far above base price.",
-  "es": "#Y Reteniendo#! — por encima de tu umbral de liberación, pero en tiempo de paz el Acopio solo vende muy por encima del precio base."
+  "es": "#Y Reteniendo#! — por encima de tu umbral de liberación, pero en tiempo de paz la política Acumular solo vende muy por encima del precio base."
  },
  "st_res_policy_reason_manual": {
   "en": "#Y Manual control#! — you set this good's rate by hand.",
@@ -25073,7 +25073,7 @@
  },
  "st_res_policy_stockpile_tooltip": {
   "en": "#bold Stockpile#!\\nFor goods you want in hand before a war. Each week, buy into the reserve while the averaged national market price is at or below your purchase threshold, at the full maximum weekly flow until the target stockpile is reached. Once buying, it carries on until the price rises [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_buy_band')|0] points past the threshold. At war, sell above your release threshold. In peacetime, sell only above +[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_stockpile_peace_release')|0]%, or above your release threshold if that is higher.\\nChoosing it loads the Stockpile preset.\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]",
-  "es": "#bold Acopio#!\\nPara los bienes que quieres tener a mano antes de una guerra. Cada semana, compra para la reserva mientras el precio promedio del mercado nacional esté en tu umbral de compra o por debajo, al flujo semanal máximo completo hasta alcanzar las existencias objetivo. Una vez que empieza a comprar, sigue hasta que el precio sube [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_buy_band')|0] puntos por encima del umbral. En guerra, vende por encima de tu umbral de liberación. En tiempo de paz, solo vende por encima de +[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_stockpile_peace_release')|0]%, o de tu umbral de liberación si este es mayor.\\nAl elegirla se carga el ajuste predefinido de Acopio.\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+  "es": "#bold Acumular#!\\nPara los bienes que quieres tener a mano antes de una guerra. Cada semana, compra para la reserva mientras el precio promedio del mercado nacional esté en tu umbral de compra o por debajo, al flujo semanal máximo completo hasta alcanzar las existencias objetivo. Una vez que empieza a comprar, sigue hasta que el precio sube [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_buy_band')|0] puntos por encima del umbral. En guerra, vende por encima de tu umbral de liberación. En tiempo de paz, solo vende por encima de +[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_stockpile_peace_release')|0]%, o de tu umbral de liberación si este es mayor.\\nAl elegirla se carga el ajuste predefinido Acumular.\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
  },
  "st_res_preset_aggressive": {
   "en": "Aggressive",
@@ -25105,11 +25105,11 @@
  },
  "st_res_preset_stockpile": {
   "en": "Stockpile",
-  "es": "Acopio"
+  "es": "Acumular"
  },
  "st_res_preset_stockpile_tooltip": {
   "en": "#bold Stockpile#!\\nThe Stockpile policy's settings.\\nBuy at or below: #v +5%#!\\nRelease above: #v +20%#!, at war\\nMaximum weekly flow: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_flow_pct')|0]%#! of capacity\\nWeekly purchase budget: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_budget_pct')|1]%#! of weekly GDP\\nPrice memory: #v 4#! weeks\\nResponse ramp: #v 10#! points, releases only\\n#italic Choosing the Stockpile policy loads it.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]",
-  "es": "#bold Acopio#!\\nLos ajustes de la política de Acopio.\\nComprar en o por debajo de: #v +5%#!\\nLiberar por encima de: #v +20%#!, en guerra\\nFlujo semanal máximo: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_flow_pct')|0]%#! de la capacidad\\nPresupuesto semanal de compras: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_budget_pct')|1]%#! del PIB semanal\\nMemoria de precios: #v 4#! semanas\\nRampa de respuesta: #v 10#! puntos, solo en las liberaciones\\n#italic Al elegir la política de Acopio se carga este ajuste.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+  "es": "#bold Acumular#!\\nLos ajustes de la política Acumular.\\nComprar en o por debajo de: #v +5%#!\\nLiberar por encima de: #v +20%#!, en guerra\\nFlujo semanal máximo: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_flow_pct')|0]%#! de la capacidad\\nPresupuesto semanal de compras: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_preset_stockpile_budget_pct')|1]%#! del PIB semanal\\nMemoria de precios: #v 4#! semanas\\nRampa de respuesta: #v 10#! puntos, solo en las liberaciones\\n#italic Al elegir la política Acumular se carga este ajuste.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
  },
  "st_res_rate_adjustment_possible": {
   "en": "Stays within the [concept_st_res_flow_cap] and the stockpile's remaining room",
@@ -30285,7 +30285,7 @@
  },
  "te_demog_up_eff_display": {
   "en": "#lore Under the Full Demographics rule, a largest city with 25% or more of the urban people would work its $building_urban_center$ and $building_university$ at a larger scale and draw more migrants, and the other states would lose migrants and grow restless, more as its share rises, and more slowly past 50%.#!",
-  "es": "#lore Con la regla Completa de Demografía, una ciudad más grande con el 25% o más de la gente urbana trabajaría su $building_urban_center$ y su $building_university$ a mayor escala y atraería a más migrantes, y los demás estados perderían migrantes y se inquietarían, más cuanto mayor fuera su proporción, y más despacio a partir del 50%.#!"
+  "es": "#lore Con la regla de Demografía completa, una ciudad más grande con el 25% o más de la gente urbana trabajaría su $building_urban_center$ y su $building_university$ a mayor escala y atraería a más migrantes, y los demás estados perderían migrantes y se inquietarían, más cuanto mayor fuera su proporción, y más despacio a partir del 50%.#!"
  },
  "te_demog_up_eff_few": {
   "en": "#b Effects:#! none. A country of fewer than three states has no urban hierarchy to speak of.",
@@ -30845,7 +30845,7 @@
  },
  "te_demog_wk_buttons_full_only": {
   "en": "Pension settings act only under the Full Demographics rule.",
-  "es": "Los ajustes de pensiones solo actúan con la regla Completa de Demografía."
+  "es": "Los ajustes de pensiones solo actúan con la regla de Demografía completa."
  },
  "te_demog_wk_buttons_term": {
   "en": "The setting chosen in #v [Country.MakeScope.ScriptValue('te_demog_pension_since_year')|0]#! holds until #v [Country.MakeScope.ScriptValue('te_demog_pension_term_end_year')|0]#!.",
@@ -30877,7 +30877,7 @@
  },
  "te_demog_wk_need_no_bill": {
   "en": "#grey Outside the Full Demographics rule it changes no cost.#!",
-  "es": "#grey Fuera de la regla Completa de Demografía no cambia ningún coste.#!"
+  "es": "#grey Fuera de la regla de Demografía completa no cambia ningún coste.#!"
  },
  "te_demog_wk_need_saving": {
   "en": "The country's people are younger than the world of 1836, so the $institution_health_system$ costs #v [Country.MakeScope.ScriptValue('te_demog_health_term_saving')|%0]#! less bureaucracy: need #v [Country.MakeScope.ScriptValue('te_demog_health_need_term')|+%0]#!, treating chronic illness #v [Country.MakeScope.ScriptValue('te_demog_health_tech_term')|+%0]#!. Set at each census.",
@@ -30893,7 +30893,7 @@
  },
  "te_demog_wk_not_full": {
   "en": "#grey Outside the Full Demographics rule these figures change nothing: the workforce follows the game's own rules.#!",
-  "es": "#grey Fuera de la regla Completa de Demografía estas cifras no cambian nada: la mano de obra sigue las reglas propias del juego.#!"
+  "es": "#grey Fuera de la regla de Demografía completa estas cifras no cambian nada: la mano de obra sigue las reglas propias del juego.#!"
  },
  "te_demog_wk_pending": {
   "en": "#grey Work figures arrive with the next census.#!",
@@ -36241,11 +36241,11 @@
  },
  "un_teeth_embargo_all_tt": {
   "en": "At the Supranational tier, sanctions are also a universal embargo: every member of [concept_major_power] rank with [concept_diplomatic_relevancy] to the target, however it voted, #R sees its relations with the target fall by 30, and places an [concept_embargo] on it#! wherever relations are then Poor or worse. Each embargo costs its member influence and trade, and a member that breaks one while the sanctions stand, when it could have kept it, is busting them.",
-  "es": "En el nivel Supranacional, las sanciones son además un embargo universal: todo miembro con rango de [concept_major_power|l] y con [concept_diplomatic_relevancy|l] respecto al objetivo, haya votado lo que haya votado, #R ve cómo sus relaciones con el objetivo caen en 30 y le impone un [concept_embargo|l]#! allí donde las relaciones sean entonces malas o peores. Cada embargo cuesta influencia y comercio a su miembro, y un miembro que rompe uno mientras las sanciones siguen vigentes, cuando podría haberlo mantenido, las está eludiendo."
+  "es": "En la categoría Supranacional, las sanciones son además un embargo universal: todo miembro con rango de [concept_major_power|l] y con [concept_diplomatic_relevancy|l] respecto al objetivo, haya votado lo que haya votado, #R ve cómo sus relaciones con el objetivo caen en 30 y le impone un [concept_embargo|l]#! allí donde las relaciones sean entonces malas o peores. Cada embargo cuesta influencia y comercio a su miembro, y un miembro que rompe uno mientras las sanciones siguen vigentes, cuando podría haberlo mantenido, las está eludiendo."
  },
  "un_teeth_embargo_voters_tt": {
   "en": "At the Strong tier, sanctions are also an embargo: every member of [concept_major_power] rank that voted for them and has [concept_diplomatic_relevancy] to the target #R sees its relations with the target fall by 30, and places an [concept_embargo] on it#! wherever relations are then Poor or worse. Each embargo costs its member influence and trade, and a member that breaks one while the sanctions stand, when it could have kept it, is busting them.",
-  "es": "En el nivel Fuerte, las sanciones son además un embargo: todo miembro con rango de [concept_major_power|l] que votó a favor y tiene [concept_diplomatic_relevancy|l] respecto al objetivo #R ve cómo sus relaciones con el objetivo caen en 30 y le impone un [concept_embargo|l]#! allí donde las relaciones sean entonces malas o peores. Cada embargo cuesta influencia y comercio a su miembro, y un miembro que rompe uno mientras las sanciones siguen vigentes, cuando podría haberlo mantenido, las está eludiendo."
+  "es": "En la categoría Fuerte, las sanciones son además un embargo: todo miembro con rango de [concept_major_power|l] que votó a favor y tiene [concept_diplomatic_relevancy|l] respecto al objetivo #R ve cómo sus relaciones con el objetivo caen en 30 y le impone un [concept_embargo|l]#! allí donde las relaciones sean entonces malas o peores. Cada embargo cuesta influencia y comercio a su miembro, y un miembro que rompe uno mientras las sanciones siguen vigentes, cuando podría haberlo mantenido, las está eludiendo."
  },
  "un_trade_arbitration_modifier": {
   "en": "Trade Arbitration Accepted",

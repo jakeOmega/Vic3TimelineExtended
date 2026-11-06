@@ -11433,7 +11433,7 @@
  },
  "modern_election_events.32.d": {
   "en": "Citizens of [ROOT.GetCountry.GetNameNoFlag] living in orbital habitats and off-world colonies have transmitted a formal demand for electoral representation. They contribute taxes, serve in the military, and maintain their citizenship — yet they cannot cast a ballot that counts. The campaign must now grapple with a question the founders never anticipated: does democracy extend beyond the atmosphere?",
-  "de": "Bürger [ROOT.GetCountry.GetAltNameNoFlag('GEN')], die in Orbitalhabitaten und außerirdischen Kolonien leben, haben eine formelle Forderung nach Wahlvertretung übermittelt. Sie zahlen Steuern, dienen in den Streitkräften und behalten ihre Staatsbürgerschaft – doch sie können keine zählende Stimme abgeben. Der Wahlkampf muss sich nun mit einer Frage auseinandersetzen, die die Gründerväter nie vorhergesehen haben: Reicht die Demokratie über die Atmosphäre hinaus?"
+  "de": "Bürger [ROOT.GetCountry.GetAltNameNoFlag('GEN')], die in Orbitalhabitaten und außerplanetaren Kolonien leben, haben eine formelle Forderung nach Wahlvertretung übermittelt. Sie zahlen Steuern, dienen in den Streitkräften und behalten ihre Staatsbürgerschaft – doch sie können keine zählende Stimme abgeben. Der Wahlkampf muss sich nun mit einer Frage auseinandersetzen, die die Gründerväter nie vorhergesehen haben: Reicht die Demokratie über die Atmosphäre hinaus?"
  },
  "modern_election_events.32.f": {
   "en": "\\\"The petition arrived from the orbital habitat this morning.\\\"\\n\\n\\\"What does it ask?\\\"\\n\\n\\\"For the vote. They have citizenship. They pay taxes. Their children attend the same schools as our children, via the satellite link. They cannot cast a ballot. They are asking why. We do not have a good answer.\\\"",
@@ -20693,7 +20693,7 @@
  },
  "space_race_events.53.a": {
   "en": "Fully integrate off-world industry with the program.",
-  "de": "Die außerirdische Industrie vollständig in das Programm integrieren."
+  "de": "Die außerplanetare Industrie vollständig in das Programm integrieren."
  },
  "space_race_events.53.b": {
   "en": "Keep mining and exploration as separate programs.",
@@ -20709,7 +20709,7 @@
  },
  "space_race_events.53.t": {
   "en": "Off-World Industry Meets the Space Program",
-  "de": "Außerirdische Industrie trifft auf das Raumfahrtprogramm"
+  "de": "Außerplanetare Industrie trifft auf das Raumfahrtprogramm"
  },
  "space_race_events.54.a": {
   "en": "Ablative heat shield: proven, expendable.",
@@ -21345,7 +21345,7 @@
  },
  "space_race_events.81.d": {
   "en": "Our probe is ready for its journey beyond Earth orbit. Three targets have been proposed. Venus, shrouded in clouds, could reveal whether a runaway greenhouse effect awaits our own world. Mars, with its ancient riverbeds and polar ice, is the most likely candidate for past life. The asteroid belt offers navigational and prospecting data that could accelerate future off-world industry.",
-  "de": "Unsere Sonde ist bereit für ihre Reise jenseits des Erdorbits. Drei Ziele wurden vorgeschlagen. Die Venus, in Wolken gehüllt, könnte offenbaren, ob unserer eigenen Welt ein außer Kontrolle geratener Treibhauseffekt bevorsteht. Der Mars, mit seinen uralten Flussbetten und Polkappen aus Eis, ist der wahrscheinlichste Kandidat für früheres Leben. Der Asteroidengürtel bietet Navigations- und Erkundungsdaten, die eine künftige außerirdische Industrie beschleunigen könnten."
+  "de": "Unsere Sonde ist bereit für ihre Reise jenseits des Erdorbits. Drei Ziele wurden vorgeschlagen. Die Venus, in Wolken gehüllt, könnte offenbaren, ob unserer eigenen Welt ein außer Kontrolle geratener Treibhauseffekt bevorsteht. Der Mars, mit seinen uralten Flussbetten und Polkappen aus Eis, ist der wahrscheinlichste Kandidat für früheres Leben. Der Asteroidengürtel bietet Navigations- und Erkundungsdaten, die eine künftige außerplanetare Industrie beschleunigen könnten."
  },
  "space_race_events.81.f": {
   "en": "\\\"Venus will teach us about our past. Mars will teach us about our future. The asteroids will teach us about our bank accounts.\\\"\\n\\n— Planetary Science Advisory Panel",

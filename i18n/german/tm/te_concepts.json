@@ -3665,7 +3665,7 @@
  },
  "concept_sr_module_desc": {
   "en": "A colony's equipment, built in queue order by the Space Program's Module Fabrication method, #v 100#! points a module, and shipped from Earth in its site's [concept_sr_launch_window]; it is installed for whoever holds the site when it lands. A colony's two specializations share four levels, and its Habitats, Spaceports, Defenses and facilities share its slots: #v 1#! to #v 4#! by its size, #v +1#! each with $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ and $molecular_assemblers$, and up to #v 4#! past them at #v 100#! points more than the last. The facilities each give their bonus a staffed level: a Mining Complex (Extraplanetary Base room), an Orbital Yard (fabrication and ships), a Research Station, a Cultural Center, an Off-World Resort, a Black Site, a Training Ground, a Nuclear Command Center, a Materials Foundry and an Administration (less autonomy). Every level past the first needs a crew of 5,000 of the colony's people, except Habitats, which house the crews; an understaffed colony's specializations and facilities give that share of their bonus. Spaceports and Defenses serve and fight [concept_sr_space_fleet]s, so they work only under Full Colonies.",
-  "de": "Die Ausrüstung einer Kolonie, in Warteschlangenreihenfolge von der Methode Modulfertigung des Raumfahrtprogramms gebaut, #v 100#! Punkte pro Modul, und von der Erde im [concept_sr_launch_window] ihres Standorts geliefert; sie wird für den installiert, der den Standort hält, wenn sie landet. Die zwei Spezialisierungen einer Kolonie teilen sich vier Stufen, und ihre Habitate, Raumhäfen, Verteidigungsanlagen und Einrichtungen teilen sich ihre Plätze: #v 1#! bis #v 4#! je nach Größe, jeweils #v +1#! mit $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ und $molecular_assemblers$, und bis zu #v 4#! darüber hinaus zu je #v 100#! Punkten mehr als der letzte. Die Einrichtungen geben ihren Bonus je besetzter Stufe: ein Bergbaukomplex (Raum des Außerplanetaren Stützpunkts), eine Orbitalwerft (Fertigung und Schiffe), eine Forschungsstation, ein Kulturzentrum, ein Außerirdisches Resort, eine Geheimanlage, ein Übungsgelände, eine Nuklearkommandozentrale, eine Materialgießerei und eine Verwaltung (weniger Autonomie). Jede Stufe nach der ersten braucht eine Besatzung von 5.000 Menschen der Kolonie, außer Habitaten, die die Besatzungen beherbergen; die Spezialisierungen und Einrichtungen einer unterbesetzten Kolonie geben diesen Anteil ihres Bonus. Raumhäfen und Verteidigungsanlagen bedienen und bekämpfen [Concept('concept_sr_space_fleet', 'Weltraumflotten')], daher funktionieren sie nur bei „Volle Kolonien“."
+  "de": "Die Ausrüstung einer Kolonie, in Warteschlangenreihenfolge von der Methode Modulfertigung des Raumfahrtprogramms gebaut, #v 100#! Punkte pro Modul, und von der Erde im [concept_sr_launch_window] ihres Standorts geliefert; sie wird für den installiert, der den Standort hält, wenn sie landet. Die zwei Spezialisierungen einer Kolonie teilen sich vier Stufen, und ihre Habitate, Raumhäfen, Verteidigungsanlagen und Einrichtungen teilen sich ihre Plätze: #v 1#! bis #v 4#! je nach Größe, jeweils #v +1#! mit $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ und $molecular_assemblers$, und bis zu #v 4#! darüber hinaus zu je #v 100#! Punkten mehr als der letzte. Die Einrichtungen geben ihren Bonus je besetzter Stufe: ein Bergbaukomplex (Raum des Außerplanetaren Stützpunkts), eine Orbitalwerft (Fertigung und Schiffe), eine Forschungsstation, ein Kulturzentrum, ein Außerplanetares Resort, eine Geheimanlage, ein Übungsgelände, eine Nuklearkommandozentrale, eine Materialgießerei und eine Verwaltung (weniger Autonomie). Jede Stufe nach der ersten braucht eine Besatzung von 5.000 Menschen der Kolonie, außer Habitaten, die die Besatzungen beherbergen; die Spezialisierungen und Einrichtungen einer unterbesetzten Kolonie geben diesen Anteil ihres Bonus. Raumhäfen und Verteidigungsanlagen bedienen und bekämpfen [Concept('concept_sr_space_fleet', 'Weltraumflotten')], daher funktionieren sie nur bei „Volle Kolonien“."
  },
  "concept_sr_role_carrier_desc": {
   "en": "Troopships: fire #v 0.25#! on fleets and on Defenses, #v 12#! months of supply, and #v 2#! battalions of [concept_sr_marines] for each point of strength, to land at a colony and seize it.",
@@ -4029,7 +4029,7 @@
  },
  "concept_un_specialized_agencies_desc": {
   "en": "Standing organizations of the United Nations. Sixteen are founded when the General Assembly adopts the matching convention: WHO (pandemic response), UNESCO (heritage protection), UNHRC (human rights), IAEA (nuclear non-proliferation), UNEP (climate), UNHCR (refugees), UNOOSA (space cooperation), ITLOS (the law of the sea), the ICC (international criminal justice), the regime for the physical protection of nuclear material, the INCB (narcotics), the Convention on Cultural Diversity, the Treaty on the Prohibition of Nuclear Weapons, the ATS (the Antarctic Treaty), UNODA (the anti-satellite moratorium) and COPUOS (the settlement of outer space). The ICJ (international court) is founded when a country first accepts a World Court ruling against it. An agency stands for its convention: the convention's terms bind the members that ratify it, and some reach every country, member or not. Hover an agency in the overview for its terms. The ICJ has no effects of its own.",
-  "de": "Ständige Organisationen der Vereinten Nationen. Sechzehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Menschenrechte), die IAEO (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der IStGH (internationale Strafjustiz), das Regime für den physischen Schutz von Nuklearmaterial, der INCB (Suchtstoffe), die Konvention über kulturelle Vielfalt, der Vertrag über das Verbot von Nuklearwaffen, der ATS (der Antarktisvertrag), das UNODA (das Antisatellitenmoratorium) und das COPUOS (die Besiedlung des Weltraums). Der ICJ (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Internationalen Gerichtshofs gegen sich selbst akzeptiert. Eine Organisation steht für ihre Konvention: Die Bestimmungen der Konvention binden die Mitglieder, die sie ratifizieren, und einige reichen bis in jedes Land, ob Mitglied oder nicht. Bewegen Sie in der Übersicht den Mauszeiger über eine Organisation, um ihre Bestimmungen zu sehen. Der ICJ hat keine eigenen Wirkungen."
+  "de": "Ständige Organisationen der Vereinten Nationen. Sechzehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Menschenrechte), die IAEO (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der IStGH (internationale Strafjustiz), das Regime für den physischen Schutz von Nuklearmaterial, der INCB (Suchtstoffe), die Konvention über kulturelle Vielfalt, der Vertrag über das Verbot von Nuklearwaffen, der ATS (der Antarktisvertrag), das UNODA (das Antisatellitenmoratorium) und das COPUOS (die Besiedlung des Weltraums). Der IGH (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Internationalen Gerichtshofs gegen sich selbst akzeptiert. Eine Organisation steht für ihre Konvention: Die Bestimmungen der Konvention binden die Mitglieder, die sie ratifizieren, und einige reichen bis in jedes Land, ob Mitglied oder nicht. Bewegen Sie in der Übersicht den Mauszeiger über eine Organisation, um ihre Bestimmungen zu sehen. Der IGH hat keine eigenen Wirkungen."
  },
  "concept_un_standing": {
   "en": "International Standing",
@@ -6653,7 +6653,7 @@
  },
  "imposed_currency_peg_desc": {
   "en": "A currency peg a stronger power dictates rather than a weaker one chooses. The pegger takes the anchor's interest rate at a penalty spread, earns none of the credit standing a chosen discipline earns, and cannot simply walk away.",
-  "de": "Eine Währungsbindung, die eine stärkere Macht diktiert, statt dass eine schwächere sie wählt. Das bindende Land übernimmt den Zinssatz des Ankerlandes mit einem Strafaufschlag, erwirbt keine der Bonität, die eine freiwillige Disziplin einbringt, und kann sich nicht einfach zurückziehen."
+  "de": "Eine Währungsbindung, die eine stärkere Macht diktiert, statt dass eine schwächere sie wählt. Das bindende Land übernimmt den Zinssatz des Ankerlandes mit einem Strafaufschlag, erwirbt nichts von der Kreditwürdigkeit, die eine freiwillige Disziplin einbringt, und kann sich nicht einfach zurückziehen."
  },
  "imposed_currency_peg_effects_desc": {
   "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +1.0 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• Imports up to #v 80%#! of the anchor’s monetary credibility, but gets #R none#! of a voluntary peg’s #v 0.5-point#! structural risk-premium reduction.\\n• Overvaluation drains Peg Confidence and can force a currency crisis. In that crisis it #R cannot choose to abandon the peg#!: it must defend or devalue it.\\n#b Anchor:#! benefits from reserve-currency risk-premium relief, but has no bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate. War does not automatically end an imposed peg.",
@@ -7573,7 +7573,7 @@
  },
  "me_colonial_representation_modifier_desc": {
   "en": "Extending the vote to off-world colonists has enhanced our reputation but complicated governance.",
-  "de": "Die Ausweitung des Wahlrechts auf außerweltliche Kolonisten hat unser Ansehen gestärkt, die Regierungsführung aber erschwert."
+  "de": "Die Ausweitung des Wahlrechts auf außerplanetare Kolonisten hat unser Ansehen gestärkt, die Regierungsführung aber erschwert."
  },
  "me_cyber_defense_modifier_desc": {
   "en": "The government has quietly strengthened its cyber defense infrastructure against electoral interference.",
@@ -8625,7 +8625,7 @@
  },
  "nuclear_guarantee_effects_desc": {
   "en": "• The protected country no longer loses war support for facing a nuclear-armed enemy without weapons of its own.\\n• Countries threatening it must reckon with the guarantor's arsenal, and their pressure on it is weaker.\\n• The guarantor may issue nuclear warnings over attacks on the protected country, and is asked to honor the guarantee when it is threatened or struck — walking away costs it dearly with every country it protects.",
-  "de": "• Das geschützte Land verliert keine Kriegsunterstützung mehr dafür, einem atomar bewaffneten Feind ohne eigene Waffen gegenüberzustehen.\\n• Länder, die es bedrohen, müssen mit dem Arsenal des Garanten rechnen, und ihr Druck auf es fällt schwächer aus.\\n• Der Garant darf nukleare Warnungen wegen Angriffen auf das geschützte Land aussprechen und wird aufgefordert, die Garantie einzuhalten, wenn es bedroht oder getroffen wird – ein Rückzug kostet ihn bei jedem Land, das er schützt, teuer."
+  "de": "• Das geschützte Land verliert keinen Kriegswillen mehr dafür, einem atomar bewaffneten Feind ohne eigene Waffen gegenüberzustehen.\\n• Länder, die es bedrohen, müssen mit dem Arsenal des Garanten rechnen, und ihr Druck auf es fällt schwächer aus.\\n• Der Garant darf nukleare Warnungen wegen Angriffen auf das geschützte Land aussprechen und wird aufgefordert, die Garantie einzuhalten, wenn es bedroht oder getroffen wird – ein Rückzug kostet ihn bei jedem Land, das er schützt, teuer."
  },
  "nuclear_mobilization_modifier": {
   "en": "Nuclear Mobilization",
@@ -10593,7 +10593,7 @@
  },
  "sr_extraplanetary_commercial": {
   "en": "Commercial Off-World Industry",
-  "de": "Kommerzielle außerweltliche Industrie"
+  "de": "Kommerzielle außerplanetare Industrie"
  },
  "sr_extraplanetary_commercial_desc": {
   "en": "Extraplanetary mining operations stay a commercial enterprise, selling their output to the market instead of the space program, which lifts Extraplanetary Base output and advanced materials production.",
@@ -10601,7 +10601,7 @@
  },
  "sr_extraplanetary_integration": {
   "en": "Integrated Off-World Industry",
-  "de": "Integrierte außerweltliche Industrie"
+  "de": "Integrierte außerplanetare Industrie"
  },
  "sr_extraplanetary_integration_desc": {
   "en": "Extraplanetary mining operations supply the space program with materials, reducing costs and accelerating progress.",
@@ -10829,7 +10829,7 @@
  },
  "sr_offworld_population": {
   "en": "Off-World Population",
-  "de": "Bevölkerung außerhalb der Erde"
+  "de": "Außerplanetare Bevölkerung"
  },
  "sr_offworld_population_desc": {
   "en": "Our people living on other worlds lend the nation prestige and draw the world's eyes, more with every 100,000 of them, up to a million.",
@@ -10933,7 +10933,7 @@
  },
  "sr_solar_system_trade_desc": {
   "en": "Trade between Earth and off-world colonies provides substantial economic and strategic benefits.",
-  "de": "Der Handel zwischen der Erde und außerirdischen Kolonien bringt erhebliche wirtschaftliche und strategische Vorteile."
+  "de": "Der Handel zwischen der Erde und außerplanetaren Kolonien bringt erhebliche wirtschaftliche und strategische Vorteile."
  },
  "sr_space_command_paused_desc": {
   "en": "Construction is paused: this $building_space_command$ buys none of the goods its yards build with, and builds no fleet strength. Its maintenance goods are still used.",
