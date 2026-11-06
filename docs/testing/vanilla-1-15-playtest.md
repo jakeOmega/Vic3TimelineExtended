@@ -139,13 +139,20 @@ or Spanish game.
 **The map**
 - TULA, KOSTROMA and the renamed states (LITHUANIA, SARATOV, VOLOGDA) have tourism, a Local Climate tile, an area,
   Planned Capital, capital bloc names and a seabed basin where coastal; KAMCHATKA holds the old Chukotka.
-- A Cossack Host reads as cooperative in the Demographics rural-work split.
+- A Cossack Host reads as cooperative in the Demographics rural-work split, and its workers count for the state's
+  farming town in Largest Cities, not the capital (#1407).
 
 **Defines, treaties, the UN and ships**
 - Devastation without the mod's overrides, and whether the UN docket's `un_docket_war_devastation` (0.3) is still
   reachable under per-battle devastation; the docket's 0.25 occupation threshold.
-- Renegotiate a treaty to add Seize Company or Disband Company, or point one at another company: it takes effect.
-  A copy carried over from the old treaty doesn't seize or disband a second time.
+- Renegotiate a treaty to add Seize Company or Disband Company: it takes effect. Since #1407 neither is
+  renegotiable, so a copy carried over from the old treaty is locked and doesn't seize or disband a second time.
+- The six one-off articles (Disband and Seize Company, Return Cultural Property, Surrender a Monument, Cede Colony,
+  the population transfer) carry `is_one_time` (#1407): an AI that received mostly one-offs withdraws once the
+  binding period ends, so it stops paying their upkeep.
+- Forced Disarmament: the conceding country can't queue a warship (vanilla's "cannot construct military ships" reason
+  names the article), and can still build supply ships. A demilitarized zone's state shows "Disallow Barracks
+  Construction" (#1407).
 - A demilitarized zone renegotiated, and a seabed lease's quantity on renegotiation; the money transfer's
   contextual score.
 - Decolonization: a subject's war against the overlord's own revolutionaries or secessionists isn't tracked.
