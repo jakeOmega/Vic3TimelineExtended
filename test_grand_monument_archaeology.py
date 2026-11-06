@@ -606,7 +606,7 @@ class BrakeTests(unittest.TestCase):
         # The retired money modifier is neither declared nor removed any more: its remover went with
         # the national refresh (#1404), and no save that carried it loads in 1.15 (#1407).
         self.assertIsNone(declaration("gm_arch_expense"))
-        for rel in (EFFECTS, GM_EFFECTS, "common/scripted_effects/legacy_modifier_cleanup.txt"):
+        for rel in (EFFECTS, GM_EFFECTS):
             self.assertNotIn("remove_modifier = gm_arch_expense", strip_comments(read(rel)), rel)
         L = loc()
         for key in ("gm_arch_diversion", "gm_arch_diversion_desc", "gm_arch_expense", "gm_arch_expense_desc"):
