@@ -2979,7 +2979,6 @@
  te_jmap_pick_life_expectancy_desc:0 "Color each state by its life expectancy at birth in the last census, from 25 years to 80."
  te_jmap_pick_literacy_desc:0 "Color each state by its literacy, from none to all."
  te_jmap_pick_median_age_desc:0 "Color each state by the median age of its people in the last census, from 15 years to 45."
- te_jmap_pick_scope_probe_desc:0 "A test map. Yellow: the map reaches this journal entry. Blue: it doesn't, and reads only a global variable. White stripes mark your own states."
  te_jmap_pick_turmoil_desc:0 "Color each state by its [concept_turmoil], from calm to uproar at half its people radical."
  te_jud_act_upheld_desc:0 "The courts found the act we forced through lawful, and it carries their approval."
  te_jud_algorithmic_capture_desc:0 "The system that drafts our laws also judges them, so no court stands in the way of a law the government wants."

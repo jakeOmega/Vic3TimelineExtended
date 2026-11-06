@@ -1,4 +1,4 @@
-"""Journal entry map modes, second pass (docs/systems/mod_systems/journal_map_modes.md).
+"""Journal entry map modes, third pass (docs/systems/mod_systems/journal_map_modes.md).
 
 The engine says nothing about a map's script: a named color it doesn't know, a tooltip key with no loc or a selector
 number no branch reads all fail silently on the map. So this holds the pieces together offline:
@@ -7,9 +7,10 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - every Map Room pick (a scripted GUI) sets a selector that map_color and map_tooltip both branch on, has a
   button, and has its loc; the Map Room stays contextless, in no journal, with no scripted buttons (they lock);
 - every map_tooltip key has loc;
-- the map buttons are mounted, the test strip shows only in debug mode, and every GUI reach into an entry names one
-  that exists;
-- the listed map mode copy is committed, listed and named.
+- each pick reopens the Map Room's page a beat after its click, so a paused map repaints (check 4);
+- the map buttons are mounted, Banking's shows while its entry is inactive (check 7), and every GUI reach into an
+  entry names one that exists;
+- every journal page has the see-through eye (gui/journal_entry.gui): a pick's reopen keeps it, closing clears it.
 """
 import os
 import re
@@ -28,6 +29,7 @@ VALUES = "common/script_values/te_journal_map_values.txt"
 WIDGETS = "gui/te_map_widgets.gui"
 DEMOG_LAYOUT = "gui/te_demographics_layout.gui"
 BANKING_LAYOUT = "gui/journal_entry_widgets/banking_layout_widget.gui"
+JE_PANEL = "gui/journal_entry.gui"
 MAP_MODE = "gfx/map/map_modes/te_map_modes.txt"
 LOC_DIR = "localization/english"
 PLAYTEST = "docs/testing/journal-map-modes-playtest.md"
@@ -66,8 +68,23 @@ def block(text, key):
     return text[m.end():i - 1]
 
 
+def override(text, name):
+    """The body of `blockoverride "name" { ... }` in text."""
+    m = re.search(r'\bblockoverride\s+"' + re.escape(name) + r'"\s*\{', text)
+    if not m:
+        return None
+    start, end = enclosing_span(text, m.end())
+    return text[start:end]
+
+
 def enclosing(text, pos):
     """The body of the innermost `{ ... }` around pos."""
+    start, end = enclosing_span(text, pos)
+    return text[start:end]
+
+
+def enclosing_span(text, pos):
+    """(start, end) of the body of the innermost `{ ... }` around pos."""
     depth, i = 0, pos
     while i > 0:
         i -= 1
@@ -81,7 +98,7 @@ def enclosing(text, pos):
     while depth:
         depth += {"{": 1, "}": -1}.get(text[j], 0)
         j += 1
-    return text[i + 1:j - 1]
+    return i + 1, j - 1
 
 
 def entry(rel, name):
@@ -104,7 +121,7 @@ def named_colors():
 
 
 def tracked(rel):
-    """Whether git tracks rel. CI checks out without gfx/ (sparse), so a committed file can be absent on disk."""
+    """Whether git tracks rel. CI checks out without gfx/ (sparse), so a file can be absent on disk yet committed."""
     return subprocess.run(["git", "ls-files", "--error-unmatch", rel], cwd=REPO,
                           capture_output=True).returncode == 0
 
@@ -120,7 +137,7 @@ class FilesTest(unittest.TestCase):
 class ColorsTest(unittest.TestCase):
     def test_every_map_color_is_defined(self):
         known = named_colors()
-        for rel, name in ((HOST, "je_te_map_room"), (HOST, "je_te_map_potential_probe"), (BANKING, "je_banking_cycle")):
+        for rel, name in ((HOST, "je_te_map_room"), (BANKING, "je_banking_cycle")):
             body = entry(rel, name)
             for key in ("map_color", "map_color_second"):
                 part = block(body, key)
@@ -154,7 +171,7 @@ class MapRoomTest(unittest.TestCase):
 
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
-        self.assertEqual(sorted(picks.values()), list(range(1, 7)), "selectors 1-6, one pick each")
+        self.assertEqual(sorted(picks.values()), list(range(1, 6)), "selectors 1-5, one pick each")
         # the census maps' shared "no data" branch names 3-5 in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -172,7 +189,7 @@ class MapRoomTest(unittest.TestCase):
         row = block(code(WIDGETS), "te_jmap_pick_row")
         self.assertIsNotNone(row)
         seen = []
-        for m in re.finditer(r"\bbutton\s*=\s*\{", row):
+        for m in re.finditer(r"\bte_jmap_pick_button\s*=\s*\{", row):
             button = enclosing(row, m.end())
             sguis = set(re.findall(r"GetScriptedGui\('(\w+)'\)", button))
             self.assertEqual(len(sguis), 1, f"one scripted GUI per button: {sguis}")
@@ -182,8 +199,26 @@ class MapRoomTest(unittest.TestCase):
             key = name[:-len("_sgui")]
             self.assertIn(f'text = "{key}"', button, f"{name}: its button shows another pick's name")
             self.assertIn(f'tooltip = "{key}_desc"', button, f"{name}: its button shows another pick's tooltip")
+            clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', button)
+            self.assertEqual(len(clicks), 2, f"{name}: pick, then the repaint")
+            self.assertIn(".Execute(", clicks[0], f"{name}: the pick runs first")
+            self.assertEqual(clicks[1], "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]", name)
             seen.append(name)
         self.assertEqual(sorted(seen), sorted(self.picks()), "one button per pick")
+
+    def test_a_pick_reopens_the_page_to_repaint(self):
+        # check 4 (2026-11-05): paused, reopening the page repainted the map. OpenJournalEntryPanel toggles, so the
+        # page is closed first; the entry is the button's own datacontext, which outlives the page closing.
+        button = block(code(WIDGETS), "te_jmap_pick_button")
+        self.assertIsNotNone(button)
+        self.assertIn('datacontext = "[GetPlayerJournalEntry(\'je_te_map_room\')]"', button)
+        state = block(button, "state")
+        self.assertRegex(state, r"name\s*=\s*te_jmap_repaint\b")
+        self.assertRegex(state, r"duration\s*=\s*0?\.\d+")
+        finish = re.findall(r'on_finish\s*=\s*"([^"]*)"', state)
+        # DontToggle: if the close hadn't landed, the toggling open would close the page for good
+        self.assertEqual(finish, ["[InformationPanelBar.ClosePanel]",
+                                  "[InformationPanelBar.OpenJournalEntryPanelDontToggle(JournalEntry.AccessSelf)]"])
 
     def test_the_room_is_contextless_and_in_no_journal(self):
         # check 7 (2026-11-05): a contextless entry nobody is involved in is active from the start, in no journal, and
@@ -211,38 +246,41 @@ class MapRoomTest(unittest.TestCase):
             self.assertRegex(block(self.sguis, name), r"ai_is_valid\s*=\s*\{\s*always\s*=\s*no\s*\}", name)
 
 
-class PotentialProbeTest(unittest.TestCase):
-    def test_the_probe_stays_inactive(self):
-        probe = entry(HOST, "je_te_map_potential_probe")
-        self.assertRegex(block(probe, "possible"), r"always\s*=\s*no")
-        self.assertIn("has_variable = te_jmap_potential_probe", block(probe, "is_shown_when_inactive"))
-        self.assertNotRegex(probe, r"\bcontext\s*=", "a country entry, so it can sit in a journal's Potential")
-
-
 class LocTest(unittest.TestCase):
     def test_tooltips_buttons_and_names_have_loc(self):
         keys = loc_keys()
         wanted = set()
         for rel in MAP_ENTRIES:
             wanted |= set(re.findall(r"custom_tooltip_no_bullet\s*=\s*(\w+)", code(rel)))
-        for rel in (WIDGETS, ROOM_WIDGET):
-            wanted |= set(re.findall(r'(?:text|tooltip)\s*=\s*"(te_jmap_\w+)"', code(rel)))
-        wanted |= {"je_te_map_room", "je_te_map_room_reason", "je_te_map_potential_probe",
-                   "je_te_map_potential_probe_reason", "mm_te_journal_entry_map"}
+        for rel in (WIDGETS, ROOM_WIDGET, JE_PANEL):
+            wanted |= set(re.findall(r'(?:text|tooltip)\s*=\s*"(te_j(?:map|e)_\w+)"', code(rel)))
+        self.assertIn("te_je_see_through_tt", wanted)
+        wanted |= {"je_te_map_room", "je_te_map_room_reason"}
         self.assertEqual(wanted - keys, set(), "loc keys missing")
+
+    def test_retired_test_pieces_left_no_loc(self):
+        keys = loc_keys()
+        gone = {k for k in keys if k.startswith(("te_jmap_strip_", "te_jmap_tt_probe_", "je_te_map_potential_probe"))}
+        gone |= keys & {"te_jmap_pick_scope_probe", "te_jmap_pick_scope_probe_desc", "te_jmap_tt_potential_probe",
+                        "mm_te_journal_entry_map"}
+        self.assertEqual(gone, set())
 
 
 class GuiTest(unittest.TestCase):
     def test_buttons_are_mounted(self):
         self.assertIn("te_jmap_demog_map_button = {}", code(DEMOG_LAYOUT))
-        self.assertIn("te_jmap_test_strip = {}", code(DEMOG_LAYOUT))
         self.assertIn("te_jmap_banking_map_button = {}", code(BANKING_LAYOUT))
 
-    def test_test_strip_is_debug_only(self):
-        strip = block(code(WIDGETS), "te_jmap_test_strip")
-        self.assertIsNotNone(strip)
-        first = re.search(r'visible\s*=\s*"([^"]*)"', strip).group(1)
-        self.assertIn("InDebugMode", first, "the strip's own visible must gate it on debug mode")
+    def test_banking_button_has_no_activity_gate(self):
+        # the entry is active from the engine's first check (possible = yes), and an inactive page would open and
+        # paint too (check 7, 2026-11-05), so the button needs no IsActive gate
+        self.assertNotIn("IsActive", block(code(WIDGETS), "te_jmap_banking_map_button"))
+        self.assertRegex(block(code(BANKING), "je_banking_cycle"), r"\bpossible\s*=\s*\{\s*always\s*=\s*yes\s*\}")
+
+    def test_map_buttons_open_pages_whole(self):
+        for name in ("te_jmap_demog_map_button", "te_jmap_banking_map_button"):
+            clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', block(code(WIDGETS), name))
+            self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]", name)
 
     def test_every_entry_the_gui_opens_exists(self):
         entries = set(re.findall(r"^([a-z_0-9]+)\s*=\s*\{", code(HOST), re.M)) | {"je_banking_cycle"}
@@ -254,39 +292,63 @@ class GuiTest(unittest.TestCase):
         # ("requires non const promote", third session): the button carries the entry as its datacontext
         text = code(WIDGETS)
         self.assertNotRegex(text, r'onclick\s*=\s*"[^"]*GetPlayerJournalEntry')
-        for m in re.finditer(r"OpenJournalEntryPanel\(([^)]*)\)", text):
+        for m in re.finditer(r"OpenJournalEntryPanel(?:DontToggle)?\(([^)]*)\)", text):
             self.assertEqual(m.group(1), "JournalEntry.AccessSelf")
-            self.assertIn('datacontext = "[GetPlayerJournalEntry(', enclosing(text, m.start()),
+            start, end = enclosing_span(text, m.start())
+            if re.search(r"\bstate\s*=\s*\{\s*$", text[:start]):
+                # an animation state's callback: the entry sits on the widget the state belongs to
+                start, end = enclosing_span(text, start - 1)
+            self.assertIn('datacontext = "[GetPlayerJournalEntry(', text[start:end],
                           "an open with no entry datacontext on its own widget")
 
     def test_demographics_button_is_one_click(self):
         button = block(code(WIDGETS), "te_jmap_demog_map_button")
         clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', button)
-        self.assertEqual(len(clicks), 2, "pick, then open")
-        self.assertIn("te_jmap_pick_life_expectancy_sgui", clicks[0])
-        self.assertIn("OpenJournalEntryPanel", clicks[1])
+        self.assertEqual(len(clicks), 3, "unfade, pick, then open")
+        self.assertIn("te_jmap_pick_life_expectancy_sgui", clicks[1])
+        self.assertIn("OpenJournalEntryPanel", clicks[2])
         self.assertIn("GetPlayerJournalEntry('je_te_map_room')", button)
 
 
+class SeeThroughTest(unittest.TestCase):
+    """The eye on every journal page fades it so its map shows (owner's ask, 2026-11-05)."""
+
+    def setUp(self):
+        self.panel = block(code(JE_PANEL), "journal_entry_panel")
+
+    def test_the_page_fades_on_the_flag(self):
+        alpha = re.findall(r'^\t\talpha\s*=\s*"([^"]*)"', self.panel, re.M)
+        self.assertEqual(len(alpha), 1, "one alpha on the panel's root")
+        self.assertIn("GetVariableSystem.Exists('te_je_see_through')", alpha[0])
+
+    def test_the_eye_toggles_the_flag(self):
+        props = override(self.panel, "top_left_button_properties")
+        self.assertIsNotNone(props)
+        self.assertIn("[GetVariableSystem.Toggle('te_je_see_through')]", props)
+        self.assertIn("JournalEntryPanel.HasJournalEntry", override(self.panel, "top_left_button_visibility"))
+
+    def test_closing_clears_it_but_a_reopen_keeps_it(self):
+        # a Map Room pick reopens the page (te_jmap_repaint), which fires _show: clearing there would unfade the page
+        # at every pick
+        self.assertNotIn("te_je_see_through", override(self.panel, "animation_state_block"))
+        close = re.findall(r'onclick\s*=\s*"([^"]*)"', override(self.panel, "header_close_button"))
+        self.assertEqual(close, ["[InformationPanelBar.ClosePanel]", "[GetVariableSystem.Clear('te_je_see_through')]"])
+        back = override(self.panel, "header_back_button")
+        self.assertEqual(re.findall(r'onclick\s*=\s*"([^"]*)"', back),
+                         ["[InformationPanelBar.OpenPreviousPanel]", "[GetVariableSystem.Clear('te_je_see_through')]"])
+        self.assertRegex(back, r'input_action\s*=\s*"back"', "vanilla's back shortcut kept")
+
+
 class MapModeTest(unittest.TestCase):
-    def test_listed_copy_is_committed(self):
-        if not os.path.exists(os.path.join(REPO, MAP_MODE)):
-            self.assertTrue(tracked(MAP_MODE), MAP_MODE)
-            return
-        text = code(MAP_MODE)
-        body = block(text, "mm_te_journal_entry_map")
-        self.assertIsNotNone(body)
-        self.assertRegex(body, r"map_painting_mode\s*=\s*journal_entry_map_data\b")
-        self.assertRegex(body, r"is_visible\s*=\s*yes")
-        with open(os.path.join(REPO, MAP_MODE), "rb") as f:
-            self.assertTrue(f.read(3) == BOM)
+    def test_listed_copy_is_gone(self):
+        # check 5 (2026-11-05): with no page open it painted nothing, and with one open it showed that page's map
+        self.assertFalse(os.path.exists(os.path.join(REPO, MAP_MODE)) or tracked(MAP_MODE), MAP_MODE)
 
 
 class DocsTest(unittest.TestCase):
     def test_playtest_names_every_test_piece(self):
         doc = read(PLAYTEST)
-        for piece in ("te_jmap_test_strip", "je_te_map_potential_probe", "te_jmap_pick_scope_probe", MAP_MODE,
-                      "TE_JMAP"):
+        for piece in ("TE_JMAP", "te_jmap_repaint", "te_je_see_through"):
             self.assertIn(piece, doc)
 
 

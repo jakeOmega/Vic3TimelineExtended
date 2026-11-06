@@ -41,6 +41,8 @@ NEW_GUI = BOM + """types t {
 		textbox = { text = "[SelectLocalization( GetScriptedGui('known_sgui').IsShown( GuiScope.End ), 'known_key', 'gone_key' )]" }
 		icon = { texture = "gfx/interface/nope.dds" }
 		button = { onclick = "[GetVariableSystem.Toggle('te_new_details')]" }
+		widget = { alpha = "[Select_float( GetVariableSystem.Exists('te_new_fade'), '(float)0.3', '(float)1' )]" }
+		button = { onclick = "[GetVariableSystem.Toggle('te_new_fade')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner]" }
@@ -189,6 +191,7 @@ class LintTest(unittest.TestCase):
         self.assertIn("gfx/interface/nope.dds", warns)
         self.assertNotIn("vanilla_icon", warns)
         self.assertIn("te_new_details should end _open", warns)
+        self.assertNotIn("te_new_fade", warns, "a flag that fades, read by no visible, isn't a collapse flag")
 
     def test_unproven_warnings_name_their_own_line(self):
         lines = {m: ln for s, p, ln, m in self.findings if p == "gui/lines.gui" and s == "WARN"}

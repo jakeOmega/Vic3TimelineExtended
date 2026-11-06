@@ -29,16 +29,6 @@ colors = {
 	te_jmap_median_mid = hsv360 { 335 42 72 }
 	te_jmap_median_high = hsv360 { 268 58 36 }
 
-	# je_te_map_room: the scope probe. One flat color per answer (docs/testing/journal-map-modes-playtest.md).
-	te_jmap_probe_entry_owner = hsv360 { 120 70 70 }
-	te_jmap_probe_entry_only = hsv360 { 55 85 95 }
-	te_jmap_probe_global_only = hsv360 { 215 75 85 }
-	te_jmap_probe_stripe = hsv360 { 0 0 100 }
-
-
-	# je_te_map_potential_probe: one flat color, so the map says an inactive entry painted it.
-	te_jmap_potential_probe = hsv360 { 300 70 80 }
-
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }
 	te_jmap_bank_downturn = hsv360 { 14 72 78 }
