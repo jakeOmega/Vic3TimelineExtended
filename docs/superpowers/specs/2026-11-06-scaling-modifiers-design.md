@@ -489,14 +489,19 @@ and others that pin the adds.
 Once-a-game `debug_log` lines (CLAUDE.md, "In-game checks"), each excluding the
 degenerate case so OK can't be a false pass:
 - **`scaling_live`**: a country with an active Strategic Reserve entry and
-  `var:st_res_sell_profit >= 1`, read a week after the variable last changed:
+  `var:st_res_sell_profit >= 1`, read at the start of a weekly pulse, before the
+  week's income is booked again, once the entry has run a full week (so the
+  variable was written seven days earlier):
   `modifier:country_te_budget_income_reserve_add` (a field only that modifier
   carries) equals the value within 1%. Proves a declaration reaches the
   country's sums from a country-root value.
 - **`scaling_inherited`**: at `te_civil_war_on_won` the winner is marked; 30
   days later, if it holds an active `je_covert_warfare` with
-  `covert_operation_cost_mult > 0`, `modifier:country_te_budget_expense_covert_add`
-  equals it within 1%. Proves an inherited entry re-applies its declarations.
+  `covert_operation_cost_mult > 1`, `modifier:country_te_budget_expense_covert_add`
+  carries at least half of it (only revolutionaries' wins count: a government
+  that wins keeps its own entry). An absent declaration reads 0; half allows
+  for a funding change in the last few days. Proves an inherited entry
+  re-applies its declarations.
   Fallback if BROKEN: no effect re-activates or removes an entry in place, so
   the winner's entries end through their `invalid` trigger (a flag set at
   `te_civil_war_on_won`) and are added again (an inherited entry arrives empty
