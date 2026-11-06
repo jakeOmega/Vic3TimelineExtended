@@ -63,6 +63,10 @@
   "en": "Automation Dividend",
   "es": "Dividendo de la automatización"
  },
+ "law_automation_dividend_desc": {
+  "en": "What the machines make belongs to everyone, paid out as a dividend on the nation's robots and code.",
+  "es": "Lo que producen las máquinas pertenece a todos y se reparte como un dividendo sobre los robots y el código de la nación."
+ },
  "law_auxiliary_fleet": {
   "en": "Auxiliary Fleet",
   "es": "Flota auxiliar"
@@ -106,6 +110,10 @@
  "law_clade_citizenship": {
   "en": "Clade Citizenship",
   "es": "Ciudadanía por clado"
+ },
+ "law_clade_citizenship_desc": {
+  "en": "A citizen who has left the human body plan behind keeps every right the law gives anyone else, whether they breathe water, see by heat or were built for low gravity. The state no longer asks what a person is made like, and the old lines of descent mean little where so many people have chosen their own.",
+  "es": "Un ciudadano que ha dejado atrás el plan corporal humano conserva todos los derechos que la ley da a cualquier otro, ya respire agua, vea por el calor o haya sido construido para la baja gravedad. El Estado ya no pregunta cómo está hecha una persona, y los antiguos linajes significan poco allí donde tanta gente ha elegido el suyo propio."
  },
  "law_command_cooperative_economy": {
   "en": "Command/Cooperative Economy",
@@ -335,6 +343,10 @@
   "en": "Human Labor Quotas",
   "es": "Cuotas de trabajo humano"
  },
+ "law_human_labor_quotas_desc": {
+  "en": "Work that people can do is kept for people. Factories, shops and farms keep their staff and give up what the machines would have made.",
+  "es": "El trabajo que pueden hacer las personas se reserva a las personas. Las fábricas, los comercios y las granjas conservan su personal y renuncian a lo que habrían producido las máquinas."
+ },
  "law_human_purity": {
   "en": "Human Purity",
   "es": "Pureza humana"
@@ -362,6 +374,18 @@
  "law_international_ai_oversight": {
   "en": "International Oversight",
   "es": "Supervisión internacional"
+ },
+ "law_international_ai_oversight_desc": {
+  "en": "Under a treaty administered through the United Nations, our laboratories report every large training run and open their doors to international inspectors, as nuclear plants do.",
+  "es": "Con arreglo a un tratado administrado por medio de las Naciones Unidas, nuestros laboratorios informan de cada ejecución de entrenamiento de gran tamaño y abren sus puertas a inspectores internacionales, como hacen las centrales nucleares."
+ },
+ "law_international_ai_oversight_falls_tt": {
+  "en": "If we leave the United Nations, or it dissolves, this law falls to $law_national_ai_licensing$",
+  "es": "Si abandonamos las Naciones Unidas, o estas se disuelven, esta ley revierte a $law_national_ai_licensing$"
+ },
+ "law_international_ai_oversight_needs_un_tt": {
+  "en": "We are a member of the United Nations",
+  "es": "Somos miembros de las Naciones Unidas"
  },
  "law_intrusive_surveillance": {
   "en": "Intrusive Surveillance System",
@@ -391,6 +415,10 @@
   "en": "Licensed Modification",
   "es": "Modificación con licencia"
  },
+ "law_licensed_modification_desc": {
+  "en": "Licensed clinics may reshape an adult's body on request, after counseling and a waiting period. Boards decide which changes are safe and which go too far, and a modified citizen's papers record what was done.",
+  "es": "Las clínicas autorizadas pueden remodelar el cuerpo de un adulto a petición suya, tras asesoramiento y un período de espera. Unos comités deciden qué cambios son seguros y cuáles van demasiado lejos, y los documentos de un ciudadano modificado registran lo que se hizo."
+ },
  "law_limited_war": {
   "en": "Limited War",
   "es": "Guerra limitada"
@@ -410,6 +438,10 @@
  "law_liquid_democracy": {
   "en": "Liquid Democracy",
   "es": "Democracia líquida"
+ },
+ "law_liquid_democracy_desc": {
+  "en": "Every citizen may vote on every question put to the nation, or delegate the vote, issue by issue, to anyone they trust. A delegation can be withdrawn at any moment, so those who carry many votes carry them only as long as their voters allow.",
+  "es": "Todo ciudadano puede votar cada cuestión que se plantee a la nación, o delegar el voto, asunto por asunto, en quien le inspire confianza. Una delegación puede retirarse en cualquier momento, de modo que quienes reúnen muchos votos solo los conservan mientras sus votantes lo permitan."
  },
  "law_littoral_defense": {
   "en": "Littoral Defense",
@@ -639,6 +671,10 @@
   "en": "Morphological Freedom",
   "es": "Libertad morfológica"
  },
+ "law_morphological_freedom_desc": {
+  "en": "A person's body is theirs to remake. Adults may change their appearance, sex characteristics and shape as they choose, and the state asks only that the work be done safely. A citizen with a tail is still a citizen.",
+  "es": "El cuerpo de una persona es suyo para rehacerlo. Los adultos pueden cambiar su apariencia, sus características sexuales y su forma como deseen, y el Estado solo exige que el trabajo se haga con seguridad. Un ciudadano con cola sigue siendo un ciudadano."
+ },
  "law_multilingual_federalism": {
   "en": "Multilingual Federalism",
   "es": "Federalismo multilingüe"
@@ -651,6 +687,10 @@
   "en": "National Licensing",
   "es": "Licencias nacionales"
  },
+ "law_national_ai_licensing_desc": {
+  "en": "Training a model beyond a set size needs a license. The labs stay in private hands, but they submit their systems for testing, and a regulator decides what may be released.",
+  "es": "Entrenar un modelo por encima de cierto tamaño requiere una licencia. Los laboratorios siguen en manos privadas, pero someten sus sistemas a pruebas, y un regulador decide qué puede lanzarse."
+ },
  "law_national_bank": {
   "en": "National Bank Established",
   "es": "Banco Nacional establecido"
@@ -662,6 +702,10 @@
  "law_natural_form": {
   "en": "Natural Form",
   "es": "Forma natural"
+ },
+ "law_natural_form_desc": {
+  "en": "The law makes no room for changing a body for its own sake. Surgery and gene therapy are for the sick and the injured, and a body is expected to look as it was born. Those who want more must go abroad, or to the back-street clinics.",
+  "es": "La ley no deja sitio para cambiar el cuerpo por el simple hecho de cambiarlo. La cirugía y la terapia génica son para los enfermos y los heridos, y se espera que un cuerpo tenga el aspecto con el que nació. Quienes quieran más deben irse al extranjero o acudir a las clínicas clandestinas."
  },
  "law_neocameralism": {
   "en": "Neocameralism",
@@ -706,6 +750,14 @@
  "law_no_frontier_ai_policy": {
   "en": "No Frontier AI Policy",
   "es": "Sin política de IA de vanguardia"
+ },
+ "law_no_frontier_ai_policy_closed_tt": {
+  "en": "Only before $ai_agents$: once machines act on their own, the frontier has to be governed",
+  "es": "Solo antes de $ai_agents$: cuando las máquinas actúen por sí solas, habrá que gobernar la frontera"
+ },
+ "law_no_frontier_ai_policy_desc": {
+  "en": "No machine yet acts on its own, so there is no frontier to govern. The question waits on the technology.",
+  "es": "Ninguna máquina actúa todavía por sí sola, así que no hay frontera que gobernar. La cuestión espera a la tecnología."
  },
  "law_no_internet_policy": {
   "en": "No Internet Policy",
@@ -887,6 +939,14 @@
   "en": "Open Weights",
   "es": "Pesos abiertos"
  },
+ "law_open_weights_desc": {
+  "en": "Frontier models must be published in full, for anyone to study, run and improve. Nothing at the frontier stays secret for long, here or abroad.",
+  "es": "Los modelos de frontera deben publicarse íntegros, para que cualquiera pueda estudiarlos, ejecutarlos y mejorarlos. Nada en la frontera permanece en secreto mucho tiempo, ni aquí ni en el extranjero."
+ },
+ "law_open_weights_world_spread_tt": {
+  "en": "While we are a [concept_major_power] or greater, every country gains #v +100#! [concept_technology_spread] from $global_technological_development$, up to #v +300#! from all the countries that hold this law",
+  "es": "Mientras seamos una [concept_major_power|l] o superior, todos los países obtienen #v +100#! de [concept_technology_spread|l] por $global_technological_development$, hasta #v +300#! por todos los países que tengan esta ley"
+ },
  "law_partible": {
   "en": "Customary Inheritance",
   "es": "Herencia consuetudinaria"
@@ -923,6 +983,10 @@
   "en": "Prescribed Form",
   "es": "Forma prescrita"
  },
+ "law_prescribed_form_desc": {
+  "en": "The state decides what a citizen looks like, and the clinics that once sold change now enforce sameness. No one can be told apart by face, skin or frame, and no one may choose otherwise.",
+  "es": "El Estado decide qué aspecto tiene un ciudadano, y las clínicas que antes vendían cambios ahora imponen la uniformidad. Nadie puede distinguirse por el rostro, la piel o la complexión, y nadie puede elegir lo contrario."
+ },
  "law_primogeniture": {
   "en": "Primogeniture & Entail",
   "es": "Primogenitura y mayorazgo"
@@ -934,6 +998,10 @@
  "law_private_ai_labs": {
   "en": "Private Labs",
   "es": "Laboratorios privados"
+ },
+ "law_private_ai_labs_desc": {
+  "en": "Companies race to build the most capable systems, raising capital on each new model. They move fast, and they guard their secrets only as well as a company can.",
+  "es": "Las empresas compiten por construir los sistemas más capaces y reúnen capital con cada nuevo modelo. Avanzan deprisa y guardan sus secretos solo hasta donde puede hacerlo una empresa."
  },
  "law_private_military_contractors": {
   "en": "Private Military Contractors",
@@ -1051,9 +1119,17 @@
   "en": "Robot Tax",
   "es": "Impuesto sobre los robots"
  },
+ "law_robot_tax_desc": {
+  "en": "A machine that does a worker's job pays toward the state the worker once paid for. The robots stay at their posts, and their owners pay for the privilege.",
+  "es": "Una máquina que hace el trabajo de un obrero contribuye al Estado que el obrero antes sostenía con sus impuestos. Los robots siguen en sus puestos, y sus dueños pagan por el privilegio."
+ },
  "law_state_ai_monopoly": {
   "en": "State Monopoly",
   "es": "Monopolio estatal"
+ },
+ "law_state_ai_monopoly_desc": {
+  "en": "Only the state may build at the frontier. Its laboratories sit behind security clearances, and their systems serve the government and the armed forces first.",
+  "es": "Solo el Estado puede construir en la frontera. Sus laboratorios están tras habilitaciones de seguridad, y sus sistemas sirven primero al gobierno y a las fuerzas armadas."
  },
  "law_state_controlled_internet": {
   "en": "State-Controlled Internet",
@@ -1259,6 +1335,10 @@
   "en": "Unrestricted Automation",
   "es": "Automatización sin restricciones"
  },
+ "law_unrestricted_automation_desc": {
+  "en": "Owners put machines to work wherever they pay, and keep what the machines make.",
+  "es": "Los propietarios ponen las máquinas a trabajar donde compensa y se quedan con lo que producen."
+ },
  "law_unrestricted_extraction": {
   "en": "Unrestricted Extraction",
   "es": "Extracción sin restricciones"
@@ -1295,9 +1375,17 @@
   "en": "Automation Policy",
   "es": "Política de automatización"
  },
+ "lawgroup_automation_policy_desc": {
+  "en": "Whether robots and AI may do the work people did, and who gains when they do. [GetLawType('law_robot_tax').GetName] and [GetLawType('law_automation_dividend').GetName] scale with our automated share, now #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!: the part of our automatable building levels that run a robotic or AI-managed [concept_production_method]. Under [GetLawType('law_unrestricted_automation').GetName] a rise in the share puts workers out of work, at half the cost under [GetLawType('law_robot_tax').GetName]; last year it rose #v [GetPlayer.MakeScope.ScriptValue('te_ap_disp_rise_display')|1]#! points.",
+  "es": "Si los robots y la IA pueden hacer el trabajo que hacía la gente, y quién gana cuando lo hacen. [GetLawType('law_robot_tax').GetName] y [GetLawType('law_automation_dividend').GetName] escalan con nuestra proporción automatizada, ahora #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!: la parte de nuestros niveles de edificio automatizables que funcionan con un [concept_production_method|l] robótico o gestionado por IA. Con [GetLawType('law_unrestricted_automation').GetName], un aumento de esa proporción deja a trabajadores sin empleo, a un coste que con [GetLawType('law_robot_tax').GetName] se reduce a la mitad; el año pasado subió #v [GetPlayer.MakeScope.ScriptValue('te_ap_disp_rise_display')|1]#! puntos."
+ },
  "lawgroup_bodily_autonomy": {
   "en": "Bodily Autonomy",
   "es": "Autonomía corporal"
+ },
+ "lawgroup_bodily_autonomy_desc": {
+  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether someone who leaves the human body plan behind is still a citizen. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
+  "es": "Hasta dónde pueden cambiar las personas el aspecto de su cuerpo, desde la piel y los caracteres sexuales hasta el pelaje y las colas, y, en última instancia, si quien abandona el plan corporal humano sigue siendo ciudadano. Lo que puede hacer un cuerpo es otra cuestión, que corresponde a las leyes de [concept_human_augmentation_system|l]."
  },
  "lawgroup_criminal_justice": {
   "en": "Criminal Justice",
@@ -1334,6 +1422,10 @@
  "lawgroup_frontier_ai_control": {
   "en": "Frontier AI Control",
   "es": "Control de la IA de vanguardia"
+ },
+ "lawgroup_frontier_ai_control_desc": {
+  "en": "Who may build the most capable artificial intelligence systems, who may see how they work, and who answers for what they do.",
+  "es": "Quién puede construir los sistemas de inteligencia artificial más capaces, quién puede ver cómo funcionan y quién responde de lo que hacen."
  },
  "lawgroup_genetic_rights": {
   "en": "Genetic Rights",
