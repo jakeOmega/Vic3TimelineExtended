@@ -329,4 +329,60 @@ je_nuclear_program = {
 	# over by nd_custody_restore_progress.
 	can_revolution_inherit = no
 	can_deactivate = yes
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): the world's nuclear
+	# powers, as the world sees them, and the viewer's deterrent. Root: the state being painted, every state in the world.
+	# The Map Room draws the same map as its selector 19, from the same triggers in the same order
+	# (common/scripted_triggers/te_journal_map_triggers.txt; the parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			value = "te_jmap_nuke_you"
+		}
+		else_if = {
+			limit = { te_jmap_nuke_hosts_yours = yes }
+			value = "te_jmap_nuke_hosts"
+		}
+		else_if = {
+			limit = { te_jmap_nuke_umbrella = yes }
+			value = "te_jmap_nuke_umbrella"
+		}
+		else_if = {
+			limit = { te_jmap_nuke_guaranteed = yes }
+			value = "te_jmap_nuke_guaranteed"
+		}
+		else_if = {
+			limit = { te_jmap_nuke_armed = yes }
+			value = "te_jmap_nuke_armed"
+		}
+		else = {
+			value = "te_jmap_none"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_you
+		}
+		else_if = {
+			limit = { te_jmap_nuke_hosts_yours = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_hosts
+		}
+		else_if = {
+			limit = { te_jmap_nuke_umbrella = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_umbrella
+		}
+		else_if = {
+			limit = { te_jmap_nuke_guaranteed = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_guaranteed
+		}
+		else_if = {
+			limit = { te_jmap_nuke_armed = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_armed
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_none
+		}
+	}
 }

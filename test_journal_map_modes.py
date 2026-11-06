@@ -13,7 +13,11 @@ number no branch reads all fail silently on the map. So this holds the pieces to
   widget outside the page (te_jmap_repainter), since a widget on it dies with the close (fifth session);
 - the map buttons are mounted, Banking's shows while its entry is inactive (check 7), and every GUI reach into an
   entry names one that exists;
-- every journal page has the see-through eye (gui/journal_entry.gui): a pick's reopen keeps it, closing clears it.
+- every journal page has the see-through eye (gui/journal_entry.gui): a pick's reopen keeps it, closing clears it;
+- the systems' maps (selectors 18-25): each system entry's map and the Map Room's branch for it ask the same triggers
+  in the same order (the parity test), each pick waits for its system's rule, each system tab's button picks its map
+  and opens the Map Room, and the "your" maps follow the viewer the picks note;
+- the Timeline Extended window's Map Room button opens the page before it closes the window.
 """
 import os
 import re
@@ -26,7 +30,30 @@ EFFECTS = "common/scripted_effects/te_journal_map_effects.txt"
 SGUIS = "common/scripted_guis/te_journal_map_sguis.txt"
 ROOM_WIDGET = "gui/journal_entry_widgets/te_map_room_widget.gui"
 BANKING = "common/journal_entries/je_banking.txt"
-MAP_ENTRIES = (HOST, BANKING)
+# The systems' maps: (selector, entry file, entry key, Map Room pick, tab button, tab file, rule gate). The Seabed has
+# no entry, so the Map Room alone draws it.
+SYSTEM_MAPS = (
+    (18, "common/journal_entries/je_global_warming.txt", "je_global_warming", "emissions", "gw",
+     "gui/journal_entry_widgets/global_warming_widget.gui", "has_game_rule = global_warming_enabled"),
+    (19, "common/journal_entries/je_nuclear_program.txt", "je_nuclear_program", "nuclear", "nuclear",
+     "gui/journal_entry_widgets/nuclear_layout_widget.gui", "has_game_rule = nuclear_weapons_enabled"),
+    (20, "common/journal_entries/je_covert_warfare.txt", "je_covert_warfare", "networks", "covert",
+     "gui/journal_entry_widgets/covert_operations_widget.gui", "has_game_rule = covert_warfare_enabled"),
+    (21, "common/journal_entries/je_united_nations.txt", "je_united_nations", "united_nations", "un",
+     "gui/journal_entry_widgets/un_layout_widget.gui", "has_game_rule = united_nations_enabled"),
+    (22, "common/journal_entries/je_cultural_hegemony.txt", "je_cultural_hegemony", "political_models", "ch",
+     "gui/journal_entry_widgets/cultural_hegemony_widget.gui", "has_game_rule = cultural_hegemony_enabled"),
+    (23, None, None, "ocean_basins", "seabed", "gui/te_seabed_widgets.gui", "te_global_commons_enabled = yes"),
+    (24, "common/journal_entries/je_grand_monuments.txt", "je_grand_monuments", "grandeur", "gm",
+     "gui/journal_entry_widgets/grand_monuments_widget.gui", "gm_system_enabled = yes"),
+    (25, "common/journal_entries/je_colonial_empire.txt", "je_colonial_empire", "colonies", "ce",
+     "gui/journal_entry_widgets/colonial_empire_widget.gui", "has_game_rule = decolonization_enabled"),
+)
+SYSTEM_ENTRIES = tuple((rel, key) for _sel, rel, key, *_ in SYSTEM_MAPS if rel)
+MAP_ENTRIES = (HOST, BANKING) + tuple(rel for rel, _key in SYSTEM_ENTRIES)
+TRIGGERS = "common/scripted_triggers/te_journal_map_triggers.txt"
+ON_ACTIONS = "common/on_actions/te_journal_map_on_actions.txt"
+SYSTEMS_WINDOW = "gui/te_systems_window.gui"
 COLORS = "common/named_colors/te_journal_map_colors.txt"
 VALUES = "common/script_values/te_journal_map_values.txt"
 SCALES = "common/script_values/te_journal_map_scales_generated.txt"
@@ -144,7 +171,7 @@ def tracked(rel):
 
 class FilesTest(unittest.TestCase):
     def test_each_new_file_has_one_bom(self):
-        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS):
+        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS, TRIGGERS, ON_ACTIONS):
             with open(os.path.join(REPO, rel), "rb") as f:
                 head = f.read(6)
             self.assertTrue(head.startswith(BOM) and not head[3:].startswith(BOM), rel)
@@ -153,7 +180,7 @@ class FilesTest(unittest.TestCase):
 class ColorsTest(unittest.TestCase):
     def test_every_map_color_is_defined(self):
         known = named_colors()
-        for rel, name in ((HOST, "je_te_map_room"), (BANKING, "je_banking_cycle")):
+        for rel, name in ((HOST, "je_te_map_room"), (BANKING, "je_banking_cycle")) + SYSTEM_ENTRIES:
             body = entry(rel, name)
             for key in ("map_color", "map_color_second"):
                 part = block(body, key)
@@ -207,7 +234,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 18)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 26)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -338,6 +365,207 @@ class MapRoomTest(unittest.TestCase):
             self.assertRegex(block(self.sguis, name), r"ai_is_valid\s*=\s*\{\s*always\s*=\s*no\s*\}", name)
 
 
+def branches_of(part):
+    """[(limit, body)] for the top-level if / else_if / else of a map_color or map_tooltip block, whitespace collapsed;
+    an else's limit is ""."""
+    out = []
+    for m in re.finditer(r"\b(if|else_if|else)\s*=\s*\{", part):
+        start, end = enclosing_span(part, m.end())
+        if part[:m.start()].count("{") - part[:m.start()].count("}") != 0:
+            continue    # nested
+        body = part[start:end]
+        limit = block(body, "limit") if m.group(1) != "else" else ""
+        rest = body
+        if limit is not None and m.group(1) != "else":
+            lm = re.search(r"\blimit\s*=\s*\{", body)
+            ls, le = enclosing_span(body, lm.end())
+            rest = body[:lm.start()] + body[le + 1:]
+        out.append((" ".join((limit or "").split()), " ".join(rest.split())))
+    return out
+
+
+class SystemMapsTest(unittest.TestCase):
+    """The systems' maps: each on its own entry and in the Map Room (selectors 18-25)."""
+
+    def setUp(self):
+        self.room = entry(HOST, "je_te_map_room")
+        self.sguis = code(SGUIS)
+        self.widgets = code(WIDGETS)
+
+    def room_branches(self, key, sel):
+        """The Map Room's branches for selector sel, the selector taken out of each limit."""
+        out = []
+        for limit, body in branches_of(block(self.room, key)):
+            if re.search(r"(^| )te_jmap_selector = " + str(sel) + r"( |$)", limit) and "OR = {" not in limit:
+                out.append((" ".join(re.sub(r"\bte_jmap_selector = " + str(sel) + r"\b", "", limit).split()), body))
+        return out
+
+    def test_each_entry_draws_the_map_room_s_map(self):
+        # one map, two hosts: the entry's ladder and the Map Room's branches for its selector, in the same order, from
+        # the same triggers and colors (te_journal_map_triggers.txt). A drift paints the two pages differently, silently.
+        for sel, rel, key, *_ in SYSTEM_MAPS:
+            for part in ("map_color", "map_tooltip"):
+                with self.subTest(selector=sel, block=part):
+                    room = self.room_branches(part, sel)
+                    self.assertTrue(room, "no Map Room branch")
+                    self.assertEqual(room[-1][0], "", "the map's last branch takes every state left")
+                    if rel is None:
+                        continue
+                    mine = branches_of(block(entry(rel, key), part))
+                    self.assertEqual(mine, room)
+
+    def test_the_systems_maps_read_only_shared_triggers(self):
+        # every limit of a system map is the shared triggers (yes, or a parameter block), so the entry and the Map Room
+        # can't each grow their own reading
+        names = set(re.findall(r"^(te_jmap_\w+)\s*=\s*\{", code(TRIGGERS), re.M))
+        for sel, *_ in SYSTEM_MAPS:
+            for part in ("map_color", "map_tooltip"):
+                for limit, _body in self.room_branches(part, sel):
+                    for call in re.findall(r"(\w+) = (?:yes|\{)", limit):
+                        self.assertIn(call, names, f"selector {sel}, {part}: {call} is not a shared map trigger")
+
+    def test_each_pick_waits_for_its_system(self):
+        for sel, _rel, _key, pick, *_rest, gate in SYSTEM_MAPS:
+            body = block(self.sguis, f"te_jmap_pick_{pick}_sgui")
+            self.assertIsNotNone(body, pick)
+            self.assertIn(gate, block(body, "is_shown"), pick)
+            self.assertRegex(body, r"te_jmap_set_selector\s*=\s*\{\s*SEL\s*=\s*" + str(sel) + r"\s*\}")
+
+    def test_each_system_tab_has_a_one_click_map_button(self):
+        # the Map Room, not the system's own entry: several entries are held by only some countries, or not yet, and a
+        # button on an entry nobody holds has nothing to open
+        for _sel, _rel, _key, pick, button, tab, _gate in SYSTEM_MAPS:
+            with self.subTest(button=button):
+                name = f"te_jmap_{button}_map_button"
+                self.assertIn(f"{name} = {{}}", code(tab), f"{name} isn't mounted in {tab}")
+                body = block(self.widgets, name)
+                self.assertIn("GetPlayerJournalEntry('je_te_map_room')", body)
+                clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', body)
+                self.assertEqual(len(clicks), 4, "unfade, note the viewer, pick, then open")
+                self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]")
+                # the viewer first: a pick already made is invalid, and its effect (which notes it too) doesn't run
+                self.assertIn("te_jmap_note_viewer_sgui", clicks[1])
+                self.assertIn(f"te_jmap_pick_{pick}_sgui", clicks[2])
+                self.assertEqual(clicks[3], "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]")
+
+    def test_the_your_maps_follow_the_viewer(self):
+        # a paint can't reach the player (is_player drew nothing, 2026-11-05): every pick and map button notes the
+        # player's country as the viewer, and each month a player's pulse does too
+        effects = code(EFFECTS)
+        self.assertIn("te_jmap_note_viewer = yes", block(effects, "te_jmap_set_selector"))
+        self.assertRegex(block(effects, "te_jmap_note_viewer"),
+                         r"set_global_variable\s*=\s*\{\s*name\s*=\s*te_jmap_viewer\s*value\s*=\s*root\s*\}")
+        self.assertIn("te_jmap_monthly_viewer", block(code(ON_ACTIONS), "on_monthly_pulse_country"))
+        self.assertRegex(block(code(ON_ACTIONS), "te_jmap_monthly_viewer"), r"is_player\s*=\s*yes")
+        self.assertIn("te_jmap_note_viewer_sgui", block(self.widgets, "te_jmap_window_button"))
+
+    def test_the_nuclear_map_shows_the_world_s_view_of_others(self):
+        # nuclear.md's privacy rule: another country's true count never shows. The owner is read only through
+        # nd_believed_armed and the public estimate; nd_is_armed is the viewer's own
+        # nd_is_armed is read on nobody, the viewer included: in multiplayer another player sees the viewer's map
+        trig = code(TRIGGERS)
+        secret = ("nuclear_weapon_stockpile", "nd_is_armed", "nd_display_public_estimate", "nd_believed_stockpile",
+                  "nd_stockpile")
+        names = [n for n in re.findall(r"^(te_jmap_\w+)\s*=\s*\{", trig, re.M) if n.startswith(("te_jmap_nuke_",
+                                                                                                "te_jmap_owner_"))]
+        self.assertIn("te_jmap_nuke_guaranteed", names)
+        for name in names:
+            for word in secret:
+                self.assertNotRegex(block(trig, name), r"\b" + word + r"\b", f"{name} reads {word}")
+        for key, text in loc_values().items():
+            if key.startswith("te_jmap_tt_nuke_"):
+                for word in secret:
+                    self.assertNotRegex(text, r"\b" + word + r"\b", key)
+                if "ScriptValue(" in text:
+                    self.assertIn("ScriptValue('nd_shown_public_estimate')", text, key)
+
+    def test_the_political_models_are_the_pie_s_colors(self):
+        import colorsys
+        pie = dict(re.findall(r'\("(\w+)", "(#[0-9a-f]{6})"\)', read(CauseColorsTest.PIE)))
+        text = code(COLORS)
+        models = re.findall(r"te_jmap_ch_model = \{ MODEL = (\d+) \}\s*\}\s*value = \"te_jmap_ch_(\w+)\"",
+                            code(HOST))
+        self.assertEqual([int(n) for n, _ in models], list(range(1, 16)), "one branch per model code")
+        for _n, model in models:
+            h = pie[model]
+            hsv = colorsys.rgb_to_hsv(*(int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)))
+            m = re.search(r"\bte_jmap_ch_" + model + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)\s*\}", text)
+            self.assertIsNotNone(m, model)
+            want = (round(hsv[0] * 360), round(hsv[1] * 100), round(hsv[2] * 100))
+            self.assertEqual(tuple(int(x) for x in m.groups()), want, f"te_jmap_ch_{model} vs the pie's {h}")
+
+    def test_the_model_codes_are_the_census_s(self):
+        # ch_set_political_model's codes, in order (cultural_hegemony_effects.txt's code table)
+        table = read("common/scripted_effects/cultural_hegemony_effects.txt")
+        for n, model in re.findall(r"te_jmap_ch_model = \{ MODEL = (\d+) \}\s*\}\s*value = \"te_jmap_ch_(\w+)\"",
+                                   code(HOST)):
+            self.assertRegex(table, r"\b" + n + r"\s*=?\s*" + model + r"\b", f"code {n} is not {model}")
+
+
+class ScriptChangesTest(unittest.TestCase):
+    """The maps' figures the systems keep for them, since a paint can't walk pops."""
+
+    def test_emissions_are_kept_per_state_in_the_one_yearly_walk(self):
+        body = block(code("common/scripted_effects/global_warming_effects.txt"), "gw_snapshot_country_emissions_effect")
+        state = body.index("name = gw_state_emis")
+        country = body.index("name = gw_disp_country_emis")
+        self.assertLess(state, country, "each state's figure first, then the country's as their sum")
+        self.assertIn("value = gw_country_emis_from_states", body)
+        self.assertNotIn("country_greenhouse_gas_emissions_script_value", body, "a second walk of the pops")
+
+    def test_colonies_are_marked_in_the_pass_that_counts_them(self):
+        body = block(code("common/scripted_effects/colonial_empire_display_effects.txt"),
+                     "colonial_empire_refresh_display")
+        mark = body.index("name = te_jmap_ce_colony")
+        self.assertLess(mark, body.index("name = colonial_empire_colony_count"))
+        self.assertIn("value = te_jmap_ce_colony_count", body)
+        self.assertEqual(body.count("is_overseas_colonial_state"), 1, "one colony test per state")
+
+    def test_the_basins_are_set_from_the_first_month_and_each_january(self):
+        # each January too: a coastal state made after the first month (a colony) would otherwise wait for a claimant
+        effects = code("common/scripted_effects/te_global_commons_seabed_effects.txt")
+        at = effects.index("set_global_variable = te_seabed_basins_set")
+        limit = enclosing(effects, effects.rindex("limit = {", 0, at) + len("limit = {"))
+        self.assertNotIn("abyssal_plain_mining", limit)
+        self.assertIn("NOT = { has_global_variable = te_seabed_basins_set }", limit)
+        self.assertRegex(limit, r"\bmonth = 0\b")
+        self.assertIn("te_seabed_ensure_state_basin = yes", enclosing(effects, at))
+
+    def test_the_emissions_map_reads_nothing_beside_its_guard(self):
+        # a multi-child NOT reads every child (scripting_best_practices.md), so a figure an OR guards is read anyway
+        trig = code(TRIGGERS)
+        for name in ("te_jmap_gw_no_data", "te_jmap_gw_removal"):
+            self.assertNotRegex(block(trig, name), r"\b(?:var|global_var):", name)
+
+
+class WindowButtonTest(unittest.TestCase):
+    def test_the_map_room_button_sits_by_the_width_toggle(self):
+        text = code(SYSTEMS_WINDOW)
+        toggle = enclosing(text, re.search(r"type te_systems_window_toggle = hbox \{", text).end())
+        self.assertIn("te_jmap_window_button = {}", toggle)
+
+    def test_it_opens_the_page_then_closes_the_window(self):
+        # the close comes last: a button whose own window hides mid-click may lose the lines after it
+        body = block(code(WIDGETS), "te_jmap_window_button")
+        self.assertIn("GetPlayerJournalEntry('je_te_map_room')", body)
+        clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', body)
+        self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]")
+        self.assertIn("te_jmap_note_viewer_sgui", clicks[1])
+        self.assertEqual(clicks[2], "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]")
+        self.assertEqual(clicks[3], "[GetVariableSystem.Clear('com_open_window')]")
+
+
+def loc_values():
+    out = {}
+    for name in os.listdir(os.path.join(REPO, LOC_DIR)):
+        if name.endswith(".yml"):
+            for line in read(os.path.join(LOC_DIR, name)).splitlines():
+                m = re.match(r'\s+([A-Za-z0-9_.\-]+):\d*\s+"(.*)"\s*$', line)
+                if m:
+                    out[m.group(1)] = m.group(2)
+    return out
+
+
 class LocTest(unittest.TestCase):
     def test_tooltips_buttons_and_names_have_loc(self):
         keys = loc_keys()
@@ -369,6 +597,7 @@ class GuiTest(unittest.TestCase):
     def test_buttons_are_mounted(self):
         self.assertIn("te_jmap_demog_map_button = {}", code(DEMOG_LAYOUT))
         self.assertIn("te_jmap_banking_map_button = {}", code(BANKING_LAYOUT))
+        self.assertIn("te_jmap_window_button = {}", code(SYSTEMS_WINDOW))
 
     def test_banking_button_has_no_activity_gate(self):
         # the entry is active from the engine's first check (possible = yes), and an inactive page would open and
@@ -377,7 +606,9 @@ class GuiTest(unittest.TestCase):
         self.assertRegex(block(code(BANKING), "je_banking_cycle"), r"\bpossible\s*=\s*\{\s*always\s*=\s*yes\s*\}")
 
     def test_map_buttons_open_pages_whole(self):
-        for name in ("te_jmap_demog_map_button", "te_jmap_banking_map_button"):
+        names = ["te_jmap_demog_map_button", "te_jmap_banking_map_button", "te_jmap_window_button"]
+        names += [f"te_jmap_{button}_map_button" for *_head, button, _tab, _gate in SYSTEM_MAPS]
+        for name in names:
             clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', block(code(WIDGETS), name))
             self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]", name)
 

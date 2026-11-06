@@ -209,4 +209,40 @@
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = no
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): each state's share of
+	# the world's greenhouse gas emissions last year. Root: the state being painted, every state in the world. The Map Room
+	# draws the same map as its selector 18, from the same triggers in the same order
+	# (common/scripted_triggers/te_journal_map_triggers.txt; the parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_gw_no_data = yes }
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = { te_jmap_gw_removal = yes }
+			value = "te_jmap_gw_removal"
+		}
+		else = {
+			lerp = {
+				min_color = "te_jmap_gw_low"
+				max_color = "te_jmap_gw_high"
+				factor = te_jmap_gw_factor
+			}
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_gw_no_data = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_gw_no_data
+		}
+		else_if = {
+			limit = { te_jmap_gw_removal = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_gw_removal
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_gw
+		}
+	}
 }

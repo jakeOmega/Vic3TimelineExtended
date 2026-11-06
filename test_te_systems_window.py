@@ -1091,8 +1091,10 @@ class WideTest(unittest.TestCase):
         for the session. So the full-screen frame's toggle sits at the left,
         under Back; the side panel's stays at its right."""
         toggle_type = _type_body(self.gui, "te_systems_window_toggle")
-        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*button = \{')
-        button = toggle_type.index("button = {")
+        # the Map Room button (te_map_widgets.gui) sits just left of the toggle in both frames
+        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*te_jmap_window_button = \{\}\s*'
+                                      r'button = \{')
+        button = re.search(r"(?<!\w)button = \{", toggle_type).start()
         self.assertRegex(toggle_type[_close(toggle_type, button + len("button = {") - 1):],
                          r'^\}\s*block "toggle_trail" \{\}\s*$')
         narrow = _override(self.narrow, "fixed_top")

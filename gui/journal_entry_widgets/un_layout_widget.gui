@@ -671,6 +671,8 @@ types un_layout_widget_types
 				blockoverride "text" {
 					text = "je_united_nations"
 				}
+				### Show the UN's members and missions on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_un_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
