@@ -1,0 +1,53 @@
+﻿# Power bloc summits (#1442): when an AI bloc leader spends a spare mandate.
+# docs/systems/mod_systems/power_blocs.md.
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_pb_summit_ai_on_action
+	}
+}
+
+# A monthly chance from two stored mandates, rising with the count: 3%, 6%,
+# 10% and 25% at two, three, four and five (the cap), or about 31%, 52%, 72%
+# and 97% a year. AI leaders fill their principle slots quickly, so two in
+# hand rarely means a slot waits; at the cap, mandate progress is wasted, so
+# the summit comes within months. The event's ai_chance picks the initiative.
+# A player convenes from the panel instead (te_pb_summit_sgui).
+te_pb_summit_ai_on_action = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				is_power_bloc_leader = yes
+				power_bloc ?= { num_mandates >= 2 }
+			}
+			if = {
+				limit = { power_bloc ?= { num_mandates >= 5 } }
+				random = {
+					chance = 25
+					trigger_event = { id = te_pb_summit.1 }
+				}
+			}
+			else_if = {
+				limit = { power_bloc ?= { num_mandates >= 4 } }
+				random = {
+					chance = 10
+					trigger_event = { id = te_pb_summit.1 }
+				}
+			}
+			else_if = {
+				limit = { power_bloc ?= { num_mandates >= 3 } }
+				random = {
+					chance = 6
+					trigger_event = { id = te_pb_summit.1 }
+				}
+			}
+			else = {
+				random = {
+					chance = 3
+					trigger_event = { id = te_pb_summit.1 }
+				}
+			}
+		}
+	}
+}

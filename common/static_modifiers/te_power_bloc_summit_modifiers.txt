@@ -1,0 +1,40 @@
+﻿# Power bloc summits (#1442): what a bloc leader buys with a spare mandate.
+# Each is granted by one option of te_pb_summit.1 for long_modifier_time (ten
+# years), removed first so a repeat refreshes rather than stacks. All but
+# te_pb_summit_home sit on the power bloc; te_pb_summit_home sits on the
+# leader. docs/systems/mod_systems/power_blocs.md has the design.
+
+# Rally the Bloc (option a): with an immediate add_cohesion_percent = 0.2.
+# Vanilla's principles move cohesion by 5 to 20; the UN's bloc vacuum gives 10.
+te_pb_summit_rally = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 10
+}
+
+# Recruitment Drive (option b). The Sovereign Empire identity's penalty is -30.
+te_pb_summit_recruitment = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_invite_acceptance_add = 25
+}
+
+# Leverage Campaign (option c). The UN's dissolution vacuum gives +20%.
+te_pb_summit_leverage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	power_bloc_leverage_generation_mult = 0.25
+}
+
+# Open Borders Accord (option e): the abilities of Navy III and Freedom of
+# Movement III, on loan. The option is hidden when the bloc's principles give
+# both (te_pb_summit_has_open_borders).
+te_pb_summit_open_borders = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	power_bloc_allow_port_access_bool = yes
+	power_bloc_allow_wider_migration_area_bool = yes
+}
+
+# A Mandate at Home (option g), on the leader.
+te_pb_summit_home = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 10
+	country_authority_add = 50
+}

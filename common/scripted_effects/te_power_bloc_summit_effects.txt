@@ -1,0 +1,42 @@
+﻿# Power bloc summits (#1442, te_pb_summit.1). docs/systems/mod_systems/power_blocs.md.
+
+# Country scope, the bloc leader: spend one of the bloc's mandates. 1.15's
+# add_power_bloc_mandate takes a negative value, and the count drops within the
+# same effect (te_debug_pb.1's mandate test, 2026-11-06). The tooltip line says
+# what the engine's own line might not. Callers gate on te_pb_summit_can_pay.
+# $KIND$ names the initiative in the log line, for play-test and observer reads.
+te_pb_summit_pay = {
+	custom_tooltip = {
+		text = te_pb_summit_cost_tt
+		power_bloc = {
+			add_power_bloc_mandate = -1
+		}
+	}
+	hidden_effect = {
+		if = {
+			limit = { is_ai = yes }
+			debug_log = "TE_PB_SUMMIT $KIND$ by=ai leader=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_PB_SUMMIT $KIND$ by=player leader=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# Country scope, the bloc leader: grant a bloc initiative for ten years. The
+# copy already running is removed first, unseen, because a same-name
+# add_modifier stacks; the option's tooltip shows the new one.
+te_pb_summit_grant_bloc_initiative = {
+	power_bloc = {
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = $MODIFIER$ }
+				remove_modifier = $MODIFIER$
+			}
+		}
+		add_modifier = {
+			name = $MODIFIER$
+			days = long_modifier_time
+		}
+	}
+}

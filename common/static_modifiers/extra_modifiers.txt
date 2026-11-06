@@ -7994,12 +7994,11 @@ colonial_collapse_subject_unrest_modifier = {
 }
 
 # ============================================================================
-# MANDATE RESERVE - power bloc cohesion bonus scaled on unused mandates.
-# Unit value (1); the real per-tier number is carried by the multiplier in
-# te_unused_mandate_reserve_on_action, which inlines an if/else_if ladder
-# directly in power_bloc scope (num_mandates is a power_bloc-scoped trigger
-# comparator; resolving it via a script value passed as `multiplier` failed
-# because multipliers are evaluated in the caller's country scope).
+# MANDATE RESERVE - RETIRED 2026-11-06 (#1442): spare mandates now buy a bloc
+# summit's initiatives (te_pb_summit.1). Nothing applies it any more. Kept
+# defined so a save carrying it (a 13-month power bloc modifier) loads cleanly;
+# te_unused_mandate_reserve_on_action strips it. Removal checklist:
+# common/scripted_effects/legacy_modifier_cleanup.txt (PENDING REMOVAL).
 # ============================================================================
 sm_te_unused_mandate_reserve = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

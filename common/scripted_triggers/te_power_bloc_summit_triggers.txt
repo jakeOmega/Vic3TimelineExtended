@@ -1,0 +1,27 @@
+﻿# Power bloc summits (#1442, te_pb_summit.1). docs/systems/mod_systems/power_blocs.md.
+
+# Country scope: this country leads a bloc holding a mandate to spend. Gates
+# the summit button (te_pb_summit_sgui) and every option that spends one, since
+# the event can wait while the mandate goes on a principle. Whether
+# add_power_bloc_mandate = -1 takes the count below 0 is untested, so nothing
+# spends without one in hand.
+te_pb_summit_can_pay = {
+	is_power_bloc_leader = yes
+	power_bloc ?= { num_mandates >= 1 }
+}
+
+# Power bloc scope: the bloc's principles already give both abilities the Open
+# Borders Accord would lend (port access from Navy III to V, wider migration
+# from Freedom of Movement III to V), so the option is hidden.
+te_pb_summit_has_open_borders = {
+	OR = {
+		has_principle = principle:principle_navy_3
+		has_principle = principle:principle_navy_4
+		has_principle = principle:principle_navy_5
+	}
+	OR = {
+		has_principle = principle:principle_freedom_of_movement_3
+		has_principle = principle:principle_freedom_of_movement_4
+		has_principle = principle:principle_freedom_of_movement_5
+	}
+}
