@@ -37,13 +37,14 @@ Process fuel and automation both contribute. The figure grows with staffing and
 throughput and feeds the climate calculation. The state owner's industrial
 policy cut applies afterward.
 
-Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
-Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off
-the mine's output instead of listing it as an input, so the methods show no coal
-cost but still show the emissions: 2.00 and 3.00 a level for the two pumps and
-0.60 for the Steam Donkey, at full staffing and base throughput. An Iron Mine
-shows the same 2.00 and 3.00 for these pumps; its Steam Donkey, which lists 4
-coal as an input, shows 0.80. Oil-fired methods in every
+Coal Mines burn some of their own coal. Their Atmospheric Engine Pump,
+Condensing Engine Pump and Steam Donkey methods take that coal off the mine's
+output instead of listing it as an input, so the methods show no coal cost but
+still show the emissions: 2.00 and 3.00 a level for the two pumps and 0.60 for
+the Steam Donkey, at full staffing and base throughput. A Graphite Mine buys the
+same coal for these methods, so it lists it as an input and shows the same
+emissions. An Iron Mine shows the same 2.00 and 3.00 for these pumps; its Steam
+Donkey, which lists 4 coal as an input, shows 0.80. Oil-fired methods in every
 mine list their oil as an input and show it as usual.
 
 Household heating demand follows the buy packages at each state's average

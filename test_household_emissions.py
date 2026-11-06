@@ -187,16 +187,23 @@ class HouseholdEmissionsTest(unittest.TestCase):
 
     def test_every_fuel_method_carries_its_gross_and_capture_its_cut(self):
         methods = self.graph.mod_parsers["PMs"].data
+        groups = self.graph.mod_parsers["PM Groups"].data
+        # Methods some building runs. A group no building lists (the tech metals mine
+        # family, which gen_mine_coproducts.py copies for each of its mines) is a
+        # template, and pm_emissions gives its methods no line.
+        covered = {pm for building in self.graph.mod_parsers["Buildings"].data.values()
+                   for group in body(emissions.unwrap(building), "production_method_groups")
+                   for pm in body(emissions.unwrap(groups[group]), "production_methods")}
         checked = 0
         for name, pm in methods.items():
             gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")},
                                                netted=emissions.netted_fuel(name, pm))
-            if not gross or name in emissions.EXEMPT_METHODS:
+            if not gross or name in emissions.EXEMPT_METHODS or name not in covered:
                 continue
             checked += 1
             if name not in emissions.SYNTHETIC_CREDITS:  # net of the output credit; checked below
                 self.assertEqual(scalar(state_scaled(pm), emissions.STATE_MODIFIER), gross, name)
-        self.assertEqual(checked, 260)
+        self.assertEqual(checked, 345)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
                 self.assertLess(scalar(state_scaled(pm), emissions.STATE_MODIFIER), 0, name)

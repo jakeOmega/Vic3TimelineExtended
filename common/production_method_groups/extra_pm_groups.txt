@@ -436,6 +436,9 @@ INJECT:pmg_steam_automation_building_copper_mine = {
 		pm_laser_excavation_technology_copper_mine
 	}
 }
+# The tech metals mine family. No building runs these three groups: each of the four
+# tech metals mines runs its own copy, with the output split across several goods
+# (scripts/generators/gen_mine_coproducts.py, #1419). Edit the ladder here, then rerun it.
 REPLACE_OR_CREATE:pmg_mining_equipment_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {

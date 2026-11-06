@@ -22,14 +22,14 @@ building_manganese_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_iron_mine
-		pmg_explosives_building_iron_mine
-		pmg_steam_automation_building_iron_mine
+		pmg_mining_equipment_building_manganese_mine
+		pmg_explosives_building_manganese_mine
+		pmg_steam_automation_building_manganese_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_iron_mine
-		pmg_carbon_capture_steam_automation_building_iron_mine
+		pmg_carbon_capture_mining_equipment_building_manganese_mine
+		pmg_carbon_capture_steam_automation_building_manganese_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -53,14 +53,14 @@ building_chromium_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_iron_mine
-		pmg_explosives_building_iron_mine
-		pmg_steam_automation_building_iron_mine
+		pmg_mining_equipment_building_chromium_mine
+		pmg_explosives_building_chromium_mine
+		pmg_steam_automation_building_chromium_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_iron_mine
-		pmg_carbon_capture_steam_automation_building_iron_mine
+		pmg_carbon_capture_mining_equipment_building_chromium_mine
+		pmg_carbon_capture_steam_automation_building_chromium_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -84,14 +84,14 @@ building_specialty_alloy_metal_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_iron_mine
-		pmg_explosives_building_iron_mine
-		pmg_steam_automation_building_iron_mine
+		pmg_mining_equipment_building_specialty_alloy_metal_mine
+		pmg_explosives_building_specialty_alloy_metal_mine
+		pmg_steam_automation_building_specialty_alloy_metal_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_iron_mine
-		pmg_carbon_capture_steam_automation_building_iron_mine
+		pmg_carbon_capture_mining_equipment_building_specialty_alloy_metal_mine
+		pmg_carbon_capture_steam_automation_building_specialty_alloy_metal_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -115,14 +115,14 @@ building_bauxite_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_iron_mine
-		pmg_explosives_building_iron_mine
-		pmg_steam_automation_building_iron_mine
+		pmg_mining_equipment_building_bauxite_mine
+		pmg_explosives_building_bauxite_mine
+		pmg_steam_automation_building_bauxite_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_iron_mine
-		pmg_carbon_capture_steam_automation_building_iron_mine
+		pmg_carbon_capture_mining_equipment_building_bauxite_mine
+		pmg_carbon_capture_steam_automation_building_bauxite_mine
 	}
 
 	required_construction = construction_cost_high
@@ -146,14 +146,14 @@ building_precious_minor_base_metal_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_lead_mine
-		pmg_explosives_building_lead_mine
-		pmg_steam_automation_building_lead_mine
+		pmg_mining_equipment_building_precious_minor_base_metal_mine
+		pmg_explosives_building_precious_minor_base_metal_mine
+		pmg_steam_automation_building_precious_minor_base_metal_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_lead_mine
-		pmg_carbon_capture_steam_automation_building_lead_mine
+		pmg_carbon_capture_mining_equipment_building_precious_minor_base_metal_mine
+		pmg_carbon_capture_steam_automation_building_precious_minor_base_metal_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -177,14 +177,14 @@ building_nickel_cobalt_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_tech_metals_mine
-		pmg_explosives_building_tech_metals_mine
-		pmg_steam_automation_building_tech_metals_mine
+		pmg_mining_equipment_building_nickel_cobalt_mine
+		pmg_explosives_building_nickel_cobalt_mine
+		pmg_steam_automation_building_nickel_cobalt_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
-		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
-		pmg_carbon_capture_steam_automation_building_tech_metals_mine
+		pmg_carbon_capture_mining_equipment_building_nickel_cobalt_mine
+		pmg_carbon_capture_steam_automation_building_nickel_cobalt_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -208,14 +208,14 @@ building_lithium_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_tech_metals_mine
-		pmg_explosives_building_tech_metals_mine
-		pmg_steam_automation_building_tech_metals_mine
+		pmg_mining_equipment_building_lithium_mine
+		pmg_explosives_building_lithium_mine
+		pmg_steam_automation_building_lithium_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
-		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
-		pmg_carbon_capture_steam_automation_building_tech_metals_mine
+		pmg_carbon_capture_mining_equipment_building_lithium_mine
+		pmg_carbon_capture_steam_automation_building_lithium_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -239,14 +239,14 @@ building_rare_earth_metals_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_tech_metals_mine
-		pmg_explosives_building_tech_metals_mine
-		pmg_steam_automation_building_tech_metals_mine
+		pmg_mining_equipment_building_rare_earth_metals_mine
+		pmg_explosives_building_rare_earth_metals_mine
+		pmg_steam_automation_building_rare_earth_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
-		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
-		pmg_carbon_capture_steam_automation_building_tech_metals_mine
+		pmg_carbon_capture_mining_equipment_building_rare_earth_metals_mine
+		pmg_carbon_capture_steam_automation_building_rare_earth_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -270,14 +270,14 @@ building_platinum_group_metals_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_tech_metals_mine
-		pmg_explosives_building_tech_metals_mine
-		pmg_steam_automation_building_tech_metals_mine
+		pmg_mining_equipment_building_platinum_group_metals_mine
+		pmg_explosives_building_platinum_group_metals_mine
+		pmg_steam_automation_building_platinum_group_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
-		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
-		pmg_carbon_capture_steam_automation_building_tech_metals_mine
+		pmg_carbon_capture_mining_equipment_building_platinum_group_metals_mine
+		pmg_carbon_capture_steam_automation_building_platinum_group_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -301,14 +301,14 @@ building_graphite_mine = {
 	}
 
 	production_method_groups = {
-		pmg_mining_equipment_building_coal_mine
-		pmg_explosives_building_coal_mine
-		pmg_steam_automation_building_coal_mine
+		pmg_mining_equipment_building_graphite_mine
+		pmg_explosives_building_graphite_mine
+		pmg_steam_automation_building_graphite_mine
 		pmg_train_automation_building_coal_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
-		pmg_carbon_capture_mining_equipment_building_coal_mine
-		pmg_carbon_capture_steam_automation_building_coal_mine
+		pmg_carbon_capture_mining_equipment_building_graphite_mine
+		pmg_carbon_capture_steam_automation_building_graphite_mine
 	}
 
 	required_construction = construction_cost_high
