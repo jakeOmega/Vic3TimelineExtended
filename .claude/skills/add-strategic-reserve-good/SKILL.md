@@ -94,7 +94,7 @@ Don't change these for one good in isolation — they're a single global pool. I
 
 ## Verification (every time)
 
-Run all four after the edits, in order:
+Run all five after the edits, in order:
 
 1. **Parse.** `.venv/bin/python -c "from paradox_file_parser import ParadoxFileParser; p = ParadoxFileParser(); [p.parse_file(f) for f in [<list of edited .txt files>]]; print('OK')"` — catches brace mismatches before the engine sees them.
 
@@ -103,6 +103,8 @@ Run all four after the edits, in order:
 3. **Engine coverage.** `curl -s http://127.0.0.1:8950/validate/engine-coverage | python3 -c "import json,sys; d=json.load(sys.stdin); print('unknown:', len(d.get('unknown_modifiers',[]))); print('suspicious:', len(d.get('suspicious_modifiers',[])))"`. Both must be 0. Anything non-zero — likely a missed mult-axis registration — go back to the pre-flight section.
 
 4. **debug.log spot check.** `curl -s 'http://127.0.0.1:8950/logs/debug?summary=false&dedupe=true&q=<NEW_GOOD>' | python3 -c "import json,sys; d=json.load(sys.stdin); print('entries:', d.get('total_unique', 0)); [print(e.get('message','')[:200]) for e in d.get('entries',[])]"`. 0 entries is the goal. The debug.log is from the **previous** game session, so this confirms no historical errors; for a true runtime check the user has to launch the game.
+
+5. **Goods-name splices.** `python3 scripts/analysis/check_goods_label_splices.py` must print nothing. The `country_st_res_<GOOD>_*` labels and their `_desc`s are goods-keyed, so naming the good in them, even in flavor text ("Copper ingots keep indefinitely"), fails CI's `test_check_goods_label_splices` (copper, #1422). Write the good in lowercase prose as the other goods' lines do, or splice `$<GOOD>$`.
 
 ## In-game verification caveat (mention this proactively)
 

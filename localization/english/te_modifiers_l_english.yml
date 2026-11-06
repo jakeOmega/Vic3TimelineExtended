@@ -350,7 +350,7 @@
  country_st_res_copper_capacity_add:0 "$copper$ Reserve Capacity"
  country_st_res_copper_capacity_add_desc:0 "Maximum conductive metals that can be held in the national strategic reserve."
  country_st_res_copper_decay_add:0 "$copper$ Reserve Decay"
- country_st_res_copper_decay_add_desc:0 "Fraction of the conductive metals stockpile lost per year. Copper ingots and cathodes keep indefinitely, so the base rate is zero."
+ country_st_res_copper_decay_add_desc:0 "Fraction of the conductive metals stockpile lost per year. Ingots and cathodes keep indefinitely, so the base rate is zero."
  country_st_res_fertilizer_capacity_add:0 "$fertilizer$ Reserve Capacity"
  country_st_res_fertilizer_capacity_add_desc:0 "Maximum chemicals that can be held in the national strategic reserve."
  country_st_res_fertilizer_decay_add:0 "$fertilizer$ Reserve Decay"
