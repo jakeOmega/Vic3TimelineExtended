@@ -119,7 +119,7 @@ class NothingTradesWithoutHubTests(unittest.TestCase):
         read_only = [n for n in names if re.search(r"is_valid = \{ always = no \}", _block(SGUIS, n))]
         self.assertEqual(read_only, ["st_res_ov_held_sgui"])
         names = [n for n in names if n not in read_only]
-        self.assertEqual(len(names), 21)
+        self.assertEqual(len(names), 23)
         for name in names:
             with self.subTest(sgui=name):
                 valid = _block(_block(SGUIS, name), "is_valid", top_level=False)

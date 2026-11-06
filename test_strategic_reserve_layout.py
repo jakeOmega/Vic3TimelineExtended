@@ -651,7 +651,7 @@ def _display(value, loc, stand_ins=()):
 # (loc key, cell width, font, stand-ins for its [data] in order)
 STATIC_CELLS = (
     [(f"st_res_row_{g}_name", 150, "row", ()) for g in
-     ("grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer")]
+     ("grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer", "copper")]
     + [("je_strategic_reserve_inv_col_good", 150, "row", ()),
        ("je_strategic_reserve_inv_col_stock", 92, "row", ()),
        ("je_strategic_reserve_inv_col_status", 64, "row", ()),

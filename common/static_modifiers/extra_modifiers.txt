@@ -56,6 +56,10 @@
 	# loses its chlorine, carboys break. Eight techs from improved_fertilizer
 	# (era 3) to molecular_assemblers (era 13) bring it down to 0.001.
 	country_st_res_fertilizer_decay_add = 0.04
+	# Copper (Conductive Metals): ingots and cathodes keep indefinitely, so the
+	# stock does not decay (owner, 2026-11-05, #1405). The line stays so the
+	# decay modifier has a base like every other good's.
+	country_st_res_copper_decay_add = 0
 
 	# ------------------------------------------------------------------------
 	# Monetary Policy — cancel vanilla's flat base interest rate (§16.1)
@@ -7789,9 +7793,19 @@ st_res_fertilizer_store_flow = {
 	goods_input_fertilizer_mult = 1
 }
 
+st_res_copper_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_copper_mult = 1
+}
+
 st_res_fertilizer_withdraw_flow = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_fertilizer_mult = 1
+}
+
+st_res_copper_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_copper_mult = 1
 }
 
 st_res_sell_profit_modifier = {

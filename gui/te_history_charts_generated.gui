@@ -2119,6 +2119,123 @@ types te_history_charts_generated_types
 		}
 	}
 
+	### st_res_copper: strategic_reserve, monthly
+	type te_hist_st_res_copper = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
+
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "st_res_hist_title"
+			}
+			blockoverride "chart_legend" {
+				text = "st_res_hist_legend"
+			}
+			blockoverride "marker_pips" {}
+			blockoverride "bar_tooltip" {
+				tooltip = "st_res_hist_tt_copper"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_copper' )]"
+					blockoverride "values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_copper' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_copper' ), '(CFixedPoint)4' ) ) )]"
+					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_copper')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_copper')]"
+				}
+			}
+		}
+	}
+
+	type te_hist_st_res_copper_large = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
+
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "st_res_hist_title"
+			}
+			blockoverride "chart_legend" {
+				text = "st_res_hist_legend"
+			}
+			blockoverride "marker_pips" {}
+			blockoverride "bar_tooltip" {
+				tooltip = "st_res_hist_tt_copper"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_copper' )]"
+					blockoverride "values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.5', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_copper' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_copper' ), '(CFixedPoint)1' ) ) )]"
+					}
+				}
+			}
+			blockoverride "plot_size" {
+				size = { 1216 348 }
+			}
+			blockoverride "plot_layouts" {
+				te_history_plot = {
+					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+				}
+				te_history_plot = {
+					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '5' )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+				}
+				te_history_plot = {
+					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]"
+					blockoverride "bar_size" {
+						size = { 5 336 }
+					}
+				}
+			}
+			blockoverride "chart_text_width" {
+				max_width = 1204
+			}
+			blockoverride "empty_width" {
+				max_width = 1000
+			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
+		}
+	}
+
 	### demog_births_deaths: demographics, annual_pips
 	type te_hist_demog_births_deaths = flowcontainer {
 		direction = vertical
@@ -6627,6 +6744,47 @@ types te_history_charts_generated_types
 		}
 	}
 
+	type te_chart_st_res_copper_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_copper')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_copper_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_copper_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
 	type te_chart_demog_births_deaths_popup = te_ui_popup {
 		blockoverride "popup_visible" {
 			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_births_deaths')]"
@@ -7297,6 +7455,7 @@ types te_history_charts_generated_types
 		te_chart_st_res_aeroplanes_popup = {}
 		te_chart_st_res_tanks_popup = {}
 		te_chart_st_res_fertilizer_popup = {}
+		te_chart_st_res_copper_popup = {}
 		te_chart_demog_births_deaths_popup = {}
 		te_chart_demog_migration_popup = {}
 		te_chart_demog_e0_popup = {}
@@ -7721,6 +7880,31 @@ types te_history_charts_generated_types
 
 				te_chart_range_row_te_hist_range = {}
 				te_hist_st_res_fertilizer_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_copper_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_copper')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_copper_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_copper_large = {}
 			}
 		}
 	}
@@ -8180,6 +8364,7 @@ types te_history_charts_generated_types
 		te_ni_chart_st_res_aeroplanes_popup = {}
 		te_ni_chart_st_res_tanks_popup = {}
 		te_ni_chart_st_res_fertilizer_popup = {}
+		te_ni_chart_st_res_copper_popup = {}
 		te_ni_chart_demog_births_deaths_popup = {}
 		te_ni_chart_demog_migration_popup = {}
 		te_ni_chart_demog_e0_popup = {}

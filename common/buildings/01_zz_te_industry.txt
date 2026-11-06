@@ -29,6 +29,26 @@ building_synthetics_plant_silk = {
 
 	required_construction = construction_cost_very_high
 
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -55,6 +75,26 @@ building_synthetics_plant_oil = {
 
 	required_construction = construction_cost_super_high
 
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -79,6 +119,26 @@ building_synthetics_plant_rubber = {
 	}
 
 	required_construction = construction_cost_super_high
+
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes
@@ -105,6 +165,26 @@ building_synthetics_plant_coal = {
 
 	required_construction = construction_cost_super_high
 
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -129,6 +209,26 @@ building_synthetics_plant_wood = {
 	}
 
 	required_construction = construction_cost_mega_high
+
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes
@@ -155,6 +255,26 @@ building_synthetics_plant_sugar = {
 
 	required_construction = construction_cost_super_high
 
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -179,6 +299,26 @@ building_synthetics_plant_drinks = {
 	}
 
 	required_construction = construction_cost_super_high
+
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes
@@ -319,6 +459,26 @@ building_electrics_industry_radio = {
 	}
 
 	required_construction = construction_cost_super_high
+
+	# Vanilla 1.15's weight on its heavy industries: the AI favors the building
+	# while a Five-Year Plan's heavy-industry goal is open, which counts
+	# bg_heavy_industry levels (#1405).
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes

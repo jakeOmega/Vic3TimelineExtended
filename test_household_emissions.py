@@ -263,7 +263,7 @@ class HouseholdEmissionsTest(unittest.TestCase):
             if emissions.ATMOSPHERIC_MODIFIER in mirror:
                 return cost / scalar(mirror, emissions.ATMOSPHERIC_MODIFIER)
             return cost / -scalar(mirror, emissions.STATE_MODIFIER)
-        self.assertGreater(cost_per_unit("pm_direct_air_capture"), cost_per_unit("pm_carbon_capture_2_base_building_power_plant_coal25_oil0"))
+        self.assertGreater(cost_per_unit("pm_direct_air_capture"), cost_per_unit("pm_carbon_capture_2_base_building_power_plant_coal20_oil0"))
 
     def test_ownership_updates_preserve_other_state_blocks_and_remove_stale_mirrors(self):
         block = 'pm_test = {\n\tstate_modifiers = {\n\t\tunscaled = { state_pollution_generation_add = 2 }\n\t}\n}\n'

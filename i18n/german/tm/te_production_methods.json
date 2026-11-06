@@ -807,11 +807,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil35": {
-  "en": "Partial Carbon Capture (35 Oil)",
-  "de": "Partielle CO2-Abscheidung (35 Öl)"
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil30": {
+  "en": "Partial Carbon Capture (30 Oil)",
+  "de": "Partielle CO2-Abscheidung (30 Öl)"
  },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil35_desc": {
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil30_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -820,14 +820,6 @@
   "de": "Partielle CO2-Abscheidung (20 Kohle)"
  },
  "pm_carbon_capture_1_base_building_power_plant_coal20_oil0_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_1_base_building_power_plant_coal25_oil0": {
-  "en": "Partial Carbon Capture (25 Coal)",
-  "de": "Partielle CO2-Abscheidung (25 Kohle)"
- },
- "pm_carbon_capture_1_base_building_power_plant_coal25_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1743,11 +1735,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil35": {
-  "en": "Carbon Capture and Storage (35 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (35 Öl)"
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil30": {
+  "en": "Carbon Capture and Storage (30 Oil)",
+  "de": "CO2-Abscheidung und -Speicherung (30 Öl)"
  },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil35_desc": {
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil30_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1756,14 +1748,6 @@
   "de": "CO2-Abscheidung und -Speicherung (20 Kohle)"
  },
  "pm_carbon_capture_2_base_building_power_plant_coal20_oil0_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_2_base_building_power_plant_coal25_oil0": {
-  "en": "Carbon Capture and Storage (25 Coal)",
-  "de": "CO2-Abscheidung und -Speicherung (25 Kohle)"
- },
- "pm_carbon_capture_2_base_building_power_plant_coal25_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2679,11 +2663,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil35": {
-  "en": "Advanced Carbon Capture (35 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (35 Öl)"
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil30": {
+  "en": "Advanced Carbon Capture (30 Oil)",
+  "de": "Fortgeschrittene CO2-Abscheidung (30 Öl)"
  },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil35_desc": {
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil30_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2692,14 +2676,6 @@
   "de": "Fortgeschrittene CO2-Abscheidung (20 Kohle)"
  },
  "pm_carbon_capture_3_base_building_power_plant_coal20_oil0_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_3_base_building_power_plant_coal25_oil0": {
-  "en": "Advanced Carbon Capture (25 Coal)",
-  "de": "Fortgeschrittene CO2-Abscheidung (25 Kohle)"
- },
- "pm_carbon_capture_3_base_building_power_plant_coal25_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },

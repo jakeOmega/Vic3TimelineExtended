@@ -239,7 +239,7 @@ BANKING_SHOWN = {"mon_policy": f"Not( {_DIGITAL} )", "mon_policy_digital": _DIGI
                  "mon_inflation": _MONETARY, "mon_fx": _MONETARY}
 
 
-ST_RES_GOODS = ["grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer"]
+ST_RES_GOODS = ["grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer", "copper"]
 
 CHARTS: list[Chart] = (
     _monthly("banking", "je_banking_cycle", "te_budget_banking_tab_sgui",
@@ -666,7 +666,7 @@ def ni_popups() -> list[str]:
     """te_ni_chart_viewers: every chart's viewer for another country, for
     National Info to instance once. Up only while one is open, as te_popups is
     only while te_popup exists: no full-window widget lies over the Pops rows,
-    and the 33 viewers are built only then."""
+    and the 34 viewers are built only then."""
     return (["type te_ni_chart_viewers = widget {", "\tsize = { 100% 100% }",
              f"\tvisible = \"[GetVariableSystem.Exists('{NI_KEY}')]\"", ""]
             + [f"\t{ni_popup_name(c)} = {{}}" for c in CHARTS] + ["}"])

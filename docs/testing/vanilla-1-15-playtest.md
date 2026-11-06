@@ -127,6 +127,14 @@ or Spanish game.
   Sumitomo show their copper bonuses.
 - An old save: the mod's old copper mines and renamed carbon-capture variants fall back to their groups' defaults.
 - Copper discovery pacing over a few decades; one copper belt each in Katanga, Zambia and Antofagasta.
+- The copper follow-ups (#1405): Conductive Metals shows in the Strategic Reserve with Electrical Generation, a
+  ninth row named "Conductors" with the copper icon and 0% decay; the hub stores and releases it (its intake needs
+  the newly registered `goods_input_copper_mult`: no `Unknown modifier type` for it in `debug.log`). BHP Group and
+  Vale list High-Conductivity Copper, drawn with the base game's copper goods icon until a painted one is made. A
+  Grid Transfer Station buys 2 Conductive Metals a week, and an HVDC Undersea Interconnector 6. Copper's price over a
+  few decades now that power, construction, munitions and assembly lines take it. The modern coal and oil plants burn
+  20% and 14% less fuel for the same power, so the next observer run's warming at 2015 (about 1.1 °C before) may
+  read a little lower.
 
 **The map**
 - TULA, KOSTROMA and the renamed states (LITHUANIA, SARATOV, VOLOGDA) have tourism, a Local Climate tile, an area,

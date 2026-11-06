@@ -481,8 +481,8 @@ Two things join grids that don't touch:
 
 - With Clean Energy Technologies, you can build an HVDC Undersea
 Interconnector in a coastal state that has a station, built or queued: one
-per state, for 400 construction. Your government pays its engineers and
-Electronic Components. It lays an undersea cable with an
+per state, for 400 construction. Your government pays its engineers,
+Electronic Components and Conductive Metals. It lays an undersea cable with an
 Undersea Cable Range of 1 Sea Node. Smart Grids and Quantum Materials add 1
 each, but only to interconnectors: a station without one has no cable. Two
 cables join their grids when either one's range reaches the other: at 1,
@@ -583,7 +583,7 @@ trades nor replaces what decays.
 
 ### Reserve goods and decay
 
-The reserve holds eight goods. Stock decays every week at a yearly rate that
+The reserve holds nine goods. Stock decays every week at a yearly rate that
 technology lowers.
 
 | Good | Available from | Decay per year at first | After all technologies |
@@ -594,14 +594,15 @@ technology lowers.
 | Ammunition | Percussion Cap | 2% | 0.5% |
 | Oil | Fractional Distillation | 0.5% | 0.05% |
 | Chemicals | Intensive Agriculture | 4% | 0.1% |
+| Conductive Metals | Electrical Generation | 0% | 0% |
 | Aeroplanes | Military Aviation | 4% | 2% |
 | Tanks | Mobile Armor | 2.5% | 1.4% |
 
 Aeroplane and tank decay rises for a time with jets, stealth aircraft and
-composite armor before later technologies bring it down. The hub buys each
-week's decay on top of whatever rate you set, so a rate of 0 holds a stockpile
-steady at a small ongoing cost. Hover a good's row for its decay rate broken
-down by source.
+composite armor before later technologies bring it down. Conductive metals
+don't decay at all. The hub buys each week's decay on top of whatever rate you
+set, so a rate of 0 holds a stockpile steady at a small ongoing cost. Hover a
+good's row for its decay rate broken down by source.
 
 ### The Strategic Reserve panel
 
@@ -750,7 +751,7 @@ unlocked:
 | Button | What it does | When to use it |
 |---|---|---|
 | All: Stabilize | Every good to Stabilize Prices with the Standard preset. | To lean against price swings in every market you stock. |
-| Military: Stockpile | Ammunition, oil, small arms, artillery, aeroplanes and tanks to Stockpile with its preset. Grain and chemicals keep their policy. | To build a war reserve at about base price. |
+| Military: Stockpile | Ammunition, oil, small arms, artillery, aeroplanes and tanks to Stockpile with its preset. Grain, chemicals and conductive metals keep their policy. | To build a war reserve at about base price. |
 | All: Manual | Every good to Manual. Each keeps its current rate and settings. | To take back control without stopping trade; Reset Rates also sets every rate to 0. |
 
 ### Moving or losing the reserve hub
@@ -799,8 +800,8 @@ Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 The AI founds its reserve through Establish a Strategic Reserve: great and major
 powers take it, more readily in peacetime, and so does any country with a GDP
 above 10 million. AI reserves add silos once any good passes 75% of capacity.
-An AI reserve runs grain and chemicals on Stabilize Prices with the
-Conservative preset: it buys below −20% and releases above +30%. Its
+An AI reserve runs grain, chemicals and conductive metals on Stabilize Prices
+with the Conservative preset: it buys below −20% and releases above +30%. Its
 ammunition, oil, small arms, artillery, aeroplanes and tanks go on Stockpile
 with the Stockpile preset while its treasury allows: it must not be borrowing
 or in default, and it needs a quarter of its gold reserve limit in hand to

@@ -113,3 +113,12 @@ prestige_good_generic_tech_metals = {
 	prestige_bonus = 0.1
 	texture = "gfx/interface/icons/goods_icons/prestige_goods/prestige_good_generic_tech_metals.dds"
 }
+
+# Copper (Conductive Metals), from vanilla 1.15 (#1405). BHP Group and Vale make
+# it in their Copper Mines. The texture is the base game's copper goods icon
+# until a painted one is made.
+prestige_good_generic_copper = {
+	base_good = copper
+	prestige_bonus = 0.1
+	texture = "gfx/interface/icons/goods_icons/copper.dds"
+}
