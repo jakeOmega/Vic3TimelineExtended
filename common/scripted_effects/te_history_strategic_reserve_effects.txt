@@ -74,5 +74,9 @@ te_history_record_strategic_reserve_samples = {
 			limit = { st_res_fertilizer_unlocked_trigger = yes }
 			te_history_record_sample = { METRIC = st_res_fertilizer VALUE = st_res_fertilizer_fill_pct }
 		}
+		if = {
+			limit = { st_res_copper_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_copper VALUE = st_res_copper_fill_pct }
+		}
 	}
 }

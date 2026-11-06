@@ -2311,6 +2311,108 @@ types strategic_reserve_widget_types
 					}
 				}
 			}
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_copper_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_copper_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_copper_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_copper_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_copper_name" }
+				blockoverride "row_stock_tooltip" { tooltip = "st_res_row_copper_stock_tt" }
+				blockoverride "row_status" { tooltip = "st_res_row_copper_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_auto_tooltip" { tooltip = "st_res_row_copper_auto_tooltip" }
+				blockoverride "row_rate_short" { text = "st_res_row_copper_rate_short" }
+				blockoverride "row_stored" { text = "st_res_row_copper_amount" }
+				blockoverride "row_rate" { text = "st_res_row_copper_flow" }
+				blockoverride "row_rate_tooltip" { tooltip = "st_res_row_copper_rate_tt" }
+				blockoverride "row_last" { text = "st_res_row_copper_last" }
+				blockoverride "row_decay" { text = "st_res_row_copper_decay" }
+				blockoverride "row_decay_tooltip" { tooltip = "st_res_row_copper_decay_tt" }
+				blockoverride "row_price" { text = "st_res_row_copper_price" }
+				blockoverride "row_policy" { text = "st_res_row_copper_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_copper_policy_reason" }
+				blockoverride "row_history" {
+					te_hist_st_res_copper = {}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_copper_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_copper_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_copper_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_copper_open'), GetVariableSystem.Exists('st_res_policy_copper_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_copper_sgui')]"
+						}
+						blockoverride "policy_value_policy" { text = "st_res_row_copper_policy" }
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
 		}
 	}
 

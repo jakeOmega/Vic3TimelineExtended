@@ -399,6 +399,18 @@ goods_output_copper_mult = {
 	}
 }
 
+# Vanilla 1.15 registers neither copper mult axis. The Strategic Reserve's
+# st_res_copper_store_flow needs the input axis (#1405), or the hub's copper
+# intake silently no-ops, as aeroplanes' once did.
+goods_input_copper_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
 goods_output_gold_mult = {
 	color = good
 	percent = yes

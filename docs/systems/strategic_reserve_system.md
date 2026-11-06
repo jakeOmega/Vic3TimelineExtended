@@ -1,6 +1,6 @@
 ﻿# Strategic Reserve System (SRS)
 
-A national stockpile system that lets countries physically hoard eight goods: **grain**, **ammunition**, **oil**, **small arms**, **artillery**, **aeroplanes**, **tanks** and **chemicals** (script ID `fertilizer`; the mod renames the vanilla good to Chemicals in `localization/english/replace/timeline_extended_override_l_english.yml`, so every player-facing string says *Chemicals* while every script name says `fertilizer`). Storing/withdrawing interacts directly with the market through transient hub-building modifiers, so reserve operations shift prices. The player controls a **signed weekly rate** per good plus one shared **step size**: positive rates store goods, negative rates withdraw goods, and stockpiles decay continuously. Each good can instead be put on a **price-triggered policy** that re-decides its rate every week from a running average of the market price, with either a step or a linear response; one of them, **Stockpile**, buys at about base price and sells only at war (§4.6).
+A national stockpile system that lets countries physically hoard nine goods: **grain**, **ammunition**, **oil**, **small arms**, **artillery**, **aeroplanes**, **tanks**, **chemicals** (script ID `fertilizer`; the mod renames the vanilla good to Chemicals in `localization/english/replace/timeline_extended_override_l_english.yml`, so every player-facing string says *Chemicals* while every script name says `fertilizer`) and **conductive metals** (script ID `copper`, vanilla 1.15's good, renamed the same way; added 2026-11-05, #1405). Storing/withdrawing interacts directly with the market through transient hub-building modifiers, so reserve operations shift prices. The player controls a **signed weekly rate** per good plus one shared **step size**: positive rates store goods, negative rates withdraw goods, and stockpiles decay continuously. Each good can instead be put on a **price-triggered policy** that re-decides its rate every week from a running average of the market price, with either a step or a linear response; one of them, **Stockpile**, buys at about base price and sells only at war (§4.6).
 
 This document describes the **current implementation**. See §8 for deviations from the original AI-drafted spec.
 
@@ -14,7 +14,7 @@ This document describes the **current implementation**. See §8 for deviations f
 | [common/production_method_groups/strategic_reserve_pmgs.txt](../../common/production_method_groups/strategic_reserve_pmgs.txt) | `pmg_st_res_hub` + `pmg_st_res_silo_capacity`, one PM each |
 | [common/production_methods/strategic_reserve_pms.txt](../../common/production_methods/strategic_reserve_pms.txt) | `pm_st_res_hub_reserve` (per-good capacity + the load-bearing base 1-unit goods I/O) and `pm_st_res_silo_capacity` |
 | [common/modifier_type_definitions/st_res_modifier_types.txt](../../common/modifier_type_definitions/st_res_modifier_types.txt) | `country_st_res_<good>_capacity_add`, `country_st_res_<good>_decay_add`, `country_st_res_weekly_rate_cap_add` |
-| [common/modifier_type_definitions/mod_entity_modifier_types.txt](../../common/modifier_type_definitions/mod_entity_modifier_types.txt) | The `goods_input_<good>_mult` / `goods_output_<good>_mult` axes vanilla leaves unregistered: `grain` (both), `aeroplanes` (input), `fertilizer` (both). Without them a hub-flow modifier silently no-ops |
+| [common/modifier_type_definitions/mod_entity_modifier_types.txt](../../common/modifier_type_definitions/mod_entity_modifier_types.txt) | The `goods_input_<good>_mult` / `goods_output_<good>_mult` axes vanilla leaves unregistered: `grain` (both), `aeroplanes` (input), `fertilizer` (both), `copper` (both; vanilla 1.15 registers neither). Without them a hub-flow modifier silently no-ops |
 | [common/static_modifiers/extra_modifiers.txt](../../common/static_modifiers/extra_modifiers.txt) | `INJECT:base_values` (base decay rates) + the `st_res_<good>_store_flow` / `st_res_<good>_withdraw_flow` hub-flow modifiers and `st_res_sell_profit_modifier` |
 | [common/script_values/st_res_script_values.txt](../../common/script_values/st_res_script_values.txt) | Hub level, throughput factor, signed rate cap, weekly deltas, capacity, fill-%, the per-good policy price values, and the panel's display-only values (`st_res_disp_hub_staffed`, `st_res_<good>_disp_status` / `_disp_policy` / `_disp_target` / `_disp_floor`) |
 | [common/scripted_effects/st_res_effects.txt](../../common/scripted_effects/st_res_effects.txt) | Init, reset, hub-cache refresh, hub-flow rebuild, weekly bookkeeping, signed-rate controls, status derivation, policy evaluation, the all-goods policy buttons, AI seeding and the AI's weekly review |
@@ -80,6 +80,7 @@ The PM is the same for every good and has no tech gate. Which goods the player s
 | Ammunition | `ammunition` | `percussion_cap` |
 | Oil | `oil` | `fractional_distillation` |
 | Chemicals | `fertilizer` | `intensive_agriculture` (the tech that unlocks the Chemical Plant, the good's producer) |
+| Conductive metals | `copper` | `electrical_generation` (when copper becomes strategic: generators, motors and wire) |
 | Aeroplanes | `aeroplanes` | `military_aviation` |
 | Tanks | `tanks` | `mobile_armor` |
 
@@ -183,12 +184,13 @@ Decay rates are **custom country modifier types** (`country_st_res_<good>_decay_
 | Chemicals (`fertilizer`) | 4% | −1 pp each: `improved_fertilizer`, `nitrogen_fixation`; −0.75 pp `modern_chemical_processes`; −0.5 pp `plastic_mass_production`; −0.25 pp `pollution_control`; −0.1 pp `supply_chain_management`; −0.15 pp each: `advanced_nanofabrication`, `molecular_assemblers` | 0.1% |
 | Aeroplanes | 4% | rises in eras 7–9 (jets, stealth, UAVs), then falls in eras 10–12; ten techs | 2% |
 | Tanks | 2.5% | rises in era 9 (composite armor, network-centric warfare), then falls in eras 10–12; eight techs | 1.4% |
+| Conductive metals (`copper`) | 0% | none: ingots and cathodes keep indefinitely (owner, 2026-11-05) | 0% |
 
 Chemicals decay follows how chemical storage actually changed. In era 2 the stock sits in wooden casks, jute sacks and glass carboys: saltpetre and other hygroscopic salts cake, superphosphate "reverts" (its water-soluble phosphate turns insoluble), bleaching powder loses its chlorine, and carboys break. So 4% sits above ammunition's 2% and far below grain's 25%. The cuts track purer product grades (era 3), Haber-Bosch product in steel tanks and drums (era 4), prilling and anti-caking coatings (era 6), polyethylene sacks and tank liners (era 7), vapour recovery and spill containment (era 7), stock rotation (era 9), and impermeable coatings and on-site re-synthesis (era 12). The 0.1% endpoint sits between oil (0.05%) and ammunition (0.5%). Decay models physical and quality loss only. The real modern cost of holding bulk chemicals is storage rent, which the reserve charges through the hub's construction and staffing.
 
 `st_res_<good>_annual_decay_rate` reads the modifier and floors it at 0, so further tech reductions cannot push decay negative; `st_res_<good>_decay_rate` divides it by 52 (capped at 1) for the weekly tick. The annual value is the single derivation site: an expanded inventory row's Decay cell shows it as *X%/yr* (§5), and the row tooltip adds the modifier's `GetValueWithBreakdownFor`, a hoverable breakdown of every source. The breakdown is the raw modifier, so it would read below 0% if tech ever cut a good past zero, while the row and the bookkeeping stop at 0%. No good does today; grain lands exactly on 0%.
 
-Each good's `st_res_row_<good>_decay` key picks its own decimals to match that good's finest tech step: `%0` for grain (5 pp steps), `%2` for oil and chemicals (0.05–0.25 pp steps), `%1` for the rest. A new tech with a finer step needs the good's `st_res_row_<good>_decay` format widened, or the row rounds it away.
+Each good's `st_res_row_<good>_decay` key picks its own decimals to match that good's finest tech step: `%0` for grain (5 pp steps) and conductive metals (no decay), `%2` for oil and chemicals (0.05–0.25 pp steps), `%1` for the rest. A new tech with a finer step needs the good's `st_res_row_<good>_decay` format widened, or the row rounds it away.
 
 ### 4.5 Hub-flow safeguards
 
@@ -202,7 +204,7 @@ Each good's `st_res_row_<good>_decay` key picks its own decimals to match that g
 
 The two modifiers are `goods_input_<good>_mult = 1` and `goods_output_<good>_mult = 1` static modifiers, so a multiplier of −1 cancels the PM's base 1-unit I/O (§3). `st_res_<good>_good_mult` is `|flow| / throughput_factor − 1`, so the hub's building throughput bonus does not make it trade more than the bookkeeping books. **Both mult axes must be registered for every good**, or the modifier silently does nothing and the hub keeps trading its base unit (§1, `mod_entity_modifier_types.txt`).
 
-The building-scoped per-good work is routed through one explicit wrapper per good — `st_res_rebuild_<good>_flow_modifiers_effect` for `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks` and `fertilizer` — each delegating to the shared helper `st_res_rebuild_good_flow_modifiers_effect = { GOOD = <good> }`, which keeps the concrete good names grep-able while removing the repeated in-building logic.
+The building-scoped per-good work is routed through one explicit wrapper per good — `st_res_rebuild_<good>_flow_modifiers_effect` for `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks`, `fertilizer` and `copper` — each delegating to the shared helper `st_res_rebuild_good_flow_modifiers_effect = { GOOD = <good> }`, which keeps the concrete good names grep-able while removing the repeated in-building logic.
 
 If a stockpile is full, empty, or configured with no legal effective flow, the −1 pair keeps the hub from consuming or producing that good even when the configured signed rate remains nonzero. The rate variable stays as configured; only the building-side market flow shuts off. (The `st_res_grain_disable_*_flow` / `st_res_ammunition_disable_*_flow` static modifiers still in `extra_modifiers.txt` are dead code from the older design; no effect references them.)
 
@@ -418,9 +420,9 @@ Collapse flags say their default: `_closed` is open until closed, `_open` collap
 
   | Button | Goods | Policy | Preset |
   |---|---|---|---|
-  | All: Stabilize | all eight | Stabilize Prices | Standard |
+  | All: Stabilize | all nine | Stabilize Prices | Standard |
   | Military: Stockpile | ammunition, oil, small arms, artillery, aeroplanes, tanks | Stockpile | Stockpile |
-  | All: Manual | all eight | Manual | unchanged, and each rate stays where it is (Reset Reserve Rates is the button that also zeroes rates) |
+  | All: Manual | all nine | Manual | unchanged, and each rate stays where it is (Reset Reserve Rates is the button that also zeroes rates) |
 
   "Military" is the six goods the AI also stockpiles (§7); oil is in because armies and fleets run on it. They are scripted GUIs only, `st_res_all_stabilize_sgui`, `st_res_military_stockpile_sgui` and `st_res_all_manual_sgui`, greyed without a hub like the rest: the entry binds `scripted_button`s at activation (below), so a running entry would never show new ones, and the Market panel's Reserve tab, which reuses `te_st_res_sec_inventory`, shows them without a change of its own.
 - **How the Strategic Reserve Works** is, since 2026-11-02, the Help page (the "?" at the top of the entry and in the tab's header open it; its link and container 3's root went 2026-11-03), whose body `te_strategic_reserve_help_body` holds every explanation, one heading per topic: the hub and silos, rates, status, decay, reserve policies, presets and settings, sales income, and fill history. The live sections carry none.
@@ -470,7 +472,7 @@ Reserve policies close that second gap without giving the AI a UI path. `st_res_
 | 1 Stockpile | `st_res_ai_wants_stockpile`: not in default, not taking loans, and either already stockpiling or holding at least `st_res_ai_stockpile_min_reserves` (25%) of its gold reserves' limit | Stockpile policy on the Stockpile preset: buy at or below +5%, sell above +20% at war |
 | 2 Stabilize (absent reads as 2) | otherwise | Stabilize Prices on Conservative, where seeding put them |
 
-Grain and chemicals stay on Stabilize Prices on Conservative throughout. Starting to stockpile needs money in hand, carrying on only needs no borrowing, so a treasury near the line does not flip the stance week to week. The goods are rewritten only when the stance changes, so a settled AI pays a trigger and a comparison a week; each change logs a `TE_ST_RES:` line. A locked good is set too, ready for the week it unlocks (the evaluator treats it as Manual until then).
+Grain, chemicals and conductive metals stay on Stabilize Prices on Conservative throughout. Starting to stockpile needs money in hand, carrying on only needs no borrowing, so a treasury near the line does not flip the stance week to week. The goods are rewritten only when the stance changes, so a settled AI pays a trigger and a comparison a week; each change logs a `TE_ST_RES:` line. A locked good is set too, ready for the week it unlocks (the evaluator treats it as Manual until then).
 
 **War is the policy's business.** The task that added the review asked for the AI to switch to Release When Expensive or Stabilize Prices at war and to re-evaluate on war start and end. The review deliberately does not: the Stockpile policy itself sells above its release threshold while `is_at_war`, for the player as for the AI, and switching would only move the AI's selling later (Conservative sells from +30%, ramped to +50%; the Stockpile preset from +20%, ramped to +30%). A weekly review is a finer cadence than war start and end, or a quarterly check, and catches the case that matters at war: a treasury that runs dry ends the stance once the AI borrows.
 

@@ -951,6 +951,108 @@ st_res_fertilizer_sale_profit = {
 	}
 }
 
+# --- COPPER (Conductive Metals) ---
+st_res_copper_annual_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_copper_decay_add
+	min = 0
+}
+
+st_res_copper_decay_rate = {
+	value = st_res_copper_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
+	max = 1
+}
+
+st_res_copper_weekly_decay = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_stored }
+		value = var:st_res_copper_stored
+		multiply = st_res_copper_decay_rate
+	}
+}
+
+st_res_copper_actual_rate = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_copper_rate
+		}
+		add = var:st_res_copper_rate
+		add = st_res_copper_weekly_decay
+	}
+}
+
+st_res_copper_actual_rate_base_applied = {
+	value = st_res_copper_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_copper_weekly_delta = {
+	value = 0
+	add = st_res_copper_actual_rate_base_applied
+	subtract = st_res_copper_weekly_decay
+}
+
+st_res_copper_capacity = {
+	value = 0
+	add = modifier:country_st_res_copper_capacity_add
+}
+
+st_res_copper_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_copper_stored
+			st_res_copper_actual_rate_base_applied > 0
+		}
+		add = st_res_copper_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_copper_stored }
+		subtract = st_res_copper_actual_rate_base_applied
+	}
+	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
+}
+
+st_res_copper_max_withdrawable = {
+	value = 0
+	add = var:st_res_copper_stored
+	multiply = -1
+}
+
+st_res_copper_max_storable = {
+	value = 0
+	add = st_res_copper_capacity
+	subtract = var:st_res_copper_stored
+}
+
+st_res_copper_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_copper_stored
+			st_res_copper_actual_rate_base_applied < 0
+		}
+		subtract = st_res_copper_actual_rate_base_applied
+		g:copper = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:copper.market_goods_pricier
+		}
+	}
+}
+
 # --- Capacity utilization (for AI hints / loc / the JE inventory widget) ---
 # `has_variable` guarded: the inventory widget evaluates these every frame via
 # GuiScope.ScriptValue, including for a country that has the JE visible-but-
@@ -1063,6 +1165,20 @@ st_res_fertilizer_fill_pct = {
 	}
 }
 
+st_res_copper_fill_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_stored }
+		value = var:st_res_copper_stored
+		divide = {
+			value = st_res_copper_capacity
+			min = 1
+		}
+		multiply = 100
+		max = 100
+	}
+}
+
 # --- Widget accessors -------------------------------------------------------
 # Guarded read-only wrappers over the bookkeeping variables the JE inventory
 # widget displays. The widget evaluates these every frame, including on a save
@@ -1135,6 +1251,14 @@ st_res_fertilizer_last_net = {
 	if = {
 		limit = { has_variable = st_res_fertilizer_last_delta }
 		value = var:st_res_fertilizer_last_delta
+	}
+}
+
+st_res_copper_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_last_delta }
+		value = var:st_res_copper_last_delta
 	}
 }
 
@@ -1234,6 +1358,14 @@ st_res_fertilizer_disp_policy = {
 	if = {
 		limit = { has_variable = st_res_fertilizer_policy }
 		value = var:st_res_fertilizer_policy
+	}
+}
+
+st_res_copper_disp_policy = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_policy }
+		value = var:st_res_copper_policy
 	}
 }
 
@@ -1464,6 +1596,35 @@ st_res_fertilizer_disp_status = {
 		}
 		else_if = {
 			limit = { var:st_res_fertilizer_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+
+st_res_copper_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_copper_last_status = 1
+					var:st_res_copper_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_copper_last_status = 2
+					var:st_res_copper_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_copper_last_status >= 5 }
 			value = 3
 		}
 	}
@@ -1702,6 +1863,22 @@ st_res_fertilizer_disp_target = {
 		value = var:st_res_fertilizer_ceil_pct
 	}
 }
+
+st_res_copper_disp_target = {
+	value = 100
+	if = {
+		limit = {
+			has_variable = st_res_copper_policy
+			has_variable = st_res_copper_ceil_pct
+			OR = {
+				var:st_res_copper_policy = 1
+				var:st_res_copper_policy = 3
+				var:st_res_copper_policy = 4
+			}
+		}
+		value = var:st_res_copper_ceil_pct
+	}
+}
 st_res_fertilizer_disp_floor = {
 	value = 0
 	if = {
@@ -1715,6 +1892,22 @@ st_res_fertilizer_disp_floor = {
 			}
 		}
 		value = var:st_res_fertilizer_floor_pct
+	}
+}
+
+st_res_copper_disp_floor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_copper_policy
+			has_variable = st_res_copper_floor_pct
+			OR = {
+				var:st_res_copper_policy = 2
+				var:st_res_copper_policy = 3
+				var:st_res_copper_policy = 4
+			}
+		}
+		value = var:st_res_copper_floor_pct
 	}
 }
 
@@ -1732,6 +1925,7 @@ st_res_total_sale_profit = {
 	add = st_res_aeroplanes_sale_profit
 	add = st_res_tanks_sale_profit
 	add = st_res_fertilizer_sale_profit
+	add = st_res_copper_sale_profit
 }
 
 
@@ -2901,6 +3095,106 @@ st_res_fertilizer_policy_budget_max = {
 	min = st_res_policy_budget_max_base
 }
 
+# --- COPPER (Conductive Metals) ---
+st_res_copper_price_up = {
+	value = 0
+	market = {
+		mg:copper = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+}
+
+st_res_copper_price_down = {
+	value = 0
+	market = {
+		mg:copper = {
+			add = market_goods_cheaper
+		}
+	}
+	min = 0
+}
+
+st_res_copper_price_rel = {
+	value = st_res_copper_price_up
+	subtract = st_res_copper_price_down
+}
+
+st_res_copper_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_price_avg }
+		add = var:st_res_copper_price_avg
+	}
+	else = {
+		add = st_res_copper_price_rel
+		multiply = 100
+	}
+}
+
+st_res_copper_unit_price = {
+	value = 1
+	g:copper = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_copper_price_rel
+	}
+	min = 1
+}
+
+st_res_copper_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_sell_thr }
+		add = var:st_res_copper_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+st_res_copper_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_buy_thr }
+		add = var:st_res_copper_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+st_res_copper_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_ceil_pct }
+		add = var:st_res_copper_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+st_res_copper_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_floor_pct }
+		add = var:st_res_copper_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+st_res_copper_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_copper_weekly_decay
+	multiply = st_res_copper_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
 # ============================================================================
 # The panel's second pass (2026-10-27): the overview's held-up and spending
 # cells (SR-9) and the rate buttons' before-and-after (SR-7). Display only:
@@ -2971,6 +3265,13 @@ st_res_disp_full_count = {
 		}
 		add = 1
 	}
+	if = {
+		limit = {
+			has_variable = st_res_copper_last_status
+			var:st_res_copper_last_status = 5
+		}
+		add = 1
+	}
 }
 
 st_res_disp_empty_count = {
@@ -3028,6 +3329,13 @@ st_res_disp_empty_count = {
 		limit = {
 			has_variable = st_res_fertilizer_last_status
 			var:st_res_fertilizer_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_copper_last_status
+			var:st_res_copper_last_status = 6
 		}
 		add = 1
 	}
@@ -3116,6 +3424,15 @@ st_res_fertilizer_purchase_cost = {
 	}
 }
 
+st_res_copper_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_copper_actual_rate_base_applied > 0 }
+		add = st_res_copper_actual_rate_base_applied
+		multiply = st_res_copper_unit_price
+	}
+}
+
 st_res_total_purchase_cost = {
 	value = 0
 	add = st_res_grain_purchase_cost
@@ -3126,6 +3443,7 @@ st_res_total_purchase_cost = {
 	add = st_res_aeroplanes_purchase_cost
 	add = st_res_tanks_purchase_cost
 	add = st_res_fertilizer_purchase_cost
+	add = st_res_copper_purchase_cost
 }
 
 # The rate a good's decrease and increase buttons would leave, for their
@@ -3327,6 +3645,19 @@ st_res_fertilizer_rate_after_up = {
 	min = st_res_fertilizer_max_withdrawable
 }
 
+st_res_copper_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_rate }
+		add = var:st_res_copper_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_copper_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_copper_max_withdrawable
+}
+
 st_res_fertilizer_rate_after_down = {
 	value = 0
 	if = {
@@ -3338,4 +3669,17 @@ st_res_fertilizer_rate_after_down = {
 	max = st_res_fertilizer_max_storable
 	min = st_res_neg_weekly_base_rate_cap
 	min = st_res_fertilizer_max_withdrawable
+}
+
+st_res_copper_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_copper_rate }
+		add = var:st_res_copper_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_copper_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_copper_max_withdrawable
 }

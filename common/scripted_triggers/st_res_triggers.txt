@@ -45,6 +45,12 @@ st_res_fertilizer_unlocked_trigger = {
 	has_technology_researched = intensive_agriculture
 }
 
+# Copper (Conductive Metals) becomes a strategic metal with electrification:
+# generators, motors and the wire between them.
+st_res_copper_unlocked_trigger = {
+	has_technology_researched = electrical_generation
+}
+
 # ============================================================================
 # Journal entry unlock — country scope
 # ============================================================================
@@ -81,6 +87,7 @@ st_res_reserve_filling_up = {
 		st_res_aeroplanes_fill_pct >= 75
 		st_res_tanks_fill_pct >= 75
 		st_res_fertilizer_fill_pct >= 75
+		st_res_copper_fill_pct >= 75
 	}
 }
 

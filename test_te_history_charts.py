@@ -260,10 +260,10 @@ def _all_fragments():
 class RegistryTest(unittest.TestCase):
     """One registry entry per chart, its fragment drawn at two sizes (spec § 4.3)."""
 
-    def test_the_33_charts(self):
-        self.assertEqual(len(gen.CHARTS), 33)
+    def test_the_34_charts(self):
+        self.assertEqual(len(gen.CHARTS), 34)
         counts = {s: sum(c.system == s for c in gen.CHARTS) for s in gen.SYSTEMS}
-        self.assertEqual(counts, {"banking": 8, "strategic_reserve": 8, "demographics": 8, "cultural_hegemony": 1,
+        self.assertEqual(counts, {"banking": 8, "strategic_reserve": 9, "demographics": 8, "cultural_hegemony": 1,
                                   "nuclear_weapons": 2, "united_nations": 2, "global_warming": 2,
                                   "colonial_empire": 2})
         self.assertEqual(sorted(gen.SYSTEMS), sorted(SECTIONS))
