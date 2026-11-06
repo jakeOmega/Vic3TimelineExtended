@@ -8964,6 +8964,7 @@
  te_jmap_tt_seabed_none:0 "#b [THIS.GetState.GetName]#!\nNo ocean basin: not on the coast of one."
  te_jmap_tt_seabed_pacific:0 "#b [THIS.GetState.GetName]#!\nOcean basin: #v $te_seabed_basin_pacific$#!"
  te_jmap_tt_seabed_southern:0 "#b [THIS.GetState.GetName]#!\nOcean basin: #v $te_seabed_basin_southern$#!"
+ te_jmap_tt_seabed_unrecorded:0 "#b [THIS.GetState.GetName]#!\nCoastal, but its ocean basin isn't recorded yet. Each January the coastal states' basins are recorded."
  te_jmap_tt_sex_balance:0 "#b [THIS.GetState.GetName]#!\nSex balance: #v [THIS.GetState.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! men per 100 women aged 20 to 59"
  te_jmap_tt_turmoil:0 "#b [THIS.GetState.GetName]#!\nTurmoil: [THIS.GetState.CalcTurmoil|v%1]"
  te_jmap_tt_un_aid:0 "#b [THIS.GetState.GetName]#!\nA UN $concept_un_mission_aid$ is at work here, at strength #v ×[THIS.GetState.MakeScope.ScriptValue('un_state_mission_strength')|2]#!."

@@ -72,7 +72,8 @@ types te_map_widgets
 	### The Map Room, not the system's own entry, though each entry draws the same map: the Map Room is there for every
 	### country from the start, while several of these entries are held only by some countries, or not yet (the
 	### nuclear program before its technology, covert warfare before its slots, a monument's owner, an empire with
-	### colonies), and an entry nobody holds gives a button nothing to open. Each sits left of its header's "?".
+	### colonies), and an entry nobody holds gives a button nothing to open. Each sits left of its header's "?". Each
+	### notes the player as the maps' viewer before it picks: a pick already made is invalid, so its effect doesn't run.
 
 	type te_jmap_gw_map_button = widget {
 		size = { 29 29 }
@@ -85,6 +86,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_gw_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -101,6 +103,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_nuclear_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -117,6 +120,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_covert_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_networks_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -133,6 +137,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_un_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -149,6 +154,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_ch_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_political_models_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -165,6 +171,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_seabed_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -181,6 +188,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_gm_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
@@ -197,6 +205,7 @@ types te_map_widgets
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_ce_button_tt"
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}

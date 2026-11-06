@@ -1313,6 +1313,13 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 23
+				te_jmap_seabed_unrecorded = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_unrecorded
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_seabed_none
 		}

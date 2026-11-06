@@ -726,18 +726,22 @@ te_seabed_global_monthly = {
 		}
 		te_seabed_yearly_pass = yes
 	}
-	# Every coastal state's basin, once a game, from the first month: the
-	# Map Room's basin map shows them all game (te_jmap_seabed_basin; until
-	# 2026-11-06 this waited for the first country with abyssal_plain_mining).
-	# The state view still shows a basin only to a player with the
+	# Every coastal state's basin, from the first month and again each
+	# January for coastal states made since (a colony founded mid-game, say):
+	# the Map Room's basin map shows them all game (te_jmap_seabed_basin;
+	# until 2026-11-06 this ran once, when the first country had
+	# abyssal_plain_mining). te_seabed_ensure_state_basin skips a state that
+	# has one. The state view still shows a basin only to a player with the
 	# technology (te_seabed_basin_tile_sgui; GUI audit VAN-8b, owner
 	# 2026-10-27), and the yearly pass, which sets them too, still waits for
-	# a coastal claimant. The pass and a change of owner cover state scopes
-	# made later.
+	# a coastal claimant. A change of owner covers the months between.
 	if = {
 		limit = {
 			te_global_commons_enabled = yes
-			NOT = { has_global_variable = te_seabed_basins_set }
+			OR = {
+				NOT = { has_global_variable = te_seabed_basins_set }
+				month = 0
+			}
 		}
 		set_global_variable = te_seabed_basins_set
 		every_country = {

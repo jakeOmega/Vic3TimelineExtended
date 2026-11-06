@@ -34,14 +34,31 @@ te_jmap_gw_share = {
 	if = {
 		limit = {
 			has_variable = gw_state_emis
-			has_global_variable = gw_g_global_emis
-			global_var:gw_g_global_emis > 0
+			te_jmap_gw_world > 0
 		}
 		value = var:gw_state_emis
-		divide = global_var:gw_g_global_emis
+		divide = te_jmap_gw_world
 	}
 	min = -1
 	max = 1
+}
+
+# The world's emissions last year (gw_g_global_emis), 0 before the first January; any scope.
+te_jmap_gw_world = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_global_emis }
+		value = global_var:gw_g_global_emis
+	}
+}
+
+# The state's emissions last year in internal units (gw_state_emis), 0 before its first snapshot.
+te_jmap_gw_state_emis = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		value = var:gw_state_emis
+	}
 }
 
 # The state's emissions last year in display units (the panel's K/M figures: internal x 1000, gw_disp_own_emis).

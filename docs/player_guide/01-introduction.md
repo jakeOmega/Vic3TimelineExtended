@@ -33,17 +33,19 @@ census, Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death
 Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance and
 Net Migration. Hover a state for its figure. Emissions colors a state by its
 share of the world's emissions last year. Nuclear Weapons shows the world's
-nuclear powers as the world sees them, and, if you are one, the countries that
-host your weapons, shelter under your umbrella or have your guarantee of
-independence; Agent Networks shades each country by your network there.
+nuclear powers as the world sees them, the countries that host your weapons or
+shelter under your umbrella, and, while the world believes you armed, those
+whose independence you guarantee; Agent Networks shades each country by your
+network there.
 Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
 of Death chart; it, Birth Rate, Death Rate, Natural Change and Net Migration
 need a state's first full census year, so they start gray.
 
 Those eight systems' tabs, and Demographics', have a map button left of the
-"?" that opens the Map Room on their map, and each system's own journal entry
-draws the same map while its page is open. Banking's opens its journal entry,
+"?" that opens the Map Room on their map. Seven of the eight (all but Ocean
+Basins) also draw the same map in their own journal entry while its page is
+open. Banking's button opens its journal entry,
 which colors every country by the phase of its banking cycle. A journal
 entry's map shows only while its page is open, so the crossed-out eye at the
 top left of every journal page fades the page until you click it again or close

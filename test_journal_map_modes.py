@@ -441,10 +441,12 @@ class SystemMapsTest(unittest.TestCase):
                 body = block(self.widgets, name)
                 self.assertIn("GetPlayerJournalEntry('je_te_map_room')", body)
                 clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', body)
-                self.assertEqual(len(clicks), 3, "unfade, pick, then open")
+                self.assertEqual(len(clicks), 4, "unfade, note the viewer, pick, then open")
                 self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]")
-                self.assertIn(f"te_jmap_pick_{pick}_sgui", clicks[1])
-                self.assertEqual(clicks[2], "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]")
+                # the viewer first: a pick already made is invalid, and its effect (which notes it too) doesn't run
+                self.assertIn("te_jmap_note_viewer_sgui", clicks[1])
+                self.assertIn(f"te_jmap_pick_{pick}_sgui", clicks[2])
+                self.assertEqual(clicks[3], "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]")
 
     def test_the_your_maps_follow_the_viewer(self):
         # a paint can't reach the player (is_player drew nothing, 2026-11-05): every pick and map button notes the
@@ -460,17 +462,22 @@ class SystemMapsTest(unittest.TestCase):
     def test_the_nuclear_map_shows_the_world_s_view_of_others(self):
         # nuclear.md's privacy rule: another country's true count never shows. The owner is read only through
         # nd_believed_armed and the public estimate; nd_is_armed is the viewer's own
+        # nd_is_armed is read on nobody, the viewer included: in multiplayer another player sees the viewer's map
         trig = code(TRIGGERS)
-        for name in ("te_jmap_nuke_hosts_yours", "te_jmap_nuke_umbrella", "te_jmap_nuke_guaranteed",
-                     "te_jmap_nuke_armed"):
-            owner = block(block(trig, name), "owner ?") or ""
-            m = re.search(r"\bowner\s*\?=\s*\{", block(trig, name))
-            owner = enclosing(block(trig, name), m.end())
-            for word in ("nuclear_weapon_stockpile", "nd_is_armed", "nd_display_public_estimate"):
-                self.assertNotIn(word, owner, f"{name} reads the owner's {word}")
+        secret = ("nuclear_weapon_stockpile", "nd_is_armed", "nd_display_public_estimate", "nd_believed_stockpile",
+                  "nd_stockpile")
+        names = [n for n in re.findall(r"^(te_jmap_\w+)\s*=\s*\{", trig, re.M) if n.startswith(("te_jmap_nuke_",
+                                                                                                "te_jmap_owner_"))]
+        self.assertIn("te_jmap_nuke_guaranteed", names)
+        for name in names:
+            for word in secret:
+                self.assertNotRegex(block(trig, name), r"\b" + word + r"\b", f"{name} reads {word}")
         for key, text in loc_values().items():
             if key.startswith("te_jmap_tt_nuke_"):
-                self.assertNotIn("nuclear_weapon_stockpile", text, key)
+                for word in secret:
+                    self.assertNotRegex(text, r"\b" + word + r"\b", key)
+                if "ScriptValue(" in text:
+                    self.assertIn("ScriptValue('nd_shown_public_estimate')", text, key)
 
     def test_the_political_models_are_the_pie_s_colors(self):
         import colorsys
@@ -514,11 +521,21 @@ class ScriptChangesTest(unittest.TestCase):
         self.assertIn("value = te_jmap_ce_colony_count", body)
         self.assertEqual(body.count("is_overseas_colonial_state"), 1, "one colony test per state")
 
-    def test_the_basins_are_set_from_the_first_month(self):
+    def test_the_basins_are_set_from_the_first_month_and_each_january(self):
+        # each January too: a coastal state made after the first month (a colony) would otherwise wait for a claimant
         effects = code("common/scripted_effects/te_global_commons_seabed_effects.txt")
         at = effects.index("set_global_variable = te_seabed_basins_set")
         limit = enclosing(effects, effects.rindex("limit = {", 0, at) + len("limit = {"))
         self.assertNotIn("abyssal_plain_mining", limit)
+        self.assertIn("NOT = { has_global_variable = te_seabed_basins_set }", limit)
+        self.assertRegex(limit, r"\bmonth = 0\b")
+        self.assertIn("te_seabed_ensure_state_basin = yes", enclosing(effects, at))
+
+    def test_the_emissions_map_reads_nothing_beside_its_guard(self):
+        # a multi-child NOT reads every child (scripting_best_practices.md), so a figure an OR guards is read anyway
+        trig = code(TRIGGERS)
+        for name in ("te_jmap_gw_no_data", "te_jmap_gw_removal"):
+            self.assertNotRegex(block(trig, name), r"\b(?:var|global_var):", name)
 
 
 class WindowButtonTest(unittest.TestCase):

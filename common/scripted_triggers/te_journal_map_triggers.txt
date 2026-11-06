@@ -21,18 +21,18 @@ te_jmap_owner_is_viewer = {
 # ---------------------------------------------------------------------------
 # No figure yet: no yearly snapshot of the state (gw_state_emis, gw_snapshot_country_emissions_effect) or no world
 # total (gw_g_global_emis, re-based each January).
+# The figures are read only inside script values' guarded ifs (te_jmap_gw_world, te_jmap_gw_state_emis), never beside
+# their guards in this OR: a multi-child NOT reads every child (scripting_best_practices.md), and an OR may too.
 te_jmap_gw_no_data = {
 	OR = {
 		NOT = { has_variable = gw_state_emis }
-		NOT = { has_global_variable = gw_g_global_emis }
-		global_var:gw_g_global_emis <= 0
+		te_jmap_gw_world <= 0
 	}
 }
 
 # Takes more out of the air than it puts in (Direct Air Capture, capture credits).
 te_jmap_gw_removal = {
-	has_variable = gw_state_emis
-	var:gw_state_emis < 0
+	te_jmap_gw_state_emis < 0
 }
 
 # ---------------------------------------------------------------------------
@@ -64,12 +64,13 @@ te_jmap_nuke_umbrella = {
 	}
 }
 
-# Its independence guaranteed by the viewer, while the viewer is a nuclear power (vanilla's guarantee_independence
-# article, directed: the viewer the source).
+# Its independence guaranteed by the viewer, while the world believes the viewer a nuclear power (vanilla's
+# guarantee_independence article, directed: the viewer the source). nd_believed_armed, not nd_is_armed: in multiplayer
+# another player sees the viewer's map, and an untested arsenal must not show through it.
 te_jmap_nuke_guaranteed = {
 	global_var:te_jmap_viewer ?= {
 		save_temporary_scope_as = te_jmap_viewer_scope
-		nd_is_armed = yes
+		nd_believed_armed = yes
 	}
 	owner ?= {
 		NOT = { this = scope:te_jmap_viewer_scope }
@@ -161,6 +162,12 @@ te_jmap_seabed_basin = {
 	var:te_seabed_basin = $BASIN$
 }
 
+# Coastal, with no basin recorded yet: a state made since January's sweep (te_seabed_global_monthly).
+te_jmap_seabed_unrecorded = {
+	is_coastal = yes
+	NOT = { has_variable = te_seabed_basin }
+}
+
 # ---------------------------------------------------------------------------
 # Grand Monuments: each state's grandeur
 # ---------------------------------------------------------------------------
@@ -172,6 +179,12 @@ te_jmap_gm_monument = {
 # ---------------------------------------------------------------------------
 # Colonial Empire: the colonies, colored by their empire's stability
 # ---------------------------------------------------------------------------
+# Country scope: the empire's band is known (colonial_empire_tier, 1-5; 0 before the entry's first refresh).
+te_jmap_ce_tier_known = {
+	has_variable = colonial_empire_tier
+	var:colonial_empire_tier >= 1
+}
+
 # A colony of its owner: is_overseas_colonial_state as the entry counts it, marked each month by
 # colonial_empire_refresh_display (te_jmap_ce_colony names the owner, so a state taken since reads as none), while the
 # owner holds the entry.
@@ -180,7 +193,7 @@ te_jmap_ce_colony = {
 	owner ?= {
 		save_temporary_scope_as = te_jmap_ce_owner_scope
 		has_journal_entry = je_colonial_empire
-		has_variable = colonial_empire_tier
+		te_jmap_ce_tier_known = yes
 	}
 	var:te_jmap_ce_colony ?= scope:te_jmap_ce_owner_scope
 }
@@ -191,7 +204,7 @@ te_jmap_ce_subject = {
 		is_qualifying_colonial_subject = yes
 		overlord ?= {
 			has_journal_entry = je_colonial_empire
-			has_variable = colonial_empire_tier
+			te_jmap_ce_tier_known = yes
 		}
 	}
 }
@@ -216,6 +229,6 @@ te_jmap_ce_subject_band = {
 te_jmap_ce_metropole = {
 	owner ?= {
 		has_journal_entry = je_colonial_empire
-		has_variable = colonial_empire_tier
+		te_jmap_ce_tier_known = yes
 	}
 }
