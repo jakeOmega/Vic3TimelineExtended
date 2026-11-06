@@ -1015,7 +1015,8 @@ class MilitaryTabTest(unittest.TestCase):
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
-        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        # the header's map button (te_jmap_nuclear_map_button, journal_map_modes.md) is not a journal root
+        found = [n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M) if not n.startswith("te_jmap_")]
         roots = [wrapped for _, _, wrapped in ROOTS]
         # The journal's roots, with the entry's own bar under The Programme, as in the journal.
         self.assertEqual(found, roots[:2] + ["te_nuclear_programme_bar"] + roots[2:])

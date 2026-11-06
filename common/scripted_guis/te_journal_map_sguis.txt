@@ -205,6 +205,123 @@ te_jmap_pick_old_share_sgui = {
 	}
 }
 
+# The systems' maps, each shown while its system's rule is on. Each is its system's own entry's map too, and each
+# system's tab has a map button that picks it and opens the Map Room (gui/te_map_widgets.gui). A pick also notes the
+# player as the maps' viewer (te_jmap_set_selector), for the deterrent and network maps drawn for "your" country.
+
+te_jmap_pick_emissions_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = global_warming_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 18 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 18 }
+	}
+}
+
+te_jmap_pick_nuclear_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = nuclear_weapons_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 19 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 19 }
+	}
+}
+
+te_jmap_pick_networks_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = covert_warfare_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 20 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 20 }
+	}
+}
+
+te_jmap_pick_united_nations_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = united_nations_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 21 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 21 }
+	}
+}
+
+te_jmap_pick_political_models_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = cultural_hegemony_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 22 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 22 }
+	}
+}
+
+te_jmap_pick_ocean_basins_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_global_commons_enabled = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 23 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 23 }
+	}
+}
+
+te_jmap_pick_grandeur_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		gm_system_enabled = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 24 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 24 }
+	}
+}
+
+te_jmap_pick_colonies_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = decolonization_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 25 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 25 }
+	}
+}
+# A map button that opens a page without picking (the Timeline Extended window's, and each system tab's): notes the
+# player as the maps' viewer first (te_jmap_note_viewer).
+te_jmap_note_viewer_sgui = {
+	scope = country
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_note_viewer = yes
+	}
+}
+
 # The repainter's log line (gui/te_map_widgets.gui, te_jmap_repainter): it runs just before the reopen, so a page that
 # closes after a pick and stays closed says whether the reopen ran. Goes with the pick's line when the play-test is done.
 te_jmap_reopen_log_sgui = {

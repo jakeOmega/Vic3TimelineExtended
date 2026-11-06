@@ -97,7 +97,11 @@ class CumulativeTest(unittest.TestCase):
     def test_country_totals_do_not_import_old_market_totals(self):
         effects = _read(EFFECTS)
         snapshot = _body(effects, "gw_snapshot_country_emissions_effect")
-        self.assertIn("value = country_greenhouse_gas_emissions_script_value", snapshot)
+        # the country's own states' emissions: since 2026-11-06 each state's snapshot first (gw_state_emis, for the
+        # Emissions map), then their sum, which is country_greenhouse_gas_emissions_script_value without a second walk
+        self.assertIn("value = gw_state_greenhouse_gas_emissions", snapshot)
+        self.assertIn("value = gw_country_emis_from_states", snapshot)
+        self.assertIn("add = var:gw_state_emis", _body(_read(VALUES), "gw_country_emis_from_states"))
         cumulative = _body(effects, "gw_accumulate_country_emissions_effect")
         self.assertNotIn("gw_disp_market_emis", snapshot + cumulative)
         self.assertNotIn("gw_is_market_leader", snapshot + cumulative)

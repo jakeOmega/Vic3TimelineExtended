@@ -566,3 +566,14 @@ gw_disp_penalty_mortality_pct = {
 	value = gw_warming_penalty_scale_display
 	multiply = 5
 }
+
+# Country scope: the country's emissions this year as the sum of its states' snapshots, just taken
+# (gw_snapshot_country_emissions_effect sets each state's gw_state_emis first). Equal to
+# country_greenhouse_gas_emissions_script_value at that moment, without walking the pops a second time.
+gw_country_emis_from_states = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = gw_state_emis }
+		add = var:gw_state_emis
+	}
+}

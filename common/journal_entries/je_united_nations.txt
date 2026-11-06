@@ -592,4 +592,84 @@
 	can_revolution_inherit = yes
 	can_deactivate = no
 	should_update_on_player_command = yes
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): members, the Security
+	# Council's permanent members, the headquarters and the missions at work. Root: the state being painted, every state in
+	# the world. The Map Room draws the same map as its selector 21, from the same triggers in the same order
+	# (common/scripted_triggers/te_journal_map_triggers.txt; the parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_un_unfounded = yes }
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 1 } }
+			value = "te_jmap_un_peacekeeping"
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 2 } }
+			value = "te_jmap_un_aid"
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 3 } }
+			value = "te_jmap_un_stabilization"
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 4 } }
+			value = "te_jmap_un_electoral"
+		}
+		else_if = {
+			limit = { te_jmap_un_hq = yes }
+			value = "te_jmap_un_hq"
+		}
+		else_if = {
+			limit = { te_jmap_un_permanent = yes }
+			value = "te_jmap_un_permanent"
+		}
+		else_if = {
+			limit = { te_jmap_un_member = yes }
+			value = "te_jmap_un_member"
+		}
+		else = {
+			value = "te_jmap_none"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_un_unfounded = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_un_unfounded
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 1 } }
+			custom_tooltip_no_bullet = te_jmap_tt_un_peacekeeping
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 2 } }
+			custom_tooltip_no_bullet = te_jmap_tt_un_aid
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 3 } }
+			custom_tooltip_no_bullet = te_jmap_tt_un_stabilization
+		}
+		else_if = {
+			limit = { te_jmap_un_mission = { TYPE = 4 } }
+			custom_tooltip_no_bullet = te_jmap_tt_un_electoral
+		}
+		else_if = {
+			limit = { te_jmap_un_hq = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_un_hq
+		}
+		else_if = {
+			limit = { te_jmap_un_permanent = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_un_permanent
+		}
+		else_if = {
+			limit = { te_jmap_un_member = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_un_member
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_un_nonmember
+		}
+	}
 }

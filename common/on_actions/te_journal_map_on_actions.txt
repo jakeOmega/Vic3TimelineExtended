@@ -1,0 +1,18 @@
+﻿# Journal entry map modes (docs/systems/mod_systems/journal_map_modes.md): each month, a player's country becomes the
+# maps' viewer (te_jmap_note_viewer, te_journal_map_effects.txt), so a map of "your" country drawn on a page opened from
+# the journal, with no map button clicked yet, has one. The picks and map buttons set it too, at once.
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_jmap_monthly_viewer
+	}
+}
+
+te_jmap_monthly_viewer = {
+	effect = {
+		if = {
+			limit = { is_player = yes }
+			te_jmap_note_viewer = yes
+		}
+	}
+}

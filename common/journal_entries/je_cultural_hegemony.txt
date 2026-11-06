@@ -247,4 +247,88 @@ je_cultural_hegemony = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = no
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): each country's
+	# political model at the last census of models, in the model pie's colors. Root: the state being painted, every state
+	# in the world. The Map Room draws the same map as its selector 22, from the same triggers in the same order
+	# (common/scripted_triggers/te_journal_map_triggers.txt; the parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_ch_model = { MODEL = 1 } }
+			value = "te_jmap_ch_communist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 2 } }
+			value = "te_jmap_ch_anarchist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 3 } }
+			value = "te_jmap_ch_fascist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 4 } }
+			value = "te_jmap_ch_corporatist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 5 } }
+			value = "te_jmap_ch_socialist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 6 } }
+			value = "te_jmap_ch_royalist_absolutist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 7 } }
+			value = "te_jmap_ch_royalist_constitutional"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 8 } }
+			value = "te_jmap_ch_religious"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 9 } }
+			value = "te_jmap_ch_reactionary"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 10 } }
+			value = "te_jmap_ch_military_junta"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 11 } }
+			value = "te_jmap_ch_liberal"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 12 } }
+			value = "te_jmap_ch_other"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 13 } }
+			value = "te_jmap_ch_technocratic"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 14 } }
+			value = "te_jmap_ch_republican"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 15 } }
+			value = "te_jmap_ch_developmentalist_junta"
+		}
+		else = {
+			value = "te_jmap_no_data"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_ch_no_data = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_ch_no_data
+		}
+		else_if = {
+			limit = { te_jmap_ch_hegemon = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_ch_hegemon
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_ch_model
+		}
+	}
 }

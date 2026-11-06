@@ -788,8 +788,11 @@ class HoldingsTest(unittest.TestCase):
                 self.assertIn(f"GetPlayer.MakeScope.ScriptValue('{value}')", desc, (concept, value))
             self.assertNotRegex(re.sub(r"\[[^\]]*\]|#\w+", "", desc), r"\d", "editing rule 1: no number typed in loc")
         self.assertIn("concept_unincorporated_state", self.loc["concept_overseas_colony_desc"])
-        # The colonies it counts are the entry's own test.
-        self.assertIn("value = colonial_state_count", _block(_read(DISPLAY), "colonial_empire_refresh_display"))
+        # The colonies it counts are the entry's own test: since 2026-11-06 read from the marks the same pass sets
+        # with it (te_jmap_ce_colony, for the Colonies map), so the test runs once per state.
+        refresh = _block(_read(DISPLAY), "colonial_empire_refresh_display")
+        self.assertIn("value = te_jmap_ce_colony_count", refresh)
+        self.assertLess(refresh.index("is_overseas_colonial_state = yes"), refresh.index("name = te_jmap_ce_colony"))
 
     def test_each_definition_is_written_once(self):
         """CE-4: the hovers that wrote out what a territory, a colony and a
