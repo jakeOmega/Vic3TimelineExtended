@@ -265,6 +265,8 @@ je_te_map_room = {
 		# 11. The leading cause of death (Demographics), in the Causes of Death pie's colors: te_dg_dc_lead's codes, 1
 		# infection and hunger, 2 chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 7 killed by
 		# events, 8 war and devastation (6, the deaths added on top until 2026-10-22, as war, as the panel's icon does).
+		# Each fades from its pale end to the pie's color by the cause's share of the deaths (te_jmap_cause_factor, 30% to
+		# 90%), so a state where it barely leads reads apart from one where it takes nearly all.
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
@@ -275,7 +277,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 1
 			}
-			value = "te_jmap_cause_inf"
+			lerp = {
+				min_color = "te_jmap_cause_inf_pale"
+				max_color = "te_jmap_cause_inf"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -287,7 +293,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 2
 			}
-			value = "te_jmap_cause_chr"
+			lerp = {
+				min_color = "te_jmap_cause_chr_pale"
+				max_color = "te_jmap_cause_chr"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -299,7 +309,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 3
 			}
-			value = "te_jmap_cause_ext"
+			lerp = {
+				min_color = "te_jmap_cause_ext_pale"
+				max_color = "te_jmap_cause_ext"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -311,7 +325,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 4
 			}
-			value = "te_jmap_cause_work"
+			lerp = {
+				min_color = "te_jmap_cause_work_pale"
+				max_color = "te_jmap_cause_work"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -323,7 +341,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 5
 			}
-			value = "te_jmap_cause_mat"
+			lerp = {
+				min_color = "te_jmap_cause_mat_pale"
+				max_color = "te_jmap_cause_mat"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -335,7 +357,11 @@ je_te_map_room = {
 				has_variable = te_dg_dc_lead
 				var:te_dg_dc_lead = 7
 			}
-			value = "te_jmap_cause_kill"
+			lerp = {
+				min_color = "te_jmap_cause_kill_pale"
+				max_color = "te_jmap_cause_kill"
+				factor = te_jmap_cause_factor
+			}
 		}
 		else_if = {
 			limit = {
@@ -350,7 +376,11 @@ je_te_map_room = {
 					var:te_dg_dc_lead = 6
 				}
 			}
-			value = "te_jmap_cause_war"
+			lerp = {
+				min_color = "te_jmap_cause_war_pale"
+				max_color = "te_jmap_cause_war"
+				factor = te_jmap_cause_factor
+			}
 		}
 		# 9. Births per 1,000 (Demographics, once stepped).
 		else_if = {

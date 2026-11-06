@@ -216,6 +216,20 @@ class CauseColorsTest(unittest.TestCase):
             want = (round(hsv[0] * 360), round(hsv[1] * 100), round(hsv[2] * 100))
             self.assertEqual(tuple(int(x) for x in m.groups()), want, f"te_jmap_cause_{short} vs the pie's {h}")
 
+    def test_each_cause_fades_by_its_share(self):
+        # each cause's branch fades from a pale end of its own hue to the pie's color by the leading share, so a
+        # state where a cause barely leads reads apart from one where it takes nearly every death
+        text, host = code(COLORS), code(HOST)
+        for short in ("inf", "chr", "ext", "work", "mat", "kill", "war"):
+            full = re.search(r"\bte_jmap_cause_" + short + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)", text)
+            pale = re.search(r"\bte_jmap_cause_" + short + r"_pale\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)", text)
+            self.assertIsNotNone(pale, short)
+            self.assertEqual(pale.group(1), full.group(1), f"te_jmap_cause_{short}_pale keeps the cause's hue")
+            self.assertLess(int(pale.group(2)), int(full.group(2)), f"te_jmap_cause_{short}_pale is paler")
+            self.assertRegex(host, r'lerp = \{\s*min_color = "te_jmap_cause_' + short + r'_pale"\s*max_color = '
+                             r'"te_jmap_cause_' + short + r'"\s*factor = te_jmap_cause_factor\s*\}', short)
+        self.assertNotRegex(host, r'value = "te_jmap_cause_', "a cause drawn flat, not by its share")
+
 
 class MapRoomTest(unittest.TestCase):
     def setUp(self):

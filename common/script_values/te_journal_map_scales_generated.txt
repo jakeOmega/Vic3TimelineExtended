@@ -366,6 +366,18 @@ te_jmap_mig_factor_upper = {
 	max = 1
 }
 
+# The leading cause of death's share of last year's deaths, its color pale at 30% and full at 90%: with seven causes the lead takes at least a seventh, and states ran 31-97% in 1838, 1940 and 2020 saves.
+# Knots: 0.3 -> 0, 0.9 -> 1.
+te_jmap_cause_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_total has_variable = te_dg_dc_lead }
+		value = te_demog_dc_lead_share subtract = 0.3 divide = 0.6
+	}
+	min = 0
+	max = 1
+}
+
 # Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): half the color by 1%, all of it at 5%; a thousand-odd states average 0.1%.
 # Knots: 0 -> 0, 0.01 -> 0.5, 0.05 -> 1.
 te_jmap_gw_factor = {
