@@ -1275,26 +1275,21 @@ sr_record_probe_result = {
 #     sr_space_program_cost / sr_funding_progress / sr_funding_throughput
 #     (entry): nothing to rebuild. Each milestone's entry declares them
 #     (scaling_modifiers_while_active, je_space_race.txt; #1404) from the
-#     approach, choice and funding variables the winner inherits. Until then
-#     sr_sync_<m>_entry, sr_recalculate_cost and the monthly
-#     sr_cost_modifiers_missing repair put them back.
-#   - sr_colony_* (solar colonization entry): from <modifier>_held, by
-#     sr_sync_solar_colonization_entry.
-#   - sr_solar_system_trade (solar colonization entry): from
-#     sr_completed_solar_colonization, by sr_sync_solar_colonization_entry.
+#     approach, choice and funding variables the winner inherits.
+#   - sr_colony_* and sr_discovery_* (solar colonization entry): declared
+#     while <modifier>_held is set, and sr_solar_system_trade while
+#     sr_completed_solar_colonization is (1.15 scaling_modifiers_while_active,
+#     #1404): nothing to rebuild, the winner inherits the variables.
 #   - sr_commercial_space_dividend (country): from the variables
 #     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
 #     re-applies it every month anyway (end of this file).
 #
 # Country modifiers come back in sr_repair_after_civil_war, which the shared
 # civil-war hook runs for the winner (te_civil_war_on_won in
-# common/on_actions/te_civil_war_on_actions.txt). Journal-entry modifiers do
-# not: whether on_civil_war_won runs before or after an inherited entry's
-# `immediate` is unknown. Solar colonization's own `immediate` rebuilds its
-# colonies' modifiers, and the monthly country pulse
-# (sr_sync_space_race_entries) is the backstop. Every step puts back only what
-# a record says is missing, so a loyalist winner, which still holds its
-# modifiers, sees no change.
+# common/on_actions/te_civil_war_on_actions.txt). Journal-entry modifiers need
+# nothing: every one the space race keeps on an entry is declared there
+# (#1404). Every step puts back only what a record says is missing, so a
+# loyalist winner, which still holds its modifiers, sees no change.
 #
 # Not rebuilt: timed modifiers (the completion events' themed rewards, the
 # failure penalties, sr_temporary_safety_review), whose remaining time is
@@ -1401,90 +1396,6 @@ sr_sync_probe_data = {
 		sr_sync_probe_data_base = { MODIFIER = sr_probe_biological_data    }
 		sr_sync_probe_data_base = { MODIFIER = sr_probe_intelligence_data  }
 	}
-}
-
-# A colony's specialisation: one of 68 modifiers on the solar colonization
-# entry, granted by an option of space_race_colony_events.1-40. Recorded as
-# <modifier>_held in the same effect. Country scope.
-sr_grant_colony_modifier = {
-	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
-	set_variable = { name = $MODIFIER$_held value = yes }
-	# The world's record (sr_sites_generated.txt): which specialization or
-	# discovery outcome it carries, whoever holds it later. Bookkeeping behind
-	# the modifier the option already shows, so hidden from its tooltip.
-	hidden_effect = { sr_site_choose_$MODIFIER$ = yes }
-}
-
-# Country scope. One colony modifier, both ways, as sr_sync_probe_data_base.
-# The entry is open whenever a colony is held (its `possible`), so both
-# directions can always reach it. A discovery's outcome; a specialization
-# takes sr_sync_colony_spec_base below.
-sr_sync_colony_modifier_base = {
-	if = {
-		limit = {
-			NOT = { has_variable = $MODIFIER$_held }
-			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
-		}
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	else_if = {
-		limit = {
-			has_variable = $MODIFIER$_held
-			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
-		}
-		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
-	}
-}
-
-# Country scope. One colony specialization, both ways, as the above. A record
-# with no modifier (a revolution's winner, whose inherited entry arrives empty)
-# gets it back at MULT, its level times the colony's staffing
-# (sr_site_mult_<a|b>_<key>; colony modules design § 7), and the multiplier
-# applied is recorded as the world's sync records it (sr_site_show_modifier_at).
-sr_sync_colony_spec_base = {
-	if = {
-		limit = {
-			NOT = { has_variable = $MODIFIER$_held }
-			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
-		}
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	else_if = {
-		limit = {
-			has_variable = $MODIFIER$_held
-			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
-		}
-		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ multiplier = $MULT$ } }
-		set_variable = { name = $MODIFIER$_mult value = $MULT$ } # REVIEWED 2026-10-25: records the multiplier just applied, recomputed from the world's global record; nothing built up is lost
-	}
-}
-
-# Solar colonization's entry, from its `immediate`; sr_sync_space_race_entries
-# runs it from the monthly country pulse. Its colonies' modifiers only: the
-# approach (and every milestone's cost, funding and choice modifiers) is
-# declared on the entry since #1404, and the six other milestones' syncs went.
-sr_sync_solar_colonization_entry = {
-	# Only a colony holder has any, and its entry is always open.
-	if = {
-		limit = { sr_has_space_colony = yes }
-		sr_sync_colony_discovery_modifiers = yes
-		# The colony specialisations, each at its level times the colony's
-		# staffing (sr_sites_generated.txt; colony modules design § 7).
-		sr_sites_sync_entry_specs = yes
-		# The all-colonies reward: the entry's pulse adds it in the block that
-		# sets sr_completed_solar_colonization, so the variable alone records it.
-		if = {
-			limit = {
-				has_variable = sr_completed_solar_colonization
-				je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } }
-			}
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-		}
-	}
-}
-
-sr_sync_space_race_entries = {
-	sr_sync_solar_colonization_entry = yes
 }
 
 # ======= After the race: Commercial Space Industry =======

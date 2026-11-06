@@ -247,8 +247,8 @@ sr_disp_worlds_ours_frac = {
 # ---- Solar colonization: the colonies we hold ---------------------------------
 # One value per specialization (80, two for each of the 40 worlds, in the order
 # space_race_colony_events.1-40 offer them): 1 while we hold it, else 0. The
-# record is <modifier>_held, which sr_grant_colony_modifier sets with the
-# modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
+# record is <modifier>_held, which the world's sync sets (sr_site_mark_held)
+# and the entry declares the modifier from; a revolution's winner inherits it.
 # The Colonies table's name hovers name the ones we hold (je_space_race_widget_
 # colony_site_tt_<key>; audit SPC-5), and their sum is the "held" figure. A
 # world holds at most one of its two, so the sum is its worlds.

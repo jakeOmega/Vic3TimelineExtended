@@ -82,8 +82,12 @@ sr_mod_fab_stock_value = {
 }
 
 # ---- Upkeep (design § 8) -------------------------------------------------------------
-# Journal entry scope (the multiplier of sr_module_upkeep): the module
-# levels past the first at the colonies its country holds, read through owner.
+# Journal entry scope (sr_module_upkeep's old multiplier): the module levels
+# past the first at the colonies its country holds, read through owner. The
+# entry now declares sr_module_upkeep from sr_mod_upkeep_levels
+# (je_space_race.txt), so nothing calls this; a save from before the
+# declarations may still name it on the copy it added.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_upkeep_units = {
 	value = 0
 	owner = { add = sr_mod_upkeep_levels }

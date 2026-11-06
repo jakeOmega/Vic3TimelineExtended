@@ -11768,8 +11768,8 @@ sr_mod_next_cost_imbrium = {
 
 # ===== Facilities (colony management design § 7) =====
 # Country scope: sr_mod_units_<type>, THIS's staffed levels of the facility at the
-# colonies that serve it; entry scope (a modifier's multiplier, read through owner):
-# sr_mod_units_<type>_entry.
+# colonies that serve it, the solar colonization entry's declared value for its
+# modifier (common/journal_entries/sr_sites_generated.txt).
 # Mining Complex
 sr_mod_units_mine = {
 	value = 0
@@ -11902,6 +11902,7 @@ sr_mod_units_lab = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_lab_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_lab_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_lab_entry = {
 	value = 0
 	owner = { add = sr_mod_units_lab }
@@ -11950,6 +11951,7 @@ sr_mod_units_culture = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_culture_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_culture_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_culture_entry = {
 	value = 0
 	owner = { add = sr_mod_units_culture }
@@ -11998,6 +12000,7 @@ sr_mod_units_resort = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_resort_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_resort_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_resort_entry = {
 	value = 0
 	owner = { add = sr_mod_units_resort }
@@ -12046,6 +12049,7 @@ sr_mod_units_black = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_black_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_black_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_black_entry = {
 	value = 0
 	owner = { add = sr_mod_units_black }
@@ -12094,6 +12098,7 @@ sr_mod_units_train = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_train_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_train_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_train_entry = {
 	value = 0
 	owner = { add = sr_mod_units_train }
@@ -12186,6 +12191,7 @@ sr_mod_units_foundry = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_foundry_staffed_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_foundry_staffed_imbrium }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_mod_units_foundry_entry = {
 	value = 0
 	owner = { add = sr_mod_units_foundry }

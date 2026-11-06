@@ -135,22 +135,21 @@ class ImmediateTests(unittest.TestCase):
         goal = _block(_block(JE, "je_space_race_interstellar_results"), "goal_add_value")
         self.assertIn("subtract = sr_interstellar_transit_value", goal)
 
-    def test_only_the_colonies_modifiers_are_rebuilt(self):
+    def test_no_entry_modifier_is_rebuilt(self):
         """Each milestone entry declares its approach, choice, cost and funding
-        modifiers from inherited variables (#1404,
-        test_space_race_scaling_modifiers.py), so only solar colonization's
-        colony modifiers are put back: by its `immediate`, and monthly."""
-        for entry in MILESTONES:
+        modifiers, and solar colonization its colony modifiers, from inherited
+        variables (#1404, test_space_race_scaling_modifiers.py,
+        test_sr_solar_scaling_modifiers.py), so no `immediate` and no monthly
+        backstop puts an entry modifier back. The probe record's sync stays."""
+        for entry in ENTRIES:
             with self.subTest(entry=entry):
                 self.assertNotRegex(_immediate(entry), r"sr_sync_\w+_entry")
-        self.assertIn("sr_sync_solar_colonization_entry = yes", _immediate("solar_colonization"))
-        pulse = _block(EFFECTS, "sr_sync_space_race_entries")
-        self.assertEqual(re.findall(r"sr_sync_(\w+)_entry = yes", pulse), ["solar_colonization"])
+        for gone in ("sr_sync_space_race_entries", "sr_sync_solar_colonization_entry"):
+            with self.subTest(gone=gone):
+                self.assertNotIn(gone, EFFECTS + ON_ACTIONS + JE)
         monthly = _block(ON_ACTIONS, "space_race_on_action")
-        for call in ("sr_sync_space_race_entries = yes", "sr_sync_probe_data = yes"):
-            with self.subTest(call=call):
-                limits = _if_limits_around(monthly, monthly.index(call))
-                self.assertEqual(limits, [" sr_space_race_participant = yes "])
+        limits = _if_limits_around(monthly, monthly.index("sr_sync_probe_data = yes"))
+        self.assertEqual(limits, [" sr_space_race_participant = yes "])
 
     def test_the_monthly_sync_removes_only_what_is_there(self):
         # remove_modifier on an absent modifier logs an error on every call
@@ -277,20 +276,24 @@ class RewardTests(unittest.TestCase):
         self.assertEqual(synced, defined)
 
     def test_colony_modifiers_are_recorded(self):
+        # Each option records its specialization (sr_site_choose_<modifier>), and
+        # the entry declares it while the holder's <modifier>_held is set (1.15
+        # scaling modifiers, #1404). A revolution's winner inherits the variables,
+        # so nothing has to put the modifier back: no option adds one, and the
+        # entry's backstop no longer lists them.
         text = _read("events", "space_race_colony_events.txt")
         self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
-        granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
+        granted = re.findall(r"sr_site_choose_(\w+) = yes", text)
         self.assertEqual(len(granted), 80)  # two for each of the 40 worlds
-        # The backstop names every specialization at its multiplier, its level times
-        # the colony's staffing (colony modules design § 7), from the site table.
-        self.assertIn("sr_sites_sync_entry_specs = yes", _block(EFFECTS, "sr_sync_solar_colonization_entry"))
-        sites = _read("common", "scripted_effects", "sr_sites_generated.txt")
-        synced = re.findall(r"sr_sync_colony_spec_base = \{ MODIFIER = (\w+) MULT = sr_site_mult_[ab]_\w+ \}",
-                            _block(sites, "sr_sites_sync_entry_specs"))
-        self.assertEqual(sorted(synced), sorted(set(granted)))
+        declared = _read("common", "journal_entries", "sr_sites_generated.txt")
+        for modifier in granted:
+            with self.subTest(modifier=modifier):
+                self.assertRegex(declared, r"scaling_modifiers_while_active = \{\s*modifier = " + modifier
+                                 + r"\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = "
+                                 + modifier + r"_held \}")
+        self.assertNotIn("sr_sync_solar_colonization_entry", EFFECTS)
         defined = set(re.findall(r"^(sr_colony_\w+) = \{", MODIFIERS, re.M))
         self.assertEqual(set(granted), defined)
-
 
 if __name__ == "__main__":
     unittest.main()

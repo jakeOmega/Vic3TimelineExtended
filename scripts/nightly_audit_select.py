@@ -76,6 +76,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/sr_launch_windows_generated.txt",
     "common/script_values/sr_fleet_legs_generated.txt",
     "common/scripted_effects/sr_sites_generated.txt",
+    "common/journal_entries/sr_sites_generated.txt",
     "common/scripted_triggers/sr_sites_generated.txt",
     "common/script_values/sr_sites_generated.txt",
     "common/script_values/sr_sites_display_generated.txt",

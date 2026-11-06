@@ -579,7 +579,8 @@ sr_colony_abandon_sgui = {
 }
 
 # Free Colonies (slice 5 design § 3): start or stop supplying a free colony. The
-# entry's modifiers follow at once (Free Colony Supply and Trade).
+# entry's modifiers follow within days (Free Colony Supply and Trade, declared
+# from the supply records: je_space_race.txt).
 sr_free_supply_sgui = {
 	scope = country
 	saved_scopes = { site }
@@ -625,6 +626,5 @@ sr_free_supply_sgui = {
 				sr_site_by_scope = { DO = toggle_supply }
 			}
 		}
-		sr_emig_refresh_modifiers = yes
 	}
 }

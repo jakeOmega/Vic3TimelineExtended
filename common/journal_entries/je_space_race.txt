@@ -10,8 +10,7 @@
 # each choice event once per milestone (sr_<m>_choice_made). Each milestone's
 # cost, funding, approach and choice modifiers are declared on its entry
 # (scaling_modifiers_while_active, #1404), from variables the winner inherits,
-# so nothing puts them back; solar colonization's `immediate` still runs
-# sr_sync_solar_colonization_entry for its colonies' modifiers.
+# so nothing puts them back, and so are solar colonization's colony modifiers.
 #
 # Carrying progress into a new record keeps the progress bar right:
 # - Inherited: the new record keeps the loser's bar. Its start date, baseline
@@ -1901,7 +1900,6 @@ je_space_race_solar_colonization = {
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
 		}
-		sr_sync_solar_colonization_entry = yes
 		# The Moon is stage 0 (lunar colonization design § 3.2).
 		if = {
 			limit = { NOT = { has_global_variable = sr_colonization_stage } }
@@ -2029,9 +2027,9 @@ je_space_race_solar_colonization = {
 			# A programme resumed for the Moon (sr_colonization_resumed; lunar
 			# colonization 2b, owner 2026-10-29) goes on while a lunar world is
 			# free, and stops here once the Moon is full; one that didn't choose
-			# it finishes as before. A resumed one may already hold its record
-			# and Interplanetary Trade Networks, so the modifier is added only
-			# when missing, and the marker goes.
+			# it finishes as before. A resumed one may already hold its record,
+			# and the marker goes. The record is what the entry declares
+			# Interplanetary Trade Networks from (sr_solar_system_trade, below).
 			if = {
 				limit = {
 					has_variable = sr_active_solar_colonization
@@ -2043,10 +2041,6 @@ je_space_race_solar_colonization = {
 					}
 				}
 				set_variable = { name = sr_completed_solar_colonization value = yes }
-				if = {
-					limit = { je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } } }
-					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-				}
 				if = { limit = { has_variable = sr_colonization_resumed } remove_variable = sr_colonization_resumed }
 				remove_variable = sr_active_solar_colonization
 				if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
@@ -2061,9 +2055,9 @@ je_space_race_solar_colonization = {
 			# modules design §§ 5, 10): the AI's yearly review, the month's
 			# fabrication; autonomy and free colonies (slice 5 design §§ 3, 7):
 			# event worlds left stale cleared, the AI's yearly supply review, the
-			# month's colony life; then the entry's six modifiers. A colony
-			# holder's entry is always open, so this runs for every holder,
-			# programme or not.
+			# month's colony life. A colony holder's entry is always open, so
+			# this runs for every holder, programme or not. The entry's modifiers
+			# follow what these change by themselves (declared below).
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
 			sr_mod_ai_review = yes
@@ -2071,7 +2065,113 @@ je_space_race_solar_colonization = {
 			sr_site_events_clear_stale = yes
 			sr_free_ai_review = yes
 			sr_life_month = yes
-			sr_emig_refresh_modifiers = yes
+		}
+	}
+
+	# The entry's own modifiers (1.15 scaling_modifiers_while_active, #1404;
+	# docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.10). Each
+	# value's root is the owning country; each is 0 outside the gate the monthly
+	# re-add used to sit behind. They apply only while the entry is active, which
+	# a colony holder's always is (`possible`). has_modifier cannot see them: test
+	# the inputs. Each world's specializations and discovery outcomes, and the
+	# facilities, are declared in common/journal_entries/sr_sites_generated.txt
+	# (generated, scripts/generators/gen_solar_sites.py).
+	# Interplanetary Trade Networks, once every world is claimed (the monthly
+	# pulse above records it).
+	scaling_modifiers_while_active = {
+		modifier = sr_solar_system_trade
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_completed_solar_colonization }
+				add = 1
+			}
+		}
+	}
+	# Colony population (simple and full colonies; slices 2-3 design § 10): the
+	# emigration programme's upkeep, a unit a level of it.
+	scaling_modifiers_while_active = {
+		modifier = sr_emigration_programme
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_emig_level_value >= 1
+				}
+				add = sr_emig_level_value
+			}
+		}
+	}
+	# The nation's people off Earth, a unit per 100,000 (capped), nothing below
+	# the minimum (design § 10.5).
+	scaling_modifiers_while_active = {
+		modifier = sr_offworld_population
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_offworld_pop_total >= sr_offworld_bonus_minimum
+				}
+				add = sr_offworld_units
+			}
+		}
+	}
+	# The module levels past the first at the colonies held (colony modules
+	# design § 8).
+	scaling_modifiers_while_active = {
+		modifier = sr_module_upkeep
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_mod_upkeep_levels >= 1
+				}
+				add = sr_mod_upkeep_levels
+			}
+		}
+	}
+	# Autonomy and free colonies (slice 5 design §§ 2-3): a unit a free colony
+	# supplied, the trade from them, a unit a garrisoned colony.
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_supply
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_supply_count >= 1
+				}
+				add = sr_free_supply_count
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_trade
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_trade_units > 0
+				}
+				add = sr_free_trade_units
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_colonial_garrisons
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_garrison_count >= 1
+				}
+				add = sr_garrison_count
+			}
 		}
 	}
 

@@ -205,7 +205,6 @@ te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event
 		trigger = { sr_colonies_contested_enabled = yes }
 		sr_emig_set_level = { LEVEL = 3 }
 		sr_emig_month = yes
-		sr_emig_refresh_modifiers = yes
 	}
 
 	# Our colonies filled to half their room (the off-world bonus).
@@ -216,7 +215,6 @@ te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event
 			sr_has_space_colony = yes
 		}
 		sr_cf_debug_half_fill = yes
-		sr_emig_refresh_modifiers = yes
 	}
 }
 
@@ -260,8 +258,8 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 		sr_mod_month = yes
 	}
 
-	# Every one of our shipments lands now (the modifier_seen_same_effect
-	# self-check), then the entry's modifiers.
+	# Every one of our shipments lands now; the entry's modifiers follow within
+	# days.
 	option = {
 		name = te_debug_space_race.4.e
 		trigger = {
@@ -269,25 +267,22 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 			has_variable = sr_ms_count
 		}
 		sr_ms_debug_land_all_now = yes
-		sr_emig_refresh_modifiers = yes
 	}
 
 	# Every level we are dismantling comes down now (dismantling, owner
-	# 2026-10-31), then the entry's modifiers.
+	# 2026-10-31); the entry's modifiers follow within days.
 	option = {
 		name = te_debug_space_race.4.h
 		trigger = { sr_colonies_contested_enabled = yes }
 		sr_md_debug_finish_all = yes
-		sr_emig_refresh_modifiers = yes
 	}
 
 	# Ten years of terraforming at every colony of ours that takes it, at this
-	# month's pace (era 13 spec § 7.11), then the entry's modifiers.
+	# month's pace (era 13 spec § 7.11); the entry's modifiers follow within days.
 	option = {
 		name = te_debug_space_race.4.i
 		trigger = { sr_colonies_contested_enabled = yes }
 		sr_terra_debug_advance = yes
-		sr_emig_refresh_modifiers = yes
 	}
 
 	# Our Extraplanetary Base room recomputed now.
@@ -344,7 +339,7 @@ te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event
 		sr_site_by_index = { DO = let_go }
 	}
 
-	# Every free colony supplied by us, then the entry's modifiers.
+	# Every free colony supplied by us; the entry's modifiers follow within days.
 	option = {
 		name = te_debug_space_race.5.e
 		trigger = {
@@ -352,7 +347,6 @@ te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event
 			sr_free_any = yes
 		}
 		sr_free_debug_supply_all = yes
-		sr_emig_refresh_modifiers = yes
 	}
 
 	# Full ties with every free colony we supply: a petition in the next
