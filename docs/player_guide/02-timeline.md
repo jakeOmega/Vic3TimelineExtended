@@ -251,7 +251,7 @@ renames eleven base-game goods to fit a longer timeline.
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
-| Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
+| Tech-Critical Metals | Industrial | Lithium, Rare Earth Metals, Platinum Group Metals and Nickel and Cobalt Mines, and some from Graphite, Specialty Alloy Metal and Manganese Mines ([New mines and extraction](#new-mines-and-extraction)); also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations, and the Deep-Sea Mine's tenders; the pops' Leisure need, as Steamers |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
 | Grid Power | Industrial | Grid Transfer Stations, from a state's spare Electricity | Grid Transfer Stations, which turn it back into Electricity in short states of the same power grid ([Economy and construction](03-economy.md#power-grids)) |
@@ -292,20 +292,31 @@ most base-game buildings with production methods for the new eras.
 
 ### New mines and extraction
 
-Thirteen new mines work deposits of specific minerals. Nine of them produce one
-of the renamed resource goods, adding supply to existing chains; the other four
-produce the new Tech-Critical Metals. Resource deposits are covered in [New
-mineral deposits](03-economy.md#new-mineral-deposits).
+Thirteen new mines work deposits of specific minerals. Most produce several
+goods, split the way their mineral is used in reality: aluminum goes into wiring
+as well as frames, so a Bauxite Mine makes some Conductive Metals beside its
+Structural Metals. The table gives each good's share of a mine's output value at
+base prices; every production method keeps the same split, and its tooltip shows
+the amounts. The mines run the base game's mining equipment, explosives and
+automation, except that the Nickel and Cobalt, Lithium, Rare Earth Metals and
+Platinum Group Metals Mines start at the Condensing Engine Pump. Resource
+deposits are covered in [New mineral deposits](03-economy.md#new-mineral-deposits).
 
 | Mine | Produces |
 |---|---|
-| Manganese, Chromium, Bauxite, Specialty Alloy Metal | Structural Metals |
-| Precious and Minor Base Metal | Base Metals |
-| Nickel and Cobalt, Lithium, Rare Earth Metals, Platinum Group Metals | Tech-Critical Metals |
-| Graphite | Energy and Carbon Minerals |
+| Bauxite | Structural Metals 85%, Conductive Metals 15% |
+| Manganese | Structural Metals 90%, Tech-Critical Metals 5%, Chemicals 5% |
+| Chromium | Structural Metals 90%, Chemical and Industrial Minerals 10% |
+| Specialty Alloy Metal | Structural Metals 75%, Tech-Critical Metals 15%, Chemicals 10% |
+| Precious and Minor Base Metal | Base Metals 55%, Conductive Metals 30%, Structural Metals 15% |
+| Nickel and Cobalt | Structural Metals 60%, Tech-Critical Metals 40% |
+| Lithium | Tech-Critical Metals 90%, Glass and Plastics 5%, Chemicals 5% |
+| Rare Earth Metals | Tech-Critical Metals 80%, Chemicals 10%, Glass and Plastics 10% |
+| Platinum Group Metals | Tech-Critical Metals 90%, Chemicals 10% |
+| Graphite | Energy and Carbon Minerals 70%, Tech-Critical Metals 30% |
 | Phosphate, Potash, Industrial Mineral and Salt | Chemical and Industrial Minerals |
 
-Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
+Two late buildings mine the seabed and space. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed license
 ([Seabed licenses](#seabed-licenses)). Like a fishing wharf, it loses up to
 three quarters of its throughput while its state is blockaded. Its ships come

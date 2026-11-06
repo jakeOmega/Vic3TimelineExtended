@@ -207,6 +207,14 @@
   "en": "Automated Fulfillment Center",
   "es": "Centro de distribución automatizado"
  },
+ "pm_ammonium_nitrate_building_bauxite_mine": {
+  "en": "$pm_ammonium_nitrate_building_iron_mine$",
+  "es": "$pm_ammonium_nitrate_building_iron_mine$"
+ },
+ "pm_ammonium_nitrate_building_chromium_mine": {
+  "en": "$pm_ammonium_nitrate_building_iron_mine$",
+  "es": "$pm_ammonium_nitrate_building_iron_mine$"
+ },
  "pm_ammonium_nitrate_building_coal_mine": {
   "en": "Ammonium Nitrate",
   "es": "Nitrato de amonio"
@@ -215,6 +223,10 @@
   "en": "Ammonium Nitrate",
   "es": "Nitrato de amonio"
  },
+ "pm_ammonium_nitrate_building_graphite_mine": {
+  "en": "$pm_ammonium_nitrate_building_coal_mine$",
+  "es": "$pm_ammonium_nitrate_building_coal_mine$"
+ },
  "pm_ammonium_nitrate_building_iron_mine": {
   "en": "Ammonium Nitrate",
   "es": "Nitrato de amonio"
@@ -222,6 +234,34 @@
  "pm_ammonium_nitrate_building_lead_mine": {
   "en": "Ammonium Nitrate",
   "es": "Nitrato de amonio"
+ },
+ "pm_ammonium_nitrate_building_lithium_mine": {
+  "en": "$pm_ammonium_nitrate_building_tech_metals_mine$",
+  "es": "$pm_ammonium_nitrate_building_tech_metals_mine$"
+ },
+ "pm_ammonium_nitrate_building_manganese_mine": {
+  "en": "$pm_ammonium_nitrate_building_iron_mine$",
+  "es": "$pm_ammonium_nitrate_building_iron_mine$"
+ },
+ "pm_ammonium_nitrate_building_nickel_cobalt_mine": {
+  "en": "$pm_ammonium_nitrate_building_tech_metals_mine$",
+  "es": "$pm_ammonium_nitrate_building_tech_metals_mine$"
+ },
+ "pm_ammonium_nitrate_building_platinum_group_metals_mine": {
+  "en": "$pm_ammonium_nitrate_building_tech_metals_mine$",
+  "es": "$pm_ammonium_nitrate_building_tech_metals_mine$"
+ },
+ "pm_ammonium_nitrate_building_precious_minor_base_metal_mine": {
+  "en": "$pm_ammonium_nitrate_building_lead_mine$",
+  "es": "$pm_ammonium_nitrate_building_lead_mine$"
+ },
+ "pm_ammonium_nitrate_building_rare_earth_metals_mine": {
+  "en": "$pm_ammonium_nitrate_building_tech_metals_mine$",
+  "es": "$pm_ammonium_nitrate_building_tech_metals_mine$"
+ },
+ "pm_ammonium_nitrate_building_specialty_alloy_metal_mine": {
+  "en": "$pm_ammonium_nitrate_building_iron_mine$",
+  "es": "$pm_ammonium_nitrate_building_iron_mine$"
  },
  "pm_ammonium_nitrate_building_sulfur_mine": {
   "en": "Ammonium Nitrate",
@@ -318,6 +358,30 @@
  "pm_assisted_postnatal_care": {
   "en": "Assisted Postnatal Care",
   "es": "Atención posnatal asistida"
+ },
+ "pm_atmospheric_engine_pump_building_bauxite_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_iron_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_iron_mine$"
+ },
+ "pm_atmospheric_engine_pump_building_chromium_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_iron_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_iron_mine$"
+ },
+ "pm_atmospheric_engine_pump_building_graphite_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_coal_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_coal_mine$"
+ },
+ "pm_atmospheric_engine_pump_building_manganese_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_iron_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_iron_mine$"
+ },
+ "pm_atmospheric_engine_pump_building_precious_minor_base_metal_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_lead_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_lead_mine$"
+ },
+ "pm_atmospheric_engine_pump_building_specialty_alloy_metal_mine": {
+  "en": "$pm_atmospheric_engine_pump_building_iron_mine$",
+  "es": "$pm_atmospheric_engine_pump_building_iron_mine$"
  },
  "pm_automated_am_fabrication": {
   "en": "Automated AM Fabrication",
@@ -1119,6 +1183,70 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil10": {
   "en": "Partial Carbon Capture (10 Oil)",
   "es": "Captura de carbono parcial (10 de petróleo)"
@@ -1183,6 +1311,38 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_1_mining_equipment_building_iron_mine_coal0_oil10": {
   "en": "Partial Carbon Capture (10 Oil)",
   "es": "Captura de carbono parcial (10 de petróleo)"
@@ -1244,6 +1404,166 @@
   "es": "Captura de carbono parcial (15 de carbón)"
  },
  "pm_carbon_capture_1_mining_equipment_building_lead_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "es": "Captura de carbono parcial (10 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "es": "Captura de carbono parcial (5 de petróleo)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "es": "Captura de carbono parcial (10 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "es": "Captura de carbono parcial (15 de carbón)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -1351,6 +1671,22 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_1_steam_automation_building_bauxite_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_bauxite_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_chromium_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_chromium_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_1_steam_automation_building_coal_mine_coal3_oil0": {
   "en": "Partial Carbon Capture (3 Coal)",
   "es": "Captura de carbono parcial (3 de carbón)"
@@ -1367,6 +1703,14 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_1_steam_automation_building_graphite_mine_coal3_oil0": {
+  "en": "Partial Carbon Capture (3 Coal)",
+  "es": "Captura de carbono parcial (3 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_graphite_mine_coal3_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_1_steam_automation_building_iron_mine_coal4_oil0": {
   "en": "Partial Carbon Capture (4 Coal)",
   "es": "Captura de carbono parcial (4 de carbón)"
@@ -1380,6 +1724,62 @@
   "es": "Captura de carbono parcial (4 de carbón)"
  },
  "pm_carbon_capture_1_steam_automation_building_lead_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_lithium_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_lithium_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_manganese_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_manganese_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_nickel_cobalt_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_nickel_cobalt_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_platinum_group_metals_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_platinum_group_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_rare_earth_metals_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_rare_earth_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_1_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "es": "Captura de carbono parcial (4 de carbón)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2047,6 +2447,70 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil10": {
   "en": "Carbon Capture and Storage (10 Oil)",
   "es": "Captura y almacenamiento de carbono (10 de petróleo)"
@@ -2111,6 +2575,38 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_2_mining_equipment_building_iron_mine_coal0_oil10": {
   "en": "Carbon Capture and Storage (10 Oil)",
   "es": "Captura y almacenamiento de carbono (10 de petróleo)"
@@ -2172,6 +2668,166 @@
   "es": "Captura y almacenamiento de carbono (15 de carbón)"
  },
  "pm_carbon_capture_2_mining_equipment_building_lead_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "es": "Captura y almacenamiento de carbono (10 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "es": "Captura y almacenamiento de carbono (15 de carbón)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2279,6 +2935,22 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_2_steam_automation_building_bauxite_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_bauxite_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_chromium_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_chromium_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_2_steam_automation_building_coal_mine_coal3_oil0": {
   "en": "Carbon Capture and Storage (3 Coal)",
   "es": "Captura y almacenamiento de carbono (3 de carbón)"
@@ -2295,6 +2967,14 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_2_steam_automation_building_graphite_mine_coal3_oil0": {
+  "en": "Carbon Capture and Storage (3 Coal)",
+  "es": "Captura y almacenamiento de carbono (3 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_graphite_mine_coal3_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_2_steam_automation_building_iron_mine_coal4_oil0": {
   "en": "Carbon Capture and Storage (4 Coal)",
   "es": "Captura y almacenamiento de carbono (4 de carbón)"
@@ -2308,6 +2988,62 @@
   "es": "Captura y almacenamiento de carbono (4 de carbón)"
  },
  "pm_carbon_capture_2_steam_automation_building_lead_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_lithium_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_lithium_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_manganese_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_manganese_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_nickel_cobalt_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_nickel_cobalt_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_platinum_group_metals_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_platinum_group_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_rare_earth_metals_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_rare_earth_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_2_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "es": "Captura y almacenamiento de carbono (4 de carbón)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2975,6 +3711,70 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil10": {
   "en": "Advanced Carbon Capture (10 Oil)",
   "es": "Captura de carbono avanzada (10 de petróleo)"
@@ -3039,6 +3839,38 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_3_mining_equipment_building_iron_mine_coal0_oil10": {
   "en": "Advanced Carbon Capture (10 Oil)",
   "es": "Captura de carbono avanzada (10 de petróleo)"
@@ -3100,6 +3932,166 @@
   "es": "Captura de carbono avanzada (15 de carbón)"
  },
  "pm_carbon_capture_3_mining_equipment_building_lead_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "es": "Captura de carbono avanzada (10 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "es": "Captura de carbono avanzada (5 de petróleo)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "es": "Captura de carbono avanzada (10 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "es": "Captura de carbono avanzada (15 de carbón)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -3207,6 +4199,22 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_3_steam_automation_building_bauxite_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_bauxite_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_chromium_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_chromium_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_3_steam_automation_building_coal_mine_coal3_oil0": {
   "en": "Advanced Carbon Capture (3 Coal)",
   "es": "Captura de carbono avanzada (3 de carbón)"
@@ -3223,6 +4231,14 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
+ "pm_carbon_capture_3_steam_automation_building_graphite_mine_coal3_oil0": {
+  "en": "Advanced Carbon Capture (3 Coal)",
+  "es": "Captura de carbono avanzada (3 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_graphite_mine_coal3_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
  "pm_carbon_capture_3_steam_automation_building_iron_mine_coal4_oil0": {
   "en": "Advanced Carbon Capture (4 Coal)",
   "es": "Captura de carbono avanzada (4 de carbón)"
@@ -3236,6 +4252,62 @@
   "es": "Captura de carbono avanzada (4 de carbón)"
  },
  "pm_carbon_capture_3_steam_automation_building_lead_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_lithium_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_lithium_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_manganese_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_manganese_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_nickel_cobalt_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_nickel_cobalt_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_platinum_group_metals_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_platinum_group_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_rare_earth_metals_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_rare_earth_metals_mine_coal4_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
+ },
+ "pm_carbon_capture_3_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "es": "Captura de carbono avanzada (4 de carbón)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -3495,6 +4567,22 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
+ "pm_carbon_capture_na_mining_equipment_building_bauxite_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_bauxite_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_chromium_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_chromium_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
  "pm_carbon_capture_na_mining_equipment_building_coal_mine": {
   "en": "Capture Not Applicable",
   "es": "Captura no aplicable"
@@ -3511,6 +4599,14 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
+ "pm_carbon_capture_na_mining_equipment_building_graphite_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_graphite_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
  "pm_carbon_capture_na_mining_equipment_building_iron_mine": {
   "en": "Capture Not Applicable",
   "es": "Captura no aplicable"
@@ -3524,6 +4620,62 @@
   "es": "Captura no aplicable"
  },
  "pm_carbon_capture_na_mining_equipment_building_lead_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_lithium_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_lithium_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_manganese_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_manganese_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_nickel_cobalt_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_nickel_cobalt_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_platinum_group_metals_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_platinum_group_metals_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_precious_minor_base_metal_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_precious_minor_base_metal_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_rare_earth_metals_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_rare_earth_metals_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_mining_equipment_building_specialty_alloy_metal_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_specialty_alloy_metal_mine_desc": {
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
@@ -3551,6 +4703,22 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
+ "pm_carbon_capture_na_steam_automation_building_bauxite_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_bauxite_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_chromium_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_chromium_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
  "pm_carbon_capture_na_steam_automation_building_coal_mine": {
   "en": "Capture Not Applicable",
   "es": "Captura no aplicable"
@@ -3567,6 +4735,14 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
+ "pm_carbon_capture_na_steam_automation_building_graphite_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_graphite_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
  "pm_carbon_capture_na_steam_automation_building_iron_mine": {
   "en": "Capture Not Applicable",
   "es": "Captura no aplicable"
@@ -3580,6 +4756,62 @@
   "es": "Captura no aplicable"
  },
  "pm_carbon_capture_na_steam_automation_building_lead_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_lithium_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_lithium_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_manganese_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_manganese_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_nickel_cobalt_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_nickel_cobalt_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_platinum_group_metals_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_platinum_group_metals_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_precious_minor_base_metal_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_precious_minor_base_metal_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_rare_earth_metals_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_rare_earth_metals_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
+ },
+ "pm_carbon_capture_na_steam_automation_building_specialty_alloy_metal_mine": {
+  "en": "Capture Not Applicable",
+  "es": "Captura no aplicable"
+ },
+ "pm_carbon_capture_na_steam_automation_building_specialty_alloy_metal_mine_desc": {
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
@@ -3727,6 +4959,46 @@
   "en": "Concrete Bunkers",
   "es": "Búnkeres de hormigón"
  },
+ "pm_condensing_engine_pump_building_bauxite_mine": {
+  "en": "$pm_condensing_engine_pump_building_iron_mine$",
+  "es": "$pm_condensing_engine_pump_building_iron_mine$"
+ },
+ "pm_condensing_engine_pump_building_chromium_mine": {
+  "en": "$pm_condensing_engine_pump_building_iron_mine$",
+  "es": "$pm_condensing_engine_pump_building_iron_mine$"
+ },
+ "pm_condensing_engine_pump_building_graphite_mine": {
+  "en": "$pm_condensing_engine_pump_building_coal_mine$",
+  "es": "$pm_condensing_engine_pump_building_coal_mine$"
+ },
+ "pm_condensing_engine_pump_building_lithium_mine": {
+  "en": "$pm_condensing_engine_pump_building_tech_metals_mine$",
+  "es": "$pm_condensing_engine_pump_building_tech_metals_mine$"
+ },
+ "pm_condensing_engine_pump_building_manganese_mine": {
+  "en": "$pm_condensing_engine_pump_building_iron_mine$",
+  "es": "$pm_condensing_engine_pump_building_iron_mine$"
+ },
+ "pm_condensing_engine_pump_building_nickel_cobalt_mine": {
+  "en": "$pm_condensing_engine_pump_building_tech_metals_mine$",
+  "es": "$pm_condensing_engine_pump_building_tech_metals_mine$"
+ },
+ "pm_condensing_engine_pump_building_platinum_group_metals_mine": {
+  "en": "$pm_condensing_engine_pump_building_tech_metals_mine$",
+  "es": "$pm_condensing_engine_pump_building_tech_metals_mine$"
+ },
+ "pm_condensing_engine_pump_building_precious_minor_base_metal_mine": {
+  "en": "$pm_condensing_engine_pump_building_lead_mine$",
+  "es": "$pm_condensing_engine_pump_building_lead_mine$"
+ },
+ "pm_condensing_engine_pump_building_rare_earth_metals_mine": {
+  "en": "$pm_condensing_engine_pump_building_tech_metals_mine$",
+  "es": "$pm_condensing_engine_pump_building_tech_metals_mine$"
+ },
+ "pm_condensing_engine_pump_building_specialty_alloy_metal_mine": {
+  "en": "$pm_condensing_engine_pump_building_iron_mine$",
+  "es": "$pm_condensing_engine_pump_building_iron_mine$"
+ },
  "pm_condensing_engine_pump_building_tech_metals_mine": {
   "en": "Condensing Engine Pump",
   "es": "Bomba de motor de condensación"
@@ -3783,6 +5055,14 @@
   "en": "Continuous Bleaching",
   "es": "Blanqueo continuo"
  },
+ "pm_continuous_miners_building_bauxite_mine": {
+  "en": "$pm_continuous_miners_building_iron_mine$",
+  "es": "$pm_continuous_miners_building_iron_mine$"
+ },
+ "pm_continuous_miners_building_chromium_mine": {
+  "en": "$pm_continuous_miners_building_iron_mine$",
+  "es": "$pm_continuous_miners_building_iron_mine$"
+ },
  "pm_continuous_miners_building_coal_mine": {
   "en": "Continuous Miners",
   "es": "Minadores continuos"
@@ -3791,6 +5071,10 @@
   "en": "Continuous Miners",
   "es": "Minadores continuos"
  },
+ "pm_continuous_miners_building_graphite_mine": {
+  "en": "$pm_continuous_miners_building_coal_mine$",
+  "es": "$pm_continuous_miners_building_coal_mine$"
+ },
  "pm_continuous_miners_building_iron_mine": {
   "en": "Continuous Miners",
   "es": "Minadores continuos"
@@ -3798,6 +5082,34 @@
  "pm_continuous_miners_building_lead_mine": {
   "en": "Continuous Miners",
   "es": "Minadores continuos"
+ },
+ "pm_continuous_miners_building_lithium_mine": {
+  "en": "$pm_continuous_miners_building_tech_metals_mine$",
+  "es": "$pm_continuous_miners_building_tech_metals_mine$"
+ },
+ "pm_continuous_miners_building_manganese_mine": {
+  "en": "$pm_continuous_miners_building_iron_mine$",
+  "es": "$pm_continuous_miners_building_iron_mine$"
+ },
+ "pm_continuous_miners_building_nickel_cobalt_mine": {
+  "en": "$pm_continuous_miners_building_tech_metals_mine$",
+  "es": "$pm_continuous_miners_building_tech_metals_mine$"
+ },
+ "pm_continuous_miners_building_platinum_group_metals_mine": {
+  "en": "$pm_continuous_miners_building_tech_metals_mine$",
+  "es": "$pm_continuous_miners_building_tech_metals_mine$"
+ },
+ "pm_continuous_miners_building_precious_minor_base_metal_mine": {
+  "en": "$pm_continuous_miners_building_lead_mine$",
+  "es": "$pm_continuous_miners_building_lead_mine$"
+ },
+ "pm_continuous_miners_building_rare_earth_metals_mine": {
+  "en": "$pm_continuous_miners_building_tech_metals_mine$",
+  "es": "$pm_continuous_miners_building_tech_metals_mine$"
+ },
+ "pm_continuous_miners_building_specialty_alloy_metal_mine": {
+  "en": "$pm_continuous_miners_building_iron_mine$",
+  "es": "$pm_continuous_miners_building_iron_mine$"
  },
  "pm_continuous_miners_building_sulfur_mine": {
   "en": "Continuous Miners",
@@ -3915,6 +5227,46 @@
   "en": "Diesel-Electric Ferries",
   "es": "Transbordadores diésel-eléctricos"
  },
+ "pm_diesel_pump_building_bauxite_mine": {
+  "en": "$pm_diesel_pump_building_iron_mine$",
+  "es": "$pm_diesel_pump_building_iron_mine$"
+ },
+ "pm_diesel_pump_building_chromium_mine": {
+  "en": "$pm_diesel_pump_building_iron_mine$",
+  "es": "$pm_diesel_pump_building_iron_mine$"
+ },
+ "pm_diesel_pump_building_graphite_mine": {
+  "en": "$pm_diesel_pump_building_coal_mine$",
+  "es": "$pm_diesel_pump_building_coal_mine$"
+ },
+ "pm_diesel_pump_building_lithium_mine": {
+  "en": "$pm_diesel_pump_building_tech_metals_mine$",
+  "es": "$pm_diesel_pump_building_tech_metals_mine$"
+ },
+ "pm_diesel_pump_building_manganese_mine": {
+  "en": "$pm_diesel_pump_building_iron_mine$",
+  "es": "$pm_diesel_pump_building_iron_mine$"
+ },
+ "pm_diesel_pump_building_nickel_cobalt_mine": {
+  "en": "$pm_diesel_pump_building_tech_metals_mine$",
+  "es": "$pm_diesel_pump_building_tech_metals_mine$"
+ },
+ "pm_diesel_pump_building_platinum_group_metals_mine": {
+  "en": "$pm_diesel_pump_building_tech_metals_mine$",
+  "es": "$pm_diesel_pump_building_tech_metals_mine$"
+ },
+ "pm_diesel_pump_building_precious_minor_base_metal_mine": {
+  "en": "$pm_diesel_pump_building_lead_mine$",
+  "es": "$pm_diesel_pump_building_lead_mine$"
+ },
+ "pm_diesel_pump_building_rare_earth_metals_mine": {
+  "en": "$pm_diesel_pump_building_tech_metals_mine$",
+  "es": "$pm_diesel_pump_building_tech_metals_mine$"
+ },
+ "pm_diesel_pump_building_specialty_alloy_metal_mine": {
+  "en": "$pm_diesel_pump_building_iron_mine$",
+  "es": "$pm_diesel_pump_building_iron_mine$"
+ },
  "pm_diesel_pump_building_tech_metals_mine": {
   "en": "Diesel Pump",
   "es": "Bomba diésel"
@@ -3983,6 +5335,14 @@
   "en": "Douro Wine Lodge",
   "es": "Bodega de vino del Duero"
  },
+ "pm_dragline_excavators_bauxite_mine": {
+  "en": "$pm_dragline_excavators_iron_mine$",
+  "es": "$pm_dragline_excavators_iron_mine$"
+ },
+ "pm_dragline_excavators_chromium_mine": {
+  "en": "$pm_dragline_excavators_iron_mine$",
+  "es": "$pm_dragline_excavators_iron_mine$"
+ },
  "pm_dragline_excavators_coal_mine": {
   "en": "Dragline Excavators",
   "es": "Dragalinas"
@@ -3991,6 +5351,10 @@
   "en": "Dragline Excavators",
   "es": "Dragalinas"
  },
+ "pm_dragline_excavators_graphite_mine": {
+  "en": "$pm_dragline_excavators_coal_mine$",
+  "es": "$pm_dragline_excavators_coal_mine$"
+ },
  "pm_dragline_excavators_iron_mine": {
   "en": "Dragline Excavators",
   "es": "Dragalinas"
@@ -3998,6 +5362,34 @@
  "pm_dragline_excavators_lead_mine": {
   "en": "Dragline Excavators",
   "es": "Dragalinas"
+ },
+ "pm_dragline_excavators_lithium_mine": {
+  "en": "$pm_dragline_excavators_tech_metals_mine$",
+  "es": "$pm_dragline_excavators_tech_metals_mine$"
+ },
+ "pm_dragline_excavators_manganese_mine": {
+  "en": "$pm_dragline_excavators_iron_mine$",
+  "es": "$pm_dragline_excavators_iron_mine$"
+ },
+ "pm_dragline_excavators_nickel_cobalt_mine": {
+  "en": "$pm_dragline_excavators_tech_metals_mine$",
+  "es": "$pm_dragline_excavators_tech_metals_mine$"
+ },
+ "pm_dragline_excavators_platinum_group_metals_mine": {
+  "en": "$pm_dragline_excavators_tech_metals_mine$",
+  "es": "$pm_dragline_excavators_tech_metals_mine$"
+ },
+ "pm_dragline_excavators_precious_minor_base_metal_mine": {
+  "en": "$pm_dragline_excavators_lead_mine$",
+  "es": "$pm_dragline_excavators_lead_mine$"
+ },
+ "pm_dragline_excavators_rare_earth_metals_mine": {
+  "en": "$pm_dragline_excavators_tech_metals_mine$",
+  "es": "$pm_dragline_excavators_tech_metals_mine$"
+ },
+ "pm_dragline_excavators_specialty_alloy_metal_mine": {
+  "en": "$pm_dragline_excavators_iron_mine$",
+  "es": "$pm_dragline_excavators_iron_mine$"
  },
  "pm_dragline_excavators_sulfur_mine": {
   "en": "Dragline Excavators",
@@ -4018,6 +5410,46 @@
  "pm_duro_la_felguera_steelworks": {
   "en": "Duro La Felguera Steelworks",
   "es": "Siderúrgica Duro La Felguera"
+ },
+ "pm_dynamite_building_bauxite_mine": {
+  "en": "$pm_dynamite_building_iron_mine$",
+  "es": "$pm_dynamite_building_iron_mine$"
+ },
+ "pm_dynamite_building_chromium_mine": {
+  "en": "$pm_dynamite_building_iron_mine$",
+  "es": "$pm_dynamite_building_iron_mine$"
+ },
+ "pm_dynamite_building_graphite_mine": {
+  "en": "$pm_dynamite_building_coal_mine$",
+  "es": "$pm_dynamite_building_coal_mine$"
+ },
+ "pm_dynamite_building_lithium_mine": {
+  "en": "$pm_dynamite_building_tech_metals_mine$",
+  "es": "$pm_dynamite_building_tech_metals_mine$"
+ },
+ "pm_dynamite_building_manganese_mine": {
+  "en": "$pm_dynamite_building_iron_mine$",
+  "es": "$pm_dynamite_building_iron_mine$"
+ },
+ "pm_dynamite_building_nickel_cobalt_mine": {
+  "en": "$pm_dynamite_building_tech_metals_mine$",
+  "es": "$pm_dynamite_building_tech_metals_mine$"
+ },
+ "pm_dynamite_building_platinum_group_metals_mine": {
+  "en": "$pm_dynamite_building_tech_metals_mine$",
+  "es": "$pm_dynamite_building_tech_metals_mine$"
+ },
+ "pm_dynamite_building_precious_minor_base_metal_mine": {
+  "en": "$pm_dynamite_building_lead_mine$",
+  "es": "$pm_dynamite_building_lead_mine$"
+ },
+ "pm_dynamite_building_rare_earth_metals_mine": {
+  "en": "$pm_dynamite_building_tech_metals_mine$",
+  "es": "$pm_dynamite_building_tech_metals_mine$"
+ },
+ "pm_dynamite_building_specialty_alloy_metal_mine": {
+  "en": "$pm_dynamite_building_iron_mine$",
+  "es": "$pm_dynamite_building_iron_mine$"
  },
  "pm_dynamite_building_tech_metals_mine": {
   "en": "Dynamite",
@@ -4483,6 +5915,14 @@
   "en": "Wine and Fruit Processing",
   "es": "Procesamiento de vino y fruta"
  },
+ "pm_geophysical_survey_techniques_bauxite_mine": {
+  "en": "$pm_geophysical_survey_techniques_iron_mine$",
+  "es": "$pm_geophysical_survey_techniques_iron_mine$"
+ },
+ "pm_geophysical_survey_techniques_chromium_mine": {
+  "en": "$pm_geophysical_survey_techniques_iron_mine$",
+  "es": "$pm_geophysical_survey_techniques_iron_mine$"
+ },
  "pm_geophysical_survey_techniques_coal_mine": {
   "en": "Geophysical Survey Techniques",
   "es": "Técnicas de prospección geofísica"
@@ -4491,6 +5931,10 @@
   "en": "Geophysical Survey Techniques",
   "es": "Técnicas de prospección geofísica"
  },
+ "pm_geophysical_survey_techniques_graphite_mine": {
+  "en": "$pm_geophysical_survey_techniques_coal_mine$",
+  "es": "$pm_geophysical_survey_techniques_coal_mine$"
+ },
  "pm_geophysical_survey_techniques_iron_mine": {
   "en": "Geophysical Survey Techniques",
   "es": "Técnicas de prospección geofísica"
@@ -4498,6 +5942,34 @@
  "pm_geophysical_survey_techniques_lead_mine": {
   "en": "Geophysical Survey Techniques",
   "es": "Técnicas de prospección geofísica"
+ },
+ "pm_geophysical_survey_techniques_lithium_mine": {
+  "en": "$pm_geophysical_survey_techniques_tech_metals_mine$",
+  "es": "$pm_geophysical_survey_techniques_tech_metals_mine$"
+ },
+ "pm_geophysical_survey_techniques_manganese_mine": {
+  "en": "$pm_geophysical_survey_techniques_iron_mine$",
+  "es": "$pm_geophysical_survey_techniques_iron_mine$"
+ },
+ "pm_geophysical_survey_techniques_nickel_cobalt_mine": {
+  "en": "$pm_geophysical_survey_techniques_tech_metals_mine$",
+  "es": "$pm_geophysical_survey_techniques_tech_metals_mine$"
+ },
+ "pm_geophysical_survey_techniques_platinum_group_metals_mine": {
+  "en": "$pm_geophysical_survey_techniques_tech_metals_mine$",
+  "es": "$pm_geophysical_survey_techniques_tech_metals_mine$"
+ },
+ "pm_geophysical_survey_techniques_precious_minor_base_metal_mine": {
+  "en": "$pm_geophysical_survey_techniques_lead_mine$",
+  "es": "$pm_geophysical_survey_techniques_lead_mine$"
+ },
+ "pm_geophysical_survey_techniques_rare_earth_metals_mine": {
+  "en": "$pm_geophysical_survey_techniques_tech_metals_mine$",
+  "es": "$pm_geophysical_survey_techniques_tech_metals_mine$"
+ },
+ "pm_geophysical_survey_techniques_specialty_alloy_metal_mine": {
+  "en": "$pm_geophysical_survey_techniques_iron_mine$",
+  "es": "$pm_geophysical_survey_techniques_iron_mine$"
  },
  "pm_geophysical_survey_techniques_sulfur_mine": {
   "en": "Geophysical Survey Techniques",
@@ -4615,6 +6087,14 @@
   "en": "High-Fructose Syrup",
   "es": "Jarabe de alta fructosa"
  },
+ "pm_high_pressure_hydraulic_pump_building_bauxite_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_iron_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_iron_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_chromium_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_iron_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_iron_mine$"
+ },
  "pm_high_pressure_hydraulic_pump_building_coal_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "es": "Bomba hidráulica de alta presión"
@@ -4623,6 +6103,10 @@
   "en": "High-Pressure Hydraulic Pump",
   "es": "Bomba hidráulica de alta presión"
  },
+ "pm_high_pressure_hydraulic_pump_building_graphite_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_coal_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_coal_mine$"
+ },
  "pm_high_pressure_hydraulic_pump_building_iron_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "es": "Bomba hidráulica de alta presión"
@@ -4630,6 +6114,34 @@
  "pm_high_pressure_hydraulic_pump_building_lead_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "es": "Bomba hidráulica de alta presión"
+ },
+ "pm_high_pressure_hydraulic_pump_building_lithium_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_manganese_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_iron_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_iron_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_nickel_cobalt_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_platinum_group_metals_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_precious_minor_base_metal_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_lead_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_lead_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_rare_earth_metals_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_tech_metals_mine$"
+ },
+ "pm_high_pressure_hydraulic_pump_building_specialty_alloy_metal_mine": {
+  "en": "$pm_high_pressure_hydraulic_pump_building_iron_mine$",
+  "es": "$pm_high_pressure_hydraulic_pump_building_iron_mine$"
  },
  "pm_high_pressure_hydraulic_pump_building_sulfur_mine": {
   "en": "High-Pressure Hydraulic Pump",
@@ -4871,6 +6383,14 @@
   "en": "Lanfang Pontianak Kongsi House",
   "es": "Casa kongsi Lanfang Pontianak"
  },
+ "pm_large_scale_earth_movers_bauxite_mine": {
+  "en": "$pm_large_scale_earth_movers_iron_mine$",
+  "es": "$pm_large_scale_earth_movers_iron_mine$"
+ },
+ "pm_large_scale_earth_movers_chromium_mine": {
+  "en": "$pm_large_scale_earth_movers_iron_mine$",
+  "es": "$pm_large_scale_earth_movers_iron_mine$"
+ },
  "pm_large_scale_earth_movers_coal_mine": {
   "en": "Large Scale Earth Movers",
   "es": "Excavadoras de gran escala"
@@ -4878,6 +6398,10 @@
  "pm_large_scale_earth_movers_gold_mine": {
   "en": "Large Scale Earth Movers",
   "es": "Excavadoras de gran escala"
+ },
+ "pm_large_scale_earth_movers_graphite_mine": {
+  "en": "$pm_large_scale_earth_movers_coal_mine$",
+  "es": "$pm_large_scale_earth_movers_coal_mine$"
  },
  "pm_large_scale_earth_movers_iron_mine": {
   "en": "Large Scale Earth Movers",
@@ -4887,6 +6411,34 @@
   "en": "Large Scale Earth Movers",
   "es": "Excavadoras de gran escala"
  },
+ "pm_large_scale_earth_movers_lithium_mine": {
+  "en": "$pm_large_scale_earth_movers_tech_metals_mine$",
+  "es": "$pm_large_scale_earth_movers_tech_metals_mine$"
+ },
+ "pm_large_scale_earth_movers_manganese_mine": {
+  "en": "$pm_large_scale_earth_movers_iron_mine$",
+  "es": "$pm_large_scale_earth_movers_iron_mine$"
+ },
+ "pm_large_scale_earth_movers_nickel_cobalt_mine": {
+  "en": "$pm_large_scale_earth_movers_tech_metals_mine$",
+  "es": "$pm_large_scale_earth_movers_tech_metals_mine$"
+ },
+ "pm_large_scale_earth_movers_platinum_group_metals_mine": {
+  "en": "$pm_large_scale_earth_movers_tech_metals_mine$",
+  "es": "$pm_large_scale_earth_movers_tech_metals_mine$"
+ },
+ "pm_large_scale_earth_movers_precious_minor_base_metal_mine": {
+  "en": "$pm_large_scale_earth_movers_lead_mine$",
+  "es": "$pm_large_scale_earth_movers_lead_mine$"
+ },
+ "pm_large_scale_earth_movers_rare_earth_metals_mine": {
+  "en": "$pm_large_scale_earth_movers_tech_metals_mine$",
+  "es": "$pm_large_scale_earth_movers_tech_metals_mine$"
+ },
+ "pm_large_scale_earth_movers_specialty_alloy_metal_mine": {
+  "en": "$pm_large_scale_earth_movers_iron_mine$",
+  "es": "$pm_large_scale_earth_movers_iron_mine$"
+ },
  "pm_large_scale_earth_movers_sulfur_mine": {
   "en": "Large Scale Earth Movers",
   "es": "Excavadoras de gran escala"
@@ -4894,6 +6446,14 @@
  "pm_large_scale_earth_movers_tech_metals_mine": {
   "en": "Large-Scale Earth Movers",
   "es": "Excavadoras de gran escala"
+ },
+ "pm_laser_excavation_technology_bauxite_mine": {
+  "en": "$pm_laser_excavation_technology_iron_mine$",
+  "es": "$pm_laser_excavation_technology_iron_mine$"
+ },
+ "pm_laser_excavation_technology_chromium_mine": {
+  "en": "$pm_laser_excavation_technology_iron_mine$",
+  "es": "$pm_laser_excavation_technology_iron_mine$"
  },
  "pm_laser_excavation_technology_coal_mine": {
   "en": "Laser Excavation Technology",
@@ -4903,6 +6463,10 @@
   "en": "Laser Excavation Technology",
   "es": "Tecnología de excavación láser"
  },
+ "pm_laser_excavation_technology_graphite_mine": {
+  "en": "$pm_laser_excavation_technology_coal_mine$",
+  "es": "$pm_laser_excavation_technology_coal_mine$"
+ },
  "pm_laser_excavation_technology_iron_mine": {
   "en": "Laser Excavation Technology",
   "es": "Tecnología de excavación láser"
@@ -4910,6 +6474,34 @@
  "pm_laser_excavation_technology_lead_mine": {
   "en": "Laser Excavation Technology",
   "es": "Tecnología de excavación láser"
+ },
+ "pm_laser_excavation_technology_lithium_mine": {
+  "en": "$pm_laser_excavation_technology_tech_metals_mine$",
+  "es": "$pm_laser_excavation_technology_tech_metals_mine$"
+ },
+ "pm_laser_excavation_technology_manganese_mine": {
+  "en": "$pm_laser_excavation_technology_iron_mine$",
+  "es": "$pm_laser_excavation_technology_iron_mine$"
+ },
+ "pm_laser_excavation_technology_nickel_cobalt_mine": {
+  "en": "$pm_laser_excavation_technology_tech_metals_mine$",
+  "es": "$pm_laser_excavation_technology_tech_metals_mine$"
+ },
+ "pm_laser_excavation_technology_platinum_group_metals_mine": {
+  "en": "$pm_laser_excavation_technology_tech_metals_mine$",
+  "es": "$pm_laser_excavation_technology_tech_metals_mine$"
+ },
+ "pm_laser_excavation_technology_precious_minor_base_metal_mine": {
+  "en": "$pm_laser_excavation_technology_lead_mine$",
+  "es": "$pm_laser_excavation_technology_lead_mine$"
+ },
+ "pm_laser_excavation_technology_rare_earth_metals_mine": {
+  "en": "$pm_laser_excavation_technology_tech_metals_mine$",
+  "es": "$pm_laser_excavation_technology_tech_metals_mine$"
+ },
+ "pm_laser_excavation_technology_specialty_alloy_metal_mine": {
+  "en": "$pm_laser_excavation_technology_iron_mine$",
+  "es": "$pm_laser_excavation_technology_iron_mine$"
  },
  "pm_laser_excavation_technology_sulfur_mine": {
   "en": "Laser Excavation Technology",
@@ -5167,6 +6759,14 @@
   "en": "Metamaterial Explosives",
   "es": "Explosivos de metamateriales"
  },
+ "pm_metamaterial_explosives_building_bauxite_mine": {
+  "en": "$pm_metamaterial_explosives_building_iron_mine$",
+  "es": "$pm_metamaterial_explosives_building_iron_mine$"
+ },
+ "pm_metamaterial_explosives_building_chromium_mine": {
+  "en": "$pm_metamaterial_explosives_building_iron_mine$",
+  "es": "$pm_metamaterial_explosives_building_iron_mine$"
+ },
  "pm_metamaterial_explosives_building_coal_mine": {
   "en": "Metamaterial Explosives",
   "es": "Explosivos de metamateriales"
@@ -5175,6 +6775,10 @@
   "en": "Metamaterial Explosives",
   "es": "Explosivos de metamateriales"
  },
+ "pm_metamaterial_explosives_building_graphite_mine": {
+  "en": "$pm_metamaterial_explosives_building_coal_mine$",
+  "es": "$pm_metamaterial_explosives_building_coal_mine$"
+ },
  "pm_metamaterial_explosives_building_iron_mine": {
   "en": "Metamaterial Explosives",
   "es": "Explosivos de metamateriales"
@@ -5182,6 +6786,34 @@
  "pm_metamaterial_explosives_building_lead_mine": {
   "en": "Metamaterial Explosives",
   "es": "Explosivos de metamateriales"
+ },
+ "pm_metamaterial_explosives_building_lithium_mine": {
+  "en": "$pm_metamaterial_explosives_building_tech_metals_mine$",
+  "es": "$pm_metamaterial_explosives_building_tech_metals_mine$"
+ },
+ "pm_metamaterial_explosives_building_manganese_mine": {
+  "en": "$pm_metamaterial_explosives_building_iron_mine$",
+  "es": "$pm_metamaterial_explosives_building_iron_mine$"
+ },
+ "pm_metamaterial_explosives_building_nickel_cobalt_mine": {
+  "en": "$pm_metamaterial_explosives_building_tech_metals_mine$",
+  "es": "$pm_metamaterial_explosives_building_tech_metals_mine$"
+ },
+ "pm_metamaterial_explosives_building_platinum_group_metals_mine": {
+  "en": "$pm_metamaterial_explosives_building_tech_metals_mine$",
+  "es": "$pm_metamaterial_explosives_building_tech_metals_mine$"
+ },
+ "pm_metamaterial_explosives_building_precious_minor_base_metal_mine": {
+  "en": "$pm_metamaterial_explosives_building_lead_mine$",
+  "es": "$pm_metamaterial_explosives_building_lead_mine$"
+ },
+ "pm_metamaterial_explosives_building_rare_earth_metals_mine": {
+  "en": "$pm_metamaterial_explosives_building_tech_metals_mine$",
+  "es": "$pm_metamaterial_explosives_building_tech_metals_mine$"
+ },
+ "pm_metamaterial_explosives_building_specialty_alloy_metal_mine": {
+  "en": "$pm_metamaterial_explosives_building_iron_mine$",
+  "es": "$pm_metamaterial_explosives_building_iron_mine$"
  },
  "pm_metamaterial_explosives_building_sulfur_mine": {
   "en": "Metamaterial Explosives",
@@ -5635,6 +7267,30 @@
   "en": "NIOC Masjed Soleyman Field",
   "es": "Yacimiento NIOC Masjed Soleyman"
  },
+ "pm_nitroglycerin_building_bauxite_mine": {
+  "en": "$pm_nitroglycerin_building_iron_mine$",
+  "es": "$pm_nitroglycerin_building_iron_mine$"
+ },
+ "pm_nitroglycerin_building_chromium_mine": {
+  "en": "$pm_nitroglycerin_building_iron_mine$",
+  "es": "$pm_nitroglycerin_building_iron_mine$"
+ },
+ "pm_nitroglycerin_building_graphite_mine": {
+  "en": "$pm_nitroglycerin_building_coal_mine$",
+  "es": "$pm_nitroglycerin_building_coal_mine$"
+ },
+ "pm_nitroglycerin_building_manganese_mine": {
+  "en": "$pm_nitroglycerin_building_iron_mine$",
+  "es": "$pm_nitroglycerin_building_iron_mine$"
+ },
+ "pm_nitroglycerin_building_precious_minor_base_metal_mine": {
+  "en": "$pm_nitroglycerin_building_lead_mine$",
+  "es": "$pm_nitroglycerin_building_lead_mine$"
+ },
+ "pm_nitroglycerin_building_specialty_alloy_metal_mine": {
+  "en": "$pm_nitroglycerin_building_iron_mine$",
+  "es": "$pm_nitroglycerin_building_iron_mine$"
+ },
  "pm_no_branding_building": {
   "en": "Local Recognition",
   "es": "Reconocimiento local"
@@ -5815,6 +7471,14 @@
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
+ "pm_no_carbon_capture_mining_equipment_building_bauxite_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_chromium_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
  "pm_no_carbon_capture_mining_equipment_building_coal_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
@@ -5823,11 +7487,43 @@
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
+ "pm_no_carbon_capture_mining_equipment_building_graphite_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
  "pm_no_carbon_capture_mining_equipment_building_iron_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
  "pm_no_carbon_capture_mining_equipment_building_lead_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_lithium_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_manganese_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_nickel_cobalt_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_platinum_group_metals_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_precious_minor_base_metal_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_rare_earth_metals_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_mining_equipment_building_specialty_alloy_metal_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
@@ -5859,6 +7555,14 @@
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
+ "pm_no_carbon_capture_steam_automation_building_bauxite_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_chromium_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
  "pm_no_carbon_capture_steam_automation_building_coal_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
@@ -5867,11 +7571,43 @@
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
+ "pm_no_carbon_capture_steam_automation_building_graphite_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
  "pm_no_carbon_capture_steam_automation_building_iron_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
  "pm_no_carbon_capture_steam_automation_building_lead_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_lithium_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_manganese_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_nickel_cobalt_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_platinum_group_metals_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_precious_minor_base_metal_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_rare_earth_metals_mine": {
+  "en": "No Carbon Capture",
+  "es": "Sin captura de carbono"
+ },
+ "pm_no_carbon_capture_steam_automation_building_specialty_alloy_metal_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
@@ -6067,6 +7803,14 @@
   "en": "Orbital Nanolithography",
   "es": "Nanolitografía orbital"
  },
+ "pm_ore_sorting_and_separation_technology_bauxite_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_iron_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_iron_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_chromium_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_iron_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_iron_mine$"
+ },
  "pm_ore_sorting_and_separation_technology_coal_mine": {
   "en": "Ore Sorting and Separation Technology",
   "es": "Tecnología de clasificación y separación de mineral"
@@ -6075,6 +7819,10 @@
   "en": "Ore Sorting and Separation Technology",
   "es": "Tecnología de clasificación y separación de mineral"
  },
+ "pm_ore_sorting_and_separation_technology_graphite_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_coal_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_coal_mine$"
+ },
  "pm_ore_sorting_and_separation_technology_iron_mine": {
   "en": "Ore Sorting and Separation Technology",
   "es": "Tecnología de clasificación y separación de mineral"
@@ -6082,6 +7830,34 @@
  "pm_ore_sorting_and_separation_technology_lead_mine": {
   "en": "Ore Sorting and Separation Technology",
   "es": "Tecnología de clasificación y separación de mineral"
+ },
+ "pm_ore_sorting_and_separation_technology_lithium_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_manganese_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_iron_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_iron_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_nickel_cobalt_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_platinum_group_metals_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_precious_minor_base_metal_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_lead_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_lead_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_rare_earth_metals_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_tech_metals_mine$"
+ },
+ "pm_ore_sorting_and_separation_technology_specialty_alloy_metal_mine": {
+  "en": "$pm_ore_sorting_and_separation_technology_iron_mine$",
+  "es": "$pm_ore_sorting_and_separation_technology_iron_mine$"
  },
  "pm_ore_sorting_and_separation_technology_sulfur_mine": {
   "en": "Ore Sorting and Separation Technology",
@@ -6174,6 +7950,30 @@
  "pm_philips_eindhoven_natlab": {
   "en": "Philips Eindhoven NatLab",
   "es": "Philips Eindhoven NatLab"
+ },
+ "pm_picks_and_shovels_building_bauxite_mine": {
+  "en": "$pm_picks_and_shovels_building_iron_mine$",
+  "es": "$pm_picks_and_shovels_building_iron_mine$"
+ },
+ "pm_picks_and_shovels_building_chromium_mine": {
+  "en": "$pm_picks_and_shovels_building_iron_mine$",
+  "es": "$pm_picks_and_shovels_building_iron_mine$"
+ },
+ "pm_picks_and_shovels_building_graphite_mine": {
+  "en": "$pm_picks_and_shovels_building_coal_mine$",
+  "es": "$pm_picks_and_shovels_building_coal_mine$"
+ },
+ "pm_picks_and_shovels_building_manganese_mine": {
+  "en": "$pm_picks_and_shovels_building_iron_mine$",
+  "es": "$pm_picks_and_shovels_building_iron_mine$"
+ },
+ "pm_picks_and_shovels_building_precious_minor_base_metal_mine": {
+  "en": "$pm_picks_and_shovels_building_lead_mine$",
+  "es": "$pm_picks_and_shovels_building_lead_mine$"
+ },
+ "pm_picks_and_shovels_building_specialty_alloy_metal_mine": {
+  "en": "$pm_picks_and_shovels_building_iron_mine$",
+  "es": "$pm_picks_and_shovels_building_iron_mine$"
  },
  "pm_pirelli_bicocca_plant": {
   "en": "Pirelli Bicocca Plant",
@@ -6727,6 +8527,14 @@
   "en": "Smart LED Streetlights",
   "es": "Farolas LED inteligentes"
  },
+ "pm_smart_miners_building_bauxite_mine": {
+  "en": "$pm_smart_miners_building_iron_mine$",
+  "es": "$pm_smart_miners_building_iron_mine$"
+ },
+ "pm_smart_miners_building_chromium_mine": {
+  "en": "$pm_smart_miners_building_iron_mine$",
+  "es": "$pm_smart_miners_building_iron_mine$"
+ },
  "pm_smart_miners_building_coal_mine": {
   "en": "Smart Miners",
   "es": "Mineros inteligentes"
@@ -6735,6 +8543,10 @@
   "en": "Smart Miners",
   "es": "Mineros inteligentes"
  },
+ "pm_smart_miners_building_graphite_mine": {
+  "en": "$pm_smart_miners_building_coal_mine$",
+  "es": "$pm_smart_miners_building_coal_mine$"
+ },
  "pm_smart_miners_building_iron_mine": {
   "en": "Smart Miners",
   "es": "Mineros inteligentes"
@@ -6742,6 +8554,34 @@
  "pm_smart_miners_building_lead_mine": {
   "en": "Smart Miners",
   "es": "Mineros inteligentes"
+ },
+ "pm_smart_miners_building_lithium_mine": {
+  "en": "$pm_smart_miners_building_tech_metals_mine$",
+  "es": "$pm_smart_miners_building_tech_metals_mine$"
+ },
+ "pm_smart_miners_building_manganese_mine": {
+  "en": "$pm_smart_miners_building_iron_mine$",
+  "es": "$pm_smart_miners_building_iron_mine$"
+ },
+ "pm_smart_miners_building_nickel_cobalt_mine": {
+  "en": "$pm_smart_miners_building_tech_metals_mine$",
+  "es": "$pm_smart_miners_building_tech_metals_mine$"
+ },
+ "pm_smart_miners_building_platinum_group_metals_mine": {
+  "en": "$pm_smart_miners_building_tech_metals_mine$",
+  "es": "$pm_smart_miners_building_tech_metals_mine$"
+ },
+ "pm_smart_miners_building_precious_minor_base_metal_mine": {
+  "en": "$pm_smart_miners_building_lead_mine$",
+  "es": "$pm_smart_miners_building_lead_mine$"
+ },
+ "pm_smart_miners_building_rare_earth_metals_mine": {
+  "en": "$pm_smart_miners_building_tech_metals_mine$",
+  "es": "$pm_smart_miners_building_tech_metals_mine$"
+ },
+ "pm_smart_miners_building_specialty_alloy_metal_mine": {
+  "en": "$pm_smart_miners_building_iron_mine$",
+  "es": "$pm_smart_miners_building_iron_mine$"
  },
  "pm_smart_miners_building_sulfur_mine": {
   "en": "Smart Miners",
@@ -6906,6 +8746,10 @@
  "pm_state_directed_media": {
   "en": "State-Directed Media",
   "es": "Medios dirigidos por el Estado"
+ },
+ "pm_steam_donkey_building_graphite_mine": {
+  "en": "$pm_steam_donkey_building_coal_mine$",
+  "es": "$pm_steam_donkey_building_coal_mine$"
  },
  "pm_steam_paddleboats": {
   "en": "Steam Paddleboats",
@@ -7895,13 +9739,29 @@
   "en": "Carbon Capture ($pmg_mfo_oerlikon_works$)",
   "es": "Captura de carbono ($pmg_mfo_oerlikon_works$)"
  },
+ "pmg_carbon_capture_mining_equipment_building_bauxite_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_bauxite_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_bauxite_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_chromium_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_chromium_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_chromium_mine$)"
+ },
  "pmg_carbon_capture_mining_equipment_building_coal_mine": {
   "en": "Carbon Capture ($pmg_mining_equipment_building_coal_mine$)",
   "es": "Captura de carbono ($pmg_mining_equipment_building_coal_mine$)"
  },
+ "pmg_carbon_capture_mining_equipment_building_copper_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_copper_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_copper_mine$)"
+ },
  "pmg_carbon_capture_mining_equipment_building_gold_mine": {
   "en": "Carbon Capture ($pmg_mining_equipment_building_gold_mine$)",
   "es": "Captura de carbono ($pmg_mining_equipment_building_gold_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_graphite_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_graphite_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_graphite_mine$)"
  },
  "pmg_carbon_capture_mining_equipment_building_iron_mine": {
   "en": "Carbon Capture ($pmg_mining_equipment_building_iron_mine$)",
@@ -7910,6 +9770,34 @@
  "pmg_carbon_capture_mining_equipment_building_lead_mine": {
   "en": "Carbon Capture ($pmg_mining_equipment_building_lead_mine$)",
   "es": "Captura de carbono ($pmg_mining_equipment_building_lead_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_lithium_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_lithium_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_lithium_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_manganese_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_manganese_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_manganese_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_nickel_cobalt_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_nickel_cobalt_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_nickel_cobalt_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_platinum_group_metals_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_platinum_group_metals_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_platinum_group_metals_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_precious_minor_base_metal_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_precious_minor_base_metal_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_precious_minor_base_metal_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_rare_earth_metals_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_rare_earth_metals_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_rare_earth_metals_mine$)"
+ },
+ "pmg_carbon_capture_mining_equipment_building_specialty_alloy_metal_mine": {
+  "en": "Carbon Capture ($pmg_mining_equipment_building_specialty_alloy_metal_mine$)",
+  "es": "Captura de carbono ($pmg_mining_equipment_building_specialty_alloy_metal_mine$)"
  },
  "pmg_carbon_capture_mining_equipment_building_sulfur_mine": {
   "en": "Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$)",
@@ -7939,13 +9827,29 @@
   "en": "Carbon Capture ($pmg_siam_electric_wat_liab_station$)",
   "es": "Captura de carbono ($pmg_siam_electric_wat_liab_station$)"
  },
+ "pmg_carbon_capture_steam_automation_building_bauxite_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_bauxite_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_bauxite_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_chromium_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_chromium_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_chromium_mine$)"
+ },
  "pmg_carbon_capture_steam_automation_building_coal_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_coal_mine$)",
   "es": "Captura de carbono ($pmg_steam_automation_building_coal_mine$)"
  },
+ "pmg_carbon_capture_steam_automation_building_copper_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_copper_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_copper_mine$)"
+ },
  "pmg_carbon_capture_steam_automation_building_gold_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_gold_mine$)",
   "es": "Captura de carbono ($pmg_steam_automation_building_gold_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_graphite_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_graphite_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_graphite_mine$)"
  },
  "pmg_carbon_capture_steam_automation_building_iron_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_iron_mine$)",
@@ -7954,6 +9858,34 @@
  "pmg_carbon_capture_steam_automation_building_lead_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_lead_mine$)",
   "es": "Captura de carbono ($pmg_steam_automation_building_lead_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_lithium_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_lithium_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_lithium_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_manganese_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_manganese_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_manganese_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_nickel_cobalt_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_nickel_cobalt_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_nickel_cobalt_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_platinum_group_metals_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_platinum_group_metals_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_platinum_group_metals_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_precious_minor_base_metal_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_precious_minor_base_metal_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_precious_minor_base_metal_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_rare_earth_metals_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_rare_earth_metals_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_rare_earth_metals_mine$)"
+ },
+ "pmg_carbon_capture_steam_automation_building_specialty_alloy_metal_mine": {
+  "en": "Carbon Capture ($pmg_steam_automation_building_specialty_alloy_metal_mine$)",
+  "es": "Captura de carbono ($pmg_steam_automation_building_specialty_alloy_metal_mine$)"
  },
  "pmg_carbon_capture_steam_automation_building_sulfur_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_sulfur_mine$)",
@@ -8174,6 +10106,46 @@
  "pmg_ethiopian_railway_dire_dawa_depot": {
   "en": "Ethiopian Railway Dire Dawa Depot",
   "es": "Depósito del Ferrocarril Etíope Dire Dawa"
+ },
+ "pmg_explosives_building_bauxite_mine": {
+  "en": "$pmg_explosives_building_iron_mine$",
+  "es": "$pmg_explosives_building_iron_mine$"
+ },
+ "pmg_explosives_building_chromium_mine": {
+  "en": "$pmg_explosives_building_iron_mine$",
+  "es": "$pmg_explosives_building_iron_mine$"
+ },
+ "pmg_explosives_building_graphite_mine": {
+  "en": "$pmg_explosives_building_coal_mine$",
+  "es": "$pmg_explosives_building_coal_mine$"
+ },
+ "pmg_explosives_building_lithium_mine": {
+  "en": "$pmg_explosives_building_tech_metals_mine$",
+  "es": "$pmg_explosives_building_tech_metals_mine$"
+ },
+ "pmg_explosives_building_manganese_mine": {
+  "en": "$pmg_explosives_building_iron_mine$",
+  "es": "$pmg_explosives_building_iron_mine$"
+ },
+ "pmg_explosives_building_nickel_cobalt_mine": {
+  "en": "$pmg_explosives_building_tech_metals_mine$",
+  "es": "$pmg_explosives_building_tech_metals_mine$"
+ },
+ "pmg_explosives_building_platinum_group_metals_mine": {
+  "en": "$pmg_explosives_building_tech_metals_mine$",
+  "es": "$pmg_explosives_building_tech_metals_mine$"
+ },
+ "pmg_explosives_building_precious_minor_base_metal_mine": {
+  "en": "$pmg_explosives_building_lead_mine$",
+  "es": "$pmg_explosives_building_lead_mine$"
+ },
+ "pmg_explosives_building_rare_earth_metals_mine": {
+  "en": "$pmg_explosives_building_tech_metals_mine$",
+  "es": "$pmg_explosives_building_tech_metals_mine$"
+ },
+ "pmg_explosives_building_specialty_alloy_metal_mine": {
+  "en": "$pmg_explosives_building_iron_mine$",
+  "es": "$pmg_explosives_building_iron_mine$"
  },
  "pmg_explosives_building_tech_metals_mine": {
   "en": "Explosives",
@@ -8739,6 +10711,46 @@
   "en": "Base Purpose",
   "es": "Finalidad de la base"
  },
+ "pmg_mining_equipment_building_bauxite_mine": {
+  "en": "$pmg_mining_equipment_building_iron_mine$",
+  "es": "$pmg_mining_equipment_building_iron_mine$"
+ },
+ "pmg_mining_equipment_building_chromium_mine": {
+  "en": "$pmg_mining_equipment_building_iron_mine$",
+  "es": "$pmg_mining_equipment_building_iron_mine$"
+ },
+ "pmg_mining_equipment_building_graphite_mine": {
+  "en": "$pmg_mining_equipment_building_coal_mine$",
+  "es": "$pmg_mining_equipment_building_coal_mine$"
+ },
+ "pmg_mining_equipment_building_lithium_mine": {
+  "en": "$pmg_mining_equipment_building_tech_metals_mine$",
+  "es": "$pmg_mining_equipment_building_tech_metals_mine$"
+ },
+ "pmg_mining_equipment_building_manganese_mine": {
+  "en": "$pmg_mining_equipment_building_iron_mine$",
+  "es": "$pmg_mining_equipment_building_iron_mine$"
+ },
+ "pmg_mining_equipment_building_nickel_cobalt_mine": {
+  "en": "$pmg_mining_equipment_building_tech_metals_mine$",
+  "es": "$pmg_mining_equipment_building_tech_metals_mine$"
+ },
+ "pmg_mining_equipment_building_platinum_group_metals_mine": {
+  "en": "$pmg_mining_equipment_building_tech_metals_mine$",
+  "es": "$pmg_mining_equipment_building_tech_metals_mine$"
+ },
+ "pmg_mining_equipment_building_precious_minor_base_metal_mine": {
+  "en": "$pmg_mining_equipment_building_lead_mine$",
+  "es": "$pmg_mining_equipment_building_lead_mine$"
+ },
+ "pmg_mining_equipment_building_rare_earth_metals_mine": {
+  "en": "$pmg_mining_equipment_building_tech_metals_mine$",
+  "es": "$pmg_mining_equipment_building_tech_metals_mine$"
+ },
+ "pmg_mining_equipment_building_specialty_alloy_metal_mine": {
+  "en": "$pmg_mining_equipment_building_iron_mine$",
+  "es": "$pmg_mining_equipment_building_iron_mine$"
+ },
  "pmg_mining_equipment_building_tech_metals_mine": {
   "en": "Mining Equipment",
   "es": "Equipo de minería"
@@ -9162,6 +11174,46 @@
  "pmg_standard_oil_refinery": {
   "en": "Standard Oil Refinery",
   "es": "Refinería Standard Oil"
+ },
+ "pmg_steam_automation_building_bauxite_mine": {
+  "en": "$pmg_steam_automation_building_iron_mine$",
+  "es": "$pmg_steam_automation_building_iron_mine$"
+ },
+ "pmg_steam_automation_building_chromium_mine": {
+  "en": "$pmg_steam_automation_building_iron_mine$",
+  "es": "$pmg_steam_automation_building_iron_mine$"
+ },
+ "pmg_steam_automation_building_graphite_mine": {
+  "en": "$pmg_steam_automation_building_coal_mine$",
+  "es": "$pmg_steam_automation_building_coal_mine$"
+ },
+ "pmg_steam_automation_building_lithium_mine": {
+  "en": "$pmg_steam_automation_building_tech_metals_mine$",
+  "es": "$pmg_steam_automation_building_tech_metals_mine$"
+ },
+ "pmg_steam_automation_building_manganese_mine": {
+  "en": "$pmg_steam_automation_building_iron_mine$",
+  "es": "$pmg_steam_automation_building_iron_mine$"
+ },
+ "pmg_steam_automation_building_nickel_cobalt_mine": {
+  "en": "$pmg_steam_automation_building_tech_metals_mine$",
+  "es": "$pmg_steam_automation_building_tech_metals_mine$"
+ },
+ "pmg_steam_automation_building_platinum_group_metals_mine": {
+  "en": "$pmg_steam_automation_building_tech_metals_mine$",
+  "es": "$pmg_steam_automation_building_tech_metals_mine$"
+ },
+ "pmg_steam_automation_building_precious_minor_base_metal_mine": {
+  "en": "$pmg_steam_automation_building_lead_mine$",
+  "es": "$pmg_steam_automation_building_lead_mine$"
+ },
+ "pmg_steam_automation_building_rare_earth_metals_mine": {
+  "en": "$pmg_steam_automation_building_tech_metals_mine$",
+  "es": "$pmg_steam_automation_building_tech_metals_mine$"
+ },
+ "pmg_steam_automation_building_specialty_alloy_metal_mine": {
+  "en": "$pmg_steam_automation_building_iron_mine$",
+  "es": "$pmg_steam_automation_building_iron_mine$"
  },
  "pmg_steam_automation_building_tech_metals_mine": {
   "en": "Automation",

@@ -91,17 +91,31 @@ class CaptureGeneratorTest(unittest.TestCase):
         self.assertIn("pm_dragline_excavators_iron_mine", exempt)
 
     def test_coal_mine_pumps_and_donkey_are_stationary_capture_sources(self):
-        # Their coal is netted from the output, not listed as an input; the
-        # Graphite Mine reuses the same groups.
-        for building in ("building_coal_mine", "building_graphite_mine"):
-            self.assertIn("pmg_carbon_capture_mining_equipment_building_coal_mine", self.attachments[building])
-            self.assertIn("pmg_carbon_capture_steam_automation_building_coal_mine", self.attachments[building])
+        # Their coal is netted from the output, not listed as an input.
+        building = "building_coal_mine"
+        self.assertIn("pmg_carbon_capture_mining_equipment_building_coal_mine", self.attachments[building])
+        self.assertIn("pmg_carbon_capture_steam_automation_building_coal_mine", self.attachments[building])
         pumps = self.catalog["pmg_mining_equipment_building_coal_mine"][0]
         self.assertEqual(pumps[(Decimal(10), Decimal(0))], ["pm_atmospheric_engine_pump_building_coal_mine"])
         self.assertEqual(pumps[(Decimal(15), Decimal(0))], ["pm_condensing_engine_pump_building_coal_mine"])
         classes, exempt, _, _ = self.catalog["pmg_steam_automation_building_coal_mine"]
         self.assertEqual(classes[(Decimal(3), Decimal(0))], ["pm_steam_donkey_building_coal_mine"])
         self.assertIn("pm_dragline_excavators_coal_mine", exempt)
+
+    def test_graphite_mine_copies_buy_the_coal_they_burn(self):
+        # The Graphite Mine runs its own copy of the Coal Mine's groups
+        # (gen_mine_coproducts.py), which lists the netted coal as an input, so
+        # the same fuel classes are captured in its own groups.
+        building = "building_graphite_mine"
+        self.assertIn("pmg_carbon_capture_mining_equipment_building_graphite_mine", self.attachments[building])
+        self.assertIn("pmg_carbon_capture_steam_automation_building_graphite_mine", self.attachments[building])
+        self.assertNotIn("pmg_carbon_capture_mining_equipment_building_coal_mine", self.attachments[building])
+        pumps = self.catalog["pmg_mining_equipment_building_graphite_mine"][0]
+        self.assertEqual(pumps[(Decimal(10), Decimal(0))], ["pm_atmospheric_engine_pump_building_graphite_mine"])
+        self.assertEqual(pumps[(Decimal(15), Decimal(0))], ["pm_condensing_engine_pump_building_graphite_mine"])
+        classes, exempt, _, _ = self.catalog["pmg_steam_automation_building_graphite_mine"]
+        self.assertEqual(classes[(Decimal(3), Decimal(0))], ["pm_steam_donkey_building_graphite_mine"])
+        self.assertIn("pm_dragline_excavators_graphite_mine", exempt)
 
     def test_feedstock_transport_and_synthetic_fuel_exceptions(self):
         for building in ("building_port", "building_railway", "building_airport", "building_wheat_farm",
@@ -146,7 +160,7 @@ class CaptureGeneratorTest(unittest.TestCase):
                 if energy_loss:
                     self.assertGreater(Decimal(body(capture.workforce(self.methods[pm]), "goods_output_electricity_add")) + energy_loss, 0)
             self.assertTrue(any(k.startswith("goods_input_") for k in workforce(method)))
-        self.assertEqual(tiers, 360)
+        self.assertEqual(tiers, 477)
 
     def test_modern_coal_tier_two_costs_follow_design_anchors(self):
         pm = self.methods["pm_carbon_capture_2_base_building_power_plant_coal20_oil0"]
