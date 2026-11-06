@@ -100,21 +100,16 @@ class NoDriftTest(unittest.TestCase):
 class NoCooldownTest(unittest.TestCase):
     """The post-setback cooldown skipped the roll for six months on every
     milestone, so switching them all to Ambitious after a failure was free
-    progress. It went on 2026-10-31 (owner): nothing sets or reads it but the
-    monthly old-save strip."""
+    progress. It went on 2026-10-31 (owner), and its old-save strip with
+    vanilla 1.15, which loads no older save (#1407): nothing names it."""
 
     def test_nothing_sets_or_reads_the_cooldown(self):
-        strip = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
         for sub in ("common", "events"):
             for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
                 text = _read(path)
                 with self.subTest(path=os.path.relpath(path, REPO)):
                     self.assertNotIn("sr_has_failure_cooldown", text)
-                    if os.path.samefile(path, strip):
-                        self.assertIn("remove_variable = sr_failure_cooldown", text)
-                        self.assertNotIn("name = sr_failure_cooldown", text)
-                    else:
-                        self.assertNotIn("sr_failure_cooldown", text)
+                    self.assertNotIn("sr_failure_cooldown", text)
 
 
 class StandardControlTest(unittest.TestCase):

@@ -6695,7 +6695,6 @@
  sr_prog_state_taken:0 "#R another power got there first#!"
  sr_program_lost_interstellar_probe_tt:0 "The #b Interstellar Probe#! program is closed: the launch complex can no longer carry it, and its progress is lost."
  sr_program_lost_mars_landing_tt:0 "The #b Mars Landing#! program is closed: the launch complex can no longer carry it, and its progress is lost."
- sr_program_lost_moon_base_tt:0 "The #b Moon Base#! program is closed: the launch complex can no longer carry it, and its progress is lost."
  sr_program_lost_moon_landing_tt:0 "The #b Moon Landing#! program is closed: the launch complex can no longer carry it, and its progress is lost."
  sr_program_lost_orbital_tt:0 "The #b Orbital Flight#! program is closed: the launch complex can no longer carry it, and its progress is lost."
  sr_program_lost_probe_tt:0 "The #b Deep-Space Probe#! program is closed: the launch complex can no longer carry it, and its progress is lost."

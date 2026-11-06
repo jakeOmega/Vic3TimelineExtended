@@ -786,8 +786,7 @@ space_race_events.20 = {
 	duration = 3
 
 	# One queued popup per completion; each takes exactly one pending entry
-	# (sr_notify_milestone_achievement). A popup queued before the per-milestone
-	# lists existed carries none and is dropped here rather than shown blank.
+	# (sr_notify_milestone_achievement).
 	trigger = {
 		OR = {
 			sr_has_milestone_notice = { MILESTONE = suborbital }
@@ -837,7 +836,6 @@ space_race_events.20 = {
 			limit = { sr_has_milestone_notice = { MILESTONE = interstellar_probe } }
 			sr_take_milestone_notice_base = { MILESTONE = interstellar_probe }
 		}
-		sr_clear_legacy_milestone_notice = yes
 	}
 
 	option = {
@@ -4091,7 +4089,6 @@ space_race_events.76 = {
 		if = { limit = { exists = scope:sr_program_lost_orbital            } custom_tooltip = sr_program_lost_orbital_tt            }
 		if = { limit = { exists = scope:sr_program_lost_moon_landing       } custom_tooltip = sr_program_lost_moon_landing_tt       }
 		if = { limit = { exists = scope:sr_program_lost_probe              } custom_tooltip = sr_program_lost_probe_tt              }
-		if = { limit = { exists = scope:sr_program_lost_moon_base          } custom_tooltip = sr_program_lost_moon_base_tt          }
 		if = { limit = { exists = scope:sr_program_lost_mars_landing       } custom_tooltip = sr_program_lost_mars_landing_tt       }
 		if = { limit = { exists = scope:sr_program_lost_interstellar_probe } custom_tooltip = sr_program_lost_interstellar_probe_tt }
 		if = { limit = { exists = scope:sr_program_lost_solar_colonization } custom_tooltip = sr_program_lost_solar_colonization_tt }

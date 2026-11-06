@@ -895,8 +895,10 @@ class SpacePowersTest(unittest.TestCase):
         self.assertIn("sr_powers_list_selfcheck = yes", refresh)
         clear = _block(effects, "sr_powers_clear")
         self.assertIn("clear_variable_list = sr_powers_list", clear)
-        for name in ["sr_power_total"] + [f"sr_power_{n}" for n in range(1, 9)]:
-            self.assertIn(f"remove_variable = {name} }}", clear)
+        self.assertIn("remove_variable = sr_power_total }", clear)
+        # the eight slots from before SPC-9 went with vanilla 1.15 (#1407)
+        for n in range(1, 9):
+            self.assertNotRegex(effects, rf"\bsr_power_{n}\b")
         # players in the race, monthly
         pulse = _read(ON_ACTIONS)
         self.assertRegex(pulse, r"is_player = yes\s+sr_space_race_on = yes\s+sr_in_space_race = yes\s+\}\s+"

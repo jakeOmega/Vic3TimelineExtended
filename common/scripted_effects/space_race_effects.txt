@@ -113,7 +113,7 @@ sr_refresh_milestone_statuses = {
 
 # Keeps live milestone state aligned with the JEs that own it.
 # This is permanent logic for intentionally deactivatable JEs, not a save-migration
-# cleanup (bar one marked old-save strip below).
+# cleanup.
 sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = suborbital         }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = orbital            }
@@ -144,12 +144,6 @@ sr_cleanup_inactive_space_race_milestones = {
 			if = { limit = { has_variable = sr_active_interstellar_results } remove_variable = sr_active_interstellar_results }
 			if = { limit = { has_variable = sr_interstellar_transit_progress } remove_variable = sr_interstellar_transit_progress }
 		}
-	}
-	# Old saves: sr_active_milestone was retired for sr_has_running_milestone
-	# (#480). Nothing reads it any more; strip what a save still carries.
-	if = {
-		limit = { has_variable = sr_active_milestone }
-		remove_variable = sr_active_milestone
 	}
 	if = {
 		limit = { has_variable = sr_space_race_cleanup_changed }
@@ -395,24 +389,6 @@ sr_take_milestone_notice_base = {
 		limit = { scope:sr_achiever = { has_variable = sr_was_first_$MILESTONE$ } }
 		save_scope_as = sr_is_first
 	}
-}
-
-# Old-save migration: a receiver can still hold the single-variable format a
-# notification queued before the per-milestone lists wrote. Such a queued .20
-# fails its trigger and is dropped (its immediate never runs); the variables it
-# left behind are inert and are stripped here, by the next new-format
-# notification that reaches that receiver. Called from space_race_events.20's
-# immediate.
-sr_clear_legacy_milestone_notice = {
-	if = { limit = { has_variable = sr_notify_achiever_capital      } remove_variable = sr_notify_achiever_capital      }
-	if = { limit = { has_variable = sr_notify_is_first              } remove_variable = sr_notify_is_first              }
-	if = { limit = { has_variable = sr_notify_suborbital            } remove_variable = sr_notify_suborbital            }
-	if = { limit = { has_variable = sr_notify_orbital               } remove_variable = sr_notify_orbital               }
-	if = { limit = { has_variable = sr_notify_moon_landing          } remove_variable = sr_notify_moon_landing          }
-	if = { limit = { has_variable = sr_notify_probe                 } remove_variable = sr_notify_probe                 }
-	if = { limit = { has_variable = sr_notify_moon_base             } remove_variable = sr_notify_moon_base             }
-	if = { limit = { has_variable = sr_notify_mars_landing          } remove_variable = sr_notify_mars_landing          }
-	if = { limit = { has_variable = sr_notify_interstellar_probe    } remove_variable = sr_notify_interstellar_probe    }
 }
 
 # --- Per-milestone completion / reward / cleanup helpers ---------------------
@@ -770,8 +746,7 @@ sr_effect_fund_down = {
 #   2              ambitious approach
 #
 # States 3 to 5 ("shielded", inside the post-setback cooldown) went with the
-# cooldown on 2026-10-31; the monthly country pulse re-derives an old save's
-# (space_race_on_actions.txt, its cooldown strip).
+# cooldown on 2026-10-31.
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
 # sr_space_program_incompatible_tt, and it would need a second parameter because
@@ -1182,17 +1157,9 @@ sr_own_fuzz_refresh = {
 	sr_power_fuzz_base = { MILESTONE = solar_colonization }
 }
 
-# The viewer's snapshot for a milestone: the list, and the five slots and the
-# count that held it before audit SPC-9 (2026-10-27), so an older save drops
-# them at its first refresh. Scope: the viewer.
+# The viewer's snapshot for a milestone: the list. Scope: the viewer.
 sr_clear_rival_slots = {
 	if = { limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } clear_variable_list = sr_rivals_list_$MILESTONE$ }
-	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_3 } remove_variable = sr_rival_$MILESTONE$_3 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_4 } remove_variable = sr_rival_$MILESTONE$_4 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
 }
 
 # --- Display-only: the Space Powers standings --------------------------------
@@ -1326,21 +1293,11 @@ sr_power_fuzz_first = {
 	}
 }
 
-# The snapshot: the list and the count, and the eight slots that held it
-# before audit SPC-9 (2026-10-27), so an older save drops them at its first
-# refresh. From the refresh, and for a country that no longer views it (no
-# longer played). Scope: the country.
+# The snapshot: the list and the count. From the refresh, and for a country
+# that no longer views it (no longer played). Scope: the country.
 sr_powers_clear = {
 	if = { limit = { has_variable_list = sr_powers_list } clear_variable_list = sr_powers_list }
 	if = { limit = { has_variable = sr_power_total } remove_variable = sr_power_total }
-	if = { limit = { has_variable = sr_power_1 } remove_variable = sr_power_1 }
-	if = { limit = { has_variable = sr_power_2 } remove_variable = sr_power_2 }
-	if = { limit = { has_variable = sr_power_3 } remove_variable = sr_power_3 }
-	if = { limit = { has_variable = sr_power_4 } remove_variable = sr_power_4 }
-	if = { limit = { has_variable = sr_power_5 } remove_variable = sr_power_5 }
-	if = { limit = { has_variable = sr_power_6 } remove_variable = sr_power_6 }
-	if = { limit = { has_variable = sr_power_7 } remove_variable = sr_power_7 }
-	if = { limit = { has_variable = sr_power_8 } remove_variable = sr_power_8 }
 }
 
 # --- A launch complex that can no longer carry a milestone -------------------
@@ -1353,7 +1310,7 @@ sr_powers_clear = {
 # on_fail used to fire its own identical space_race_events.76. Each on_fail now
 # records its milestone, and only the first one queues the report — five days
 # out, so every journal entry failing over the same change has recorded itself
-# by the time it fires. Country scope. Called from the eight on_fail blocks.
+# by the time it fires. Country scope. Called from the seven on_fail blocks.
 sr_report_program_loss = {
 	set_variable = { name = sr_program_lost_$MILESTONE$ value = yes }
 	if = {
@@ -1380,7 +1337,6 @@ sr_take_program_losses = {
 	sr_take_program_loss_base = { MILESTONE = orbital            }
 	sr_take_program_loss_base = { MILESTONE = moon_landing       }
 	sr_take_program_loss_base = { MILESTONE = probe              }
-	sr_take_program_loss_base = { MILESTONE = moon_base          }
 	sr_take_program_loss_base = { MILESTONE = mars_landing       }
 	sr_take_program_loss_base = { MILESTONE = interstellar_probe }
 	sr_take_program_loss_base = { MILESTONE = solar_colonization }

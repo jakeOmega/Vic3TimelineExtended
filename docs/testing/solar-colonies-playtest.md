@@ -600,9 +600,10 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
 1. **No Shielded state.** Force an Ambitious failure (`event te_debug_space_race.1`, option j, on a milestone set to
    Ambitious) and answer it: the overview keeps reading Ambitious with its risk, never "Shielded", and the next month
    rolls as usual. The console's "Clear the setback cooldown" option is gone.
-2. **An old save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the
-   overview reads its approach again (until then a Safe or Standard one may read Ambitious), and
-   `sr_failure_cooldown` is gone from the country.
+2. **Retired at vanilla 1.15** (the strip went with the migration; saves from 1.14.5 don't carry over). ~~**An old
+   save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the overview reads
+   its approach again (until then a Safe or Standard one may read Ambitious), and `sr_failure_cooldown` is gone from
+   the country.~~
 3. **Self-government at 50.** A colony whose autonomy reaches 50 fires `space_race_events.94` (Demands
    Self-Government), and the overview's Colonies cell names it in red from 50.
 4. **The grade beside Bases.** The Colonies section's Modules view: each colony's Bases reads its room and grade,

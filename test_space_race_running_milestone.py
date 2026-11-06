@@ -58,20 +58,11 @@ def _script_files():
 
 
 class RetiredFlagTests(unittest.TestCase):
-    def test_only_the_old_save_strip_mentions_the_retired_flag(self):
-        effects = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
-        hits = {}
+    def test_nothing_mentions_the_retired_flag(self):
+        # The old-save strip went with vanilla 1.15, which loads no older save
+        # (#1407): no script sets, reads or removes the flag.
         for path in _script_files():
-            n = len(re.findall(r"\bsr_active_milestone\b", _read(path)))
-            if n:
-                hits[os.path.relpath(path, REPO)] = n
-        self.assertEqual(hits, {os.path.relpath(effects, REPO): 2})
-        strip = _block(_read(effects), "sr_cleanup_inactive_space_race_milestones")
-        self.assertRegex(
-            strip,
-            r"limit\s*=\s*\{\s*has_variable\s*=\s*sr_active_milestone\s*\}\s*"
-            r"remove_variable\s*=\s*sr_active_milestone",
-        )
+            self.assertNotRegex(_read(path), r"\bsr_active_milestone\b", os.path.relpath(path, REPO))
 
     def test_retired_triggers_are_gone(self):
         for path in _script_files():
