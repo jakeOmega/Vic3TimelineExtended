@@ -5437,7 +5437,9 @@ Seen in game on 2026-11-05:
   page, and it stayed closed, with nothing in either log (2026-11-05). Either the button went with the page before the second
   line ran, or the close landed after the open had found the page still open; `DontToggle` itself is unproven. Run the
   close and the open from a widget outside the page, as two states chained by `next`
-  (`te_jmap_repainter`, `gui/te_map_widgets.gui`).
+  (`te_jmap_repainter`, `gui/te_map_widgets.gui`). That works: the second state's plain `OpenJournalEntryPanel`
+  reopens the page and repaints its map, with the close a quarter second after the click and the open a tenth after
+  the close (sixth session, 2026-11-05). How short the first wait can be is open (0.05 s in the fifth pass's check 1).
 - **An inactive entry's page opens and paints.** A button holding `GetPlayerJournalEntry('<key>')` opens the inactive
   copy every country holds of an entry with activation triggers, and its map paints, so a map button needn't wait
   for the entry to activate. That page listed a long run of countries under Involved Countries.
