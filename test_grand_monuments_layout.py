@@ -156,6 +156,11 @@ def _loc():
     return out
 
 
+def _spliced(key, loc):
+    """A key's text with its `$key$` splices inlined, as the engine does at load."""
+    return re.sub(r"\$([\w.]+)\$", lambda m: _spliced(m[1], loc) if m[1] in loc else m[0], loc[key])
+
+
 def _gui():
     return _read(GUI)
 
@@ -511,18 +516,50 @@ class ChoicePreviewTest(unittest.TestCase):
     def test_the_tooltips_read_the_guarded_figures(self):
         loc = _loc()
         values = _read(VALUES)
-        for key, reads in (("gm_tear_down_tt", ("gm_state_disp_prev_td_legit", "gm_state_disp_prev_td_base",
-                                                 "gm_state_disp_prev_td_sup")),
-                           ("gm_rededicate_tt", ("gm_state_disp_prev_rd_levels", "gm_state_disp_prev_rd_grandeur",
-                                                  "gm_state_disp_prev_rd_sup", "gm_state_rededicate_cost"))):
+        for key, reads in (("gm_tear_down_base_sup_tt", ("gm_state_disp_prev_td_legit", "gm_state_disp_prev_td_base",
+                                                         "gm_state_disp_prev_td_sup")),
+                           ("gm_rededicate_sup_tt", ("gm_state_disp_prev_rd_levels", "gm_state_disp_prev_rd_grandeur",
+                                                      "gm_state_disp_prev_rd_sup", "gm_state_rededicate_cost"))):
             for name in reads:
-                self.assertIn(f"ScriptValue('{name}')", loc[key], (key, name))
+                self.assertIn(f"ScriptValue('{name}')", _spliced(key, loc), (key, name))
         for name in ("td_legit", "td_base", "td_sup", "rd_sup"):
             self.assertEqual(_squash(_block(values, f"gm_state_disp_prev_{name}")),
                              f"value = 0 if = {{ limit = {{ has_variable = gm_prev_{name} }} value = var:gm_prev_{name} }}")
         for key in ("gm_mon_tear_down_tt", "gm_mon_rededicate_tt", "gm_mon_preserve_tt"):
             self.assertIn("THIS.ScriptValue('gm_mon_", loc[key], key)
         self.assertIn("does not change now", loc["gm_preserve_tt"])
+
+    def test_the_approval_lines_are_picked_in_script(self):
+        # #1413: a key named in SelectLocalization loses THIS, so the lines
+        # for the groups whose approval moves are not picked in the loc. Each
+        # case is its own key, shown by the branch whose limit asks for those
+        # figures and no others, splicing the shared text and those lines.
+        loc = _loc()
+        state = _read(EFFECTS)
+        mon = _read(os.path.join(REPO, "common", "scripted_guis", "gm_monument_sguis.txt"))
+        for body, value, key, line in (
+                (_block(state, "gm_state_choose_tear_down"), "gm_state_disp_prev_", "gm_tear_down", "gm_prev_"),
+                (_block(state, "gm_state_choose_rededicate"), "gm_state_disp_prev_", "gm_rededicate", "gm_prev_"),
+                (_block(mon, "gm_mon_tear_down_sgui"), "gm_mon_disp_prev_", "gm_mon_tear_down", "gm_mon_prev_"),
+                (_block(mon, "gm_mon_rededicate_sgui"), "gm_mon_disp_prev_", "gm_mon_rededicate", "gm_mon_prev_")):
+            body = _squash(body)
+            figures = ["td_base", "td_sup"] if key.endswith("tear_down") else ["rd_sup"]
+            cases = [(m[1] or "", m[2] or m[3]) for m in re.finditer(
+                r"(?:else_if|if) = \{ limit = \{ ([^{}]*) \} custom_tooltip = (\w+) \}"
+                r"|else = \{ custom_tooltip = (\w+) \}", body)]
+            # Both, then each alone, then neither: an earlier branch takes a case
+            # that also meets a later one's limit.
+            wanted = ([["td_base", "td_sup"], ["td_base"], ["td_sup"], []] if len(figures) == 2
+                      else [["rd_sup"], []])
+            self.assertEqual([[f for f in figures if f"{value}{f} != 0" in limit] for limit, _ in cases], wanted, key)
+            for (limit, shown), want in zip(cases, wanted):
+                self.assertEqual(limit, " ".join(f"{value}{f} != 0" for f in want), (key, shown))
+                self.assertEqual(shown, "_".join([key, *(f.split("_")[1] for f in want), "tt"]), (key, want))
+                if want:
+                    self.assertEqual(loc[shown], f"${key}_tt$" + "".join(f"${line}{f}_line$" for f in want), shown)
+                self.assertNotIn("SelectLocalization", _spliced(shown, loc), shown)
+            self.assertEqual(len(cases), len(wanted), key)
+            self.assertEqual(body.count("hidden_effect = {"), 1, f"{key}: the work runs once, whatever the case")
 
 
 class ApprovalBreakdownTest(unittest.TestCase):

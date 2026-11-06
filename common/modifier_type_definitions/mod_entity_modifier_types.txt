@@ -3755,6 +3755,25 @@ country_enactment_success_chance_law_slavery_banned_add = {
 }
 
 
+# === Ideologies (leader chance for mod character ideologies) ===
+# Vanilla 1.15 declares interest_group_ideology_<ideology>_leader_chance_mult
+# in script (modifier_types.json, script_only) for each of its 47 character
+# ideologies, and each ideology's two leader weights read it as
+# `multiply = { value = 1 add = modifier:<type> }`. Nothing generates it for a
+# mod ideology, so Environmentalist's is declared here, and its weights in
+# common/ideologies/extra_ideologies.txt read it the same way. Set by
+# environmentalist_leader_pull_modifier (environmentalism events, #1446).
+interest_group_ideology_environmentalists_leader_chance_mult = {
+	script_only = yes
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+
 # === Religions (per-religion SoL for mod custom religions) ===
 # The engine code-generates state_<religion>_standard_of_living_add only for vanilla
 # religions (listed in vanilla modifiers.log, absent from every modifier_type_definitions

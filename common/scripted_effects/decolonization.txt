@@ -905,9 +905,10 @@ colonial_empire_clear_path_months = {
 #      not the winner. Removed once read.
 #   2. ce_reentry_due (colonial_empire_triggers.txt): the entry's
 #      is_shown_when_inactive and possible, which add_journal_entry skips, and
-#      what the add needs on top, the voluntary end's one-year hold among it
-#      (ce_reentry_voluntary_hold, a guard against a flickering colony test,
-#      not a cooldown).
+#      what the add needs on top: no record of the entry, active or inactive
+#      (the add is refused over an inactive copy, #1416), and the voluntary
+#      end's one-year hold among it (ce_reentry_voluntary_hold, a guard against
+#      a flickering colony test, not a cooldown).
 #   3. A whole month first. The first pass that finds the country due marks it
 #      (ce_reentry_waiting, naming the country), and the next adds the entry
 #      and logs the add. The engine updates inactive records every
@@ -915,11 +916,11 @@ colonial_empire_clear_path_months = {
 #      common/defines/00_defines.txt) and activates one whose possible has
 #      turned true, so the month between the two passes takes in at least two
 #      of its updates and the pass never races it. A country that has never
-#      run the entry normally holds such a record; one the engine left out
-#      gets the entry from this pass instead. A weekly pass would race the
-#      engine. The month also keeps a colony test that holds for one pass and
-#      no longer from starting an entry whose voluntary end (.206) would follow
-#      at once. The mark goes whenever the country stops being due, the entry
+#      run the entry normally holds such a record, and is not due while it
+#      does; one the engine left out gets the entry from this pass instead.
+#      A weekly pass would race the engine. The month also keeps a colony
+#      test that holds for one pass and no longer from starting an entry whose
+#      voluntary end (.206) would follow at once. The mark goes whenever the country stops being due, the entry
 #      running among the reasons. It names the country for a revolution's
 #      winner: it holds fresh records for an entry that has ended, which the
 #      engine activates itself, so a mark it inherited from the loser (naming

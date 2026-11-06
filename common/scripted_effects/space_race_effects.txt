@@ -1386,7 +1386,7 @@ sr_reentry_milestone = {
 				set_global_variable = { name = sr_closed_record_ok_logged value = yes }
 				debug_log = "TE_SELF_CHECK OK sr_closed_record milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (je_space_race_$MILESTONE$ closed on a programme loss; the programme has been able to carry it for a whole month and the country holds no record of it, active or inactive: the engine does not bring a concluded milestone back, so the re-entry pass adds it now)"
 			}
-			add_journal_entry = { type = je_space_race_$MILESTONE$ }
+			add_journal_entry = { type = je_space_race_$MILESTONE$ } # REVIEWED 2026-11-06 (add_journal_entry): the re-entry after a programme loss concluded the entry; guarded, through the parameter the test cannot follow, by sr_reentry_due_<m>'s NOT = { has_inactive_journal_entry = je_space_race_<m> } (test_space_race_reentry.py pins it in all seven)
 			set_variable = { name = sr_reentry_added_$MILESTONE$ value = scope:sr_reentry_country }
 		}
 		else = {

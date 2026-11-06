@@ -137,14 +137,15 @@ gw_entry_unlocked = {
 }
 
 # Is the Climate Warming modifier (global_warming) on this country? It is a
-# scaling modifier on the entry at the felt anomaly floored at 0
-# (je_global_warming.txt), so it is on while the entry is active and the
+# scaling modifier on the contextless World Climate entry at the felt anomaly
+# floored at 0 (je_world_climate.txt, #1448), so it is on while the country is
+# involved in that entry (only an active entry involves anyone) and the
 # anomaly is at least the 0.01 C it is quantized to. has_modifier cannot see a
 # scaling modifier: the recurring climate events and their monthly roll
 # (extra_on_actions.txt, environmentalism_events.txt) read this instead.
 # Scope: country.
 gw_warming_felt = {
-	has_journal_entry = je_global_warming
+	is_involved_in_journal_entry = je_world_climate
 	temperature_anomaly_display >= 0.01
 }
 

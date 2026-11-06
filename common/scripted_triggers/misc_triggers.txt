@@ -309,12 +309,19 @@ te_same_governance_principle = {
 	}
 }
 
-# True if the actor's army is at least 5x the target's. Used by te_subjugation_strength
-# for the Military Treaty Organization axis match.
+# True if the actor's army is at least 5x the target's and, since 1.15 (#1450),
+# can get to it: by land, or by shipping at once as much army strength as the
+# target has (has_military_reach, te_military_reach_values.txt). Used by
+# te_subjugation_strength for the Military Treaty Organization axis match.
 te_target_militarily_weaker = {
 	army_size >= {
 		value = $TARGET$.army_size
 		multiply = 5
+	}
+	has_military_reach = {
+		target = $TARGET$
+		min_reach = te_reach_realistic
+		min_shippable_strength = te_reach_ship_match
 	}
 }
 

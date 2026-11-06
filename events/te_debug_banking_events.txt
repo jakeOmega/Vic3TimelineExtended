@@ -27,7 +27,16 @@ te_debug_banking.1 = {
 					te_banking_entry_expected = yes
 					NOT = { has_journal_entry = je_banking_cycle }
 				}
-				debug_log = "TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting]"
+				# Which of the two: a copy the engine has yet to activate (the
+				# net leaves it alone, since the add would be refused), or no
+				# record at all (the net adds it on its next pass).
+				if = {
+					limit = { has_inactive_journal_entry = je_banking_cycle }
+					debug_log = "TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] record=inactive"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] record=none"
+				}
 			}
 		}
 	}

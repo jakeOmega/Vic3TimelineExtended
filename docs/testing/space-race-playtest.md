@@ -61,6 +61,12 @@ The Space Program now stands in its owner's capital (`sr_space_program_site`, `s
 2. **A market capital that is not the capital.** As the USA (market capital New York, capital Washington), found one: it stands in Washington. The build menu lists only the capital, and the greyed reason on other states reads "This state is our capital".
 3. **Space Command's tie.** With two Space Commands of the same size after an annexation, the one in the capital stays.
 
+## An idle Solar System Colonization's approach (2026-11-06, #1472)
+
+Solar System Colonization's entry stays open for its colonies after its programme stops, and its approach declarations now also need the programme billed (`sr_milestone_billed_solar_colonization`), as its cost and funding declarations already did.
+
+1. **The approach goes with the programme.** Run Solar System Colonization on Ambitious beside another milestone, and note that milestone's pace. Switch the Space Program's colonization method off and wait a week: `sr_ambitious_approach` leaves the solar entry (hover its modifiers), the other milestone's pace falls by the +50%, and the solar overview reads Idle. Switch the method back on: within a week the modifier is back, and so is the pace.
+
 ## A milestone starting again after a programme loss (2026-11-06)
 
 A lowered Space Program method or a lost building fails every milestone the launch complex can no longer carry (the failure outcome of each `je_space_race_<m>`; `docs/systems/mod_systems/space_race.md` → *Programme loss (`.76`)*). The engine deletes a concluded record three days later and never activates that type again (`docs/guides/scripting_best_practices.md`, "A finished record is deleted": the Colonial Empire's 1910 save), and nothing added a milestone back, so a refit ended it for good. Not seen in a save of our own yet: the second self-check below confirms or refutes it. A monthly pass now adds the entry back (`sr_reentry_monthly`, `common/scripted_effects/space_race_effects.txt`, run from `space_race_on_action` after the inactive-milestone cleanup) once the country has been due it for a whole month (`sr_reentry_due_<m>`, `space_race_triggers.txt`: no record of it, active or inactive, not decentralized, not a revolution's rebels, and the entry's own `is_shown_when_inactive` and `possible`, so the method can carry it again). It starts from zero: the progress lost at the failure stays lost (owner, 2026-11-06). Search `debug.log` for `sr_reentry` and `sr_closed_record`.

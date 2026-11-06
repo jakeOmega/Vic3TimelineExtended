@@ -158,7 +158,7 @@ class OrganizeAllUnusedTests(unittest.TestCase):
             os.makedirs(defs)
             with open(os.path.join(defs, "x.txt"), "w", encoding="utf-8-sig") as fh:
                 fh.write("SGP = {\n\ttier = city_state\n}\n")
-            self.assertEqual(find_country_keys(td), {"SGP", "SGP_ADJ"})
+            self.assertEqual(find_country_keys(td), {"SGP", "SGP_ADJ", "SGP_DEF"})
             with contextlib.redirect_stdout(io.StringIO()):
                 organize_all(td)
             with open(os.path.join(loc_dir, "te_city_states_l_english.yml"), encoding="utf-8-sig") as fh:

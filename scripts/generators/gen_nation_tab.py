@@ -158,10 +158,11 @@ SECTIONS = {
         "te_demog_um_research",
     ),
     "international": (
-        # The UN's absence, NPT disarmament, the sanctions a country enforces (the conventions, the
-        # regime terms, embargoes, the sanctions regime, membership's benefits, mandates, development
-        # grants and observers are declared on the UN's entry since #1404)
-        "un_nonmember_pariah_*", "un_npt_disarmament_modifier", "un_sanctions_enforcer_modifier",
+        # The sanctions a country enforces (the conventions, the regime terms, embargoes, the sanctions
+        # regime, membership's benefits, mandates, development grants and observers are declared on the
+        # UN's entry since #1404, and the UN's absence and NPT disarmament are added to it:
+        # NOT_ON_COUNTRY)
+        "un_sanctions_enforcer_modifier",
         # Intelligence sharing and the nuclear taboo
         "intelligence_sharing_defense_shield_modifier", "nd_taboo_*",
         # A colonial subject's overlord in decline
@@ -249,6 +250,8 @@ NOT_ON_COUNTRY = {
     "un_peacekeeping_contributor_modifier": "je_united_nations", "un_physical_protection_modifier": "je_united_nations",
     "un_refugee_program_modifier": "je_united_nations", "un_space_partnership_modifier": "je_united_nations",
     "un_undermine_order_cost": "je_united_nations",
+    # Added to the UN's entry, not the country (je_united_nations.txt's monthly pulse, #1474).
+    "un_nonmember_pariah_*": "je_united_nations", "un_npt_disarmament_modifier": "je_united_nations",
     "un_food_reserve_relief_state_modifier": "states", "un_mission_*_state_modifier": "states",
     "ww_*": "je_world_war",
     "antimatter_facility_progress": "the megaproject's building",
@@ -300,8 +303,8 @@ SOURCE_GROUPS = {
     # The health bill, family limitation, the life-expectancy gap, pension positions
     "demography": ("te_demog_health_bill_*", "te_demog_family_limitation", "te_demog_lx_gap_politics",
                    "te_demog_pension_pos_*"),
-    # The nonproliferation regime, the conventions on the bomb, the taboo
-    "nuclear_order": ("un_npt_disarmament_modifier", "nd_taboo_*"),
+    # The nuclear taboo
+    "nuclear_order": ("nd_taboo_*",),
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
@@ -309,8 +312,6 @@ SOURCE_GROUPS = {
     "civil_rights": ("cr_*",),
     # A colonial subject's overlord in decline, a great power's stance on colonialism
     "decolonization": ("colonial_overlord_*", "gp_*_colonial_policy_modifier"),
-    # The UN's absence
-    "united_nations": ("un_nonmember_pariah_*",),
     "monetary": ("te_mon_*", "te_monetary_rate_paid", "te_monetisation_minting", "te_capital_controls_fatigue"),
     # Inflation and exchange-rate bands
     "inflation": ("te_inflation_band_*", "te_fx_*"),
@@ -412,7 +413,7 @@ TYPE_ROWS = {
             "country_private_construction_allocation_mult", "country_loan_interest_rate_add", "country_risk_premium_add",
         ),
         "trade": (
-            "state_trade_advantage_mult", "state_export_advantage_mult", "state_import_advantage_mult",
+            "state_export_advantage_mult", "state_import_advantage_mult",
         ),
     },
     "science_and_space": {
@@ -429,7 +430,7 @@ TYPE_ROWS = {
         "standing": (
             "country_prestige_add", "country_prestige_mult",
             "country_cultural_pull_mult", "country_influence_mult", "country_influence_cost_add",
-            "country_diplomatic_reputation_add", "country_improve_relations_speed_mult",
+            "country_diplomatic_reputation_add",
             "country_leverage_generation_mult", "country_un_authority_target_add", "country_liberty_desire_add",
         ),
         "covert_defense": (

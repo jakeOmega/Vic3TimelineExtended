@@ -10,7 +10,9 @@ show here. Each PR adds its own section, newest last, and a fixed item is struck
 - **Where to look.** The United Nations journal entry, or the UN tab of the Diplomacy panel: the overview's agency
   icons, the General Assembly's Table a Resolution rows, the resolution in session, and Our Obligations.
 - **Quick setup.** `event te_debug_un.1` founds the UN and seats the great and major powers, and can have another member
-  table a condemnation (`events/te_debug_un_events.txt`).
+  table a condemnation (`events/te_debug_un_events.txt`). Founding activates each country's entry at the engine's next
+  check, within two weeks, and a seat needs an active entry, so run it again two weeks on if the chamber still says
+  "non-member".
 - **Logs.** Read `debug.log`, not `error.log`. Search it for `Failed parsing localized text`, `je_un_terms_` and
   `je_un_ov_agency_`.
 

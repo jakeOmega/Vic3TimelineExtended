@@ -11,12 +11,20 @@
 # show the overview, the national effects, one row per monument and How
 # Grand Monuments Work.
 #
-# Activates two ways: is_shown_when_inactive below auto-activates it in new
-# saves the moment a country owns a Grand Monument (gated on the rule too,
-# per spec §7's "Disabled -> no JE"), and gm_country_refresh explicitly calls
-# add_journal_entry for saves that predate this entry's introduction, where
-# is_shown_when_inactive alone never reaches an already-running save
-# (scripting_best_practices.md § "JE Auto-Activation Requires BOTH").
+# Activates two ways. Every country holds an inactive record from the game's
+# start, which the engine activates at its own check, fortnightly, once
+# is_shown_when_inactive and possible below hold (gated on the rule too, per
+# spec §7's "Disabled -> no JE"). And gm_country_refresh and
+# gm_com_send_offer call add_journal_entry for a country that holds no record:
+# a save that predates this entry, where the engine made none
+# (scripting_best_practices.md § "JE Auto-Activation Requires BOTH"), and a
+# country whose entry has concluded (the invalid outcome below), whose record
+# is gone (same doc, "A concluded entry is gone to script"). Both adds skip a
+# country holding a copy, active or inactive: over an inactive copy the add is
+# refused with an error, and the engine activates that copy itself (same doc,
+# the has_journal_entry bullet; test_add_journal_entry_guard.py, #1416). Were
+# a concluded entry to leave a record after all, the engine would activate it
+# and the guard would still skip the add.
 
 je_grand_monuments = {
 	icon = "gfx/interface/icons/event_icons/je_grand_monuments.dds"

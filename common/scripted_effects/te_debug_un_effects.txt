@@ -15,7 +15,11 @@
 # Found the UN if nobody has, and seat the player plus every great and major
 # power as members (the first five great powers, player included, as permanent
 # members). Safe to run twice: run it again if the chamber still says
-# "non-member", which means the journal entry had not activated yet.
+# "non-member", which means the journal entry had not activated yet. Founding
+# meets the entry's gate (un_entry_unlocked) for every country, so the engine
+# activates each country's inactive copy at its next check, within two weeks;
+# the seats below wait for that (the mirrors are written only on an active
+# entry), so run it again two weeks on.
 # Scope: country
 te_debug_un_setup = {
 	if = {
@@ -42,10 +46,16 @@ te_debug_un_setup = {
 te_debug_un_seat_member = {
 	if = {
 		# The rule too: with it off the entry's inactive record is pruned
-		# (disable_evaluation), so nothing would refuse the add.
+		# (disable_evaluation), so nothing would refuse the add. And not over an
+		# inactive copy, which every country holds: the add is refused then,
+		# with an error ("already has a journal entry of type",
+		# scripting_best_practices.md, the has_journal_entry bullet; #1416), and
+		# the engine activates that copy itself. So this adds only for a country
+		# the engine left without a record.
 		limit = {
 			has_game_rule = united_nations_enabled
 			NOT = { has_journal_entry = je_united_nations }
+			NOT = { has_inactive_journal_entry = je_united_nations }
 		}
 		add_journal_entry = { type = je_united_nations }
 	}

@@ -1783,7 +1783,6 @@ te_ai_decentralized_absorption_effect = {
 		random_country = {
 			limit = {
 				is_country_type = decentralized
-				irr_target_reachable = yes
 				NOT = { has_truce_with = scope:irr_dc_annexer }
 				# Era-6 floor: same-culture only; globalization (era 9) lifts it.
 				# Mirrors voluntary_union_decentralized_culture_tt in the action.
@@ -1791,6 +1790,8 @@ te_ai_decentralized_absorption_effect = {
 					scope:irr_dc_annexer = { has_technology_researched = globalization }
 					irr_target_same_nation = yes
 				}
+				# Last: the reach read is the dearest test here (#1450).
+				irr_target_reachable = yes
 			}
 			save_scope_as = irr_dc_target
 		}

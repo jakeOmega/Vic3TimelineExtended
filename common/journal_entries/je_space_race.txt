@@ -1877,13 +1877,19 @@ je_space_race_solar_colonization = {
 		}
 	}
 	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
-	# Standard is neither).
+	# Standard is neither) and the programme is billed: this entry stays open for
+	# the colonies after its method goes off, and an idle programme's approach
+	# would otherwise go on acting on every running milestone with nothing billed
+	# for it (#1472). The other milestones' entries close when they stop running.
 	scaling_modifiers_while_active = {
 		modifier = sr_safe_approach
 		value = {
 			value = 0
 			if = {
-				limit = { has_variable = sr_safe_solar_colonization }
+				limit = {
+					has_variable = sr_safe_solar_colonization
+					sr_milestone_billed_solar_colonization = yes
+				}
 				add = 1
 			}
 		}
@@ -1893,7 +1899,10 @@ je_space_race_solar_colonization = {
 		value = {
 			value = 0
 			if = {
-				limit = { has_variable = sr_ambitious_solar_colonization }
+				limit = {
+					has_variable = sr_ambitious_solar_colonization
+					sr_milestone_billed_solar_colonization = yes
+				}
 				add = 1
 			}
 		}

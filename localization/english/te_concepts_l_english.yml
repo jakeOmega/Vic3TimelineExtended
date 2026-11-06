@@ -1427,6 +1427,7 @@
  environmental_sovereignty_modifier_desc:0 "We have rejected international environmental pressure, maintaining economic sovereignty at the cost of diplomatic goodwill."
  environmentalist_crackdown_modifier:0 "Environmentalist Movement Suppressed"
  environmentalist_crackdown_modifier_desc:0 "The government has used eco-terrorism as a pretext to crack down on all environmental activism."
+ environmentalist_leader_pull_modifier_desc:0 "Climate politics has reached this [concept_interest_group]. The next time it chooses a [concept_leader], an $ideology_environmentalists$ is likelier to win."
  environmentalist_momentum_modifier:0 "Environmentalist Momentum"
  environmentalist_momentum_modifier_desc:0 "The environmentalist movement is gaining strength, attracting more supporters and making it easier to establish environmental [Concept('concept_institution', 'institutions')]."
  environmentalist_momentum_movement_modifier_desc:0 "The environmentalist movement is gaining supporters and attracting more people to its cause."
