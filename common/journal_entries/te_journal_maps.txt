@@ -41,7 +41,7 @@ je_te_map_host = {
 	can_deactivate = yes
 
 	immediate = {
-		debug_log = "TE_JMAP host activated (the entry's immediate; compare its date with the button's line)"
+		debug_log = "TE_JMAP host activated date=[TimeKeeper.GetCurrentDate.GetString] (the entry's immediate; compare its date with the button's line)"
 	}
 
 	scripted_button = te_jmap_pick_turmoil
@@ -235,6 +235,17 @@ je_te_map_host = {
 			limit = { te_jmap_selector = 2 }
 			custom_tooltip_no_bullet = te_jmap_tt_literacy
 		}
+		# Over 10,000 is a separate branch, not a SelectLocalization in the loc: a key
+		# named there loses THIS, and every hover logged "Promote 'THIS' returned
+		# nullptr" and printed nothing (2026-11-05).
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 10000
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy_over
+		}
 		else_if = {
 			limit = {
 				te_jmap_selector = 3
@@ -327,11 +338,27 @@ je_te_map_hidden_world = {
 		always = no
 	}
 
+	# Check 14: a button on this page, where no country is involved. Its effect sets a
+	# global variable, which turns the map green at the next tick if it ran.
+	scripted_button = te_jmap_world_probe
+
 	map_color = {
-		value = "te_jmap_hidden_world"
+		if = {
+			limit = { has_global_variable = te_jmap_world_probe }
+			value = "te_jmap_hidden_world_probe"
+		}
+		else = {
+			value = "te_jmap_hidden_world"
+		}
 	}
 
 	map_tooltip = {
-		custom_tooltip_no_bullet = te_jmap_tt_hidden_world
+		if = {
+			limit = { has_global_variable = te_jmap_world_probe }
+			custom_tooltip_no_bullet = te_jmap_tt_hidden_world_probe
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_hidden_world
+		}
 	}
 }

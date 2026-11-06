@@ -41,6 +41,7 @@ colors = {
 
 	# je_te_map_hidden_world: one flat color, so the map says which entry painted it.
 	te_jmap_hidden_world = hsv360 { 300 70 80 }
+	te_jmap_hidden_world_probe = hsv360 { 130 70 70 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

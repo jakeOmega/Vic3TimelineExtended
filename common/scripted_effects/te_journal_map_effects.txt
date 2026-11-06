@@ -23,14 +23,14 @@ te_jmap_open_host = {
 	if = {
 		limit = { NOT = { has_journal_entry = je_te_map_host } }
 		add_journal_entry = { type = je_te_map_host }
-		debug_log = "TE_JMAP host added by add_journal_entry (the button's route; the entry's immediate logs when it activates)"
+		debug_log = "TE_JMAP host added by add_journal_entry date=[TimeKeeper.GetCurrentDate.GetString] (the button's route; the entry's immediate logs when it activates)"
 	}
 }
 
 te_jmap_request_host = {
 	te_jmap_set_selector = { SEL = $SEL$ }
 	set_variable = te_jmap_host_on
-	debug_log = "TE_JMAP host requested through its activation triggers only (compare this line's date with the entry's activation line)"
+	debug_log = "TE_JMAP host requested through its activation triggers only date=[TimeKeeper.GetCurrentDate.GetString] (compare this line's date with the entry's activation line)"
 }
 
 te_jmap_close_host = {
@@ -38,5 +38,5 @@ te_jmap_close_host = {
 		limit = { has_variable = te_jmap_host_on }
 		remove_variable = te_jmap_host_on
 	}
-	debug_log = "TE_JMAP host closed (the variable is gone; the entry should go back out of the journal when the engine next checks it)"
+	debug_log = "TE_JMAP host closed date=[TimeKeeper.GetCurrentDate.GetString] (the variable is gone; the entry should go back out of the journal when the engine next checks it)"
 }

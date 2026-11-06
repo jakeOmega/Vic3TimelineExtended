@@ -22,7 +22,8 @@ Vanilla 1.15 gives a journal entry three optional blocks (`game/common/journal_e
 A map of the player's own data, or a map whose look the player picks, needs something every state can read. The mod
 writes the pick to the player's country and to a global variable (`te_jmap_selector`,
 `common/script_values/te_journal_map_values.txt`) and reads the country through `scope:journal_entry.owner` when that
-resolves; whether it does is check 2 of the play-test.
+resolves. It doesn't: the scope probe came back blue (2026-11-05), so the global is the pick, and two players in one
+game share it. `map_color` is re-evaluated as the game runs (the refresh tick steps with the page open).
 
 **The engine shows the map itself.** `mm_journal_entry_map_data` (`gfx/map/map_modes/map_modes.txt`) is
 `is_visible = no`, "overriden in code", and no vanilla `.gui` names it. The working assumption, not yet seen in game, is
@@ -56,8 +57,11 @@ entry, and an entry that sits out of the journal until a button asks for it.
 - **The scope probe and the refresh tick** are test maps (check 2 and check 4) and go once answered.
 
 `je_te_map_hidden_world` beside it is a test: a contextless entry (`context = none`) nobody is involved in or can see,
-active from the start, painting every state one magenta. It answers whether an entry outside every journal can still
-be opened by a button and paint.
+active from the start, painting every state one magenta. It works (2026-11-05): the strip's button opens its page and
+the map turns magenta, so an entry outside every journal can host a map. That is the pattern for the next pass's Map
+Room, which needs no add and no close. A pick shows at the next tick (paused, on unpause), and the map goes when the
+page closes. Its one button, Probe: Run a Button Here (`te_jmap_world_probe`), sets a global variable that turns the map
+green and dumps its scopes to `debug.log`: whether a button on such a page runs, and with what root (check 14).
 
 ## The Banking Map
 
@@ -73,15 +77,17 @@ cycle value. Every country holds the entry, so this is a world map read from eac
 
 - `te_jmap_demog_map_button`, in the Demographics tab's header (`te_demog_window_body`, so the Population panel's tab and
   the Timeline Extended window's), left of the "?": Add while the Map Room is out of the journal, Open once it is in, each
-  picking life expectancy. A scripted GUI's effect lands after the click, so one click cannot both add the entry and open
-  it; the test strip checks that.
+  picking life expectancy. `add_journal_entry` puts the Map Room in the journal about a week later (2026-11-05), so one
+  click can't add it and open it, and the Add tooltip says it appears within about a week.
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
 - `te_jmap_test_strip`, on the Demographics tab above its sections, in debug mode only (`InDebugMode`): Add + Open in one
   click, Request (the activation-trigger route), Close, Hidden Entry (`je_te_map_hidden_world`), and two hover previews
-  (`SetTempMapModeByKey` on vanilla's mode and on the mod's listed copy).
+  (`SetTempMapModeByKey` on vanilla's mode and on the mod's listed copy). Add + Open names the entry with no datacontext,
+  as `GetPlayerJournalEntry('je_te_map_host').AccessSelf`: `GetPlayerJournalEntry` is a promote only, and passed bare as
+  an argument it failed at load and lost the button its second click (`gui_modding_guide.md` gotcha #29).
 - `gfx/map/map_modes/te_map_modes.txt` defines `mm_te_journal_entry_map`, vanilla's journal entry painting with
   `is_visible = yes`, so it is listed in the lens toolbar's map mode dropdown: the test of a journal map with no page
-  open. If the game will not load with it, delete it; nothing else needs it.
+  open. The game loads with it (first launch, 2026-11-05); nothing else needs it.
 
 ## Adding a Map
 

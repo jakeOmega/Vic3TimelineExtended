@@ -5411,11 +5411,18 @@ When a generator numbers its rows by position (Solar System Colonization's `gen_
 1.15's `map_color`, `map_color_second` (stripes) and `map_tooltip` on a journal entry run with **the state being painted
 as root**, once per state in the world. So `owner` is that state's country, not the player or the entry's owner: a map of
 the player's data, or a map whose look the player picks, needs a read every state can make. A global variable always
-works (and one player sets it for all); `scope:journal_entry.owner` may, and the Map Room's scope probe answers whether
-(`docs/testing/journal-map-modes-playtest.md`, check 3). `map_color` takes `if` / `else_if` and inline factor blocks
+works (and one player sets it for all); `scope:journal_entry` does not resolve there, nor its owner (the Map Room's scope
+probe painted blue, 2026-11-05). `map_color` takes `if` / `else_if` and inline factor blocks
 (`factor = { value = this.turmoil multiply = 2 }`, vanilla's Forest of Bayonets); a branch that matches nothing leaves
 the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`. No `.gui` switches the map on: vanilla's
 `mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. There is
 no `remove_journal_entry` effect: an entry leaves the journal by concluding, or by `can_deactivate = yes` with its
 `possible` failing and `is_shown_when_inactive` false. Read stored variables only, never walk pops, until the play-test
-says how often the map is evaluated. The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.
+says how often the map is evaluated. An entry with all three blocks loads with no log line, and so does a copy of vanilla's
+journal map mode with `is_visible = yes` (first launch, 2026-11-05). `map_color` is re-evaluated as the game runs.
+`add_journal_entry` doesn't put the entry in the journal at once: the Map Room appeared about a week later, so a button
+can't add an entry and open its page in one click. A contextless entry no country is involved in (`context = none`,
+active from the start) can host a map and be opened by a button, which needs no add at all. A pick shows at the next
+tick (paused, on unpause), the map goes when the page closes, and `SetTempMapModeByKey` on vanilla's journal map mode
+paints nothing (2026-11-05). The mod's maps and the open questions:
+`docs/systems/mod_systems/journal_map_modes.md`.
