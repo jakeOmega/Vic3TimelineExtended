@@ -601,7 +601,11 @@ banking_effect_cb_sterilize_inflows = {
 banking_effect_cb_disable_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
 	je:je_banking_cycle = { remove_modifier = banking_sterilize_inflows }
-	set_variable = { name = banking_external_sterilization_charge_cached value = 0 }
+	# The bill ends with the tool; set_variable shows nothing, so say so.
+	custom_tooltip = {
+		text = banking_external_sterilization_charge_off_tt
+		set_variable = { name = banking_external_sterilization_charge_cached value = 0 }
+	}
 	set_variable = { name = banking_external_sterilization_funded value = 0 }
 }
 
@@ -641,6 +645,9 @@ banking_effect_cb_emergency_import_financing = {
 banking_effect_cb_disable_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = off_cb_emergency_import_financing }
 	je:je_banking_cycle = { remove_modifier = banking_emergency_import_financing }
-	set_variable = { name = banking_external_import_charge_cached value = 0 }
+	custom_tooltip = {
+		text = banking_external_import_charge_off_tt
+		set_variable = { name = banking_external_import_charge_cached value = 0 }
+	}
 	custom_tooltip = banking_nonmod_emergency_import_financing_off_tt
 }
