@@ -77,14 +77,6 @@ gm_national_vanity = {
 	country_legitimacy_base_add = -1
 }
 
-# v2's commission reward, retired with the opportunities (2026-10-12): nothing
-# adds it. Kept, with its remove_modifier in gm_remove_national_modifiers, so a
-# save that carries it on the journal entry sheds it on the first refresh.
-gm_national_promise = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_legitimacy_base_add = 1
-}
-
 # ---- Unique dedications (signatures spec 2026-10-16 §2.1): on je:je_grand_monuments ----
 # One step each, the multiplier the signature's step count (gm_sig_compute_sums,
 # gm_signature_effects.txt), as the dedications' are. gm_signature_values.txt
@@ -429,21 +421,10 @@ gm_name_carrier_slot = {
 # The finished building's upkeep (sites spec 2026-10-18 §3.4): one modifier,
 # its multiplier always -1 (gm_state_upkeep_mult), so it cancels the building's
 # maintenance input: Grand Monuments cost nothing to maintain (policy spec
-# 2026-10-23 § 5). The two policy modifiers below are no longer added; they
-# stay for older saves, whose pulse removes them.
+# 2026-10-23 § 5).
 gm_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	goods_input_construction_mult = 1
-}
-
-gm_policy_upkeep_open = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
-	goods_input_construction_mult = 0.5
-}
-
-gm_policy_upkeep_mothballed = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	goods_input_construction_mult = -0.5
 }
 
 # ---- Flavour event rewards (§6.1): timed, normal_modifier_time (5 years) -----

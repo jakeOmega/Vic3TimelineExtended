@@ -29,7 +29,6 @@ te_debug_sr_set_progress = {
 	te_debug_sr_set_progress_base = { MILESTONE = orbital            FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = moon_landing       FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = probe              FRACTION = 0.9 }
-	te_debug_sr_set_progress_base = { MILESTONE = moon_base          FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 0.9 }
@@ -41,7 +40,6 @@ te_debug_sr_finish_now = {
 	te_debug_sr_set_progress_base = { MILESTONE = orbital            FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = moon_landing       FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = probe              FRACTION = 1 }
-	te_debug_sr_set_progress_base = { MILESTONE = moon_base          FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 1 }
@@ -70,7 +68,6 @@ te_debug_sr_force_setback = {
 	te_debug_sr_flag_setback_base = { MILESTONE = orbital            }
 	te_debug_sr_flag_setback_base = { MILESTONE = moon_landing       }
 	te_debug_sr_flag_setback_base = { MILESTONE = probe              }
-	te_debug_sr_flag_setback_base = { MILESTONE = moon_base          }
 	te_debug_sr_flag_setback_base = { MILESTONE = mars_landing       }
 	te_debug_sr_flag_setback_base = { MILESTONE = interstellar_probe }
 	te_debug_sr_flag_setback_base = { MILESTONE = solar_colonization }
@@ -111,10 +108,6 @@ te_debug_sr_fire_setback = {
 	else_if = {
 		limit = { has_variable = sr_active_mars_landing }
 		te_debug_sr_fire_setback_base = { MILESTONE = mars_landing }
-	}
-	else_if = {
-		limit = { has_variable = sr_active_moon_base }
-		te_debug_sr_fire_setback_base = { MILESTONE = moon_base }
 	}
 	else_if = {
 		limit = { has_variable = sr_active_probe }
@@ -193,7 +186,6 @@ te_debug_sr_seed_rivals = {
 		te_debug_sr_mirror_base = { MILESTONE = orbital            }
 		te_debug_sr_mirror_base = { MILESTONE = moon_landing       }
 		te_debug_sr_mirror_base = { MILESTONE = probe              }
-		te_debug_sr_mirror_base = { MILESTONE = moon_base          }
 		te_debug_sr_mirror_base = { MILESTONE = mars_landing       }
 		te_debug_sr_mirror_base = { MILESTONE = interstellar_probe }
 		te_debug_sr_mirror_base = { MILESTONE = solar_colonization }

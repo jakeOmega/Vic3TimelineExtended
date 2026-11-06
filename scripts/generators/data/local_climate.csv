@@ -626,7 +626,7 @@ STATE_MOSCOW,Moscow,19,1,-7,0,0,56,32.3,25.7,WMO27612:9km,"Humid continental, co
 STATE_BREST,Hrodna,18,1,-4,0,0,54,32.1,25.3,UMMG:17km,Humid continental cold winters
 STATE_VOLHYNIA,Lutsk,19,1,-4,0,0,51,34.1,26,UKLR:60km,Humid continental cold winters
 STATE_KIEV,Kyiv,20,1,-4,0,0,50,34.9,26.5,UKKK:8km,Humid continental forest-steppe cold winters
-STATE_ORYOL,Oryol,19,1,-8,0,0,53,32.8,25.5,analog:STATE_TULA,Humid continental cold winters; Tula's record (1.15 split Tula off Oryol) at Oryol's latitude
+STATE_ORYOL,Oryol,20,1,-6,0,0,53,34.2,25.8,UUOR:6km,Humid continental cold winters
 STATE_SMOLENSK,Smolensk,18,1,-7,0,0,55,31.3,24.6,WMO26781:4km,Humid continental cold winters
 STATE_MOGILEV,Magiliow,18,1,-6,0,0,54,32.5,25,UMOO:16km,Humid continental cold winters
 STATE_ARKHANGELSK,Arkhangelsk,16,1,-12,0,0,65,27.4,22,WMO22551:34km,Subarctic White Sea coast long winters
@@ -674,4 +674,4 @@ STATE_CHUVASHIA,Cheboksary,19,1,-11,0,0,56,32.7,25.5,WMO27479:47km,Cold continen
 STATE_CHERNIHIV,Chernihiv,20,1,-5,0,0,51,34.7,26.6,UKRR:5km,Humid continental cold winters
 STATE_NENETSIA,Mezen,15,1,-14,0,0,66,30,23.4,ULAE:3km,Subarctic White Sea coast long winters
 STATE_TULA,Tula,19,1,-8,0,0,54,32.8,25.5,WMO27719:4km,Humid continental cold winters
-STATE_KOSTROMA,Kostroma,18,1,-9,0,0,58,32,25.3,analog:STATE_YAROSLAVL,Cold continental upper Volga; Yaroslavl's record (1.15 made Kostroma from Yaroslavl, Nizhny Novgorod and Galich)
+STATE_KOSTROMA,Kostroma,19,1,-10,0,0,58,32.8,25.7,WMO27242:87km,Cold continental upper Volga

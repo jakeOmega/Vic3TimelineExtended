@@ -191,50 +191,6 @@ sr_probe_profile = {
 	}
 }
 
-sr_moon_base_profile = {
-	type = country
-	random_valid = no
-
-	text = {
-		trigger = {
-			has_variable = sr_moon_base_scientific
-		}
-		localization_key = je_space_race_moon_base_status_scientific
-	}
-
-	text = {
-		trigger = {
-			has_variable = sr_moon_base_industrial
-		}
-		localization_key = je_space_race_moon_base_status_industrial
-	}
-
-	text = {
-		trigger = {
-			has_variable = sr_moon_base_military
-		}
-		localization_key = je_space_race_moon_base_status_military_purpose
-	}
-
-	text = {
-		trigger = {
-			has_variable = sr_ambitious_moon_base
-		}
-		localization_key = je_space_race_moon_base_status_ambitious
-	}
-
-	text = {
-		trigger = {
-			has_variable = sr_safe_moon_base
-		}
-		localization_key = je_space_race_moon_base_status_safe
-	}
-
-	text = {
-		localization_key = je_space_race_moon_base_status_default
-	}
-}
-
 sr_mars_landing_profile = {
 	type = country
 	random_valid = no

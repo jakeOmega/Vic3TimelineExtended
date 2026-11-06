@@ -1997,7 +1997,7 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_BREST } value = -4 }
 	else_if = { limit = { state_region = s:STATE_VOLHYNIA } value = -4 }
 	else_if = { limit = { state_region = s:STATE_KIEV } value = -4 }
-	else_if = { limit = { state_region = s:STATE_ORYOL } value = -8 }
+	else_if = { limit = { state_region = s:STATE_ORYOL } value = -6 }
 	else_if = { limit = { state_region = s:STATE_SMOLENSK } value = -7 }
 	else_if = { limit = { state_region = s:STATE_MOGILEV } value = -6 }
 	else_if = { limit = { state_region = s:STATE_ARKHANGELSK } value = -12 }
@@ -2045,7 +2045,7 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = -5 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = -14 }
 	else_if = { limit = { state_region = s:STATE_TULA } value = -8 }
-	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = -9 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = -10 }
 }
 
 # State scope: water for settlement: 0 ample, 1 limited, 2 scarce.
@@ -4721,7 +4721,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_BREST } value = 32.1 }
 	else_if = { limit = { state_region = s:STATE_VOLHYNIA } value = 34.1 }
 	else_if = { limit = { state_region = s:STATE_KIEV } value = 34.9 }
-	else_if = { limit = { state_region = s:STATE_ORYOL } value = 32.8 }
+	else_if = { limit = { state_region = s:STATE_ORYOL } value = 34.2 }
 	else_if = { limit = { state_region = s:STATE_SMOLENSK } value = 31.3 }
 	else_if = { limit = { state_region = s:STATE_MOGILEV } value = 32.5 }
 	else_if = { limit = { state_region = s:STATE_ARKHANGELSK } value = 27.4 }
@@ -4769,7 +4769,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 34.7 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 30 }
 	else_if = { limit = { state_region = s:STATE_TULA } value = 32.8 }
-	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 32 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 32.8 }
 }
 
 # State scope: heat stress on a typical year's worst day, °C: 0.7 x wet-bulb + 0.3 x air temperature.
@@ -5402,7 +5402,7 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_BREST } value = 25.3 }
 	else_if = { limit = { state_region = s:STATE_VOLHYNIA } value = 26 }
 	else_if = { limit = { state_region = s:STATE_KIEV } value = 26.5 }
-	else_if = { limit = { state_region = s:STATE_ORYOL } value = 25.5 }
+	else_if = { limit = { state_region = s:STATE_ORYOL } value = 25.8 }
 	else_if = { limit = { state_region = s:STATE_SMOLENSK } value = 24.6 }
 	else_if = { limit = { state_region = s:STATE_MOGILEV } value = 25 }
 	else_if = { limit = { state_region = s:STATE_ARKHANGELSK } value = 22 }
@@ -5450,5 +5450,5 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 26.6 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 23.4 }
 	else_if = { limit = { state_region = s:STATE_TULA } value = 25.5 }
-	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 25.3 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 25.7 }
 }

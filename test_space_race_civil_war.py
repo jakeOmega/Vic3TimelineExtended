@@ -14,15 +14,15 @@ import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe",
               "mars_landing", "interstellar_probe")
 ENTRIES = MILESTONES + ("solar_colonization",)
-CHOICE_EVENTS = {"80": "orbital", "5": "moon_landing", "81": "probe",
-                 "82": "moon_base", "83": "mars_landing"}
-# Retired with the Moon Base (2026-10-29, lunar colonization design § 7): the
-# entry is never possible, and .82 keeps one option that does nothing, for an
-# old save's queued copy. Its recorded answers stand (the migration reads them).
-RETIRED = ("moon_base",)
+CHOICE_EVENTS = {"80": "orbital", "5": "moon_landing", "81": "probe", "83": "mars_landing"}
+# The milestones with a reward. The retired Moon Base's entry and its purpose
+# event (.82) went with vanilla 1.15 (#1407); its reward is the first lunar
+# colony's (lunar colonization design § 7), and a revolution's winner gets it back.
+REWARDED = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
+            "mars_landing", "interstellar_probe")
 
 
 def _path(*parts):
@@ -169,17 +169,13 @@ class ImmediateTests(unittest.TestCase):
         for entry in ENTRIES[1:]:
             with self.subTest(entry=entry):
                 possible = _block(_block(JE, f"je_space_race_{entry}"), "possible")
-                if entry in RETIRED:
-                    # never possible, so it admits no one the gate could miss
-                    self.assertEqual(possible.split(), ["always", "=", "no"])
-                    continue
                 self.assertRegex(possible, r"(?<!NOT = \{ )has_variable = sr_completed_\w+")
         self.assertIn("has_variable = sr_completed_suborbital",
                       _block(_block(JE, "je_space_race_orbital"), "possible"))
         self.assertNotRegex(EFFECTS + JE, r"remove_variable\s*=\s*sr_completed_")
-        # Nor the old-save migration (owner, 2026-10-29: a race that ended before
-        # the Moon existed keeps every completion; a finished programme resumes
-        # for the Moon by choice, sr_colonization_resumed).
+        # Nor the colony record (owner, 2026-10-29: a race over with the Moon
+        # free keeps every completion; a finished programme resumes for the
+        # Moon by choice, sr_colonization_resumed).
         self.assertNotRegex(_read("common", "scripted_effects", "sr_site_effects.txt"),
                             r"remove_variable\s*=\s*sr_completed_")
 
@@ -261,9 +257,9 @@ class RewardTests(unittest.TestCase):
                      _block(EFFECTS, "sr_sync_probe_data_base")):
             self.assertNotRegex(text, r"te_cw_|remove_")
         rewarded = set(re.findall(r"^sr_first_(\w+) = \{", MODIFIERS, re.M))
-        self.assertEqual(rewarded, set(MILESTONES))
+        self.assertEqual(rewarded, set(REWARDED))
         restored = re.findall(r"MILESTONE = (\w+)", _block(EFFECTS, "sr_restore_milestone_rewards"))
-        self.assertEqual(sorted(restored), sorted(MILESTONES))
+        self.assertEqual(sorted(restored), sorted(REWARDED))
 
     def test_milestone_reward_is_modifier_only(self):
         body = _block(EFFECTS, "sr_apply_milestone_reward_base")
@@ -273,11 +269,6 @@ class RewardTests(unittest.TestCase):
     def test_choice_modifiers_are_rebuilt_from_the_choice(self):
         for ev, entry in CHOICE_EVENTS.items():
             event = _block(EVENTS, f"space_race_events.{ev}")
-            if entry in RETIRED:
-                # one option, setting and adding nothing
-                self.assertEqual(len(re.findall(r"\boption\s*=\s*\{", event)), 1, ev)
-                self.assertNotRegex(event, r"set_variable|add_modifier|je:", ev)
-                continue
             pairs = re.findall(
                 r"set_variable\s*=\s*\{\s*name\s*=\s*(\w+)\s+value\s*=\s*yes\s*\}\s*"
                 r"je:je_space_race_" + entry + r"\s*=\s*\{\s*add_modifier\s*=\s*(\w+)\s*\}", event)

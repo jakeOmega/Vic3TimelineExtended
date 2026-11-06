@@ -22,7 +22,7 @@ EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.t
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")
 HELPERS = r"sr_setback_lose_months|sr_gain_progress_months|sr_lose_progress_months|sr_boost_active_milestones"
 # Which tooltip each helper is announced by.

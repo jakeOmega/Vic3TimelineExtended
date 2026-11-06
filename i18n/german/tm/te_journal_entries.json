@@ -2359,45 +2359,9 @@
   "en": "Even a follow-on Mars expedition delivers major [concept_prestige] and research gains, plus durable cultural reach.",
   "de": "Selbst eine nachfolgende Mars-Expedition bringt erhebliches [concept_prestige] und Forschungsgewinne, dazu dauerhafte kulturelle Reichweite."
  },
- "je_space_race_moon_base": {
-  "en": "Moon Base",
-  "de": "Mondbasis"
- },
  "je_space_race_moon_base_desc": {
   "en": "Establish a permanent crewed outpost on the lunar surface.",
   "de": "Errichten Sie einen dauerhaften, bemannten Außenposten auf der Mondoberfläche."
- },
- "je_space_race_moon_base_reason": {
-  "en": "A permanent lunar outpost will serve as a stepping stone for deeper space exploration and a symbol of our civilization's ambition.",
-  "de": "Ein dauerhafter Mond-Außenposten wird als Sprungbrett für tiefere Weltraumforschung dienen und als Symbol für den Ehrgeiz unserer Zivilisation."
- },
- "je_space_race_moon_base_status": {
-  "en": "A permanently crewed station on the lunar surface.",
-  "de": "Eine dauerhaft bemannte Station auf der Mondoberfläche."
- },
- "je_space_race_moon_base_status_ambitious": {
-  "en": "#bold Approach:#! Ambitious\\n#bold Status:#! Rapid-deployment habitat modules are being launched in quick succession. The base takes shape with breathtaking speed.",
-  "de": "#bold Vorgehensweise:#! Ehrgeizig\\n#bold Status:#! Schnell einsetzbare Wohnmodule werden in rascher Folge gestartet. Die Basis nimmt mit atemberaubender Geschwindigkeit Gestalt an."
- },
- "je_space_race_moon_base_status_default": {
-  "en": "#bold Approach:#! Standard\\n#bold Status:#! With a successful landing behind us, we can now establish a permanent lunar presence.",
-  "de": "#bold Ansatz:#! Standard\\n#bold Status:#! Nach einer erfolgreichen Landung können wir nun eine dauerhafte Präsenz auf dem Mond errichten."
- },
- "je_space_race_moon_base_status_industrial": {
-  "en": "#bold Purpose:#! Industrial Facility\\nThe lunar base focuses on mining helium-3 and rare minerals for export.",
-  "de": "#bold Zweck:#! Industrieanlage\\nDie Mondbasis konzentriert sich auf den Abbau von Helium-3 und seltenen Mineralien für den Export."
- },
- "je_space_race_moon_base_status_military_purpose": {
-  "en": "#bold Purpose:#! Military Installation\\nThe lunar base provides strategic observation and force projection capabilities.",
-  "de": "#bold Zweck:#! Militärische Einrichtung\\nDie Mondbasis bietet strategische Beobachtung und die Fähigkeit zur Kräfteprojektion."
- },
- "je_space_race_moon_base_status_safe": {
-  "en": "#bold Approach:#! Safe\\n#bold Status:#! Each module is thoroughly tested on Earth before launch. The base grows slowly but reliably.",
-  "de": "#bold Vorgehensweise:#! Vorsichtig\\n#bold Status:#! Jedes Modul wird vor dem Start gründlich auf der Erde getestet. Die Basis wächst langsam, aber zuverlässig."
- },
- "je_space_race_moon_base_status_scientific": {
-  "en": "#bold Purpose:#! Scientific Outpost\\nThe lunar base is dedicated to pure research and international collaboration.",
-  "de": "#bold Zweck:#! Wissenschaftlicher Außenposten\\nDie Mondbasis widmet sich reiner Forschung und internationaler Zusammenarbeit."
  },
  "je_space_race_moon_landing": {
   "en": "Moon Landing",
@@ -2915,10 +2879,6 @@
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] months",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] Monate"
  },
- "je_space_race_widget_eta_moon_base": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_base')|0] months",
-  "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_base')|0] Monate"
- },
  "je_space_race_widget_eta_moon_landing": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] months",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] Monate"
@@ -3123,10 +3083,6 @@
   "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/wk",
   "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/Wo."
  },
- "je_space_race_widget_ov_ambitious_moon_base": {
-  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]/wk",
-  "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]/Wo."
- },
  "je_space_race_widget_ov_ambitious_moon_landing": {
   "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/wk",
   "de": "Ehrgeizig −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/Wo."
@@ -3186,10 +3142,6 @@
  "je_space_race_widget_ov_safe_mars_landing": {
   "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/wk",
   "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/Wo."
- },
- "je_space_race_widget_ov_safe_moon_base": {
-  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]/wk",
-  "de": "Sicher −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]/Wo."
  },
  "je_space_race_widget_ov_safe_moon_landing": {
   "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]/wk",
@@ -3263,10 +3215,6 @@
   "en": "Mars Landing: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#!",
   "de": "Marslandung: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#!"
  },
- "je_space_race_widget_power_lead_moon_base": {
-  "en": "Moon Base: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#!",
-  "de": "Mondbasis: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#!"
- },
  "je_space_race_widget_power_lead_moon_landing": {
   "en": "Moon Landing: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#!",
   "de": "Mondlandung: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#!"
@@ -3306,10 +3254,6 @@
  "je_space_race_widget_power_own_mars_landing": {
   "en": "Mars Landing: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing')|%0]#!",
   "de": "Marslandung: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing')|%0]#!"
- },
- "je_space_race_widget_power_own_moon_base": {
-  "en": "Moon Base: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base')|%0]#!",
-  "de": "Mondbasis: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base')|%0]#!"
  },
  "je_space_race_widget_power_own_moon_landing": {
   "en": "Moon Landing: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing')|%0]#!",
@@ -3451,10 +3395,6 @@
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo#!)",
   "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/Mo.#!)"
  },
- "je_space_race_widget_progress_moon_base": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_base_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_base_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_base')|1]/mo#!)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_base_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_base_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_base')|1]/Mo.#!)"
- },
  "je_space_race_widget_progress_moon_landing": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo#!)",
   "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/Mo.#!)"
@@ -3487,10 +3427,6 @@
   "en": "#header Mars Landing#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_mars_landing').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_mars_landing').GetDesc]",
   "de": "#header Marslandung#!\\n#bold Wenn wir die erste Nation sind, die dies erreicht:#!\\n[GetStaticModifier('sr_first_mars_landing').GetDesc]\\n#bold Wenn eine andere Macht zuerst dort ankommt:#!\\n[GetStaticModifier('sr_mars_landing').GetDesc]"
  },
- "je_space_race_widget_reward_moon_base": {
-  "en": "#header Moon Base#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_moon_base').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_moon_base').GetDesc]",
-  "de": "#header Mondbasis#!\\n#bold Wenn wir die erste Nation sind, die dies erreicht:#!\\n[GetStaticModifier('sr_first_moon_base').GetDesc]\\n#bold Wenn eine andere Macht zuerst dort ankommt:#!\\n[GetStaticModifier('sr_moon_base').GetDesc]"
- },
  "je_space_race_widget_reward_moon_landing": {
   "en": "#header Moon Landing#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_moon_landing').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_moon_landing').GetDesc]",
   "de": "#header Mondlandung#!\\n#bold Wenn wir die erste Nation sind, die dies erreicht:#!\\n[GetStaticModifier('sr_first_moon_landing').GetDesc]\\n#bold Wenn eine andere Macht zuerst dort ankommt:#!\\n[GetStaticModifier('sr_moon_landing').GetDesc]"
@@ -3518,10 +3454,6 @@
  "je_space_race_widget_risk_mars_landing": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
   "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/Mo."
- },
- "je_space_race_widget_risk_moon_base": {
-  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/Mo."
  },
  "je_space_race_widget_risk_moon_landing": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
@@ -3582,10 +3514,6 @@
  "je_space_race_widget_rival_tt_mars_landing": {
   "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands between #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]#! and #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! of the goal (the marker: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_mars_landing')|%0]). The band is ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it; where in the band the marker sits is drawn again once a year. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",
   "de": "#bold Eine Schätzung, kein Bericht.#! Nach dem, was [State.GetCountry.GetAltName('NOM')] angekündigt hat, liegt das Programm zwischen #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]#! und #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! des Ziels (die Markierung: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_mars_landing')|%0]). Das Band beträgt ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] des Ziels, und der wahre Wert liegt immer darin; wo im Band die Markierung sitzt, wird einmal im Jahr neu ausgelost. Ein Nachrichtendienst-Netzwerk im Land verengt das Band: ±10% bei Stärke 50, ±5% bei 75."
- },
- "je_space_race_widget_rival_tt_moon_base": {
-  "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands between #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]#! and #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#! of the goal (the marker: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_moon_base')|%0]). The band is ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it; where in the band the marker sits is drawn again once a year. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",
-  "de": "#bold Eine Schätzung, kein Bericht.#! Nach dem, was [State.GetCountry.GetAltName('NOM')] angekündigt hat, liegt das Programm zwischen #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]#! und #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#! des Ziels (die Markierung: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_moon_base')|%0]). Das Band beträgt ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] des Ziels, und der wahre Wert liegt immer darin; wo im Band die Markierung sitzt, wird einmal im Jahr neu ausgelost. Ein Nachrichtendienst-Netzwerk im Land verengt das Band: ±10% bei Stärke 50, ±5% bei 75."
  },
  "je_space_race_widget_rival_tt_moon_landing": {
   "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands between #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]#! and #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#! of the goal (the marker: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_moon_landing')|%0]). The band is ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it; where in the band the marker sits is drawn again once a year. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",

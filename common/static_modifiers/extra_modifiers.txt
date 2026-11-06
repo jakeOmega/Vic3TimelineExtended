@@ -5412,6 +5412,7 @@ religious_mission_state_modifier = {
 demilitarized_zone_state_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_conscription_rate_mult = -1.0
+	state_disallow_barracks_construction_bool = yes # vanilla 1.15: says no new barracks in one line; the caps stay
 	state_building_barrack_max_level_add = -1000
 	state_building_naval_fortification_max_level_add = -1000
 	state_building_military_base_max_level_add = -1000

@@ -137,6 +137,41 @@ class Validate(unittest.TestCase):
         for state, reason in gen.DESERT_TRAIT_EXCEPTIONS.items():
             self.assertTrue(reason, state)
 
+class ColdBand(unittest.TestCase):
+    """The record's winter against vanilla 1.15's cold at the peak of winter (max_cold_effect; #1407)."""
+
+    def test_each_band(self):
+        cases = [
+            (row("STATE_A", winter=1), 0.75, True),     # above freezing under severe cold
+            (row("STATE_A", winter=0), 0.75, False),
+            (row("STATE_A", winter=4), 0.5, True),      # milder than London's under moderate cold
+            (row("STATE_A", winter=3), 0.74, False),
+            (row("STATE_A", winter=-10), 0.49, True),   # a hard winter where vanilla's cold isn't moderate
+            (row("STATE_A", winter=-10), 0.5, False),
+            (row("STATE_A", winter=-9), 0.0, False),
+        ]
+        for r, cold, flagged in cases:
+            with self.subTest(winter=r.winter_mean_c, cold=cold):
+                self.assertEqual(r.state in gen.cold_band_flags([r], {"STATE_A": cold}), flagged)
+
+    def test_a_region_with_no_cold_reads_zero(self):
+        self.assertIn("STATE_A", gen.cold_band_flags([row("STATE_A", winter=-12)], {}))
+
+    def test_region_cold_reads_the_map(self):
+        cold = gen.region_cold()
+        self.assertEqual(set(cold), gen.land_regions())
+        self.assertGreater(sum(1 for c in cold.values() if c > 0), 500)
+        self.assertEqual(cold["STATE_NORTH_RHINE"], 0.0)   # vanilla's one cold-wintered gap
+
+    def test_the_committed_record_agrees_but_for_its_listed_exceptions(self):
+        flags = gen.cold_band_flags(gen.load_rows(), gen.region_cold())
+        self.assertEqual({s: w for s, w in flags.items() if s not in gen.COLD_BAND_EXCEPTIONS}, {},
+                         "a row disagrees with vanilla's cold: fix the row, or list it with its reason")
+        self.assertEqual(sorted(set(gen.COLD_BAND_EXCEPTIONS) - set(flags)), [], "a stale exception")
+        for state, reason in gen.COLD_BAND_EXCEPTIONS.items():
+            self.assertTrue(reason, state)
+
+
 class Committed(unittest.TestCase):
     def test_csv_rows_validate(self):
         self.assertEqual(gen.validate(gen.load_rows(), gen.land_regions(), gen.region_traits()), [])

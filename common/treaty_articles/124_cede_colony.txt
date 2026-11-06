@@ -19,7 +19,7 @@ te_cede_colony = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, l
 
 	flags = {
 		can_be_enforced
-		giftable
+		giftable		is_one_time
 	}
 
 	# As state_transfer: nothing to maintain once the colony has moved.

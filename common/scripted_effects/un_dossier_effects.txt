@@ -183,10 +183,7 @@ un_veto_record_add = {
 	change_variable = { name = un_veto_record add = un_veto_record_points }
 }
 
-# Every record fades. Saves from before the record started a member that
-# carries a recent veto's isolation with one veto's worth: that member vetoed
-# within five years, and the record would otherwise read zero until it vetoes
-# again. Remove the seed after 2026-12-31.
+# Every record fades.
 # Scope: none (inside un_dossier_monthly_update)
 un_veto_record_monthly_update = {
 	every_country = {
@@ -196,13 +193,6 @@ un_veto_record_monthly_update = {
 			limit = { var:un_veto_record < un_veto_record_floor }
 			remove_variable = un_veto_record
 		}
-	}
-	every_country = {
-		limit = {
-			has_modifier = un_veto_isolation_modifier
-			NOT = { has_variable = un_veto_record }
-		}
-		set_variable = { name = un_veto_record value = un_veto_record_points }
 	}
 }
 

@@ -8,10 +8,12 @@ orders a state's towns by the people at work in each kind of building and splits
 - `common/scripted_triggers/te_demog_town_triggers_generated.txt`:
   - building scope, `te_demog_town_<kind>_work` for port, mine, farm and wood, and `te_demog_town_subsistence_work`: the
     building's town. That is vanilla's own `city_type`, the hub a building's meshes stand in, except that a building
-    that draws no mesh (`levels_per_mesh = -1`) and says `city` takes the one kind every meshed base-game building of
-    its nearest group shares: the mod's discoverable mines say `city` with no mesh, and are mines. A subsistence
-    building (its group `is_subsistence`) counts for no town, its peasants being the countryside's own; every other
-    building, those with no `city_type` among them (railways, canals, most monuments), counts for the capital.
+    that draws no mesh (`levels_per_mesh = -1`) and says `city`, or says no `city_type` at all, takes the one kind every
+    meshed base-game building of its nearest group shares: the mod's discoverable mines say `city` with no mesh, and
+    are mines; vanilla 1.15's Cossack Host says nothing and sits under ranching, so its town is the farming town
+    (#1407). A subsistence building (its group `is_subsistence`) counts for no town, its peasants being the
+    countryside's own; every other building, those with no `city_type` and no such group among them (railways,
+    canals, most monuments), counts for the capital.
   - state scope, `te_demog_town_named_<kind>` for all five: the state's hub of that kind exists in
     `map_data/state_regions/` and its loc key does (15 mining and 8 logging towns have none, and the accessor would
     print the raw key). Written as the shorter of the list and its complement.
@@ -119,7 +121,7 @@ def town_classes(buildings, groups, vanilla) -> dict[str, str | None]:
             out[key] = None
             continue
         kind = unwrap(body.get("city_type"))
-        if kind == "city" and str(unwrap(body.get("levels_per_mesh"))) == "-1":
+        if kind in (None, "none") or (kind == "city" and str(unwrap(body.get("levels_per_mesh"))) == "-1"):
             for group in chain:
                 kinds = shared.get(group)
                 if kinds:

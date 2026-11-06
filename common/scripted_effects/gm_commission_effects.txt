@@ -35,8 +35,7 @@
 # asking IG's ledger rises (gm_ig_ledger_<ig>) and a boon runs for ten years.
 
 # ---- The record ------------------------------------------------------------------
-# Country scope. Forget the opportunity (offered or open). gm_com_extended and
-# gm_com_gap_half are v2's, cleared for a save that still carries them.
+# Country scope. Forget the opportunity (offered or open).
 gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_offered }
 	gm_remove_state_var = { VAR = gm_com_open }
@@ -47,14 +46,12 @@ gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_target }
 	gm_remove_state_var = { VAR = gm_com_baseline }
 	gm_remove_state_var = { VAR = gm_com_months_left }
-	gm_remove_state_var = { VAR = gm_com_extended }
 	gm_remove_state_var = { VAR = gm_com_namesake }
 	gm_remove_state_var = { VAR = gm_com_form }
 	gm_remove_state_var = { VAR = gm_com_occasion }
 	gm_remove_state_var = { VAR = gm_com_name_year }
 	gm_remove_state_var = { VAR = gm_com_name_char }
 	gm_remove_state_var = { VAR = gm_com_name_enemy_cap }
-	gm_remove_state_var = { VAR = gm_com_gap_half }
 	gm_remove_state_var = { VAR = gm_com_offer_watch }
 	gm_remove_state_var = { VAR = gm_com_build_where }
 	gm_remove_state_var = { VAR = gm_com_raise_pending }
@@ -1007,11 +1004,9 @@ gm_com_world_monthly = {
 	gm_com_track_historical = yes
 }
 
-# Country scope. The first time the world pass sees a country (a new game, a
-# save from before opportunities, a released country): what it already has is
-# seen (great power status, the technologies, the space firsts won), so it
-# brings no opportunity. A save's v2 promise ledger and petition
-# cooldown go.
+# Country scope. The first time the world pass sees a country (a new game or a
+# released country): what it already has is seen (great power status, the
+# technologies, the space firsts won), so it brings no opportunity.
 gm_com_first_sight = {
 	set_variable = gm_com_opp_tracked
 	if = {
@@ -1028,8 +1023,6 @@ gm_com_first_sight = {
 	gm_com_see_space_if_won = { M = moon_base }
 	gm_com_see_space_if_won = { M = mars_landing }
 	gm_com_see_space_if_won = { M = interstellar_probe }
-	gm_remove_state_var = { VAR = gm_promise_ledger }
-	gm_remove_state_var = { VAR = gm_com_cooldown }
 }
 
 gm_com_see_tech_if_known = {
