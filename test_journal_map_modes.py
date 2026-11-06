@@ -29,6 +29,7 @@ BANKING = "common/journal_entries/je_banking.txt"
 MAP_ENTRIES = (HOST, BANKING)
 COLORS = "common/named_colors/te_journal_map_colors.txt"
 VALUES = "common/script_values/te_journal_map_values.txt"
+SCALES = "common/script_values/te_journal_map_scales_generated.txt"
 WIDGETS = "gui/te_map_widgets.gui"
 REPAINTER = "te_jmap_repainter"
 REGISTRATION = "gui/scripted_widgets/te_systems_window.txt"
@@ -143,7 +144,7 @@ def tracked(rel):
 
 class FilesTest(unittest.TestCase):
     def test_each_new_file_has_one_bom(self):
-        for rel in (HOST, COLORS, VALUES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS):
+        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS):
             with open(os.path.join(REPO, rel), "rb") as f:
                 head = f.read(6)
             self.assertTrue(head.startswith(BOM) and not head[3:].startswith(BOM), rel)

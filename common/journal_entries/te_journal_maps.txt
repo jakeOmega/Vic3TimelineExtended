@@ -55,7 +55,8 @@ je_te_map_room = {
 	}
 
 	# Root: the state being painted. A branch that matches nothing leaves the state unpainted, which is how a map with
-	# no pick (selector 0) should look. The census's per-state figures (common/scripted_effects/te_demog_effects.txt's
+	# no pick (selector 0) should look. Each map's color comes from its factor, 0-1 (te_journal_map_scales_generated.txt, from
+	# gen_journal_map_scales.py's table); a three-color map splits at factor 0.5, its midpoint (replacement, none, 100 men). The census's per-state figures (common/scripted_effects/te_demog_effects.txt's
 	# header): the life table's from a state's first seed, a year's births, deaths and migrants only once it has stepped
 	# (te_dg_stepped above 0; a seed writes their rates as 0), as the Demographics panel gates them.
 	map_color = {
@@ -106,7 +107,7 @@ je_te_map_room = {
 			limit = {
 				te_jmap_selector = 17
 				has_variable = te_dg_wc
-				var:te_dg_wc < 50
+				te_jmap_wc_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_wc_low"
@@ -158,7 +159,7 @@ je_te_map_room = {
 				has_variable = te_dg_imr
 				has_variable = te_dg_e0
 				var:te_dg_e0 > 0
-				var:te_dg_imr < 50
+				te_jmap_imr_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_imr_low"
@@ -305,7 +306,7 @@ je_te_map_room = {
 				var:te_dg_stepped > 0
 				has_variable = te_dg_cbr
 				has_variable = te_dg_cdr
-				te_demog_natural_change < 0
+				te_jmap_natural_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_natural_low"
@@ -333,7 +334,7 @@ je_te_map_room = {
 				te_jmap_selector = 4
 				has_variable = te_dg_tfr
 				var:te_dg_tfr > 0
-				var:te_dg_tfr < 2.1
+				te_jmap_tfr_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_tfr_low"
@@ -359,7 +360,7 @@ je_te_map_room = {
 				te_jmap_selector = 5
 				has_variable = te_dg_median
 				var:te_dg_median > 0
-				var:te_dg_median < 30
+				te_jmap_median_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_median_low"
@@ -399,7 +400,7 @@ je_te_map_room = {
 				te_jmap_selector = 12
 				has_variable = te_dg_sex_balance
 				var:te_dg_sex_balance > 0
-				var:te_dg_sex_balance < 100
+				te_jmap_sex_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_sex_low"
@@ -426,7 +427,7 @@ je_te_map_room = {
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_mig_rate
-				var:te_dg_mig_rate < 0
+				te_jmap_mig_factor < 0.5
 			}
 			lerp = {
 				min_color = "te_jmap_mig_low"

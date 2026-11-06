@@ -43,9 +43,20 @@ journal page has a see-through eye (below) to look past it. An inactive entry's 
 too.
 
 **Cheap reads only.** Every value runs once per state, as the game runs, so
-the maps read stored variables and engine figures, never walk pops. Factors are clamped to fixed bounds (life
-expectancy 25–80), so a color means the same thing in 1850 and 1950. Colors are named in
+the maps read stored variables and engine figures, never walk pops. Each map's color comes from a factor, 0–1, on a
+fixed curve (life expectancy 25–80), so a color means the same thing in 1850 and 1950. Colors are named in
 `common/named_colors/te_journal_map_colors.txt`, one family per map.
+
+**The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
+`common/script_values/te_journal_map_scales_generated.txt`, `te_jmap_<map>_factor`). A script value takes no arguments
+and a paint runs no effect, so one shared curve can't be fed each map's figure (`te_sqrt`'s input is a variable an
+effect sets); the generator writes each map's tree from a table row instead, using one of three shapes: linear, a soft
+cap (straight to a soft bound, then `SLOPE_RATIO`, 4, times shallower to a hard one, so the common values get most of
+the color and the extremes still differ) and diverging (0.5 at a midpoint, each side straight or soft-capped). Changing
+a shape changes every map using it. Each tree reads its figure only inside an `if` on its `has_variable` guards (a
+guard in the same `AND` doesn't stop the read where the engine builds a tooltip, #1418). A three-color map's
+`map_color` splits at `factor < 0.5`, so its midpoint lives only in the table, and reads `_lower` and `_upper`, the
+factor doubled and doubled less 1.
 
 ## The Map Room
 
@@ -58,16 +69,18 @@ entry, in no country's journal.
   pass proved the shape with a test entry (`je_te_map_hidden_world`, 2026-11-05).
 - **Several maps.** `map_color` is an `if` / `else_if` ladder on `te_jmap_selector`
   (`common/script_values/te_journal_map_values.txt` lists the numbers). The world's: 1 turmoil, 6 devastation (both the
-  engine's own figures, saturating at a half), and from the yearly walk, which runs whatever the Demographics rule, 15
+  engine's own figures, soft-capped at 20%), and from the yearly walk, which runs whatever the Demographics rule, 15
   urban people (`te_dg_urban_share`), 16 the Gini coefficient (`te_dg_gini`, 0.30–0.80) and 17 Dynastic Wealth
   (`te_dg_wc`, 0–50–100, diverging where its effects turn from dispersed to concentrated property). The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
   expectancy, 10 infant mortality, 4 fertility, 5 median age, 14 aged 65 and over and 12 sex balance from a state's first
   seed; 9 births, 8 deaths and 7 natural change per 1,000, 13 net migration and 11 the leading cause of death only once
   the state has stepped a full year (`te_dg_stepped` above 0, as the panel gates them: a seed writes those rates as 0).
   Every map that reads a stored figure shows grey (`te_jmap_no_data`) for a state without one, through one `OR` branch
-  that lists them all. Each bound is fixed and historical (deaths 5–45 per 1,000, infant mortality 0–50–300, natural
-  change −15–0–+30, sex balance 80–100–130 from the census's own effect thresholds, net migration ±20, 65 and over
-  2–30%), so a color means the same thing in 1850 and 1950. The leading cause is categorical, in the Causes of Death
+  that lists them all. Each curve is fixed and historical. Soft caps: turmoil and devastation half the color by 20%,
+  all at 100%; deaths per 1,000 70% of it from 5 to 40, all at 100. Diverging: infant mortality 0–50–300 (soft) to
+  500, natural change −40 to −15 (soft), 0, +30 (soft) to +45, net migration ±20 (soft) to ±60, sex balance 80–100–130
+  from the census's own effect thresholds, Dynastic Wealth 0–50–100. Linear: births 8–50, 65 and over 2–30%, Gini
+  0.30–0.80. Each pick's tooltip says where its bends are, since the map has no legend. The leading cause is categorical, in the Causes of Death
   pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), and its hover
   is a branch per cause. 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
   the unpainted map and "Pick a map" until the next pick.
@@ -144,7 +157,8 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
 
 1. Add `map_color` (and `map_color_second`, `map_tooltip`) to the system's entry, branching on `owner ?= { … }` for a
    per-country map or on the state's own variables for a per-state one. Name the colors in
-   `te_journal_map_colors.txt`; put each `lerp` factor in a clamped script value.
+   `te_journal_map_colors.txt`; give each `lerp` its factor as a row in `gen_journal_map_scales.py`'s `SCALES` and
+   re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
    pick scripted GUI and its `te_jmap_pick_button` in `te_jmap_pick_row`, and loc for both. A map that reads a stored
    figure joins both "no data" `OR`s (`test_journal_map_modes.py` checks it).
