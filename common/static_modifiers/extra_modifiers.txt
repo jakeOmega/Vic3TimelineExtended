@@ -1353,8 +1353,8 @@ banking_crash_intervention_capital_controls = {
 	country_influence_add = -100
 }
 
-# ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
-# Note: The actual multiplier values are defined in the relevant journal entry (e.g. based on temperature anomaly or severity stage).
+# ----- Global Warming severity stage (a scaling modifier on every country's je_global_warming) -----
+# Per degree: the entry declares it at the felt temperature anomaly, floored at 0 (je_global_warming.txt).
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
@@ -1410,11 +1410,9 @@ renewable_investment_modifier = {
 
 # Renewable Investment's running cost, in place of the forced plant subsidies it
 # used to carry (country_building_renewable_energy_plant_require_subsidies_bool,
-# retired 2026-10-20). Held on the country, not the journal entry, because the
-# multiplier reads gdp. Applied with multiplier = gw_renewable_investment_cost_value
-# (0.5% of GDP a year, per week) by gw_renewable_investment_cost_apply and
-# re-applied monthly by gw_refresh_policy_costs_effect, the single refresh site.
-# Budget Breakdown: Climate Policy.
+# retired 2026-10-20). A scaling modifier on je_global_warming at
+# gw_renewable_investment_cost_value (0.5% of GDP a year, per week) while the
+# policy is in force. Budget Breakdown: Climate Policy.
 renewable_investment_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -1440,6 +1438,8 @@ emission_standards_modifier = {
 }
 
 # Indirect-effect policies (available to all countries)
+# Carbon Removal Support: a scaling modifier on je_global_warming while the
+# country variable gw_carbon_removal_policy is set.
 carbon_removal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_building_synthetics_plant_coal_require_subsidies_bool = yes
@@ -1449,8 +1449,9 @@ carbon_removal_modifier = {
 }
 
 # Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5), on the
-# journal entry like the other national policies. Its climate effect is not a
-# modifier: the countries running it set the world's aerosol mask
+# journal entry like the other national policies (a scaling modifier there,
+# while the country variable gw_aerosol_injection_policy is set). Its climate
+# effect is not a modifier: the countries running it set the world's aerosol mask
 # (global_warming_aerosol_values.txt), which every country's warming reads.
 # The Environmental Movement opposes it, so it stirs the movement where every
 # other policy calms it.
@@ -1460,18 +1461,18 @@ aerosol_injection_modifier = {
 }
 
 # Stratospheric Aerosol Injection's running cost: 1% of GDP a year, per week
-# (gw_aerosol_injection_cost_value). On the country, applied and re-applied as
-# Renewable Investment's is (gw_aerosol_injection_cost_apply, from
-# gw_refresh_policy_costs_effect). Budget Breakdown: Climate Policy.
+# (gw_aerosol_injection_cost_value). A scaling modifier on je_global_warming
+# while the policy is in force, as Renewable Investment's is. Budget
+# Breakdown: Climate Policy.
 aerosol_injection_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 	country_te_budget_expense_climate_add = 1
 }
 
-# The haze weakens the summer monsoons (Geoengineering). On the journal entry
-# of a country whose capital lies in a monsoon region (gw_country_in_monsoon_region),
-# re-applied monthly with multiplier = the aerosol mask in degrees: per degree
+# The haze weakens the summer monsoons (Geoengineering). A scaling modifier on
+# the journal entry of a country whose capital lies in a monsoon region
+# (gw_country_in_monsoon_region), at the aerosol mask in degrees: per degree
 # masked, half the farm relief the mask brings back and none of its drought
 # relief (the global_warming modifier is -10% farms, +25% droughts a degree).
 gw_aerosol_monsoon_modifier = {

@@ -4605,7 +4605,7 @@
  gw_cond_emis_tt_theirs:0 "Annual [concept_greenhouse_gas_emissions] of this market, from building greenhouse gases after source capture and industrial policy cuts, plus households, less atmospheric removal.\n\n#lore The sum of its members' own emissions, which Top Emitters lists country by country. Updated each January.#!"
  gw_cond_leads_market:0 "We lead our own market"
  gw_cond_not_treaty_bound:0 "We are not bound by an emissions-reduction treaty"
- gw_cond_penalty_tt:0 "Every month each line below applies at #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, the temperature anomaly in °C.\n$TOOLTIP_DELIMITER$\n[GetStaticModifier('global_warming').GetDesc]"
+ gw_cond_penalty_tt:0 "Each line below applies at #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, the temperature anomaly in °C.\n$TOOLTIP_DELIMITER$\n[GetStaticModifier('global_warming').GetDesc]"
  gw_cond_role_tt:0 "[SelectLocalization( Country.IsLocalPlayer, 'gw_cond_role_tt_ours', 'gw_cond_role_tt_theirs' )]"
  gw_cond_role_tt_ours:0 "The market leader controls fossil-fuel tariffs. Every country controls its own nine national climate policies and industrial emissions reductions."
  gw_cond_role_tt_theirs:0 "[Country.GetName] leads this market and sets its fossil-fuel tariffs. Every country sets its own nine national climate policies and industrial emissions reductions."
