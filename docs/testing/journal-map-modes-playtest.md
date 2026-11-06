@@ -92,7 +92,9 @@ The owner's report, with `debug.log` from 16:51 to 16:55:
   added` lines, 21 of them in 12 seconds (each logs only while `has_journal_entry` is false), and the entry's
   `immediate` logged twice. For the next pass, check 7 removes the wait: a contextless entry like the hidden one exists
   from the start and opens at the first click, so the Map Room can be one, with no add, close or two-state button.
-- The `TE_JMAP` lines printed no date, so checks 4–5 couldn't be timed from the log. They now print `date=`.
+- The `TE_JMAP` lines printed no date, so checks 4–5 couldn't be timed from the log: at 16:51 four adds were followed by
+  the activation 29 seconds later, and at 16:54 21 adds had no activation before the close, but in game days that could
+  mean anything. All four lines now print `date=`, so 4–5 need a rerun.
 
 ## Not tested here
 

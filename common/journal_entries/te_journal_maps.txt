@@ -41,7 +41,7 @@ je_te_map_host = {
 	can_deactivate = yes
 
 	immediate = {
-		debug_log = "TE_JMAP host activated (the entry's immediate; compare its date with the button's line)"
+		debug_log = "TE_JMAP host activated date=[TimeKeeper.GetCurrentDate.GetString] (the entry's immediate; compare its date with the button's line)"
 	}
 
 	scripted_button = te_jmap_pick_turmoil
