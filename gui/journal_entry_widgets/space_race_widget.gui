@@ -5857,7 +5857,9 @@ types space_race_widget_types
 	### and delta-v at the fleet's pace (red when the fleet carries less), from
 	### Earth the launch window toward it (Next Windows' "Open now" and "In N
 	### months"; blank for other legs: a closed window only raises the delta-v,
-	### UI pass design § 4), our worlds there, the strength there and on its way
+	### UI pass design § 4; and blank for a fleet at a torch or antimatter pace
+	### (sr_fl_<n>_pace >= 2), which leaves in any month, so the cell would read
+	### as a wait it doesn't have), our worlds there, the strength there and on its way
 	### of countries at war with us, and Choose, greyed with the reason where
 	### the fleet can't choose; the destination already chosen reads Chosen in
 	### vanilla's selected-tab look (the Strategic Reserve's policy choice).

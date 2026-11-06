@@ -2491,8 +2491,9 @@ def _xfer_body(n: int) -> list[str]:
 def _dest_row(n: int, b: glw.Location) -> list[str]:
     """Slot n's row for the location b in its destination popup (UI pass
     design § 4): hidden for where the fleet is; the leg's months and delta-v
-    (red when the fleet carries less), from Earth the window toward b's body,
-    our worlds there, the enemy's strength there and on its way, and Choose."""
+    (red when the fleet carries less), from Earth the window toward b's body
+    (blank at a torch or antimatter pace, which leaves in any month), our
+    worlds there, the enemy's strength there and on its way, and Choose."""
     k = b.key
     loc, dv, leg_dv = var(n, "loc_value"), var(n, "dv_value"), var(n, f"leg_dv_{k}")
     covered = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(dv)}, {_sv(leg_dv)} )"
@@ -2509,8 +2510,12 @@ def _dest_row(n: int, b: glw.Location) -> list[str]:
         rows += _override("dr_win_open_visible", "visible = no")
         rows += _override("dr_win_wait", "visible = no")
     else:
-        rows += _override("dr_win_open_visible", f'visible = "[And( {at_earth}, {_eq(wait, 0)} )]"')
-        rows += _override("dr_win_wait", f'visible = "[And( {at_earth}, {_ge(wait, 1)} )]"',
+        # Blank for a torch or antimatter pace (2 and up, rapid response hulls' one
+        # step ahead included): those drives leave in any month, so "Open now" and
+        # "In N months" would read as a wait the fleet doesn't have.
+        gated = f"Not( {_ge(var(n, 'pace'), 2)} )"
+        rows += _override("dr_win_open_visible", f'visible = "[And3( {at_earth}, {gated}, {_eq(wait, 0)} )]"')
+        rows += _override("dr_win_wait", f'visible = "[And3( {at_earth}, {gated}, {_ge(wait, 1)} )]"',
                           f'text = "je_space_race_widget_win_wait_{b.body}"')
     rows += _override("dr_worlds", f'raw_text = "[{_sv(f"sr_disp_loc_worlds_{k}")}|0]"')
     rows += _override("dr_enemy", f'raw_text = "[{_sv(f"sr_loc_ai_enemy_fleets_{k}")}|0]"')
