@@ -244,24 +244,14 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 ---
 
-### L25. `un_vote.5` kept for events queued in older saves
-**Files:** `events/un_vote_events.txt` (`un_vote.5`)
-
-**Problem (2026-09-27):** The late AI ballots (#531) retired `un_vote.5` as the ballot dispatcher. Nothing queues it any more, but a save from before #531 can still hold one queued, so the event stays and only refreshes the leans (its definition carries a `# REVIEWED` comment for `orphaned_event_audit`). The engine logs `Event un_vote.5 is orphaned` (`jomini_eventmanager.cpp:376`) at load, once per launch. Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signature names only this event.
-
-**Fix:** Delete `un_vote.5`, and this entry, once saves from before #531 (2026-09-27) are no longer in play.
-
----
-
 ### L26. Grand Monuments v2 load-time notices
-**Files:** `events/monument_events.txt` (`monument_events.11`), `common/scripted_effects/gm_commission_effects.txt:115`
+**Files:** `events/monument_events.txt` (`monument_events.11`), `common/scripted_effects/gm_commission_effects.txt` (`gm_com_begin`)
 
-**Problem (2026-10-07):** Grand Monuments v2 (#759) logs two lines once per launch, and the picture work (#909) added a third. (A fourth, `Database type building_gm_name_carrier_anchor has missing texture`, went on 2026-10-25, when the placeholder building was given a `background`: the slot `guitexturehandler.h:155` reports missing is the building panel's background, `scripting_best_practices.md`.)
+**Problem (2026-10-07):** Grand Monuments v2 (#759) logs two lines once per launch. (Another, `Database type building_gm_name_carrier_anchor has missing texture`, went on 2026-10-25, when the placeholder building was given a `background`: the slot `guitexturehandler.h:155` reports missing is the building panel's background, `scripting_best_practices.md`.)
 - `No default option in event monument_events.11.` (`event.cpp:410` from 1.15, `:358` on 1.14.5). By design: the skin choice leaves out `default_option` so that an expired event takes its first valid option, the most specific skin (the note above its Hebrew option).
 - `Flag 'leader' is used but is never set` (`jomini_effect.cpp:1144`, `:1139` on 1.14.5). `gm_com_dedication` is set as `flag:$DEDICATION$`, which the parse-time validator cannot see.
-- `Flag 'memorial' is used but is never set` (`jomini_effect.cpp:1144`, `:1139` on 1.14.5; 2026-10-12). #909 retired the Memorial form, so nothing sets `flag:memorial` any more, but a monument or commission from an older save can still hold it. The form's `gm_form_name` and `gm_com_form_phrase` branches stay on purpose to name it (`RETIRED_FORMS` in `test_grand_monument_registry.py`).
 
-Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these three.
+Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these two. (`Flag 'memorial' is used but is never set` went with #1407 on 2026-11-06: 1.15 loads no save from before #909, which retired the Memorial form, so the branches that named it are gone.)
 
 **Fix:** None needed.
 

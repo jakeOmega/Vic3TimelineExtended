@@ -251,7 +251,7 @@ After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_onl
 
 ## 6a. Retire old-save repairs
 
-Code that repairs saves from an older mod version carries a marker, `# OLD-SAVE REPAIR (#N): remove after YYYY-MM-DD or at vanilla X.Y, whichever comes first.`, mostly in `common/on_actions/te_old_save_repairs.txt`. Once `vanilla_parsed/` is rebuilt for version X.Y, `test_old_save_repairs.py` fails, naming each one. Delete the repair's block, and the file once it is empty. The old-save cleanup tracked in `docs/audits/open_issues.md` (L24, L25) is the same kind of code without a marker: check whether it can go too.
+Code that repairs saves from an older mod version carries a marker, `# OLD-SAVE REPAIR (#N): remove after YYYY-MM-DD or at vanilla X.Y, whichever comes first.`, mostly in `common/on_actions/te_old_save_repairs.txt`. Once `vanilla_parsed/` is rebuilt for version X.Y, `test_old_save_repairs.py` fails, naming each one. Delete the repair's block, and the file once it is empty. Old-save cleanup without a marker (a strip, migration or kept reader registered in `docs/audits/mod_known_noise.md`) is the same kind of code: check whether it can go too. A vanilla version that loads no save from the one before retires all of it at once: 1.15 loads no 1.14 save, so #1407 removed every old-save path and the L24–L25 registry entries.
 
 ## 6b. Vanilla constants the mod mirrors (silent-drift check)
 
