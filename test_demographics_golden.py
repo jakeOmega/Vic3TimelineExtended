@@ -68,7 +68,10 @@ past the pyramid's row starts past 85 (te_dg_of<i>, te_dg_om<i>), which the farm
 rows themselves don't show: under 1% of the people). The sweeps, the slots' normalisation and the bands' blocks that
 carry the rows are held to their new digests (RING300_DIGESTS). The model's rich case, whose ring keeps a few survivors
 past 150 (under a billionth of a person each, to age 169), ages them in their own slots instead of the pool, and its
-births and deaths moved by -1.9e-11 of themselves; it alone was re-recorded on this tree (TE_RECORD_GOLDEN_CASES)."""
+births and deaths moved by -1.9e-11 of themselves; it alone was re-recorded on this tree (TE_RECORD_GOLDEN_CASES).
+
+The old-save code's removal (#1407, 2026-11-06) rewrites te_demog_gini_band_store and te_demog_lines_refresh
+(OLDSAVE_DIGESTS) and changes no number."""
 
 import functools
 import hashlib
@@ -295,6 +298,15 @@ VANILLA_115_DIGESTS = {
 STRATA_BIRTH_DIGESTS = {
     ("generated_values", "te_demog_pop_birth_mult"): "ce7735ab70d6b04eae8aa4d24c77019b222ca5e93964753403003078c250f034",
 }
+# The old-save code goes (#1407, owner 2026-11-06: vanilla 1.15 loads no save from before 2026-11-05): the Gini store
+# no longer strips the six strata sums a save from before #854 held (te_dg_<n|y>_<lo|mi|up>), and the lines' refresh
+# no longer takes off a census term with no te_dg_q_b (a step from before the moved lines, 2026-10-11; a step sets the
+# two together). No recorded case holds the sums, and the lines' Full case holds te_dg_q_b, so no number changes.
+OLDSAVE_DIGESTS = {
+    ("generated_effects", "te_demog_gini_band_store"):
+        "a5d12450a900acc480beef05f4b1462b9d84ac5c14d1e78720fa5a61f9e8dc5f",
+    ("line_effects", "te_demog_lines_refresh"): "1a0591a62e33de9586551a24793b8d46e0c1dd05a398a2bab382f1957756d0bb",
+}
 
 
 def _ring300(name):
@@ -501,6 +513,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = RING300_DIGESTS.get((key, name), want)
                 want = VANILLA_115_DIGESTS.get((key, name), want)
                 want = STRATA_BIRTH_DIGESTS.get((key, name), want)
+                want = OLDSAVE_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

@@ -994,8 +994,7 @@ def gini_bands(o, pieces):
     o("")
     o("# THIS = a state, after its walk: keep the bands that have people, for the country's sum, and")
     o(f"# remove the rest (save size), with the layout they follow (te_dg_gini_layout = {P.GINI_LAYOUT}, the")
-    o("# country adds no other). Overwrites or removes every band an older layout stored, and an old")
-    o("# save's strata sums (before the wealth bands, 2026-10-10).")
+    o("# country adds no other). Overwrites or removes every band an older layout stored.")
     o("te_demog_gini_band_store = {")
     o(f"set_variable = {{ name = te_dg_gini_layout value = {P.GINI_LAYOUT} }}")
     for k in range(1, n + 1):
@@ -1009,11 +1008,6 @@ def gini_bands(o, pieces):
         o(f"remove_variable = te_dg_gn{k}")
         o(f"remove_variable = te_dg_gy{k}")
         o("}")
-    o("if = {")
-    o("limit = { has_variable = te_dg_n_lo }")
-    for name in ("n_lo", "n_mi", "n_up", "y_lo", "y_mi", "y_up"):
-        o(f"remove_variable = te_dg_{name}")
-    o("}")
     o("}")
     o("")
     o("# THIS = a state, after its store: its bands into the formula's locals (0 where none is stored).")
@@ -1035,8 +1029,8 @@ def gini_bands(o, pieces):
     o("}")
     o("")
     o("# THIS = a state in its country's loop: add its bands if they follow this layout, and count it in")
-    o("# local_var:te_dg_g_states (the caller sets it to 0). A state from an older save (14 bands to 61+,")
-    o("# capped income in other units, or strata sums) adds nothing until its own walk stores new ones.")
+    o("# local_var:te_dg_g_states (the caller sets it to 0). A state with no bands in this layout adds nothing")
+    o("# until its own walk stores them.")
     o("te_demog_gini_band_add_state = {")
     o("if = {")
     o("limit = { has_variable = te_dg_gini_layout }")
@@ -2424,10 +2418,7 @@ def _render_line_effects(fields, header, intro, refresh, gate, clear, clear_note
         o("if = {")
         o("limit = {")
         o("has_variable = te_dg_mb")
-        o("OR = {")
         o("NOT = { te_demog_effects_run = yes }")
-        o("NOT = { has_variable = te_dg_q_b }")
-        o("}")
         o("}")
         o("te_demog_rates_clear = yes")
         o("}")
@@ -2477,8 +2468,7 @@ def render_line_effects():
          "# game, a law's activation and a technology): each field's pair at the families' sum while te_demog_lines_apply",
          "# holds, touched only when the sum changed; otherwise (the census sets the state's births and deaths) every pair off.",
          "# First, a census term that is no longer the census's comes off now, not at the state's next yearly step, so it and",
-         "# the pairs are never both in force: one a rule switched off Full left, or one from a save made before the moved",
-         "# lines (no te_dg_q_b, which this build's step always sets with it)."],
+         "# the pairs are never both in force: one a rule switched off Full left."],
         "te_demog_lines_refresh", "te_demog_lines_apply", "te_demog_lines_clear",
         "# THIS = a state: every pair off, with its stored sum (the census's refresh calls it when it first sets M).",
         stale_m=True)
