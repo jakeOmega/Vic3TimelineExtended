@@ -780,6 +780,12 @@ je_grand_monuments = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_grand_monuments = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	weight = 400
 	should_update_on_player_command = yes
 
