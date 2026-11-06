@@ -20483,10 +20483,6 @@
   "en": "Where Shall We Send the Probe?",
   "de": "Wohin sollen wir die Sonde schicken?"
  },
- "space_race_events.82.a": {
-  "en": "A scientific outpost: knowledge is the ultimate resource.",
-  "de": "Ein wissenschaftlicher Außenposten: Wissen ist die ultimative Ressource."
- },
  "space_race_events.82.b": {
   "en": "An industrial facility: the Moon's wealth will fuel our growth.",
   "de": "Eine Industrieanlage: der Reichtum des Mondes wird unser Wachstum antreiben."
@@ -20494,18 +20490,6 @@
  "space_race_events.82.c": {
   "en": "A military installation: the ultimate high ground.",
   "de": "Eine militärische Anlage: die ultimative Höhenüberlegenheit."
- },
- "space_race_events.82.d": {
-  "en": "With a permanent lunar presence becoming reality, we must decide the base's primary mission. A scientific outpost would advance pure research and attract international collaboration. An industrial facility could begin extracting helium-3 and rare minerals. A military installation would provide unmatched strategic observation capabilities and serve as a staging point for force projection.",
-  "de": "Da eine dauerhafte Präsenz auf dem Mond Wirklichkeit wird, müssen wir über die Hauptaufgabe der Basis entscheiden. Ein wissenschaftlicher Außenposten würde die Grundlagenforschung vorantreiben und internationale Zusammenarbeit anziehen. Eine Industrieanlage könnte mit der Förderung von Helium-3 und seltenen Mineralien beginnen. Eine militärische Anlage würde unübertroffene strategische Beobachtungsfähigkeiten bieten und als Aufmarschpunkt für die Projektion von Macht dienen."
- },
- "space_race_events.82.f": {
-  "en": "\\\"A laboratory, a mine, or a fortress. Each choice shapes not just what we do on the Moon, but who we become as a spacefaring nation.\\\"\\n\\n— Lunar Planning Commission",
-  "de": "„Ein Labor, eine Mine oder eine Festung. Jede Wahl prägt nicht nur, was wir auf dem Mond tun, sondern wer wir als raumfahrende Nation werden.“\\n\\n— Kommission für die Mondplanung"
- },
- "space_race_events.82.t": {
-  "en": "The Purpose of the Base",
-  "de": "Der Zweck der Basis"
  },
  "space_race_events.83.a": {
   "en": "Direct landing: plant our flag on Mars now.",

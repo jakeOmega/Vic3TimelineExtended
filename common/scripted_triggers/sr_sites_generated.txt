@@ -164,30 +164,8 @@ sr_sites_lunar_open = {
 	}
 }
 
-# THIS holds a lunar world (the old-save migration, sr_lunar_migrate_country).
-# Country scope.
-sr_holds_lunar_world = {
-	OR = {
-		global_var:sr_site_holder_shackleton ?= this
-		global_var:sr_site_holder_peary ?= this
-		global_var:sr_site_holder_tranquility ?= this
-		global_var:sr_site_holder_marius_hills ?= this
-		global_var:sr_site_holder_daedalus ?= this
-		global_var:sr_site_holder_imbrium ?= this
-	}
-}
-
-# A lunar world the migration can give: unclaimed and not a ruin. Any scope.
-sr_lunar_world_free_any = {
-	OR = {
-		sr_lunar_world_free_shackleton = yes
-		sr_lunar_world_free_peary = yes
-		sr_lunar_world_free_tranquility = yes
-		sr_lunar_world_free_marius_hills = yes
-		sr_lunar_world_free_daedalus = yes
-		sr_lunar_world_free_imbrium = yes
-	}
-}
+# A lunar world, as sr_sites_lunar_open reads it: unclaimed and not a ruin.
+# Any scope.
 sr_lunar_world_free_shackleton = {
 	NOT = { has_global_variable = sr_colony_shackleton }
 	NOT = { has_global_variable = sr_site_ruined_shackleton }

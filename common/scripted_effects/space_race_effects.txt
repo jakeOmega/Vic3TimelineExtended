@@ -1,7 +1,7 @@
 ﻿# Space Race Scripted Effects
 
 # Per-JE on_monthly_pulse body for the milestone progress tick. Country scope.
-# Drives 7 of the 8 milestone JEs (solar_colonization has a structurally
+# Drives 6 of the 7 milestone JEs (solar_colonization has a structurally
 # different progress loop and stays inline). The failure roll reads
 # sr_risk_pct_$MILESTONE$, the same script value the journal-entry widget shows
 # as "Setback risk" — there is no longer a sr_base_risk proxy variable and no
@@ -17,7 +17,7 @@
 #
 # Parameters:
 #   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
-#                 moon_base, mars_landing, interstellar_probe). Resolves the
+#                 mars_landing, interstellar_probe). Resolves the
 #                 sr_safe_/sr_ambitious_/sr_progress_/sr_failed_ variable
 #                 namespace and the sr_risk_pct_/sr_base_risk_ script values.
 sr_monthly_progress_update_effect = {
@@ -50,7 +50,6 @@ sr_recalculate_cost = {
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = orbital            }
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = moon_landing       }
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = probe              }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = moon_base          }
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
 	sr_clear_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
@@ -59,7 +58,6 @@ sr_recalculate_cost = {
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = orbital            }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = moon_landing       }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = probe              }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = moon_base          }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
@@ -105,7 +103,6 @@ sr_refresh_milestone_statuses = {
 	sr_set_milestone_status_base = { MILESTONE = orbital            }
 	sr_set_milestone_status_base = { MILESTONE = moon_landing       }
 	sr_set_milestone_status_base = { MILESTONE = probe              }
-	sr_set_milestone_status_base = { MILESTONE = moon_base          }
 	sr_set_milestone_status_base = { MILESTONE = mars_landing       }
 	sr_set_milestone_status_base = { MILESTONE = interstellar_probe }
 	sr_set_milestone_status_base = { MILESTONE = solar_colonization }
@@ -119,7 +116,6 @@ sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = orbital            }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = probe              }
-	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_base          }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = mars_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = interstellar_probe }
 	# Solar colonization's fleets staged in orbit wait for a deactivated
@@ -181,7 +177,6 @@ sr_temporary_safety_review_effect = {
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = orbital            }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_landing       }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = probe              }
-	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_base          }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = mars_landing       }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = interstellar_probe }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = solar_colonization }
@@ -198,7 +193,6 @@ sr_setback_lose_months = {
 	sr_setback_lose_months_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
-	sr_setback_lose_months_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
@@ -210,7 +204,6 @@ sr_clear_failed_milestone_flags = {
 	sr_clear_failed_flag_base = { MILESTONE = orbital            }
 	sr_clear_failed_flag_base = { MILESTONE = moon_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = probe              }
-	sr_clear_failed_flag_base = { MILESTONE = moon_base          }
 	sr_clear_failed_flag_base = { MILESTONE = mars_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = interstellar_probe }
 	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
@@ -226,7 +219,6 @@ sr_switch_setback_milestone_to_safe = {
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = orbital            }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_landing       }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = probe              }
-	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_base          }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = mars_landing       }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = interstellar_probe }
 	# Only while its controls are offered (sr_solar_controls_shown), so the event
@@ -245,7 +237,6 @@ sr_boost_active_milestones = {
 	sr_boost_active_milestone_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
-	sr_boost_active_milestone_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	# Solar colonization's journal entry stays open, frozen, while its production
@@ -445,14 +436,14 @@ sr_cleanup_milestone_variables_effect = {
 # The top-level helpers (sr_temporary_safety_review_effect,
 # sr_setback_lose_months, sr_clear_failed_milestone_flags,
 # sr_switch_setback_milestone_to_safe, sr_boost_active_milestones) all walk the
-# same 8 milestones (suborbital..solar_colonization). Each delegates to one of
+# same 7 milestones (suborbital..solar_colonization). Each delegates to one of
 # these bases and the orchestrator lists the tokens explicitly so the support
 # matrix stays grep-able at the call site.
 
 # Apply a temporary safety review modifier to the JE owning the failed milestone
 # (scope:sr_setback_$MILESTONE$ — see "The setback a failure event reports"
 # above), and clear that milestone's failure flag. Country scope. Caller
-# iterates the standard 8 milestone tokens.
+# iterates the standard 7 milestone tokens.
 sr_apply_safety_review_to_milestone_base = {
 	if = {
 		limit = { exists = scope:sr_setback_$MILESTONE$ }
@@ -511,7 +502,6 @@ sr_resolve_setback_markers = {
 		sr_resolve_setback_marker_base = { MILESTONE = orbital            }
 		sr_resolve_setback_marker_base = { MILESTONE = moon_landing       }
 		sr_resolve_setback_marker_base = { MILESTONE = probe              }
-		sr_resolve_setback_marker_base = { MILESTONE = moon_base          }
 		sr_resolve_setback_marker_base = { MILESTONE = mars_landing       }
 		sr_resolve_setback_marker_base = { MILESTONE = interstellar_probe }
 		sr_resolve_setback_marker_base = { MILESTONE = solar_colonization }
@@ -555,7 +545,7 @@ sr_clear_milestone_cost_modifiers_base = {
 # level past the cap still costs in full and adds its full +25% (lunar
 # colonization design § 5.1). Multiplier names interpolate from $MILESTONE$
 # (sr_<X>_cost, sr_funding_<X>_effective and sr_funding_<X>_level — verified to
-# exist for all 8 tokens). Country scope. ?= because each milestone entry's immediate
+# exist for all 7 tokens). Country scope. ?= because each milestone entry's immediate
 # sets sr_active_<X> and then runs sr_recalculate_cost, and when a
 # revolution's winner inherits the entry that immediate runs before je: can
 # find it ("Failed to scope to journal entry by tag", Spain's moon landing in
@@ -612,9 +602,9 @@ sr_cleanup_milestone_if_inactive_base = {
 
 # --- Shared bodies for the milestone controls --------------------------------
 # The five things a player can do to a running milestone, four of them also the
-# AI's. Each of the 32 journal-entry buttons and each op on that milestone's
+# AI's. Each of the 28 journal-entry buttons and each op on that milestone's
 # scripted GUI runs the body from here, so the two surfaces cannot drift apart.
-# $MILESTONE$ is one of the eight milestone tokens. Standard is the player's
+# $MILESTONE$ is one of the seven milestone tokens. Standard is the player's
 # only (op 4 on the scripted GUI): the AI never had a way back from an approach,
 # and starts on Standard like everyone.
 #
@@ -750,7 +740,7 @@ sr_effect_fund_down = {
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
 # sr_space_program_incompatible_tt, and it would need a second parameter because
-# the eight milestones gate on five different country_sr_*_program_bool modifiers.
+# the milestones gate on different country_sr_*_program_bool modifiers.
 sr_set_milestone_status_base = {
 	if = {
 		limit = { NOT = { has_variable = sr_active_$MILESTONE$ } }
@@ -804,7 +794,6 @@ sr_complete_suborbital_effect       = { sr_complete_milestone_effect_base = { MI
 sr_complete_orbital_effect          = { sr_complete_milestone_effect_base = { MILESTONE = orbital          } }
 sr_complete_moon_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = moon_landing     } }
 sr_complete_probe_effect            = { sr_complete_milestone_effect_base = { MILESTONE = probe            } }
-sr_complete_moon_base_effect        = { sr_complete_milestone_effect_base = { MILESTONE = moon_base        } }
 sr_complete_mars_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = mars_landing     } }
 
 # Interstellar probe is the same shape but additionally raises the
@@ -826,8 +815,8 @@ sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILEST
 # The Moon Base milestone is retired (§ 7): the first lunar world a country
 # founds with its own fleet takes its place in the race. Called by each lunar
 # world's sr_site_found_<key> and lunar draw branch (gen_solar_sites.py), after
-# the world's sync, so a world received by treaty, inheritance, seizure, a
-# petition or the old-save migration (sr_lunar_migrate_take_<key>) never counts.
+# the world's sync, so a world received by treaty, inheritance, seizure or a
+# petition never counts.
 # The record keeps the Moon Base's names, so every reader of
 # sr_completed_moon_base, sr_was_first_moon_base and sr_global_first_moon_base
 # (the Program row, Space Powers, the UN count, covert "ahead in space", the
@@ -912,7 +901,7 @@ sr_fire_ambitious_failure_event = {
 			trigger = { sr_setback_is_deep_space_probe = yes }
 			trigger_event = { id = space_race_events.13 }
 		}
-		# Habitat Depressurization (moon base/mars/colonization)
+		# Habitat Depressurization (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.14 }
@@ -931,7 +920,7 @@ sr_fire_ambitious_failure_event = {
 			}
 			trigger_event = { id = space_race_events.16 }
 		}
-		# Crew Medical Emergency (moon base/mars/colonization)
+		# Crew Medical Emergency (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.17 }
@@ -959,7 +948,7 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger_event = { id = space_race_events.70 }
 		}
-		# Capsule Depressurization (moon base/mars/colonization)
+		# Capsule Depressurization (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.71 }
@@ -1073,7 +1062,6 @@ sr_rivals_estimate_refresh = {
 	sr_rivals_estimate_refresh_base = { MILESTONE = orbital            }
 	sr_rivals_estimate_refresh_base = { MILESTONE = moon_landing       }
 	sr_rivals_estimate_refresh_base = { MILESTONE = probe              }
-	sr_rivals_estimate_refresh_base = { MILESTONE = moon_base          }
 	sr_rivals_estimate_refresh_base = { MILESTONE = mars_landing       }
 	sr_rivals_estimate_refresh_base = { MILESTONE = interstellar_probe }
 	sr_rivals_estimate_refresh_base = { MILESTONE = solar_colonization }
@@ -1151,7 +1139,6 @@ sr_own_fuzz_refresh = {
 	sr_power_fuzz_base = { MILESTONE = orbital            }
 	sr_power_fuzz_base = { MILESTONE = moon_landing       }
 	sr_power_fuzz_base = { MILESTONE = probe              }
-	sr_power_fuzz_base = { MILESTONE = moon_base          }
 	sr_power_fuzz_base = { MILESTONE = mars_landing       }
 	sr_power_fuzz_base = { MILESTONE = interstellar_probe }
 	sr_power_fuzz_base = { MILESTONE = solar_colonization }
@@ -1195,7 +1182,6 @@ sr_powers_refresh = {
 		sr_power_fuzz_base = { MILESTONE = orbital            }
 		sr_power_fuzz_base = { MILESTONE = moon_landing       }
 		sr_power_fuzz_base = { MILESTONE = probe              }
-		sr_power_fuzz_base = { MILESTONE = moon_base          }
 		sr_power_fuzz_base = { MILESTONE = mars_landing       }
 		sr_power_fuzz_base = { MILESTONE = interstellar_probe }
 		sr_power_fuzz_base = { MILESTONE = solar_colonization }
@@ -1639,13 +1625,6 @@ sr_sync_probe_entry = {
 	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_mars     MODIFIER = sr_choice_probe_mars }
 	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_asteroid MODIFIER = sr_choice_probe_asteroid }
 }
-sr_sync_moon_base_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_scientific MODIFIER = sr_choice_moon_base_scientific }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_industrial MODIFIER = sr_choice_moon_base_industrial }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_military   MODIFIER = sr_choice_moon_base_military }
-}
 sr_sync_mars_landing_entry = {
 	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = safe      }
 	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = ambitious }
@@ -1684,7 +1663,6 @@ sr_sync_space_race_entries = {
 	sr_sync_orbital_entry = yes
 	sr_sync_moon_landing_entry = yes
 	sr_sync_probe_entry = yes
-	sr_sync_moon_base_entry = yes
 	sr_sync_mars_landing_entry = yes
 	sr_sync_interstellar_probe_entry = yes
 	sr_sync_solar_colonization_entry = yes

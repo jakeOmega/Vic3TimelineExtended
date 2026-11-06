@@ -1769,7 +1769,7 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Multi-stage competitive space race system across nine journal entries — seven milestones with a bar (one of them, the Moon Base, retired 2026-10-29), the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
+Multi-stage competitive space race system across eight journal entries — six milestones with a bar (a seventh, the Moon Base, retired 2026-10-29 and removed with vanilla 1.15), the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
 - **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing → Deep-Space Probe / Mars Landing / Solar System Colonization on the Moon (parallel; all three need the Moon Landing) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization beyond the Moon (repeatable; each world needs the Mars Landing). The Moon Base is retired: the first lunar colony takes its place
@@ -1789,7 +1789,7 @@ Multi-stage competitive space race system across nine journal entries — seven 
 | Orbital Flight | guided_missiles | Suborbital complete |
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital + Moon Landing complete (shown once Orbital is done) |
-| Moon Base | — | Retired 2026-10-29: never shown or possible; the first lunar colony takes its place (`sr_lunar_colony_founded`) and an old save's Moon Base becomes a lunar colony (mod_systems/space_race.md → Space Race → *The Moon Base retired*) |
+| Moon Base | — | Retired 2026-10-29, its entry removed with vanilla 1.15 (#1407): the first lunar colony takes its place (`sr_lunar_colony_founded`; mod_systems/space_race.md → Space Race → *The Moon Base retired*) |
 | Mars Landing | knowledge_economy | Orbital + Moon Landing complete (shown once Orbital is done) |
 | Interstellar Probe | aneutronic_fusion (compact_fusion_reactors until 2026-10-31) | Deep-Space Probe + Mars Landing complete |
 | Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
@@ -1865,8 +1865,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 - `.12`-`.19`, `.21`-`.25`, `.70`-`.73`, `.75` — Themed setbacks and incidents (pad fires, lost probes, scandals, supply failures, …); `.74` — An Unexpected Breakthrough; `.26` — When Politics Reaches Orbit
 - `.60` — Interstellar probe data received; its results are `.601`-`.630` in `events/probe_result_events.txt`
 - `.76` — Programme discontinued (a lost or lowered launch complex)
-- `.80`-`.83` — Choice events asked once per milestone (who flies first, probe target, the Moon base's purpose, the Mars strategy); `.82` is retired to one option for an old save's open copy
-- `.109` — An old save's Moon Base became a lunar colony, or its Moon is open by choice: with every other world claimed, the decision Resume Solar System Colonization (or Begin Solar Colonization) runs a program for the Moon; a finished one keeps its rewards, and Commercial Space Industry pauses while it runs (players; one notice for both)
+- `.80`, `.81`, `.83` — Choice events asked once per milestone (who flies first, probe target, the Mars strategy); `.82`, the Moon Base's purpose, went with the entry (vanilla 1.15)
 - `events/space_race_colony_events.txt` — 40 colony establishment events
 
 ### Related Files

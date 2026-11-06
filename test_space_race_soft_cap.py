@@ -32,7 +32,7 @@ GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui"
 NATION_TAB = os.path.join(REPO, "scripts", "generators", "gen_nation_tab.py")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")
 STEPS = 6
 # The design's table: effective levels past the cap after 1..6 levels past it.

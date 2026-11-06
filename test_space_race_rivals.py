@@ -25,7 +25,7 @@ ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.t
 COVERT_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "covert_warfare_effects.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")  # je_space_race.txt's order
 FUZZ_STEPS = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]
 ROW_VALUE = ("[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"

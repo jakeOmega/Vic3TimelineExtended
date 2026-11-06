@@ -14,9 +14,6 @@ sr_moon_landing_goal = {
 sr_probe_goal = {
 	value = 150
 }
-sr_moon_base_goal = {
-	value = 300
-}
 sr_mars_landing_goal = {
 	value = 450
 }
@@ -201,7 +198,6 @@ sr_base_risk_suborbital          = { value = 5  }
 sr_base_risk_orbital             = { value = 6  }
 sr_base_risk_moon_landing        = { value = 6  }
 sr_base_risk_probe               = { value = 6  }
-sr_base_risk_moon_base           = { value = 8  }
 sr_base_risk_mars_landing        = { value = 9  }
 sr_base_risk_interstellar_probe  = { value = 9  }
 sr_base_risk_solar_colonization  = { value = 10 }
@@ -241,15 +237,6 @@ sr_risk_pct_moon_landing = {
 }
 sr_risk_pct_probe = {
 	value = sr_base_risk_probe
-	multiply = {
-		value = 1
-		add = modifier:country_space_race_risk_mult
-	}
-	min = 1
-	max = 50
-}
-sr_risk_pct_moon_base = {
-	value = sr_base_risk_moon_base
 	multiply = {
 		value = 1
 		add = modifier:country_space_race_risk_mult
@@ -338,10 +325,6 @@ sr_funding_moon_landing_level = {
 sr_funding_probe_level = {
 	value = 0
 	owner = { if = { limit = { has_variable = sr_funding_probe } add = var:sr_funding_probe } }
-}
-sr_funding_moon_base_level = {
-	value = 0
-	owner = { if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base } }
 }
 sr_funding_mars_landing_level = {
 	value = 0
@@ -482,34 +465,6 @@ sr_funding_probe_effective = {
 		add = sr_funding_probe_past_cap_effective
 	}
 }
-sr_funding_moon_base_within_cap = {
-	value = 0
-	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
-	max = sr_max_funding_level
-	min = 0
-}
-sr_funding_moon_base_past_cap = {
-	value = 0
-	if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
-	subtract = sr_max_funding_level
-	min = 0
-}
-sr_funding_moon_base_past_cap_effective = {
-	value = 0
-	if = { limit = { sr_funding_moon_base_past_cap >= 1 } add = sr_funding_past_cap_step_1 }
-	if = { limit = { sr_funding_moon_base_past_cap >= 2 } add = sr_funding_past_cap_step_2 }
-	if = { limit = { sr_funding_moon_base_past_cap >= 3 } add = sr_funding_past_cap_step_3 }
-	if = { limit = { sr_funding_moon_base_past_cap >= 4 } add = sr_funding_past_cap_step_4 }
-	if = { limit = { sr_funding_moon_base_past_cap >= 5 } add = sr_funding_past_cap_step_5 }
-	if = { limit = { sr_funding_moon_base_past_cap >= 6 } add = sr_funding_past_cap_step_6 }
-}
-sr_funding_moon_base_effective = {
-	value = 0
-	owner = {
-		add = sr_funding_moon_base_within_cap
-		add = sr_funding_moon_base_past_cap_effective
-	}
-}
 sr_funding_mars_landing_within_cap = {
 	value = 0
 	if = { limit = { has_variable = sr_funding_mars_landing } add = var:sr_funding_mars_landing }
@@ -609,11 +564,10 @@ sr_cost_factor_suborbital         = { value = 1   } # Era 6
 sr_cost_factor_orbital            = { value = 1.5 } # Era 7
 sr_cost_factor_moon_landing       = { value = 2   } # Era 7
 sr_cost_factor_probe              = { value = 2   } # Era 7
-sr_cost_factor_moon_base          = { value = 5   } # Era 10
 sr_cost_factor_mars_landing       = { value = 6   } # Era 10
 sr_cost_factor_interstellar_probe = { value = 12  } # Era 12
-# Era 10 to 11 (lunar colonization design § 4): 5, the Moon Base's, until the
-# country's own Mars Landing, then 8. Read through owner, so it holds in the
+# Era 10 to 11 (lunar colonization design § 4): 5, the retired Moon Base's,
+# until the country's own Mars Landing, then 8. Read through owner, so it holds in the
 # entry's scope (the cost modifier's multiplier) and in the country's (the
 # panel). The Mars Landing's completion re-posts the cost
 # (sr_complete_milestone_effect runs sr_recalculate_cost).
@@ -674,15 +628,6 @@ sr_probe_cost = {
 	}
 	multiply = sr_cost_factor_probe
 }
-sr_moon_base_cost = {
-	value = 0
-	owner = {
-		if = { limit = { has_variable = sr_funding_moon_base } add = var:sr_funding_moon_base }
-		if = { limit = { has_variable = sr_safe_moon_base sr_ai_should_participate = yes } add = 1 }
-		if = { limit = { has_variable = sr_ambitious_moon_base sr_ai_should_participate = yes } add = 2 }
-	}
-	multiply = sr_cost_factor_moon_base
-}
 sr_mars_landing_cost = {
 	value = 0
 	owner = {
@@ -727,10 +672,6 @@ sr_progress_moon_landing_value = {
 sr_progress_probe_value = {
 	value = 0
 	if = { limit = { has_variable = sr_progress_probe } add = var:sr_progress_probe }
-}
-sr_progress_moon_base_value = {
-	value = 0
-	if = { limit = { has_variable = sr_progress_moon_base } add = var:sr_progress_moon_base }
 }
 sr_progress_mars_landing_value = {
 	value = 0
@@ -806,10 +747,6 @@ sr_pace_rate_probe = {
 	value = sr_progress
 	min = 0.5
 }
-sr_pace_rate_moon_base = {
-	value = sr_progress
-	min = 0.5
-}
 sr_pace_rate_mars_landing = {
 	value = sr_progress
 	min = 0.5
@@ -838,9 +775,6 @@ sr_risk_shown_moon_landing = {
 }
 sr_risk_shown_probe = {
 	value = sr_risk_pct_probe
-}
-sr_risk_shown_moon_base = {
-	value = sr_risk_pct_moon_base
 }
 sr_risk_shown_mars_landing = {
 	value = sr_risk_pct_mars_landing
@@ -872,10 +806,6 @@ sr_setbacks_moon_landing_value = {
 sr_setbacks_probe_value = {
 	value = 0
 	if = { limit = { has_variable = sr_probe_setbacks } add = var:sr_probe_setbacks }
-}
-sr_setbacks_moon_base_value = {
-	value = 0
-	if = { limit = { has_variable = sr_moon_base_setbacks } add = var:sr_moon_base_setbacks }
 }
 sr_setbacks_mars_landing_value = {
 	value = 0
@@ -922,12 +852,6 @@ sr_eta_months_probe = {
 	if = { limit = { has_variable = sr_progress_probe } subtract = var:sr_progress_probe }
 	min = 0
 	divide = sr_pace_rate_probe
-}
-sr_eta_months_moon_base = {
-	value = sr_moon_base_goal
-	if = { limit = { has_variable = sr_progress_moon_base } subtract = var:sr_progress_moon_base }
-	min = 0
-	divide = sr_pace_rate_moon_base
 }
 sr_eta_months_mars_landing = {
 	value = sr_mars_landing_goal
@@ -1012,19 +936,6 @@ sr_rival_est_open_probe = {
 	min = 0
 	max = 1
 }
-sr_rival_est_open_moon_base = {
-	value = sr_progress_moon_base_value
-	divide = sr_moon_base_goal
-	if = {
-		limit = { has_variable = sr_fuzz_moon_base }
-		add = {
-			value = var:sr_fuzz_moon_base
-			multiply = sr_rival_band_open
-		}
-	}
-	min = 0
-	max = 1
-}
 sr_rival_est_open_mars_landing = {
 	value = sr_progress_mars_landing_value
 	divide = sr_mars_landing_goal
@@ -1072,14 +983,14 @@ sr_rival_est_open_solar_colonization = {
 
 # A power's furthest milestone under way, as a code: 0 none, then
 # je_space_race.txt's order, 1 Suborbital Flight to 7 the Interstellar Probe,
-# and 8 Solar System Colonization while it colonizes. The wait for the probe's
-# data has no progress to estimate, so it is left out. Scope: country
+# and 8 Solar System Colonization while it colonizes. 5 was the retired Moon
+# Base, which never runs. The wait for the probe's data has no progress to
+# estimate, so it is left out. Scope: country
 sr_power_lead_code = {
 	value = 0
 	if = { limit = { sr_solar_colonization_running = yes } value = 8 }
 	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 7 }
 	else_if = { limit = { has_variable = sr_active_mars_landing } value = 6 }
-	else_if = { limit = { has_variable = sr_active_moon_base } value = 5 }
 	else_if = { limit = { has_variable = sr_active_probe } value = 4 }
 	else_if = { limit = { has_variable = sr_active_moon_landing } value = 3 }
 	else_if = { limit = { has_variable = sr_active_orbital } value = 2 }

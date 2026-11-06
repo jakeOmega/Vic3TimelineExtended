@@ -41,11 +41,16 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "space_ra
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-RACING = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+RACING = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
           "interstellar_probe"]
-CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in je_space_race.txt's order
-ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+CONTROLLED = RACING + ["solar_colonization"]  # the seven with controls, in je_space_race.txt's order
+ALL = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
        "interstellar_probe", "interstellar_results", "solar_colonization"]  # journal order
+# The retired Moon Base has no entry since vanilla 1.15 (#1407): the first lunar
+# colony keeps its record, so the programme rows keep its icon and its first.
+RETIRED = ["moon_base"]
+FIRSTS = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+          "interstellar_probe"]  # the races with a first
 # The programme row: one icon per entry, except that the Interstellar Probe and
 # the wait for its data share one four-state icon (owner's play-test, round 3).
 ROW = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
@@ -181,7 +186,7 @@ def _milestones_named(text):
     """The milestone tokens a stretch of text mentions, longest names first so
     'interstellar_probe' is not also read as 'probe'."""
     found = set()
-    for m in sorted(ALL, key=len, reverse=True):
+    for m in sorted(ALL + RETIRED, key=len, reverse=True):
         pat = rf"(?<=[_'/]){m}(?![a-z])"
         if re.search(pat, text):
             found.add(m)
@@ -766,7 +771,7 @@ class ProgrammeRowTest(unittest.TestCase):
                 self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
                 self.assertEqual(_milestones_named(cell), {m})
                 self.assertIn(f"ScriptValue('sr_disp_prog_{m}')", cell)
-                self.assertEqual('blockoverride "first"' in cell, m in RACING)
+                self.assertEqual('blockoverride "first"' in cell, m in FIRSTS)
 
     def test_the_row_fits_the_column(self):
         cell = re.search(r"size = \{ (\d+) \d+ \}", _type_body(_read(GUI), "te_sr_ov_prog_cell")).group(1)
@@ -777,7 +782,7 @@ class ProgrammeRowTest(unittest.TestCase):
     def test_the_textures_exist(self):
         tracked = subprocess.run(["git", "-C", REPO, "ls-files", "gfx/interface/icons/event_icons/"],
                                  capture_output=True, text=True, check=True).stdout.split()
-        for m in ALL:
+        for m in ALL + RETIRED:
             self.assertIn(f"gfx/interface/icons/event_icons/je_space_race_{m}.dds", tracked)
 
     def test_every_entry_has_an_overview_that_draws_the_row(self):
@@ -845,9 +850,10 @@ class InterstellarCellTest(unittest.TestCase):
 
 
 
-# The furthest milestone a Space Powers row estimates, by code (sr_power_lead_code).
-LEAD = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
-        "interstellar_probe", "solar_colonization"]
+# The furthest milestone a Space Powers row estimates, by code (sr_power_lead_code):
+# je_space_race.txt's order, 5 (the retired Moon Base, #1407) unused.
+LEAD = {1: "suborbital", 2: "orbital", 3: "moon_landing", 4: "probe", 6: "mars_landing",
+        7: "interstellar_probe", 8: "solar_colonization"}
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
@@ -883,7 +889,7 @@ class SpacePowersTest(unittest.TestCase):
     def test_the_refresh_fills_the_list(self):
         effects = _read(EFFECTS)
         refresh = _block(effects, "sr_powers_refresh")
-        for m in LEAD:
+        for m in LEAD.values():
             self.assertIn(f"sr_power_fuzz_base = {{ MILESTONE = {m}", refresh)
         self.assertLess(refresh.index("sr_powers_clear = yes"), refresh.index("ordered_country"))
         walk = refresh[refresh.index("ordered_country"):]
@@ -926,9 +932,9 @@ class SpacePowersTest(unittest.TestCase):
                 found = re.findall(r"ScriptValue\('sr_disp_power_lead'\), '\(CFixedPoint\)(\d)' \)\]\"\s+"
                                    r"text = \"(\w+)\"", body)
                 self.assertEqual(found, [("0", "je_space_race_widget_power_lead_none")]
-                                 + [(str(c), prefix + m) for c, m in enumerate(LEAD, start=1)])
+                                 + [(str(c), prefix + m) for c, m in LEAD.items()])
         own = _type_body(self.gui, "te_sr_power_lead_own")
-        for m in LEAD:
+        for m in LEAD.values():
             self.assertIn(f"ScriptValue('sr_disp_progress_frac_{m}')", _loc(f"je_space_race_widget_power_own_{m}"))
             band = _loc(f"je_space_race_widget_power_lead_{m}")
             for end in ("lo", "hi"):
@@ -939,7 +945,7 @@ class SpacePowersTest(unittest.TestCase):
         body = _strip_comments(_block(_read(VALUES), "sr_power_lead_code"))
         found = re.findall(r"limit = \{ (?:has_variable = sr_active_(\w+)|sr_(solar_colonization)_running = yes) \} value = (\d)", body)
         self.assertEqual([(a or b, int(c)) for a, b, c in found],
-                         list(reversed([(m, c) for c, m in enumerate(LEAD, start=1)])))
+                         list(reversed([(m, c) for c, m in LEAD.items()])))
 
     def test_eight_icons_in_journal_order(self):
         row = _type_body(self.gui, "te_sr_power_row")
@@ -959,7 +965,7 @@ class SpacePowersTest(unittest.TestCase):
                 self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
                 self.assertEqual(_milestones_named(cell), {m})
                 self.assertIn(f"State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_{m}')", cell)
-                self.assertEqual('blockoverride "first"' in cell, m in RACING)
+                self.assertEqual('blockoverride "first"' in cell, m in FIRSTS)
         # 8 cells and their spacing, then the estimate column, inside the 480 row
         cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_cell")).group(1))
         column = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_lead_band")).group(1))
@@ -1139,7 +1145,7 @@ class SpaceRaceIconsTest(unittest.TestCase):
         self.assertEqual(pie.count("framesize = { 128 128 }\n\t\t\t\tframe = 2"), 3)
 
     def test_no_placeholder_left(self):
-        journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL}
+        journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL + RETIRED}
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
                 self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT

@@ -9715,18 +9715,6 @@
   "en": "Sending robots ahead to prepare the landing site dramatically reduces human risk and accelerates readiness.",
   "de": "Das Vorausschicken von Robotern zur Vorbereitung des Landeplatzes verringert das Risiko für Menschen erheblich und beschleunigt die Einsatzbereitschaft."
  },
- "sr_choice_moon_base_industrial_desc": {
-  "en": "Heavy mining equipment and resource extraction in low gravity present significant engineering challenges.",
-  "de": "Schwere Bergbauausrüstung und Rohstoffförderung bei geringer Schwerkraft stellen erhebliche technische Herausforderungen dar."
- },
- "sr_choice_moon_base_military_desc": {
-  "en": "A classified military installation adds operational complexity and higher failure potential.",
-  "de": "Eine geheime militärische Anlage erhöht die operative Komplexität und das Fehlschlagsrisiko."
- },
- "sr_choice_moon_base_scientific_desc": {
-  "en": "A research-focused installation follows proven designs, minimizing risk while advancing knowledge.",
-  "de": "Eine auf Forschung ausgerichtete Anlage folgt bewährten Entwürfen, minimiert das Risiko und erweitert dabei das Wissen."
- },
  "sr_choice_orbital_civilian_desc": {
   "en": "Sending an untrained civilian into orbit is bold but risky — a public relations gamble that could end in tragedy.",
   "de": "Einen ungeschulten Zivilisten in die Umlaufbahn zu schicken ist kühn, aber riskant – ein PR-Wagnis, das in einer Tragödie enden könnte."
@@ -10234,18 +10222,6 @@
  "sr_moon_base_desc": {
   "en": "A permanent human presence on the Moon strengthens our position in the [concept_space_race].",
   "de": "Eine dauerhafte menschliche Präsenz auf dem Mond stärkt unsere Position im [concept_space_race]."
- },
- "sr_moon_base_industrial_desc": {
-  "en": "Our lunar base focuses on mining and materials processing, boosting industrial output.",
-  "de": "Unsere Mondbasis konzentriert sich auf Bergbau und Materialverarbeitung und steigert die industrielle Produktion."
- },
- "sr_moon_base_military_desc": {
-  "en": "Our lunar base provides strategic military observation and force projection capabilities.",
-  "de": "Unsere Mondbasis bietet strategische militärische Beobachtung und Machtprojektion."
- },
- "sr_moon_base_scientific_desc": {
-  "en": "Our lunar base is dedicated to pure research, driving technological breakthroughs.",
-  "de": "Unsere Mondbasis widmet sich der reinen Forschung und treibt technologische Durchbrüche voran."
  },
  "sr_moon_landing": {
   "en": "Moon Landing Achieved",

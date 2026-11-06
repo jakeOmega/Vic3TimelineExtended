@@ -342,7 +342,7 @@ te_pops_demog_tab_unlock_sgui = {
 # window is up for every played country (gui/te_systems_window.gui).
 
 # ---------------------------------------------------------------------------
-# Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
+# Space Race: the eight je_space_race_* entries (je_space_race.txt). The tab
 # opens with the first milestone and stays open from then on (sr_in_space_race:
 # the country has run a milestone, or holds an entry), so the Space Powers
 # standings and Orbit, which read no entry, show between milestones too
@@ -427,16 +427,6 @@ te_window_space_race_probe_sgui = {
 	effect = { }
 }
 
-te_window_space_race_moon_base_sgui = {
-	scope = country
-	is_shown = {
-		sr_space_race_on = yes
-		has_journal_entry = je_space_race_moon_base
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
 
 te_window_space_race_mars_landing_sgui = {
 	scope = country

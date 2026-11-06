@@ -62,7 +62,7 @@ Page = collections.namedtuple("Page", "key title flags tabs entries rows popup_t
                               defaults=((), (), None))
 
 SR_ENTRIES = ("je_space_race_suborbital", "je_space_race_orbital", "je_space_race_moon_landing",
-              "je_space_race_probe", "je_space_race_moon_base", "je_space_race_mars_landing",
+              "je_space_race_probe", "je_space_race_mars_landing",
               "je_space_race_interstellar_probe", "je_space_race_interstellar_results",
               "je_space_race_solar_colonization")
 
@@ -99,7 +99,7 @@ PAGES = [
          ("je_tax_code",),
          popup_title="text = \"[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( "
                      "GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]\""),
-    # the nine entries share it; in the window the "?" is in the milestones'
+    # the eight entries share it; in the window the "?" is in the milestones'
     # generated headers (SpaceRaceHeaderTest)
     Page("space_race", "je_space_race_widget_how_header", ("sr_panel_how_open", "sr_panel_how_colonies_open"), (),
          SR_ENTRIES),
