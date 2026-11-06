@@ -238,18 +238,17 @@ post_scarcity_events.3 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = universal_basic_income
 		NOT = { has_law = law_type:law_post-scarcity }
 		has_technology_researched = artificial_intelligence
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = ai_bureaucracy_debate_happened }
 		# Automated Bureaucracy (or Algorithmic Governance, which installs it)
 		# has already settled the question.
 		NOT = { has_law = law_type:law_automated_bureaucracy }
-	}
-
-	immediate = {
-		set_variable = ai_bureaucracy_debate_happened
 	}
 
 	# Automate government - efficient but unsettling

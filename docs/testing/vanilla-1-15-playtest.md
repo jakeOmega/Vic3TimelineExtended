@@ -28,7 +28,11 @@ game, in English.
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
   entry is `can_revolution_inherit = no`).
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
-  (save before and after, `scripts/analysis/save_country_probe.py`).
+  (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
+  the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in
+  `debug.log` if it fires twice for one nation in a game started after the change. It logs nothing while the record
+  holds: read a game with saves, loads and a revolution won past the canary's ten-year modifier. Fallback if BROKEN:
+  each event sets its variable in `immediate` again (the triggers still read them).
 - **C21**, contextless entries: `should_be_involved` re-checks, what `je:` and `JournalEntry.GetCountry` return for one,
   `effect_all_involved`. A contextless probe entry could show in a player's journal, so none was built.
 
@@ -73,6 +77,10 @@ or Spanish game.
   is hidden for a North American union and goes invalid, with its cleanup, if one forms. The three vanilla tax
   entries complete under the Tax Code rule.
 - How the panel shows an `INJECT:`ed outcome: listed as one more, merged, or dropped (the parser assumes one more).
+- `disable_evaluation` (#1404): in a game with Social Movements off, no Civil Rights, Digital Rights, Mental Health,
+  Morphological Freedom, Human Augmentation or Post-Scarcity entry ever shows; in a game with every rule on, each
+  entry appears as before and every country still holds Banking's dormant entry. `debug.log` has no `already has a
+  journal entry` line for a pruned type.
 
 **The journal panel and tooltips**
 - Every journal entry panel opens, and the concluded page too. No duplicate bars under the bars-on-top marker

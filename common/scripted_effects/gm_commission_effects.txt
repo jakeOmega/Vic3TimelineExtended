@@ -164,8 +164,11 @@ gm_com_send_offer = {
 		# cannot block every later opportunity.
 		set_variable = { name = gm_com_offer_watch value = yes months = 6 }
 		# Not over an entry shown but not yet active (gm_country_refresh says why).
+		# The rule too: with it off the entry's inactive record is pruned
+		# (disable_evaluation), so nothing would refuse the add.
 		if = {
 			limit = {
+				gm_system_enabled = yes
 				NOT = { has_journal_entry = je_grand_monuments }
 				NOT = { has_inactive_journal_entry = je_grand_monuments }
 			}

@@ -19,6 +19,10 @@ je_digital_rights = {
 		digital_rights_debate_active_modifier
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { has_game_rule = social_movements_enabled }
+	}
 	is_shown_when_inactive = {
 		has_game_rule = social_movements_enabled
 		OR = {
