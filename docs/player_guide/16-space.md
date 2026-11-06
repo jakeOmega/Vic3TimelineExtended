@@ -307,7 +307,7 @@ the milestone's cost factor for Safe and twice that for Ambitious, so 30 and 60
 a week on the Moon Landing.
 
 Approach, funding and mission choices apply to your whole program, not to the
-milestone they sit on. Their modifiers appear on each milestone's journal entry,
+milestone they sit on, for as long as that milestone runs. Their modifiers appear on each milestone's journal entry,
 but the game adds them up for your country as a whole: every running milestone
 moves at the same pace, and every milestone's base risk is
 scaled by the same total. A Safe approach on one milestone cuts the risk on all
