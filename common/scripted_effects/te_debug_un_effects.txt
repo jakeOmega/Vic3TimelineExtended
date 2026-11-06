@@ -450,7 +450,6 @@ te_debug_un_wipe_entry = {
 	un_state_reconcile = yes
 	te_debug_un_drop = { MODIFIER = un_member_modifier }
 	te_debug_un_drop = { MODIFIER = un_member_privileges_modifier }
-	te_debug_un_drop = { MODIFIER = un_membership_benefits_modifier }
 	te_debug_un_drop = { MODIFIER = un_founding_member_modifier }
 	te_debug_un_drop = { MODIFIER = un_headquarters_modifier }
 	te_debug_un_drop = { MODIFIER = un_security_council_modifier }

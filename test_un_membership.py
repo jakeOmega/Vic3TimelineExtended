@@ -253,8 +253,9 @@ class PrivilegesTests(unittest.TestCase):
                      "un_membership_end_effect")
         self.assertIn("remove_modifier = un_member_privileges_modifier", end)
         je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
-        benefits = je.index("name = un_membership_benefits_modifier")
-        self.assertIn("un_member_draws_benefits = yes", je[benefits - 600:benefits])
+        # Declared on the entry (test_un_scaling_modifiers.py pins the value).
+        benefits = je.index("modifier = un_membership_benefits_modifier")
+        self.assertIn("un_member_draws_benefits = yes", je[benefits:benefits + 400])
         self.assertGreaterEqual(je.count("un_member_privileges_modifier"), 3)
 
 

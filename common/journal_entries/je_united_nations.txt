@@ -146,6 +146,35 @@
 		un_state_restore_all = yes
 	}
 
+	# ---- Scaling modifiers (1.15, #1404; design § 4.11) ----
+	# The modifiers that follow a number, or a state a variable records, are
+	# declared here, and the engine re-reads each value from the owning
+	# country about every four days while the entry is active: every country
+	# that is not decentralized holds it active once the UN can exist
+	# (can_deactivate = no), member or not, so sanction and embargo targets
+	# carry theirs too. Nothing adds or removes them, and has_modifier cannot
+	# see them: their readers test what each value reads (a cache, or a
+	# <modifier>_on mirror, which is the truth). Each value is 0 wherever the
+	# old code would have removed the modifier. test_un_scaling_modifiers.py
+	# pins every declaration and its gate.
+	#
+	# Membership benefits: authority / 50 x (1 + institutional alignment), from
+	# the Contested tier, to a member that draws its benefits (represented, or
+	# its seat carried by a paying overlord, §0.8).
+	scaling_modifiers_while_active = {
+		modifier = un_membership_benefits_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					un_tier_at_least_contested = yes
+					un_member_draws_benefits = yes
+				}
+				add = un_membership_benefits_multiplier
+			}
+		}
+	}
+
 	progressbar = no
 	progress_desc = un_authority_progress_desc
 
@@ -365,29 +394,8 @@
 						je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 					}
 
-					# ---- Apply scaled UN membership modifier ----
-					# Modifier stays applied per-member; the multiplier reads the shared
-					# global authority. Members of a bloc with the Multilateral Institutions
-					# principle scale the benefit further by (1 + country_un_institutional_alignment)
-					# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
-					# Paid from the Contested tier up (redesign phase 2): a Moribund UN
-					# pays its members nothing. And only to a member that draws the
-					# benefits (§0.8): represented, or its seat carried.
-					if = {
-						limit = {
-							un_tier_at_least_contested = yes
-							un_member_draws_benefits = yes
-						}
-						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-						je:je_united_nations ?= { add_modifier = {
-								name = un_membership_benefits_modifier
-								multiplier = un_membership_benefits_multiplier_for_je
-							}
-						}
-					}
-					else = {
-						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-					}
+					# The scaled membership benefits are declared on the entry
+					# (scaling_modifiers_while_active, above).
 
 					# ---- Retired: the blanket infamy modifier ----
 					# Redesign phase 5 (§5.2): a war goal added without a mandate now
@@ -554,7 +562,7 @@
 		header = je_un_preview_membership_benefits_header
 		effect = {
 			custom_tooltip = je_un_preview_membership_benefits_tt
-			add_modifier = { name = un_membership_benefits_modifier }
+			show_as_tooltip = { add_modifier = { name = un_membership_benefits_modifier } }
 		}
 	}
 	event_outcome_activated_effect_desc = {

@@ -551,7 +551,8 @@ un_membership_end_effect = {
 		limit = { has_modifier = un_regime_colony_liberty_modifier }
 		remove_modifier = un_regime_colony_liberty_modifier
 	}
-	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	# The membership benefits are declared on the entry and end with the
+	# membership modifier (un_member_draws_benefits).
 	# NPT enforcement binds members only (je_un_preview_npt_tt), so a member
 	# held to disarmament is released the day it goes; otherwise its programme
 	# and stockpile were zeroed every week until it rejoined.

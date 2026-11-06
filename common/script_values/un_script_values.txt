@@ -5,8 +5,29 @@
 
 # ---- Member Statistics ----
 
-# JE multiplier: authority is global, but institutional alignment belongs to
-# the owning country. The owner link survives the modifier's later recalculations.
+# The membership benefits' strength, declared on je_united_nations
+# (scaling_modifiers_while_active), whose value is read from the owning
+# country: authority / 50 (global), times 1 + the country's institutional
+# alignment (the Multilateral Institutions principle; 0.5 alignment = +50%).
+# Scope: country
+un_membership_benefits_multiplier = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority }
+		add = {
+			value = global_var:un_authority
+			divide = 50
+			multiply = {
+				value = 1
+				add = modifier:country_un_institutional_alignment
+			}
+		}
+	}
+}
+
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
+# Uncalled: a save from before the declaration holds the copy the old pulse
+# added with this multiplier, until the strip removes it.
 un_membership_benefits_multiplier_for_je = {
 	value = 0
 	owner = {
