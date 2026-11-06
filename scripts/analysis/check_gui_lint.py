@@ -31,9 +31,10 @@ WARN:
     defines. Not necessarily wrong, but nothing in the mod has shown it works
     in game; prefer a proven equivalent, or check it in game.
   - ScriptValue('x') with no script value x in the mod or vanilla
-  - a collapse flag (GetVariableSystem.Toggle) whose name does not say its
-    default (_open: collapsed until opened; _closed: open until closed), or
-    whose Exists() tests disagree with that default (gui_style_guide.md rule 7)
+  - a collapse flag (GetVariableSystem.Toggle, unless only non-visible
+    properties such as alpha read it) whose name does not say its default
+    (_open: collapsed until opened; _closed: open until closed), or whose
+    Exists() tests disagree with that default (gui_style_guide.md rule 7)
   - an added loc value that starts or ends with a literal \\n (rule 8), outside
     te_unused_l_english.yml
 """
@@ -446,6 +447,10 @@ class Linter:
                             f"loc key '{m.group(1)}' is in neither mod nor vanilla loc")
 
         for flag in sorted(set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", text))):
+            # A flag read only by other properties (the see-through journal page's alpha) collapses nothing.
+            reads = self.variable_readers().get(flag)
+            if reads and "visible" not in reads:
+                continue
             if not re.search(r"_(open|closed)$", flag):
                 self.report("WARN", path, 1, f"collapse flag {flag} should end _open (collapsed until "
                                              "opened) or _closed (open until closed): style rule 7")
@@ -458,6 +463,17 @@ class Linter:
             if flag.endswith("_open") and neg != 1:
                 self.report("WARN", path, 1, f"{flag} says collapsed by default, but {neg} Not(Exists()) "
                                              "test it (expected one: the show-more arrow)")
+
+    def variable_readers(self):
+        """{GetVariableSystem flag: the properties whose bindings test it with Exists()}, over every mod .gui, built
+        once: one pass over the text rather than one per flag (11.5 MB each)."""
+        if getattr(self, "_variable_readers", None) is None:
+            readers = {}
+            for m in re.finditer(r'(\w+)\s*=\s*"([^"]*GetVariableSystem\.Exists[^"]*)"', self.cur_gui_text):
+                for flag in re.findall(r"GetVariableSystem\.Exists\('(\w+)'\)", m.group(2)):
+                    readers.setdefault(flag, set()).add(m.group(1))
+            self._variable_readers = readers
+        return self._variable_readers
 
     def lint_added_loc(self):
         # te_unused holds keys nothing renders; organize_loc moving a key there

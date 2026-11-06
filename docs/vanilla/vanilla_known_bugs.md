@@ -1113,7 +1113,15 @@ The Remove Opium Ban decision's is_shown checks `exists = market` and then reads
 has_journal_entry trigger [ Wrong scope for trigger: state, expected country ]
 ```
 
-The event calls a vanilla AI scripted trigger (00_ai_triggers.txt line 1304) whose `has_journal_entry` runs with a state as its scope. Vanilla 1.15; once at the start of the first 1.15 observer game (2026-11-05).
+The event calls a vanilla AI scripted trigger (00_ai_triggers.txt line 1304) whose `has_journal_entry` runs with a state as its scope. Vanilla 1.15; once at the start of the first 1.15 observer game (2026-11-05), and twice in a game as Britain the same night, once from line 115 and once from line 163 (00_ai_triggers.txt line 1313).
+
+### `common/journal_entries/04_indian_famines.txt:225` — an outcome removes a timed modifier the country doesn't hold (1.15)
+
+```
+remove_modifier effect [ Timed modifier india_famine_radicals_modifier in scope object Country Great Britain (1) not found. Make sure the modifier is in the same scope as this effect is being run on. ]
+```
+
+The Indian Famines entry's completion outcome removes `india_famine_radicals_modifier` with no check that it is there; only the entry's `immediate` adds it (line 50), for a timed spell. 2026-11-05, a new game as Britain: 270 lines in sixteen minutes of January 1836 (86 and 184 across the two error logs), with the entry never concluding, so the line comes from the outcome being read, apparently for its tooltip, not run. The mod overrides neither file.
 
 ### `events/brazil/peru_bolivia.txt:793` — `change_relations` between a country and itself (1.15)
 

@@ -1,44 +1,51 @@
 # Journal entry map modes: play-test checklist
 
 The in-game checks for vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue
-#1404), most important first. The first pass (#1410, #1414) answered most of its list; this is the second pass's list,
-for the contextless Map Room and its page of picks. Record each answer under Results, in
-`docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in `docs/guides/scripting_best_practices.md` §
-"Journal Entry Map Modes".
+#1404), most important first. The first two passes (#1410, #1414, #1417) answered their lists (below); this is the
+third pass's list: picks that repaint a paused map, and the see-through journal page. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
+`docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
 
 ## How to run
 
-- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout: the branch keeps
-  `gfx/map/map_modes/te_map_modes.txt`, so a sparse worktree's deploy would also delete textures.
-- **A new game**, or a save: the first pass's `je_te_map_host` and `je_te_map_hidden_world` are gone, and a save that
-  holds them may log their records as unknown at load. Note any such line; it is harmless for a test build.
-- **Launch with `-debug_mode`** for the test strip, which sits on the Demographics tab (Population panel, last tab),
-  above the sections, under a "Map tests" heading. Demographics on Full or Display only, the default. The map button in
-  the tab's header (left of "?") needs no debug mode.
+- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout: the branch deletes
+  `gfx/map/map_modes/te_map_modes.txt`, and a sparse worktree's deploy would delete every texture with it.
+- **A new game** or a save. No debug mode needed: the test strip is gone, and every check uses the map buttons in the
+  Demographics and Banking tabs' headers (left of "?") and the Map Room's page.
 - **Logs.** `grep TE_JMAP debug.log` (or `curl -s "http://localhost:8950/logs/debug?debug_log=only&mod_only=true&q=TE_JMAP"`):
-  every pick writes `TE_JMAP pick <n> date=…`, and the Potential probe its on and off.
-- **At load**, check `error.log` for lines naming `te_map_widgets.gui`, `te_map_room_widget.gui`,
-  `te_journal_maps.txt` or `te_journal_map_sguis.txt`, `failed reading callback` above all: the engine drops a callback
-  it can't read and says so only there, once.
+  every pick writes `TE_JMAP pick <n> date=…`.
+- **At load**, check `error.log` for lines naming `te_map_widgets.gui`, `journal_entry.gui` or
+  `te_map_room_widget.gui`, `failed reading callback` above all: the engine drops a callback it can't read and says so
+  only there, once.
 
-## The checks (second pass)
+## The checks (third pass)
 
 | # | Check | How | What each answer means | If it's the bad answer |
 |---|---|---|---|---|
-| 1 | One click opens the Map Room, with its picks on the page | Click the Demographics header's map button once. | The Map Room's page opens at once and the map turns to life expectancy (paused: at unpause). Two rows of pick buttons sit above the description: a widget draws on a contextless page, and the next pass builds on it. A second click while life expectancy is already the pick runs a scripted GUI whose `is_valid` is false; a log line about that is harmless. | No page: read `error.log` for a callback line. A page without the buttons: the widget doesn't draw on a contextless page; use the strip's row (the same buttons) for checks 2–4, and the picks move beside the map buttons in the next pass. |
-| 2 | Picks on the page | Click Turmoil, Literacy, then the three census maps, with the game running. | The map changes at each click (at the next tick), and the current pick's button draws pressed (`down`, which no mod `.gui` used before). | Buttons do nothing: read `debug.log` for `TE_JMAP pick` lines (none: the scripted GUI didn't run from the page). No pressed state: note it; a label can mark the pick instead. |
-| 3 | The scope probe on a contextless entry | Pick Scope Probe (Test). | **Yellow**: `scope:journal_entry` is set in a contextless entry's map. **Blue**: it isn't. Either is fine (the pick is global). **White stripes** over your own states: `map_color_second` and the state's `owner` link work, so a map can mark the player's land. | No stripes: a map can't single out the player's states that way; note it. |
-| 4 | Repaint while paused | Pause. Pick another map. Then (a) click the strip's Open Map Room, which reopens the page; (b) if that doesn't repaint, switch the map mode away and back with the lens toolbar. | (a) or (b) repaints: the buttons can do the same after a pick, so a paused player sees their pick at once. | Neither: a pick shows at unpause; say so in the picks' tooltips. |
-| 5 | The map with the page closed | (a) With the Map Room open, turn on the lens toolbar's lock (the padlock by the map mode name), then close the page. (b) With no page open, pick **Journal Entry Map (Test)** from the map mode dropdown; then again after opening and closing the Map Room, and after Banking. | (a) The map stays: a journal map can be pinned. (b) It paints, and the colors say whose map it is (the Map Room's pick, or Banking's phases): the listed copy is a way to show a map with no page. Nothing painted: a journal map needs its page. | If neither holds, a map exists only while its page is open; say so in each map button's tooltip, and drop the listed copy. |
-| 6 | Banking map, and whether a tab opens it | Open the Budget panel's Banking tab: does the map change by itself? Then the tab header's map button. | The tab alone paints it: any panel showing an entry through `GetPlayerJournalEntry` triggers its map (prep C6). Only the button: as built. Look: every country in its phase's color, yellow stripes on the overheating, grey where the cycle hasn't started. | — |
-| 7 | An inactive entry's page (prep C6) | Save first: (a) asks the journal panel for an entry it never lists. (a) Before anything else, click the strip's **Open Potential Probe**: every country holds an inactive copy of a country entry with activation triggers, so the button shows from the start. Does a page open for an entry shown nowhere? (b) Click **Potential Probe**; note the date of `TE_JMAP potential probe on` and the day the entry appears in the journal's Potential section. (c) Open it from the journal (or the strip): does the map turn **magenta**? | (a) A page opens: `GetPlayerJournalEntry` returns an inactive copy and the panel opens it, so a system's map button needn't wait for its entry. (b) The wait for a shown inactive entry (the first pass's activations came up to two weeks after the click). (c) Magenta: an inactive page paints its map, so Banking's map button can show before a country's cycle starts. | (a) A crash or an error: never open an entry the player can't see; note the log line. (c) No magenta: a map needs an active entry; keep Banking's button gated on `IsActive`. |
-| 8 | Look and feel | With each map up, judge the palette, the grey "no census" states, borders, and the hover text (state name and figure). The same for Banking. | Notes for the next pass: colors to change, a legend wanted (vanilla draws none for journal maps, as far as known), text to add. | — |
-| 9 | How water, wasteland, unowned and decentralized land draw | Look at them on any map. | Recorded for the system doc. Unowned land has no `owner`, so Banking leaves it unpainted. | — |
-| 10 | Cost | With a census map up, run at top speed for a year and compare with the map off. | No visible slowdown: per-state variable reads are cheap enough. A slowdown: note it; maps may need fewer branches. | Fewer branches per map. |
+| 1 | A pick repaints a paused map | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks (each pick closes and reopens it a quarter second later, `te_jmap_repaint`, the reopen by `OpenJournalEntryPanelDontToggle`, which no mod or vanilla `.gui` used before) and the map shows the new pick at once, paused or not. Say whether the blink is acceptable while running. | The page blinks but the old map stays: the reopen came before the pick's effect landed; lengthen the delay (0.5 s), or failing that say "at unpause" in the picks' tooltips. The page stays open with the old map and doesn't blink: the close hadn't landed when the reopen ran; the delay between them needs a second state. The page closes and stays closed: the reopen line failed; read `error.log` for a callback line naming `te_map_widgets.gui`. |
+| 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Pick a few maps. Click the eye again. Then fade it and close the page with X (or Escape), and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through, and stays faded from pick to pick; the second click brings it back; after a close it reopens whole. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). Known edge: leave a faded page by opening another panel (a state, say) and the next journal page you open from the journal opens faded; the map buttons and the X clear it. | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
+| 3 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
+| 4 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
+
+## The second pass's checks, answered
+
+From #1417's list (its numbering), by the fourth session under Results:
+
+| # | Question | Answer |
+|---|---|---|
+| 1 | One click opens the Map Room, picks on the page | Yes: a widget draws on a contextless page. |
+| 2 | Picks on the page | Work, at the next tick, and the current pick's button draws pressed (`down` works). |
+| 3 | Scope probe | Blue: `scope:journal_entry` isn't set in a contextless entry's map either. No white stripes over the player's states: the stripe condition was `owner ?= { is_player = yes }`, and vanilla's own entries stripe through the state's `owner`, so most likely `is_player` doesn't resolve in the paint. The probe is gone. |
+| 4 | Repaint while paused | (a) Reopening the page repaints. The picks now reopen it themselves (third-pass check 1). |
+| 5 | The map with the page closed | Neither: the lens toolbar's lock doesn't keep it (the map went back to political), and the listed copy painted nothing with no page open and the open page's map otherwise. The copy is gone; the see-through page is the answer instead. |
+| 6 | Does the Banking tab paint its map | No: only its button (opening the entry's page) does. |
+| 7 | An inactive entry's page | Opens from a button and paints its map (magenta). (b), the wait for Potential, is moot. Banking's button lost its `IsActive` gate, which never mattered: the entry is active from the engine's first check. |
+| 8 | Look and feel | Good for now. |
+| 9 | Water, wasteland, unowned, decentralized | Land no branch paints draws dark grey; water keeps its normal look. |
+| 10 | Cost | Somewhat slower, hard to tell; not measured. |
 
 ## The first pass's checks, answered
 
-From #1410's list (its numbering), by the three sessions under Results:
+From #1410's list (its numbering), by the first three sessions under Results:
 
 | # | Question | Answer |
 |---|---|---|
@@ -139,14 +146,58 @@ The owner's report and screenshot, `debug.log` and `error.log` from 17:18 to 17:
   "Countries that are not involved in the Journal Entry may not take this action" and the padlock; no `TE_JMAP world
   button ran` line. 1.15's `add_involved_country` could unlock it, but an involved country probably sees the entry in
   its journal, so the second pass uses scripted GUIs on a page widget instead.
-- **Second pass built on these** (this list): the Map Room is contextless, its picks are scripted GUIs on its page, the
+- **Second pass built on these** (#1417): the Map Room is contextless, its picks are scripted GUIs on its page, the
   Demographics button is one click, and the first pass's host, hidden world entry, add, request, close and hover
   buttons are gone.
+
+### Fourth session, 2026-11-05 night (build ef1e1cce1, #1417)
+
+The owner's report and screenshot, `debug.log` and `error.log` from 20:49 to 21:05 (16 `TE_JMAP pick` lines, six of
+them on Jan 1 while paused):
+
+- **Check 1: works.** One click on the Demographics header's map button opens the Map Room with its picks above the
+  description, so a widget draws on a contextless page.
+- **Check 2: works, at the next tick.** Each pick changes the map once the game runs, and the current pick's button
+  draws pressed: `down` bound to a scripted GUI's `IsValid` works (the owner, after the session's report).
+- **Check 3: blue everywhere, no stripes.** Blue: `scope:journal_entry` isn't set in a contextless entry's map either.
+  No stripes: `map_color_second` drew nothing under `owner ?= { is_player = yes }`. Vanilla's own entries draw stripes
+  through the state's `owner` (the Great Game, the Forest of Bayonets), so the likely failure is `is_player` inside the
+  paint, which fits a paint with no player or entry in reach. Not separated further: no map needs it, so the probe is
+  gone.
+- **Check 4 (a): reopening the page repaints.** Paused, after a pick, going to Demographics and clicking Open Map Room
+  again showed the new pick. So each pick now closes and reopens the page itself, a quarter second after the click.
+- **Check 5: the map exists only while its page is open.** (a) With the lens toolbar's lock on, closing the page sent
+  the map back to political. (b) The listed copy, Journal Entry Map (Test), painted nothing (grey) with no page open;
+  opening the Map Room or Banking showed that page's map, and closing it went grey again. It adds nothing to vanilla's
+  journal map mode, so it is gone. The owner asked whether the page could stay open but transparent: the third pass
+  adds the see-through eye (check 2).
+- **Check 6: the Banking tab doesn't paint the map.** Only its map button, which opens the entry's page, does. So
+  only the journal panel triggers a map: every system shown in a vanilla tab or the Timeline Extended window needs a
+  button that opens a page.
+- **Check 7: an inactive entry's page opens and paints.** The strip's Open Potential Probe, clicked before anything
+  else, opened the inactive `je_te_map_potential_probe` ("Potential Probe (Test)", a Domestic Affairs entry), and the
+  map turned magenta at once (screenshot). So `GetPlayerJournalEntry` returns an inactive copy, the panel opens it,
+  and its map paints: a map button needn't wait for its entry. Banking's button lost its `IsActive` gate on that
+  ground, though it gated nothing a player meets: the entry is active for every country from the engine's first check
+  (`possible = { always = yes }`), and the Banking tab waits for that. (b) wasn't answered and is moot: the log's
+  `potential probe on` (Jan 4) and `off` (Jan 7) are the toggle, not the day the entry showed in Potential. The
+  inactive page listed a long run of countries under Involved Countries, over a hundred flags and running off the
+  screen; nothing opens an inactive page now, so it waits for a map that does.
+- **Check 8: good for now.**
+- **Check 9: land no branch paints draws dark grey, and water keeps its normal look.** A branch that matches paints
+  any land: the probe's flat magenta covered all of it in the screenshot.
+- **Check 10: somewhat slower, hard to tell.** Not measured; nothing to change yet.
+- **Logs.** No load line names a map file. The in-game error counter (2849) was mostly Grand Monuments'
+  `gm_arch_country_has_any`, which reads its counts despite a `has_variable` guard in the same `AND` (1,104 lines;
+  issue #1418), and vanilla's Indian Famines outcome (270 lines; `docs/vanilla/vanilla_known_bugs.md`).
+- **Third pass built on these** (this list): picks reopen the page to repaint, every journal page has a see-through
+  eye, Banking's button has no `IsActive` gate, and the scope probe, the Potential probe, the test strip and the listed
+  copy are gone.
 
 ## Not tested here
 
 - Whether `map_color` takes a scope path (`value = owner.color`, prep C21): left out, since a field the engine rejects at
-  load can drop the whole entry it sits in. Try it in its own entry once checks 1–2 pass.
+  load can drop the whole entry it sits in. Try it in an entry of its own.
 - Multiplayer: two players share the Map Room's pick (a global variable). Whether that is acceptable is a design
   call; nothing tests it.
 - `add_involved_country` on the Map Room (its own scripted buttons would unlock), and whether an involved country sees
@@ -154,11 +205,8 @@ The owner's report and screenshot, `debug.log` and `error.log` from 17:18 to 17:
 
 ## When it's done
 
-- Delete the test pieces: `te_jmap_test_strip` and its mount (`tab_before_gate` in `te_demographics_layout.gui`), the
-  `te_jmap_strip_*` loc keys, the Scope Probe (selector 6: `te_jmap_pick_scope_probe_sgui`, its button in
-  `te_jmap_pick_row`, its branches, colors and tooltips), `je_te_map_potential_probe` with its two scripted GUIs, color
-  and loc, the `TE_JMAP pick` debug line in `te_jmap_set_selector`, and `gfx/map/map_modes/te_map_modes.txt` unless
-  check 5 (b) makes it worth keeping (its name, `mm_te_journal_entry_map`, sits in `te_unused_l_english.yml`, since
-  `organize_loc.py` doesn't read `gfx/`).
-- Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1).
-- Give the player guide its lines: the Demographics and Banking chapters' map buttons, and the Map Room.
+- Delete the `TE_JMAP pick` debug line in `te_jmap_set_selector` once check 1 is answered.
+- Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) in a PR of its own: it touches its events,
+  `scripts/nightly_audit_select.py` and `scripts/image_pipeline/event_image_prompts.py`.
+- Give the Banking and Demographics chapters a line each if a map grows beyond the introduction's paragraph
+  (`docs/player_guide/01-introduction.md`, which covers the map buttons, the Map Room and the eye).
