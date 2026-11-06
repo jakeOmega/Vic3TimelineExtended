@@ -427,6 +427,8 @@ te_demog_state_yearly = {
 		te_demog_consequences_refresh = yes
 		# phase 3: the longevity gap's politics, on since 2026-10-16 (te_demog_lx_effects.txt)
 		te_demog_lx_politics_refresh = yes
+		# the census's runaway tripwire, once a state (2026-11-06; te_debug_demog_effects.txt)
+		te_debug_demog_runaway_selfcheck = yes
 	}
 }
 
