@@ -1494,7 +1494,7 @@ gm_state_tear_down = {
 # nothing, so the reads of gm_rebuild_cost and gm_rebuild_level found them
 # unset (~600 error lines a frame through the level switch's 200 cases while
 # the Rededicate button was hovered, 2026-10-12). Every caller already shows
-# gm_rededicate_tt in place of these effects (gm_state_choose_rededicate) or
+# a gm_rededicate_*tt in place of these effects (gm_state_choose_rededicate) or
 # needs no tooltip (the AI), so the guard hides nothing
 # (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects").
 gm_state_rededicate = {
@@ -1581,18 +1581,44 @@ gm_state_preserve = {
 # State scope. Each choice with the tooltip that says what it does. One
 # wrapper per choice, so the notice, the per-monument event and the journal
 # entry's buttons show the same words. The loc reads the state as THIS.
+#
+# Pull Down and Rededicate add a line for each group whose approval the
+# choice moves, only while it moves (gm_preview_choices' figures). The case is
+# picked here, one key each splicing the shared text, not in the loc: a key
+# named in SelectLocalization loses THIS (#1413; gui_modding_guide.md's
+# SelectLocalization note). One custom_tooltip whatever the case, since two
+# lines in the state's scope list under its name in monument_events.17.
 gm_state_choose_tear_down = {
-	custom_tooltip = {
-		text = gm_tear_down_tt
-		gm_state_tear_down = yes
+	if = {
+		limit = {
+			gm_state_disp_prev_td_base != 0
+			gm_state_disp_prev_td_sup != 0
+		}
+		custom_tooltip = gm_tear_down_base_sup_tt
 	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_base != 0 }
+		custom_tooltip = gm_tear_down_base_tt
+	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_sup != 0 }
+		custom_tooltip = gm_tear_down_sup_tt
+	}
+	else = {
+		custom_tooltip = gm_tear_down_tt
+	}
+	hidden_effect = { gm_state_tear_down = yes }
 }
 
 gm_state_choose_rededicate = {
-	custom_tooltip = {
-		text = gm_rededicate_tt
-		gm_state_rededicate = yes
+	if = {
+		limit = { gm_state_disp_prev_rd_sup != 0 }
+		custom_tooltip = gm_rededicate_sup_tt
 	}
+	else = {
+		custom_tooltip = gm_rededicate_tt
+	}
+	hidden_effect = { gm_state_rededicate = yes }
 }
 
 gm_state_choose_preserve = {

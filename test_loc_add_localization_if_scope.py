@@ -21,10 +21,10 @@ seconds, 2026-10-28).
 THIS too. The Map Room's life-expectancy tooltip (a journal entry's
 map_tooltip, the state as THIS) named te_jmap_tt_e0_value in a
 SelectLocalization, and every hover logged "Promote 'THIS' returned nullptr"
-and showed no figure (649 lines, 2026-11-05). Grand Monuments' tear-down and
-rededicate hovers name six keys that read THIS (UNVERIFIED_THIS): a scripted
-button's tooltip may keep it, and no log has shown them failing, so they wait
-on an in-game look rather than a rewrite (#1413).
+and showed no figure (649 lines, 2026-11-05). Branch in script instead: the
+Map Room has one map_tooltip per case, and Grand Monuments' tear-down and
+rededicate hovers pick one custom_tooltip key per case, each splicing the
+lines it shows (#1413).
 """
 
 import re
@@ -32,12 +32,6 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-UNVERIFIED_THIS = {
-    "gm_mon_prev_rd_sup_line", "gm_mon_prev_td_base_line", "gm_mon_prev_td_sup_line",
-    "gm_prev_rd_sup_line", "gm_prev_td_base_line", "gm_prev_td_sup_line",
-}
-_LOST_SCOPE_BUT_THIS = re.compile(r"\b(?:SCOPE|ROOT)\.")
-
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
 _CALL = re.compile(r"(?:AddLocalizationIf|SelectLocalization)\(")
 _STRING_OR_COMMENT = re.compile(r'("[^"\n]*")|#[^\n]*')
@@ -85,7 +79,7 @@ class TestAddLocalizationIfScope(unittest.TestCase):
         bad = [f"{where}: '{key}'"
                for where, text in sources
                for key in named_keys(text, loc)
-               if (_LOST_SCOPE_BUT_THIS if key in UNVERIFIED_THIS else _LOST_SCOPE).search(expanded(key, loc))]
+               if _LOST_SCOPE.search(expanded(key, loc))]
         self.assertEqual(bad, [], "keep SCOPE, ROOT and THIS reads in the parent string; the named key loses them")
 
     def test_the_check_sees_what_it_rejects(self):

@@ -1115,9 +1115,16 @@ class ContestTests(unittest.TestCase):
         preserve = squash(block(self.e, "gm_state_preserve"))
         self.assertIn("gm_state_ledger_ig = { WHO = gm_base_ig FACTOR = -1 }", preserve)
         self.assertIn("set_variable = gm_heritage", preserve)
+        self.assertEqual(squash(block(self.e, "gm_state_choose_preserve")),
+                         "custom_tooltip = { text = gm_preserve_tt gm_state_preserve = yes }")
+        # Pull Down and Rededicate pick their tooltip's case in script (#1413);
+        # test_grand_monuments_layout.ChoicePreviewTest holds each case to its lines.
+        for choice in ("tear_down", "rededicate"):
+            body = squash(block(self.e, f"gm_state_choose_{choice}"))
+            self.assertTrue(body.endswith(f"else = {{ custom_tooltip = gm_{choice}_tt }} "
+                                          f"hidden_effect = {{ gm_state_{choice} = yes }}"), body)
+            self.assertEqual(body.count(f"gm_state_{choice} = yes"), 1, choice)
         for choice in ("tear_down", "rededicate", "preserve"):
-            self.assertEqual(squash(block(self.e, f"gm_state_choose_{choice}")),
-                             f"custom_tooltip = {{ text = gm_{choice}_tt gm_state_{choice} = yes }}")
             self.assertIn(f"gm_{choice}_tt", loc())
 
     def test_ladder_reaches_200(self):
