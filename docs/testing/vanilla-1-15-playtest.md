@@ -70,8 +70,10 @@ game, in English.
   convention puts its modifier on the entry within five days, named as the source; at Moribund the convention
   modifiers leave the entry while Our Obligations still lists the conventions, and they return when the tier
   rises; starting a program puts its cost and benefit on the entry within days, and a second start in the same
-  week is refused when the first one's influence would leave too little (the booking, `un_influence_pending`);
-  the Budget Breakdown's United Nations expense and income rows still list their amounts.
+  week is refused when the first one's influence would leave too little (the booking, `un_influence_pending`,
+  with its own line in the button's tooltip); a member at Contested or better carries UN Membership Benefits on
+  the entry (its gate reads `je:je_united_nations` from inside the entry's own value, unprobed); the Budget
+  Breakdown's United Nations expense and income rows still list their amounts.
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

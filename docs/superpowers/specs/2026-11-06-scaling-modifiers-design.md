@@ -619,16 +619,28 @@ script value was deleted: an older save's copies name them all.
 - **Beyond the lag:** at Moribund the conventions' effects are ×0 and their
   modifiers leave the entry while the ratifications stand; conventions and
   regime terms follow enforcement within days, not at the regime epoch; the
-  nine country conventions and the terms need the entry active, so a
-  decentralized colony of a member no longer carries the colony-liberty term;
-  a peacekeeping pledge no longer adds a second contributor copy for a member
+  nine country conventions and the terms need the entry active (a
+  decentralized country never ran the refresh, so it held none before
+  either); a peacekeeping pledge no longer adds a second contributor copy for a member
   already running the programme; and with no reconcile, a stray mirror is no
   longer dropped monthly.
 - **Old saves:** `legacy_scaling_strip_united_nations` first sets each mirror
   from a copy an older save holds (the deleted reconcile's rule; the sanctions
   regime also from a standing `un_sanctions_enforced_by`), never clearing one,
   then removes the 17 entry and 36 country copies, monthly and from a new weekly
-  pulse. The caches the values read predate #1404, so none needed seeding.
+  pulse. Every helper that clears a mirror runs it first (`un_mirror_clear`,
+  `un_regime_term_off`, the sanctions lifts, a dissolution), so a clear in the
+  days before the first strip can't be undone by it. The caches the values
+  read predate #1404, so none needed seeding; the strip drops a dues figure an
+  older save kept after a member stopped paying.
+- **Rebels:** a revolution's winner inherits the loser's variables, and with no
+  reconcile a government that won would keep the conventions and programmes of
+  rebels who had joined. An uprising may no longer join the UN (the Join
+  button, the charter's invitation, a treaty's enrolment, `un_events.10`), as
+  it may already not lobby in it (`un_lobbying.txt`).
+- **Influence gates' tooltips:** the cost line keeps the cost, and a second
+  line, shown only while a start in the past week is booked, names the booking
+  (`un_influence_pending_tt`).
 - **Nation tab:** 29 types and 21 type rows were fed only by these modifiers and
   go, with the war support and nuclear groups.
 

@@ -1291,7 +1291,9 @@ credit, its conventions, and its terms under the regimes.
   - **Declared:** `je_united_nations` declares the modifier (`scaling_modifiers_while_active`)
     while the mirror is set, so the variable is all there is. Nothing adds, removes, restores or
     reconciles it, its readers test the mirror, and a revolution's winner keeps it by
-    construction. The six programmes and stances, the two programme costs, and the sixteen
+    construction. A loyalist winner would keep the rebels' as well, so an uprising may not
+    join the UN (the Join button, the charter's invitation, a treaty's enrolment and
+    `un_events.10` test `is_revolutionary = no`). The six programmes and stances, the two programme costs, and the sixteen
     convention modifiers, at the UN's enforcement. Nine of them sat on the country before
     1.15 (the law of the sea, the ICC and the physical protection of nuclear material from
     #474, then six more); all sit on the entry now.

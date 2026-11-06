@@ -43,7 +43,8 @@ building is demolished.
 Any country that conducts its own foreign policy may press Join the United
 Nations, under the overview's Membership cell: an independent country, or a dominion, protectorate or tributary.
 Puppets, vassals, colonies, personal unions, crown lands, chartered companies
-and decentralized nations cannot. No technology is needed.
+and decentralized nations cannot, nor can an uprising while it fights. No
+technology is needed.
 
 Members get UN Membership Privileges at once: +10% relations improvement speed,
 +5 leverage generation, +3% prestige, +3% influence and slower escalation when
@@ -63,8 +64,9 @@ member walking out knocks authority down at once (4 points for a typical great
 power, up to 8).
 
 When a revolution wins, the mod carries the nation's membership, seat,
-conventions and any UN sanctions on it over to the winner and rebuilds them in
-the following months (see [After a revolution](06-politics.md#after-a-revolution)).
+conventions and any UN sanctions on it over to the winner. The conventions and
+sanctions apply again within days, and the membership and seat in the following
+months (see [After a revolution](06-politics.md#after-a-revolution)).
 
 ### Subjects and suspended representation
 
