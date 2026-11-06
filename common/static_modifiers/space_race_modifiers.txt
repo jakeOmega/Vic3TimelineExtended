@@ -237,10 +237,10 @@ sr_solar_system_trade = {
 }
 
 # ======= Solar System Colonization - colony population (simple and full colonies)
-# Both on the entry, at a multiplier, re-applied monthly by
-# sr_emig_refresh_modifiers (sr_colony_population_effects.txt; slices 2-3
-# design § 10). The programme's upkeep, per level of emigration: the Space
-# Program's Launch Capacity bill, as funding raises it.
+# Both declared on the entry (je_space_race.txt; 1.15
+# scaling_modifiers_while_active, #1404; slices 2-3 design § 10). The
+# programme's upkeep, per level of emigration: the Space Program's Launch
+# Capacity bill, as funding raises it.
 sr_emigration_programme = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_space_program_throughput_add = 0.05
@@ -254,10 +254,10 @@ sr_offworld_population = {
 }
 
 # ======= Solar System Colonization - colony modules (simple and full colonies)
-# On the entry, at multiplier = the module levels past the first at the
-# colonies held (sr_mod_upkeep_units), re-applied monthly with the two above by
-# sr_emig_refresh_modifiers (colony modules design § 8): each level's upkeep is
-# the Space Program's Launch Capacity bill, as emigration's is.
+# Declared on the entry at the module levels past the first at the colonies
+# held (sr_mod_upkeep_levels), with the two above (colony modules design § 8):
+# each level's upkeep is the Space Program's Launch Capacity bill, as
+# emigration's is.
 sr_module_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_space_program_throughput_add = 0.01
@@ -265,9 +265,8 @@ sr_module_upkeep = {
 
 # ======= Solar System Colonization - facilities (simple and full colonies;
 # docs/superpowers/specs/2026-10-30-colony-management-design.md § 7)
-# On the entry, each at multiplier = its staffed levels at the colonies that
-# serve us (sr_mod_units_<key>_entry), re-applied monthly by
-# sr_mod_refresh_facilities from sr_emig_refresh_modifiers. The Mining
+# Declared on the entry, each at its staffed levels at the colonies that serve
+# us (sr_mod_units_<key>; common/journal_entries/sr_sites_generated.txt). The Mining
 # Complex, Orbital Yard, Nuclear Command Center and Administration have no
 # modifier: they feed other numbers (sr_colony_module_values.txt).
 sr_module_lab = {
@@ -304,9 +303,9 @@ sr_module_foundry = {
 
 # ======= Solar System Colonization - autonomy and free colonies (slice 5;
 # docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md)
-# On the entry, each at a multiplier and re-applied monthly with the three
-# above by sr_emig_refresh_modifiers: supplying free colonies is the Space
-# Program's Launch Capacity bill (a unit a colony supplied); their trade a unit
+# Declared on the entry, each at its units, with the three above
+# (je_space_race.txt): supplying free colonies is the Space Program's Launch
+# Capacity bill (a unit a colony supplied); their trade a unit
 # a 20,000 of a colony's people, shared among its suppliers, at most five
 # (sr_free_trade_units); a garrison's upkeep a unit a garrisoned colony.
 sr_free_colony_supply = {

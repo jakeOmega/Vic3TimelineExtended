@@ -549,25 +549,6 @@ sr_marker_self_check = {
 	}
 }
 
-# Journal entry scope, right after sr_site_show_modifier_at's add_modifier.
-# TE_SELF_CHECK modifier_seen_same_effect: whether has_modifier sees a
-# modifier added earlier in the same effect, which the mod's code has so far
-# avoided relying on (slices 2-3 design § 15). Once a game, at the first add.
-sr_mod_seen_self_check = {
-	if = {
-		limit = { NOT = { has_global_variable = sr_mod_seen_checked } }
-		# the modifier's name, as a flag for the line (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
-		set_global_variable = { name = sr_mod_seen_checked value = flag:$MODIFIER$ }
-		if = {
-			limit = { has_modifier = $MODIFIER$ }
-			debug_log = "TE_SELF_CHECK OK modifier_seen_same_effect [GetGlobalVariable('sr_mod_seen_checked').GetFlagName] (has_modifier sees an add_modifier made earlier in the same effect) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN modifier_seen_same_effect [GetGlobalVariable('sr_mod_seen_checked').GetFlagName] (has_modifier does not yet see an add_modifier made earlier in the same effect: keep every refresh to once per effect; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-	}
-}
-
 # ---- Console (te_debug_space_race.4) --------------------------------------------------------
 # Country scope. Every one of our shipments, waiting or in flight, lands now.
 sr_ms_debug_land_all_now = {

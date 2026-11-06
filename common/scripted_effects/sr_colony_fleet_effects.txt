@@ -234,7 +234,7 @@ sr_cf_after_found = {
 # Country scope. A colony founded by a fleet's landing or a races-only target
 # needs the entry that holds its modifiers: opened, after the sync has counted
 # the colony (so `possible` holds), before the founding event offers its
-# specialization (sr_grant_colony_modifier writes through je:).
+# specialization (declared on the entry, which applies it only while active).
 sr_cf_open_entry = {
 	if = {
 		limit = {
