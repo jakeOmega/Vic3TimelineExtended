@@ -31787,6 +31787,34 @@
   "en": "#b [THIS.GetState.GetName]#!\\nLeading cause of death: #v $te_demog_dc_mat_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of last year's deaths",
   "es": "#b [THIS.GetState.GetName]#!\\nCausa principal de muerte: #v $te_demog_dc_mat_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de las muertes del año pasado"
  },
+ "te_jmap_tt_cause_second_chr": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_chr_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_chr_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_ext": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_ext_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_ext_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_inf": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_inf_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_inf_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_kill": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_kill_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_kill_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_mat": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_mat_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_mat_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_war": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_war_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_war_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
+ "te_jmap_tt_cause_second_work": {
+  "en": "Close behind, in the stripes: #v $te_demog_dc_work_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! of last year's deaths",
+  "es": "Le sigue de cerca, en las rayas: #v $te_demog_dc_work_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_second_share')|%0]#! de las muertes del año pasado"
+ },
  "te_jmap_tt_cause_war": {
   "en": "#b [THIS.GetState.GetName]#!\\nLeading cause of death: #v $te_demog_dc_war_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of last year's deaths",
   "es": "#b [THIS.GetState.GetName]#!\\nCausa principal de muerte: #v $te_demog_dc_war_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de las muertes del año pasado"

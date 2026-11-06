@@ -11856,8 +11856,8 @@
   "es": "Colorea cada estado según cuántos de cada 1 000 bebés mueren en su primer año, en el último censo: verde azulado cerca de ninguno, ámbar en 50, la mayor parte del camino hacia el burdeos con 300 y todo con 500."
  },
  "te_jmap_pick_leading_cause_desc": {
-  "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red.",
-  "es": "Colorea cada estado según lo que mató a más gente el año pasado, con los colores del gráfico Causas de muerte: infección azul, enfermedad crónica naranja, accidentes verde, trabajo dorado, parto rosa, muertos por eventos lavanda, guerra rojo."
+  "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red. The color is full where that cause took 90% of the deaths or more, and fades to pale at 30%. Stripes in a second cause's color mark a state where the runner-up took at least half as many deaths as the leader.",
+  "es": "Colorea cada estado según lo que mató a más gente el año pasado, con los colores del gráfico Causas de muerte: infección azul, enfermedad crónica naranja, accidentes verde, trabajo dorado, parto rosa, muertos por eventos lavanda, guerra rojo. El color es pleno donde esa causa se llevó el 90% de las muertes o más, y se aclara hasta quedar pálido al 30%. Las rayas del color de una segunda causa marcan un estado donde la segunda causa se cobró al menos la mitad de muertes que la principal."
  },
  "te_jmap_pick_life_expectancy_desc": {
   "en": "Color each state by its life expectancy at birth in the last census, from 25 years to 80.",

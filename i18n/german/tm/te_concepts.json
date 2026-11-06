@@ -11856,8 +11856,8 @@
   "de": "Färbt jeden Staat danach, wie viele von je 1.000 Babys in der letzten Volkszählung im ersten Lebensjahr sterben: petrol bei nahezu keinem, bernsteinfarben bei 50, größtenteils bis Ochsenblutrot bei 300 und vollständig bei 500."
  },
  "te_jmap_pick_leading_cause_desc": {
-  "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red.",
-  "de": "Färbt jeden Staat nach dem, was im letzten Jahr die meisten seiner Einwohner getötet hat, in den Farben des Diagramms „Todesursachen“: Infektion blau, chronische Krankheit orange, Unfälle grün, Arbeit gold, Geburt rosa, durch Ereignisse getötet lavendelfarben, Krieg rot."
+  "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red. The color is full where that cause took 90% of the deaths or more, and fades to pale at 30%. Stripes in a second cause's color mark a state where the runner-up took at least half as many deaths as the leader.",
+  "de": "Färbt jeden Staat nach dem, was im letzten Jahr die meisten seiner Einwohner getötet hat, in den Farben des Diagramms „Todesursachen“: Infektion blau, chronische Krankheit orange, Unfälle grün, Arbeit gold, Geburt rosa, durch Ereignisse getötet lavendelfarben, Krieg rot. Die Farbe ist am kräftigsten, wo diese Ursache 90% der Todesfälle oder mehr ausmachte, und wird bis 30% immer blasser. Streifen in der Farbe einer zweiten Ursache kennzeichnen einen Staat, in dem die zweithäufigste Ursache mindestens halb so viele Todesfälle forderte wie die häufigste."
  },
  "te_jmap_pick_life_expectancy_desc": {
   "en": "Color each state by its life expectancy at birth in the last census, from 25 years to 80.",
