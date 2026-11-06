@@ -509,9 +509,10 @@ state:
 | Above 50, in farming states | Land Hunger | Migration +30%, Land Reform movement support +25%, radicals +10%, scaled by the state's share of Peasants and Farmers |
 | Below 50 | Dispersed Property | Political strength from wealth −10%; qualifications +10%; education access +10%; radicals −10% |
 
-Every effect reaches its full size at 80 or 20, so a state at 65 gets half of
-it, and keeps growing beyond: the concentrated side to two thirds more at 100,
-the dispersed side to a third more at 0. A state's modifiers update with its yearly count, so a war loss or an event
+Every effect starts at 50 and grows with the distance from it, so a state at 65
+gets half the table's figure. Past 80 or 20 it keeps growing: the concentrated
+side to two thirds more at 100, the dispersed side, more slowly, to a third more
+at 0. A state's modifiers update with its yearly count, so a war loss or an event
 that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
