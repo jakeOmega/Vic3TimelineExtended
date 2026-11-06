@@ -989,7 +989,7 @@
  },
  "building_grid_undersea_cable_range_add_desc": {
   "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
-  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem Meeresabschnitt ($concept_sea_node$), den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren Meeresabschnitt ($concept_sea_node$) und landet an einer Küste, die beide berührt. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
+  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem $concept_sea_node$, den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren $concept_sea_node$ und landet an einer Küste, die beide berührt. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
