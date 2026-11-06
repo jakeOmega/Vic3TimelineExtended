@@ -49,6 +49,7 @@ site did not seed).
 | **Empiricism.** Research it. | Troy and Pergamon join (Mycenae and Olympia, in Greece's Peloponnese, for a Greek player); the Systematic button appears. | A site that stays unlisted: the gate (`gm_arch_has_gate_for`) or the ground. |
 | **Not our ground.** Play Britain. | No Nineveh: only a country with a part of the ground is offered a site. Foreign digs are deferred. | |
 | **Incidental.** Debug a. | The incidental sites in our states whose technology we have are listed with a Launch button; nothing is lost. | |
+| **No unset reads (#1418, 2026-11-06).** After a month of a new game, search `error.log`. | No `Failed to fetch variable for 'gm_arch_dig_count'` or `'gm_arch_open_count'` (the 2026-11-05 play-test logged 1,104 such lines in sixteen minutes, from the entry's `possible` and outcome). | Lines still there: the engine reads a `trigger_if`'s body with its `limit` false, in a tooltip at least. Have `gm_arch_pass` write both counts, 0 for none, for every country it visits, and seed them in the entry's `immediate`. |
 
 ## The dig
 
