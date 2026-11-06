@@ -163,7 +163,8 @@ gm_com_send_offer = {
 		# never fired, or never closed) is forgotten by the world pass, so it
 		# cannot block every later opportunity.
 		set_variable = { name = gm_com_offer_watch value = yes months = 6 }
-		# Not over an entry shown but not yet active (gm_country_refresh says why).
+		# Not over an inactive copy (gm_country_refresh says why): the add is for
+		# a country with no record, an old save's or one whose entry concluded.
 		# The rule too: with it off the entry's inactive record is pruned
 		# (disable_evaluation), so nothing would refuse the add.
 		if = {

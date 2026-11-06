@@ -86,11 +86,19 @@ sr_site_clear_discovery = {
 
 # Common to every gain: the entry that holds the colony's modifiers opens for a
 # country that has none (design § 8), and a receiver without the Moon Base and
-# Mars Landing is watched by the site_receiver_entry self-check.
+# Mars Landing is watched by the site_receiver_entry self-check. A colony meets
+# the entry's possible and is_shown_when_inactive (sr_has_space_colony), so a
+# receiver holding the inactive copy every country starts with gets the entry
+# at the engine's next check, within two weeks; the add is for one holding no
+# record, whose entry failed (a concluded record is gone, and the engine never
+# activates the type again) or that the engine left out. Over an inactive copy
+# the add is refused with an error ("already has a journal entry of type",
+# scripting_best_practices.md, the has_journal_entry bullet; #1416).
 sr_site_gained_base = {
 	if = {
 		limit = {
 			NOT = { has_journal_entry = je_space_race_solar_colonization }
+			NOT = { has_inactive_journal_entry = je_space_race_solar_colonization }
 			sr_space_race_on = yes
 		}
 		add_journal_entry = { type = je_space_race_solar_colonization }
