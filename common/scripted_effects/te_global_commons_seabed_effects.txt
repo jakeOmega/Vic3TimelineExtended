@@ -726,16 +726,18 @@ te_seabed_global_monthly = {
 		}
 		te_seabed_yearly_pass = yes
 	}
-	# Every coastal state's basin, once any country has the technology: the
-	# state view shows each coastal state's basin to a player who has it
-	# (te_seabed_basin_tile_shown; GUI audit VAN-8b, owner 2026-10-27), and
-	# the yearly pass, which sets them too, waits for a coastal claimant. Once
-	# a game; the pass and a change of owner cover state scopes made later.
+	# Every coastal state's basin, once a game, from the first month: the
+	# Map Room's basin map shows them all game (te_jmap_seabed_basin; until
+	# 2026-11-06 this waited for the first country with abyssal_plain_mining).
+	# The state view still shows a basin only to a player with the
+	# technology (te_seabed_basin_tile_sgui; GUI audit VAN-8b, owner
+	# 2026-10-27), and the yearly pass, which sets them too, still waits for
+	# a coastal claimant. The pass and a change of owner cover state scopes
+	# made later.
 	if = {
 		limit = {
 			te_global_commons_enabled = yes
 			NOT = { has_global_variable = te_seabed_basins_set }
-			any_country = { has_technology_researched = abyssal_plain_mining }
 		}
 		set_global_variable = te_seabed_basins_set
 		every_country = {

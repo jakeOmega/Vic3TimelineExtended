@@ -7,7 +7,9 @@
 # ---------------------------------------------------------------------------
 # 1 turmoil, 3 life expectancy, 4 fertility, 5 median age, 6 devastation, 7 natural change, 8 death rate, 9 birth
 # rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
-# share, 16 Gini coefficient, 17 Dynastic Wealth; 0 none. 2 was literacy, retired because vanilla's own literacy map
+# share, 16 Gini coefficient, 17 Dynastic Wealth; the systems' (each also on its own entry): 18 emissions, 19 nuclear
+# weapons, 20 covert networks, 21 the United Nations, 22 political models, 23 ocean basins, 24 grandeur, 25 colonies;
+# 0 none. 2 was literacy, retired because vanilla's own literacy map
 # mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next pick); 6 was the scope probe
 # until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -18,4 +20,61 @@ te_jmap_selector = {
 		limit = { has_global_variable = te_jmap_sel }
 		value = global_var:te_jmap_sel
 	}
+}
+
+# ---------------------------------------------------------------------------
+# The systems' figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# The state's share of the world's greenhouse gas emissions last year, 0-1 (negative for a state that takes more out of
+# the air than it puts in): its yearly snapshot (gw_state_emis, gw_snapshot_country_emissions_effect) over the world's
+# annual total (gw_g_global_emis, re-based each January), both in internal units. A share, not an amount (owner,
+# 2026-11-06), so a color means the same thing in 1850 and 2000, whatever the world emits.
+te_jmap_gw_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gw_state_emis
+			has_global_variable = gw_g_global_emis
+			global_var:gw_g_global_emis > 0
+		}
+		value = var:gw_state_emis
+		divide = global_var:gw_g_global_emis
+	}
+	min = -1
+	max = 1
+}
+
+# The state's emissions last year in display units (the panel's K/M figures: internal x 1000, gw_disp_own_emis).
+te_jmap_gw_disp_emis = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		value = var:gw_state_emis
+		multiply = 1000
+	}
+}
+
+# The viewer's network in the state's owner, 0-100 (covert warfare's iw_nets: one container per target, on the
+# operator, iw_net_strength; nd_loose_network_tier reads it the same way). 0 with no network, no viewer, or the viewer
+# itself. root is the state: the map's, or the hover's (MakeScope).
+te_jmap_net_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = owner
+			global_var:te_jmap_viewer ?= { has_variable_list = iw_nets }
+		}
+		global_var:te_jmap_viewer = {
+			every_in_list = {
+				variable = iw_nets
+				limit = {
+					var:iw_target ?= root.owner
+					has_variable = iw_net_strength
+				}
+				add = var:iw_net_strength
+			}
+		}
+	}
+	min = 0
+	max = 100
 }

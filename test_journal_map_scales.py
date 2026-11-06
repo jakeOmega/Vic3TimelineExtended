@@ -16,6 +16,10 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(REPO, "common", "script_values", "te_journal_map_scales_generated.txt")
 HAND = os.path.join(REPO, "common", "script_values", "te_journal_map_values.txt")
 ROOM = os.path.join(REPO, "common", "journal_entries", "te_journal_maps.txt")
+# The systems' entries draw the Map Room's maps of their systems too (test_journal_map_modes.SYSTEM_MAPS).
+ENTRIES = [os.path.join(REPO, "common", "journal_entries", f"{name}.txt") for name in (
+    "je_global_warming", "je_nuclear_program", "je_covert_warfare", "je_united_nations", "je_cultural_hegemony",
+    "je_grand_monuments", "je_colonial_empire")]
 
 _spec = importlib.util.spec_from_file_location(
     "gen_journal_map_scales", os.path.join(REPO, "scripts", "generators", "gen_journal_map_scales.py"))
@@ -181,6 +185,9 @@ class UseTest(unittest.TestCase):
         generated = set(re.findall(r"^(te_jmap_\w+)\s*=\s*\{", _read(OUT), re.M))
         used = set(re.findall(r"\b(te_jmap_\w+_factor(?:_lower|_upper)?)\b", _read(ROOM)))
         self.assertEqual(used - generated, set(), "factors the map reads that the generator doesn't write")
+        for path in ENTRIES:
+            mine = set(re.findall(r"\b(te_jmap_\w+_factor(?:_lower|_upper)?)\b", _read(path)))
+            self.assertEqual(mine - generated, set(), f"{os.path.basename(path)}: factors no generator writes")
         top = {n for n in generated if not n.endswith(("_lower", "_upper"))}
         three = {f"te_jmap_{s['name']}_factor" for s in gen.SCALES if s["three"]}
         self.assertEqual(top - used, set(), "generated factors no map reads")

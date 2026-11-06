@@ -302,4 +302,40 @@ je_covert_warfare = {
 	can_revolution_inherit = yes
 	can_deactivate = no
 	should_update_on_player_command = yes
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): the viewer's covert
+	# network in each country. Root: the state being painted, every state in the world. The Map Room draws the same map as
+	# its selector 20, from the same triggers in the same order (common/scripted_triggers/te_journal_map_triggers.txt; the
+	# parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			value = "te_jmap_net_you"
+		}
+		else_if = {
+			limit = { te_jmap_net_some = yes }
+			lerp = {
+				min_color = "te_jmap_net_low"
+				max_color = "te_jmap_net_high"
+				factor = te_jmap_net_factor
+			}
+		}
+		else = {
+			value = "te_jmap_none"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_net_you
+		}
+		else_if = {
+			limit = { te_jmap_net_some = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_net
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_net_none
+		}
+	}
 }

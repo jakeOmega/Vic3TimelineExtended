@@ -2674,6 +2674,8 @@ types covert_operations_widget_types
 				blockoverride "text" {
 					text = "je_covert_warfare"
 				}
+				### Show your networks on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_covert_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]"

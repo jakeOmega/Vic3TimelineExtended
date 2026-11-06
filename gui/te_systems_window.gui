@@ -265,14 +265,20 @@ types te_systems_window_types
 	### 2026-11-02 the outliner hides while the full-screen frame draws, as
 	### under vanilla's full screens (gui/00_te_fullscreen_hide.gui); the
 	### toggle stays at the left all the same.
+	###
+	### The Map Room button (te_jmap_window_button, gui/te_map_widgets.gui) sits just left of the toggle in both
+	### frames: the world's maps one click from the window (owner, 2026-11-06).
 	type te_systems_window_toggle = hbox {
 		layoutpolicy_horizontal = expanding
 		layoutpolicy_vertical = fixed
 		margin = { 10 0 }
+		spacing = 4
 
 		block "toggle_lead" {
 			expand = {}
 		}
+
+		te_jmap_window_button = {}
 
 		button = {
 			using = default_button
