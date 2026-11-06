@@ -5430,6 +5430,12 @@ Seen in game on 2026-11-05:
 - **It repaints as the game runs, or when the page opens again.** `map_color` is re-evaluated each tick, so a changed
   value shows at the next one; paused, reopening the page shows it at once. Read stored variables only, never walk
   pops. Land no branch paints draws dark grey; water keeps its look.
+- **A widget on a journal page can't reopen its own page.** A state on a page's button whose `on_finish` lines were
+  `InformationPanelBar.ClosePanel` then `OpenJournalEntryPanelDontToggle(JournalEntry.AccessSelf)` closed the page,
+  and it stayed closed, with nothing in either log (2026-11-05). Either the button went with the page before the second
+  line ran, or the close landed after the open had found the page still open; `DontToggle` itself is unproven. Run the
+  close and the open from a widget outside the page, as two states chained by `next`
+  (`te_jmap_repainter`, `gui/te_map_widgets.gui`).
 - **An inactive entry's page opens and paints.** A button holding `GetPlayerJournalEntry('<key>')` opens the inactive
   copy every country holds of an entry with activation triggers, and its map paints, so a map button needn't wait
   for the entry to activate. That page listed a long run of countries under Involved Countries.

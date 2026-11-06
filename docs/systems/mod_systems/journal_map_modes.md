@@ -2,10 +2,12 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Third pass, 2026-11-05 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Fourth pass, 2026-11-05 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
-and the third adds what its play-test asked for: picks that repaint a paused map, and the see-through journal page. `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file
-says which parts rest on an unverified engine fact. Update both as the answers come in.
+and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
+page. Its picks closed the page for good, so the fourth moves their repaint to a widget outside the page.
+`docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
+unverified engine fact. Update both as the answers come in.
 
 ## How a Journal Entry Paints the Map
 
@@ -62,12 +64,15 @@ entry, in no country's journal.
   through the entry's `widget` (`gui/journal_entry_widgets/te_map_room_widget.gui`, above the description; a widget
   draws on a contextless page, 2026-11-05). A pick's `is_valid` is false while it is the pick, which its button draws
   pressed (`down`, seen working 2026-11-05); the census maps' `is_shown` hides them while the census doesn't run.
-- **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then triggers its own
-  `te_jmap_repaint` state, which a quarter second later closes the page (`InformationPanelBar.ClosePanel`) and opens
-  it again (`OpenJournalEntryPanelDontToggle`: `OpenJournalEntryPanel` toggles, so if the close hadn't landed it would
-  close the page for good). Reopening repainted a paused map (2026-11-05); the delay lets the scripted GUI's effect land
-  before the page asks for the map. The button carries the Map Room as its own `datacontext`, so the second line still
-  names it after the page closes. Untested in game (third pass, check 1).
+- **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then fires
+  `te_jmap_repaint` with `PdxGuiTriggerAllAnimations`. That state sits on `te_jmap_repainter`, a zero-size scripted
+  widget outside the page (`gui/te_map_widgets.gui`, registered in `gui/scripted_widgets/te_systems_window.txt`), which
+  carries the Map Room as its own `datacontext`. A quarter second after the click it closes the page
+  (`InformationPanelBar.ClosePanel`), long enough for the scripted GUI's effect to land, and its next state,
+  `te_jmap_repaint_open`, opens the page again a tenth of a second later with the plain `OpenJournalEntryPanel`: the
+  page is closed by then, so the toggle opens it. Reopening repainted a paused map (2026-11-05). The third pass ran both
+  calls from a state on the pick button itself, `ClosePanel` then `OpenJournalEntryPanelDontToggle`: the page closed
+  and stayed closed, with no log line (fifth session). The reopen logs `TE_JMAP reopen` first. Untested in game (check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
 
 ### Why not a country entry added by a button
