@@ -2849,7 +2849,7 @@ banking_tool_omo_active = { je:je_banking_cycle ?= { has_modifier = banking_open
 
 ### Systems Using JE-Scoped Modifiers
 
-Since vanilla 1.15 a system's standing modifiers are declared on its entry with `scaling_modifiers_while_active` instead of added (#1404, design `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md`): `has_modifier` can't see those, so test the value's inputs. Converted so far: Strategic Reserve's sales income; Covert Warfare's five; Global Warming's `global_warming`, monsoon mask, the two policy costs and the carbon removal and aerosol injection policies; the Nuclear Program's funding, upkeep, taboo cost, doctrine and readiness. The table lists the entries whose modifiers are still added there.
+Since vanilla 1.15 a system's standing modifiers are declared on its entry with `scaling_modifiers_while_active` instead of added (#1404, design `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md`): `has_modifier` can't see those, so test the value's inputs. Converted so far: Strategic Reserve's sales income; Covert Warfare's five; Global Warming's `global_warming`, monsoon mask, the two policy costs and the carbon removal and aerosol injection policies; the Nuclear Program's funding, upkeep, taboo cost, doctrine and readiness; Colonial Empire's three programmes and the investment's expense; Cultural Hegemony's effect, foreign benchmark, funding pair, exposition cost and four programmes. The table lists the entries whose modifiers are still added there.
 
 | System | JE Name | Modifiers |
 |---|---|---|
@@ -2859,7 +2859,7 @@ Since vanilla 1.15 a system's standing modifiers are declared on its entry with 
 | Covert Warfare | `je_covert_warfare` | none added since #1404 (all declared) |
 | World War | `je_world_war` | 9 modifiers: `ww_rising_tensions`, `ww_rearmament`, `ww_appeasement`, `ww_lend_lease`, `ww_total_war_economy`, `ww_war_propaganda`, `ww_wartime_rationing`, `ww_home_front_strain`, `ww_prolonged_war_exhaustion`. NOT: `ww_fresh_forces`, `ww_arsenal_of_democracy` (event-applied one-time bonuses) |
 | United Nations | `je_united_nations` | 6 modifiers: `un_membership_benefits`, `un_high_authority_infamy`, `un_npt_disarmament`, `un_nonmember_pariah`, `un_champion_order_cost`, `un_undermine_order_cost`. NOT: `un_member`, `un_security_council`, `un_headquarters` (status modifiers checked cross-entity) |
-| Colonial Empire | `je_colonial_empire` | 2 modifiers: `colonial_empire_under_pressure`, `colonial_empire_crumbling`. NOT: `colonial_empire_solidified`, `colonial_empire_collapsed` (on_complete/on_fail), movement radicalism modifiers (movement-scoped) |
+| Colonial Empire | `je_colonial_empire` | the five stability bands (`colonial_empire_crumbling_modifier` … `colonial_empire_solidified_modifier`), swapped monthly; Solidified is also the ending's permanent country reward. NOT: movement radicalism modifiers (movement-scoped) |
 | Space Race Colonization | `je_space_race_solar_colonization` | 68 colony modifiers (`sr_colony_*`), `sr_solar_system_trade`. NOT: milestone modifiers like `sr_first_*`, approach/failure modifiers (country-scoped, not JE-managed) |
 
 ### Important: Update ALL References
@@ -3621,14 +3621,14 @@ If the entry log fires but the BUG log doesn't, the scope is valid regardless of
 
 ## Path-Dependent JE Resolution Pattern
 
-To make a journal entry's `on_complete` / `on_fail` event branch by which policy the player leaned on, **count months active** in country variables in the JE's `on_monthly_pulse`, then dispatch in the resolution effect. Country vars survive across the entire JE lifetime (whereas `has_modifier` only sees the current frame).
+To make a journal entry's `on_complete` / `on_fail` event branch by which policy the player leaned on, **count months active** in country variables in the JE's `on_monthly_pulse`, then dispatch in the resolution effect. Country vars survive across the entire JE lifetime (whereas `has_modifier` only sees the current frame, and since 1.15 can't see a declared scaling modifier at all: count from the policy's own variable).
 
 ```
 on_monthly_pulse = {
     effect = {
         if = { limit = { NOT = { has_variable = colonial_invest_months } }
                set_variable = { name = colonial_invest_months value = 0 } }
-        if = { limit = { has_modifier = colonial_development_investment_modifier }
+        if = { limit = { colonial_invest_level_value >= 1 }
                change_variable = { name = colonial_invest_months add = 1 } }
         # ... repeat per policy
     }

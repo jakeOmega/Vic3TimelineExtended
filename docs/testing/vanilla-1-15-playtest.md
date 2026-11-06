@@ -26,8 +26,8 @@ game, in English.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
-  entry is `can_revolution_inherit = no`). Since #1404 the Strategic Reserve, Covert Warfare, Global Warming and
-  Nuclear Program entries declare their standing modifiers (design
+  entry is `can_revolution_inherit = no`). Since #1404 the Strategic Reserve, Covert Warfare, Global Warming,
+  Nuclear Program, Colonial Empire and Cultural Hegemony entries declare their standing modifiers (design
   `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md` § 4): open each entry and a country's modifier
   tooltip. If a zero row shows, hide the scaling-modifier icon strip on the mod's entries in `gui/journal_entry.gui`.
   Two once-a-game lines in `debug.log`:
@@ -45,6 +45,12 @@ game, in English.
   `country_building_synthetics_plant_coal_require_subsidies_bool`, and no vanilla scaling modifier carries a `_bool`
   field. With the policy on, a synthetics plant on a coal method should show as subsidized and unable to drop it. If
   it doesn't, add that modifier to the entry by hand again (it is a flat 1).
+  Colonial Empire: a step on a program moves its modifier, now on the entry, within a few days, and the
+  investment's expense follows. Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
+  count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
+  the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
+  the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign
+  Cultural Benchmark on the entry, named as the source.
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in
