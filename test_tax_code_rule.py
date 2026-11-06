@@ -162,9 +162,11 @@ class OnActionGateSweepTest(unittest.TestCase):
                     for block in blocks if isinstance(blocks, list) else [blocks]:
                         limit = block["limit"]
                         self.assertTrue(any(limit.get(gate) == "yes" for gate in GATES), (branch, limit))
-        # Both effects carry a light branch: the rebels migrate from their own law,
-        # and the winner syncs (te_tax_light.2, te_tax_light.3).
+        # Both effects carry a light branch: the rebels take the original's code and adopt
+        # it (te_tax_light.4), or migrate from their own law when it has none in force
+        # (te_tax_light.2), and the winner syncs (te_tax_light.3; #1469).
         text = (ROOT / "common/scripted_effects/te_tax_civil_war_effects.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("trigger_event = { id = te_tax_light.4 }", text)
         self.assertIn("trigger_event = { id = te_tax_light.2 }", text)
         self.assertIn("trigger_event = { id = te_tax_light.3 }", text)
 

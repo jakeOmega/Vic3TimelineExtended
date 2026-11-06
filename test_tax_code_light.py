@@ -561,12 +561,15 @@ class SyncTest(unittest.TestCase):
                 at = found + len(part)
             return at
 
-        # 1. A law change: an AI's code follows its level, a player's is clamped.
-        at = in_order(["var:te_tax_light_law = te_tax_light_law_id", "limit = { is_ai = yes } te_tax_light_gen_uniform = yes",
+        # 1. A law change: an AI's code follows its level, a player's is clamped. "An AI" is
+        # te_tax_light_ai_uniform: an uprising holding a copied code takes the player's branches
+        # while its war lasts (#1469, test_tax_code_civil_war.LightOutbreakTest).
+        at = in_order(["var:te_tax_light_law = te_tax_light_law_id",
+                       "limit = { te_tax_light_ai_uniform = yes } te_tax_light_gen_uniform = yes",
                        "else = { te_tax_light_gen_clamp = yes }",
                        "set_variable = { name = te_tax_light_law value = te_tax_light_law_id }"])
         # 2. The AI: every tax follows the native level, scored.
-        at = in_order(["limit = { is_ai = yes }", "te_tax_light_gen_uniform_scored = yes",
+        at = in_order(["limit = { te_tax_light_ai_uniform = yes }", "te_tax_light_gen_uniform_scored = yes",
                        "set_variable = { name = te_tax_light_level value = te_tax_light_native_level }",
                        "te_tax_light_gen_steps = yes"], at)
         # The player: an outside level move is adopted, then the level follows the heaviest tax.
@@ -661,7 +664,7 @@ class HookTest(unittest.TestCase):
     def test_events_are_hidden_country_events_on_the_light_setting(self):
         text = read(EVENTS)
         for n, effect in ((1, "te_tax_light_process_month"), (2, "te_tax_light_migrate_country"),
-                          (3, "te_tax_light_sync")):
+                          (3, "te_tax_light_sync"), (4, "te_tax_light_adopt_copied_code")):
             body = flat(block(text, f"te_tax_light.{n}"))
             with self.subTest(event=n):
                 self.assertIn("type = country_event hidden = yes", body)

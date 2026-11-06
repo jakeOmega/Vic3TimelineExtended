@@ -151,9 +151,11 @@ TRANSITION_LOGGED = {
 }
 # Files whose is_ai reads predate the AI layer (te_tax_detect_drift's and the
 # customs adoption's first-time-only logging for AI countries), with counts, and
-# the light code's sync, whose AI countries follow their native tax level
-# (te_tax_light_effects.txt: the law change and the level, test_tax_code_light.py).
-PRE_EXISTING_IS_AI = {"te_tax_collection_effects.txt": 3, "te_tax_light_effects.txt": 2}
+# the light code's sync, whose AI countries follow their native tax level: its
+# law-change and level branches ask te_tax_light_ai_uniform (te_tax_triggers.txt),
+# an AI country that is not an uprising while its war lasts (#1469,
+# test_tax_code_light.py).
+PRE_EXISTING_IS_AI = {"te_tax_collection_effects.txt": 3, "te_tax_triggers.txt": 1}
 PLAYER_LOG_GATE = re.compile(r'if = \{ limit = \{ is_ai = no \} debug_log = "[^"]*" \}')
 # Generated effects whose whole body is an is_ai branch between two literal
 # debug_log lines (Task 19): the deadline line, written for every country,
