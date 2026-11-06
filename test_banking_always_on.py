@@ -165,7 +165,7 @@ class EntryTest(unittest.TestCase):
                       _norm(first_if))
         running = _key_block(effect[effect.index(first_if) + len(first_if):], "else")
         for step in ("banking_cycle_advance_variables", "banking_cycle_check_and_execute_crash",
-                     "banking_cycle_random_event_effect", "banking_cycle_apply_phase_modifiers",
+                     "banking_cycle_random_event_effect", "banking_cycle_update_ce_pool_balance",
                      "te_history_record_banking_samples"):
             self.assertIn(f"{step} = yes", running, step)
             self.assertNotIn(f"{step} = yes", first_if, step)
