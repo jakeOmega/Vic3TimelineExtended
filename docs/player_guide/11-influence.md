@@ -446,8 +446,8 @@ their priorities, but none can rise until a slot is free again.
 Priority 3 needs an Established agency; a fully operational operation at
 priority 3 works at four times base strength. A click changes detection risk at
 once, in either direction, but the effects only at the start of the next month.
-Raising priority raises upkeep at once; lowering it cuts upkeep only when the
-effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
+Raising priority raises upkeep within a few days; lowering it cuts upkeep only
+when the effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
 to electoral confidence and Regime Change's push on a coup are fixed and don't
 scale with priority.
 

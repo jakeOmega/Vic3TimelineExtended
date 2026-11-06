@@ -168,8 +168,8 @@ with the tier's name beneath it:
 
 ### The Climate Warming modifier
 
-Each month the entry gives every country the Climate Warming modifier, with
-every value multiplied by the current anomaly, after any aerosol mask
+The entry gives every country the Climate Warming modifier, with every value
+multiplied by the current anomaly (read again every few days), after any aerosol mask
 ([Aerosol Injection](#aerosol-injection)). At 1 °C it is:
 
 - +5% mortality and −1 standard of living in every state;
