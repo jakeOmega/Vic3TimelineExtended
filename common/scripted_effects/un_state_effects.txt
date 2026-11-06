@@ -12,9 +12,9 @@
 # THE CONTRACT. Every UN state modifier below has a mirror, the country
 # variable <modifier>_on. The variable is the truth. Two kinds:
 #   - REBUILT: the modifier is added beside its mirror and rebuilt from it.
-#     Every write goes through a helper here (un_state_on / _off, the
-#     convention helpers), or writes the modifier and calls un_state_record /
-#     un_state_forget beside it in the same block.
+#     Every write goes through a helper here (un_state_on / _off), or writes
+#     the modifier and calls un_state_record / un_state_forget beside it in
+#     the same block.
 #     test_un_state_mirror.py holds every write site to that.
 #   - DECLARED (1.15, #1404): je_united_nations declares the modifier
 #     (scaling_modifiers_while_active) while the mirror is set, so the
@@ -26,21 +26,17 @@
 #
 #   rebuilt, entry         un_member_modifier, un_founding_member_modifier,
 #                          un_headquarters_modifier, un_security_council_modifier,
-#                          un_permanent_member_modifier,
-#                          the seven convention modifiers
+#                          un_permanent_member_modifier
 #   declared               un_peacekeeping_contributor_modifier (+ _cost),
 #                          un_development_contributor_modifier (+ _cost),
 #                          un_human_rights_champion_modifier,
 #                          un_arms_control_participant_modifier,
 #                          un_champion_order_cost, un_undermine_order_cost
-#                          (un_programmes_end ends them all)
-#   rebuilt, country       un_law_of_sea_modifier, un_icc_member_modifier,
-#                          un_physical_protection_modifier,
-#                          un_cultural_diversity_modifier, un_nuclear_ban_modifier,
-#                          un_narcotics_control_modifier,
-#                          un_antarctic_treaty_modifier,
-#                          un_asat_moratorium_modifier,
-#                          un_colony_protection_modifier
+#                          (un_programmes_end ends them all);
+#                          the sixteen convention member modifiers, at the
+#                          enforcement (un_convention_on ratifies one,
+#                          un_conventions_end ends them all). Nine of them sat
+#                          on the country before 1.15; all are on the entry.
 #
 # Not mirrored, because the monthly pulse derives them from the above:
 # un_member_privileges_modifier, un_npt_disarmament_modifier, both pariah
@@ -156,27 +152,20 @@ un_state_off = {
 	un_state_forget = { MODIFIER = $MODIFIER$ }
 }
 
-# Ratify a convention: its member modifier at the current enforcement, on the
-# journal entry, or on the country for the law of the sea, the ICC and the
-# physical protection of nuclear material.
-# Parameters: $MODIFIER$
+# Ratify a convention: the entry declares its member modifier, at the current
+# enforcement (un_convention_multiplier), while the mirror is set. The line
+# previews the modifier; the mirror is the ratification. Named by the stem
+# (un_<stem>_modifier): no effect may be handed a declared modifier's name.
+# Callers test the mirror first, so a party is never ratified twice.
+# Parameters: $CONVENTION$ = the stem, e.g. human_rights_declaration
 # Scope: country
 un_convention_on = {
-	je:je_united_nations ?= { add_modifier = { name = $MODIFIER$ multiplier = un_convention_multiplier } }
-	if = {
-		limit = { exists = je:je_united_nations }
-		un_state_record = { MODIFIER = $MODIFIER$ }
+	show_as_tooltip = {
+		je:je_united_nations ?= { add_modifier = { name = un_$CONVENTION$_modifier multiplier = un_convention_multiplier } }
 	}
-}
-
-un_convention_country_on = {
-	add_modifier = { name = $MODIFIER$ multiplier = un_convention_multiplier }
-	un_state_record = { MODIFIER = $MODIFIER$ }
-}
-
-un_state_country_off = {
-	remove_modifier_if_exists_effect = { MODIFIER = $MODIFIER$ }
-	un_state_forget = { MODIFIER = $MODIFIER$ }
+	hidden_effect = {
+		un_mirror_set = { MIRROR = un_$CONVENTION$_modifier_on }
+	}
 }
 
 # ---- Rebuilding a wiped entry -------------------------------------------------------
@@ -191,25 +180,12 @@ un_state_restore = {
 	}
 }
 
-un_convention_restore = {
-	if = {
-		limit = { un_state_missing = { MODIFIER = $MODIFIER$ } }
-		je:je_united_nations ?= { add_modifier = { name = $MODIFIER$ multiplier = un_convention_multiplier } }
-	}
-}
-
-un_convention_country_restore = {
-	if = {
-		limit = { un_state_country_missing = { MODIFIER = $MODIFIER$ } }
-		add_modifier = { name = $MODIFIER$ multiplier = un_convention_multiplier }
-	}
-}
-
 # Restore the entry from the mirrors. Only adds what is missing, so it is safe
 # on an entry that kept its modifiers, and it writes no mirror: what it cannot
 # honour yet is left for the pulse's heal (un_state_rebuild) to decide.
-#   - Membership, founding status and conventions come back for any member:
-#     a suspended member keeps them (§0.8).
+#   - Membership and founding status come back for any member: a suspended
+#     member keeps them (§0.8), as it keeps its conventions, which are
+#     declared from their mirrors and need nothing here.
 #   - The headquarters only while we are its host (un_hq_is_host, which
 #     counts a winner whose predecessor hosted it).
 #   - The permanent seat and the Council seat only while we conduct our own
@@ -255,22 +231,6 @@ un_state_restore_all = {
 			}
 			je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 		}
-		un_convention_restore = { MODIFIER = un_human_rights_declaration_modifier }
-		un_convention_restore = { MODIFIER = un_nonproliferation_modifier }
-		un_convention_restore = { MODIFIER = un_climate_binding_modifier }
-		un_convention_restore = { MODIFIER = un_heritage_program_modifier }
-		un_convention_restore = { MODIFIER = un_pandemic_cooperation_modifier }
-		un_convention_restore = { MODIFIER = un_refugee_program_modifier }
-		un_convention_restore = { MODIFIER = un_space_partnership_modifier }
-		un_convention_country_restore = { MODIFIER = un_law_of_sea_modifier }
-		un_convention_country_restore = { MODIFIER = un_icc_member_modifier }
-		un_convention_country_restore = { MODIFIER = un_physical_protection_modifier }
-		un_convention_country_restore = { MODIFIER = un_narcotics_control_modifier }
-		un_convention_country_restore = { MODIFIER = un_cultural_diversity_modifier }
-		un_convention_country_restore = { MODIFIER = un_nuclear_ban_modifier }
-		un_convention_country_restore = { MODIFIER = un_antarctic_treaty_modifier }
-		un_convention_country_restore = { MODIFIER = un_asat_moratorium_modifier }
-		un_convention_country_restore = { MODIFIER = un_colony_protection_modifier }
 
 		if = {
 			limit = { un_hq_is_host = yes }
@@ -336,7 +296,7 @@ un_state_rebuild = {
 		un_state_forget = { MODIFIER = un_founding_member_modifier }
 		un_state_forget = { MODIFIER = un_headquarters_modifier }
 		un_state_forget_representation = yes
-		un_state_forget_conventions = yes
+		un_conventions_end = yes
 	}
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
@@ -367,24 +327,27 @@ un_programmes_end = {
 	un_mirror_clear = { MIRROR = un_undermine_order_cost_on }
 }
 
+# Every convention we are party to ends: their mirrors, which the entry's
+# declarations read (leaving, dissolution, a rebuild that finds us no
+# member).
 # Scope: country
-un_state_forget_conventions = {
-	un_state_forget = { MODIFIER = un_human_rights_declaration_modifier }
-	un_state_forget = { MODIFIER = un_nonproliferation_modifier }
-	un_state_forget = { MODIFIER = un_climate_binding_modifier }
-	un_state_forget = { MODIFIER = un_heritage_program_modifier }
-	un_state_forget = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_state_forget = { MODIFIER = un_refugee_program_modifier }
-	un_state_forget = { MODIFIER = un_space_partnership_modifier }
-	un_state_forget = { MODIFIER = un_law_of_sea_modifier }
-	un_state_forget = { MODIFIER = un_icc_member_modifier }
-	un_state_forget = { MODIFIER = un_physical_protection_modifier }
-	un_state_forget = { MODIFIER = un_narcotics_control_modifier }
-	un_state_forget = { MODIFIER = un_cultural_diversity_modifier }
-	un_state_forget = { MODIFIER = un_nuclear_ban_modifier }
-	un_state_forget = { MODIFIER = un_antarctic_treaty_modifier }
-	un_state_forget = { MODIFIER = un_asat_moratorium_modifier }
-	un_state_forget = { MODIFIER = un_colony_protection_modifier }
+un_conventions_end = {
+	un_mirror_clear = { MIRROR = un_human_rights_declaration_modifier_on }
+	un_mirror_clear = { MIRROR = un_nonproliferation_modifier_on }
+	un_mirror_clear = { MIRROR = un_climate_binding_modifier_on }
+	un_mirror_clear = { MIRROR = un_heritage_program_modifier_on }
+	un_mirror_clear = { MIRROR = un_pandemic_cooperation_modifier_on }
+	un_mirror_clear = { MIRROR = un_refugee_program_modifier_on }
+	un_mirror_clear = { MIRROR = un_space_partnership_modifier_on }
+	un_mirror_clear = { MIRROR = un_law_of_sea_modifier_on }
+	un_mirror_clear = { MIRROR = un_icc_member_modifier_on }
+	un_mirror_clear = { MIRROR = un_physical_protection_modifier_on }
+	un_mirror_clear = { MIRROR = un_narcotics_control_modifier_on }
+	un_mirror_clear = { MIRROR = un_cultural_diversity_modifier_on }
+	un_mirror_clear = { MIRROR = un_nuclear_ban_modifier_on }
+	un_mirror_clear = { MIRROR = un_antarctic_treaty_modifier_on }
+	un_mirror_clear = { MIRROR = un_asat_moratorium_modifier_on }
+	un_mirror_clear = { MIRROR = un_colony_protection_modifier_on }
 }
 
 # The pulse's turn on a pending entry that still lacks something: rebuild, and
@@ -418,19 +381,6 @@ un_state_reconcile_one = {
 	}
 }
 
-un_state_reconcile_country = {
-	if = {
-		limit = { has_modifier = $MODIFIER$ }
-		if = {
-			limit = { NOT = { has_variable = $MODIFIER$_on } }
-			un_state_record = { MODIFIER = $MODIFIER$ }
-		}
-	}
-	else = {
-		un_state_forget = { MODIFIER = $MODIFIER$ }
-	}
-}
-
 # Called at the top of je_united_nations' monthly pulse whenever it is not
 # healing; also clears a pending mark whose entry needed nothing.
 # Scope: country
@@ -444,22 +394,6 @@ un_state_reconcile = {
 	un_state_reconcile_one = { MODIFIER = un_headquarters_modifier }
 	un_state_reconcile_one = { MODIFIER = un_security_council_modifier }
 	un_state_reconcile_one = { MODIFIER = un_permanent_member_modifier }
-	un_state_reconcile_one = { MODIFIER = un_human_rights_declaration_modifier }
-	un_state_reconcile_one = { MODIFIER = un_nonproliferation_modifier }
-	un_state_reconcile_one = { MODIFIER = un_climate_binding_modifier }
-	un_state_reconcile_one = { MODIFIER = un_heritage_program_modifier }
-	un_state_reconcile_one = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_state_reconcile_one = { MODIFIER = un_refugee_program_modifier }
-	un_state_reconcile_one = { MODIFIER = un_space_partnership_modifier }
-	un_state_reconcile_country = { MODIFIER = un_law_of_sea_modifier }
-	un_state_reconcile_country = { MODIFIER = un_icc_member_modifier }
-	un_state_reconcile_country = { MODIFIER = un_physical_protection_modifier }
-	un_state_reconcile_country = { MODIFIER = un_narcotics_control_modifier }
-	un_state_reconcile_country = { MODIFIER = un_cultural_diversity_modifier }
-	un_state_reconcile_country = { MODIFIER = un_nuclear_ban_modifier }
-	un_state_reconcile_country = { MODIFIER = un_antarctic_treaty_modifier }
-	un_state_reconcile_country = { MODIFIER = un_asat_moratorium_modifier }
-	un_state_reconcile_country = { MODIFIER = un_colony_protection_modifier }
 }
 
 # ---- The headquarters host across a revolution ------------------------------------------

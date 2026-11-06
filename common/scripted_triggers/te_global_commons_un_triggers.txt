@@ -67,10 +67,7 @@ te_seabed_was_unilateral = {
 # Scope: country
 te_seabed_itlos_ratified = {
 	has_global_variable = un_agency_itlos
-	OR = {
-		has_modifier = un_law_of_sea_modifier
-		has_variable = un_law_of_sea_modifier_on
-	}
+	has_variable = un_law_of_sea_modifier_on
 }
 
 # A defector that has left Unilateral Licensing and is not yet a party again.
@@ -123,10 +120,7 @@ te_antarctic_has_station = {
 # Scope: country
 te_antarctic_treaty_party = {
 	has_global_variable = un_agency_ats
-	OR = {
-		has_modifier = un_antarctic_treaty_modifier
-		has_variable = un_antarctic_treaty_modifier_on
-	}
+	has_variable = un_antarctic_treaty_modifier_on
 }
 
 # A great power outside the treaty (it refused it, denounced it, or is not a

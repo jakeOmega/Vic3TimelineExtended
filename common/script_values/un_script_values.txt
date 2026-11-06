@@ -356,7 +356,7 @@ un_sanctions_target_count = {
 un_nonproliferation_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		limit = { has_variable = un_nonproliferation_modifier_on }
 		add = 1
 	}
 }
@@ -364,7 +364,7 @@ un_nonproliferation_signatories = {
 un_climate_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		limit = { has_variable = un_climate_binding_modifier_on }
 		add = 1
 	}
 }
@@ -372,7 +372,7 @@ un_climate_signatories = {
 un_human_rights_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		limit = { has_variable = un_human_rights_declaration_modifier_on }
 		add = 1
 	}
 }
@@ -380,7 +380,7 @@ un_human_rights_signatories = {
 un_heritage_participants = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		limit = { has_variable = un_heritage_program_modifier_on }
 		add = 1
 	}
 }

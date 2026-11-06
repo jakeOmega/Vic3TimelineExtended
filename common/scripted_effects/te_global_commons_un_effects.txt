@@ -269,7 +269,7 @@ te_antarctic_treaty_denounce = {
 	}
 	custom_tooltip = te_antarctic_denounce_case_tt
 	un_dossier_record = { RECORD = defiance POINTS = te_antarctic_denounce_case }
-	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
+	un_mirror_clear = { MIRROR = un_antarctic_treaty_modifier_on }
 	set_variable = te_antarctic_denounced
 	if = {
 		limit = { has_modifier = un_antarctic_policy_modifier }
@@ -289,12 +289,9 @@ te_antarctic_treaty_lapse = {
 	set_global_variable = te_antarctic_treaty_lapsed
 	every_country = {
 		limit = {
-			OR = {
-				has_modifier = un_antarctic_treaty_modifier
-				has_variable = un_antarctic_treaty_modifier_on
-			}
+			has_variable = un_antarctic_treaty_modifier_on
 		}
-		un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
+		un_mirror_clear = { MIRROR = un_antarctic_treaty_modifier_on }
 		te_antarctic_reread_terms = yes
 	}
 	every_country = {

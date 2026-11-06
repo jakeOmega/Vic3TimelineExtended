@@ -363,6 +363,170 @@
 			}
 		}
 	}
+	# The conventions we are party to, at the UN's enforcement E: the mirror
+	# is the ratification (un_convention_on sets it, un_conventions_end
+	# clears it), so a Moribund UN's x0 takes the modifier off and leaves the
+	# ratification. Nine of these sat on the country before 1.15.
+	scaling_modifiers_while_active = {
+		modifier = un_human_rights_declaration_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_human_rights_declaration_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_nonproliferation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_nonproliferation_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_climate_binding_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_climate_binding_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_heritage_program_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_heritage_program_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_pandemic_cooperation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_pandemic_cooperation_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_refugee_program_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_refugee_program_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_space_partnership_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_space_partnership_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_law_of_sea_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_law_of_sea_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_icc_member_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_icc_member_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_physical_protection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_physical_protection_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_narcotics_control_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_narcotics_control_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_cultural_diversity_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_cultural_diversity_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_nuclear_ban_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_nuclear_ban_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_antarctic_treaty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_antarctic_treaty_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_asat_moratorium_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_asat_moratorium_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_colony_protection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_colony_protection_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc

@@ -18,6 +18,7 @@ import re
 import unittest
 
 from je_multiplier_scope_audit import parse_text
+from test_un_convention_registry import RATIFIED
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -153,6 +154,13 @@ EXPECTED = {
     # merge did (un_policy_counts_in_full).
     "un_undermine_order_cost": _gated("un_undermines_the_order = yes", "1"),
 }
+
+# The conventions we are party to, at the enforcement, while the mirror (the
+# ratification) is set: a Moribund UN's x0 takes them off and keeps the
+# ratification, so un_convention_multiplier no longer floors at x0.01.
+CONVENTION_MODIFIERS = tuple(c.member_modifier for c in RATIFIED)
+for _mod in CONVENTION_MODIFIERS:
+    EXPECTED[_mod] = _gated(f"has_variable = {_mod}_on", "un_convention_multiplier")
 
 PROGRAMMES = (
     "un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost",
@@ -428,6 +436,36 @@ class ProgrammeTests(unittest.TestCase):
                 self.assertIn(f"un_mirror_clear = {{ MIRROR = {modifier}_on }}", ends)
         self.assertIn("un_programmes_end = yes", _block(_read(LADDER), "un_membership_end_effect"))
         self.assertIn("un_programmes_end = yes", _block(state, "un_state_forget_representation"))
+
+
+class ConventionTests(unittest.TestCase):
+    def test_the_mirrors_are_written_only_by_ratifying_and_ending(self):
+        # un_convention_on sets one (its stem), un_conventions_end clears them
+        # all; the Antarctic Treaty's denunciation and lapse clear its own.
+        for modifier in CONVENTION_MODIFIERS:
+            with self.subTest(modifier=modifier):
+                self.assertEqual(_writes(modifier + "_on"),
+                                 {"set_variable": [], "remove_variable": [], "change_variable": []})
+        clears = {}
+        call = re.compile(r"un_mirror_clear = \{ MIRROR = (un_\w+_modifier)_on \}")
+        for path in _script_files():
+            text = _read(path)
+            tops = [(m.start(), m.group(1)) for m in re.finditer(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", text, re.M)]
+            for m in call.finditer(text):
+                if m.group(1) in CONVENTION_MODIFIERS:
+                    owner = max(t for t in tops if t[0] <= m.start())[1]
+                    clears.setdefault(m.group(1), set()).add(owner)
+        for modifier in CONVENTION_MODIFIERS:
+            with self.subTest(modifier=modifier):
+                expected = {"un_conventions_end"}
+                if modifier == "un_antarctic_treaty_modifier":
+                    expected |= {"te_antarctic_treaty_denounce", "te_antarctic_treaty_lapse"}
+                self.assertEqual(clears.get(modifier), expected)
+
+    def test_the_regime_layer_no_longer_rescales_them(self):
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotIn("un_regime_reapply", _read(path))
 
 
 if __name__ == "__main__":

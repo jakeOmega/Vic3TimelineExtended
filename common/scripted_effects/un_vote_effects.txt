@@ -480,23 +480,23 @@ un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_human_rights }
-			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+			NOT = { has_variable = un_human_rights_declaration_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_human_rights_declaration_modifier }
+		un_convention_on = { CONVENTION = human_rights_declaration }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_npt }
-			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+			NOT = { has_variable = un_nonproliferation_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_nonproliferation_modifier }
+		un_convention_on = { CONVENTION = nonproliferation }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_climate }
-			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+			NOT = { has_variable = un_climate_binding_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_climate_binding_modifier }
+		un_convention_on = { CONVENTION = climate_binding }
 	}
 	# A vetoed reform is flat-blocked (un_vote.2 applies nothing), so members
 	# ratify nothing either.
@@ -515,9 +515,9 @@ un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_heritage }
-			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+			NOT = { has_variable = un_heritage_program_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_heritage_program_modifier }
+		un_convention_on = { CONVENTION = heritage_program }
 	}
 	if = {
 		limit = {
@@ -559,56 +559,55 @@ un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_pandemic }
-			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+			NOT = { has_variable = un_pandemic_cooperation_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_pandemic_cooperation_modifier }
+		un_convention_on = { CONVENTION = pandemic_cooperation }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_refugee }
-			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+			NOT = { has_variable = un_refugee_program_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_refugee_program_modifier }
+		un_convention_on = { CONVENTION = refugee_program }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_space }
-			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+			NOT = { has_variable = un_space_partnership_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_space_partnership_modifier }
+		un_convention_on = { CONVENTION = space_partnership }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-			NOT = { has_modifier = un_law_of_sea_modifier }
+			NOT = { has_variable = un_law_of_sea_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
+		un_convention_on = { CONVENTION = law_of_sea }
 	}
-	# Physical protection of nuclear material: country-scoped, like the law of
-	# the sea, so the nuclear code reads it without a je: hop
-	# (nd_custody_is_secured, nd_loose_monthly).
+	# Physical protection of nuclear material: the nuclear code reads its
+	# mirror (nd_custody_is_secured, nd_loose_monthly).
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_physical_protection }
-			NOT = { has_modifier = un_physical_protection_modifier }
+			NOT = { has_variable = un_physical_protection_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+		un_convention_on = { CONVENTION = physical_protection }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_narcotics }
-			NOT = { has_modifier = un_narcotics_control_modifier }
+			NOT = { has_variable = un_narcotics_control_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
+		un_convention_on = { CONVENTION = narcotics_control }
 	}
-	# The phase 7 conventions (§0.12): country-scoped too, so the cultural
-	# hegemony, homeland and nuclear code read them without a je: hop.
+	# The phase 7 conventions (§0.12): the cultural hegemony, homeland and
+	# nuclear code read their mirrors.
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
-			NOT = { has_modifier = un_cultural_diversity_modifier }
+			NOT = { has_variable = un_cultural_diversity_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+		un_convention_on = { CONVENTION = cultural_diversity }
 		un_cultural_diversity_terms_tt = yes
 	}
 	# An armed party is held to a ceiling from the nuclear entry's next month
@@ -621,13 +620,13 @@ un_vote_apply_treaty_modifier = {
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
-			NOT = { has_modifier = un_nuclear_ban_modifier }
+			NOT = { has_variable = un_nuclear_ban_modifier_on }
 			OR = {
 				nd_is_armed = no
 				scope:un_resolution ?= { un_lobby_has_voted = { COUNTRY = ROOT } }
 			}
 		}
-		un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+		un_convention_on = { CONVENTION = nuclear_ban }
 		un_nuclear_ban_terms_tt = yes
 	}
 	# ICC membership: skipped when the resolution was vetoed (graduated form
@@ -636,39 +635,38 @@ un_vote_apply_treaty_modifier = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_icc }
 			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
-			NOT = { has_modifier = un_icc_member_modifier }
+			NOT = { has_variable = un_icc_member_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+		un_convention_on = { CONVENTION = icc_member }
 	}
 	# The Global Commons' conventions (2026-10-16-global-commons-design.md §4,
-	# §6.5): country-scoped too, so the seabed allocation and the
-	# anti-satellite strike read them without a je: hop
-	# (te_seabed_southern_barred, te_asat_moratorium_party).
+	# §6.5): the seabed allocation and the anti-satellite strike read their
+	# mirrors (te_seabed_southern_barred, te_asat_moratorium_party).
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_antarctic }
-			NOT = { has_modifier = un_antarctic_treaty_modifier }
+			NOT = { has_variable = un_antarctic_treaty_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+		un_convention_on = { CONVENTION = antarctic_treaty }
 		custom_tooltip = un_antarctic_terms_tt
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_asat }
-			NOT = { has_modifier = un_asat_moratorium_modifier }
+			NOT = { has_variable = un_asat_moratorium_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+		un_convention_on = { CONVENTION = asat_moratorium }
 		custom_tooltip = un_asat_terms_tt
 	}
 	# The Convention on the Settlement of Outer Space (solar colonization fleets
-	# design § 13): country-scoped, so the fleets' prices of force read it
-	# without a je: hop (sr_colony_convention_party).
+	# design § 13): the fleets' prices of force read its mirror
+	# (sr_colony_convention_party).
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_colony_protection }
-			NOT = { has_modifier = un_colony_protection_modifier }
+			NOT = { has_variable = un_colony_protection_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
+		un_convention_on = { CONVENTION = colony_protection }
 		custom_tooltip = un_colony_protection_terms_tt
 	}
 	# The convention regimes (redesign phase 5, §5.3): read our terms now —
@@ -694,94 +692,90 @@ un_apply_ratified_conventions = {
 	if = {
 		limit = {
 			has_global_variable = un_agency_unhrc
-			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+			NOT = { has_variable = un_human_rights_declaration_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_human_rights_declaration_modifier }
+		un_convention_on = { CONVENTION = human_rights_declaration }
 	}
 	# Nuclear Non-Proliferation Treaty (IAEA established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_iaea
-			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+			NOT = { has_variable = un_nonproliferation_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_nonproliferation_modifier }
+		un_convention_on = { CONVENTION = nonproliferation }
 	}
 	# Climate Binding Framework (UNEP established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_unep
-			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+			NOT = { has_variable = un_climate_binding_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_climate_binding_modifier }
+		un_convention_on = { CONVENTION = climate_binding }
 	}
 	# Cultural Heritage Program (UNESCO established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_unesco
-			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+			NOT = { has_variable = un_heritage_program_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_heritage_program_modifier }
+		un_convention_on = { CONVENTION = heritage_program }
 	}
 	# Pandemic Cooperation (WHO established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_who
-			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+			NOT = { has_variable = un_pandemic_cooperation_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_pandemic_cooperation_modifier }
+		un_convention_on = { CONVENTION = pandemic_cooperation }
 	}
 	# Refugee Protection Program (UNHCR established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_unhcr
-			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+			NOT = { has_variable = un_refugee_program_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_refugee_program_modifier }
+		un_convention_on = { CONVENTION = refugee_program }
 	}
 	# Space Partnership (UNOOSA established)
 	if = {
 		limit = {
 			has_global_variable = un_agency_unoosa
-			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+			NOT = { has_variable = un_space_partnership_modifier_on }
 		}
-		un_convention_on = { MODIFIER = un_space_partnership_modifier }
+		un_convention_on = { CONVENTION = space_partnership }
 	}
 	# Convention on the Law of the Sea (ITLOS established).
-	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
 	if = {
 		limit = {
 			has_global_variable = un_agency_itlos
-			NOT = { has_modifier = un_law_of_sea_modifier }
+			NOT = { has_variable = un_law_of_sea_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
+		un_convention_on = { CONVENTION = law_of_sea }
 	}
 	# Physical Protection of Nuclear Material (CPPNM in force).
-	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
 	if = {
 		limit = {
 			has_global_variable = un_agency_cppnm
-			NOT = { has_modifier = un_physical_protection_modifier }
+			NOT = { has_variable = un_physical_protection_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+		un_convention_on = { CONVENTION = physical_protection }
 	}
 	if = {
 		limit = {
 			has_global_variable = un_agency_incb
-			NOT = { has_modifier = un_narcotics_control_modifier }
+			NOT = { has_variable = un_narcotics_control_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
+		un_convention_on = { CONVENTION = narcotics_control }
 	}
 	# Convention on Cultural Diversity (CCD in force).
-	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
 	if = {
 		limit = {
 			has_global_variable = un_agency_ccd
-			NOT = { has_modifier = un_cultural_diversity_modifier }
+			NOT = { has_variable = un_cultural_diversity_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+		un_convention_on = { CONVENTION = cultural_diversity }
 	}
 	# Treaty on the Prohibition of Nuclear Weapons (TPNW in force).
-	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
 	# Not for an armed joiner: it never voted on the ban, and joining the
 	# Assembly is no promise to disarm (it would put its arsenal on a 25-year
 	# schedule, nd_taboo_refresh_ban_ceiling). It stays outside, as a member
@@ -789,48 +783,45 @@ un_apply_ratified_conventions = {
 	if = {
 		limit = {
 			has_global_variable = un_agency_tpnw
-			NOT = { has_modifier = un_nuclear_ban_modifier }
+			NOT = { has_variable = un_nuclear_ban_modifier_on }
 			nd_is_armed = no
 		}
-		un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+		un_convention_on = { CONVENTION = nuclear_ban }
 	}
 	# International Criminal Court (ICC established, non-vetoed pass).
-	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
 	if = {
 		limit = {
 			has_global_variable = un_agency_icc
-			NOT = { has_modifier = un_icc_member_modifier }
+			NOT = { has_variable = un_icc_member_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+		un_convention_on = { CONVENTION = icc_member }
 	}
-	# The Antarctic Treaty (ATS in force). Country-scoped — matches
-	# un_vote_apply_treaty_modifier. Not for a joiner that denounced it: it
+	# The Antarctic Treaty (ATS in force). Not for a joiner that denounced it: it
 	# left the treaty on purpose, and rejoining the Assembly does not bring it
 	# back (te_antarctic_denounced; a new treaty clears the mark).
 	if = {
 		limit = {
 			has_global_variable = un_agency_ats
-			NOT = { has_modifier = un_antarctic_treaty_modifier }
+			NOT = { has_variable = un_antarctic_treaty_modifier_on }
 			NOT = { has_variable = te_antarctic_denounced }
 		}
-		un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+		un_convention_on = { CONVENTION = antarctic_treaty }
 	}
-	# The anti-satellite moratorium (UNODA in force). Country-scoped.
+	# The anti-satellite moratorium (UNODA in force).
 	if = {
 		limit = {
 			has_global_variable = un_agency_unoda
-			NOT = { has_modifier = un_asat_moratorium_modifier }
+			NOT = { has_variable = un_asat_moratorium_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+		un_convention_on = { CONVENTION = asat_moratorium }
 	}
 	# The Convention on the Settlement of Outer Space (COPUOS in force).
-	# Country-scoped.
 	if = {
 		limit = {
 			has_global_variable = un_agency_copuos
-			NOT = { has_modifier = un_colony_protection_modifier }
+			NOT = { has_variable = un_colony_protection_modifier_on }
 		}
-		un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
+		un_convention_on = { CONVENTION = colony_protection }
 	}
 	# The joiner's terms under the regimes in force (redesign phase 5).
 	un_regime_refresh_country = yes

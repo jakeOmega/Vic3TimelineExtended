@@ -394,7 +394,10 @@ class ProposeTextTest(unittest.TestCase):
                 self.assertFalse(_loc(key).startswith(" "), key)
 
 
-MEMBER_MODIFIERS = {   # convention -> (member modifier, where it sits); test_un_convention_registry's table
+# convention -> (member modifier, where a save from before 1.15 holds its copy);
+# test_un_convention_registry's table. The entry declares each one from its
+# mirror (#1404), and the chamber's line takes its stem.
+MEMBER_MODIFIERS = {
     "human_rights": ("un_human_rights_declaration_modifier", "je"),
     "icc": ("un_icc_member_modifier", "country"),
     "npt": ("un_nonproliferation_modifier", "je"),
@@ -409,6 +412,12 @@ MEMBER_MODIFIERS = {   # convention -> (member modifier, where it sits); test_un
     "antarctic": ("un_antarctic_treaty_modifier", "country"),
     "asat": ("un_asat_moratorium_modifier", "country"),
 }
+
+
+def _stem(mod):
+    return mod[len("un_"):-len("_modifier")]
+
+
 TERMS = {   # convention -> its regime terms, in display order
     "human_rights": ("un_regime_rights_violator_modifier",),
     "npt": ("un_regime_npt_inspection_modifier", "un_regime_npt_guarantee_modifier"),
@@ -462,17 +471,17 @@ class ObligationsTest(unittest.TestCase):
         self.assertIsNone(_loc_or_none("je_un_chamber_sub_budget"))
 
     def test_every_convention_we_carry_has_a_line_with_its_modifier(self):
-        for key, (mod, scope) in MEMBER_MODIFIERS.items():
+        for key, (mod, _scope) in MEMBER_MODIFIERS.items():
             with self.subTest(convention=key):
-                m = re.search(rf"un_chamber_convention_line_{scope} = \{{ MODIFIER = {mod} LINE = (\w+) \}}",
+                m = re.search(rf"un_chamber_convention_line = \{{ CONVENTION = {_stem(mod)} LINE = (\w+) \}}",
                               self.regimes)
                 self.assertTrue(m, key)
                 self.assertModifierHover(m.group(1), mod)
 
     def test_every_term_sits_under_its_convention_with_its_modifier(self):
         for key, terms in TERMS.items():
-            head = self.regimes.index(f"MODIFIER = {MEMBER_MODIFIERS[key][0]} ")
-            later = [self.regimes.index(f"MODIFIER = {m[0]} ") for k, m in MEMBER_MODIFIERS.items()]
+            head = self.regimes.index(f"CONVENTION = {_stem(MEMBER_MODIFIERS[key][0])} ")
+            later = [self.regimes.index(f"CONVENTION = {_stem(m[0])} ") for k, m in MEMBER_MODIFIERS.items()]
             nxt = min([i for i in later if i > head] + [len(self.regimes)])
             for mod in terms:
                 with self.subTest(term=mod):
@@ -706,12 +715,10 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertTrue(m, "the footnote is not gated on being party to a convention")
         self.assertIn("je_un_chamber_regimes_not_party", self.regimes)
         party = _block(_read(REGIME_TRIGGERS), "un_chamber_party_to_a_convention")
-        for key, (mod, scope) in MEMBER_MODIFIERS.items():
+        for key, (mod, _scope) in MEMBER_MODIFIERS.items():
             with self.subTest(convention=key):
-                if scope == "je":
-                    self.assertRegex(party, rf"je:je_united_nations \?= \{{[^}}]*has_modifier = {mod}\b")
-                else:
-                    self.assertRegex(party, rf"(?m)^\t+has_modifier = {mod}$")
+                self.assertRegex(party, rf"(?m)^\t+has_variable = {mod}_on$")
+                self.assertNotIn(f"has_modifier = {mod}", party)
 
     def test_icc_jurisdiction_over_a_non_party_is_its_own_line(self):
         self.assertIn("je_un_chamber_regime_icc_outside", self.regimes)

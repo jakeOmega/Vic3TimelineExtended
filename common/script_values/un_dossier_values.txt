@@ -1005,7 +1005,7 @@ un_lean_interests = {
 		else = {
 			add = 20
 			if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+				limit = { has_variable = un_nonproliferation_modifier_on }
 				add = 10
 			}
 		}

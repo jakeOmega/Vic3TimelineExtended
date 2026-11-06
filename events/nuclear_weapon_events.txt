@@ -1768,7 +1768,7 @@ nuclear_weapon_events.18 = {
 			else_if = {
 				limit = {
 					scope:proliferating_country = {
-						je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+						has_variable = un_nonproliferation_modifier_on
 					}
 				}
 				custom_tooltip = {

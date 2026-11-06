@@ -3660,7 +3660,8 @@ class TestLooseRecovery(unittest.TestCase):
         self.assertIn("nd_loose_monthly = yes", block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup"))
 
     def test_un_convention_secures_custody_and_searches(self):
-        self.assertIn("has_modifier = un_physical_protection_modifier", block(self.ct, "nd_custody_is_secured"))
+        # The ratification is the mirror the entry declares the modifier from (#1404).
+        self.assertIn("has_variable = un_physical_protection_modifier_on", block(self.ct, "nd_custody_is_secured"))
         monthly = block(self.le, "nd_loose_monthly")
         self.assertIn("chance = nd_loose_convention_chance", monthly)
         self.assertIn("nd_loose_recover_from_line = { HOW = 4 }", monthly)
@@ -3853,7 +3854,7 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         for line in ("un_tier_is_supranational = yes",
                      "has_modifier = un_member_modifier",
                      "un_propose_npt_in_force = yes",
-                     "NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }",
+                     "NOT = { has_variable = un_nonproliferation_modifier_on }",
                      "un_regime_npt_threshold = yes",
                      "has_variable = un_npt_built_outside"):
             self.assertIn(line, body)

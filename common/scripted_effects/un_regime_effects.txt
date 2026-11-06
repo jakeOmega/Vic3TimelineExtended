@@ -8,7 +8,9 @@
 #
 # WHAT A COUNTRY'S "TERMS" ARE. For a member:
 #   - the member modifier of every convention it has ratified, multiplied by
-#     the UN's enforcement E (un_regime_reapply_conventions);
+#     the UN's enforcement E (declared by je_united_nations while the
+#     convention's mirror is set, so it follows E within days; nothing here
+#     touches it);
 #   - the winner or loser modifier each convention it has RATIFIED gives it
 #     (§5.3). A member that refused to ratify (un_vote.3's "Refuse to ratify
 #     it", PR #422) stays outside the convention: neither its member modifier
@@ -106,13 +108,16 @@ un_regime_country_pulse = {
 
 # Clear and re-apply everything the regimes do to this country.
 #
-# Membership and every convention are read from the modifier OR its mirror
-# (<modifier>_on, un_state_record). Ratifying, joining and un_events.36 add the
-# modifiers in the very block that calls this, where has_modifier cannot see
-# them yet; the stamp below then keeps the monthly pulse from reading our terms
-# again until the next un_regime_bump, up to un_regime_refresh_months later. On
-# the pulse itself un_state_reconcile has just made each mirror match its
-# modifier, so the mirror changes nothing there.
+# Every convention is read from its mirror (<modifier>_on), which is the
+# ratification: the entry declares the member modifier from it. Ratifying,
+# joining and un_events.36 set the mirror in the very block that calls this,
+# and a variable is visible there at once. Membership is read from the
+# modifier OR its mirror (un_state_record): joining adds the modifier in that
+# same block, where has_modifier cannot see it yet; the stamp below then keeps
+# the monthly pulse from reading our terms again until the next
+# un_regime_bump, up to un_regime_refresh_months later. On the pulse itself
+# un_state_reconcile has just made the mirror match the modifier, so the
+# mirror changes nothing there.
 # Scope: country
 un_regime_refresh_country = {
 	un_regime_clear_country = yes
@@ -128,8 +133,6 @@ un_regime_refresh_country = {
 				has_variable = un_member_modifier_on
 			}
 		}
-		un_regime_reapply_conventions = yes
-
 		# Climate (UNEP): the high emitters pay, the low emitters are helped.
 		# Not under the disabled global warming rule, which stops the
 		# emissions and temperature the terms are read from.
@@ -137,10 +140,7 @@ un_regime_refresh_country = {
 			limit = {
 				has_game_rule = global_warming_enabled
 				has_global_variable = un_agency_unep
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_climate_binding_modifier }
-					has_variable = un_climate_binding_modifier_on
-				}
+				has_variable = un_climate_binding_modifier_on
 			}
 			if = {
 				limit = { un_regime_climate_emitter = yes }
@@ -165,10 +165,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_iaea
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
-					has_variable = un_nonproliferation_modifier_on
-				}
+				has_variable = un_nonproliferation_modifier_on
 			}
 			if = {
 				limit = { un_regime_npt_threshold = yes }
@@ -189,10 +186,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_itlos
-				OR = {
-					has_modifier = un_law_of_sea_modifier
-					has_variable = un_law_of_sea_modifier_on
-				}
+				has_variable = un_law_of_sea_modifier_on
 				un_regime_naval_power = yes
 			}
 			add_modifier = {
@@ -204,10 +198,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unhrc
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
-					has_variable = un_human_rights_declaration_modifier_on
-				}
+				has_variable = un_human_rights_declaration_modifier_on
 				un_regime_human_rights_violator = yes
 			}
 			add_modifier = {
@@ -230,10 +221,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unhcr
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
-					has_variable = un_refugee_program_modifier_on
-				}
+				has_variable = un_refugee_program_modifier_on
 			}
 			if = {
 				limit = { un_regime_refugee_host = yes }
@@ -255,10 +243,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unoosa
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_space_partnership_modifier }
-					has_variable = un_space_partnership_modifier_on
-				}
+				has_variable = un_space_partnership_modifier_on
 			}
 			if = {
 				limit = { un_regime_space_leader = yes }
@@ -286,10 +271,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unesco
-				OR = {
-					je:je_united_nations ?= { has_modifier = un_heritage_program_modifier }
-					has_variable = un_heritage_program_modifier_on
-				}
+				has_variable = un_heritage_program_modifier_on
 				un_regime_heritage_site = yes
 			}
 			add_modifier = {
@@ -303,10 +285,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_ccd
-				OR = {
-					has_modifier = un_cultural_diversity_modifier
-					has_variable = un_cultural_diversity_modifier_on
-				}
+				has_variable = un_cultural_diversity_modifier_on
 				un_regime_cultural_hegemon = yes
 			}
 			add_modifier = {
@@ -321,10 +300,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_ats
-				OR = {
-					has_modifier = un_antarctic_treaty_modifier
-					has_variable = un_antarctic_treaty_modifier_on
-				}
+				has_variable = un_antarctic_treaty_modifier_on
 				te_antarctic_has_station = yes
 			}
 			add_modifier = {
@@ -389,59 +365,10 @@ un_regime_refresh_country = {
 	}
 }
 
-# Re-apply each convention member modifier this country carries, at the
-# current E (x0.01 at Moribund, x2.5 at Supranational: un_convention_multiplier).
-# Scope: country (a member)
-un_regime_reapply_conventions = {
-	un_regime_reapply_je = { MODIFIER = un_human_rights_declaration_modifier }
-	un_regime_reapply_je = { MODIFIER = un_nonproliferation_modifier }
-	un_regime_reapply_je = { MODIFIER = un_climate_binding_modifier }
-	un_regime_reapply_je = { MODIFIER = un_heritage_program_modifier }
-	un_regime_reapply_je = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_regime_reapply_je = { MODIFIER = un_refugee_program_modifier }
-	un_regime_reapply_je = { MODIFIER = un_space_partnership_modifier }
-	un_regime_reapply_country = { MODIFIER = un_law_of_sea_modifier }
-	un_regime_reapply_country = { MODIFIER = un_icc_member_modifier }
-	un_regime_reapply_country = { MODIFIER = un_physical_protection_modifier }
-	un_regime_reapply_country = { MODIFIER = un_narcotics_control_modifier }
-	un_regime_reapply_country = { MODIFIER = un_cultural_diversity_modifier }
-	un_regime_reapply_country = { MODIFIER = un_nuclear_ban_modifier }
-	un_regime_reapply_country = { MODIFIER = un_antarctic_treaty_modifier }
-	un_regime_reapply_country = { MODIFIER = un_asat_moratorium_modifier }
-	un_regime_reapply_country = { MODIFIER = un_colony_protection_modifier }
-}
-
-# Parameters: $MODIFIER$ = a convention member modifier on the journal entry
-# Scope: country
-un_regime_reapply_je = {
-	if = {
-		limit = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
-		je:je_united_nations ?= { remove_modifier = $MODIFIER$ }
-		je:je_united_nations ?= {
-			add_modifier = {
-				name = $MODIFIER$
-				multiplier = un_convention_multiplier
-			}
-		}
-	}
-}
-
-# Parameters: $MODIFIER$ = a convention member modifier on the country
-# Scope: country
-un_regime_reapply_country = {
-	if = {
-		limit = { has_modifier = $MODIFIER$ }
-		remove_modifier = $MODIFIER$
-		add_modifier = {
-			name = $MODIFIER$
-			multiplier = un_convention_multiplier
-		}
-	}
-}
-
 # Remove every regime modifier from this country and its interest groups.
-# The convention member modifiers are not touched here: ratifying adds them,
-# leaving removes them (un_membership_end_effect).
+# The convention member modifiers are not touched here: the entry declares
+# them from the mirrors that ratifying sets and leaving clears
+# (un_conventions_end).
 # Scope: country
 un_regime_clear_country = {
 	un_regime_clear_modifier = { MODIFIER = un_regime_climate_emitter_modifier }
@@ -521,7 +448,7 @@ un_regime_icc_note_crime = {
 			exists = ruler
 			NOT = { has_variable = un_icc_indicted_cd }
 			OR = {
-				has_modifier = un_icc_member_modifier
+				has_variable = un_icc_member_modifier_on
 				un_tier_is_supranational = yes
 			}
 		}

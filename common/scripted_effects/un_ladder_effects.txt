@@ -574,27 +574,10 @@ un_membership_end_effect = {
 	# while dropping the bill made leaving a way to stop paying for aid.
 	remove_modifier = un_humanitarian_aid_modifier
 	remove_modifier = un_humanitarian_aid_cost
-	# Permanent treaty commitments
-	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
-	un_state_off = { MODIFIER = un_nonproliferation_modifier }
-	un_state_off = { MODIFIER = un_climate_binding_modifier }
-	un_state_off = { MODIFIER = un_heritage_program_modifier }
-	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_state_off = { MODIFIER = un_refugee_program_modifier }
-	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The nine conventions that sit on the country rather than the journal
-	# entry. un_apply_ratified_conventions re-adds them on rejoining,
-	# exactly as it does the journal-entry ones above (except an Antarctic
-	# Treaty its member denounced).
-	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
-	un_state_country_off = { MODIFIER = un_icc_member_modifier }
-	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
-	un_state_country_off = { MODIFIER = un_narcotics_control_modifier }
-	un_state_country_off = { MODIFIER = un_cultural_diversity_modifier }
-	un_state_country_off = { MODIFIER = un_nuclear_ban_modifier }
-	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
-	un_state_country_off = { MODIFIER = un_asat_moratorium_modifier }
-	un_state_country_off = { MODIFIER = un_colony_protection_modifier }
+	# Every convention we ratified (declared on the entry while its mirror is
+	# set). un_apply_ratified_conventions ratifies them again on rejoining
+	# (except an Antarctic Treaty its member denounced).
+	un_conventions_end = yes
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes

@@ -558,7 +558,7 @@ nd_loose_monthly = {
 		limit = {
 			has_game_rule = nuclear_weapons_enabled
 			nd_loose_has_line = yes
-			has_modifier = un_physical_protection_modifier
+			has_variable = un_physical_protection_modifier_on
 		}
 		random = {
 			chance = nd_loose_convention_chance

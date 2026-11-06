@@ -65,9 +65,13 @@ LOC_DIR = _path("localization", "english")
 # in_force          the global variable passage sets: its agency, or for
 #                   decolonization its standing regime
 # member_modifier   what a party carries; None for decolonization, which binds
-#                   the whole Assembly and has no parties
-# scope             where member_modifier sits: "je" (je_united_nations) or
-#                   "country"; None with no member modifier
+#                   the whole Assembly and has no parties. je_united_nations
+#                   declares it at the enforcement while its mirror
+#                   (<member_modifier>_on) is set (#1404), and the mirror is
+#                   the ratification
+# scope             where a save from before 1.15 holds its added copy, which
+#                   legacy_modifier_cleanup strips: "je" (je_united_nations)
+#                   or "country"; None with no member modifier
 # op                its row in the chamber's Table a Resolution list
 # event             its proposer event, un_events.<event>
 # refusal_reason    the ledger reason its proposer event's refusal books
@@ -158,6 +162,15 @@ BY_KEY = {c.key: c for c in CONVENTIONS}
 RATIFIED = tuple(c for c in CONVENTIONS if c.member_modifier)
 JE_CONVENTION = [c.member_modifier for c in CONVENTIONS if c.scope == "je"]
 COUNTRY_CONVENTION = [c.member_modifier for c in CONVENTIONS if c.scope == "country"]
+
+
+def _stem(c):
+    """What the convention helpers take: un_<stem>_modifier (CONVENTION = <stem>)."""
+    return c.member_modifier[len("un_"):-len("_modifier")]
+
+
+def _mirror(c):
+    return c.member_modifier + "_on"
 # AGENCY = <short> in the §0.8 catch-up (un_rep_convention_mark and friends).
 AGENCIES = {c.key: c.in_force[len("un_agency_"):] for c in RATIFIED}
 
@@ -449,11 +462,9 @@ class ProposeTests(unittest.TestCase, _GapMixin):
         for c in CONVENTIONS:
             body = _flat(_block(self.triggers, f"un_propose_{c.key}_qualifies"))
             with self.subTest(key=c.key, check="party"):
-                if c.scope == "je":
-                    self.assertIn(f"NOT = {{ je:je_united_nations ?= {{ has_modifier = {c.member_modifier} }} }}",
-                                  body)
-                elif c.scope == "country":
-                    self.assertIn(f"NOT = {{ has_modifier = {c.member_modifier} }}", body)
+                if c.member_modifier:
+                    self.assertIn(f"NOT = {{ has_variable = {_mirror(c)} }}", body)
+                    self.assertNotIn(f"has_modifier = {c.member_modifier}", body)
             if c.refusal_modifier:
                 with self.subTest(key=c.key, check="refuser"):
                     self.assertInvariant(
@@ -592,10 +603,8 @@ class ProposerEventTests(unittest.TestCase, _GapMixin):
         for c in RATIFIED:
             with self.subTest(key=c.key):
                 trigger = _flat(_event_trigger(_event(c.event)))
-                if c.scope == "je":
-                    self.assertIn(f"je:je_united_nations ?= {{ has_modifier = {c.member_modifier} }}", trigger)
-                else:
-                    self.assertIn(f"has_modifier = {c.member_modifier}", trigger)
+                self.assertIn(f"has_variable = {_mirror(c)}", trigger)
+                self.assertNotIn(f"has_modifier = {c.member_modifier}", trigger)
 
 
 # ---- The chamber: un_chamber_sguis.txt, the widget, the row renderers ---------------------
@@ -776,9 +785,10 @@ class TreatyModifierTests(unittest.TestCase):
         segments = _topic_segments(self.apply)
         self.assertEqual(_conventions_in(segments), set(KEYS))
         for c in RATIFIED:
-            helper = "un_convention_on" if c.scope == "je" else "un_convention_country_on"
             with self.subTest(key=c.key):
-                self.assertIn(f"{helper} = {{ MODIFIER = {c.member_modifier} }}", _flat(segments[c.key]))
+                body = _flat(segments[c.key])
+                self.assertIn(f"NOT = {{ has_variable = {_mirror(c)} }}", body)
+                self.assertIn(f"un_convention_on = {{ CONVENTION = {_stem(c)} }}", body)
 
     def test_the_yes_vote_previews_it(self):
         segments = _topic_segments(self.preview)
@@ -787,19 +797,23 @@ class TreatyModifierTests(unittest.TestCase):
             add = f"add_modifier = {{ name = {c.member_modifier} multiplier = un_convention_multiplier }}"
             body = _flat(segments[c.key])
             with self.subTest(key=c.key):
-                if c.scope == "je":
-                    self.assertIn("je:je_united_nations ?= { " + add + " }", body)
-                else:
-                    self.assertIn(add, body)
-                    self.assertNotIn("je:je_united_nations", body)
+                # On the entry, which declares it (#1404).
+                self.assertIn("je:je_united_nations ?= { " + add + " }", body)
 
     def test_a_joiner_gets_every_convention_in_force(self):
         segments = _segments(self.joiner, r"has_global_variable\s*=\s*(\w+)")
         self.assertEqual(set(segments), {c.in_force for c in RATIFIED})
         for c in RATIFIED:
-            helper = "un_convention_on" if c.scope == "je" else "un_convention_country_on"
             with self.subTest(key=c.key):
-                self.assertIn(f"{helper} = {{ MODIFIER = {c.member_modifier} }}", _flat(segments[c.in_force]))
+                body = _flat(segments[c.in_force])
+                self.assertIn(f"NOT = {{ has_variable = {_mirror(c)} }}", body)
+                self.assertIn(f"un_convention_on = {{ CONVENTION = {_stem(c)} }}", body)
+
+    def test_the_helper_previews_the_modifier_and_sets_the_mirror(self):
+        body = _flat(_block(_read(_path("common", "scripted_effects", "un_state_effects.txt")), "un_convention_on")).strip()
+        self.assertEqual(body, "show_as_tooltip = { je:je_united_nations ?= { add_modifier = { "
+                               "name = un_$CONVENTION$_modifier multiplier = un_convention_multiplier } } } "
+                               "hidden_effect = { un_mirror_set = { MIRROR = un_$CONVENTION$_modifier_on } }")
 
     def test_the_ratified_kind_is_the_conventions_with_parties(self):
         body = _block(_read(RESOLUTION_TRIGGERS), "un_resolution_is_convention")
@@ -822,19 +836,21 @@ class RepresentationTests(unittest.TestCase):
 
     def test_missed_pairs_each_agency_with_its_modifier(self):
         body = _block(self.triggers, "un_rep_any_convention_missed")
-        found = set(re.findall(r"AGENCY\s*=\s*(\w+)\s+MODIFIER\s*=\s*(\w+)", body))
-        self.assertEqual(found, {(AGENCIES[c.key], c.member_modifier) for c in RATIFIED})
+        found = set(re.findall(r"AGENCY\s*=\s*(\w+)\s+CONVENTION\s*=\s*(\w+)", body))
+        self.assertEqual(found, {(AGENCIES[c.key], _stem(c)) for c in RATIFIED})
+        missed = _flat(_block(self.triggers, "un_rep_convention_missed"))
+        self.assertIn("NOT = { has_variable = un_$CONVENTION$_modifier_on }", missed)
+        self.assertNotIn("has_modifier", missed)
 
     def test_restoration_ratifies_each_missed_convention(self):
         option_a = _options(_block(_read(UN_EVENTS), "un_events.36"))[0]
         segments = _segments(option_a, r"AGENCY\s*=\s*(\w+)")
         self.assertEqual(set(segments), set(AGENCIES.values()))
         for c in RATIFIED:
-            helper = "un_convention_on" if c.scope == "je" else "un_convention_country_on"
             with self.subTest(key=c.key):
                 body = _flat(segments[AGENCIES[c.key]])
-                self.assertIn(f"MODIFIER = {c.member_modifier} }}", body)
-                self.assertIn(f"{helper} = {{ MODIFIER = {c.member_modifier} }}", body)
+                self.assertIn(f"CONVENTION = {_stem(c)} }}", body)
+                self.assertIn(f"un_convention_on = {{ CONVENTION = {_stem(c)} }}", body)
 
 
 # ---- The regime layer: un_regime_effects.txt / un_regime_triggers.txt ---------------------
@@ -846,10 +862,22 @@ class RegimeTests(unittest.TestCase):
         cls.triggers = _read(REGIME_TRIGGERS)
         cls.display = _read(CHAMBER_DISPLAY)
 
-    def test_reapply_rescales_every_member_modifier(self):
-        body = _block(self.effects, "un_regime_reapply_conventions")
-        found = set(re.findall(r"(un_regime_reapply_\w+)\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)", body))
-        self.assertEqual(found, {("un_regime_reapply_" + c.scope, c.member_modifier) for c in RATIFIED})
+    def test_the_entry_declares_every_member_modifier_at_the_enforcement(self):
+        # The re-apply at each regime epoch is gone: the entry declares each
+        # member modifier at un_convention_multiplier while the mirror is set
+        # (#1404), so it follows the enforcement within days.
+        entry = _flat(_read(_path("common", "journal_entries", "je_united_nations.txt")))
+        for c in RATIFIED:
+            with self.subTest(key=c.key):
+                self.assertIn(f"scaling_modifiers_while_active = {{ modifier = {c.member_modifier} value = {{ "
+                              f"value = 0 if = {{ limit = {{ has_variable = {_mirror(c)} }} "
+                              f"add = un_convention_multiplier }} }} }}", entry)
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotIn("un_regime_reapply", _read(path))
+        values = _flat(_block(_read(_path("common", "script_values", "un_regime_values.txt")),
+                              "un_convention_multiplier")).strip()
+        self.assertEqual(values, "value = un_enforcement", "the x0.01 floor kept a has_modifier read alive")
 
     def test_any_convention_knows_every_one(self):
         body = _block(self.triggers, "un_regime_any_convention")
@@ -868,15 +896,18 @@ class RegimeTests(unittest.TestCase):
                 with self.subTest(key=c.key, modifier=mod):
                     self.assertEqual(where.get(mod), {c.in_force})
 
-    # Ratifying (un_vote_apply_treaty_modifier), joining
-    # (un_apply_ratified_conventions) and un_events.36 option A add the member
-    # modifier in the block that calls the refresh, where has_modifier cannot
-    # see it. The refresh then stamps the country, so a branch that reads the
-    # modifier alone leaves the terms off until the next un_regime_bump, up to
-    # a year later. Each read ORs in the mirror un_state_record sets.
+    # Joining (un_join_organisation) adds the membership modifier in the
+    # block that calls the refresh, where has_modifier cannot see it. The
+    # refresh then stamps the country, so a branch that reads the modifier
+    # alone leaves the terms off until the next un_regime_bump, up to a year
+    # later. The membership read ORs in the mirror un_state_record sets; a
+    # convention is read from its mirror alone, which ratifying sets in that
+    # block and the refresh sees at once (#1404).
 
     @staticmethod
     def _read_with_mirror(modifier, scope):
+        if modifier != "un_member_modifier":
+            return f"has_variable = {modifier}_on"
         live = f"has_modifier = {modifier}"
         if scope == "je":
             live = "je:je_united_nations ?= { " + live + " }"
@@ -892,7 +923,7 @@ class RegimeTests(unittest.TestCase):
             seg = segments[c.in_force]
             with self.subTest(key=c.key):
                 self.assertIn(self._read_with_mirror(c.member_modifier, c.scope), seg)
-                self.assertEqual(len(re.findall(rf"has_modifier = {c.member_modifier}\b", seg)), 1)
+                self.assertEqual(len(re.findall(rf"has_modifier = {c.member_modifier}\b", seg)), 0)
 
     def test_membership_is_read_with_the_mirror(self):
         member = self._read_with_mirror("un_member_modifier", "je")
@@ -905,11 +936,11 @@ class RegimeTests(unittest.TestCase):
 
     def test_no_bare_membership_or_convention_read_in_the_refresh(self):
         refresh = _flat(_block(self.effects, "un_regime_refresh_country"))
-        reads = [("un_member_modifier", "je")] + [(c.member_modifier, c.scope) for c in RATIFIED]
-        for modifier, scope in reads:
-            with self.subTest(modifier=modifier):
-                self.assertEqual(len(re.findall(rf"has_modifier = {modifier}\b", refresh)),
-                                 refresh.count(self._read_with_mirror(modifier, scope)))
+        member = self._read_with_mirror("un_member_modifier", "je")
+        self.assertEqual(len(re.findall(r"has_modifier = un_member_modifier\b", refresh)), refresh.count(member))
+        for c in RATIFIED:
+            with self.subTest(modifier=c.member_modifier):
+                self.assertNotRegex(refresh, rf"has_modifier = {c.member_modifier}\b")
 
     def test_every_term_is_cleared_listed_and_shown(self):
         expected = {m for c in CONVENTIONS for m in c.regime_modifiers}
@@ -944,13 +975,10 @@ class LeavingTests(unittest.TestCase):
 
     def test_leaving_sheds_every_member_modifier(self):
         body = _block(self.ladder, "un_membership_end_effect")
-        je_off = set(re.findall(r"un_state_off\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)", body))
-        country_off = set(re.findall(r"un_state_country_off\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)", body))
-        # un_state_off takes the other journal-entry state too, so only this
-        # direction here; test_un_state_mirror.HELPER_NAMES, built from
-        # JE_CONVENTION, holds the names it may be called with.
-        self.assertLessEqual(set(JE_CONVENTION), je_off)
-        self.assertEqual(country_off, set(COUNTRY_CONVENTION))
+        self.assertIn("un_conventions_end = yes", body)
+        ends = _block(_read(_path("common", "scripted_effects", "un_state_effects.txt")), "un_conventions_end")
+        found = set(re.findall(r"un_mirror_clear\s*=\s*\{\s*MIRROR\s*=\s*(\w+)", ends))
+        self.assertEqual(found, {_mirror(c) for c in RATIFIED})
 
     def test_dissolution_lapses_every_convention(self):
         found = set(re.findall(r"un_dissolve_remove_global\s*=\s*\{\s*NAME\s*=\s*(\w+)",

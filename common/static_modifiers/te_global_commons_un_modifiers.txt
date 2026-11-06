@@ -49,8 +49,9 @@ te_antarctic_station_upkeep = {
 # licences (te_seabed_southern_barred, which the seabed allocation reads),
 # a party with a station gains research (un_regime_antarctic_station_modifier)
 # and every party counts toward the UN Authority Target's Policy pillar
-# (un_antarctic_policy_modifier). Re-applied at the UN's enforcement by the
-# regime layer (un_regime_reapply_conventions): the figure below is at x1.
+# (un_antarctic_policy_modifier). je_united_nations declares it at the UN's
+# enforcement (un_convention_multiplier) while the mirror is set: the figure
+# below is at x1.
 un_antarctic_treaty_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.02
