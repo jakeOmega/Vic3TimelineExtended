@@ -1,0 +1,19 @@
+﻿# Values for the scaling_live and scaling_inherited self-checks
+# (common/scripted_effects/te_scaling_selfcheck_effects.txt, #1404). Delete with
+# them.
+
+# Country scope: how far the Strategic Reserve's declared income is from the
+# week it was booked from, as a share of it. The caller holds the variable at
+# 1 or more.
+te_sc_live_relative_gap = {
+	value = modifier:country_te_budget_income_reserve_add
+	subtract = var:st_res_sell_profit
+	divide = var:st_res_sell_profit
+}
+
+# Country scope: the share of Covert Warfare's funding cost the country's
+# budget mirror carries. The caller holds the cost over 1.
+te_sc_inherited_ratio = {
+	value = modifier:country_te_budget_expense_covert_add
+	divide = covert_operation_cost_mult
+}
