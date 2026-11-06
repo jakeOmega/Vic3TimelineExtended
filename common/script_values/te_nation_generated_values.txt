@@ -824,19 +824,7 @@ te_nation_src_transhumanism_count = {
 te_nation_src_colonial_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
 		add = 1
 	}
 	if = {
@@ -1023,10 +1011,6 @@ te_nation_src_un_conventions_count = {
 # Used by: the monthly pulse, for te_nation_src_foreign
 te_nation_src_foreign_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = intelligence_sharing_defense_shield_modifier }
 		add = 1
@@ -1217,14 +1201,6 @@ te_nation_types_governance_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = cr_cooptation_modifier }
 		add = 1
 	}
@@ -1242,10 +1218,6 @@ te_nation_types_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = cr_suppression_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 		add = 1
 	}
 	if = {
@@ -1630,14 +1602,6 @@ te_nation_types_governance_count = {
 te_nation_group_authority_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = cr_federal_protection_modifier }
 		add = 1
 	}
@@ -1741,14 +1705,6 @@ te_nation_type_country_authority_mult_count = {
 te_nation_type_country_authority_cost_add_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = heir_ed_ideology_focus_active }
 		add = 1
 	}
@@ -1789,14 +1745,6 @@ te_nation_type_country_authority_cost_add_count = {
 # Used by: the country_bureaucracy_mult row
 te_nation_type_country_bureaucracy_mult_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = cr_federal_protection_modifier }
 		add = 1
@@ -1841,10 +1789,6 @@ te_nation_group_legitimacy_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = iron_fist_path_modifier }
 		add = 1
 	}
@@ -1875,10 +1819,6 @@ te_nation_type_country_legitimacy_base_add_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = algorithmic_mandate }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 		add = 1
 	}
 	if = {
@@ -1933,10 +1873,6 @@ te_nation_type_character_coup_strength_mult_count = {
 # Used by: the interest_groups subheading
 te_nation_group_interest_groups_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = resettlement_land_grants_politics }
 		add = 1
@@ -2804,24 +2740,6 @@ te_nation_type_interest_group_ig_armed_forces_pol_str_mult_count = {
 	}
 }
 
-# Used by: the interest_group_ig_intelligentsia_pol_str_mult row
-te_nation_type_interest_group_ig_intelligentsia_pol_str_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-}
-
-# Used by: the interest_group_ig_trade_unions_pol_str_mult row
-te_nation_type_interest_group_ig_trade_unions_pol_str_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-}
-
 # Used by: the interest_group_ig_armed_forces_pop_attraction_mult row
 te_nation_type_interest_group_ig_armed_forces_pop_attraction_mult_count = {
 	value = 0
@@ -2847,14 +2765,6 @@ te_nation_type_interest_group_in_government_attraction_mult_count = {
 # Used by: the Nation tab's society type rows (te_nation_types_society)
 te_nation_types_society_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
 		add = 1
@@ -3037,10 +2947,6 @@ te_nation_types_society_count = {
 te_nation_group_living_standards_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = sol_expectations_lower_strata_shift }
 		add = 1
 	}
@@ -3121,10 +3027,6 @@ te_nation_type_state_middle_strata_standard_of_living_add_count = {
 te_nation_type_state_lower_strata_expected_sol_add_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = sol_expectations_lower_strata_shift }
 		add = 1
 	}
@@ -3133,10 +3035,6 @@ te_nation_type_state_lower_strata_expected_sol_add_count = {
 # Used by: the state_middle_strata_expected_sol_add row
 te_nation_type_state_middle_strata_expected_sol_add_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = sol_expectations_middle_strata_shift }
 		add = 1
@@ -3180,10 +3078,6 @@ te_nation_type_country_sol_expectations_lower_offset_add_count = {
 # Used by: the acceptance subheading
 te_nation_group_acceptance_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
 		add = 1
@@ -3310,20 +3204,7 @@ te_nation_type_country_acceptance_no_shared_heritage_trait_add_count = {
 te_nation_type_state_assimilation_mult_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_conversion_mult row
-te_nation_type_state_conversion_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
 		add = 1
 	}
 }
@@ -3340,10 +3221,6 @@ te_nation_type_state_homeland_removal_speed_mult_count = {
 # Used by: the unrest subheading
 te_nation_group_unrest_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
 		add = 1
@@ -3415,10 +3292,6 @@ te_nation_type_state_turmoil_effects_mult_count = {
 te_nation_type_state_radicals_from_political_movements_mult_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = cr_grassroots_modifier }
 		add = 1
 	}
@@ -3457,10 +3330,6 @@ te_nation_type_state_loyalists_from_political_movements_mult_count = {
 te_nation_group_population_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = imperial_federation_modifier }
 		add = 1
 	}
@@ -3487,15 +3356,6 @@ te_nation_type_state_migration_pull_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = un_regime_refugee_host_modifier }
-		add = 1
-	}
-}
-
-# Used by: the state_migration_pull_unincorporated_mult row
-te_nation_type_state_migration_pull_unincorporated_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
 		add = 1
 	}
 }
@@ -3724,14 +3584,6 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_automation_robot_tax }
 		add = 1
 	}
@@ -3913,10 +3765,6 @@ te_nation_group_production_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = too_much_private_construction }
 		add = 1
 	}
@@ -3981,15 +3829,6 @@ te_nation_type_building_group_bg_agriculture_throughput_add_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = un_regime_climate_adaptation_modifier }
-		add = 1
-	}
-}
-
-# Used by: the building_group_bg_extraction_throughput_add row
-te_nation_type_building_group_bg_extraction_throughput_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
 		add = 1
 	}
 }
@@ -4241,10 +4080,6 @@ te_nation_type_country_minting_mult_count = {
 te_nation_group_investment_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_capital_controls_fatigue }
 		add = 1
 	}
@@ -4358,10 +4193,6 @@ te_nation_type_country_loan_interest_rate_add_count = {
 # Used by: the country_risk_premium_add row
 te_nation_type_country_risk_premium_add_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = te_mon_arrangement_provider }
 		add = 1
@@ -4986,10 +4817,6 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = colonial_overlord_collapsing_subject_ld_modifier }
 		add = 1
 	}
@@ -5260,10 +5087,6 @@ te_nation_group_standing_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
 		add = 1
 	}
 	if = {
@@ -5650,15 +5473,6 @@ te_nation_type_country_prestige_mult_count = {
 	}
 }
 
-# Used by: the country_prestige_from_army_power_projection_mult row
-te_nation_type_country_prestige_from_army_power_projection_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		add = 1
-	}
-}
-
 # Used by: the country_prestige_from_navy_power_projection_mult row
 te_nation_type_country_prestige_from_navy_power_projection_mult_count = {
 	value = 0
@@ -5872,15 +5686,6 @@ te_nation_type_country_infamy_generation_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = un_icc_member_modifier }
-		add = 1
-	}
-}
-
-# Used by: the country_infamy_decay_mult row
-te_nation_type_country_infamy_decay_mult_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
 		add = 1
 	}
 }

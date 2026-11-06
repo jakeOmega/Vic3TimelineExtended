@@ -130,9 +130,6 @@ SECTIONS = {
         # entry otherwise, where the filter matches nothing
         "te_mon_*", "te_inflation_band_*", "te_fx_*", "te_monetary_rate_paid",
         "te_monetisation_minting", "te_capital_controls_fatigue",
-        # Colonial programmes (the Colonial Empire entry's policy dials)
-        "colonial_cultural_assimilation_modifier", "colonial_development_investment_modifier",
-        "colonial_military_garrison_modifier",
         # The colonial empire's ending, for good (decol_grant_permanent_modifier,
         # `days = -1`), and the Imperial Federation and Mandate System decisions.
         # Solidified is also the entry's top band, which never reaches the country.
@@ -176,9 +173,6 @@ SECTIONS = {
         # A great power's stance on colonialism, held while it counts
         # (decolonization_stance_effects.txt)
         "gp_anti_colonial_policy_modifier", "gp_pro_colonial_policy_modifier",
-        # Foreign cultures' pull on legitimacy, scaled monthly by the cultural
-        # hegemony entry's pulse but added to the country itself
-        "cultural_hegemony_foreign_benchmark",
     ),
 }
 
@@ -229,7 +223,7 @@ NOT_ON_COUNTRY = {
     "public_transit_modifier": "je_global_warming", "reforestation_subsidies_modifier": "je_global_warming",
     "renewable_investment_modifier": "je_global_warming",
     "ch_cultural_*": "je_cultural_hegemony", "ch_global_media_campaign": "je_cultural_hegemony",
-    "ch_world_exposition": "je_cultural_hegemony", "cultural_hegemony_*": "je_cultural_hegemony",
+    "ch_world_exposition": "je_cultural_hegemony",
     "civil_rights_phase_*": "je_civil_rights",
     "colonial_empire_*": "je_colonial_empire",
     "colonial_crumbling_movement_radicalism": "political movements",
@@ -347,18 +341,17 @@ SOURCE_GROUPS = {
     "resettlement": ("resettlement_*",),
     # Uploaded minds and Clade Citizenship's heritage parity
     "transhumanism": ("te_demog_um_*", "te_clade_parity_*"),
-    # The Colonial Empire entry's programs, its endings, the two decisions
-    "colonial": ("colonial_cultural_assimilation_modifier", "colonial_development_*",
-                 "colonial_military_garrison_modifier", "colonial_empire_solidified_modifier", "*_path_modifier",
-                 "imperial_federation_modifier", "mandate_system_modifier"),
+    # The Colonial Empire's endings, the two decisions
+    "colonial": ("colonial_empire_solidified_modifier", "*_path_modifier", "imperial_federation_modifier",
+                 "mandate_system_modifier"),
     # Space race milestones, the probe's data, the dividend, Extraplanetary Base room, orbital debris
     "space": ("sr_*", "te_orbital_debris", "te_debris_*"),
     # The Antarctic station and regime, seabed policy
     "commons": ("te_antarctic_*", "un_antarctic_*", "un_regime_antarctic_station_modifier", "te_seabed_*"),
     "un_conventions": ("un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
                        "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_colony_protection_modifier"),
-    # Intelligence sharing, the cultural benchmark
-    "foreign": ("intelligence_sharing_defense_shield_modifier", "cultural_hegemony_foreign_benchmark"),
+    # Intelligence sharing
+    "foreign": ("intelligence_sharing_defense_shield_modifier",),
 }
 MAX_GROUP = 32
 
@@ -395,8 +388,7 @@ TYPE_ROWS = {
             # The eight approvals: tax-code views, resettlement's politics,
             # demographic measures, pension positions
             "interest_group_ig_*_approval_add",
-            "interest_group_ig_armed_forces_pol_str_mult", "interest_group_ig_intelligentsia_pol_str_mult",
-            "interest_group_ig_trade_unions_pol_str_mult", "interest_group_ig_armed_forces_pop_attraction_mult",
+            "interest_group_ig_armed_forces_pol_str_mult", "interest_group_ig_armed_forces_pop_attraction_mult",
             "interest_group_in_government_attraction_mult",
         ),
     },
@@ -410,14 +402,14 @@ TYPE_ROWS = {
         "acceptance": (
             "country_acceptance_not_homeland_add", "country_acceptance_shared_heritage_trait_add",
             "country_acceptance_shared_heritage_trait_group_add", "country_acceptance_no_shared_heritage_trait_add",
-            "state_assimilation_mult", "state_conversion_mult", "state_homeland_removal_speed_mult",
+            "state_assimilation_mult", "state_homeland_removal_speed_mult",
         ),
         "unrest": (
             "state_turmoil_effects_mult", "state_radicals_from_political_movements_mult",
             "state_loyalists_from_political_movements_mult",
         ),
         "population": (
-            "state_migration_pull_mult", "state_migration_pull_unincorporated_mult", "state_pop_qualifications_mult",
+            "state_migration_pull_mult", "state_pop_qualifications_mult",
         ),
         # Most only under the Demographics rule, whose measures carry them
         "demography": (
@@ -430,7 +422,7 @@ TYPE_ROWS = {
     "economy": {
         "production": (
             "state_arable_land_mult", "state_construction_mult", "building_group_bg_agriculture_throughput_add",
-            "building_group_bg_extraction_throughput_add", "building_group_bg_heavy_industry_throughput_add",
+            "building_group_bg_heavy_industry_throughput_add",
             "building_opium_plantation_throughput_add", "building_synthetics_plant_opium_throughput_add",
             "building_tourism_industry_throughput_add",
         ),
@@ -461,11 +453,11 @@ TYPE_ROWS = {
     },
     "international": {
         "standing": (
-            "country_prestige_add", "country_prestige_mult", "country_prestige_from_army_power_projection_mult",
+            "country_prestige_add", "country_prestige_mult",
             "country_prestige_from_navy_power_projection_mult", "country_cultural_pull_add",
             "country_cultural_pull_mult", "country_influence_mult", "country_influence_cost_add",
             "country_diplomatic_reputation_add", "country_improve_relations_speed_mult",
-            "country_leverage_generation_mult", "country_infamy_generation_mult", "country_infamy_decay_mult",
+            "country_leverage_generation_mult", "country_infamy_generation_mult",
             "country_ideology_resistance_mult", "country_un_authority_target_add", "country_liberty_desire_add",
         ),
         "covert_defense": (

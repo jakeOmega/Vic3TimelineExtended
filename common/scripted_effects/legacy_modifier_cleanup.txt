@@ -973,4 +973,41 @@ legacy_je_modifier_cleanup_effect = {
 		if = { limit = { has_modifier = nd_readiness_mod_2 } remove_modifier = nd_readiness_mod_2 }
 		if = { limit = { has_modifier = nd_readiness_mod_3 } remove_modifier = nd_readiness_mod_3 }
 	}
+	# Colonial Empire's three programmes and the investment's expense sat on
+	# the country. Every 1.15 save holds the level variables they now read.
+	if = { limit = { has_modifier = colonial_development_investment_modifier } remove_modifier = colonial_development_investment_modifier }
+	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
+	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
+	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
+	# Cultural Hegemony: the benchmark sat on the country, the rest on the
+	# entry. The four programmes had no variable before the change: set it
+	# from the old copy, then take the copy off (the entry declares the
+	# programme while the variable is set; the variable sits on the country).
+	if = { limit = { has_modifier = cultural_hegemony_foreign_benchmark } remove_modifier = cultural_hegemony_foreign_benchmark }
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition } }
+		set_variable = { name = ch_world_exposition_on value = yes }
+		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program } }
+		set_variable = { name = ch_cultural_institutes_on value = yes }
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign } }
+		set_variable = { name = ch_global_media_campaign_on value = yes }
+		je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program } }
+		set_variable = { name = ch_cultural_protectionism_on value = yes }
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+	}
+	je:je_cultural_hegemony ?= {
+		if = { limit = { has_modifier = cultural_hegemony_effect } remove_modifier = cultural_hegemony_effect }
+		if = { limit = { has_modifier = ch_cultural_program_funding } remove_modifier = ch_cultural_program_funding }
+		if = { limit = { has_modifier = ch_cultural_program_funding_cost } remove_modifier = ch_cultural_program_funding_cost }
+		if = { limit = { has_modifier = ch_world_exposition_cost } remove_modifier = ch_world_exposition_cost }
+	}
 }
