@@ -186,6 +186,43 @@
 			}
 		}
 	}
+	# The World Development Fund: what its recipients remember of our money
+	# (var:un_dev_fund_patron, un_dev_fund_patron_pulse), and the grant it
+	# pays us this month (var:un_dev_fund_grant), into the investment pool
+	# where the pool can take it, into the treasury otherwise.
+	scaling_modifiers_while_active = {
+		modifier = un_development_patron_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_dev_fund_patron
+					var:un_dev_fund_patron > 0
+				}
+				add = var:un_dev_fund_patron
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_dev_fund_pool_grant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dev_fund_grant_into_pool = yes }
+				add = var:un_dev_fund_grant
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_dev_fund_treasury_grant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dev_fund_grant_into_treasury = yes }
+				add = var:un_dev_fund_grant
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc

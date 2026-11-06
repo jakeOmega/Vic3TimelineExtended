@@ -32,6 +32,9 @@ LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 DEBUG = _path("common", "scripted_effects", "te_debug_un_effects.txt")
 DUES_EFFECTS = _path("common", "scripted_effects", "un_dues_effects.txt")
 DUES_TRIGGERS = _path("common", "scripted_triggers", "un_dues_triggers.txt")
+ECONOMY_EFFECTS = _path("common", "scripted_effects", "un_economy_effects.txt")
+ECONOMY_TRIGGERS = _path("common", "scripted_triggers", "un_economy_triggers.txt")
+ECONOMY_EVENTS = _path("events", "un_economy_events.txt")
 
 
 def _raw(path):
@@ -60,11 +63,26 @@ def _block(text, name):
     raise AssertionError(f"{name} is not closed")
 
 
-def _serialize(node):
-    """A node as one line: ``key=value`` for a leaf, ``key{...}`` for a block."""
-    if node.value is not None and not node.children:
-        return f"{node.key}={node.value}"
-    return node.key + "{" + " ".join(_serialize(c) for c in node.children) + "}"
+def _flat(text):
+    """Comments dropped, whitespace collapsed to single spaces."""
+    return " ".join(re.sub(r"#[^\n]*", "", text).split())
+
+
+def _value_texts():
+    """modifier -> [its declaration's ``value = ...`` text, flattened] (operators kept, which the parser drops)."""
+    body = _block(_read(JE), "je_united_nations")
+    out = {}
+    for m in re.finditer(r"^\tscaling_modifiers_while_active\s*=\s*\{", body, re.M):
+        depth, i = 0, m.end() - 1
+        while True:
+            depth += {"{": 1, "}": -1}.get(body[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        flat = _flat(body[m.end():i])
+        name = re.match(r"modifier = (\w+) ", flat).group(1)
+        out.setdefault(name, []).append(flat[len(f"modifier = {name} "):])
+    return out
 
 
 def _entry():
@@ -85,18 +103,23 @@ def _declarations():
 
 
 def _gated(limit, add):
-    """``value = { value = 0 if = { limit = { <limit> } add = <add> } }``, serialized."""
-    return "value{value=0 if{limit{" + limit + "} add=" + add + "}}"
+    """``value = { value = 0 if = { limit = { <limit> } add = <add> } }``, flattened (_flat)."""
+    return f"value = {{ value = 0 if = {{ limit = {{ {limit} }} add = {add} }} }}"
 
 
-# modifier -> its value block, serialized (_serialize). Every value is an inline
+# modifier -> its value block, flattened (_flat). Every value is an inline
 # block, as in all of vanilla's uses (08_tsarpoints.txt, 00_communism.txt).
 EXPECTED = {
     # Membership benefits: from the Contested tier, to a member that draws them.
     "un_membership_benefits_modifier": _gated(
-        "un_tier_at_least_contested=yes un_member_draws_benefits=yes", "un_membership_benefits_multiplier"),
+        "un_tier_at_least_contested = yes un_member_draws_benefits = yes", "un_membership_benefits_multiplier"),
     # Dues: this month's cache while the member pays its own.
-    "un_dues_modifier": _gated("un_dues_in_force=yes", "var:un_dues_cached"),
+    "un_dues_modifier": _gated("un_dues_in_force = yes", "var:un_dues_cached"),
+    # The World Development Fund: the recipients' memory, and this month's grant.
+    "un_development_patron_modifier": _gated(
+        "has_variable = un_dev_fund_patron var:un_dev_fund_patron > 0", "var:un_dev_fund_patron"),
+    "un_dev_fund_pool_grant_modifier": _gated("un_dev_fund_grant_into_pool = yes", "var:un_dev_fund_grant"),
+    "un_dev_fund_treasury_grant_modifier": _gated("un_dev_fund_grant_into_treasury = yes", "var:un_dev_fund_grant"),
 }
 
 
@@ -133,12 +156,11 @@ class DeclarationTests(unittest.TestCase):
                 self.assertEqual(len(values), 1)
 
     def test_each_value_is_its_block(self):
-        declared = _declarations()
+        declared, texts = _declarations(), _value_texts()
         for modifier, expected in EXPECTED.items():
             with self.subTest(modifier=modifier):
-                value = declared[modifier][0]
-                self.assertIsNone(value.value, "an inline value block, never a bare name")
-                self.assertEqual(_serialize(value), expected)
+                self.assertIsNone(declared[modifier][0].value, "an inline value block, never a bare name")
+                self.assertEqual(texts[modifier], [expected])
 
 
 class MembershipBenefitsTests(unittest.TestCase):
@@ -186,6 +208,41 @@ class DuesTests(unittest.TestCase):
         self.assertIn("un_dues_stop_paying = yes", _block(_read(LADDER), "un_membership_end_effect"))
         je = _read(JE)
         self.assertRegex(je, r"limit = \{ NOT = \{ un_dues_self_assessed = yes \} \}\s*un_dues_stop_paying = yes")
+
+
+def _lines(body):
+    return [line.strip() for line in body.splitlines() if line.strip()]
+
+
+class DevelopmentFundTests(unittest.TestCase):
+    def test_the_grant_goes_one_way_or_the_other(self):
+        triggers = _read(ECONOMY_TRIGGERS)
+        self.assertEqual(_lines(_block(triggers, "un_dev_fund_grant_paid")),
+                         ["has_global_variable = un_inst_development_fund", "has_variable = un_dev_fund_grant",
+                          "var:un_dev_fund_grant > 0"])
+        self.assertEqual(_lines(_block(triggers, "un_dev_fund_grant_into_pool")),
+                         ["un_dev_fund_grant_paid = yes", "un_dev_fund_pays_into_pool = yes"])
+        self.assertEqual(_lines(_block(triggers, "un_dev_fund_grant_into_treasury")),
+                         ["un_dev_fund_grant_paid = yes", "NOT = { un_dev_fund_pays_into_pool = yes }"])
+
+    def test_the_monthly_update_writes_the_grant_and_fires_nothing(self):
+        body = _block(_read(ECONOMY_EFFECTS), "un_dev_fund_monthly_update")
+        self.assertIn("set_variable = { name = un_dev_fund_grant value = un_dev_fund_grant_value }", body)
+        self.assertIn("set_variable = { name = un_dev_fund_grant value = 0 }", body)
+        self.assertNotIn("trigger_event", body)
+
+    def test_the_root_hop_and_the_refresh_are_gone(self):
+        self.assertNotRegex(_read(ECONOMY_EVENTS), r"(?m)^un_economy\.1\s*=")
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                text = _read(path)
+                self.assertNotIn("un_dev_fund_country_refresh", text)
+                self.assertNotRegex(text, r"\bun_economy\.1\b")
+
+    def test_the_patron_pulse_writes_only_the_variable(self):
+        body = _block(_read(ECONOMY_EFFECTS), "un_dev_fund_patron_pulse")
+        self.assertIn("set_variable = { name = un_dev_fund_patron value = un_dev_fund_patron_next_value }", body)
+        self.assertNotIn("modifier", body)
 
 
 if __name__ == "__main__":

@@ -3922,8 +3922,8 @@ un_development_contributor_modifier = {
 # What the World Development Fund's recipients remember of a contributor's
 # money: added with multiplier = root.var:un_dev_fund_patron, which moves a
 # twelfth of the way each month toward the contribution's benefit factor
-# (un_dev_fund_patron_pulse, un_economy_effects.txt), and is derived from that
-# variable every month rather than mirrored. Members the Fund pays are more
+# (un_dev_fund_patron_pulse, un_economy_effects.txt), at which
+# je_united_nations declares it. Members the Fund pays are more
 # receptive to the contributor's lobbying.
 un_development_patron_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
