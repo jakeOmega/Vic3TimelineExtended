@@ -1,11 +1,11 @@
 # Journal entry map modes: play-test checklist
 
 The in-game checks for vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue
-#1404), most important first. The first two passes (#1410, #1414, #1417) answered their lists (below); this is the
-third pass's list: picks that repaint a paused map, and the see-through journal page. Check 1 is the fourth pass's,
-since the third pass's picks closed the page for good (fifth session, under Results). Record each answer under
-Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
-`docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
+#1404), most important first. The first two passes (#1410, #1414, #1417) answered their lists (below), and the fourth
+pass's repaint answered check 1 of the third's (sixth session, under Results). This is the fifth pass's list: a
+shorter repaint (check 1), the Devastation map and the new census maps (checks 5–8); checks 2–4 are the third pass's,
+still unreported. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each
+engine fact in `docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
 
 ## How to run
 
@@ -19,14 +19,24 @@ Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fa
   `te_map_room_widget.gui` or `te_systems_window.txt`, `failed reading callback` above all: the engine drops a
   callback it can't read and says so only there, once.
 
-## The checks (third pass)
+## The checks (fifth pass)
 
 | # | Check | How | What each answer means | If it's the bad answer |
 |---|---|---|---|---|
-| 1 | A pick repaints a paused map (fourth pass) | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks and comes back on the new map, paused or not: a quarter second after the click `te_jmap_repainter`, a scripted widget outside the page, closes it, and a tenth of a second later opens it again (`te_jmap_repaint`, then `te_jmap_repaint_open`). Each pick logs `TE_JMAP pick` and then `TE_JMAP reopen`. Say whether the blink is acceptable while running. | The page closes and stays closed, `TE_JMAP reopen` logged: the open failed from that widget; read `error.log` for a callback line naming `te_map_widgets.gui`. Closed, no `TE_JMAP reopen`: the chain stopped after the close (`next`), or the scripted GUI failed; try the open as the first state's second `on_finish` line. The page stays open with the old map and no `TE_JMAP reopen`: `PdxGuiTriggerAllAnimations` didn't reach the widget; have the pick set a client-side variable instead, and the repainter's first state fire on it (`trigger_when`, the launcher's pattern in `te_systems_window.gui`), its second clear it. Reopened on the old map: lengthen the first state (0.5 s). |
+| 1 | A pick repaints at a twentieth of a second (fifth pass) | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks and comes back on the new map, paused or not, quicker than the sixth session's quarter second: `te_jmap_repaint` now closes the page 0.05 s after the click, and `te_jmap_repaint_open` opens it 0.05 s after that (they were 0.25 s and 0.1 s). Each pick logs `TE_JMAP pick` and then `TE_JMAP reopen`. Say whether the blink is acceptable while running. | Reopened on the old map: the scripted GUI's pick hadn't landed when the page closed; set `te_jmap_repaint`'s `duration` to 0.1, and back to 0.25 (which worked) if that fails too. Closed and stayed closed, `TE_JMAP reopen` logged: the open ran before the close had landed, so its toggle closed the page; set `te_jmap_repaint_open`'s `duration` back to 0.1. Closed with no `TE_JMAP reopen`: read `error.log` for a callback line naming `te_map_widgets.gui`. |
 | 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Pick a few maps. Click the eye again. Then fade it and close the page with X (or Escape), and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through, and stays faded from pick to pick; the second click brings it back; after a close it reopens whole. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). Known edge: leave a faded page by opening another panel (a state, say) and the next journal page you open from the journal opens faded; the map buttons and the X clear it. | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
 | 3 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
 | 4 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
+| 5 | The Devastation map | During or after a war with battles on land, pick Devastation. Hover a battle-torn state and open its state panel. | Battle-torn states shade from pale sage toward char: halfway by 20% devastated, the rest more slowly to 100%. The rest of the world is sage. The hover's figure is the state panel's devastation. | All sage while the hover shows devastation above 0: the bare `devastation` read (`te_jmap_devastation_factor`) returns 0 in the paint; try the inline factor vanilla's Forest of Bayonets uses (`factor = { value = this.devastation multiply = 2 }`), and if that paints, give the generator's devastation row `this.devastation` as its input. No figure in the hover: read `debug.log` for `te_jmap_tt_devastation`. |
+| 6 | The census maps | A few years in, click each census map (Life Expectancy, Infant Mortality, Leading Cause; Birth Rate, Death Rate, Natural Change; Fertility, Median Age, Aged 65 and Over; Sex Balance, Net Migration), and Urban People, Gini Coefficient and Dynastic Wealth. Hover a state and compare its Demographics panel. Try one in 1836, before the first census year. | Each paints, and its hover reads the panel's figure. In 1836 Birth Rate, Death Rate, Natural Change, Net Migration and Leading Cause show every state grey ("No census figures yet") until its first full year; the rest paint from the start. Say whether each map's curve reads well (each pick's tooltip gives its bends; `gen_journal_map_scales.py`'s table holds them all, and its shapes change every map at once): turmoil and devastation are soft-capped at 20%, deaths at 40 per 1,000, infant mortality past 300, natural change past −15 and +30, net migration past ±20, each a quarter as steep beyond. | A map grey everywhere after the first year: its gate's variable isn't stored as `te_demog_effects.txt`'s header says; note which. A hover with no figure: read `debug.log` for that map's `te_jmap_tt_` key. |
+| 7 | Leading Cause's colors | Pick Leading Cause; open a state's Demographics panel. | The state's color is its largest slice's in the Causes of Death pie, and the hover names it. | Colors that don't match the pie: note which; the named colors are `te_jmap_cause_*`. |
+| 8 | The page with sixteen maps | Open the Map Room. | Six rows of buttons fit above the description without crowding the page; nothing slower with the page open than before. | Crowded: say so (the rows could fold). Slower: say how much; the ladder is longer now. |
+
+## The third pass's checks, answered
+
+| # | Question | Answer |
+|---|---|---|
+| 1 | A pick repaints a paused map (the fourth pass's repainter) | Works: `te_jmap_repainter` closing the page a quarter second after the click and reopening it a tenth later (the owner, sixth session: "0.25 worked"). Check 1 above tries a twentieth. |
 
 ## The second pass's checks, answered
 
@@ -209,6 +219,14 @@ The owner's report and `debug.log`/`error.log` from 22:06 to 22:18 (six `TE_JMAP
   outside the page, two states apart, with the plain open (check 1 above).
 - Checks 2–4 not reported.
 
+### Sixth session, 2026-11-05 night (#1424)
+
+The owner's report, "0.25 worked": **check 1 works**, the repainter's quarter-second close and its reopen a tenth
+later. Not said: whether paused and running both, or how the blink feels while running (check 1 asks again). Checks
+2–4 not reported. The fifth pass tries a twentieth of a second for each (check 1 above) and, from the owner's asks, adds
+Devastation, Urban People, Gini Coefficient, Dynastic Wealth and eight census maps and drops Literacy, which vanilla's
+own literacy map mode shows.
+
 ## Not tested here
 
 - Whether `map_color` takes a scope path (`value = owner.color`, prep C21): left out, since a field the engine rejects at
@@ -220,7 +238,8 @@ The owner's report and `debug.log`/`error.log` from 22:06 to 22:18 (six `TE_JMAP
 
 ## When it's done
 
-- Delete the `TE_JMAP pick` debug line in `te_jmap_set_selector` once check 1 is answered.
+- Delete the `TE_JMAP pick` debug line in `te_jmap_set_selector` and the repainter's `TE_JMAP reopen` line
+  (`te_jmap_reopen_log_sgui`) once check 1 settles the repaint's timing.
 - Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) in a PR of its own: it touches its events,
   `scripts/nightly_audit_select.py` and `scripts/image_pipeline/event_image_prompts.py`.
 - Give the Banking and Demographics chapters a line each if a map grows beyond the introduction's paragraph

@@ -9,9 +9,22 @@ colors = {
 	te_jmap_turmoil_low = hsv360 { 150 18 62 }
 	te_jmap_turmoil_high = hsv360 { 356 82 72 }
 
-	# je_te_map_room: literacy, unlettered to universal.
-	te_jmap_literacy_low = hsv360 { 30 35 32 }
-	te_jmap_literacy_high = hsv360 { 190 70 88 }
+	# je_te_map_room: devastation, untouched to half ruined.
+	te_jmap_devastation_low = hsv360 { 80 14 66 }
+	te_jmap_devastation_high = hsv360 { 18 90 34 }
+
+	# je_te_map_room: the urban share, rural green to city brick.
+	te_jmap_urban_low = hsv360 { 95 40 55 }
+	te_jmap_urban_high = hsv360 { 15 75 78 }
+
+	# je_te_map_room: the Gini coefficient, 0.30 to 0.80 (pale blue to burnt orange).
+	te_jmap_gini_low = hsv360 { 200 20 90 }
+	te_jmap_gini_high = hsv360 { 25 85 55 }
+
+	# je_te_map_room: Dynastic Wealth, diverging at 50: dispersed teal, cream at 50, concentrated plum.
+	te_jmap_wc_low = hsv360 { 165 55 50 }
+	te_jmap_wc_mid = hsv360 { 50 6 92 }
+	te_jmap_wc_high = hsv360 { 315 60 45 }
 
 	# je_te_map_room, Demographics: life expectancy at birth, 25 to 80 years (oxblood, amber, teal).
 	te_jmap_e0_low = hsv360 { 355 75 42 }
@@ -28,6 +41,50 @@ colors = {
 	te_jmap_median_low = hsv360 { 52 55 92 }
 	te_jmap_median_mid = hsv360 { 335 42 72 }
 	te_jmap_median_high = hsv360 { 268 58 36 }
+
+	# je_te_map_room, Demographics: natural change, diverging at none: shrinking violet, cream at none, growing green.
+	te_jmap_natural_low = hsv360 { 268 48 58 }
+	te_jmap_natural_mid = hsv360 { 55 8 92 }
+	te_jmap_natural_high = hsv360 { 145 70 46 }
+
+	# je_te_map_room, Demographics: deaths per 1,000, 5 to 45 (pale to deep red).
+	te_jmap_cdr_low = hsv360 { 30 12 95 }
+	te_jmap_cdr_high = hsv360 { 352 85 42 }
+
+	# je_te_map_room, Demographics: births per 1,000, 8 to 50 (pale to deep blue).
+	te_jmap_cbr_low = hsv360 { 200 12 95 }
+	te_jmap_cbr_high = hsv360 { 215 82 48 }
+
+	# je_te_map_room, Demographics: infant mortality, 0 to 300 per 1,000 births (life expectancy's teal, amber and
+	# oxblood, the other way round).
+	te_jmap_imr_low = hsv360 { 172 62 55 }
+	te_jmap_imr_mid = hsv360 { 38 72 88 }
+	te_jmap_imr_high = hsv360 { 355 75 42 }
+
+	# je_te_map_room, Demographics: the leading cause of death, the Causes of Death pie's colors
+	# (scripts/image_pipeline/gen_ch_model_pie_textures.py), one per te_dg_dc_lead code.
+	te_jmap_cause_inf = hsv360 { 213 75 90 }
+	te_jmap_cause_chr = hsv360 { 17 82 85 }
+	te_jmap_cause_ext = hsv360 { 159 84 62 }
+	te_jmap_cause_work = hsv360 { 40 100 79 }
+	te_jmap_cause_mat = hsv360 { 338 62 84 }
+	te_jmap_cause_kill = hsv360 { 247 43 91 }
+	te_jmap_cause_war = hsv360 { 0 55 90 }
+
+	# je_te_map_room, Demographics: sex balance, men per 100 women aged 20-59, diverging at 100: fewer men rose, even
+	# cream, more men blue.
+	te_jmap_sex_low = hsv360 { 335 55 72 }
+	te_jmap_sex_mid = hsv360 { 50 6 92 }
+	te_jmap_sex_high = hsv360 { 205 72 58 }
+
+	# je_te_map_room, Demographics: net migration per 1,000, diverging at none: leaving orange, cream, arriving blue.
+	te_jmap_mig_low = hsv360 { 28 78 72 }
+	te_jmap_mig_mid = hsv360 { 50 6 92 }
+	te_jmap_mig_high = hsv360 { 190 75 52 }
+
+	# je_te_map_room, Demographics: aged 65 and over, 2% to 30% (pale straw to plum).
+	te_jmap_old_low = hsv360 { 60 35 92 }
+	te_jmap_old_high = hsv360 { 280 55 38 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

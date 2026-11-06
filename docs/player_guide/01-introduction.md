@@ -28,7 +28,13 @@ Escape or click outside the page to close it.
 Two tabs have a map button left of the "?". Banking's opens its journal entry,
 which colors every country by the phase of its banking cycle. Demographics'
 opens the Map Room, a page of world maps with a button for each: Turmoil,
-Literacy and, from the census, Life Expectancy, Fertility and Median Age. Hover a
+Devastation, Urban People, Gini Coefficient and Dynastic Wealth and, from the
+census, Life Expectancy, Infant
+Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility,
+Median Age, Aged 65 and Over, Sex Balance and Net Migration. Leading Cause
+colors a state by what killed most of its people, in the colors of the Causes
+of Death chart. Birth Rate, Death Rate, Natural Change, Net Migration and
+Leading Cause need a state's first full census year, so they start gray. Hover a
 state for its figure. A journal entry's map shows only while its page is open,
 so the crossed-out eye at the top left of every journal page fades the page
 until you click it again or close the page, and the map shows through. The

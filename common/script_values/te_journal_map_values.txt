@@ -1,91 +1,21 @@
-﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). Every value here runs with a
-# STATE as root: the engine evaluates an entry's map_color once per state in the world. So they read only what is
-# already stored (a census variable, an engine figure), never walk pops, and each factor is clamped to 0-1 against
-# fixed bounds, so a color means the same thing in 1850 and 1950 (docs/audits/vanilla_1_15_prep.md § 4.1).
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The Map Room's selector. Each
+# map's color scale, its factor 0-1, is generated: te_journal_map_scales_generated.txt, from the table in
+# scripts/generators/gen_journal_map_scales.py (one shape per family, so a change to a shape changes every map using it).
 
 # ---------------------------------------------------------------------------
 # The selector: which of the Map Room's maps the player picked
 # ---------------------------------------------------------------------------
-# 1 turmoil, 2 literacy, 3 life expectancy, 4 fertility, 5 median age; 0 none (6 was the scope probe, retired). A
-# global variable (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope
-# probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's
-# state roots and the pick buttons' country roots read the same number.
+# 1 turmoil, 3 life expectancy, 4 fertility, 5 median age, 6 devastation, 7 natural change, 8 death rate, 9 birth
+# rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
+# share, 16 Gini coefficient, 17 Dynastic Wealth; 0 none. 2 was literacy, retired because vanilla's own literacy map
+# mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next pick); 6 was the scope probe
+# until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
+# entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
+# Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.
 te_jmap_selector = {
 	value = 0
 	if = {
 		limit = { has_global_variable = te_jmap_sel }
 		value = global_var:te_jmap_sel
 	}
-}
-
-# ---------------------------------------------------------------------------
-# Factors, each 0-1
-# ---------------------------------------------------------------------------
-# Turmoil is the radicals' share; above a half is a state in uproar, so the scale saturates there (as vanilla's
-# Forest of Bayonets map does).
-te_jmap_turmoil_factor = {
-	value = turmoil
-	multiply = 2
-	min = 0
-	max = 1
-}
-
-te_jmap_literacy_factor = {
-	value = literacy_rate
-	min = 0
-	max = 1
-}
-
-# Life expectancy at birth, 25 to 80 years; two halves for a three-color gradient (low to mid, mid to high).
-te_jmap_e0_factor = {
-	value = var:te_dg_e0
-	subtract = 25
-	divide = 55
-	min = 0
-	max = 1
-}
-te_jmap_e0_factor_lower = {
-	value = te_jmap_e0_factor
-	multiply = 2
-	min = 0
-	max = 1
-}
-te_jmap_e0_factor_upper = {
-	value = te_jmap_e0_factor
-	subtract = 0.5
-	multiply = 2
-	min = 0
-	max = 1
-}
-
-# Fertility diverges at replacement, 2.1 children a woman: 1.0 to 2.1 below it, 2.1 to 6.5 above.
-te_jmap_tfr_factor_lower = {
-	value = var:te_dg_tfr
-	subtract = 1
-	divide = 1.1
-	min = 0
-	max = 1
-}
-te_jmap_tfr_factor_upper = {
-	value = var:te_dg_tfr
-	subtract = 2.1
-	divide = 4.4
-	min = 0
-	max = 1
-}
-
-# Median age, 15 to 45 years, in two halves at 30.
-te_jmap_median_factor_lower = {
-	value = var:te_dg_median
-	subtract = 15
-	divide = 15
-	min = 0
-	max = 1
-}
-te_jmap_median_factor_upper = {
-	value = var:te_dg_median
-	subtract = 30
-	divide = 15
-	min = 0
-	max = 1
 }

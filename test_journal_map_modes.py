@@ -1,4 +1,4 @@
-"""Journal entry map modes, third pass (docs/systems/mod_systems/journal_map_modes.md).
+"""Journal entry map modes, fifth pass (docs/systems/mod_systems/journal_map_modes.md).
 
 The engine says nothing about a map's script: a named color it doesn't know, a tooltip key with no loc or a selector
 number no branch reads all fail silently on the map. So this holds the pieces together offline:
@@ -6,6 +6,8 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - every color a map names is one of the mod's (common/named_colors/te_journal_map_colors.txt), and each is used;
 - every Map Room pick (a scripted GUI) sets a selector that map_color and map_tooltip both branch on, has a
   button, and has its loc; the Map Room stays contextless, in no journal, with no scripted buttons (they lock);
+- every map that needs a stored figure has a "no data" branch, and a year's figures wait for a state's first step;
+- the leading-cause map's colors are the Causes of Death pie's;
 - every map_tooltip key has loc;
 - each pick reopens the Map Room's page a beat after its click, so a paused map repaints (check 4), from a
   widget outside the page (te_jmap_repainter), since a widget on it dies with the close (fifth session);
@@ -27,6 +29,7 @@ BANKING = "common/journal_entries/je_banking.txt"
 MAP_ENTRIES = (HOST, BANKING)
 COLORS = "common/named_colors/te_journal_map_colors.txt"
 VALUES = "common/script_values/te_journal_map_values.txt"
+SCALES = "common/script_values/te_journal_map_scales_generated.txt"
 WIDGETS = "gui/te_map_widgets.gui"
 REPAINTER = "te_jmap_repainter"
 REGISTRATION = "gui/scripted_widgets/te_systems_window.txt"
@@ -141,7 +144,7 @@ def tracked(rel):
 
 class FilesTest(unittest.TestCase):
     def test_each_new_file_has_one_bom(self):
-        for rel in (HOST, COLORS, VALUES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS):
+        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS):
             with open(os.path.join(REPO, rel), "rb") as f:
                 head = f.read(6)
             self.assertTrue(head.startswith(BOM) and not head[3:].startswith(BOM), rel)
@@ -168,6 +171,25 @@ class ColorsTest(unittest.TestCase):
         self.assertEqual(defined - used, set(), "named colors no map uses")
 
 
+class CauseColorsTest(unittest.TestCase):
+    PIE = "scripts/image_pipeline/gen_ch_model_pie_textures.py"
+
+    def test_leading_cause_colors_are_the_pies(self):
+        # the leading-cause map draws in the Causes of Death pie's colors, so the pie's legend reads the map too
+        import colorsys
+        pie = dict(re.findall(r'"icons/demographics_icons/pie_(\w+)\.dds",\s*"(#[0-9a-f]{6})"', read(self.PIE)))
+        names = {"inf": "infection", "chr": "chronic", "ext": "external", "work": "work", "mat": "maternal",
+                 "kill": "killed", "war": "war"}
+        text = code(COLORS)
+        for short, long in names.items():
+            h = pie[long]
+            hsv = colorsys.rgb_to_hsv(*(int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)))
+            m = re.search(r"\bte_jmap_cause_" + short + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)\s*\}", text)
+            self.assertIsNotNone(m, short)
+            want = (round(hsv[0] * 360), round(hsv[1] * 100), round(hsv[2] * 100))
+            self.assertEqual(tuple(int(x) for x in m.groups()), want, f"te_jmap_cause_{short} vs the pie's {h}")
+
+
 class MapRoomTest(unittest.TestCase):
     def setUp(self):
         self.room = entry(HOST, "je_te_map_room")
@@ -184,14 +206,54 @@ class MapRoomTest(unittest.TestCase):
 
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
-        self.assertEqual(sorted(picks.values()), list(range(1, 6)), "selectors 1-5, one pick each")
-        # the census maps' shared "no data" branch names 3-5 in an OR; a pick needs a branch of its own
+        # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 18)), "one pick per selector, 2 unused")
+        # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
         for name, sel in picks.items():
             branch = re.compile(r"te_jmap_selector\s*=\s*" + str(sel) + r"\b")
             self.assertRegex(color, branch, f"{name}: map_color has no branch for selector {sel}")
             self.assertRegex(tooltip, branch, f"{name}: map_tooltip has no branch for selector {sel}")
+
+    def branches(self, key, sel):
+        """The bodies of key's branches (if / else_if) that name selector sel outside an OR."""
+        part = block(self.room, key)
+        out = []
+        for m in re.finditer(r"\b(?:if|else_if)\s*=\s*\{", part):
+            body = enclosing(part, m.end())
+            limit = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(body, "limit") or "")
+            if re.search(r"te_jmap_selector\s*=\s*" + str(sel) + r"\b", limit):
+                out.append(body)
+        return out
+
+    def no_data(self, key):
+        """The selectors the last OR-only branch of key lists: the maps that show grey for a state with no figure."""
+        part = block(self.room, key)
+        ors = re.findall(r"\bOR\s*=\s*\{([^{}]*te_jmap_selector[^{}]*)\}", part)
+        self.assertTrue(ors, f"{key}: no 'no data' branch")
+        return {int(n) for n in re.findall(r"te_jmap_selector\s*=\s*(\d+)", ors[-1])}
+
+    def test_every_figure_map_has_a_no_data_branch(self):
+        # a map whose branches all need a stored figure (has_variable) leaves a state with none unpainted (dark grey)
+        # and with the "Pick a map" tooltip, unless the OR lists it
+        gated = set()
+        for sel in self.picks().values():
+            bodies = self.branches("map_color", sel)
+            self.assertTrue(bodies, sel)
+            if all("has_variable" in b for b in bodies):
+                gated.add(sel)
+        self.assertIn(3, gated)
+        self.assertEqual(self.no_data("map_color"), gated, "map_color's 'no data' OR")
+        self.assertEqual(self.no_data("map_tooltip"), gated, "map_tooltip's 'no data' OR")
+
+    def test_a_years_figures_wait_for_a_step(self):
+        # a seed writes births, deaths and migration as 0, and no causes of death (te_demog_state_stepped_sgui): those
+        # maps show grey until the state's first full year
+        for sel in (7, 8, 9, 11, 13):
+            for key in ("map_color", "map_tooltip"):
+                for body in self.branches(key, sel):
+                    self.assertRegex(body, r"var:te_dg_stepped\s*>\s*0", f"{key}, selector {sel}")
 
     def test_the_current_pick_is_invalid_so_its_button_draws_pressed(self):
         for name, sel in self.picks().items():
@@ -292,8 +354,15 @@ class LocTest(unittest.TestCase):
         keys = loc_keys()
         gone = {k for k in keys if k.startswith(("te_jmap_strip_", "te_jmap_tt_probe_", "je_te_map_potential_probe"))}
         gone |= keys & {"te_jmap_pick_scope_probe", "te_jmap_pick_scope_probe_desc", "te_jmap_tt_potential_probe",
-                        "mm_te_journal_entry_map"}
+                        "mm_te_journal_entry_map",
+                        # literacy, retired: vanilla's literacy map mode shows it
+                        "te_jmap_pick_literacy", "te_jmap_pick_literacy_desc", "te_jmap_tt_literacy"}
         self.assertEqual(gone, set())
+
+    def test_literacy_is_gone(self):
+        self.assertNotIn("te_jmap_pick_literacy_sgui", code(SGUIS))
+        self.assertNotIn("literacy", code(VALUES))
+        self.assertNotIn("literacy", code(COLORS))
 
 
 class GuiTest(unittest.TestCase):
