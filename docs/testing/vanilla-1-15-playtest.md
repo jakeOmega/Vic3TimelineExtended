@@ -147,3 +147,11 @@ or Spanish game.
 - A marginal interest group's halved trait line; Foreign Affairs' formation-interest gain; literacy curves; war
   deaths in the census (all moved by vanilla, § 5 of the migration record).
 - `debug_log` lines that pass arguments through `te_log_args_set` print the names, not blanks.
+
+**Pre-1.15 leftovers (#1406)**
+- The Buildings map list's profit column: a Barracks or Naval Base reads Upkeep, a Construction Sector in a Free
+  Market Construction game reads Earnings (its group is under heavy industry, not government funded), and
+  National Parks read Upkeep. The mod's copy of the header, which named only Government Administration, is gone.
+- Japan on Shinsengumi: the law's tooltip lists Secret Police's tourism, intelligence capacity and colonial lines, and
+  the Ministry of Propaganda can be enacted once Mass Media is in. The Ottomans on the Millet System: the Ministry of
+  Religion can be enacted, and the law shows State Religion's bureaucracy cost line.

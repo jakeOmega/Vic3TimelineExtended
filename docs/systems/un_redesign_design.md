@@ -1066,6 +1066,7 @@ good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinne
 | Humanitarian Regulations | +1 | `extra_laws.txt` |
 | Limited War | +1.5 | `extra_laws.txt` |
 | Isolationism (vanilla) | −1.5 | `INJECT:law_isolationism`, `extra_laws.txt` |
+| Canton System, Sakoku (Isolationism's vanilla variants, #1406) | −1.5 | `INJECT:law_canton_system`, `INJECT:law_sakoku`, `extra_laws.txt`; the same law group as Isolationism, so never on top of it |
 | Ministry of International Aid | +0.15 a level (+1.35 at the cap of 9) | the institution, `extra_institutions.txt` |
 | Doctrine: No First Use / Existential Deterrence / Flexible First Use / Compellence / Warfighting | +0.5 / 0 / −0.5 / −1 / −1.5 | `nd_doctrine_mod_*`, on `je_nuclear_program` |
 | The Burden of the Bomb | −1 × burden (0..1) | `nd_taboo_possession_cost`, on `je_nuclear_program` |

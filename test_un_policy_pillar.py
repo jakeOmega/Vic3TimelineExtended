@@ -42,6 +42,9 @@ GRANTS = {
     ("common/laws/extra_laws.txt", "law_humanitarian_regulations"): 1,
     ("common/laws/extra_laws.txt", "law_limited_war"): 1.5,
     ("common/laws/extra_laws.txt", "INJECT:law_isolationism"): -1.5,
+    # Isolationism's variants carry its line (#1406); one law group, so they don't stack with it.
+    ("common/laws/extra_laws.txt", "INJECT:law_canton_system"): -1.5,
+    ("common/laws/extra_laws.txt", "INJECT:law_sakoku"): -1.5,
     ("common/institutions/extra_institutions.txt", "institution_ministry_of_international_aid"): 0.15,
     ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_1"): 0.5,
     ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_3"): -0.5,

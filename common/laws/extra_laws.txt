@@ -44,14 +44,18 @@ INJECT:law_isolationism = {
 		country_un_authority_target_add = -1.5
 	}
 }
+# Isolationism's variants carry its UN authority line: a variant takes its
+# parent's stances, not its modifiers.
 INJECT:law_canton_system = {
 	modifier = {
 		country_cultural_pull_mult = -0.10
+		country_un_authority_target_add = -1.5
 	}
 }
 INJECT:law_sakoku = {
 	modifier = {
 		country_cultural_pull_mult = -0.10
+		country_un_authority_target_add = -1.5
 	}
 }
 
@@ -3997,6 +4001,10 @@ law_ministry_of_propaganda = {
 	unlocking_laws = {
 		law_single_party_state
 		law_secret_police
+		# Secret Police's variants, named one by one
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_outlawed_dissent
 	}
 
@@ -4108,6 +4116,10 @@ law_ministry_of_thought_control = {
 	unlocking_laws = {
 		law_single_party_state
 		law_secret_police
+		# Secret Police's variants, named one by one
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_outlawed_dissent
 	}
 
@@ -4234,7 +4246,10 @@ law_ministry_of_religion = {
 
 	unlocking_laws = {
 		law_state_religion
-		law_caesaropapism # 1.15's State Religion variant: the church as a department of state
+		# State Religion's variants, named one by one
+		law_caesaropapism
+		law_millet_system
+		law_people_of_the_book
 		law_freedom_of_conscience
 	}
 
