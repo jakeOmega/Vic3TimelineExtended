@@ -290,20 +290,26 @@ class RewardTests(unittest.TestCase):
         self.assertEqual(synced, defined)
 
     def test_colony_modifiers_are_recorded(self):
+        # Each option records its specialization (sr_site_choose_<modifier>), and
+        # the entry declares it while the holder's <modifier>_held is set (1.15
+        # scaling modifiers, #1404). A revolution's winner inherits the variables,
+        # so nothing has to put the modifier back: no option adds one, and the
+        # entry's backstop no longer lists them.
         text = _read("events", "space_race_colony_events.txt")
         self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
-        granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
+        granted = re.findall(r"sr_site_choose_(\w+) = yes", text)
         self.assertEqual(len(granted), 80)  # two for each of the 40 worlds
-        # The backstop names every specialization at its multiplier, its level times
-        # the colony's staffing (colony modules design § 7), from the site table.
-        self.assertIn("sr_sites_sync_entry_specs = yes", _block(EFFECTS, "sr_sync_solar_colonization_entry"))
-        sites = _read("common", "scripted_effects", "sr_sites_generated.txt")
-        synced = re.findall(r"sr_sync_colony_spec_base = \{ MODIFIER = (\w+) MULT = sr_site_mult_[ab]_\w+ \}",
-                            _block(sites, "sr_sites_sync_entry_specs"))
-        self.assertEqual(sorted(synced), sorted(set(granted)))
+        declared = _read("common", "journal_entries", "sr_sites_generated.txt")
+        for modifier in granted:
+            with self.subTest(modifier=modifier):
+                self.assertRegex(declared, r"scaling_modifiers_while_active = \{\s*modifier = " + modifier
+                                 + r"\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = "
+                                 + modifier + r"_held \}")
+        sync = _block(EFFECTS, "sr_sync_solar_colonization_entry")
+        self.assertNotIn("sr_colony_", sync)
+        self.assertNotIn("sr_solar_system_trade", sync)
         defined = set(re.findall(r"^(sr_colony_\w+) = \{", MODIFIERS, re.M))
         self.assertEqual(set(granted), defined)
-
 
 if __name__ == "__main__":
     unittest.main()
