@@ -173,12 +173,13 @@ INJECT:law_secret_police = {
 }
 
 # Secret Police's variants (Shinsengumi, and 1.15's Okhrana and Third Section)
-# and 1.15's Extraordinary Commission carry its lines.
+# and 1.15's Extraordinary Commission carry its lines. Shinsengumi has no
+# institution, so an institution_modifier would scale by nothing; like vanilla's
+# own Shinsengumi, which carries Secret Police's institution lines at one
+# level's value, it takes the garrison line flat.
 INJECT:law_shinsengumi = {
 	modifier = {
 		country_colonial_stability_drift_add = 0.2
-	}
-	institution_modifier = {
 		country_colonial_garrison_effectiveness_add = 0.1
 	}
 }

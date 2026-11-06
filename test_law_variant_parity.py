@@ -5,22 +5,28 @@ Bakufu for Autocracy, the Millet System for State Religion, ...) take their
 parent's ideology stances but none of its modifiers. So a line the mod injects
 into a parent's `modifier` or `institution_modifier` block reaches no country
 on a variant unless the variant is injected too, and nothing logs it. Before
-#1406, twelve variants missed lines their parents carry: Shinsengumi had none
+#1406, ten variants missed lines their parents carry: Shinsengumi had none
 of Secret Police's tourism, intelligence or colonial lines, and Bakufu and
 Neo-Absolutism none of Autocracy's colonial or standard-of-living ones.
 
-The same goes for a law the mod gates on a parent. `unlocking_laws` and
+The same goes for anything the mod gates on a parent. `unlocking_laws` and
 `disallowing_laws` name laws one by one, so a list that names Secret Police
 names each of its variants too (the Ministries of Propaganda and Thought
-Control named none of Secret Police's three until #1406).
+Control named none of Secret Police's three until #1406, nor did the
+Consciousness Network's methods).
 
-The checks, over `common/laws/*.txt` and the committed `vanilla_parsed/` laws:
-  * every key the mod adds to a parent's `modifier` or `institution_modifier`
-    (an `INJECT`'s keys, or a `REPLACE`'s keys vanilla's law lacks) is in each
-    variant's block of the same name, vanilla's or the mod's (values may
-    differ: Women in the Fields takes Women Own Property's);
-  * every `unlocking_laws` / `disallowing_laws` entry the mod writes that
-    names a parent sits beside each of the parent's variants.
+The checks, over `common/laws/*.txt`, `common/production_methods/*.txt` and
+the committed `vanilla_parsed/` laws and methods:
+  * every key the mod adds to a parent law's `modifier` or
+    `institution_modifier` (an `INJECT`'s keys, or a `REPLACE`'s keys vanilla's
+    law lacks) is in each variant's block of the same name, vanilla's or the
+    mod's (values may differ: Women in the Fields takes Women Own Property's).
+    A variant with no `institution` has nothing to scale an
+    `institution_modifier`, so it carries the parent's institution lines in its
+    `modifier` block instead, as vanilla's Shinsengumi does;
+  * every `unlocking_laws` / `disallowing_laws` entry the mod writes in a law
+    or a production method that names a parent sits beside each of the
+    parent's variants.
 
 A gap that is deliberate is excused by
 `# REVIEWED YYYY-MM-DD (law_variant_parity): rationale` on the parent's key
@@ -38,7 +44,7 @@ from collections import defaultdict
 REPO = os.path.dirname(os.path.abspath(__file__))
 BLOCKS = ("modifier", "institution_modifier")
 LISTS = ("unlocking_laws", "disallowing_laws")
-_LAW_RE = re.compile(r"^(?:(?P<prefix>[A-Z_]+):)?(?P<name>law_[a-z0-9_]+)\s*=\s*\{", re.M)
+_ENTITY_RE = re.compile(r"^(?:(?P<prefix>[A-Z_]+):)?(?P<name>[a-z][a-z0-9_]*)\s*=\s*\{", re.M)
 _FIELD_RE = re.compile(r"(?<![A-Za-z0-9_])(?P<field>[a-z_]+)\s*=\s*\{")
 _ASSIGN_RE = re.compile(r"(?<![A-Za-z0-9_])([a-z_0-9]+)\s*=")
 _REVIEWED_RE = re.compile(r"#\s*REVIEWED\s+\d{4}-\d{2}-\d{2}\s*\(law_variant_parity\)\s*:\s*\S")
@@ -91,10 +97,12 @@ class _Law:
         self.mod_entries = []                         # (list, law, file, line) the mod writes
         self.key_lines = defaultdict(list)            # (block, key) -> [(file, line)]
         self.replaced = False
+        self.institution: str | None = None
 
 
-def load_laws() -> dict[str, _Law]:
-    with open(os.path.join(REPO, "vanilla_parsed", "common", "laws.json"), encoding="utf-8") as fh:
+def _entities(folder: str, snapshot: str) -> dict[str, _Law]:
+    """Every entity in common/<folder>/*.txt over vanilla_parsed/common/<snapshot>."""
+    with open(os.path.join(REPO, "vanilla_parsed", "common", snapshot), encoding="utf-8") as fh:
         vanilla = {name: _unwrap(value) for name, value in json.load(fh).items()}
 
     def vanilla_keys(name: str, block: str) -> set[str]:
@@ -113,27 +121,34 @@ def load_laws() -> dict[str, _Law]:
 
     laws: dict[str, _Law] = defaultdict(_Law)
     for name, body in vanilla.items():
-        if isinstance(body, dict) and "parent" in body:
-            laws[name].parent = _unwrap(body["parent"])
+        if isinstance(body, dict):
+            if "parent" in body:
+                laws[name].parent = _unwrap(body["parent"])
+            if "institution" in body:
+                laws[name].institution = _unwrap(body["institution"])
 
     sources: list[tuple[str, str, str, str]] = []
-    for path in sorted(glob.glob(os.path.join(REPO, "common", "laws", "*.txt"))):
+    for path in sorted(glob.glob(os.path.join(REPO, "common", folder, "*.txt"))):
         with open(path, encoding="utf-8-sig") as fh:
             raw = fh.read()
         sources.append((os.path.relpath(path, REPO), raw, _blank_comments(raw), path))
 
     for rel, raw, text, _path in sources:
         raw_lines = raw.splitlines()
-        for m in _LAW_RE.finditer(text):
+        for m in _ENTITY_RE.finditer(text):
             prefix, name = m.group("prefix") or "", m.group("name")
             law = laws[name]
             close = _close(text, m.end() - 1)
             replacing = prefix in _REPLACING
+            body = text[m.end():close]
             if replacing:
                 law.replaced = True
-                pm = re.search(r"(?<![a-z_])parent\s*=\s*(law_[a-z0-9_]+)", text[m.end():close])
-                if pm:
-                    law.parent = pm.group(1)
+                pm = re.search(r"(?<![a-z_])parent\s*=\s*(law_[a-z0-9_]+)", body)
+                law.parent = pm.group(1) if pm else None
+                law.institution = None
+            im = re.search(r"(?<![a-z_])institution\s*=\s*([a-z0-9_]+)", body)
+            if im:
+                law.institution = im.group(1)
             for field, b_start, b_end in _top_fields(text, m.end(), close):
                 if field in BLOCKS:
                     for km in _ASSIGN_RE.finditer(text, b_start, b_end):
@@ -149,7 +164,7 @@ def load_laws() -> dict[str, _Law]:
                         law.lists[field].add(em.group(0))
                         law.mod_entries.append((field, em.group(0), rel, raw_lines[line - 1]))
 
-    # What a law ends up with: vanilla's, unless the mod replaces it, plus the mod's.
+    # What an entity ends up with: vanilla's, unless the mod replaces it, plus the mod's.
     for name, law in laws.items():
         if not law.replaced and name in vanilla:
             for block in BLOCKS:
@@ -157,6 +172,14 @@ def load_laws() -> dict[str, _Law]:
             for field in LISTS:
                 law.lists[field] |= vanilla_list(name, field)
     return laws
+
+
+def load_laws() -> dict[str, _Law]:
+    return _entities("laws", "laws.json")
+
+
+def load_methods() -> dict[str, _Law]:
+    return _entities("production_methods", "pms.json")
 
 
 def variants(laws: dict[str, _Law]) -> dict[str, list[str]]:
@@ -175,16 +198,19 @@ def modifier_gaps(laws: dict[str, _Law]) -> list[str]:
                 if any(_REVIEWED_RE.search(line) for _rel, line in laws[parent].key_lines[(block, key)]):
                     continue
                 for kid in kids:
-                    if key not in laws[kid].present[block]:
+                    # No institution to scale it: the line belongs in the plain modifier.
+                    carried = block if block == "modifier" or laws[kid].institution else "modifier"
+                    if key not in laws[kid].present[carried]:
                         where = laws[parent].key_lines[(block, key)][0][0]
                         gaps.append(f"{kid} lacks {parent}'s {block} line {key} ({where})")
     return gaps
 
 
-def list_gaps(laws: dict[str, _Law]) -> list[str]:
+def list_gaps(laws: dict[str, _Law], entities: dict[str, _Law] | None = None) -> list[str]:
+    """Gating-list gaps in `entities` (the laws themselves by default)."""
     kids_of = variants(laws)
     gaps = []
-    for name, law in sorted(laws.items()):
+    for name, law in sorted((entities if entities is not None else laws).items()):
         for field, entry, rel, line in law.mod_entries:
             if entry not in kids_of or _REVIEWED_RE.search(line):
                 continue
@@ -208,6 +234,20 @@ class LawVariantParityTests(unittest.TestCase):
         gaps = list_gaps(self.laws)
         self.assertEqual(gaps, [], "name the variants beside their parent, or mark the entry "
                                    "# REVIEWED YYYY-MM-DD (law_variant_parity): why")
+
+    def test_production_method_lists_name_every_variant(self):
+        gaps = list_gaps(self.laws, load_methods())
+        self.assertEqual(gaps, [], "name the variants beside their parent, or mark the entry "
+                                   "# REVIEWED YYYY-MM-DD (law_variant_parity): why")
+
+    def test_a_variant_without_an_institution_carries_institution_lines_flat(self):
+        # Vanilla's Shinsengumi has no institution; Okhrana has Home Affairs.
+        self.assertIsNone(self.laws["law_shinsengumi"].institution)
+        self.assertEqual(self.laws["law_okhrana"].institution, "institution_home_affairs")
+        self.assertIn("country_colonial_garrison_effectiveness_add",
+                      self.laws["law_secret_police"].added["institution_modifier"])
+        self.assertIn("country_colonial_garrison_effectiveness_add",
+                      self.laws["law_shinsengumi"].present["modifier"])
 
     def test_the_scan_sees_the_known_variants_and_lines(self):
         # Guards the scanner: these are what #1406 found and fixed.

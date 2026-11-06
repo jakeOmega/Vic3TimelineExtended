@@ -149,9 +149,11 @@ or Spanish game.
 - `debug_log` lines that pass arguments through `te_log_args_set` print the names, not blanks.
 
 **Pre-1.15 leftovers (#1406)**
-- The Buildings map list's profit column: a Barracks or Naval Base reads Upkeep, a Construction Sector in a Free
-  Market Construction game reads Earnings (its group is under heavy industry, not government funded), and
-  National Parks read Upkeep. The mod's copy of the header, which named only Government Administration, is gone.
-- Japan on Shinsengumi: the law's tooltip lists Secret Police's tourism, intelligence capacity and colonial lines, and
+- The Buildings map list's profit column: a Naval Fortification or Naval Logistics Center reads Upkeep (a Barracks
+  shows its Units column there instead), a Construction Sector in a Free Market Construction game reads Earnings (its
+  group is under heavy industry, not government funded), and National Parks read Upkeep. The mod's copy of the
+  header, which named only Government Administration, is gone.
+- Japan on Shinsengumi: the law's tooltip lists Secret Police's tourism, intelligence capacity, colonial stability
+  drift and a flat +0.1 colonial garrison effectiveness (it has no institution to scale it), and
   the Ministry of Propaganda can be enacted once Mass Media is in. The Ottomans on the Millet System: the Ministry of
   Religion can be enacted, and the law shows State Religion's bureaucracy cost line.

@@ -4700,6 +4700,7 @@ pm_military_research = {
 
 	disallowing_laws = {
 		law_peasant_levies
+		law_warrior_caste # Peasant Levies' variant (a list matches exact keys)
 	}
 
 	unlocking_technologies = {
@@ -5150,6 +5151,10 @@ pm_decentralized_religious_structures = {
 
 	disallowing_laws = {
 		law_state_religion
+		# State Religion's variants, named one by one (a list matches exact keys)
+		law_caesaropapism
+		law_millet_system
+		law_people_of_the_book
 	}
 
 	building_modifiers = {
@@ -20515,6 +20520,10 @@ pm_behavioral_conditioning = {
 
 	unlocking_laws = {
 		law_secret_police
+		# Secret Police's variants, named one by one (a list matches exact keys)
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_outlawed_dissent
 		law_intrusive_surveillance
 	}
@@ -22643,8 +22652,15 @@ pm_consciousness_network_open = {
 
 	disallowing_laws = {
 		law_secret_police
+		# Secret Police's variants, named one by one (a list matches exact keys)
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_single_party_state
 		law_autocracy
+		# Autocracy's variants
+		law_bakufu
+		law_neo_absolutism
 		law_mandatory_augmentation
 		law_intrusive_surveillance
 	}
@@ -22674,8 +22690,15 @@ pm_consciousness_network_social_control = {
 
 	unlocking_laws = {
 		law_secret_police
+		# Secret Police's variants, named one by one (a list matches exact keys)
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_single_party_state
 		law_autocracy
+		# Autocracy's variants
+		law_bakufu
+		law_neo_absolutism
 		law_mandatory_augmentation
 		law_intrusive_surveillance
 	}
