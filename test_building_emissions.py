@@ -151,8 +151,8 @@ class BuildingEmissionsTest(unittest.TestCase):
         self.assertEqual(count, 260)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
-        for name, expected in (("pm_modern_coal-fired_plant", "3.80"),
-                               ("pm_modern_oil-fired_plant", "4.87"),
+        for name, expected in (("pm_modern_coal-fired_plant", "4.00"),
+                               ("pm_modern_oil-fired_plant", "5.22"),
                                ("pm_electric_arc_process", "2.00"),
                                ("pm_rotary_valve_engine_building_steel_mill", "2.00"),
                                ("pm_flow_chemistry_production", "38.28")):
@@ -247,7 +247,7 @@ class BuildingEmissionsTest(unittest.TestCase):
         # The historical probe predates the state line and keeps its building-scoped cut.
         probe = parsed("docs/testing/carbon_capture_probe/common/production_methods/te_cc_probe_pms.txt")
         pms = self.state.mod_parsers["PMs"].data
-        for fuel, expected in (("coal", "1.30"), ("oil", "1.82")):
+        for fuel, expected in (("coal", "1.50"), ("oil", "2.17")):
             gross = scalar(state_scaled(pms[f"pm_modern_{fuel}-fired_plant"]), emissions.STATE_MODIFIER)
             capture = scalar(workforce(probe[f"pm_te_cc_probe_{fuel}"]), "building_greenhouse_gas_emissions_add")
             self.assertLess(capture, 0)

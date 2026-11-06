@@ -133,7 +133,7 @@ or Spanish game.
   Vale list High-Conductivity Copper, drawn with the base game's copper goods icon until a painted one is made. A
   Grid Transfer Station buys 2 Conductive Metals a week, and an HVDC Undersea Interconnector 6. Copper's price over a
   few decades now that power, construction, munitions and assembly lines take it. The modern coal and oil plants burn
-  24% and 20% less fuel for the same power, so the next observer run's warming at 2015 (about 1.1 °C before) may
+  20% and 14% less fuel for the same power, so the next observer run's warming at 2015 (about 1.1 °C before) may
   read a little lower.
 
 **The map**

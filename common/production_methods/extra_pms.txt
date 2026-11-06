@@ -11697,7 +11697,7 @@ pm_modern_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 3.80 # AUTO-GENERATED: industrial emissions
+			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 30
 		}
 	}
@@ -11705,19 +11705,19 @@ pm_modern_coal-fired_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (20.41%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.21%)
-			goods_input_coal_add = 19                            # Price:   30, Total cost:   570.0 (38.78%)
-			goods_input_copper_add = 5                           # Price:   40, Total cost:   200.0 (13.61%)
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (20.55%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.40%)
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (41.10%)
+			goods_input_copper_add = 4                           # Price:   40, Total cost:   160.0 (10.96%)
 			# Output goods
 			goods_output_electricity_add = 90                    # Price:   30, Total cost:  2700.0 (100.00%)
-			# Total input cost: 1470.0
+			# Total input cost: 1460.0
 			# Total output cost: 2700.0
-			# Profit: 1230.0
-			# Profit margin: 83.67%
+			# Profit: 1240.0
+			# Profit margin: 84.93%
 			# Zero profit price multiplier: 0.54
 			# Employment: 1000
-			# Wage breakeven: 1.23
+			# Wage breakeven: 1.24
 		}
 
 		level_scaled = {
@@ -11737,7 +11737,7 @@ pm_modern_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 4.87 # AUTO-GENERATED: industrial emissions
+			state_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
@@ -11747,8 +11747,8 @@ pm_modern_oil-fired_plant = {
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (25.00%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (16.67%)
-			goods_input_oil_add = 28                             # Price:   40, Total cost:  1120.0 (46.67%)
-			goods_input_copper_add = 7                           # Price:   40, Total cost:   280.0 (11.67%)
+			goods_input_oil_add = 30                             # Price:   40, Total cost:  1200.0 (50.00%)
+			goods_input_copper_add = 5                           # Price:   40, Total cost:   200.0 (8.33%)
 			# Output goods
 			goods_output_electricity_add = 140                   # Price:   30, Total cost:  4200.0 (100.00%)
 			# Total input cost: 2400.0
