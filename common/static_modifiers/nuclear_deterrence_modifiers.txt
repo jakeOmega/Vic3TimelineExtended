@@ -3,15 +3,19 @@
 # ============================================================================
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
-# Three families are *managed*: exactly one member is on at a time and a
-# tracking variable records which, because add_modifier / remove_modifier are
-# invisible to has_modifier inside the block that ran them
-# (scripting_best_practices.md § Worked case — swapping one member of a banded
-# modifier family). Their single writers:
-#   nd_doctrine_mod_*        nd_apply_posture_modifiers  (je_nuclear_program scope)
-#   nd_readiness_mod_*       nd_apply_posture_modifiers  (je_nuclear_program scope)
-#   nd_upkeep_cost           nd_apply_posture_modifiers  (je_nuclear_program scope,
-#                            multiplier = root.var:nd_upkeep_weekly_cached)
+# Declared on je_nuclear_program (scaling_modifiers_while_active, vanilla
+# 1.15), never added: each value is 0 or 1 by the posture variable, or a
+# figure, and only while a posture is in force (nd_posture_in_force). Nothing
+# may add, remove or test them by name (has_modifier cannot see a declared
+# modifier):
+#   nd_doctrine_mod_*        1 while var:nd_doctrine is its number
+#   nd_readiness_mod_*       1 while var:nd_readiness is its number
+#   nd_upkeep_cost           var:nd_upkeep_weekly_cached (nd_apply_posture_modifiers)
+# One family is *managed*: exactly one member is on at a time and a tracking
+# variable records which, because add_modifier / remove_modifier are invisible
+# to has_modifier inside the block that ran them (scripting_best_practices.md
+# § Worked case — swapping one member of a banded modifier family). Its single
+# writer:
 #   nd_posture_approval_*    nd_refresh_domestic_stance  (interest-group scope)
 # Everything else below is a timed one-off applied by an event or a crisis
 # outcome.
@@ -92,9 +96,9 @@ nd_readiness_mod_3 = {
 # ---- Display only: never added (NUC-6, 2026-10-27) -------------------------
 # What each readiness level and each launch authority does through script, as
 # display lines (nuclear_deterrence_display_types.txt). The posture's hovers
-# print them with GetStaticModifier(...).GetDesc. Nothing adds or removes them,
-# so they are no managed family. Readiness 0 is named _terms_, never _mod_
-# (nd_readiness_mod_on uses 0 for "none"). Figures: Routine is the baseline of
+# print them with GetStaticModifier(...).GetDesc. Nothing adds, removes or
+# declares them. Readiness 0 is named _terms_, never _mod_: Recessed carries no
+# modifier. Figures: Routine is the baseline of
 # the incident rate (x0.5 / x1 / x4 / x10), strain moves -6 / -6 / +1.5 / +5
 # a month, readiness adds (level - 1) x 8 to a crisis's danger, and a threat
 # made from Recessed or High Alert presses the target 10 less or more.
@@ -165,9 +169,9 @@ nd_safeguards_slow_launch = {
 }
 
 # ---- Upkeep ---------------------------------------------------------------
-# Applied once with multiplier = root.var:nd_upkeep_weekly_cached; the monthly
-# pulse and every panel change rewrite the cached figure, and the engine
-# re-evaluates the multiplier continuously (un_buttons.txt precedent).
+# Declared on je_nuclear_program with value var:nd_upkeep_weekly_cached; the
+# monthly pulse and every panel change rewrite the cached figure, and the
+# entry re-reads it on its update.
 nd_upkeep_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

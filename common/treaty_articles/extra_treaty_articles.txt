@@ -1442,10 +1442,6 @@ nuclear_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restric
 			set_variable = { name = nuclear_weapon_program_progress value = 0 }
 			set_variable = { name = nuclear_weapons_program_funding value = 0 }
 			remove_modifier = nuclear_power
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
 		}
 	}
 }
@@ -2253,14 +2249,11 @@ nuclear_program_pause = {  # REVIEWED 2026-11-03 (involvement): an imposed restr
 
 	on_entry_into_force = {
 		scope:article_options.source_country = {
-			# Zero out funding without touching stockpile or progress
+			# Zero out funding without touching stockpile or progress; the
+			# entry's declared funding cost follows the variable.
 			set_variable = {
 				name = nuclear_weapons_program_funding
 				value = 0
-			}
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
 			}
 		}
 	}
