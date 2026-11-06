@@ -262,11 +262,12 @@ sr_window_log_copy = {
 
 # ---- Self-check: propellant_depots_bool (lunar colonization plan, review focus 3) ----
 # Country scope, from sr_launch_month. Shackleton Crater's Propellant Depot
-# carries country_sr_propellant_depots_bool on the solar colonization entry
-# (je:je_space_race_solar_colonization), and a blockade sets the shipping
-# specialization's multiplier to 0. Nothing yet shows that a journal entry's
-# boolean reaches the country's modifier:, or that a 0 multiplier turns it
-# off. This compares the modifier with the record (sr_depots_by_record) for
+# carries country_sr_propellant_depots_bool, declared on the solar colonization
+# entry by the generated INJECT (common/journal_entries/sr_sites_generated.txt;
+# 1.15 scaling modifiers, #1404), and a blockade sets the shipping
+# specialization's value to 0. Nothing yet shows that a journal entry's
+# boolean reaches the country's modifier: (through an injected declaration
+# too), or that a 0 value turns it off. This compares the modifier with the record (sr_depots_by_record) for
 # every country that holds the depot, held it, or reads the boolean.
 # OK once a game, once both answers have matched: a holder reading yes, and a
 # country that held the depot reading no after losing it (or its blockade).
@@ -334,7 +335,7 @@ sr_depots_self_check = {
 				set_global_variable = { name = sr_depots_broken_logged value = yes }
 				if = {
 					limit = { sr_depots_by_record = yes }
-					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=yes boolean=no country=[THIS.GetCountry.GetNameNoFormatting] (Shackleton's Propellant Depot is held, unblockaded, but modifier:country_sr_propellant_depots_bool reads no: the entry's boolean does not reach the country; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=yes boolean=no country=[THIS.GetCountry.GetNameNoFormatting] (Shackleton's Propellant Depot is held, unblockaded, but modifier:country_sr_propellant_depots_bool reads no: the entry's boolean does not reach the country, or the INJECT of the entry's generated declarations did not merge (common/journal_entries/sr_sites_generated.txt); fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 				}
 				else = {
 					debug_log = "TE_SELF_CHECK BROKEN propellant_depots_bool record=no boolean=yes country=[THIS.GetCountry.GetNameNoFormatting] (the depots boolean reads yes with no Propellant Depot held and serving: a 0 multiplier leaves a boolean on; fall back to sr_depots_by_record, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
