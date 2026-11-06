@@ -7994,18 +7994,6 @@ colonial_collapse_subject_unrest_modifier = {
 }
 
 # ============================================================================
-# MANDATE RESERVE - RETIRED 2026-11-06 (#1442): spare mandates now buy a bloc
-# summit's initiatives (te_pb_summit.1). Nothing applies it any more. Kept
-# defined so a save carrying it (a 13-month power bloc modifier) loads cleanly;
-# te_unused_mandate_reserve_on_action strips it. Removal checklist:
-# common/scripted_effects/legacy_modifier_cleanup.txt (PENDING REMOVAL).
-# ============================================================================
-sm_te_unused_mandate_reserve = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	power_bloc_cohesion_add = 1
-}
-
-# ============================================================================
 # AGRICULTURAL DIFFUSION - granted to every recognized country, the first
 # researcher of a transformative ag tech included, by the options of
 # agricultural_diffusion_events.1-5 (.a_first for the first researcher, which

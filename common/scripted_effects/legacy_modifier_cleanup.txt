@@ -134,20 +134,6 @@
 #   4. its entry in the banking expense row of SOURCES in
 #      scripts/generators/gen_budget_breakdown.py, then re-run that generator
 #
-# ── PENDING REMOVAL: sm_te_unused_mandate_reserve (added 2026-11-06, #1442) ──
-# The Mandate Reserve gave a bloc cohesion for unspent mandates; bloc summits
-# (te_pb_summit.1) replace it now that a mandate can be spent. The static
-# modifier survives so a save made while it was applied loads clean. It sits on
-# the power bloc, not the country, so legacy_je_modifier_cleanup_effect can't
-# reach it; te_unused_mandate_reserve_on_action strips it yearly. Remove ALL of
-# the following together, one release after 2026-11-06:
-#   1. the `sm_te_unused_mandate_reserve` block in
-#      common/static_modifiers/extra_modifiers.txt
-#   2. its loc keys `sm_te_unused_mandate_reserve` in te_miscellaneous_l_english.yml
-#      and `sm_te_unused_mandate_reserve_desc` in te_concepts_l_english.yml
-#   3. te_unused_mandate_reserve_on_action in common/on_actions/extra_on_actions.txt
-#      and its line in that file's on_yearly_pulse_country list
-#
 # ── PENDING REMOVAL: 1.15 scaling modifiers (added 2026-11-06, #1404) ──
 # Each system converted to 1.15's scaling_modifiers_while_active declares its
 # modifiers on its journal entry; nothing adds them any more. A save made before

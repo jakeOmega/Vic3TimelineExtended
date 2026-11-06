@@ -40,3 +40,80 @@ te_pb_summit_grant_bloc_initiative = {
 		}
 	}
 }
+
+# Country scope, the bloc leader: grant an initiative to every member, the
+# leader included, for ten years. A country that joins later doesn't get it;
+# one that leaves keeps what it has until it runs out.
+te_pb_summit_grant_member_initiative = {
+	power_bloc = {
+		every_power_bloc_member = {
+			hidden_effect = {
+				if = {
+					limit = { has_modifier = $MODIFIER$ }
+					remove_modifier = $MODIFIER$
+				}
+			}
+			add_modifier = {
+				name = $MODIFIER$
+				days = long_modifier_time
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: relations between every two members improve
+# by 20 at once. The walk meets each pair twice, once from either side, so
+# each step is 10.
+te_pb_summit_member_relations = {
+	custom_tooltip = {
+		text = te_pb_summit_relations_tt
+		power_bloc = {
+			every_power_bloc_member = {
+				save_scope_as = te_pb_summit_member
+				power_bloc = {
+					every_power_bloc_member = {
+						limit = {
+							NOT = { this = scope:te_pb_summit_member }
+						}
+						change_relations = {
+							country = scope:te_pb_summit_member
+							value = 10
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: relations between the leader and every other
+# member improve by 20 at once.
+te_pb_summit_leader_relations = {
+	custom_tooltip = {
+		text = te_pb_summit_leader_relations_tt
+		power_bloc = {
+			every_power_bloc_member = {
+				limit = { is_power_bloc_leader = no }
+				change_relations = {
+					country = root
+					value = 20
+				}
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: grant an initiative to the leader alone for
+# ten years, refreshing a running copy rather than stacking it.
+te_pb_summit_grant_leader_initiative = {
+	hidden_effect = {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
+		}
+	}
+	add_modifier = {
+		name = $MODIFIER$
+		days = long_modifier_time
+	}
+}

@@ -10,6 +10,8 @@
 # only while the bloc holds one (te_pb_summit_can_pay), since the event can
 # wait while the mandate goes on a principle. A timed initiative already
 # running is not offered again; Rally the Bloc is, for its immediate cohesion.
+# Beside the five general initiatives, each bloc identity has one of its own
+# (options i to o), offered only to a leader of that identity.
 # Modifiers: common/static_modifiers/te_power_bloc_summit_modifiers.txt.
 # Design: docs/systems/mod_systems/power_blocs.md.
 # ============================================================================
@@ -130,22 +132,187 @@ te_pb_summit.1 = {
 			NOT = { has_modifier = te_pb_summit_home }
 		}
 		te_pb_summit_pay = { KIND = home }
-		hidden_effect = {
-			if = {
-				limit = { has_modifier = te_pb_summit_home }
-				remove_modifier = te_pb_summit_home
-			}
-		}
-		add_modifier = {
-			name = te_pb_summit_home
-			days = long_modifier_time
-		}
+		te_pb_summit_grant_leader_initiative = { MODIFIER = te_pb_summit_home }
 		ai_chance = {
 			base = 5
 			modifier = {
 				trigger = { legitimacy < 50 }
 				add = 15
 			}
+		}
+	}
+
+	# ------------------------------------------------------------------------
+	# Identity initiatives: each offered only to a bloc of its identity, so a
+	# leader sees one of them beside the five above. Weighted above the general
+	# five for the AI, since each is made for its bloc.
+	# ------------------------------------------------------------------------
+
+	# Military Treaty Organization: Joint Exercises.
+	option = {
+		name = te_pb_summit.1.i
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_military_treaty_organization }
+			NOT = { has_modifier = te_pb_summit_drills }
+		}
+		te_pb_summit_pay = { KIND = drills }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_drills }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 10
+			}
+		}
+	}
+
+	# Religious: a council of the leader's faith, named for it.
+	option = {
+		name = {
+			trigger = { country_has_state_religion = rel:catholic }
+			text = te_pb_summit.1.j_catholic
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:protestant }
+			text = te_pb_summit.1.j_protestant
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:orthodox
+					country_has_state_religion = rel:oriental_orthodox
+				}
+			}
+			text = te_pb_summit.1.j_orthodox
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:sunni
+					country_has_state_religion = rel:shiite
+					country_has_state_religion = rel:ibadi
+				}
+			}
+			text = te_pb_summit.1.j_islamic
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:jewish }
+			text = te_pb_summit.1.j_jewish
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:mahayana
+					country_has_state_religion = rel:gelugpa
+					country_has_state_religion = rel:theravada
+				}
+			}
+			text = te_pb_summit.1.j_buddhist
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:hindu }
+			text = te_pb_summit.1.j_hindu
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:sikh }
+			text = te_pb_summit.1.j_sikh
+		}
+		name = {
+			trigger = { te_pb_summit_named_council = no }
+			text = te_pb_summit.1.j
+		}
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_religious }
+			NOT = { has_modifier = te_pb_summit_council }
+		}
+		te_pb_summit_pay = { KIND = council }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_council }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Trade League: Customs Harmonization.
+	option = {
+		name = te_pb_summit.1.k
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_trade_league }
+			power_bloc ?= {
+				NOT = { has_modifier = te_pb_summit_customs }
+			}
+		}
+		te_pb_summit_pay = { KIND = customs }
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_customs }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_customs_members }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Sovereign Empire: Imperial Conference.
+	option = {
+		name = te_pb_summit.1.l
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_sovereign_empire }
+			NOT = { has_modifier = te_pb_summit_imperial }
+		}
+		te_pb_summit_pay = { KIND = imperial }
+		te_pb_summit_grant_leader_initiative = { MODIFIER = te_pb_summit_imperial }
+		te_pb_summit_leader_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Ideological Union: Congress of the Movement.
+	option = {
+		name = te_pb_summit.1.m
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_ideological_union }
+			NOT = { has_modifier = te_pb_summit_congress }
+		}
+		te_pb_summit_pay = { KIND = congress }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_congress }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Cultural Commonwealth: Cultural Congress.
+	option = {
+		name = te_pb_summit.1.n
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_cultural }
+			NOT = { has_modifier = te_pb_summit_culture }
+		}
+		te_pb_summit_pay = { KIND = culture }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_culture }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Diplomatic Framework: Conference of Ambassadors.
+	option = {
+		name = te_pb_summit.1.o
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_diplomatic }
+			NOT = { has_modifier = te_pb_summit_ambassadors }
+		}
+		te_pb_summit_pay = { KIND = ambassadors }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_ambassadors }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
 		}
 	}
 

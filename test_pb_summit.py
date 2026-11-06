@@ -4,12 +4,13 @@ The leader's Convene a Summit button (te_pb_summit_sgui, gui/power_bloc_panel.gu
 opens te_pb_summit.1; an AI leader with two or more mandates gets it from a
 monthly roll (te_pb_summit_ai_on_action). Every option but Adjourn spends one
 mandate through te_pb_summit_pay and is offered only while the bloc holds one.
-The Mandate Reserve these replace is no longer applied.
-docs/systems/mod_systems/power_blocs.md.
+Five initiatives are open to every bloc and one more to each bloc identity.
+The Mandate Reserve these replace is gone. docs/systems/mod_systems/power_blocs.md.
 
 Run: .venv/bin/python test_pb_summit.py
 """
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -18,15 +19,43 @@ ROOT = Path(__file__).resolve().parent
 LOC = ROOT / "localization" / "english"
 EVENT_FILE = "events/te_power_bloc_summit_events.txt"
 MODIFIER_FILE = "common/static_modifiers/te_power_bloc_summit_modifiers.txt"
+EFFECT_FILE = "common/scripted_effects/te_power_bloc_summit_effects.txt"
+TRIGGER_FILE = "common/scripted_triggers/te_power_bloc_summit_triggers.txt"
 
-# option letter -> (initiative modifier, scope it sits on, hidden while running)
+# option letter -> [(initiative modifier, where it sits)]; "bloc" is the power
+# bloc, "leader" the leader alone, "member" every member through
+# te_pb_summit_grant_member_initiative. The first is the one whose running
+# copy hides the option.
 INITIATIVES = {
-    "a": ("te_pb_summit_rally", "bloc", False),
-    "b": ("te_pb_summit_recruitment", "bloc", True),
-    "c": ("te_pb_summit_leverage", "bloc", True),
-    "e": ("te_pb_summit_open_borders", "bloc", True),
-    "g": ("te_pb_summit_home", "leader", True),
+    "a": [("te_pb_summit_rally", "bloc")],
+    "b": [("te_pb_summit_recruitment", "bloc")],
+    "c": [("te_pb_summit_leverage", "bloc")],
+    "e": [("te_pb_summit_open_borders", "bloc")],
+    "g": [("te_pb_summit_home", "leader")],
+    "i": [("te_pb_summit_drills", "member")],
+    "j": [("te_pb_summit_council", "member")],
+    "k": [("te_pb_summit_customs", "bloc"), ("te_pb_summit_customs_members", "member")],
+    "l": [("te_pb_summit_imperial", "leader")],
+    "m": [("te_pb_summit_congress", "member")],
+    "n": [("te_pb_summit_culture", "member")],
+    "o": [("te_pb_summit_ambassadors", "member")],
 }
+# Offered while running, for its immediate cohesion.
+REPEATABLE = {"a"}
+# option letter -> the bloc identity it is offered to
+IDENTITY_OPTIONS = {
+    "i": "identity_military_treaty_organization",
+    "j": "identity_religious",
+    "k": "identity_trade_league",
+    "l": "identity_sovereign_empire",
+    "m": "identity_ideological_union",
+    "n": "identity_cultural",
+    "o": "identity_diplomatic",
+}
+RELATIONS = {"i": "te_pb_summit_member_relations", "n": "te_pb_summit_member_relations",
+             "o": "te_pb_summit_member_relations", "l": "te_pb_summit_leader_relations"}
+GRANT = {"bloc": "te_pb_summit_grant_bloc_initiative", "leader": "te_pb_summit_grant_leader_initiative",
+         "member": "te_pb_summit_grant_member_initiative"}
 
 
 def read(relative: str) -> str:
@@ -67,9 +96,14 @@ def options(event: str) -> dict:
     out = {}
     for m in re.finditer(r"^\toption = \{", event, re.M):
         block = block_at(event, m.start())
-        name = re.search(r"name = te_pb_summit\.1\.(\w+)", block)
-        out[name.group(1)] = block
+        out[re.search(r"te_pb_summit\.1\.([a-z])", block).group(1)] = block
     return out
+
+
+def option_trigger(block: str) -> str:
+    """The option's own trigger, not a trigger inside one of its name blocks ("" for none)."""
+    at = block.find("\n\t\ttrigger = {")
+    return block_at(block, at) if at >= 0 else ""
 
 
 class TestSummitEvent(unittest.TestCase):
@@ -86,8 +120,7 @@ class TestSummitEvent(unittest.TestCase):
                 block = self.options[letter]
                 self.assertEqual(len(re.findall(r"te_pb_summit_pay = \{ KIND = \w+ \}", block)), 1)
                 self.assertNotIn("add_power_bloc_mandate", block)   # only through the pay effect
-                trigger = block_at(block, block.index("trigger = {"))
-                self.assertIn("te_pb_summit_can_pay = yes", trigger)
+                self.assertIn("te_pb_summit_can_pay = yes", option_trigger(block))
 
     def test_adjourn_is_free_and_the_default(self):
         block = self.options["h"]
@@ -96,38 +129,88 @@ class TestSummitEvent(unittest.TestCase):
         self.assertNotIn("add_power_bloc_mandate", block)
         self.assertRegex(block, r"ai_chance = \{\s*base = 0\s*\}")
 
-    def test_each_initiative_grants_its_modifier_for_ten_years(self):
-        for letter, (modifier, scope, _) in INITIATIVES.items():
-            with self.subTest(option=letter):
-                block = self.options[letter]
-                if scope == "bloc":
-                    self.assertIn(f"te_pb_summit_grant_bloc_initiative = {{ MODIFIER = {modifier} }}", block)
-                else:
-                    self.assertRegex(block, rf"add_modifier = \{{\s*name = {modifier}\s*days = long_modifier_time\s*\}}")
-        grant = entity_block(read("common/scripted_effects/te_power_bloc_summit_effects.txt"),
-                             "te_pb_summit_grant_bloc_initiative")
-        self.assertIn("power_bloc = {", grant)
-        self.assertRegex(grant, r"add_modifier = \{\s*name = \$MODIFIER\$\s*days = long_modifier_time\s*\}")
-        # a same-name add_modifier stacks, so a running copy goes first
-        self.assertLess(grant.index("remove_modifier = $MODIFIER$"), grant.index("add_modifier"))
+    def test_each_initiative_grants_its_modifiers_through_a_helper(self):
+        modifiers = read(MODIFIER_FILE)
+        for letter, grants in INITIATIVES.items():
+            for modifier, where in grants:
+                with self.subTest(option=letter, modifier=modifier):
+                    self.assertIn(f"{GRANT[where]} = {{ MODIFIER = {modifier} }}", self.options[letter])
+                    self.assertNotIn("add_modifier", self.options[letter])
+                    entity_block(modifiers, modifier)   # defined
+
+    def test_grant_helpers_refresh_for_ten_years(self):
+        effects = read(EFFECT_FILE)
+        for where, helper in GRANT.items():
+            with self.subTest(helper=helper):
+                grant = entity_block(effects, helper)
+                self.assertRegex(grant, r"add_modifier = \{\s*name = \$MODIFIER\$\s*days = long_modifier_time\s*\}")
+                # a same-name add_modifier stacks, so a running copy goes first
+                self.assertLess(grant.index("remove_modifier = $MODIFIER$"), grant.index("add_modifier"))
+                if where == "bloc":
+                    self.assertIn("power_bloc = {", grant)
+                if where == "member":
+                    self.assertIn("every_power_bloc_member = {", grant)
+                if where == "leader":
+                    self.assertNotIn("power_bloc", grant)
 
     def test_a_running_initiative_is_not_offered_again(self):
-        for letter, (modifier, scope, hidden) in INITIATIVES.items():
+        for letter, grants in INITIATIVES.items():
+            modifier, where = grants[0]
             with self.subTest(option=letter):
-                trigger = block_at(self.options[letter], self.options[letter].index("trigger = {"))
+                trigger = option_trigger(self.options[letter])
                 running = f"NOT = {{ has_modifier = {modifier} }}"
-                if hidden:
-                    self.assertIn(running, trigger)
-                    if scope == "bloc":
-                        self.assertIn("power_bloc ?= {", trigger)
-                else:
+                if letter in REPEATABLE:
                     self.assertNotIn(running, trigger)
+                    continue
+                self.assertIn(running, trigger)
+                # a bloc modifier is read on the bloc; a member or leader one on
+                # the leader, who is a member
+                inside_bloc = re.search(r"power_bloc \?= \{[^{}]*" + re.escape(running), trigger)
+                self.assertEqual(bool(inside_bloc), where == "bloc")
+
+    def test_identity_options_are_one_an_identity(self):
+        known = set(json.loads(read("vanilla_parsed/common/power_bloc_identities.json")))
+        known |= set(re.findall(r"^(identity_\w+) = \{", read("common/power_bloc_identities/extra_power_bloc_identities.txt"), re.M))
+        self.assertEqual(set(IDENTITY_OPTIONS.values()), known)   # every identity has one
+        for letter, block in self.options.items():
+            with self.subTest(option=letter):
+                gates = re.findall(r"te_pb_summit_bloc_identity = \{ IDENTITY = (\w+) \}", option_trigger(block))
+                self.assertEqual(gates, [IDENTITY_OPTIONS[letter]] if letter in IDENTITY_OPTIONS else [])
+        check = entity_block(read(TRIGGER_FILE), "te_pb_summit_bloc_identity")
+        self.assertIn("has_identity = identity:$IDENTITY$", check)
+
+    def test_relations_where_promised(self):
+        for letter, block in self.options.items():
+            with self.subTest(option=letter):
+                calls = re.findall(r"(te_pb_summit_(?:member|leader)_relations) = yes", block)
+                self.assertEqual(calls, [RELATIONS[letter]] if letter in RELATIONS else [])
+        effects = read(EFFECT_FILE)
+        members = entity_block(effects, "te_pb_summit_member_relations")
+        # each pair is met twice, so each step is half the 20 the tooltip says
+        self.assertEqual(re.findall(r"value = (\d+)", members), ["10"])
+        self.assertIn("NOT = { this = scope:te_pb_summit_member }", members)
+        self.assertEqual(re.findall(r"value = (\d+)", entity_block(effects, "te_pb_summit_leader_relations")), ["20"])
+        for key in ("te_pb_summit_relations_tt", "te_pb_summit_leader_relations_tt"):
+            self.assertIn("#v 20#!", loc_value(key))
+
+    def test_council_names_cover_the_faiths_and_one_fallback(self):
+        block = self.options["j"]
+        names = re.findall(r"name = \{\s*trigger = \{(.*?)\}\s*text = (te_pb_summit\.1\.j\w*)\s*\}", block, re.S)
+        texts = [text for _, text in names]
+        self.assertEqual(texts[-1], "te_pb_summit.1.j")
+        self.assertIn("te_pb_summit_named_council = no", names[-1][0])
+        named = set(re.findall(r"rel:(\w+)", "".join(trigger for trigger, _ in names[:-1])))
+        listed = set(re.findall(r"rel:(\w+)", entity_block(read(TRIGGER_FILE), "te_pb_summit_named_council")))
+        self.assertEqual(named, listed)   # so the fallback never shows beside a named council
+        religions = set(json.loads(read("vanilla_parsed/common/religions.json")))
+        self.assertLessEqual(named, religions)
+        for text in texts:
+            with self.subTest(name=text):
+                self.assertTrue(loc_value(text))
 
     def test_open_borders_hidden_when_principles_give_both(self):
-        trigger = block_at(self.options["e"], self.options["e"].index("trigger = {"))
-        self.assertIn("te_pb_summit_has_open_borders = no", trigger)
-        check = entity_block(read("common/scripted_triggers/te_power_bloc_summit_triggers.txt"),
-                             "te_pb_summit_has_open_borders")
+        self.assertIn("te_pb_summit_has_open_borders = no", option_trigger(self.options["e"]))
+        check = entity_block(read(TRIGGER_FILE), "te_pb_summit_has_open_borders")
         for tier in (3, 4, 5):
             self.assertIn(f"principle:principle_navy_{tier}", check)
             self.assertIn(f"principle:principle_freedom_of_movement_{tier}", check)
@@ -141,33 +224,39 @@ class TestSummitEvent(unittest.TestCase):
         self.assertIn("power_bloc_allow_port_access_bool = yes", modifier)
         self.assertIn("power_bloc_allow_wider_migration_area_bool = yes", modifier)
 
+    def test_mandate_at_home_authority(self):
+        self.assertIn("country_authority_add = 200", entity_block(read(MODIFIER_FILE), "te_pb_summit_home"))
+
     def test_ai_weights_use_the_mtth_form(self):
         for letter, block in self.options.items():
             with self.subTest(option=letter):
                 chance = block_at(block, block.index("ai_chance = {"))
                 self.assertNotIn("if = {", chance)
                 self.assertNotIn("limit = {", chance)
+                base = int(re.search(r"base = (\d+)", chance).group(1))
+                if letter in IDENTITY_OPTIONS:
+                    self.assertEqual(base, 15)   # above the general five
 
     def test_loc(self):
-        for key in ["t", "d", "d_none", "f", *INITIATIVES, "h"]:
+        for key in ["t", "d", "d_none", "f", "h", *(k for k in INITIATIVES if k != "j")]:
             with self.subTest(key=key):
                 self.assertTrue(loc_value(f"te_pb_summit.1.{key}"))
-        for modifier, _, _ in INITIATIVES.values():
-            with self.subTest(modifier=modifier):
-                self.assertTrue(loc_value(modifier))
-                self.assertTrue(loc_value(f"{modifier}_desc"))
+        for grants in INITIATIVES.values():
+            for modifier, _ in grants:
+                with self.subTest(modifier=modifier):
+                    self.assertTrue(loc_value(modifier))
+                    self.assertTrue(loc_value(f"{modifier}_desc"))
         self.assertIn("[concept_power_bloc_mandate]", loc_value("te_pb_summit_cost_tt"))
 
 
 class TestSummitPayment(unittest.TestCase):
     def test_pay_spends_exactly_one(self):
-        pay = entity_block(read("common/scripted_effects/te_power_bloc_summit_effects.txt"), "te_pb_summit_pay")
+        pay = entity_block(read(EFFECT_FILE), "te_pb_summit_pay")
         self.assertEqual(re.findall(r"add_power_bloc_mandate = (\S+)", pay), ["-1"])
         self.assertIn("text = te_pb_summit_cost_tt", pay)
 
     def test_can_pay_needs_a_mandate_and_the_lead(self):
-        can_pay = entity_block(read("common/scripted_triggers/te_power_bloc_summit_triggers.txt"),
-                               "te_pb_summit_can_pay")
+        can_pay = entity_block(read(TRIGGER_FILE), "te_pb_summit_can_pay")
         self.assertIn("is_power_bloc_leader = yes", can_pay)
         self.assertIn("power_bloc ?= { num_mandates >= 1 }", can_pay)
 
@@ -186,8 +275,7 @@ class TestSummitButton(unittest.TestCase):
         gui = read("gui/power_bloc_panel.gui")
         m = re.search(r"text = \"te_pb_summit_button\"", gui)
         self.assertIsNotNone(m)
-        button = gui[gui.rindex("button = {", 0, m.start()):]
-        button = block_at(button, 0)
+        button = block_at(gui[gui.rindex("button = {", 0, m.start()):], 0)
         scope = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
         self.assertIn(f"GetScriptedGui('te_pb_summit_sgui').IsValid( {scope} )", button)
         self.assertIn(f"GetScriptedGui('te_pb_summit_sgui').Execute( {scope} )", button)
@@ -214,17 +302,15 @@ class TestSummitAI(unittest.TestCase):
         self.assertEqual(len(re.findall(r"trigger_event = \{ id = te_pb_summit\.1 \}", body)), 4)
 
 
-class TestMandateReserveRetired(unittest.TestCase):
-    def test_nothing_applies_it(self):
-        for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").rglob("*.txt")):
-            text = path.read_text(encoding="utf-8-sig")
-            with self.subTest(path=str(path.relative_to(ROOT))):
-                self.assertNotRegex(text, r"add_modifier = \{\s*name = sm_te_unused_mandate_reserve")
-
-    def test_kept_defined_for_old_saves_and_stripped(self):
-        self.assertIn("sm_te_unused_mandate_reserve = {", read("common/static_modifiers/extra_modifiers.txt"))
-        strip = entity_block(read("common/on_actions/extra_on_actions.txt"), "te_unused_mandate_reserve_on_action")
-        self.assertIn("remove_modifier = sm_te_unused_mandate_reserve", strip)
+class TestMandateReserveGone(unittest.TestCase):
+    def test_no_trace_in_the_mod(self):
+        roots = ["common", "events", "gui", "localization/english"]
+        for root in roots:
+            for path in sorted((ROOT / root).rglob("*")):
+                if path.suffix not in {".txt", ".gui", ".yml"}:
+                    continue
+                with self.subTest(path=str(path.relative_to(ROOT))):
+                    self.assertNotIn("unused_mandate_reserve", path.read_text(encoding="utf-8-sig"))
 
 
 if __name__ == "__main__":

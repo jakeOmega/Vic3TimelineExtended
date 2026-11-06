@@ -25,3 +25,29 @@ te_pb_summit_has_open_borders = {
 		has_principle = principle:principle_freedom_of_movement_5
 	}
 }
+
+# Country scope: the leader's bloc has this identity. Gates the identity
+# initiatives of te_pb_summit.1, one an identity.
+te_pb_summit_bloc_identity = {
+	power_bloc ?= { has_identity = identity:$IDENTITY$ }
+}
+
+# Country scope: the leader's state religion has a council of its own name in
+# te_pb_summit.1's religious option; any other faith gets the plain one.
+te_pb_summit_named_council = {
+	OR = {
+		country_has_state_religion = rel:catholic
+		country_has_state_religion = rel:protestant
+		country_has_state_religion = rel:orthodox
+		country_has_state_religion = rel:oriental_orthodox
+		country_has_state_religion = rel:sunni
+		country_has_state_religion = rel:shiite
+		country_has_state_religion = rel:ibadi
+		country_has_state_religion = rel:jewish
+		country_has_state_religion = rel:mahayana
+		country_has_state_religion = rel:gelugpa
+		country_has_state_religion = rel:theravada
+		country_has_state_religion = rel:hindu
+		country_has_state_religion = rel:sikh
+	}
+}

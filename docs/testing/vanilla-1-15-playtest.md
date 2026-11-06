@@ -97,6 +97,12 @@ game, in English.
     modifier on the bloc (or, for Mandate at Home, on the leader). Convene again: the option just taken is gone,
     except Common Purpose. With a bloc holding Navy III and Freedom of Movement III, the Open Borders Accord is gone.
     Spend the last mandate on a principle while the event is open, then answer: only Adjourn is offered.
+  - **The identity initiative.** Each bloc sees one more option, its identity's. Check at least a Religious
+    Convocation (the council's name follows the leader's faith: a Catholic leader's reads "ecumenical council", and
+    a faith with no name of its own the plain "council of our faith", never both), and one with "Relations between
+    every two members of the bloc rise by 20" (Military Treaty, Cultural Commonwealth, Diplomatic Framework): after
+    it, open two members' relations and see the step. Members' initiatives should show on every member's modifiers,
+    the leader's included.
   - **The AI.** In an observer game, `debug.log` should carry `TE_PB_SUMMIT <kind> by=ai` lines once AI blocs hold two
     or more mandates, a few a decade per bloc, mostly `rally` and `leverage`. None at all after a decade of blocs
     holding mandates means the monthly roll never fires.

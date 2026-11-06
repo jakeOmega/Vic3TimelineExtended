@@ -472,7 +472,6 @@ on_yearly_pulse_country = {
 		decol_permanent_modifier_sync_on_action
 		add_arable_land_effect_on_action
 		assign_aptitude_traits_on_action
-		te_unused_mandate_reserve_on_action
 		te_ai_decentralized_absorption_on_action
 		te_ai_seed_trade_center_on_action
 	}
@@ -3667,30 +3666,6 @@ irredentism_bloc_approval_on_action = {
 							trigger_event = { id = irredentism.8 days = 3 }
 						}
 					}
-				}
-			}
-		}
-	}
-}
-
-# ============================================================================
-# MANDATE RESERVE - RETIRED 2026-11-06 (#1442). It paid a bloc +3 cohesion a
-# year for each unspent mandate, up to +12: a stand-in for spending mandates,
-# which 1.14.5 couldn't do. 1.15's add_power_bloc_mandate = -1 can, so spare
-# mandates now buy a bloc summit's initiatives (te_pb_summit.1), Rally the Bloc
-# among them, and a bonus for sitting on them would pull the other way. The
-# yearly pulse now only strips the copy a save made before the change still
-# holds (it was a 13-month modifier, so one pass is enough). Removal checklist:
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-# ============================================================================
-te_unused_mandate_reserve_on_action = {
-	effect = {
-		if = {
-			limit = { is_power_bloc_leader = yes }
-			power_bloc = {
-				if = {
-					limit = { has_modifier = sm_te_unused_mandate_reserve }
-					remove_modifier = sm_te_unused_mandate_reserve
 				}
 			}
 		}
