@@ -39,6 +39,13 @@ Checks, per `localization/**/*.yml`:
      vanilla 1.15 escapes all ~9,950 of its own. A `'` counts as a delimiter
      only inside `[...]`, so a prose apostrophe never pairs with one.
 
+ 10. no key a `replace/` file overrides is also defined in an ordinary loc file
+     of the same language. The `replace/` copy wins, so the other one is dead
+     text that a later edit can change to no effect; organize_loc never reads
+     `replace/` for keys, so it can't merge the two. 1.15 left one such pair
+     (`goods_output_fertilizer_mult`, #1406), after the migration had cleaned
+     up `goods_output_fine_art_mult` by hand.
+
 Check 9 also runs over the translation memories (`i18n/<language>/tm/**/*.json`,
 every field of every record), since the deploy swaps their text in: an
 unescaped translation would bring the error back in that language's game.
@@ -265,6 +272,51 @@ def check_file(path: str) -> list[str]:
     return problems
 
 
+def _file_keys(path: str) -> dict[str, int]:
+    """Each key a loc file defines, with the line it is first defined on."""
+    keys: dict[str, int] = {}
+    try:
+        with open(path, encoding="utf-8-sig") as fh:
+            lines = fh.read().splitlines()
+    except (OSError, UnicodeDecodeError):
+        return keys  # check_file reports the file itself
+    for index, line in enumerate(lines, start=1):
+        match = _KEY_RE.match(line)
+        if match and not re.match(r"^l_[a-z_]+$", match.group(1)):
+            keys.setdefault(match.group(1), index)
+    return keys
+
+
+def check_replace_shadows(paths: list[str]) -> list[str]:
+    """Check 10: a key both a `replace/` file and an ordinary file of the same
+    language define. Reported on the ordinary copy, the one to delete. The
+    language is the file name's `_l_<language>` suffix, as the game reads it,
+    so any folder layout counts."""
+    overrides: dict[tuple[str, str], tuple[str, int]] = {}
+    ordinary: list[tuple[str, str]] = []
+    for path in paths:
+        suffix = _LANGUAGE_SUFFIX_RE.search(os.path.basename(path))
+        if suffix is None:
+            continue  # check_file reports the name
+        language = suffix.group(1)
+        if "replace" in os.path.normpath(path).split(os.sep):
+            for key, line in _file_keys(path).items():
+                overrides.setdefault((language, key), (path, line))
+        else:
+            ordinary.append((language, path))
+    problems: list[str] = []
+    for language, path in ordinary:
+        for key, line in _file_keys(path).items():
+            hit = overrides.get((language, key))
+            if hit:
+                problems.append(
+                    f"{os.path.relpath(path, REPO_ROOT)}:{line}: '{key}' is also defined in "
+                    f"{os.path.relpath(hit[0], REPO_ROOT)}:{hit[1]}, whose copy wins; "
+                    f"delete this one"
+                )
+    return problems
+
+
 def iter_tm_files(roots: list[str]) -> list[str]:
     """The translation memories (`.json` files in a `tm` folder) under roots."""
     found: list[str] = []
@@ -316,6 +368,7 @@ def main(argv: list[str] | None = None) -> int:
     problems: list[str] = []
     for path in files:
         problems.extend(check_file(path))
+    problems.extend(check_replace_shadows(files))
     for path in tm_files:
         problems.extend(check_tm_file(path))
 

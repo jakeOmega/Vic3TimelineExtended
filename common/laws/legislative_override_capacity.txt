@@ -236,6 +236,13 @@ INJECT:law_monarchy = {
 	}
 }
 
+# Monarchy's variant: a variant takes its parent's stances, not its modifiers.
+INJECT:law_colonial_administration = {
+	modifier = {
+		country_legislative_override_capacity_add = 1
+	}
+}
+
 INJECT:law_theocracy = {
 	modifier = {
 		country_legislative_override_capacity_add = 1

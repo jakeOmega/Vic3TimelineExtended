@@ -33,6 +33,19 @@ INJECT:law_autocracy = {
 	}
 }
 
+# Autocracy's variants: a variant takes its parent's stances, not its modifiers.
+INJECT:law_bakufu = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 2.5
+	}
+}
+
+INJECT:law_neo_absolutism = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 2.5
+	}
+}
+
 INJECT:law_landed_voting = {
 	modifier = {
 		country_sol_expectations_upper_offset_add = 3
