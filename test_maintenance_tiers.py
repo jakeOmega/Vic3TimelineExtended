@@ -7,9 +7,18 @@ and every group hidden in the PM panels (docs/systems/mod_systems/construction.m
 import json
 import os
 import re
+import sys
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+
+import gen_mine_coproducts  # noqa: E402
+
+# Mines that run their own copy of a family's equipment groups (#1419): token -> the
+# family they copy, e.g. "bauxite" -> "iron".
+COPIED_FROM = {mine.token.removesuffix("_mine"): mine.family.removesuffix("_mine")
+               for mine in gen_mine_coproducts.MINES}
 
 # group -> (its PM, construction input per level)
 TIERS = {
@@ -134,13 +143,17 @@ class MaintenanceTiers(unittest.TestCase):
         self.assertNotIn("goods_input_construction_add", pms[MINE_PMS[0]])
         paid = pms[MINE_PMS[1]]
         self.assertAlmostEqual(float(re.search(r"goods_input_construction_add = ([\d.]+)", paid).group(1)), 0.05)
-        unlocked = re.search(r"unlocking_production_methods = \{(.*?)\}", paid, re.S).group(1).split()
-        expected = [f"pm_{s}_building_{t}_mine" for t in MINE_TYPES for s in MECHANIZED_STEMS]
+        listed = re.search(r"unlocking_production_methods = \{(.*?)\}", paid, re.S).group(1)
+        unlocked = re.sub(r"#[^\n]*", "", listed).split()
+        # the vanilla mines' pumps, and the copies of them that mines on those families run
+        on_mine_group = [t for t, family in COPIED_FROM.items() if family in MINE_TYPES]
+        expected = [f"pm_{s}_building_{t}_mine" for t in MINE_TYPES + on_mine_group for s in MECHANIZED_STEMS]
         self.assertCountEqual(unlocked, expected)
         # every unlocking PM is a real method: vanilla's, or one this mod defines
         with open(os.path.join(REPO, "vanilla_parsed", "common", "pms.json"), encoding="utf-8") as f:
             known = set(json.load(f))
         known |= set(_top_level_blocks(_read("common", "production_methods", "extra_pms.txt")))
+        known |= set(_top_level_blocks(_read("common", "production_methods", "mine_coproduct_generated_pms.txt")))
         for pm in unlocked:
             with self.subTest(pm=pm):
                 self.assertIn(pm, known)
@@ -156,12 +169,13 @@ class MaintenanceTiers(unittest.TestCase):
                 body = buildings[f"building_{t}_mine"]
                 self.assertRegex(body, rf"(?m)^\s*{MINE_GROUP}\s*$")
                 equipment = re.search(r"pmg_mining_equipment_building_(\w+)_mine", body).group(1)
-                self.assertIn(equipment, MINE_TYPES)
+                self.assertIn(COPIED_FROM.get(equipment, equipment), MINE_TYPES)
         for t in TECH_METALS_MINES:
             with self.subTest(mine=t):
                 body = buildings[f"building_{t}_mine"]
                 self.assertRegex(body, r"(?m)^\s*pmg_maintenance_light\s*$")
-                self.assertIn("pmg_mining_equipment_building_tech_metals_mine", body)
+                self.assertEqual(COPIED_FROM[t], "tech_metals")
+                self.assertIn(f"pmg_mining_equipment_building_{t}_mine", body)
 
     def test_graded_group_follows_the_base_method(self):
         groups = _top_level_blocks(_read("common", "production_method_groups", "extra_pm_groups.txt"))

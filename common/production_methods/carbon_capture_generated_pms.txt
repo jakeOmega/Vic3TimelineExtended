@@ -4563,6 +4563,520 @@ pm_carbon_capture_3_mfo_oerlikon_works_coal10_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_mining_equipment_building_bauxite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_bauxite_mine pm_condensing_engine_pump_building_bauxite_mine pm_diesel_pump_building_bauxite_mine pm_high_pressure_hydraulic_pump_building_bauxite_mine pm_continuous_miners_building_bauxite_mine pm_smart_miners_building_bauxite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_bauxite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_bauxite_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_bauxite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_bauxite_mine pm_continuous_miners_building_bauxite_mine pm_smart_miners_building_bauxite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_bauxite_mine pm_continuous_miners_building_bauxite_mine pm_smart_miners_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_bauxite_mine pm_continuous_miners_building_bauxite_mine pm_smart_miners_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_bauxite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_bauxite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_bauxite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_bauxite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_bauxite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_bauxite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_chromium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_chromium_mine pm_condensing_engine_pump_building_chromium_mine pm_diesel_pump_building_chromium_mine pm_high_pressure_hydraulic_pump_building_chromium_mine pm_continuous_miners_building_chromium_mine pm_smart_miners_building_chromium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_chromium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_chromium_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_chromium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_chromium_mine pm_continuous_miners_building_chromium_mine pm_smart_miners_building_chromium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_chromium_mine pm_continuous_miners_building_chromium_mine pm_smart_miners_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_chromium_mine pm_continuous_miners_building_chromium_mine pm_smart_miners_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_chromium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_chromium_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_chromium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_chromium_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_chromium_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_chromium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
 pm_no_carbon_capture_mining_equipment_building_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -5334,6 +5848,263 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal15_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_mining_equipment_building_graphite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_graphite_mine pm_condensing_engine_pump_building_graphite_mine pm_diesel_pump_building_graphite_mine pm_high_pressure_hydraulic_pump_building_graphite_mine pm_continuous_miners_building_graphite_mine pm_smart_miners_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_graphite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_graphite_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_graphite_mine pm_continuous_miners_building_graphite_mine pm_smart_miners_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_graphite_mine pm_continuous_miners_building_graphite_mine pm_smart_miners_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_graphite_mine pm_continuous_miners_building_graphite_mine pm_smart_miners_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_graphite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_graphite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_graphite_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
 pm_no_carbon_capture_mining_equipment_building_iron_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -5848,6 +6619,1317 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal15_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_mining_equipment_building_lithium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_pump_building_lithium_mine pm_high_pressure_hydraulic_pump_building_lithium_mine pm_continuous_miners_building_lithium_mine pm_smart_miners_building_lithium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_lithium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_condensing_engine_pump_building_lithium_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_lithium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_lithium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_lithium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_lithium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_lithium_mine pm_continuous_miners_building_lithium_mine pm_smart_miners_building_lithium_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_lithium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_lithium_mine pm_continuous_miners_building_lithium_mine pm_smart_miners_building_lithium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_lithium_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_lithium_mine pm_continuous_miners_building_lithium_mine pm_smart_miners_building_lithium_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_manganese_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_manganese_mine pm_condensing_engine_pump_building_manganese_mine pm_diesel_pump_building_manganese_mine pm_high_pressure_hydraulic_pump_building_manganese_mine pm_continuous_miners_building_manganese_mine pm_smart_miners_building_manganese_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_manganese_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_manganese_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_manganese_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_manganese_mine pm_continuous_miners_building_manganese_mine pm_smart_miners_building_manganese_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_manganese_mine pm_continuous_miners_building_manganese_mine pm_smart_miners_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_manganese_mine pm_continuous_miners_building_manganese_mine pm_smart_miners_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_manganese_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_manganese_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_manganese_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_manganese_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_manganese_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_manganese_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_nickel_cobalt_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_pump_building_nickel_cobalt_mine pm_high_pressure_hydraulic_pump_building_nickel_cobalt_mine pm_continuous_miners_building_nickel_cobalt_mine pm_smart_miners_building_nickel_cobalt_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_nickel_cobalt_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_condensing_engine_pump_building_nickel_cobalt_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_nickel_cobalt_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_nickel_cobalt_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_nickel_cobalt_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_nickel_cobalt_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_nickel_cobalt_mine pm_continuous_miners_building_nickel_cobalt_mine pm_smart_miners_building_nickel_cobalt_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_nickel_cobalt_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_nickel_cobalt_mine pm_continuous_miners_building_nickel_cobalt_mine pm_smart_miners_building_nickel_cobalt_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_nickel_cobalt_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_nickel_cobalt_mine pm_continuous_miners_building_nickel_cobalt_mine pm_smart_miners_building_nickel_cobalt_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_platinum_group_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_pump_building_platinum_group_metals_mine pm_high_pressure_hydraulic_pump_building_platinum_group_metals_mine pm_continuous_miners_building_platinum_group_metals_mine pm_smart_miners_building_platinum_group_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_platinum_group_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_condensing_engine_pump_building_platinum_group_metals_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_platinum_group_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_platinum_group_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_platinum_group_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_platinum_group_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_platinum_group_metals_mine pm_continuous_miners_building_platinum_group_metals_mine pm_smart_miners_building_platinum_group_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_platinum_group_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_platinum_group_metals_mine pm_continuous_miners_building_platinum_group_metals_mine pm_smart_miners_building_platinum_group_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_platinum_group_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_platinum_group_metals_mine pm_continuous_miners_building_platinum_group_metals_mine pm_smart_miners_building_platinum_group_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_precious_minor_base_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_precious_minor_base_metal_mine pm_condensing_engine_pump_building_precious_minor_base_metal_mine pm_diesel_pump_building_precious_minor_base_metal_mine pm_high_pressure_hydraulic_pump_building_precious_minor_base_metal_mine pm_continuous_miners_building_precious_minor_base_metal_mine pm_smart_miners_building_precious_minor_base_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_precious_minor_base_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_precious_minor_base_metal_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_precious_minor_base_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_precious_minor_base_metal_mine pm_continuous_miners_building_precious_minor_base_metal_mine pm_smart_miners_building_precious_minor_base_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_precious_minor_base_metal_mine pm_continuous_miners_building_precious_minor_base_metal_mine pm_smart_miners_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_precious_minor_base_metal_mine pm_continuous_miners_building_precious_minor_base_metal_mine pm_smart_miners_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_precious_minor_base_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_precious_minor_base_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_precious_minor_base_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_precious_minor_base_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_rare_earth_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_diesel_pump_building_rare_earth_metals_mine pm_high_pressure_hydraulic_pump_building_rare_earth_metals_mine pm_continuous_miners_building_rare_earth_metals_mine pm_smart_miners_building_rare_earth_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_rare_earth_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_condensing_engine_pump_building_rare_earth_metals_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_rare_earth_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_rare_earth_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_rare_earth_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_rare_earth_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_rare_earth_metals_mine pm_continuous_miners_building_rare_earth_metals_mine pm_smart_miners_building_rare_earth_metals_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_rare_earth_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_rare_earth_metals_mine pm_continuous_miners_building_rare_earth_metals_mine pm_smart_miners_building_rare_earth_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_rare_earth_metals_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_rare_earth_metals_mine pm_continuous_miners_building_rare_earth_metals_mine pm_smart_miners_building_rare_earth_metals_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_no_carbon_capture_mining_equipment_building_specialty_alloy_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_specialty_alloy_metal_mine pm_condensing_engine_pump_building_specialty_alloy_metal_mine pm_diesel_pump_building_specialty_alloy_metal_mine pm_high_pressure_hydraulic_pump_building_specialty_alloy_metal_mine pm_continuous_miners_building_specialty_alloy_metal_mine pm_smart_miners_building_specialty_alloy_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_mining_equipment_building_specialty_alloy_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_picks_and_shovels_building_specialty_alloy_metal_mine }
+}
+
+pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_diesel_pump_building_specialty_alloy_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.21750
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_diesel_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.43500
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil5 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_diesel_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.65250
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_specialty_alloy_metal_mine pm_continuous_miners_building_specialty_alloy_metal_mine pm_smart_miners_building_specialty_alloy_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.44
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_specialty_alloy_metal_mine pm_continuous_miners_building_specialty_alloy_metal_mine pm_smart_miners_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.87
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal0_oil10 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_specialty_alloy_metal_mine pm_continuous_miners_building_specialty_alloy_metal_mine pm_smart_miners_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.31
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_specialty_alloy_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 2
+			goods_input_electricity_add = 3
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.00
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal10_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_atmospheric_engine_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 5
+		}
+	}
+}
+
+pm_carbon_capture_1_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_specialty_alloy_metal_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.75
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 2
+			goods_input_steel_add = 2
+			goods_input_fertilizer_add = 3
+			goods_input_electricity_add = 4
+		}
+	}
+}
+
+pm_carbon_capture_2_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.50
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 7
+		}
+	}
+}
+
+pm_carbon_capture_3_mining_equipment_building_specialty_alloy_metal_mine_coal15_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_condensing_engine_pump_building_specialty_alloy_metal_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_input_electricity_add = 8
+		}
+	}
+}
+
 pm_no_carbon_capture_mining_equipment_building_sulfur_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -6101,141 +8183,6 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 			goods_input_steel_add = 3
 			goods_input_fertilizer_add = 4
 			goods_input_electricity_add = 8
-		}
-	}
-}
-
-pm_no_carbon_capture_mining_equipment_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
-	disallowing_laws = { law_managed_fossil_phaseout }
-}
-
-pm_carbon_capture_na_mining_equipment_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_production_methods = { pm_condensing_engine_pump_building_tech_metals_mine }
-}
-
-pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { clean_energy_technologies }
-	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine }
-	disallowing_laws = { law_managed_fossil_phaseout }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.21750
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 1
-		}
-	}
-}
-
-pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { carbon_capture_and_storage }
-	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.43500
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 2
-		}
-	}
-}
-
-pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { modern_material_science }
-	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.65250
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 2
-		}
-	}
-}
-
-pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { clean_energy_technologies }
-	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
-	disallowing_laws = { law_managed_fossil_phaseout }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.44
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 2
-			goods_input_electricity_add = 2
-		}
-	}
-}
-
-pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { carbon_capture_and_storage }
-	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 2
-			goods_input_steel_add = 2
-			goods_input_fertilizer_add = 2
-			goods_input_electricity_add = 4
-		}
-	}
-}
-
-pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { modern_material_science }
-	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -1.31
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 2
-			goods_input_steel_add = 2
-			goods_input_fertilizer_add = 2
-			goods_input_electricity_add = 4
 		}
 	}
 }
@@ -6700,6 +8647,154 @@ pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_steam_automation_building_bauxite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_bauxite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_bauxite_mine pm_large_scale_earth_movers_bauxite_mine pm_geophysical_survey_techniques_bauxite_mine pm_ore_sorting_and_separation_technology_bauxite_mine pm_laser_excavation_technology_bauxite_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_bauxite_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_bauxite_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_bauxite_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_chromium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_chromium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_chromium_mine pm_large_scale_earth_movers_chromium_mine pm_geophysical_survey_techniques_chromium_mine pm_ore_sorting_and_separation_technology_chromium_mine pm_laser_excavation_technology_chromium_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_chromium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_chromium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_chromium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
 pm_no_carbon_capture_steam_automation_building_coal_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -6922,6 +9017,80 @@ pm_carbon_capture_3_steam_automation_building_gold_mine_coal4_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_steam_automation_building_graphite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_graphite_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_graphite_mine pm_large_scale_earth_movers_graphite_mine pm_geophysical_survey_techniques_graphite_mine pm_ore_sorting_and_separation_technology_graphite_mine pm_laser_excavation_technology_graphite_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_graphite_mine_coal3_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_building_graphite_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.15000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 0.47546
+			goods_input_steel_add = 0.49923
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_graphite_mine_coal3_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.30000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_graphite_mine_coal3_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_building_graphite_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.45000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
 pm_no_carbon_capture_steam_automation_building_iron_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -7070,6 +9239,524 @@ pm_carbon_capture_3_steam_automation_building_lead_mine_coal4_oil0 = {
 	}
 }
 
+pm_no_carbon_capture_steam_automation_building_lithium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_lithium_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_lithium_mine pm_large_scale_earth_movers_lithium_mine pm_geophysical_survey_techniques_lithium_mine pm_ore_sorting_and_separation_technology_lithium_mine pm_laser_excavation_technology_lithium_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_lithium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_lithium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_lithium_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_manganese_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_manganese_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_manganese_mine pm_large_scale_earth_movers_manganese_mine pm_geophysical_survey_techniques_manganese_mine pm_ore_sorting_and_separation_technology_manganese_mine pm_laser_excavation_technology_manganese_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_manganese_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_manganese_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_manganese_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_nickel_cobalt_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_nickel_cobalt_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_nickel_cobalt_mine pm_large_scale_earth_movers_nickel_cobalt_mine pm_geophysical_survey_techniques_nickel_cobalt_mine pm_ore_sorting_and_separation_technology_nickel_cobalt_mine pm_laser_excavation_technology_nickel_cobalt_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_nickel_cobalt_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_nickel_cobalt_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_nickel_cobalt_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_platinum_group_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_platinum_group_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_platinum_group_metals_mine pm_large_scale_earth_movers_platinum_group_metals_mine pm_geophysical_survey_techniques_platinum_group_metals_mine pm_ore_sorting_and_separation_technology_platinum_group_metals_mine pm_laser_excavation_technology_platinum_group_metals_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_platinum_group_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_platinum_group_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_platinum_group_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_precious_minor_base_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_precious_minor_base_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_precious_minor_base_metal_mine pm_large_scale_earth_movers_precious_minor_base_metal_mine pm_geophysical_survey_techniques_precious_minor_base_metal_mine pm_ore_sorting_and_separation_technology_precious_minor_base_metal_mine pm_laser_excavation_technology_precious_minor_base_metal_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_precious_minor_base_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_rare_earth_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_rare_earth_metals_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_rare_earth_metals_mine pm_large_scale_earth_movers_rare_earth_metals_mine pm_geophysical_survey_techniques_rare_earth_metals_mine pm_ore_sorting_and_separation_technology_rare_earth_metals_mine pm_laser_excavation_technology_rare_earth_metals_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_rare_earth_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_rare_earth_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_rare_earth_metals_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_no_carbon_capture_steam_automation_building_specialty_alloy_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+
+pm_carbon_capture_na_steam_automation_building_specialty_alloy_metal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_specialty_alloy_metal_mine pm_large_scale_earth_movers_specialty_alloy_metal_mine pm_geophysical_survey_techniques_specialty_alloy_metal_mine pm_ore_sorting_and_separation_technology_specialty_alloy_metal_mine pm_laser_excavation_technology_specialty_alloy_metal_mine }
+}
+
+pm_carbon_capture_1_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { clean_energy_technologies }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	disallowing_laws = { law_managed_fossil_phaseout }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.20000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 1
+		}
+	}
+}
+
+pm_carbon_capture_2_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.40000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
+pm_carbon_capture_3_steam_automation_building_specialty_alloy_metal_mine_coal4_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { modern_material_science }
+	unlocking_production_methods = { pm_steam_donkey_mine }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -0.60000
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 1
+			goods_input_steel_add = 1
+			goods_input_fertilizer_add = 1
+			goods_input_electricity_add = 2
+		}
+	}
+}
+
 pm_no_carbon_capture_steam_automation_building_sulfur_mine = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
 	is_hidden_when_unavailable = yes
@@ -7125,80 +9812,6 @@ pm_carbon_capture_2_steam_automation_building_sulfur_mine_coal4_oil0 = {
 }
 
 pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { modern_material_science }
-	unlocking_production_methods = { pm_steam_donkey_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.60000
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 2
-		}
-	}
-}
-
-pm_no_carbon_capture_steam_automation_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_production_methods = { pm_steam_donkey_mine }
-	disallowing_laws = { law_managed_fossil_phaseout }
-}
-
-pm_carbon_capture_na_steam_automation_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_none.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_production_methods = { pm_no_steam_automation pm_dragline_excavators_tech_metals_mine pm_large_scale_earth_movers_tech_metals_mine pm_geophysical_survey_techniques_tech_metals_mine pm_ore_sorting_and_separation_technology_tech_metals_mine pm_laser_excavation_technology_tech_metals_mine }
-}
-
-pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { clean_energy_technologies }
-	unlocking_production_methods = { pm_steam_donkey_mine }
-	disallowing_laws = { law_managed_fossil_phaseout }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.20000
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 1
-		}
-	}
-}
-
-pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { carbon_capture_and_storage }
-	unlocking_production_methods = { pm_steam_donkey_mine }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -0.40000
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 1
-			goods_input_steel_add = 1
-			goods_input_fertilizer_add = 1
-			goods_input_electricity_add = 2
-		}
-	}
-}
-
-pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
 	is_hidden_when_unavailable = yes
 	unlocking_technologies = { modern_material_science }
