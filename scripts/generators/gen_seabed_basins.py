@@ -10,6 +10,10 @@ sea region -> basin offline and writes one effect:
   ``te_seabed_basin`` to the basin's number, from an ``if`` / ``else_if``
   chain on ``state_region = s:STATE_X`` (one ``OR`` per basin).
 
+A sea region fixes the basin of every state that exits to it, so a country
+whose states exit to different seas can end up split across basins. The few
+states where that reads wrong are pinned by hand in ``STATE_BASIN_OVERRIDE``.
+
 Basin numbers (``BASINS``; the script's ``$N$`` and the display read them):
 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern. The order is the spec's
 § 2.1 list; the pools (§ 2.2) are separate script values, so the numbering
@@ -71,9 +75,14 @@ BASINS = {1: "pacific", 2: "atlantic", 3: "indian", 4: "arctic", 5: "southern"}
 # - CAPE_OF_GOOD_HOPE (Zululand, Eastern Cape, Cape Colony): Southern, per the
 #   spec, Zululand included, since it shares the naval exit.
 # - TASMAN_SEA (New South Wales, Victoria, Tasmania, North Island) and
-#   GREAT_AUSTRALIAN_BIGHT (South Australia): Southern, per the spec.
+#   GREAT_AUSTRALIAN_BIGHT (South Australia): Southern, per the spec. The
+#   spec's Tasman Sea is the south-east Australian coast; it never considered
+#   New Zealand, whose North Island also exits there. That would split the
+#   country across basins (see WESTERN_POLYNESIAN_SEA), so STATE_BASIN_OVERRIDE
+#   moves the North Island to the Pacific.
 # - WESTERN_POLYNESIAN_SEA (Fiji, Tonga, South Island): Pacific. New Zealand's
-#   South Island exits there, not to the Tasman Sea.
+#   South Island exits there, not to the Tasman Sea. New Zealand is a
+#   south-west Pacific country, so both islands are Pacific.
 # - PATAGONIAN_SEA (Patagonia, South Atlantic Islands) and PATAGONIAN_CHANNELS
 #   (Araucania): Southern, per the spec. Uruguay and Buenos Aires (RIVER_PLATE)
 #   stay Atlantic.
@@ -200,6 +209,17 @@ SEA_BASIN = {
     "STATE_SOUTHERN_OCEAN_02": "southern",              # unused
 }
 
+# Coastal state -> basin key, where the state's own naval exit would put it
+# somewhere that splits its country across basins. Each entry must name a
+# coastal state and differ from what its sea gives (state_basins raises
+# otherwise, so a map change or a redundant pin is caught, not silently kept).
+# - STATE_NORTH_ISLAND: exits to the Tasman Sea (Southern), while the South
+#   Island exits to the Western Polynesian Sea (Pacific). Pinned to the
+#   Pacific so New Zealand is one basin.
+STATE_BASIN_OVERRIDE = {
+    "STATE_NORTH_ISLAND": "pacific",
+}
+
 _STATE_RE = re.compile(r"^(STATE_\w+)\s*=\s*\{", re.M)
 _ID_RE = re.compile(r"\bid\s*=\s*(\d+)")
 _EXIT_RE = re.compile(r"\bnaval_exit_id\s*=\s*(\d+)")
@@ -211,9 +231,9 @@ HEADER = (
 PREAMBLE = """\
 # Scope: state. Sets the state variable te_seabed_basin to its basin, from the
 # naval exit of its state region (map_data/state_regions/*.txt -> 99_seas.txt
-# -> the generator's SEA_BASIN table): 1 Pacific, 2 Atlantic, 3 Indian,
-# 4 Arctic, 5 Southern. A landlocked state matches no branch and gets no
-# variable. Called by te_seabed_ensure_state_basin
+# -> the generator's SEA_BASIN table, then its STATE_BASIN_OVERRIDE pins):
+# 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern. A landlocked state
+# matches no branch and gets no variable. Called by te_seabed_ensure_state_basin
 # (te_global_commons_seabed_effects.txt) for coastal states without the
 # variable: the yearly pass and any recording that meets one (conquest and
 # splits make new state scopes).
@@ -251,8 +271,9 @@ def read_naval_exits(root: Path = ROOT) -> dict[str, list[int]]:
 
 
 def state_basins(root: Path = ROOT) -> dict[str, int]:
-    """Coastal land state region -> basin number. Raises on an unmapped sea or
-    a state with more than one naval exit."""
+    """Coastal land state region -> basin number. Raises on an unmapped sea, a
+    state with more than one naval exit, or a STATE_BASIN_OVERRIDE entry that
+    is not a coastal state, names no basin, or changes nothing."""
     seas = read_seas(root)
     number = {key: n for n, key in BASINS.items()}
     out = {}
@@ -267,6 +288,14 @@ def state_basins(root: Path = ROOT) -> dict[str, int]:
         if sea not in SEA_BASIN:
             raise ValueError(f"{state}: sea region {sea} has no basin in SEA_BASIN")
         out[state] = number[SEA_BASIN[sea]]
+    for state, basin in STATE_BASIN_OVERRIDE.items():
+        if state not in out:
+            raise ValueError(f"STATE_BASIN_OVERRIDE names {state}, which is not a coastal state region")
+        if basin not in number:
+            raise ValueError(f"STATE_BASIN_OVERRIDE: {state} names unknown basin {basin!r}")
+        if out[state] == number[basin]:
+            raise ValueError(f"STATE_BASIN_OVERRIDE: {state} is already {basin} by its sea; drop the override")
+        out[state] = number[basin]
     return out
 
 
