@@ -155,8 +155,9 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         self.assertEqual(sorted(picks.values()), list(range(1, 7)), "selectors 1-6, one pick each")
-        color = block(self.room, "map_color")
-        tooltip = block(self.room, "map_tooltip")
+        # the census maps' shared "no data" branch names 3-5 in an OR; a pick needs a branch of its own
+        color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
+        tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
         for name, sel in picks.items():
             branch = re.compile(r"te_jmap_selector\s*=\s*" + str(sel) + r"\b")
             self.assertRegex(color, branch, f"{name}: map_color has no branch for selector {sel}")
@@ -170,9 +171,19 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_button(self):
         row = block(code(WIDGETS), "te_jmap_pick_row")
         self.assertIsNotNone(row)
-        for name in self.picks():
+        seen = []
+        for m in re.finditer(r"\bbutton\s*=\s*\{", row):
+            button = enclosing(row, m.end())
+            sguis = set(re.findall(r"GetScriptedGui\('(\w+)'\)", button))
+            self.assertEqual(len(sguis), 1, f"one scripted GUI per button: {sguis}")
+            name = sguis.pop()
             for call in ("IsShown", "IsValid", "Execute"):
-                self.assertIn(f"GetScriptedGui('{name}').{call}(", row, f"{name}: no {call} in te_jmap_pick_row")
+                self.assertIn(f"GetScriptedGui('{name}').{call}(", button, f"{name}: no {call} on its button")
+            key = name[:-len("_sgui")]
+            self.assertIn(f'text = "{key}"', button, f"{name}: its button shows another pick's name")
+            self.assertIn(f'tooltip = "{key}_desc"', button, f"{name}: its button shows another pick's tooltip")
+            seen.append(name)
+        self.assertEqual(sorted(seen), sorted(self.picks()), "one button per pick")
 
     def test_the_room_is_contextless_and_in_no_journal(self):
         # check 7 (2026-11-05): a contextless entry nobody is involved in is active from the start, in no journal, and

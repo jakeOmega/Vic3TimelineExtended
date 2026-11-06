@@ -614,8 +614,10 @@ class PageTest(unittest.TestCase):
         overview = _entry_overviews()
         roots = _gui_roots()
         listed = {entry for page in PAGES for entry in page.entries}
-        # every entry with an overview root is a page's
-        self.assertEqual(set(overview), listed)
+        # every entry with an overview root is a page's, but the Map Room: its widget is a row of map picks on a
+        # contextless page the map buttons open, not a system's overview (journal_map_modes.md)
+        self.assertEqual(set(overview) - {"je_te_map_room"}, listed)
+        self.assertIn("je_te_map_room", overview, "the Map Room's exemption is still needed")
         for page in PAGES:
             for entry in page.entries:
                 with self.subTest(entry=entry):

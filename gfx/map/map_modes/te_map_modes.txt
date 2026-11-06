@@ -2,7 +2,7 @@
 # Vanilla's own journal entry map, mm_journal_entry_map_data, is hidden from the map mode list and switched on by the
 # engine. This is the same painting with is_visible = yes, so it is listed in the lens toolbar's map mode dropdown:
 # picking it with no journal entry open shows whether a journal entry's map can stay up without its page, and whose
-# entry it paints (docs/testing/journal-map-modes-playtest.md). The test strip's second hover button previews it.
+# entry it paints (docs/testing/journal-map-modes-playtest.md, check 5).
 #
 # If the game fails to load or crashes at start with this file present, delete it first: no other file needs it.
 
