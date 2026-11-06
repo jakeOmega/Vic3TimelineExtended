@@ -117,8 +117,13 @@ them with the rule off.
 
 **Test:** every `disable_evaluation` in a mod entry is `always = yes` or a
 `NOT` of rule tests, and each rule test it names is a top-level conjunct of the
-same entry's `is_shown_when_inactive`. So a prune can't drift from the gate it
-mirrors.
+same entry's `is_shown_when_inactive`. A rule test is `has_game_rule`, or a
+named trigger whose body (followed through further named triggers) reads only
+`has_game_rule` under `AND`/`OR`/`NOT`; `sr_space_race_on`,
+`gm_system_enabled` and `te_tax_code_on` are such wrappers today. So a prune
+can't drift from the gate it mirrors, and no prune can come to read a variable
+set after the first tick, which would delete the entry for good in a game that
+later qualifies.
 
 ## 2. `fire_only_once`
 
@@ -146,11 +151,13 @@ removed again or read elsewhere.
 **The canary.** Unknown: whether the engine's record that an event fired
 survives a save and load, and whether a revolution's winner inherits it (it
 inherits variables). One event, `society_technology_events.1`, keeps setting its
-variable but drops the guard. Its `immediate` logs `TE_SELF_CHECK BROKEN
-fire_only_once_kept` when the country already holds the variable and the game
-was started after the change (a global marker set once at game start), which
-can only happen if the event fired twice for one nation. The marker keeps old
-saves out, where the variable predates the record. It is the right event to
+variable, and its guard is bypassed only in games started after the change (a
+global marker set once at game start): `OR = { has_global_variable = <marker>
+NOT = { has_variable = ste_event_1_fired } }`. Old saves keep the guard like the
+other 31, and new games rely on `fire_only_once` alone. Its `immediate` logs
+`TE_SELF_CHECK BROKEN fire_only_once_kept` when the marker is set and the
+country already holds the variable, which can only happen if the event fired
+twice for one nation. It is the right event to
 watch: its other guard is a ten-year modifier its option grants, which expires
 and which a revolution's winner loses, so its trigger reopens either way.
 Fallback on the play-test list: put the variables back.
