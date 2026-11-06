@@ -956,6 +956,7 @@ legacy_je_modifier_cleanup_effect = {
 	legacy_scaling_strip_colonial_empire = yes
 	legacy_scaling_strip_cultural_hegemony = yes
 	legacy_scaling_strip_banking_cycle = yes
+	legacy_scaling_strip_grand_monuments = yes
 	legacy_scaling_strip_tax_code = yes
 }
 
@@ -1142,6 +1143,64 @@ legacy_scaling_strip_banking_cycle = {
 		if = { limit = { has_modifier = planning_treasury_pool_balance } remove_modifier = planning_treasury_pool_balance }
 		if = { limit = { has_modifier = banking_external_sterilization_charge } remove_modifier = banking_external_sterilization_charge }
 		if = { limit = { has_modifier = banking_external_import_charge } remove_modifier = banking_external_import_charge }
+	}
+}
+
+# Country scope. The monthly strip above and je_grand_monuments' weekly pulse.
+legacy_scaling_strip_grand_monuments = {
+	# The national effects, the boons and the digs' drain sat on the entry.
+	je:je_grand_monuments ?= {
+		if = { limit = { has_modifier = gm_national_prestige } remove_modifier = gm_national_prestige }
+		if = { limit = { has_modifier = gm_national_prestige_pct } remove_modifier = gm_national_prestige_pct }
+		if = { limit = { has_modifier = gm_national_education } remove_modifier = gm_national_education }
+		if = { limit = { has_modifier = gm_national_legitimacy } remove_modifier = gm_national_legitimacy }
+		if = { limit = { has_modifier = gm_national_leader } remove_modifier = gm_national_leader }
+		if = { limit = { has_modifier = gm_national_religious } remove_modifier = gm_national_religious }
+		if = { limit = { has_modifier = gm_national_war_memorial } remove_modifier = gm_national_war_memorial }
+		if = { limit = { has_modifier = gm_national_artistic } remove_modifier = gm_national_artistic }
+		if = { limit = { has_modifier = gm_national_scientific } remove_modifier = gm_national_scientific }
+		if = { limit = { has_modifier = gm_national_industrial } remove_modifier = gm_national_industrial }
+		if = { limit = { has_modifier = gm_national_teardown } remove_modifier = gm_national_teardown }
+		if = { limit = { has_modifier = gm_national_vanity } remove_modifier = gm_national_vanity }
+		if = { limit = { has_modifier = gm_national_sig_archive } remove_modifier = gm_national_sig_archive }
+		if = { limit = { has_modifier = gm_national_sig_archive_spread } remove_modifier = gm_national_sig_archive_spread }
+		if = { limit = { has_modifier = gm_national_sig_throne } remove_modifier = gm_national_sig_throne }
+		if = { limit = { has_modifier = gm_national_sig_royal_pantheon } remove_modifier = gm_national_sig_royal_pantheon }
+		if = { limit = { has_modifier = gm_national_sig_martial_glory } remove_modifier = gm_national_sig_martial_glory }
+		if = { limit = { has_modifier = gm_national_sig_liberty } remove_modifier = gm_national_sig_liberty }
+		if = { limit = { has_modifier = gm_national_sig_grande_armee } remove_modifier = gm_national_sig_grande_armee }
+		if = { limit = { has_modifier = gm_national_sig_mandate_of_heaven } remove_modifier = gm_national_sig_mandate_of_heaven }
+		if = { limit = { has_modifier = gm_national_sig_glory_of_athens } remove_modifier = gm_national_sig_glory_of_athens }
+		if = { limit = { has_modifier = gm_national_sig_to_victory } remove_modifier = gm_national_sig_to_victory }
+		if = { limit = { has_modifier = gm_national_sig_unknown_soldier } remove_modifier = gm_national_sig_unknown_soldier }
+		if = { limit = { has_modifier = gm_national_sig_concert_of_nations } remove_modifier = gm_national_sig_concert_of_nations }
+		if = { limit = { has_modifier = gm_national_sig_conquerors_of_space } remove_modifier = gm_national_sig_conquerors_of_space }
+		if = { limit = { has_modifier = gm_national_sig_olympic } remove_modifier = gm_national_sig_olympic }
+		if = { limit = { has_modifier = gm_national_sig_heroes } remove_modifier = gm_national_sig_heroes }
+		if = { limit = { has_modifier = gm_ig_approval_armed_forces } remove_modifier = gm_ig_approval_armed_forces }
+		if = { limit = { has_modifier = gm_ig_approval_devout } remove_modifier = gm_ig_approval_devout }
+		if = { limit = { has_modifier = gm_ig_approval_industrialists } remove_modifier = gm_ig_approval_industrialists }
+		if = { limit = { has_modifier = gm_ig_approval_intelligentsia } remove_modifier = gm_ig_approval_intelligentsia }
+		if = { limit = { has_modifier = gm_ig_approval_landowners } remove_modifier = gm_ig_approval_landowners }
+		if = { limit = { has_modifier = gm_ig_approval_petty_bourgeoisie } remove_modifier = gm_ig_approval_petty_bourgeoisie }
+		if = { limit = { has_modifier = gm_ig_approval_rural_folk } remove_modifier = gm_ig_approval_rural_folk }
+		if = { limit = { has_modifier = gm_ig_approval_trade_unions } remove_modifier = gm_ig_approval_trade_unions }
+		if = { limit = { has_modifier = gm_arch_diversion } remove_modifier = gm_arch_diversion }
+		if = { limit = { has_modifier = gm_boon_reign } remove_modifier = gm_boon_reign }
+		if = { limit = { has_modifier = gm_boon_regime } remove_modifier = gm_boon_regime }
+		if = { limit = { has_modifier = gm_boon_great_power } remove_modifier = gm_boon_great_power }
+		if = { limit = { has_modifier = gm_boon_victory } remove_modifier = gm_boon_victory }
+		if = { limit = { has_modifier = gm_boon_defeat } remove_modifier = gm_boon_defeat }
+		if = { limit = { has_modifier = gm_boon_centenary } remove_modifier = gm_boon_centenary }
+		if = { limit = { has_modifier = gm_boon_ruler_death } remove_modifier = gm_boon_ruler_death }
+		if = { limit = { has_modifier = gm_boon_space } remove_modifier = gm_boon_space }
+		if = { limit = { has_modifier = gm_boon_faith } remove_modifier = gm_boon_faith }
+		if = { limit = { has_modifier = gm_boon_tech_artistic } remove_modifier = gm_boon_tech_artistic }
+		if = { limit = { has_modifier = gm_boon_tech_scientific } remove_modifier = gm_boon_tech_scientific }
+		if = { limit = { has_modifier = gm_boon_tech_industrial } remove_modifier = gm_boon_tech_industrial }
+		if = { limit = { has_modifier = gm_boon_tech_athletic } remove_modifier = gm_boon_tech_athletic }
+		if = { limit = { has_modifier = gm_boon_tech_naturalist } remove_modifier = gm_boon_tech_naturalist }
+		if = { limit = { has_modifier = gm_boon_homecoming } remove_modifier = gm_boon_homecoming }
 	}
 }
 

@@ -186,6 +186,21 @@ def squash(text):
     return " ".join((text or "").split())
 
 
+def declaration(modifier):
+    """The body of je_grand_monuments' scaling_modifiers_while_active block for `modifier` (comments stripped,
+    squashed: `modifier = X value = { ... }`), or None. test_grand_monument_scaling_modifiers.py pins every
+    value whole; the tests here pin the variable each reads."""
+    text = strip_comments(read(JE))
+    m = re.search(r"scaling_modifiers_while_active\s*=\s*\{(?=\s*modifier\s*=\s*" + re.escape(modifier) + r"\s)",
+                  text)
+    return squash(_match_brace(text, m.end())) if m else None
+
+
+def reads_steps(modifier, var):
+    """The declaration of `modifier` adds `var`, guarded by has_variable, from above 0.001."""
+    return f"limit = {{ has_variable = {var} var:{var} > 0.001 }} add = var:{var}" in (declaration(modifier) or "")
+
+
 def top_level_blocks(text):
     """(name, body) for every top-level `name = {` in text (comments stripped)."""
     text = strip_comments(text)
@@ -388,10 +403,8 @@ class ModifierTests(unittest.TestCase):
         self.assertEqual({d.key for d in DEDICATIONS if d.national_field}, set(NATIONAL))
 
     def test_prestige_pct_rides_the_standing_steps(self):
-        apply = squash(block(read(EFFECTS), "gm_apply_national_modifiers"))
-        self.assertIn("gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }", apply)
-        self.assertIn("remove_modifier = gm_national_prestige_pct",
-                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+        for name in ("gm_national_prestige", "gm_national_prestige_pct"):
+            self.assertTrue(reads_steps(name, "gm_s_standing"), name)
         self.assertIn("gm_display_prestige_pct", loc()["gm_je_val_prestige_pct"])
 
     def test_ig_pairs(self):
@@ -829,22 +842,20 @@ class NationalTests(unittest.TestCase):
         self.assertIn("gm_state_is_contested = yes has_variable = gm_base_ig var:gm_base_ig = flag:$IG$", body)
         self.assertIn("multiply = -1", body)
 
-    def test_national_modifiers_on_the_je_from_root(self):
-        body = squash(block(self.e, "gm_apply_national_modifiers"))
-        self.assertTrue(body.startswith("je:je_grand_monuments ?= { gm_remove_national_modifiers = yes"))
+    def test_national_modifiers_declared_by_the_je(self):
+        # Each from the country variable the refresh writes (the value's root is the owning country).
         pairs = [("gm_national_prestige", "gm_s_standing"), ("gm_national_legitimacy", "gm_s_regime"),
                  ("gm_national_teardown", "gm_s_teardown"), ("gm_national_vanity", "gm_vanity_ledger")]
         pairs += [(f"gm_national_{k}", f"gm_s_{k}") for k in NATIONAL]
         for name, var in pairs:
-            self.assertIn(f"gm_add_national = {{ NAME = {name} VAR = {var} }}", body)
+            self.assertTrue(reads_steps(name, var), name)
         for ig in IGS:
-            self.assertIn(f"gm_add_national_signed = {{ NAME = gm_ig_approval_{ig} VAR = gm_s_ig_{ig} }}", body)
-        removed = squash(block(self.e, "gm_remove_national_modifiers"))
+            var = f"gm_s_ig_{ig}"
+            self.assertIn(f"limit = {{ has_variable = {var} OR = {{ var:{var} > 0.001 var:{var} < -0.001 }} }} "
+                          f"add = var:{var}", declaration(f"gm_ig_approval_{ig}"), ig)
         for name, _ in top_level_blocks(read(MODIFIERS)):
             if name.startswith(("gm_national_", "gm_ig_approval_")):
-                self.assertIn(f"remove_modifier = {name}", removed)
-        self.assertIn("multiplier = root.var:$VAR$", squash(block(self.e, "gm_add_national")))
-        self.assertIn("multiplier = root.var:$VAR$", squash(block(self.e, "gm_add_national_signed")))
+                self.assertIsNotNone(declaration(name), name)
 
     def test_refresh_order(self):
         body = squash(block(self.e, "gm_country_refresh"))
@@ -853,7 +864,7 @@ class NationalTests(unittest.TestCase):
                  "set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }",
                  "gm_state_first_sight = yes", "add_to_variable_list = { name = gm_states target = prev }",
                  "gm_set_opposition_ig = yes", "gm_check_contests = yes", "gm_compute_totals = yes",
-                 "gm_apply_national_modifiers = yes", "gm_notify_new_contests = yes"]
+                 "gm_notify_new_contests = yes"]
         positions = [body.find(s) for s in order]
         self.assertNotIn(-1, positions, dict(zip(order, positions)))
         self.assertEqual(positions, sorted(positions))
@@ -2389,8 +2400,9 @@ class CommissionLifeTests(unittest.TestCase):
         the strip of v2's ledger, kept for older saves, went with them
         (#1407: vanilla 1.15 loads no save from before 2026-11-05)."""
         e = read(EFFECTS)
-        for name in ("gm_init_ledgers", "gm_zero_ledgers", "gm_decay_ledgers", "gm_apply_national_modifiers"):
+        for name in ("gm_init_ledgers", "gm_zero_ledgers", "gm_decay_ledgers"):
             self.assertNotIn("gm_promise_ledger", squash(block(e, name)), name)
+        self.assertNotIn("gm_promise_ledger", strip_comments(read(JE)))
         self.assertNotIn("gm_promise_ledger", squash(block(read(TRIGGERS), "gm_ledgers_idle")))
         self.assertNotIn("gm_promise_ledger", strip_comments(read(COM_EFFECTS)))
         self.assertNotIn("gm_national_promise", strip_comments(e))
@@ -2554,12 +2566,14 @@ class BoonTests(unittest.TestCase):
 
     def test_every_dispatcher_lists_every_boon(self):
         for effect, call in (("gm_com_grant_boon", "gm_com_grant_boon_one = {{ SRC = {} }}"),
-                             ("gm_tick_boons", "gm_tick_boon = {{ SRC = {} }}"),
-                             ("gm_add_boons", "gm_add_boon = {{ SRC = {} }}"),
-                             ("gm_remove_boons", "remove_modifier = gm_boon_{}")):
+                             ("gm_tick_boons", "gm_tick_boon = {{ SRC = {} }}")):
             body = squash(block(self.e, effect))
             for key in SOURCE_KEYS:
                 self.assertIn(call.format(key), body, (effect, key))
+        # The entry declares each, on while its countdown runs.
+        for key in SOURCE_KEYS:
+            self.assertIn(f"limit = {{ has_variable = gm_boon_{key} }} add = 1", declaration(f"gm_boon_{key}") or "",
+                          key)
         idle = squash(block(read(COM_TRIGGERS), "gm_boons_idle"))
         custom = read(CUSTOM_LOC)
         for key in SOURCE_KEYS:
@@ -2570,9 +2584,8 @@ class BoonTests(unittest.TestCase):
                               squash(block(custom, target)), key)
 
     def test_wired_into_the_national_refresh(self):
-        e = read(EFFECTS)
-        self.assertIn("gm_add_boons = yes", squash(block(e, "gm_apply_national_modifiers")))
-        self.assertIn("gm_remove_boons = yes", squash(block(e, "gm_remove_national_modifiers")))
+        for key in SOURCE_KEYS:
+            self.assertIsNotNone(declaration(f"gm_boon_{key}"), key)
         self.assertIn("gm_boons_idle = yes", squash(block(read(TRIGGERS), "gm_ledgers_idle")),
                       "the entry and the pulse stay while a boon runs")
         grant = squash(block(self.e, "gm_com_grant_boon_one"))
@@ -3242,10 +3255,8 @@ class PolicyTests(unittest.TestCase):
         self.assertIn("if = { limit = { gm_policy_is = { P = education STANDARD = no } } gm_set_steps_lin_open = "
                       "{ IN = gm_g_education OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education "
                       "F = 10 } } else = { set_variable = { name = gm_s_education value = 0 } }", totals)
-        self.assertIn("gm_add_national = { NAME = gm_national_education VAR = gm_s_education }",
-                      squash(block(read(EFFECTS), "gm_apply_national_modifiers")))
-        self.assertIn("remove_modifier = gm_national_education",
-                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+        # 0 under any other policy, so the entry's declaration is off there.
+        self.assertTrue(reads_steps("gm_national_education", "gm_s_education"))
 
     def test_education_self_check(self):
         # Spec § 4.4: a JE-held state_* field reaching the states is unverified.
@@ -5935,16 +5946,12 @@ class SignatureEffectTests(unittest.TestCase):
                               "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }")
         self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
 
-    def test_national_hooks_from_root(self):
-        apply = squash(block(read(EFFECTS), "gm_apply_national_modifiers"))
-        removed = squash(block(read(EFFECTS), "gm_remove_national_modifiers"))
+    def test_national_declarations_read_the_steps(self):
         for s in SIGNATURES:
             for suffix, field, _ in s.national:
                 if field == "cultural_pull":
                     continue
-                self.assertIn(f"gm_add_national = {{ NAME = gm_national_sig_{s.key}{suffix} VAR = gm_s_sig_{s.key} }}",
-                              apply, s.key)
-                self.assertIn(f"remove_modifier = gm_national_sig_{s.key}{suffix}", removed, s.key)
+                self.assertTrue(reads_steps(f"gm_national_sig_{s.key}{suffix}", f"gm_s_sig_{s.key}"), s.key)
 
     def test_local_effects_on_the_state_pulse(self):
         monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
