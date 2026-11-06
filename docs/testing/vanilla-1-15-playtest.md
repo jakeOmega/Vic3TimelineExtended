@@ -73,6 +73,10 @@ or Spanish game.
   is hidden for a North American union and goes invalid, with its cleanup, if one forms. The three vanilla tax
   entries complete under the Tax Code rule.
 - How the panel shows an `INJECT:`ed outcome: listed as one more, merged, or dropped (the parser assumes one more).
+- `disable_evaluation` (#1404): in a game with Social Movements off, no Civil Rights, Digital Rights, Mental Health,
+  Morphological Freedom, Human Augmentation or Post-Scarcity entry ever shows; in a game with every rule on, each
+  entry appears as before and every country still holds Banking's dormant entry. `debug.log` has no `already has a
+  journal entry` line for a pruned type.
 
 **The journal panel and tooltips**
 - Every journal entry panel opens, and the concluded page too. No duplicate bars under the bars-on-top marker

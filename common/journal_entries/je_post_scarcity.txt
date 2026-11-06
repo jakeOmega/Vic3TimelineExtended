@@ -12,6 +12,11 @@
 		post_scarcity_transition_active_modifier
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { has_game_rule = social_movements_enabled }
+	}
+
 	# Opens at Post-Work Society (era 12), Post-Scarcity Economy's prerequisite; Universal Basic Income (era 10)
 	# until the era 13 spec (2026-10-31, § 5.3) moved Post-Scarcity Economy to era 13, past the 30-year timeout's reach
 	is_shown_when_inactive = {
