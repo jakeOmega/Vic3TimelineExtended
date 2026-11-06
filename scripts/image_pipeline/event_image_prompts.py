@@ -61,6 +61,19 @@ DO NOT:
     limbs). Prefer seated, standing, or crowd poses
   - Request holographic displays, data overlays, or floating UI — they render as
     random blobs or infinity symbols
+  - Name a building by its use ("a clinic", "a conference centre") — FLUX writes
+    the name on it. Describe its materials instead. Riot police come back with
+    POLICE on their vests, and a protest crowd seen up close carries lettered
+    placards; a crowd seen from a high rooftop keeps them to specks
+  - Leave an official chamber's back wall bare — it grows a seal, a portrait or
+    a flag. Fill it (curtained windows). And keep a figure off the furniture:
+    a signer bending over a table merged into it in three of four renders;
+    a standing figure at the table's corner held up (batch 10, 2026-11-06)
+  - Ask for "an orbital mirror array" (flying saucers) or tether "climbers"
+    (people climbing the cable); say "a field of ground antennas" and "cargo
+    capsules". "Colonies linked by ship traffic" drew no colony: put the
+    camera on the surface, among the domes
+  - Zoom every pick at full size: FLUX signs paintings in a corner
 """
 
 IMAGES = {
