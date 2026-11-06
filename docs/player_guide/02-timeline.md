@@ -1176,8 +1176,8 @@ years, but your first choice starts no wait.
 No policy changes maintenance, which Grand Monuments don't need, or aging,
 anniversaries or what a dedication does in its own state.
 
-The national effects change at once, and each monument's tourism at the start
-of the next month. The AI picks each January: State Ceremonial with legitimacy
+The national effects change within a few days, and each monument's tourism at
+the start of the next month. The AI picks each January: State Ceremonial with legitimacy
 under 40 when its regime grandeur and the quarter together reach legitimacy's
 first step, Open to the Public
 with a monument in a state with a Tourism Industry, Public Education with
@@ -1345,7 +1345,8 @@ by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
 one for 27. The button's tooltip gives this site's months, and a dig's row
 gives the innovation it diverts. Nothing caps how many digs you run, but a
 method's button is grayed while you make less weekly innovation than it would
-divert, so a new dig never takes your innovation below zero. Suspend Dig stops
+divert, counting the digs you began in the past week as already diverting, so a
+new dig never takes your innovation below zero. Suspend Dig stops
 a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.
