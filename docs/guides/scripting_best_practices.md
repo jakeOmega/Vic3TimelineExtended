@@ -5437,8 +5437,8 @@ as root**, once per state in the world. So `owner` is that state's country, not 
 the player's data, or a map whose look the player picks, needs a read every state can make. A global variable always
 works (and one player sets it for all); `scope:journal_entry` does not resolve there, nor its owner, on a country entry
 or a contextless one (the scope probe painted blue twice, 2026-11-05). `map_color_second` stripes through the state's
-`owner` (vanilla's Great Game), but drew nothing under `owner ?= { is_player = yes }`, so `is_player` most likely
-doesn't resolve in the paint either. `map_color` takes `if` / `else_if` and inline factor blocks
+`owner` (vanilla's Great Game), and on a contextless entry too: the Map Room's Leading Cause map stripes its runner-up
+(seen 2026-11-06). Under `owner ?= { is_player = yes }` it drew nothing, so `is_player` doesn't resolve in the paint. `map_color` takes `if` / `else_if` and inline factor blocks
 (`factor = { value = this.turmoil multiply = 2 }`, vanilla's Forest of Bayonets); a branch that matches nothing leaves
 the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`. No `.gui` switches the map on: vanilla's
 `mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. An entry
