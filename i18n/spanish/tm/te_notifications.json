@@ -111,6 +111,38 @@
   "en": "Propaganda Countered",
   "es": "Propaganda contrarrestada"
  },
+ "notification_covert_catch_watched_notice_desc": {
+  "en": "Our counterintelligence has caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [GetPlayer.GetCustom('covert_caught_type_name')] against us. Under our standing order it is letting the operation run and watching it. It is listed under Known Foreign Operations, where we can expose it at any time.",
+  "es": "Nuestra contrainteligencia ha atrapado a agentes de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! que llevaban a cabo [GetPlayer.GetCustom('covert_caught_type_name')] contra nosotros. Según nuestra orden vigente, deja que la operación siga su curso y la vigila. Figura en Operaciones extranjeras conocidas, donde podemos exponerla en cualquier momento."
+ },
+ "notification_covert_catch_watched_notice_name": {
+  "en": "Foreign Operation Watched",
+  "es": "Operación extranjera vigilada"
+ },
+ "notification_covert_exposure_expelled_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over. Its officers under diplomatic cover have been sent home, and it has expelled ours in turn.",
+  "es": "Hemos hecho públicas las pruebas contra #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Su operación contra nosotros, $covert_exposed_op_link$, ha terminado. Sus oficiales con cobertura diplomática han sido enviados a casa, y ha expulsado a los nuestros a su vez."
+ },
+ "notification_covert_exposure_expelled_notice_name": {
+  "en": "Operation Exposed, Diplomats Expelled",
+  "es": "Operación expuesta, diplomáticos expulsados"
+ },
+ "notification_covert_exposure_shored_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and our counterintelligence is on alert.",
+  "es": "Hemos hecho públicas las pruebas contra #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Su operación contra nosotros, $covert_exposed_op_link$, ha terminado, y nuestra contrainteligencia está en alerta."
+ },
+ "notification_covert_exposure_shored_notice_name": {
+  "en": "Operation Exposed",
+  "es": "Operación expuesta"
+ },
+ "notification_covert_exposure_turned_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and what it gave us is now a foothold inside its service.",
+  "es": "Hemos hecho públicas las pruebas contra #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Su operación contra nosotros, $covert_exposed_op_link$, ha terminado, y lo que nos dio es ahora un punto de apoyo dentro de su servicio."
+ },
+ "notification_covert_exposure_turned_notice_name": {
+  "en": "Operation Exposed and Turned",
+  "es": "Operación expuesta y revertida"
+ },
  "notification_covert_severe_exposure_notice_desc": {
   "en": "[SCOPE.sCountry('covert_exposure_operator').GetName] has been caught running a covert campaign to bring down the government of [SCOPE.sCountry('detected_by_country').GetName], which we stand behind. Our relations with [SCOPE.sCountry('covert_exposure_operator').GetName] have suffered for it.",
   "es": "Se ha sorprendido a [SCOPE.sCountry('covert_exposure_operator').GetName] llevando a cabo una campaña encubierta para derrocar el gobierno de [SCOPE.sCountry('detected_by_country').GetName], al que respaldamos. Nuestras relaciones con [SCOPE.sCountry('covert_exposure_operator').GetName] se han resentido por ello."
@@ -848,8 +880,8 @@
   "es": "#b NUEVAS LÁMPARAS EFICIENTES ILUMINAN LAS CIUDADES #!"
  },
  "notification_headlines_tech_fusion_batteries_desc": {
-  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing fusion batteries, which use compact fusion reactors to power devices and vehicles for years, revolutionizing energy as we know it... #!",
-  "es": "Imagina una batería que nunca necesita recargarse. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] está desarrollando baterías de fusión, que usan reactores de fusión compactos para alimentar dispositivos y vehículos durante años y revolucionan la energía tal como la conocemos... #!"
+  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing microfusion cells: fusion reactors small and safe enough to replace batteries, powering devices and vehicles for years. Energy as we know it may never be the same... #!",
+  "es": "Imagina una batería que nunca necesita recargarse. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] está desarrollando células de microfusión: reactores de fusión lo bastante pequeños y seguros como para sustituir a las baterías, y que alimentan dispositivos y vehículos durante años. Puede que la energía tal como la conocemos no vuelva a ser la misma... #!"
  },
  "notification_headlines_tech_fusion_batteries_name": {
   "en": "#b THE BATTERY THAT NEVER DIES? #!",
@@ -1791,6 +1823,14 @@
   "en": "A Nuclear Warning, Reported",
   "es": "Una advertencia nuclear, según informes"
  },
+ "notification_nd_deploy_bar_enforced_desc": {
+  "en": "Our missile defense on the border of [SCOPE.sCountry('nd_dbe_issuer').GetName] has been switched off again. In a nuclear crisis we agreed to deploy none next to them for ten years; a war with them would end the promise.",
+  "es": "Nuestra defensa antimisiles en la frontera de [SCOPE.sCountry('nd_dbe_issuer').GetName] se ha vuelto a apagar. En una crisis nuclear acordamos no desplegar ninguna junto a ellos durante diez años; una guerra con ellos pondría fin a la promesa."
+ },
+ "notification_nd_deploy_bar_enforced_name": {
+  "en": "Missile Defense Switched Off",
+  "es": "Defensa antimisiles desactivada"
+ },
  "notification_nd_doctrine_bound_by_law_desc": {
   "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
   "es": "La [concept_amendment|l] #bold Compromiso de no atacar primero#! está en vigor y vincula nuestra doctrina nuclear: ahora estamos comprometidos con el #v No primer uso#!. La ley hizo este cambio, no nuestro gobierno, por lo que la espera antes de poder elegir de nuevo una doctrina sigue contando desde nuestra última elección propia. Abandonar el No primer uso repudia el compromiso y borra la enmienda de nuestras leyes."
@@ -1830,6 +1870,22 @@
  "notification_rt_power_retired_notice_name": {
   "en": "$building_power_plant$ Retired",
   "es": "$building_power_plant$ retiradas"
+ },
+ "notification_sr_earth_hostile_notice_desc": {
+  "en": "A fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName], a power at war with us, is on its way to Earth. The overview's Hostile Fleet cell shows when the first lands, and what is bound for Earth against what we have there.",
+  "es": "Una flota de [SCOPE.sCountry('sr_earth_alert_power').GetName], una potencia en guerra con nosotros, se dirige a la Tierra. La celda Flota hostil del resumen muestra cuándo llega la primera y lo que se dirige a la Tierra frente a lo que tenemos allí."
+ },
+ "notification_sr_earth_hostile_notice_name": {
+  "en": "A Hostile Fleet Is Bound for Earth",
+  "es": "Una flota hostil se dirige a la Tierra"
+ },
+ "notification_sr_space_command_dismantled_notice_desc": {
+  "en": "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the larger (or the capital's, if they are the same size).",
+  "es": "Se desmanteló el $building_space_command$ de [SCOPE.sState('sr_sc_dismantled').GetName]: una nación gestiona un solo $building_space_command$, y el nuestro permanece en [SCOPE.sState('sr_sc_keeper').GetName], el mayor (o el de la capital, si son del mismo tamaño)."
+ },
+ "notification_sr_space_command_dismantled_notice_name": {
+  "en": "Space Command Dismantled",
+  "es": "Mando espacial desmantelado"
  },
  "notification_tactical_nuke_fails_attacker_desc": {
   "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses.",
@@ -2248,8 +2304,8 @@
   "es": "Termina una misión de la ONU"
  },
  "notification_un_mission_opened_notice_desc": {
-  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to [SCOPE.sState('un_msn_state').GetName]. Its work is shown in the state, and in the chamber's register of missions.",
-  "es": "Las Naciones Unidas han enviado una [Concept('concept_un_mission', 'misión')] a [SCOPE.sState('un_msn_state').GetName]. Su labor aparece en el estado y en el registro de misiones de la sala."
+  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to [SCOPE.sState('un_msn_state').GetName]. Its work is shown in the state, and under Missions in the Field on the UN tab of the Diplomacy panel.",
+  "es": "Las Naciones Unidas han enviado una [Concept('concept_un_mission', 'misión')] a [SCOPE.sState('un_msn_state').GetName]. Su labor aparece en el estado y en Misiones sobre el terreno, en la pestaña de la ONU del panel Diplomacia."
  },
  "notification_un_mission_opened_notice_name": {
   "en": "A UN Mission Arrives",

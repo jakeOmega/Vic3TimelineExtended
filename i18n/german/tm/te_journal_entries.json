@@ -745,7 +745,7 @@
  },
  "je_colonial_empire_gp_effect": {
   "en": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/mo",
-  "de": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/Mo."
+  "de": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/Monat"
  },
  "je_colonial_empire_gp_head_effect": {
   "en": "Monthly",
@@ -981,7 +981,7 @@
  },
  "je_colonial_empire_ov_gp_net": {
   "en": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/Monat"
  },
  "je_colonial_empire_ov_gp_tt_ours": {
   "en": "#header Great-power pressure#!\\nCondemning us: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_condemners')|0]#! [Concept('concept_great_power','great powers')]; backing us: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_supporters')|0]#!. Together they move [concept_colonial_stability] by #v [Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]#! a month, any escalation included. International Pressure lists each one.",
@@ -1093,7 +1093,7 @@
  },
  "je_colonial_empire_ov_programmes_net": {
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/Monat"
  },
  "je_colonial_empire_ov_programmes_running": {
   "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! of 3 running",
@@ -1109,11 +1109,11 @@
  },
  "je_colonial_empire_ov_stability_value": {
   "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
-  "de": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
+  "de": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Monat)"
  },
  "je_colonial_empire_ov_stability_value_ni": {
   "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Monat)"
  },
  "je_colonial_empire_ov_tick_eta": {
   "en": "In about #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! months at this month's rate.",
@@ -1253,7 +1253,7 @@
  },
  "je_colonial_empire_pressure_consensus_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/Monat"
  },
  "je_colonial_empire_pressure_header": {
   "en": "International Pressure",
@@ -1265,7 +1265,7 @@
  },
  "je_colonial_empire_pressure_isolation_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/Monat"
  },
  "je_colonial_empire_pressure_none_ours": {
   "en": "#G No great power is pressing us over our colonies.#!",
@@ -1605,15 +1605,15 @@
  },
  "je_colonial_empire_term_assimilation": {
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/Monat"
  },
  "je_colonial_empire_term_garrison": {
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/Monat"
  },
  "je_colonial_empire_term_invest": {
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/mo",
-  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/Mo."
+  "de": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/Monat"
  },
  "je_colonial_empire_territories_none": {
   "en": "#lore No territory is eligible.#!",
@@ -2853,7 +2853,7 @@
  },
  "je_nuclear_ov_authority_change_in": {
   "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! mo",
-  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! Mo."
+  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! Mon."
  },
  "je_nuclear_ov_change_now": {
   "en": "Can change now",
@@ -2885,7 +2885,7 @@
  },
  "je_nuclear_ov_doctrine_change_in": {
   "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! mo",
-  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! Mo."
+  "de": "Änderung in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! Mon."
  },
  "je_nuclear_ov_guarantees_caption": {
   "en": "Guarantees",
@@ -2969,7 +2969,7 @@
  },
  "je_nuclear_ov_taboo_value": {
   "en": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/Monat)"
  },
  "je_nuclear_ov_warheads_figure": {
   "en": "#lore World est. [Country.MakeScope.ScriptValue('nd_display_public_estimate')|0]#!",
@@ -5385,7 +5385,7 @@
  },
  "je_space_race_widget_mq_next_months": {
   "en": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] mo",
-  "de": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] Mo."
+  "de": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] Mon."
  },
  "je_space_race_widget_mq_next_none": {
   "en": "#R stopped#!",
@@ -5681,7 +5681,7 @@
  },
  "je_space_race_widget_ovc_earth_word": {
   "en": "Earth in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! mo",
-  "de": "Erde in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! Mo."
+  "de": "Erde in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! Mon."
  },
  "je_space_race_widget_ovc_earth_word_loud": {
   "en": "#R Earth in [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0] mo#!",
@@ -6009,7 +6009,7 @@
  },
  "je_space_race_widget_progress_interstellar_probe": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/Monat)"
  },
  "je_space_race_widget_progress_interstellar_results": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
@@ -6017,27 +6017,27 @@
  },
  "je_space_race_widget_progress_mars_landing": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/Monat)"
  },
  "je_space_race_widget_progress_moon_landing": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/Monat)"
  },
  "je_space_race_widget_progress_orbital": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/Monat)"
  },
  "je_space_race_widget_progress_probe": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/Monat)"
  },
  "je_space_race_widget_progress_solar_colonization": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/Monat)"
  },
  "je_space_race_widget_progress_suborbital": {
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo)",
-  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/Mo.)"
+  "de": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/Monat)"
  },
  "je_space_race_widget_reward_interstellar_probe": {
   "en": "#header Interstellar Probe#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_interstellar_probe').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_interstellar_probe').GetDesc]",
@@ -6073,31 +6073,31 @@
  },
  "je_space_race_widget_risk_interstellar_probe": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/Monat"
  },
  "je_space_race_widget_risk_mars_landing": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/Monat"
  },
  "je_space_race_widget_risk_moon_landing": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/Monat"
  },
  "je_space_race_widget_risk_orbital": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/Monat"
  },
  "je_space_race_widget_risk_probe": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/Monat"
  },
  "je_space_race_widget_risk_solar_colonization": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/Monat"
  },
  "je_space_race_widget_risk_suborbital": {
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
-  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/Mo."
+  "de": "Risiko: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/Monat"
  },
  "je_space_race_widget_rival_tt_interstellar_probe": {
   "en": "#header [State.GetCountry.GetName]#!\\n[concept_sr_estimate]: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! of the goal, marker at [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_interstellar_probe')|%0]; the band is ±[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0].",
@@ -6829,51 +6829,51 @@
  },
  "je_space_race_widget_win_paid_ceres": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_hygiea": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_jupiter": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_kuiper": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_mars": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_neptune": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_pallas": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_psyche": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_saturn": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_uranus": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_venus": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! Mon."
  },
  "je_space_race_widget_win_paid_vesta": {
   "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! mo",
-  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! Mo."
+  "de": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! jetzt, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! Mon."
  },
  "je_space_race_widget_win_transit_ceres": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_ceres')|0]#! months",
@@ -11297,7 +11297,7 @@
  },
  "je_un_ov_authority_value": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/mo)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/Mo.)"
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/Monat)"
  },
  "je_un_ov_council_label": {
   "en": "Security Council",
@@ -11373,7 +11373,7 @@
  },
  "je_un_ov_member_conference": {
   "en": "Opens in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! mo",
-  "de": "Öffnet in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! Mo."
+  "de": "Öffnet in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! Mon."
  },
  "je_un_ov_member_dissolved": {
   "en": "Dissolved #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dissolved_year')|0]#!",
@@ -11409,7 +11409,7 @@
  },
  "je_un_ov_motions_wait_fig": {
   "en": "Next in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! mo",
-  "de": "Nächster in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! Mo."
+  "de": "Nächster in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! Mon."
  },
  "je_un_ov_motions_wait_tt": {
   "en": "#v We may table again in [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0] months:#! the wait after our last motion, set by our rank and our [Concept('concept_un_standing','standing')].",

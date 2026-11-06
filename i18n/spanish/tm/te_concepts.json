@@ -6457,7 +6457,7 @@
  },
  "gw_pol_treaty": {
   "en": "Bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')]: national mitigation policies can't be repealed.",
-  "es": "Sujeto a un [Concept('concept_emissions_reduction_treaty','tratado de reducción de emisiones')]: las políticas nacionales de mitigación no se pueden derogar."
+  "es": "Sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')]: las políticas nacionales de mitigación no se pueden derogar."
  },
  "gw_pol_waiting": {
   "en": "Policies can be adopted once warming reaches #v 0.5 °C#!, Fossil-Fuel Divestment and Aerosol Injection at #v 1.0 °C#!.",

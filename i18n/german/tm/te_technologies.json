@@ -59,6 +59,10 @@
   "en": "Advanced Fission",
   "de": "Fortgeschrittene Kernspaltung"
  },
+ "advanced_fission_desc": {
+  "en": "Molten-salt and thorium reactors run hotter, waste less of their fuel and cannot melt down the way the old light-water designs could. Our existing nuclear plants can be rebuilt around them for far more power from every level, if we can find the specialized alloys to keep the salt from eating through the pipes.",
+  "de": "Flüssigsalz- und Thoriumreaktoren laufen heißer, verschwenden weniger von ihrem Brennstoff und können nicht auf die Weise durchschmelzen wie die alten Leichtwasserkonstruktionen. Unsere bestehenden Atomkraftwerke lassen sich um sie herum umbauen, für weit mehr Strom aus jeder Stufe, sofern wir die Speziallegierungen finden, die verhindern, dass das Salz die Rohre zerfrisst."
+ },
  "advanced_materials_armor": {
   "en": "Advanced Materials Armor",
   "de": "Panzerung aus fortgeschrittenen Materialien"
@@ -111,9 +115,17 @@
   "en": "AI Agents",
   "de": "KI-Agenten"
  },
+ "ai_agents_desc": {
+  "en": "Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.",
+  "de": "Software, die nicht nur Fragen beantwortet, sondern Dinge erledigt: Sie plant die Schritte, nutzt die Werkzeuge, prüft ihre eigene Arbeit und meldet sich zurück, wenn die Aufgabe erledigt ist. Ganze Abteilungen beaufsichtigen jetzt Agenten, statt die Arbeit selbst zu tun, und manche stellen fest, dass kaum noch etwas zu beaufsichtigen bleibt."
+ },
  "ai_tutors": {
   "en": "AI Tutors",
   "de": "KI-Tutoren"
+ },
+ "ai_tutors_desc": {
+  "en": "Every child gets a tutor of their own: endlessly patient, awake at midnight before the exam, and able to explain fractions a fourth way when the first three failed. Adults use them too, to learn a new trade in months rather than years. Whoever writes what the tutors teach now has the ear of a whole generation, and not everyone who wants that job is a teacher.",
+  "de": "Jedes Kind bekommt einen eigenen Tutor: unendlich geduldig, um Mitternacht vor der Prüfung wach und fähig, Brüche auf einem vierten Weg zu erklären, wenn die ersten drei versagt haben. Auch Erwachsene nutzen sie, um in Monaten statt in Jahren einen neuen Beruf zu erlernen. Wer schreibt, was die Tutoren lehren, hat nun das Ohr einer ganzen Generation, und nicht jeder, der diese Aufgabe will, ist Lehrer."
  },
  "aluminum_mass_production": {
   "en": "Aluminum Mass Production",
@@ -126,6 +138,10 @@
  "aneutronic_fusion": {
   "en": "Aneutronic Fusion",
   "de": "Aneutronische Fusion"
+ },
+ "aneutronic_fusion_desc": {
+  "en": "Fusing protons with boron releases its energy as charged particles instead of neutrons, so the current can be drawn straight from the plasma with no boiler and no turbine. The reactors barely irradiate their own walls and leave no radioactive waste behind, though the fuel has to burn at temperatures that make an ordinary fusion plant look lukewarm.",
+  "de": "Die Fusion von Protonen mit Bor setzt ihre Energie als geladene Teilchen statt als Neutronen frei, sodass der Strom ohne Kessel und Turbine direkt aus dem Plasma gewonnen werden kann. Die Reaktoren bestrahlen ihre eigenen Wände kaum und hinterlassen keinen radioaktiven Abfall, auch wenn der Brennstoff bei Temperaturen brennen muss, neben denen ein gewöhnliches Fusionskraftwerk lauwarm wirkt."
  },
  "animation": {
   "en": "Animation",
@@ -219,6 +235,10 @@
   "en": "Autonomous Weapons",
   "de": "Autonome Waffen"
  },
+ "autonomous_weapons_desc": {
+  "en": "Machines that find, select and engage their targets without waiting for a human to approve each shot. They react faster than any soldier and never tire, and the debate over who answers for their mistakes has not slowed their spread.",
+  "de": "Maschinen, die ihre Ziele finden, auswählen und bekämpfen, ohne darauf zu warten, dass ein Mensch jeden Schuss genehmigt. Sie reagieren schneller als jeder Soldat und ermüden nie, und die Debatte darüber, wer für ihre Fehler geradesteht, hat ihre Verbreitung nicht gebremst."
+ },
  "barcodes_and_scanners": {
   "en": "Barcodes and Scanners",
   "de": "Strichcodes und Scanner"
@@ -302,6 +322,10 @@
  "cislunar_infrastructure": {
   "en": "Cislunar Infrastructure",
   "de": "Cislunare Infrastruktur"
+ },
+ "cislunar_infrastructure_desc": {
+  "en": "Relay satellites, orbital stations and landers that fly again and again turn the space between the Earth and the Moon into a working neighborhood. With them, settling other worlds becomes a question of cost rather than of daring.",
+  "de": "Relaissatelliten, Orbitalstationen und Lander, die immer wieder fliegen, machen den Raum zwischen Erde und Mond zu einer arbeitenden Nachbarschaft. Mit ihnen wird die Besiedlung anderer Welten zu einer Frage der Kosten statt des Wagemuts."
  },
  "civil_rights_movement": {
   "en": "Civil Rights Movement",
@@ -536,8 +560,8 @@
   "de": "Mikrofusionszellen"
  },
  "fusion_batteries_desc": {
-  "en": "Imagine a battery that never needs to be recharged. These compact fusion reactors could power our devices and vehicles for years, revolutionizing energy as we know it.",
-  "de": "Man stelle sich eine Batterie vor, die nie aufgeladen werden muss. Diese kompakten Fusionsreaktoren könnten unsere Geräte und Fahrzeuge jahrelang antreiben und die Energieversorgung, wie wir sie kennen, revolutionieren."
+  "en": "Imagine a battery that never needs recharging, because it isn't a battery at all. Microfusion cells are fusion reactors made small and safe enough to sit where a battery once did, running our vehicles, motors and appliances for years on a sip of fuel.",
+  "de": "Man stelle sich eine Batterie vor, die nie aufgeladen werden muss, weil sie gar keine Batterie ist. Mikrofusionszellen sind Fusionsreaktoren, die so klein und sicher geworden sind, dass sie dort sitzen können, wo einst eine Batterie saß, und unsere Fahrzeuge, Motoren und Geräte jahrelang mit einem Schluck Brennstoff antreiben."
  },
  "fusion_power": {
   "en": "Fusion Power",
@@ -575,6 +599,10 @@
   "en": "Geoengineering",
   "de": "Geoengineering"
  },
+ "geoengineering_desc": {
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
+  "de": "Seit zwei Jahrhunderten verändern wir das Klima aus Versehen. Nur unser Mut hält uns davon ab, es mit Absicht zu tun: Flugzeuge könnten Sulfataerosole in die Stratosphäre bringen und die Sonne binnen eines Jahres verschleiern, zu einem Preis, den jede große Volkswirtschaft zahlen könnte. Der Dunst würde die Erwärmung verbergen, nicht beseitigen, und müsste so lange aufrechterhalten werden, wie der Kohlenstoff in der Luft bleibt. Kleinere Künste kommen hinzu: Wolken impfen, um in einer Dürre Regen zu bringen, und Hagel zu Regen machen, bevor er fällt. Schaltet die Klimapolitik „Stratosphärische Aerosolinjektion“ frei."
+ },
  "globalization": {
   "en": "Globalization",
   "de": "Globalisierung"
@@ -603,6 +631,10 @@
   "en": "Humanoid Robotics",
   "de": "Humanoide Robotik"
  },
+ "humanoid_robotics_desc": {
+  "en": "Robots built in our own shape can work in a world built for people: they climb stairs, open doors, stock shelves and fold laundry. Shops, warehouses and homes fill with tireless helpers, and the question of what the clerk and the porter will do next is no longer theoretical.",
+  "de": "Roboter in unserer eigenen Gestalt können in einer für Menschen gebauten Welt arbeiten: Sie steigen Treppen, öffnen Türen, füllen Regale auf und legen Wäsche zusammen. Läden, Lager und Wohnungen füllen sich mit unermüdlichen Helfern, und die Frage, was der Angestellte und der Pförtner als Nächstes tun werden, ist nicht mehr theoretisch."
+ },
  "hydraulic_fracturing": {
   "en": "Hydraulic Fracturing",
   "de": "Hydraulisches Fracking"
@@ -622,6 +654,10 @@
  "in_situ_resource_utilization": {
   "en": "In-Situ Resource Utilization",
   "de": "In-situ-Ressourcennutzung"
+ },
+ "in_situ_resource_utilization_desc": {
+  "en": "Every kilogram lifted from Earth is dear. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.",
+  "de": "Jedes von der Erde gehobene Kilogramm ist teuer. Indem wir Sauerstoff, Metalle und Glas aus dem Staub und Gestein gewinnen, wo unsere Besatzungen landen, können wir Stützpunkte jenseits der Erde aus Material bauen und versorgen, das bereits vor Ort ist."
  },
  "inertial_navigation_systems": {
   "en": "Inertial Navigation Systems",
@@ -722,6 +758,10 @@
  "liquid_democracy": {
   "en": "Liquid Democracy",
   "de": "Liquid Democracy"
+ },
+ "liquid_democracy_desc": {
+  "en": "With a secure digital identity for every citizen, a vote can be counted on any question at any time. Each voter decides an issue directly or lends the vote to someone they trust, and can take it back whenever they like. Trust still pools around a few popular delegates, but none of them keeps it a day longer than people allow.",
+  "de": "Mit einer sicheren digitalen Identität für jeden Bürger kann zu jeder Frage jederzeit eine Stimme gezählt werden. Jeder Wähler entscheidet eine Sache direkt oder leiht seine Stimme jemandem, dem er vertraut, und kann sie jederzeit zurücknehmen. Das Vertrauen sammelt sich weiterhin um einige beliebte Delegierte, doch keiner von ihnen behält es einen Tag länger, als die Menschen es zulassen."
  },
  "machine_learning": {
   "en": "Machine Learning",
@@ -887,6 +927,10 @@
   "en": "Morphological Freedom",
   "de": "Morphologische Freiheit"
  },
+ "morphological_freedom_desc": {
+  "en": "Gene therapy and grown tissue can now change how a body looks as readily as a tailor alters a coat: skin and hair in any color, sex characteristics remade, fur and tails grown from a person's own cells. None of it makes anyone stronger or cleverer. It changes how people present themselves to the world, and that makes it a question for the law.",
+  "de": "Gentherapie und gezüchtetes Gewebe können heute das Aussehen eines Körpers so mühelos verändern, wie ein Schneider einen Mantel ändert: Haut und Haar in jeder Farbe, umgestaltete Geschlechtsmerkmale, Fell und Schwänze, gezüchtet aus den eigenen Zellen eines Menschen. Nichts davon macht jemanden stärker oder klüger. Es verändert, wie Menschen sich der Welt präsentieren, und das macht es zu einer Frage für das Gesetz."
+ },
  "motorized_artillery": {
   "en": "Motorized Artillery",
   "de": "Motorisierte Artillerie"
@@ -946,6 +990,10 @@
  "nuclear_thermal_propulsion": {
   "en": "Nuclear Thermal Propulsion",
   "de": "Nukleartermischer Antrieb"
+ },
+ "nuclear_thermal_propulsion_desc": {
+  "en": "A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. A colony fleet that leaves outside its launch window pays a much smaller premium for it.",
+  "de": "Ein Reaktor erhitzt Wasserstoff auf die doppelte Austrittsgeschwindigkeit der besten chemischen Raketen, sodass derselbe Brennvorgang weit weniger Treibstoff braucht. Eine Kolonieflotte, die außerhalb ihres Startfensters aufbricht, zahlt dafür einen deutlich kleineren Aufschlag."
  },
  "nuclear_weapons": {
   "en": "Nuclear Weapons",
@@ -1039,6 +1087,10 @@
   "en": "Post-Work Society",
   "de": "Postarbeitsgesellschaft"
  },
+ "post_work_society_desc": {
+  "en": "Machines now do most of the work that once paid the bills, and a basic income covers the rest. For the first time, most people choose how to spend their days: making art, studying, caring for others or arguing about politics. Not everyone knows what to do with the freedom.",
+  "de": "Maschinen erledigen heute den Großteil der Arbeit, mit der man einst seinen Lebensunterhalt verdiente, und ein Grundeinkommen deckt den Rest. Zum ersten Mal entscheiden die meisten Menschen selbst, wie sie ihre Tage verbringen: Kunst schaffen, studieren, sich um andere kümmern oder über Politik streiten. Nicht jeder weiß mit der Freiheit etwas anzufangen."
+ },
  "precision_guided_munitions": {
   "en": "Precision Guided Munitions",
   "de": "Präzisionsgelenkte Munition"
@@ -1131,6 +1183,10 @@
   "en": "Rejuvenation Therapies",
   "de": "Verjüngungstherapien"
  },
+ "rejuvenation_therapies_desc": {
+  "en": "Senolytic drugs clear out worn-out cells, partial reprogramming winds others back, and failing organs are regrown rather than replaced. Those who can afford the treatments now age at half the old pace. It isn't immortality, but it buys a great deal of time.",
+  "de": "Senolytische Medikamente räumen verbrauchte Zellen aus, partielle Reprogrammierung spult andere zurück, und versagende Organe werden nachgezüchtet statt ersetzt. Wer sich die Behandlungen leisten kann, altert jetzt halb so schnell wie früher. Es ist keine Unsterblichkeit, aber es verschafft eine Menge Zeit."
+ },
  "reusable_rocketry": {
   "en": "Reusable Rocketry",
   "de": "Wiederverwendbare Raketentechnik"
@@ -1183,9 +1239,17 @@
   "en": "Self-Directed Evolution",
   "de": "Selbstgesteuerte Evolution"
  },
+ "self_directed_evolution_desc": {
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
+  "de": "Die Genbearbeitung reicht längst weit über die Oberfläche hinaus. Menschen entwickeln neue Sinne und leben mit konstruierten Stoffwechseln, und sie geben ihren Kindern Körper mit, die für die Tiefsee, die Polarkälte, geringe Schwerkraft oder hartes Vakuum gemacht sind. In zwei Generationen kann eine Familie eine andere Art von Geschöpf sein, und zwar eine, zu der sie sich selbst gemacht hat."
+ },
  "self_driving_laboratories": {
   "en": "Self-Driving Laboratories",
   "de": "Selbstfahrende Labore"
+ },
+ "self_driving_laboratories_desc": {
+  "en": "Robotic labs run by AI design an experiment, carry it out, read the results and choose the next one, around the clock. A search that once took a team of graduate students a decade can finish over a long weekend, provided someone remembers to restock the reagents.",
+  "de": "Von KI betriebene Roboterlabore entwerfen ein Experiment, führen es durch, lesen die Ergebnisse aus und wählen das nächste aus, rund um die Uhr. Eine Suche, für die früher ein Team von Doktoranden ein Jahrzehnt brauchte, kann über ein langes Wochenende abgeschlossen werden, sofern jemand daran denkt, die Reagenzien aufzufüllen."
  },
  "semiautomatic_rifle": {
   "en": "Semi-Automatic Rifle",
@@ -1367,6 +1431,10 @@
   "en": "Terraforming",
   "de": "Terraforming"
  },
+ "terraforming_desc": {
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
+  "de": "Das Geoengineering hat bewiesen, dass sich das Klima eines Planeten absichtlich verändern lässt. Das Terraforming wendet dieselbe Kunst auf andere Welten an: Spiegel im Orbit, um den Mars zu erwärmen, Fabriken, um seine Luft zu verdichten, einen Sonnenschirm, um die Venus zu kühlen. Die Arbeit dauert Jahrzehnte und der Lohn Jahrhunderte, und die ersten Kinder, die ohne Helm unter einem Marshimmel gehen werden, sind noch nicht geboren. Schaltet das Koloniemodul „Terraforming“ frei."
+ },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",
   "de": "Terrorismus und Terrorismusbekämpfung"
@@ -1411,6 +1479,10 @@
   "en": "Vactrains",
   "de": "Vakuumzüge"
  },
+ "vactrains_desc": {
+  "en": "Pump the air out of a sealed tube and a maglev capsule inside meets almost nothing to slow it down. Superconducting magnets carry it at an airliner's speed for a fraction of the energy, and freight pods share the tubes around the clock. Cities five hundred miles apart are now less than an hour apart.",
+  "de": "Man pumpe die Luft aus einer abgedichteten Röhre, und eine Magnetschwebekapsel darin trifft auf fast nichts, das sie bremst. Supraleitende Magnete tragen sie mit der Geschwindigkeit eines Verkehrsflugzeugs für einen Bruchteil der Energie, und Frachtkapseln teilen sich die Röhren rund um die Uhr. Städte, die fünfhundert Meilen voneinander entfernt liegen, sind nun weniger als eine Stunde voneinander entfernt."
+ },
  "video_games": {
   "en": "Video Games",
   "de": "Videospiele"
@@ -1430,6 +1502,10 @@
  "von_neumann_machines": {
   "en": "Von Neumann Machines",
   "de": "Von-Neumann-Maschinen"
+ },
+ "von_neumann_machines_desc": {
+  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.",
+  "de": "John von Neumann fragte, ob eine Maschine eine Kopie ihrer selbst bauen könnte. Unsere kann es: Eine Keimfabrik gräbt ihr eigenes Erz, stellt ihre eigenen Teile her und baut eine zweite Fabrik zusammen, und die beiden bauen vier. Bautrupps entscheiden heute meist nur noch, wohin die nächste Kopie kommt, und der Asteroidengürtel füllt sich mit Bergleuten, die niemand gestartet hat."
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",

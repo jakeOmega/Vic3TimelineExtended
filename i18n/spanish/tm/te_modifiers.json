@@ -148,24 +148,24 @@
   "es": "Defensa económica encubierta"
  },
  "country_covert_defense_economic_add_desc": {
-  "en": "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and space programme espionage.",
-  "es": "Defensa adicional contra las [concept_covert_operations|l] económicas, como la subversión financiera, el espionaje industrial y el espionaje del programa espacial."
+  "en": "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and Space Program Espionage.",
+  "es": "Defensa adicional contra las [concept_covert_operations|l] económicas, como la subversión financiera, el espionaje industrial y el Espionaje del programa espacial."
  },
  "country_covert_defense_ideological_add": {
   "en": "Ideological Covert Defense",
   "es": "Defensa ideológica encubierta"
  },
  "country_covert_defense_ideological_add_desc": {
-  "en": "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change and the cultivation of assets.",
-  "es": "Defensa adicional contra las [concept_covert_operations|l] ideológicas, como la injerencia electoral, las campañas de influencia, la subversión ideológica, la desestabilización, el cambio de régimen y la captación de activos."
+  "en": "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change, Cultivate Assets and Incite Colonial Autonomy.",
+  "es": "Defensa adicional contra las [concept_covert_operations|l] ideológicas, como la injerencia electoral, las campañas de influencia, la subversión ideológica, la desestabilización, el cambio de régimen, Captar agentes e Incitar la autonomía colonial."
  },
  "country_covert_defense_military_add": {
   "en": "Military Covert Defense",
   "es": "Defensa militar encubierta"
  },
  "country_covert_defense_military_add_desc": {
-  "en": "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage, nuclear programme sabotage and searches for loose nuclear material.",
-  "es": "Defensa adicional contra las [concept_covert_operations|l] militares, como el espionaje militar, la interrupción de las comunicaciones, el sabotaje de [concept_infrastructure|l], el sabotaje del programa nuclear y la búsqueda de material nuclear extraviado."
+  "en": "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage, Nuclear Program Sabotage, Sabotage Colony, Survey Colony Defenses and Secure Loose Material.",
+  "es": "Defensa adicional contra las [concept_covert_operations|l] militares, como el espionaje militar, la interrupción de las comunicaciones, el sabotaje de [concept_infrastructure|l], el Sabotaje del programa nuclear, Sabotear colonia, Reconocer defensas de la colonia y Asegurar material nuclear disperso."
  },
  "country_covert_operation_efficiency_mult": {
   "en": "Covert Operation Efficiency",
@@ -351,6 +351,14 @@
   "en": "A flat percentage point increase to the likelihood of enacting this specific law",
   "es": "Un aumento fijo, en puntos porcentuales, de la probabilidad de promulgar esta ley en concreto"
  },
+ "country_environmental_movement_radicalism_add": {
+  "en": "Environmental Movement Radicalism",
+  "es": "Radicalismo del movimiento ecologista"
+ },
+ "country_environmental_movement_radicalism_add_desc": {
+  "en": "Raises or lowers how radical the Environmental Movement in this country is. National climate policies in force lower it.",
+  "es": "Aumenta o reduce lo radical que es el movimiento ecologista de este país. Las políticas climáticas nacionales en vigor lo reducen."
+ },
  "country_family_limitation_literacy_mult": {
   "en": "Family Limitation Among the Literate[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "es": "Limitación familiar entre los alfabetizados[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
@@ -374,6 +382,46 @@
  "country_finance_value_monthly_add_desc": {
   "en": "A direct monthly change to the current [concept_banking_cycle] value.",
   "es": "Cambio mensual directo en el valor actual del [concept_banking_cycle|l]."
+ },
+ "country_gm_monument_ceremonial_share_add": {
+  "en": "Grandeur of Every Monument in Legitimacy and Authority",
+  "es": "Grandeza de todo monumento en legitimidad y autoridad"
+ },
+ "country_gm_monument_ceremonial_share_add_desc": {
+  "en": "Legitimacy and the Leader's authority from monuments also count this share of the grandeur of every monument, not only those to the regime and the Leader, under the monument policy $gm_policy_ceremonial$.",
+  "es": "La legitimidad y la autoridad del Líder que dan los monumentos cuentan también esta proporción de la grandeza de cada monumento, no solo la de los dedicados al régimen y al Líder, con la política de monumentos $gm_policy_ceremonial$."
+ },
+ "country_gm_monument_cultural_pull_mult": {
+  "en": "Cultural Pull from Monuments",
+  "es": "Atractivo cultural de los monumentos"
+ },
+ "country_gm_monument_cultural_pull_mult_desc": {
+  "en": "The cultural pull our Grand Monuments give, under the monument policy $gm_policy_culture$.",
+  "es": "El atractivo cultural que dan nuestros grandes monumentos, con la política de monumentos $gm_policy_culture$."
+ },
+ "country_gm_monument_education_step_add": {
+  "en": "Education Access per Step of Monument Grandeur",
+  "es": "Acceso a la educación por escalón de grandeza de los monumentos"
+ },
+ "country_gm_monument_education_step_add_desc": {
+  "en": "Education access in every state for each step of our monuments' grandeur, under the monument policy $gm_policy_education$.",
+  "es": "Acceso a la educación en cada estado por cada escalón de la grandeza de nuestros monumentos, con la política de monumentos $gm_policy_education$."
+ },
+ "country_gm_monument_prestige_mult": {
+  "en": "Prestige from Monuments",
+  "es": "Prestigio de los monumentos"
+ },
+ "country_gm_monument_prestige_mult_desc": {
+  "en": "The prestige our Grand Monuments give, under the monument policy $gm_policy_culture$ while cultural pull does nothing.",
+  "es": "El prestigio que dan nuestros grandes monumentos, con la política de monumentos $gm_policy_culture$ mientras el atractivo cultural no hace nada."
+ },
+ "country_gm_monument_tourism_mult": {
+  "en": "$tourism$ from Each Monument",
+  "es": "$tourism$ de cada monumento"
+ },
+ "country_gm_monument_tourism_mult_desc": {
+  "en": "The tourism each Grand Monument brings, under the monument policy $gm_policy_open$.",
+  "es": "El turismo que aporta cada gran monumento, con la política de monumentos $gm_policy_open$."
  },
  "country_grain_export_tariffs_rate_add": {
   "en": "@grain! $grain$ Export Tariff Rate",
@@ -432,8 +480,8 @@
   "es": "Eficiencia de transmisión de la red"
  },
  "country_grid_transmission_efficiency_add_desc": {
-  "en": "The share of the $grid_power$ a $building_grid_transfer_station$ receives that it turns back into $electricity$. The rest is lost in transmission.",
-  "es": "La proporción de $grid_power$ que recibe $building_grid_transfer_station$ y que vuelve a convertir en $electricity$. El resto se pierde en la transmisión."
+  "en": "The share of the $electricity$ sent to a $building_grid_transfer_station$ over its grid that arrives. The rest is lost in transmission.",
+  "es": "La proporción de $electricity$ enviada a una $building_grid_transfer_station$ por su red que llega a destino. El resto se pierde en la transmisión."
  },
  "country_household_greenhouse_gas_emissions_mult": {
   "en": "Household Greenhouse Gas Emissions",
@@ -895,6 +943,70 @@
   "en": "How much faster the market price of longevity care falls each year, bringing it within reach of poorer people sooner. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "es": "Cuánto más rápido cae cada año el precio de mercado de la medicina de la longevidad, lo que la pone antes al alcance de los más pobres. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
+ "country_nd_crew_strain_monthly_add": {
+  "en": "Crew Strain a Month",
+  "es": "Desgaste de la tripulación al mes"
+ },
+ "country_nd_crew_strain_monthly_add_desc": {
+  "en": "How much crew strain builds, or recovers, each month.",
+  "es": "Cuánto desgaste de la tripulación se acumula, o se recupera, cada mes."
+ },
+ "country_nd_crisis_danger_add": {
+  "en": "Danger in Our Crises",
+  "es": "Peligro en nuestras crisis"
+ },
+ "country_nd_crisis_danger_add_desc": {
+  "en": "Added to the danger of a nuclear crisis we are a party to.",
+  "es": "Se suma al peligro de una crisis nuclear en la que somos parte."
+ },
+ "country_nd_custody_cost_mult": {
+  "en": "Cost of Holding the Warheads",
+  "es": "Coste de custodiar las ojivas"
+ },
+ "country_nd_custody_cost_mult_desc": {
+  "en": "What custody of the arsenal costs, part of the deterrent's weekly upkeep.",
+  "es": "Lo que cuesta la custodia del arsenal, parte del mantenimiento semanal de la disuasión."
+ },
+ "country_nd_custody_loss_add": {
+  "en": "Warheads Lost When Custody Changes Hands",
+  "es": "Ojivas perdidas al cambiar de manos la custodia"
+ },
+ "country_nd_custody_loss_add_desc": {
+  "en": "The share of the arsenal that goes missing when it changes hands, in a civil war or when an arsenal passes to another country. Commanders who hold launch authority can also take their weapons with them.",
+  "es": "La parte del arsenal que desaparece al cambiar de manos, en una guerra civil o cuando un arsenal pasa a otro país. Los mandos con autoridad de lanzamiento también pueden llevarse sus armas."
+ },
+ "country_nd_halt_chance_add": {
+  "en": "Chance of a Halt",
+  "es": "Probabilidad de detención"
+ },
+ "country_nd_halt_chance_add_desc": {
+  "en": "The chance that someone in the chain stops a launch the government never ordered.",
+  "es": "La probabilidad de que alguien en la cadena detenga un lanzamiento que el gobierno nunca ordenó."
+ },
+ "country_nd_incident_rate_mult": {
+  "en": "Everyday Incident Rate",
+  "es": "Frecuencia de incidentes cotidianos"
+ },
+ "country_nd_incident_rate_mult_desc": {
+  "en": "How often a false warning, a weapons accident or a commander cut off from the capital comes up, against Routine readiness. A crisis adds misreadings of its own.",
+  "es": "Con qué frecuencia surge una falsa alarma, un accidente con armas o un mando aislado de la capital, frente a la preparación rutinaria. Una crisis añade sus propios errores de interpretación."
+ },
+ "country_nd_launch_credit_add": {
+  "en": "Launch Credit",
+  "es": "Crédito de lanzamiento"
+ },
+ "country_nd_launch_credit_add_desc": {
+  "en": "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer.",
+  "es": "La parte de las ojivas que un primer ataque destruiría y que logran escapar antes de que impacte. Una crisis las cuenta entre las ojivas que sobrevivirían para responder."
+ },
+ "country_nd_threat_pressure_add": {
+  "en": "Pressure Our Threats Exert",
+  "es": "Presión que ejercen nuestras amenazas"
+ },
+ "country_nd_threat_pressure_add_desc": {
+  "en": "Added to the pressure to concede on a country we threaten.",
+  "es": "Se suma a la presión para ceder sobre un país al que amenazamos."
+ },
  "country_nuclear_program_progress_mult": {
   "en": "[concept_nuclear_program] Progress",
   "es": "Progreso del [concept_nuclear_program|l]"
@@ -996,8 +1108,40 @@
   "es": "Prima de riesgo"
  },
  "country_risk_premium_add_desc": {
-  "en": "The part of your government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! your credit standing, after the floor that standing cannot fall below — so a crisis always costs you, however sound your finances, and relief measures can pull the charge back down again.",
-  "es": "La parte del tipo de endeudamiento de tu gobierno que depende de lo que #b está ocurriendo#!: el estado del ciclo financiero, las intervenciones de emergencia, el desenlace de las crisis bancarias, el peso de la deuda ya contraída y cualquier impago en la memoria viva. Se cobra #b por encima de#! tu solvencia crediticia, después del mínimo por debajo del cual esta no puede caer, de modo que una crisis siempre te cuesta, por muy sanas que estén tus finanzas, y las medidas de alivio pueden volver a reducir el recargo."
+  "en": "The part of a government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! the country's credit standing, after the floor that standing cannot fall below — so a crisis always costs a country, however sound its finances, and relief measures can pull the charge back down again.",
+  "es": "La parte del tipo de endeudamiento de un gobierno que depende de lo que #b está ocurriendo#!: el estado del ciclo financiero, las intervenciones de emergencia, el desenlace de las crisis bancarias, el peso de la deuda ya contraída y cualquier impago en la memoria viva. Se cobra #b por encima de#! la solvencia crediticia del país, después del mínimo por debajo del cual esta no puede caer, de modo que una crisis siempre le cuesta a un país, por muy sanas que estén sus finanzas, y las medidas de alivio pueden volver a reducir el recargo."
+ },
+ "country_seabed_claim_floor_add": {
+  "en": "Unused Seabed Claims Kept Each January",
+  "es": "Reclamaciones del lecho marino sin usar conservadas cada enero"
+ },
+ "country_seabed_claim_floor_add_desc": {
+  "en": "The share of our unused [concept_seabed_claim]s in each basin that each January sharing leaves us, whatever our rivals' weight.",
+  "es": "La proporción de nuestras [Concept('concept_seabed_claim','reclamaciones del lecho marino')] sin usar en cada cuenca que nos deja cada reparto de enero, sea cual sea el peso de nuestros rivales."
+ },
+ "country_seabed_claim_weight_mult": {
+  "en": "Seabed Claim Weight",
+  "es": "Peso de la reclamación del lecho marino"
+ },
+ "country_seabed_claim_weight_mult_desc": {
+  "en": "Our claim weight in every ocean basin, which sets our share of each basin's [concept_seabed_licence]s.",
+  "es": "Nuestro peso de la reclamación en todas las cuencas oceánicas, que fija nuestra parte de las [Concept('concept_seabed_licence','licencias del lecho marino')] de cada cuenca."
+ },
+ "country_seabed_naval_weight_mult": {
+  "en": "Naval Power Projection in Seabed Claims",
+  "es": "Proyección de poder naval en las reclamaciones del lecho marino"
+ },
+ "country_seabed_naval_weight_mult_desc": {
+  "en": "How much more our naval power projection counts in our seabed claim weight.",
+  "es": "Cuánto más cuenta nuestra proyección de poder naval en nuestro peso de la reclamación del lecho marino."
+ },
+ "country_seabed_unilateral_relations_add": {
+  "en": "Relations a Year with Each Other Unilateral Claimant",
+  "es": "Relaciones al año con cada otro reclamante unilateral"
+ },
+ "country_seabed_unilateral_relations_add_desc": {
+  "en": "Relations each year with every other country licensing the seabed unilaterally in a basin where we both have coast.",
+  "es": "Relaciones cada año con cualquier otro país que otorgue licencias del lecho marino de forma unilateral en una cuenca donde ambos tenemos costa."
  },
  "country_ship_type_destroyer_construction_efficiency_add": {
   "en": "$ship_type_destroyer$ Construction Efficiency",
@@ -1112,12 +1256,12 @@
   "es": "El número de Receptores de energía solar adicionales que se pueden construir. Cada nivel de Colector solar orbital añade 10 cupos, y cada nivel de Receptor de energía solar usa 1 cupo."
  },
  "country_space_race_max_funding_add": {
-  "en": "[concept_space_race] Maximum Funding Level",
-  "es": "Nivel máximo de financiación de la [concept_space_race|l]"
+  "en": "[concept_space_race] Funding Cap",
+  "es": "Límite de financiación de la [concept_space_race|l]"
  },
  "country_space_race_max_funding_add_desc": {
-  "en": "Increases the maximum funding level available for the [concept_space_race] program",
-  "es": "Aumenta el nivel máximo de financiación disponible para el programa de la [concept_space_race|l]"
+  "en": "Raises the cap on each [concept_space_race] milestone's funding. Funding can go up to six levels past the cap, but each level past it adds less pace than the one before.",
+  "es": "Aumenta el límite de financiación de cada hito de la [concept_space_race|l]. La financiación puede subir hasta seis niveles por encima del límite, pero cada nivel adicional aporta menos ritmo que el anterior."
  },
  "country_space_race_progress_add": {
   "en": "[concept_space_race] Monthly Progress",
@@ -1143,9 +1287,21 @@
   "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
   "es": "Ajuste multiplicativo del riesgo de fracaso de la [concept_space_race|l]. El enfoque seguro en los hitos activos reduce el riesgo de fracaso a costa de un progreso más lento."
  },
+ "country_sr_colony_growth_add": {
+  "en": "Colony Growth a Month",
+  "es": "Crecimiento de la colonia al mes"
+ },
+ "country_sr_colony_growth_add_desc": {
+  "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
+  "es": "Cuánto más rápido crece cada mes la población de cada colonia que tenemos, además del #v 0,2%#! en que crece toda colonia, con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
+ },
  "country_sr_colony_slots_add": {
   "en": "Colony Module Slots",
   "es": "Espacios de módulos coloniales"
+ },
+ "country_sr_colony_slots_add_desc": {
+  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
+  "es": "Ranuras de módulo en cada colonia que tenemos, además de las que da su tamaño, con los ajustes de colonias simples y completas de la regla de la Carrera espacial. Hábitats, Puertos espaciales, Defensas y las instalaciones las comparten, y una colonia puede tomar hasta #v 4#! [Concept('concept_sr_module','módulos de colonia')] más allá de ellas a un precio creciente."
  },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
@@ -1202,6 +1358,22 @@
  "country_st_res_artillery_decay_add_desc": {
   "en": "Fraction of the artillery stockpile lost to wear and obsolescence per year.",
   "es": "Fracción de las existencias de artillería que se pierde cada año por desgaste y obsolescencia."
+ },
+ "country_st_res_copper_capacity_add": {
+  "en": "$copper$ Reserve Capacity",
+  "es": "Capacidad de reserva de $copper$"
+ },
+ "country_st_res_copper_capacity_add_desc": {
+  "en": "Maximum conductive metals that can be held in the national strategic reserve.",
+  "es": "Máximo de metales conductores que se pueden guardar en la reserva estratégica nacional."
+ },
+ "country_st_res_copper_decay_add": {
+  "en": "$copper$ Reserve Decay",
+  "es": "Deterioro de la reserva de $copper$"
+ },
+ "country_st_res_copper_decay_add_desc": {
+  "en": "Fraction of the conductive metals stockpile lost per year. Ingots and cathodes keep indefinitely, so the base rate is zero.",
+  "es": "Fracción de las existencias de metales conductores que se pierde al año. Los lingotes y los cátodos se conservan indefinidamente, así que la tasa base es cero."
  },
  "country_st_res_fertilizer_capacity_add": {
   "en": "$fertilizer$ Reserve Capacity",
@@ -1347,6 +1519,78 @@
   "en": "Bonus to your [concept_subjugation_strength] when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5).",
   "es": "Bonificación a tu [concept_subjugation_strength|l] cuando diriges una Liga comercial y la [concept_economic_dependence|l] del objetivo respecto a ti es al menos #b Dependiente#! (nivel 3 de 5)."
  },
+ "country_te_mon_asset_purchase_pressure_add": {
+  "en": "Price Pressure from Asset Purchases",
+  "es": "Presión de precios por compra de activos"
+ },
+ "country_te_mon_asset_purchase_pressure_add_desc": {
+  "en": "Upward pressure on prices from your central bank buying assets with money it creates. Counted apart from $country_inflation_pressure_add$, so [concept_banking_inflation_anchoring] does not absorb it.",
+  "es": "Presión al alza sobre los precios por la compra de activos de tu banco central con dinero que crea. Se cuenta aparte de $country_inflation_pressure_add$, así que el [concept_banking_inflation_anchoring|l] no la absorbe."
+ },
+ "country_te_mon_expected_inflation_add": {
+  "en": "Expected Inflation",
+  "es": "Inflación esperada"
+ },
+ "country_te_mon_expected_inflation_add_desc": {
+  "en": "What your lenders and workers assume prices will do, raised at once. It does not move on metal or on another country's money.",
+  "es": "Lo que tus prestamistas y trabajadores suponen que harán los precios, elevado de golpe. No se mueve con el metal ni con el dinero de otro país."
+ },
+ "country_te_mon_fx_debt_protection_add": {
+  "en": "Protection from Foreign-Currency Debt",
+  "es": "Protección frente a la deuda en moneda extranjera"
+ },
+ "country_te_mon_fx_debt_protection_add_desc": {
+  "en": "How much of the [concept_banking_risk_premium] a currency below par adds is shielded, built up a month at a time.",
+  "es": "Cuánto de la [concept_banking_risk_premium|l] que añade una moneda por debajo de la par queda protegido, acumulándose mes a mes."
+ },
+ "country_te_mon_inflow_price_pressure_mult": {
+  "en": "Price Pressure from Gold Coming In",
+  "es": "Presión de precios por la entrada de oro"
+ },
+ "country_te_mon_inflow_price_pressure_mult_desc": {
+  "en": "How much of the upward pressure on prices that gold arriving from abroad adds reaches your prices.",
+  "es": "Cuánta de la presión al alza sobre los precios que añade el oro que llega del extranjero alcanza a tus precios."
+ },
+ "country_te_mon_inflow_pull_mult": {
+  "en": "Pull of Money Coming In",
+  "es": "Atracción del dinero que entra"
+ },
+ "country_te_mon_inflow_pull_mult_desc": {
+  "en": "How far a real rate above the world's draws gold in and lifts your [concept_banking_exchange_rate]. Money and gold leaving are not slowed.",
+  "es": "Hasta qué punto un tipo real por encima del mundial atrae oro y eleva tu [concept_banking_exchange_rate|l]. El dinero y el oro que salen no se frenan."
+ },
+ "country_te_mon_minting_gdp_add": {
+  "en": "Money Created a Year, of GDP",
+  "es": "Dinero creado al año, del PIB"
+ },
+ "country_te_mon_minting_gdp_add_desc": {
+  "en": "Spending your bank pays for with money it creates rather than money you borrow. For a small economy that is a fifth again on top of an ordinary mint, and a good deal more for a large one, since the ordinary mint stops growing past a certain size.",
+  "es": "Gasto que tu banco paga con dinero que crea en lugar de dinero que pides prestado. Para una economía pequeña, es una quinta parte más que una acuñación ordinaria, y bastante más para una grande, ya que la acuñación ordinaria deja de crecer a partir de cierto tamaño."
+ },
+ "country_te_mon_printing_pressure_add": {
+  "en": "Price Pressure from Printed Money",
+  "es": "Presión de precios por dinero impreso"
+ },
+ "country_te_mon_printing_pressure_add_desc": {
+  "en": "Upward pressure on prices from money your bank creates to pay for your spending. Counted apart from $country_inflation_pressure_add$, so [concept_banking_inflation_anchoring] does not absorb it, and more again once lenders and workers expect it.",
+  "es": "Presión al alza sobre los precios por el dinero que tu banco crea para pagar tu gasto. Se cuenta aparte de $country_inflation_pressure_add$, así que el [concept_banking_inflation_anchoring|l] no la absorbe, y aún más cuando prestamistas y trabajadores lo esperan."
+ },
+ "country_te_mon_rate_gap_pull_mult": {
+  "en": "Pull of the Rate Gap",
+  "es": "Atracción de la brecha de tipos"
+ },
+ "country_te_mon_rate_gap_pull_mult_desc": {
+  "en": "How far the gap between your [concept_banking_policy_rate] and the [concept_banking_world_rate] moves your [concept_banking_exchange_rate], your [concept_banking_gold_flow] and your [concept_banking_peg_confidence]. Inflation and debt still weigh on the currency in full.",
+  "es": "Hasta qué punto la diferencia entre tu [concept_banking_policy_rate|l] y el [concept_banking_world_rate|l] mueve tu [concept_banking_exchange_rate|l], tu [concept_banking_gold_flow|l] y tu [concept_banking_peg_confidence|l]. La inflación y la deuda siguen pesando por completo sobre la moneda."
+ },
+ "country_te_mon_reserve_purchase_gdp_add": {
+  "en": "Gold Bought for the Bank, of Annual GDP, at Most",
+  "es": "Oro comprado para el banco, del PIB anual, como máximo"
+ },
+ "country_te_mon_reserve_purchase_gdp_add_desc": {
+  "en": "Treasury money paid to exporters for the foreign earnings they surrender, which adds to the [concept_banking_bank_gold].",
+  "es": "Dinero del Tesoro pagado a los exportadores por los ingresos en divisas que entregan, lo que se suma al [concept_banking_bank_gold|l]."
+ },
  "country_te_pb_principle_slots_add": {
   "en": "Extra [concept_power_bloc_principle] Slots",
   "es": "Cupos adicionales de [Concept('concept_power_bloc_principle', 'principios')]"
@@ -1360,8 +1604,8 @@
   "es": "Objetivo de la Autoridad de la ONU"
  },
  "country_un_authority_target_add_desc": {
-  "en": "Added to the target that [concept_un_authority] moves toward, multiplied by this country's weight in world affairs: its share of world [concept_prestige] against a typical [concept_great_power]'s (×1), up to ×5. A superpower counts several times over and a micro-state hardly at all. It counts in full, for or against, while this country is a UN member that is not undermining the organisation. Outside the UN, or while undermining it, only a negative total counts: good policies then offset this country's bad ones and add nothing more. Summed over every country and held to −25 to +25 from all sources together, as the Policy line of the target. A negative value pulls authority down.",
-  "es": "Se suma al objetivo hacia el que se mueve la [concept_un_authority|l], multiplicado por el peso de este país en los asuntos mundiales: su cuota del [concept_prestige|l] mundial frente a la de una [concept_great_power|l] típica (×1), hasta ×5. Una superpotencia cuenta varias veces y un microestado apenas nada. Cuenta por completo, a favor o en contra, mientras este país sea miembro de la ONU y no socave la organización. Fuera de la ONU, o mientras la socave, solo cuenta un total negativo: entonces las buenas políticas compensan las malas de este país y no suman nada más. Se suma entre todos los países y se limita a entre −25 y +25 sumando todas las fuentes, como la línea de Política del objetivo. Un valor negativo reduce la autoridad."
+  "en": "Added to the target that [concept_un_authority] moves toward, multiplied by this country's [Concept('concept_un_weight','weight in world affairs')]: its share of world [concept_prestige] against a typical [concept_great_power]'s (×1), up to ×5. It counts in full, for or against, while this country is a UN member that is not undermining the organization. Outside the UN, or while undermining it, only a negative total counts: good policies then only offset bad ones. Summed over every country and held to −25 to +25 from all sources together, as the Policy line of the target.",
+  "es": "Se suma al objetivo hacia el que se mueve la [concept_un_authority|l], multiplicado por el [Concept('concept_un_weight','peso en los asuntos mundiales')] de este país: su cuota del [concept_prestige|l] mundial frente a la de una [concept_great_power|l] típica (×1), hasta ×5. Cuenta por completo, a favor o en contra, mientras este país sea miembro de la ONU y no socave la organización. Fuera de la ONU, o mientras la socave, solo cuenta un total negativo: entonces las buenas políticas solo compensan las malas. Se suma entre todos los países y se limita a entre −25 y +25 sumando todas las fuentes, como la línea de Política del objetivo."
  },
  "country_un_lobbying_fund_recipients_mult": {
   "en": "UN Lobbying Effectiveness with Aid Recipients",
@@ -1507,6 +1751,14 @@
   "en": "The amount of @consumer_appliances! $consumer_appliances$ consumed by buildings",
   "es": "Cantidad de $consumer_appliances$ @consumer_appliances! que consumen los edificios"
  },
+ "goods_input_copper_mult": {
+  "en": "@copper! $copper$ Input",
+  "es": "Insumo de $copper$ @copper!"
+ },
+ "goods_input_copper_mult_desc": {
+  "en": "The amount of @copper! $copper$ consumed by buildings",
+  "es": "Cantidad de $copper$ @copper! que consumen los edificios"
+ },
  "goods_input_digital_access_add": {
   "en": "@digital_access! $digital_access$ Input",
   "es": "Insumo de $digital_access$ @digital_access!"
@@ -1528,6 +1780,14 @@
   "es": "Insumo de $digital_assets$ @digital_assets!"
  },
  "goods_input_digital_assets_add_desc": {
+  "en": "The amount of @digital_assets! $digital_assets$ consumed by buildings",
+  "es": "Cantidad de $digital_assets$ @digital_assets! que consumen los edificios"
+ },
+ "goods_input_digital_assets_mult": {
+  "en": "@digital_assets! $digital_assets$ Input",
+  "es": "Insumo de $digital_assets$ @digital_assets!"
+ },
+ "goods_input_digital_assets_mult_desc": {
   "en": "The amount of @digital_assets! $digital_assets$ consumed by buildings",
   "es": "Cantidad de $digital_assets$ @digital_assets! que consumen los edificios"
  },
@@ -1652,12 +1912,20 @@
   "es": "Cantidad de $motor_ships$ @motor_ships! que consumen los edificios"
  },
  "goods_input_robotics_add": {
-  "en": "@robotics! Robotics Input",
-  "es": "Insumo de robótica @robotics!"
+  "en": "@robotics! $robotics$ Input",
+  "es": "Insumo de $robotics$ @robotics!"
  },
  "goods_input_robotics_add_desc": {
-  "en": "The amount of @robotics! Robotics consumed by buildings",
-  "es": "Cantidad de robótica @robotics! que consumen los edificios"
+  "en": "The amount of @robotics! $robotics$ consumed by buildings",
+  "es": "Cantidad de $robotics$ @robotics! que consumen los edificios"
+ },
+ "goods_input_robotics_mult": {
+  "en": "@robotics! $robotics$ Input",
+  "es": "Insumo de $robotics$ @robotics!"
+ },
+ "goods_input_robotics_mult_desc": {
+  "en": "The amount of @robotics! $robotics$ consumed by buildings",
+  "es": "Cantidad de $robotics$ @robotics! que consumen los edificios"
  },
  "goods_input_services_add": {
   "en": "@services! $services$ Input",
@@ -1682,6 +1950,14 @@
  "goods_input_tech_metals_add_desc": {
   "en": "The amount of @tech_metals! Tech Metals consumed by buildings",
   "es": "Cantidad de metales tecnológicos @tech_metals! que consumen los edificios"
+ },
+ "goods_input_telephones_mult": {
+  "en": "@telephones! $telephones$ Input",
+  "es": "Insumo de $telephones$ @telephones!"
+ },
+ "goods_input_telephones_mult_desc": {
+  "en": "The amount of @telephones! $telephones$ consumed by buildings",
+  "es": "Cantidad de $telephones$ @telephones! que consumen los edificios"
  },
  "goods_input_wood_mult": {
   "en": "@wood! $wood$ Input",
@@ -1762,6 +2038,14 @@
  "goods_output_consumer_appliances_mult_desc": {
   "en": "A bonus or penalty to the amount of @consumer_appliances! $consumer_appliances$ produced by buildings",
   "es": "Bonificación o penalización a la cantidad de $consumer_appliances$ @consumer_appliances! que producen los edificios"
+ },
+ "goods_output_copper_mult": {
+  "en": "Building @copper! $copper$ output",
+  "es": "Producción de $copper$ @copper! de los edificios"
+ },
+ "goods_output_copper_mult_desc": {
+  "en": "A bonus or penalty to the amount of @copper! $copper$ produced by buildings",
+  "es": "Bonificación o penalización a la cantidad de $copper$ @copper! que producen los edificios"
  },
  "goods_output_digital_access_add": {
   "en": "@digital_access! $digital_access$ Output",
@@ -2190,6 +2474,14 @@
  "goods_trade_advantage_tanks_mult_desc": {
   "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('tanks').GetName].",
   "es": "Aumento o disminución de la [concept_trade_advantage|l] general de [GetGoods('tanks').GetName]."
+ },
+ "interest_group_ideology_environmentalists_leader_chance_mult": {
+  "en": "$ideology_environmentalists$ [concept_leader] Chance",
+  "es": "Probabilidad de [concept_leader|l] $ideology_environmentalists$"
+ },
+ "interest_group_ideology_environmentalists_leader_chance_mult_desc": {
+  "en": "An increase or decrease to the chance for this [concept_interest_group] to select a [concept_leader] with the $ideology_environmentalists$ [concept_ideology]",
+  "es": "Un aumento o una disminución de la probabilidad de que este [concept_interest_group|l] elija un [concept_leader|l] con la [concept_ideology|l] $ideology_environmentalists$"
  },
  "state_ageing_rate_add": {
   "en": "Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
@@ -3495,6 +3787,14 @@
   "en": "Increases the maximum number of levels that [GetBuildingType('building_infosys_mysore_campus').GetName] can expand to in this state",
   "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_infosys_mysore_campus').GetName] en este estado"
  },
+ "state_building_ingen_biological_preserve_max_level_add": {
+  "en": "[GetBuildingType('building_ingen_biological_preserve').GetName] Max Level",
+  "es": "Nivel máximo de [GetBuildingType('building_ingen_biological_preserve').GetName]"
+ },
+ "state_building_ingen_biological_preserve_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_ingen_biological_preserve').GetName] can expand to in this state",
+  "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_ingen_biological_preserve').GetName] en este estado"
+ },
  "state_building_ingolstadt_power_station_max_level_add": {
   "en": "[GetBuildingType('building_ingolstadt_power_station').GetName] Max Level",
   "es": "Nivel máximo de [GetBuildingType('building_ingolstadt_power_station').GetName]"
@@ -4191,6 +4491,14 @@
   "en": "Increases the maximum number of levels that [GetBuildingType('building_prussian_railway_directorate').GetName] can expand to in this state",
   "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_prussian_railway_directorate').GetName] en este estado"
  },
+ "state_building_public_housing_max_level_add": {
+  "en": "[GetBuildingType('building_public_housing').GetName] Max Level",
+  "es": "Nivel máximo de [GetBuildingType('building_public_housing').GetName]"
+ },
+ "state_building_public_housing_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_public_housing').GetName] can expand to in this state",
+  "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_public_housing').GetName] en este estado"
+ },
  "state_building_putilov_works_max_level_add": {
   "en": "[GetBuildingType('building_putilov_works').GetName] Max Level",
   "es": "Nivel máximo de [GetBuildingType('building_putilov_works').GetName]"
@@ -4222,6 +4530,14 @@
  "state_building_ramirez_vila_real_cannery_max_level_add_desc": {
   "en": "Increases the maximum number of levels that [GetBuildingType('building_ramirez_vila_real_cannery').GetName] can expand to in this state",
   "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_ramirez_vila_real_cannery').GetName] en este estado"
+ },
+ "state_building_rejoovenesense_compound_max_level_add": {
+  "en": "[GetBuildingType('building_rejoovenesense_compound').GetName] Max Level",
+  "es": "Nivel máximo de [GetBuildingType('building_rejoovenesense_compound').GetName]"
+ },
+ "state_building_rejoovenesense_compound_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_rejoovenesense_compound').GetName] can expand to in this state",
+  "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_rejoovenesense_compound').GetName] en este estado"
  },
  "state_building_rekal_hq_max_level_add": {
   "en": "[GetBuildingType('building_rekal_hq').GetName] Max Level",
@@ -4911,6 +5227,54 @@
   "en": "The share of deaths from the diseases of age that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "es": "La proporción de muertes por las enfermedades de la edad que la medicina puede evitar allí donde la gente tiene acceso a ella. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
+ "state_climate_cold_relief_add": {
+  "en": "Cold Relief",
+  "es": "Alivio del frío"
+ },
+ "state_climate_cold_relief_add_desc": {
+  "en": "How far heating and insulation ease the winter cold that makes a state less comfortable to live in, cutting the cold part of its [concept_local_climate] penalty by this share.",
+  "es": "Hasta qué punto la calefacción y el aislamiento alivian el frío invernal que hace a un estado menos cómodo para vivir, reduciendo en esta proporción la parte de frío de su penalización del [concept_local_climate|l]."
+ },
+ "state_climate_disease_relief_add": {
+  "en": "Malaria Relief",
+  "es": "Alivio de la malaria"
+ },
+ "state_climate_disease_relief_add_desc": {
+  "en": "How far medicine and drainage protect newcomers from malaria, cutting the malaria part of a state's [concept_local_climate] penalty by this share.",
+  "es": "Hasta qué punto la medicina y el drenaje protegen a los recién llegados de la malaria, reduciendo en esta proporción la parte de malaria de la penalización del [concept_local_climate|l] de un estado."
+ },
+ "state_climate_heat_relief_add": {
+  "en": "Heat Relief",
+  "es": "Alivio del calor"
+ },
+ "state_climate_heat_relief_add_desc": {
+  "en": "How far fans and air conditioning ease the summer heat that makes a state less comfortable to live in, cutting the heat part of its [concept_local_climate] penalty by this share.",
+  "es": "Hasta qué punto los ventiladores y el aire acondicionado alivian el calor del verano que hace a un estado menos cómodo para vivir, reduciendo en esta proporción la parte de calor de su penalización del [concept_local_climate|l]."
+ },
+ "state_climate_sun_relief_add": {
+  "en": "Winter Sun Relief",
+  "es": "Alivio del sol invernal"
+ },
+ "state_climate_sun_relief_add_desc": {
+  "en": "How far weather modification and the last technologies close the gap between a gloomy winter and a sunny one, shrinking by this share both what a dark winter costs a state in [concept_local_climate] and what a bright one draws.",
+  "es": "Hasta qué punto la modificación del clima y las últimas tecnologías cierran la brecha entre un invierno sombrío y uno soleado, reduciendo en esta proporción tanto lo que un invierno oscuro cuesta a un estado en [concept_local_climate|l] como lo que atrae uno luminoso."
+ },
+ "state_climate_water_relief_add": {
+  "en": "Water Supply",
+  "es": "Suministro de agua"
+ },
+ "state_climate_water_relief_add_desc": {
+  "en": "How far pumps, dams and desalination make up for a dry state's want of water, cutting the water part of its [concept_local_climate] penalty by this share.",
+  "es": "Hasta qué punto las bombas, las presas y la desalinización compensan la falta de agua de un estado seco, reduciendo en esta proporción la parte de agua de su penalización del [concept_local_climate|l]."
+ },
+ "state_climate_winter_relief_add": {
+  "en": "Winter Relief",
+  "es": "Alivio del invierno"
+ },
+ "state_climate_winter_relief_add_desc": {
+  "en": "How far heating, insulation and warm clothing close the gap between a raw winter and a mild one, shrinking by this share both what a harsh winter costs a state in [concept_local_climate] and what a mild one draws.",
+  "es": "Hasta qué punto la calefacción, el aislamiento y la ropa de abrigo cierran la brecha entre un invierno crudo y uno suave, reduciendo en esta proporción tanto lo que un invierno duro cuesta a un estado en [concept_local_climate|l] como lo que atrae uno suave."
+ },
  "state_contraception_add": {
   "en": "Contraception[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "es": "Anticoncepción[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
@@ -5284,12 +5648,12 @@
   "es": "Cuántos niveles de riqueza más abajo lleva el mercado la medicina de la longevidad: las personas tanto más pobres pueden comprarla. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_malaria_control_add": {
-  "en": "Malaria Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
-  "es": "Control de la malaria[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+  "en": "Malaria Control",
+  "es": "Control de la malaria"
  },
  "state_malaria_control_add_desc": {
-  "en": "How far malaria's toll on the people who live with it has been brought under control. In a state with malaria, deaths from infection rise by a share that this takes away: all of it at 100%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
-  "es": "Hasta qué punto se ha controlado el tributo que la malaria se cobra entre quienes viven con ella. En un estado con malaria, las muertes por infección aumentan en una proporción que esto elimina: toda ella con un 100%. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+  "en": "How far malaria's toll on the people who live with it has been brought under control. In a state with malaria, deaths from infection rise by a share that this takes away: all of it at 100%. Used by the census on the Demographics tab. It also eases the malaria part of a state's [concept_local_climate] cost, whatever the Demographics rule.",
+  "es": "Hasta qué punto se ha controlado el tributo que la malaria se cobra entre quienes viven con ella. En un estado con malaria, las muertes por infección aumentan en una proporción que esto elimina: toda ella con un 100%. Lo usa el censo en la pestaña de Demografía. También reduce la parte de malaria del coste del [concept_local_climate|l] de un estado, sea cual sea la regla de Demografía."
  },
  "state_male_labor_participation_add": {
   "en": "Census: Men at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
@@ -5379,6 +5743,22 @@
   "en": "The chance of successfully defending a [Concept('concept_state','$concept_state|q$')] against a [concept_nuclear_strike].",
   "es": "La probabilidad de defender con éxito un [Concept('concept_state','$concept_state|q$')|l] frente a un [concept_nuclear_strike|l]."
  },
+ "state_orbital_battery_fire_add": {
+  "en": "Fire on Hostile Fleets at Earth",
+  "es": "Fuego contra flotas hostiles en la Tierra"
+ },
+ "state_orbital_battery_fire_add_desc": {
+  "en": "Fire this state's ground-to-orbit batteries put on enemy fleets in Earth orbit each month, while its owner controls the state",
+  "es": "Fuego que las baterías tierra-órbita de este estado dirigen cada mes contra flotas enemigas en la órbita terrestre, mientras su propietario controla el estado"
+ },
+ "state_orbital_debris_sweep_add": {
+  "en": "Low-Orbit Debris Swept in Peace",
+  "es": "Restos de órbita baja barridos en paz"
+ },
+ "state_orbital_debris_sweep_add_desc": {
+  "en": "Low-orbit debris this state's ground lasers clear each month, while its owner controls the state and is at war with no one",
+  "es": "Restos de órbita baja que los láseres terrestres de este estado despejan cada mes, mientras su propietario controla el estado y no está en guerra con nadie"
+ },
  "state_pollution_generation_mult": {
   "en": "Generated [concept_pollution_system]",
   "es": "[concept_pollution_system] generada"
@@ -5450,6 +5830,14 @@
  "state_sex_ratio_at_birth_add_desc": {
   "en": "How far a preference for sons raises the boys born per 100 girls above the natural 105. It counts only once prenatal sexing exists, with $microprocessor$. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "es": "Cuánto eleva la preferencia por los hijos varones el número de niños nacidos por cada 100 niñas por encima de los 105 naturales. Solo cuenta cuando existe la determinación del sexo prenatal, con $microprocessor$. Lo usa el censo en la pestaña de Demografía.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_sr_ship_construction_add": {
+  "en": "Fleet Strength Built a Month",
+  "es": "Fuerza de la flota construida al mes"
+ },
+ "state_sr_ship_construction_add_desc": {
+  "en": "Warship strength this state's Space Command adds to its owner's home fleet each month, while its owner controls the state",
+  "es": "Fuerza de buques de guerra que el Mando espacial de este estado añade cada mes a la flota nacional de su propietario, mientras su propietario controla el estado"
  },
  "state_urban_fertility_relief_add": {
   "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
