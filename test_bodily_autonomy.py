@@ -312,11 +312,12 @@ class PrescribedFormTest(unittest.TestCase):
                 with self.subTest(path=os.path.basename(path)):
                     self.assertRegex(block.group(1), r"law_prescribed_form = \w+")
 
-    def test_its_icon_is_borrowed_until_painted(self):
+    def test_its_icon_is_its_own(self):
+        # Icon batch 10 (2026-11-06) painted it; it borrowed Mandatory Augmentation's until then.
         raw = _top_level(_read(LAWS), "law_prescribed_form")
         icon = re.search(r'icon = "([^"]+)"', raw).group(1)
-        self.assertEqual(icon, "gfx/interface/icons/law_icons/law_mandatory_augmentation.dds")
-        self.assertRegex(_read(ICON_PROMPTS), r'"law_prescribed_form": \{"subject": "[^"]+", "seed": None\}')
+        self.assertEqual(icon, "gfx/interface/icons/law_icons/law_prescribed_form.dds")
+        self.assertRegex(_read(ICON_PROMPTS), r'"law_prescribed_form": \{"subject": "[^"]+", "seed": \d+\}')
 
 
 if __name__ == "__main__":

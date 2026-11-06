@@ -1349,9 +1349,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": 0},
         # Clade Citizenship (era 13 spec § 7.3) borrows Unrestricted Augmentation's icon.
         "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": 0},
-        # Prescribed Form (owner, 2026-11-04) borrows Mandatory Augmentation's
-        # icon until it is painted (seed None: not yet picked).
-        "law_prescribed_form": {"subject": "a row of identical plain grey artist's mannequins standing shoulder to shoulder on one long wooden stand", "seed": None},
+        # Prescribed Form (owner, 2026-11-04) borrowed Mandatory Augmentation's
+        # icon until icon batch 10 (2026-11-06) painted its own.
+        "law_prescribed_form": {"subject": "a row of identical plain grey artist's mannequins standing shoulder to shoulder on one long wooden stand", "seed": 1},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
