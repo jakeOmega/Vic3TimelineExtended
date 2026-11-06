@@ -363,7 +363,7 @@ pool of licenses. A coastal state belongs to the basin its sea lane opens onto.
 
 | Basin | Licenses | Includes |
 |---|---|---|
-| Pacific | 300 | the Sea of Japan and the East and South China Seas |
+| Pacific | 300 | the Sea of Japan, the East and South China Seas and New Zealand |
 | Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
 | Indian | 200 | the Red Sea, Persian Gulf and Arabian Sea |
 | Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
