@@ -429,7 +429,7 @@
  },
  "te_diplomacy_tab_un_locked_tt": {
   "en": "#b $te_diplomacy_tab_un$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_diplomacy_tab_un$#!\\nAún no está disponible. Se abre cuando:\\n"
+  "es": "#b $te_diplomacy_tab_un$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_diplomacy_tab_un_tt": {
   "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers.",

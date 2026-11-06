@@ -33547,6 +33547,10 @@
   "en": "Summit: Customs Harmonization",
   "de": "Gipfel: Zollharmonisierung"
  },
+ "te_pb_summit_customs_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_customs').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_customs').GetDesc]#!",
+  "de": "[ROOT.GetCountry.GetPowerBloc.GetName] erhält #b [GetStaticModifier('te_pb_summit_customs').GetName]#! für #b 10 Jahre#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_customs').GetDesc]#!"
+ },
  "te_pb_summit_customs_members": {
   "en": "Summit: Harmonized Customs",
   "de": "Gipfel: Harmonisierte Zölle"
@@ -33571,6 +33575,10 @@
   "en": "Summit: Leverage Campaign",
   "de": "Gipfel: Einflusshebel-Kampagne"
  },
+ "te_pb_summit_leverage_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_leverage').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_leverage').GetDesc]#!",
+  "de": "[ROOT.GetCountry.GetPowerBloc.GetName] erhält #b [GetStaticModifier('te_pb_summit_leverage').GetName]#! für #b 10 Jahre#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_leverage').GetDesc]#!"
+ },
  "te_pb_summit_needs_mandate_tt": {
   "en": "We lead a bloc that holds at least one [concept_power_bloc_mandate]",
   "de": "Wir führen einen Block, der mindestens ein [concept_power_bloc_mandate] besitzt"
@@ -33579,13 +33587,25 @@
   "en": "Summit: Open Borders Accord",
   "de": "Gipfel: Abkommen über offene Grenzen"
  },
+ "te_pb_summit_open_borders_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_open_borders').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_open_borders').GetDesc]#!",
+  "de": "[ROOT.GetCountry.GetPowerBloc.GetName] erhält #b [GetStaticModifier('te_pb_summit_open_borders').GetName]#! für #b 10 Jahre#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_open_borders').GetDesc]#!"
+ },
  "te_pb_summit_rally": {
   "en": "Summit: Common Purpose",
   "de": "Gipfel: Gemeinsames Ziel"
  },
+ "te_pb_summit_rally_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_rally').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_rally').GetDesc]#!",
+  "de": "[ROOT.GetCountry.GetPowerBloc.GetName] erhält #b [GetStaticModifier('te_pb_summit_rally').GetName]#! für #b 10 Jahre#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_rally').GetDesc]#!"
+ },
  "te_pb_summit_recruitment": {
   "en": "Summit: Recruitment Drive",
   "de": "Gipfel: Anwerbekampagne"
+ },
+ "te_pb_summit_recruitment_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_recruitment').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_recruitment').GetDesc]#!",
+  "de": "[ROOT.GetCountry.GetPowerBloc.GetName] erhält #b [GetStaticModifier('te_pb_summit_recruitment').GetName]#! für #b 10 Jahre#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_recruitment').GetDesc]#!"
  },
  "te_pb_summit_relations_tt": {
   "en": "Relations between every two members of the bloc rise by #v 20#!",
@@ -33609,7 +33629,7 @@
  },
  "te_pops_tab_demog_locked_tt": {
   "en": "#b $te_pops_tab_demog$#!\\nNot open yet. It opens once:\\n",
-  "de": "#b $te_pops_tab_demog$#!\\nNoch nicht geöffnet. Er öffnet sich, sobald Folgendes zutrifft:\\n"
+  "de": "#b $te_pops_tab_demog$#!\\nNoch nicht geöffnet. Er öffnet sich, sobald:\\n"
  },
  "te_pops_tab_demog_tt": {
   "en": "Who your people are: their ages, how many children they have, how long they live, how wealth is held and where they live, from the yearly census.",

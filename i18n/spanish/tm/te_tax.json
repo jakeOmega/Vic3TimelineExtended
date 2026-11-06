@@ -2129,7 +2129,7 @@
  },
  "te_tax_tab_locked_tt": {
   "en": "#b $te_tax_tab$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_tax_tab$#!\\nAún no está abierto. Se abre cuando:\\n"
+  "es": "#b $te_tax_tab$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_tax_tt_bill_open": {
   "en": "A tax bill is under debate.",

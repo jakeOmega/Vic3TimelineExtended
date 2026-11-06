@@ -32261,7 +32261,7 @@
  },
  "te_market_tab_global_warming_locked_tt": {
   "en": "#b $te_market_tab_global_warming$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_market_tab_global_warming$#!\\nTodavía no se ha abierto. Se abre cuando:\\n"
+  "es": "#b $te_market_tab_global_warming$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_market_tab_global_warming_tt": {
   "en": "The world's temperature, the countries emitting most and the history, your climate policies and your Fossil Transition. On another market, that market's emissions and its leader's policies, which only the leader can change.",
@@ -32273,7 +32273,7 @@
  },
  "te_market_tab_strategic_reserve_locked_tt": {
   "en": "#b $te_market_tab_strategic_reserve$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_market_tab_strategic_reserve$#!\\nTodavía no se ha abierto. Se abre cuando:\\n"
+  "es": "#b $te_market_tab_strategic_reserve$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_market_tab_strategic_reserve_tt": {
   "en": "Your hub, each good's stock, status and policy, and its fill history. The reserve buys and sells in your own market, so this tab shows only there.",
@@ -32329,7 +32329,7 @@
  },
  "te_military_tab_covert_locked_tt": {
   "en": "#b $te_military_tab_covert$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_military_tab_covert$#!\\nTodavía no se ha abierto. Se abre cuando:\\n"
+  "es": "#b $te_military_tab_covert$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_military_tab_covert_tt": {
   "en": "Your operations, funding, agent networks and counterintelligence.",
@@ -32341,7 +32341,7 @@
  },
  "te_military_tab_nuclear_locked_tt": {
   "en": "#b $te_military_tab_nuclear$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_military_tab_nuclear$#!\\nTodavía no se ha abierto. Se abre cuando:\\n"
+  "es": "#b $te_military_tab_nuclear$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_military_tab_nuclear_tt": {
   "en": "Your program, posture and forces, any crisis, and the nuclear taboo.",
@@ -33299,6 +33299,10 @@
   "en": "Summit: Customs Harmonization",
   "es": "Cumbre: Armonización aduanera"
  },
+ "te_pb_summit_customs_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_customs').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_customs').GetDesc]#!",
+  "es": "[ROOT.GetCountry.GetPowerBloc.GetName] obtiene #b [GetStaticModifier('te_pb_summit_customs').GetName]#! durante #b 10 años#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_customs').GetDesc]#!"
+ },
  "te_pb_summit_customs_members": {
   "en": "Summit: Harmonized Customs",
   "es": "Cumbre: Aduanas armonizadas"
@@ -33323,6 +33327,10 @@
   "en": "Summit: Leverage Campaign",
   "es": "Cumbre: Campaña de potestad"
  },
+ "te_pb_summit_leverage_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_leverage').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_leverage').GetDesc]#!",
+  "es": "[ROOT.GetCountry.GetPowerBloc.GetName] obtiene #b [GetStaticModifier('te_pb_summit_leverage').GetName]#! durante #b 10 años#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_leverage').GetDesc]#!"
+ },
  "te_pb_summit_needs_mandate_tt": {
   "en": "We lead a bloc that holds at least one [concept_power_bloc_mandate]",
   "es": "Lideramos un bloque que tiene al menos un [concept_power_bloc_mandate|l]"
@@ -33331,13 +33339,25 @@
   "en": "Summit: Open Borders Accord",
   "es": "Cumbre: Acuerdo de fronteras abiertas"
  },
+ "te_pb_summit_open_borders_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_open_borders').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_open_borders').GetDesc]#!",
+  "es": "[ROOT.GetCountry.GetPowerBloc.GetName] obtiene #b [GetStaticModifier('te_pb_summit_open_borders').GetName]#! durante #b 10 años#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_open_borders').GetDesc]#!"
+ },
  "te_pb_summit_rally": {
   "en": "Summit: Common Purpose",
   "es": "Cumbre: Propósito común"
  },
+ "te_pb_summit_rally_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_rally').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_rally').GetDesc]#!",
+  "es": "[ROOT.GetCountry.GetPowerBloc.GetName] obtiene #b [GetStaticModifier('te_pb_summit_rally').GetName]#! durante #b 10 años#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_rally').GetDesc]#!"
+ },
  "te_pb_summit_recruitment": {
   "en": "Summit: Recruitment Drive",
   "es": "Cumbre: Campaña de reclutamiento"
+ },
+ "te_pb_summit_recruitment_grant_tt": {
+  "en": "[ROOT.GetCountry.GetPowerBloc.GetName] gets #b [GetStaticModifier('te_pb_summit_recruitment').GetName]#! for #b 10 years#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_recruitment').GetDesc]#!",
+  "es": "[ROOT.GetCountry.GetPowerBloc.GetName] obtiene #b [GetStaticModifier('te_pb_summit_recruitment').GetName]#! durante #b 10 años#!\\n$TAB$#indent_newline:3 [GetStaticModifier('te_pb_summit_recruitment').GetDesc]#!"
  },
  "te_pb_summit_relations_tt": {
   "en": "Relations between every two members of the bloc rise by #v 20#!",
@@ -33361,7 +33381,7 @@
  },
  "te_pops_tab_demog_locked_tt": {
   "en": "#b $te_pops_tab_demog$#!\\nNot open yet. It opens once:\\n",
-  "es": "#b $te_pops_tab_demog$#!\\nTodavía no se ha abierto. Se abre cuando:\\n"
+  "es": "#b $te_pops_tab_demog$#!\\nAún no disponible. Se abre cuando:\\n"
  },
  "te_pops_tab_demog_tt": {
   "en": "Who your people are: their ages, how many children they have, how long they live, how wealth is held and where they live, from the yearly census.",
