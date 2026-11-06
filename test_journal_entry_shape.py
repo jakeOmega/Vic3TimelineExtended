@@ -224,6 +224,12 @@ class PruneTreeTest(unittest.TestCase):
 LEGACY_STRIP_FILE = "common/scripted_effects/legacy_modifier_cleanup.txt"
 
 
+def _walk(nodes: list[Node]):
+    for node in nodes:
+        yield node
+        yield from _walk(node.children)
+
+
 def scaling_declarations(entries: list[tuple[str, Node]]) -> dict[str, list[tuple[str, int, str]]]:
     """modifier → [(file, line, entry)] for every scaling_modifiers_while_active block."""
     out: dict[str, list[tuple[str, int, str]]] = {}
@@ -311,6 +317,15 @@ class ScalingModifierTreeTest(unittest.TestCase):
         for name, sites in scaling_declarations(load_entries()).items():
             with self.subTest(modifier=name, at=sites[0]):
                 self.assertIn(name, names)
+
+    def test_every_scaling_modifier_is_stripped_from_old_saves(self):
+        """A save from before a conversion holds the copy the old code added, which stacks with the declaration
+        (design § 4.0, rule 7). Delete this test with the strip block after 2026-12-31."""
+        stripped = {node.value for node in _walk(_parse(ROOT / LEGACY_STRIP_FILE))
+                    if node.key == "remove_modifier" and not node.children}
+        for name in scaling_declarations(load_entries()):
+            with self.subTest(modifier=name):
+                self.assertIn(name, stripped)
 
     def test_no_scaling_modifier_is_added_or_tested(self):
         """has_modifier can't see a scaling modifier, on the entry or the country (probed 2026-11-05), and an
