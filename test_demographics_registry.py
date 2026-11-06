@@ -2636,7 +2636,8 @@ class TestRatesScript(unittest.TestCase):
         self.assertFalse({"te_demog_census_deaths_up", "te_demog_census_deaths_down"} & set(eng.modifiers))
 
     def test_no_ceiling(self):
-        """No ceiling (owner, 2026-10-20; it was +3): a target past seven times the bare curve is met, unflagged."""
+        """No ceiling on deaths (owner, 2026-10-20; it was +3): a target past seven times the bare curve is met,
+        unflagged. Births stop at +10, where no figure in range reaches (#1476; test_demographics_rate_guards.py)."""
         eng = self._eng(cdr=400.0)
         eng.call("te_demog_rates_refresh")
         _, md = self._want(38.0, 400.0, 475e6, 430e6, self.EBR, 0.05, 0.04)

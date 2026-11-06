@@ -2268,7 +2268,8 @@ def predict_state(pops, cbr, cdr, d, on_top_b=0.0, on_top_d=0.0, added_b=0.0, ad
     rep_b = sum(b * (P.LITERACY_BIRTH_PENALTY * p.literacy + mb) for p, b, _x, _sb, _sd, mb, _md in terms)
     rep_d = sum(x * md for p, _b, x, _sb, _sd, _mb, md in terms)
     target_b, target_d = cbr / 1000 * people, cdr / 1000 * people
-    m_b, cb = M.rate_term(target_b, bare_b, absorbed=rep_b, other=on_top_b, on_top=on_top_b, added=added_b)
+    m_b, cb = M.rate_term(target_b, bare_b, absorbed=rep_b, other=on_top_b, on_top=on_top_b, added=added_b,
+                          ceiling=P.RATE_BIRTHS_CEILING)
     m_d, cd = M.rate_term(target_d, bare_d, absorbed=rep_d, other=on_top_d, on_top=on_top_d, added=added_d)
     wealth_line = max(wealth, P.WEALTH_LINE_FLOOR) * target_d / bare_d if bare_d > 0 and wealth else 0.0
     births = deaths = 0.0

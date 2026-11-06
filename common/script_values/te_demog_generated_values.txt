@@ -1474,7 +1474,7 @@ te_demog_f_infection_literacy = {
 }
 # State scope: infection's crowding factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_crowding = {
-	value = var:te_dg_in_crowd multiply = 1 add = 1
+	value = var:te_dg_in_crowd max = 5 multiply = 1 add = 1
 }
 # State scope: infection's malaria factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_malaria = {
@@ -1901,6 +1901,10 @@ te_demog_k_cause_scale_min_deaths = { value = 1 }
 te_demog_k_cause_scale_min = { value = 0.0001 }
 te_demog_k_rate_total_floor = { value = -1 }
 te_demog_k_rate_bare_min = { value = 80 }
+te_demog_k_rate_guard_people = { value = 500000000 }
+te_demog_k_rate_guard_e0 = { value = 5 }
+te_demog_k_rate_births_ceiling = { value = 10 }
+te_demog_k_crowding_pull_max = { value = 5 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
 te_demog_k_wealth_line_floor = { value = -0.005 }
 te_demog_k_medicine_snap = { value = 0.005 }

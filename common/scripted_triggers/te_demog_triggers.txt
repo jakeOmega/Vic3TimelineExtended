@@ -107,6 +107,47 @@ te_demog_lines_apply = {
 	}
 }
 
+# THIS = a state at its census, in te_demog_rates_refresh (#1476): the census's own figures are out of range, so its
+# births and deaths terms would be set from nonsense. The bounds sit past every sane state of the 2020, 1940 and 1926
+# saves (demographics_params.py, RATE_GUARD_*), and a figure the state doesn't hold says nothing. The refresh keeps
+# which held first as te_dg_rate_guard (1, 2, 3, in this order). Twin: demographics_model.census_out_of_range.
+te_demog_census_out_of_range = {
+	OR = {
+		te_demog_census_people_out_of_range = yes
+		te_demog_census_e0_out_of_range = yes
+		te_demog_census_rates_out_of_range = yes
+	}
+}
+
+# 1: its people's sum below 0 (wrapped at the script's fixed-point limit) or above te_demog_k_rate_guard_people
+te_demog_census_people_out_of_range = {
+	has_variable = te_dg_walk_pop
+	OR = {
+		var:te_dg_walk_pop < 0
+		var:te_dg_walk_pop > te_demog_k_rate_guard_people
+	}
+}
+
+# 2: life expectancy under te_demog_k_rate_guard_e0 (the life table has all but its adults dying)
+te_demog_census_e0_out_of_range = {
+	has_variable = te_dg_e0
+	var:te_dg_e0 < te_demog_k_rate_guard_e0
+}
+
+# 3: the model's birth or death rate below 0
+te_demog_census_rates_out_of_range = {
+	OR = {
+		AND = {
+			has_variable = te_dg_cbr_model
+			var:te_dg_cbr_model < 0
+		}
+		AND = {
+			has_variable = te_dg_cdr_model
+			var:te_dg_cdr_model < 0
+		}
+	}
+}
+
 # THIS = a state: the working-adult lines' pair applies (phase 2 step 1) unless the census sets this state's
 # workforce: Full, and step 2's term in force (te_dg_mw). In step 1 nothing sets te_dg_mw, so it always applies.
 te_demog_workforce_lines_apply = {

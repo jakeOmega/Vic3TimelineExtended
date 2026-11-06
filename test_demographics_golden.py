@@ -71,7 +71,10 @@ past 150 (under a billionth of a person each, to age 169), ages them in their ow
 births and deaths moved by -1.9e-11 of themselves; it alone was re-recorded on this tree (TE_RECORD_GOLDEN_CASES).
 
 The old-save code's removal (#1407, 2026-11-06) rewrites te_demog_gini_band_store and te_demog_lines_refresh
-(OLDSAVE_DIGESTS) and changes no number."""
+(OLDSAVE_DIGESTS) and changes no number.
+
+The census's guards (#1476, 2026-11-06) cap crowding's infection factor at a pull of 5 (GUARDS_DIGESTS). No case's
+crowding comes near it, so no number changes."""
 
 import functools
 import hashlib
@@ -309,6 +312,12 @@ OLDSAVE_DIGESTS = {
         "a5d12450a900acc480beef05f4b1462b9d84ac5c14d1e78720fa5a61f9e8dc5f",
     ("line_effects", "te_demog_lines_refresh"): "1a0591a62e33de9586551a24793b8d46e0c1dd05a398a2bab382f1957756d0bb",
 }
+# The census's guards (#1476, 2026-11-06): crowding's infection factor stops at a pull of 5
+# (P.CROWDING_INFECTION_PULL_MAX), past every sane state; no recorded case's crowding comes near it.
+GUARDS_DIGESTS = {
+    ("generated_values", "te_demog_f_infection_crowding"):
+        "e1bee69b4cf134356a618db0a2d8514e766b0c109d8569abcaa69db7617c0ed7",
+}
 
 
 def _ring300(name):
@@ -516,6 +525,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = VANILLA_115_DIGESTS.get((key, name), want)
                 want = STRATA_BIRTH_DIGESTS.get((key, name), want)
                 want = OLDSAVE_DIGESTS.get((key, name), want)
+                want = GUARDS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
