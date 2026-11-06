@@ -6884,7 +6884,8 @@ me_border_security_campaign_modifier = {
 
 # ============================================================================
 # CULTURAL HEGEMONY - Dynamic modifier scaled by cultural_pull script value
-# Applied in JE on_monthly_pulse with multiplier = cultural_hegemony_modifier_mult
+# Declared on je_cultural_hegemony (scaling_modifiers_while_active) at
+# cultural_hegemony_modifier_mult
 # ============================================================================
 
 cultural_hegemony_effect = {
@@ -6899,8 +6900,8 @@ cultural_hegemony_effect = {
 	state_assimilation_mult = 0.05
 }
 
-# Applied to foreign countries to reduce legitimacy
-# (ideology pressure from the cultural hegemon)
+# Declared on a trailing country's je_cultural_hegemony to reduce legitimacy
+# (ideology pressure from the cultural hegemon), at var:ch_benchmark_applied
 cultural_hegemony_foreign_benchmark = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5

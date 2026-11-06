@@ -96,8 +96,8 @@ ch_decrease_program_funding_button = {
 }
 
 ### NOTE: player-facing name is "International Cultural Outreach". Internal
-### key kept as ch_world_exposition* to avoid silently dropping the modifier
-### from any save where it's currently active.
+### key kept as ch_world_exposition* (the modifier, its cost and the
+### ch_world_exposition_on variable) so saves carry it over.
 ch_world_exposition_button = {
 	name = "CH_WORLD_EXPOSITION"
 	desc = "CH_WORLD_EXPOSITION_DESC"
@@ -136,7 +136,7 @@ ch_disable_world_exposition_button = {
 	visible = {
 		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_world_exposition }
+		ch_active_world_exposition = yes
 	}
 
 	# The no-ministry branch below was the AI's escape hatch from an outreach
@@ -206,7 +206,7 @@ ch_disable_cultural_institutes_button = {
 	visible = {
 		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
+		ch_active_cultural_institutes = yes
 	}
 
 	# Also scaled back while influence is in deficit: the programme costs 150.
@@ -255,7 +255,7 @@ ch_global_media_campaign_button = {
 			add = 20
 		}
 		if = {
-			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			limit = { ch_trails_hegemon = yes }
 			add = -30
 		}
 		# Only with influence to spare after the campaign's cost
@@ -281,7 +281,7 @@ ch_disable_global_media_campaign_button = {
 	visible = {
 		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
+		ch_active_global_media_campaign = yes
 	}
 
 	# Also ended while influence is in deficit: the campaign costs 200.
@@ -296,7 +296,7 @@ ch_disable_global_media_campaign_button = {
 			add = te_ai_influence_deficit_repeal_weight
 		}
 		if = {
-			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			limit = { ch_trails_hegemon = yes }
 			add = 40
 		}
 	}
@@ -323,7 +323,7 @@ ch_cultural_protectionism_button = {
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			limit = { ch_trails_hegemon = yes }
 			add = 35
 		}
 		if = {
@@ -352,7 +352,7 @@ ch_disable_cultural_protectionism_button = {
 	visible = {
 		is_ai = yes
 		has_journal_entry = je_cultural_hegemony
-		je:je_cultural_hegemony = { has_modifier = ch_cultural_protectionism_program }
+		ch_active_cultural_protectionism = yes
 	}
 
 	ai_chance = {
