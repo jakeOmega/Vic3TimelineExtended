@@ -31,9 +31,10 @@ WARN:
     defines. Not necessarily wrong, but nothing in the mod has shown it works
     in game; prefer a proven equivalent, or check it in game.
   - ScriptValue('x') with no script value x in the mod or vanilla
-  - a collapse flag (GetVariableSystem.Toggle) whose name does not say its
-    default (_open: collapsed until opened; _closed: open until closed), or
-    whose Exists() tests disagree with that default (gui_style_guide.md rule 7)
+  - a collapse flag (GetVariableSystem.Toggle, unless only non-visible
+    properties such as alpha read it) whose name does not say its default
+    (_open: collapsed until opened; _closed: open until closed), or whose
+    Exists() tests disagree with that default (gui_style_guide.md rule 7)
   - an added loc value that starts or ends with a literal \\n (rule 8), outside
     te_unused_l_english.yml
 """
@@ -446,6 +447,10 @@ class Linter:
                             f"loc key '{m.group(1)}' is in neither mod nor vanilla loc")
 
         for flag in sorted(set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", text))):
+            # A flag read only by other properties (the see-through journal page's alpha) collapses nothing.
+            reads = re.findall(rf"(\w+)\s*=\s*\"[^\"]*GetVariableSystem\.Exists\('{flag}'\)", self.cur_gui_text)
+            if reads and "visible" not in reads:
+                continue
             if not re.search(r"_(open|closed)$", flag):
                 self.report("WARN", path, 1, f"collapse flag {flag} should end _open (collapsed until "
                                              "opened) or _closed (open until closed): style rule 7")
