@@ -2,26 +2,28 @@
 
 The in-game checks for vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue
 #1404), most important first. The first two passes (#1410, #1414, #1417) answered their lists (below); this is the
-third pass's list: picks that repaint a paused map, and the see-through journal page. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
+third pass's list: picks that repaint a paused map, and the see-through journal page. Check 1 is the fourth pass's,
+since the third pass's picks closed the page for good (fifth session, under Results). Record each answer under
+Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
 `docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
 
 ## How to run
 
-- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout: the branch deletes
-  `gfx/map/map_modes/te_map_modes.txt`, and a sparse worktree's deploy would delete every texture with it.
+- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout: a sparse worktree's deploy would
+  delete every texture.
 - **A new game** or a save. No debug mode needed: the test strip is gone, and every check uses the map buttons in the
   Demographics and Banking tabs' headers (left of "?") and the Map Room's page.
 - **Logs.** `grep TE_JMAP debug.log` (or `curl -s "http://localhost:8950/logs/debug?debug_log=only&mod_only=true&q=TE_JMAP"`):
-  every pick writes `TE_JMAP pick <n> date=…`.
-- **At load**, check `error.log` for lines naming `te_map_widgets.gui`, `journal_entry.gui` or
-  `te_map_room_widget.gui`, `failed reading callback` above all: the engine drops a callback it can't read and says so
-  only there, once.
+  every pick writes `TE_JMAP pick <n> date=…`, and its reopen `TE_JMAP reopen date=…`.
+- **At load**, check `error.log` for lines naming `te_map_widgets.gui`, `journal_entry.gui`,
+  `te_map_room_widget.gui` or `te_systems_window.txt`, `failed reading callback` above all: the engine drops a
+  callback it can't read and says so only there, once.
 
 ## The checks (third pass)
 
 | # | Check | How | What each answer means | If it's the bad answer |
 |---|---|---|---|---|
-| 1 | A pick repaints a paused map | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks (each pick closes and reopens it a quarter second later, `te_jmap_repaint`, the reopen by `OpenJournalEntryPanelDontToggle`, which no mod or vanilla `.gui` used before) and the map shows the new pick at once, paused or not. Say whether the blink is acceptable while running. | The page blinks but the old map stays: the reopen came before the pick's effect landed; lengthen the delay (0.5 s), or failing that say "at unpause" in the picks' tooltips. The page stays open with the old map and doesn't blink: the close hadn't landed when the reopen ran; the delay between them needs a second state. The page closes and stays closed: the reopen line failed; read `error.log` for a callback line naming `te_map_widgets.gui`. |
+| 1 | A pick repaints a paused map (fourth pass) | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks and comes back on the new map, paused or not: a quarter second after the click `te_jmap_repainter`, a scripted widget outside the page, closes it, and a tenth of a second later opens it again (`te_jmap_repaint`, then `te_jmap_repaint_open`). Each pick logs `TE_JMAP pick` and then `TE_JMAP reopen`. Say whether the blink is acceptable while running. | The page closes and stays closed, `TE_JMAP reopen` logged: the open failed from that widget; read `error.log` for a callback line naming `te_map_widgets.gui`. Closed, no `TE_JMAP reopen`: the chain stopped after the close (`next`), or the scripted GUI failed; try the open as the first state's second `on_finish` line. The page stays open with the old map and no `TE_JMAP reopen`: `PdxGuiTriggerAllAnimations` didn't reach the widget; have the pick set a client-side variable instead, and the repainter's first state fire on it (`trigger_when`, the launcher's pattern in `te_systems_window.gui`), its second clear it. Reopened on the old map: lengthen the first state (0.5 s). |
 | 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Pick a few maps. Click the eye again. Then fade it and close the page with X (or Escape), and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through, and stays faded from pick to pick; the second click brings it back; after a close it reopens whole. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). Known edge: leave a faded page by opening another panel (a state, say) and the next journal page you open from the journal opens faded; the map buttons and the X clear it. | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
 | 3 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
 | 4 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
@@ -193,6 +195,19 @@ them on Jan 1 while paused):
 - **Third pass built on these** (this list): picks reopen the page to repaint, every journal page has a see-through
   eye, Banking's button has no `IsActive` gate, and the scope probe, the Potential probe, the test strip and the listed
   copy are gone.
+
+### Fifth session, 2026-11-05 night (build f0c8135f0, #1420)
+
+The owner's report and `debug.log`/`error.log` from 22:06 to 22:18 (six `TE_JMAP pick` lines, all on Jan 1, 1836):
+
+- **Check 1: the page closed and never reopened.** Every pick closed the Map Room's page, and a quarter second later
+  nothing came back, so no map but the one the page opened on could be seen at all: worse than the second pass, whose
+  picks showed at unpause. Nothing in either log names `te_map_widgets.gui` or a callback, so the state's two lines
+  both read at load. The close ran; the open (`OpenJournalEntryPanelDontToggle`) didn't, or did nothing. Either the
+  button, on the page, went with it before the second line ran, or the close landed after the open had found the page
+  still open. The logs can't tell them apart, and the fourth pass doesn't need to: the close and the open run from a widget
+  outside the page, two states apart, with the plain open (check 1 above).
+- Checks 2–4 not reported.
 
 ## Not tested here
 

@@ -7,7 +7,8 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - every Map Room pick (a scripted GUI) sets a selector that map_color and map_tooltip both branch on, has a
   button, and has its loc; the Map Room stays contextless, in no journal, with no scripted buttons (they lock);
 - every map_tooltip key has loc;
-- each pick reopens the Map Room's page a beat after its click, so a paused map repaints (check 4);
+- each pick reopens the Map Room's page a beat after its click, so a paused map repaints (check 4), from a
+  widget outside the page (te_jmap_repainter), since a widget on it dies with the close (fifth session);
 - the map buttons are mounted, Banking's shows while its entry is inactive (check 7), and every GUI reach into an
   entry names one that exists;
 - every journal page has the see-through eye (gui/journal_entry.gui): a pick's reopen keeps it, closing clears it.
@@ -27,6 +28,8 @@ MAP_ENTRIES = (HOST, BANKING)
 COLORS = "common/named_colors/te_journal_map_colors.txt"
 VALUES = "common/script_values/te_journal_map_values.txt"
 WIDGETS = "gui/te_map_widgets.gui"
+REPAINTER = "te_jmap_repainter"
+REGISTRATION = "gui/scripted_widgets/te_systems_window.txt"
 DEMOG_LAYOUT = "gui/te_demographics_layout.gui"
 BANKING_LAYOUT = "gui/journal_entry_widgets/banking_layout_widget.gui"
 JE_PANEL = "gui/journal_entry.gui"
@@ -99,6 +102,16 @@ def enclosing_span(text, pos):
         depth += {"{": 1, "}": -1}.get(text[j], 0)
         j += 1
     return i + 1, j - 1
+
+
+def top_level_widget(text, name):
+    """The body of the top-level widget named `name` (a scripted widget's root)."""
+    m = re.search(r'^\tname\s*=\s*"' + re.escape(name) + r'"', text, re.M)
+    if not m:
+        raise AssertionError(f"no top-level widget {name}")
+    start, end = enclosing_span(text, m.start())
+    assert re.search(r"^widget\s*=\s*\{\s*$", text[:start], re.M), name
+    return text[start:end]
 
 
 def entry(rel, name):
@@ -202,23 +215,40 @@ class MapRoomTest(unittest.TestCase):
             clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', button)
             self.assertEqual(len(clicks), 2, f"{name}: pick, then the repaint")
             self.assertIn(".Execute(", clicks[0], f"{name}: the pick runs first")
-            self.assertEqual(clicks[1], "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]", name)
+            # PdxGuiTriggerAllAnimations, not PdxGuiWidget.TriggerAnimation: the repaint's states sit on a widget
+            # outside the page, which outlives the close (fifth session)
+            self.assertEqual(clicks[1], "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]", name)
             seen.append(name)
         self.assertEqual(sorted(seen), sorted(self.picks()), "one button per pick")
 
     def test_a_pick_reopens_the_page_to_repaint(self):
-        # check 4 (2026-11-05): paused, reopening the page repainted the map. OpenJournalEntryPanel toggles, so the
-        # page is closed first; the entry is the button's own datacontext, which outlives the page closing.
-        button = block(code(WIDGETS), "te_jmap_pick_button")
-        self.assertIsNotNone(button)
-        self.assertIn('datacontext = "[GetPlayerJournalEntry(\'je_te_map_room\')]"', button)
-        state = block(button, "state")
-        self.assertRegex(state, r"name\s*=\s*te_jmap_repaint\b")
-        self.assertRegex(state, r"duration\s*=\s*0?\.\d+")
-        finish = re.findall(r'on_finish\s*=\s*"([^"]*)"', state)
-        # DontToggle: if the close hadn't landed, the toggling open would close the page for good
-        self.assertEqual(finish, ["[InformationPanelBar.ClosePanel]",
-                                  "[InformationPanelBar.OpenJournalEntryPanelDontToggle(JournalEntry.AccessSelf)]"])
+        # check 4 (2026-11-05): paused, reopening the page repainted the map. Fifth session: a state on the pick button
+        # itself closed the page and never reopened it (ClosePanel then the DontToggle open, one on_finish after the
+        # other). So the states sit on a scripted widget outside the page, which outlives the close, and the close and
+        # the open are two states, so the open runs frames after the close has landed.
+        host = top_level_widget(code(WIDGETS), REPAINTER)
+        self.assertIn('datacontext = "[GetPlayerJournalEntry(\'je_te_map_room\')]"', host,
+                      "the host names the entry itself: the pick button's datacontext goes with the page")
+        states = {}
+        for m in re.finditer(r"\bstate\s*=\s*\{", host):
+            body = enclosing(host, m.end())
+            states[re.search(r"name\s*=\s*(\w+)", body).group(1)] = body
+        self.assertEqual(sorted(states), ["te_jmap_repaint", "te_jmap_repaint_open"])
+        close, reopen = states["te_jmap_repaint"], states["te_jmap_repaint_open"]
+        self.assertRegex(close, r"\bnext\s*=\s*te_jmap_repaint_open\b")
+        for body in (close, reopen):
+            self.assertRegex(body, r"duration\s*=\s*0?\.\d*[1-9]", "each state waits a beat")
+        self.assertEqual(re.findall(r'on_finish\s*=\s*"([^"]*)"', close), ["[InformationPanelBar.ClosePanel]"])
+        finish = re.findall(r'on_finish\s*=\s*"([^"]*)"', reopen)
+        # the plain open, proven in game from a widget outside the page (the Demographics and Banking buttons); the
+        # page is closed by now, so its toggle opens it. DontToggle has never been seen to work.
+        self.assertEqual(finish[-1], "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]")
+        self.assertIn("te_jmap_reopen_log_sgui", finish[0], "the reopen logs before it opens")
+        # the pick button keeps no repaint state of its own: TriggerAllAnimations would fire it too
+        self.assertNotRegex(block(code(WIDGETS), "te_jmap_pick_button"), r"\bstate\s*=")
+
+    def test_the_repainter_is_registered(self):
+        self.assertIn(f"{WIDGETS} = {REPAINTER}", code(REGISTRATION))
 
     def test_the_room_is_contextless_and_in_no_journal(self):
         # check 7 (2026-11-05): a contextless entry nobody is involved in is active from the start, in no journal, and
