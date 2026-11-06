@@ -5,9 +5,10 @@ The Local Climate design (docs/superpowers/specs/2026-11-01-local-climate-design
 every land state region a small record: the warmest month's mean temperature and dew-point class,
 the coldest month's mean, water for settlement, malaria as of 1836, and latitude, all taken where
 most of the region's people live, and (§ 11, heat v2) the hottest day of a typical year and the heat
-stress on the year's worst day, from station records. The rows are
+stress on the year's worst day, from station records, and (§ 13) the winter's daily sunshine, from
+satellite data (scripts/analysis/local_climate_sun_pull.py). The rows are
 scripts/generators/data/local_climate.csv (state, ref_place, summer_mean_c, summer_humidity,
-winter_mean_c, aridity, malaria, latitude, hot_day_c, heat_index, heat_source, reason). This writes a
+winter_mean_c, aridity, malaria, latitude, hot_day_c, heat_index, winter_sun_h, heat_source, reason). This writes a
 state-scope script value for each field a script reads, each an if-chain on state_region,
 so every piece of a split region reads the region's climate. A region with no row reads neutral
 values (no penalty). Needs nothing but the repo. Re-run after editing the CSV;
@@ -21,6 +22,7 @@ exits 1 on a validation error. A plain run writes the file even when a row fails
 import argparse
 import collections
 import csv
+import math
 import os
 import re
 import sys
@@ -32,10 +34,10 @@ STATE_REGIONS = os.path.join(REPO, "map_data", "state_regions")
 SEAS = "99_seas.txt"
 
 FIELDS = ("state ref_place summer_mean_c summer_humidity winter_mean_c aridity malaria latitude hot_day_c heat_index "
-          "heat_source reason")
+          "winter_sun_h heat_source reason")
 Row = collections.namedtuple("Row", FIELDS)
 NUMERIC = ("summer_mean_c", "summer_humidity", "winter_mean_c", "aridity", "malaria", "latitude")
-FLOATS = ("hot_day_c", "heat_index")
+FLOATS = ("hot_day_c", "heat_index", "winter_sun_h")
 # Where a row's heat figures come from (§ 11.2): a station (its code and distance), the station with one figure
 # from the fit on the record's own fields (a far or high station that missed the fit by 2.5 or more on it), the
 # fit for both, or another region's row.
@@ -54,10 +56,14 @@ VALUES = (
     ("te_climate_hot_day", "hot_day_c", 20, "the hottest day of a typical year, °C (the mean of each year's highest)"),
     ("te_climate_heat_index", "heat_index", 0,
      "heat stress on a typical year's worst day, °C: 0.7 x wet-bulb + 0.3 x air temperature"),
+    # The default is London's, the sunshine term's neutral point (te_climate_sun_neutral), so it costs nothing.
+    ("te_climate_winter_sun", "winter_sun_h", 2.4,
+     "mean daily hours of sunshine in the three months around the winter solstice (Dec-Feb north, Jun-Aug south)"),
 )
 
 RANGES = {"summer_mean_c": (-10, 45), "winter_mean_c": (-50, 30), "summer_humidity": (0, 3),
-          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90), "hot_day_c": (10, 52), "heat_index": (5, 40)}
+          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90), "hot_day_c": (10, 52), "heat_index": (5, 40),
+          "winter_sun_h": (0, 12)}
 
 # A vanilla desert trait needs water 1 or more, except where the region's people live by a great river or
 # outside the desert: the trait describes the land, the record where people live (2026-11-01, PR #1307 review).
@@ -94,6 +100,17 @@ COLD_BAND_EXCEPTIONS = {
 STATE_RE = re.compile(r"(?m)^(STATE_\w+)\s*=\s*\{")
 TRAITS_RE = re.compile(r"traits\s*=\s*\{([^}]*)\}")
 COLD_RE = re.compile(r"(?m)^\s*max_cold_effect\s*=\s*([\d.]+)")
+
+
+def winter_day_hours(lat):
+    """The mean astronomical day length, hours, over the three months around the winter solstice at a latitude:
+    the most sunshine those months can hold (Cooper's declination, at each month's middle day)."""
+    total = 0.0
+    for day in ((349, 15, 46) if lat >= 0 else (166, 196, 227)):
+        decl = math.radians(23.44) * math.sin(2 * math.pi * (284 + day) / 365)
+        x = -math.tan(math.radians(lat)) * math.tan(decl)
+        total += 0.0 if x >= 1 else 24.0 if x <= -1 else 24 * math.acos(x) / math.pi
+    return total / 3
 
 
 def load_rows(path=CSV):
@@ -186,6 +203,9 @@ def validate(rows, regions, traits):
             errors.append(f"{r.state}: hottest day {r.hot_day_c} cooler than the warmest month {r.summer_mean_c}")
         if r.heat_index > r.hot_day_c:
             errors.append(f"{r.state}: heat index {r.heat_index} above the hottest day {r.hot_day_c}")
+        if r.winter_sun_h > winter_day_hours(r.latitude) + 0.05:
+            errors.append(f"{r.state}: winter sunshine {r.winter_sun_h} h a day, more than the "
+                          f"{winter_day_hours(r.latitude):.1f} h of daylight at latitude {r.latitude}")
         if not HEAT_SOURCE_RE.fullmatch(r.heat_source):
             errors.append(f"{r.state}: heat_source {r.heat_source!r} is not code:Nkm[;fit_hot_day|;fit_index], "
                           "fit or analog:STATE_X")

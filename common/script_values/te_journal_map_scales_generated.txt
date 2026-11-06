@@ -418,15 +418,15 @@ te_jmap_tourism_factor = {
 	max = 1
 }
 
-# Local Climate's penalty before any relief, percent of migration attraction (stored yearly), split at none; the most a mild winter draws is 7.2, the most climate takes 80.
-# Knots: -7.2 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
+# Local Climate's penalty before any relief, percent of migration attraction (stored yearly), split at none; the most a mild, sunny winter draws is 10.8, the most climate takes 80.
+# Knots: -10.8 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
 te_jmap_comfort_base_factor = {
 	value = 0
 	if = {
 		limit = { has_variable = te_climate_base_penalty }
 		if = {
 			limit = { var:te_climate_base_penalty < 0 }
-			value = var:te_climate_base_penalty add = 7.2 divide = 14.4
+			value = var:te_climate_base_penalty add = 10.8 divide = 21.6
 		}
 		else_if = {
 			limit = { var:te_climate_base_penalty < 30 }
@@ -454,14 +454,14 @@ te_jmap_comfort_base_factor_upper = {
 }
 
 # Local Climate's penalty in force, after the relief its owner's technologies give (stored yearly), split at none.
-# Knots: -7.2 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
+# Knots: -10.8 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
 te_jmap_comfort_factor = {
 	value = 0
 	if = {
 		limit = { has_variable = te_climate_penalty_applied }
 		if = {
 			limit = { var:te_climate_penalty_applied < 0 }
-			value = var:te_climate_penalty_applied add = 7.2 divide = 14.4
+			value = var:te_climate_penalty_applied add = 10.8 divide = 21.6
 		}
 		else_if = {
 			limit = { var:te_climate_penalty_applied < 30 }

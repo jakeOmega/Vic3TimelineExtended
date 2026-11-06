@@ -1391,6 +1391,8 @@
  state_climate_disease_relief_add_desc:0 "How far medicine and drainage protect newcomers from malaria, cutting the malaria part of a state's [concept_local_climate] penalty by this share."
  state_climate_heat_relief_add:0 "Heat Relief"
  state_climate_heat_relief_add_desc:0 "How far fans and air conditioning ease the summer heat that makes a state less comfortable to live in, cutting the heat part of its [concept_local_climate] penalty by this share."
+ state_climate_sun_relief_add:0 "Winter Sun Relief"
+ state_climate_sun_relief_add_desc:0 "How far weather modification and the last technologies close the gap between a gloomy winter and a sunny one, shrinking by this share both what a dark winter costs a state in [concept_local_climate] and what a bright one draws."
  state_climate_water_relief_add:0 "Water Supply"
  state_climate_water_relief_add_desc:0 "How far pumps, dams and desalination make up for a dry state's want of water, cutting the water part of its [concept_local_climate] penalty by this share."
  state_climate_winter_relief_add:0 "Winter Relief"

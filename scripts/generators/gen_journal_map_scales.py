@@ -125,13 +125,14 @@ SCALES = [
          knots=linear(0.2, 1), note="Tourism's Base Appeal, the state panel's row, 0-1 (stored monthly by "
                                     "te_update_tourism_modifier); 0.2 is the score of a region the table doesn't list"),
     # Local Climate's comfort penalty, in percent of migration attraction: one curve for both maps, so a color means
-    # the same before and after the owner's technologies. Negative is a mild winter's bonus, at most 7.2.
+    # the same before and after the owner's technologies. Negative is a mild or sunny winter's bonus, at most 10.8
+    # (7.2 for mildness and 3.6 for sunshine).
     dict(name="comfort_base", input="var:te_climate_base_penalty", guards=["te_climate_base_penalty"], three=True,
-         knots=diverging(-7.2, 0, (30, 80)),
+         knots=diverging(-10.8, 0, (30, 80)),
          note="Local Climate's penalty before any relief, percent of migration attraction (stored yearly), split "
-              "at none; the most a mild winter draws is 7.2, the most climate takes 80"),
+              "at none; the most a mild, sunny winter draws is 10.8, the most climate takes 80"),
     dict(name="comfort", input="var:te_climate_penalty_applied", guards=["te_climate_penalty_applied"], three=True,
-         knots=diverging(-7.2, 0, (30, 80)),
+         knots=diverging(-10.8, 0, (30, 80)),
          note="Local Climate's penalty in force, after the relief its owner's technologies give (stored yearly), "
               "split at none"),
     dict(name="gdppc", input="gdp_per_capita", guards=[], three=False, knots=doubling(0.25, 256),
