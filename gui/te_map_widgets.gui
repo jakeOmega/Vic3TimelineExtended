@@ -281,12 +281,21 @@ types te_map_widgets
 			}
 		}
 
-		# Wealth, from the same walk.
+		# Wealth: GDP per capita (engine figures), then the same walk's Gini and Dynastic Wealth.
 		flowcontainer = {
 			direction = horizontal
 			parentanchor = hcenter
 			ignoreinvisible = yes
 			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_gdp_per_capita"
+				tooltip = "te_jmap_pick_gdp_per_capita_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
 
 			te_jmap_pick_button = {
 				text = "te_jmap_pick_gini"
@@ -303,6 +312,59 @@ types te_map_widgets
 				visible = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# What a state's climate and crowding do to its migration attraction: Local Climate before any technology's
+		# relief and after its owner's, and Migration Crowding.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_base_comfort"
+				tooltip = "te_jmap_pick_base_comfort_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_current_comfort"
+				tooltip = "te_jmap_pick_current_comfort_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_crowding"
+				tooltip = "te_jmap_pick_crowding_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_crowding_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_crowding_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_crowding_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# What draws visitors: tourism's Base Appeal.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_tourism_appeal"
+				tooltip = "te_jmap_pick_tourism_appeal_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 			}
 		}

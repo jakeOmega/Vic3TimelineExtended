@@ -60,6 +60,58 @@ te_jmap_pick_dynastic_wealth_sgui = {
 	}
 }
 
+# GDP per capita and Migration Crowding read engine figures; tourism's Base Appeal and Local Climate's comfort,
+# figures their own refreshes store (te_journal_maps.txt). None depends on a game rule.
+te_jmap_pick_gdp_per_capita_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 29 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 29 }
+	}
+}
+
+te_jmap_pick_tourism_appeal_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 26 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 26 }
+	}
+}
+
+te_jmap_pick_base_comfort_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 27 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 27 }
+	}
+}
+
+te_jmap_pick_current_comfort_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 28 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 28 }
+	}
+}
+
+te_jmap_pick_crowding_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 30 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 30 }
+	}
+}
+
 # The census maps read each state's figures from the last census; births, deaths, migrants and the causes of death
 # only once a state has stepped a full year (te_journal_maps.txt).
 te_jmap_pick_life_expectancy_sgui = {

@@ -126,6 +126,88 @@ je_te_map_room = {
 				factor = te_jmap_wc_factor_upper
 			}
 		}
+		# 26. Tourism's Base Appeal, the state panel's row (stored monthly by te_update_tourism_modifier, since the score
+		# is a state_region chain of some 700 branches).
+		else_if = {
+			limit = {
+				te_jmap_selector = 26
+				has_variable = te_tourism_base_appeal
+			}
+			lerp = {
+				min_color = "te_jmap_tourism_low"
+				max_color = "te_jmap_tourism_high"
+				factor = te_jmap_tourism_factor
+			}
+		}
+		# 27. Base Comfort: Local Climate's penalty before any technology's relief (stored by its yearly refresh), diverging
+		# at none: green a mild winter's draw, red a cost.
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+				te_jmap_comfort_base_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_low"
+				max_color = "te_jmap_comfort_mid"
+				factor = te_jmap_comfort_base_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_mid"
+				max_color = "te_jmap_comfort_high"
+				factor = te_jmap_comfort_base_factor_upper
+			}
+		}
+		# 28. Current Comfort: the penalty in force, after the relief its owner's technologies give (the same refresh), on
+		# Base Comfort's curve and colors.
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+				te_jmap_comfort_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_low"
+				max_color = "te_jmap_comfort_mid"
+				factor = te_jmap_comfort_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_mid"
+				max_color = "te_jmap_comfort_high"
+				factor = te_jmap_comfort_factor_upper
+			}
+		}
+		# 29. GDP per capita: the state's GDP over its people (gdp_per_capita, two engine figures), a doubling at a time.
+		else_if = {
+			limit = { te_jmap_selector = 29 }
+			lerp = {
+				min_color = "te_jmap_gdppc_low"
+				max_color = "te_jmap_gdppc_high"
+				factor = te_jmap_gdppc_factor
+			}
+		}
+		# 30. Migration Crowding's cut to migration attraction, as the state panel's tile shows it (engine figures: people,
+		# arable land, Urban Engineering, tolerance).
+		else_if = {
+			limit = { te_jmap_selector = 30 }
+			lerp = {
+				min_color = "te_jmap_crowding_low"
+				max_color = "te_jmap_crowding_high"
+				factor = te_jmap_crowding_factor
+			}
+		}
 		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
 		else_if = {
 			limit = {
@@ -864,8 +946,9 @@ je_te_map_room = {
 			}
 			value = "te_jmap_none"
 		}
-		# Every map that reads a census or walk figure, for a state with none yet (no census, no full year, no people to
-		# count, or the rule off): grey. Every such selector is listed here (test_journal_map_modes.py).
+		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
+		# the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
+		# (test_journal_map_modes.py).
 		else_if = {
 			limit = {
 				OR = {
@@ -883,6 +966,9 @@ je_te_map_room = {
 					te_jmap_selector = 15
 					te_jmap_selector = 16
 					te_jmap_selector = 17
+					te_jmap_selector = 26
+					te_jmap_selector = 27
+					te_jmap_selector = 28
 				}
 			}
 			value = "te_jmap_no_data"
@@ -921,6 +1007,51 @@ je_te_map_room = {
 				has_variable = te_dg_wc
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_dynastic_wealth
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 26
+				has_variable = te_tourism_base_appeal
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_tourism_appeal
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_base_comfort
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+				has_variable = te_climate_base_penalty
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_current_comfort
+		}
+		# A save from before Base Comfort, until the state's first application (within a month): the cost in force only.
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_current_comfort_only
+		}
+		else_if = {
+			limit = { te_jmap_selector = 29 }
+			custom_tooltip_no_bullet = te_jmap_tt_gdp_per_capita
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 30
+				migration_crowding_mult > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_crowding
+		}
+		else_if = {
+			limit = { te_jmap_selector = 30 }
+			custom_tooltip_no_bullet = te_jmap_tt_crowding_none
 		}
 		# Over 10,000 years: the late game's immortals.
 		else_if = {
@@ -1365,6 +1496,17 @@ je_te_map_room = {
 				te_jmap_selector = 25
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_ce_none
+		}
+		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's).
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 26
+					te_jmap_selector = 27
+					te_jmap_selector = 28
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_no_figure
 		}
 		else_if = {
 			limit = {

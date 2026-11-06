@@ -405,3 +405,145 @@ te_jmap_gm_factor = {
 	min = 0
 	max = 1
 }
+
+# Tourism's Base Appeal, the state panel's row, 0-1 (stored monthly by te_update_tourism_modifier); 0.2 is the score of a region the table doesn't list.
+# Knots: 0.2 -> 0, 1 -> 1.
+te_jmap_tourism_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tourism_base_appeal }
+		value = var:te_tourism_base_appeal subtract = 0.2 divide = 0.8
+	}
+	min = 0
+	max = 1
+}
+
+# Local Climate's penalty before any relief, percent of migration attraction (stored yearly), split at none; the most a mild winter draws is 7.2, the most climate takes 80.
+# Knots: -7.2 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
+te_jmap_comfort_base_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_base_penalty }
+		if = {
+			limit = { var:te_climate_base_penalty < 0 }
+			value = var:te_climate_base_penalty add = 7.2 divide = 14.4
+		}
+		else_if = {
+			limit = { var:te_climate_base_penalty < 30 }
+			value = var:te_climate_base_penalty divide = 85 add = 0.5
+		}
+		else = {
+			value = var:te_climate_base_penalty subtract = 30 divide = 340 add = 0.85294
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_comfort_base_factor_lower = {
+	value = te_jmap_comfort_base_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_comfort_base_factor_upper = {
+	value = te_jmap_comfort_base_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# Local Climate's penalty in force, after the relief its owner's technologies give (stored yearly), split at none.
+# Knots: -7.2 -> 0, 0 -> 0.5, 30 -> 0.85294, 80 -> 1.
+te_jmap_comfort_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_penalty_applied }
+		if = {
+			limit = { var:te_climate_penalty_applied < 0 }
+			value = var:te_climate_penalty_applied add = 7.2 divide = 14.4
+		}
+		else_if = {
+			limit = { var:te_climate_penalty_applied < 30 }
+			value = var:te_climate_penalty_applied divide = 85 add = 0.5
+		}
+		else = {
+			value = var:te_climate_penalty_applied subtract = 30 divide = 340 add = 0.85294
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_comfort_factor_lower = {
+	value = te_jmap_comfort_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_comfort_factor_upper = {
+	value = te_jmap_comfort_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# GDP per capita, a year's GDP per person in pounds: a tenth of the color per doubling from 0.25 to 256 (a rich country about 1 in 1836, 8 in 1917, 60 today).
+# Knots: 0.25 -> 0, 0.5 -> 0.1, 1 -> 0.2, 2 -> 0.3, 4 -> 0.4, 8 -> 0.5, 16 -> 0.6, 32 -> 0.7, 64 -> 0.8, 128 -> 0.9, 256 -> 1.
+te_jmap_gdppc_factor = {
+	if = {
+		limit = { gdp_per_capita < 0.5 }
+		value = gdp_per_capita subtract = 0.25 divide = 2.5
+	}
+	else_if = {
+		limit = { gdp_per_capita < 1 }
+		value = gdp_per_capita subtract = 0.5 divide = 5 add = 0.1
+	}
+	else_if = {
+		limit = { gdp_per_capita < 2 }
+		value = gdp_per_capita subtract = 1 divide = 10 add = 0.2
+	}
+	else_if = {
+		limit = { gdp_per_capita < 4 }
+		value = gdp_per_capita subtract = 2 divide = 20 add = 0.3
+	}
+	else_if = {
+		limit = { gdp_per_capita < 8 }
+		value = gdp_per_capita subtract = 4 divide = 40 add = 0.4
+	}
+	else_if = {
+		limit = { gdp_per_capita < 16 }
+		value = gdp_per_capita subtract = 8 divide = 80 add = 0.5
+	}
+	else_if = {
+		limit = { gdp_per_capita < 32 }
+		value = gdp_per_capita subtract = 16 divide = 160 add = 0.6
+	}
+	else_if = {
+		limit = { gdp_per_capita < 64 }
+		value = gdp_per_capita subtract = 32 divide = 320 add = 0.7
+	}
+	else_if = {
+		limit = { gdp_per_capita < 128 }
+		value = gdp_per_capita subtract = 64 divide = 640 add = 0.8
+	}
+	else = {
+		value = gdp_per_capita subtract = 128 divide = 1280 add = 0.9
+	}
+	min = 0
+	max = 1
+}
+
+# Migration Crowding's cut to migration attraction, 0-1 and past it, as the state panel's tile shows it: 0.45 at ten times the floor density, 1.45 at twenty.
+# Knots: 0 -> 0, 0.45 -> 0.64286, 1.45 -> 1.
+te_jmap_crowding_factor = {
+	if = {
+		limit = { migration_crowding_pull_pct < 0.45 }
+		value = migration_crowding_pull_pct divide = 0.7
+	}
+	else = {
+		value = migration_crowding_pull_pct subtract = 0.45 divide = 2.8 add = 0.64286
+	}
+	min = 0
+	max = 1
+}

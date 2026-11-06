@@ -26,12 +26,18 @@ right of the system's journal entry and of a state's Demographics subtab. Press
 Escape or click outside the page to close it.
 
 The Map Room is a page of world maps with a button for each: Turmoil,
-Devastation, Urban People, Gini Coefficient and Dynastic Wealth; a map for
+Devastation, Urban People, GDP per Capita, Gini Coefficient, Dynastic Wealth,
+Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal; a map for
 each of eight systems, Emissions, Nuclear Weapons, Agent Networks, United
 Nations, Political Models, Ocean Basins, Grandeur and Colonies; and, from the
 census, Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death
 Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance and
-Net Migration. Hover a state for its figure. Emissions colors a state by its
+Net Migration. Hover a state for its figure. The two comfort maps show what a
+state's Local Climate does to its migration attraction: Base Comfort before any
+technology eases it, Current Comfort after its owner's, in the same colors so
+you can compare them. Crowding Penalty is the cut Migration Crowding makes, and
+Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
+game's first month. Emissions colors a state by its
 share of the world's emissions last year. Nuclear Weapons shows the world's
 nuclear powers as the world sees them, the countries that host your weapons or
 shelter under your umbrella, and, while the world believes you armed, those

@@ -464,9 +464,12 @@ class ScriptMatchesMirror(unittest.TestCase):
                         diff = abs(self.sv.read(sv, env) - mirror[name])
                         if diff > worst[0]:
                             worst = (diff, (row.state, era, warming, name, self.sv.read(sv, env), mirror[name]))
-                    # The values the bonus modifier and the hovers read (review of #1313).
+                    # The values the bonus modifier and the hovers read (review of #1313), and the penalty before
+                    # relief the Map Room's Base Comfort map reads: era 0's, whatever the era, since no carrier counts.
+                    bare = cal.terms(row, 0, self.c, self.s, warming)["penalty"]
                     for sv, want in (("te_climate_bonus", max(0.0, -mirror["penalty"])),
-                                     ("te_climate_winter_draw", -mirror["winter"])):
+                                     ("te_climate_winter_draw", -mirror["winter"]),
+                                     ("te_climate_penalty_raw", bare)):
                         diff = abs(self.sv.read(sv, env) - want)
                         if diff > worst[0]:
                             worst = (diff, (row.state, era, warming, sv, self.sv.read(sv, env), want))
@@ -477,6 +480,7 @@ class ScriptMatchesMirror(unittest.TestCase):
         for warming in (-3.0, 0.0, 12.0):
             env = {**record_env(row, has_record=0), **self.sums[1], "temperature_anomaly_display": warming}
             self.assertEqual(self.sv.read("te_climate_penalty", env), 0.0, warming)
+            self.assertEqual(self.sv.read("te_climate_penalty_raw", env), 0.0, warming)
 
     def test_interpreter_reads_every_value(self):
         """Every value in the file evaluates, so none hides an operation the interpreter would skip."""
@@ -494,6 +498,9 @@ DEFINES = ROOT / "common" / "defines" / "extra_defines.txt"
 EFFECT = "te_update_local_climate_modifier"
 APPLIED = "te_climate_penalty_applied"
 BONUS = "te_climate_bonus_applied"
+# The penalty before relief, for the Map Room's Base Comfort map (te_journal_maps.txt): the newest of the three, so
+# the first application keys on it.
+BASE = "te_climate_base_penalty"
 FEW_STATES_DEFINES = ("MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY", "MASS_MIGRATION_FEW_TARGET_STATES_PENALTY")
 
 
@@ -540,6 +547,7 @@ class Modifier(unittest.TestCase):
                                "remove_modifier_if_exists_effect = { MODIFIER = local_climate_amenity } "
                                f"set_variable = {{ name = {APPLIED} value = te_climate_penalty }} "
                                f"set_variable = {{ name = {BONUS} value = te_climate_bonus }} "
+                               f"set_variable = {{ name = {BASE} value = te_climate_penalty_raw }} "
                                f"if = {{ limit = {{ var:{APPLIED} > 0.5 }} "
                                f"add_modifier = {{ name = local_climate_discomfort multiplier = var:{APPLIED} }} }} "
                                f"else_if = {{ limit = {{ var:{BONUS} > 0.5 }} "
@@ -548,7 +556,7 @@ class Modifier(unittest.TestCase):
     def test_refresh_never_removes_the_variable(self):
         """The modifier's multiplier reads the variable on later ticks too (modifier_multiplier_var_audit)."""
         for path, text in script_texts("common", "events"):
-            for var in (APPLIED, BONUS):
+            for var in (APPLIED, BONUS, BASE):
                 self.assertNotRegex(text, rf"remove_variable\s*=\s*{var}\b", path.name)
                 self.assertNotRegex(text, rf"remove_variable\s*=\s*\{{\s*name\s*=\s*{var}\b", path.name)
 
@@ -561,7 +569,7 @@ class Modifier(unittest.TestCase):
         self.assertEqual(squash(top_block(text, "local_climate_yearly_on_action") or ""),
                          f"effect = {{ {EFFECT} = yes }}")
         self.assertEqual(squash(top_block(text, "local_climate_first_on_action") or ""),
-                         f"trigger = {{ NOT = {{ has_variable = {BONUS} }} }} effect = {{ {EFFECT} = yes }}")
+                         f"trigger = {{ NOT = {{ has_variable = {BASE} }} }} effect = {{ {EFFECT} = yes }}")
         # One refresh site plus the first application, and nothing else calls the effect.
         calls = [(path.name, n) for path, text in script_texts("common", "events")
                  for n in [len(re.findall(rf"\b{EFFECT}\s*=\s*yes\b", text))] if n]

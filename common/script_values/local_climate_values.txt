@@ -254,6 +254,21 @@ te_climate_penalty = {
 	}
 	max = te_climate_penalty_max
 }
+# The penalty before any relief, as a country with none of the carriers would bear it: the Map Room's
+# Base Comfort map, beside its Current Comfort (te_climate_penalty). The refresh stores it
+# (te_climate_base_penalty), since a map paints every state and this reads eight state_region chains.
+te_climate_penalty_raw = {
+	value = 0
+	if = {
+		limit = { te_climate_has_record > 0 }
+		add = te_climate_heat_raw
+		add = te_climate_cold_raw
+		add = te_climate_winter_raw
+		add = te_climate_dry_raw
+		add = te_climate_disease_raw
+	}
+	max = te_climate_penalty_max
+}
 # The bonus local_climate_amenity applies: the penalty's negative part, as a positive percent.
 te_climate_bonus = {
 	value = te_climate_penalty

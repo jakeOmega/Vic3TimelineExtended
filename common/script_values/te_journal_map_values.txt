@@ -9,9 +9,10 @@
 # rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
 # share, 16 Gini coefficient, 17 Dynastic Wealth; the systems' (each also on its own entry): 18 emissions, 19 nuclear
 # weapons, 20 covert networks, 21 the United Nations, 22 political models, 23 ocean basins, 24 grandeur, 25 colonies;
-# 0 none. 2 was literacy, retired because vanilla's own literacy map
-# mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next pick); 6 was the scope probe
-# until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
+# the Map Room's own again: 26 tourism's Base Appeal, 27 Base Comfort (Local Climate before any technology), 28 Current
+# Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 0 none. 2 was literacy, retired because
+# vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
+# pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
 # Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.
 te_jmap_selector = {
@@ -94,4 +95,18 @@ te_jmap_net_strength = {
 	}
 	min = 0
 	max = 100
+}
+
+# ---------------------------------------------------------------------------
+# Hover figures (map_tooltip's loc, state scope)
+# ---------------------------------------------------------------------------
+# Base Comfort's figure as what it does to migration attraction, signed as te_climate_effect_now is (negative a cost,
+# positive a mild winter's draw): the penalty before relief that te_update_local_climate_modifier stored.
+te_jmap_comfort_base_effect = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_base_penalty }
+		value = var:te_climate_base_penalty
+		multiply = -1
+	}
 }

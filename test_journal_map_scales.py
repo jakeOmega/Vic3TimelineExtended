@@ -180,6 +180,17 @@ class ScalesTest(unittest.TestCase):
                     self.assertAlmostEqual(slopes[2] / slopes[3], gen.SLOPE_RATIO)
 
 
+    def test_a_doubling_scale_gives_each_doubling_the_same_color(self):
+        doubled = [s for s in gen.SCALES if s["name"] == "gdppc"]
+        self.assertEqual(len(doubled), 1)
+        ks = doubled[0]["knots"]
+        for (a, fa), (b, fb) in zip(ks, ks[1:]):
+            self.assertEqual(b, 2 * a)
+            self.assertAlmostEqual(fb - fa, 1 / (len(ks) - 1))
+        with self.assertRaises(ValueError):
+            gen.doubling(0.25, 100)
+
+
 class UseTest(unittest.TestCase):
     def test_the_map_reads_only_generated_factors(self):
         generated = set(re.findall(r"^(te_jmap_\w+)\s*=\s*\{", _read(OUT), re.M))
