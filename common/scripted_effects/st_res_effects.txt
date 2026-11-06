@@ -729,8 +729,8 @@ st_res_weekly_update_effect = {
 		st_res_mark_good_no_hub_effect = { GOOD = copper }
 
 		# The cache now reads no hub and no staff, so every actual rate is 0:
-		# this writes the week's sales income as 0 and clears the income
-		# modifier the last week with a hub left on the country.
+		# this writes the week's sales income as 0, which takes the entry's
+		# income modifier to 0.
 		st_res_apply_sell_profit_effect = yes
 
 		# The tick also runs with no hub: the price average keeps tracking,
@@ -765,6 +765,7 @@ st_res_je_immediate_effect = {
 }
 
 st_res_je_weekly_pulse_effect = {
+	te_scaling_live_selfcheck = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 	st_res_weekly_update_effect = yes
 }
 
@@ -984,8 +985,10 @@ st_res_stop_tanks_rate_effect           = { st_res_stop_rate_base     = { GOOD =
 st_res_stop_fertilizer_rate_effect      = { st_res_stop_rate_base     = { GOOD = fertilizer  } }
 st_res_stop_copper_rate_effect      = { st_res_stop_rate_base     = { GOOD = copper  } }
 
+# Books the week's sales income into st_res_sell_profit. je_strategic_reserve
+# declares st_res_sell_profit_modifier from it (scaling_modifiers_while_active,
+# #1404); nothing adds or removes the modifier by hand.
 st_res_apply_sell_profit_effect = {
-	remove_modifier = st_res_sell_profit_modifier
 	set_variable = { name = st_res_sell_profit value = 0 }
 	change_variable = { name = st_res_sell_profit add = st_res_grain_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_ammunition_sale_profit }
@@ -996,7 +999,6 @@ st_res_apply_sell_profit_effect = {
 	change_variable = { name = st_res_sell_profit add = st_res_tanks_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_fertilizer_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_copper_sale_profit }
-	add_modifier = { name = st_res_sell_profit_modifier multiplier = var:st_res_sell_profit }
 }
 
 # ============================================================================
