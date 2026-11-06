@@ -13959,6 +13959,15 @@ pm_programmable_matter_clothing = {
 	required_input_goods = digital_access
 }
 
+# Vanilla gates Elastics on the two sewing-machine base methods, so a mill on
+# Programmable Matter Clothing could not pick it. Same fix as pm_precision_tools
+# for the furniture manufactory's Programmable Matter Furniture.
+INJECT:pm_elastics = {
+	unlocking_production_methods = {
+		pm_programmable_matter_clothing
+	}
+}
+
 pm_customized_clothing = {
 	texture = "gfx/interface/icons/production_method_icons/pm_customized_clothing.dds"
 
