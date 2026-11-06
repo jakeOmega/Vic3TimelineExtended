@@ -170,19 +170,21 @@ gm_arch_method_forensic_ok = {
 }
 
 # Country scope. It makes at least the weekly innovation a dig by the method
-# diverts (country_innovation is net of the digs it already runs), so a launch
-# never takes its weekly innovation below zero (owner, 2026-10-16). The AI's
-# own floor is four times this (gm_arch_ai_affords_<method>).
+# diverts (country_innovation is net of the digs it already runs, and the gate
+# adds those begun in the last two weeks, which may not be in it yet:
+# gm_arch_innovation_gate_<method>), so a launch never takes its weekly
+# innovation below zero (owner, 2026-10-16). The AI's own floor is four times
+# what the method diverts (gm_arch_ai_affords_<method>).
 gm_arch_spares_antiquarian = {
-	country_innovation >= gm_arch_innovation_antiquarian
+	country_innovation >= gm_arch_innovation_gate_antiquarian
 }
 
 gm_arch_spares_systematic = {
-	country_innovation >= gm_arch_innovation_systematic
+	country_innovation >= gm_arch_innovation_gate_systematic
 }
 
 gm_arch_spares_forensic = {
-	country_innovation >= gm_arch_innovation_forensic
+	country_innovation >= gm_arch_innovation_gate_forensic
 }
 
 # Container scope, with gm_site_order_method set: $WHO$ makes the weekly

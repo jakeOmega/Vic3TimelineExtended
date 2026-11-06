@@ -728,8 +728,8 @@ gm_com_lapse = {
 
 # ---- The boons (spec §3.2) ----------------------------------------------------------
 # Country scope. The open opportunity's boon: gm_boon_<source> counts its months
-# down (gm_tick_boons); gm_apply_national_modifiers puts the modifier of the
-# same name on the journal entry while it runs. A second of the same kind
+# down (gm_tick_boons); the journal entry declares the modifier of the same
+# name while it runs (je_grand_monuments.txt). A second of the same kind
 # restarts the clock. A save's petition, from before the rework, has none.
 # test_grand_monument_registry.py pins the list to COMMISSION_SOURCES.
 gm_com_grant_boon = {
@@ -786,51 +786,6 @@ gm_tick_boon = {
 			remove_variable = gm_boon_$SRC$
 		}
 	}
-}
-
-# Journal-entry scope, from gm_apply_national_modifiers (ROOT = the country).
-gm_add_boons = {
-	gm_add_boon = { SRC = reign }
-	gm_add_boon = { SRC = regime }
-	gm_add_boon = { SRC = great_power }
-	gm_add_boon = { SRC = victory }
-	gm_add_boon = { SRC = defeat }
-	gm_add_boon = { SRC = centenary }
-	gm_add_boon = { SRC = ruler_death }
-	gm_add_boon = { SRC = space }
-	gm_add_boon = { SRC = faith }
-	gm_add_boon = { SRC = tech_artistic }
-	gm_add_boon = { SRC = tech_scientific }
-	gm_add_boon = { SRC = tech_industrial }
-	gm_add_boon = { SRC = tech_athletic }
-	gm_add_boon = { SRC = tech_naturalist }
-}
-
-gm_add_boon = {
-	if = {
-		limit = {
-			root = { has_variable = gm_boon_$SRC$ }
-		}
-		add_modifier = { name = gm_boon_$SRC$ }
-	}
-}
-
-# Journal-entry scope, from gm_remove_national_modifiers.
-gm_remove_boons = {
-	remove_modifier = gm_boon_reign
-	remove_modifier = gm_boon_regime
-	remove_modifier = gm_boon_great_power
-	remove_modifier = gm_boon_victory
-	remove_modifier = gm_boon_defeat
-	remove_modifier = gm_boon_centenary
-	remove_modifier = gm_boon_ruler_death
-	remove_modifier = gm_boon_space
-	remove_modifier = gm_boon_faith
-	remove_modifier = gm_boon_tech_artistic
-	remove_modifier = gm_boon_tech_scientific
-	remove_modifier = gm_boon_tech_industrial
-	remove_modifier = gm_boon_tech_athletic
-	remove_modifier = gm_boon_tech_naturalist
 }
 
 # ---- The monument's gift (spec §3.1; ageing spec 2026-10-16 §5) ----------------------

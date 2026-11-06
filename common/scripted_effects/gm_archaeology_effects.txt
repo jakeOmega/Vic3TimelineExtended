@@ -88,8 +88,9 @@ gm_arch_monthly = {
 			gm_arch_ai_decide = yes
 		}
 		# A player the pass has listed is refreshed now: the cost and the drain
-		# follow the digs this month's pass counted, a finished dig's included, and
-		# a site waiting opens the journal entry.
+		# variables follow the digs this month's pass counted, a finished dig's
+		# included (the entry's declarations within days), and a site waiting
+		# opens the journal entry.
 		every_country = {
 			limit = {
 				has_variable = gm_arch_listed
@@ -1118,7 +1119,47 @@ gm_arch_begin_dig = {
 		limit = { NOT = { has_variable = gm_site_progress } }
 		set_variable = { name = gm_site_progress value = 0 }
 	}
+	# What it diverts reaches the country's weekly innovation a few days later
+	# (the journal entry declares gm_arch_diversion, #1404); until then the
+	# launch gates count it here, so launches in a row can't each pass on
+	# innovation an earlier one already diverts. Every caller sets the method first.
+	if = {
+		limit = { var:gm_site_method = flag:antiquarian }
+		$WHO$ = { gm_arch_book_innovation = { ADD = gm_arch_innovation_antiquarian } }
+	}
+	else_if = {
+		limit = { var:gm_site_method = flag:systematic }
+		$WHO$ = { gm_arch_book_innovation = { ADD = gm_arch_innovation_systematic } }
+	}
+	else_if = {
+		limit = { var:gm_site_method = flag:forensic }
+		$WHO$ = { gm_arch_book_innovation = { ADD = gm_arch_innovation_forensic } }
+	}
 	debug_log = "TE_MONUMENTS: dig begun"
+}
+
+# Country scope, from gm_arch_begin_dig: $ADD$ weekly innovation a dig just
+# begun diverts, booked for two weeks (accumulating) in
+# gm_arch_innovation_pending, which the launch gates add to what the method
+# asks (gm_arch_innovation_gate_<method>, gm_archaeology_values.txt). The
+# declared drain reaches the modifier sums 2-5 days after a launch; how often
+# country_innovation itself follows them is unprobed, so the booking covers a
+# weekly tick on top. A booking only makes the gate stricter while both count.
+gm_arch_book_innovation = {
+	if = {
+		limit = { has_variable = gm_arch_innovation_pending }
+		set_variable = {
+			name = gm_arch_innovation_pending
+			value = {
+				value = var:gm_arch_innovation_pending
+				add = $ADD$
+			}
+			days = 14
+		}
+	}
+	else = {
+		set_variable = { name = gm_arch_innovation_pending value = $ADD$ days = 14 }
+	}
 }
 
 # Container scope, from arch_events.11: the dig stops and its progress stays.
@@ -1267,26 +1308,6 @@ gm_arch_country_listed = {
 		set_variable = { name = gm_arch_innovation_units value = 0 }
 	}
 	set_variable = gm_active
-}
-
-# Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
-# The digs' weekly innovation drain, the units gm_arch_pass summed: the
-# modifier carries one unit. Digs cost no money (owner, 2026-10-16).
-gm_arch_add_national = {
-	# Only a country gm_arch_pass has listed has the variable, and
-	# gm_add_national reads it unguarded (the boons' guard, gm_add_boon).
-	if = {
-		limit = { root = { has_variable = gm_arch_innovation_units } }
-		gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units }
-	}
-}
-
-# Journal-entry scope, from gm_remove_national_modifiers. gm_arch_expense is
-# retired: nothing adds it, and removing it here sheds it from a save made while
-# digs cost money.
-gm_arch_remove_national = {
-	remove_modifier = gm_arch_diversion
-	remove_modifier = gm_arch_expense
 }
 
 # ---- The AI ---------------------------------------------------------------------------------------------------------
