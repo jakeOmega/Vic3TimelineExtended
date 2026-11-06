@@ -51,8 +51,8 @@
 # sets it there. Then:
 #   - `immediate` restores at once (un_state_restore_all), which works when
 #     it runs after the variable merge and je:je_united_nations resolves
-#     during activation (untested; the nuclear entry waits for its first
-#     pulse for that reason, nd_rebuild_posture_modifiers). It only ever
+#     during activation (untested; the nuclear entry used to wait for its
+#     first pulse for that reason). It only ever
 #     adds: the world is mid-transition then, so it forgets nothing;
 #   - the entry's monthly pulse, while pending, heals whatever is still
 #     missing (un_state_rebuild: restore, then forget what cannot be

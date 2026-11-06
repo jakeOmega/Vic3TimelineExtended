@@ -235,8 +235,6 @@ NOT_ON_COUNTRY = {
     "colonial_crumbling_movement_radicalism": "political movements",
     "colonial_pressure_movement_radicalism": "political movements",
     "gm_*": "je_grand_monuments, a monument's state or building",
-    "nd_doctrine_*": "je_nuclear_program", "nd_readiness_*": "je_nuclear_program",
-    "nuclear_weapon_program_funding": "je_nuclear_program",
     "nd_posture_*": "interest groups",
     "sr_colony_*": "je_space_race_solar_colonization", "sr_discovery_*": "je_space_race_solar_colonization",
     "sr_solar_system_trade": "je_space_race_solar_colonization",

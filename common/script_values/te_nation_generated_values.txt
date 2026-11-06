@@ -95,10 +95,6 @@ te_nation_src_demography_count = {
 te_nation_src_nuclear_order_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
 	}
@@ -5034,10 +5030,6 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = nd_taboo_programme_held }
 		add = 1
 	}
@@ -5311,10 +5303,6 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = resettlement_declaration_violation }
 		add = 1
 	}
@@ -5526,10 +5514,6 @@ te_nation_type_country_prestige_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = imperial_federation_modifier }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
 		add = 1
 	}
 	if = {
@@ -5874,10 +5858,6 @@ te_nation_type_country_improve_relations_speed_mult_count = {
 te_nation_type_country_leverage_generation_mult_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = un_nonmember_pariah_strong_modifier }
 		add = 1
 	}
@@ -5917,10 +5897,6 @@ te_nation_type_country_ideology_resistance_mult_count = {
 # Used by: the country_un_authority_target_add row
 te_nation_type_country_un_authority_target_add_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = nd_taboo_possession_cost }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = un_antarctic_policy_modifier }
 		add = 1
