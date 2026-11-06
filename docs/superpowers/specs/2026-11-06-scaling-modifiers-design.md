@@ -239,7 +239,11 @@ commit; the implementation re-reads each site.
    monthly) with a removal date (`project_old_save_repair_removals`).
    `has_modifier` sees only the added copy, so the guard never touches the
    declaration. Lines in that file that *re-add* a key (the 68 colony keys,
-   `:342-899`) become remove-only.
+   `:342-899`) become remove-only. As built (PR 4, after its review): each
+   system's lines are one `legacy_scaling_strip_<system>` effect, which the
+   monthly strip calls and the system's entry also runs from its weekly pulse,
+   so an old copy stacks with its declaration for days rather than up to a
+   month (`test_scaling_strip.py`).
 8. **Keep the preview.** A button or event option that adds a modifier today
    shows its effects in the tooltip; one that only sets a variable shows
    nothing (`silent_variable_audit` flags an option that does). Each such site
@@ -405,7 +409,8 @@ countries borrow at 0%; a hybrid keeps the country branch and adds a home gate,
 so nothing gets shorter. The 38 tools have no mirror variables (follow-up).
 
 As built (PR 4): 33 declarations, each gated on the cycle latch
-(`has_variable = finance_cycle_value`); the phases read the existing
+(`has_variable = finance_cycle_value`) but the two charges, gated on their
+tool (no tool runs on a dormant entry); the phases read the existing
 `banking_cycle_is_<phase>` and economy triggers, whose edges equal the deleted
 chain. The pool and the two external charges read new caches
 (`ce_pool_balance_cached`, `banking_external_*_charge_cached`), written where

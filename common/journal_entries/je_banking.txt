@@ -836,6 +836,7 @@
 
 	on_weekly_pulse = {
 		effect = {
+			legacy_scaling_strip_banking_cycle = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 			if = {
 				limit = { te_banking_cycle_running = yes }
 				banking_cycle_weekly_effects = yes

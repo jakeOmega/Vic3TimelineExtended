@@ -172,6 +172,8 @@ class EntryTest(unittest.TestCase):
 
     def test_the_weekly_pulse_waits_for_the_cycle(self):
         effect = _norm(_key_block(_key_block(self.je, "on_weekly_pulse"), "effect"))
+        # The old-save strip runs first until 2026-12-31 (#1404, test_scaling_strip.py).
+        effect = effect.replace("legacy_scaling_strip_banking_cycle = yes ", "")
         self.assertEqual(effect, "{ if = { limit = { te_banking_cycle_running = yes } "
                                  "banking_cycle_weekly_effects = yes } }")
 
