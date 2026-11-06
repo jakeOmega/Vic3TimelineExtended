@@ -26,8 +26,7 @@ starts. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` 
 | 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Click it again. Then fade it, close the page and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through; the second click brings it back; a reopened page is whole again. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
 | 3 | Banking's map before the cycle starts | Early in a game, before your banking cycle starts, click the Banking tab header's map button. | The entry's inactive page opens and the map paints: other countries in their phases, yours grey. Note whether the page lists every country under Involved Countries, as the Potential probe's page did (fourth session). | No page, or an error: give the button back its `IsActive` gate. A long list of countries: hide Involved Countries on an inactive page (`journal_entry.gui`). |
 | 4 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
-| 5 | The pressed pick | With the Map Room open, look at the current pick's button. | It draws pressed (`down`, which no mod `.gui` used before); the fourth session didn't say. | Not pressed: a label marks the pick instead. |
-| 6 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
+| 5 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
 
 ## The second pass's checks, answered
 
@@ -36,7 +35,7 @@ From #1417's list (its numbering), by the fourth session under Results:
 | # | Question | Answer |
 |---|---|---|
 | 1 | One click opens the Map Room, picks on the page | Yes: a widget draws on a contextless page. |
-| 2 | Picks on the page | Work, at the next tick. The pressed state wasn't mentioned (third-pass check 5). |
+| 2 | Picks on the page | Work, at the next tick, and the current pick's button draws pressed (`down` works). |
 | 3 | Scope probe | Blue: `scope:journal_entry` isn't set in a contextless entry's map either. No white stripes over the player's states: the stripe condition was `owner ?= { is_player = yes }`, and vanilla's own entries stripe through the state's `owner`, so most likely `is_player` doesn't resolve in the paint. The probe is gone. |
 | 4 | Repaint while paused | (a) Reopening the page repaints. The picks now reopen it themselves (third-pass check 1). |
 | 5 | The map with the page closed | Neither: the lens toolbar's lock doesn't keep it (the map went back to political), and the listed copy painted nothing with no page open and the open page's map otherwise. The copy is gone; the see-through page is the answer instead. |
@@ -160,8 +159,8 @@ them on Jan 1 while paused):
 
 - **Check 1: works.** One click on the Demographics header's map button opens the Map Room with its picks above the
   description, so a widget draws on a contextless page.
-- **Check 2: works, at the next tick.** Each pick changes the map once the game runs. Whether the current pick's
-  button drew pressed wasn't said.
+- **Check 2: works, at the next tick.** Each pick changes the map once the game runs, and the current pick's button
+  draws pressed: `down` bound to a scripted GUI's `IsValid` works (the owner, after the session's report).
 - **Check 3: blue everywhere, no stripes.** Blue: `scope:journal_entry` isn't set in a contextless entry's map either.
   No stripes: `map_color_second` drew nothing under `owner ?= { is_player = yes }`. Vanilla's own entries draw stripes
   through the state's `owner` (the Great Game, the Forest of Bayonets), so the likely failure is `is_player` inside the

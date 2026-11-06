@@ -62,7 +62,7 @@ entry, in no country's journal.
   set the global pick with the player as root, and `te_jmap_pick_row` (`gui/te_map_widgets.gui`) draws them on the page
   through the entry's `widget` (`gui/journal_entry_widgets/te_map_room_widget.gui`, above the description; a widget
   draws on a contextless page, 2026-11-05). A pick's `is_valid` is false while it is the pick, which its button draws
-  pressed (`down`); the census maps' `is_shown` hides them while the census doesn't run.
+  pressed (`down`, seen working 2026-11-05); the census maps' `is_shown` hides them while the census doesn't run.
 - **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then triggers its own
   `te_jmap_repaint` state, which a quarter second later closes the page (`InformationPanelBar.ClosePanel`) and opens
   it again (`OpenJournalEntryPanel`, which toggles, hence the close first). Reopening repainted a paused map
