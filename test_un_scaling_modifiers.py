@@ -235,6 +235,67 @@ class OldSaveStripTests(unittest.TestCase):
                 self.assertLess(body.index(f"set_variable = {key}_on"), body.index(f"remove_modifier = {key} "))
         self.assertIn("set_variable = un_sanctions_target_on", body)
 
+    def test_every_clear_strips_first(self):
+        # Until a country's first strip, an older save's copy stands beside a
+        # mirror the new code clears, and the strip would set it again from the
+        # copy (review of PR 8): each helper that clears a mirror runs it first.
+        sites = {
+            STATE_EFFECTS: ("un_mirror_clear",),
+            REGIME_EFFECTS: ("un_regime_term_off",),
+            JUSTICE_EFFECTS: ("un_sanctions_lift_regime", "un_sanctions_lift_ours"),
+            LADDER: ("un_dissolve_strip_country",),
+        }
+        for path, names in sites.items():
+            text = _read(path)
+            for name in names:
+                with self.subTest(effect=name):
+                    body = _flat(_block(text, name))
+                    self.assertIn("legacy_scaling_strip_united_nations = yes", body)
+                    self.assertLess(body.index("legacy_scaling_strip_united_nations = yes"),
+                                    body.index("remove_variable"))
+
+    def test_a_stale_dues_figure_goes(self):
+        text = _read(_path(*LEGACY_STRIP.split(os.sep)))
+        body = _flat(text.split("legacy_scaling_strip_united_nations = {", 1)[1].split("\n}\n", 1)[0])
+        self.assertIn("if = { limit = { has_variable = un_dues_cached NOT = { un_dues_in_force = yes } } "
+                      "un_dues_stop_paying = yes }", body)
+
+
+class UprisingTests(unittest.TestCase):
+    """A revolution's winner inherits the loser's variables, and nothing
+    reconciles a declared modifier's mirror, so a government that beat rebels
+    who had joined would keep their conventions and programmes: an uprising
+    may not join (review of PR 8)."""
+
+    def test_every_way_in_turns_an_uprising_away(self):
+        for path, name in ((BUTTONS, "un_join_button"), (SGUIS, "un_act_join_sgui")):
+            with self.subTest(control=name):
+                gate = _block(_read(path), name)
+                self.assertIn("text = un_join_not_revolutionary_tt\n\t\t\tis_revolutionary = no", gate)
+        self.assertIn("un_membership_eligible = yes\n\t\t\t\t\t\tis_revolutionary = no",
+                      _read(JE))
+        events = _read(_path("events", "un_events.txt"))
+        self.assertEqual(events.count("un_membership_eligible = yes\n\t\tis_revolutionary = no"), 1)
+        self.assertEqual(events.count("un_membership_eligible = yes\n\t\t\tis_revolutionary = no"), 1)
+
+
+class InfluenceGateTooltipTests(unittest.TestCase):
+    def test_the_booking_has_its_own_line(self):
+        # The cost line keeps the cost (test_international_influence_costs reads
+        # its figure); the booking prints only while there is one.
+        for path in (BUTTONS, SGUIS):
+            text = _read(path)
+            for kind in ("programme", "stance"):
+                with self.subTest(path=path, kind=kind):
+                    cost = (f"text = un_{kind}_influence_tt\n\t\t\tinfluence >= un_{kind}_influence_cost")
+                    booked = ("trigger_if = {\n\t\t\tlimit = { has_variable = un_influence_pending }\n"
+                              "\t\t\tcustom_tooltip = {\n\t\t\t\ttext = un_influence_pending_tt\n"
+                              f"\t\t\t\tinfluence >= un_{kind}_influence_gate")
+                    self.assertEqual(text.count(cost), text.count(booked))
+                    self.assertGreater(text.count(cost), 0)
+                    self.assertNotIn(f"text = un_{kind}_influence_tt\n\t\t\tinfluence >= un_{kind}_influence_gate",
+                                     text)
+
 
 class DeclarationTests(unittest.TestCase):
     def test_the_entry_declares_exactly_these_once_each(self):
@@ -418,6 +479,7 @@ class ProgrammeTests(unittest.TestCase):
         state = _read(STATE_EFFECTS)
         self.assertEqual(_lines(_block(state, "un_mirror_set")), ["set_variable = $MIRROR$"])
         self.assertEqual(_flat(_block(state, "un_mirror_clear")),
+                         "legacy_scaling_strip_united_nations = yes "
                          "if = { limit = { has_variable = $MIRROR$ } remove_variable = $MIRROR$ }")
         for modifier in PROGRAMMES:
             with self.subTest(modifier=modifier):
@@ -531,6 +593,7 @@ class RegimeTermTests(unittest.TestCase):
                          "name = un_regime_$TERM$_modifier multiplier = $MULT$ } } } "
                          "set_variable = un_regime_$TERM$_modifier_on")
         self.assertEqual(_flat(_block(effects, "un_regime_term_off")),
+                         "legacy_scaling_strip_united_nations = yes "
                          "if = { limit = { has_variable = un_regime_$TERM$_modifier_on } "
                          "remove_variable = un_regime_$TERM$_modifier_on }")
         clear = _block(effects, "un_regime_clear_country")

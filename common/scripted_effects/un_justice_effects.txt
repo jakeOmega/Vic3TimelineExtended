@@ -742,6 +742,7 @@ un_credentials_chamber_preview = {
 # the orphans.
 # Scope: the sanctioned country
 un_sanctions_lift_regime = {
+	legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's copy goes first, so the strip can't set this mirror again
 	if = {
 		limit = { has_variable = un_sanctions_target_on }
 		remove_variable = un_sanctions_target_on
@@ -783,6 +784,16 @@ un_sanctions_lift_regime = {
 # prints the plain line. The caller books the record once, after this.
 # Scope: the enforcer (ROOT)
 un_sanctions_lift_ours = {
+	# PENDING REMOVAL after 2026-12-31 (#1404): an older save's target records
+	# its regime as the copy and un_sanctions_enforced_by, with no
+	# un_sanctions_target_on until its strip runs; run it now, so the lift sees it.
+	every_country = {
+		limit = {
+			has_variable = un_sanctions_enforced_by
+			NOT = { has_variable = un_sanctions_target_on }
+		}
+		legacy_scaling_strip_united_nations = yes
+	}
 	if = {
 		limit = {
 			any_country = {

@@ -66,8 +66,11 @@
 #     programme counters and brand us a pariah;
 #   - otherwise the pulse reconciles the other way (un_state_reconcile): the
 #     modifier is the truth, and the mirror follows it. That is how a save
-#     from before the mirrors gains them, and how a mirror a loyalist winner
-#     inherited from the rebels is dropped.
+#     from before the mirrors gains them, and how a membership mirror a
+#     loyalist winner inherited from the rebels is dropped. The declared
+#     modifiers' mirrors have no reconcile: an uprising may not join the UN
+#     (un_join_not_revolutionary_tt), so a loyalist winner inherits none of
+#     those (#1404).
 # ============================================================================
 
 # ---- The write helpers ----------------------------------------------------------
@@ -97,6 +100,7 @@ un_mirror_set = {
 }
 
 un_mirror_clear = {
+	legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's copy goes first, so the strip can't set this mirror again
 	if = {
 		limit = { has_variable = $MIRROR$ }
 		remove_variable = $MIRROR$

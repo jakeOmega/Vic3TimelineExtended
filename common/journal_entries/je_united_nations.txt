@@ -845,6 +845,7 @@
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 						modifier:country_un_membership_obligation_bool = yes
 						un_membership_eligible = yes
+						is_revolutionary = no	# as the Join button
 					}
 					un_join_organisation = yes
 				}

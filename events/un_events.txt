@@ -72,6 +72,7 @@ un_events.1 = {
 		# A revolution's winner awaiting its rebuild is a member (§0.9).
 		NOT = { has_variable = un_member_modifier_on }
 		un_membership_eligible = yes
+		is_revolutionary = no	# as the Join button
 	}
 
 	immediate = {
@@ -1582,6 +1583,7 @@ un_events.10 = {
 			NOT = { has_variable = un_member_modifier_on }
 			has_global_variable = un_founded
 			un_membership_eligible = yes
+			is_revolutionary = no	# as the Join button
 			NOT = { has_modifier = un_expelled_cooldown }
 			NOT = { has_modifier = un_withdrawal_penalty_modifier }
 		}

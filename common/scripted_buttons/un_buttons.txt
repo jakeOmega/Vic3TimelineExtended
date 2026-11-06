@@ -150,6 +150,14 @@ un_join_button = {
 			text = un_membership_eligible_tt
 			un_membership_eligible = yes
 		}
+		# The UN seats a country's government, not an uprising against it: a
+		# revolution's winner inherits the loser's variables, so a rebel's
+		# conventions and programmes would otherwise pass to a government
+		# that wins (#1404, un_repair_after_civil_war).
+		custom_tooltip = {
+			text = un_join_not_revolutionary_tt
+			is_revolutionary = no
+		}
 		NOT = { has_modifier = un_expelled_cooldown }
 		NOT = { has_modifier = un_withdrawal_penalty_modifier }
 	}
@@ -459,7 +467,7 @@ un_propose_charter_reform_button = {
 		}
 		if = { limit = { has_law = law_type:law_isolationism } add = -40 }
 		if = {
-			limit = { has_variable = un_undermine_order_cost_on }
+			limit = { un_undermines_the_order = yes }
 			add = -60
 		}
 	}
@@ -601,7 +609,16 @@ un_peacekeeping_mission_button = {
 		NOT = { has_modifier = un_peacekeeping_cooldown }
 		custom_tooltip = {
 			text = un_programme_influence_tt
-			influence >= un_programme_influence_gate
+			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -871,7 +888,16 @@ un_human_rights_resolution_button = {
 		}
 		custom_tooltip = {
 			text = un_programme_influence_tt
-			influence >= un_programme_influence_gate
+			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -965,7 +991,16 @@ un_arms_control_button = {
 		}
 		custom_tooltip = {
 			text = un_programme_influence_tt
-			influence >= un_programme_influence_gate
+			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -1066,7 +1101,16 @@ un_champion_order_button = {
 		NOT = { has_variable = un_undermine_order_cost_on }
 		custom_tooltip = {
 			text = un_stance_influence_tt
-			influence >= un_stance_influence_gate
+			influence >= un_stance_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_stance_influence_gate
+			}
 		}
 	}
 
@@ -1138,7 +1182,16 @@ un_undermine_order_button = {
 		NOT = { has_variable = un_champion_order_cost_on }
 		custom_tooltip = {
 			text = un_stance_influence_tt
-			influence >= un_stance_influence_gate
+			influence >= un_stance_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_stance_influence_gate
+			}
 		}
 	}
 

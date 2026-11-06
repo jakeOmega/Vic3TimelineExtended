@@ -1023,6 +1023,17 @@ legacy_scaling_strip_united_nations = {
 		}
 		set_variable = un_sanctions_target_on
 	}
+	# Dues: an older save kept the weekly figure when a member stopped paying
+	# (it removed only the modifier), and the declaration would charge it again
+	# on rejoining or a restored seat until the next monthly update. Every way
+	# out removes it now (un_dues_stop_paying); a cache, not a mirror.
+	if = {
+		limit = {
+			has_variable = un_dues_cached
+			NOT = { un_dues_in_force = yes }
+		}
+		un_dues_stop_paying = yes
+	}
 	# The entry's copies.
 	je:je_united_nations ?= {
 		if = { limit = { has_modifier = un_membership_benefits_modifier } remove_modifier = un_membership_benefits_modifier }

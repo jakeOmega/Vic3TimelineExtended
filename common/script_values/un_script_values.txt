@@ -426,6 +426,17 @@ un_programme_influence_gate = {
 	}
 }
 
+# The influence a start in the past week committed, for the gates' tooltip
+# (un_influence_pending_tt).
+# Scope: country
+un_influence_pending_value = {
+	value = 0
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
+
 # Tabling a resolution on our own motion: un_sponsor_cost_modifier, or
 # un_sponsor_punitive_cost_modifier for one that punishes a member (sanctions,
 # mandate, expulsion, arms embargo, court referral, credentials), for
