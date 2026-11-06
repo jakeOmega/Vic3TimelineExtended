@@ -5,43 +5,39 @@ colors = {
 	# Every map: a state the metric has no figure for (no census yet, no banking cycle).
 	te_jmap_no_data = hsv360 { 0 0 38 }
 
-	# je_te_map_host: turmoil, calm to unrest.
+	# je_te_map_room: turmoil, calm to unrest.
 	te_jmap_turmoil_low = hsv360 { 150 18 62 }
 	te_jmap_turmoil_high = hsv360 { 356 82 72 }
 
-	# je_te_map_host: literacy, unlettered to universal.
+	# je_te_map_room: literacy, unlettered to universal.
 	te_jmap_literacy_low = hsv360 { 30 35 32 }
 	te_jmap_literacy_high = hsv360 { 190 70 88 }
 
-	# je_te_map_host, Demographics: life expectancy at birth, 25 to 80 years (oxblood, amber, teal).
+	# je_te_map_room, Demographics: life expectancy at birth, 25 to 80 years (oxblood, amber, teal).
 	te_jmap_e0_low = hsv360 { 355 75 42 }
 	te_jmap_e0_mid = hsv360 { 38 72 88 }
 	te_jmap_e0_high = hsv360 { 172 62 55 }
 
-	# je_te_map_host, Demographics: fertility, diverging at replacement (2.1 children): shrinking blue, cream at
+	# je_te_map_room, Demographics: fertility, diverging at replacement (2.1 children): shrinking blue, cream at
 	# replacement, growing rust.
 	te_jmap_tfr_low = hsv360 { 212 62 62 }
 	te_jmap_tfr_mid = hsv360 { 45 12 93 }
 	te_jmap_tfr_high = hsv360 { 18 78 62 }
 
-	# je_te_map_host, Demographics: median age, 15 to 45 years (young straw, rose, old aubergine).
+	# je_te_map_room, Demographics: median age, 15 to 45 years (young straw, rose, old aubergine).
 	te_jmap_median_low = hsv360 { 52 55 92 }
 	te_jmap_median_mid = hsv360 { 335 42 72 }
 	te_jmap_median_high = hsv360 { 268 58 36 }
 
-	# je_te_map_host: the scope probe. One flat color per answer (docs/testing/journal-map-modes-playtest.md).
+	# je_te_map_room: the scope probe. One flat color per answer (docs/testing/journal-map-modes-playtest.md).
 	te_jmap_probe_entry_owner = hsv360 { 120 70 70 }
 	te_jmap_probe_entry_only = hsv360 { 55 85 95 }
 	te_jmap_probe_global_only = hsv360 { 215 75 85 }
 	te_jmap_probe_stripe = hsv360 { 0 0 100 }
 
-	# je_te_map_host: the refresh tick, black to white as the weekly counter climbs.
-	te_jmap_tick_low = hsv360 { 0 0 8 }
-	te_jmap_tick_high = hsv360 { 0 0 96 }
 
-	# je_te_map_hidden_world: one flat color, so the map says which entry painted it.
-	te_jmap_hidden_world = hsv360 { 300 70 80 }
-	te_jmap_hidden_world_probe = hsv360 { 130 70 70 }
+	# je_te_map_potential_probe: one flat color, so the map says an inactive entry painted it.
+	te_jmap_potential_probe = hsv360 { 300 70 80 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

@@ -1,11 +1,15 @@
-﻿### Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md), first pass, 2026-11-05.
-### A journal entry's map shows (the engine switches to it from code) when its page opens, so a "show on the map" button
-### is a button that opens the page. Two are wired:
-###   - te_jmap_demog_map_button, in the Demographics tab's header (te_demog_window_body): Demographics has no entry, so
-###     it borrows je_te_map_host, which stays out of the journal until this button adds it (first click) and then
-###     opens it on life expectancy (once the entry is in the journal);
+﻿### Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md), second pass, 2026-11-05.
+### A journal entry's map shows (the engine switches to it from code) while its page is open, so a "show on the map"
+### button is a button that opens the page. Every button here names its entry through a datacontext and passes
+### JournalEntry.AccessSelf: inside a callback, GetPlayerJournalEntry fails at load both bare and ended with .AccessSelf
+### ("requires non const promote"; gui_modding_guide.md gotcha #29).
+###   - te_jmap_demog_map_button, in the Demographics tab's header (te_demog_window_body): one click picks life
+###     expectancy and opens the Map Room (je_te_map_room, contextless, in no journal, there from the game's start);
 ###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle.
 ### Both sit left of the header's "?" (te_help_button, 10 in from the right; this one 45 in), hidden for an observer.
+###
+### te_jmap_pick_row is the Map Room's picks: scripted GUIs, since the engine locks a contextless entry's own scripted
+### buttons for a country not involved in it. It sits on the Map Room's page (te_map_room_widget.gui) and on the strip.
 ###
 ### te_jmap_test_strip is the play-test's harness (docs/testing/journal-map-modes-playtest.md), in debug mode only
 ### (InDebugMode, the -debug_mode launch the console's `event` command already needs), on the Demographics tab above
@@ -23,9 +27,8 @@ types te_map_widgets
 		}
 	}
 
-	### Demographics. Two buttons in one place: Add while the host entry is out of the journal, Open once it is in.
-	### The add runs through a scripted GUI, which the engine applies after the click, so the same click cannot open
-	### an entry that does not exist yet; the test strip's one-click button checks whether it can.
+	### Demographics: pick life expectancy and open the Map Room, in one click. The pick lands at the next tick (a
+	### scripted GUI's effect, play-test check 2), so a paused game shows the old pick until unpaused.
 	type te_jmap_demog_map_button = widget {
 		size = { 29 29 }
 		parentanchor = right|vcenter
@@ -33,23 +36,10 @@ types te_map_widgets
 		visible = "[Not( GetMetaPlayer.IsObserver )]"
 
 		te_map_button = {
-			visible = "[Not( GetScriptedGui('te_jmap_host_active_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-			tooltip = "te_jmap_demog_button_add_tt"
-			onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-		}
-
-		# The gate on a parent and the entry on the child, as vanilla's Meiji button has them, so the datacontext is
-		# never asked for an entry that is not there.
-		widget = {
-			size = { 29 29 }
-			visible = "[GetScriptedGui('te_jmap_host_active_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-
-			te_map_button = {
-				datacontext = "[GetPlayerJournalEntry('je_te_map_host')]"
-				tooltip = "te_jmap_demog_button_open_tt"
-				onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-			}
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_demog_button_tt"
+			onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
 	}
 
@@ -66,6 +56,92 @@ types te_map_widgets
 			visible = "[JournalEntry.IsActive]"
 			tooltip = "te_jmap_banking_button_tt"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	### The Map Room's picks, one per map (common/scripted_guis/te_journal_map_sguis.txt): pressed while it is the
+	### pick, hidden while its data doesn't exist (the census maps while the census doesn't run).
+	type te_jmap_pick_row = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		# The world's maps, and the test map.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_turmoil"
+				tooltip = "te_jmap_pick_turmoil_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_turmoil_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_literacy"
+				tooltip = "te_jmap_pick_literacy_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_literacy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_literacy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_literacy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			# A test map (play-test check 3); it goes once answered.
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_scope_probe"
+				tooltip = "te_jmap_pick_scope_probe_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_scope_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_scope_probe_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_scope_probe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+		}
+
+		# The census maps.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_life_expectancy"
+				tooltip = "te_jmap_pick_life_expectancy_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_fertility"
+				tooltip = "te_jmap_pick_fertility_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_fertility_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_fertility_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_fertility_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			button = {
+				using = default_button
+				size = { 150 30 }
+				text = "te_jmap_pick_median_age"
+				tooltip = "te_jmap_pick_median_age_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_median_age_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_median_age_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_median_age_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
 		}
 	}
 
@@ -88,72 +164,48 @@ types te_map_widgets
 			text = "te_jmap_strip_heading"
 		}
 
+		# The same picks as the Map Room's page: a fallback if its widget doesn't draw there (check 1).
+		te_jmap_pick_row = {}
+
 		flowcontainer = {
 			direction = horizontal
 			parentanchor = hcenter
+			ignoreinvisible = yes
 			spacing = 4
 
-			# Add the host and open it in the same click (no datacontext: the entry may not exist when this runs).
+			# Open the Map Room without changing its pick.
 			button = {
 				using = default_button
-				size = { 126 32 }
-				text = "te_jmap_strip_one_click"
-				tooltip = "te_jmap_strip_one_click_tt"
-				onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_te_map_host').AccessSelf)]"
-			}
-
-			# The activation-trigger route: set the variable only.
-			button = {
-				using = default_button
-				size = { 126 32 }
-				text = "te_jmap_strip_request"
-				tooltip = "te_jmap_strip_request_tt"
-				onclick = "[GetScriptedGui('te_jmap_request_host_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-
-			# Close from outside the entry.
-			button = {
-				using = default_button
-				size = { 126 32 }
-				text = "te_jmap_strip_close"
-				tooltip = "te_jmap_strip_close_tt"
-				onclick = "[GetScriptedGui('te_jmap_close_host_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-
-			# The contextless entry nobody is involved in.
-			button = {
-				using = default_button
-				size = { 126 32 }
-				datacontext = "[GetPlayerJournalEntry('je_te_map_hidden_world')]"
-				text = "te_jmap_strip_hidden"
-				tooltip = "te_jmap_strip_hidden_tt"
+				size = { 166 32 }
+				datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+				text = "te_jmap_strip_room"
+				tooltip = "te_jmap_strip_room_tt"
 				onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 			}
-		}
 
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			spacing = 4
-
-			# Hover previews: vanilla's hidden journal entry map, then the mod's listed copy (gfx/map/map_modes/te_map_modes.txt).
+			# Check 7: put the probe entry in Potential (or take it out).
 			button = {
 				using = default_button
-				size = { 254 32 }
-				text = "te_jmap_strip_hover_vanilla"
-				tooltip = "te_jmap_strip_hover_vanilla_tt"
-				onmousehierarchyenter = "[SetTempMapModeByKey('mm_journal_entry_map_data')]"
-				onmousehierarchyleave = "[RemoveTempMapMode]"
+				size = { 166 32 }
+				text = "te_jmap_strip_potential"
+				tooltip = "te_jmap_strip_potential_tt"
+				onclick = "[GetScriptedGui('te_jmap_potential_probe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			}
 
-			button = {
-				using = default_button
-				size = { 254 32 }
-				text = "te_jmap_strip_hover_mod"
-				tooltip = "te_jmap_strip_hover_mod_tt"
-				onmousehierarchyenter = "[SetTempMapModeByKey('mm_te_journal_entry_map')]"
-				onmousehierarchyleave = "[RemoveTempMapMode]"
+			# Check 7: open the probe entry, once the player holds it, inactive or active. The gate on a parent and
+			# the entry on the child, as vanilla's Meiji button has them.
+			widget = {
+				size = { 166 32 }
+				visible = "[GetScriptedGui('te_jmap_potential_probe_held_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+				button = {
+					using = default_button
+					size = { 166 32 }
+					datacontext = "[GetPlayerJournalEntry('je_te_map_potential_probe')]"
+					text = "te_jmap_strip_potential_open"
+					tooltip = "te_jmap_strip_potential_open_tt"
+					onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+				}
 			}
 		}
 	}

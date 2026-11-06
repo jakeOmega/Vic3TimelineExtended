@@ -522,6 +522,7 @@
  military_prestige_loss:0 "Loss of military [concept_prestige]"
  minor_events_timelineextended.6.b:0 "Emergency fiscal response"
  missionary_interest:0 "Missionary interests in colonial territories"
+ mm_te_journal_entry_map:0 "Journal Entry Map (Test)"
  mobilization_option_bonus_pay:0 "Bonus Pay"
  mobilization_option_bonus_pay_desc:0 "Bonus pay can improve the morale of soldiers by providing them with [concept_budget_additional_income]."
  mobilization_option_extra_training:0 "Extra Training"

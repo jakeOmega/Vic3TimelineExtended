@@ -484,6 +484,10 @@ JOURNAL_ROOT_FILES = ["banking_layout_widget.gui", "colonial_empire_widget.gui",
                       "cultural_hegemony_widget.gui", "global_warming_widget.gui", "grand_monuments_widget.gui",
                       "nuclear_layout_widget.gui", "space_race_widget.gui", "strategic_reserve_widget.gui",
                       "te_tax_layout_widget.gui", "un_layout_widget.gui"]
+# Journal-entry roots on a contextless entry, which has no Country (JournalEntry.GetCountry would be null): they read
+# the player through scripted GUIs instead, as vanilla's contextless great_game_widgets.gui reads AccessPlayer. The
+# Map Room's picks (docs/systems/mod_systems/journal_map_modes.md).
+CONTEXTLESS_ROOT_FILES = ["te_map_room_widget.gui"]
 JE_COUNTRY = {"datacontext": '"[JournalEntry.GetCountry]"', "parentanchor": "hcenter", "direction": "vertical",
               "ignoreinvisible": "yes"}
 
@@ -548,7 +552,8 @@ class MountContextTest(unittest.TestCase):
         (test_te_help_pages.py)."""
         types = mod_types()
         roots = _journal_roots()
-        self.assertEqual(sorted({f for f, _, _, _ in roots}), JOURNAL_ROOT_FILES)
+        self.assertEqual(sorted({f for f, _, _, _ in roots}), sorted(JOURNAL_ROOT_FILES + CONTEXTLESS_ROOT_FILES))
+        roots = [r for r in roots if r[0] not in CONTEXTLESS_ROOT_FILES]
         self.assertGreaterEqual(len(roots), 44)
         for path, line, name, body in roots:
             with self.subTest(root=f"{path}:{line} {name}"):

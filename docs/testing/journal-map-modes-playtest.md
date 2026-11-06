@@ -1,43 +1,56 @@
 # Journal entry map modes: play-test checklist
 
-The first pass at vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue #1404) was
-built before anyone had seen one work in game. This list is what the play-test should settle, most important first.
-Record each answer here and in `docs/audits/vanilla_1_15_prep.md` § 2 under C6 (or C21), and put each engine fact in
-`docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
+The in-game checks for vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue
+#1404), most important first. The first pass (#1410, #1414) answered most of its list; this is the second pass's list,
+for the contextless Map Room and its page of picks. Record each answer under Results, in
+`docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in `docs/guides/scripting_best_practices.md` §
+"Journal Entry Map Modes".
 
 ## How to run
 
-- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout (the branch adds
-  `gfx/map/map_modes/te_map_modes.txt`, so a sparse worktree's deploy would also delete textures).
-- **Launch with `-debug_mode`**, as for the console's `event` command: the test strip shows only in debug mode. It sits
-  on the Demographics tab (Population panel, last tab), above the sections, under a "Map tests" heading. Demographics on
-  Full or Display only, which is the default.
+- **Deploy** per CLAUDE.md, "Play-testing unmerged work", from the full checkout: the branch keeps
+  `gfx/map/map_modes/te_map_modes.txt`, so a sparse worktree's deploy would also delete textures.
+- **A new game**, or a save: the first pass's `je_te_map_host` and `je_te_map_hidden_world` are gone, and a save that
+  holds them may log their records as unknown at load. Note any such line; it is harmless for a test build.
+- **Launch with `-debug_mode`** for the test strip, which sits on the Demographics tab (Population panel, last tab),
+  above the sections, under a "Map tests" heading. Demographics on Full or Display only, the default. The map button in
+  the tab's header (left of "?") needs no debug mode.
 - **Logs.** `grep TE_JMAP debug.log` (or `curl -s "http://localhost:8950/logs/debug?debug_log=only&mod_only=true&q=TE_JMAP"`):
-  the add, request and close buttons and the entry's activation each write one line, dated, which times check 3.
-- **At load**, check `debug.log` for errors naming `te_journal_maps.txt`, `te_journal_map_colors.txt`,
-  `te_map_modes.txt` or `je_banking.txt`: a rejected field can drop a whole entry. If the game won't start, delete
-  `gfx/map/map_modes/te_map_modes.txt` in the deploy folder first.
-- **Look at the art too** (checks 9 and 10): the Demographics maps and the Banking map were drawn to be looked at, and
-  the palettes are a first guess.
+  every pick writes `TE_JMAP pick <n> date=…`, and the Potential probe its on and off.
+- **At load**, check `error.log` for lines naming `te_map_widgets.gui`, `te_map_room_widget.gui`,
+  `te_journal_maps.txt` or `te_journal_map_sguis.txt`, `failed reading callback` above all: the engine drops a callback
+  it can't read and says so only there, once.
 
-## The checks
+## The checks (second pass)
 
 | # | Check | How | What each answer means | If it's the bad answer |
 |---|---|---|---|---|
-| 1 | Does opening an entry's page paint the map? | Click the map button in the Demographics header (left of "?"): it adds the Map Room. Click it again: it opens the Map Room on Life Expectancy. Then open Banking's page (the Banking tab's map button, or the journal). | The map recolors while the page is open: the engine switches to the entry's map on opening, as assumed. Nothing changes: something else turns it on. | Look for a map mode button on the journal entry page or in the journal list; note what does turn it on. Every button in this branch opens a page, so they all need rewiring. |
-| 2 | Several maps on one entry | In the Map Room, click Turmoil, Literacy, then the three Demographics maps. | The map changes at each click: a selector works, and one entry can host many maps. It changes only on reopening the page: it works, but the buttons should reopen the page. | It never changes: `map_color` reads the selector once. Fall back to one entry per map, each hidden until its button (the Map Room's pattern). |
-| 3 | The scope probe: can the map read the player's country? | Pick Scope Probe. | **Green**: `scope:journal_entry` and its owner both resolve inside `map_color`, so a map's pick can live on the player's country (safe in multiplayer). **Yellow**: the entry resolves, its owner doesn't. **Blue**: neither; only the global variable got through, and every player shares one pick. White stripes over the player's own states: `map_color_second` and the state's `owner` link work. | Blue: keep the global, and note in the system doc that two players in one game share the Map Room's pick. |
-| 4 | Hidden until wanted, by the activation triggers | Close the Map Room (its Close button, or the strip's Close). Then click the strip's Request. Note the in-game date of the `TE_JMAP host requested` and `TE_JMAP host activated` lines. Try once paused, once running. | Same day, even paused: activation is checked at once, and the plain "set a variable" route needs no `add_journal_entry`. Days later: activation runs on a schedule; buttons must use `add_journal_entry`. Never while paused: the same, and say so in the button's tooltip. | Keep `add_journal_entry` on every button (already the Demographics button's route). |
-| 5 | Closing hides it again | After Close, how long until the Map Room leaves the journal, and does the map go back to normal? | Leaves at once or within days: `can_deactivate` with the variable removed is a working "remove" (1.15 has no `remove_journal_entry`). Never leaves: deactivation doesn't apply to an entry added by `add_journal_entry`. | The entry needs an outcome that concludes it instead, which leaves it in the concluded tab; or keep it and let Close only clear the pick. |
-| 6 | One click: add and open | Close the Map Room; wait until it leaves the journal. Click the strip's Add + Open once. First check that the load logged no `failed reading callback` for `te_map_widgets.gui` (the first build's did: see Results). | The page opens on the first click: the scripted GUI's effect lands before the second `onclick` runs, and the Demographics button can be one button. Only on the second click: as expected; the two-state button stays. | Error or crash: the call with no entry is unsafe; keep it out of player-facing buttons (it already is). A load error at `te_map_widgets.gui:103` again: `.AccessSelf` is the wrong ending too; try `AccessPlayerJournalEntry('je_te_map_host').AccessSelf`. |
-| 7 | An entry outside every journal | Click the strip's Hidden Entry. | A page opens and the map turns **magenta**: an entry no country is involved in can host a map and be opened by a button, so a map never needs to show in the journal at all. Nothing opens: `GetPlayerJournalEntry` doesn't find an entry the player isn't involved in (the button stays inert). | The Map Room's hide-until-wanted pattern (checks 4–5) is the way to keep a map out of the journal. |
-| 8 | The map with the page closed | (a) Open the Map Room, then close its page: does the map stay? (b) Again with the lens toolbar's lock on (the padlock by the map mode name). (c) With no page open, pick **Journal Entry Map (Test)** from the map mode dropdown. (d) Hover the strip's two hover buttons, with no page open and with the Map Room open. | (a)/(b) The map stays: a journal map can be left up. (c) It paints: the listed copy works, and the colors say whose map it shows (Map Room colors, Banking's phases, or magenta for the hidden world entry), which tells how the engine picks the entry. Nothing painted: it needs a page open. (d) Same, for a hover preview. | If none of (a)–(d) holds, a map exists only while its page is open; say so in each map button's tooltip. |
-| 9 | Banking map, and whether a tab opens it | Open the Budget panel's Banking tab: does the map change? Then its header's map button. | The tab alone paints it: any panel showing an entry through `GetPlayerJournalEntry` triggers its map (prep C6). Only the button: as assumed. Look: every country in its phase's color, yellow stripes on the overheating; grey where the cycle hasn't started (early game, most of the world). | — |
-| 10 | Look and feel | With each Demographics map up, judge the palette, the grey "no census" states, borders, and the hover text (state name and figure). The same for Banking. | Notes for the next pass: colors to change, a legend wanted (vanilla draws none for journal maps, as far as known), text to add. | — |
-| 11 | How water, wasteland, unowned and decentralized land draw | Look at them on any map. | Recorded for the system doc. Unowned land has no `owner`, so Banking leaves it unpainted. | — |
-| 12 | How often the map redraws | Pick Refresh Tick, leave the page open, run the game a few weeks. | The shade steps each week: `map_color` is re-evaluated as the game runs, and live data shows live. Steps only on reopening: it is evaluated on opening; stale maps until reopened, which suits yearly census data. | — |
-| 13 | Cost | With a Demographics map up, run at top speed for a year and compare with the map off. | No visible slowdown: per-state variable reads are cheap enough. A slowdown: note it; maps may need to read fewer branches. | Fewer branches per map (move each map's ladder first). |
-| 14 | A button on a contextless page | Open the hidden entry (the strip's Hidden Entry), click its **Probe: Run a Button Here**, then unpause for a tick. | The map turns green and `debug.log` has `TE_JMAP world button ran` with a scope dump: a button on a page no country is involved in runs, and the dump says what its root is (the player's country, or none). The next pass's Map Room can then be a contextless entry with its own pick buttons. Nothing changes and no line: such a page's buttons don't run. | Picks move to GUI buttons that call scripted GUIs (with the player as root), mounted on the page or beside the map button. |
+| 1 | One click opens the Map Room, with its picks on the page | Click the Demographics header's map button once. | The Map Room's page opens at once and the map turns to life expectancy (paused: at unpause). Two rows of pick buttons sit above the description: a widget draws on a contextless page, and the next pass builds on it. A second click while life expectancy is already the pick runs a scripted GUI whose `is_valid` is false; a log line about that is harmless. | No page: read `error.log` for a callback line. A page without the buttons: the widget doesn't draw on a contextless page; use the strip's row (the same buttons) for checks 2–4, and the picks move beside the map buttons in the next pass. |
+| 2 | Picks on the page | Click Turmoil, Literacy, then the three census maps, with the game running. | The map changes at each click (at the next tick), and the current pick's button draws pressed (`down`, which no mod `.gui` used before). | Buttons do nothing: read `debug.log` for `TE_JMAP pick` lines (none: the scripted GUI didn't run from the page). No pressed state: note it; a label can mark the pick instead. |
+| 3 | The scope probe on a contextless entry | Pick Scope Probe (Test). | **Yellow**: `scope:journal_entry` is set in a contextless entry's map. **Blue**: it isn't. Either is fine (the pick is global). **White stripes** over your own states: `map_color_second` and the state's `owner` link work, so a map can mark the player's land. | No stripes: a map can't single out the player's states that way; note it. |
+| 4 | Repaint while paused | Pause. Pick another map. Then (a) click the strip's Open Map Room, which reopens the page; (b) if that doesn't repaint, switch the map mode away and back with the lens toolbar. | (a) or (b) repaints: the buttons can do the same after a pick, so a paused player sees their pick at once. | Neither: a pick shows at unpause; say so in the picks' tooltips. |
+| 5 | The map with the page closed | (a) With the Map Room open, turn on the lens toolbar's lock (the padlock by the map mode name), then close the page. (b) With no page open, pick **Journal Entry Map (Test)** from the map mode dropdown; then again after opening and closing the Map Room, and after Banking. | (a) The map stays: a journal map can be pinned. (b) It paints, and the colors say whose map it is (the Map Room's pick, or Banking's phases): the listed copy is a way to show a map with no page. Nothing painted: a journal map needs its page. | If neither holds, a map exists only while its page is open; say so in each map button's tooltip, and drop the listed copy. |
+| 6 | Banking map, and whether a tab opens it | Open the Budget panel's Banking tab: does the map change by itself? Then the tab header's map button. | The tab alone paints it: any panel showing an entry through `GetPlayerJournalEntry` triggers its map (prep C6). Only the button: as built. Look: every country in its phase's color, yellow stripes on the overheating, grey where the cycle hasn't started. | — |
+| 7 | An inactive entry's page (prep C6) | Save first: (a) asks the journal panel for an entry it never lists. (a) Before anything else, click the strip's **Open Potential Probe**: every country holds an inactive copy of a country entry with activation triggers, so the button shows from the start. Does a page open for an entry shown nowhere? (b) Click **Potential Probe**; note the date of `TE_JMAP potential probe on` and the day the entry appears in the journal's Potential section. (c) Open it from the journal (or the strip): does the map turn **magenta**? | (a) A page opens: `GetPlayerJournalEntry` returns an inactive copy and the panel opens it, so a system's map button needn't wait for its entry. (b) The wait for a shown inactive entry (the first pass's activations came up to two weeks after the click). (c) Magenta: an inactive page paints its map, so Banking's map button can show before a country's cycle starts. | (a) A crash or an error: never open an entry the player can't see; note the log line. (c) No magenta: a map needs an active entry; keep Banking's button gated on `IsActive`. |
+| 8 | Look and feel | With each map up, judge the palette, the grey "no census" states, borders, and the hover text (state name and figure). The same for Banking. | Notes for the next pass: colors to change, a legend wanted (vanilla draws none for journal maps, as far as known), text to add. | — |
+| 9 | How water, wasteland, unowned and decentralized land draw | Look at them on any map. | Recorded for the system doc. Unowned land has no `owner`, so Banking leaves it unpainted. | — |
+| 10 | Cost | With a census map up, run at top speed for a year and compare with the map off. | No visible slowdown: per-state variable reads are cheap enough. A slowdown: note it; maps may need fewer branches. | Fewer branches per map. |
+
+## The first pass's checks, answered
+
+From #1410's list (its numbering), by the three sessions under Results:
+
+| # | Question | Answer |
+|---|---|---|
+| 2 | Several maps on one entry | Yes, on a selector: a pick shows at the next tick (paused, at unpause). |
+| 3 | Can `map_color` read the player's country? | No: blue. Neither `scope:journal_entry` nor its owner resolved on a country entry, so the pick is a global variable, shared by every player in a multiplayer game. Stripes not yet reported (check 3 above). |
+| 4 | Activation timing | An entry with activation triggers activates at the engine's own check, which looks fortnightly: four activations fell on Jan 13 plus a multiple of 14 days, 4–12 days after the click. |
+| 5 | Closing (`can_deactivate`, variable removed) | Works: the entry went back to inactive (the adds that followed ran, and it reactivated). |
+| 6 | One click: add and open | Moot. `add_journal_entry` was refused every time, and the open callback failed at load in both forms tried. |
+| 7 | An entry outside every journal | Works: a contextless entry nobody is involved in opens from a button and paints. The Map Room is now one. |
+| 8 (a), (d) | The map with the page closed; hover previews | The map goes with the page; `SetTempMapModeByKey` hovers paint nothing (grey). (b) and (c) are check 5 above. |
+| 12 | How often the map redraws | As the game runs: the weekly tick map stepped with the page open. |
+| 14 | A scripted button on a contextless page | Locked: "Countries that are not involved in the Journal Entry may not take this action". The Map Room's picks are scripted GUIs instead. |
 
 ## Results
 
@@ -56,7 +69,8 @@ The first launch on `main` after #1410: a new game as Britain in debug mode, run
   dump lists `GetPlayerJournalEntry` only as a global promote, with no function form, so it can't stand as an argument
   on its own. The button would only have added the entry, and check 6 would have read "two clicks" whatever the engine
   does. It now passes `GetPlayerJournalEntry('je_te_map_host').AccessSelf`, the form vanilla's
-  `GetBuildingType('building_shipyard').Self` takes (`construction_panel.gui`). Check 6 tests that form too.
+  `GetBuildingType('building_shipyard').Self` takes (`construction_panel.gui`). Check 6 tests that form too. (That
+  failed at load as well: third session.)
 - **The hidden world entry exists.** `je_te_map_hidden_world` is active from 1836.1.1 with no country and an empty
   root: a contextless entry nobody is involved in is created and kept. Whether a button can open it is check 7.
 - **The Map Room stays out of the journal while nobody asks.** `je_te_map_host` has an inactive record on all 286
@@ -85,7 +99,8 @@ The owner's report, with `debug.log` from 16:51 to 16:55:
   there lost `THIS`: 649 lines of `Promote 'THIS' returned nullptr` / `Data error in loc string 'te_jmap_tt_e0_value'`
   and no figure. The choice is now two `map_tooltip` branches (the same trap as `ROOT` and `SCOPE`,
   `gui_modding_guide.md`).
-- **Add + Open (check 6): the add takes about a week, and the page never opened.** It never could on this build: its
+- **Add + Open (check 6): the add takes about a week, and the page never opened.** (Wrong on both causes: see the third
+  session. The add was refused, and `.AccessSelf` failed at load too.) It never could on this build: its
   open callback was dropped at load (above). But the week answers check 6 whatever the form: an entry `add_journal_entry`
   adds isn't in the journal until about a week later, so no click can add the Map Room and open it. The Demographics
   button stays two-state, and its tooltip now says the Map Room appears within about a week. The log fits: 25 `host
@@ -96,19 +111,54 @@ The owner's report, with `debug.log` from 16:51 to 16:55:
   the activation 29 seconds later, and at 16:54 21 adds had no activation before the close, but in game days that could
   mean anything. All four lines now print `date=`, so 4–5 need a rerun.
 
+### Third session, 2026-11-05 evening (build d733ebc76, with #1414)
+
+The owner's report and screenshot, `debug.log` and `error.log` from 17:18 to 17:27, and the 17:29 autosave:
+
+- **Add + Open still had no open.** The load logged `Invalid promote 'GetPlayerJournalEntry'(0) for
+  'GetPlayerJournalEntry('je_te_map_host').AccessSelf', requires non const promote` and `failed reading callback, at
+  gui/te_map_widgets.gui:103` (`error.1.log`). Inside a callback `GetPlayerJournalEntry` fails ended with
+  `.AccessSelf` as well as bare: it is a const promote, and a function that changes the game (`OpenJournalEntryPanel`)
+  needs a non-const one. The form proven in game is the entry as the button's `datacontext` and
+  `JournalEntry.AccessSelf` in the click (the Hidden Entry and Banking buttons). Gotcha #29 and the GUI lint said
+  otherwise; both are corrected.
+- **`add_journal_entry` never added the Map Room.** Every add logged `Great Britain already has a journal entry of type
+  je_te_map_host` (`journal_entry_manager.cpp:372`, 32 lines). The autosave holds 286 `je_te_map_host` records, one per
+  country, only Britain's active: every country holds an inactive copy of a country entry with its own activation
+  triggers (`is_shown_when_inactive`, `possible`) from the game's start, vanilla's too (`je_meiji_restoration`: 286).
+  Entries vanilla adds by effect define neither and have no copy until added (`je_king_in_parliament`,
+  `je_spanish_flu`, `je_iwakura_mission`, `je_sepoy_mutiny`: 0 each; `je_abolish_monarchy`: 3). `has_journal_entry`
+  reads active copies only, so the button's guard passed, and the add was refused. The owner saw the copy in the
+  journal's Potential section once the button's variable made it shown.
+- **So the wait was the activation check, not the add.** Clicks (adds or requests) on Jan 1, Jan 20, Feb 17 and Apr 17
+  led to activations on Jan 13, Jan 27, Feb 24 and Apr 21: each Jan 13 plus a multiple of 14 days. The Request and Add
+  buttons were the same button.
+- **Close works** (first-pass check 5): the Feb 17 and Apr 17 adds ran, which their guard allows only once the entry
+  is no longer active, and the entry reactivated after each.
+- **Check 14: a contextless page's scripted button is locked.** The screenshot shows Probe: Run a Button Here with
+  "Countries that are not involved in the Journal Entry may not take this action" and the padlock; no `TE_JMAP world
+  button ran` line. 1.15's `add_involved_country` could unlock it, but an involved country probably sees the entry in
+  its journal, so the second pass uses scripted GUIs on a page widget instead.
+- **Second pass built on these** (this list): the Map Room is contextless, its picks are scripted GUIs on its page, the
+  Demographics button is one click, and the first pass's host, hidden world entry, add, request, close and hover
+  buttons are gone.
+
 ## Not tested here
 
 - Whether `map_color` takes a scope path (`value = owner.color`, prep C21): left out, since a field the engine rejects at
   load can drop the whole entry it sits in. Try it in its own entry once checks 1–2 pass.
-- Whether an **inactive but shown** entry (`is_shown_when_inactive` true, `possible` false) paints its map when its page
-  is opened (prep C6). Nothing in this branch is shown inactive.
-- Multiplayer: two players picking different Map Room maps (only matters if check 3 comes back blue).
+- Multiplayer: two players share the Map Room's pick (a global variable). Whether that is acceptable is a design
+  call; nothing tests it.
+- `add_involved_country` on the Map Room (its own scripted buttons would unlock), and whether an involved country sees
+  a contextless entry in its journal.
 
 ## When it's done
 
 - Delete the test pieces: `te_jmap_test_strip` and its mount (`tab_before_gate` in `te_demographics_layout.gui`), the
-  `te_jmap_strip_*` loc keys, the Scope Probe and Refresh Tick buttons and branches (selector 6 and 7, their colors and
-  tooltips), the world probe button `te_jmap_world_probe` and its green, `je_te_map_hidden_world` (keep it if check 7 makes it the better pattern), and
-  `gfx/map/map_modes/te_map_modes.txt` unless check 8(c) makes it worth keeping.
+  `te_jmap_strip_*` loc keys, the Scope Probe (selector 6: `te_jmap_pick_scope_probe_sgui`, its button in
+  `te_jmap_pick_row`, its branches, colors and tooltips), `je_te_map_potential_probe` with its two scripted GUIs, color
+  and loc, the `TE_JMAP pick` debug line in `te_jmap_set_selector`, and `gfx/map/map_modes/te_map_modes.txt` unless
+  check 5 (b) makes it worth keeping (its name, `mm_te_journal_entry_map`, sits in `te_unused_l_english.yml`, since
+  `organize_loc.py` doesn't read `gfx/`).
 - Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1).
 - Give the player guide its lines: the Demographics and Banking chapters' map buttons, and the Map Room.
