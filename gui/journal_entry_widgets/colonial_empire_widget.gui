@@ -3625,6 +3625,8 @@ types colonial_empire_widget_types
 				blockoverride "text" {
 					text = "je_colonial_empire"
 				}
+				### Show the colonies on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_ce_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"

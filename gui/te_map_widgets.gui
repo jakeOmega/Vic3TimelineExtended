@@ -68,6 +68,167 @@ types te_map_widgets
 		}
 	}
 
+	### The systems' tabs: one click picks the system's map and opens the Map Room, as the Demographics button does.
+	### The Map Room, not the system's own entry, though each entry draws the same map: the Map Room is there for every
+	### country from the start, while several of these entries are held only by some countries, or not yet (the
+	### nuclear program before its technology, covert warfare before its slots, a monument's owner, an empire with
+	### colonies), and an entry nobody holds gives a button nothing to open. Each sits left of its header's "?". Each
+	### notes the player as the maps' viewer before it picks: a pick already made is invalid, so its effect doesn't run.
+
+	type te_jmap_gw_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Global Warming tab (te_gw_tab_body, also the Market panel's Climate tab).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_gw_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_nuclear_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Nuclear Weapons tab (te_nuclear_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_nuclear_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_covert_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Covert Warfare tab (te_covert_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_covert_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_networks_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_un_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The United Nations tab (te_un_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_un_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_ch_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Cultural Hegemony tab (te_ch_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_ch_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_political_models_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_seabed_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Seabed tab (te_seabed_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_seabed_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_gm_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Grand Monuments tab (te_gm_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_gm_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_ce_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Colonial Empire tab (te_ce_tab_body).
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_ce_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	### The Timeline Extended window's Map Room button, left of its width toggle in both frames
+	### (te_systems_window_toggle): opens the Map Room on whatever map was picked last, then closes the window, which
+	### would cover the page (both are side panels, and the full screen covers the map). The close comes last: a button
+	### whose own window hides mid-click may lose the lines after it (a pick's close-then-open on the page did, fifth
+	### session). It notes the player as the maps' viewer first, for the maps of "your" country (te_jmap_viewer,
+	### te_journal_map_effects.txt).
+	type te_jmap_window_button = button {
+		using = default_button
+		size = { 140 26 }
+		datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+		text = "te_jmap_window_button"
+		tooltip = "te_jmap_window_button_tt"
+		onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+		onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		onclick = "[GetVariableSystem.Clear('com_open_window')]"
+	}
+
 	### One pick: a button that runs its scripted GUI, then has te_jmap_repainter (below) close and reopen the page.
 	### It holds no repaint state of its own: on the page, a state dies with the close (fifth session), and
 	### PdxGuiTriggerAllAnimations would fire one here too.
@@ -204,6 +365,102 @@ types te_map_widgets
 				visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# The systems' maps, each also on its own entry: emissions, the bomb and the networks,
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_emissions"
+				tooltip = "te_jmap_pick_emissions_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_emissions_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_emissions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_nuclear"
+				tooltip = "te_jmap_pick_nuclear_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_nuclear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_networks"
+				tooltip = "te_jmap_pick_networks_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_networks_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_networks_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_networks_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# the world's institutions and ideas and the seabed,
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_united_nations"
+				tooltip = "te_jmap_pick_united_nations_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_united_nations_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_united_nations_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_political_models"
+				tooltip = "te_jmap_pick_political_models_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_political_models_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_political_models_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_political_models_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_ocean_basins"
+				tooltip = "te_jmap_pick_ocean_basins_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_ocean_basins_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_ocean_basins_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# the monuments and the empires.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_grandeur"
+				tooltip = "te_jmap_pick_grandeur_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_grandeur_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_colonies"
+				tooltip = "te_jmap_pick_colonies_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_colonies_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_colonies_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 			}
 		}

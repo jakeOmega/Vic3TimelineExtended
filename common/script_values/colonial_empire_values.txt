@@ -53,6 +53,16 @@ colonial_state_count = {
 	}
 }
 
+# The colonies colonial_empire_refresh_display has just marked (te_jmap_ce_colony): colonial_state_count, read from the
+# marks, so the colony test runs once per state for both the count and the colonial map. Country scope.
+te_jmap_ce_colony_count = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_jmap_ce_colony }
+		add = 1
+	}
+}
+
 # Count of overseas colonial states with very low acceptance pops (< acceptance_status_2, i.e. 20)
 colonial_low_acceptance_count = {
 	value = 0

@@ -805,6 +805,12 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_subject_count
 	remove_variable = colonial_empire_eligible_count
 	remove_variable = colonial_empire_bloc_count
+	# The colonial map's marks on our colonies (te_jmap_ce_colony, refresh_display): timed, but cleared at once so the
+	# map drops an ended empire's colonies now, not two months on.
+	every_scope_state = {
+		limit = { has_variable = te_jmap_ce_colony }
+		remove_variable = te_jmap_ce_colony
+	}
 	# The holdings lists and the great-power table's rows.
 	clear_variable_list = colonial_empire_blocs
 	clear_variable_list = colonial_empire_subject_capitals

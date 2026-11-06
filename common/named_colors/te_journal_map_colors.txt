@@ -113,4 +113,73 @@ colors = {
 	te_jmap_bank_boom = hsv360 { 142 72 50 }
 	te_jmap_bank_frenzy = hsv360 { 292 62 68 }
 	te_jmap_bank_risk_stripe = hsv360 { 50 92 100 }
+
+	# Every system map: a state with nothing on the map (no network, no monument, not a member, no nuclear weapons).
+	te_jmap_none = hsv360 { 45 6 82 }
+
+	# Global Warming: the state's share of the world's emissions, none to a twentieth (pale to soot), and net removal.
+	te_jmap_gw_low = hsv360 { 50 10 90 }
+	te_jmap_gw_high = hsv360 { 15 85 32 }
+	te_jmap_gw_removal = hsv360 { 140 55 55 }
+
+	# Nuclear Weapons: the viewer, its hosts, its umbrella, the countries whose independence it guarantees, and the
+	# world's other nuclear powers.
+	te_jmap_nuke_you = hsv360 { 212 72 72 }
+	te_jmap_nuke_hosts = hsv360 { 275 52 68 }
+	te_jmap_nuke_umbrella = hsv360 { 190 58 82 }
+	te_jmap_nuke_guaranteed = hsv360 { 160 38 72 }
+	te_jmap_nuke_armed = hsv360 { 2 82 70 }
+
+	# Covert Warfare: the viewer, and its network's strength, faint to full (pale lilac to deep violet).
+	te_jmap_net_you = hsv360 { 212 72 72 }
+	te_jmap_net_low = hsv360 { 290 18 88 }
+	te_jmap_net_high = hsv360 { 275 82 38 }
+
+	# United Nations: members in the UN pie's blue (gen_ch_model_pie_textures.py), permanent members deeper, the
+	# headquarters gold, and each kind of mission its own color over all of them.
+	te_jmap_un_member = hsv360 { 216 60 90 }
+	te_jmap_un_permanent = hsv360 { 224 82 55 }
+	te_jmap_un_hq = hsv360 { 45 85 95 }
+	te_jmap_un_peacekeeping = hsv360 { 185 90 80 }
+	te_jmap_un_aid = hsv360 { 28 85 92 }
+	te_jmap_un_stabilization = hsv360 { 350 72 80 }
+	te_jmap_un_electoral = hsv360 { 115 60 68 }
+
+	# Cultural Hegemony: the political models, in the model pie's colors (gen_ch_model_pie_textures.py), one per
+	# ch_model_census code.
+	te_jmap_ch_communist = hsv360 { 3 71 77 }
+	te_jmap_ch_anarchist = hsv360 { 322 64 61 }
+	te_jmap_ch_fascist = hsv360 { 20 69 56 }
+	te_jmap_ch_corporatist = hsv360 { 27 83 77 }
+	te_jmap_ch_socialist = hsv360 { 349 48 83 }
+	te_jmap_ch_royalist_absolutist = hsv360 { 259 57 67 }
+	te_jmap_ch_royalist_constitutional = hsv360 { 256 40 80 }
+	te_jmap_ch_religious = hsv360 { 49 88 54 }
+	te_jmap_ch_reactionary = hsv360 { 213 79 66 }
+	te_jmap_ch_military_junta = hsv360 { 78 75 43 }
+	te_jmap_ch_liberal = hsv360 { 44 88 71 }
+	te_jmap_ch_other = hsv360 { 45 6 49 }
+	te_jmap_ch_technocratic = hsv360 { 178 100 61 }
+	te_jmap_ch_republican = hsv360 { 204 64 81 }
+	te_jmap_ch_developmentalist_junta = hsv360 { 124 52 64 }
+
+	# The Seabed: the five ocean basins.
+	te_jmap_seabed_pacific = hsv360 { 196 62 78 }
+	te_jmap_seabed_atlantic = hsv360 { 226 62 60 }
+	te_jmap_seabed_indian = hsv360 { 168 58 62 }
+	te_jmap_seabed_arctic = hsv360 { 195 14 96 }
+	te_jmap_seabed_southern = hsv360 { 252 36 76 }
+
+	# Grand Monuments: the state's grandeur, a first monument to the oldest wonders (cream to bronze).
+	te_jmap_gm_low = hsv360 { 48 28 92 }
+	te_jmap_gm_high = hsv360 { 32 92 58 }
+
+	# Colonial Empire: the colonies (and colonial subjects) by their empire's stability, the panel's five bands from
+	# collapsing to solidified, and the empires' home states.
+	te_jmap_ce_collapsing = hsv360 { 356 82 62 }
+	te_jmap_ce_crumbling = hsv360 { 18 82 80 }
+	te_jmap_ce_strained = hsv360 { 44 80 88 }
+	te_jmap_ce_stable = hsv360 { 95 50 66 }
+	te_jmap_ce_solidified = hsv360 { 135 62 48 }
+	te_jmap_ce_metropole = hsv360 { 30 22 66 }
 }

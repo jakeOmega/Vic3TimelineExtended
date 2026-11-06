@@ -1652,6 +1652,8 @@ types te_seabed_widget_types
 				blockoverride "text" {
 					text = "te_seabed_tab_header"
 				}
+				### Show the ocean basins on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_seabed_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"

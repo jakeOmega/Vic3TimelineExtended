@@ -2,13 +2,15 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Fifth pass, 2026-11-05 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Seventh pass, 2026-11-06 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
-worked. The fifth tries a shorter repaint, adds Devastation, Urban People, the Gini coefficient, Dynastic Wealth and
-eight more census maps, and drops Literacy, which vanilla's own literacy map mode shows. A sixth (2026-11-06) adds
-Tourism Appeal, Base and Current Comfort, GDP per Capita and the Crowding Penalty.
+worked. The fifth (#1425) tried a shorter repaint, added Devastation, Urban People, the Gini coefficient, Dynastic
+Wealth and eight more census maps, and dropped Literacy, which vanilla's own literacy map mode shows. The sixth adds a
+map for eight of the mod's systems, each on its own entry and in the Map Room (below), a map button in each of their
+tabs and a Map Room button in the Timeline Extended window, and fades the see-through page to 20%. The seventh adds
+five maps to the Map Room alone: Tourism Appeal, Base and Current Comfort, GDP per Capita and the Crowding Penalty.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -98,7 +100,8 @@ entry, in no country's journal.
   0.30–0.80. Each pick's tooltip says where its bends are, since the map has no legend. The leading cause is categorical, in the Causes of Death
   pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), and its hover
   is a branch per cause. 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
-  the unpainted map and "Pick a map" until the next pick.
+  the unpainted map and "Pick a map" until the next pick. 18-25 are the systems' maps, each also on its own entry
+  (below).
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
@@ -132,14 +135,51 @@ takes it out again short of an outcome, which leaves it in the concluded tab. Th
 
 `gui/journal_entry.gui` (the mod's copy of vanilla's panel) puts a crossed-out eye (`visibility.dds`) in the header's
 top-left button slot, which vanilla leaves empty on this panel, on every journal page. It toggles a GUI flag,
-`GetVariableSystem` key `te_je_see_through`, and the panel's root binds `alpha` to it: 0.3 while set, so the page's
-map shows through. The flag outlives a reopen, so the Map Room stays faded from pick to pick; the header's close and
+`GetVariableSystem` key `te_je_see_through`, and the panel's root binds `alpha` to it: 0.2 while set (the owner's pick
+after seeing 0.3, 2026-11-06), so the page's map shows through. The flag outlives a reopen, so the Map Room stays faded from pick to pick; the header's close and
 back buttons clear it (vanilla's own lines first; Escape runs the close), and so do the two map buttons before they open
 a page. Clearing on `_show` would unfade the page at every pick, since a pick's reopen fires it. Leave a faded page by
 opening another panel and the next journal page opened from the journal is faded too. The faded page still takes clicks: the window's frame is a `clickthrough_blocker` in no block the panel
 can override, and a fold that hid the content would leave the same full-height frame. On every page because the GUI
-can't tell which entries carry a map, and vanilla's own map entries gain from it too. Whether `alpha` binds on a side
-panel's root is untested (vanilla binds it only on inner widgets; third pass, check 2).
+can't tell which entries carry a map, and vanilla's own map entries gain from it too. `alpha` on a side panel's root
+works (the owner saw the page fade, 2026-11-06).
+
+## The Systems' Maps
+
+Eight of the mod's systems have a map (sixth pass, owner's ask, 2026-11-06), selectors 18-25. Each but the Seabed's is
+drawn twice: by the system's own entry, whenever its page is open, and by the Map Room, on a pick. Both ask the same
+state-scope triggers in the same order (`common/scripted_triggers/te_journal_map_triggers.txt`, one per color band), so
+the two pages paint alike; `test_journal_map_modes.py`'s parity test compares the entry's ladder with the Map Room's
+branches for its selector. Each map ends in a branch that takes every state left, so none needs the "no data" `OR`.
+Each pick shows while its system's rule is on.
+
+| # | Map | Entry | Reads |
+|---|---|---|---|
+| 18 | Emissions | `je_global_warming` | The state's share of the world's emissions last year: its yearly snapshot `gw_state_emis` over `gw_g_global_emis` (`te_jmap_gw_share`). A share, not an amount (owner), so a color means the same in 1850 and 2000; soft-capped, half the color by 1%, all at 5%. Net removal green, no snapshot yet grey |
+| 19 | Nuclear Weapons | `je_nuclear_program` | The viewer's own country, then the countries hosting its weapons (`nd_hosts_weapons_of`), under its umbrella (`nd_is_guaranteed_by_treaty`, `nd_under_umbrella_of`), and those whose independence it guarantees while the world believes it armed (vanilla's `guarantee_independence` article, gated on the viewer's `nd_believed_armed`, never `nd_is_armed`: in multiplayer another player can see the viewer's map); every other nuclear power as the world sees it (`nd_believed_armed`, the public estimate in the hover: nuclear.md's privacy rule) |
+| 20 | Agent Networks | `je_covert_warfare` | The viewer's network in each country, 0-100 (`te_jmap_net_strength`: the viewer's `iw_nets` containers, `iw_net_strength`) |
+| 21 | United Nations | `je_united_nations` | Grey before the founding (`un_founded`); a mission's state in its type's color (`un_state_mission_type`), over the headquarters (`building_un_headquarters`), permanent members and members (the `_on` mirrors) |
+| 22 | Political Models | `je_cultural_hegemony` | The owner's `ch_model_census`, in the model pie's colors (`gen_ch_model_pie_textures.py`, checked by a test); the hover names it through `ch_country_model_text` and marks the leading power |
+| 23 | Ocean Basins | none | The state's `te_seabed_basin`, set for every coastal state in the first month and again each January for states made since (until 2026-11-06 only once a country had Abyssal Plain Mining); a coastal state still without one hovers as not yet recorded (`te_jmap_seabed_unrecorded`) |
+| 24 | Grandeur | `je_grand_monuments` | `gm_state_grandeur`, straight to 75 (the panel's top frame), then soft to 225 |
+| 25 | Colonies | `je_colonial_empire` | Each colony (`te_jmap_ce_colony`, below) and each colonial subject's state by its empire's band (`colonial_empire_tier`, the monthly snapshot of the band ladder); an empire's other states taupe |
+
+**The viewer.** A paint can't reach the player (`is_player` drew nothing under `owner`, 2026-11-05), so the maps of
+"your" country (19, 20) are drawn for `global_var:te_jmap_viewer`: every pick and map button sets it to the player's
+country (`te_jmap_note_viewer`, `te_journal_map_effects.txt`), and so does a player's monthly pulse
+(`te_journal_map_on_actions.txt`), so an entry's page opened from the journal has one too. Like the pick, it is one for
+every player in a multiplayer game: there the last player to pick sees their own deterrent and networks, and another
+player looking at those maps sees the same viewer's, a known limit. Whether `global_var:` holding a country compares
+in a paint (`this = scope:…` after `save_temporary_scope_as`) is unverified (play-test).
+
+**What the systems keep for the maps.** A paint can't walk pops, so two systems now store a figure where they already
+computed it:
+- Global Warming: `gw_snapshot_country_emissions_effect`, at each capital's yearly pulse, writes each state's
+  `gw_state_greenhouse_gas_emissions` to `gw_state_emis` first and sums them into `gw_disp_country_emis`
+  (`gw_country_emis_from_states`), the same total as before with one walk of the pops.
+- Colonial Empire: `colonial_empire_refresh_display` marks each colony with its owner (`te_jmap_ce_colony`, 62 days,
+  so the marks go when the entry stops refreshing them) and counts `colonial_empire_colony_count` from the marks: one
+  colony test per state, as before.
 
 ## The Banking Map
 
@@ -160,11 +200,20 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 - `te_jmap_demog_map_button`, in the Demographics tab's header (`te_demog_window_body`, so the Population panel's tab and
   the Timeline Extended window's), left of the "?": one click picks life expectancy and opens the Map Room.
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
+- `te_jmap_<system>_map_button` (gw, nuclear, covert, un, ch, seabed, gm, ce), in each of the eight systems' tab
+  headers: one click picks the system's map and opens the Map Room, as the Demographics button does. The Map Room, not
+  the system's entry: several entries are held by only some countries or not yet (the nuclear program before its
+  technology, covert warfare before its slots, a monument's owner, an empire with colonies), and a button on an entry
+  nobody holds has nothing to open. The entry paints the same map when it is opened from the journal.
+- `te_jmap_window_button`, in the Timeline Extended window, left of its Full Screen / Side Panel toggle in both frames
+  (`te_systems_window_toggle`): opens the Map Room on the last pick, then closes the window, which would cover the page.
+  The close comes last, in case a button whose window hides mid-click loses the lines after it.
 
-Both map buttons clear the see-through flag before they open a page.
+Every map button clears the see-through flag before it opens a page.
 - `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three (Turmoil, Devastation,
   Urban People), wealth (GDP per Capita, Gini, Dynastic Wealth), migration attraction (Base Comfort, Current Comfort,
-  Crowding Penalty) and Tourism Appeal alone, then the census's eleven three to a row.
+  Crowding Penalty) and Tourism Appeal alone, the systems' eight in rows of three, three and two, then the census's
+  eleven three to a row.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
@@ -180,6 +229,9 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
    figure behind a long `state_region` chain is stored by the refresh that already computes it, not read live
    (tourism's and Local Climate's are the pattern).
-3. A "show on the map" button opens the entry's page (`te_jmap_banking_map_button` is the pattern), for a system in
-   a tab too: a tab showing an entry's content doesn't trigger its map.
-4. Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) once one map is seen working in game.
+3. A map on both an entry and the Map Room asks shared triggers (`te_journal_map_triggers.txt`) in the same order in
+   both, and joins `SYSTEM_MAPS` in `test_journal_map_modes.py`, whose parity test compares them.
+4. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,
+   or the Map Room on the system's pick (`te_jmap_gw_map_button`) when not. A tab showing an entry's content doesn't
+   trigger its map.
+5. Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) once one map is seen working in game.

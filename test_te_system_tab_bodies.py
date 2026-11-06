@@ -143,6 +143,7 @@ class BodyTest(unittest.TestCase):
                 head = _override(body, "tab_header")
                 self.assertRegex(head, rf'default_header = \{{\s*using = default_list_position\s*'
                                        rf'blockoverride "text" \{{\s*text = "{header}"\s*\}}\s*'
+                                       rf'(?:te_jmap_\w+_map_button = \{{\}}\s*)?'    # its map (journal_map_modes.md)
                                        rf'(?:te_help_button = \{{[^{{}}]*\}}\s*)?\}}')
                 self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
                 if entry:

@@ -530,6 +530,422 @@ je_te_map_room = {
 				factor = te_jmap_mig_factor_upper
 			}
 		}
+		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
+		# it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_no_data = yes
+			}
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_removal = yes
+			}
+			value = "te_jmap_gw_removal"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+			}
+			lerp = {
+				min_color = "te_jmap_gw_low"
+				max_color = "te_jmap_gw_high"
+				factor = te_jmap_gw_factor
+			}
+		}
+		# 19. The systems' maps: the world's nuclear powers, as the world sees them, and the viewer's deterrent
+		# (je_nuclear_program draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_owner_is_viewer = yes
+			}
+			value = "te_jmap_nuke_you"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_hosts_yours = yes
+			}
+			value = "te_jmap_nuke_hosts"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_umbrella = yes
+			}
+			value = "te_jmap_nuke_umbrella"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_guaranteed = yes
+			}
+			value = "te_jmap_nuke_guaranteed"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_armed = yes
+			}
+			value = "te_jmap_nuke_armed"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+			}
+			value = "te_jmap_none"
+		}
+		# 20. The systems' maps: the viewer's covert network in each country (je_covert_warfare draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_owner_is_viewer = yes
+			}
+			value = "te_jmap_net_you"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_net_some = yes
+			}
+			lerp = {
+				min_color = "te_jmap_net_low"
+				max_color = "te_jmap_net_high"
+				factor = te_jmap_net_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+			}
+			value = "te_jmap_none"
+		}
+		# 21. The systems' maps: members, the Security Council's permanent members, the headquarters and the missions at work
+		# (je_united_nations draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_unfounded = yes
+			}
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 1 }
+			}
+			value = "te_jmap_un_peacekeeping"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 2 }
+			}
+			value = "te_jmap_un_aid"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 3 }
+			}
+			value = "te_jmap_un_stabilization"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 4 }
+			}
+			value = "te_jmap_un_electoral"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_hq = yes
+			}
+			value = "te_jmap_un_hq"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_permanent = yes
+			}
+			value = "te_jmap_un_permanent"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_member = yes
+			}
+			value = "te_jmap_un_member"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+			}
+			value = "te_jmap_none"
+		}
+		# 22. The systems' maps: each country's political model at the last census of models, in the model pie's colors
+		# (je_cultural_hegemony draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 1 }
+			}
+			value = "te_jmap_ch_communist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 2 }
+			}
+			value = "te_jmap_ch_anarchist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 3 }
+			}
+			value = "te_jmap_ch_fascist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 4 }
+			}
+			value = "te_jmap_ch_corporatist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 5 }
+			}
+			value = "te_jmap_ch_socialist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 6 }
+			}
+			value = "te_jmap_ch_royalist_absolutist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 7 }
+			}
+			value = "te_jmap_ch_royalist_constitutional"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 8 }
+			}
+			value = "te_jmap_ch_religious"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 9 }
+			}
+			value = "te_jmap_ch_reactionary"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 10 }
+			}
+			value = "te_jmap_ch_military_junta"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 11 }
+			}
+			value = "te_jmap_ch_liberal"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 12 }
+			}
+			value = "te_jmap_ch_other"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 13 }
+			}
+			value = "te_jmap_ch_technocratic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 14 }
+			}
+			value = "te_jmap_ch_republican"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 15 }
+			}
+			value = "te_jmap_ch_developmentalist_junta"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+			}
+			value = "te_jmap_no_data"
+		}
+		# 23. The systems' maps: each coastal state's ocean basin.
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 1 }
+			}
+			value = "te_jmap_seabed_pacific"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 2 }
+			}
+			value = "te_jmap_seabed_atlantic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 3 }
+			}
+			value = "te_jmap_seabed_indian"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 4 }
+			}
+			value = "te_jmap_seabed_arctic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 5 }
+			}
+			value = "te_jmap_seabed_southern"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+			}
+			value = "te_jmap_none"
+		}
+		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+				te_jmap_gm_monument = yes
+			}
+			lerp = {
+				min_color = "te_jmap_gm_low"
+				max_color = "te_jmap_gm_high"
+				factor = te_jmap_gm_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+			}
+			value = "te_jmap_none"
+		}
+		# 25. The systems' maps: the colonies and colonial subjects, by their empire's colonial stability, and the empires'
+		# home states (je_colonial_empire draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 1 }
+			}
+			value = "te_jmap_ce_collapsing"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 2 }
+			}
+			value = "te_jmap_ce_crumbling"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 3 }
+			}
+			value = "te_jmap_ce_strained"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 4 }
+			}
+			value = "te_jmap_ce_stable"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 5 }
+			}
+			value = "te_jmap_ce_solidified"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 1 }
+			}
+			value = "te_jmap_ce_collapsing"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 2 }
+			}
+			value = "te_jmap_ce_crumbling"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 3 }
+			}
+			value = "te_jmap_ce_strained"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 4 }
+			}
+			value = "te_jmap_ce_stable"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 5 }
+			}
+			value = "te_jmap_ce_solidified"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_metropole = yes
+			}
+			value = "te_jmap_ce_metropole"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+			}
+			value = "te_jmap_none"
+		}
 		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
 		# the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
 		# (test_journal_map_modes.py).
@@ -816,6 +1232,270 @@ je_te_map_room = {
 				has_variable = te_dg_mig_rate
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_net_migration
+		}
+		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
+		# it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_no_data = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw_no_data
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_removal = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw_removal
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw
+		}
+		# 19. The systems' maps: the world's nuclear powers, as the world sees them, and the viewer's deterrent
+		# (je_nuclear_program draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_owner_is_viewer = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_you
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_hosts_yours = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_hosts
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_umbrella = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_umbrella
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_guaranteed = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_guaranteed
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_armed = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_armed
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_none
+		}
+		# 20. The systems' maps: the viewer's covert network in each country (je_covert_warfare draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_owner_is_viewer = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_you
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_net_some = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_none
+		}
+		# 21. The systems' maps: members, the Security Council's permanent members, the headquarters and the missions at work
+		# (je_united_nations draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_unfounded = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_unfounded
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 1 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_peacekeeping
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 2 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_aid
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 3 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_stabilization
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 4 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_electoral
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_hq = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_hq
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_permanent = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_permanent
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_member = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_member
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_nonmember
+		}
+		# 22. The systems' maps: each country's political model at the last census of models, in the model pie's colors
+		# (je_cultural_hegemony draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_no_data = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_no_data
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_hegemon = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_hegemon
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_model
+		}
+		# 23. The systems' maps: each coastal state's ocean basin.
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 1 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_pacific
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 2 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_atlantic
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 3 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_indian
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 4 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_arctic
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 5 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_southern
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_unrecorded = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_unrecorded
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_none
+		}
+		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+				te_jmap_gm_monument = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gm
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gm_none
+		}
+		# 25. The systems' maps: the colonies and colonial subjects, by their empire's colonial stability, and the empires'
+		# home states (je_colonial_empire draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_colony
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_subject
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_metropole = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_metropole
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_none
 		}
 		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's).
 		else_if = {

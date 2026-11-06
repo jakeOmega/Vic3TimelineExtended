@@ -18,33 +18,44 @@ tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
 and Military panels, the same as there, so every system is in one place. Full Screen, at
 the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
 left there, brings it back to the width of the other panels. The tab you chose
-stays chosen when you switch.
+stays chosen when you switch. Map Room, beside it, opens the Map Room (below).
 
 Each system has a Help page that explains how it works, with a heading for
 each topic. The "?" opens it: at the right of the tab's header, and at the top
 right of the system's journal entry and of a state's Demographics subtab. Press
 Escape or click outside the page to close it.
 
-Two tabs have a map button left of the "?". Banking's opens its journal entry,
-which colors every country by the phase of its banking cycle. Demographics'
-opens the Map Room, a page of world maps with a button for each: Turmoil,
+The Map Room is a page of world maps with a button for each: Turmoil,
 Devastation, Urban People, GDP per Capita, Gini Coefficient, Dynastic Wealth,
-Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal and, from the
-census, Life Expectancy, Infant
-Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility,
-Median Age, Aged 65 and Over, Sex Balance and Net Migration. Leading Cause
+Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal; a map for
+each of eight systems, Emissions, Nuclear Weapons, Agent Networks, United
+Nations, Political Models, Ocean Basins, Grandeur and Colonies; and, from the
+census, Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death
+Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance and
+Net Migration. Hover a state for its figure. The two comfort maps show what a
+state's Local Climate does to its migration attraction: Base Comfort before any
+technology eases it, Current Comfort after its owner's, in the same colors so
+you can compare them. Crowding Penalty is the cut Migration Crowding makes, and
+Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
+game's first month. Emissions colors a state by its
+share of the world's emissions last year. Nuclear Weapons shows the world's
+nuclear powers as the world sees them, the countries that host your weapons or
+shelter under your umbrella, and, while the world believes you armed, those
+whose independence you guarantee; Agent Networks shades each country by your
+network there.
+Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
-of Death chart. The two comfort maps show what a state's Local Climate does to
-its migration attraction: Base Comfort before any technology eases it, Current
-Comfort after its owner's, both in the same colors so you can compare them.
-Crowding Penalty is the cut Migration Crowding makes, and Tourism Appeal the
-state's Base Appeal. Birth Rate, Death Rate, Natural Change, Net Migration and
-Leading Cause need a state's first full census year, so they start gray, and the
-two comfort maps and Tourism Appeal are gray for a game's first month. Hover a
-state for its figure. A journal entry's map shows only while its page is open,
-so the crossed-out eye at the top left of every journal page fades the page
-until you click it again or close the page, and the map shows through. The
-faded page still takes your clicks.
+of Death chart; it, Birth Rate, Death Rate, Natural Change and Net Migration
+need a state's first full census year, so they start gray.
+
+Those eight systems' tabs, and Demographics', have a map button left of the
+"?" that opens the Map Room on their map. Seven of the eight (all but Ocean
+Basins) also draw the same map in their own journal entry while its page is
+open. Banking's button opens its journal entry,
+which colors every country by the phase of its banking cycle. A journal
+entry's map shows only while its page is open, so the crossed-out eye at the
+top left of every journal page fades the page until you click it again or close
+the page, and the map shows through. The faded page still takes your clicks.
 
 National Info, the base game's Census Data window under a new name, shows
 another country's panels. Open it from the foot of that country's Politics tab,
