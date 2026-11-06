@@ -66,6 +66,11 @@ So:
 - **Count things yourself.** The repository README and the Steam description
   disagree with each other and with the files on several counts. If you give a
   number of laws, milestones or buttons, count it from `common/`.
+- **"Full" means the most there is.** Don't call a scale's reference point
+  "full" when the effect keeps growing past it ("full at 80, and stronger
+  beyond"). Give the figures at that point ("+20% at 80"), or, in loc, a
+  strength of 100%, or say where the effect starts and that it grows. This
+  goes for loc text as well as the guide (2026-11-06).
 - **Describe only what exists.** Nothing from open pull requests or unbuilt
   design phases. If you can't confirm a mechanic from the script, leave it out
   and list it in your notes instead of guessing.

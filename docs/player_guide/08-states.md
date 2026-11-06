@@ -113,7 +113,7 @@ and tolerance figures for their sources.
 | Modern Urban Planning, Advanced Structural Engineering | +20% each |
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
-| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and is full at 60% |
+| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and reaches it at 60% |
 | Green Belt or Urban Sprawl, from the Overspill event (see [Demographic events](#demographic-events)) | −10% or +20%, for twenty years |
 
 Ministries are explained in [Ministries](06-politics.md#ministries). The same
@@ -417,10 +417,10 @@ state's yearly census:
   the state's modifier list; the conscription tooltip names it and the Fighting-Age
   Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
-  18% of the people while work is short. At full strength (24% young adults and
-  a fifth of the workforce without work) radicals from movements rise by 25% and
-  the effects of turmoil by 15%. Past that each factor keeps adding at half the
-  pace, up to twice the full size.
+  18% of the people while work is short. With 24% young adults and a fifth of
+  the workforce without work, radicals from movements rise by 25% and the effects
+  of turmoil by 15%. Past that each factor keeps adding at half the pace, up to
+  twice those figures.
 - **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
   many dead. Fewer women marry, so children per woman fall with the balance (by
   at most a fifth), more women work, and support for women's rights movements
@@ -629,10 +629,10 @@ Center and University throughput and migration attraction. Every other state get
 Provincial Neglect, with less migration attraction, higher penalties from turmoil
 and, where the state has a culture of its own, more support for its Cultural
 Minority Movement. Both grow with the largest city's share of urban people, from
-nothing at 25% to their full size at 50%: Urban Center throughput +20%,
+nothing at 25% to these figures at 50%: Urban Center throughput +20%,
 University throughput +10% and migration attraction +25% for the city, migration
 attraction −15%, turmoil penalties +15% and cultural minority support +15% for
-the rest. Past 50% they keep growing at half the pace, to twice their full size
+the rest. Past 50% they keep growing at half the pace, to twice these figures
 when one city holds all the urban people. A country of fewer than three states
 gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
@@ -650,10 +650,10 @@ planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
 lower it, and a country's urbanization raises it most at half its people in towns
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
-full at 60%: the state crowds 10% sooner, its people give 20% more infrastructure,
+which at 60% are: the state crowds 10% sooner, its people give 20% more infrastructure,
 its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
-families are a little smaller. Past 60% all but the crowding keep growing at half
-the pace, to nearly twice their size at the highest shares. Below 20% its towns
+families are a little smaller. Past 60% all but the crowding and family size keep
+growing at half the pace, to nearly twice their size at the highest shares. Below 20% its towns
 give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 Its Largest Cities list names real towns and estimates the people in each. A
