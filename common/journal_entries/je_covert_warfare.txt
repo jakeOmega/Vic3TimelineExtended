@@ -119,6 +119,7 @@ je_covert_warfare = {
 
 	on_monthly_pulse = {
 		effect = {
+			te_scaling_inherited_selfcheck_rebel_entry = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 			# ---- AI Funding Management ----
 			# AI automatically manages funding level based on financial health,
 			# strategic need, active operations, and cost awareness.

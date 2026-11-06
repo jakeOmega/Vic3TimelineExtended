@@ -767,6 +767,7 @@ st_res_je_immediate_effect = {
 st_res_je_weekly_pulse_effect = {
 	te_scaling_live_selfcheck = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 	st_res_weekly_update_effect = yes
+	te_scaling_live_selfcheck_book = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 }
 
 # --------------------------------------------------------------------------

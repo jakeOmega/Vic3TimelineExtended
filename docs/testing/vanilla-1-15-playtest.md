@@ -32,10 +32,13 @@ game, in English.
   tooltip. If a zero row shows, hide the scaling-modifier icon strip on the mod's entries in `gui/journal_entry.gui`.
   Two once-a-game lines in `debug.log`:
   - `TE_SELF_CHECK OK|BROKEN scaling_live`: the Strategic Reserve's declared sales income reaches the country (needs a
-    country with a staffed hub selling for two weeks). BROKEN: put the weekly `add_modifier` back.
+    country with a staffed hub selling for two weeks with no panel change in between). BROKEN: put the weekly
+    `add_modifier` back.
   - `TE_SELF_CHECK OK|BROKEN scaling_inherited`: 30 days after revolutionaries win a civil war, the winner's Covert
-    Warfare funding cost is declared again. BROKEN: the design's § 5 fallback, before PRs 3, 7 and 8's deleted
-    revolution repairs matter.
+    Warfare funding cost is declared again (rebels who ran a Covert Warfare entry of their own don't count). BROKEN
+    means every inherited entry has lost its declarations, which this change already relies on: Covert Warfare's five,
+    Global Warming's six (Carbon Removal's and Aerosol Injection's restore effects are gone), and later the
+    revolution repairs PRs 3, 7 and 8 delete. Fallback: the design's § 5.
   Also look at: the Budget panel's Strategic Reserve Sales, Covert Actions and Nuclear Program rows still list their
   amounts (they read the modifiers' budget mirror fields); a converted modifier's tooltip names its entry as the
   source; and **Carbon Removal's forced coal subsidy**: `carbon_removal_modifier` carries
