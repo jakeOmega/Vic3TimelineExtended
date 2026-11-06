@@ -193,7 +193,7 @@ un_mission_volunteer_eligible = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { un_representation_suspended = yes }
 	country_rank >= rank_value:major_power
-	NOT = { has_modifier = un_sanctions_target_modifier }
+	NOT = { has_variable = un_sanctions_target_on }
 }
 
 # $WHO$ is not the scoped mission's host.
@@ -232,6 +232,26 @@ un_mission_accepts_volunteer = {
 	un_mission_not_at_war_with_host = { WHO = $WHO$ }
 	NOT = { un_mission_served_by = { WHO = $WHO$ } }
 	NOT = { un_mission_withdrawn_by = { WHO = $WHO$ } }
+}
+
+# The scoped member pays for the missions it serves in at will: this month's
+# cost is cached (var:un_msn_service_cached, which un_mission_service_refresh
+# writes and removes). The gate of un_mission_service_cost's declaration on
+# je_united_nations.
+# Scope: country
+un_mission_service_paying = {
+	has_variable = un_msn_service_cached
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+}
+
+# The scoped member hosts an electoral mission whose observers it carries
+# (var:un_msn_electoral_power, which un_mission_electoral_host_refresh writes
+# and removes). The gate of un_electoral_observers_modifier's declaration on
+# je_united_nations.
+# Scope: country
+un_mission_observers_present = {
+	has_variable = un_msn_electoral_power
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
 }
 
 # $WHO$ serves in the scoped mission at will, and pays for it
@@ -304,7 +324,7 @@ un_mission_slot_can_volunteer = {
 	}
 	custom_tooltip = {
 		text = un_mission_volunteer_need_not_sanctioned_tt
-		NOT = { has_modifier = un_sanctions_target_modifier }
+		NOT = { has_variable = un_sanctions_target_on }
 	}
 	custom_tooltip = {
 		text = un_mission_volunteer_need_not_electoral_tt

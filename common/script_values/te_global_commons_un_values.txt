@@ -52,8 +52,8 @@ te_seabed_ocean_mine_levels = {
 	}
 }
 
-# A payer's royalty a week (te_seabed_royalty_payer): the multiplier of
-# te_seabed_royalty_modifier, cached as var:te_seabed_royalty_cached.
+# A payer's royalty a week (te_seabed_royalty_payer): the value of
+# te_seabed_royalty_modifier's declaration, cached as var:te_seabed_royalty_cached.
 # Scope: country
 te_seabed_royalty_weekly_value = {
 	value = te_seabed_ocean_mine_levels
@@ -67,10 +67,7 @@ te_seabed_royalty_weekly_value = {
 te_seabed_royalties_total_value = {
 	value = 0
 	every_country = {
-		limit = {
-			has_modifier = te_seabed_royalty_modifier
-			has_variable = te_seabed_royalty_cached
-		}
+		limit = { te_seabed_royalty_paying = yes }
 		add = var:te_seabed_royalty_cached
 	}
 	# The holding fee goes the royalties' way from the countries that would pay

@@ -3,25 +3,13 @@
 # ============================================================================
 # THE CHARTER'S NEW BUSINESS — ECONOMY: THE ROOT HOPS (redesign phase 7)
 # ============================================================================
-# Two hidden country events, each fired at one country so that what runs in it
-# has that country as ROOT. The global UN pulse that decides them has no ROOT,
-# and a modifier's multiplier is read against ROOT, not against the scope it is
-# applied in (scripting_best_practices.md, "add_modifier { multiplier = var:X }
-# Resolves Against ROOT"). Neither is shown; both are fired by script only.
-# The writers are in common/scripted_effects/un_economy_effects.txt.
+# A hidden country event, fired at one country so that what runs in it has
+# that country as ROOT: the global UN pulse that decides it has no ROOT. Not
+# shown; fired by script only. The writers are in
+# common/scripted_effects/un_economy_effects.txt.
+# un_economy.1, which applied the World Development Fund's grant from such a
+# hop, is retired: je_united_nations declares the grant (1.15, #1404).
 # ============================================================================
-
-# The World Development Fund's grant to this country, applied or removed
-# (un_dev_fund_monthly_update sends it to every recipient, and to every
-# country whose grant has just stopped).
-un_economy.1 = {
-	type = country_event
-	hidden = yes
-
-	immediate = {
-		un_dev_fund_country_refresh = yes
-	}
-}
 
 # The World Food Reserve has drawn on this pledger's grain
 # (un_food_reserve_draw_from): the Strategic Reserve's own clamp and hub

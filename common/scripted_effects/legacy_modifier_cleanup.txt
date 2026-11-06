@@ -133,6 +133,17 @@
 #      common/scripted_effects/te_monetary_effects.txt
 #   4. its entry in the banking expense row of SOURCES in
 #      scripts/generators/gen_budget_breakdown.py, then re-run that generator
+#
+# ── PENDING REMOVAL: 1.15 scaling modifiers (added 2026-11-06, #1404) ──
+# Each system converted to 1.15's scaling_modifiers_while_active declares its
+# modifiers on its journal entry; nothing adds them any more. A save made before
+# the conversion still holds the copy the old pulse added (on the entry, or on
+# the country), which would stack with the declaration. The "1.15 scaling
+# modifiers" block at the foot of legacy_je_modifier_cleanup_effect strips each
+# copy once, through one legacy_scaling_strip_<system> effect a system, which
+# the system's entry also runs from its weekly pulse. has_modifier sees only an
+# added copy, never a declared one, so the block can't touch the declarations.
+# Remove the block, the effects and their weekly calls after 2026-12-31.
 ########################################
 
 legacy_je_modifier_cleanup_effect = {
@@ -281,62 +292,63 @@ legacy_je_modifier_cleanup_effect = {
 	# the journal entry. un_events.7 and the aid-request pledge in
 	# un_vote_apply_resolution_compliance add it to the country, so stripping it
 	# here made every aid commitment free after its first month.
-	# One-shot membership program modifiers moved to JE scope
+	# One-shot membership program modifiers, from before they moved to the entry.
+	# The ratification is the mirror now (#1404): the copy sets it and goes.
 	if = {
 		limit = { has_modifier = un_human_rights_declaration_modifier }
-		remove_modifier = un_human_rights_declaration_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+			set_variable = un_human_rights_declaration_modifier_on
 		}
+		remove_modifier = un_human_rights_declaration_modifier
 	}
 	if = {
 		limit = { has_modifier = un_nonproliferation_modifier }
-		remove_modifier = un_nonproliferation_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+			set_variable = un_nonproliferation_modifier_on
 		}
+		remove_modifier = un_nonproliferation_modifier
 	}
 	if = {
 		limit = { has_modifier = un_climate_binding_modifier }
-		remove_modifier = un_climate_binding_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+			set_variable = un_climate_binding_modifier_on
 		}
+		remove_modifier = un_climate_binding_modifier
 	}
 	if = {
 		limit = { has_modifier = un_heritage_program_modifier }
-		remove_modifier = un_heritage_program_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+			set_variable = un_heritage_program_modifier_on
 		}
+		remove_modifier = un_heritage_program_modifier
 	}
 	if = {
 		limit = { has_modifier = un_pandemic_cooperation_modifier }
-		remove_modifier = un_pandemic_cooperation_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+			set_variable = un_pandemic_cooperation_modifier_on
 		}
+		remove_modifier = un_pandemic_cooperation_modifier
 	}
 	if = {
 		limit = { has_modifier = un_refugee_program_modifier }
-		remove_modifier = un_refugee_program_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+			set_variable = un_refugee_program_modifier_on
 		}
+		remove_modifier = un_refugee_program_modifier
 	}
 	if = {
 		limit = { has_modifier = un_space_partnership_modifier }
-		remove_modifier = un_space_partnership_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+			set_variable = un_space_partnership_modifier_on
 		}
+		remove_modifier = un_space_partnership_modifier
 	}
 
 	# ── Space Race (je:je_space_race_*) ──
@@ -344,559 +356,77 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = sr_space_program_funding } remove_modifier = sr_space_program_funding }
 	if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
 	if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
-	# Solar Colonization colony modifiers (moved to JE scope)
-	if = {
-		limit = { has_modifier = sr_solar_system_trade }
-		remove_modifier = sr_solar_system_trade
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_amalthea_physics }
-		remove_modifier = sr_colony_amalthea_physics
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_physics } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_amalthea_rings }
-		remove_modifier = sr_colony_amalthea_rings
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_rings } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_arcadia_civilian }
-		remove_modifier = sr_colony_arcadia_civilian
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_civilian } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_arcadia_military }
-		remove_modifier = sr_colony_arcadia_military
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_military } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ariel_cryovolcanic }
-		remove_modifier = sr_colony_ariel_cryovolcanic
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_cryovolcanic } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ariel_quarrying }
-		remove_modifier = sr_colony_ariel_quarrying
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_quarrying } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_callisto_agricultural }
-		remove_modifier = sr_colony_callisto_agricultural
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_agricultural } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_callisto_gateway }
-		remove_modifier = sr_colony_callisto_gateway
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_gateway } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ceres_observatory }
-		remove_modifier = sr_colony_ceres_observatory
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_observatory } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ceres_waystation }
-		remove_modifier = sr_colony_ceres_waystation
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_waystation } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_enceladus_astrobiology }
-		remove_modifier = sr_colony_enceladus_astrobiology
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_astrobiology } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_enceladus_water }
-		remove_modifier = sr_colony_enceladus_water
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_water } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_eris_monitoring }
-		remove_modifier = sr_colony_eris_monitoring
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_monitoring } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_eris_selfsufficiency }
-		remove_modifier = sr_colony_eris_selfsufficiency
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_selfsufficiency } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_europa_drilling }
-		remove_modifier = sr_colony_europa_drilling
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_drilling } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_europa_surface }
-		remove_modifier = sr_colony_europa_surface
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_surface } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ganymede_command }
-		remove_modifier = sr_colony_ganymede_command
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_command } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_ganymede_settlement }
-		remove_modifier = sr_colony_ganymede_settlement
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_settlement } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_haumea_dynamics }
-		remove_modifier = sr_colony_haumea_dynamics
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_dynamics } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_haumea_rings }
-		remove_modifier = sr_colony_haumea_rings
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_rings } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_hellas_astrobiology }
-		remove_modifier = sr_colony_hellas_astrobiology
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_astrobiology } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_hellas_settlement }
-		remove_modifier = sr_colony_hellas_settlement
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_settlement } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_himalia_depot }
-		remove_modifier = sr_colony_himalia_depot
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_depot } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_himalia_telescope }
-		remove_modifier = sr_colony_himalia_telescope
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_telescope } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_hygiea_automated }
-		remove_modifier = sr_colony_hygiea_automated
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_automated } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_hygiea_volatiles }
-		remove_modifier = sr_colony_hygiea_volatiles
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_volatiles } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_iapetus_organics }
-		remove_modifier = sr_colony_iapetus_organics
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_organics } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_iapetus_ridge }
-		remove_modifier = sr_colony_iapetus_ridge
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_ridge } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_io_mining }
-		remove_modifier = sr_colony_io_mining
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_mining } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_io_research }
-		remove_modifier = sr_colony_io_research
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_research } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_makemake_chemistry }
-		remove_modifier = sr_colony_makemake_chemistry
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_chemistry } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_makemake_solarwind }
-		remove_modifier = sr_colony_makemake_solarwind
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_solarwind } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_mercury_ice }
-		remove_modifier = sr_colony_mercury_ice
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_ice } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_mercury_solar }
-		remove_modifier = sr_colony_mercury_solar
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_solar } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_mimas_gravity }
-		remove_modifier = sr_colony_mimas_gravity
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_gravity } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_mimas_installation }
-		remove_modifier = sr_colony_mimas_installation
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_installation } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_miranda_drilling }
-		remove_modifier = sr_colony_miranda_drilling
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_drilling } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_miranda_rupes }
-		remove_modifier = sr_colony_miranda_rupes
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_rupes } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_oberon_relay }
-		remove_modifier = sr_colony_oberon_relay
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_relay } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_oberon_research }
-		remove_modifier = sr_colony_oberon_research
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_research } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_olympus_mons_atmospheric }
-		remove_modifier = sr_colony_olympus_mons_atmospheric
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_atmospheric } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_olympus_mons_geothermal }
-		remove_modifier = sr_colony_olympus_mons_geothermal
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_geothermal } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_pallas_composites }
-		remove_modifier = sr_colony_pallas_composites
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_composites } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_pallas_observatory }
-		remove_modifier = sr_colony_pallas_observatory
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_observatory } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_pluto_harvesting }
-		remove_modifier = sr_colony_pluto_harvesting
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_harvesting } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_pluto_research }
-		remove_modifier = sr_colony_pluto_research
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_research } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_proteus_extraction }
-		remove_modifier = sr_colony_proteus_extraction
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_extraction } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_proteus_probe }
-		remove_modifier = sr_colony_proteus_probe
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_probe } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_psyche_careful }
-		remove_modifier = sr_colony_psyche_careful
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_careful } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_psyche_industrial }
-		remove_modifier = sr_colony_psyche_industrial
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_industrial } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_rhea_observation }
-		remove_modifier = sr_colony_rhea_observation
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_observation } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_rhea_propellant }
-		remove_modifier = sr_colony_rhea_propellant
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_propellant } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_sedna_interstellar }
-		remove_modifier = sr_colony_sedna_interstellar
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_interstellar } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_sedna_outpost }
-		remove_modifier = sr_colony_sedna_outpost
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_outpost } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_titan_hydrocarbons }
-		remove_modifier = sr_colony_titan_hydrocarbons
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_hydrocarbons } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_titan_prebiotic }
-		remove_modifier = sr_colony_titan_prebiotic
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_prebiotic } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_titania_geophysics }
-		remove_modifier = sr_colony_titania_geophysics
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_geophysics } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_titania_mining }
-		remove_modifier = sr_colony_titania_mining
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_mining } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_triton_gateway }
-		remove_modifier = sr_colony_triton_gateway
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_gateway } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_triton_geyser }
-		remove_modifier = sr_colony_triton_geyser
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_geyser } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_utopia_agriculture }
-		remove_modifier = sr_colony_utopia_agriculture
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_agriculture } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_utopia_ice }
-		remove_modifier = sr_colony_utopia_ice
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_ice } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_valles_marineris_mining }
-		remove_modifier = sr_colony_valles_marineris_mining
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_mining } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_valles_marineris_research }
-		remove_modifier = sr_colony_valles_marineris_research
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_research } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_venus_atmospheric }
-		remove_modifier = sr_colony_venus_atmospheric
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_atmospheric } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_venus_extraction }
-		remove_modifier = sr_colony_venus_extraction
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_extraction } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_vesta_mining }
-		remove_modifier = sr_colony_vesta_mining
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_mining } }
-		}
-	}
-	if = {
-		limit = { has_modifier = sr_colony_vesta_science }
-		remove_modifier = sr_colony_vesta_science
-		if = {
-			limit = { has_journal_entry = je_space_race_solar_colonization }
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_science } }
-		}
-	}
+	# Solar Colonization colony modifiers, from before they moved to the entry.
+	# The entry declares them now (#1404), so the old country copy only goes.
+	if = { limit = { has_modifier = sr_solar_system_trade } remove_modifier = sr_solar_system_trade }
+	if = { limit = { has_modifier = sr_colony_amalthea_physics } remove_modifier = sr_colony_amalthea_physics }
+	if = { limit = { has_modifier = sr_colony_amalthea_rings } remove_modifier = sr_colony_amalthea_rings }
+	if = { limit = { has_modifier = sr_colony_arcadia_civilian } remove_modifier = sr_colony_arcadia_civilian }
+	if = { limit = { has_modifier = sr_colony_arcadia_military } remove_modifier = sr_colony_arcadia_military }
+	if = { limit = { has_modifier = sr_colony_ariel_cryovolcanic } remove_modifier = sr_colony_ariel_cryovolcanic }
+	if = { limit = { has_modifier = sr_colony_ariel_quarrying } remove_modifier = sr_colony_ariel_quarrying }
+	if = { limit = { has_modifier = sr_colony_callisto_agricultural } remove_modifier = sr_colony_callisto_agricultural }
+	if = { limit = { has_modifier = sr_colony_callisto_gateway } remove_modifier = sr_colony_callisto_gateway }
+	if = { limit = { has_modifier = sr_colony_ceres_observatory } remove_modifier = sr_colony_ceres_observatory }
+	if = { limit = { has_modifier = sr_colony_ceres_waystation } remove_modifier = sr_colony_ceres_waystation }
+	if = { limit = { has_modifier = sr_colony_enceladus_astrobiology } remove_modifier = sr_colony_enceladus_astrobiology }
+	if = { limit = { has_modifier = sr_colony_enceladus_water } remove_modifier = sr_colony_enceladus_water }
+	if = { limit = { has_modifier = sr_colony_eris_monitoring } remove_modifier = sr_colony_eris_monitoring }
+	if = { limit = { has_modifier = sr_colony_eris_selfsufficiency } remove_modifier = sr_colony_eris_selfsufficiency }
+	if = { limit = { has_modifier = sr_colony_europa_drilling } remove_modifier = sr_colony_europa_drilling }
+	if = { limit = { has_modifier = sr_colony_europa_surface } remove_modifier = sr_colony_europa_surface }
+	if = { limit = { has_modifier = sr_colony_ganymede_command } remove_modifier = sr_colony_ganymede_command }
+	if = { limit = { has_modifier = sr_colony_ganymede_settlement } remove_modifier = sr_colony_ganymede_settlement }
+	if = { limit = { has_modifier = sr_colony_haumea_dynamics } remove_modifier = sr_colony_haumea_dynamics }
+	if = { limit = { has_modifier = sr_colony_haumea_rings } remove_modifier = sr_colony_haumea_rings }
+	if = { limit = { has_modifier = sr_colony_hellas_astrobiology } remove_modifier = sr_colony_hellas_astrobiology }
+	if = { limit = { has_modifier = sr_colony_hellas_settlement } remove_modifier = sr_colony_hellas_settlement }
+	if = { limit = { has_modifier = sr_colony_himalia_depot } remove_modifier = sr_colony_himalia_depot }
+	if = { limit = { has_modifier = sr_colony_himalia_telescope } remove_modifier = sr_colony_himalia_telescope }
+	if = { limit = { has_modifier = sr_colony_hygiea_automated } remove_modifier = sr_colony_hygiea_automated }
+	if = { limit = { has_modifier = sr_colony_hygiea_volatiles } remove_modifier = sr_colony_hygiea_volatiles }
+	if = { limit = { has_modifier = sr_colony_iapetus_organics } remove_modifier = sr_colony_iapetus_organics }
+	if = { limit = { has_modifier = sr_colony_iapetus_ridge } remove_modifier = sr_colony_iapetus_ridge }
+	if = { limit = { has_modifier = sr_colony_io_mining } remove_modifier = sr_colony_io_mining }
+	if = { limit = { has_modifier = sr_colony_io_research } remove_modifier = sr_colony_io_research }
+	if = { limit = { has_modifier = sr_colony_makemake_chemistry } remove_modifier = sr_colony_makemake_chemistry }
+	if = { limit = { has_modifier = sr_colony_makemake_solarwind } remove_modifier = sr_colony_makemake_solarwind }
+	if = { limit = { has_modifier = sr_colony_mercury_ice } remove_modifier = sr_colony_mercury_ice }
+	if = { limit = { has_modifier = sr_colony_mercury_solar } remove_modifier = sr_colony_mercury_solar }
+	if = { limit = { has_modifier = sr_colony_mimas_gravity } remove_modifier = sr_colony_mimas_gravity }
+	if = { limit = { has_modifier = sr_colony_mimas_installation } remove_modifier = sr_colony_mimas_installation }
+	if = { limit = { has_modifier = sr_colony_miranda_drilling } remove_modifier = sr_colony_miranda_drilling }
+	if = { limit = { has_modifier = sr_colony_miranda_rupes } remove_modifier = sr_colony_miranda_rupes }
+	if = { limit = { has_modifier = sr_colony_oberon_relay } remove_modifier = sr_colony_oberon_relay }
+	if = { limit = { has_modifier = sr_colony_oberon_research } remove_modifier = sr_colony_oberon_research }
+	if = { limit = { has_modifier = sr_colony_olympus_mons_atmospheric } remove_modifier = sr_colony_olympus_mons_atmospheric }
+	if = { limit = { has_modifier = sr_colony_olympus_mons_geothermal } remove_modifier = sr_colony_olympus_mons_geothermal }
+	if = { limit = { has_modifier = sr_colony_pallas_composites } remove_modifier = sr_colony_pallas_composites }
+	if = { limit = { has_modifier = sr_colony_pallas_observatory } remove_modifier = sr_colony_pallas_observatory }
+	if = { limit = { has_modifier = sr_colony_pluto_harvesting } remove_modifier = sr_colony_pluto_harvesting }
+	if = { limit = { has_modifier = sr_colony_pluto_research } remove_modifier = sr_colony_pluto_research }
+	if = { limit = { has_modifier = sr_colony_proteus_extraction } remove_modifier = sr_colony_proteus_extraction }
+	if = { limit = { has_modifier = sr_colony_proteus_probe } remove_modifier = sr_colony_proteus_probe }
+	if = { limit = { has_modifier = sr_colony_psyche_careful } remove_modifier = sr_colony_psyche_careful }
+	if = { limit = { has_modifier = sr_colony_psyche_industrial } remove_modifier = sr_colony_psyche_industrial }
+	if = { limit = { has_modifier = sr_colony_rhea_observation } remove_modifier = sr_colony_rhea_observation }
+	if = { limit = { has_modifier = sr_colony_rhea_propellant } remove_modifier = sr_colony_rhea_propellant }
+	if = { limit = { has_modifier = sr_colony_sedna_interstellar } remove_modifier = sr_colony_sedna_interstellar }
+	if = { limit = { has_modifier = sr_colony_sedna_outpost } remove_modifier = sr_colony_sedna_outpost }
+	if = { limit = { has_modifier = sr_colony_titan_hydrocarbons } remove_modifier = sr_colony_titan_hydrocarbons }
+	if = { limit = { has_modifier = sr_colony_titan_prebiotic } remove_modifier = sr_colony_titan_prebiotic }
+	if = { limit = { has_modifier = sr_colony_titania_geophysics } remove_modifier = sr_colony_titania_geophysics }
+	if = { limit = { has_modifier = sr_colony_titania_mining } remove_modifier = sr_colony_titania_mining }
+	if = { limit = { has_modifier = sr_colony_triton_gateway } remove_modifier = sr_colony_triton_gateway }
+	if = { limit = { has_modifier = sr_colony_triton_geyser } remove_modifier = sr_colony_triton_geyser }
+	if = { limit = { has_modifier = sr_colony_utopia_agriculture } remove_modifier = sr_colony_utopia_agriculture }
+	if = { limit = { has_modifier = sr_colony_utopia_ice } remove_modifier = sr_colony_utopia_ice }
+	if = { limit = { has_modifier = sr_colony_valles_marineris_mining } remove_modifier = sr_colony_valles_marineris_mining }
+	if = { limit = { has_modifier = sr_colony_valles_marineris_research } remove_modifier = sr_colony_valles_marineris_research }
+	if = { limit = { has_modifier = sr_colony_venus_atmospheric } remove_modifier = sr_colony_venus_atmospheric }
+	if = { limit = { has_modifier = sr_colony_venus_extraction } remove_modifier = sr_colony_venus_extraction }
+	if = { limit = { has_modifier = sr_colony_vesta_mining } remove_modifier = sr_colony_vesta_mining }
+	if = { limit = { has_modifier = sr_colony_vesta_science } remove_modifier = sr_colony_vesta_science }
 
 	# ── Colonial Empire (je:je_colonial_empire) ──
 	if = { limit = { has_modifier = colonial_empire_under_pressure_modifier } remove_modifier = colonial_empire_under_pressure_modifier }
@@ -931,4 +461,637 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = ch_adopted_education } remove_modifier = ch_adopted_education }
 	if = { limit = { has_modifier = ch_domestic_education_defense } remove_modifier = ch_domestic_education_defense }
 	if = { limit = { has_modifier = ch_selective_education } remove_modifier = ch_selective_education }
+
+	# ── 1.15 scaling modifiers (#1404) ── PENDING REMOVAL after 2026-12-31 ──
+	# The copies an older save added by hand, where the old code put them; the
+	# entries now declare these (header note above). One effect a system,
+	# below: each converted entry's weekly pulse runs its own as well, since
+	# the monthly strip alone left an old copy stacked with its declaration
+	# for up to a month after a load.
+	legacy_scaling_strip_strategic_reserve = yes
+	legacy_scaling_strip_covert_warfare = yes
+	legacy_scaling_strip_global_warming = yes
+	legacy_scaling_strip_nuclear_program = yes
+	legacy_scaling_strip_colonial_empire = yes
+	legacy_scaling_strip_cultural_hegemony = yes
+	legacy_scaling_strip_banking_cycle = yes
+	legacy_scaling_strip_grand_monuments = yes
+	legacy_scaling_strip_tax_code = yes
+	legacy_scaling_strip_space_race_suborbital = yes
+	legacy_scaling_strip_space_race_orbital = yes
+	legacy_scaling_strip_space_race_moon_landing = yes
+	legacy_scaling_strip_space_race_probe = yes
+	legacy_scaling_strip_space_race_mars_landing = yes
+	legacy_scaling_strip_space_race_interstellar_probe = yes
+	legacy_scaling_strip_space_race_solar_colonization = yes
+	legacy_scaling_strip_united_nations = yes
+}
+
+# Country scope. The monthly strip above and je_strategic_reserve's weekly pulse.
+legacy_scaling_strip_strategic_reserve = {
+	# Its sales income sat on the country.
+	if = { limit = { has_modifier = st_res_sell_profit_modifier } remove_modifier = st_res_sell_profit_modifier }
+}
+
+# Country scope. The monthly strip above and je_covert_warfare's weekly pulse.
+legacy_scaling_strip_covert_warfare = {
+	je:je_covert_warfare ?= {
+		if = { limit = { has_modifier = intelligence_capacity_defense } remove_modifier = intelligence_capacity_defense }
+		if = { limit = { has_modifier = iw_domestic_defense } remove_modifier = iw_domestic_defense }
+		if = { limit = { has_modifier = iw_funding_defense } remove_modifier = iw_funding_defense }
+		if = { limit = { has_modifier = covert_operation_funding_cost } remove_modifier = covert_operation_funding_cost }
+		if = { limit = { has_modifier = iw_tradecraft_bonus } remove_modifier = iw_tradecraft_bonus }
+	}
+}
+
+# Country scope. The monthly strip above and je_global_warming's weekly pulse.
+legacy_scaling_strip_global_warming = {
+	# The two policy costs sat on the country, the rest on the entry.
+	if = { limit = { has_modifier = renewable_investment_cost_modifier } remove_modifier = renewable_investment_cost_modifier }
+	if = { limit = { has_modifier = aerosol_injection_cost_modifier } remove_modifier = aerosol_injection_cost_modifier }
+	je:je_global_warming ?= {
+		if = { limit = { has_modifier = global_warming } remove_modifier = global_warming }
+		if = { limit = { has_modifier = gw_aerosol_monsoon_modifier } remove_modifier = gw_aerosol_monsoon_modifier }
+		if = { limit = { has_modifier = carbon_removal_modifier } remove_modifier = carbon_removal_modifier }
+		if = { limit = { has_modifier = aerosol_injection_modifier } remove_modifier = aerosol_injection_modifier }
+	}
+}
+
+# Country scope. The monthly strip above and je_nuclear_program's weekly pulse.
+legacy_scaling_strip_nuclear_program = {
+	je:je_nuclear_program ?= {
+		if = { limit = { has_modifier = nuclear_weapon_program_funding } remove_modifier = nuclear_weapon_program_funding }
+		if = { limit = { has_modifier = nd_upkeep_cost } remove_modifier = nd_upkeep_cost }
+		if = { limit = { has_modifier = nd_taboo_possession_cost } remove_modifier = nd_taboo_possession_cost }
+		if = { limit = { has_modifier = nd_doctrine_mod_1 } remove_modifier = nd_doctrine_mod_1 }
+		if = { limit = { has_modifier = nd_doctrine_mod_2 } remove_modifier = nd_doctrine_mod_2 }
+		if = { limit = { has_modifier = nd_doctrine_mod_3 } remove_modifier = nd_doctrine_mod_3 }
+		if = { limit = { has_modifier = nd_doctrine_mod_4 } remove_modifier = nd_doctrine_mod_4 }
+		if = { limit = { has_modifier = nd_doctrine_mod_5 } remove_modifier = nd_doctrine_mod_5 }
+		if = { limit = { has_modifier = nd_readiness_mod_2 } remove_modifier = nd_readiness_mod_2 }
+		if = { limit = { has_modifier = nd_readiness_mod_3 } remove_modifier = nd_readiness_mod_3 }
+	}
+}
+
+# Country scope. The monthly strip above and je_colonial_empire's weekly pulse.
+legacy_scaling_strip_colonial_empire = {
+	# Colonial Empire's three programmes and the investment's expense sat on
+	# the country. Every 1.15 save holds the level variables they now read.
+	if = { limit = { has_modifier = colonial_development_investment_modifier } remove_modifier = colonial_development_investment_modifier }
+	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
+	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
+	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
+}
+
+# Country scope. The monthly strip above and je_cultural_hegemony's weekly pulse.
+legacy_scaling_strip_cultural_hegemony = {
+	# Cultural Hegemony: the benchmark sat on the country, the rest on the
+	# entry. The four programmes had no variable before the change: set it
+	# from the old copy, then take the copy off (the entry declares the
+	# programme while the variable is set; the variable sits on the country).
+	# The copy goes either way. The variable isn't set without the Ministry of
+	# Culture (the entry's pulse ends every programme then), nor when the
+	# programme was started again since the load, nor when the programme it
+	# excludes was started since (during the wait the old copy is invisible to
+	# the exclusion; the newer choice stands).
+	if = { limit = { has_modifier = cultural_hegemony_foreign_benchmark } remove_modifier = cultural_hegemony_foreign_benchmark }
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition } }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_world_exposition_on }
+			}
+			set_variable = { name = ch_world_exposition_on value = yes }
+		}
+		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program } }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_cultural_institutes_on }
+			}
+			set_variable = { name = ch_cultural_institutes_on value = yes }
+		}
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign } }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_global_media_campaign_on }
+				NOT = { has_variable = ch_cultural_protectionism_on }
+			}
+			set_variable = { name = ch_global_media_campaign_on value = yes }
+		}
+		je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+	}
+	if = {
+		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program } }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_cultural_protectionism_on }
+				NOT = { has_variable = ch_global_media_campaign_on }
+			}
+			set_variable = { name = ch_cultural_protectionism_on value = yes }
+		}
+		je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+	}
+	je:je_cultural_hegemony ?= {
+		if = { limit = { has_modifier = cultural_hegemony_effect } remove_modifier = cultural_hegemony_effect }
+		if = { limit = { has_modifier = ch_cultural_program_funding } remove_modifier = ch_cultural_program_funding }
+		if = { limit = { has_modifier = ch_cultural_program_funding_cost } remove_modifier = ch_cultural_program_funding_cost }
+		if = { limit = { has_modifier = ch_world_exposition_cost } remove_modifier = ch_world_exposition_cost }
+	}
+}
+
+# Country scope. The monthly strip above and je_banking_cycle's weekly pulse.
+legacy_scaling_strip_banking_cycle = {
+	# The Banking cycle's modifiers sat on its entry. The planning pool and the
+	# two external charges now read caches an older save lacks: write each
+	# before its copy goes, or the line would pay nothing until its next
+	# refresh.
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = planning_treasury_pool_balance }
+			NOT = { has_variable = ce_pool_balance_cached }
+		}
+		banking_cycle_update_ce_pool_balance = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_sterilization_charge }
+			NOT = { has_variable = banking_external_sterilization_charge_cached }
+		}
+		banking_external_charge_sterilization = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_import_charge }
+			NOT = { has_variable = banking_external_import_charge_cached }
+		}
+		banking_external_charge_import = yes
+	}
+	je:je_banking_cycle ?= {
+		if = { limit = { has_modifier = financial_cycle_government_fiscal_policy_effect } remove_modifier = financial_cycle_government_fiscal_policy_effect }
+		if = { limit = { has_modifier = bubble_inertia_moderate } remove_modifier = bubble_inertia_moderate }
+		if = { limit = { has_modifier = bubble_inertia_high } remove_modifier = bubble_inertia_high }
+		if = { limit = { has_modifier = bubble_inertia_extreme } remove_modifier = bubble_inertia_extreme }
+		if = { limit = { has_modifier = bubble_inertia_moderate_coop } remove_modifier = bubble_inertia_moderate_coop }
+		if = { limit = { has_modifier = bubble_inertia_high_coop } remove_modifier = bubble_inertia_high_coop }
+		if = { limit = { has_modifier = bubble_inertia_extreme_coop } remove_modifier = bubble_inertia_extreme_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_panic } remove_modifier = financial_cycle_phase_panic }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn } remove_modifier = financial_cycle_phase_downturn }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation } remove_modifier = financial_cycle_phase_stagnation }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion } remove_modifier = financial_cycle_phase_expansion }
+		if = { limit = { has_modifier = financial_cycle_phase_boom } remove_modifier = financial_cycle_phase_boom }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy } remove_modifier = financial_cycle_phase_frenzy }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_cmd } remove_modifier = financial_cycle_phase_panic_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_cmd } remove_modifier = financial_cycle_phase_downturn_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_cmd } remove_modifier = financial_cycle_phase_stagnation_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_cmd } remove_modifier = financial_cycle_phase_expansion_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_cmd } remove_modifier = financial_cycle_phase_boom_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_cmd } remove_modifier = financial_cycle_phase_frenzy_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_coop } remove_modifier = financial_cycle_phase_panic_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_coop } remove_modifier = financial_cycle_phase_downturn_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_coop } remove_modifier = financial_cycle_phase_stagnation_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_coop } remove_modifier = financial_cycle_phase_expansion_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_coop } remove_modifier = financial_cycle_phase_boom_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_coop } remove_modifier = financial_cycle_phase_frenzy_coop }
+		if = { limit = { has_modifier = banking_stance_band_1 } remove_modifier = banking_stance_band_1 }
+		if = { limit = { has_modifier = banking_stance_band_2 } remove_modifier = banking_stance_band_2 }
+		if = { limit = { has_modifier = banking_stance_band_3 } remove_modifier = banking_stance_band_3 }
+		if = { limit = { has_modifier = banking_stance_band_4 } remove_modifier = banking_stance_band_4 }
+		if = { limit = { has_modifier = banking_stance_band_5 } remove_modifier = banking_stance_band_5 }
+		if = { limit = { has_modifier = planning_treasury_pool_balance } remove_modifier = planning_treasury_pool_balance }
+		if = { limit = { has_modifier = banking_external_sterilization_charge } remove_modifier = banking_external_sterilization_charge }
+		if = { limit = { has_modifier = banking_external_import_charge } remove_modifier = banking_external_import_charge }
+	}
+}
+
+# Country scope. The monthly strip above and je_grand_monuments' weekly pulse.
+legacy_scaling_strip_grand_monuments = {
+	# The national effects, the boons and the digs' drain sat on the entry.
+	je:je_grand_monuments ?= {
+		if = { limit = { has_modifier = gm_national_prestige } remove_modifier = gm_national_prestige }
+		if = { limit = { has_modifier = gm_national_prestige_pct } remove_modifier = gm_national_prestige_pct }
+		if = { limit = { has_modifier = gm_national_education } remove_modifier = gm_national_education }
+		if = { limit = { has_modifier = gm_national_legitimacy } remove_modifier = gm_national_legitimacy }
+		if = { limit = { has_modifier = gm_national_leader } remove_modifier = gm_national_leader }
+		if = { limit = { has_modifier = gm_national_religious } remove_modifier = gm_national_religious }
+		if = { limit = { has_modifier = gm_national_war_memorial } remove_modifier = gm_national_war_memorial }
+		if = { limit = { has_modifier = gm_national_artistic } remove_modifier = gm_national_artistic }
+		if = { limit = { has_modifier = gm_national_scientific } remove_modifier = gm_national_scientific }
+		if = { limit = { has_modifier = gm_national_industrial } remove_modifier = gm_national_industrial }
+		if = { limit = { has_modifier = gm_national_teardown } remove_modifier = gm_national_teardown }
+		if = { limit = { has_modifier = gm_national_vanity } remove_modifier = gm_national_vanity }
+		if = { limit = { has_modifier = gm_national_sig_archive } remove_modifier = gm_national_sig_archive }
+		if = { limit = { has_modifier = gm_national_sig_archive_spread } remove_modifier = gm_national_sig_archive_spread }
+		if = { limit = { has_modifier = gm_national_sig_throne } remove_modifier = gm_national_sig_throne }
+		if = { limit = { has_modifier = gm_national_sig_royal_pantheon } remove_modifier = gm_national_sig_royal_pantheon }
+		if = { limit = { has_modifier = gm_national_sig_martial_glory } remove_modifier = gm_national_sig_martial_glory }
+		if = { limit = { has_modifier = gm_national_sig_liberty } remove_modifier = gm_national_sig_liberty }
+		if = { limit = { has_modifier = gm_national_sig_grande_armee } remove_modifier = gm_national_sig_grande_armee }
+		if = { limit = { has_modifier = gm_national_sig_mandate_of_heaven } remove_modifier = gm_national_sig_mandate_of_heaven }
+		if = { limit = { has_modifier = gm_national_sig_glory_of_athens } remove_modifier = gm_national_sig_glory_of_athens }
+		if = { limit = { has_modifier = gm_national_sig_to_victory } remove_modifier = gm_national_sig_to_victory }
+		if = { limit = { has_modifier = gm_national_sig_unknown_soldier } remove_modifier = gm_national_sig_unknown_soldier }
+		if = { limit = { has_modifier = gm_national_sig_concert_of_nations } remove_modifier = gm_national_sig_concert_of_nations }
+		if = { limit = { has_modifier = gm_national_sig_conquerors_of_space } remove_modifier = gm_national_sig_conquerors_of_space }
+		if = { limit = { has_modifier = gm_national_sig_olympic } remove_modifier = gm_national_sig_olympic }
+		if = { limit = { has_modifier = gm_national_sig_heroes } remove_modifier = gm_national_sig_heroes }
+		if = { limit = { has_modifier = gm_ig_approval_armed_forces } remove_modifier = gm_ig_approval_armed_forces }
+		if = { limit = { has_modifier = gm_ig_approval_devout } remove_modifier = gm_ig_approval_devout }
+		if = { limit = { has_modifier = gm_ig_approval_industrialists } remove_modifier = gm_ig_approval_industrialists }
+		if = { limit = { has_modifier = gm_ig_approval_intelligentsia } remove_modifier = gm_ig_approval_intelligentsia }
+		if = { limit = { has_modifier = gm_ig_approval_landowners } remove_modifier = gm_ig_approval_landowners }
+		if = { limit = { has_modifier = gm_ig_approval_petty_bourgeoisie } remove_modifier = gm_ig_approval_petty_bourgeoisie }
+		if = { limit = { has_modifier = gm_ig_approval_rural_folk } remove_modifier = gm_ig_approval_rural_folk }
+		if = { limit = { has_modifier = gm_ig_approval_trade_unions } remove_modifier = gm_ig_approval_trade_unions }
+		if = { limit = { has_modifier = gm_arch_diversion } remove_modifier = gm_arch_diversion }
+		if = { limit = { has_modifier = gm_boon_reign } remove_modifier = gm_boon_reign }
+		if = { limit = { has_modifier = gm_boon_regime } remove_modifier = gm_boon_regime }
+		if = { limit = { has_modifier = gm_boon_great_power } remove_modifier = gm_boon_great_power }
+		if = { limit = { has_modifier = gm_boon_victory } remove_modifier = gm_boon_victory }
+		if = { limit = { has_modifier = gm_boon_defeat } remove_modifier = gm_boon_defeat }
+		if = { limit = { has_modifier = gm_boon_centenary } remove_modifier = gm_boon_centenary }
+		if = { limit = { has_modifier = gm_boon_ruler_death } remove_modifier = gm_boon_ruler_death }
+		if = { limit = { has_modifier = gm_boon_space } remove_modifier = gm_boon_space }
+		if = { limit = { has_modifier = gm_boon_faith } remove_modifier = gm_boon_faith }
+		if = { limit = { has_modifier = gm_boon_tech_artistic } remove_modifier = gm_boon_tech_artistic }
+		if = { limit = { has_modifier = gm_boon_tech_scientific } remove_modifier = gm_boon_tech_scientific }
+		if = { limit = { has_modifier = gm_boon_tech_industrial } remove_modifier = gm_boon_tech_industrial }
+		if = { limit = { has_modifier = gm_boon_tech_athletic } remove_modifier = gm_boon_tech_athletic }
+		if = { limit = { has_modifier = gm_boon_tech_naturalist } remove_modifier = gm_boon_tech_naturalist }
+		if = { limit = { has_modifier = gm_boon_homecoming } remove_modifier = gm_boon_homecoming }
+	}
+}
+
+# Country scope. The monthly strip above and je_tax_code's weekly pulse.
+legacy_scaling_strip_tax_code = {
+	# The light code's relief and reactions sat on the country.
+	if = { limit = { has_modifier = te_tax_light_relief_wage } remove_modifier = te_tax_light_relief_wage }
+	if = { limit = { has_modifier = te_tax_light_relief_div } remove_modifier = te_tax_light_relief_div }
+	if = { limit = { has_modifier = te_tax_light_relief_land } remove_modifier = te_tax_light_relief_land }
+	if = { limit = { has_modifier = te_tax_light_relief_head } remove_modifier = te_tax_light_relief_head }
+	if = { limit = { has_modifier = te_tax_light_relief_cons } remove_modifier = te_tax_light_relief_cons }
+	if = { limit = { has_modifier = te_tax_light_react_armed_forces_pos } remove_modifier = te_tax_light_react_armed_forces_pos }
+	if = { limit = { has_modifier = te_tax_light_react_armed_forces_neg } remove_modifier = te_tax_light_react_armed_forces_neg }
+	if = { limit = { has_modifier = te_tax_light_react_devout_pos } remove_modifier = te_tax_light_react_devout_pos }
+	if = { limit = { has_modifier = te_tax_light_react_devout_neg } remove_modifier = te_tax_light_react_devout_neg }
+	if = { limit = { has_modifier = te_tax_light_react_industrialists_pos } remove_modifier = te_tax_light_react_industrialists_pos }
+	if = { limit = { has_modifier = te_tax_light_react_industrialists_neg } remove_modifier = te_tax_light_react_industrialists_neg }
+	if = { limit = { has_modifier = te_tax_light_react_intelligentsia_pos } remove_modifier = te_tax_light_react_intelligentsia_pos }
+	if = { limit = { has_modifier = te_tax_light_react_intelligentsia_neg } remove_modifier = te_tax_light_react_intelligentsia_neg }
+	if = { limit = { has_modifier = te_tax_light_react_landowners_pos } remove_modifier = te_tax_light_react_landowners_pos }
+	if = { limit = { has_modifier = te_tax_light_react_landowners_neg } remove_modifier = te_tax_light_react_landowners_neg }
+	if = { limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_pos } remove_modifier = te_tax_light_react_petty_bourgeoisie_pos }
+	if = { limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_neg } remove_modifier = te_tax_light_react_petty_bourgeoisie_neg }
+	if = { limit = { has_modifier = te_tax_light_react_rural_folk_pos } remove_modifier = te_tax_light_react_rural_folk_pos }
+	if = { limit = { has_modifier = te_tax_light_react_rural_folk_neg } remove_modifier = te_tax_light_react_rural_folk_neg }
+	if = { limit = { has_modifier = te_tax_light_react_trade_unions_pos } remove_modifier = te_tax_light_react_trade_unions_pos }
+	if = { limit = { has_modifier = te_tax_light_react_trade_unions_neg } remove_modifier = te_tax_light_react_trade_unions_neg }
+}
+
+# Country scope. The monthly strip above and je_space_race_suborbital's weekly pulse.
+legacy_scaling_strip_space_race_suborbital = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_suborbital ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_orbital's weekly pulse.
+legacy_scaling_strip_space_race_orbital = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_orbital ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+		if = { limit = { has_modifier = sr_choice_orbital_civilian } remove_modifier = sr_choice_orbital_civilian }
+		if = { limit = { has_modifier = sr_choice_orbital_military } remove_modifier = sr_choice_orbital_military }
+		if = { limit = { has_modifier = sr_choice_orbital_scientist } remove_modifier = sr_choice_orbital_scientist }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_moon_landing's weekly pulse.
+legacy_scaling_strip_space_race_moon_landing = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_moon_landing ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+		if = { limit = { has_modifier = sr_choice_site_shackleton } remove_modifier = sr_choice_site_shackleton }
+		if = { limit = { has_modifier = sr_choice_site_equatorial } remove_modifier = sr_choice_site_equatorial }
+		if = { limit = { has_modifier = sr_choice_site_tranquility } remove_modifier = sr_choice_site_tranquility }
+		if = { limit = { has_modifier = sr_choice_site_far_side } remove_modifier = sr_choice_site_far_side }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_probe's weekly pulse.
+legacy_scaling_strip_space_race_probe = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_probe ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+		if = { limit = { has_modifier = sr_choice_probe_venus } remove_modifier = sr_choice_probe_venus }
+		if = { limit = { has_modifier = sr_choice_probe_mars } remove_modifier = sr_choice_probe_mars }
+		if = { limit = { has_modifier = sr_choice_probe_asteroid } remove_modifier = sr_choice_probe_asteroid }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_mars_landing's weekly pulse.
+legacy_scaling_strip_space_race_mars_landing = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_mars_landing ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+		if = { limit = { has_modifier = sr_choice_mars_direct } remove_modifier = sr_choice_mars_direct }
+		if = { limit = { has_modifier = sr_choice_mars_orbital } remove_modifier = sr_choice_mars_orbital }
+		if = { limit = { has_modifier = sr_choice_mars_robotic } remove_modifier = sr_choice_mars_robotic }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_interstellar_probe's weekly pulse.
+legacy_scaling_strip_space_race_interstellar_probe = {
+	# Its cost, funding, approach and choice modifiers sat on the entry.
+	je:je_space_race_interstellar_probe ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+	}
+}
+
+# Country scope. The monthly strip above and je_space_race_solar_colonization's weekly pulse.
+legacy_scaling_strip_space_race_solar_colonization = {
+	# Its milestone modifiers and its 133 colony modifiers (126 declared in
+	# sr_sites_generated.txt) sat on the entry.
+	je:je_space_race_solar_colonization ?= {
+		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
+		if = { limit = { has_modifier = sr_funding_progress } remove_modifier = sr_funding_progress }
+		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
+		if = { limit = { has_modifier = sr_safe_approach } remove_modifier = sr_safe_approach }
+		if = { limit = { has_modifier = sr_ambitious_approach } remove_modifier = sr_ambitious_approach }
+		if = { limit = { has_modifier = sr_solar_system_trade } remove_modifier = sr_solar_system_trade }
+		if = { limit = { has_modifier = sr_emigration_programme } remove_modifier = sr_emigration_programme }
+		if = { limit = { has_modifier = sr_offworld_population } remove_modifier = sr_offworld_population }
+		if = { limit = { has_modifier = sr_module_upkeep } remove_modifier = sr_module_upkeep }
+		if = { limit = { has_modifier = sr_free_colony_supply } remove_modifier = sr_free_colony_supply }
+		if = { limit = { has_modifier = sr_free_colony_trade } remove_modifier = sr_free_colony_trade }
+		if = { limit = { has_modifier = sr_colonial_garrisons } remove_modifier = sr_colonial_garrisons }
+		if = { limit = { has_modifier = sr_colony_valles_marineris_research } remove_modifier = sr_colony_valles_marineris_research }
+		if = { limit = { has_modifier = sr_colony_valles_marineris_mining } remove_modifier = sr_colony_valles_marineris_mining }
+		if = { limit = { has_modifier = sr_colony_olympus_mons_atmospheric } remove_modifier = sr_colony_olympus_mons_atmospheric }
+		if = { limit = { has_modifier = sr_colony_olympus_mons_geothermal } remove_modifier = sr_colony_olympus_mons_geothermal }
+		if = { limit = { has_modifier = sr_discovery_olympus_tubes_a } remove_modifier = sr_discovery_olympus_tubes_a }
+		if = { limit = { has_modifier = sr_discovery_olympus_tubes_b } remove_modifier = sr_discovery_olympus_tubes_b }
+		if = { limit = { has_modifier = sr_colony_hellas_settlement } remove_modifier = sr_colony_hellas_settlement }
+		if = { limit = { has_modifier = sr_colony_hellas_astrobiology } remove_modifier = sr_colony_hellas_astrobiology }
+		if = { limit = { has_modifier = sr_discovery_hellas_fossils_a } remove_modifier = sr_discovery_hellas_fossils_a }
+		if = { limit = { has_modifier = sr_discovery_hellas_fossils_b } remove_modifier = sr_discovery_hellas_fossils_b }
+		if = { limit = { has_modifier = sr_colony_utopia_ice } remove_modifier = sr_colony_utopia_ice }
+		if = { limit = { has_modifier = sr_colony_utopia_agriculture } remove_modifier = sr_colony_utopia_agriculture }
+		if = { limit = { has_modifier = sr_discovery_utopia_glacier_a } remove_modifier = sr_discovery_utopia_glacier_a }
+		if = { limit = { has_modifier = sr_discovery_utopia_glacier_b } remove_modifier = sr_discovery_utopia_glacier_b }
+		if = { limit = { has_modifier = sr_colony_arcadia_civilian } remove_modifier = sr_colony_arcadia_civilian }
+		if = { limit = { has_modifier = sr_colony_arcadia_military } remove_modifier = sr_colony_arcadia_military }
+		if = { limit = { has_modifier = sr_discovery_arcadia_brines_a } remove_modifier = sr_discovery_arcadia_brines_a }
+		if = { limit = { has_modifier = sr_discovery_arcadia_brines_b } remove_modifier = sr_discovery_arcadia_brines_b }
+		if = { limit = { has_modifier = sr_colony_ceres_waystation } remove_modifier = sr_colony_ceres_waystation }
+		if = { limit = { has_modifier = sr_colony_ceres_observatory } remove_modifier = sr_colony_ceres_observatory }
+		if = { limit = { has_modifier = sr_discovery_ceres_reservoir_a } remove_modifier = sr_discovery_ceres_reservoir_a }
+		if = { limit = { has_modifier = sr_discovery_ceres_reservoir_b } remove_modifier = sr_discovery_ceres_reservoir_b }
+		if = { limit = { has_modifier = sr_colony_vesta_mining } remove_modifier = sr_colony_vesta_mining }
+		if = { limit = { has_modifier = sr_colony_vesta_science } remove_modifier = sr_colony_vesta_science }
+		if = { limit = { has_modifier = sr_discovery_vesta_impactor_a } remove_modifier = sr_discovery_vesta_impactor_a }
+		if = { limit = { has_modifier = sr_discovery_vesta_impactor_b } remove_modifier = sr_discovery_vesta_impactor_b }
+		if = { limit = { has_modifier = sr_colony_psyche_industrial } remove_modifier = sr_colony_psyche_industrial }
+		if = { limit = { has_modifier = sr_colony_psyche_careful } remove_modifier = sr_colony_psyche_careful }
+		if = { limit = { has_modifier = sr_discovery_psyche_metal_a } remove_modifier = sr_discovery_psyche_metal_a }
+		if = { limit = { has_modifier = sr_discovery_psyche_metal_b } remove_modifier = sr_discovery_psyche_metal_b }
+		if = { limit = { has_modifier = sr_colony_pallas_composites } remove_modifier = sr_colony_pallas_composites }
+		if = { limit = { has_modifier = sr_colony_pallas_observatory } remove_modifier = sr_colony_pallas_observatory }
+		if = { limit = { has_modifier = sr_discovery_pallas_water_a } remove_modifier = sr_discovery_pallas_water_a }
+		if = { limit = { has_modifier = sr_discovery_pallas_water_b } remove_modifier = sr_discovery_pallas_water_b }
+		if = { limit = { has_modifier = sr_colony_hygiea_volatiles } remove_modifier = sr_colony_hygiea_volatiles }
+		if = { limit = { has_modifier = sr_colony_hygiea_automated } remove_modifier = sr_colony_hygiea_automated }
+		if = { limit = { has_modifier = sr_colony_io_mining } remove_modifier = sr_colony_io_mining }
+		if = { limit = { has_modifier = sr_colony_io_research } remove_modifier = sr_colony_io_research }
+		if = { limit = { has_modifier = sr_discovery_io_roof_a } remove_modifier = sr_discovery_io_roof_a }
+		if = { limit = { has_modifier = sr_discovery_io_roof_b } remove_modifier = sr_discovery_io_roof_b }
+		if = { limit = { has_modifier = sr_colony_europa_drilling } remove_modifier = sr_colony_europa_drilling }
+		if = { limit = { has_modifier = sr_colony_europa_surface } remove_modifier = sr_colony_europa_surface }
+		if = { limit = { has_modifier = sr_discovery_europa_life_a } remove_modifier = sr_discovery_europa_life_a }
+		if = { limit = { has_modifier = sr_discovery_europa_life_b } remove_modifier = sr_discovery_europa_life_b }
+		if = { limit = { has_modifier = sr_discovery_europa_vents_a } remove_modifier = sr_discovery_europa_vents_a }
+		if = { limit = { has_modifier = sr_discovery_europa_vents_b } remove_modifier = sr_discovery_europa_vents_b }
+		if = { limit = { has_modifier = sr_colony_ganymede_settlement } remove_modifier = sr_colony_ganymede_settlement }
+		if = { limit = { has_modifier = sr_colony_ganymede_command } remove_modifier = sr_colony_ganymede_command }
+		if = { limit = { has_modifier = sr_discovery_ganymede_layers_a } remove_modifier = sr_discovery_ganymede_layers_a }
+		if = { limit = { has_modifier = sr_discovery_ganymede_layers_b } remove_modifier = sr_discovery_ganymede_layers_b }
+		if = { limit = { has_modifier = sr_colony_callisto_gateway } remove_modifier = sr_colony_callisto_gateway }
+		if = { limit = { has_modifier = sr_colony_callisto_agricultural } remove_modifier = sr_colony_callisto_agricultural }
+		if = { limit = { has_modifier = sr_discovery_callisto_archive_a } remove_modifier = sr_discovery_callisto_archive_a }
+		if = { limit = { has_modifier = sr_discovery_callisto_archive_b } remove_modifier = sr_discovery_callisto_archive_b }
+		if = { limit = { has_modifier = sr_colony_himalia_telescope } remove_modifier = sr_colony_himalia_telescope }
+		if = { limit = { has_modifier = sr_colony_himalia_depot } remove_modifier = sr_colony_himalia_depot }
+		if = { limit = { has_modifier = sr_colony_amalthea_physics } remove_modifier = sr_colony_amalthea_physics }
+		if = { limit = { has_modifier = sr_colony_amalthea_rings } remove_modifier = sr_colony_amalthea_rings }
+		if = { limit = { has_modifier = sr_colony_venus_atmospheric } remove_modifier = sr_colony_venus_atmospheric }
+		if = { limit = { has_modifier = sr_colony_venus_extraction } remove_modifier = sr_colony_venus_extraction }
+		if = { limit = { has_modifier = sr_discovery_venus_waves_a } remove_modifier = sr_discovery_venus_waves_a }
+		if = { limit = { has_modifier = sr_discovery_venus_waves_b } remove_modifier = sr_discovery_venus_waves_b }
+		if = { limit = { has_modifier = sr_colony_mercury_solar } remove_modifier = sr_colony_mercury_solar }
+		if = { limit = { has_modifier = sr_colony_mercury_ice } remove_modifier = sr_colony_mercury_ice }
+		if = { limit = { has_modifier = sr_discovery_mercury_archive_a } remove_modifier = sr_discovery_mercury_archive_a }
+		if = { limit = { has_modifier = sr_discovery_mercury_archive_b } remove_modifier = sr_discovery_mercury_archive_b }
+		if = { limit = { has_modifier = sr_colony_titan_hydrocarbons } remove_modifier = sr_colony_titan_hydrocarbons }
+		if = { limit = { has_modifier = sr_colony_titan_prebiotic } remove_modifier = sr_colony_titan_prebiotic }
+		if = { limit = { has_modifier = sr_discovery_titan_chemistry_a } remove_modifier = sr_discovery_titan_chemistry_a }
+		if = { limit = { has_modifier = sr_discovery_titan_chemistry_b } remove_modifier = sr_discovery_titan_chemistry_b }
+		if = { limit = { has_modifier = sr_colony_enceladus_astrobiology } remove_modifier = sr_colony_enceladus_astrobiology }
+		if = { limit = { has_modifier = sr_colony_enceladus_water } remove_modifier = sr_colony_enceladus_water }
+		if = { limit = { has_modifier = sr_discovery_enceladus_life_a } remove_modifier = sr_discovery_enceladus_life_a }
+		if = { limit = { has_modifier = sr_discovery_enceladus_life_b } remove_modifier = sr_discovery_enceladus_life_b }
+		if = { limit = { has_modifier = sr_colony_rhea_propellant } remove_modifier = sr_colony_rhea_propellant }
+		if = { limit = { has_modifier = sr_colony_rhea_observation } remove_modifier = sr_colony_rhea_observation }
+		if = { limit = { has_modifier = sr_colony_mimas_installation } remove_modifier = sr_colony_mimas_installation }
+		if = { limit = { has_modifier = sr_colony_mimas_gravity } remove_modifier = sr_colony_mimas_gravity }
+		if = { limit = { has_modifier = sr_colony_iapetus_ridge } remove_modifier = sr_colony_iapetus_ridge }
+		if = { limit = { has_modifier = sr_colony_iapetus_organics } remove_modifier = sr_colony_iapetus_organics }
+		if = { limit = { has_modifier = sr_colony_titania_mining } remove_modifier = sr_colony_titania_mining }
+		if = { limit = { has_modifier = sr_colony_titania_geophysics } remove_modifier = sr_colony_titania_geophysics }
+		if = { limit = { has_modifier = sr_discovery_titania_ocean_a } remove_modifier = sr_discovery_titania_ocean_a }
+		if = { limit = { has_modifier = sr_discovery_titania_ocean_b } remove_modifier = sr_discovery_titania_ocean_b }
+		if = { limit = { has_modifier = sr_colony_oberon_relay } remove_modifier = sr_colony_oberon_relay }
+		if = { limit = { has_modifier = sr_colony_oberon_research } remove_modifier = sr_colony_oberon_research }
+		if = { limit = { has_modifier = sr_colony_miranda_rupes } remove_modifier = sr_colony_miranda_rupes }
+		if = { limit = { has_modifier = sr_colony_miranda_drilling } remove_modifier = sr_colony_miranda_drilling }
+		if = { limit = { has_modifier = sr_colony_ariel_cryovolcanic } remove_modifier = sr_colony_ariel_cryovolcanic }
+		if = { limit = { has_modifier = sr_colony_ariel_quarrying } remove_modifier = sr_colony_ariel_quarrying }
+		if = { limit = { has_modifier = sr_colony_triton_geyser } remove_modifier = sr_colony_triton_geyser }
+		if = { limit = { has_modifier = sr_colony_triton_gateway } remove_modifier = sr_colony_triton_gateway }
+		if = { limit = { has_modifier = sr_discovery_triton_jet_a } remove_modifier = sr_discovery_triton_jet_a }
+		if = { limit = { has_modifier = sr_discovery_triton_jet_b } remove_modifier = sr_discovery_triton_jet_b }
+		if = { limit = { has_modifier = sr_colony_proteus_probe } remove_modifier = sr_colony_proteus_probe }
+		if = { limit = { has_modifier = sr_colony_proteus_extraction } remove_modifier = sr_colony_proteus_extraction }
+		if = { limit = { has_modifier = sr_colony_pluto_research } remove_modifier = sr_colony_pluto_research }
+		if = { limit = { has_modifier = sr_colony_pluto_harvesting } remove_modifier = sr_colony_pluto_harvesting }
+		if = { limit = { has_modifier = sr_discovery_pluto_antifreeze_a } remove_modifier = sr_discovery_pluto_antifreeze_a }
+		if = { limit = { has_modifier = sr_discovery_pluto_antifreeze_b } remove_modifier = sr_discovery_pluto_antifreeze_b }
+		if = { limit = { has_modifier = sr_colony_eris_selfsufficiency } remove_modifier = sr_colony_eris_selfsufficiency }
+		if = { limit = { has_modifier = sr_colony_eris_monitoring } remove_modifier = sr_colony_eris_monitoring }
+		if = { limit = { has_modifier = sr_colony_makemake_chemistry } remove_modifier = sr_colony_makemake_chemistry }
+		if = { limit = { has_modifier = sr_colony_makemake_solarwind } remove_modifier = sr_colony_makemake_solarwind }
+		if = { limit = { has_modifier = sr_colony_haumea_dynamics } remove_modifier = sr_colony_haumea_dynamics }
+		if = { limit = { has_modifier = sr_colony_haumea_rings } remove_modifier = sr_colony_haumea_rings }
+		if = { limit = { has_modifier = sr_colony_sedna_outpost } remove_modifier = sr_colony_sedna_outpost }
+		if = { limit = { has_modifier = sr_colony_sedna_interstellar } remove_modifier = sr_colony_sedna_interstellar }
+		if = { limit = { has_modifier = sr_colony_shackleton_depot } remove_modifier = sr_colony_shackleton_depot }
+		if = { limit = { has_modifier = sr_colony_shackleton_outpost } remove_modifier = sr_colony_shackleton_outpost }
+		if = { limit = { has_modifier = sr_colony_peary_solar } remove_modifier = sr_colony_peary_solar }
+		if = { limit = { has_modifier = sr_colony_peary_observatory } remove_modifier = sr_colony_peary_observatory }
+		if = { limit = { has_modifier = sr_colony_tranquility_heritage } remove_modifier = sr_colony_tranquility_heritage }
+		if = { limit = { has_modifier = sr_colony_tranquility_helium } remove_modifier = sr_colony_tranquility_helium }
+		if = { limit = { has_modifier = sr_colony_marius_lavatubes } remove_modifier = sr_colony_marius_lavatubes }
+		if = { limit = { has_modifier = sr_colony_marius_hardened } remove_modifier = sr_colony_marius_hardened }
+		if = { limit = { has_modifier = sr_colony_daedalus_telescope } remove_modifier = sr_colony_daedalus_telescope }
+		if = { limit = { has_modifier = sr_colony_daedalus_relay } remove_modifier = sr_colony_daedalus_relay }
+		if = { limit = { has_modifier = sr_colony_imbrium_massdriver } remove_modifier = sr_colony_imbrium_massdriver }
+		if = { limit = { has_modifier = sr_colony_imbrium_kreep } remove_modifier = sr_colony_imbrium_kreep }
+		if = { limit = { has_modifier = sr_module_lab } remove_modifier = sr_module_lab }
+		if = { limit = { has_modifier = sr_module_culture } remove_modifier = sr_module_culture }
+		if = { limit = { has_modifier = sr_module_resort } remove_modifier = sr_module_resort }
+		if = { limit = { has_modifier = sr_module_black } remove_modifier = sr_module_black }
+		if = { limit = { has_modifier = sr_module_train } remove_modifier = sr_module_train }
+		if = { limit = { has_modifier = sr_module_foundry } remove_modifier = sr_module_foundry }
+	}
+}
+
+# Country scope. The monthly strip above and je_united_nations' weekly pulse.
+legacy_scaling_strip_united_nations = {
+	# The mirrors first: the old monthly reconcile made the modifier the truth
+	# and recorded a mirror for any copy it found, so a copy an older save holds
+	# sets its mirror once, before it goes. Never clears a mirror: this runs
+	# every week and nothing adds a copy any more. The caches the values read
+	# (dues, fund, missions, seabed, the contributors' expenses) predate #1404.
+	if = { limit = { NOT = { has_variable = un_peacekeeping_contributor_modifier_on } je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } } set_variable = un_peacekeeping_contributor_modifier_on }
+	if = { limit = { NOT = { has_variable = un_peacekeeping_contributor_cost_on } je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } } set_variable = un_peacekeeping_contributor_cost_on }
+	if = { limit = { NOT = { has_variable = un_development_contributor_modifier_on } je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } } set_variable = un_development_contributor_modifier_on }
+	if = { limit = { NOT = { has_variable = un_development_contributor_cost_on } je:je_united_nations ?= { has_modifier = un_development_contributor_cost } } set_variable = un_development_contributor_cost_on }
+	if = { limit = { NOT = { has_variable = un_human_rights_champion_modifier_on } je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } } set_variable = un_human_rights_champion_modifier_on }
+	if = { limit = { NOT = { has_variable = un_arms_control_participant_modifier_on } je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } } set_variable = un_arms_control_participant_modifier_on }
+	if = { limit = { NOT = { has_variable = un_champion_order_cost_on } je:je_united_nations ?= { has_modifier = un_champion_order_cost } } set_variable = un_champion_order_cost_on }
+	if = { limit = { NOT = { has_variable = un_undermine_order_cost_on } je:je_united_nations ?= { has_modifier = un_undermine_order_cost } } set_variable = un_undermine_order_cost_on }
+	if = { limit = { NOT = { has_variable = un_human_rights_declaration_modifier_on } je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } } set_variable = un_human_rights_declaration_modifier_on }
+	if = { limit = { NOT = { has_variable = un_nonproliferation_modifier_on } je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } } set_variable = un_nonproliferation_modifier_on }
+	if = { limit = { NOT = { has_variable = un_climate_binding_modifier_on } je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } } set_variable = un_climate_binding_modifier_on }
+	if = { limit = { NOT = { has_variable = un_heritage_program_modifier_on } je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } } set_variable = un_heritage_program_modifier_on }
+	if = { limit = { NOT = { has_variable = un_pandemic_cooperation_modifier_on } je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } } set_variable = un_pandemic_cooperation_modifier_on }
+	if = { limit = { NOT = { has_variable = un_refugee_program_modifier_on } je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } } set_variable = un_refugee_program_modifier_on }
+	if = { limit = { NOT = { has_variable = un_space_partnership_modifier_on } je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } } set_variable = un_space_partnership_modifier_on }
+	# Sanctions: the regime is un_sanctions_target_on now. The old pulse re-added
+	# the modifier wherever un_sanctions_enforced_by stood without it, so that
+	# counts too (every lift path removes both variables).
+	if = {
+		limit = {
+			OR = {
+				has_modifier = un_sanctions_target_modifier
+				has_variable = un_sanctions_enforced_by
+			}
+			NOT = { has_variable = un_sanctions_target_on }
+		}
+		set_variable = un_sanctions_target_on
+	}
+	# Dues: an older save kept the weekly figure when a member stopped paying
+	# (it removed only the modifier), and the declaration would charge it again
+	# on rejoining or a restored seat until the next monthly update. Every way
+	# out removes it now (un_dues_stop_paying); a cache, not a mirror.
+	if = {
+		limit = {
+			has_variable = un_dues_cached
+			NOT = { un_dues_in_force = yes }
+		}
+		un_dues_stop_paying = yes
+	}
+	# The entry's copies.
+	je:je_united_nations ?= {
+		if = { limit = { has_modifier = un_membership_benefits_modifier } remove_modifier = un_membership_benefits_modifier }
+		if = { limit = { has_modifier = un_development_patron_modifier } remove_modifier = un_development_patron_modifier }
+		if = { limit = { has_modifier = un_peacekeeping_contributor_modifier } remove_modifier = un_peacekeeping_contributor_modifier }
+		if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
+		if = { limit = { has_modifier = un_development_contributor_modifier } remove_modifier = un_development_contributor_modifier }
+		if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
+		if = { limit = { has_modifier = un_human_rights_champion_modifier } remove_modifier = un_human_rights_champion_modifier }
+		if = { limit = { has_modifier = un_arms_control_participant_modifier } remove_modifier = un_arms_control_participant_modifier }
+		if = { limit = { has_modifier = un_champion_order_cost } remove_modifier = un_champion_order_cost }
+		if = { limit = { has_modifier = un_undermine_order_cost } remove_modifier = un_undermine_order_cost }
+		if = { limit = { has_modifier = un_human_rights_declaration_modifier } remove_modifier = un_human_rights_declaration_modifier }
+		if = { limit = { has_modifier = un_nonproliferation_modifier } remove_modifier = un_nonproliferation_modifier }
+		if = { limit = { has_modifier = un_climate_binding_modifier } remove_modifier = un_climate_binding_modifier }
+		if = { limit = { has_modifier = un_heritage_program_modifier } remove_modifier = un_heritage_program_modifier }
+		if = { limit = { has_modifier = un_pandemic_cooperation_modifier } remove_modifier = un_pandemic_cooperation_modifier }
+		if = { limit = { has_modifier = un_refugee_program_modifier } remove_modifier = un_refugee_program_modifier }
+		if = { limit = { has_modifier = un_space_partnership_modifier } remove_modifier = un_space_partnership_modifier }
+	}
+	# The nine country conventions: the mirror, then the copy goes.
+	if = { limit = { has_modifier = un_law_of_sea_modifier } set_variable = un_law_of_sea_modifier_on remove_modifier = un_law_of_sea_modifier }
+	if = { limit = { has_modifier = un_icc_member_modifier } set_variable = un_icc_member_modifier_on remove_modifier = un_icc_member_modifier }
+	if = { limit = { has_modifier = un_physical_protection_modifier } set_variable = un_physical_protection_modifier_on remove_modifier = un_physical_protection_modifier }
+	if = { limit = { has_modifier = un_narcotics_control_modifier } set_variable = un_narcotics_control_modifier_on remove_modifier = un_narcotics_control_modifier }
+	if = { limit = { has_modifier = un_cultural_diversity_modifier } set_variable = un_cultural_diversity_modifier_on remove_modifier = un_cultural_diversity_modifier }
+	if = { limit = { has_modifier = un_nuclear_ban_modifier } set_variable = un_nuclear_ban_modifier_on remove_modifier = un_nuclear_ban_modifier }
+	if = { limit = { has_modifier = un_antarctic_treaty_modifier } set_variable = un_antarctic_treaty_modifier_on remove_modifier = un_antarctic_treaty_modifier }
+	if = { limit = { has_modifier = un_asat_moratorium_modifier } set_variable = un_asat_moratorium_modifier_on remove_modifier = un_asat_moratorium_modifier }
+	if = { limit = { has_modifier = un_colony_protection_modifier } set_variable = un_colony_protection_modifier_on remove_modifier = un_colony_protection_modifier }
+	# The regime terms: a presence variable for each (the next un_regime_bump
+	# derives them again).
+	if = { limit = { has_modifier = un_regime_climate_emitter_modifier } set_variable = un_regime_climate_emitter_modifier_on remove_modifier = un_regime_climate_emitter_modifier }
+	if = { limit = { has_modifier = un_regime_climate_adaptation_modifier } set_variable = un_regime_climate_adaptation_modifier_on remove_modifier = un_regime_climate_adaptation_modifier }
+	if = { limit = { has_modifier = un_regime_npt_inspection_modifier } set_variable = un_regime_npt_inspection_modifier_on remove_modifier = un_regime_npt_inspection_modifier }
+	if = { limit = { has_modifier = un_regime_npt_guarantee_modifier } set_variable = un_regime_npt_guarantee_modifier_on remove_modifier = un_regime_npt_guarantee_modifier }
+	if = { limit = { has_modifier = un_regime_naval_curb_modifier } set_variable = un_regime_naval_curb_modifier_on remove_modifier = un_regime_naval_curb_modifier }
+	if = { limit = { has_modifier = un_regime_rights_violator_modifier } set_variable = un_regime_rights_violator_modifier_on remove_modifier = un_regime_rights_violator_modifier }
+	if = { limit = { has_modifier = un_regime_colonial_pressure_modifier } set_variable = un_regime_colonial_pressure_modifier_on remove_modifier = un_regime_colonial_pressure_modifier }
+	if = { limit = { has_modifier = un_regime_colony_liberty_modifier } set_variable = un_regime_colony_liberty_modifier_on remove_modifier = un_regime_colony_liberty_modifier }
+	if = { limit = { has_modifier = un_regime_refugee_host_modifier } set_variable = un_regime_refugee_host_modifier_on remove_modifier = un_regime_refugee_host_modifier }
+	if = { limit = { has_modifier = un_regime_refugee_source_modifier } set_variable = un_regime_refugee_source_modifier_on remove_modifier = un_regime_refugee_source_modifier }
+	if = { limit = { has_modifier = un_regime_space_leader_modifier } set_variable = un_regime_space_leader_modifier_on remove_modifier = un_regime_space_leader_modifier }
+	if = { limit = { has_modifier = un_regime_space_laggard_modifier } set_variable = un_regime_space_laggard_modifier_on remove_modifier = un_regime_space_laggard_modifier }
+	if = { limit = { has_modifier = un_regime_space_weapon_modifier } set_variable = un_regime_space_weapon_modifier_on remove_modifier = un_regime_space_weapon_modifier }
+	if = { limit = { has_modifier = un_regime_heritage_site_modifier } set_variable = un_regime_heritage_site_modifier_on remove_modifier = un_regime_heritage_site_modifier }
+	if = { limit = { has_modifier = un_regime_cultural_hegemon_modifier } set_variable = un_regime_cultural_hegemon_modifier_on remove_modifier = un_regime_cultural_hegemon_modifier }
+	if = { limit = { has_modifier = un_regime_antarctic_station_modifier } set_variable = un_regime_antarctic_station_modifier_on remove_modifier = un_regime_antarctic_station_modifier }
+	if = { limit = { has_modifier = un_regime_shared_intelligence_modifier } set_variable = un_regime_shared_intelligence_modifier_on remove_modifier = un_regime_shared_intelligence_modifier }
+	# The rest sat on the country and read caches the sync still writes.
+	if = { limit = { has_modifier = un_sanctions_target_modifier } remove_modifier = un_sanctions_target_modifier }
+	if = { limit = { has_modifier = un_arms_embargo_target_modifier } remove_modifier = un_arms_embargo_target_modifier }
+	if = { limit = { has_modifier = un_arms_embargo_voluntary_modifier } remove_modifier = un_arms_embargo_voluntary_modifier }
+	if = { limit = { has_modifier = un_dues_modifier } remove_modifier = un_dues_modifier }
+	if = { limit = { has_modifier = un_dev_fund_pool_grant_modifier } remove_modifier = un_dev_fund_pool_grant_modifier }
+	if = { limit = { has_modifier = un_dev_fund_treasury_grant_modifier } remove_modifier = un_dev_fund_treasury_grant_modifier }
+	if = { limit = { has_modifier = un_mission_service_cost } remove_modifier = un_mission_service_cost }
+	if = { limit = { has_modifier = un_electoral_observers_modifier } remove_modifier = un_electoral_observers_modifier }
+	if = { limit = { has_modifier = un_mandate_war_support_modifier } remove_modifier = un_mandate_war_support_modifier }
+	if = { limit = { has_modifier = te_seabed_royalty_modifier } remove_modifier = te_seabed_royalty_modifier }
 }

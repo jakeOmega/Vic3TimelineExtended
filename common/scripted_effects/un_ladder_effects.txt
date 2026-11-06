@@ -488,6 +488,7 @@ un_dissolve_remove_global = {
 # without.
 # Scope: country
 un_dissolve_strip_country = {
+	legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's copy goes first, so the strip can't set this mirror again
 	un_membership_end_effect = yes
 	# The organisation's claims die with it (redesign phase 5).
 	un_dues_clear = yes
@@ -496,7 +497,10 @@ un_dissolve_strip_country = {
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 	un_state_off = { MODIFIER = un_headquarters_modifier }
 	un_standing_clear_tier_modifiers = yes
-	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_target_on }
+		remove_variable = un_sanctions_target_on
+	}
 	if = {
 		limit = { has_variable = un_sanctions_enforced_by }
 		remove_variable = un_sanctions_enforced_by
@@ -504,10 +508,10 @@ un_dissolve_strip_country = {
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
-	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes and
-	# the mandate holder's war support end with it.
+	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes end
+	# with it, and the mandate holder's war support (declared on the entry,
+	# under global_var:un_founded) with the UN itself.
 	un_teeth_lift_embargoes = yes
-	remove_modifier = un_mandate_war_support_modifier
 	if = {
 		limit = { has_variable = un_charter_signed }
 		remove_variable = un_charter_signed
@@ -538,7 +542,7 @@ un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
-	remove_modifier = un_dues_modifier
+	un_dues_stop_paying = yes
 	# So do the convention regimes' terms (redesign phase 5); the stamp goes
 	# so that a member that rejoins reads them afresh.
 	un_regime_clear_country = yes
@@ -548,10 +552,11 @@ un_membership_end_effect = {
 	}
 	# The decolonisation regime reached our colonies through our membership.
 	every_direct_subject = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		remove_modifier = un_regime_colony_liberty_modifier
+		limit = { has_variable = un_regime_colony_liberty_modifier_on }
+		un_regime_term_off = { TERM = colony_liberty }
 	}
-	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	# The membership benefits are declared on the entry and end with the
+	# membership modifier (un_member_draws_benefits).
 	# NPT enforcement binds members only (je_un_preview_npt_tt), so a member
 	# held to disarmament is released the day it goes; otherwise its programme
 	# and stockpile were zeroed every week until it rejoined.
@@ -566,39 +571,17 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_permanent_member_modifier }
 	un_state_off = { MODIFIER = un_founding_member_modifier }
 	remove_modifier = un_sanctions_enforcer_modifier
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
-	un_state_off = { MODIFIER = un_development_contributor_modifier }
-	un_state_off = { MODIFIER = un_development_contributor_cost }
+	# Every programme and stance, and their costs (declared on the entry
+	# while their mirrors are set).
+	un_programmes_end = yes
 	# The aid programme ends with its cost; keeping the prestige marker
 	# while dropping the bill made leaving a way to stop paying for aid.
 	remove_modifier = un_humanitarian_aid_modifier
 	remove_modifier = un_humanitarian_aid_cost
-	un_state_off = { MODIFIER = un_human_rights_champion_modifier }
-	un_state_off = { MODIFIER = un_arms_control_participant_modifier }
-	un_state_off = { MODIFIER = un_champion_order_cost }
-	un_state_off = { MODIFIER = un_undermine_order_cost }
-	# Permanent treaty commitments
-	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
-	un_state_off = { MODIFIER = un_nonproliferation_modifier }
-	un_state_off = { MODIFIER = un_climate_binding_modifier }
-	un_state_off = { MODIFIER = un_heritage_program_modifier }
-	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_state_off = { MODIFIER = un_refugee_program_modifier }
-	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The nine conventions that sit on the country rather than the journal
-	# entry. un_apply_ratified_conventions re-adds them on rejoining,
-	# exactly as it does the journal-entry ones above (except an Antarctic
-	# Treaty its member denounced).
-	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
-	un_state_country_off = { MODIFIER = un_icc_member_modifier }
-	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
-	un_state_country_off = { MODIFIER = un_narcotics_control_modifier }
-	un_state_country_off = { MODIFIER = un_cultural_diversity_modifier }
-	un_state_country_off = { MODIFIER = un_nuclear_ban_modifier }
-	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
-	un_state_country_off = { MODIFIER = un_asat_moratorium_modifier }
-	un_state_country_off = { MODIFIER = un_colony_protection_modifier }
+	# Every convention we ratified (declared on the entry while its mirror is
+	# set). un_apply_ratified_conventions ratifies them again on rejoining
+	# (except an Antarctic Treaty its member denounced).
+	un_conventions_end = yes
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes
@@ -822,6 +805,7 @@ un_conference_conclude = {
 			has_global_variable = un_conference_top_power_joins
 			has_global_variable = un_conference_top_power
 			exists = global_var:un_conference_top_power
+			global_var:un_conference_top_power = { is_revolutionary = no }	# as the Join button
 		}
 		global_var:un_conference_top_power = {
 			un_join_organisation = yes

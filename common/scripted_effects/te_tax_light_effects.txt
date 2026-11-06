@@ -8,7 +8,9 @@
 # at a very high tax level; a tax it levies may go down to nothing. The code is five enacted
 # indices, te_tax_en_<key> (rate = index x te_tax_step_<key>, the full code's
 # own schema), which the player moves one step at a time from the tax code's
-# panel; a change applies at once. There are no bills.
+# panel. A change moves the rate and the native tax level at once, and the
+# relief and the reactions within days (je_tax_code's scaling modifiers, below).
+# There are no bills.
 #
 # Collection. Each rate sits on a step of its law's ladder: the lowest native
 # level whose rate is at least the code's (te_tax_light_rung_<key>). The native
@@ -23,23 +25,33 @@
 # Interest groups. Each change draws a reaction from every group, scored with
 # the full code's material and ideology reasons for that change alone
 # (te_tax_light_gen_react); a reaction that pleases a group counts half. The
-# running reaction (te_tax_lr_<ig>, +-10) is shown as te_tax_light_react_<ig>
-# and fades by 30% a month. The groups' standing view of the law is the base
-# game's own (the law is enacted); the view bands (te_tax_ig_band_<ig>) carry
-# instead the relief each group's members get, +1 or +2.
+# running reaction (te_tax_lr_<ig>, +-10) is shown as te_tax_light_react_<ig>_
+# pos or _neg and fades by 30% a month. The groups' standing view of the law
+# is the base game's own (the law is enacted); the view bands
+# (te_tax_ig_band_<ig>) carry instead the relief each group's members get, +1
+# or +2.
 #
 # The AI. An AI country keeps choosing its native tax level as in the base
 # game; at each sync its code follows it, every tax at the law's rate for that
 # level, and each change draws the same reactions. Its code never carries
 # relief, so a level change collects the right rates at once.
 #
-# A revolution's winner inherits every variable here and no modifier; the next
-# sync (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds
-# them back from the variables.
+# The relief and reaction modifiers are je_tax_code's scaling modifiers
+# (scaling_modifiers_while_active): the entry reads each from the country's
+# variables (te_tax_light_rl_<key>, te_tax_lr_<ig>, te_tax_lr_mag_<ig>; the
+# values are te_tax_light_relief_<key>_value and te_tax_light_react_<ig>_<pos|neg>
+# _value, te_tax_light_generated_values.txt) about every four days while it is
+# active, so the sync only writes the variables. A country in force that the
+# engine left without the entry gets it from te_tax_light_entry_net
+# (te_tax_on_actions.txt).
 #
-# Every entry point is a country effect with ROOT = the country: a country
+# A revolution's winner inherits every variable here and no modifier; the next
+# sync (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds the
+# view bands back from the variables.
+#
+# Every entry point is a country effect in the country's own scope: a country
 # event (te_tax_light.1-.3) or the player's scripted GUI (te_tax_light_step_
-# <key>_sgui), because the relief and reaction modifiers' multipliers read ROOT.
+# <key>_sgui).
 # ============================================================================
 
 # Country scope (te_tax_light.2: every country after the lobby, a formed or
@@ -67,9 +79,9 @@ te_tax_light_migrate_country = {
 }
 
 # Country scope. Writes the native fiscal state from the code: the tax level,
-# the relief modifiers, the reaction modifiers and the view bands. Stateless:
-# every part is derived from the variables and re-applied, so a second call
-# changes nothing. In order:
+# the relief steps and reaction sizes the entry's scaling modifiers read, and
+# the view bands. Stateless: every part is derived from the variables and
+# re-applied, so a second call changes nothing. In order:
 #   1. the active law changed since the last sync (on_law_activated raises
 #      te_tax_light.3; the 1st catches anything else): a player's code is
 #      clamped into the new law's range, at most the law's rate at the tax
@@ -84,7 +96,7 @@ te_tax_light_migrate_country = {
 #      move it; the buttons are greyed), each tax moves by its law's difference
 #      between the two levels (te_tax_light_gen_shift), scored;
 #   3. each tax's step, and for a player's country the tax level they give;
-#   4. relief, reactions and bands (the view-band modifiers).
+#   4. relief steps, reaction sizes and bands (the view-band modifiers).
 # Every limit on the way reads a variable that persists between runs
 # (te_tax_light_gen_init creates the scratch ones), because a step button's
 # tooltip walks this without running it: a limit that reads a value set earlier
@@ -147,7 +159,7 @@ te_tax_light_sync = {
 			}
 		}
 		te_tax_light_gen_relief = yes
-		te_tax_light_gen_apply_reactions = yes
+		te_tax_light_gen_reaction_sizes = yes
 		te_tax_light_gen_bands = yes
 	}
 }

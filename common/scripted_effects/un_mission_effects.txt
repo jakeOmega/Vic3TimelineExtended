@@ -34,9 +34,9 @@
 #   state   un_msn_here (the state's active mission), un_msn_power (the
 #           strength its modifier is multiplied by)
 #   country un_msn_service_cached (the weekly cost of the missions it serves
-#           in at will: un_mission_service_cost's multiplier),
-#           un_msn_electoral_power (the strength of the electoral mission it
-#           hosts: un_electoral_observers_modifier's multiplier);
+#           in at will: the value of un_mission_service_cost's declaration on
+#           je_united_nations), un_msn_electoral_power (the strength of the
+#           electoral mission it hosts: un_electoral_observers_modifier's);
 #           players only: un_msn_cap_<slot>_<n> and un_msn_cap_count_<slot>
 #           (the chamber rows' contributor flags: un_mission_mirror_flags)
 #
@@ -64,8 +64,8 @@
 #                                             (un_msn_cap_<slot>_<n>): rebuilt
 #                                             by every writer of a slot or a
 #                                             contributor list
-#   un_mission_service_refresh                the single refresh site for
-#                                             un_mission_service_cost (the JE's
+#   un_mission_service_refresh                the single writer of
+#                                             var:un_msn_service_cached (the JE's
 #                                             monthly pulse, and at once on
 #                                             joining or leaving)
 #   un_mission_open_electoral                 a carried request for electoral
@@ -73,9 +73,9 @@
 #   un_mission_electoral_election_held        on_election_campaign_end
 #                                             (un_mission_on_actions.txt): the
 #                                             host's election was observed
-#   un_mission_electoral_host_refresh         the single refresh site for
-#                                             un_electoral_observers_modifier on
-#                                             the host (the country monthly pulse,
+#   un_mission_electoral_host_refresh         the single writer of
+#                                             var:un_msn_electoral_power on the
+#                                             host (the country monthly pulse,
 #                                             un_mission_on_actions.txt)
 #
 # REASON CODES: ledger 21/22/23 (a peacekeeping / aid / stabilisation mission
@@ -645,11 +645,11 @@ un_mission_slot_withdraw = {
 	}
 }
 
-# The weekly cost of the missions the scoped country serves in at will. The
-# single refresh site for un_mission_service_cost: the journal entry's monthly
+# The weekly cost of the missions the scoped country serves in at will
+# (var:un_msn_service_cached, which je_united_nations declares
+# un_mission_service_cost at). The single writer: the journal entry's monthly
 # pulse, and un_mission_volunteer / un_mission_withdraw, so a contingent is
-# paid for from the week it goes to the week it comes home. The multiplier's
-# variable is removed only after the modifier is.
+# paid for from within days of going to within days of coming home.
 # Scope: country
 un_mission_service_refresh = {
 	if = {
@@ -658,20 +658,8 @@ un_mission_service_refresh = {
 			un_mission_service_count > 0
 		}
 		set_variable = { name = un_msn_service_cached value = un_mission_service_expense_value }
-		if = {
-			limit = { has_modifier = un_mission_service_cost }
-			remove_modifier = un_mission_service_cost
-		}
-		add_modifier = {
-			name = un_mission_service_cost
-			multiplier = var:un_msn_service_cached
-		}
 	}
 	else = {
-		if = {
-			limit = { has_modifier = un_mission_service_cost }
-			remove_modifier = un_mission_service_cost
-		}
 		if = {
 			limit = { has_variable = un_msn_service_cached }
 			remove_variable = un_msn_service_cached
@@ -1301,12 +1289,10 @@ un_mission_electoral_election_held = {
 }
 
 # The observers' effect on the host country: un_electoral_observers_modifier x
-# the strength of the electoral mission it hosts. The single refresh site for
-# that modifier, from the country monthly pulse (un_mission_on_actions.txt),
-# whose ROOT is the host, so the multiplier resolves against it. Re-applied
-# every month from the mission register, so a revolution's winner, which
-# inherits no modifiers, has it back within a month (§0.9). The multiplier's
-# variable is removed only after the modifier is.
+# the strength of the electoral mission it hosts, which je_united_nations
+# declares at var:un_msn_electoral_power. The single writer of that variable,
+# from the country monthly pulse (un_mission_on_actions.txt), re-read every
+# month from the mission register.
 # Scope: country (ROOT)
 un_mission_electoral_host_refresh = {
 	save_scope_as = un_msn_observed_host
@@ -1325,20 +1311,8 @@ un_mission_electoral_host_refresh = {
 			save_scope_as = un_msn_observing
 		}
 		set_variable = { name = un_msn_electoral_power value = scope:un_msn_observing.var:un_msn_strength }
-		if = {
-			limit = { has_modifier = un_electoral_observers_modifier }
-			remove_modifier = un_electoral_observers_modifier
-		}
-		add_modifier = {
-			name = un_electoral_observers_modifier
-			multiplier = var:un_msn_electoral_power
-		}
 	}
 	else = {
-		if = {
-			limit = { has_modifier = un_electoral_observers_modifier }
-			remove_modifier = un_electoral_observers_modifier
-		}
 		if = {
 			limit = { has_variable = un_msn_electoral_power }
 			remove_variable = un_msn_electoral_power

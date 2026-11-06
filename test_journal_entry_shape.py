@@ -222,6 +222,15 @@ class PruneTreeTest(unittest.TestCase):
 # legacy_je_modifier_cleanup_effect strips the copies an old save added by hand (design § 4.0, rule 7): it may test
 # and remove a declared key, never add one.
 LEGACY_STRIP_FILE = "common/scripted_effects/legacy_modifier_cleanup.txt"
+# The temporary scaling self-checks (#1404) test for an older save's added copy, which has_modifier sees and a
+# declaration never is, so a check can wait for the strip instead of misreading the sum.
+SELFCHECK_FILE = "common/scripted_effects/te_scaling_selfcheck_effects.txt"
+
+
+def _walk(nodes: list[Node]):
+    for node in nodes:
+        yield node
+        yield from _walk(node.children)
 
 
 def scaling_declarations(entries: list[tuple[str, Node]]) -> dict[str, list[tuple[str, int, str]]]:
@@ -245,9 +254,27 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
     """(file, line, kind, modifier) for every `key = <declared modifier>` outside its declaration: a has_modifier,
     add_modifier or remove_modifier of it, and a helper argument that passes it on (`un_state_on = { MODIFIER = x }`,
     whose body adds `$MODIFIER$`). Allowed: the declaration's own `modifier =`, an add inside show_as_tooltip (the
-    option's preview, design § 4.0 rule 8), and the legacy strip's tests and removals (rule 7)."""
+    option's preview, design § 4.0 rule 8), the legacy strip's tests and removals (rule 7), and the self-checks'
+    tests for an old copy. Not a use: a variable or a loc key that shares the modifier's name (a Grand Monuments
+    boon's countdown is the variable gm_boon_<source>, read with has_variable and named by its loc)."""
     out: list[tuple[str, int, str, str]] = []
     legacy = rel == LEGACY_STRIP_FILE
+    selfcheck = rel == SELFCHECK_FILE
+
+    def names(value: str, modifier_op: bool) -> bool:
+        """The value is a declared modifier, or, in an add, remove or has_modifier, a template whose literal part
+        names a family and makes one (`gm_boon_$SRC$`, the shape of the boons' retired adder). A template with one
+        literal token (`sr_$MILESTONE$`, the milestone rewards) or none (`$MODIFIER$`) would match any key."""
+        if not value:
+            return False
+        if value in declared:
+            return True
+        if not modifier_op or "$" not in value:
+            return False
+        if len([t for t in re.sub(r"\$\w+\$", "", value).split("_") if t]) < 2:
+            return False
+        pattern = re.compile(re.sub(r"\\\$\w+\\\$", r"\\w+", re.escape(value)))
+        return any(pattern.fullmatch(name) for name in declared)
 
     def walk(items: list[Node], parent: str, declaration: bool, preview: bool):
         for node in items:
@@ -255,13 +282,18 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
                 walk(node.children, node.key, declaration or node.key == "scaling_modifiers_while_active",
                      preview or node.key == "show_as_tooltip")
                 continue
-            if node.value not in declared or declaration:
+            modifier_op = node.key in ("add_modifier", "remove_modifier", "has_modifier") or (
+                node.key == "name" and parent in ("add_modifier", "remove_modifier"))
+            if declaration or not names(node.value, modifier_op):
+                continue
+            if node.key in ("has_variable", "remove_variable", "localization_key") or (
+                    node.key == "name" and parent in ("set_variable", "change_variable", "clamp_variable")):
                 continue
             kind = parent if node.key == "name" and parent in ("add_modifier", "remove_modifier") else node.key
             if kind == "MODIFIER" and parent == "remove_modifier_if_exists_effect":
                 kind = parent
             adds = kind not in ("has_modifier", "remove_modifier", "remove_modifier_if_exists_effect")
-            if (preview and adds) or (legacy and not adds):
+            if (preview and adds) or (legacy and not adds) or (selfcheck and kind == "has_modifier"):
                 continue
             out.append((rel, node.line, kind, node.value))
 
@@ -272,6 +304,15 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
 class ScalingModifierFixtureTest(unittest.TestCase):
     def sites(self, text: str, rel: str = "common/scripted_effects/x.txt") -> list[tuple[str, str]]:
         return [(kind, name) for _, _, kind, name in misuse_sites(parse_text(text, rel)[0], {"m"}, rel)]
+
+    def test_a_template_that_makes_a_declared_name_is_flagged(self):
+        sites = lambda text: [(kind, name) for _, _, kind, name in misuse_sites(  # noqa: E731
+            parse_text(text, "common/scripted_effects/x.txt")[0], {"gm_boon_reign"}, "common/scripted_effects/x.txt")]
+        self.assertEqual(sites("e = { add_modifier = { name = gm_boon_$SRC$ } }"), [("add_modifier", "gm_boon_$SRC$")])
+        self.assertEqual(sites("e = { remove_modifier = $MODIFIER$ }"), [])
+        self.assertEqual(sites("e = { add_modifier = { name = gm_local_$KEY$ } }"), [])
+        self.assertEqual(sites("e = { add_modifier = gm_$X$ }"), [], "one literal token names no family")
+        self.assertEqual(sites("e = { has_global_variable = gm_boon_$SRC$ }"), [], "not a modifier operation")
 
     def test_has_add_and_remove_are_flagged(self):
         self.assertEqual(self.sites("e = { has_modifier = m }"), [("has_modifier", "m")])
@@ -284,9 +325,20 @@ class ScalingModifierFixtureTest(unittest.TestCase):
     def test_a_preview_is_allowed(self):
         self.assertEqual(self.sites("o = { show_as_tooltip = { if = { add_modifier = { name = m } } } }"), [])
 
+    def test_the_self_checks_may_test_but_not_remove_or_add(self):
+        text = "e = { if = { limit = { NOT = { has_modifier = m } } } remove_modifier = m add_modifier = m }"
+        self.assertEqual(self.sites(text, SELFCHECK_FILE), [("remove_modifier", "m"), ("add_modifier", "m")])
+
     def test_the_legacy_strip_may_test_and_remove_but_not_add(self):
         text = "e = { if = { limit = { has_modifier = m } remove_modifier = m } add_modifier = { name = m } }"
         self.assertEqual(self.sites(text, LEGACY_STRIP_FILE), [("add_modifier", "m")])
+
+    def test_a_variable_or_loc_key_of_the_same_name_is_not_flagged(self):
+        text = ("e = { if = { limit = { has_variable = m } } set_variable = { name = m value = 1 } "
+                "change_variable = { name = m add = -1 } remove_variable = m } t = { localization_key = m }")
+        self.assertEqual(self.sites(text), [])
+        self.assertEqual(self.sites("e = { set_variable = { name = x value = 1 } add_modifier = { name = m } }"),
+                         [("add_modifier", "m")])
 
     def test_a_helper_argument_is_flagged(self):
         self.assertEqual(self.sites("e = { un_state_on = { MODIFIER = m } }"), [("MODIFIER", "m")])
@@ -311,6 +363,15 @@ class ScalingModifierTreeTest(unittest.TestCase):
         for name, sites in scaling_declarations(load_entries()).items():
             with self.subTest(modifier=name, at=sites[0]):
                 self.assertIn(name, names)
+
+    def test_every_scaling_modifier_is_stripped_from_old_saves(self):
+        """A save from before a conversion holds the copy the old code added, which stacks with the declaration
+        (design § 4.0, rule 7). Delete this test with the strip block after 2026-12-31."""
+        stripped = {node.value for node in _walk(_parse(ROOT / LEGACY_STRIP_FILE))
+                    if node.key == "remove_modifier" and not node.children}
+        for name in scaling_declarations(load_entries()):
+            with self.subTest(modifier=name):
+                self.assertIn(name, stripped)
 
     def test_no_scaling_modifier_is_added_or_tested(self):
         """has_modifier can't see a scaling modifier, on the entry or the country (probed 2026-11-05), and an

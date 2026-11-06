@@ -812,8 +812,9 @@ class JournalEntryTest(unittest.TestCase):
 
     def test_activation_writes_nothing(self):
         """A revolution's winner re-runs `immediate` on the inherited entry
-        (CLAUDE.md "Top gotchas"); the entry is display only, so it has none,
-        and none of its blocks writes a variable."""
+        (CLAUDE.md "Top gotchas"); the entry holds no state (under the light
+        code its scaling modifiers only read the country's variables), so it
+        has none, and none of its blocks writes a variable."""
         self.assertNotRegex(self.body, r"(?m)^\timmediate =")
         self.assertIsNone(re.search(r"\b(set_variable|change_variable|remove_variable)\b", self.body))
 

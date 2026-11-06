@@ -42,6 +42,15 @@ nd_is_initialized = {
 	has_variable = nd_authority
 }
 
+# Is a posture in force: armed, and under a doctrine and a readiness? The gate
+# of the posture's declared modifiers on je_nuclear_program (its doctrine and
+# readiness modifiers and the upkeep) and of nd_apply_posture_modifiers' cache
+# refresh. Also guards their var:nd_doctrine / var:nd_readiness reads.
+nd_posture_in_force = {
+	nd_is_armed = yes
+	nd_is_initialized = yes
+}
+
 # ----------------------------------------------------------------------------
 # DOCTRINE — one trigger per value, missing variable = existential (the default)
 # ----------------------------------------------------------------------------

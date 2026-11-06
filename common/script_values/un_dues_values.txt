@@ -4,7 +4,7 @@
 # docs/systems/un_redesign_design.md §7.2; as shipped, §0.5 of the same file.
 #
 # Every member pays an ASSESSMENT: a share of its GDP set by the UN's tier,
-# charged as a weekly expense (un_dues_modifier, country scope). The rate
+# charged as a weekly expense (un_dues_modifier, declared on je_united_nations). The rate
 # grows with the tier, because a stronger UN does more and costs more:
 #
 #     Moribund 0   Contested 0.1%   Established 0.2%   Strong 0.4%
@@ -108,8 +108,8 @@ un_dues_assessed_gdp = {
 	}
 }
 
-# This member's dues a week: the multiplier on un_dues_modifier, whose one
-# field is country_expenses_add = 1.
+# This member's dues a week, cached monthly as var:un_dues_cached: the value of
+# un_dues_modifier's declaration, whose one field is country_expenses_add = 1.
 # Scope: country
 un_dues_weekly_value = {
 	value = un_dues_assessed_gdp

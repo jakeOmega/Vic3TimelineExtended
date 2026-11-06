@@ -356,7 +356,7 @@ un_lean_interests_credentials = {
 		if = {
 			limit = {
 				OR = {
-					je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+					has_variable = un_human_rights_champion_modifier_on
 					has_law = law_type:law_humanitarian_regulations
 				}
 			}
@@ -534,7 +534,7 @@ un_credentials_ai_chance = {
 	if = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+				has_variable = un_human_rights_champion_modifier_on
 				has_law = law_type:law_humanitarian_regulations
 			}
 		}

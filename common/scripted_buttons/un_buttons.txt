@@ -69,6 +69,11 @@ un_found_button = {
 		has_technology_researched = intergovernmental_organizations
 		country_rank >= rank_value:great_power
 		is_subject = no
+		# As joining (un_join_button): a founder is a member.
+		custom_tooltip = {
+			text = un_join_not_revolutionary_tt
+			is_revolutionary = no
+		}
 		custom_tooltip = {
 			text = un_refounding_cooldown_tt
 			NOT = { has_global_variable = un_refounding_cooldown }
@@ -149,6 +154,14 @@ un_join_button = {
 		custom_tooltip = {
 			text = un_membership_eligible_tt
 			un_membership_eligible = yes
+		}
+		# The UN seats a country's government, not an uprising against it: a
+		# revolution's winner inherits the loser's variables, so a rebel's
+		# conventions and programmes would otherwise pass to a government
+		# that wins (#1404, un_repair_after_civil_war).
+		custom_tooltip = {
+			text = un_join_not_revolutionary_tt
+			is_revolutionary = no
 		}
 		NOT = { has_modifier = un_expelled_cooldown }
 		NOT = { has_modifier = un_withdrawal_penalty_modifier }
@@ -436,7 +449,7 @@ un_propose_charter_reform_button = {
 		value = 0
 		# A power that champions the order wants the organisation to grow.
 		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			limit = { has_variable = un_champion_order_cost_on }
 			add = 30
 		}
 		if = {
@@ -459,7 +472,7 @@ un_propose_charter_reform_button = {
 		}
 		if = { limit = { has_law = law_type:law_isolationism } add = -40 }
 		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			limit = { un_undermines_the_order = yes }
 			add = -60
 		}
 	}
@@ -582,7 +595,7 @@ un_peacekeeping_mission_button = {
 	visible = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		NOT = { has_variable = un_peacekeeping_contributor_modifier_on }
 	}
 
 	possible = {
@@ -594,11 +607,23 @@ un_peacekeeping_mission_button = {
 			NOT = { un_representation_suspended = yes }
 		}
 		country_rank >= rank_value:major_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		custom_tooltip = {
+			text = un_programme_not_yet_ours_tt
+			NOT = { has_variable = un_peacekeeping_contributor_modifier_on }
+		}
 		NOT = { has_modifier = un_peacekeeping_cooldown }
 		custom_tooltip = {
 			text = un_programme_influence_tt
 			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -609,22 +634,24 @@ un_peacekeeping_mission_button = {
 
 	effect = {
 		custom_tooltip = UN_PEACEKEEPING_DESC
-		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
-		un_state_record = { MODIFIER = un_peacekeeping_contributor_modifier }
+		# The entry declares the programme and its cost while their mirrors
+		# are set (je_united_nations, #1404); these lines preview them.
+		show_as_tooltip = {
+			je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+			add_modifier = { name = un_peacekeeping_contributor_cost multiplier = un_program_expense_value }
+		}
 		add_modifier = {
 			name = un_peacekeeping_cooldown
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Cache expense in country scope; JE scope can't read gdp directly
-		# (the modifier multiplier is re-evaluated continuously and would
-		# otherwise return 'none'). Refreshed monthly in je_united_nations.
-		set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_peacekeeping_contributor_cost
-				multiplier = root.var:un_peacekeeping_expense_cached
-			} }
-		un_state_record = { MODIFIER = un_peacekeeping_contributor_cost }
+		hidden_effect = {
+			# The weekly cost, re-priced monthly in je_united_nations.
+			set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+			un_mirror_set = { MIRROR = un_peacekeeping_contributor_modifier_on }
+			un_mirror_set = { MIRROR = un_peacekeeping_contributor_cost_on }
+			un_influence_pending_add = { AMOUNT = un_programme_influence_cost }
+		}
 	}
 }
 
@@ -634,11 +661,14 @@ un_end_peacekeeping_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+		has_variable = un_peacekeeping_contributor_modifier_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+		custom_tooltip = {
+			text = un_programme_ours_tt
+			has_variable = un_peacekeeping_contributor_modifier_on
+		}
 		custom_tooltip = {
 			text = un_end_peacekeeping_cooldown_tt
 			NOT = { has_modifier = un_peacekeeping_cooldown }
@@ -652,10 +682,11 @@ un_end_peacekeeping_button = {
 
 	effect = {
 		custom_tooltip = UN_END_PEACEKEEPING_DESC
-		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
-		un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
-		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-		un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
+		custom_tooltip = {
+			text = un_peacekeeping_end_tt
+			un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
+			un_mirror_clear = { MIRROR = un_peacekeeping_contributor_cost_on }
+		}
 	}
 }
 
@@ -684,7 +715,7 @@ un_fund_development_button = {
 	visible = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		NOT = { has_variable = un_development_contributor_modifier_on }
 	}
 
 	possible = {
@@ -710,7 +741,10 @@ un_fund_development_button = {
 			text = un_fund_development_not_recipient_tt
 			NOT = { un_dev_fund_receiving = yes }
 		}
-		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		custom_tooltip = {
+			text = un_programme_not_yet_ours_tt
+			NOT = { has_variable = un_development_contributor_modifier_on }
+		}
 	}
 
 	ai_chance = {
@@ -723,19 +757,12 @@ un_fund_development_button = {
 		hidden_effect = {
 			set_variable = { name = un_dev_fund_size value = 1 }
 			set_variable = un_dev_fund_five_sizes
+			# The benefits' factor and the weekly cost, which the entry's
+			# declarations read while the mirrors are set (#1404).
 			set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
-			je:je_united_nations ?= { add_modifier = {
-					name = un_development_contributor_modifier
-					multiplier = root.var:un_dev_fund_benefit
-				} }
-			un_state_record = { MODIFIER = un_development_contributor_modifier }
-			# Cache expense in country scope; see un_peacekeeping_mission_button.
 			set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
-			je:je_united_nations ?= { add_modifier = {
-					name = un_development_contributor_cost
-					multiplier = root.var:un_development_expense_cached
-				} }
-			un_state_record = { MODIFIER = un_development_contributor_cost }
+			un_mirror_set = { MIRROR = un_development_contributor_modifier_on }
+			un_mirror_set = { MIRROR = un_development_contributor_cost_on }
 		}
 	}
 }
@@ -746,12 +773,15 @@ un_raise_development_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		has_variable = un_development_contributor_modifier_on
 		un_dev_fund_size_stored < un_dev_fund_size_max
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		custom_tooltip = {
+			text = un_programme_ours_tt
+			has_variable = un_development_contributor_modifier_on
+		}
 		custom_tooltip = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
@@ -777,7 +807,7 @@ un_reduce_development_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		has_variable = un_development_contributor_modifier_on
 		un_dev_fund_size_stored > 1
 	}
 
@@ -785,7 +815,7 @@ un_reduce_development_button = {
 		# is_shown's own tests: the control shows only while they hold, and
 		# bare they would print as raw script with a tick (button_reason_audit).
 		hidden_trigger = {
-			je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+			has_variable = un_development_contributor_modifier_on
 			un_dev_fund_size_stored > 1
 		}
 	}
@@ -807,11 +837,14 @@ un_defund_development_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		has_variable = un_development_contributor_modifier_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		custom_tooltip = {
+			text = un_programme_ours_tt
+			has_variable = un_development_contributor_modifier_on
+		}
 	}
 
 	ai_chance = {
@@ -822,10 +855,8 @@ un_defund_development_button = {
 	effect = {
 		custom_tooltip = {
 			text = "un_defund_development_effect_tt"
-			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
-			un_state_forget = { MODIFIER = un_development_contributor_modifier }
-			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
-			un_state_forget = { MODIFIER = un_development_contributor_cost }
+			un_mirror_clear = { MIRROR = un_development_contributor_modifier_on }
+			un_mirror_clear = { MIRROR = un_development_contributor_cost_on }
 		}
 	}
 }
@@ -839,7 +870,7 @@ un_human_rights_resolution_button = {
 	visible = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+		NOT = { has_variable = un_human_rights_champion_modifier_on }
 	}
 
 	possible = {
@@ -850,7 +881,10 @@ un_human_rights_resolution_button = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
 		}
-		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+		custom_tooltip = {
+			text = un_programme_not_yet_ours_tt
+			NOT = { has_variable = un_human_rights_champion_modifier_on }
+		}
 		OR = {
 			has_law = law_type:law_multicultural
 			has_law = law_type:law_universal_suffrage
@@ -860,6 +894,15 @@ un_human_rights_resolution_button = {
 		custom_tooltip = {
 			text = un_programme_influence_tt
 			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -878,8 +921,13 @@ un_human_rights_resolution_button = {
 
 	effect = {
 		custom_tooltip = UN_HUMAN_RIGHTS_DESC
-		je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
-		un_state_record = { MODIFIER = un_human_rights_champion_modifier }
+		show_as_tooltip = {
+			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
+		}
+		hidden_effect = {
+			un_mirror_set = { MIRROR = un_human_rights_champion_modifier_on }
+			un_influence_pending_add = { AMOUNT = un_programme_influence_cost }
+		}
 	}
 }
 
@@ -889,11 +937,14 @@ un_withdraw_human_rights_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+		has_variable = un_human_rights_champion_modifier_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+		custom_tooltip = {
+			text = un_programme_ours_tt
+			has_variable = un_human_rights_champion_modifier_on
+		}
 	}
 
 	ai_chance = {
@@ -907,8 +958,10 @@ un_withdraw_human_rights_button = {
 
 	effect = {
 		custom_tooltip = UN_WITHDRAW_HUMAN_RIGHTS_DESC
-		je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-		un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
+		custom_tooltip = {
+			text = un_human_rights_champion_end_tt
+			un_mirror_clear = { MIRROR = un_human_rights_champion_modifier_on }
+		}
 	}
 }
 
@@ -921,7 +974,7 @@ un_arms_control_button = {
 	visible = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+		NOT = { has_variable = un_arms_control_participant_modifier_on }
 	}
 
 	possible = {
@@ -932,7 +985,10 @@ un_arms_control_button = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
 		}
-		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+		custom_tooltip = {
+			text = un_programme_not_yet_ours_tt
+			NOT = { has_variable = un_arms_control_participant_modifier_on }
+		}
 		OR = {
 			has_law = law_type:law_war_crimes_forbidden
 			has_law = law_type:law_humanitarian_regulations
@@ -941,6 +997,15 @@ un_arms_control_button = {
 		custom_tooltip = {
 			text = un_programme_influence_tt
 			influence >= un_programme_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_programme_influence_gate
+			}
 		}
 	}
 
@@ -953,7 +1018,7 @@ un_arms_control_button = {
 			limit = {
 				any_country = {
 					has_diplomatic_pact = { who = ROOT type = rivalry }
-					je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+					has_variable = un_arms_control_participant_modifier_on
 				}
 			}
 			add = 15
@@ -967,8 +1032,13 @@ un_arms_control_button = {
 
 	effect = {
 		custom_tooltip = UN_ARMS_CONTROL_DESC
-		je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
-		un_state_record = { MODIFIER = un_arms_control_participant_modifier }
+		show_as_tooltip = {
+			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
+		}
+		hidden_effect = {
+			un_mirror_set = { MIRROR = un_arms_control_participant_modifier_on }
+			un_influence_pending_add = { AMOUNT = un_programme_influence_cost }
+		}
 	}
 }
 
@@ -978,11 +1048,14 @@ un_withdraw_arms_control_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+		has_variable = un_arms_control_participant_modifier_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+		custom_tooltip = {
+			text = un_programme_ours_tt
+			has_variable = un_arms_control_participant_modifier_on
+		}
 	}
 
 	ai_chance = {
@@ -995,8 +1068,10 @@ un_withdraw_arms_control_button = {
 
 	effect = {
 		custom_tooltip = UN_WITHDRAW_ARMS_CONTROL_DESC
-		je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-		un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
+		custom_tooltip = {
+			text = un_arms_control_end_tt
+			un_mirror_clear = { MIRROR = un_arms_control_participant_modifier_on }
+		}
 	}
 }
 
@@ -1015,7 +1090,7 @@ un_champion_order_button = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		NOT = { has_variable = un_champion_order_cost_on }
 	}
 
 	possible = {
@@ -1027,11 +1102,20 @@ un_champion_order_button = {
 			NOT = { un_representation_suspended = yes }
 		}
 		country_rank >= rank_value:great_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		NOT = { has_variable = un_champion_order_cost_on }
+		NOT = { has_variable = un_undermine_order_cost_on }
 		custom_tooltip = {
 			text = un_stance_influence_tt
 			influence >= un_stance_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_stance_influence_gate
+			}
 		}
 	}
 
@@ -1042,8 +1126,13 @@ un_champion_order_button = {
 
 	effect = {
 		custom_tooltip = UN_CHAMPION_ORDER_DESC
-		je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
-		un_state_record = { MODIFIER = un_champion_order_cost }
+		show_as_tooltip = {
+			je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
+		}
+		hidden_effect = {
+			un_mirror_set = { MIRROR = un_champion_order_cost_on }
+			un_influence_pending_add = { AMOUNT = un_stance_influence_cost }
+		}
 	}
 }
 
@@ -1053,11 +1142,11 @@ un_stop_championing_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+		has_variable = un_champion_order_cost_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+		has_variable = un_champion_order_cost_on
 	}
 
 	ai_chance = {
@@ -1067,8 +1156,10 @@ un_stop_championing_button = {
 
 	effect = {
 		custom_tooltip = UN_STOP_CHAMPIONING_DESC
-		je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
-		un_state_forget = { MODIFIER = un_champion_order_cost }
+		custom_tooltip = {
+			text = un_champion_order_end_tt
+			un_mirror_clear = { MIRROR = un_champion_order_cost_on }
+		}
 	}
 }
 
@@ -1080,7 +1171,7 @@ un_undermine_order_button = {
 		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		NOT = { has_variable = un_undermine_order_cost_on }
 	}
 
 	possible = {
@@ -1092,11 +1183,20 @@ un_undermine_order_button = {
 			NOT = { un_representation_suspended = yes }
 		}
 		country_rank >= rank_value:great_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		NOT = { has_variable = un_undermine_order_cost_on }
+		NOT = { has_variable = un_champion_order_cost_on }
 		custom_tooltip = {
 			text = un_stance_influence_tt
 			influence >= un_stance_influence_cost
+		}
+		# A start in the past week the entry's declaration doesn't charge
+		# yet (un_influence_pending): printed only while there is one.
+		trigger_if = {
+			limit = { has_variable = un_influence_pending }
+			custom_tooltip = {
+				text = un_influence_pending_tt
+				influence >= un_stance_influence_gate
+			}
 		}
 	}
 
@@ -1107,8 +1207,13 @@ un_undermine_order_button = {
 
 	effect = {
 		custom_tooltip = UN_UNDERMINE_ORDER_DESC
-		je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
-		un_state_record = { MODIFIER = un_undermine_order_cost }
+		show_as_tooltip = {
+			je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
+		}
+		hidden_effect = {
+			un_mirror_set = { MIRROR = un_undermine_order_cost_on }
+			un_influence_pending_add = { AMOUNT = un_stance_influence_cost }
+		}
 	}
 }
 
@@ -1118,11 +1223,11 @@ un_stop_undermining_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+		has_variable = un_undermine_order_cost_on
 	}
 
 	possible = {
-		je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+		has_variable = un_undermine_order_cost_on
 	}
 
 	ai_chance = {
@@ -1132,8 +1237,10 @@ un_stop_undermining_button = {
 
 	effect = {
 		custom_tooltip = UN_STOP_UNDERMINING_DESC
-		je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
-		un_state_forget = { MODIFIER = un_undermine_order_cost }
+		custom_tooltip = {
+			text = un_undermine_order_end_tt
+			un_mirror_clear = { MIRROR = un_undermine_order_cost_on }
+		}
 	}
 }
 

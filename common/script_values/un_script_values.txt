@@ -5,8 +5,29 @@
 
 # ---- Member Statistics ----
 
-# JE multiplier: authority is global, but institutional alignment belongs to
-# the owning country. The owner link survives the modifier's later recalculations.
+# The membership benefits' strength, declared on je_united_nations
+# (scaling_modifiers_while_active), whose value is read from the owning
+# country: authority / 50 (global), times 1 + the country's institutional
+# alignment (the Multilateral Institutions principle; 0.5 alignment = +50%).
+# Scope: country
+un_membership_benefits_multiplier = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority }
+		add = {
+			value = global_var:un_authority
+			divide = 50
+			multiply = {
+				value = 1
+				add = modifier:country_un_institutional_alignment
+			}
+		}
+	}
+}
+
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
+# Uncalled: a save from before the declaration holds the copy the old pulse
+# added with this multiplier, until the strip removes it.
 un_membership_benefits_multiplier_for_je = {
 	value = 0
 	owner = {
@@ -293,7 +314,7 @@ un_member_wars_count = {
 un_peacekeeping_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		limit = { has_variable = un_peacekeeping_contributor_modifier_on }
 		add = 1
 	}
 }
@@ -301,7 +322,7 @@ un_peacekeeping_count = {
 un_development_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		limit = { has_variable = un_development_contributor_modifier_on }
 		add = 1
 	}
 }
@@ -309,7 +330,7 @@ un_development_count = {
 un_human_rights_champion_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+		limit = { has_variable = un_human_rights_champion_modifier_on }
 		add = 1
 	}
 }
@@ -317,7 +338,7 @@ un_human_rights_champion_count = {
 un_arms_control_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+		limit = { has_variable = un_arms_control_participant_modifier_on }
 		add = 1
 	}
 }
@@ -325,7 +346,7 @@ un_arms_control_count = {
 un_sanctions_target_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_sanctions_target_modifier }
+		limit = { has_variable = un_sanctions_target_on }
 		add = 1
 	}
 }
@@ -335,7 +356,7 @@ un_sanctions_target_count = {
 un_nonproliferation_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		limit = { has_variable = un_nonproliferation_modifier_on }
 		add = 1
 	}
 }
@@ -343,7 +364,7 @@ un_nonproliferation_signatories = {
 un_climate_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		limit = { has_variable = un_climate_binding_modifier_on }
 		add = 1
 	}
 }
@@ -351,7 +372,7 @@ un_climate_signatories = {
 un_human_rights_signatories = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		limit = { has_variable = un_human_rights_declaration_modifier_on }
 		add = 1
 	}
 }
@@ -359,7 +380,7 @@ un_human_rights_signatories = {
 un_heritage_participants = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		limit = { has_variable = un_heritage_program_modifier_on }
 		add = 1
 	}
 }
@@ -384,6 +405,37 @@ un_stance_influence_cost = { value = 500 }
 # un_peacekeeping_contributor_modifier, un_human_rights_champion_modifier,
 # un_arms_control_participant_modifier, while each runs.
 un_programme_influence_cost = { value = 100 }
+
+# What a start asks for: its cost, plus that of any programme or stance
+# started in the last week, which the entry's declaration may not carry yet
+# (un_influence_pending, un_influence_pending_add in un_state_effects.txt).
+# Scope: country
+un_stance_influence_gate = {
+	value = un_stance_influence_cost
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
+
+un_programme_influence_gate = {
+	value = un_programme_influence_cost
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
+
+# The influence a start in the past week committed, for the gates' tooltip
+# (un_influence_pending_tt).
+# Scope: country
+un_influence_pending_value = {
+	value = 0
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
 
 # Tabling a resolution on our own motion: un_sponsor_cost_modifier, or
 # un_sponsor_punitive_cost_modifier for one that punishes a member (sanctions,
@@ -412,7 +464,7 @@ un_peacekeeping_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+				has_variable = un_peacekeeping_contributor_modifier_on
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -426,7 +478,7 @@ un_aid_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+				has_variable = un_development_contributor_modifier_on
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}
@@ -442,7 +494,7 @@ un_peacekeeping_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+				has_variable = un_peacekeeping_contributor_modifier_on
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -464,7 +516,7 @@ un_aid_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+				has_variable = un_development_contributor_modifier_on
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}
@@ -560,7 +612,7 @@ un_mandate_age_order = {
 un_mandate_case_score = {
 	value = 0
 	if = { limit = { has_modifier = un_condemned_modifier } add = 40 }
-	if = { limit = { has_modifier = un_sanctions_target_modifier } add = 40 }
+	if = { limit = { has_variable = un_sanctions_target_on } add = 40 }
 	if = { limit = { has_modifier = un_sanctions_voluntary_target_modifier } add = 20 }
 	if = { limit = { has_modifier = un_non_binding_rebuke_modifier } add = 20 }
 	if = {

@@ -1,0 +1,31 @@
+﻿# The scaling_inherited self-check's second half (#1404; the header of
+# common/scripted_effects/te_scaling_selfcheck_effects.txt says what it reads).
+# Fired 30 days after revolutionaries win a civil war, on the winner. Delete
+# with that file.
+namespace = te_scaling_selfcheck
+
+te_scaling_selfcheck.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_sc_scaling_inherited_done }
+				has_journal_entry = je_covert_warfare
+				covert_operation_cost_mult > 1
+				NOT = { has_variable = te_sc_cw_rebel_entry }
+			}
+			set_global_variable = te_sc_scaling_inherited_done
+			set_global_variable = { name = te_sc_inherited_value value = covert_operation_cost_mult }
+			set_global_variable = { name = te_sc_inherited_modifier value = modifier:country_te_budget_expense_covert_add }
+			if = {
+				limit = { modifier:country_te_budget_expense_covert_add > 0 }
+				debug_log = "TE_SELF_CHECK OK scaling_inherited (a revolution's winner holds Covert Warfare's declared funding cost again: modifier=[GetGlobalVariable('te_sc_inherited_modifier').GetValue|2] value=[GetGlobalVariable('te_sc_inherited_value').GetValue|2])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN scaling_inherited (a revolution's winner, 30 days on, carries modifier=[GetGlobalVariable('te_sc_inherited_modifier').GetValue|2] of Covert Warfare's declared funding cost value=[GetGlobalVariable('te_sc_inherited_value').GetValue|2]: the inherited entry doesn't declare it again, nor do Global Warming's or any other inherited entry's declarations; design section 5's fallback, docs/testing/vanilla-1-15-playtest.md C7)"
+			}
+		}
+	}
+}

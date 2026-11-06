@@ -431,7 +431,12 @@ class PenaltyCellTest(unittest.TestCase):
         got_mort = float(re.search(r"multiply = (-?[\d.]+)", _top_level(values, "gw_disp_penalty_mortality_pct")).group(1))
         self.assertEqual(got_sol, sol)
         self.assertEqual(got_mort, mort * 100)
-        self.assertIn("multiplier = temperature_anomaly_display", _read(JE))
+        # The entry declares the modifier at the felt anomaly floored at 0 (#1404), and the cell's scale is
+        # the same figure.
+        self.assertRegex(_read(JE), r"modifier = global_warming\s*value = \{\s*value = temperature_anomaly_display"
+                                    r"\s*min = 0\s*\}")
+        self.assertRegex(_top_level(values, "gw_warming_penalty_scale_display"),
+                         r"^\s*value = temperature_anomaly_display\s*min = 0\s*$")
         self.assertIn("gw_disp_penalty_sol", _loc_value("gw_ov_penalty_word"))
         self.assertIn("gw_disp_penalty_mortality_pct", _loc_value("gw_ov_penalty_third"))
         # The anomaly itself is the temperature row's; the cell no longer repeats it.

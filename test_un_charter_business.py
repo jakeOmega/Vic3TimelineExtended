@@ -445,7 +445,8 @@ class DevelopmentProgramsGateTests(unittest.TestCase):
         lapse = _flat(_block(effects, "un_dev_fund_lapse_contributions"))
         self.assertIn("limit = { NOT = { has_global_variable = un_inst_development_fund } }", lapse)
         for modifier in ("un_development_contributor_modifier", "un_development_contributor_cost"):
-            self.assertIn(f"un_state_off = {{ MODIFIER = {modifier} }}", lapse)
+            # The entry declares both while their mirrors are set (#1404).
+            self.assertIn(f"un_mirror_clear = {{ MIRROR = {modifier}_on }}", lapse)
         self.assertIn("post_notification = un_dev_fund_contribution_lapsed_notice", lapse)
         # It runs first, so the month's contributions never count a lapsed one.
         update = _flat(_block(effects, "un_dev_fund_monthly_update"))

@@ -52,6 +52,9 @@ SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_action
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
 EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
+WEAPON_EFFECTS = ROOT / "common/scripted_effects/nuclear_weapon_effects.txt"
+TREATY_ARTICLES = ROOT / "common/treaty_articles/extra_treaty_articles.txt"
+NUCLEAR_DEBUG_EVENTS = ROOT / "events/te_debug_nuclear_events.txt"
 MILITARY_BASE_FILE = ROOT / "common/buildings/05_zz_te_military_base.txt"
 EXTRA_PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
@@ -113,6 +116,24 @@ def block(text, name):
         depth -= c == "}"
         i += 1
     return text[m.end():i - 1]
+
+
+def scaling_declarations(text):
+    """modifier -> [value body] for every `scaling_modifiers_while_active`
+    block in `text` (comments stripped by the caller)."""
+    out = {}
+    for m in re.finditer(r"scaling_modifiers_while_active\s*=\s*\{", text):
+        depth, i = 1, m.end()
+        while depth:
+            c = text[i]
+            depth += c == "{"
+            depth -= c == "}"
+            i += 1
+        body = text[m.end():i - 1]
+        name = re.search(r"\bmodifier\s*=\s*(\w+)", body).group(1)
+        value = re.search(r"(?m)^\s*value\s*=", body)
+        out.setdefault(name, []).append(body[value.start():].strip())
+    return out
 
 
 def gui_ops(gui_text, sgui):
@@ -2452,14 +2473,57 @@ class TestManagedFamilies(unittest.TestCase):
             self.assertIn(f"nd_readiness_mod_{r}", mods)
         self.assertIn("nd_upkeep_cost", mods)
 
-    def test_every_family_member_is_removed_by_the_tracker_helpers(self):
-        effects = read(EFFECTS)
-        remove_doc = block(effects, "nd_remove_doctrine_modifier")
-        for d in range(1, 6):
-            self.assertIn(f"remove_modifier = nd_doctrine_mod_{d}", remove_doc)
-        remove_rd = block(effects, "nd_remove_readiness_modifier")
-        for r in (2, 3):
-            self.assertIn(f"remove_modifier = nd_readiness_mod_{r}", remove_rd)
+    def test_every_family_member_is_declared_on_the_entry(self):
+        """Since vanilla 1.15 the entry declares the posture's modifiers
+        (scaling_modifiers_while_active): each member is 1 while a posture is in
+        force and its variable is its number, 0 otherwise."""
+        declared = scaling_declarations(strip_comments(read(JE)))
+        members = [(f"nd_doctrine_mod_{d}", f"var:nd_doctrine = {d}") for d in range(1, 6)]
+        members += [(f"nd_readiness_mod_{r}", f"var:nd_readiness = {r}") for r in (2, 3)]
+        for name, test in members:
+            with self.subTest(modifier=name):
+                self.assertEqual(len(declared.get(name, [])), 1)
+                value = declared[name][0]
+                self.assertRegex(value, r"^value = \{\s*value = 0\s*if = \{")
+                self.assertIn("nd_posture_in_force = yes", value)
+                self.assertIn(test, value)
+                self.assertIn("add = 1", value)
+        # The guard comes first, so neither variable is read before it exists.
+        gate = block(strip_comments(read(TRIGGERS)), "nd_posture_in_force")
+        self.assertIn("nd_is_armed = yes", gate)
+        self.assertIn("nd_is_initialized = yes", gate)
+
+    def test_upkeep_is_declared_from_the_cache(self):
+        value = scaling_declarations(strip_comments(read(JE)))["nd_upkeep_cost"]
+        self.assertEqual(len(value), 1)
+        for needle in ("value = 0", "nd_posture_in_force = yes", "has_variable = nd_upkeep_weekly_cached",
+                       "add = var:nd_upkeep_weekly_cached"):
+            self.assertIn(needle, value[0])
+        # The cache is the panel's figure too, so it stays, rewritten in both
+        # branches; nothing removes it.
+        apply = block(strip_comments(read(EFFECTS)), "nd_apply_posture_modifiers")
+        self.assertIn("nd_posture_in_force = yes", apply)
+        self.assertIn("set_variable = { name = nd_upkeep_weekly_cached value = nd_upkeep_weekly }", apply)
+        self.assertIn("set_variable = { name = nd_upkeep_weekly_cached value = 0 }", apply)
+        self.assertNotIn("je:je_nuclear_program", apply)
+        for path in SCRIPT_FILES + EVENT_FILES:
+            self.assertNotIn("remove_variable = nd_upkeep_weekly_cached", strip_comments(read(path)), path.name)
+
+    def test_an_armed_activation_refreshes_the_cache(self):
+        # The upkeep reads the cache from the entry's first update, so the
+        # immediate refreshes it for an armed country (a custody arrival, an
+        # old save's first activation), after the posture exists.
+        immediate = block(strip_comments(read(JE)), "immediate")
+        self.assertRegex(immediate, r"limit = \{ nd_is_armed = yes \}\s*nd_init_posture = yes\s*"
+                                    r"nd_apply_posture_modifiers = yes")
+
+    def test_the_trackers_and_the_rebuild_are_gone(self):
+        for path in SCRIPT_FILES + EVENT_FILES + (TABOO_EFFECTS, CUSTODY_EFFECTS):
+            text = strip_comments(read(path))
+            for name in ("nd_doctrine_mod_on", "nd_readiness_mod_on", "nd_upkeep_mod_on",
+                         "nd_posture_on_merged_entry", "nd_rebuild_posture_modifiers",
+                         "nd_remove_doctrine_modifier", "nd_remove_readiness_modifier"):
+                self.assertNotIn(name, text, path.name)
 
     def test_posture_wrappers_exist_for_every_value(self):
         effects = read(EFFECTS)
@@ -2477,6 +2541,34 @@ class TestManagedFamilies(unittest.TestCase):
             text = strip_comments(read(path))
             for m in re.finditer(r"nd_set_(doctrine|readiness_target|authority) = \{ [DRA] = \d \}", text):
                 self.fail(f"{path.name}: {m.group(0)} bypasses the wrapper")
+
+
+class TestProgrammeFunding(unittest.TestCase):
+    """The programme's weekly innovation is the entry's declared
+    nuclear_weapon_program_funding (vanilla 1.15), read from the funding
+    variable: the buttons, the pause treaty and lost standing only move it."""
+
+    def test_funding_is_declared_from_the_guarded_cost(self):
+        value = scaling_declarations(strip_comments(read(JE)))["nuclear_weapon_program_funding"]
+        self.assertEqual(value, ["value = { value = nuclear_program_display_weekly_cost }"])
+        values = strip_comments(read(EXTRA_VALUES))
+        self.assertIn("value = nuclear_program_display_funding", block(values, "nuclear_program_display_weekly_cost"))
+        self.assertIn("has_variable = nuclear_weapons_program_funding", block(values, "nuclear_program_display_funding"))
+
+    def test_buttons_move_the_variable_and_keep_their_preview(self):
+        effects = strip_comments(read(WEAPON_EFFECTS))
+        for verb, op in (("increase", "add"), ("decrease", "subtract")):
+            body = block(effects, f"nuclear_program_effect_{verb}_funding")
+            tooltip = block(body, "custom_tooltip")
+            self.assertIn(f'text = "{verb.upper()}_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"', tooltip)
+            self.assertRegex(tooltip, rf"name = nuclear_weapons_program_funding\s*{op} = 1")
+            self.assertNotIn("je:je_nuclear_program", body)
+            self.assertIn("nuclear_program_refresh_state_effect = yes", body)
+        self.assertNotIn("je:je_nuclear_program", block(effects, "nuclear_program_refresh_state_effect"))
+
+    def test_the_cost_cache_is_gone(self):
+        for path in (WEAPON_EFFECTS, JE, TREATY_ARTICLES, NUCLEAR_DEBUG_EVENTS):
+            self.assertNotIn("nuclear_weapons_program_cost_cached", strip_comments(read(path)), path.name)
 
 
 class TestRecessed(unittest.TestCase):
@@ -2506,7 +2598,8 @@ class TestRecessed(unittest.TestCase):
         self.assertNotRegex(self.crisis, r"var:nd_readiness_target = 1\b")
 
     def test_recessed_has_no_readiness_modifier(self):
-        # nd_readiness_mod_on uses 0 for "none": a level-0 member could never be tracked.
+        # Recessed, like Routine, carries no readiness modifier: only levels 2
+        # and 3 are declared on the entry.
         self.assertNotIn("nd_readiness_mod_0", read(MODIFIERS))
         self.assertNotIn("nd_readiness_mod_0", self.effects)
 
@@ -3567,7 +3660,8 @@ class TestLooseRecovery(unittest.TestCase):
         self.assertIn("nd_loose_monthly = yes", block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup"))
 
     def test_un_convention_secures_custody_and_searches(self):
-        self.assertIn("has_modifier = un_physical_protection_modifier", block(self.ct, "nd_custody_is_secured"))
+        # The ratification is the mirror the entry declares the modifier from (#1404).
+        self.assertIn("has_variable = un_physical_protection_modifier_on", block(self.ct, "nd_custody_is_secured"))
         monthly = block(self.le, "nd_loose_monthly")
         self.assertIn("chance = nd_loose_convention_chance", monthly)
         self.assertIn("nd_loose_recover_from_line = { HOW = 4 }", monthly)
@@ -3760,7 +3854,7 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         for line in ("un_tier_is_supranational = yes",
                      "has_modifier = un_member_modifier",
                      "un_propose_npt_in_force = yes",
-                     "NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }",
+                     "NOT = { has_variable = un_nonproliferation_modifier_on }",
                      "un_regime_npt_threshold = yes",
                      "has_variable = un_npt_built_outside"):
             self.assertIn(line, body)

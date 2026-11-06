@@ -82,7 +82,8 @@ class LiftTests(unittest.TestCase):
 
     def test_the_lift_ends_every_part_of_the_regime(self):
         body = _flat(_block(self.effects, "un_sanctions_lift_regime"))
-        for part in ("remove_modifier = un_sanctions_target_modifier",
+        # The regime is its variable: the entry declares the modifier from it (#1404).
+        for part in ("if = { limit = { has_variable = un_sanctions_target_on } remove_variable = un_sanctions_target_on }",
                      "remove_variable = un_sanctions_enforced_by",
                      "remove_variable = un_sanctions_months",
                      "un_teeth_lift_embargoes = yes"):
@@ -119,7 +120,7 @@ class MonthlyTests(unittest.TestCase):
                       _flat(_block(self.effects, "un_justice_monthly_update")))
 
     def test_an_orphaned_regime_lapses_and_a_human_target_is_told(self):
-        lapse = self.update[:self.update.index("add_modifier")]
+        lapse = self.update[:self.update.index("un_sanctions_months")]
         self.assertIn("limit = { un_sanctions_regime_orphaned = yes }", lapse)
         self.assertIn("post_notification = un_sanctions_lapsed_notice", lapse)
         self.assertIn("is_ai = no", lapse)
@@ -132,14 +133,17 @@ class MonthlyTests(unittest.TestCase):
         self.assertIn("NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }",
                       body)
 
-    def test_a_recorded_regime_gets_its_modifier_back(self):
-        # A revolution's winner inherits the record and not the modifier.
-        restore = re.search(r"every_country = \{ limit = \{ has_variable = un_sanctions_enforced_by "
-                            r"NOT = \{ un_sanctions_regime_on = yes \} \} add_modifier = \{ "
-                            r"name = un_sanctions_target_modifier multiplier = un_enforcement \} \}", self.update)
-        self.assertTrue(restore, self.update)
-        # After the orphans have lapsed, so a regime with no enforcer is not revived.
-        self.assertLess(self.update.index("un_sanctions_regime_orphaned"), restore.start())
+    def test_the_regime_is_its_variable(self):
+        # A revolution's winner inherits the variable, and the entry declares
+        # the modifier from it (#1404), so nothing re-applies it any more.
+        self.assertNotIn("add_modifier", self.update)
+        self.assertEqual(_flat(_block(self.triggers, "un_sanctions_regime_on")).strip(),
+                         "has_variable = un_sanctions_target_on")
+        vote = _flat(_read(_path("events", "un_vote_events.txt")))
+        self.assertIn("show_as_tooltip = { je:je_united_nations ?= { add_modifier = { "
+                      "name = un_sanctions_target_modifier multiplier = un_enforcement } } } "
+                      "set_variable = un_sanctions_target_on set_variable = { name = un_sanctions_enforced_by "
+                      "value = ROOT }", vote)
 
     def test_each_regime_counts_its_months(self):
         self.assertIn("change_variable = { name = un_sanctions_months add = 1 }", self.update)
@@ -168,12 +172,12 @@ class ForgetTheMonthsTests(unittest.TestCase):
         self.assertIn("un_sanctions_lift_ours = yes", button)
         helper = _flat(_block(_read(JUSTICE_EFFECTS), "un_sanctions_lift_ours"))
         loop = helper[helper.index("every_country"):]
-        self.assertIn("remove_modifier = un_sanctions_target_modifier", loop)
+        self.assertIn("if = { limit = { has_variable = un_sanctions_target_on } remove_variable = un_sanctions_target_on }", loop)
         self.assertIn("remove_variable = un_sanctions_months", loop)
 
     def test_a_dissolution(self):
         strip = _flat(_block(_read(LADDER), "un_dissolve_strip_country"))
-        self.assertIn("remove_modifier = un_sanctions_target_modifier", strip)
+        self.assertIn("if = { limit = { has_variable = un_sanctions_target_on } remove_variable = un_sanctions_target_on }", strip)
         on_dissolve = _flat(_block(_read(JUSTICE_EFFECTS), "un_justice_on_dissolve"))
         self.assertIn("limit = { has_variable = un_sanctions_months } remove_variable = un_sanctions_months",
                       on_dissolve)
@@ -185,7 +189,7 @@ class ForgetTheMonthsTests(unittest.TestCase):
                 for name in files:
                     if name.endswith(".txt"):
                         path = os.path.join(dirpath, name)
-                        if "remove_modifier = un_sanctions_target_modifier" in _read(path):
+                        if "remove_variable = un_sanctions_target_on" in _read(path):
                             sites.append(os.path.relpath(path, REPO))
         self.assertEqual(sorted(sites), sorted([
             os.path.join("common", "scripted_effects", "un_justice_effects.txt"),

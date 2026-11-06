@@ -6,10 +6,11 @@
 # can_deactivate = yes), and on every entry a revolution's winner inherits,
 # after the loser's variables have merged in
 # (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"). So it creates only what is missing (progress, funding), puts
-# back the modifiers the new record lacks (sr_sync_<m>_entry in
-# space_race_effects.txt), and asks each choice event once per milestone
-# (sr_<m>_choice_made).
+# Inherits"). So it creates only what is missing (progress, funding) and asks
+# each choice event once per milestone (sr_<m>_choice_made). Each milestone's
+# cost, funding, approach and choice modifiers are declared on its entry
+# (scaling_modifiers_while_active, #1404), from variables the winner inherits,
+# so nothing puts them back, and so are solar colonization's colony modifiers.
 #
 # Carrying progress into a new record keeps the progress bar right:
 # - Inherited: the new record keeps the loser's bar. Its start date, baseline
@@ -93,14 +94,72 @@ je_space_race_suborbital = {
 		NOT = { has_variable = sr_completed_suborbital }
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_suborbital: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_suborbital_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_funding_suborbital_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_funding_suborbital_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_suborbital }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_suborbital }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_suborbital value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = suborbital }
 		if = { limit = { NOT = { has_variable = sr_progress_suborbital } } set_variable = { name = sr_progress_suborbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_suborbital } } set_variable = { name = sr_funding_suborbital value = 1 } }
-		sr_sync_suborbital_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_suborbital
@@ -190,6 +249,12 @@ je_space_race_suborbital = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_suborbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital } }
 	}
@@ -254,14 +319,112 @@ je_space_race_orbital = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_orbital: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_orbital_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_funding_orbital_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_funding_orbital_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_orbital }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_orbital }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.80), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_civilian
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_civilian
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_military
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_military
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_scientist
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_scientist
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_orbital value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = orbital }
 		if = { limit = { NOT = { has_variable = sr_progress_orbital } } set_variable = { name = sr_progress_orbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_orbital } } set_variable = { name = sr_funding_orbital value = 1 } }
-		sr_sync_orbital_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The astronaut type choice, asked once per milestone
 		# (sr_orbital_choice_made, space_race_triggers.txt).
 		if = {
@@ -356,6 +519,12 @@ je_space_race_orbital = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_orbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital } }
 	}
@@ -421,14 +590,125 @@ je_space_race_moon_landing = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_moon_landing: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_moon_landing_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_funding_moon_landing_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_funding_moon_landing_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_moon_landing }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_moon_landing }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.5), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_shackleton
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_shackleton
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_equatorial
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_equatorial
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_tranquility
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_tranquility
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_far_side
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_far_side
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_moon_landing value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = moon_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_moon_landing } } set_variable = { name = sr_progress_moon_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_moon_landing } } set_variable = { name = sr_funding_moon_landing value = 1 } }
-		sr_sync_moon_landing_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The landing site choice, asked once per milestone
 		# (sr_moon_landing_choice_made, space_race_triggers.txt).
 		if = {
@@ -523,6 +803,12 @@ je_space_race_moon_landing = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_moon_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing } }
 	}
@@ -589,14 +875,112 @@ je_space_race_probe = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_probe: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_probe_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_funding_probe_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_funding_probe_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_probe }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_probe }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.81), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_venus
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_venus
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_mars
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_mars
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_asteroid
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_asteroid
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_probe value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = probe }
 		if = { limit = { NOT = { has_variable = sr_progress_probe } } set_variable = { name = sr_progress_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_probe } } set_variable = { name = sr_funding_probe value = 1 } }
-		sr_sync_probe_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The probe target choice, asked once per milestone
 		# (sr_probe_choice_made, space_race_triggers.txt).
 		if = {
@@ -691,6 +1075,12 @@ je_space_race_probe = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe } }
 	}
@@ -757,14 +1147,112 @@ je_space_race_mars_landing = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_mars_landing: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_mars_landing_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_funding_mars_landing_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_funding_mars_landing_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_mars_landing }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_mars_landing }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.83), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_direct
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_direct
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_orbital
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_orbital_first
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_robotic
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_robotic
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_mars_landing value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = mars_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_mars_landing } } set_variable = { name = sr_progress_mars_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_mars_landing } } set_variable = { name = sr_funding_mars_landing value = 1 } }
-		sr_sync_mars_landing_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The Mars strategy choice, asked once per milestone
 		# (sr_mars_landing_choice_made, space_race_triggers.txt).
 		if = {
@@ -859,6 +1347,12 @@ je_space_race_mars_landing = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_mars_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing } }
 	}
@@ -931,14 +1425,72 @@ je_space_race_interstellar_probe = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_interstellar_probe: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_interstellar_probe_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_funding_interstellar_probe_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_funding_interstellar_probe_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_interstellar_probe }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_interstellar_probe }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_interstellar_probe value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = interstellar_probe }
 		if = { limit = { NOT = { has_variable = sr_progress_interstellar_probe } } set_variable = { name = sr_progress_interstellar_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_interstellar_probe } } set_variable = { name = sr_funding_interstellar_probe value = 1 } }
-		sr_sync_interstellar_probe_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_interstellar_probe
@@ -1024,6 +1576,12 @@ je_space_race_interstellar_probe = {
 			effect = {
 				custom_tooltip = je_space_race_interstellar_probe_setback_tt
 			}
+		}
+	}
+
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_interstellar_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 
@@ -1278,6 +1836,66 @@ je_space_race_solar_colonization = {
 		}
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_solar_colonization: its programme
+	# running, not merely its entry open for the colonies):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_solar_colonization_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_funding_solar_colonization_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_funding_solar_colonization_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_solar_colonization }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_solar_colonization }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		# A finished programme stays open to hold the colony modifiers, and a
 		# revolution's winner inherits it that way. Running this block again
@@ -1318,7 +1936,6 @@ je_space_race_solar_colonization = {
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
 		}
-		sr_sync_solar_colonization_entry = yes
 		# The Moon is stage 0 (lunar colonization design § 3.2).
 		if = {
 			limit = { NOT = { has_global_variable = sr_colonization_stage } }
@@ -1328,7 +1945,7 @@ je_space_race_solar_colonization = {
 			limit = { NOT = { has_variable = sr_colony_count } }
 			set_variable = { name = sr_colony_count value = 0 }
 		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_solar_colonization
@@ -1396,6 +2013,12 @@ je_space_race_solar_colonization = {
 		}
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_space_race_solar_colonization = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = {
 			# Skip colonization logic if completed or PM disabled (passive mode — JE stays for modifiers).
@@ -1446,9 +2069,9 @@ je_space_race_solar_colonization = {
 			# A programme resumed for the Moon (sr_colonization_resumed; lunar
 			# colonization 2b, owner 2026-10-29) goes on while a lunar world is
 			# free, and stops here once the Moon is full; one that didn't choose
-			# it finishes as before. A resumed one may already hold its record
-			# and Interplanetary Trade Networks, so the modifier is added only
-			# when missing, and the marker goes.
+			# it finishes as before. A resumed one may already hold its record,
+			# and the marker goes. The record is what the entry declares
+			# Interplanetary Trade Networks from (sr_solar_system_trade, below).
 			if = {
 				limit = {
 					has_variable = sr_active_solar_colonization
@@ -1460,10 +2083,6 @@ je_space_race_solar_colonization = {
 					}
 				}
 				set_variable = { name = sr_completed_solar_colonization value = yes }
-				if = {
-					limit = { je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } } }
-					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-				}
 				if = { limit = { has_variable = sr_colonization_resumed } remove_variable = sr_colonization_resumed }
 				remove_variable = sr_active_solar_colonization
 				if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
@@ -1478,9 +2097,9 @@ je_space_race_solar_colonization = {
 			# modules design §§ 5, 10): the AI's yearly review, the month's
 			# fabrication; autonomy and free colonies (slice 5 design §§ 3, 7):
 			# event worlds left stale cleared, the AI's yearly supply review, the
-			# month's colony life; then the entry's six modifiers. A colony
-			# holder's entry is always open, so this runs for every holder,
-			# programme or not.
+			# month's colony life. A colony holder's entry is always open, so
+			# this runs for every holder, programme or not. The entry's modifiers
+			# follow what these change by themselves (declared below).
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
 			sr_mod_ai_review = yes
@@ -1488,7 +2107,113 @@ je_space_race_solar_colonization = {
 			sr_site_events_clear_stale = yes
 			sr_free_ai_review = yes
 			sr_life_month = yes
-			sr_emig_refresh_modifiers = yes
+		}
+	}
+
+	# The entry's own modifiers (1.15 scaling_modifiers_while_active, #1404;
+	# docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.10). Each
+	# value's root is the owning country; each is 0 outside the gate the monthly
+	# re-add used to sit behind. They apply only while the entry is active, which
+	# a colony holder's always is (`possible`). has_modifier cannot see them: test
+	# the inputs. Each world's specializations and discovery outcomes, and the
+	# facilities, are declared in common/journal_entries/sr_sites_generated.txt
+	# (generated, scripts/generators/gen_solar_sites.py).
+	# Interplanetary Trade Networks, once every world is claimed (the monthly
+	# pulse above records it).
+	scaling_modifiers_while_active = {
+		modifier = sr_solar_system_trade
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_completed_solar_colonization }
+				add = 1
+			}
+		}
+	}
+	# Colony population (simple and full colonies; slices 2-3 design § 10): the
+	# emigration programme's upkeep, a unit a level of it.
+	scaling_modifiers_while_active = {
+		modifier = sr_emigration_programme
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_emig_level_value >= 1
+				}
+				add = sr_emig_level_value
+			}
+		}
+	}
+	# The nation's people off Earth, a unit per 100,000 (capped), nothing below
+	# the minimum (design § 10.5).
+	scaling_modifiers_while_active = {
+		modifier = sr_offworld_population
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_offworld_pop_total >= sr_offworld_bonus_minimum
+				}
+				add = sr_offworld_units
+			}
+		}
+	}
+	# The module levels past the first at the colonies held (colony modules
+	# design § 8).
+	scaling_modifiers_while_active = {
+		modifier = sr_module_upkeep
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_mod_upkeep_levels >= 1
+				}
+				add = sr_mod_upkeep_levels
+			}
+		}
+	}
+	# Autonomy and free colonies (slice 5 design §§ 2-3): a unit a free colony
+	# supplied, the trade from them, a unit a garrisoned colony.
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_supply
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_supply_count >= 1
+				}
+				add = sr_free_supply_count
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_trade
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_trade_units > 0
+				}
+				add = sr_free_trade_units
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_colonial_garrisons
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_garrison_count >= 1
+				}
+				add = sr_garrison_count
+			}
 		}
 	}
 

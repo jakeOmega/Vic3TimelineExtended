@@ -9,61 +9,29 @@
 # The button and the widget's nuclear_program_funding_sgui both call the helper,
 # so the hidden grid and the panel cannot drift apart.
 #
-# The funding modifier sits on the journal entry, and the engine re-evaluates a
-# journal-entry modifier's multiplier in JE scope, where the bare
-# `var:nuclear_weapons_program_funding` inside nuclear_weapons_program_current_cost
-# reads 'none' ("Value of wrong type ... Got value of type 'none'" on the
-# add_modifier line, every recalculation). So the cost is cached on the country
-# and read through root, as the UN and banking entries do
-# (scripting_best_practices.md, "JE scope can't read country properties").
-# nuclear_program_refresh_state_effect re-applies a modifier left over from the
-# old form once.
+# They only move the funding variable. The weekly innovation it costs is
+# je_nuclear_program's declared nuclear_weapon_program_funding (value
+# nuclear_program_display_weekly_cost), which follows the variable at the
+# entry's next update. The custom tooltip is the click's preview: it names the
+# step's cost, since change_variable renders nothing.
 
 nuclear_program_effect_increase_funding = {
-	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+	custom_tooltip = {
 		text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding
 			add = 1
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program = {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
 		}
 	}
 	nuclear_program_refresh_state_effect = yes
 }
 
 nuclear_program_effect_decrease_funding = {
-	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+	custom_tooltip = {
 		text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding
 			subtract = 1
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program = {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
 		}
 	}
 	nuclear_program_refresh_state_effect = yes
@@ -82,13 +50,8 @@ nuclear_program_effect_decrease_funding = {
 # Moved here verbatim from the entry when posture and crises were merged into
 # it (2026-09-25), so the entry's pulse reads as programme, then posture.
 nuclear_program_weekly_progress = {
-	# A pause treaty zeroes funding. Taking the funding modifier back off is
-	# left to nuclear_program_refresh_state_effect, which the entry's pulse runs
-	# straight after this effect — the one site that owns that modifier. The
-	# remove_modifier that used to sit here ran in *country* scope, while the
-	# buttons apply the modifier in `je:je_nuclear_program` scope — so it was a
-	# silent no-op and a paused programme went on paying its full weekly
-	# innovation bill for ever.
+	# A pause treaty zeroes funding, and with it the entry's declared funding
+	# cost.
 	if = {
 		limit = {
 			modifier:country_nuclear_program_pause_bool = yes
@@ -142,7 +105,7 @@ nuclear_program_weekly_progress = {
 			if = {
 				limit = {
 					un_propose_npt_in_force = yes
-					NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+					NOT = { has_variable = un_nonproliferation_modifier_on }
 				}
 				set_variable = un_npt_built_outside
 			}
@@ -231,79 +194,16 @@ nuclear_program_weekly_progress = {
 # programme step, and the two button effects above — and therefore both stepper
 # ops in the widget, which delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
 # from the console only, after forcing state by hand.)
-# In `immediate` the journal entry is still being
-# activated, which is why the modifier guard below reaches it through `?=`:
-# whether `je:je_nuclear_program` resolves that early is untested, and either
-# answer is safe (unresolved is skipped; resolved has no modifier yet on a fresh
-# entry, and on a re-activation the old entry's modifier died with it). Nothing
-# else may write nuclear_program_last_status, and neither the .gui nor the
-# localization may re-derive it — see
+# Nothing else may write nuclear_program_last_status, and neither the .gui nor
+# the localization may re-derive it — see
 # docs/guides/scripting_best_practices.md, "Journal-Entry Widgets: Derive Display
 # State Once, in Script".
 #
-# WHY THE FUNDING MODIFIER IS DECIDED FROM THE VARIABLE, NOT FROM has_modifier.
-# add_modifier / remove_modifier results are not visible inside the same effect
-# block, and a scripted effect call is inlined into its caller's block, so a
-# has_modifier read here may see the state as it was *before* the button body
-# ran. change_variable results, by contrast, are visible immediately. The
-# decision is therefore taken from var:nuclear_weapons_program_funding, which
-# this block's caller has just written. Walking every caller, with the invariant
-# "funding >= 1 implies the modifier is on the journal entry":
-#   increase, F -> F+1       funding >= 1, guard skipped; the button body already
-#                            re-added the modifier at the new multiplier.
-#   decrease, F -> F-1 >= 1  same: nothing to do.
-#   decrease, 1 -> 0         funding = 0. Pre-block the modifier was present
-#                            (funding was 1), so the has_modifier read is true,
-#                            and the body removed and re-added it at multiplier
-#                            0 — so it really is present and the remove lands.
-#                            Without this the entry would keep a "-0 weekly
-#                            innovation" row for ever.
-#   pulse, pause in force    the pulse zeroes funding earlier in the same block;
-#                            the modifier is genuinely still present, so the read
-#                            is true and the innovation drain finally stops.
-#   pulse, standing lost     the same, from the entry's own else_if: an armed
-#                            power demoted below nuclear_program_has_programme
-#                            keeps the entry but stops paying.
-#   pulse, already at 0      modifier absent, read false, so no remove_modifier
-#                            on a missing modifier (which logs an error).
-#   pulse, steady funding>=1 funding /= 0, guard skipped, modifier left exactly
-#                            as it is rather than re-added every week.
-# The guard is correct whether the has_modifier read sees the pre-block or the
-# live state, because the only caller where the two differ is "decrease 1 -> 0",
-# and there both readings say "present".
+# It no longer touches the funding modifier: since vanilla 1.15 the entry
+# declares it (scaling_modifiers_while_active), with a value that reads
+# var:nuclear_weapons_program_funding, so every caller that moves the variable
+# moves the cost.
 nuclear_program_refresh_state_effect = {
-	# Migration: a save funded before the cost was cached carries the modifier
-	# with the old JE-scope multiplier; re-apply it once in the cached form.
-	if = {
-		limit = {
-			has_variable = nuclear_weapons_program_funding
-			var:nuclear_weapons_program_funding >= 1
-			NOT = { has_variable = nuclear_weapons_program_cost_cached }
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program ?= {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
-		}
-	}
-	if = {
-		limit = {
-			has_variable = nuclear_weapons_program_funding
-			var:nuclear_weapons_program_funding = 0
-			je:je_nuclear_program ?= { has_modifier = nuclear_weapon_program_funding }
-		}
-		je:je_nuclear_program ?= { remove_modifier = nuclear_weapon_program_funding }
-	}
-
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.

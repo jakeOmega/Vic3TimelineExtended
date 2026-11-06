@@ -506,7 +506,7 @@ financial_cycle_phase_frenzy = {
 	# BUBBLE 20 -> 8 (2026-09-22). Nearly every frenzy starts with bubble
 	# already past 60 (it is filled in boom), so this line decides how fast a
 	# frenzy locks in, not whether crashes happen: crash frequency moved ~1%.
-	# With the flatter inertia curve (bubble_inertia_multiplier_script_value)
+	# With the flatter inertia curve (bubble_inertia_curve)
 	# it gives maxed tools a few percent chance to escape a frenzy instead of
 	# none (banking_cycle_simulation.md §10). _cmd / _coop scaled x0.4 alike.
 	country_bubble_pressure_monthly_add = 8
@@ -1353,8 +1353,8 @@ banking_crash_intervention_capital_controls = {
 	country_influence_add = -100
 }
 
-# ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
-# Note: The actual multiplier values are defined in the relevant journal entry (e.g. based on temperature anomaly or severity stage).
+# ----- Global Warming severity stage (a scaling modifier on every country's je_global_warming) -----
+# Per degree: the entry declares it at the felt temperature anomaly, floored at 0 (je_global_warming.txt).
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
@@ -1410,11 +1410,9 @@ renewable_investment_modifier = {
 
 # Renewable Investment's running cost, in place of the forced plant subsidies it
 # used to carry (country_building_renewable_energy_plant_require_subsidies_bool,
-# retired 2026-10-20). Held on the country, not the journal entry, because the
-# multiplier reads gdp. Applied with multiplier = gw_renewable_investment_cost_value
-# (0.5% of GDP a year, per week) by gw_renewable_investment_cost_apply and
-# re-applied monthly by gw_refresh_policy_costs_effect, the single refresh site.
-# Budget Breakdown: Climate Policy.
+# retired 2026-10-20). A scaling modifier on je_global_warming at
+# gw_renewable_investment_cost_value (0.5% of GDP a year, per week) while the
+# policy is in force. Budget Breakdown: Climate Policy.
 renewable_investment_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -1440,6 +1438,8 @@ emission_standards_modifier = {
 }
 
 # Indirect-effect policies (available to all countries)
+# Carbon Removal Support: a scaling modifier on je_global_warming while the
+# country variable gw_carbon_removal_policy is set.
 carbon_removal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_building_synthetics_plant_coal_require_subsidies_bool = yes
@@ -1449,8 +1449,9 @@ carbon_removal_modifier = {
 }
 
 # Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5), on the
-# journal entry like the other national policies. Its climate effect is not a
-# modifier: the countries running it set the world's aerosol mask
+# journal entry like the other national policies (a scaling modifier there,
+# while the country variable gw_aerosol_injection_policy is set). Its climate
+# effect is not a modifier: the countries running it set the world's aerosol mask
 # (global_warming_aerosol_values.txt), which every country's warming reads.
 # The Environmental Movement opposes it, so it stirs the movement where every
 # other policy calms it.
@@ -1460,18 +1461,18 @@ aerosol_injection_modifier = {
 }
 
 # Stratospheric Aerosol Injection's running cost: 1% of GDP a year, per week
-# (gw_aerosol_injection_cost_value). On the country, applied and re-applied as
-# Renewable Investment's is (gw_aerosol_injection_cost_apply, from
-# gw_refresh_policy_costs_effect). Budget Breakdown: Climate Policy.
+# (gw_aerosol_injection_cost_value). A scaling modifier on je_global_warming
+# while the policy is in force, as Renewable Investment's is. Budget
+# Breakdown: Climate Policy.
 aerosol_injection_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 	country_te_budget_expense_climate_add = 1
 }
 
-# The haze weakens the summer monsoons (Geoengineering). On the journal entry
-# of a country whose capital lies in a monsoon region (gw_country_in_monsoon_region),
-# re-applied monthly with multiplier = the aerosol mask in degrees: per degree
+# The haze weakens the summer monsoons (Geoengineering). A scaling modifier on
+# the journal entry of a country whose capital lies in a monsoon region
+# (gw_country_in_monsoon_region), at the aerosol mask in degrees: per degree
 # masked, half the farm relief the mask brings back and none of its drought
 # relief (the global_warming modifier is -10% farms, +25% droughts a degree).
 gw_aerosol_monsoon_modifier = {
@@ -2298,9 +2299,9 @@ foreign_property_protected_modifier = {
 
 # The three programmes. Each runs at a level from 0 to 3 (colonial_empire_values.txt,
 # PROGRAMME LEVELS); the values below are the FULL programme, level 3, and
-# colonial_programmes_refresh_modifiers (decolonization.txt) applies each at a
-# third, two thirds or all of them. Each is the right pick in different
-# circumstances:
+# je_colonial_empire declares each as a scaling modifier at a third, two thirds
+# or all of them (colonial_*_modifier_scale). Each is the right pick in
+# different circumstances:
 #   - Invest: slow bar push, but pays for itself in economic terms. Right when
 #     stability is OK and you want to grow the empire long-term.
 #   - Garrison: fast bar push, but burns prestige and projection. Right when
@@ -2311,7 +2312,7 @@ foreign_property_protected_modifier = {
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	# The weekly upkeep is carried by colonial_development_investment_expense_modifier
-	# (re-applied each JE pulse at a share of the colonies' GDP per level) so it
+	# (declared on the entry at a share of the colonies' GDP per level) so it
 	# shows up in the budget line rather than being a silent treasury debit.
 	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
@@ -2326,10 +2327,10 @@ colonial_development_investment_modifier = {
 	# that mechanically erodes them.
 }
 
-# Per-pulse-refreshed expense modifier for the Development Investment program.
-# Held isolated (country_expenses_add only) so the refresh can re-apply it with
-# the weekly cost as its multiplier without rescaling the other policy effects:
-# country_expenses_add is a WEEKLY amount, so the multiplier is
+# Expense modifier for the Development Investment program, a scaling modifier
+# on je_colonial_empire. Held isolated (country_expenses_add only) so its value
+# can be the weekly cost without rescaling the other policy effects:
+# country_expenses_add is a WEEKLY amount, so the value is
 # colonial_invest_weekly_cost (a share of the colonies' yearly GDP per level,
 # over 52). Surfaces in the country's budget panel as a line item — players can
 # see what the program is actually costing them.
@@ -3921,8 +3922,8 @@ un_development_contributor_modifier = {
 # What the World Development Fund's recipients remember of a contributor's
 # money: added with multiplier = root.var:un_dev_fund_patron, which moves a
 # twelfth of the way each month toward the contribution's benefit factor
-# (un_dev_fund_patron_pulse, un_economy_effects.txt), and is derived from that
-# variable every month rather than mirrored. Members the Fund pays are more
+# (un_dev_fund_patron_pulse, un_economy_effects.txt), at which
+# je_united_nations declares it. Members the Fund pays are more
 # receptive to the contributor's lobbying.
 un_development_patron_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -4075,10 +4076,11 @@ un_mandate_war_support_modifier = {
 }
 
 # ---- UN redesign phase 5: convention regimes (un_regime_effects.txt) ----
-# Each is a unit value applied with multiplier = un_enforcement (E) by
-# un_regime_refresh_country, the single refresh site, except the climate
-# adaptation aid (x temperature anomaly x E) and shared intelligence (x the
-# steps above Established: 1 at Strong, 2 at Supranational).
+# Each is a unit value, declared by je_united_nations at un_enforcement (E)
+# while the presence variable un_regime_refresh_country sets (the single
+# refresh site) is held, except the climate adaptation aid (x temperature
+# anomaly x E) and shared intelligence (x the steps above Established: 1 at
+# Strong, 2 at Supranational).
 # Climate, a high emitter: the binding cut, paid in heavy-industry output.
 un_regime_climate_emitter_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
@@ -4537,9 +4539,9 @@ un_mission_service_cost = {
 }
 
 # Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
-# the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
-# dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
-# refresh site; removed while the member withholds.
+# the UN's tier. Declared on je_united_nations at var:un_dues_cached (the
+# weekly dues, un_dues_weekly_value, cached by un_dues_country_monthly_update)
+# while the member pays (un_dues_in_force); 0 while it withholds.
 un_dues_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -5500,10 +5502,10 @@ planning_consolidation_order = {
 }
 
 # 9. Treasury → Investment Pool auto-balance (command economy only)
-# Automatically applied and recalibrated each month (and on inject/withdraw button press)
-# by banking_cycle_update_ce_pool_balance. The multiplier is computed so that the
-# investment pool's net monthly income equals zero: the state treasury funds all
-# planned investment directly.
+# Declared on je_banking_cycle (scaling_modifiers_while_active) at the value
+# banking_cycle_update_ce_pool_balance caches each month (and on an inject or
+# withdraw), computed so that the investment pool's net monthly income equals
+# zero: the state treasury funds all planned investment directly.
 # Base values:
 #   country_weekly_investment_pool_add = 1  (per week, scaled by multiplier)
 #   country_expenses_add = 1
@@ -6604,7 +6606,7 @@ bubble_inertia_extreme = {
 
 # Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §21):
 # a fifth of the market's pull, under the same bands and the same
-# bubble_inertia_multiplier_script_value. With none at all a cooperative economy
+# bubble_inertia_curve. With none at all a cooperative economy
 # almost never left Stable (0.6 crashes a century untooled, Boom or Frenzy 0.2%
 # of months); at a fifth it has about 2, the owner's target.
 bubble_inertia_moderate_coop = {
@@ -6883,7 +6885,8 @@ me_border_security_campaign_modifier = {
 
 # ============================================================================
 # CULTURAL HEGEMONY - Dynamic modifier scaled by cultural_pull script value
-# Applied in JE on_monthly_pulse with multiplier = cultural_hegemony_modifier_mult
+# Declared on je_cultural_hegemony (scaling_modifiers_while_active) at
+# cultural_hegemony_modifier_mult
 # ============================================================================
 
 cultural_hegemony_effect = {
@@ -6898,8 +6901,8 @@ cultural_hegemony_effect = {
 	state_assimilation_mult = 0.05
 }
 
-# Applied to foreign countries to reduce legitimacy
-# (ideology pressure from the cultural hegemon)
+# Declared on a trailing country's je_cultural_hegemony to reduce legitimacy
+# (ideology pressure from the cultural hegemon), at var:ch_benchmark_applied
 cultural_hegemony_foreign_benchmark = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5
@@ -6980,8 +6983,8 @@ iw_domestic_defense = {
 	country_colonial_garrison_effectiveness_add = 0.05
 }
 
-# Agency experience (slice 5). Applied to je_covert_warfare by
-# covert_tradecraft_refresh_bonus with multiplier = the Tradecraft tier (0-4).
+# Agency experience (slice 5). Declared on je_covert_warfare
+# (scaling_modifiers_while_active) with value = the Tradecraft tier (0-4).
 # Network growth per tier is scripted (covert_tradecraft_net_gain_mult), not a
 # modifier field.
 iw_tradecraft_bonus = {
@@ -8096,9 +8099,9 @@ te_monetary_rate_paid = {
 # ============================================================================
 # Monetary Policy — policy stance bands (monetary_policy_design.md §8)
 # ============================================================================
-# Journal-entry-scope modifiers on je_banking_cycle, swapped when
-# te_mon_stance_band changes. Cheap money feeds the investment pool; tight
-# money starves it.
+# Journal-entry-scope modifiers on je_banking_cycle, which declares the one
+# te_mon_stance_band names (scaling_modifiers_while_active, since 1.15). Cheap
+# money feeds the investment pool; tight money starves it.
 #
 # These exist *instead of* one modifier scaled by the true stance gap: a scaled
 # modifier would print -0.125 x (policy - inflation - r*) in its tooltip, from
@@ -8109,8 +8112,8 @@ te_monetary_rate_paid = {
 #
 # Band 3 (neutral) carries no field on purpose: a 0 value would render as "+0%"
 # and trip modifier_visibility_audit, and there is nothing to say. It stays
-# defined so the swap logic always has exactly one band modifier to apply and
-# the JE reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
+# defined so the entry always declares exactly one band modifier and the JE
+# reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
 # does the same for the neutral tier of its own banded sets — tax_modifier_medium,
 # government_wages_medium and infamy_reputable in
 # vanilla common/static_modifiers/00_code_static_modifiers.txt are all empty.
@@ -8126,8 +8129,8 @@ banking_stance_band_2 = {
 }
 
 banking_stance_band_3 = {
-	# An EMPTY modifier that is still applied, so the entry always names the
-	# stance. It needs an icon all the same: the journal entry lists it, and a
+	# An EMPTY modifier that is still declared at 1, so the entry always names
+	# the stance. It needs an icon all the same: the journal entry lists it, and a
 	# modifier with none logs "Could not find texture ... '' not found".
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 }
@@ -8780,9 +8783,9 @@ te_mon_mandate_loosen_step = {
 }
 
 # The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
-# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, as the
-# multiplier, refreshed monthly by banking_external_charge_* (its header has
-# the rules), on the entry beside the tool. The mirror field puts them under
+# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, declared
+# on the entry beside the tool from the cache banking_external_charge_* writes
+# monthly (its header has the rules). The mirror field puts them under
 # Banking in the Budget Breakdown (gen_budget_breakdown.py's SOURCES).
 banking_external_sterilization_charge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds

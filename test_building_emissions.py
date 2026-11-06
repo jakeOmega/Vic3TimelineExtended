@@ -433,22 +433,28 @@ class DirectAirCaptureTest(unittest.TestCase):
         self.assertEqual(scalar(modifier, "country_authority_cost_add"), 100)
         self.assertNotIn("country_greenhouse_gas_emissions_mult", modifier)
 
-    def test_support_can_be_rebuilt_from_inherited_country_state_and_repealed(self):
+    def test_support_is_a_country_variable_the_entry_declares_its_modifier_from(self):
+        """A civil war's winner inherits variables but no modifiers, so the policy is the variable and
+        je_global_warming declares carbon_removal_modifier at 1 while it is set (#1404); nothing adds,
+        removes or rebuilds the modifier any more, and has_modifier cannot see it."""
+        from test_tax_code_rule import load
         effects = parsed("common/scripted_effects/global_warming_effects.txt")
         adopt = body(body(effects, "gw_effect_carbon_removal"), "custom_tooltip")
         repeal = body(body(effects, "gw_effect_remove_carbon_removal"), "custom_tooltip")
         flag = body(body(body(adopt, "hidden_effect"), "set_variable"), "name")
+        self.assertEqual(flag, "gw_carbon_removal_policy")
         self.assertEqual(body(body(repeal, "hidden_effect"), "remove_variable"), flag)
         self.assertNotIn("every_country", adopt)
-        restore = body(body(effects, "gw_restore_carbon_removal_policy_effect"), "if")
-        self.assertEqual(body(body(restore, "limit"), "has_variable"), flag)
-        self.assertEqual(body(body(body(restore, "je:je_global_warming"), "add_modifier"), "name"),
-                         "carbon_removal_modifier")
-        self.assertEqual(body(body(repeal, "je:je_global_warming"), "remove_modifier"),
-                         "carbon_removal_modifier")
-        je = body(parsed("common/journal_entries/je_global_warming.txt"), "je_global_warming")
-        pulse = body(body(je, "on_monthly_pulse"), "effect")
-        self.assertEqual(body(pulse, "gw_restore_carbon_removal_policy_effect"), "yes")
+        for block in (adopt, repeal):
+            self.assertNotIn("je:je_global_warming", block)
+        self.assertNotIn("gw_restore_carbon_removal_policy_effect", effects)
+        je = load("common/journal_entries/je_global_warming.txt")["je_global_warming"]
+        declared = {d["modifier"]: d["value"] for d in je["scaling_modifiers_while_active"]}
+        self.assertEqual(declared["carbon_removal_modifier"],
+                         {"value": "0", "if": {"limit": {"has_variable": flag}, "add": "1"}})
+        self.assertNotIn("gw_restore_carbon_removal_policy_effect", str(je["on_monthly_pulse"]))
+        active = load("common/scripted_triggers/global_warming_triggers.txt")["gw_policy_carbon_removal_active"]
+        self.assertEqual(active, {"has_journal_entry": "je_global_warming", "has_variable": flag})
         debug = parsed("common/scripted_effects/te_debug_gw_effects.txt")
         self.assertEqual(body(body(debug, "te_debug_gw_adopt_all"), "gw_effect_carbon_removal"), "yes")
         self.assertEqual(body(body(debug, "te_debug_gw_repeal_all"), "gw_effect_remove_carbon_removal"), "yes")

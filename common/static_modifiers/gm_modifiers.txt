@@ -7,7 +7,8 @@
 # the step count. gm_values.txt mirrors every value as gm_step_*; change both.
 
 # ---- National totals (§2.4): on je:je_grand_monuments ------------------------
-# Refreshed by gm_apply_national_modifiers (gm_effects.txt), ROOT = country.
+# Declared by the entry (scaling_modifiers_while_active, je_grand_monuments.txt),
+# each from the country variable gm_compute_totals writes (gm_effects.txt).
 gm_national_prestige = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_prestige_add = 10
@@ -194,7 +195,7 @@ gm_policy_education_display = {
 
 # ---- Opportunity boons (opportunities spec §3.2): on je:je_grand_monuments ----
 # One per moment, flat, while the country's gm_boon_<source> counts its 120
-# months down (gm_add_boons, gm_commission_effects.txt). test_grand_monument_
+# months down (declared by je_grand_monuments.txt). test_grand_monument_
 # registry.py's BOONS pins each field and value to its loc.
 gm_boon_reign = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds

@@ -32,7 +32,7 @@ te_debug_sr_set_progress = {
 	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 0.9 }
 	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 0.9 }
-	sr_recalculate_cost = yes
+	sr_refresh_milestone_statuses = yes
 }
 
 te_debug_sr_finish_now = {
@@ -43,7 +43,7 @@ te_debug_sr_finish_now = {
 	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 1 }
 	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 1 }
-	sr_recalculate_cost = yes
+	sr_refresh_milestone_statuses = yes
 }
 
 # Raise the failure flag on every running milestone, and mark it as the
@@ -61,7 +61,7 @@ te_debug_sr_flag_setback_base = {
 # One real setback on every running milestone, down the same path the monthly
 # pulse takes: flag, progress loss (two months, a minor setback's default
 # answer), safety review on the journal entry.
-# No event fires (option j does that). Ends on sr_recalculate_cost so the panel
+# No event fires (option j does that). Ends on sr_refresh_milestone_statuses so the panel
 # redraws at once. Scope: country.
 te_debug_sr_force_setback = {
 	te_debug_sr_flag_setback_base = { MILESTONE = suborbital         }
@@ -74,7 +74,7 @@ te_debug_sr_force_setback = {
 	sr_record_event_pace = yes
 	sr_setback_lose_months = { MONTHS = 2 }
 	sr_temporary_safety_review_effect = yes
-	sr_recalculate_cost = yes
+	sr_refresh_milestone_statuses = yes
 }
 
 # One real setback EVENT for the most advanced running milestone, down the

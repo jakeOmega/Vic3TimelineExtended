@@ -75,7 +75,7 @@ un_authority_champions_sgui = {
 	scope = country
 	is_shown = {
 		has_global_variable = un_founded
-		any_country = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		any_country = { has_variable = un_champion_order_cost_on }
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -88,7 +88,7 @@ un_authority_underminers_sgui = {
 	scope = country
 	is_shown = {
 		has_global_variable = un_founded
-		any_country = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		any_country = { un_undermines_the_order = yes }
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

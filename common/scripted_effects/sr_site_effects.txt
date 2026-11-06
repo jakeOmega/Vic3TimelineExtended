@@ -4,87 +4,36 @@
 # Design: docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md.
 #
 # Every world has a global record (sr_site_holder_<key>, sr_site_spec_<key>,
-# ...), the truth. The holder's <modifier>_held variables and its journal
-# entry's modifiers are its projection, written by sr_site_sync_<key>. The
+# ...), the truth. The holder's <modifier>_held variables are its projection,
+# written by sr_site_sync_<key>, and its journal entry declares each modifier
+# the variables name (common/journal_entries/sr_sites_generated.txt). The
 # per-world blocks are generated (sr_sites_generated.txt, from
 # scripts/generators/gen_solar_sites.py); this file holds what they call.
 # ============================================================================
 
-# Country scope. One modifier of a world we hold, shown: its record and, where
-# the entry is open, the modifier on it. The entry's immediate puts back a
-# modifier the record names when the entry opens later
-# (sr_sync_solar_colonization_entry).
-sr_site_show_modifier = {
+# Country scope. One modifier of a world we hold, shown: its record,
+# <modifier>_held, passed as VAR. The solar colonization entry declares the
+# modifier while the record is held (1.15 scaling_modifiers_while_active, #1404;
+# common/journal_entries/sr_sites_generated.txt): a specialization at its level
+# times the colony's staffing (sr_site_mult_<a|b>_<key>; slice 4 design § 3), a
+# discovery outcome at 1. Nothing adds or removes the modifier itself, and
+# has_modifier cannot see it: read the record. The record also counts the
+# colony in the panel (sr_disp_colony_<modifier>) and lets a country showing a
+# claim no one holds adopt it (sr_site_monthly_<key>).
+sr_site_mark_held = {
 	if = {
-		limit = { NOT = { has_variable = $MODIFIER$_held } }
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	je:je_space_race_solar_colonization ?= {
-		if = {
-			limit = { NOT = { has_modifier = $MODIFIER$ } }
-			add_modifier = { name = $MODIFIER$ }
-		}
-	}
-}
-
-# Country scope. A specialization of a world we hold, at MULT (its level times
-# the colony's staffing, sr_site_mult_<a|b>_<key>; slice 4 design § 3): the
-# record, and where the entry is open the modifier at that multiplier. The
-# multiplier applied is recorded as <modifier>_mult, and only a change of it
-# (or no record) removes the old copy and adds the new: the test is the
-# variable, never has_modifier, so a second sync in the same effect adds
-# nothing even if has_modifier cannot yet see this one's add. MULT reads
-# global variables only, so it evaluates alike in the entry's scope.
-sr_site_show_modifier_at = {
-	if = {
-		limit = { NOT = { has_variable = $MODIFIER$_held } }
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	if = {
-		limit = {
-			OR = {
-				NOT = { has_variable = $MODIFIER$_mult }
-				NOT = { var:$MODIFIER$_mult = $MULT$ }
-			}
-		}
-		je:je_space_race_solar_colonization ?= {
-			if = {
-				limit = { has_modifier = $MODIFIER$ }
-				remove_modifier = $MODIFIER$
-			}
-			add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }
-			owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }
-			sr_mod_seen_self_check = { MODIFIER = $MODIFIER$ }
-		}
+		limit = { NOT = { has_variable = $VAR$ } }
+		set_variable = { name = $VAR$ value = yes }
 	}
 }
 
 # Country scope. One modifier of a world we no longer hold (or of the option we
-# did not take), hidden: record and modifier. A discovery's modifier, shown by
-# sr_site_show_modifier, has no multiplier record; a specialization's goes
-# through sr_site_hide_modifier_at, which also clears the multiplier it was
-# shown at. Reading <modifier>_mult here for a discovery logged "Variable is
-# used but is never set" for all 40 at every launch (2026-10-25).
-sr_site_hide_modifier = {
+# did not take), hidden: the record sr_site_mark_held set, so the entry's
+# declaration reads 0.
+sr_site_clear_held = {
 	if = {
-		limit = { has_variable = $MODIFIER$_held }
-		remove_variable = $MODIFIER$_held
-	}
-	je:je_space_race_solar_colonization ?= {
-		if = {
-			limit = { has_modifier = $MODIFIER$ }
-			remove_modifier = $MODIFIER$
-		}
-	}
-}
-
-# Country scope. A specialization hidden (sr_site_show_modifier_at shows it):
-# as sr_site_hide_modifier, and the multiplier it was shown at.
-sr_site_hide_modifier_at = {
-	sr_site_hide_modifier = { MODIFIER = $MODIFIER$ }
-	if = {
-		limit = { has_variable = $MODIFIER$_mult }
-		remove_variable = $MODIFIER$_mult
+		limit = { has_variable = $VAR$ }
+		remove_variable = $VAR$
 	}
 }
 
@@ -320,7 +269,7 @@ sr_resume_solar_colonization = {
 			limit = { NOT = { has_variable = sr_funding_solar_colonization } }
 			set_variable = { name = sr_funding_solar_colonization value = 1 }
 		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 }
 

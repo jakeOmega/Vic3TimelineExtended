@@ -72,6 +72,7 @@ un_events.1 = {
 		# A revolution's winner awaiting its rebuild is a member (§0.9).
 		NOT = { has_variable = un_member_modifier_on }
 		un_membership_eligible = yes
+		is_revolutionary = no	# as the Join button
 	}
 
 	immediate = {
@@ -307,7 +308,7 @@ un_events.2 = {
 			NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
 			scope:condemned_country = {
 				un_case_supports = { TOPIC = sanctions }
-				NOT = { has_modifier = un_sanctions_target_modifier }
+				NOT = { has_variable = un_sanctions_target_on }
 			}
 		}
 		ai_chance = {
@@ -471,7 +472,7 @@ un_events.3 = {
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		NOT = { has_variable = un_human_rights_declaration_modifier_on }
 		NOT = { has_modifier = un_human_rights_refusal_modifier }
 		has_technology_researched = human_rights
 		global_var:un_authority >= 40
@@ -789,10 +790,10 @@ un_events.5 = {
 		# target that accepted its censure (no target modifier is applied) or
 		# that no longer exists, and every option below acts on the target.
 		OR = {
-			scope:sanctioned_country ?= { has_modifier = un_sanctions_target_modifier }
+			scope:sanctioned_country ?= { has_variable = un_sanctions_target_on }
 			AND = {
 				NOT = { exists = scope:sanctioned_country }
-				any_country = { has_modifier = un_sanctions_target_modifier }
+				any_country = { has_variable = un_sanctions_target_on }
 			}
 		}
 	}
@@ -802,7 +803,7 @@ un_events.5 = {
 			limit = { NOT = { exists = scope:sanctioned_country } }
 			random_country = {
 				limit = {
-					has_modifier = un_sanctions_target_modifier
+					has_variable = un_sanctions_target_on
 				}
 				save_scope_as = sanctioned_country
 			}
@@ -998,7 +999,7 @@ un_events.6 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -1420,7 +1421,7 @@ un_events.9 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
-		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		NOT = { has_variable = un_heritage_program_modifier_on }
 		NOT = { has_modifier = un_heritage_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -1549,7 +1550,7 @@ un_events.10 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -1557,7 +1558,7 @@ un_events.10 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = -5
 			}
 		}
@@ -1582,6 +1583,7 @@ un_events.10 = {
 			NOT = { has_variable = un_member_modifier_on }
 			has_global_variable = un_founded
 			un_membership_eligible = yes
+			is_revolutionary = no	# as the Join button
 			NOT = { has_modifier = un_expelled_cooldown }
 			NOT = { has_modifier = un_withdrawal_penalty_modifier }
 		}
@@ -1623,7 +1625,7 @@ un_events.10 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -1932,7 +1934,7 @@ un_events.14 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
-		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		NOT = { has_variable = un_nonproliferation_modifier_on }
 		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2186,7 +2188,7 @@ un_events.16 = {
 		country_rank >= rank_value:major_power
 		global_var:un_authority >= 20
 		has_technology_researched = antibiotics
-		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		NOT = { has_variable = un_pandemic_cooperation_modifier_on }
 		NOT = { has_modifier = un_pandemic_isolationist_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2297,7 +2299,7 @@ un_events.17 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = environmental_movement
-		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		NOT = { has_variable = un_climate_binding_modifier_on }
 		NOT = { has_modifier = un_climate_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2409,7 +2411,7 @@ un_events.18 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 20
-		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+		NOT = { has_variable = un_refugee_program_modifier_on }
 		NOT = { has_modifier = un_refugee_closed_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		any_country = {
@@ -2534,7 +2536,7 @@ un_events.19 = {
 		global_var:un_authority >= 40
 		has_technology_researched = space_exploration
 		country_rank >= rank_value:major_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+		NOT = { has_variable = un_space_partnership_modifier_on }
 		NOT = { has_modifier = un_space_independent_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2980,7 +2982,7 @@ un_events.21 = {
 		# cover new UN joiners or Option B/C takers (decaying modifiers), who
 		# would otherwise be able to re-trigger the full vote cascade.
 		NOT = { has_global_variable = un_agency_itlos }
-		NOT = { has_modifier = un_law_of_sea_modifier }
+		NOT = { has_variable = un_law_of_sea_modifier_on }
 		NOT = { has_modifier = un_law_of_sea_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3087,7 +3089,7 @@ un_events.22 = {
 		# un_agency_icc is only set on non-vetoed pass — vetoed/graduated
 		# passes are symbolic censure only and remain re-proposable.
 		NOT = { has_global_variable = un_agency_icc }
-		NOT = { has_modifier = un_icc_member_modifier }
+		NOT = { has_variable = un_icc_member_modifier_on }
 		NOT = { has_modifier = un_icc_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3195,7 +3197,7 @@ un_events.23 = {
 		has_technology_researched = nuclear_weapons
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_cppnm }
-		NOT = { has_modifier = un_physical_protection_modifier }
+		NOT = { has_variable = un_physical_protection_modifier_on }
 		NOT = { has_modifier = un_physical_protection_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3289,7 +3291,7 @@ un_events.37 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.37.d_benchmark
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 			}
 			desc = un_events.37.d
 		}
@@ -3306,7 +3308,7 @@ un_events.37 = {
 		has_technology_researched = mass_media
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_ccd }
-		NOT = { has_modifier = un_cultural_diversity_modifier }
+		NOT = { has_variable = un_cultural_diversity_modifier_on }
 		NOT = { has_modifier = un_cultural_diversity_refusal_modifier }
 		NOT = { un_regime_cultural_hegemon = yes }
 		NOT = { has_global_variable = un_vote_active }
@@ -3323,7 +3325,7 @@ un_events.37 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 				add = 3
 			}
 			modifier = {
@@ -3415,7 +3417,7 @@ un_events.38 = {
 		nd_is_armed = no
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_tpnw }
-		NOT = { has_modifier = un_nuclear_ban_modifier }
+		NOT = { has_variable = un_nuclear_ban_modifier_on }
 		NOT = { has_modifier = un_nuclear_ban_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3723,7 +3725,7 @@ un_events.33 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.33.d_ratified
-				trigger = { has_modifier = un_icc_member_modifier }
+				trigger = { has_variable = un_icc_member_modifier_on }
 			}
 			desc = un_events.33.d_jurisdiction
 		}
@@ -3760,7 +3762,7 @@ un_events.33 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 3
 			}
 			modifier = {
@@ -3891,11 +3893,11 @@ un_events.34 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = -1
 			}
 			# Leaving ends the World Development Fund's grant, which at these
@@ -3946,7 +3948,7 @@ un_events.34 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -4049,7 +4051,7 @@ un_events.35 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 3
 			}
 		}
@@ -4110,81 +4112,81 @@ un_events.36 = {
 			}
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier } }
-			un_convention_on = { MODIFIER = un_human_rights_declaration_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unhrc CONVENTION = human_rights_declaration } }
+			un_convention_on = { CONVENTION = human_rights_declaration }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier } }
-			un_convention_on = { MODIFIER = un_nonproliferation_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = iaea CONVENTION = nonproliferation } }
+			un_convention_on = { CONVENTION = nonproliferation }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier } }
-			un_convention_on = { MODIFIER = un_climate_binding_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unep CONVENTION = climate_binding } }
+			un_convention_on = { CONVENTION = climate_binding }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier } }
-			un_convention_on = { MODIFIER = un_heritage_program_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unesco CONVENTION = heritage_program } }
+			un_convention_on = { CONVENTION = heritage_program }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier } }
-			un_convention_on = { MODIFIER = un_pandemic_cooperation_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = who CONVENTION = pandemic_cooperation } }
+			un_convention_on = { CONVENTION = pandemic_cooperation }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier } }
-			un_convention_on = { MODIFIER = un_refugee_program_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unhcr CONVENTION = refugee_program } }
+			un_convention_on = { CONVENTION = refugee_program }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
-			un_convention_on = { MODIFIER = un_space_partnership_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unoosa CONVENTION = space_partnership } }
+			un_convention_on = { CONVENTION = space_partnership }
 		}
-		# The nine country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The nine Assembly conventions after them, as un_apply_ratified_conventions has them.
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
-			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
-		}
-		if = {
-			limit = { un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier } }
-			un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = itlos CONVENTION = law_of_sea } }
+			un_convention_on = { CONVENTION = law_of_sea }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = incb MODIFIER = un_narcotics_control_modifier } }
-			un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = cppnm CONVENTION = physical_protection } }
+			un_convention_on = { CONVENTION = physical_protection }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
-			un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = incb CONVENTION = narcotics_control } }
+			un_convention_on = { CONVENTION = narcotics_control }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier } }
-			un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = icc CONVENTION = icc_member } }
+			un_convention_on = { CONVENTION = icc_member }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = ccd CONVENTION = cultural_diversity } }
+			un_convention_on = { CONVENTION = cultural_diversity }
 		}
 		# Not for an armed member: it never voted on the ban, as an armed
 		# joiner never did (un_apply_ratified_conventions), and ratifying the
 		# rest is no promise to disarm. un_rep_any_convention_missed agrees.
 		if = {
 			limit = {
-				un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+				un_rep_convention_missed = { AGENCY = tpnw CONVENTION = nuclear_ban }
 				nd_is_armed = no
 			}
-			un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+			un_convention_on = { CONVENTION = nuclear_ban }
 			un_nuclear_ban_terms_tt = yes
 		}
 		# Not for a member that denounced the Antarctic Treaty, as for a
 		# joiner (un_apply_ratified_conventions).
 		if = {
 			limit = {
-				un_rep_convention_missed = { AGENCY = ats MODIFIER = un_antarctic_treaty_modifier }
+				un_rep_convention_missed = { AGENCY = ats CONVENTION = antarctic_treaty }
 				NOT = { has_variable = te_antarctic_denounced }
 			}
-			un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+			un_convention_on = { CONVENTION = antarctic_treaty }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier } }
-			un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unoda CONVENTION = asat_moratorium } }
+			un_convention_on = { CONVENTION = asat_moratorium }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = copuos MODIFIER = un_colony_protection_modifier } }
-			un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = copuos CONVENTION = colony_protection } }
+			un_convention_on = { CONVENTION = colony_protection }
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes
@@ -4227,7 +4229,7 @@ un_events.39 = {
 		un_docket_topic_open_narcotics = yes
 		country_rank >= rank_value:major_power
 		has_technology_researched = pharmaceuticals
-		NOT = { has_modifier = un_narcotics_control_modifier }
+		NOT = { has_variable = un_narcotics_control_modifier_on }
 		NOT = { has_modifier = un_narcotics_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4328,7 +4330,7 @@ un_events.40 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_antarctic = yes
 		has_technology_researched = space_exploration
-		NOT = { has_modifier = un_antarctic_treaty_modifier }
+		NOT = { has_variable = un_antarctic_treaty_modifier_on }
 		NOT = { has_modifier = un_antarctic_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4438,7 +4440,7 @@ un_events.41 = {
 		un_docket_topic_open_asat = yes
 		has_technology_researched = space_exploration
 		NOT = { has_variable = un_dkt_asat_struck }
-		NOT = { has_modifier = un_asat_moratorium_modifier }
+		NOT = { has_variable = un_asat_moratorium_modifier_on }
 		NOT = { has_modifier = un_asat_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4544,7 +4546,7 @@ un_events.42 = {
 		un_docket_topic_open_colony_protection = yes
 		sr_has_space_colony = yes
 		NOT = { has_variable = un_dkt_colony_actor }
-		NOT = { has_modifier = un_colony_protection_modifier }
+		NOT = { has_variable = un_colony_protection_modifier_on }
 		NOT = { has_modifier = un_colony_protection_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}

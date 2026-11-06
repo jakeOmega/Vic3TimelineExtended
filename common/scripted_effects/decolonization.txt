@@ -826,31 +826,14 @@ colonial_empire_je_cleanup_effect = {
 		colonial_bloc_clear_state = yes
 	}
 
-	# Country-scope modifiers of the three programmes. A programme running at
-	# end-of-JE keeps its modifier after the JE vanishes; clear them so the
-	# country reverts to neutral. The Invest programme also has a dedicated
-	# budget-expense line refreshed each pulse — clear it alongside the
-	# programme modifier or it would linger.
-	# Each is guarded: the journal panel renders on_complete / on_fail (and so
-	# this effect) as tooltips every frame, and an unguarded remove_modifier of
-	# a modifier the scope lacks logs "Timed modifier ... not found" each time
-	# (play-test, 2026-09-29). The legacy_modifier_cleanup.txt pattern; the
-	# effect is the same.
-	if = { limit = { has_modifier = colonial_development_investment_modifier } remove_modifier = colonial_development_investment_modifier }
-	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
-	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
-	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
-	# And their levels, which are their records (decol_sync_programmes), or a
-	# revolution's winner, or a later run of the entry, would be handed the
-	# programmes back. Then the two cost caches: the expense line that read
-	# colonial_invest_cost_week is gone (above). The on/off records saves made
-	# before the levels may still hold (<modifier>_held) are inert and left
-	# alone: nothing sets them any more, so a remove_variable here would log
-	# "used but never set".
+	# The three programmes' levels. Their modifiers and Investment's expense
+	# line are the entry's scaling modifiers (je_colonial_empire.txt), which
+	# leave with it; the levels would hand a revolution's winner, or a later run
+	# of the entry, the programmes back. Then the colonies' GDP cache that
+	# Investment's cost reads.
 	remove_variable = colonial_invest_level
 	remove_variable = colonial_garrison_level
 	remove_variable = colonial_assim_level
-	remove_variable = colonial_invest_cost_week
 	remove_variable = colonial_dev_colonial_gdp
 
 	# Civil-rights movement radicalism modifiers reapplied each pulse while
@@ -1038,13 +1021,11 @@ ce_reentry_monthly = {
 # - The Imperial Federation Act's imperial_federation_modifier and the Mandate
 #   System's mandate_system_modifier, recorded by the decisions' own
 #   imperial_federation_taken / mandate_system_taken.
-# - The three running programmes, which stand until their remove button or the
-#   entry's end: recorded as <modifier>_held by the programme effects, cleared
-#   by the remove effects and colonial_empire_je_cleanup_effect, and restored
-#   only while the entry runs. The Invest programme's expense modifier is not
-#   recorded: the entry's monthly pulse re-adds it whenever the programme is on.
-# Not rebuilt: timed modifiers (the remaining time is recorded nowhere) and the
-# entry's own band modifiers, which its monthly pulse re-applies.
+# Not rebuilt: timed modifiers (the remaining time is recorded nowhere), the
+# entry's own band modifiers, which its monthly pulse re-applies, and the three
+# programmes and Investment's expense line, which the entry declares
+# (scaling_modifiers_while_active) from the level variables the winner
+# inherits.
 # ============================================================================
 
 # Grant a permanent ending reward with its record. Country scope. Removed
@@ -1113,56 +1094,19 @@ decol_sync_permanent_modifiers = {
 	decol_sync_permanent_modifier = { MODIFIER = mandate_system_modifier RECORD = mandate_system_taken }
 }
 
-# The running programmes, after a revolution or on a save from before levels.
-# A programme's level variable (colonial_invest_level, colonial_garrison_level,
-# colonial_assim_level) is its record: a revolution's winner inherits the
-# variables but not the modifiers, and colonial_programmes_refresh_modifiers
-# rebuilds the modifiers from the levels. A save from before the levels
-# (2026-10) holds the modifier of a running programme but no level; that
-# programme ran at full strength, so it becomes the top level, and from then on
-# costs the new weekly amount. Only while the entry runs: the steps and the
-# entry's end keep the levels and the modifiers in step. Country scope.
-decol_migrate_programme = {
-	if = {
-		limit = {
-			NOT = { has_variable = $LEVEL$ }
-			has_modifier = $MODIFIER$
-		}
-		set_variable = { name = $LEVEL$ value = colonial_programme_max_level }
-	}
-}
-
-decol_migrate_programmes = {
-	decol_migrate_programme = { MODIFIER = colonial_development_investment_modifier LEVEL = colonial_invest_level }
-	decol_migrate_programme = { MODIFIER = colonial_military_garrison_modifier LEVEL = colonial_garrison_level }
-	decol_migrate_programme = { MODIFIER = colonial_cultural_assimilation_modifier LEVEL = colonial_assim_level }
-}
-
-# The civil-war repair's half. The entry's monthly pulse runs the migration at
-# its top and its one refresh later, after the AI's review, so it does not
-# call this: a second refresh in the same block would re-add modifiers the
-# first had just added.
-decol_sync_programmes = {
-	if = {
-		limit = { has_journal_entry = je_colonial_empire }
-		decol_migrate_programmes = yes
-		colonial_programmes_refresh_modifiers = yes
-	}
-}
-
 # The colonial empire's part of the civil-war repair. ROOT = THIS = the winner,
 # called from te_civil_war_on_won (te_civil_war_on_actions.txt) after the
 # loser's variables have merged in. Stateless, like sr_repair_after_civil_war:
 # it reads no side information and only adds what a record says is missing.
-# Whether on_civil_war_won runs before or after the inherited entry exists is
-# unknown, and the programmes need the entry, so the entry's monthly pulse
-# syncs them too. The permanent modifiers' records are country variables,
-# merged before on_civil_war_won, so the repair restores them at once; the
-# yearly country pulse (decol_permanent_modifier_sync_on_action) is there to
-# backfill the records on saves from before they existed.
+# The permanent modifiers' records are country variables, merged before
+# on_civil_war_won, so the repair restores them at once; the yearly country
+# pulse (decol_permanent_modifier_sync_on_action) is there to backfill the
+# records on saves from before they existed. The programmes need no repair:
+# the inherited entry declares them from the inherited levels (unprobed: the
+# scaling_inherited self-check, te_scaling_selfcheck_effects.txt, watches an
+# inherited Covert Warfare entry for the same).
 decol_repair_after_civil_war = {
 	decol_sync_permanent_modifiers = yes
-	decol_sync_programmes = yes
 	# The stance on colonialism: the winner inherits its variables and its
 	# cooldown, and gets the policy modifier back here (the monthly pass would,
 	# a month later).
@@ -1241,11 +1185,9 @@ impose_neocolonial_investment_trade_treaty = {
 # PROGRAMME LEVELS and PROGRAMME COSTS in colonial_empire_values.txt hold the
 # numbers. Each step has a core (colonial_programme_<programme>_up / _down:
 # what the step pays and the level change) and a player effect
-# (colonial_empire_effect_<programme>_up / _down: the core, then the refresh),
-# which the widget's stepper calls through colonial_empire_policy_sgui. The
-# AI's monthly review calls the cores and the entry's pulse refreshes after it,
-# so every effect block refreshes the modifiers exactly once (whether a
-# modifier added earlier in the same block can be removed again is unproven).
+# (colonial_empire_effect_<programme>_up / _down: the core, then the widget's
+# snapshot), which the widget's stepper calls through
+# colonial_empire_policy_sgui. The AI's monthly review calls the cores.
 #
 # What is paid once, and when:
 #   * the one-off treasury payments (Investment, Assimilation): every step up;
@@ -1256,11 +1198,12 @@ impose_neocolonial_investment_trade_treaty = {
 # tooltip shows them too (the tooltip is drawn from the unchanged state).
 #
 # Everything else (the programme's modifier, the expense line) follows the
-# level through colonial_programmes_refresh_modifiers.
+# level on its own: je_colonial_empire declares them as scaling modifiers,
+# which the engine re-reads every few days. The level change is the step's
+# whole effect on them, so the tooltip shows it through the core's
+# custom_tooltip (CE_*_UP_TT / _DOWN_TT).
 #
-# Each core starts a missing level from colonial_*_level_value, which reads a
-# running programme on a save from before the levels as the top level until
-# the pulse migrates it; a missing level is never assumed to be 0.
+# Each core starts a missing level from the guarded colonial_*_level_value.
 #
 # The one-offs charge the cost base cached by the last monthly pulse (or the
 # entry's `immediate`), the figure the row and the step's tooltip show, so the
@@ -1354,12 +1297,11 @@ colonial_programme_assimilation_down = {
 	}
 }
 
-# What follows a player's step: the modifiers at the new level and the widget's
-# snapshot. Hidden: the widget draws the step's tooltip every frame through
-# ScriptedGui.ExecuteTooltip, and these walk states.
+# What follows a player's step: the widget's snapshot (the modifiers follow the
+# level on their own). Hidden: the widget draws the step's tooltip every frame
+# through ScriptedGui.ExecuteTooltip, and the snapshot walks states.
 colonial_programme_after_step = {
 	hidden_effect = {
-		colonial_programmes_refresh_modifiers = yes
 		colonial_empire_refresh_display = yes
 	}
 }
@@ -1377,6 +1319,22 @@ colonial_empire_effect_invest_down = {
 colonial_empire_effect_garrison_up = {
 	colonial_programme_garrison_up = yes
 	colonial_programme_after_step = yes
+	# The level's authority upkeep reaches the country within a few days (the
+	# entry declares it, #1404); until then the raise gate counts it here, so
+	# clicks in a row can't each pass on authority the last one already spent.
+	hidden_effect = {
+		if = {
+			limit = { has_variable = colonial_garrison_pending_levels }
+			set_variable = {
+				name = colonial_garrison_pending_levels
+				value = { value = var:colonial_garrison_pending_levels add = 1 }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = colonial_garrison_pending_levels value = 1 days = 7 }
+		}
+	}
 }
 
 colonial_empire_effect_garrison_down = {
@@ -1400,60 +1358,6 @@ colonial_empire_effect_assimilation_down = {
 # Country scope.
 colonial_programmes_refresh_cost_base = {
 	set_variable = { name = colonial_dev_colonial_gdp value = colonial_development_gdp }
-}
-
-# One programme's modifier at its level: removed, then added back at a third,
-# two thirds or all of its values. Literal multipliers, so the stored
-# multiplier never has to re-read a variable (scripting_best_practices.md,
-# "Variables backing add_modifier { multiplier = ... }"). The ladder's top is
-# colonial_programme_max_level. Country scope.
-colonial_programme_apply_modifier = {
-	if = {
-		limit = { has_modifier = $MODIFIER$ }
-		remove_modifier = $MODIFIER$
-	}
-	if = {
-		limit = { $LEVEL_VALUE$ >= 3 }
-		add_modifier = { name = $MODIFIER$ }
-	}
-	else_if = {
-		limit = { $LEVEL_VALUE$ >= 2 }
-		add_modifier = { name = $MODIFIER$ multiplier = 0.667 }
-	}
-	else_if = {
-		limit = { $LEVEL_VALUE$ >= 1 }
-		add_modifier = { name = $MODIFIER$ multiplier = 0.333 }
-	}
-}
-
-# THE one refresh site for the three programme modifiers and Investment's
-# expense line: a player's step (colonial_programme_after_step), the entry's
-# monthly pulse (after the AI's review) and the civil-war repair
-# (decol_sync_programmes) call it, once per effect block. Country scope, with ROOT the same
-# country (the expense multiplier is read against ROOT): the pulse, the widget's
-# scripted GUI and te_civil_war_on_won all qualify.
-#
-# The expense line (country_expenses_add = 1) is re-added at this week's cost,
-# copied into var:colonial_invest_cost_week first so the stored multiplier is a
-# flat variable. That variable is never removed while the line runs; the
-# entry's cleanup removes the line before it.
-colonial_programmes_refresh_modifiers = {
-	colonial_programme_apply_modifier = { MODIFIER = colonial_development_investment_modifier LEVEL_VALUE = colonial_invest_level_value }
-	colonial_programme_apply_modifier = { MODIFIER = colonial_military_garrison_modifier LEVEL_VALUE = colonial_garrison_level_value }
-	colonial_programme_apply_modifier = { MODIFIER = colonial_cultural_assimilation_modifier LEVEL_VALUE = colonial_assim_level_value }
-
-	if = {
-		limit = { has_modifier = colonial_development_investment_expense_modifier }
-		remove_modifier = colonial_development_investment_expense_modifier
-	}
-	if = {
-		limit = { colonial_invest_level_value >= 1 }
-		set_variable = { name = colonial_invest_cost_week value = colonial_invest_weekly_cost }
-		add_modifier = {
-			name = colonial_development_investment_expense_modifier
-			multiplier = var:colonial_invest_cost_week
-		}
-	}
 }
 
 # Cultural Assimilation's disruption on the colonial states it works in, at the

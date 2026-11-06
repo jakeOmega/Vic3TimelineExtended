@@ -393,14 +393,19 @@ intelligence_capacity_relative = {
 	max = 100
 }
 
-# Multiplier for the intelligence_capacity_defense static modifier
-# Scales with absolute IC, capped at 5x
-# owner = {} makes this safe from JE scope (JE→Country) while being a no-op from country scope
+# Strength of the intelligence_capacity_defense static modifier, declared on
+# je_covert_warfare (scaling_modifiers_while_active, whose root is the owning
+# country). Scales with absolute IC, capped at 5x; 0 below 1 total capacity,
+# where the old monthly pulse removed the modifier. owner = { } is a no-op from
+# country scope, kept in the shape of the other covert values.
 intelligence_capacity_modifier_mult = {
 	value = 0
 	owner = {
-		add = intelligence_capacity_total
-		divide = 25
+		if = {
+			limit = { intelligence_capacity_total >= 1 }
+			add = intelligence_capacity_total
+			divide = 25
+		}
 	}
 	min = 0
 	max = 5
@@ -472,7 +477,9 @@ covert_operation_slots_used = {
 }
 
 # Free slots: what launching an operation (one slot, at priority 1) and each
-# step up in priority (covert_possible_priority_up) need.
+# step up in priority (covert_possible_priority_up) need. Also the strength of
+# iw_domestic_defense, declared on je_covert_warfare: whole slots, so 0 exactly
+# where the old monthly pulse's `>= 1` gate removed the modifier.
 covert_operations_available_slots = {
 	value = 0
 	owner = {
@@ -502,7 +509,8 @@ covert_operations_cost_scale = {
 	multiply = 0.00005 # small, but multiplied by funding level and number of ops, so it adds up for big economies
 }
 
-# Funding cost: multiplier for the covert_operation_funding_cost modifier
+# Funding cost: strength of the covert_operation_funding_cost modifier, declared
+# on je_covert_warfare (0 at funding 0, where the old pulse removed it).
 # Scales with the priority-weighted operation count + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
 	value = 0
@@ -786,7 +794,8 @@ covert_detection_efficiency_reduction = {
 }
 
 # ---- Funding defense multiplier ----
-# For iw_funding_defense static modifier: scales with funding level above 1
+# Strength of the iw_funding_defense static modifier, declared on
+# je_covert_warfare: scales with funding level above 1
 # Level 0-1: 0, Level 2: 1, Level 3: 2, Level 4: 3, Level 5: 4
 covert_ops_funding_ci_mult = {
 	value = 0
@@ -1586,9 +1595,10 @@ covert_tradecraft_tier = {
 	}
 }
 
-# Multiplier for the iw_tradecraft_bonus static modifier on the journal entry.
-# owner = { } makes it safe from JE scope, where the engine re-evaluates it
-# (a no-op from country scope) — same shape as intelligence_capacity_modifier_mult.
+# Strength of the iw_tradecraft_bonus static modifier, declared on
+# je_covert_warfare (scaling_modifiers_while_active, whose root is the owning
+# country): the tier, 0 at Untested. owner = { } is a no-op from country
+# scope — same shape as intelligence_capacity_modifier_mult.
 covert_tradecraft_bonus_mult = {
 	value = 0
 	owner = {

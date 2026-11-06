@@ -116,7 +116,7 @@ cultural_hegemony.2 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 5
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 	}
 
@@ -320,7 +320,7 @@ cultural_hegemony.4 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_interest_group = {
 			OR = {
@@ -493,7 +493,7 @@ cultural_hegemony.6 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 3
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_scope_state = {
 			any_scope_pop = {
@@ -586,7 +586,7 @@ cultural_hegemony.7 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -1315,7 +1315,7 @@ cultural_hegemony.14 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -1490,7 +1490,7 @@ cultural_hegemony.15 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -1642,7 +1642,7 @@ cultural_hegemony.16 = {
 
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		has_global_variable = ch_top_cultural_pull
 		global_var:ch_top_cultural_pull >= 25
@@ -2156,7 +2156,7 @@ cultural_hegemony.18 = {
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		has_technology_researched = mass_media
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_variable = ch_total
 		var:ch_total < 10
 		exists = global_var:ch_rank_1

@@ -378,7 +378,7 @@ class ConsoleTest(unittest.TestCase):
     def test_ten_years_from_the_console(self):
         event = _squash(_block(_strip(_read("events/te_debug_space_race_events.txt")), "te_debug_space_race.4"))
         self.assertIn("name = te_debug_space_race.4.i trigger = { sr_colonies_contested_enabled = yes } "
-                      "sr_terra_debug_advance = yes sr_emig_refresh_modifiers = yes", event)
+                      "sr_terra_debug_advance = yes }", event)
         self.assertTrue(LOC["te_debug_space_race.4.i"])
         advance = _squash(_block(EFFECTS, "sr_terra_debug_advance"))
         for site in TERRA:
