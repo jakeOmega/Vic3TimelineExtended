@@ -164,9 +164,19 @@ gw_snapshot_market_emissions_effect = {
 
 gw_snapshot_country_emissions_effect = {
 	hidden_effect = {
+		# Each state's figure first, kept for the emissions map (gw_state_emis; te_jmap_gw_share,
+		# te_journal_map_values.txt), which can't walk pops; then the country's as their sum
+		# (gw_country_emis_from_states, the same total as country_greenhouse_gas_emissions_script_value): one walk of
+		# the states' pops a year, as before.
+		every_scope_state = {
+			set_variable = {
+				name = gw_state_emis
+				value = gw_state_greenhouse_gas_emissions
+			}
+		}
 		set_variable = {
 			name = gw_disp_country_emis
-			value = country_greenhouse_gas_emissions_script_value
+			value = gw_country_emis_from_states
 		}
 	}
 }

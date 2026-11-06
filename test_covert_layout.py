@@ -1188,7 +1188,9 @@ class MilitaryCovertTabTest(unittest.TestCase):
         mounted = re.findall(r'name = "(widget_je_covert_\w+)"', _read(JE))
         wrapped = [ROOTS[name][1] for name in mounted]
         self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections"])
-        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
+        # the header's map button (te_jmap_covert_map_button, journal_map_modes.md) is not a journal root
+        self.assertEqual([n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M) if not n.startswith("te_jmap_")],
+                         wrapped)
         # The link back to the entry is the frame's, after every section.
         self.assertNotIn('blockoverride "tab_open_journal" ', body)
 

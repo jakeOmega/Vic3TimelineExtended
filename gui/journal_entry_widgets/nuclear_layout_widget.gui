@@ -196,6 +196,8 @@ types nuclear_layout_widget_types
 				blockoverride "text" {
 					text = "je_nuclear_program"
 				}
+				### Show the world's nuclear powers and your deterrent on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_nuclear_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"

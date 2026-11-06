@@ -2148,6 +2148,8 @@ types global_warming_widget_types
 				blockoverride "text" {
 					text = "je_global_warming"
 				}
+				### Show each state's share of the world's emissions on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_gw_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"

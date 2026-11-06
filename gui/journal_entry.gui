@@ -25,7 +25,7 @@ types journal_entry_panel_types
 		### buttons clear it, and so do the map buttons (te_map_widgets.gui) before they open a page. Not on _show,
 		### which the pick's reopen fires too. On every journal page: the GUI can't tell which entries carry a map, and
 		### 1.15's own map entries (the Great Game, the Forest of Bayonets, the Hungry Forties) gain from it too.
-		alpha = "[Select_float( GetVariableSystem.Exists('te_je_see_through'), '(float)0.3', '(float)1' )]"
+		alpha = "[Select_float( GetVariableSystem.Exists('te_je_see_through'), '(float)0.2', '(float)1' )]"
 
 		blockoverride "animation_state_block" {
 			state = {

@@ -365,3 +365,43 @@ te_jmap_mig_factor_upper = {
 	min = 0
 	max = 1
 }
+
+# Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): half the color by 1%, all of it at 5%; a thousand-odd states average 0.1%.
+# Knots: 0 -> 0, 0.01 -> 0.5, 0.05 -> 1.
+te_jmap_gw_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		if = {
+			limit = { te_jmap_gw_share < 0.01 }
+			value = te_jmap_gw_share divide = 0.02
+		}
+		else = {
+			value = te_jmap_gw_share subtract = 0.01 divide = 0.08 add = 0.5
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Covert Warfare: the viewer's network in the state's owner, 0-100 (intel tiers at 50 and 75).
+# Knots: 0 -> 0, 100 -> 1.
+te_jmap_net_factor = {
+	value = te_jmap_net_strength divide = 100
+	min = 0
+	max = 1
+}
+
+# Grand Monuments: the state's grandeur, straight to 75 (the panel's top frame), then a quarter as steep to 225 (an 1836 landmark aged to three times its start).
+# Knots: 0 -> 0, 75 -> 0.66667, 225 -> 1.
+te_jmap_gm_factor = {
+	if = {
+		limit = { gm_state_grandeur < 75 }
+		value = gm_state_grandeur divide = 112.5
+	}
+	else = {
+		value = gm_state_grandeur subtract = 75 divide = 450 add = 0.66667
+	}
+	min = 0
+	max = 1
+}

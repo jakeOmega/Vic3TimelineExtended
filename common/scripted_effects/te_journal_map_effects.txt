@@ -6,5 +6,15 @@
 # player in a multiplayer game shares it.
 te_jmap_set_selector = {
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
+	te_jmap_note_viewer = yes
 	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; a pick on the page closes it a twentieth of a second later and reopens it a twentieth after that, which repaints the map: TE_JMAP reopen)"
+}
+
+# The maps' viewer: the country a map of "your" deterrent or "your" networks is drawn for (te_jmap_viewer_*,
+# common/scripted_triggers/te_journal_map_triggers.txt). A state's map_color can't reach the player (is_player drew
+# nothing under owner, 2026-11-05), so the player's country is a global variable, set by every pick and map button and
+# each month for a player (te_journal_map_on_actions.txt), so a page opened from the journal has it too. One viewer for
+# every player in a multiplayer game, as the pick is.
+te_jmap_note_viewer = {
+	set_global_variable = { name = te_jmap_viewer value = root }
 }

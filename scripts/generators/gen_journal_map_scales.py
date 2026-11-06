@@ -100,6 +100,15 @@ SCALES = [
          note="Sex balance, men per 100 women aged 20-59, split at 100: the census's own bounds for its effects"),
     dict(name="mig", input="var:te_dg_mig_rate", guards=["te_dg_mig_rate"], three=True,
          knots=diverging((-20, -60), 0, (20, 60)), note="Net migration per 1,000 people last year, split at none"),
+    # The systems' maps, each on its own entry too (te_journal_map_triggers.txt).
+    dict(name="gw", input="te_jmap_gw_share", guards=["gw_state_emis"], three=False, knots=soft_cap(0, 0.01, 0.05),
+         note="Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): "
+              "half the color by 1%, all of it at 5%; a thousand-odd states average 0.1%"),
+    dict(name="net", input="te_jmap_net_strength", guards=[], three=False, knots=linear(0, 100),
+         note="Covert Warfare: the viewer's network in the state's owner, 0-100 (intel tiers at 50 and 75)"),
+    dict(name="gm", input="gm_state_grandeur", guards=[], three=False, knots=soft_cap(0, 75, 225),
+         note="Grand Monuments: the state's grandeur, straight to 75 (the panel's top frame), then a quarter as "
+              "steep to 225 (an 1836 landmark aged to three times its start)"),
 ]
 
 
