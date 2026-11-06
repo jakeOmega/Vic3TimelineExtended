@@ -453,7 +453,10 @@ SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog
                     # Causes of Death's tags (owner, 2026-10-22): test_demographics_cause_tags reads its text
                     "te_debug_demog_cause_tags_selfcheck": "",
                     # the census's province line (2026-10-20): a debug_log line; TestProvinceLine runs its text
-                    "te_debug_demog_province_change": ""}
+                    "te_debug_demog_province_change": "",
+                    # the runaway tripwire (2026-11-06): debug_log and the state's name;
+                    # test_demographics_runaway_check runs it
+                    "te_debug_demog_runaway_selfcheck": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 # 2026-10-20: the walk applies the state's wealth line per pop, and the refresh and the split read it beside te_dg_w_edw:

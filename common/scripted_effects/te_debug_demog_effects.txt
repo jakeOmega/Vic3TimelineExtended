@@ -1184,6 +1184,110 @@ te_debug_demog_cause_deaths_selfcheck = {
 	}
 }
 
+# ---- The census's runaway tripwire (2026-11-06) ----------------------------------------------------------------------
+# The first 1.15 observer game reached 1923 with East Bengal holding some 9e15 people. Every census sum there wraps at
+# the script's fixed-point limit (about 9.2e13 either way), and no save or log showed when it began: Bengal's own census
+# history already read a life expectancy of 0.5 in its first year, 1917. Sindh, at 1.2 billion and still in range,
+# showed the census's failure mode once a state is that large: crowding of 60-90 drives infection past the infants'
+# death cap, life expectancy falls to 0.5, the model's death rate turns negative, and the deaths term sits at its floor,
+# so the engine kills nobody there. This tripwire logs the first census at which a state shows any sign of a runaway,
+# once a state, with the census's terms and their inputs, so the next run dates the onset. No sign held in any sane state
+# of a 2020, a 1940 and the 1926 save (about 2,400 states). `why` is the first that holds:
+#   1  the walk's people below 0: its sum wrapped
+#   2  over 500 million people (the largest state of the 2020 save held 128 million)
+#   3  ten times last year's people with no change in the state's provinces (a merge changes them; births can't)
+#   4  life expectancy under 5 (sane states: 26 or more)
+#   5  the deaths term at its floor (te_dg_rate_clamp_d 1: the census asked for fewer deaths than none)
+#   6  crowding's input over 5 (sane states: 1.64 at most)
+#   7  the births term over 10 (sane states: 4.05 at most)
+# 4 to 7 only in a state of 10,000 people or more, and 3 only from 10,000. Under Full only: the census's terms move the
+# engine's rates only there. te_dg_chk_runaway keeps the code, so a state logs once a game, and te_dg_chk_runaway_year
+# the census year: a later save dates the trip after debug.log has rolled the line away.
+# THIS = a state, at the end of its census (te_demog_state_yearly, fast mode's te_demog_state_clock_step), with the
+# census's locals: te_dg_prov_step is te_debug_demog_province_change's, set only when the state held a census before.
+# docs/testing/demographics-playtest.md, § Self-checks.
+te_debug_demog_runaway_selfcheck = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			te_demog_effects_run = yes
+			NOT = { has_variable = te_dg_chk_runaway }
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+			has_variable = te_dg_year
+			has_variable = te_dg_provinces
+			has_variable = te_dg_e0
+			has_variable = te_dg_cbr
+			has_variable = te_dg_cdr
+			has_variable = te_dg_net_migration
+			has_variable = te_dg_in_crowd
+			has_variable = te_dg_m_inf
+			has_variable = te_dg_mb
+			has_variable = te_dg_md
+			has_variable = te_dg_tb_b
+			has_variable = te_dg_tb_d
+			has_variable = te_dg_os_b
+			has_variable = te_dg_os_d
+			has_variable = te_dg_q_b
+			has_variable = te_dg_q_d
+			has_variable = te_dg_rate_clamp_d
+		}
+		set_local_variable = {
+			name = te_dg_rw_ratio
+			value = {
+				value = var:te_dg_walk_pop
+				divide = { value = var:te_dg_walk_pop_prev min = 1 }
+			}
+		}
+		set_local_variable = { name = te_dg_rw_why value = 0 }
+		if = {
+			limit = { var:te_dg_walk_pop < 0 }
+			set_local_variable = { name = te_dg_rw_why value = 1 }
+		}
+		else_if = {
+			limit = { var:te_dg_walk_pop > 500000000 }
+			set_local_variable = { name = te_dg_rw_why value = 2 }
+		}
+		else_if = {
+			limit = {
+				var:te_dg_walk_pop_prev >= 10000
+				has_local_variable = te_dg_prov_step
+				local_var:te_dg_prov_step = 0
+				local_var:te_dg_rw_ratio >= 10
+			}
+			set_local_variable = { name = te_dg_rw_why value = 3 }
+		}
+		# fewer people than this and the rates say nothing: no verdict
+		else_if = {
+			limit = { var:te_dg_walk_pop >= 10000 }
+			if = {
+				limit = { var:te_dg_e0 < 5 }
+				set_local_variable = { name = te_dg_rw_why value = 4 }
+			}
+			else_if = {
+				limit = { var:te_dg_rate_clamp_d = 1 }
+				set_local_variable = { name = te_dg_rw_why value = 5 }
+			}
+			else_if = {
+				limit = { var:te_dg_in_crowd > 5 }
+				set_local_variable = { name = te_dg_rw_why value = 6 }
+			}
+			else_if = {
+				limit = { var:te_dg_mb > 10 }
+				set_local_variable = { name = te_dg_rw_why value = 7 }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_rw_why > 0 }
+			set_variable = { name = te_dg_chk_runaway value = local_var:te_dg_rw_why }
+			# the census year beside the code: debug.log rolls over in minutes in a long run, a save keeps both
+			set_variable = { name = te_dg_chk_runaway_year value = var:te_dg_year }
+			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] mb=[THIS.Var('te_dg_mb').GetValue|3] md=[THIS.Var('te_dg_md').GetValue|3] tb_b=[THIS.Var('te_dg_tb_b').GetValue|3] tb_d=[THIS.Var('te_dg_tb_d').GetValue|3] os_b=[THIS.Var('te_dg_os_b').GetValue|3] os_d=[THIS.Var('te_dg_os_d').GetValue|3] q_b=[THIS.Var('te_dg_q_b').GetValue|3] q_d=[THIS.Var('te_dg_q_d').GetValue|3] floor_d=[THIS.Var('te_dg_rate_clamp_d').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, 4 life expectancy under 5, 5 the deaths term at its floor, 6 crowding over 5, 7 the births term over 10; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log_scopes = yes
+		}
+	}
+}
+
 # THIS = a state, in the census's refresh of its deaths term under Full, once its state-level lines on top are read
 # (local te_dg_rate_os): TE_SELF_CHECK cause_tags_read, once a game (Causes of Death, owner 2026-10-22). Every engine
 # mortality line on top carries a tag at its value on its cause's script-only type (demographics_params.DEATH_CAUSE_TAGS),
