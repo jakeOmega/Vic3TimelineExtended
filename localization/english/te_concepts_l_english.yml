@@ -2982,6 +2982,7 @@
  te_jmap_pick_refresh_tick_desc:0 "A test map. Every state takes one shade, which steps from black to white once a week. If it changes while this page stays open, the map redraws as the game runs."
  te_jmap_pick_scope_probe_desc:0 "A test map. Green: the map can reach this journal entry and your country. Yellow: the entry but not your country. Blue: neither. White stripes mark your own states."
  te_jmap_pick_turmoil_desc:0 "Color each state by its [concept_turmoil], from calm to uproar at half its people radical."
+ te_jmap_world_probe_desc:0 "A test: does a button on this page run with no country involved? If it does, the map turns green once the game runs, and debug.log has a TE_JMAP line with this button's scopes. Click again to turn it back."
  te_jud_act_upheld_desc:0 "The courts found the act we forced through lawful, and it carries their approval."
  te_jud_algorithmic_capture_desc:0 "The system that drafts our laws also judges them, so no court stands in the way of a law the government wants."
  te_jud_bench_restored_desc:0 "We sent the judges we added home, and the courts sit as they did before."

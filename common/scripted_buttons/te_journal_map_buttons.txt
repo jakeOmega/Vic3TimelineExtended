@@ -88,6 +88,30 @@ te_jmap_pick_refresh_tick = {
 	}
 }
 
+# je_te_map_hidden_world's probe (play-test check 14): a button on a page no country is involved in, the pattern the
+# next pass's Map Room would use. Root there may be no country at all, so the effect sets only a global variable and
+# dumps its scopes to debug.log: the map turns green at the next tick if the effect ran, and the dump says what root
+# such a button gets. A second click turns it back.
+te_jmap_world_probe = {
+	name = "te_jmap_world_probe"
+	desc = "te_jmap_world_probe_desc"
+	visible = { always = yes }
+	selected = { has_global_variable = te_jmap_world_probe }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		if = {
+			limit = { has_global_variable = te_jmap_world_probe }
+			remove_global_variable = te_jmap_world_probe
+		}
+		else = {
+			set_global_variable = te_jmap_world_probe
+		}
+		debug_log = "TE_JMAP world button ran date=[TimeKeeper.GetCurrentDate.GetString] (a button on a contextless entry's page; its scopes follow)"
+		debug_log_scopes = yes
+	}
+}
+
 te_jmap_close = {
 	name = "te_jmap_close"
 	desc = "te_jmap_close_desc"

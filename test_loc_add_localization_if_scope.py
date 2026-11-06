@@ -17,6 +17,14 @@ through ROOT.GetCountry in the parent, which worked, and again inside
 je_civil_rights_months_line, named by AddLocalizationIf, where each of the six
 reads logged "Promote 'ROOT' returned nullptr" (about 220 renders in 36
 seconds, 2026-10-28).
+
+THIS too. The Map Room's life-expectancy tooltip (a journal entry's
+map_tooltip, the state as THIS) named te_jmap_tt_e0_value in a
+SelectLocalization, and every hover logged "Promote 'THIS' returned nullptr"
+and showed no figure (649 lines, 2026-11-05). Grand Monuments' tear-down and
+rededicate hovers name six keys that read THIS (UNVERIFIED_THIS): a scripted
+button's tooltip may keep it, and no log has shown them failing, so they wait
+on an in-game look rather than a rewrite.
 """
 
 import re
@@ -24,11 +32,16 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
+UNVERIFIED_THIS = {
+    "gm_mon_prev_rd_sup_line", "gm_mon_prev_td_base_line", "gm_mon_prev_td_sup_line",
+    "gm_prev_rd_sup_line", "gm_prev_td_base_line", "gm_prev_td_sup_line",
+}
+_LOST_SCOPE_BUT_THIS = re.compile(r"\b(?:SCOPE|ROOT)\.")
 
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
 _CALL = re.compile(r"(?:AddLocalizationIf|SelectLocalization)\(")
 _STRING_OR_COMMENT = re.compile(r'("[^"\n]*")|#[^\n]*')
-_LOST_SCOPE = re.compile(r"\b(?:SCOPE|ROOT)\.")
+_LOST_SCOPE = re.compile(r"\b(?:SCOPE|ROOT|THIS)\.")
 
 
 def english_loc():
@@ -62,7 +75,7 @@ def named_keys(text, loc):
 
 
 class TestAddLocalizationIfScope(unittest.TestCase):
-    def test_no_key_named_in_add_localization_if_or_select_localization_reads_scope_or_root(self):
+    def test_no_key_named_in_add_localization_if_or_select_localization_reads_scope_root_or_this(self):
         loc = english_loc()
         sources = [(f"loc {k}", v) for k, v in loc.items()]
         for path in sorted((ROOT / "gui").rglob("*.gui")):
@@ -72,19 +85,19 @@ class TestAddLocalizationIfScope(unittest.TestCase):
         bad = [f"{where}: '{key}'"
                for where, text in sources
                for key in named_keys(text, loc)
-               if _LOST_SCOPE.search(expanded(key, loc))]
-        self.assertEqual(bad, [], "keep SCOPE and ROOT reads in the parent string; the named key loses both")
+               if (_LOST_SCOPE_BUT_THIS if key in UNVERIFIED_THIS else _LOST_SCOPE).search(expanded(key, loc))]
+        self.assertEqual(bad, [], "keep SCOPE, ROOT and THIS reads in the parent string; the named key loses them")
 
     def test_the_check_sees_what_it_rejects(self):
         loc = {"a": "x [SCOPE.sCountry('t').GetName]", "b": "$a$!", "c": "no scope", "d": "",
                "e": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('m'), "
-                    "'(CFixedPoint)0'), 'c')]", "f": "[GetPlayer.MakeScope.ScriptValue('m')|0]",
+                    "'(CFixedPoint)0'), 'c')]", "f": "[GetPlayer.MakeScope.ScriptValue('m')|0]", "g": "[THIS.GetState.GetName]",
                "p": "[AddLocalizationIf(EqualTo_CFixedPoint(SCOPE.ScriptValue('i'), '(CFixedPoint)1'), 'b')]"
                     "[AddLocalizationIf(Not(Is('x')), 'c')][SelectLocalization(Is('y'), 'a', 'd')]"
-                    "[AddLocalizationIf(Is('z'), 'e')][AddLocalizationIf(Is('w'), 'f')]"}
-        self.assertEqual(named_keys(loc["p"], loc), ["b", "c", "a", "d", "e", "f"])
+                    "[AddLocalizationIf(Is('z'), 'e')][AddLocalizationIf(Is('w'), 'f')][SelectLocalization(Is('v'), 'g', 'c')]"}
+        self.assertEqual(named_keys(loc["p"], loc), ["b", "c", "a", "d", "e", "f", "g", "c"])
         self.assertEqual([k for k in named_keys(loc["p"], loc) if _LOST_SCOPE.search(expanded(k, loc))],
-                         ["b", "a", "e"])
+                         ["b", "a", "e", "g"])
 
 
 if __name__ == "__main__":
