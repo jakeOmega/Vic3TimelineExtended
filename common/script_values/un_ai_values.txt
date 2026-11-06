@@ -925,7 +925,7 @@ un_ai_order_will = {
 	}
 	# The Assembly against us: its sanctions, or a record it could act on.
 	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
+		limit = { has_variable = un_sanctions_target_on }
 		add = -20
 	}
 	if = {

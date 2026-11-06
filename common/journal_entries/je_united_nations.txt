@@ -701,6 +701,40 @@
 			}
 		}
 	}
+	# What the Assembly imposed on us, at E: an arms embargo, full or
+	# voluntary, while its months run (un_arms_embargo_months and _form), and
+	# a sanctions regime while its variable is set. A target outside the UN
+	# holds the entry too (every country does once the UN is founded).
+	scaling_modifiers_while_active = {
+		modifier = un_arms_embargo_target_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_arms_embargo_full_in_force = yes }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_arms_embargo_voluntary_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_arms_embargo_voluntary_in_force = yes }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_sanctions_target_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_sanctions_target_on }
+				add = un_enforcement
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc

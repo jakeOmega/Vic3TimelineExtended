@@ -113,7 +113,7 @@ un_propose_sanctions_available = {
 	# Grounds (redesign phase 3): some rival's record must support sanctions.
 	any_country = {
 		has_diplomatic_pact = { who = ROOT type = rivalry }
-		NOT = { has_modifier = un_sanctions_target_modifier }
+		NOT = { has_variable = un_sanctions_target_on }
 		un_case_supports = { TOPIC = sanctions }
 	}
 }
@@ -148,7 +148,7 @@ un_propose_sanctions_possible = {
 		text = un_grounds_sanctions_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
-			NOT = { has_modifier = un_sanctions_target_modifier }
+			NOT = { has_variable = un_sanctions_target_on }
 			un_case_supports = { TOPIC = sanctions }
 		}
 	}
@@ -1378,7 +1378,7 @@ un_condemn_relation = {
 
 un_sanctions_relation = {
 	has_diplomatic_pact = { who = ROOT type = rivalry }
-	NOT = { has_modifier = un_sanctions_target_modifier }
+	NOT = { has_variable = un_sanctions_target_on }
 }
 
 un_arms_embargo_relation = {

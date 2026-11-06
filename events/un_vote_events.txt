@@ -1670,13 +1670,13 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							# Scaled by the UN's enforcement (redesign phase 2).
-							# un_enforcement reads only globals, so the stored
-							# multiplier is sound whenever the engine re-reads it.
-							add_modifier = {
-								name = un_sanctions_target_modifier
-								multiplier = un_enforcement
+							# Scaled by the UN's enforcement (redesign phase 2):
+							# the entry declares the modifier at E while the
+							# regime's variable is set (#1404).
+							show_as_tooltip = {
+								je:je_united_nations ?= { add_modifier = { name = un_sanctions_target_modifier multiplier = un_enforcement } }
 							}
+							set_variable = un_sanctions_target_on
 							# The regime names its enforcer: two regimes can
 							# run at once, and un_lift_sanctions_button lifts
 							# only the one its presser enforces.

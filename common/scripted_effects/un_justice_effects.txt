@@ -49,9 +49,10 @@
 # STATE. Kept in country variables, so a revolution's winner keeps it (§0.9;
 # the winner inherits the loser's variables but none of its modifiers):
 #   un_arms_embargo_months   months an arms embargo on us has left. Counted
-#                            down, and the embargo's modifier re-applied when
-#                            missing, every month by un_justice_monthly_update
-#   un_arms_embargo_form     1 the full embargo, 2 the voluntary one
+#                            down every month by un_justice_monthly_update
+#   un_arms_embargo_form     1 the full embargo, 2 the voluntary one.
+#                            je_united_nations declares the embargo's
+#                            modifier at E from the two (#1404)
 #   un_credentials_months    months our suspended credentials have left
 #                            (un_credentials_suspended); ends early once our
 #                            case falls below un_credentials_restore_case
@@ -65,10 +66,13 @@
 #   un_court_bar_charged     (timed, twenty years; on the claimant) the
 #                            diplomatic play the bar's surcharge was last
 #                            charged in, so one play is charged once
+#   un_sanctions_target_on   (written by un_vote.2) the sanctions regime on
+#                            us: je_united_nations declares
+#                            un_sanctions_target_modifier at E while it is
+#                            set (#1404)
 #   un_sanctions_enforced_by (written by un_vote.2) the enforcer of the
 #                            sanctions regime on us: the regime's record.
-#                            Its modifier is re-applied from it when missing
-#                            every month, and it lapses with its enforcer
+#                            The regime lapses with its enforcer
 #   un_sanctions_months      months the regime on us has stood, counted every
 #                            month from the first month it is seen
 # On a court_referral resolution: un_res_court_odds, un_res_court_state and
@@ -582,15 +586,14 @@ un_arms_embargo_on_carried = {
 	}
 }
 
-# Impose the full embargo for ten years, replacing any other.
-# un_enforcement reads only globals, so the stored multiplier is sound
-# wherever the engine re-reads it.
+# Impose the full embargo for ten years, replacing any other. The variables
+# are the embargo: je_united_nations declares its modifier at E while they
+# say so (un_arms_embargo_full_in_force, #1404); the line previews it.
 # Scope: the target
 un_arms_embargo_impose_full = {
 	hidden_effect = { un_arms_embargo_clear = yes }
-	add_modifier = {
-		name = un_arms_embargo_target_modifier
-		multiplier = un_enforcement
+	show_as_tooltip = {
+		je:je_united_nations ?= { add_modifier = { name = un_arms_embargo_target_modifier multiplier = un_enforcement } }
 	}
 	hidden_effect = {
 		set_variable = { name = un_arms_embargo_months value = un_arms_embargo_months_full }
@@ -599,13 +602,12 @@ un_arms_embargo_impose_full = {
 }
 
 # Impose the voluntary embargo (half the penalty) for five years, replacing
-# any other.
+# any other (declared while un_arms_embargo_voluntary_in_force).
 # Scope: the target
 un_arms_embargo_impose_voluntary = {
 	hidden_effect = { un_arms_embargo_clear = yes }
-	add_modifier = {
-		name = un_arms_embargo_voluntary_modifier
-		multiplier = un_enforcement
+	show_as_tooltip = {
+		je:je_united_nations ?= { add_modifier = { name = un_arms_embargo_voluntary_modifier multiplier = un_enforcement } }
 	}
 	hidden_effect = {
 		set_variable = { name = un_arms_embargo_months value = un_arms_embargo_months_voluntary }
@@ -613,37 +615,10 @@ un_arms_embargo_impose_voluntary = {
 	}
 }
 
-# Re-apply the embargo the variables record when its modifier is missing: a
-# revolution's winner inherits the variables but not the modifier (§0.9).
-# Scope: a country under an arms embargo
-un_arms_embargo_restore = {
-	if = {
-		limit = {
-			has_variable = un_arms_embargo_form
-			var:un_arms_embargo_form = 2
-		}
-		if = {
-			limit = { NOT = { has_modifier = un_arms_embargo_voluntary_modifier } }
-			add_modifier = {
-				name = un_arms_embargo_voluntary_modifier
-				multiplier = un_enforcement
-			}
-		}
-	}
-	else_if = {
-		limit = { NOT = { has_modifier = un_arms_embargo_target_modifier } }
-		add_modifier = {
-			name = un_arms_embargo_target_modifier
-			multiplier = un_enforcement
-		}
-	}
-}
-
-# End the embargo, whichever form.
+# End the embargo, whichever form: its variables, which the entry's
+# declarations read.
 # Scope: country
 un_arms_embargo_clear = {
-	remove_modifier_if_exists_effect = { MODIFIER = un_arms_embargo_target_modifier }
-	remove_modifier_if_exists_effect = { MODIFIER = un_arms_embargo_voluntary_modifier }
 	if = {
 		limit = { has_variable = un_arms_embargo_months }
 		remove_variable = un_arms_embargo_months
@@ -767,7 +742,10 @@ un_credentials_chamber_preview = {
 # the orphans.
 # Scope: the sanctioned country
 un_sanctions_lift_regime = {
-	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_target_on }
+		remove_variable = un_sanctions_target_on
+	}
 	if = {
 		limit = { has_variable = un_sanctions_enforced_by }
 		var:un_sanctions_enforced_by ?= {
@@ -808,13 +786,13 @@ un_sanctions_lift_ours = {
 	if = {
 		limit = {
 			any_country = {
-				has_modifier = un_sanctions_target_modifier
+				has_variable = un_sanctions_target_on
 				var:un_sanctions_enforced_by ?= ROOT
 			}
 		}
 		random_country = {
 			limit = {
-				has_modifier = un_sanctions_target_modifier
+				has_variable = un_sanctions_target_on
 				var:un_sanctions_enforced_by ?= ROOT
 			}
 			save_scope_as = un_sanctions_lifted_target
@@ -825,14 +803,14 @@ un_sanctions_lift_ours = {
 			NOT = {
 				any_country = {
 					count >= 2
-					has_modifier = un_sanctions_target_modifier
+					has_variable = un_sanctions_target_on
 					NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 				}
 			}
 		}
 		random_country = {
 			limit = {
-				has_modifier = un_sanctions_target_modifier
+				has_variable = un_sanctions_target_on
 				NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 			}
 			save_scope_as = un_sanctions_lifted_target
@@ -840,13 +818,16 @@ un_sanctions_lift_ours = {
 	}
 	every_country = {
 		limit = {
-			has_modifier = un_sanctions_target_modifier
+			has_variable = un_sanctions_target_on
 			OR = {
 				var:un_sanctions_enforced_by ?= ROOT
 				NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
 			}
 		}
-		remove_modifier = un_sanctions_target_modifier
+		if = {
+			limit = { has_variable = un_sanctions_target_on }
+			remove_variable = un_sanctions_target_on
+		}
 		if = {
 			limit = { has_variable = un_sanctions_enforced_by }
 			remove_variable = un_sanctions_enforced_by
@@ -904,10 +885,10 @@ un_lift_sanctions_chamber_preview = {
 #   it left the UN, ceased to exist, or won or lost a revolution) lapses, and
 #   a human target is told. Before 2026-10-16 such a regime stood until some
 #   other enforcer pressed Lift Sanctions, which might never happen.
-# - A recorded regime whose modifier is missing has it re-applied: a
-#   revolution's winner inherits the record but not the modifier (§0.9). The
-#   embargoes the Assembly imposed are a list, which the winner does not
-#   inherit either, and are not rebuilt.
+# - The regime itself is a variable (un_sanctions_target_on), which a
+#   revolution's winner inherits, and the entry declares its modifier from it
+#   (#1404). The embargoes the Assembly imposed are a list, which the winner
+#   does not inherit, and are not rebuilt.
 # - Each regime counts its months in force (un_sanctions_months), which the
 #   lean on a petition reads (un_lean_lift_sanctions_fresh).
 # - An enforcer that no regime names any more (its target was annexed) is
@@ -926,16 +907,6 @@ un_sanctions_regime_monthly_update = {
 			post_notification = un_sanctions_lapsed_notice
 		}
 		un_sanctions_lift_regime = yes
-	}
-	every_country = {
-		limit = {
-			has_variable = un_sanctions_enforced_by
-			NOT = { un_sanctions_regime_on = yes }
-		}
-		add_modifier = {
-			name = un_sanctions_target_modifier
-			multiplier = un_enforcement
-		}
 	}
 	every_country = {
 		limit = { un_sanctions_regime_on = yes }
@@ -965,8 +936,9 @@ un_sanctions_regime_monthly_update = {
 # ============================================================================
 
 # Once a month, from un_charter_monthly_update (no-country scope, the UN
-# founded). The embargoes count down and are re-applied where a revolution
-# took their modifier; suspended credentials count down and end early once
+# founded). The embargoes count down (the entry declares their modifiers
+# from the variables, which a revolution's winner inherits); suspended
+# credentials count down and end early once
 # the member's case falls below 30. The member's restoration is announced by
 # un_representation_monthly_update, which notices the change. The court's
 # records on the parties are timed variables and lapse by themselves. A
@@ -998,9 +970,6 @@ un_justice_monthly_update = {
 				limit = { is_ai = no }
 				post_notification = un_arms_embargo_lifted_notice
 			}
-		}
-		else = {
-			un_arms_embargo_restore = yes
 		}
 	}
 	every_country = {

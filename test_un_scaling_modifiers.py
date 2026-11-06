@@ -177,6 +177,12 @@ REGIME_MULTIPLIERS = {
 for _term, _mult in REGIME_MULTIPLIERS.items():
     EXPECTED[f"un_regime_{_term}_modifier"] = _gated(f"has_variable = un_regime_{_term}_modifier_on", _mult)
 
+# What the Assembly imposed on us: an arms embargo while its months run, full
+# or voluntary by its form, and a sanctions regime while its variable is set.
+EXPECTED["un_arms_embargo_target_modifier"] = _gated("un_arms_embargo_full_in_force = yes", "un_enforcement")
+EXPECTED["un_arms_embargo_voluntary_modifier"] = _gated("un_arms_embargo_voluntary_in_force = yes", "un_enforcement")
+EXPECTED["un_sanctions_target_modifier"] = _gated("has_variable = un_sanctions_target_on", "un_enforcement")
+
 PROGRAMMES = (
     "un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost",
     "un_development_contributor_modifier", "un_development_contributor_cost",
@@ -526,6 +532,44 @@ class RegimeTermTests(unittest.TestCase):
         pulse = _flat(_block(_read(REGIME_EFFECTS), "un_regime_country_pulse"))
         self.assertIn("NOT = { var:un_regime_stamp = global_var:un_regime_epoch }", pulse)
         self.assertIn("un_regime_refresh_country = yes", pulse)
+
+
+JUSTICE_EFFECTS = _path("common", "scripted_effects", "un_justice_effects.txt")
+JUSTICE_TRIGGERS = _path("common", "scripted_triggers", "un_justice_triggers.txt")
+
+
+class EmbargoSanctionsTests(unittest.TestCase):
+    def test_the_two_forms_split_the_record(self):
+        triggers = _read(JUSTICE_TRIGGERS)
+        self.assertEqual(_lines(_block(triggers, "un_arms_embargo_voluntary_in_force")),
+                         ["has_variable = un_arms_embargo_months", "has_variable = un_arms_embargo_form",
+                          "var:un_arms_embargo_form = 2"])
+        self.assertEqual(_lines(_block(triggers, "un_arms_embargo_full_in_force")),
+                         ["has_variable = un_arms_embargo_months",
+                          "NOT = { un_arms_embargo_voluntary_in_force = yes }"])
+
+    def test_an_embargo_previews_and_records_and_nothing_restores_it(self):
+        effects = _read(JUSTICE_EFFECTS)
+        for name, modifier, form in (("un_arms_embargo_impose_full", "un_arms_embargo_target_modifier", 1),
+                                     ("un_arms_embargo_impose_voluntary", "un_arms_embargo_voluntary_modifier", 2)):
+            with self.subTest(effect=name):
+                body = _flat(_block(effects, name))
+                self.assertIn(f"show_as_tooltip = {{ je:je_united_nations ?= {{ add_modifier = {{ name = {modifier} "
+                              f"multiplier = un_enforcement }} }} }}", body)
+                self.assertIn(f"set_variable = {{ name = un_arms_embargo_form value = {form} }}", body)
+        clear = _flat(_block(effects, "un_arms_embargo_clear"))
+        self.assertNotIn("modifier", clear)
+        self.assertIn("remove_variable = un_arms_embargo_months", clear)
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotIn("un_arms_embargo_restore", _read(path))
+
+    def test_the_sanctions_variable_is_set_by_the_vote_and_cleared_by_the_lifts(self):
+        writes = _writes("un_sanctions_target_on")
+        self.assertEqual({o for _, o in writes["set_variable"]}, {"un_vote.2"})
+        self.assertEqual({o for _, o in writes["remove_variable"]},
+                         {"un_sanctions_lift_regime", "un_sanctions_lift_ours", "un_dissolve_strip_country"})
+        self.assertEqual(writes["change_variable"], [])
 
 
 if __name__ == "__main__":

@@ -496,7 +496,10 @@ un_dissolve_strip_country = {
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 	un_state_off = { MODIFIER = un_headquarters_modifier }
 	un_standing_clear_tier_modifiers = yes
-	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_target_on }
+		remove_variable = un_sanctions_target_on
+	}
 	if = {
 		limit = { has_variable = un_sanctions_enforced_by }
 		remove_variable = un_sanctions_enforced_by

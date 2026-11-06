@@ -346,7 +346,7 @@ un_arms_control_count = {
 un_sanctions_target_count = {
 	value = 0
 	every_country = {
-		limit = { has_modifier = un_sanctions_target_modifier }
+		limit = { has_variable = un_sanctions_target_on }
 		add = 1
 	}
 }
@@ -601,7 +601,7 @@ un_mandate_age_order = {
 un_mandate_case_score = {
 	value = 0
 	if = { limit = { has_modifier = un_condemned_modifier } add = 40 }
-	if = { limit = { has_modifier = un_sanctions_target_modifier } add = 40 }
+	if = { limit = { has_variable = un_sanctions_target_on } add = 40 }
 	if = { limit = { has_modifier = un_sanctions_voluntary_target_modifier } add = 20 }
 	if = { limit = { has_modifier = un_non_binding_rebuke_modifier } add = 20 }
 	if = {

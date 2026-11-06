@@ -202,7 +202,7 @@ un_teeth_monthly_update = {
 		if = {
 			limit = {
 				OR = {
-					has_modifier = un_sanctions_target_modifier
+					has_variable = un_sanctions_target_on
 					has_modifier = un_sanctions_voluntary_target_modifier
 				}
 			}

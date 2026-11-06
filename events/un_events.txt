@@ -307,7 +307,7 @@ un_events.2 = {
 			NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
 			scope:condemned_country = {
 				un_case_supports = { TOPIC = sanctions }
-				NOT = { has_modifier = un_sanctions_target_modifier }
+				NOT = { has_variable = un_sanctions_target_on }
 			}
 		}
 		ai_chance = {
@@ -789,10 +789,10 @@ un_events.5 = {
 		# target that accepted its censure (no target modifier is applied) or
 		# that no longer exists, and every option below acts on the target.
 		OR = {
-			scope:sanctioned_country ?= { has_modifier = un_sanctions_target_modifier }
+			scope:sanctioned_country ?= { has_variable = un_sanctions_target_on }
 			AND = {
 				NOT = { exists = scope:sanctioned_country }
-				any_country = { has_modifier = un_sanctions_target_modifier }
+				any_country = { has_variable = un_sanctions_target_on }
 			}
 		}
 	}
@@ -802,7 +802,7 @@ un_events.5 = {
 			limit = { NOT = { exists = scope:sanctioned_country } }
 			random_country = {
 				limit = {
-					has_modifier = un_sanctions_target_modifier
+					has_variable = un_sanctions_target_on
 				}
 				save_scope_as = sanctioned_country
 			}
