@@ -39,7 +39,7 @@ Two side effects the owner counts as gains (2026-11-06):
    (Cultural Hegemony's programmes, § 4.6).
 3. `disable_evaluation` on every entry that can only appear while a game rule
    is on (§ 1).
-4. `fire_only_once` on the 30 events that guard themselves with a variable
+4. `fire_only_once` on the 32 events that guard themselves with a variable
    nothing else reads, with a canary (§ 2).
 5. `scripts/generators/convert_je_outcomes.py` retired (§ 3).
 6. The tooling reads the new block before its first use (§ 3).
@@ -123,30 +123,37 @@ mirrors.
 ## 2. `fire_only_once`
 
 `fire_only_once = yes` stops a second firing for the same country; a try whose
-trigger fails doesn't use it up (probe C20). The 30 events below each set a
+trigger fails doesn't use it up (probe C20). The 32 events below each set a
 variable in `immediate` that only their own trigger reads (`NOT = { has_variable
 = X }`), never removed:
 
-- `society_technology_events` .1–.6, .9, .12, .13, .17, .19–.21, .25, .27–.31
-  (19, `ste_event_<n>_fired`)
+- `society_technology_events` .1–.6, .9, .12, .13, .16, .17, .19–.21, .25–.31
+  (21, `ste_event_<n>_fired`)
 - `te_judiciary_events` .30–.36 (7, `te_jud_heard_*`)
 - `cultural_hegemony` .8, .9 (`ch_milestone_significant`, `_dominant`)
 - `post_scarcity_events.3`, `surveillance_events.4` (the two AI debates)
 
-Each gets `fire_only_once = yes`; its `set_variable` and the trigger's guard go.
-Not converted: `ste_event_18_fired`, `ste_event_36_fired` and
-`wonder_asteroid_deflected` are read elsewhere; the World War, inheritance and
-debug variables are removed again; `te_construction_market_last_pulse_date` is
-a date, not a guard.
+Each gets `fire_only_once = yes` and loses its `set_variable`. **The trigger's
+guard stays as a read until a removal date** (with the other old-save repairs,
+`project_old_save_repair_removals`): a save made before the change holds the
+variable but no engine record, and the guard keeps those events from firing a
+second time there. In a new game nothing sets the variable, so the guard is
+inert. Not converted: `ste_event_8_fired`, `_18_`, `_36_`, `_37_` and
+`wonder_asteroid_deflected` are read elsewhere (the on-action dispatcher reads
+.8 and .37); the World War, inheritance, UN charter and debug variables are
+removed again or read elsewhere.
 
-**The canary.** Unknown: whether a revolution's winner inherits the engine's
-record that an event fired (it inherits variables). One event,
-`society_technology_events.1`, keeps setting its variable but no longer reads it
-in its trigger. Its `immediate` logs `TE_SELF_CHECK BROKEN fire_only_once_inherited`
-when the country already holds the variable, which can only happen if the event
-fired twice for one nation. It is the right one to watch: its other guard is the
-modifier its option grants, which a revolution's winner loses, so its trigger
-reopens for a winner. Fallback on the play-test list: put the variables back.
+**The canary.** Unknown: whether the engine's record that an event fired
+survives a save and load, and whether a revolution's winner inherits it (it
+inherits variables). One event, `society_technology_events.1`, keeps setting its
+variable but drops the guard. Its `immediate` logs `TE_SELF_CHECK BROKEN
+fire_only_once_kept` when the country already holds the variable and the game
+was started after the change (a global marker set once at game start), which
+can only happen if the event fired twice for one nation. The marker keeps old
+saves out, where the variable predates the record. It is the right event to
+watch: its other guard is a ten-year modifier its option grants, which expires
+and which a revolution's winner loses, so its trigger reopens either way.
+Fallback on the play-test list: put the variables back.
 
 ## 3. Tooling
 
@@ -474,14 +481,23 @@ degenerate case so OK can't be a false pass:
   days later, if it holds an active `je_covert_warfare` with
   `covert_operation_cost_mult > 0`, `modifier:country_te_budget_expense_covert_add`
   equals it within 1%. Proves an inherited entry re-applies its declarations.
-  Fallback if BROKEN: a repair that re-activates the entry, or keep the repairs.
-- **`fire_only_once_inherited`** (§ 2): BROKEN only.
+  Fallback if BROKEN: no effect re-activates or removes an entry in place, so
+  the winner's entries end through their `invalid` trigger (a flag set at
+  `te_civil_war_on_won`) and are added again (an inherited entry arrives empty
+  and re-runs `immediate` anyway, so little is lost), or the systems whose
+  repairs were deleted get them back. Per the
+  owner's rule (CLAUDE.md, "In-game checks"), this check doesn't hold back a
+  merge: PRs 3, 7 and 8, which delete revolution repairs, land on the offline
+  gate like the rest.
+- **`fire_only_once_kept`** (§ 2): BROKEN only.
 - The existing `gm_education_reaches_states` covers entry-held `state_*` fields.
 
 Play-test list (`docs/testing/vanilla-1-15-playtest.md`, C7): a converted
 modifier at value 0 shows no zero row in the entry panel or the country's
-tooltip; the Budget panel's rows include entry-held money modifiers (a GUI
-getter, unprobed); the tooltip names the entry as the source.
+tooltip (fallback if one shows: hide the scaling-modifier icon strip on the
+mod's own entries in `gui/journal_entry.gui`, a GUI-only change); the Budget
+panel's rows include entry-held money modifiers (a GUI getter, unprobed); the
+tooltip names the entry as the source.
 
 ## 6. Delivery
 
@@ -523,3 +539,9 @@ with PR 1.
 7. **Grand Monuments' four `state_*` keys convert with the rest**; if
    `gm_education_reaches_states` reads BROKEN, those four go back to the
    country as plain `add_modifier`s.
+8. **Old saves keep their once-guards as reads** (§ 2) until a removal date,
+   since a save made before the change has the variables but no engine record.
+9. **The repair-deleting PRs don't wait for `scaling_inherited`** (§ 5): it
+   is a self-check with a named fallback, like every in-game unknown.
+10. **A zero row, if one shows, is hidden in the GUI** (§ 5), not by keeping
+    the modifiers off the entry.
