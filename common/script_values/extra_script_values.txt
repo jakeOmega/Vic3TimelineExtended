@@ -2138,9 +2138,11 @@ sol_expectations_lower_shift_value = {
 
 # ========== End SoL Expectations ==========
 
-# Fiscal policy effect based on spending relative to GDP: the multiplier on
-# financial_cycle_government_fiscal_policy_effect (country_finance_value_monthly_add = 1),
-# so this IS the monthly push on finance_cycle_value.
+# Fiscal policy effect based on spending relative to GDP: the value
+# je_banking_cycle declares financial_cycle_government_fiscal_policy_effect at
+# (country_finance_value_monthly_add = 1) while the cycle runs, so this IS the
+# monthly push on finance_cycle_value. Read live from the owning country on the
+# entry's update (about every 4 days); until 1.15 a monthly add_modifier.
 #
 # `income` and `total_expenses` are WEEKLY and `gdp` is ANNUAL
 # (docs/engine/event_targets_summary.txt), so the flows are annualised through
@@ -2171,61 +2173,75 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
-# JE multipliers re-evaluate in JE scope; retain the country formula for other callers.
+# Uncalled since 1.15. An older save's added copy of the modifier, until the
+# monthly strip takes it off, still names it as its multiplier.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 financial_cycle_government_fiscal_policy_effect_size_for_je = {
 	value = 0
 	owner = { add = financial_cycle_government_fiscal_policy_effect_size }
 }
 
-# linear up to +0.25 at 50 bubble pressure, then a gentle curve to +0.45 at
-# max pressure. Until 2026-09-22 the upper half was quadratic to +1.25: at
-# bubble 80+ that was a standing +7-12 cycle points a month, which no tool
-# set could turn, so a frenzy was never escapable. Flattened with frenzy's
+# The momentum the six bubble_inertia_* declarations on je_banking_cycle carry
+# (each in its band and economy there), read from the owning country: none up
+# to 15 bubble pressure, linear to +0.25 at 50, then a gentle curve to +0.45 at
+# max pressure. Its callers guard var:bubble_pressure. Until 1.15 it was the
+# multiplier of a monthly add_modifier on the entry, as
+# bubble_inertia_multiplier_script_value (below). Until 2026-09-22 the upper
+# half was quadratic to +1.25: at bubble 80+ that was a standing +7-12 cycle
+# points a month, which no tool set could turn, so a frenzy was never
+# escapable. Flattened with frenzy's
 # bubble 20 -> 8 (banking_cycle_simulation.md §10); crash frequency moved
 # ~1%, and maxed tools now escape a few percent of frenzies.
-bubble_inertia_multiplier_script_value = {
+bubble_inertia_curve = {
 	value = 0
-	owner = {
-		if = {
-			limit = {
-				var:bubble_pressure <= 15
-			}
-			add = 0
+	if = {
+		limit = {
+			var:bubble_pressure <= 15
 		}
-		else_if = {
-			limit = {
-				var:bubble_pressure < 50
+		add = 0
+	}
+	else_if = {
+		limit = {
+			var:bubble_pressure < 50
+		}
+		add = {
+			value = var:bubble_pressure
+			subtract = 15
+			multiply = 0.25
+			divide = 35 # rises by 0.25 over 35 points of pressure
+		}
+	}
+	else = {
+		add = {
+			# f(x) = 0.25 + 0.005 (x - 50) - 0.00002 (x - 50)^2
+			# f(50) = 0.25, f'(50) = 1/200 (continuous with the branch above),
+			# f(100) = 0.45
+			value = 0.25
+			add = {
+				value = var:bubble_pressure
+				subtract = 50
+				multiply = 0.005
 			}
 			add = {
 				value = var:bubble_pressure
-				subtract = 15
-				multiply = 0.25
-				divide = 35 # rises by 0.25 over 35 points of pressure
-			}
-		}
-		else = {
-			add = {
-				# f(x) = 0.25 + 0.005 (x - 50) - 0.00002 (x - 50)^2
-				# f(50) = 0.25, f'(50) = 1/200 (continuous with the branch above),
-				# f(100) = 0.45
-				value = 0.25
-				add = {
+				subtract = 50
+				multiply = {
 					value = var:bubble_pressure
 					subtract = 50
-					multiply = 0.005
 				}
-				add = {
-					value = var:bubble_pressure
-					subtract = 50
-					multiply = {
-						value = var:bubble_pressure
-						subtract = 50
-					}
-					multiply = -0.00002
-				}
+				multiply = -0.00002
 			}
 		}
 	}
+}
+
+# The curve read from the entry (JE scope) through its owner: uncalled since
+# 1.15, but an older save's added copies of the six tiers, until the monthly
+# strip takes them off, still name it as their multiplier.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
+bubble_inertia_multiplier_script_value = {
+	value = 0
+	owner = { add = bubble_inertia_curve }
 }
 
 # Minimum source GDP for contagion to be possible.
@@ -2409,9 +2425,13 @@ ce_pool_withdraw_pool_cost = {
 	multiply = -1
 }
 
-# Command economy auto-balance multiplier for planning_treasury_pool_balance.
+# Command economy auto-balance for planning_treasury_pool_balance.
 # Equals -investment_pool_net_income, which makes the pool's net income zero
-# on the next tick. No prior-multiplier subtraction is needed here because
+# on the next tick. banking_cycle_update_ce_pool_balance caches it monthly (and
+# after an inject or withdraw) in ce_pool_balance_cached, the variable
+# je_banking_cycle declares the modifier at, so the balance keeps its monthly
+# cadence rather than chasing the pool's income every four days. No
+# prior-multiplier subtraction is needed here because
 # country_weekly_investment_pool_add (our modifier's key) is a mod-created
 # value and is NOT included in the engine's investment_pool_net_income read,
 # so there is no double-counting problem.
@@ -2420,7 +2440,8 @@ ce_treasury_pool_balance_multiplier = {
 	subtract = investment_pool_net_income
 }
 
-# Keep the live pool-income read on the JE's owning country.
+# Uncalled since 1.15; an older save's added copy still names it.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 ce_treasury_pool_balance_multiplier_for_je = {
 	value = 0
 	owner = { add = ce_treasury_pool_balance_multiplier }

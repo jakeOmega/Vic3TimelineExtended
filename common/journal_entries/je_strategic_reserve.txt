@@ -122,6 +122,7 @@ je_strategic_reserve = {
 	# Weekly bookkeeping lives on country vars; the JE only provides the pulse.
 	on_weekly_pulse = {
 		effect = {
+			legacy_scaling_strip_strategic_reserve = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 			st_res_je_weekly_pulse_effect = yes
 		}
 	}
