@@ -1,8 +1,4 @@
 {
- "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP": {
-  "en": "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\\n(Excluding [Concept('concept_building_wage','$concept_building_wages|q$')])\\n$TOOLTIP_DELIMITER$\\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')].",
-  "de": "#header Voraussichtliche [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] nach dem Ausbau#!\\n(ohne [Concept('concept_building_wage','$concept_building_wages|q$')])\\n$TOOLTIP_DELIMITER$\\nEine Prognose, wie stark sich der Ausbau dieses Gebäudes auf seine wöchentlichen [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] auswirken würde."
- },
  "CAN_EXPAND_BUILDING_TOOLTIP": {
   "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
   "de": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Größe: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Voraussichtlich(e) [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / Woche\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nVerfügbare Arbeitskräfte: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
@@ -87,9 +83,17 @@
   "en": "Local Conditions",
   "de": "Lokale Bedingungen"
  },
+ "concept_migration_target_desc": {
+  "en": "A [concept_state] selected as a suitable target for a [concept_mass_migration]. Surrounding $concept_states$ may also see some degree of $concept_immigration$ from a $concept_mass_migration$.\\n\\nTo be $concept_mass_migration_eligible$ for $concept_mass_migrations$ a state needs to be [Concept('concept_incorporated_state', '$concept_incorporated|q$')] and have at least #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access]. Additionally, the $concept_state$ cannot already be the target of a different $concept_mass_migration$ and the $concept_country$'s [GetLawGroup('lawgroup_migration').GetName] and [GetLawGroup('lawgroup_citizenship').GetName] [Concept('concept_law', '$concept_laws|q$')] need to allow $concept_migration$ to happen. A harsh [concept_local_climate] makes a state a less likely target.",
+  "de": "Ein [concept_state], der als geeignetes Ziel für eine [concept_mass_migration] ausgewählt wurde. Umliegende $concept_states$ können durch eine $concept_mass_migration$ ebenfalls in gewissem Maß $concept_immigration$ erfahren.\\n\\nUm für $concept_mass_migrations$ $concept_mass_migration_eligible$ zu sein, muss ein Staat [Concept('concept_incorporated_state', '$concept_incorporated|q$')] sein und mindestens #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access] haben. Zudem darf der $concept_state$ nicht bereits Ziel einer anderen $concept_mass_migration$ sein, und die [Concept('concept_law', '$concept_laws|q$')] zu [GetLawGroup('lawgroup_migration').GetName] und [GetLawGroup('lawgroup_citizenship').GetName] müssen in diesem $concept_country$ $concept_migration$ zulassen. Ein raues [concept_local_climate] macht einen Staat zu einem weniger wahrscheinlichen Ziel."
+ },
  "concept_power_bloc_principle_group_desc": {
   "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')] that support the same theme.",
   "de": "Gruppen aus fünf Stufen von [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')], die dasselbe Thema unterstützen."
+ },
+ "copper": {
+  "en": "Conductive Metals",
+  "de": "Leitfähige Metalle"
  },
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
@@ -122,6 +126,14 @@
  "goods_input_coal_add_desc": {
   "en": "The amount of @coal! $coal$ consumed by buildings",
   "de": "Wie viel @coal! $coal$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_copper_add": {
+  "en": "@copper! $copper$ input",
+  "de": "@copper! $copper$-Einsatz"
+ },
+ "goods_input_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ consumed by buildings",
+  "de": "Von Gebäuden verbrauchte Menge: @copper! $copper$"
  },
  "goods_input_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Input",
@@ -211,6 +223,14 @@
   "en": "The amount of @coal! $coal$ produced by buildings",
   "de": "Wie viel @coal! $coal$ von Gebäuden produziert wird"
  },
+ "goods_output_copper_add": {
+  "en": "@copper! $copper$ output",
+  "de": "@copper! $copper$-Ausstoß"
+ },
+ "goods_output_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ produced by buildings",
+  "de": "Von Gebäuden produzierte Menge: @copper! $copper$"
+ },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Output",
   "de": "@fertilizer! $fertilizer$-Ausstoß"
@@ -218,6 +238,14 @@
  "goods_output_fertilizer_add_desc": {
   "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
   "de": "Wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
+ },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
+ },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
  },
  "goods_output_fine_art_add": {
   "en": "@fine_art! $fine_art$ output",
@@ -396,8 +424,8 @@
   "de": "Wer für die gewöhnliche Polizeiarbeit sorgt, wer sie bezahlt und wem sie untersteht."
  },
  "lead": {
-  "en": "Conductive and Base Metals",
-  "de": "Leit- und Basismetalle"
+  "en": "Base Metals",
+  "de": "Basismetalle"
  },
  "no_veterancy": {
   "en": "Recruit",

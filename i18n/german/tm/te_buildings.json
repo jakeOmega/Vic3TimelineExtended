@@ -156,8 +156,8 @@
   "de": "Baustelle: Antimaterie-Eindämmungsanlage"
  },
  "building_antimatter_sub_slots_tt": {
-  "en": "Has available [concept_antimatter_facility] slots (including levels [concept_under_construction])",
-  "de": "Verfügt über freie [concept_antimatter_facility]-Slots (einschließlich der Stufen [concept_under_construction])"
+  "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "de": "Ein freier [concept_antimatter_facility]-Slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! frei im ganzen Land (Stufen [concept_under_construction|l] zählen als belegt)"
  },
  "building_antimatter_warhead_plant": {
   "en": "Antimatter Warhead Plant",
@@ -398,18 +398,6 @@
  "building_consciousness_network_construction_site": {
   "en": "Consciousness Network Construction Site",
   "de": "Baustelle: Bewusstseinsnetzwerk"
- },
- "building_copper_mine": {
-  "en": "Copper Mine",
-  "de": "Kupfermine"
- },
- "building_copper_mine_throughput_add": {
-  "en": "$building_copper_mine$ building [concept_throughput]",
-  "de": "[concept_throughput] – Gebäude $building_copper_mine$"
- },
- "building_copper_mine_throughput_add_desc": {
-  "en": "$building_copper_mine$ building [concept_throughput]",
-  "de": "[concept_throughput] – Gebäude $building_copper_mine$"
  },
  "building_cordoba_railway_alta_gracia_works": {
   "en": "Córdoba Railway Alta Gracia Works",
@@ -724,7 +712,7 @@
   "de": "Ein Forschungs- und Testlabor für elektrische Bauteile und Unterhaltungselektronik."
  },
  "building_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "de": "Nationales Ausstellungszentrum"
  },
  "building_generic_export_warehouse": {
@@ -952,7 +940,7 @@
   "de": "Großes Monument"
  },
  "building_grand_monument_desc": {
-  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
+  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favor of like-minded interest groups while what it honors still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
   "de": "Ein Monument, das eine Regierung für das errichtet, wofür sie steht: ihre Krone, ihre Republik, ihre Revolution, ihren Anführer, ihren Glauben oder die Nation. Es wird als $building_grand_monument_site$ gebaut und mit der Widmung fertiggestellt, und zwar mit der [concept_grandeur] der errichteten Stufen. Es verleiht Prestige, Legitimität und die Gunst gleichgesinnter Interessengruppen, solange das, was es ehrt, noch Bestand hat. Fällt dies, muss die nächste Regierung entscheiden, was damit geschehen soll. Siehe den Reiter „Große Monumente“ im Fenster „Timeline Extended“."
  },
  "building_grand_monument_site": {
@@ -992,8 +980,8 @@
   "de": "Netzübergabestation"
  },
  "building_grid_transfer_station_desc": {
-  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
-  "de": "Verbindet diesen Staat mit seinem [concept_power_grid]: unseren übrigen Stationen im selben [concept_market_area] sowie den Stationen, die diese per Seekabel ($building_grid_hvdc_interconnector$) oder über ein $grid_interconnection_agreement$ erreichen. Jeden Monat gleicht das Netz $electricity$ zwischen allen angeschlossenen Staaten so aus, dass jeder dasselbe Verhältnis von Angebot zu Nachfrage hat. Ein Staat mit Energieüberschuss gibt diese als @grid_power! $grid_power$ ans Netz ab, und ein Staat mit Mangel bezieht $grid_power$ und wandelt ihn wieder in $electricity$ um, wobei unterwegs ein Teil verloren geht (#b Netzübertragungseffizienz#!). Ein Netz gibt nur ab, was es aufgenommen hat. Eine pro Staat. Unsere erste Station in einem Marktgebiet kann in jedem unserer dortigen Staaten stehen; jede weitere muss an einen unserer Staaten grenzen, der bereits eine hat. Stets subventioniert."
+  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid moves $electricity$ from states where it is cheap to states where it is dear, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
+  "de": "Verbindet diesen Staat mit seinem [concept_power_grid]: unseren übrigen Stationen im selben [concept_market_area] sowie den Stationen, die diese per Seekabel ($building_grid_hvdc_interconnector$) oder über ein $grid_interconnection_agreement$ erreichen. Jeden Monat verschiebt das Netz $electricity$ aus Staaten, in denen sie billig ist, in Staaten, in denen sie teuer ist, bis sie dort, wo sie abgegeben wird, zu einem Preis verkauft wird und dort, wo sie ankommt, zu diesem Preis geteilt durch die #b Netzübertragungseffizienz#!. Eine Station, die $electricity$ sendet, wird dafür in @grid_power! $grid_power$ bezahlt, und eine, die sie empfängt, zahlt in $grid_power$, jeweils zum Preis des Netzes, sodass eine Station ihre Warenkosten in etwa deckt. Unterwegs geht etwas Strom verloren. Ein Netz gibt nur ab, was es aufgenommen hat. Eine pro Staat. Unsere erste Station in einem Marktgebiet kann in jedem unserer dortigen Staaten stehen; jede weitere muss an einen unserer Staaten grenzen, der bereits eine hat. Stets subventioniert."
  },
  "building_grid_undersea_cable_range_add": {
   "en": "Undersea Cable Range",
@@ -1001,7 +989,7 @@
  },
  "building_grid_undersea_cable_range_add_desc": {
   "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
-  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem Meeresabschnitt ($concept_sea_node$), den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren Meeresabschnitt ($concept_sea_node$) und landet an einer Küste, die beide berührt. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
+  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem $concept_sea_node$, den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren $concept_sea_node$ und landet an einer Küste, die beide berührt. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -1235,6 +1223,14 @@
   "en": "Infosys Mysore Campus",
   "de": "Infosys-Campus Mysore"
  },
+ "building_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "de": "InGen-Biologie-Schutzgebiet"
+ },
+ "building_ingen_biological_preserve_desc": {
+  "en": "InGen's island preserve, stocked with animals that were extinct until the company rebuilt their DNA. Visitors cross the world to see them from behind electrified fences, and the same laboratories breed hardier livestock for the mainland.",
+  "de": "Das Inselreservat von InGen, besetzt mit Tieren, die ausgestorben waren, bis das Unternehmen ihre DNA rekonstruierte. Besucher reisen um die ganze Welt, um sie hinter elektrischen Zäunen zu sehen, und dieselben Labore züchten robusteres Vieh für das Festland."
+ },
  "building_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
   "de": "Kraftwerk Ingolstadt"
@@ -1256,7 +1252,7 @@
   "de": "Jardine-Princeps-Haus"
  },
  "building_jardine_princeps_house_desc": {
-  "en": "Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.",
+  "en": "Jardine, Matheson & Co.'s Hong Kong head office, nerve center of a sprawling China-coast trading empire.",
   "de": "Der Firmensitz von Jardine, Matheson & Co. in Hongkong, Nervenzentrum eines weitläufigen Handelsimperiums an der chinesischen Küste."
  },
  "building_jiangnan_nanjing_brocade_hall": {
@@ -1424,7 +1420,7 @@
   "de": "Michelin-Werke Clermont-Ferrand"
  },
  "building_michelin_clermont_ferrand_desc": {
-  "en": "Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.",
+  "en": "Michelin's Clermont-Ferrand tire works, putting the automobile age on pneumatic rubber.",
   "de": "Michelins Reifenwerk in Clermont-Ferrand, das dem Automobilzeitalter zu Luftreifen aus Gummi verhalf."
  },
  "building_microsoft_redmond_campus": {
@@ -1667,6 +1663,14 @@
   "en": "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give",
   "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_orbital_battlestation$-Gebäude sowie auf die militärischen Boni, die sie gewähren"
  },
+ "building_orbital_defense_battery": {
+  "en": "Ground-to-Orbit Battery",
+  "de": "Boden-Orbit-Batterie"
+ },
+ "building_orbital_defense_battery_desc": {
+  "en": "Interceptor silos, and later lasers, aimed at the sky over our own territory. Each level fires on every enemy fleet in Earth orbit every month, by its production method, from states we control. Ground lasers also sweep small debris out of low orbit while we are at peace.",
+  "de": "Abfangraketensilos und später Laser, die auf den Himmel über unserem eigenen Gebiet gerichtet sind. Jede Stufe feuert jeden Monat je nach Produktionsmethode auf jede feindliche Flotte im Erdorbit, und zwar aus Staaten, die wir kontrollieren. Bodenlaser fegen zudem in Friedenszeiten kleine Trümmerteile aus dem niedrigen Orbit."
+ },
  "building_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
   "de": "Orient-Express-Terminal Sirkeci"
@@ -1732,7 +1736,7 @@
   "de": "Pirelli-Werk Bicocca"
  },
  "building_pirelli_bicocca_plant_desc": {
-  "en": "Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.",
+  "en": "Pirelli's Bicocca works in Milan, producing tires and the insulated cables wiring the modern world.",
   "de": "Pirellis Werk Bicocca in Mailand, das Reifen und die isolierten Kabel fertigt, die die moderne Welt verkabeln."
  },
  "building_platinum_group_metals_mine": {
@@ -1783,6 +1787,14 @@
   "en": "Prussian Railway Directorate",
   "de": "Preußische Eisenbahndirektion"
  },
+ "building_public_housing": {
+  "en": "Public Housing",
+  "de": "Sozialwohnungen"
+ },
+ "building_public_housing_desc": {
+  "en": "Dwellings the state builds and runs, so a city can grow without [concept_migration_crowding] turning migrants away. Each staffed level adds [concept_urban_engineering] to its [concept_state], more on each later method, and each point houses #v 1,000#! more people before crowding sets in, multiplied by the state's $state_migration_crowding_density_mult$. Technology sets how many levels a state can hold. A state below its crowding threshold gains nothing from it.",
+  "de": "Wohnungen, die der Staat baut und betreibt, damit eine Stadt wachsen kann, ohne dass die [concept_migration_crowding] Migranten abweist. Jede besetzte Stufe fügt ihrem [concept_state] [concept_urban_engineering] hinzu, mit jeder späteren Methode mehr, und jeder Punkt beherbergt #v 1.000#! weitere Menschen, bevor die Überlastung einsetzt, multipliziert mit der $state_migration_crowding_density_mult$ des Staates. Die Technik bestimmt, wie viele Stufen ein Staat fassen kann. Ein Staat unter seiner Überfüllungsschwelle gewinnt daraus nichts."
+ },
  "building_putilov_works": {
   "en": "Putilov Works",
   "de": "Putilow-Werke"
@@ -1818,6 +1830,14 @@
  "building_rare_earth_metals_mine_throughput_add_desc": {
   "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
   "de": "[concept_throughput] – Gebäude $building_rare_earth_metals_mine$"
+ },
+ "building_rejoovenesense_compound": {
+  "en": "RejoovenEsense Compound",
+  "de": "RejoovenEsense-Komplex"
+ },
+ "building_rejoovenesense_compound_desc": {
+  "en": "RejoovenEsense's walled campus, where its staff live and work under guard. Its clinics sell treatments that halt aging and wind the body back toward its prime to anyone who can pay, and its laboratories work on a pill that promises the same to everyone.",
+  "de": "Der ummauerte Campus von RejoovenEsense, auf dem die Belegschaft unter Bewachung lebt und arbeitet. Seine Kliniken verkaufen jedem, der zahlen kann, Behandlungen, die das Altern aufhalten und den Körper in seine besten Jahre zurückversetzen, und seine Labore arbeiten an einer Pille, die allen dasselbe verspricht."
  },
  "building_rekal_hq": {
   "en": "Rekal Memory Center",
@@ -1878,6 +1898,14 @@
  "building_ricordi_galleria_vittorio_emanuele": {
   "en": "Ricordi Galleria Publishing House",
   "de": "Ricordi-Verlagshaus Galleria Vittorio Emanuele"
+ },
+ "building_robotic_or_ai_managed_bool": {
+  "en": "Robotic or AI-Managed",
+  "de": "Robotisch oder KI-verwaltet"
+ },
+ "building_robotic_or_ai_managed_bool_desc": {
+  "en": "Robots or AI do the work people did in this building. Its levels count toward our automated share, on which $law_robot_tax$ and $law_automation_dividend$ pay out, and $law_human_labor_quotas$ withdraws the [concept_production_method].",
+  "de": "Roboter oder KI übernehmen in diesem Gebäude die Arbeit, die zuvor Menschen verrichteten. Seine Stufen zählen zu unserem automatisierten Anteil, auf dessen Grundlage $law_robot_tax$ und $law_automation_dividend$ auszahlen, und $law_human_labor_quotas$ zieht die [concept_production_method] zurück."
  },
  "building_robotics_industry": {
   "en": "Robotics Industry",
@@ -2068,8 +2096,8 @@
   "de": "Solarempfänger"
  },
  "building_solar_receiver_slots_tt": {
-  "en": "Has available Solar Receiver slots (including levels [concept_under_construction])",
-  "de": "Verfügt über freie Solarempfänger-Slots (einschließlich der Stufen [concept_under_construction])"
+  "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "de": "Ein freier Solarempfänger-Slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! frei im ganzen Land (Stufen [concept_under_construction|l] zählen als belegt)"
  },
  "building_solar_receiver_throughput_add_desc": {
   "en": "A bonus or penalty to both input and output of $building_solar_receiver$ buildings",
@@ -2078,6 +2106,14 @@
  "building_sony_pictures_studios": {
   "en": "Sony Pictures Studios",
   "de": "Sony Pictures Studios"
+ },
+ "building_space_command": {
+  "en": "Space Command",
+  "de": "Weltraumkommando"
+ },
+ "building_space_command_desc": {
+  "en": "The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep multiplies its maintenance goods.",
+  "de": "Die Werften, Besatzungen und Stäbe, die die Kriegsschiffe einer Nation im Weltraum bauen und betreiben. Jede Stufe baut jeden Monat je nach Produktionsmethode Flottenstärke auf, und der Unterhalt der Flotten vervielfacht ihre Wartungswaren."
  },
  "building_space_elevator": {
   "en": "Space Elevator",
@@ -2171,6 +2207,14 @@
   "en": "The colony on $sr_site_name_ceres$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_ceres$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
  },
+ "building_sr_site_daedalus": {
+  "en": "$sr_site_name_daedalus$ Colony",
+  "de": "Kolonie $sr_site_name_daedalus$"
+ },
+ "building_sr_site_daedalus_desc": {
+  "en": "The colony at $sr_site_name_daedalus$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_daedalus$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
+ },
  "building_sr_site_enceladus": {
   "en": "$sr_site_name_enceladus$ Colony",
   "de": "Kolonie $sr_site_name_enceladus$"
@@ -2243,6 +2287,14 @@
   "en": "The colony on $sr_site_name_iapetus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_iapetus$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
  },
+ "building_sr_site_imbrium": {
+  "en": "$sr_site_name_imbrium$ Colony",
+  "de": "Kolonie $sr_site_name_imbrium$"
+ },
+ "building_sr_site_imbrium_desc": {
+  "en": "The colony at $sr_site_name_imbrium$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_imbrium$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
+ },
  "building_sr_site_io": {
   "en": "$sr_site_name_io$ Colony",
   "de": "Kolonie $sr_site_name_io$"
@@ -2258,6 +2310,14 @@
  "building_sr_site_makemake_desc": {
   "en": "The colony on $sr_site_name_makemake$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_makemake$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
+ },
+ "building_sr_site_marius_hills": {
+  "en": "$sr_site_name_marius_hills$ Colony",
+  "de": "Kolonie $sr_site_name_marius_hills$"
+ },
+ "building_sr_site_marius_hills_desc": {
+  "en": "The colony at $sr_site_name_marius_hills$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_marius_hills$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
  },
  "building_sr_site_mercury": {
   "en": "$sr_site_name_mercury$ Colony",
@@ -2307,6 +2367,14 @@
   "en": "The colony on $sr_site_name_pallas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_pallas$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
  },
+ "building_sr_site_peary": {
+  "en": "$sr_site_name_peary$ Colony",
+  "de": "Kolonie $sr_site_name_peary$"
+ },
+ "building_sr_site_peary_desc": {
+  "en": "The colony at $sr_site_name_peary$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_peary$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
+ },
  "building_sr_site_pluto": {
   "en": "$sr_site_name_pluto$ Colony",
   "de": "Kolonie $sr_site_name_pluto$"
@@ -2347,6 +2415,14 @@
   "en": "The colony on $sr_site_name_sedna$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_sedna$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
  },
+ "building_sr_site_shackleton": {
+  "en": "$sr_site_name_shackleton$ Colony",
+  "de": "Kolonie $sr_site_name_shackleton$"
+ },
+ "building_sr_site_shackleton_desc": {
+  "en": "The colony at $sr_site_name_shackleton$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_shackleton$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
+ },
  "building_sr_site_titan": {
   "en": "$sr_site_name_titan$ Colony",
   "de": "Kolonie $sr_site_name_titan$"
@@ -2362,6 +2438,14 @@
  "building_sr_site_titania_desc": {
   "en": "The colony on $sr_site_name_titania$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
   "de": "Die Kolonie auf $sr_site_name_titania$, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land an ein anderes übergeben kann. Sie wird nie gebaut."
+ },
+ "building_sr_site_tranquility": {
+  "en": "$sr_site_name_tranquility$ Colony",
+  "de": "Kolonie $sr_site_name_tranquility$"
+ },
+ "building_sr_site_tranquility_desc": {
+  "en": "The colony at $sr_site_name_tranquility$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "de": "Die Kolonie bei $sr_site_name_tranquility$ auf dem Mond, hier benannt, damit der Vertragsartikel „Kolonie abtreten“ sie von einem Land auf ein anderes übertragen kann. Sie wird nie gebaut."
  },
  "building_sr_site_triton": {
   "en": "$sr_site_name_triton$ Colony",
@@ -2428,8 +2512,8 @@
   "de": "Knoten der Strategischen Reserve"
  },
  "building_strategic_reserve_hub_desc": {
-  "en": "A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.",
-  "de": "Eine nationale Lagerstätte für Getreide, Munition, Öl, Handfeuerwaffen, Artillerie, Flugzeuge, Panzer und Chemikalien. Jede Stufe gewährt +5000 Kapazität pro Reservegut und erlaubt es, für jedes Gut bis zu 1000 Einheiten pro Woche in die oder aus der Reserve zu bewegen, einzeln einstellbar auf dem Reiter „Reserve“ des Marktfensters. Sie kann nicht abgerissen werden und steht stets in der Hauptstadt: Verlegt sich die Hauptstadt, wird der Knoten dort kostenlos neu errichtet. Erobert eine fremde Macht ihren Staat, wird sie zerstört."
+  "en": "A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, chemicals, and conductive metals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.",
+  "de": "Eine nationale Lagerstätte für Getreide, Munition, Öl, Handfeuerwaffen, Artillerie, Flugzeuge, Panzer, Chemikalien und Leitfähige Metalle. Jede Stufe gewährt +5000 Kapazität pro Reservegut und erlaubt es, für jedes Gut bis zu 1000 Einheiten pro Woche in die oder aus der Reserve zu bewegen, einzeln einstellbar auf dem Reiter „Reserve“ des Marktfensters. Sie kann nicht abgerissen werden und steht stets in der Hauptstadt: Verlegt sich die Hauptstadt, wird der Knoten dort kostenlos neu errichtet. Erobert eine fremde Macht ihren Staat, wird sie zerstört."
  },
  "building_strategic_reserve_silo": {
   "en": "Strategic Reserve Silo",

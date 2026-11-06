@@ -879,6 +879,14 @@
   "en": "Vertical-launch missile cells turn the ship into a long-range bombardment platform, dramatically increasing its [concept_blockade_strength] and [Concept('concept_hull_attack_damage', 'hull damage')].",
   "es": "Las celdas de misiles de lanzamiento vertical convierten el buque en una plataforma de bombardeo de largo alcance y aumentan drásticamente su [concept_blockade_strength|l] y su [Concept('concept_hull_attack_damage', 'daño al casco')]."
  },
+ "utility_mod_ciws": {
+  "en": "Close-In Weapon System",
+  "es": "Sistema de armas de defensa cercana"
+ },
+ "utility_mod_ciws_desc": {
+  "en": "Radar-directed rotary cannon shoot down incoming missiles and shells in their last seconds of flight. Fewer shots aimed at the ship land, and its [concept_vulnerability] falls sharply, so the enemy picks other targets.",
+  "es": "Los cañones rotativos dirigidos por radar derriban misiles y proyectiles entrantes en los últimos segundos de su vuelo. Aciertan menos disparos dirigidos al buque, y su [concept_vulnerability|l] cae en picado, así que el enemigo elige otros blancos."
+ },
  "utility_mod_composite_armor_plating": {
   "en": "Composite Armor Plating",
   "es": "Blindaje compuesto"
@@ -887,13 +895,21 @@
   "en": "Layered ceramic-and-metal-matrix composite armor with reactive elements absorbs and deflects modern anti-ship munitions, reducing both incoming damage and the chance of catastrophic critical hits.",
   "es": "Un blindaje compuesto por capas de cerámica y matriz metálica con elementos reactivos absorbe y desvía las municiones antibuque modernas, lo que reduce tanto el daño recibido como la probabilidad de impactos críticos catastróficos."
  },
+ "utility_mod_damage_control_teams": {
+  "en": "Damage Control Teams",
+  "es": "Equipos de control de averías"
+ },
+ "utility_mod_damage_control_teams_desc": {
+  "en": "Trained repair parties, compartment flooding and firefighting gear stationed throughout the ship contain fires and flooding before they spread, so each hit does less [Concept('concept_hull_attack_damage', 'hull damage')] and kills fewer of the [concept_ship_crew].",
+  "es": "Las cuadrillas de reparación entrenadas, la inundación de compartimentos y el equipo contraincendios distribuidos por todo el buque contienen los incendios y las inundaciones antes de que se extiendan, así que cada impacto causa menos [Concept('concept_hull_attack_damage', 'daño al casco')] y mata a menos integrantes de la [concept_ship_crew|l]."
+ },
  "utility_mod_dew_point_defense": {
   "en": "DEW Point Defense",
   "es": "Defensa puntual DEW"
  },
  "utility_mod_dew_point_defense_desc": {
-  "en": "Directed-energy point-defense turrets shoot down incoming missiles and aircraft, sharply reducing the ship's vulnerability and contributing to fleet [concept_screening].",
-  "es": "Las torretas de defensa puntual de energía dirigida derriban misiles y aviones entrantes, lo que reduce drásticamente la vulnerabilidad del buque y contribuye a la [concept_screening|l] de la flota."
+  "en": "Directed-energy turrets burn down incoming missiles, aircraft and drones at the speed of light. Far fewer shots aimed at the ship land, its [concept_vulnerability] falls further than with a Close-In Weapon System, and it adds to fleet [concept_screening].",
+  "es": "Las torretas de energía dirigida abaten misiles, aviones y drones entrantes a la velocidad de la luz. Aciertan muchos menos disparos dirigidos al buque, su [concept_vulnerability|l] cae más que con un Sistema de armas de defensa cercana, y contribuye a la [concept_screening|l] de la flota."
  },
  "utility_mod_drone_complement": {
   "en": "Drone Complement",
@@ -903,6 +919,14 @@
   "en": "An onboard drone hangar and control suite that improves the ship's accuracy and [concept_screening] capability while extending [concept_detection] range.",
   "es": "Un hangar de drones a bordo y un sistema de control que mejoran la precisión del buque y su capacidad de [concept_screening|l] a la vez que amplían el alcance de [concept_detection|l]."
  },
+ "utility_mod_electronic_countermeasures": {
+  "en": "Electronic Countermeasures",
+  "es": "Contramedidas electrónicas"
+ },
+ "utility_mod_electronic_countermeasures_desc": {
+  "en": "Radar jammers, chaff and decoy launchers feed false returns to enemy fire control, cutting the [concept_accuracy] of ships firing at this one and its [concept_visibility] to enemy fleets.",
+  "es": "Los inhibidores de radar, el chaff y los lanzadores de señuelos envían ecos falsos al control de tiro enemigo, lo que reduce la [concept_accuracy|l] de los buques que disparan contra este y su [concept_visibility|l] para las flotas enemigas."
+ },
  "utility_mod_helicopter_pad": {
   "en": "Helicopter Pad",
   "es": "Helipuerto"
@@ -911,6 +935,14 @@
   "en": "A flight deck and hangar for naval helicopters and tilt-rotor aircraft, expanding the ship's troop transport and amphibious assault capabilities.",
   "es": "Una cubierta de vuelo y un hangar para helicópteros navales y aeronaves de rotor basculante que amplían las capacidades de transporte de tropas y de asalto anfibio del buque."
  },
+ "utility_mod_precision_warheads": {
+  "en": "Precision Warheads",
+  "es": "Ojivas de precisión"
+ },
+ "utility_mod_precision_warheads_desc": {
+  "en": "Guided shaped-charge and penetrating warheads strike machinery spaces and magazines rather than the hull at large, raising the [concept_critical_hit_chance] and the [Concept('concept_crew_attack_damage', 'crew damage')] of every hit.",
+  "es": "Las ojivas guiadas de carga hueca y las penetrantes golpean las salas de máquinas y los pañoles en lugar del casco en general, lo que aumenta la [concept_critical_hit_chance|l] y el [Concept('concept_crew_attack_damage', 'daño de tripulación')] de cada impacto."
+ },
  "utility_mod_sonar_suite": {
   "en": "Sonar Suite",
   "es": "Equipo de sonar"
@@ -918,6 +950,14 @@
  "utility_mod_sonar_suite_desc": {
   "en": "Active and passive sonar arrays paired with depth-charge mounts. Devastating against submarines, with greatly improved general [concept_detection].",
   "es": "Sonares activos y pasivos combinados con lanzadores de cargas de profundidad. Devastador contra submarinos, con una [concept_detection|l] general muy mejorada."
+ },
+ "utility_mod_surface_search_radar": {
+  "en": "Surface Search Radar",
+  "es": "Radar de búsqueda de superficie"
+ },
+ "utility_mod_surface_search_radar_desc": {
+  "en": "A surface-search radar finds and tracks targets through fog, darkness and heavy seas, so bad weather costs the ship far less [concept_accuracy], and its [concept_detection] range grows.",
+  "es": "Un radar de búsqueda de superficie localiza y sigue objetivos con niebla, oscuridad y mar gruesa, así que el mal tiempo le cuesta al buque mucha menos [concept_accuracy|l], y aumenta su alcance de [concept_detection|l]."
  },
  "utility_mod_underway_replenishment": {
   "en": "Underway Replenishment",

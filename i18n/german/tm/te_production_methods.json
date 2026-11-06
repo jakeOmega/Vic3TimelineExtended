@@ -219,6 +219,10 @@
   "en": "Ammonium Nitrate",
   "de": "Ammoniumnitrat"
  },
+ "pm_ammonium_nitrate_building_copper_mine": {
+  "en": "Ammonium Nitrate",
+  "de": "Ammoniumnitrat"
+ },
  "pm_ammonium_nitrate_building_gold_mine": {
   "en": "Ammonium Nitrate",
   "de": "Ammoniumnitrat"
@@ -463,9 +467,21 @@
   "en": "BAE Systems Samlesbury Aerodrome",
   "de": "BAE-Systems-Flugplatz Samlesbury"
  },
+ "pm_base_building_advanced_fission_power": {
+  "en": "Generation IV Reactors",
+  "de": "Reaktoren der Generation IV"
+ },
  "pm_base_building_advanced_renewable_power": {
   "en": "Advanced Renewable Power",
   "de": "Fortgeschrittene erneuerbare Energie"
+ },
+ "pm_base_building_aneutronic_fusion_power": {
+  "en": "Aneutronic Fusion Power",
+  "de": "Aneutronische Fusionsenergie"
+ },
+ "pm_base_building_aneutronic_fusion_power_desc": {
+  "en": "Proton-boron reactors release charged particles instead of neutrons, and their current is drawn straight from the plasma. With no turbines to drive and almost nothing to shield, they need few engines, little lead and a smaller crew, and they leave no radioactive waste.",
+  "de": "Proton-Bor-Reaktoren setzen statt Neutronen geladene Teilchen frei, und ihr Strom wird direkt aus dem Plasma gewonnen. Da keine Turbinen anzutreiben und fast nichts abzuschirmen ist, brauchen sie wenige Motoren, wenig Blei und eine kleinere Besatzung, und sie hinterlassen keinen radioaktiven Abfall."
  },
  "pm_base_building_compact_modular_fusion_power": {
   "en": "Compact Fusion Power",
@@ -647,14 +663,6 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "de": "Partielle CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5": {
   "en": "Partial Carbon Capture (5 Oil)",
   "de": "Partielle CO2-Abscheidung (5 Öl)"
@@ -663,11 +671,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0": {
-  "en": "Partial Carbon Capture (15 Coal)",
-  "de": "Partielle CO2-Abscheidung (15 Kohle)"
+ "pm_carbon_capture_1_automation_building_arms_industry_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "de": "Partielle CO2-Abscheidung (10 Kohle)"
  },
- "pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0_desc": {
+ "pm_carbon_capture_1_automation_building_arms_industry_coal10_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -727,14 +735,6 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "de": "Partielle CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil5": {
   "en": "Partial Carbon Capture (5 Oil)",
   "de": "Partielle CO2-Abscheidung (5 Öl)"
@@ -743,11 +743,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0": {
-  "en": "Partial Carbon Capture (15 Coal)",
-  "de": "Partielle CO2-Abscheidung (15 Kohle)"
+ "pm_carbon_capture_1_automation_building_munition_plant_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "de": "Partielle CO2-Abscheidung (10 Kohle)"
  },
- "pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0_desc": {
+ "pm_carbon_capture_1_automation_building_munition_plant_coal10_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -783,19 +783,19 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "de": "Partielle CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil5": {
   "en": "Partial Carbon Capture (5 Oil)",
   "de": "Partielle CO2-Abscheidung (5 Öl)"
  },
  "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Partial Carbon Capture (9 Oil)",
+  "de": "Partielle CO2-Abscheidung (9 Öl)"
+ },
+ "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil9_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -863,11 +863,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil25": {
-  "en": "Partial Carbon Capture (25 Oil)",
-  "de": "Partielle CO2-Abscheidung (25 Öl)"
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil20": {
+  "en": "Partial Carbon Capture (20 Oil)",
+  "de": "Partielle CO2-Abscheidung (20 Öl)"
  },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil25_desc": {
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil20_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -876,6 +876,14 @@
   "de": "Partielle CO2-Abscheidung (30 Öl)"
  },
  "pm_carbon_capture_1_base_building_power_plant_coal0_oil30_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_base_building_power_plant_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "de": "Partielle CO2-Abscheidung (15 Kohle)"
+ },
+ "pm_carbon_capture_1_base_building_power_plant_coal15_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1279,6 +1287,38 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "de": "Partielle CO2-Abscheidung (10 Öl)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "de": "Partielle CO2-Abscheidung (5 Öl)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal0_oil5_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "de": "Partielle CO2-Abscheidung (10 Kohle)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal10_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "de": "Partielle CO2-Abscheidung (15 Kohle)"
+ },
+ "pm_carbon_capture_1_mining_equipment_building_copper_mine_coal15_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
  "pm_carbon_capture_1_mining_equipment_building_gold_mine_coal0_oil10": {
   "en": "Partial Carbon Capture (10 Oil)",
   "de": "Partielle CO2-Abscheidung (10 Öl)"
@@ -1599,22 +1639,6 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "de": "Partielle CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Partial Carbon Capture (5 Oil)",
-  "de": "Partielle CO2-Abscheidung (5 Öl)"
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_1_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Partial Carbon Capture (10 Coal)",
   "de": "Partielle CO2-Abscheidung (10 Kohle)"
@@ -1692,6 +1716,14 @@
   "de": "Partielle CO2-Abscheidung (3 Kohle)"
  },
  "pm_carbon_capture_1_steam_automation_building_coal_mine_coal3_oil0_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_1_steam_automation_building_copper_mine_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "de": "Partielle CO2-Abscheidung (4 Kohle)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_copper_mine_coal4_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1788,14 +1820,6 @@
   "de": "Partielle CO2-Abscheidung (4 Kohle)"
  },
  "pm_carbon_capture_1_steam_automation_building_sulfur_mine_coal4_oil0_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Partial Carbon Capture (4 Coal)",
-  "de": "Partielle CO2-Abscheidung (4 Kohle)"
- },
- "pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 25,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1911,14 +1935,6 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
- },
- "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5": {
   "en": "Carbon Capture and Storage (5 Oil)",
   "de": "CO2-Abscheidung und -Speicherung (5 Öl)"
@@ -1927,11 +1943,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0": {
-  "en": "Carbon Capture and Storage (15 Coal)",
-  "de": "CO2-Abscheidung und -Speicherung (15 Kohle)"
+ "pm_carbon_capture_2_automation_building_arms_industry_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (10 Kohle)"
  },
- "pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0_desc": {
+ "pm_carbon_capture_2_automation_building_arms_industry_coal10_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -1991,14 +2007,6 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
- },
- "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil5": {
   "en": "Carbon Capture and Storage (5 Oil)",
   "de": "CO2-Abscheidung und -Speicherung (5 Öl)"
@@ -2007,11 +2015,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0": {
-  "en": "Carbon Capture and Storage (15 Coal)",
-  "de": "CO2-Abscheidung und -Speicherung (15 Kohle)"
+ "pm_carbon_capture_2_automation_building_munition_plant_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (10 Kohle)"
  },
- "pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0_desc": {
+ "pm_carbon_capture_2_automation_building_munition_plant_coal10_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2047,19 +2055,19 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
- },
- "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil5": {
   "en": "Carbon Capture and Storage (5 Oil)",
   "de": "CO2-Abscheidung und -Speicherung (5 Öl)"
  },
  "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Carbon Capture and Storage (9 Oil)",
+  "de": "CO2-Abscheidung und -Speicherung (9 Öl)"
+ },
+ "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil9_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2127,11 +2135,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil25": {
-  "en": "Carbon Capture and Storage (25 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (25 Öl)"
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil20": {
+  "en": "Carbon Capture and Storage (20 Oil)",
+  "de": "CO2-Abscheidung und -Speicherung (20 Öl)"
  },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil25_desc": {
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil20_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2140,6 +2148,14 @@
   "de": "CO2-Abscheidung und -Speicherung (30 Öl)"
  },
  "pm_carbon_capture_2_base_building_power_plant_coal0_oil30_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_base_building_power_plant_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (15 Kohle)"
+ },
+ "pm_carbon_capture_2_base_building_power_plant_coal15_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -2543,6 +2559,38 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "de": "CO2-Abscheidung und -Speicherung (5 Öl)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal0_oil5_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (10 Kohle)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal10_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (15 Kohle)"
+ },
+ "pm_carbon_capture_2_mining_equipment_building_copper_mine_coal15_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
  "pm_carbon_capture_2_mining_equipment_building_gold_mine_coal0_oil10": {
   "en": "Carbon Capture and Storage (10 Oil)",
   "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
@@ -2863,22 +2911,6 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (10 Öl)"
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Carbon Capture and Storage (5 Oil)",
-  "de": "CO2-Abscheidung und -Speicherung (5 Öl)"
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_2_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Carbon Capture and Storage (10 Coal)",
   "de": "CO2-Abscheidung und -Speicherung (10 Kohle)"
@@ -2956,6 +2988,14 @@
   "de": "CO2-Abscheidung und -Speicherung (3 Kohle)"
  },
  "pm_carbon_capture_2_steam_automation_building_coal_mine_coal3_oil0_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_2_steam_automation_building_copper_mine_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "de": "CO2-Abscheidung und -Speicherung (4 Kohle)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_copper_mine_coal4_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3052,14 +3092,6 @@
   "de": "CO2-Abscheidung und -Speicherung (4 Kohle)"
  },
  "pm_carbon_capture_2_steam_automation_building_sulfur_mine_coal4_oil0_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Carbon Capture and Storage (4 Coal)",
-  "de": "CO2-Abscheidung und -Speicherung (4 Kohle)"
- },
- "pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 50,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3175,14 +3207,6 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5": {
   "en": "Advanced Carbon Capture (5 Oil)",
   "de": "Fortgeschrittene CO2-Abscheidung (5 Öl)"
@@ -3191,11 +3215,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0": {
-  "en": "Advanced Carbon Capture (15 Coal)",
-  "de": "Fortgeschrittene CO2-Abscheidung (15 Kohle)"
+ "pm_carbon_capture_3_automation_building_arms_industry_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (10 Kohle)"
  },
- "pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0_desc": {
+ "pm_carbon_capture_3_automation_building_arms_industry_coal10_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3255,14 +3279,6 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil5": {
   "en": "Advanced Carbon Capture (5 Oil)",
   "de": "Fortgeschrittene CO2-Abscheidung (5 Öl)"
@@ -3271,11 +3287,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0": {
-  "en": "Advanced Carbon Capture (15 Coal)",
-  "de": "Fortgeschrittene CO2-Abscheidung (15 Kohle)"
+ "pm_carbon_capture_3_automation_building_munition_plant_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (10 Kohle)"
  },
- "pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0_desc": {
+ "pm_carbon_capture_3_automation_building_munition_plant_coal10_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3311,19 +3327,19 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil5": {
   "en": "Advanced Carbon Capture (5 Oil)",
   "de": "Fortgeschrittene CO2-Abscheidung (5 Öl)"
  },
  "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Advanced Carbon Capture (9 Oil)",
+  "de": "Fortgeschrittene CO2-Abscheidung (9 Öl)"
+ },
+ "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil9_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3391,11 +3407,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil25": {
-  "en": "Advanced Carbon Capture (25 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (25 Öl)"
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil20": {
+  "en": "Advanced Carbon Capture (20 Oil)",
+  "de": "Fortgeschrittene CO2-Abscheidung (20 Öl)"
  },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil25_desc": {
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil20_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3404,6 +3420,14 @@
   "de": "Fortgeschrittene CO2-Abscheidung (30 Öl)"
  },
  "pm_carbon_capture_3_base_building_power_plant_coal0_oil30_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_base_building_power_plant_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (15 Kohle)"
+ },
+ "pm_carbon_capture_3_base_building_power_plant_coal15_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -3807,6 +3831,38 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "de": "Fortgeschrittene CO2-Abscheidung (5 Öl)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal0_oil5_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (10 Kohle)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal10_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (15 Kohle)"
+ },
+ "pm_carbon_capture_3_mining_equipment_building_copper_mine_coal15_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
  "pm_carbon_capture_3_mining_equipment_building_gold_mine_coal0_oil10": {
   "en": "Advanced Carbon Capture (10 Oil)",
   "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
@@ -4127,22 +4183,6 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (10 Öl)"
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Advanced Carbon Capture (5 Oil)",
-  "de": "Fortgeschrittene CO2-Abscheidung (5 Öl)"
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
  "pm_carbon_capture_3_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Advanced Carbon Capture (10 Coal)",
   "de": "Fortgeschrittene CO2-Abscheidung (10 Kohle)"
@@ -4220,6 +4260,14 @@
   "de": "Fortgeschrittene CO2-Abscheidung (3 Kohle)"
  },
  "pm_carbon_capture_3_steam_automation_building_coal_mine_coal3_oil0_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
+ },
+ "pm_carbon_capture_3_steam_automation_building_copper_mine_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "de": "Fortgeschrittene CO2-Abscheidung (4 Kohle)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_copper_mine_coal4_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -4316,14 +4364,6 @@
   "de": "Fortgeschrittene CO2-Abscheidung (4 Kohle)"
  },
  "pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
- },
- "pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Advanced Carbon Capture (4 Coal)",
-  "de": "Fortgeschrittene CO2-Abscheidung (4 Kohle)"
- },
- "pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "de": "Scheidet 75,00% der Brennstoffemissionen dieser Produktionsgruppe ab. Personalstärke und Durchsatz skalieren die Abscheidungs- und Betriebskosten."
  },
@@ -4591,6 +4631,14 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
  },
+ "pm_carbon_capture_na_mining_equipment_building_copper_mine": {
+  "en": "Capture Not Applicable",
+  "de": "Abscheidung entfällt"
+ },
+ "pm_carbon_capture_na_mining_equipment_building_copper_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
+ },
  "pm_carbon_capture_na_mining_equipment_building_gold_mine": {
   "en": "Capture Not Applicable",
   "de": "Abscheidung entfällt"
@@ -4687,14 +4735,6 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
  },
- "pm_carbon_capture_na_mining_equipment_building_tech_metals_mine": {
-  "en": "Capture Not Applicable",
-  "de": "Abscheidung entfällt"
- },
- "pm_carbon_capture_na_mining_equipment_building_tech_metals_mine_desc": {
-  "en": "This production method has no eligible stationary fuel emissions to capture.",
-  "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
- },
  "pm_carbon_capture_na_refinement_building_sugar_plantation": {
   "en": "Capture Not Applicable",
   "de": "Abscheidung entfällt"
@@ -4724,6 +4764,14 @@
   "de": "Abscheidung entfällt"
  },
  "pm_carbon_capture_na_steam_automation_building_coal_mine_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
+ },
+ "pm_carbon_capture_na_steam_automation_building_copper_mine": {
+  "en": "Capture Not Applicable",
+  "de": "Abscheidung entfällt"
+ },
+ "pm_carbon_capture_na_steam_automation_building_copper_mine_desc": {
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
  },
@@ -4820,14 +4868,6 @@
   "de": "Abscheidung entfällt"
  },
  "pm_carbon_capture_na_steam_automation_building_sulfur_mine_desc": {
-  "en": "This production method has no eligible stationary fuel emissions to capture.",
-  "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
- },
- "pm_carbon_capture_na_steam_automation_building_tech_metals_mine": {
-  "en": "Capture Not Applicable",
-  "de": "Abscheidung entfällt"
- },
- "pm_carbon_capture_na_steam_automation_building_tech_metals_mine_desc": {
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "de": "Diese Produktionsmethode verursacht keine stationären Brennstoffemissionen, die sich abscheiden lassen."
  },
@@ -5067,6 +5107,10 @@
   "en": "Continuous Miners",
   "de": "Kontinuierliche Abbaumaschinen"
  },
+ "pm_continuous_miners_building_copper_mine": {
+  "en": "Continuous Miners",
+  "de": "Kontinuierliche Abbaumaschinen"
+ },
  "pm_continuous_miners_building_gold_mine": {
   "en": "Continuous Miners",
   "de": "Kontinuierliche Abbaumaschinen"
@@ -5180,7 +5224,7 @@
   "de": "Keine Schrottbeseitigung"
  },
  "pm_debris_removal_none_desc": {
-  "en": "The programme flies its missions and leaves the debris to others.",
+  "en": "The program flies its missions and leaves the debris to others.",
   "de": "Das Programm fliegt seine Missionen und überlässt den Schrott anderen."
  },
  "pm_decentralized_religious_structures": {
@@ -5296,7 +5340,7 @@
   "de": "Direktabscheidung aus der Luft"
  },
  "pm_direct_air_capture_desc": {
-  "en": "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no saleable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions.",
+  "en": "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no salable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions.",
   "de": "Entzieht der Atmosphäre Kohlendioxid und speichert es dauerhaft. Erzeugt keine verkäuflichen Waren und benötigt Subventionen für den Betrieb. Die Stromerzeugung trägt weiterhin zu den Emissionen des Marktes bei."
  },
  "pm_directed_energy_point_defense": {
@@ -5344,6 +5388,10 @@
   "de": "$pm_dragline_excavators_iron_mine$"
  },
  "pm_dragline_excavators_coal_mine": {
+  "en": "Dragline Excavators",
+  "de": "Schürfkübelbagger"
+ },
+ "pm_dragline_excavators_copper_mine": {
   "en": "Dragline Excavators",
   "de": "Schürfkübelbagger"
  },
@@ -5699,6 +5747,14 @@
   "en": "Fusion SSTO Craft",
   "de": "Fusions-SSTO-Raumschiffe"
  },
+ "pm_fusion_torch_reclamation": {
+  "en": "Fusion Torch Reclamation",
+  "de": "Rückgewinnung per Fusionsfackel"
+ },
+ "pm_fusion_torch_reclamation_desc": {
+  "en": "A fusion torch, first proposed in 1969, turns scrap and waste into a plasma hot enough to break it back into its elements. Our mills recover most of their iron from what we throw away, for a great deal of electricity.",
+  "de": "Eine Fusionsfackel, erstmals 1969 vorgeschlagen, verwandelt Schrott und Abfall in ein Plasma, das heiß genug ist, um sie wieder in ihre Elemente zu zerlegen. Unsere Werke gewinnen den Großteil ihres Eisens aus dem, was wir wegwerfen, und verbrauchen dafür gewaltige Mengen an Strom."
+ },
  "pm_fusion_tugs_building_space_mine": {
   "en": "Fusion Tugs",
   "de": "Fusionsschlepper"
@@ -5776,7 +5832,7 @@
   "de": "Elektronikforschung"
  },
  "pm_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "de": "Nationales Ausstellungszentrum"
  },
  "pm_generic_export_warehouse": {
@@ -5927,6 +5983,10 @@
   "en": "Geophysical Survey Techniques",
   "de": "Geophysikalische Vermessungstechniken"
  },
+ "pm_geophysical_survey_techniques_copper_mine": {
+  "en": "Geophysical Survey Techniques",
+  "de": "Geophysikalische Vermessungstechniken"
+ },
  "pm_geophysical_survey_techniques_gold_mine": {
   "en": "Geophysical Survey Techniques",
   "de": "Geophysikalische Vermessungstechniken"
@@ -6037,7 +6097,7 @@
  },
  "pm_grid_hvdc_interconnector_desc": {
   "en": "Converter valves and a high-voltage direct-current cable to the far shore, with a range of one [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), which $smart_grids$ and $quantum_materials$ lengthen.",
-  "de": "Konverterventile und ein Hochspannungs-Gleichstromkabel zum gegenüberliegenden Ufer, mit einer Reichweite von einem Meeresabschnitt ([concept_sea_node], #b $building_grid_undersea_cable_range_add$#!), die $smart_grids$ und $quantum_materials$ verlängern."
+  "de": "Konverterventile und ein Hochspannungs-Gleichstromkabel zum gegenüberliegenden Ufer, mit einer Reichweite von einem [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), die $smart_grids$ und $quantum_materials$ verlängern."
  },
  "pm_grid_transfer_base": {
   "en": "Substation",
@@ -6096,6 +6156,10 @@
   "de": "$pm_high_pressure_hydraulic_pump_building_iron_mine$"
  },
  "pm_high_pressure_hydraulic_pump_building_coal_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "de": "Hochdruck-Hydraulikpumpe"
+ },
+ "pm_high_pressure_hydraulic_pump_building_copper_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "de": "Hochdruck-Hydraulikpumpe"
  },
@@ -6259,6 +6323,10 @@
   "en": "Infosys Mysore Campus",
   "de": "Infosys-Campus Mysore"
  },
+ "pm_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "de": "InGen-Biologie-Schutzgebiet"
+ },
  "pm_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
   "de": "Kraftwerk Ingolstadt"
@@ -6395,6 +6463,10 @@
   "en": "Large Scale Earth Movers",
   "de": "Großraum-Erdbewegungsmaschinen"
  },
+ "pm_large_scale_earth_movers_copper_mine": {
+  "en": "Large Scale Earth Movers",
+  "de": "Großraum-Erdbewegungsmaschinen"
+ },
  "pm_large_scale_earth_movers_gold_mine": {
   "en": "Large Scale Earth Movers",
   "de": "Großraum-Erdbewegungsmaschinen"
@@ -6456,6 +6528,10 @@
   "de": "$pm_laser_excavation_technology_iron_mine$"
  },
  "pm_laser_excavation_technology_coal_mine": {
+  "en": "Laser Excavation Technology",
+  "de": "Laser-Abbautechnologie"
+ },
+ "pm_laser_excavation_technology_copper_mine": {
   "en": "Laser Excavation Technology",
   "de": "Laser-Abbautechnologie"
  },
@@ -6771,6 +6847,10 @@
   "en": "Metamaterial Explosives",
   "de": "Metamaterial-Sprengstoffe"
  },
+ "pm_metamaterial_explosives_building_copper_mine": {
+  "en": "Metamaterial Explosives",
+  "de": "Metamaterial-Sprengstoffe"
+ },
  "pm_metamaterial_explosives_building_gold_mine": {
   "en": "Metamaterial Explosives",
   "de": "Metamaterial-Sprengstoffe"
@@ -7008,7 +7088,7 @@
   "de": "Der Geschichte"
  },
  "pm_monument_historic_desc": {
-  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honours no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
+  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honors no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
   "de": "Ein Monument aus einer älteren Zeit, um seiner selbst willen bewahrt und für alle, die zu ihm reisen, um es zu sehen. Es ehrt keine Regierung und gefällt keiner Gruppe, daher kann sich keine Regierung mit ihm überwerfen. #R Die Widmung ist dauerhaft.#!"
  },
  "pm_monument_industrial": {
@@ -7040,7 +7120,7 @@
   "de": "Großer Schrein"
  },
  "pm_monument_religious_desc": {
-  "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honours. #R The dedication is permanent.#!",
+  "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honors. #R The dedication is permanent.#!",
   "de": "Eine Kathedrale, ein Tempel, eine Moschee, gebaut, um die Regierung zu überdauern, die sie finanziert hat. Erfreut die Frommen und wird umstritten, wenn das Land den Glauben aufgibt, den es ehrt. #R Die Widmung ist dauerhaft.#!"
  },
  "pm_monument_republic": {
@@ -7483,6 +7563,10 @@
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
  },
+ "pm_no_carbon_capture_mining_equipment_building_copper_mine": {
+  "en": "No Carbon Capture",
+  "de": "Keine CO2-Abscheidung"
+ },
  "pm_no_carbon_capture_mining_equipment_building_gold_mine": {
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
@@ -7531,10 +7615,6 @@
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
  },
- "pm_no_carbon_capture_mining_equipment_building_tech_metals_mine": {
-  "en": "No Carbon Capture",
-  "de": "Keine CO2-Abscheidung"
- },
  "pm_no_carbon_capture_norsk_hydro_rjukan_plant": {
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
@@ -7564,6 +7644,10 @@
   "de": "Keine CO2-Abscheidung"
  },
  "pm_no_carbon_capture_steam_automation_building_coal_mine": {
+  "en": "No Carbon Capture",
+  "de": "Keine CO2-Abscheidung"
+ },
+ "pm_no_carbon_capture_steam_automation_building_copper_mine": {
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
  },
@@ -7612,10 +7696,6 @@
   "de": "Keine CO2-Abscheidung"
  },
  "pm_no_carbon_capture_steam_automation_building_sulfur_mine": {
-  "en": "No Carbon Capture",
-  "de": "Keine CO2-Abscheidung"
- },
- "pm_no_carbon_capture_steam_automation_building_tech_metals_mine": {
   "en": "No Carbon Capture",
   "de": "Keine CO2-Abscheidung"
  },
@@ -7775,6 +7855,14 @@
   "en": "Oracle Cloud Data Center",
   "de": "Oracle-Cloud-Rechenzentrum"
  },
+ "pm_orbital_battery_kinetic": {
+  "en": "Kinetic Interceptors",
+  "de": "Kinetische Abfangflugkörper"
+ },
+ "pm_orbital_battery_lasers": {
+  "en": "Ground Lasers",
+  "de": "Bodenlaser"
+ },
  "pm_orbital_battlestation": {
   "en": "Orbital Battlestation",
   "de": "Orbitale Kampfstation"
@@ -7812,6 +7900,10 @@
   "de": "$pm_ore_sorting_and_separation_technology_iron_mine$"
  },
  "pm_ore_sorting_and_separation_technology_coal_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "de": "Erzsortierungs- und Trenntechnologie"
+ },
+ "pm_ore_sorting_and_separation_technology_copper_mine": {
   "en": "Ore Sorting and Separation Technology",
   "de": "Erzsortierungs- und Trenntechnologie"
  },
@@ -8040,7 +8132,7 @@
   "de": "Forschungsmandat"
  },
  "pm_principle_advanced_research_4_desc": {
-  "en": "When the bloc holds the Advanced Research [concept_power_bloc_principle], the university is reorganised around frontier research: hundreds of academics employed per level, paper consumed in volume, innovation feeding directly into the country's research.",
+  "en": "When the bloc holds the Advanced Research [concept_power_bloc_principle], the university is reorganized around frontier research: hundreds of academics employed per level, paper consumed in volume, innovation feeding directly into the country's research.",
   "de": "Hält der Block das [concept_power_bloc_principle] Fortschrittliche Forschung, wird die Universität um Spitzenforschung herum neu organisiert: Hunderte Akademiker werden pro Stufe beschäftigt, Papier wird in großen Mengen verbraucht, und Innovation fließt direkt in die Forschung des Landes ein."
  },
  "pm_principle_artistic_expression_2": {
@@ -8103,6 +8195,54 @@
   "en": "Prussian Railway Directorate",
   "de": "Preußische Eisenbahndirektion"
  },
+ "pm_public_housing_arcologies": {
+  "en": "Arcologies",
+  "de": "Arkologien"
+ },
+ "pm_public_housing_arcologies_desc": {
+  "en": "Self-contained city structures that stack homes, work and services into a single vast building, run by machines.",
+  "de": "Autarke Stadtstrukturen, die Wohnungen, Arbeitsplätze und Dienstleistungen in einem einzigen riesigen Gebäude übereinanderstapeln und von Maschinen betrieben werden."
+ },
+ "pm_public_housing_high_rise_apartments": {
+  "en": "High-Rise Apartments",
+  "de": "Hochhauswohnungen"
+ },
+ "pm_public_housing_high_rise_apartments_desc": {
+  "en": "Elevators and electric pumps let apartment towers climb past a dozen floors.",
+  "de": "Aufzüge und elektrische Pumpen lassen Wohntürme über ein Dutzend Stockwerke hinauswachsen."
+ },
+ "pm_public_housing_model_dwellings": {
+  "en": "Model Dwellings",
+  "de": "Mustersiedlungen"
+ },
+ "pm_public_housing_model_dwellings_desc": {
+  "en": "Plain brick and timber cottages and terraces, laid out by the city's surveyors and let at low rents.",
+  "de": "Schlichte Häuschen und Reihenhäuser aus Ziegel und Holz, von den Landvermessern der Stadt geplant und zu niedrigen Mieten vergeben."
+ },
+ "pm_public_housing_sanitary_tenements": {
+  "en": "Sanitary Tenements",
+  "de": "Hygienische Mietskasernen"
+ },
+ "pm_public_housing_sanitary_tenements_desc": {
+  "en": "Tenement blocks with piped water, drains and a window in every room, packing more families onto each street without the old slums' cholera.",
+  "de": "Mietskasernen mit Wasserleitungen, Kanalisation und einem Fenster in jedem Raum, die mehr Familien pro Straße unterbringen, ohne die Cholera der alten Slums."
+ },
+ "pm_public_housing_steel_frame_apartments": {
+  "en": "Steel-Frame Apartments",
+  "de": "Stahlskelett-Wohnhäuser"
+ },
+ "pm_public_housing_steel_frame_apartments_desc": {
+  "en": "Apartment buildings on steel frames, rising six and eight stories over the same footprint.",
+  "de": "Wohngebäude auf Stahlskeletten, die auf derselben Grundfläche sechs und acht Stockwerke hoch aufragen."
+ },
+ "pm_public_housing_tower_blocks": {
+  "en": "Prefabricated Tower Blocks",
+  "de": "Plattenbau-Hochhäuser"
+ },
+ "pm_public_housing_tower_blocks_desc": {
+  "en": "Whole estates of tower blocks bolted together from factory-made panels, raised in months rather than years.",
+  "de": "Ganze Siedlungen von Hochhäusern, aus werkseitig gefertigten Platten zusammengeschraubt und in Monaten statt Jahren errichtet."
+ },
  "pm_punchcards": {
   "en": "Punchcards",
   "de": "Lochkarten"
@@ -8147,9 +8287,17 @@
   "en": "Regional Marketing",
   "de": "Regionales Marketing"
  },
+ "pm_regolith_processing": {
+  "en": "Regolith Processing",
+  "de": "Regolith-Verarbeitung"
+ },
  "pm_reinforced_concrete_buildings": {
   "en": "Reinforced Concrete Buildings",
   "de": "Stahlbetongebäude"
+ },
+ "pm_rejoovenesense_compound": {
+  "en": "RejoovenEsense Compound",
+  "de": "RejoovenEsense-Komplex"
  },
  "pm_rekal_hq": {
   "en": "Rekal Memory Services",
@@ -8455,6 +8603,14 @@
   "en": "Self-Replicating Assemblers",
   "de": "Selbstreplizierende Assembler"
  },
+ "pm_self_replicating_construction": {
+  "en": "Self-Replicating Construction",
+  "de": "Selbstreplizierender Bau"
+ },
+ "pm_self_replicating_miners": {
+  "en": "Self-Replicating Miners",
+  "de": "Selbstreplizierende Abbaumaschinen"
+ },
  "pm_semiautomatic_rifles": {
   "en": "Semi-automatic Rifles",
   "de": "Halbautomatische Gewehre"
@@ -8536,6 +8692,10 @@
   "de": "$pm_smart_miners_building_iron_mine$"
  },
  "pm_smart_miners_building_coal_mine": {
+  "en": "Smart Miners",
+  "de": "Intelligente Abbaumaschinen"
+ },
+ "pm_smart_miners_building_copper_mine": {
   "en": "Smart Miners",
   "de": "Intelligente Abbaumaschinen"
  },
@@ -8692,19 +8852,19 @@
   "de": "Mit Fusionsenergie betriebene Orbitalwerften fertigen Koloniemodule im Dutzend. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
  },
  "pm_sr_fabrication_lunar_foundries": {
-  "en": "Lunar Foundries",
-  "de": "Mondgießereien"
+  "en": "Orbital Foundries",
+  "de": "Orbitalgießereien"
  },
  "pm_sr_fabrication_lunar_foundries_desc": {
-  "en": "Foundries on the Moon cast module frames from lunar metal and launch them from its shallow gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",
-  "de": "Gießereien auf dem Mond gießen Modulrahmen aus Mondmetall und starten sie aus seinem flachen Gravitationsbrunnen. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
+  "en": "Foundries in orbit cast module frames from metal mined beyond Earth, which never has to be lifted out of its gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Gießereien im Orbit gießen Modulrahmen aus Metall, das jenseits der Erde abgebaut wurde und nie aus deren Gravitationsbrunnen gehoben werden muss. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
  },
  "pm_sr_fabrication_none": {
   "en": "No Module Fabrication",
   "de": "Keine Modulfertigung"
  },
  "pm_sr_fabrication_none_desc": {
-  "en": "The programme builds no modules for our colonies.",
+  "en": "The program builds no modules for our colonies.",
   "de": "Das Programm baut keine Module für unsere Kolonien."
  },
  "pm_sr_fabrication_orbital_assembly": {
@@ -8719,6 +8879,22 @@
   "en": "Colony Record",
   "de": "Kolonieregister"
  },
+ "pm_sr_space_command_antimatter_yards": {
+  "en": "Antimatter Yards",
+  "de": "Antimaterie-Werften"
+ },
+ "pm_sr_space_command_fusion_yards": {
+  "en": "Fusion Yards",
+  "de": "Fusionswerften"
+ },
+ "pm_sr_space_command_orbital_shipyards": {
+  "en": "Orbital Shipyards",
+  "de": "Orbitalwerften"
+ },
+ "pm_sr_space_command_torch_yards": {
+  "en": "Torch Yards",
+  "de": "Fackelwerften"
+ },
  "pm_st_res_hub_reserve": {
   "en": "Reserve Control",
   "de": "Reservekontrolle"
@@ -8732,8 +8908,8 @@
   "de": "Silolagerung"
  },
  "pm_st_res_silo_capacity_desc": {
-  "en": "Stores grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals for the national strategic reserve.",
-  "de": "Lagert Getreide, Munition, Öl, Handfeuerwaffen, Artillerie, Flugzeuge, Panzer und Chemikalien für die nationale strategische Reserve."
+  "en": "Stores grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, chemicals, and conductive metals for the national strategic reserve.",
+  "de": "Lagert Getreide, Munition, Öl, Handfeuerwaffen, Artillerie, Flugzeuge, Panzer, Chemikalien und Leitfähige Metalle für die nationale strategische Reserve."
  },
  "pm_standard_oil_refinery": {
   "en": "Standard Oil Refinery",
@@ -8982,6 +9158,14 @@
  "pm_ursus_warsaw_tractor_plant": {
   "en": "Ursus Warsaw Tractor Plant",
   "de": "Ursus-Traktorenwerk Warschau"
+ },
+ "pm_vactrain_freight": {
+  "en": "Vactrain Freight",
+  "de": "Vakuumzug-Fracht"
+ },
+ "pm_vactrains": {
+  "en": "Vactrains",
+  "de": "Vakuumzüge"
  },
  "pm_vale_carajas_mine": {
   "en": "Carajás Mine",
@@ -9443,6 +9627,10 @@
   "en": "Orbital Battlestation Construction",
   "de": "Bau der orbitalen Kampfstation"
  },
+ "pmg_base_building_public_housing": {
+  "en": "Housing",
+  "de": "Wohnraum"
+ },
  "pmg_base_building_renewable_power": {
   "en": "Renewable Power",
   "de": "Erneuerbare Energie"
@@ -9811,10 +9999,6 @@
   "en": "Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$)",
   "de": "CO2-Abscheidung ($pmg_mining_equipment_building_sulfur_mine$)"
  },
- "pmg_carbon_capture_mining_equipment_building_tech_metals_mine": {
-  "en": "Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$)",
-  "de": "CO2-Abscheidung ($pmg_mining_equipment_building_tech_metals_mine$)"
- },
  "pmg_carbon_capture_norsk_hydro_rjukan_plant": {
   "en": "Carbon Capture ($pmg_norsk_hydro_rjukan_plant$)",
   "de": "CO2-Abscheidung ($pmg_norsk_hydro_rjukan_plant$)"
@@ -9898,10 +10082,6 @@
  "pmg_carbon_capture_steam_automation_building_sulfur_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_sulfur_mine$)",
   "de": "CO2-Abscheidung ($pmg_steam_automation_building_sulfur_mine$)"
- },
- "pmg_carbon_capture_steam_automation_building_tech_metals_mine": {
-  "en": "Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$)",
-  "de": "CO2-Abscheidung ($pmg_steam_automation_building_tech_metals_mine$)"
  },
  "pmg_carbon_capture_steelmaking_process": {
   "en": "Carbon Capture ($pmg_steelmaking_process$)",
@@ -10272,7 +10452,7 @@
   "de": "Elektroniklaborbetrieb"
  },
  "pmg_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "de": "Nationales Ausstellungszentrum"
  },
  "pmg_generic_export_warehouse": {
@@ -10526,6 +10706,10 @@
  "pmg_infosys_mysore_campus": {
   "en": "Infosys Mysore Campus",
   "de": "Infosys-Campus Mysore"
+ },
+ "pmg_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "de": "InGen-Biologie-Schutzgebiet"
  },
  "pmg_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
@@ -10883,6 +11067,10 @@
   "en": "Oracle Cloud Data Center",
   "de": "Oracle-Cloud-Rechenzentrum"
  },
+ "pmg_orbital_defense_battery": {
+  "en": "Weapons",
+  "de": "Waffen"
+ },
  "pmg_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
   "de": "Orient-Express-Terminal Sirkeci"
@@ -10986,6 +11174,10 @@
  "pmg_ramirez_vila_real_cannery": {
   "en": "Ramirez Vila Real Cannery",
   "de": "Ramirez-Konservenfabrik Vila Real"
+ },
+ "pmg_rejoovenesense_compound": {
+  "en": "RejoovenEsense Compound",
+  "de": "RejoovenEsense-Komplex"
  },
  "pmg_rekal_hq": {
   "en": "Rekal Memory Services",
@@ -11146,6 +11338,10 @@
  "pmg_sony_pictures_studios": {
   "en": "Sony Pictures Studios",
   "de": "Sony Pictures Studios"
+ },
+ "pmg_space_command_yards": {
+  "en": "Yards",
+  "de": "Werften"
  },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",

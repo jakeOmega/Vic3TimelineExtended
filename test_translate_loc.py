@@ -347,6 +347,35 @@ class RoundTripTests(unittest.TestCase):
         self.assertIn("# PREVIOUS TRANSLATION: Alt", text)
 
 
+class RespellTests(unittest.TestCase):
+    """respell keeps a translation whose English changed only to American
+    spelling, and leaves any other change stale."""
+
+    def test_spelling_only_change_is_re_pointed(self):
+        entries = [
+            t.Entry("te_laws_l_english.yml", "law_a", "A license for the center"),
+            t.Entry("te_laws_l_english.yml", "law_b", "Ten policies are national"),
+            t.Entry("te_formable_countries_l_english.yml", "AFU", "African Labor Union"),
+        ]
+        tm = {
+            "law_a": {"en": "A licence for the centre", "de": "Eine Lizenz für das Zentrum"},
+            "law_b": {"en": "Nine policies are national", "de": "Neun Maßnahmen sind national"},
+            "AFU": {"en": "African Labour Union", "de": "Afrikanische Arbeiterunion"},
+            "AFU_DAT": {"en": "African Labour Union", "de": "der Afrikanischen Arbeiterunion", "base": "AFU"},
+        }
+        with tempfile.TemporaryDirectory() as root:
+            dirs = (os.path.join(root, "i18n", "german"), os.path.join(root, "build", "i18n", "german"))
+            with mock.patch.object(t, "language_dirs", lambda language: dirs), \
+                    mock.patch.object(t, "load_english", lambda english_dir=None: entries):
+                t.save_tm(tm, entries, "german")
+                self.assertEqual(t.respelled_keys(t.load_tm("german"), entries), ["AFU", "AFU_DAT", "law_a"])
+                self.assertEqual(t.main(["respell"]), 0)
+                after = t.load_tm("german")
+        self.assertEqual(after["law_a"], {"en": "A license for the center", "de": "Eine Lizenz für das Zentrum"})
+        self.assertEqual(after["AFU_DAT"]["en"], "African Labor Union")
+        self.assertEqual(after["law_b"]["en"], "Nine policies are national")  # a real change stays stale
+
+
 class SpanishNamesTests(unittest.TestCase):
     """A language vanilla doesn't decline gets no country-forms section, and
     its merge expects none."""

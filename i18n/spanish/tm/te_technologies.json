@@ -55,6 +55,14 @@
   "en": "With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.",
   "es": "Con nuevos materiales como los compuestos ligeros e incluso los exoesqueletos, nuestros soldados están mejor protegidos y son más móviles. Esto debería mejorar sus probabilidades de sobrevivir a las incomodidades del combate."
  },
+ "advanced_fission": {
+  "en": "Advanced Fission",
+  "es": "Fisión avanzada"
+ },
+ "advanced_fission_desc": {
+  "en": "Molten-salt and thorium reactors run hotter, waste less of their fuel and cannot melt down the way the old light-water designs could. Our existing nuclear plants can be rebuilt around them for far more power from every level, if we can find the specialized alloys to keep the salt from eating through the pipes.",
+  "es": "Los reactores de sales fundidas y de torio funcionan a más temperatura, desperdician menos combustible y no pueden fundirse como lo hacían los antiguos diseños de agua ligera. Nuestras centrales nucleares actuales pueden reconstruirse en torno a ellos para obtener mucha más energía de cada nivel, si logramos encontrar las aleaciones especializadas que impidan que la sal corroa las tuberías."
+ },
  "advanced_materials_armor": {
   "en": "Advanced Materials Armor",
   "es": "Blindaje de materiales avanzados"
@@ -103,6 +111,22 @@
   "en": "Using the latest technology and data analysis, we can make our business processes more streamlined and automated. This cuts down on waste and should, in theory, make everyone more productive.",
   "es": "Con la tecnología más reciente y el análisis de datos, podemos agilizar y automatizar más nuestros procesos empresariales. Esto reduce el desperdicio y debería, en teoría, hacer más productivo a todo el mundo."
  },
+ "ai_agents": {
+  "en": "AI Agents",
+  "es": "Agentes de IA"
+ },
+ "ai_agents_desc": {
+  "en": "Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.",
+  "es": "Un software que no se limita a responder preguntas, sino que hace las cosas: planifica los pasos, usa las herramientas, revisa su propio trabajo y vuelve cuando la tarea está terminada. Departamentos enteros supervisan ahora a agentes en lugar de hacer el trabajo ellos mismos, y algunos descubren que queda poco que supervisar."
+ },
+ "ai_tutors": {
+  "en": "AI Tutors",
+  "es": "Tutores de IA"
+ },
+ "ai_tutors_desc": {
+  "en": "Every child gets a tutor of their own: endlessly patient, awake at midnight before the exam, and able to explain fractions a fourth way when the first three failed. Adults use them too, to learn a new trade in months rather than years. Whoever writes what the tutors teach now has the ear of a whole generation, and not everyone who wants that job is a teacher.",
+  "es": "Cada niño tiene un tutor propio: infinitamente paciente, despierto a medianoche la víspera del examen y capaz de explicar las fracciones de una cuarta manera cuando las tres primeras han fallado. Los adultos también los usan, para aprender un nuevo oficio en meses en lugar de años. Quien escribe lo que enseñan los tutores tiene ahora el oído de toda una generación, y no todos los que quieren ese puesto son maestros."
+ },
  "aluminum_mass_production": {
   "en": "Aluminum Mass Production",
   "es": "Producción en serie de aluminio"
@@ -110,6 +134,14 @@
  "aluminum_mass_production_desc": {
   "en": "We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.",
   "es": "Hemos descubierto cómo producir aluminio a gran escala. Este metal ligero es útil en todo tipo de industrias, así que cabe esperar verlo por todas partes."
+ },
+ "aneutronic_fusion": {
+  "en": "Aneutronic Fusion",
+  "es": "Fusión aneutrónica"
+ },
+ "aneutronic_fusion_desc": {
+  "en": "Fusing protons with boron releases its energy as charged particles instead of neutrons, so the current can be drawn straight from the plasma with no boiler and no turbine. The reactors barely irradiate their own walls and leave no radioactive waste behind, though the fuel has to burn at temperatures that make an ordinary fusion plant look lukewarm.",
+  "es": "Fusionar protones con boro libera su energía en forma de partículas cargadas en lugar de neutrones, de modo que la corriente puede extraerse directamente del plasma, sin caldera ni turbina. Los reactores apenas irradian sus propias paredes y no dejan residuos radiactivos, aunque el combustible debe arder a temperaturas que hacen que una central de fusión corriente parezca tibia."
  },
  "animation": {
   "en": "Animation",
@@ -199,6 +231,14 @@
   "en": "Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.",
   "es": "Los vehículos que se conducen solos ya no son una fantasía. Podrían revolucionar el transporte, hacer nuestras carreteras más seguras y quizá incluso acabar con los atascos."
  },
+ "autonomous_weapons": {
+  "en": "Autonomous Weapons",
+  "es": "Armas autónomas"
+ },
+ "autonomous_weapons_desc": {
+  "en": "Machines that find, select and engage their targets without waiting for a human to approve each shot. They react faster than any soldier and never tire, and the debate over who answers for their mistakes has not slowed their spread.",
+  "es": "Máquinas que encuentran, seleccionan y atacan sus objetivos sin esperar a que un humano apruebe cada disparo. Reaccionan más rápido que cualquier soldado y nunca se cansan, y el debate sobre quién responde de sus errores no ha frenado su expansión."
+ },
  "barcodes_and_scanners": {
   "en": "Barcodes and Scanners",
   "es": "Códigos de barras y escáneres"
@@ -278,6 +318,14 @@
  "cellular_networks_desc": {
   "en": "The rise of cellular networks has meant we can now make phone calls from almost anywhere. This has changed the way we live and do business, for better or worse.",
   "es": "El auge de las redes celulares ha permitido que ahora podamos hacer llamadas telefónicas desde casi cualquier lugar. Esto ha cambiado nuestra forma de vivir y de hacer negocios, para bien o para mal."
+ },
+ "cislunar_infrastructure": {
+  "en": "Cislunar Infrastructure",
+  "es": "Infraestructura cislunar"
+ },
+ "cislunar_infrastructure_desc": {
+  "en": "Relay satellites, orbital stations and landers that fly again and again turn the space between the Earth and the Moon into a working neighborhood. With them, settling other worlds becomes a question of cost rather than of daring.",
+  "es": "Los satélites de enlace, las estaciones orbitales y los módulos de aterrizaje que vuelan una y otra vez convierten el espacio entre la Tierra y la Luna en un vecindario de trabajo. Con ellos, asentarse en otros mundos pasa a ser una cuestión de coste y no de osadía."
  },
  "civil_rights_movement": {
   "en": "Civil Rights Movement",
@@ -512,8 +560,8 @@
   "es": "Células de microfusión"
  },
  "fusion_batteries_desc": {
-  "en": "Imagine a battery that never needs to be recharged. These compact fusion reactors could power our devices and vehicles for years, revolutionizing energy as we know it.",
-  "es": "Imagina una batería que nunca necesita recargarse. Estos reactores de fusión compactos podrían alimentar nuestros dispositivos y vehículos durante años y revolucionar la energía tal y como la conocemos."
+  "en": "Imagine a battery that never needs recharging, because it isn't a battery at all. Microfusion cells are fusion reactors made small and safe enough to sit where a battery once did, running our vehicles, motors and appliances for years on a sip of fuel.",
+  "es": "Imagina una batería que nunca necesita recargarse, porque no es una batería en absoluto. Las células de microfusión son reactores de fusión hechos lo bastante pequeños y seguros como para ocupar el lugar de una batería, y alimentan nuestros vehículos, motores y electrodomésticos durante años con un sorbo de combustible."
  },
  "fusion_power": {
   "en": "Fusion Power",
@@ -547,6 +595,14 @@
   "en": "By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.",
   "es": "Manipulando los genes de los organismos, podemos desarrollar nuevos tratamientos médicos y mejorar nuestros cultivos. Es una tecnología poderosa, pero que debemos manejar con cuidado."
  },
+ "geoengineering": {
+  "en": "Geoengineering",
+  "es": "Geoingeniería"
+ },
+ "geoengineering_desc": {
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
+  "es": "Llevamos dos siglos cambiando el clima por accidente. Solo nuestra audacia nos impide hacerlo a propósito: los aviones podrían llevar aerosoles de sulfato a la estratosfera y velar el sol en menos de un año, a un precio que cualquier gran economía podría pagar. La neblina ocultaría el calentamiento, no lo eliminaría, y habría que mantenerla mientras el carbono permanezca en el aire. Con ella vienen artes menores: sembrar nubes para traer lluvia en una sequía y convertir el granizo en lluvia antes de que caiga. Desbloquea la política climática de Inyección de aerosoles estratosféricos."
+ },
  "globalization": {
   "en": "Globalization",
   "es": "Globalización"
@@ -571,6 +627,14 @@
   "en": "Now our missiles can find their own way to the target. This makes them much more accurate and effective, which is bad news for the enemy.",
   "es": "Ahora nuestros misiles pueden encontrar por sí solos el camino hacia el objetivo. Esto los hace mucho más precisos y eficaces, lo cual son malas noticias para el enemigo."
  },
+ "humanoid_robotics": {
+  "en": "Humanoid Robotics",
+  "es": "Robótica humanoide"
+ },
+ "humanoid_robotics_desc": {
+  "en": "Robots built in our own shape can work in a world built for people: they climb stairs, open doors, stock shelves and fold laundry. Shops, warehouses and homes fill with tireless helpers, and the question of what the clerk and the porter will do next is no longer theoretical.",
+  "es": "Los robots construidos a nuestra imagen pueden trabajar en un mundo hecho para las personas: suben escaleras, abren puertas, reponen estantes y doblan la colada. Tiendas, almacenes y hogares se llenan de ayudantes incansables, y la pregunta de qué harán después el dependiente y el mozo de carga ya no es teórica."
+ },
  "hydraulic_fracturing": {
   "en": "Hydraulic Fracturing",
   "es": "Fracturación hidráulica"
@@ -586,6 +650,14 @@
  "hypersonic_weapons_desc": {
   "en": "Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems.",
   "es": "Armas capaces de viajar a más de cinco veces la velocidad del sonido. Son increíblemente rápidas y precisas, y un verdadero quebradero de cabeza para nuestros sistemas de defensa actuales."
+ },
+ "in_situ_resource_utilization": {
+  "en": "In-Situ Resource Utilization",
+  "es": "Utilización de recursos in situ"
+ },
+ "in_situ_resource_utilization_desc": {
+  "en": "Every kilogram lifted from Earth is dear. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.",
+  "es": "Cada kilogramo que se lleva desde la Tierra es caro. Si extraemos oxígeno, metales y vidrio del polvo y la roca donde aterrizan nuestras tripulaciones, podremos construir y abastecer bases más allá de la Tierra con materiales que ya están allí."
  },
  "inertial_navigation_systems": {
   "en": "Inertial Navigation Systems",
@@ -682,6 +754,14 @@
  "laser_technology_desc": {
   "en": "The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses.",
   "es": "El láser se ha abierto paso en todo tipo de aplicaciones, desde las telecomunicaciones hasta la medicina y la fabricación. Es una herramienta precisa y potente con un número aparentemente infinito de usos."
+ },
+ "liquid_democracy": {
+  "en": "Liquid Democracy",
+  "es": "Democracia líquida"
+ },
+ "liquid_democracy_desc": {
+  "en": "With a secure digital identity for every citizen, a vote can be counted on any question at any time. Each voter decides an issue directly or lends the vote to someone they trust, and can take it back whenever they like. Trust still pools around a few popular delegates, but none of them keeps it a day longer than people allow.",
+  "es": "Con una identidad digital segura para cada ciudadano, se puede contar un voto sobre cualquier cuestión en cualquier momento. Cada votante decide un asunto directamente o presta su voto a alguien de su confianza, y puede retirarlo cuando quiera. La confianza sigue concentrándose en unos pocos delegados populares, pero ninguno la conserva un día más de lo que la gente permite."
  },
  "machine_learning": {
   "en": "Machine Learning",
@@ -843,6 +923,14 @@
   "en": "Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.",
   "es": "Imagina máquinas capaces de construir cosas átomo a átomo. Estos ensambladores moleculares podrían crear bienes muy personalizados con una precisión increíble y cambiar la naturaleza misma de la fabricación."
  },
+ "morphological_freedom": {
+  "en": "Morphological Freedom",
+  "es": "Libertad morfológica"
+ },
+ "morphological_freedom_desc": {
+  "en": "Gene therapy and grown tissue can now change how a body looks as readily as a tailor alters a coat: skin and hair in any color, sex characteristics remade, fur and tails grown from a person's own cells. None of it makes anyone stronger or cleverer. It changes how people present themselves to the world, and that makes it a question for the law.",
+  "es": "La terapia génica y los tejidos cultivados pueden ahora cambiar el aspecto de un cuerpo con la misma facilidad con que un sastre arregla un abrigo: piel y cabello de cualquier color, caracteres sexuales rehechos, pelaje y colas crecidos a partir de las propias células de una persona. Nada de esto hace a nadie más fuerte ni más listo. Cambia cómo se presentan las personas al mundo, y eso lo convierte en una cuestión para la ley."
+ },
  "motorized_artillery": {
   "en": "Motorized Artillery",
   "es": "Artillería motorizada"
@@ -898,6 +986,14 @@
  "nuclear_energy_desc": {
   "en": "By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.",
   "es": "Al aprovechar la energía de las reacciones nucleares, hemos encontrado una nueva y potente fuente de energía. Ha impulsado nuestras industrias y reducido nuestra dependencia de los combustibles fósiles, pero conlleva sus propios riesgos."
+ },
+ "nuclear_thermal_propulsion": {
+  "en": "Nuclear Thermal Propulsion",
+  "es": "Propulsión térmica nuclear"
+ },
+ "nuclear_thermal_propulsion_desc": {
+  "en": "A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. A colony fleet that leaves outside its launch window pays a much smaller premium for it.",
+  "es": "Un reactor calienta hidrógeno hasta lograr el doble de velocidad de escape que los mejores cohetes químicos, así que la misma combustión necesita mucho menos propergol. Una flota colonial que parte fuera de su ventana de lanzamiento paga por ello un recargo mucho menor."
  },
  "nuclear_weapons": {
   "en": "Nuclear Weapons",
@@ -987,6 +1083,14 @@
   "en": "What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.",
   "es": "¿Y si viviéramos en un mundo en el que hubiera suficiente para todos? Una economía de la posescasez, hecha posible por la tecnología avanzada, podría eliminar la carencia material y redefinir el significado mismo del trabajo."
  },
+ "post_work_society": {
+  "en": "Post-Work Society",
+  "es": "Sociedad posterior al trabajo"
+ },
+ "post_work_society_desc": {
+  "en": "Machines now do most of the work that once paid the bills, and a basic income covers the rest. For the first time, most people choose how to spend their days: making art, studying, caring for others or arguing about politics. Not everyone knows what to do with the freedom.",
+  "es": "Las máquinas hacen ahora la mayor parte del trabajo que antes pagaba las facturas, y una renta básica cubre el resto. Por primera vez, la mayoría de la gente elige cómo pasar sus días: haciendo arte, estudiando, cuidando de otros o discutiendo de política. No todos saben qué hacer con la libertad."
+ },
  "precision_guided_munitions": {
   "en": "Precision Guided Munitions",
   "es": "Municiones de precisión guiada"
@@ -1075,6 +1179,14 @@
   "en": "With satellites, we can now spy on any part of the world from space. This has revolutionized intelligence gathering, giving us an unprecedented view of our adversaries.",
   "es": "Con los satélites, ahora podemos espiar cualquier parte del mundo desde el espacio. Esto ha revolucionado la recopilación de inteligencia y nos da una visión sin precedentes de nuestros adversarios."
  },
+ "rejuvenation_therapies": {
+  "en": "Rejuvenation Therapies",
+  "es": "Terapias de rejuvenecimiento"
+ },
+ "rejuvenation_therapies_desc": {
+  "en": "Senolytic drugs clear out worn-out cells, partial reprogramming winds others back, and failing organs are regrown rather than replaced. Those who can afford the treatments now age at half the old pace. It isn't immortality, but it buys a great deal of time.",
+  "es": "Los fármacos senolíticos eliminan las células desgastadas, la reprogramación parcial devuelve otras a su estado anterior, y los órganos que fallan se regeneran en lugar de sustituirse. Quienes pueden permitirse los tratamientos envejecen ahora a la mitad del ritmo de antes. No es la inmortalidad, pero da mucho tiempo."
+ },
  "reusable_rocketry": {
   "en": "Reusable Rocketry",
   "es": "Cohetería reutilizable"
@@ -1122,6 +1234,22 @@
  "second_wave_feminism_desc": {
   "en": "This wave of feminism has fought for equality and personal rights for women. It has had a significant impact on our society, changing gender roles and legal norms.",
   "es": "Esta ola del feminismo ha luchado por la igualdad y los derechos personales de las mujeres. Ha tenido un impacto significativo en nuestra sociedad, al cambiar los roles de género y las normas jurídicas."
+ },
+ "self_directed_evolution": {
+  "en": "Self-Directed Evolution",
+  "es": "Evolución autodirigida"
+ },
+ "self_directed_evolution_desc": {
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
+  "es": "La edición genética ha ido mucho más allá de la superficie. La gente desarrolla nuevos sentidos y funciona con metabolismos diseñados, y da a sus hijos cuerpos hechos para las profundidades del océano, el frío polar, la baja gravedad o el vacío total. En dos generaciones, una familia puede ser una especie de criatura distinta, y una que eligió llegar a ser."
+ },
+ "self_driving_laboratories": {
+  "en": "Self-Driving Laboratories",
+  "es": "Laboratorios autónomos"
+ },
+ "self_driving_laboratories_desc": {
+  "en": "Robotic labs run by AI design an experiment, carry it out, read the results and choose the next one, around the clock. A search that once took a team of graduate students a decade can finish over a long weekend, provided someone remembers to restock the reagents.",
+  "es": "Los laboratorios robóticos dirigidos por IA diseñan un experimento, lo llevan a cabo, leen los resultados y eligen el siguiente, las veinticuatro horas del día. Una búsqueda que antes llevaba una década a un equipo de doctorandos puede terminar en un fin de semana largo, siempre que alguien se acuerde de reponer los reactivos."
  },
  "semiautomatic_rifle": {
   "en": "Semi-Automatic Rifle",
@@ -1299,6 +1427,14 @@
   "en": "Television has revolutionized entertainment and communication. It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time.",
   "es": "La televisión ha revolucionado el entretenimiento y la comunicación. Se ha convertido en un medio poderoso para difundir información y moldear la opinión pública, una pantalla parpadeante tras otra."
  },
+ "terraforming": {
+  "en": "Terraforming",
+  "es": "Terraformación"
+ },
+ "terraforming_desc": {
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
+  "es": "La geoingeniería demostró que el clima de un planeta puede cambiarse a propósito. La terraformación aplica el mismo oficio a otros mundos: espejos en órbita para calentar Marte, fábricas para espesar su aire, una pantalla solar para enfriar Venus. La obra lleva décadas y la recompensa siglos, y los primeros niños que caminarán bajo un cielo marciano sin casco aún no han nacido. Desbloquea el módulo de colonia de Terraformación."
+ },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",
   "es": "Terrorismo y antiterrorismo"
@@ -1339,6 +1475,14 @@
   "en": "Drones have changed the face of warfare. They allow us to conduct surveillance and precision strikes without risking the lives of our pilots, giving us a powerful new tool in our military arsenal.",
   "es": "Los drones han cambiado la faz de la guerra. Nos permiten realizar labores de vigilancia y ataques de precisión sin arriesgar la vida de nuestros pilotos, lo que nos da una nueva y poderosa herramienta en nuestro arsenal militar."
  },
+ "vactrains": {
+  "en": "Vactrains",
+  "es": "Trenes de vacío"
+ },
+ "vactrains_desc": {
+  "en": "Pump the air out of a sealed tube and a maglev capsule inside meets almost nothing to slow it down. Superconducting magnets carry it at an airliner's speed for a fraction of the energy, and freight pods share the tubes around the clock. Cities five hundred miles apart are now less than an hour apart.",
+  "es": "Si se extrae el aire de un tubo sellado, una cápsula maglev en su interior casi no encuentra nada que la frene. Los imanes superconductores la llevan a la velocidad de un avión de línea con una fracción de la energía, y las cápsulas de carga comparten los tubos las veinticuatro horas del día. Ciudades separadas por quinientas millas distan ahora menos de una hora."
+ },
  "video_games": {
   "en": "Video Games",
   "es": "Videojuegos"
@@ -1354,6 +1498,14 @@
  "virtual_reality_desc": {
   "en": "Virtual reality technologies can create incredibly immersive experiences for entertainment, education, and training. It's a new way to interact with the digital world, and it's full of potential.",
   "es": "Las tecnologías de realidad virtual pueden crear experiencias increíblemente inmersivas para el entretenimiento, la educación y el entrenamiento. Es una nueva forma de interactuar con el mundo digital, y está llena de potencial."
+ },
+ "von_neumann_machines": {
+  "en": "Von Neumann Machines",
+  "es": "Máquinas de von Neumann"
+ },
+ "von_neumann_machines_desc": {
+  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.",
+  "es": "John von Neumann se preguntó si una máquina podría construir una copia de sí misma. Las nuestras pueden: una fábrica semilla extrae su propio mineral, fabrica sus propias piezas y monta una segunda fábrica, y las dos hacen cuatro. Las cuadrillas de construcción deciden ahora sobre todo adónde va la siguiente copia, y el cinturón de asteroides se llena de mineros que nadie lanzó."
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",

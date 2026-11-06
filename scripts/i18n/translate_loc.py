@@ -8,6 +8,8 @@ The model never edits a `.yml`. This script does everything deterministic:
     merge     read the agents' output, check every value's markup against the
               English, and add what passes to the translation memory
     status    count translated, stale and missing keys
+    respell   re-point translations whose English changed only from British to
+              American spelling at the new English, so no agent redoes them
 
 The translation memory (`i18n/<language>/tm/*.json`, committed) maps each loc
 key to the English it was translated from and the translation. Keys are looked
@@ -1002,6 +1004,34 @@ def cmd_prepare_fixes(args) -> int:
     return 0
 
 
+def respelled_keys(tm: dict[str, dict], entries: list[Entry]) -> list[str]:
+    """Translated keys whose English has since changed only from British to
+    American spelling, as scripts/analysis/check_loc_spelling.py sweeps it
+    (Licence to License). Their translation still fits the new English."""
+    current = {e.key: e.en for e in entries}
+    out = []
+    for key, record in tm.items():
+        en = current.get(record.get("base", key))
+        if en is not None and record["en"] != en and americanize_value(record["en"])[0] == en:
+            out.append(key)
+    return sorted(out)
+
+
+def cmd_respell(args) -> int:
+    """Point each spelling-only stale record (country forms included) at the
+    current English, keeping its translation. Without this, `prepare` offers
+    every line an American-spelling sweep touched to an agent again."""
+    entries = load_english()
+    current = {e.key: e.en for e in entries}
+    tm = load_tm(args.language)
+    keys = respelled_keys(tm, entries)
+    for key in keys:
+        tm[key]["en"] = current[tm[key].get("base", key)]
+    save_tm(tm, entries, args.language)
+    print(f"{len(keys)} translation(s) re-pointed at their American-spelled English.")
+    return 0
+
+
 def cmd_status(args) -> int:
     entries = load_english()
     state = classify(entries, load_tm(args.language))
@@ -1027,6 +1057,7 @@ def main(argv: list[str] | None = None) -> int:
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")
     sub.add_parser("status")
+    sub.add_parser("respell", help="keep translations whose English changed only to American spelling")
     rf = sub.add_parser("refresh", help="rebuild unstarted chunks' glossaries from the manifest")
     rf.add_argument("chunks", nargs="+")
     pf = sub.add_parser("prepare-fixes", help="write a correction chunk for check-terms mismatches")
@@ -1040,7 +1071,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     args.field = args.field or tm_field(args.language)
     return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
-            "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh, "prepare-fixes": cmd_prepare_fixes}[args.command](args)
+            "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh, "prepare-fixes": cmd_prepare_fixes,
+            "respell": cmd_respell}[args.command](args)
 
 
 if __name__ == "__main__":
