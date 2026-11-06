@@ -77,3 +77,30 @@ Aneutronic Fusion (era 13, military, after Compact Fusion Reactors) adds a base 
 - **Aneutronic Fusion Power** (`pm_base_building_aneutronic_fusion_power`). Proton–boron fusion gives off charged particles, not neutrons, and its current is drawn from the plasma. Against Compact Fusion Power it takes a quarter of the engines (no turbines) and of the lead (almost no shielding), twice the tech metals, 500 electronic components and 15 advanced materials, and staffs 450 laborers, 300 machinists, 100 engineers and 100 academics a level. The mod has no radioactive-waste mechanic, so "no waste" is the lead cut and the method's description.
 - **Its own AI-managed tier.** `pm_ai_managed_power_plant_reactor` cancels 500 laborers, 400 machinists, 100 engineers and 100 academics a level, exact for the three older fusion bases and the Nuclear Plant (#996). The new base staffs fewer, so the reactor method doesn't list it; `pm_ai_managed_power_plant_aneutronic` (hidden when unavailable, the same inputs and 1,000-engineer crew) cancels 450, 300, 100 and 100. A new power base method needs one of the AI-managed power methods to list it, with a cut that matches its staff. The two flat automation tiers (Centralized Control, Integrated Smart Systems) cut at most 420 laborers, 280 machinists and 40 engineers, which the new staff covers.
 - **Fusion Torch Reclamation** (`pm_fusion_torch_reclamation`): the 1969 Eastlund–Gough fusion torch, which breaks scrap and waste back into its elements. It trades ore for electricity, with Microgravity Alloying's steel and staff and pollution 10 (Microgravity's 20). Bespoke Alloys lists it (its cut leaves 10 engineers, as on Microgravity), and `gen_carbon_capture_pms.py` puts it on the not-applicable capture method beside Microgravity, since it burns no coal.
+
+### The mod's mines and their co-products (#1419)
+
+Ten of the thirteen mines the mod adds (`common/buildings/03_zz_te_mines.txt`) make several goods, in proportion to their mineral's real end uses: a Bauxite Mine makes Conductive Metals as well as Structural Metals, a Nickel and Cobalt Mine mostly Structural Metals. Each runs its own copy of the three equipment groups that carry a mine's output (`pmg_mining_equipment_`, `pmg_explosives_` and `pmg_steam_automation_building_<mine>`), cloned from the family it used before by `scripts/generators/gen_mine_coproducts.py` into `mine_coproduct_generated_pms.txt` and `mine_coproduct_generated_groups.txt`. Its train automation, tailings and maintenance groups are still the family's.
+
+| Mine | Family | Value shares at base prices |
+|---|---|---|
+| Bauxite | iron | Structural 85%, Conductive 15% |
+| Manganese | iron | Structural 90%, Tech-Critical 5%, Chemicals 5% |
+| Chromium | iron | Structural 90%, Chemical and Industrial Minerals 10% |
+| Specialty Alloy Metal | iron | Structural 75%, Tech-Critical 15%, Chemicals 10% |
+| Precious and Minor Base Metal | lead | Base 55%, Conductive 30%, Structural 15% |
+| Nickel and Cobalt | tech metals | Structural 60%, Tech-Critical 40% |
+| Lithium | tech metals | Tech-Critical 90%, Glass and Plastics 5%, Chemicals 5% |
+| Rare Earth Metals | tech metals | Tech-Critical 80%, Chemicals 10%, Glass and Plastics 10% |
+| Platinum Group Metals | tech metals | Tech-Critical 90%, Chemicals 10% |
+| Graphite | coal | Energy and Carbon Minerals 70%, Tech-Critical 30% |
+
+Phosphate, Potash and Industrial Mineral and Salt are unchanged: nearly all phosphate and potash go to fertilizer, and salt's other uses (de-icing, food) have no good. Each mine's sources sit with its `MINES` entry in the generator and above its methods in the generated file; shares are rounded to 5%.
+
+- **Value-neutral.** Each copied method keeps its template's inputs, staff, technologies and output value at base prices; only the goods change, so margins and the AI's choice of method don't move. Outputs of one unit or more round to a tenth, smaller ones to a hundredth, and the first good takes the remainder.
+- **One ratio per mine**, the same at every tier. A mine that changed its mix by era (graphite's battery share grew from under a fifth to about half between 2019 and 2025) would need a share table per tier; none does yet.
+- **Templates stay the source.** Rebalance a pump, an explosive or an excavator in the iron, lead, coal or tech metals family, then rerun the generator and `gen_carbon_capture_pms.py`; `test_mine_coproducts.py` fails while the copies are stale. No building runs the tech metals family's three output groups now, so `gen_carbon_capture_pms.py` gives those templates no emissions lines and no capture groups.
+- **Netted fuel becomes an input.** The Coal Mine's pumps and steam donkey burn coal out of their own output (`pm_emissions.NETTED_FUEL`). The Graphite Mine's copies list that coal as an input and split the gross output, so they buy the coal at the same profit and the emissions and capture classes are the template's.
+- **Shared methods that unlock on a pump** (`pm_tailings_treatment`, `pm_maintenance_mechanized_mine`, `pm_rail_transport_mine_infrastructure_4`) also name the copies, in a generated tail of their `unlocking_production_methods` after the generator's `# AUTO-GENERATED` marker. The rest of each list is hand-written.
+- **Carbon capture**: each copied group gets its own capture group from `gen_carbon_capture_pms.py`, with the template's fuel classes.
+- **Supply.** With every deposit worked, these ten mines make about 20% less Tech-Critical Metals by value than before (Nickel and Cobalt holds 35% of the four tech metals mines' deposit levels) and about a fifth more Structural Metals. Late Tech-Critical Metals prices are on the play-test list (`docs/testing/mine-coproducts-playtest.md`); the Nickel and Cobalt line is the lever if they climb too far.
