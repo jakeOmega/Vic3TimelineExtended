@@ -732,3 +732,97 @@ Bauchi, Kumasi and Mbandaka took the fit's hot day, Caracas its heat index
 (its station is 861 m below the city), and Barquisimeto both. Mogadishu keeps
 Wajir's 39.4 °C from 584 km inland, 2.2 from a fit that can't see the coast.
 An `analog:` row must now copy its source's figures.
+
+## 13. Winter sunshine: London neutral, a little either way (2026-11-06)
+
+### 13.1 Why
+
+The owner asked for weather beyond temperature: with interiors heated and cooled, Colorado's Front Range draws people
+for its sunny winters, while Londoners and the Pacific Northwest complain of grey ones. Not a large factor, and eased
+only very late (a little by geoengineering, the rest by era 13's technologies). Asked about other factors, the owner
+kept comfort to the long-term draw or push: storms, earthquakes, floods and wildfires are temporary shocks, the base
+game's harvest conditions, and stay out (owner, 2026-11-06). The evidence for sunshine apart from warmth is weaker than
+for warm winters, since the two travel together in the United States, which is one more reason to keep it small. The
+draw is old, not only modern: 19th-century consumptives moved to Colorado and Davos for the sun, so the weight is the
+same from 1836, and it comes forward late because the larger terms are relieved first and it is not.
+
+### 13.2 Data
+
+`winter_sun_h`: mean daily hours of bright sunshine in the three months around the winter solstice (December to
+February north of the equator, June to August south). The solstice quarter rather than the year, since the
+complaint is about winter: Seattle's summers are sunny, and its year totals more sun than London's while its winters
+match. Rather than the darkest three months, which would charge Bombay its monsoon.
+
+Station sunshine normals exist for only some regions, from instruments that disagree, so every row is estimated the
+same way (`scripts/analysis/local_climate_sun_pull.py`): NASA POWER's 2001-2025 monthly climatology (CERES SYN1deg)
+at the heat figures' station, or at the reference place where that station is over 60 km away, a fit, or an analog;
+each month's sunny share of its daylight as a line in two clearness ratios (all-sky over top-of-atmosphere sunlight,
+all-sky over clear-sky) and a snow term; fitted to 80 stations' approximate normals. It misses a held-out station by
+0.53 h a day. Wolfram's station cloud cover was tried first and is unusable (Seattle's Boeing Field reported 7% cover
+for the winter of 2015-16). The 11 American stations, whose figures run about 0.9 h above every other country's
+against the same satellite data, are kept out of the fit. London reads 2.4 h by this measure, so it is the neutral
+point by the same measure as every row. Across 676 regions the median is 4.5 h, the quartiles 2.7 and 6.8; the least
+is Kola's 0.6, the most 9.6.
+
+### 13.3 Formula
+
+```
+gloom   = max(0, 2.4 - sun) x 1                                     a winter darker than London's costs
+bright  = max(0, min(sun, 6) - 2.4) x 1 x summer share              a brighter one draws, to 6 h
+sun     = (gloom - bright) x (1 - sun relief)                       signed, like winter's mildness
+penalty = min(80, heat + cold + winter + dry + disease + sun)
+```
+
+- 1% per hour, so at most 2.4% for polar night and 3.6% for 6 h and over, against winter's 7.2 and costs up to 80
+  *(designer's call)*. Denver's 5.5 h draws 3.1%; Seattle's 2.2 h costs 0.2, Glasgow's 1.6 h 0.8, Bergen's 1.3 h 1.1.
+- **A hot summer cancels the draw**, with winter mildness's own summer share. Without it Khartoum's 9.4 h would put it
+  past London again once air conditioning eased its heat, which § 12's ruling forbids; with it the deserts' bright
+  winters draw almost nothing (Khartoum 0.3%, Riyadh 0.8, Tucson 1.3). The cost is not cancelled.
+- Warming leaves it alone: how cloud cover answers warming is too uncertain to model.
+- Bounds: the total is never below −10.8 (7.2 + 3.6). The Map Room's comfort scale ends there.
+
+### 13.4 Relief
+
+A new type, `state_climate_sun_relief_add` (Winter Sun Relief), closes both sides together, as Winter Relief does.
+A heated, well-lit house doesn't bring the sun out, so no earlier technology carries it.
+
+| Technology | Era | Sun relief | Why |
+|---|---|---|---|
+| Geoengineering | 12 | 0.3 | weather modification: cloud seeding thins the winter overcast (the technology already carries it for droughts and hail) |
+| Terraforming | 13 | 0.7 | orbital mirrors and cloud control give every winter its sun |
+
+Every kind is still 1.0 at era 13.
+
+### 13.5 Calibration
+
+Percent, negative a bonus, every carrier to each era, the world's anomaly 0:
+
+| Region | Sun h | Sun term, 1836 | 1836 | Era 7 | Era 10 | Era 11 | Era 12 |
+|---|---|---|---|---|---|---|---|
+| Home Counties (London) | 2.4 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Washington (Seattle) | 2.2 | +0.2 | 0.1 | 0.2 | 0.2 | 0.2 | 0.1 |
+| Lowlands (Glasgow) | 1.6 | +0.8 | 1.6 | 1.4 | 1.3 | 1.1 | 0.7 |
+| Western Norway (Bergen) | 1.3 | +1.1 | 3.6 | 2.9 | 2.4 | 2.0 | 1.2 |
+| Moscow | 1.7 | +0.7 | 16.8 | 10.1 | 6.9 | 5.4 | 2.8 |
+| Colorado (Denver) | 5.5 | −3.1 | 18.6 | 5.3 | 1.8 | −0.5 | −0.5 |
+| California (San Francisco) | 5.2 | −2.8 | −1.7 | −5.9 | −5.2 | −4.4 | −2.7 |
+| New Castile (Madrid) | 4.9 | −2.3 | 19.7 | 2.2 | −0.2 | −1.7 | −0.9 |
+| Madeira (Funchal) | 5.2 | −2.8 | −9.9 | −8.4 | −7.0 | −5.6 | −3.4 |
+| Blue Nile (Khartoum) | 9.4 | −0.3 | 22.3 | 2.8 | 1.1 | 0.3 | 0.6 |
+
+- **The Front Range** passes London in era 11, once the last eras have eased its dry land and its winters, and passes
+  Seattle from the start of the modern eras. The test pins both.
+- **London and the Pacific Northwest** stay near nothing: their winters get about the same sun. Vancouver's 1.9 h costs
+  0.5.
+- Across 676 regions in 1836 the sunshine term costs in 128 and draws in 402; the median penalty falls from 19.1% to
+  18.6%, and 53 regions have a bonus over 0.5, against 39. In era 7, 130 have a bonus (87 without it), none of them a
+  hot state.
+- § 12.4's bonuses grow: Madeira −9.9 in 1836, Hawaii −8.7, Cape Colony −8.1.
+
+### 13.6 Not built
+
+- **Temporary weather** (storms, floods, fires, earthquakes; owner, 2026-11-06): comfort is the long-term draw. A
+  disaster's aftermath belongs to the harvest conditions, if anywhere.
+- **Yellow fever and sleeping sickness**: neither yields to Quinine, so each would need its own field and relief; the
+  tsetse fly's large effect on settlement runs through cattle and draft animals, which belongs with agriculture from
+  climate.

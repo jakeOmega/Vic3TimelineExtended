@@ -29,9 +29,9 @@ TECH = os.path.join(REPO, "common", "technology", "technologies")
 VANILLA_TECH = os.path.join(REPO, "vanilla_parsed", "common", "technologies.json")
 VALUES = os.path.join(REPO, "common", "script_values", "local_climate_values.txt")
 GENERATOR = os.path.join(REPO, "scripts", "generators", "gen_local_climate.py")
-KINDS = ("heat", "cold", "winter", "water", "disease")
+KINDS = ("heat", "cold", "winter", "water", "disease", "sun")
 # Each penalty term and the relief kind that eases it.
-TERM_RELIEF = {"heat": "heat", "cold": "cold", "winter": "winter", "dry": "water", "disease": "disease"}
+TERM_RELIEF = {"heat": "heat", "cold": "cold", "winter": "winter", "dry": "water", "disease": "disease", "sun": "sun"}
 ERAS = (1, 4, 7, 10, 13)
 CONSTANT_RE = re.compile(r"(?m)^(te_climate_\w+) = (-?[\d.]+)\s*(?:#.*)?$")
 
@@ -83,7 +83,7 @@ COUNTRIES = (
 )
 
 TOP_RE = re.compile(r"(?m)^(INJECT:|REPLACE:)?(\w+) = \{")
-RELIEF_RE = re.compile(r"state_climate_(heat|cold|winter|water|disease)_relief_add\s*=\s*(-?[\d.]+)")
+RELIEF_RE = re.compile(r"state_climate_(heat|cold|winter|water|disease|sun)_relief_add\s*=\s*(-?[\d.]+)")
 # Malaria Prevention's relief is the census's Malaria Control, which the comfort formula adds to the
 # disease relief (te_climate_relief_disease, local_climate_values.txt).
 CONTROL_RE = re.compile(r"state_malaria_control_add\s*=\s*(-?[\d.]+)")
@@ -169,7 +169,8 @@ def amplification(lat, c):
 
 
 def terms(row, era, c, schedule, warming=0.0):
-    """A row's five terms (winter's signed, negative a bonus) and their sum, for a country holding every carrier up to `era`.
+    """A row's six terms (winter's and sunshine's signed, negative a bonus) and their sum, for a country holding every
+    carrier up to `era`.
 
     `warming` is the world's felt anomaly (temperature_anomaly_display; 0 in 1836). The record holds at
     te_climate_normals_warming, so the row's hot days feel the anomaly less that, and its winter that times
@@ -188,6 +189,10 @@ def terms(row, era, c, schedule, warming=0.0):
     raw["winter"] = (max(0.0, c["te_climate_winter_neutral"] - winter)
                      - max(0.0, min(winter, c["te_climate_winter_mild"]) - c["te_climate_winter_neutral"]) * summer_share
                      ) * c["te_climate_winter_per_degree"]
+    # A winter gloomier than London's costs and a sunnier one draws, the draw cancelled by a hot summer as winter's is.
+    raw["sun"] = (max(0.0, c["te_climate_sun_neutral"] - row.winter_sun_h)
+                  - max(0.0, min(row.winter_sun_h, c["te_climate_sun_full"]) - c["te_climate_sun_neutral"]) * summer_share
+                  ) * c["te_climate_sun_per_hour"]
     out = {term: value * (1 - relief_at(schedule, TERM_RELIEF[term], era)) for term, value in raw.items()}
     out["penalty"] = min(c["te_climate_penalty_max"], sum(out.values()))
     return out
@@ -215,16 +220,16 @@ def main(argv=None):
     for kind in KINDS:
         print(f"  {kind:<18}" + "".join(f"  {relief_at(schedule, kind, e):6.2f}" for e in ERAS))
 
-    split_heads = "".join(f"{h:>6}" for h in ("heat", "cold", "wint.", "dry", "dis."))
+    split_heads = "".join(f"{h:>6}" for h in ("heat", "cold", "wint.", "dry", "dis.", "sun"))
     print(f"\n  {'Anchor region':<26}  {'place':<14}  {split_heads}{heads}")
-    print(f"  {'':<26}  {'':<14}  {'(the 1836 terms; negative is a bonus)':>30}")
+    print(f"  {'':<26}  {'':<14}  {'(the 1836 terms; negative is a bonus)':>36}")
     for state in ANCHORS:
         r = rows.get(state)
         if r is None:
             print(f"  {state:<26}  (no row yet)")
             continue
         t1 = terms(r, 1, c, schedule, args.warming)
-        split = "".join(f"{t1[k]:6.1f}" for k in ("heat", "cold", "winter", "dry", "disease"))
+        split = "".join(f"{t1[k]:6.1f}" for k in ("heat", "cold", "winter", "dry", "disease", "sun"))
         eras = "".join(f"  {terms(r, e, c, schedule, args.warming)['penalty']:6.1f}" for e in ERAS)
         print(f"  {state:<26}  {r.ref_place[:14]:<14}  {split}{eras}")
 
