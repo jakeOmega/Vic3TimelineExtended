@@ -340,8 +340,8 @@ te_debug_un_indict_us = {
 		set_global_variable = un_agency_icc
 	}
 	if = {
-		limit = { NOT = { has_modifier = un_icc_member_modifier } }
-		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+		limit = { NOT = { has_variable = un_icc_member_modifier_on } }
+		un_convention_on = { CONVENTION = icc_member }
 	}
 	set_variable = { name = un_icc_crime value = 1 }
 	trigger_event = { id = un_events.33 }
@@ -432,86 +432,33 @@ te_debug_un_cycle_subject_member = {
 # ---- §0.9: a revolution's winner ----
 
 # Do to our journal entry what a won revolution does to the winner's: every UN
-# modifier on it goes, and the nine country-scoped conventions with them, while
-# the variables stay (scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
+# modifier on it goes, while the variables stay (scripting_best_practices.md
+# § "What a Civil War's Winner Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
 # record a winner inherits. The mirrors are brought up to date first, in case
 # this save has not had its first monthly pulse since they were added.
 # It tests the entry's rebuild only: no civil war ends, so #467's shared
 # te_civil_war_on_won and un_repair_after_civil_war (the pending mark, the
 # headquarters hand-over) do not run, and the dues, regime terms and cooldowns
 # a real revolution drops stay on.
-# At the next monthly pulse: membership, founding status, the headquarters,
-# the permanent seat, the programmes and the conventions come back, and the
-# programme counters survive. The month after: privileges, benefits, dues, the
-# standing tier and the regime terms.
+# At the next monthly pulse: membership, founding status, the headquarters
+# and the permanent seat come back, and the programme counters survive (the
+# programmes and the conventions are declared from their mirrors, which the
+# wipe leaves alone, as are the benefits and the dues). The month after:
+# privileges, the standing tier and the regime terms.
 # Scope: country (the player, a member)
 te_debug_un_wipe_entry = {
 	un_state_reconcile = yes
 	te_debug_un_drop = { MODIFIER = un_member_modifier }
 	te_debug_un_drop = { MODIFIER = un_member_privileges_modifier }
-	te_debug_un_drop = { MODIFIER = un_membership_benefits_modifier }
 	te_debug_un_drop = { MODIFIER = un_founding_member_modifier }
 	te_debug_un_drop = { MODIFIER = un_headquarters_modifier }
 	te_debug_un_drop = { MODIFIER = un_security_council_modifier }
 	te_debug_un_drop = { MODIFIER = un_permanent_member_modifier }
-	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_modifier }
-	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_cost }
-	te_debug_un_drop = { MODIFIER = un_development_contributor_modifier }
-	te_debug_un_drop = { MODIFIER = un_development_contributor_cost }
-	te_debug_un_drop = { MODIFIER = un_development_patron_modifier }
-	te_debug_un_drop = { MODIFIER = un_human_rights_champion_modifier }
-	te_debug_un_drop = { MODIFIER = un_arms_control_participant_modifier }
-	te_debug_un_drop = { MODIFIER = un_champion_order_cost }
-	te_debug_un_drop = { MODIFIER = un_undermine_order_cost }
-	te_debug_un_drop = { MODIFIER = un_human_rights_declaration_modifier }
-	te_debug_un_drop = { MODIFIER = un_nonproliferation_modifier }
-	te_debug_un_drop = { MODIFIER = un_climate_binding_modifier }
-	te_debug_un_drop = { MODIFIER = un_heritage_program_modifier }
-	te_debug_un_drop = { MODIFIER = un_pandemic_cooperation_modifier }
-	te_debug_un_drop = { MODIFIER = un_refugee_program_modifier }
-	te_debug_un_drop = { MODIFIER = un_space_partnership_modifier }
 	te_debug_un_drop = { MODIFIER = un_npt_disarmament_modifier }
 	te_debug_un_drop = { MODIFIER = un_standing_exemplary_modifier }
 	te_debug_un_drop = { MODIFIER = un_standing_respected_modifier }
 	te_debug_un_drop = { MODIFIER = un_standing_poor_modifier }
 	te_debug_un_drop = { MODIFIER = un_standing_disgraced_modifier }
-	if = {
-		limit = { has_modifier = un_law_of_sea_modifier }
-		remove_modifier = un_law_of_sea_modifier
-	}
-	if = {
-		limit = { has_modifier = un_icc_member_modifier }
-		remove_modifier = un_icc_member_modifier
-	}
-	if = {
-		limit = { has_modifier = un_physical_protection_modifier }
-		remove_modifier = un_physical_protection_modifier
-	}
-	if = {
-		limit = { has_modifier = un_narcotics_control_modifier }
-		remove_modifier = un_narcotics_control_modifier
-	}
-	if = {
-		limit = { has_modifier = un_cultural_diversity_modifier }
-		remove_modifier = un_cultural_diversity_modifier
-	}
-	if = {
-		limit = { has_modifier = un_nuclear_ban_modifier }
-		remove_modifier = un_nuclear_ban_modifier
-	}
-	if = {
-		limit = { has_modifier = un_antarctic_treaty_modifier }
-		remove_modifier = un_antarctic_treaty_modifier
-	}
-	if = {
-		limit = { has_modifier = un_asat_moratorium_modifier }
-		remove_modifier = un_asat_moratorium_modifier
-	}
-	if = {
-		limit = { has_modifier = un_colony_protection_modifier }
-		remove_modifier = un_colony_protection_modifier
-	}
 	if = {
 		limit = { NOT = { has_variable = un_state_rebuild_pending } }
 		set_variable = un_state_rebuild_pending

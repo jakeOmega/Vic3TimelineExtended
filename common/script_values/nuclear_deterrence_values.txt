@@ -159,8 +159,8 @@ nd_upkeep_units = {
 }
 
 # The weekly expense, in money. Cached into nd_upkeep_weekly_cached by
-# nd_apply_posture_modifiers; the JE-scoped modifier reads the cache, never
-# this, because a JE-scope re-evaluation cannot reach `gdp`.
+# nd_apply_posture_modifiers; je_nuclear_program's declared nd_upkeep_cost and
+# the panel both read the cache, never this, so the two show one figure.
 nd_upkeep_weekly = {
 	value = gdp
 	divide = 100000

@@ -146,6 +146,596 @@
 		un_state_restore_all = yes
 	}
 
+	# ---- Scaling modifiers (1.15, #1404; design § 4.11) ----
+	# The modifiers that follow a number, or a state a variable records, are
+	# declared here, and the engine re-reads each value from the owning
+	# country about every four days while the entry is active: every country
+	# that is not decentralized holds it active once the UN can exist
+	# (can_deactivate = no), member or not, so sanction and embargo targets
+	# carry theirs too. Nothing adds or removes them, and has_modifier cannot
+	# see them: their readers test what each value reads (a cache, or a
+	# <modifier>_on mirror, which is the truth). Each value is 0 wherever the
+	# old code would have removed the modifier. test_un_scaling_modifiers.py
+	# pins every declaration and its gate.
+	#
+	# Membership benefits: authority / 50 x (1 + institutional alignment), from
+	# the Contested tier, to a member that draws its benefits (represented, or
+	# its seat carried by a paying overlord, §0.8).
+	scaling_modifiers_while_active = {
+		modifier = un_membership_benefits_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					un_tier_at_least_contested = yes
+					un_member_draws_benefits = yes
+				}
+				add = un_membership_benefits_multiplier
+			}
+		}
+	}
+	# Dues: this month's weekly assessment (var:un_dues_cached, which every way
+	# out removes), while the member pays its own (un_dues_in_force).
+	scaling_modifiers_while_active = {
+		modifier = un_dues_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dues_in_force = yes }
+				add = var:un_dues_cached
+			}
+		}
+	}
+	# The World Development Fund: what its recipients remember of our money
+	# (var:un_dev_fund_patron, un_dev_fund_patron_pulse), and the grant it
+	# pays us this month (var:un_dev_fund_grant), into the investment pool
+	# where the pool can take it, into the treasury otherwise.
+	scaling_modifiers_while_active = {
+		modifier = un_development_patron_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_dev_fund_patron
+					var:un_dev_fund_patron > 0
+				}
+				add = var:un_dev_fund_patron
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_dev_fund_pool_grant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dev_fund_grant_into_pool = yes }
+				add = var:un_dev_fund_grant
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_dev_fund_treasury_grant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dev_fund_grant_into_treasury = yes }
+				add = var:un_dev_fund_grant
+			}
+		}
+	}
+	# Missions: this month's cost of the missions we serve in at will, and the
+	# observers of an electoral mission we host, at its strength.
+	scaling_modifiers_while_active = {
+		modifier = un_mission_service_cost
+		value = {
+			value = 0
+			if = {
+				limit = { un_mission_service_paying = yes }
+				add = var:un_msn_service_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_electoral_observers_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_mission_observers_present = yes }
+				add = var:un_msn_electoral_power
+			}
+		}
+	}
+	# A bound mandate's war support at E (from the Strong tier), and the seabed
+	# royalty a party pays while the Law of the Sea regulates the seabed.
+	scaling_modifiers_while_active = {
+		modifier = un_mandate_war_support_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_global_variable = un_founded
+					un_teeth_mandate_support_applies = yes
+				}
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_seabed_royalty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { te_seabed_royalty_paying = yes }
+				add = var:te_seabed_royalty_cached
+			}
+		}
+	}
+	# The programmes and stances, while their mirrors are set (§0.9: the
+	# variable is the truth, so a revolution's winner keeps them). The two
+	# costs and the Development Programs benefits at their cached figures;
+	# undermining only without the championing a merge may deliver beside it.
+	scaling_modifiers_while_active = {
+		modifier = un_peacekeeping_contributor_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_peacekeeping_contributor_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_peacekeeping_contributor_cost
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_peacekeeping_contributor_cost_on
+					has_variable = un_peacekeeping_expense_cached
+				}
+				add = var:un_peacekeeping_expense_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_development_contributor_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_development_contributor_modifier_on
+					has_variable = un_dev_fund_benefit
+				}
+				add = var:un_dev_fund_benefit
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_development_contributor_cost
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_development_contributor_cost_on
+					has_variable = un_development_expense_cached
+				}
+				add = var:un_development_expense_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_human_rights_champion_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_human_rights_champion_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_arms_control_participant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_arms_control_participant_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_champion_order_cost
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_champion_order_cost_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_undermine_order_cost
+		value = {
+			value = 0
+			if = {
+				limit = { un_undermines_the_order = yes }
+				add = 1
+			}
+		}
+	}
+	# The conventions we are party to, at the UN's enforcement E: the mirror
+	# is the ratification (un_convention_on sets it, un_conventions_end
+	# clears it), so a Moribund UN's x0 takes the modifier off and leaves the
+	# ratification. Nine of these sat on the country before 1.15.
+	scaling_modifiers_while_active = {
+		modifier = un_human_rights_declaration_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_human_rights_declaration_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_nonproliferation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_nonproliferation_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_climate_binding_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_climate_binding_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_heritage_program_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_heritage_program_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_pandemic_cooperation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_pandemic_cooperation_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_refugee_program_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_refugee_program_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_space_partnership_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_space_partnership_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_law_of_sea_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_law_of_sea_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_icc_member_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_icc_member_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_physical_protection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_physical_protection_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_narcotics_control_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_narcotics_control_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_cultural_diversity_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_cultural_diversity_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_nuclear_ban_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_nuclear_ban_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_antarctic_treaty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_antarctic_treaty_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_asat_moratorium_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_asat_moratorium_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_colony_protection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_colony_protection_modifier_on }
+				add = un_convention_multiplier
+			}
+		}
+	}
+	# The regime terms (un_regime_refresh_country decides them once an epoch
+	# and sets their presence variables): at E, the climate adaptation aid at
+	# the warming it offsets, intelligence sharing at the tier's steps above
+	# Strong. All sat on the country before 1.15.
+	scaling_modifiers_while_active = {
+		modifier = un_regime_climate_emitter_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_climate_emitter_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_climate_adaptation_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_climate_adaptation_modifier_on }
+				add = un_regime_adaptation_multiplier
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_npt_inspection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_npt_inspection_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_npt_guarantee_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_npt_guarantee_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_naval_curb_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_naval_curb_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_rights_violator_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_rights_violator_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_colonial_pressure_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_colonial_pressure_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_colony_liberty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_colony_liberty_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_refugee_host_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_refugee_host_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_refugee_source_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_refugee_source_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_leader_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_leader_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_laggard_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_laggard_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_space_weapon_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_space_weapon_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_heritage_site_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_heritage_site_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_cultural_hegemon_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_cultural_hegemon_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_antarctic_station_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_antarctic_station_modifier_on }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_regime_shared_intelligence_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_regime_shared_intelligence_modifier_on }
+				add = un_regime_strong_steps
+			}
+		}
+	}
+	# What the Assembly imposed on us, at E: an arms embargo, full or
+	# voluntary, while its months run (un_arms_embargo_months and _form), and
+	# a sanctions regime while its variable is set. A target outside the UN
+	# holds the entry too (every country does once the UN is founded).
+	scaling_modifiers_while_active = {
+		modifier = un_arms_embargo_target_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_arms_embargo_full_in_force = yes }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_arms_embargo_voluntary_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_arms_embargo_voluntary_in_force = yes }
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_sanctions_target_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_sanctions_target_on }
+				add = un_enforcement
+			}
+		}
+	}
+
 	progressbar = no
 	progress_desc = un_authority_progress_desc
 
@@ -168,6 +758,12 @@
 				desc = je_un_status_dissolved
 				trigger = { un_founding_is_refounding = yes }
 			}
+		}
+	}
+
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_united_nations = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 		}
 	}
 
@@ -249,20 +845,18 @@
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 						modifier:country_un_membership_obligation_bool = yes
 						un_membership_eligible = yes
+						is_revolutionary = no	# as the Join button
 					}
 					un_join_organisation = yes
 				}
 
 				# A member that has left stops paying for the contingents it sent at
-				# will (un_mission_service_refresh removes the cost for a
-				# non-member; the members' refresh is below).
+				# will (un_mission_service_refresh removes the cost's variable for
+				# a non-member; the members' refresh is below).
 				if = {
 					limit = {
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-						OR = {
-							has_modifier = un_mission_service_cost
-							has_variable = un_msn_service_cached
-						}
+						has_variable = un_msn_service_cached
 					}
 					un_mission_service_refresh = yes
 				}
@@ -306,11 +900,10 @@
 					# (un_authority_monthly_update, un_authority_effects.txt). Nothing
 					# per-member is applied here.
 
-					# Refresh contributor-cost cached expense vars so the JE-scoped
-					# add_modifier multipliers track current GDP. JE scope can't read
-					# country properties like gdp directly inside multiplier blocks.
+					# Re-price the programmes' weekly costs, which the entry's
+					# declarations read, so they follow today's GDP.
 					if = {
-						limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+						limit = { has_variable = un_peacekeeping_contributor_modifier_on }
 						set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
 					}
 					# Development Programs: the size's expense and benefit factor
@@ -321,7 +914,8 @@
 					# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
 					# This month's assessment, or a month in arrears for a member
 					# withholding its dues (Article 19 after 24 of them). The single
-					# refresh site for un_dues_modifier.
+					# refresh site for var:un_dues_cached, which the entry's
+					# declaration of un_dues_modifier reads (above).
 					# A member suspended for want of diplomatic autonomy is never
 					# assessed itself: its represented overlord is billed for its
 					# seat (un_dues_assessed_gdp, §0.8 ruling 4). Its arrears, if
@@ -330,10 +924,7 @@
 					# (un_dues_self_assessed).
 					if = {
 						limit = { NOT = { un_dues_self_assessed = yes } }
-						if = {
-							limit = { has_modifier = un_dues_modifier }
-							remove_modifier = un_dues_modifier
-						}
+						un_dues_stop_paying = yes
 					}
 					else = {
 						un_dues_country_monthly_update = yes
@@ -342,7 +933,7 @@
 					# ---- Missions joined at will (un_mission_effects.txt) ----
 					# The AI sends or recalls a contingent the way a player does from
 					# the chamber; then this month's cost of every mission we serve
-					# in at will (un_mission_service_cost's refresh).
+					# in at will (the variable un_mission_service_cost is declared at).
 					if = {
 						limit = { is_ai = yes }
 						un_mission_ai_monthly = yes
@@ -365,29 +956,8 @@
 						je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 					}
 
-					# ---- Apply scaled UN membership modifier ----
-					# Modifier stays applied per-member; the multiplier reads the shared
-					# global authority. Members of a bloc with the Multilateral Institutions
-					# principle scale the benefit further by (1 + country_un_institutional_alignment)
-					# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
-					# Paid from the Contested tier up (redesign phase 2): a Moribund UN
-					# pays its members nothing. And only to a member that draws the
-					# benefits (§0.8): represented, or its seat carried.
-					if = {
-						limit = {
-							un_tier_at_least_contested = yes
-							un_member_draws_benefits = yes
-						}
-						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-						je:je_united_nations ?= { add_modifier = {
-								name = un_membership_benefits_modifier
-								multiplier = un_membership_benefits_multiplier_for_je
-							}
-						}
-					}
-					else = {
-						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-					}
+					# The scaled membership benefits are declared on the entry
+					# (scaling_modifiers_while_active, above).
 
 					# ---- Retired: the blanket infamy modifier ----
 					# Redesign phase 5 (§5.2): a war goal added without a mandate now
@@ -554,7 +1124,7 @@
 		header = je_un_preview_membership_benefits_header
 		effect = {
 			custom_tooltip = je_un_preview_membership_benefits_tt
-			add_modifier = { name = un_membership_benefits_modifier }
+			show_as_tooltip = { add_modifier = { name = un_membership_benefits_modifier } }
 		}
 	}
 	event_outcome_activated_effect_desc = {

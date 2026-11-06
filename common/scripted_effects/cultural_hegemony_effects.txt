@@ -5,9 +5,11 @@
 # Called from on_actions (game start) and JE (display only after 1845).
 # ============================================================================
 
-# ---- MONTHLY: Per-country cache + modifier application ----
+# ---- MONTHLY: Per-country cache ----
 # Scope: Country
-# Caches all display variables and applies/removes CH modifiers.
+# Caches the display variables. var:ch_total is also what je_cultural_hegemony
+# declares cultural_hegemony_effect at (cultural_hegemony_modifier_mult), so the
+# entry never recomputes the world's pull itself.
 ch_monthly_country_update = {
 	# Last month's share, kept for the journal-entry widget's trend arrow
 	# (ch_disp_share_trend). Display bookkeeping: nothing else reads it.
@@ -43,17 +45,6 @@ ch_monthly_country_update = {
 		limit = { is_player = yes }
 		ch_leaders_display_write = yes
 		ch_board_refresh_capitals = yes
-	}
-
-	# Foreign benchmark is now applied in JE on_monthly_pulse
-	# (only affects countries that have the journal entry active)
-	# Clean up stale foreign benchmark from countries without the JE
-	if = {
-		limit = {
-			has_modifier = cultural_hegemony_foreign_benchmark
-			NOT = { has_journal_entry = je_cultural_hegemony }
-		}
-		remove_modifier = cultural_hegemony_foreign_benchmark
 	}
 }
 
@@ -330,19 +321,19 @@ ch_set_display_state = {
 
 	set_variable = { name = ch_prog_count value = 0 }
 	if = {
-		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition } }
+		limit = { ch_active_world_exposition = yes }
 		change_variable = { name = ch_prog_count add = 1 }
 	}
 	if = {
-		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program } }
+		limit = { ch_active_cultural_institutes = yes }
 		change_variable = { name = ch_prog_count add = 1 }
 	}
 	if = {
-		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign } }
+		limit = { ch_active_global_media_campaign = yes }
 		change_variable = { name = ch_prog_count add = 1 }
 	}
 	if = {
-		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program } }
+		limit = { ch_active_cultural_protectionism = yes }
 		change_variable = { name = ch_prog_count add = 1 }
 	}
 }
@@ -360,23 +351,18 @@ ch_set_display_state = {
 #   * on the two funding steppers, one `custom_tooltip` OUTSIDE the
 #     `hidden_effect`: the original body is wholly hidden, so the widget's
 #     composed tooltip would otherwise render an empty "what this does" half.
-# Everything else is byte-identical to the pre-change button bodies.
+#     It names what a step adds and costs, so it is the steppers' preview.
+#
+# Since vanilla 1.15 the funding pair and the four programmes are scaling
+# modifiers on je_cultural_hegemony (scaling_modifiers_while_active), read from
+# the funding level and from one country variable per programme
+# (ch_<programme>_on, ch_active_<programme>). These effects only write the
+# variables; the entry's modifiers follow on its next update, a few days later.
+# An effect that only sets a variable shows nothing in a tooltip, so starting a
+# programme previews its modifiers (show_as_tooltip) and ending one says so
+# (custom_tooltip).
 # Scope: country (the journal entry's owner).
 # ============================================================================
-
-# The remove-then-conditionally-re-add block that the two funding steppers and
-# the journal entry's monthly pulse all used to carry verbatim.
-# Scope: country
-ch_refresh_funding_modifiers = {
-	je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
-	je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
-	if = {
-		limit = { ch_program_funding_level_value >= 1 }
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding multiplier = ch_program_funding_level_value_for_je } }
-		# One level's cost per level (ch_program_funding_total_cost_mult).
-		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_program_funding_cost multiplier = ch_program_funding_total_cost_mult_for_je } }
-	}
-}
 
 ch_effect_increase_program_funding = {
 	hidden_effect = {
@@ -389,7 +375,6 @@ ch_effect_increase_program_funding = {
 			clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 		}
 
-		ch_refresh_funding_modifiers = yes
 		ch_set_display_state = yes
 	}
 	custom_tooltip = ch_policy_funding_step_tt
@@ -400,65 +385,116 @@ ch_effect_decrease_program_funding = {
 		change_variable = { name = ch_program_funding_level subtract = 1 }
 		clamp_variable = { name = ch_program_funding_level min = 0 max = ch_program_funding_max_level }
 
-		ch_refresh_funding_modifiers = yes
 		ch_set_display_state = yes
 	}
 	custom_tooltip = ch_policy_funding_step_tt
 }
 
+# The outreach's cost (ch_world_exposition_cost, one funding step's worth) is
+# declared beside it while it runs. Its preview sits on the country, where
+# ch_program_funding_cost_mult can read gdp; the entry passes it on to the
+# country all the same.
 ch_effect_world_exposition = {
-	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
-	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
+	show_as_tooltip = {
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
+		add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult }
+	}
 	hidden_effect = {
+		set_variable = { name = ch_world_exposition_on value = yes }
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_disable_world_exposition = {
-	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
-	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
+	custom_tooltip = {
+		text = ch_policy_outreach_end_tt
+		hidden_effect = { remove_variable = ch_world_exposition_on }
+	}
 	hidden_effect = {
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_cultural_institutes = {
-	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
+	show_as_tooltip = {
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_institutes_program } }
+	}
 	hidden_effect = {
+		set_variable = { name = ch_cultural_institutes_on value = yes }
+		# Its influence use reaches the country within a few days (the entry
+		# declares it, #1404); until then the influence gates count it here.
+		if = {
+			limit = { has_variable = ch_influence_pending }
+			set_variable = {
+				name = ch_influence_pending
+				value = { value = var:ch_influence_pending add = ch_cultural_institutes_influence_cost }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = ch_influence_pending value = ch_cultural_institutes_influence_cost days = 7 }
+		}
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_disable_cultural_institutes = {
-	je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
+	custom_tooltip = {
+		text = ch_policy_institutes_end_tt
+		hidden_effect = { remove_variable = ch_cultural_institutes_on }
+	}
 	hidden_effect = {
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_global_media_campaign = {
-	je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
+	show_as_tooltip = {
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_global_media_campaign } }
+	}
 	hidden_effect = {
+		set_variable = { name = ch_global_media_campaign_on value = yes }
+		# As Cultural Institutes: the gates count the cost until it lands.
+		if = {
+			limit = { has_variable = ch_influence_pending }
+			set_variable = {
+				name = ch_influence_pending
+				value = { value = var:ch_influence_pending add = ch_global_media_influence_cost }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = ch_influence_pending value = ch_global_media_influence_cost days = 7 }
+		}
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_disable_global_media_campaign = {
-	je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
+	custom_tooltip = {
+		text = ch_policy_media_end_tt
+		hidden_effect = { remove_variable = ch_global_media_campaign_on }
+	}
 	hidden_effect = {
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_cultural_protectionism = {
-	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
+	show_as_tooltip = {
+		je:je_cultural_hegemony ?= { add_modifier = { name = ch_cultural_protectionism_program } }
+	}
 	hidden_effect = {
+		set_variable = { name = ch_cultural_protectionism_on value = yes }
 		ch_set_display_state = yes
 	}
 }
 
 ch_effect_disable_cultural_protectionism = {
-	je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
+	custom_tooltip = {
+		text = ch_policy_protectionism_end_tt
+		hidden_effect = { remove_variable = ch_cultural_protectionism_on }
+	}
 	hidden_effect = {
 		ch_set_display_state = yes
 	}
@@ -1545,7 +1581,8 @@ ch_apply_hegemon_movement_pressure = {
 # ch_yearly_global_update, which saves the rank-1 hegemon as
 # scope:cultural_hegemon first.
 # Strips the baseline modifiers from every movement, then — for a country that
-# trails the hegemon (it carries cultural_hegemony_foreign_benchmark) — re-applies
+# trails the hegemon (ch_trails_hegemon: it carries the Foreign Cultural
+# Benchmark) — re-applies
 # them to the hegemon model's movements, scaled by that model's share of world
 # culture (ch_model_pressure_mult). Non-decaying, and 13 months long so it never
 # lapses between rebuilds; the event-driven pressure (ch_hegemon_ideological_pressure)
@@ -1572,7 +1609,7 @@ ch_refresh_baseline_model_pressure = {
 			exists = scope:cultural_hegemon
 			NOT = { this = scope:cultural_hegemon }
 			has_journal_entry = je_cultural_hegemony
-			has_modifier = cultural_hegemony_foreign_benchmark
+			ch_trails_hegemon = yes
 			# A trigger needs the variable on the LEFT; the threshold is the
 			# same script value ch_model_pressure_mult tests.
 			has_global_variable = ch_rank_1_ideology_share

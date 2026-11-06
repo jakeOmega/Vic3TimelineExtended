@@ -65,12 +65,15 @@ banking_external_sterilization_cost = {
 	min = 0
 }
 # A month's sterilization bill, charged a quarter of it a week as a government
-# expense (banking_external_charge_sterilization, owner 2026-10-27). The
-# multiplier is evaluated in the entry's scope, so it reads the owner.
+# expense (owner 2026-10-27). banking_external_charge_sterilization caches it in
+# banking_external_sterilization_charge_cached, which je_banking_cycle declares
+# banking_external_sterilization_charge at while the tool is on.
 banking_external_sterilization_weekly_charge = {
 	value = banking_external_sterilization_cost
 	divide = 4
 }
+# Uncalled since 1.15; an older save's added copy of the charge still names it.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 banking_external_sterilization_weekly_charge_for_je = {
 	value = 0
 	owner = { add = banking_external_sterilization_weekly_charge }
@@ -108,11 +111,14 @@ banking_external_import_cost = {
 	multiply = gdp
 	min = 0
 }
-# ...and import financing's, at this month's escalated cost.
+# ...and import financing's, at this month's escalated cost
+# (banking_external_charge_import, into banking_external_import_charge_cached).
 banking_external_import_weekly_charge = {
 	value = banking_external_import_cost
 	divide = 4
 }
+# Uncalled since 1.15; an older save's added copy of the charge still names it.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 banking_external_import_weekly_charge_for_je = {
 	value = 0
 	owner = { add = banking_external_import_weekly_charge }

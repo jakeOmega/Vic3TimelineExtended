@@ -3,9 +3,10 @@
 # ============================================================================
 # Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt and by
 # te_tax_on_uprising / te_tax_repair_after_civil_war
-# (common/scripted_effects/te_tax_civil_war_effects.txt). ROOT is always the
-# country the event fires on, which the relief and reaction modifiers'
-# multipliers read. Logic: common/scripted_effects/te_tax_light_effects.txt;
+# (common/scripted_effects/te_tax_civil_war_effects.txt). Each runs in the
+# country it fires on; the relief and reaction modifiers are je_tax_code's
+# scaling modifiers, which read the variables the sync writes. Logic:
+# common/scripted_effects/te_tax_light_effects.txt;
 # design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md.
 # ============================================================================
 namespace = te_tax_light

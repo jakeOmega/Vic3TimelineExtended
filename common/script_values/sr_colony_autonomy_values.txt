@@ -77,17 +77,22 @@ sr_free_trade_max_units = { value = 5 }
 # The AI supplies at most this many free colonies (sr_free_ai_review).
 sr_free_ai_max = { value = 2 }
 
-# The entry's three modifiers' multipliers (sr_emig_refresh_modifiers). They
-# resolve in the entry's scope, so they read the country through owner
-# (je_multiplier_scope_audit).
+# The entry's three modifiers' old multipliers, read through owner from the
+# entry's scope. The entry now declares the three from sr_free_supply_count,
+# sr_free_trade_units and sr_garrison_count (je_space_race.txt), so nothing
+# calls these; a save from before the declarations may still name them on the
+# copy it added, until the old-save strip removes it.
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_free_supply_units = {
 	value = 0
 	owner = { add = sr_free_supply_count }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_free_trade_units_entry = {
 	value = 0
 	owner = { add = sr_free_trade_units }
 }
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of legacy_je_modifier_cleanup_effect (after 2026-12-31)
 sr_garrison_units = {
 	value = 0
 	owner = { add = sr_garrison_count }

@@ -908,7 +908,7 @@ remove_as_interest_group_leader effect [ Character has no valid Interest Group ]
 
 `character_role_ig_leader`'s `on_career_end` ends with `remove_as_interest_group_leader = yes` and no check that the character still has a group, so a leader whose group was dissolved first logs this as the role is taken away. The stack has no other frame. 2026-10-24: one line; harmless.
 
-### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
+### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88`, `common/journal_entries/05_great_eastern_crisis.txt:33` and `events/technology_events.txt:28` — a country with no states read through its capital
 - reviewed: helper anchor, signature cannot match a mod call (the mod reads only the numeric interest_tier_effect_* constants from 00_diplomacy_values, which read no capital, region or market; its override of leverage_threshold_to_invite lives in the mod's own script values)
 
 ```
@@ -919,7 +919,7 @@ Scoped object is not valid. Type: State NULL_STATE
 Undefined event target 'capital_scope'
 ```
 
-A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. Two vanilla events read the capital the same way: `events/movement_events.txt:1657` (`capital`, then `add_loyalists_in_state` on `NULL_STATE`) and `events/agitators_events/agitators_law_events.txt:1497` (`capital = { save_scope_as = capital_scope }`, so `scope:capital_scope` at line 1523 is undefined), one or two lines each in the 2026-10-10 and 2026-10-11 runs. The vanilla AI strategies read capitals the same way; the next entry covers them, for stacks with no mod frame only.
+A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. Two vanilla events read the capital the same way: `events/movement_events.txt:1657` (`capital`, then `add_loyalists_in_state` on `NULL_STATE`) and `events/agitators_events/agitators_law_events.txt:1497` (`capital = { save_scope_as = capital_scope }`, so `scope:capital_scope` at line 1523 is undefined), one or two lines each in the 2026-10-10 and 2026-10-11 runs. The Great Eastern Crisis entry's `should_show_when_not_involved` reads `top_overlord ?= { capital = { ... } }` the same way as the Iberian one: one line on 2026-11-06. The vanilla AI strategies read capitals the same way; the next entry covers them, for stacks with no mod frame only.
 
 ### `common/ai_strategies/00_default_strategy.txt`, `common/ai_strategies/01_admin_strategies.txt:51` and `common/ai_strategies/02_diplomatic_strategies.txt:724, 778` — the AI reads a stateless country's capital
 - stack: vanilla only
@@ -1054,6 +1054,7 @@ Undefined event target 'general_1'
 Undefined event target 'fascist_ig'
 Undefined event target 'fascist_leader'
 Undefined event target 'strike_state'
+Undefined event target 'sapporo_partner_country_scope'
 Event target link 'scope' returned an unset scope
 Event target link 'scope' returned an invalid object
 Invalid left side during comparison 'scope'
@@ -1062,7 +1063,7 @@ Wrong scope for trigger: none
 Scoped object is not valid. Type: State NULL_STATE
 ```
 
-Each saves a scope in `immediate` (or on activation) and reads it in an option or `on_fail` without `exists`, and the saved object can be gone by then. One to three lines each, 2026-10-10. The files: the petition agenda's `on_fail`, Dreyfus option b (`kill_character`), `events/japan_events/ep2_sakoku_events.txt:51`, `events/tech_events/trench_warfare.txt:123`, `events/fascism_events.txt:134, 164, 1451, 1462` and `common/journal_entries/00_fascism.txt:200` (Night of the Long Knives, the fascist takeover), and `events/strike_events.txt:110, 366` (the strike state, read through vanilla's strike effects).
+Each saves a scope in `immediate` (or on activation) and reads it in an option or `on_fail` without `exists`, and the saved object can be gone by then. One to three lines each, 2026-10-10. The files: the petition agenda's `on_fail`, Dreyfus option b (`kill_character`), `events/japan_events/ep2_sakoku_events.txt:51`, `events/tech_events/trench_warfare.txt:123`, `events/fascism_events.txt:134, 164, 1451, 1462` and `common/journal_entries/00_fascism.txt:200` (Night of the Long Knives, the fascist takeover), and `events/strike_events.txt:110, 366` (the strike state, read through vanilla's strike effects). The Sapporo event (`events/japan_events/ep2_hokkaido_events.txt:873, 914`) saves its partner from a `random_country_in_americas` or `random_country_in_europe` whose limit (a friendly great power) can match no one, then reads it unguarded, and the `religion` and `create_diplomatic_catalyst` effects inside run on nothing: six lines on 2026-11-05.
 
 ### `events/agitators_events/paris_commune_events.txt:567, 573`, `events/brazil/vargas.txt:1043` and `events/fascism_events.txt:1421` — governments formed with an insurrectionary group
 
@@ -1107,13 +1108,14 @@ Event target link 'owner' returned an invalid object
 
 The Remove Opium Ban decision's is_shown checks `exists = market` and then reads `market.owner = root`, and lobby event 5's trigger reads `any_market = { NOT = { owner = root } … }`; both fail on a market whose owner is gone. 2026-10-29 (a game in 2010): 15 and 3 lines over 17 minutes, in the launch where the mod's monthly trade-partner refresh also met a market with no trade-center state (its `trade_center` link invalid, once a month; now skipped). The mod overrides neither file.
 
-### `events/paralegal_discrimination_events.txt:115` — an AI trigger's `has_journal_entry` read in a state scope (1.15)
+### `events/paralegal_discrimination_events.txt:115` and `events/india_events/jail.txt:59, 116, 173, 214` — an AI trigger's `has_journal_entry` read in a state or character scope (1.15)
 
 ```
 has_journal_entry trigger [ Wrong scope for trigger: state, expected country ]
+has_journal_entry trigger [ Wrong scope for trigger: character, expected country ]
 ```
 
-The event calls a vanilla AI scripted trigger (00_ai_triggers.txt line 1304) whose `has_journal_entry` runs with a state as its scope. Vanilla 1.15; once at the start of the first 1.15 observer game (2026-11-05), and twice in a game as Britain the same night, once from line 115 and once from line 163 (00_ai_triggers.txt line 1313).
+The event calls a vanilla AI scripted trigger (00_ai_triggers.txt line 1304) whose `has_journal_entry` runs with a state as its scope. Vanilla 1.15; once at the start of the first 1.15 observer game (2026-11-05), and twice in a game as Britain the same night, once from line 115 and once from line 163 (00_ai_triggers.txt line 1313). The Indian jail events' option weights call the same two triggers (`ai_wants_radicals`, `ai_avoids_radicals`) with the prisoner, a character, as the scope: one line from each of the four options on 2026-11-05.
 
 ### `common/journal_entries/04_indian_famines.txt:225` — an outcome removes a timed modifier the country doesn't hold (1.15)
 
@@ -1175,13 +1177,13 @@ je:je_great_game_control effect [ Wrong scope for effect: none, expected country
 
 Through the Great Game scripted effects (00_victoria_great_game_scripted_effects.txt line 83). Vanilla 1.15 (2026-11-05).
 
-### `events/balkans_events/00_ip3_hungary_events.txt:768` — `play_as` with no player
+### `events/balkans_events/00_ip3_hungary_events.txt:768` and `events/soi_events/00_ep1_kazakh_events.txt:539` — `play_as` with no player
 
 ```
 Failed to switch player to new country in play_as effect - no player for scoped country
 ```
 
-The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05).
+The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05). The Kazakh event's `play_as = c:KAZ` does the same when the country it fires for has no player: once the same night.
 
 ### `common/journal_entries/06_morocco_lands_of_anarchy.txt:99` — `owner = root` on an al-Rif state with no owner (1.15)
 
@@ -1208,6 +1210,68 @@ abandon_revolution effect [ InterestGroup's country doesn't have a valid growing
 ```
 
 The post-revolution cleanup runs `abandon_revolution = yes` on every interest group with `ig_to_take_power`, whether or not its country still has a revolution growing. The same message comes from vanilla's peoples_springtime.txt:1270 (its own entry above), which the morning's games logged too. One line in the same game (2026-11-05).
+
+### `common/journal_entries/00_communism.txt:1092` — the Five-Year Plan's monthly pulse reads its drafting timer after it lapses (1.15)
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'five_year_plan_drafting_var' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+```
+
+`je_five_year_plan`'s `on_monthly_pulse` compares `var:five_year_plan_drafting_var > 0` with no `has_variable`, and the variable is a timed one (line 967 sets it with `months = 6`), so every monthly pulse after it lapses logs these three lines; the entry's own lines 1123 and 1138 do test `has_variable`. 224 of each in the 2026-11-05/06 sessions. The mod neither overrides the file nor writes the variable. Harmless: the decrement the comparison guards has nothing to do once the timer is gone.
+
+### `common/journal_entries/08_ip5_communism.txt:99` and `common/scripted_effects/00_victoria_ip5_scripted_effects.txt:28, 41, 143` — Reform or Revolution reads its own variables before it sets them (1.15)
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'num_involved_countries_var' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+Got value of type 'none'
+Div/0 near
+```
+
+`je_reform_or_revolution`'s `immediate` (line 99) runs the effect that fills the entry's variables, and that effect reads one before it writes it: the involved countries' population total, set first, counts only if `num_involved_countries_var > 0`, which the next `set_variable` sets, so the total comes out 0. Each involved country's share of it (`involved_country_percentage_of_total_involved_population`) has no value outside its `total > 0` branch, so the contribution at line 28 and the paramount socialist country's `order_by` at line 41 read `none`, and the factory-council share at line 143 divides by the 0. One burst when the entry starts: 280 `none` lines (274 at line 28, 6 at line 41), four Div/0 and the three-line `num_involved_countries_var` set, all in one second on 2026-11-05, beside vanilla's Karl Marx event. Later monthly updates, with the variables set, are clean. The mod overrides none of the script values or triggers the update reads.
+
+### `common/script_values/00_diplomacy_values.txt:996` — a subject's weekly liberty desire tests a radical-left government in the pact's scope
+- stack: vanilla only
+- reviewed: helper anchor, signature cannot match a mod call (the mod reads only support_separatism_total_pop_support from 00_diplomacy_values, which calls no has_law_or_variant)
+
+```
+has_law_or_variant trigger [ Wrong scope for trigger: diplomatic_pact, expected country ]
+```
+
+In `liberty_desire_weekly_change` the communist-subject term's `limit` tests `ROOT.second_country` and `ROOT.first_country`, but the two `if`s inside its `add` call `has_radical_leftist_government` and `has_radical_leftist_economy` with no country in front, so their `has_law_or_variant` runs on the pact: the government half logs, and the economy half runs in the same scope. 150 lines in five minutes on 2026-11-06, from subject pacts with a radical-left subject under a non-radical overlord.
+
+### `events/agitators_events/agitators_law_events.txt:274` — an agitator event hands a variant law to `has_law_or_variant`
+- stack: vanilla only
+
+```
+has_law_or_variant trigger [ Given law is a variant, we expect the parent ]
+```
+
+The event's `trigger` asks whether a neighboring state's owner `has_law_or_variant = root.currently_enacting_law.type`, and the trigger takes a parent law, so while the law being enacted is a variant (Okhrana, Bakufu, Homesteading and the rest of vanilla 1.15's 22) every evaluation logs once. 55 lines in three minutes on 2026-11-05. The line predates 1.15; vanilla's variants made it reachable. The mod's only variant is vanilla's `law_official_nationality`, replaced in place.
+
+### `events/karl_marx_events.txt:428` — Marx's event makes an immortal character immortal again (1.15)
+
+```
+You cannot apply this effect when set_character_immortal is 'yes'
+```
+
+`marx_events.3.a` runs `set_character_busy_and_immortal = yes` on `global_var:big_communism_builder`, who can already be immortal, and the engine ignores it. Once on 2026-11-05, two seconds after Reform or Revolution started.
+
+### `common/laws/00_army_model.txt:391, 392, 402` — Revolutionary Guard retires a commander who leads no formation (1.15)
+- stack: vanilla only
+
+```
+Event target link 'commander_military_formation' returned an invalid object
+Scoped object is not valid. Type: Military Formation
+Scope commander is not assigned to a formation
+```
+
+The law's `on_activate` walks every general and admiral who doesn't back the council republic, saves `commander_military_formation` and, in the 75-weight branch, runs `unassign_from_formation`, with no check that the commander leads a formation. Three lines once, on 2026-11-06.
 
 ## Expected mod-override noise
 

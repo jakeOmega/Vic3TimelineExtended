@@ -370,7 +370,10 @@ space_race_events.5 = {
 			}
 		}
 		set_variable = { name = sr_moon_site_shackleton value = yes }
-		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_shackleton }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_moon_landing ?= { add_modifier = sr_choice_site_shackleton }
+		}
 		custom_tooltip = {
 			text = "SR_SHACKLETON_CHOSEN_TT"
 		}
@@ -388,7 +391,10 @@ space_race_events.5 = {
 			}
 		}
 		set_variable = { name = sr_moon_site_equatorial value = yes }
-		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_equatorial }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_moon_landing ?= { add_modifier = sr_choice_site_equatorial }
+		}
 		custom_tooltip = {
 			text = "SR_EQUATORIAL_CHOSEN_TT"
 		}
@@ -401,7 +407,10 @@ space_race_events.5 = {
 			base = 4
 		}
 		set_variable = { name = sr_moon_site_tranquility value = yes }
-		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_tranquility }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_moon_landing ?= { add_modifier = sr_choice_site_tranquility }
+		}
 		custom_tooltip = {
 			text = "SR_TRANQUILITY_CHOSEN_TT"
 		}
@@ -418,7 +427,10 @@ space_race_events.5 = {
 			}
 		}
 		set_variable = { name = sr_moon_site_far_side value = yes }
-		je:je_space_race_moon_landing = { add_modifier = sr_choice_site_far_side }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_moon_landing ?= { add_modifier = sr_choice_site_far_side }
+		}
 		custom_tooltip = {
 			text = "SR_FAR_SIDE_CHOSEN_TT"
 		}
@@ -2466,7 +2478,7 @@ space_race_events.52 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+				trigger = { has_variable = un_space_partnership_modifier_on }
 				add = 3
 			}
 		}
@@ -4161,7 +4173,10 @@ space_race_events.80 = {
 			base = 4
 		}
 		set_variable = { name = sr_orbital_civilian value = yes }
-		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_civilian }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_orbital ?= { add_modifier = sr_choice_orbital_civilian }
+		}
 		custom_tooltip = {
 			text = "SR_ORBITAL_CIVILIAN_CHOSEN_TT"
 		}
@@ -4179,7 +4194,10 @@ space_race_events.80 = {
 			}
 		}
 		set_variable = { name = sr_orbital_military value = yes }
-		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_military }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_orbital ?= { add_modifier = sr_choice_orbital_military }
+		}
 		custom_tooltip = {
 			text = "SR_ORBITAL_MILITARY_CHOSEN_TT"
 		}
@@ -4196,7 +4214,10 @@ space_race_events.80 = {
 			}
 		}
 		set_variable = { name = sr_orbital_scientist value = yes }
-		je:je_space_race_orbital = { add_modifier = sr_choice_orbital_scientist }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_orbital ?= { add_modifier = sr_choice_orbital_scientist }
+		}
 		custom_tooltip = {
 			text = "SR_ORBITAL_SCIENTIST_CHOSEN_TT"
 		}
@@ -4231,7 +4252,10 @@ space_race_events.81 = {
 			base = 3
 		}
 		set_variable = { name = sr_probe_target_venus value = yes }
-		je:je_space_race_probe = { add_modifier = sr_choice_probe_venus }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_probe ?= { add_modifier = sr_choice_probe_venus }
+		}
 		custom_tooltip = {
 			text = "SR_PROBE_VENUS_CHOSEN_TT"
 		}
@@ -4249,7 +4273,10 @@ space_race_events.81 = {
 			}
 		}
 		set_variable = { name = sr_probe_target_mars value = yes }
-		je:je_space_race_probe = { add_modifier = sr_choice_probe_mars }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_probe ?= { add_modifier = sr_choice_probe_mars }
+		}
 		custom_tooltip = {
 			text = "SR_PROBE_MARS_CHOSEN_TT"
 		}
@@ -4262,7 +4289,10 @@ space_race_events.81 = {
 			base = 3
 		}
 		set_variable = { name = sr_probe_target_asteroid value = yes }
-		je:je_space_race_probe = { add_modifier = sr_choice_probe_asteroid }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_probe ?= { add_modifier = sr_choice_probe_asteroid }
+		}
 		custom_tooltip = {
 			text = "SR_PROBE_ASTEROID_CHOSEN_TT"
 		}
@@ -4300,7 +4330,10 @@ space_race_events.83 = {
 			}
 		}
 		set_variable = { name = sr_mars_direct value = yes }
-		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_direct }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_mars_landing ?= { add_modifier = sr_choice_mars_direct }
+		}
 		custom_tooltip = {
 			text = "SR_MARS_DIRECT_CHOSEN_TT"
 		}
@@ -4318,7 +4351,10 @@ space_race_events.83 = {
 			}
 		}
 		set_variable = { name = sr_mars_orbital_first value = yes }
-		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_orbital }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_mars_landing ?= { add_modifier = sr_choice_mars_orbital }
+		}
 		custom_tooltip = {
 			text = "SR_MARS_ORBITAL_CHOSEN_TT"
 		}
@@ -4331,7 +4367,10 @@ space_race_events.83 = {
 			base = 4
 		}
 		set_variable = { name = sr_mars_robotic value = yes }
-		je:je_space_race_mars_landing = { add_modifier = sr_choice_mars_robotic }
+		# The entry declares it from the variable (#1404); the preview shows it.
+		show_as_tooltip = {
+			je:je_space_race_mars_landing ?= { add_modifier = sr_choice_mars_robotic }
+		}
 		custom_tooltip = {
 			text = "SR_MARS_ROBOTIC_CHOSEN_TT"
 		}

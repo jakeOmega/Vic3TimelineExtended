@@ -6,14 +6,16 @@
 # common/scripted_triggers/un_dues_triggers.txt.
 #
 #   variable / modifier        written by
-#   un_dues_modifier           un_dues_country_monthly_update (the single
-#                              refresh site), un_dues_resume; removed by
-#                              un_dues_withhold, un_membership_end_effect and
-#                              un_dues_clear
-#   un_dues_cached (country)   the same refresh site: the weekly dues the
-#                              modifier's multiplier reads. Never removed while
-#                              the modifier stands (the engine re-reads a
-#                              stored multiplier; modifier_multiplier_var_audit)
+#   un_dues_modifier           nobody: je_united_nations declares it
+#                              (scaling_modifiers_while_active) at
+#                              var:un_dues_cached while un_dues_in_force holds
+#   un_dues_cached (country)   un_dues_country_monthly_update (the single
+#                              refresh site) and un_dues_resume: this month's
+#                              weekly dues. Removed on every way out:
+#                              un_dues_withhold, the monthly update of a member
+#                              withholding or not assessed, je_united_nations'
+#                              pulse for a member not assessed its own,
+#                              un_membership_end_effect and un_dues_clear
 #   un_dues_withheld           un_dues_withhold / un_dues_resume
 #   un_arrears_months          un_dues_country_monthly_update, un_dues_resume
 #   un_arrears_owed            the same, and un_dues_withhold (the first month)
@@ -40,10 +42,7 @@
 un_dues_country_monthly_update = {
 	if = {
 		limit = { un_dues_is_withholding = yes }
-		if = {
-			limit = { has_modifier = un_dues_modifier }
-			remove_modifier = un_dues_modifier
-		}
+		un_dues_stop_paying = yes
 		# A month in arrears only while dues are assessed: a Moribund UN
 		# asks nothing, so there is nothing to owe.
 		if = {
@@ -76,32 +75,31 @@ un_dues_country_monthly_update = {
 	else_if = {
 		limit = { un_dues_assessed = yes }
 		set_variable = { name = un_dues_cached value = un_dues_weekly_value }
-		if = {
-			limit = { has_modifier = un_dues_modifier }
-			remove_modifier = un_dues_modifier
-		}
-		add_modifier = {
-			name = un_dues_modifier
-			multiplier = var:un_dues_cached
-		}
 	}
-	else_if = {
-		limit = { has_modifier = un_dues_modifier }
-		remove_modifier = un_dues_modifier
+	else = {
+		un_dues_stop_paying = yes
 	}
 }
 
-# Stop paying. The money is saved from this week; the months in arrears start
+# This week's dues stop: the cache the entry's declaration reads goes, and the
+# expense leaves within days (the entry's update).
+# Scope: country
+un_dues_stop_paying = {
+	if = {
+		limit = { has_variable = un_dues_cached }
+		remove_variable = un_dues_cached
+	}
+}
+
+# Stop paying. The money is saved from the entry's next update (within days);
+# the months in arrears start
 # counting at the next monthly update. Dues are billed by the month, so the
 # current month is owed at once: withholding and paying again inside a month
 # saves nothing. Costs standing once.
 # Scope: country (a member)
 un_dues_withhold = {
 	set_variable = un_dues_withheld
-	if = {
-		limit = { has_modifier = un_dues_modifier }
-		remove_modifier = un_dues_modifier
-	}
+	un_dues_stop_paying = yes
 	if = {
 		limit = { un_dues_assessed = yes }
 		if = {
@@ -115,7 +113,8 @@ un_dues_withhold = {
 }
 
 # Resume paying: everything owed is settled at once, the months in arrears are
-# forgiven, the vote comes back, and this week's dues are charged again.
+# forgiven, the vote comes back, and the dues are charged again from the
+# entry's next update (within days).
 # Scope: country (a member)
 un_dues_resume = {
 	if = {
@@ -135,28 +134,13 @@ un_dues_resume = {
 	if = {
 		limit = { un_dues_assessed = yes }
 		set_variable = { name = un_dues_cached value = un_dues_weekly_value }
-		if = {
-			limit = { has_modifier = un_dues_modifier }
-			remove_modifier = un_dues_modifier
-		}
-		add_modifier = {
-			name = un_dues_modifier
-			multiplier = var:un_dues_cached
-		}
 	}
 }
 
 # The organisation is gone: so are its claims.
 # Scope: country
 un_dues_clear = {
-	if = {
-		limit = { has_modifier = un_dues_modifier }
-		remove_modifier = un_dues_modifier
-	}
-	if = {
-		limit = { has_variable = un_dues_cached }
-		remove_variable = un_dues_cached
-	}
+	un_dues_stop_paying = yes
 	if = {
 		limit = { has_variable = un_dues_withheld }
 		remove_variable = un_dues_withheld

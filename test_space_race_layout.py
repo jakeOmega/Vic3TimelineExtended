@@ -421,7 +421,7 @@ def _colony_sites():
     """[(event number, [the two specializations it grants])] in event order."""
     text = _read(COLONY_EVENTS)
     parts = re.split(r"\n(space_race_colony_events\.(\d+)) = \{", text)
-    return [(int(parts[i + 1]), re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", parts[i + 2]))
+    return [(int(parts[i + 1]), re.findall(r"sr_site_choose_(\w+) = yes", parts[i + 2]))
             for i in range(1, len(parts), 3)]
 
 

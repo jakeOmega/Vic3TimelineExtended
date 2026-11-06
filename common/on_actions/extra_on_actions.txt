@@ -1048,9 +1048,6 @@ global_warming_events_on_action = {
 		# Tariff maintenance also runs with the rule off to restore prior settings.
 		# Emissions and threshold events remain gated on the climate rule.
 		gw_refresh_tariff_policies_effect = yes
-		# Policy running costs follow GDP, so they are re-applied every month
-		# (Renewable Investment's expense line); rule-independent, like the above.
-		gw_refresh_policy_costs_effect = yes
 		if = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
@@ -1115,8 +1112,7 @@ global_warming_events_on_action = {
 				# Climate refugees (moderate+ warming)
 				15 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 1.0
 					}
 					trigger_event = { id = environmentalism_events.6 }
@@ -1144,8 +1140,7 @@ global_warming_events_on_action = {
 				# Environmentalist movement (mild+ warming, has pollution_control)
 				15 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 0.5
 						has_technology_researched = pollution_control
 					}
@@ -1154,8 +1149,7 @@ global_warming_events_on_action = {
 				# Coastal flooding (moderate+ warming, coastal ports)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 1.0
 						any_scope_state = {
 							is_incorporated = yes
@@ -1168,8 +1162,7 @@ global_warming_events_on_action = {
 				# Water shortage (severe+ warming)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
 					}
 					trigger_event = { id = environmentalism_events.10 }
@@ -1177,8 +1170,7 @@ global_warming_events_on_action = {
 				# Green tech boom (environmental_movement tech + renewables)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						has_technology_researched = environmental_movement
 						any_scope_state = {
 							has_building = building_renewable_energy_plant
@@ -1212,8 +1204,7 @@ global_warming_events_on_action = {
 				# summit is the fallback for a world without one.
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 1.0
 						country_rank >= rank_value:major_power
 						has_technology_researched = pollution_control
@@ -1227,8 +1218,7 @@ global_warming_events_on_action = {
 				# Disease outbreak (severe+ warming)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.0
 					}
 					trigger_event = { id = environmentalism_events.14 }
@@ -1236,8 +1226,7 @@ global_warming_events_on_action = {
 				# Political clash (clean_energy_technologies + industrialists in gov + catastrophic warming)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 3.0
 						has_technology_researched = clean_energy_technologies
 						ig:ig_industrialists ?= { is_in_government = yes }
@@ -1247,8 +1236,7 @@ global_warming_events_on_action = {
 				# Melting ice caps (high warming, coastal)
 				10 = {
 					trigger = {
-						has_journal_entry = je_global_warming
-						je:je_global_warming = { has_modifier = global_warming }
+						gw_warming_felt = yes
 						temperature_anomaly_display >= 2.5
 						any_scope_state = { is_coastal = yes }
 					}

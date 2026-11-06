@@ -9,9 +9,10 @@
 # are the parent's, and nothing here touches them.
 #
 # Where its effects are applied, as the dedications' are (gm_effects.txt):
-# national ones on the journal entry from gm_apply_national_modifiers, ROOT =
-# the country; local ones on the state from gm_state_monthly, ROOT = the state.
-# A variable backing a multiplier is zeroed, never removed.
+# national ones declared by the journal entry, each from its gm_s_sig_*
+# variable (je_grand_monuments.txt); local ones on the state from
+# gm_state_monthly, ROOT = the state. A variable backing a multiplier or a
+# declaration is zeroed, never removed.
 
 # ---- A landmark's signature (§4.4) -------------------------------------------------
 # Any scope. The signature of the landmark whose key the variable $LM$ holds,

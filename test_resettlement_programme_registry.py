@@ -811,7 +811,8 @@ class PoliticsTests(unittest.TestCase):
 class DeclarationTests(unittest.TestCase):
     def test_party_reads_the_conventions_member_modifier(self):
         body = squash(block(read(TRIGGERS), "resettlement_is_declaration_party"))
-        self.assertIn("je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }", body)
+        # The ratification is the mirror the entry declares the modifier from (#1404).
+        self.assertIn("has_variable = un_human_rights_declaration_modifier_on", body)
         # Ratifying with reservations went with the proposer events' option B
         # (#419): nothing applies un_human_rights_reservations_modifier.
         self.assertNotIn("reservations", body)

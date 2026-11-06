@@ -25,20 +25,24 @@ te_debug_ch_setup = {
 		add_modifier = { name = ch_debug_funding_cap }
 	}
 	set_variable = { name = ch_program_funding_level value = 2 }
-	ch_refresh_funding_modifiers = yes
 
-	ch_effect_world_exposition = yes
-	ch_effect_cultural_institutes = yes
-	# Protectionism only — it is mutually exclusive with the media campaign, and
-	# leaving media off is what makes the greyed-out Enable control testable.
-	ch_effect_cultural_protectionism = yes
+	# Only with the entry, as the old adds onto it were: a programme's
+	# variable set before the entry activates would start it then.
+	if = {
+		limit = { has_journal_entry = je_cultural_hegemony }
+		ch_effect_world_exposition = yes
+		ch_effect_cultural_institutes = yes
+		# Protectionism only — it is mutually exclusive with the media campaign, and
+		# leaving media off is what makes the greyed-out Enable control testable.
+		ch_effect_cultural_protectionism = yes
+	}
 
 	ch_set_display_state = yes
 }
 
 # Repeal the Ministry of Culture. The journal entry's monthly pulse should then
-# zero funding and strip all four programme modifiers, International Cultural
-# Outreach included — the bug this branch fixes.
+# zero funding and end all four programmes (their variables, and so their
+# declared modifiers), International Cultural Outreach and its cost included.
 # Scope: country
 te_debug_ch_repeal_ministry = {
 	activate_law = law_type:law_no_ministry_of_culture
@@ -191,8 +195,9 @@ te_debug_ch_stage_follower_events = {
 	}
 
 	# .18 — a trailing share and the benchmark the journal entry would give us
+	# (the entry declares it at this variable; its next monthly pulse rewrites it)
 	set_variable = { name = ch_total value = 3 }
-	add_modifier = { name = cultural_hegemony_foreign_benchmark months = 1 }
+	set_variable = { name = ch_benchmark_applied value = 1 }
 	trigger_event = { id = cultural_hegemony.18 days = 1 }
 
 	# .19 — the leader used to run our model

@@ -332,9 +332,9 @@ shock.
    policy's line (Environmental Movement radicalism +10), the weekly expense at
    1% of GDP a year and the objection line. Around the World counts it.
 3. **The cost.** The Budget panel's Breakdown lists it under Climate Policy at
-   about 1% of GDP a year, and the figure follows GDP month to month without
-   stacking (one copy of Aerosol Injection: Running Cost in the country's
-   modifiers).
+   about 1% of GDP a year, and the figure follows GDP without stacking (one
+   copy of Aerosol Injection: Running Cost, held by the Global Warming entry
+   since #1404 and none left on the country).
 4. **The mask.** After adopting, the overview's table gains an Aerosol Mask row
    that grows a little each month (for a country with a fifth of world GDP,
    about −0.6 °C after a year, heading to −1.00 °C). The temperature headline,

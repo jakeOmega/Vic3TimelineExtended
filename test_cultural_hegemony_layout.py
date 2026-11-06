@@ -292,7 +292,7 @@ class StateGatedTest(unittest.TestCase):
     def test_scope_free_gates_are_display_only(self):
         sguis = _read(SGUIS)
         for name, trigger in (("ch_ministry_missing_sgui", "has_law = law_type:law_ministry_of_culture"),
-                              ("ch_benchmark_sgui", "has_modifier = cultural_hegemony_foreign_benchmark")):
+                              ("ch_benchmark_sgui", "ch_trails_hegemon = yes")):
             with self.subTest(sgui=name):
                 body = _block(sguis, name)
                 self.assertNotIn("saved_scopes", body)
@@ -1087,13 +1087,14 @@ class HegemonyBonusTest(unittest.TestCase):
                 self.assertIn(f"multiply = ch_bonus_unit_{field}", body)
                 self.assertIn(f"${field}$: [Country.MakeScope.ScriptValue('ch_bonus_{field}_display')|+=1", listing)
 
-    def test_the_strength_is_what_the_pulse_applied_and_zero_without_the_modifier(self):
+    def test_the_strength_is_what_the_entry_declares_and_zero_while_it_is_inactive(self):
+        # The entry declares the modifier at cultural_hegemony_modifier_mult
+        # (test_cultural_hegemony_scaling_modifiers.py pins the value), and a
+        # declaration applies only while the entry is active.
         body = _block(self.values, "ch_bonus_strength_display")
-        self.assertIn("has_variable = ch_effect_mult_cached", body)
-        self.assertIn("je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }", body)
-        self.assertIn("add = var:ch_effect_mult_cached", body)
-        self.assertIn("add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached }",
-                      _read(JE))
+        self.assertRegex(body, r"limit = \{ has_journal_entry = je_cultural_hegemony \}\s*add = cultural_hegemony_modifier_mult")
+        self.assertRegex(_read(JE), r"modifier = cultural_hegemony_effect\s*value = \{\s*value = cultural_hegemony_modifier_mult\s*\}")
+        self.assertNotIn("ch_effect_mult_cached", _read(VALUES) + _read(JE))
 
     def test_the_cell_sits_beside_the_programs_in_a_row_that_fits(self):
         text = _read(WIDGET)
@@ -1289,9 +1290,9 @@ class PrivateTest(unittest.TestCase):
                 self.assertTrue(gated, f"{f.text.strip()[:100]}: no observer gate over it")
 
     def test_the_programs_are_shown(self):
-        """Each program's Running or Idle, from the country's own entry's
-        modifiers (ch_active_<programme>: je:je_cultural_hegemony), and the
-        funding level against its cap."""
+        """Each program's Running or Idle, from the country's own programme
+        variables (ch_active_<programme>), and the funding level against its
+        cap."""
         progs = self._drawn("te_ch_sec_programmes")
         self.assertIn('text = "je_ch_widget_funding_value"', progs)
         self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', progs)
@@ -1315,7 +1316,7 @@ class PrivateTest(unittest.TestCase):
             self.assertIn(key, self.keys, key)
         triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "cultural_hegemony_triggers.txt"))
         for prog in ("world_exposition", "cultural_institutes", "global_media_campaign", "cultural_protectionism"):
-            self.assertIn("je:je_cultural_hegemony ?= { has_modifier", _block(triggers, f"ch_active_{prog}"), prog)
+            self.assertIn(f"has_variable = ch_{prog}_on", _block(triggers, f"ch_active_{prog}"), prog)
 
     def test_the_breakdown_is_shown(self):
         bd = self._drawn("te_ch_sec_breakdown")

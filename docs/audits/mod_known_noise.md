@@ -181,13 +181,15 @@ Vanilla's reciprocal-article check skips its own two mutual articles but not the
 ### `country.cpp:9608` — a construction queue with no construction to spend on it (unattributed)
 - source: `country.cpp:9608`
 - source: `country.cpp:9594`
+- source: `country.cpp:9794`
+- source: `country.cpp:9780`
 - tracked: `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`
 
 ```
 The total construction speed is zero
 ```
 
-The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
+The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Vanilla 1.15 moved both lines, to `:9794` ("queue") and `:9780` ("queues"): 720 lines in the 2026-11-05/06 sessions, untagged until the two anchors were added. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
 
 ### `common/decrees/extra_decrees.txt` — the engine checks a decree's country_trigger with no country
 - tracked: `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`

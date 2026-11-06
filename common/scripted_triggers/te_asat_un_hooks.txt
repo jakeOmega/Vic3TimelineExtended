@@ -11,8 +11,5 @@
 # Scope: country
 te_asat_moratorium_party = {
 	has_global_variable = un_agency_unoda
-	OR = {
-		has_modifier = un_asat_moratorium_modifier
-		has_variable = un_asat_moratorium_modifier_on
-	}
+	has_variable = un_asat_moratorium_modifier_on
 }

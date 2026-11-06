@@ -26,7 +26,54 @@ game, in English.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
-  entry is `can_revolution_inherit = no`).
+  entry is `can_revolution_inherit = no`). Since #1404 the entries converted in the design's § 4
+  (`docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md`, each system's "As built") declare their standing
+  modifiers: open each entry and a country's modifier tooltip. If a zero row shows, hide the scaling-modifier icon
+  strip on the mod's entries in `gui/journal_entry.gui`.
+  Two once-a-game lines in `debug.log`:
+  - `TE_SELF_CHECK OK|BROKEN scaling_live`: the Strategic Reserve's declared sales income reaches the country (needs a
+    country with a staffed hub selling for two weeks with no panel change in between). BROKEN: put the weekly
+    `add_modifier` back.
+  - `TE_SELF_CHECK OK|BROKEN scaling_inherited`: 30 days after revolutionaries win a civil war, the winner's Covert
+    Warfare funding cost is declared again (rebels who ran a Covert Warfare entry of their own don't count). BROKEN
+    means every inherited entry has lost its declarations, which this change already relies on: Covert Warfare's five,
+    Global Warming's six (Carbon Removal's and Aerosol Injection's restore effects are gone), and later the
+    revolution repairs PRs 3, 7 and 8 delete. Fallback: the design's § 5.
+  Also look at: the Budget panel's Strategic Reserve Sales, Covert Actions and Nuclear Program rows still list their
+  amounts (they read the modifiers' budget mirror fields); a converted modifier's tooltip names its entry as the
+  source; and **Carbon Removal's forced coal subsidy**: `carbon_removal_modifier` carries
+  `country_building_synthetics_plant_coal_require_subsidies_bool`, and no vanilla scaling modifier carries a `_bool`
+  field. With the policy on, a synthetics plant on a coal method should show as subsidized and unable to drop it. If
+  it doesn't, add that modifier to the entry by hand again (it is a flat 1).
+  Colonial Empire: a step on a program moves its modifier, now on the entry, within a few days, and the
+  investment's expense follows. Cultural Hegemony: ending a program reads "Ends …" in the tooltip, the program
+  count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
+  the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
+  the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign
+  Cultural Benchmark on the entry, named as the source. Banking cycle: the Neutral stance (`banking_stance_band_3`,
+  an empty modifier declared at 1) still shows in the entry's list; the Budget Breakdown's Banking row still lists the
+  planning pool's balance and both external charges; the momentum tooltip names the bubble inertia tier. Grand
+  Monuments: a policy change moves the national effects on the entry within a few days; a boon shows on the entry
+  while its countdown runs; the dig gate's day-by-day check is in the archaeology play-test's "The gate." row. Tax
+  Code, Light setting: a step moves the rate and the tax level at once and the Budget's collected rate within a few
+  days (note whether it lands at once, which would mean `should_update_on_player_command` re-reads the
+  declarations); the interest group reactions show on the entry, named as the source; under the full code and before
+  any step, the entry carries 21 declarations at 0, so it is where a zero row would show first. The two lag windows
+  have their own checks in `tax_code_schema.md` § "Light code checks". Space Race: a funding step or an approach
+  switch moves the entry's Space Program Cost and the panel's pace within a few days. Open a colony holder's Solar
+  System Colonization entry: it should list both the Space Program Cost (declared in `je_space_race.txt`) and the
+  colony specializations and discoveries (declared in the generated INJECT,
+  `common/journal_entries/sr_sites_generated.txt`). One kind without the other means the INJECT replaced the
+  entry's own blocks or was dropped. After a load,
+  `debug.log` should name neither that file nor `je_space_race_solar_colonization` in an error. A Shackleton
+  depot holder keeps off-window launches (the `propellant_depots_bool` self-check). United Nations: ratifying a
+  convention puts its modifier on the entry within five days, named as the source; at Moribund the convention
+  modifiers leave the entry while Our Obligations still lists the conventions, and they return when the tier
+  rises; starting a program puts its cost and benefit on the entry within days, and a second start in the same
+  week is refused when the first one's influence would leave too little (the booking, `un_influence_pending`,
+  with its own line in the button's tooltip); a member at Contested or better carries UN Membership Benefits on
+  the entry (its gate reads `je:je_united_nations` from inside the entry's own value, unprobed); the Budget
+  Breakdown's United Nations expense and income rows still list their amounts.
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

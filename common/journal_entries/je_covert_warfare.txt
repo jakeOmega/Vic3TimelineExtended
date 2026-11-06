@@ -74,6 +74,38 @@ je_covert_warfare = {
 	scripted_button = iw_increase_funding_button
 	scripted_button = iw_decrease_funding_button
 
+	# ---- The agency's five standing modifiers ----
+	# Held on this entry while it is active (1.15's scaling modifiers): the
+	# engine re-reads each value from the owning country about every four days,
+	# so nothing adds, removes or refreshes them. Each value is 0 wherever the
+	# old monthly pulse removed its modifier. has_modifier can't see them: test
+	# the value's inputs instead.
+	# Defense from intelligence capacity (off below 1 total capacity).
+	scaling_modifiers_while_active = {
+		modifier = intelligence_capacity_defense
+		value = { value = intelligence_capacity_modifier_mult }
+	}
+	# Each unused operation slot redirected to domestic intelligence.
+	scaling_modifiers_while_active = {
+		modifier = iw_domestic_defense
+		value = { value = covert_operations_available_slots }
+	}
+	# Counterintelligence from funding: funding level − 1, from level 2.
+	scaling_modifiers_while_active = {
+		modifier = iw_funding_defense
+		value = { value = covert_ops_funding_ci_mult }
+	}
+	# The weekly expense, GDP-scaled; 0 at funding 0.
+	scaling_modifiers_while_active = {
+		modifier = covert_operation_funding_cost
+		value = { value = covert_operation_cost_mult }
+	}
+	# Tradecraft: one stack per tier above Untested.
+	scaling_modifiers_while_active = {
+		modifier = iw_tradecraft_bonus
+		value = { value = covert_tradecraft_bonus_mult }
+	}
+
 	immediate = {
 		# Initialize funding variable if missing
 		if = {
@@ -85,8 +117,15 @@ je_covert_warfare = {
 		covert_tradecraft_init = yes
 	}
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_covert_warfare = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	on_monthly_pulse = {
 		effect = {
+			te_scaling_inherited_selfcheck_rebel_entry = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 			# ---- AI Funding Management ----
 			# AI automatically manages funding level based on financial health,
 			# strategic need, active operations, and cost awareness.
@@ -182,54 +221,8 @@ je_covert_warfare = {
 				set_global_variable = { name = global_max_ic value = intelligence_capacity_total }
 			}
 
-			# ---- Update intelligence capacity defense modifier ----
-			# NOTE: Script values use owner={} internally to access country data
-			# from JE scope (owner is a no-op from country scope).
-			if = {
-				limit = { intelligence_capacity_total >= 1 }
-				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
-				je:je_covert_warfare = { add_modifier = { name = intelligence_capacity_defense multiplier = intelligence_capacity_modifier_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = intelligence_capacity_defense } }
-				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
-			}
-
-			# ---- Domestic defense from unused operation slots ----
-			if = {
-				limit = { covert_operations_available_slots >= 1 }
-				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
-				je:je_covert_warfare = { add_modifier = { name = iw_domestic_defense multiplier = covert_operations_available_slots } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = iw_domestic_defense } }
-				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
-			}
-
-			# ---- Counterintelligence bonus from funding level ----
-			if = {
-				limit = { covert_ops_funding_ci_mult >= 1 }
-				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-				je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
-				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-			}
-
-			# ---- Apply operation funding cost ----
-			if = {
-				limit = {
-					has_variable = iw_funding_level
-					var:iw_funding_level >= 1
-				}
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-			}
+			# The agency's standing modifiers are the entry's
+			# scaling_modifiers_while_active (above): nothing to refresh here.
 
 			# The exposure record's age (iw_last_exposed_age) and the defender
 			# event's cooldown are aged by covert_warfare_monthly_country

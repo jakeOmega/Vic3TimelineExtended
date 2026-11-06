@@ -29,11 +29,16 @@
 #
 # NON-PARTICIPANTS. An AI outside the top three by global ranking
 # (sr_ai_should_participate fails) makes no progress at all in the monthly
-# pulse, yet sr_recalculate_cost still charges it for funding and approach.
+# pulse, yet its entry's cost declaration still charges it for funding.
 # So for such a country the approach and increase-funding buttons weigh 0 and
 # decrease-funding gets +100, and it winds its funding down to 0. An approach
 # already chosen costs nothing while it stays outside (sr_<m>_cost gates the
-# approach terms; space_race_on_action recalculates when its rank crosses 3).
+# approach terms, and the declaration follows its rank within days).
+#
+# The innovation reads below are AI weights, not gates: a step's cost reaches
+# the country 2 to 5 days after the click (the entry declares it, #1404), so
+# the weights can see the old figure for those days. No pending booking: the
+# increase-funding `possible` reads the funding variable, which moves at once.
 # ----------------------------------------------------------------------------
 
 

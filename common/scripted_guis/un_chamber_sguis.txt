@@ -795,7 +795,7 @@ un_chamber_reach_sgui = {
 	is_shown = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		OR = {
-			has_modifier = un_regime_shared_intelligence_modifier
+			has_variable = un_regime_shared_intelligence_modifier_on
 			AND = {
 				un_tier_at_least_strong = yes
 				any_interest_group = {

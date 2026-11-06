@@ -165,13 +165,15 @@ class EntryTest(unittest.TestCase):
                       _norm(first_if))
         running = _key_block(effect[effect.index(first_if) + len(first_if):], "else")
         for step in ("banking_cycle_advance_variables", "banking_cycle_check_and_execute_crash",
-                     "banking_cycle_random_event_effect", "banking_cycle_apply_phase_modifiers",
+                     "banking_cycle_random_event_effect", "banking_cycle_update_ce_pool_balance",
                      "te_history_record_banking_samples"):
             self.assertIn(f"{step} = yes", running, step)
             self.assertNotIn(f"{step} = yes", first_if, step)
 
     def test_the_weekly_pulse_waits_for_the_cycle(self):
         effect = _norm(_key_block(_key_block(self.je, "on_weekly_pulse"), "effect"))
+        # The old-save strip runs first until 2026-12-31 (#1404, test_scaling_strip.py).
+        effect = effect.replace("legacy_scaling_strip_banking_cycle = yes ", "")
         self.assertEqual(effect, "{ if = { limit = { te_banking_cycle_running = yes } "
                                  "banking_cycle_weekly_effects = yes } }")
 

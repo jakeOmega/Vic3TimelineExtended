@@ -12,9 +12,9 @@
 #   the modifiers    common/static_modifiers/un_economy_modifiers.txt
 #   the pledges      common/scripted_buttons/un_economy_buttons.txt
 #   the state pulse  common/on_actions/un_economy_on_actions.txt
-#   the ROOT hops    events/un_economy_events.txt (hidden country events, so a
-#                    modifier's multiplier and the Strategic Reserve's own
-#                    refresh resolve against the country they are for)
+#   the ROOT hop     events/un_economy_events.txt (a hidden country event, so
+#                    the Strategic Reserve's own refresh resolves against the
+#                    country it is for)
 #   the notices      common/messages/un_economy_messages.txt
 #
 # THE WORLD DEVELOPMENT FUND (development_fund; no reform needed)
@@ -72,18 +72,18 @@
 #            un_dev_fund_benefit         its benefit factor: the multiplier of
 #                                        un_development_contributor_modifier
 #            un_dev_fund_patron          what the recipients remember of our
-#                                        money: the multiplier of
-#                                        un_development_patron_modifier
-#                                        (un_dev_fund_patron_pulse)
+#                                        money: the value of
+#                                        un_development_patron_modifier's
+#                                        declaration on je_united_nations
+#                                        (written by un_dev_fund_patron_pulse)
 #            un_dev_fund_gdp_ph          GDP per head (represented members only)
-#            un_dev_fund_grant           this month's weekly grant: the
-#                                        multiplier of the grant modifier. Set
-#                                        to 0 when the grant stops, never removed
-#                                        while the UN stands (the engine re-reads
-#                                        a stored multiplier)
+#            un_dev_fund_grant           this month's weekly grant. Set to 0
+#                                        when the grant stops, removed when the
+#                                        UN dissolves
 #   modifier un_dev_fund_pool_grant_modifier / un_dev_fund_treasury_grant_modifier,
-#            one or the other: un_dev_fund_country_refresh (un_economy.1) is
-#            the single refresh site, removing and re-adding monthly
+#            one or the other: declared on je_united_nations at
+#            var:un_dev_fund_grant (un_dev_fund_grant_into_pool /
+#            un_dev_fund_grant_into_treasury, un_economy_triggers.txt)
 #   Fund Development Programs opens only while the Fund stands (owner,
 #   2026-10-03), and a contribution running with no Fund lapses at the next
 #   monthly update (un_dev_fund_lapse_contributions).
@@ -300,12 +300,9 @@ un_dev_fund_monthly_update = {
 	#    what the contributors pay.
 	set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }
 	set_global_variable = { name = un_dev_fund_contributors value = un_dev_fund_contributors_value }
-	# 5. This month's grants. A recipient's grant is stored here and applied
-	#    by un_economy.1, whose ROOT is the recipient: a multiplier read from
-	#    this root-less pulse would resolve against nothing and silently apply
-	#    1 (scripting_best_practices.md, "multiplier = var:X Resolves Against
-	#    ROOT"). A country whose grant has stopped is sent the same event, which
-	#    removes its modifier.
+	# 5. This month's grants: a recipient's weekly grant, which the entry's
+	#    declaration of the grant modifier reads (je_united_nations), and 0
+	#    for a country whose grant has stopped.
 	every_country = {
 		limit = {
 			OR = {
@@ -317,8 +314,6 @@ un_dev_fund_monthly_update = {
 					has_variable = un_dev_fund_grant
 					var:un_dev_fund_grant > 0
 				}
-				has_modifier = un_dev_fund_pool_grant_modifier
-				has_modifier = un_dev_fund_treasury_grant_modifier
 			}
 		}
 		if = {
@@ -331,7 +326,6 @@ un_dev_fund_monthly_update = {
 		else = {
 			set_variable = { name = un_dev_fund_grant value = 0 }
 		}
-		trigger_event = { id = un_economy.1 }
 	}
 }
 
@@ -339,23 +333,21 @@ un_dev_fund_monthly_update = {
 # 2026-10-03; un_fund_development_button's possible): before the Assembly
 # founds it, the programme's money would reach nobody. A contribution that
 # runs with no Fund (one from a save before the gate) ends here, exactly as
-# Stop Contributing ends it: both journal-entry modifiers and their mirrors go
-# (un_state_off, as leaving the UN does), and the contributor is told why.
+# Stop Contributing ends it: both mirrors go (the entry declares the
+# modifiers from them), and the contributor is told why.
 # Scope: none
 un_dev_fund_lapse_contributions = {
 	if = {
 		limit = { NOT = { has_global_variable = un_inst_development_fund } }
 		every_country = {
 			limit = {
-				je:je_united_nations ?= {
-					OR = {
-						has_modifier = un_development_contributor_modifier
-						has_modifier = un_development_contributor_cost
-					}
+				OR = {
+					has_variable = un_development_contributor_modifier_on
+					has_variable = un_development_contributor_cost_on
 				}
 			}
-			un_state_off = { MODIFIER = un_development_contributor_modifier }
-			un_state_off = { MODIFIER = un_development_contributor_cost }
+			un_mirror_clear = { MIRROR = un_development_contributor_modifier_on }
+			un_mirror_clear = { MIRROR = un_development_contributor_cost_on }
 			post_notification = un_dev_fund_contribution_lapsed_notice
 		}
 	}
@@ -405,12 +397,9 @@ un_dev_fund_reduce = {
 	un_dev_fund_resize = { STEP = -1 }
 }
 
-# Move the contribution $STEP$ sizes, held to 1..5, and re-add both modifiers
-# at the new size: the benefits at its factor, the cost at its expense. Both
-# multipliers read root.var, so ROOT must be the contributor (a button's
-# effect). un_state_off takes each modifier off with its mirror and the add
-# records it again: the removes read the modifiers the entry held before the
-# click, which a button's own block can see.
+# Move the contribution $STEP$ sizes, held to 1..5, and re-price it: the
+# benefits' factor and the cost's expense, which the entry's declarations of
+# both modifiers read (they follow within days).
 # Parameters: $STEP$ = 1 | -1
 # Scope: country (the contributor, = ROOT)
 un_dev_fund_resize = {
@@ -421,18 +410,6 @@ un_dev_fund_resize = {
 		clamp_variable = { name = un_dev_fund_size min = 1 max = un_dev_fund_size_max }
 		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
 		set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
-		un_state_off = { MODIFIER = un_development_contributor_modifier }
-		un_state_off = { MODIFIER = un_development_contributor_cost }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_development_contributor_modifier
-				multiplier = root.var:un_dev_fund_benefit
-			} }
-		un_state_record = { MODIFIER = un_development_contributor_modifier }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_development_contributor_cost
-				multiplier = root.var:un_development_expense_cached
-			} }
-		un_state_record = { MODIFIER = un_development_contributor_cost }
 	}
 }
 
@@ -440,14 +417,12 @@ un_dev_fund_resize = {
 # member): a contribution from before the sizes becomes Substantial, the size
 # it paid for, and one from the four sizes keeps its money and factor under
 # the size number it now has (un_dev_fund_size_stored); the benefit factor and
-# the expense follow the size and today's GDP. The benefit modifier is
-# re-added only for a contribution that was migrated (a save from before the
-# sizes holds it with no multiplier, which is Substantial already, so nothing
-# changes but the variable it will read).
+# the expense follow the size and today's GDP, and the entry's declarations
+# of the benefits and the cost read them.
 # Scope: country (= ROOT)
 un_dev_fund_contribution_monthly = {
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		limit = { has_variable = un_development_contributor_modifier_on }
 		if = {
 			limit = { NOT = { has_variable = un_dev_fund_five_sizes } }
 			set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored }
@@ -461,11 +436,10 @@ un_dev_fund_contribution_monthly = {
 # What the Fund's recipients remember of our money, once a month, from
 # je_united_nations' pulse (ROOT = the country): var:un_dev_fund_patron moves
 # a twelfth of the way toward our benefit factor while our money reaches the
-# Fund, toward 0 when it does not; un_development_patron_modifier is
-# re-applied at it on the journal entry (the single refresh site; derived,
-# so not mirrored: a revolution's winner inherits the variable and gets the
-# modifier back here). Runs for a member and a non-member alike, so the
-# memory fades after a contribution, or a membership, ends.
+# Fund, toward 0 when it does not; the entry declares
+# un_development_patron_modifier at it (a revolution's winner inherits the
+# variable). Runs for a member and a non-member alike, so the memory fades
+# after a contribution, or a membership, ends.
 # Scope: country (= ROOT)
 un_dev_fund_patron_pulse = {
 	if = {
@@ -485,54 +459,6 @@ un_dev_fund_patron_pulse = {
 				var:un_dev_fund_patron < un_dev_fund_patron_floor
 			}
 			set_variable = { name = un_dev_fund_patron value = 0 }
-		}
-		je:je_united_nations ?= {
-			if = {
-				limit = { has_modifier = un_development_patron_modifier }
-				remove_modifier = un_development_patron_modifier
-			}
-		}
-		if = {
-			limit = { var:un_dev_fund_patron > 0 }
-			je:je_united_nations ?= { add_modifier = {
-					name = un_development_patron_modifier
-					multiplier = root.var:un_dev_fund_patron
-				} }
-		}
-	}
-}
-
-# One country's grant, from its own hidden event (un_economy.1): the single
-# refresh site for both grant modifiers. Into the investment pool where the
-# pool can take it, into the treasury otherwise.
-# Scope: the country (and ROOT)
-un_dev_fund_country_refresh = {
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		remove_modifier = un_dev_fund_pool_grant_modifier
-	}
-	if = {
-		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
-		remove_modifier = un_dev_fund_treasury_grant_modifier
-	}
-	if = {
-		limit = {
-			has_global_variable = un_inst_development_fund
-			has_variable = un_dev_fund_grant
-			var:un_dev_fund_grant > 0
-		}
-		if = {
-			limit = { un_dev_fund_pays_into_pool = yes }
-			add_modifier = {
-				name = un_dev_fund_pool_grant_modifier
-				multiplier = var:un_dev_fund_grant
-			}
-		}
-		else = {
-			add_modifier = {
-				name = un_dev_fund_treasury_grant_modifier
-				multiplier = var:un_dev_fund_grant
-			}
 		}
 	}
 }
@@ -745,11 +671,11 @@ un_economy_obligation_lines = {
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_moribund
 		}
 		else_if = {
-			limit = { has_modifier = un_dev_fund_pool_grant_modifier }
+			limit = { un_dev_fund_grant_into_pool = yes }
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_pool
 		}
 		else_if = {
-			limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
+			limit = { un_dev_fund_grant_into_treasury = yes }
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_treasury
 		}
 		# Under the founding charter the Fund pays out only the contributions:
@@ -920,17 +846,9 @@ un_dev_fund_line_lines = {
 # released at once. Meant for un_membership_end_effect (un_ladder_effects.txt)
 # to call; until it does, the monthly update ends both within a month (a
 # non-member is neither a recipient nor a pledger). The grant variable is set
-# to 0, not removed: a stored multiplier may still be read.
+# to 0, which ends the entry's declaration of the grant within days.
 # Scope: country
 un_economy_on_membership_end = {
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		remove_modifier = un_dev_fund_pool_grant_modifier
-	}
-	if = {
-		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
-		remove_modifier = un_dev_fund_treasury_grant_modifier
-	}
 	if = {
 		limit = { has_variable = un_dev_fund_grant }
 		set_variable = { name = un_dev_fund_grant value = 0 }
@@ -950,8 +868,6 @@ un_economy_on_dissolve = {
 	every_country = {
 		limit = {
 			OR = {
-				has_modifier = un_dev_fund_pool_grant_modifier
-				has_modifier = un_dev_fund_treasury_grant_modifier
 				has_variable = un_dev_fund_grant
 				has_variable = un_dev_fund_gdp_ph
 				has_variable = un_fr_pledged
@@ -986,18 +902,10 @@ un_economy_on_dissolve = {
 	un_dissolve_remove_global = { NAME = un_fr_holders_grain }
 }
 
-# One country's share of the institutions, gone. The grant modifiers go
-# before the variable their multiplier reads.
+# One country's share of the institutions, gone (the grant variable with
+# them, which ends the entry's declaration of the grant).
 # Scope: country
 un_economy_country_clear = {
-	if = {
-		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
-		remove_modifier = un_dev_fund_pool_grant_modifier
-	}
-	if = {
-		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
-		remove_modifier = un_dev_fund_treasury_grant_modifier
-	}
 	if = {
 		limit = { has_variable = un_dev_fund_grant }
 		remove_variable = un_dev_fund_grant
