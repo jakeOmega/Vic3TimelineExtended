@@ -174,6 +174,18 @@
 			}
 		}
 	}
+	# Dues: this month's weekly assessment (var:un_dues_cached, which every way
+	# out removes), while the member pays its own (un_dues_in_force).
+	scaling_modifiers_while_active = {
+		modifier = un_dues_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_dues_in_force = yes }
+				add = var:un_dues_cached
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc
@@ -350,7 +362,8 @@
 					# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
 					# This month's assessment, or a month in arrears for a member
 					# withholding its dues (Article 19 after 24 of them). The single
-					# refresh site for un_dues_modifier.
+					# refresh site for var:un_dues_cached, which the entry's
+					# declaration of un_dues_modifier reads (above).
 					# A member suspended for want of diplomatic autonomy is never
 					# assessed itself: its represented overlord is billed for its
 					# seat (un_dues_assessed_gdp, §0.8 ruling 4). Its arrears, if
@@ -359,10 +372,7 @@
 					# (un_dues_self_assessed).
 					if = {
 						limit = { NOT = { un_dues_self_assessed = yes } }
-						if = {
-							limit = { has_modifier = un_dues_modifier }
-							remove_modifier = un_dues_modifier
-						}
+						un_dues_stop_paying = yes
 					}
 					else = {
 						un_dues_country_monthly_update = yes

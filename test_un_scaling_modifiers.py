@@ -30,6 +30,8 @@ JE = _path("common", "journal_entries", "je_united_nations.txt")
 UN_VALUES = _path("common", "script_values", "un_script_values.txt")
 LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 DEBUG = _path("common", "scripted_effects", "te_debug_un_effects.txt")
+DUES_EFFECTS = _path("common", "scripted_effects", "un_dues_effects.txt")
+DUES_TRIGGERS = _path("common", "scripted_triggers", "un_dues_triggers.txt")
 
 
 def _raw(path):
@@ -93,7 +95,33 @@ EXPECTED = {
     # Membership benefits: from the Contested tier, to a member that draws them.
     "un_membership_benefits_modifier": _gated(
         "un_tier_at_least_contested=yes un_member_draws_benefits=yes", "un_membership_benefits_multiplier"),
+    # Dues: this month's cache while the member pays its own.
+    "un_dues_modifier": _gated("un_dues_in_force=yes", "var:un_dues_cached"),
 }
+
+
+def _script_files():
+    for root in ("common", "events"):
+        for dirpath, _dirs, files in os.walk(_path(root)):
+            for f in sorted(files):
+                if f.endswith(".txt"):
+                    yield os.path.join(dirpath, f)
+
+
+def _writes(variable, ops=("set_variable", "remove_variable", "change_variable")):
+    """(file, top-level definition) of every write of ``variable`` in common/ and events/, by op."""
+    out = {op: [] for op in ops}
+    pattern = re.compile(r"\b(" + "|".join(ops) + r")\s*=\s*(?:\{\s*name\s*=\s*)?" + re.escape(variable) + r"\b")
+    top = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
+    for path in _script_files():
+        text = _read(path)
+        if variable not in text:
+            continue
+        tops = [(m.start(), m.group(1)) for m in top.finditer(text)]
+        for m in pattern.finditer(text):
+            owner = max((t for t in tops if t[0] <= m.start()), default=(0, "?"))[1]
+            out[m.group(1)].append((os.path.relpath(path, REPO), owner))
+    return out
 
 
 class DeclarationTests(unittest.TestCase):
@@ -131,6 +159,33 @@ class MembershipBenefitsTests(unittest.TestCase):
                         with self.subTest(file=f):
                             self.assertNotIn("un_membership_benefits_multiplier_for_je",
                                              _read(os.path.join(dirpath, f)))
+
+
+class DuesTests(unittest.TestCase):
+    def test_in_force_is_the_old_gate(self):
+        body = [line.strip() for line in _block(_read(DUES_TRIGGERS), "un_dues_in_force").splitlines()
+                if line.strip()]
+        self.assertEqual(body, ["has_variable = un_dues_cached", "un_dues_self_assessed = yes",
+                                "NOT = { un_dues_is_withholding = yes }", "un_dues_assessed = yes"])
+
+    def test_the_cache_is_set_by_the_refresh_and_the_resume_and_removed_by_one_helper(self):
+        writes = _writes("un_dues_cached")
+        self.assertEqual(sorted(set(owner for _, owner in writes["set_variable"])),
+                         ["un_dues_country_monthly_update", "un_dues_resume"])
+        self.assertEqual(writes["remove_variable"],
+                         [("common/scripted_effects/un_dues_effects.txt", "un_dues_stop_paying")])
+        self.assertEqual(writes["change_variable"], [])
+
+    def test_every_way_out_stops_paying(self):
+        effects = _read(DUES_EFFECTS)
+        monthly = _block(effects, "un_dues_country_monthly_update")
+        self.assertEqual(monthly.count("un_dues_stop_paying = yes"), 2, "withholding, and not assessed")
+        for name in ("un_dues_withhold", "un_dues_clear"):
+            with self.subTest(effect=name):
+                self.assertIn("un_dues_stop_paying = yes", _block(effects, name))
+        self.assertIn("un_dues_stop_paying = yes", _block(_read(LADDER), "un_membership_end_effect"))
+        je = _read(JE)
+        self.assertRegex(je, r"limit = \{ NOT = \{ un_dues_self_assessed = yes \} \}\s*un_dues_stop_paying = yes")
 
 
 if __name__ == "__main__":

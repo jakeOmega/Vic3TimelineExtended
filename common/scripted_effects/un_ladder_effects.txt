@@ -538,7 +538,7 @@ un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
-	remove_modifier = un_dues_modifier
+	un_dues_stop_paying = yes
 	# So do the convention regimes' terms (redesign phase 5); the stamp goes
 	# so that a member that rejoins reads them afresh.
 	un_regime_clear_country = yes
