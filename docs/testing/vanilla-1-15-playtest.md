@@ -66,7 +66,12 @@ game, in English.
   `common/journal_entries/sr_sites_generated.txt`). One kind without the other means the INJECT replaced the
   entry's own blocks or was dropped. After a load,
   `debug.log` should name neither that file nor `je_space_race_solar_colonization` in an error. A Shackleton
-  depot holder keeps off-window launches (the `propellant_depots_bool` self-check).
+  depot holder keeps off-window launches (the `propellant_depots_bool` self-check). United Nations: ratifying a
+  convention puts its modifier on the entry within five days, named as the source; at Moribund the convention
+  modifiers leave the entry while Our Obligations still lists the conventions, and they return when the tier
+  rises; starting a program puts its cost and benefit on the entry within days, and a second start in the same
+  week is refused when the first one's influence would leave too little (the booking, `un_influence_pending`);
+  the Budget Breakdown's United Nations expense and income rows still list their amounts.
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

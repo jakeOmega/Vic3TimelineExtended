@@ -603,6 +603,35 @@ Commons cost with no UN gate (no entry with the UN rule off). Tests:
 `test_un_lift_sanctions.py`, `test_un_membership.py`, `test_un_dev_fund_sizes.py`
 and others that pin the adds.
 
+As built (PR 8): 53 declarations, the 48 above and five mirrored flats (the
+inventory's count, by key). The regime terms' presence variables are
+`un_regime_<t>_modifier_on`, like the other mirrors. New helpers
+`un_convention_on = { CONVENTION }`, `un_regime_term_on = { TERM MULT }` and
+`un_regime_term_off` set and clear the mirrors and preview the modifier with
+`show_as_tooltip`; `un_state_forget_conventions` is `un_conventions_end`. No
+script value was deleted: an older save's copies name them all.
+- **Gates that read back a declared cost:** a programme or stance start costs
+  influence that the declaration charges days later, so each start books its
+  cost for 7 days in `un_influence_pending` and both start gates add it
+  (`un_programme_influence_gate`, `un_stance_influence_gate`). The sponsor and
+  lobby gates aren't booked: their own costs don't land late, but one of them
+  in the days after a start can overdraw by that start's cost.
+- **Beyond the lag:** at Moribund the conventions' effects are ×0 and their
+  modifiers leave the entry while the ratifications stand; conventions and
+  regime terms follow enforcement within days, not at the regime epoch; the
+  nine country conventions and the terms need the entry active, so a
+  decentralized colony of a member no longer carries the colony-liberty term;
+  a peacekeeping pledge no longer adds a second contributor copy for a member
+  already running the programme; and with no reconcile, a stray mirror is no
+  longer dropped monthly.
+- **Old saves:** `legacy_scaling_strip_united_nations` first sets each mirror
+  from a copy an older save holds (the deleted reconcile's rule; the sanctions
+  regime also from a standing `un_sanctions_enforced_by`), never clearing one,
+  then removes the 17 entry and 36 country copies, monthly and from a new weekly
+  pulse. The caches the values read predate #1404, so none needed seeding.
+- **Nation tab:** 29 types and 21 type rows were fed only by these modifiers and
+  go, with the war support and nuclear groups.
+
 ## 5. Self-checks and the play-test list
 
 Once-a-game `debug_log` lines (CLAUDE.md, "In-game checks"), each excluding the

@@ -786,15 +786,16 @@ below half a percent.
 
 A convention is a standing regime. When it carries it founds its agency (the
 decolonization declaration founds none), and every member that ratifies it
-carries its member modifier. Its effects are multiplied by the UN's enforcement,
-never below ×0.01, so a Moribund UN leaves conventions dormant rather than
-lapsed. Most also name winners and losers among the parties. Our Obligations
+carries its member modifier. Its effects are multiplied by the UN's enforcement
+and follow it within a few days. A Moribund UN enforces nothing, so its
+conventions do nothing, but your ratifications stand and the effects return when
+the UN recovers. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
 convention for all its terms, or a term for its modifier. An agency's hover in
 the overview says whether it is founded, with its convention's terms one hover
-further, on Its terms. Your terms start the day
-you ratify a convention or join, and are re-read when the tier changes and once
-a year.
+further, on Its terms. Your terms start within a few
+days of ratifying a convention or joining. They are re-read when the tier
+changes and once a year, and their strength follows enforcement as it moves.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|
