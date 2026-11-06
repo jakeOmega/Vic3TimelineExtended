@@ -3678,8 +3678,10 @@ irredentism_bloc_approval_on_action = {
 # stockpile of unused mandates. Engine has no on_yearly_pulse_power_bloc, so
 # we run from on_yearly_pulse_country gated on is_power_bloc_leader = yes and
 # scope into the bloc to apply the modifier. (Vanilla 1.15 adds
-# add_power_bloc_mandate, but still no way to remove one, and the count still
-# has no script-value accessor, hence the tiered value.) remove_modifier first prevents stack drift across years.
+# add_power_bloc_mandate. Whether a negative value removes one, and whether
+# power_bloc.num_mandates reads the count as a value, are untested: the power
+# bloc test console's mandate options, te_debug_pb.1, check both. Hence the
+# tiered value for now.) remove_modifier first prevents stack drift across years.
 # months = 13 outlives the yearly pulse so the modifier never blinks off.
 # ============================================================================
 te_unused_mandate_reserve_on_action = {

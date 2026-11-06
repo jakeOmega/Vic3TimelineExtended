@@ -82,6 +82,20 @@ game, in English.
   each event sets its variable in `immediate` again (the triggers still read them).
 - **C21**, contextless entries: `should_be_involved` re-checks, what `je:` and `JournalEntry.GetCountry` return for one,
   `effect_all_involved`. A contextless probe entry could show in a player's journal, so none was built.
+- **Power bloc mandates** (#1442): does `add_power_bloc_mandate = -1` take a mandate away? The script docs promise only
+  adding, and spending mandates on anything but principles depends on it. In the power bloc test console
+  (`event te_debug_pb.1`): form a bloc if you lead none (option a), get a mandate or two with fast mandates (option l),
+  and toggle fast mandates off again, since Add and Remove are hidden while it is on. Then click **Add one mandate**
+  below the cap of 5 and unpause for a day. The console reopens with the verdict in its flavor text, and `debug.log`
+  has `TE_DEBUG_PB_MANDATE` lines with the counts. Add is the control: if it reads anything but OK, the test is
+  broken and Remove's result means nothing. Then click **Remove one mandate** with at least one held, and once more
+  with none held, to see whether the count can go below 0. Also note:
+  - whether each click's `straight_after` count already shows the change, which tells whether a spend can check and
+    deduct within one click;
+  - whether the `link` count (`power_bloc.num_mandates` read as a value from country scope) matches the trigger's
+    count. If it does, a spend can cost two or more and a panel can show the count without a trigger ladder;
+  - whether the bloc's own mandate display in the power bloc panel moves with each click.
+  Record the answers in `docs/guides/scripting_best_practices.md` § "1.15: power bloc effects exist" and on #1442.
 
 ## Panels and systems
 
