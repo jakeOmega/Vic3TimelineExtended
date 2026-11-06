@@ -63,13 +63,26 @@ ALWAYS_KNOWN = {"types", "template", "blockoverride", "block", "state", "on_star
 # The global names the 1.15 data-types dump lists only as a "Global promote" (no
 # "Global function" form) that take arguments. As a function's argument the
 # engine looks for a function of that name, logs "Could not find data system
-# function", and drops the whole callback or binding, so end the chain with a
-# function: GetPlayerJournalEntry('x').AccessSelf (vanilla: construction_panel.gui's
-# GetBuildingType('building_shipyard').Self). Names with both forms, GetPlayer
-# and GetBuildingType among them, can be passed bare.
+# function", and drops the whole callback or binding. Ending the chain with
+# .AccessSelf doesn't help for the const Get* ones: "Invalid promote
+# 'GetPlayerJournalEntry'(0) for '...AccessSelf', requires non const promote",
+# and the callback is dropped too (the map test strip, 2026-11-05). Set the
+# promote as the widget's datacontext and pass JournalEntry.AccessSelf, as
+# vanilla does. Names with both forms, GetPlayer and GetBuildingType among them,
+# can be passed bare.
 PROMOTE_ONLY_CALLS = ("GetPlayerJournalEntry", "AccessPlayerJournalEntry", "GetStrategicObjectiveFormationInState",
                       "GetScriptedGui", "GC")
 PROMOTE_ARG = re.compile(r"[(,]\s*(" + "|".join(PROMOTE_ONLY_CALLS) + r")\((?:[^()]|\([^()]*\))*\)\s*[),]")
+
+
+# A const Get* promote-only call whose chain goes on to an Access* step.
+CONST_PROMOTE_ACCESS = re.compile(r"\b(" + "|".join(n for n in PROMOTE_ONLY_CALLS if n.startswith("Get"))
+                                  + r")\((?:[^()]|\([^()]*\))*\)(?:\.\w+(?:\((?:[^()]|\([^()]*\))*\))?)*?\.(Access\w*)")
+
+
+def const_promote_access(text):
+    """Const Get* promote-only calls chained to an Access* step, as (line, name, step)."""
+    return [(text.count("\n", 0, m.start(1)) + 1, m.group(1), m.group(2)) for m in CONST_PROMOTE_ACCESS.finditer(text)]
 
 
 def promote_as_argument(text):
@@ -333,7 +346,12 @@ class Linter:
                         "datacontext = \"[MarketPanel.GetMarket.GetOwner]\"; GetPlayerJournalEntry is fine (gotcha #35)")
         for _, name in promote_as_argument(expr):
             self.report("ERROR", path, ln, f"{name}(...) is a promote only, so as an argument it fails at load and the "
-                        f"engine drops the callback: end it with a function, {name}(...).AccessSelf")
+                        f"engine drops the callback: set it as the widget's datacontext and pass the type's .AccessSelf "
+                        f"(e.g. JournalEntry.AccessSelf; gotcha #29)")
+        for _, name, step in const_promote_access(expr):
+            self.report("ERROR", path, ln, f"{name}(...) is a const promote, so {name}(...).{step} fails at load "
+                        f"(\"requires non const promote\") and the engine drops the callback: set it as the widget's "
+                        f"datacontext and pass the type's .AccessSelf (gotcha #29)")
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")

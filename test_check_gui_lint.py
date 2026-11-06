@@ -149,8 +149,10 @@ class LintTest(unittest.TestCase):
         # datacontext and GetPlayerJournalEntry are fine.
         self.assertEqual(errs.count("another country's journal entry (.GetJournalEntry)"), 2)
         # A promote-only call as an argument fails at load (the map test strip,
-        # 2026-11-05); ended with .AccessSelf, and as a datacontext, it is fine.
+        # 2026-11-05), and so does a const one ended with .AccessSelf (third
+        # session); as a datacontext it is fine.
         self.assertEqual(errs.count("GetPlayerJournalEntry(...) is a promote only"), 1)
+        self.assertEqual(errs.count("GetPlayerJournalEntry(...) is a const promote"), 1)
 
     def test_margin_on_plain_widget(self):
         # The engine logs "Property 'margin_right' not handled" for a plain
@@ -308,6 +310,27 @@ class BoxInFlowcontainerTest(unittest.TestCase):
         bases = lint.gui_type_bases("\n".join(texts.values()))
         hits = [f"{os.path.relpath(p, repo)}:{ln}: {child} ({kind})"
                 for p, text in texts.items() for ln, child, kind in lint.box_in_flowcontainer(text, bases)]
+        self.assertEqual(hits, [])
+
+
+class ConstPromoteAccessTest(unittest.TestCase):
+    def test_const_promote_chained_to_access(self):
+        text = ("a = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]\"\n"
+                "b = \"[GetPlayerJournalEntry('je_x')]\"\n"
+                "c = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"\n"
+                "d = \"[GetPlayerJournalEntry('je_x').GetOwner.AccessSelf]\"\n"
+                "e = \"[AccessPlayerJournalEntry('je_x').AccessSelf]\"\n"
+                "f = \"[GetScriptedGui('s').Execute( GuiScope.End )]\"\n")
+        self.assertEqual(lint.const_promote_access(text),
+                         [(1, "GetPlayerJournalEntry", "AccessSelf"), (4, "GetPlayerJournalEntry", "AccessSelf")])
+
+    def test_none_in_the_repository(self):
+        # The engine drops such a callback at load; CI doesn't run the lint, so
+        # this is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {name}.{step}" for p in paths
+                for ln, name, step in lint.const_promote_access(lint.strip_comments(lint._read(p)))]
         self.assertEqual(hits, [])
 
 
