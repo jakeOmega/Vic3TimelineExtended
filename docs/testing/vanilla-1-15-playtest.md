@@ -59,7 +59,14 @@ game, in English.
   days (note whether it lands at once, which would mean `should_update_on_player_command` re-reads the
   declarations); the interest group reactions show on the entry, named as the source; under the full code and before
   any step, the entry carries 21 declarations at 0, so it is where a zero row would show first. The two lag windows
-  have their own checks in `tax_code_schema.md` § "Light code checks".
+  have their own checks in `tax_code_schema.md` § "Light code checks". Space Race: a funding step or an approach
+  switch moves the entry's Space Program Cost and the panel's pace within a few days. Open a colony holder's Solar
+  System Colonization entry: it should list both the Space Program Cost (declared in `je_space_race.txt`) and the
+  colony specializations and discoveries (declared in the generated INJECT,
+  `common/journal_entries/sr_sites_generated.txt`). One kind without the other means the INJECT replaced the
+  entry's own blocks or was dropped. After a load,
+  `debug.log` should name neither that file nor `je_space_race_solar_colonization` in an error. A Shackleton
+  depot holder keeps off-window launches (the `propellant_depots_bool` self-check).
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in
