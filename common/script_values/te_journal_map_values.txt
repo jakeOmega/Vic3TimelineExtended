@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------------
 # The selector: which of the Map Room's maps the player picked
 # ---------------------------------------------------------------------------
-# 1 turmoil, 2 literacy, 3 life expectancy, 4 fertility, 5 median age, 6 the scope probe; 0 none. A global variable
-# (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope probe painted
-# blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's state roots and
-# the pick buttons' country roots read the same number.
+# 1 turmoil, 2 literacy, 3 life expectancy, 4 fertility, 5 median age; 0 none (6 was the scope probe, retired). A
+# global variable (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope
+# probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's
+# state roots and the pick buttons' country roots read the same number.
 te_jmap_selector = {
 	value = 0
 	if = {

@@ -1,19 +1,21 @@
-﻿### Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md), second pass, 2026-11-05.
-### A journal entry's map shows (the engine switches to it from code) while its page is open, so a "show on the map"
+﻿### Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md), third pass, 2026-11-05.
+### A journal entry's map shows (the engine switches to it from code) while its page is open, and only then: the lens
+### toolbar's lock doesn't keep it, and no other panel paints it (play-test checks 5 and 6). So a "show on the map"
 ### button is a button that opens the page. Every button here names its entry through a datacontext and passes
 ### JournalEntry.AccessSelf: inside a callback, GetPlayerJournalEntry fails at load both bare and ended with .AccessSelf
 ### ("requires non const promote"; gui_modding_guide.md gotcha #29).
 ###   - te_jmap_demog_map_button, in the Demographics tab's header (te_demog_window_body): one click picks life
 ###     expectancy and opens the Map Room (je_te_map_room, contextless, in no journal, there from the game's start);
-###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle.
+###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle, active or
+###     not (an inactive entry's page opens and paints its map, check 7).
 ### Both sit left of the header's "?" (te_help_button, 10 in from the right; this one 45 in), hidden for an observer.
 ###
 ### te_jmap_pick_row is the Map Room's picks: scripted GUIs, since the engine locks a contextless entry's own scripted
-### buttons for a country not involved in it. It sits on the Map Room's page (te_map_room_widget.gui) and on the strip.
+### buttons for a country not involved in it. It sits on the Map Room's page (te_map_room_widget.gui). The map takes a
+### new pick at the next tick, and at once when the page reopens (check 4), so each pick closes and reopens the page a
+### quarter second after the click: long enough for the scripted GUI's effect to land first.
 ###
-### te_jmap_test_strip is the play-test's harness (docs/testing/journal-map-modes-playtest.md), in debug mode only
-### (InDebugMode, the -debug_mode launch the console's `event` command already needs), on the Demographics tab above
-### its sections. It goes once the questions are answered.
+### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map.
 
 types te_map_widgets
 {
@@ -44,7 +46,8 @@ types te_map_widgets
 	}
 
 	### Banking: every country holds the entry, so the button only opens it (vanilla's own pattern, states_panel.gui's
-	### Meiji domain button: the entry as datacontext, then OpenJournalEntryPanel).
+	### Meiji domain button: the entry as datacontext, then OpenJournalEntryPanel). Before the country's cycle starts
+	### the entry is inactive, and its page still opens and paints (check 7), so the button shows from the start.
 	type te_jmap_banking_map_button = widget {
 		size = { 29 29 }
 		parentanchor = right|vcenter
@@ -53,9 +56,27 @@ types te_map_widgets
 
 		te_map_button = {
 			datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
-			visible = "[JournalEntry.IsActive]"
 			tooltip = "te_jmap_banking_button_tt"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	### One pick: a button that runs its scripted GUI, then (te_jmap_repaint) closes and reopens the Map Room's page a
+	### quarter second later, which repaints the map at once, paused or not (check 4: reopening repainted). The delay
+	### lets the scripted GUI's effect land before the page asks for the map again; a callback's lines run in order,
+	### but whether the effect lands within the same click is unknown. ClosePanel first, since OpenJournalEntryPanel
+	### toggles: on the open page it would only close it. The entry is the button's own datacontext, not the page's, so
+	### the second line still names it once the page is closed.
+	type te_jmap_pick_button = button {
+		using = default_button
+		size = { 150 30 }
+		datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+
+		state = {
+			name = te_jmap_repaint
+			duration = 0.25
+			on_finish = "[InformationPanelBar.ClosePanel]"
+			on_finish = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
 	}
 
@@ -67,42 +88,29 @@ types te_map_widgets
 		ignoreinvisible = yes
 		spacing = 4
 
-		# The world's maps, and the test map.
+		# The world's maps.
 		flowcontainer = {
 			direction = horizontal
 			parentanchor = hcenter
 			ignoreinvisible = yes
 			spacing = 4
 
-			button = {
-				using = default_button
-				size = { 150 30 }
+			te_jmap_pick_button = {
 				text = "te_jmap_pick_turmoil"
 				tooltip = "te_jmap_pick_turmoil_desc"
 				visible = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_turmoil_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]"
 			}
 
-			button = {
-				using = default_button
-				size = { 150 30 }
+			te_jmap_pick_button = {
 				text = "te_jmap_pick_literacy"
 				tooltip = "te_jmap_pick_literacy_desc"
 				visible = "[GetScriptedGui('te_jmap_pick_literacy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_literacy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_literacy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-
-			# A test map (play-test check 3); it goes once answered.
-			button = {
-				using = default_button
-				size = { 150 30 }
-				text = "te_jmap_pick_scope_probe"
-				tooltip = "te_jmap_pick_scope_probe_desc"
-				visible = "[GetScriptedGui('te_jmap_pick_scope_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				down = "[Not( GetScriptedGui('te_jmap_pick_scope_probe_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-				onclick = "[GetScriptedGui('te_jmap_pick_scope_probe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]"
 			}
 		}
 
@@ -113,99 +121,31 @@ types te_map_widgets
 			ignoreinvisible = yes
 			spacing = 4
 
-			button = {
-				using = default_button
-				size = { 150 30 }
+			te_jmap_pick_button = {
 				text = "te_jmap_pick_life_expectancy"
 				tooltip = "te_jmap_pick_life_expectancy_desc"
 				visible = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]"
 			}
 
-			button = {
-				using = default_button
-				size = { 150 30 }
+			te_jmap_pick_button = {
 				text = "te_jmap_pick_fertility"
 				tooltip = "te_jmap_pick_fertility_desc"
 				visible = "[GetScriptedGui('te_jmap_pick_fertility_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_fertility_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_fertility_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]"
 			}
 
-			button = {
-				using = default_button
-				size = { 150 30 }
+			te_jmap_pick_button = {
 				text = "te_jmap_pick_median_age"
 				tooltip = "te_jmap_pick_median_age_desc"
 				visible = "[GetScriptedGui('te_jmap_pick_median_age_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_median_age_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_median_age_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-		}
-	}
-
-	### The test strip. Each button is one check in the play-test list; its tooltip says what to watch.
-	type te_jmap_test_strip = flowcontainer {
-		visible = "[And( InDebugMode, Not( GetMetaPlayer.IsObserver ) )]"
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-		minimumsize = { 520 -1 }
-		maximumsize = { 520 -1 }
-
-		textbox = {
-			parentanchor = hcenter
-			autoresize = yes
-			multiline = yes
-			max_width = 500
-			align = center|nobaseline
-			text = "te_jmap_strip_heading"
-		}
-
-		# The same picks as the Map Room's page: a fallback if its widget doesn't draw there (check 1).
-		te_jmap_pick_row = {}
-
-		flowcontainer = {
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			# Open the Map Room without changing its pick.
-			button = {
-				using = default_button
-				size = { 166 32 }
-				datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
-				text = "te_jmap_strip_room"
-				tooltip = "te_jmap_strip_room_tt"
-				onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-			}
-
-			# Check 7: put the probe entry in Potential (or take it out).
-			button = {
-				using = default_button
-				size = { 166 32 }
-				text = "te_jmap_strip_potential"
-				tooltip = "te_jmap_strip_potential_tt"
-				onclick = "[GetScriptedGui('te_jmap_potential_probe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-			}
-
-			# Check 7: open the probe entry, once the player holds it, inactive or active. The gate on a parent and
-			# the entry on the child, as vanilla's Meiji button has them.
-			widget = {
-				size = { 166 32 }
-				visible = "[GetScriptedGui('te_jmap_potential_probe_held_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-
-				button = {
-					using = default_button
-					size = { 166 32 }
-					datacontext = "[GetPlayerJournalEntry('je_te_map_potential_probe')]"
-					text = "te_jmap_strip_potential_open"
-					tooltip = "te_jmap_strip_potential_open_tt"
-					onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-				}
+				onclick = "[PdxGuiWidget.TriggerAnimation('te_jmap_repaint')]"
 			}
 		}
 	}

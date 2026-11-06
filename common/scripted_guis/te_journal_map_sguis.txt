@@ -1,6 +1,6 @@
-﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The Map Room's picks and the
-# test strip's probe, called from gui/te_map_widgets.gui (the te_jmap_pick_row type, on the Map Room's page and on the
-# strip) and from the Demographics tab's map button. The AI never uses these: the map is a player's view.
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The Map Room's picks, called
+# from gui/te_map_widgets.gui (the te_jmap_pick_row type, on the Map Room's page) and from the Demographics tab's map
+# button. The AI never uses these: the map is a player's view.
 #
 # The picks are scripted GUIs, not the entry's scripted buttons: the Map Room is contextless with nobody involved, and
 # the engine locks a scripted button for a country not involved in its entry (play-test check 14, 2026-11-05).
@@ -65,49 +65,4 @@ te_jmap_pick_median_age_sgui = {
 	effect = {
 		te_jmap_set_selector = { SEL = 5 }
 	}
-}
-
-# A test map (play-test check 3): it goes once the stripes and the contextless answer are in.
-te_jmap_pick_scope_probe_sgui = {
-	scope = country
-	is_shown = { is_player = yes }
-	ai_is_valid = { always = no }
-	is_valid = { NOT = { te_jmap_selector = 6 } }
-	effect = {
-		te_jmap_set_selector = { SEL = 6 }
-	}
-}
-
-# The strip's Potential probe (check 7): toggle the variable that shows je_te_map_potential_probe in Potential.
-te_jmap_potential_probe_sgui = {
-	scope = country
-	is_shown = { is_player = yes }
-	ai_is_valid = { always = no }
-	is_valid = { is_player = yes }
-	effect = {
-		if = {
-			limit = { has_variable = te_jmap_potential_probe }
-			remove_variable = te_jmap_potential_probe
-			debug_log = "TE_JMAP potential probe off date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else = {
-			set_variable = te_jmap_potential_probe
-			debug_log = "TE_JMAP potential probe on date=[TimeKeeper.GetCurrentDate.GetString] (the entry should show in Potential at the engine's next check)"
-		}
-	}
-}
-
-# Read-only: whether the probe entry exists for the player at all, inactive or active, so the strip's Open button
-# asks for it only then.
-te_jmap_potential_probe_held_sgui = {
-	scope = country
-	is_shown = {
-		OR = {
-			has_journal_entry = je_te_map_potential_probe
-			has_inactive_journal_entry = je_te_map_potential_probe
-		}
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
 }

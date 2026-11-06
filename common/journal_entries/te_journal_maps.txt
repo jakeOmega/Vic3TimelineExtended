@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# Journal entry map modes: the Map Room and the Potential probe (vanilla 1.15; second pass, 2026-11-05)
+# Journal entry map modes: the Map Room (vanilla 1.15; third pass, 2026-11-05)
 # ============================================================================
 # docs/systems/mod_systems/journal_map_modes.md; the in-game checks in docs/testing/journal-map-modes-playtest.md.
 #
@@ -14,14 +14,12 @@
 #                              buttons calling scripted GUIs (gui/journal_entry_widgets/te_map_room_widget.gui), not
 #                              scripted buttons: the engine locks a scripted button for a country not involved in the
 #                              entry ("Countries that are not involved in the Journal Entry may not take this action").
-#   je_te_map_potential_probe  a test: an entry held in Potential (shown, never active) by a debug button. Does its
-#                              page paint its map? It goes once answered.
 #
 # The first pass's je_te_map_host (a country entry added by a button) is gone: add_journal_entry was refused every
 # time, because every country already holds an inactive copy of an entry with its own activation triggers, and the
 # engine activated it on its own check up to two weeks later (scripting_best_practices.md, "Journal Entry Map Modes").
 #
-# Both entries are the player's tools only: no AI country sets anything here, and neither entry has an effect.
+# The entry is the player's tool only: no AI country sets anything here, and it has no effect.
 
 je_te_map_room = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
@@ -166,41 +164,6 @@ je_te_map_room = {
 			}
 			value = "te_jmap_no_data"
 		}
-		# 6. The scope probe: which scopes map_color reaches besides the state. On the first pass's country entry it
-		# painted blue (neither scope:journal_entry nor its owner). This entry has no owner, so green can't happen:
-		# yellow says scope:journal_entry is set for a contextless entry's map, blue that it isn't.
-		else_if = {
-			limit = {
-				te_jmap_selector = 6
-				exists = scope:journal_entry
-				scope:journal_entry ?= {
-					owner ?= { is_player = yes }
-				}
-			}
-			value = "te_jmap_probe_entry_owner"
-		}
-		else_if = {
-			limit = {
-				te_jmap_selector = 6
-				exists = scope:journal_entry
-			}
-			value = "te_jmap_probe_entry_only"
-		}
-		else_if = {
-			limit = { te_jmap_selector = 6 }
-			value = "te_jmap_probe_global_only"
-		}
-	}
-
-	# Stripes, on the scope probe only: white over every state the player owns, through the state's own owner link.
-	map_color_second = {
-		if = {
-			limit = {
-				te_jmap_selector = 6
-				owner ?= { is_player = yes }
-			}
-			value = "te_jmap_probe_stripe"
-		}
 	}
 
 	# Root: the state under the cursor. Never runs as an effect; it only prints.
@@ -258,60 +221,8 @@ je_te_map_room = {
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census
 		}
-		else_if = {
-			limit = {
-				te_jmap_selector = 6
-				exists = scope:journal_entry
-				scope:journal_entry ?= {
-					owner ?= { is_player = yes }
-				}
-			}
-			custom_tooltip_no_bullet = te_jmap_tt_probe_entry_owner
-		}
-		else_if = {
-			limit = {
-				te_jmap_selector = 6
-				exists = scope:journal_entry
-			}
-			custom_tooltip_no_bullet = te_jmap_tt_probe_entry_only
-		}
-		else_if = {
-			limit = { te_jmap_selector = 6 }
-			custom_tooltip_no_bullet = te_jmap_tt_probe_global_only
-		}
 		else = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_pick
 		}
-	}
-}
-
-# A country entry shown in Potential and never active: the strip's Potential Probe button sets the variable, and the
-# engine lists the entry at its next check (up to two weeks). Open it from the journal or the strip: if the map turns
-# magenta, an inactive page paints its map (prep C6), which decides whether a system's map button can show before its
-# entry activates.
-je_te_map_potential_probe = {
-	icon = "gfx/interface/icons/event_icons/event_map.dds"
-	group = je_group_internal_affairs
-
-	activation_description = {
-		always = yes
-	}
-
-	transferable = no
-	can_revolution_inherit = no
-
-	is_shown_when_inactive = {
-		has_variable = te_jmap_potential_probe
-	}
-	possible = {
-		always = no
-	}
-
-	map_color = {
-		value = "te_jmap_potential_probe"
-	}
-
-	map_tooltip = {
-		custom_tooltip_no_bullet = te_jmap_tt_potential_probe
 	}
 }

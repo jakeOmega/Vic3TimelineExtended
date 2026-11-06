@@ -4,8 +4,8 @@
 ###     The picks (te_jmap_pick_row, gui/te_map_widgets.gui): one button per map, the current one pressed.
 ###
 ### The Map Room is contextless and nobody is involved in it, so its own scripted buttons would be locked; these are
-### GUI buttons calling scripted GUIs with the player as root. Whether a widget draws on such a page is play-test
-### check 1 (vanilla's je_great_game_control, also contextless, carries one); the debug strip repeats the row.
+### GUI buttons calling scripted GUIs with the player as root. A widget draws on such a page (play-test check 1,
+### 2026-11-05).
 
 flowcontainer = {
 	name = "widget_je_te_map_room"

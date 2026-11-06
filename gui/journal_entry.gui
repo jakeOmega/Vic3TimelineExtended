@@ -17,9 +17,18 @@ types journal_entry_panel_types
 		name = "journal_entry_panel"
 		datacontext = "[JournalEntryPanel.AccessJournalEntryType]"
 
+		### TIMELINE EXTENDED — the see-through page, the third change to this vanilla file (the bars-on-top marker
+		### below is the other two). The eye in the header (top_left_button_*, below) fades the whole page so its
+		### journal map shows through: a journal entry's map shows only while its page is open (journal_map_modes.md).
+		### The faded page still takes clicks (the window's frame is a clickthrough_blocker), and every page reopens
+		### opaque (_show clears the flag). On every journal page: the GUI can't tell which entries carry a map, and
+		### 1.15's own map entries (the Great Game, the Forest of Bayonets, the Hungry Forties) gain from it too.
+		alpha = "[Select_float( GetVariableSystem.Exists('te_je_see_through'), '(float)0.3', '(float)1' )]"
+
 		blockoverride "animation_state_block" {
 			state = {
 				name = _show
+				on_start = "[GetVariableSystem.Clear('te_je_see_through')]"
 				start_sound = {
 					soundeffect = "event:/SFX/UI/Global/panel_show"
 				}
@@ -416,8 +425,8 @@ types journal_entry_panel_types
 				}
 
 				flowcontainer = {
-					### TIMELINE EXTENDED — one of two changes to this vanilla file (the other
-					### is the goal bar below). A journal entry that draws its own bars higher up
+					### TIMELINE EXTENDED — one of the changes to this vanilla file (the others
+					### are the goal bar below and the see-through page above). A journal entry that draws its own bars higher up
 					### the panel says so by putting a (zero-sized) widget in
 					### custom_widget_container_7; see je_banking.txt and
 					### gui/journal_entry_widgets/te_je_bars_on_top_marker.gui.
@@ -897,6 +906,21 @@ types journal_entry_panel_types
 			visible = "[Not(JournalEntry.IsPinnedInOutliner)]"
 			onclick = "[JournalEntry.TogglePinInOutliner]"
 			tooltip = "PIN_JOURNAL_ENTRY"
+		}
+
+		### TIMELINE EXTENDED — the see-through page's eye (see alpha above), in the header slot vanilla leaves empty
+		### here (default_block_window's top-left button, beside the back arrow).
+		blockoverride "top_left_button_visibility" {
+			visible = "[JournalEntryPanel.HasJournalEntry]"
+		}
+
+		blockoverride "top_left_button_properties" {
+			tooltip = "te_je_see_through_tt"
+			onclick = "[GetVariableSystem.Toggle('te_je_see_through')]"
+		}
+
+		blockoverride "top_left_button_texture" {
+			texture = "gfx/interface/icons/military_icons/navy_icons/visibility.dds"
 		}
 	}
 
