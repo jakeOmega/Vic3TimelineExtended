@@ -92,10 +92,9 @@ class ScriptValueTests(unittest.TestCase):
         for n in range(1, 5):
             self.assertIn("covert_tradecraft_tier_%d = yes" % n, block)
 
-    def test_bonus_mult_hops_owner(self):
-        # Evaluated as a journal-entry modifier multiplier: JE scope.
+    def test_bonus_mult_is_the_tier(self):
+        # The entry's scaling-modifier value; its root is the owning country.
         block = _top_level_block(_text(VALUES), "covert_tradecraft_bonus_mult = {")
-        self.assertIn("owner = {", block)
         self.assertIn("covert_tradecraft_tier", block)
 
     def test_net_gain_mult_is_one_plus_tier_share(self):
@@ -186,7 +185,9 @@ class MonthlyTests(unittest.TestCase):
         # Support neither earns Tradecraft nor holds it (spec 2026-10-16 § C).
         self.assertIn("covert_op_is_hostile = yes", block[block.index("else_if = {"):])
         self.assertIn("covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }", block)
-        self.assertIn("covert_tradecraft_refresh_bonus = yes", block)
+        # The tier bonus is the entry's scaling modifier: nothing to refresh.
+        self.assertNotIn("iw_tradecraft_bonus", block)
+        self.assertNotIn("covert_tradecraft_refresh_bonus", _text(EFFECTS))
 
     def test_immediate_seeds(self):
         immediate = field(entry_text(_text(JE), "je_covert_warfare"), "immediate")
@@ -195,9 +196,11 @@ class MonthlyTests(unittest.TestCase):
     def test_bonus_modifier(self):
         block = _top_level_block(_text(STATIC), "iw_tradecraft_bonus = {")
         self.assertIn("country_intelligence_capacity_mult = 0.05", block)
-        refresh = _top_level_block(_text(EFFECTS), "covert_tradecraft_refresh_bonus = {")
-        self.assertIn("multiplier = covert_tradecraft_bonus_mult", refresh)
-        self.assertIn("je:je_covert_warfare", refresh)
+        # Declared on the entry (1.15's scaling_modifiers_while_active), the
+        # tier as its value; the engine re-reads it about every four days.
+        self.assertRegex(entry_text(_text(JE), "je_covert_warfare"),
+                         r"scaling_modifiers_while_active = \{\s*modifier = iw_tradecraft_bonus"
+                         r"\s*value = covert_tradecraft_bonus_mult\s*\}")
         loc = _all_loc()
         self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus:0 ")
         self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus_desc:0 ")
@@ -325,7 +328,7 @@ class DisplayTests(unittest.TestCase):
         setter = _top_level_block(effects, "te_debug_covert_set_tradecraft = {")
         self.assertIn("covert_tradecraft_init = yes", setter)
         self.assertIn("covert_tradecraft_clamp = yes", setter)
-        self.assertIn("covert_tradecraft_refresh_bonus = yes", setter)
+        self.assertNotIn("iw_tradecraft_bonus", setter)
         tick = _top_level_block(effects, "te_debug_covert_tick_tradecraft = {")
         self.assertIn("covert_tradecraft_monthly = yes", tick)
         event = _top_level_block(_text(DEBUG_EVENTS), "te_debug_covert.3 = {")

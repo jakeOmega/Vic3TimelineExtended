@@ -1294,22 +1294,6 @@ covert_tradecraft_burn_loss = {
 	}
 }
 
-
-# Re-apply the tier bonus on the journal entry. The ONE refresh site for
-# iw_tradecraft_bonus: called only from covert_tradecraft_monthly.
-# Scope: operator country
-covert_tradecraft_refresh_bonus = {
-	if = {
-		limit = { covert_tradecraft_tier >= 1 }
-		je:je_covert_warfare = { remove_modifier = iw_tradecraft_bonus }
-		je:je_covert_warfare = { add_modifier = { name = iw_tradecraft_bonus multiplier = covert_tradecraft_bonus_mult } }
-	}
-	else_if = {
-		limit = { je:je_covert_warfare = { has_modifier = iw_tradecraft_bonus } }
-		je:je_covert_warfare = { remove_modifier = iw_tradecraft_bonus }
-	}
-}
-
 # The monthly Tradecraft pass. Called ONCE a month from je_covert_warfare's
 # pulse, after covert_ops_age_all_durations (so the phase is this month's) —
 # never from covert_ops_sync_all or covert_refresh_funding_state, which run on
@@ -1322,7 +1306,8 @@ covert_tradecraft_refresh_bonus = {
 #      Support teaches nothing (the protector gets nothing, spec 2026-10-16 § C).
 #   3. Gain if anything counted; else decay if no hostile operation runs: a
 #      service that only protects a friend is idle for this purpose.
-#   4. Refresh the tier bonus.
+# The tier bonus (iw_tradecraft_bonus) follows by itself: je_covert_warfare
+# declares it with covert_tradecraft_bonus_mult.
 # Scope: operator country
 covert_tradecraft_monthly = {
 	save_scope_as = iw_tc_operator
@@ -1376,7 +1361,6 @@ covert_tradecraft_monthly = {
 		}
 		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }
 	}
-	covert_tradecraft_refresh_bonus = yes
 }
 
 # ============================================================================
@@ -2906,41 +2890,17 @@ covert_op_election_confidence_effect = {
 # covert_possible_* trigger (covert_warfare_triggers.txt).
 # Scope: country
 
-# Everything that must be true again once iw_funding_level has moved. The
-# monthly pulse recomputes all three of these from the variable, so this is the
-# pulse's work brought forward to the click; without it the panel's funding
-# numbers (read straight from the variable) would disagree with the modifiers
-# actually in force for up to a month.
-#   - covert_operation_funding_cost: the weekly expense, scaled by ops x level.
-#   - iw_funding_defense: the counter-intelligence capacity bonus. The original
-#     buttons did NOT refresh this one, so a click moved the advertised
-#     "+N counterintelligence IC" immediately while the modifier caught up at
-#     the next monthly pulse.
-#   - covert_ops_sync_all: each operation's stored detection display, because
-#     funding changes the odds.
-# Mirrors je_covert_warfare's on_monthly_pulse; keep the two in step.
+# Everything that must be true again once iw_funding_level (or an operation's
+# priority) has moved: each operation's stored detection display, because
+# funding changes the odds (covert_ops_sync_all). Without it the panel's
+# detection figures would disagree with the roll until the next monthly pulse.
+# The two funding modifiers, covert_operation_funding_cost (the weekly expense)
+# and iw_funding_defense (the counterintelligence capacity bonus), are
+# je_covert_warfare's scaling_modifiers_while_active: they follow the variable
+# within a few days by themselves, so nothing here adds or removes them. The
+# steppers' tooltips (iw_increase_funding_effect_tt, iw_decrease_funding_effect_tt)
+# preview the new weekly cost.
 covert_refresh_funding_state = {
-	if = {
-		limit = {
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
-		}
-		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-		je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
-	}
-	else_if = {
-		limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-		je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-	}
-	if = {
-		limit = { covert_ops_funding_ci_mult >= 1 }
-		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-		je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
-	}
-	else_if = {
-		limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
-		je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-	}
 	covert_ops_sync_all = yes
 }
 
@@ -3013,12 +2973,12 @@ covert_effect_stand_down = {
 # constants for that level.
 # Scope: operator country; scope:iw_op = the operation container
 
-# Upkeep, the JE's cost modifier and every operation's detection display are
-# recomputed on the click (covert_refresh_funding_state runs the sync, which
-# re-stages detection). covert_refresh_priority_cost runs first on purpose, so
-# the priority-weighted sum is current before covert_refresh_funding_state
-# re-adds the cost modifier from it (the sync inside covert_refresh_funding_state
-# also refreshes the sum again; that second refresh is harmless).
+# Upkeep and every operation's detection display are recomputed on the click:
+# covert_refresh_priority_cost rewrites the priority-weighted sum
+# (iw_priority_cost_sum), which the entry's covert_operation_funding_cost
+# declaration reads through covert_operation_cost_mult, so the charge follows
+# within a few days; covert_refresh_funding_state runs the sync, which re-stages
+# detection (and refreshes the sum again; that second refresh is harmless).
 #
 # The effect modifiers are deliberately NOT re-applied here. They pick up the
 # new priority at the next monthly pulse instead: covert_ops_apply_all_phase_effects'
