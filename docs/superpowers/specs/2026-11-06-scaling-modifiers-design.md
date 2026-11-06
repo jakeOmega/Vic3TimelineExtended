@@ -536,7 +536,7 @@ guide where a figure or a source it states changes, and the play-test list. The
 issue for the outcome splits and one per §§ 4.4–4.11 / § 7 feature are filed
 with PR 1.
 
-## 7. Calls made in this design (owner to check)
+## 7. Calls made in this design (owner approved all ten, 2026-11-06: "As you suggest is fine")
 
 1. **Banking's monetary layer stays as it is** (§ 4.7). Every country under
    the rule holds the entry, dormant until its cycle starts, and the layer's
