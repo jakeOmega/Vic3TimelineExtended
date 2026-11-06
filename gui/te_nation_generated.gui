@@ -29,7 +29,7 @@ template te_nation_list_science_and_space {
 
 ### The international section's list.
 template te_nation_list_international {
-	visible = "[Or(Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_nuclear_order').GetValue, '(CFixedPoint)0'), Or(EqualTo_string(TimedModifier.GetName, Localize('nd_taboo_programme_held')), Or(EqualTo_string(TimedModifier.GetName, Localize('nd_taboo_renounced')), EqualTo_string(TimedModifier.GetName, Localize('un_npt_disarmament_modifier'))))), And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_decolonization').GetValue, '(CFixedPoint)0'), Or(Or(EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_collapsing_subject_ld_modifier')), EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_crumbling_subject_ld_modifier'))), Or(EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_strained_subject_ld_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gp_anti_colonial_policy_modifier')), EqualTo_string(TimedModifier.GetName, Localize('gp_pro_colonial_policy_modifier'))))))), Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_united_nations').GetValue, '(CFixedPoint)0'), Or(EqualTo_string(TimedModifier.GetName, Localize('un_nonmember_pariah_modifier')), EqualTo_string(TimedModifier.GetName, Localize('un_nonmember_pariah_strong_modifier')))), Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_sanctions').GetValue, '(CFixedPoint)0'), EqualTo_string(TimedModifier.GetName, Localize('un_sanctions_enforcer_modifier'))), And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_foreign').GetValue, '(CFixedPoint)0'), EqualTo_string(TimedModifier.GetName, Localize('intelligence_sharing_defense_shield_modifier'))))))]"
+	visible = "[Or(Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_nuclear_order').GetValue, '(CFixedPoint)0'), Or(EqualTo_string(TimedModifier.GetName, Localize('nd_taboo_programme_held')), EqualTo_string(TimedModifier.GetName, Localize('nd_taboo_renounced')))), And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_decolonization').GetValue, '(CFixedPoint)0'), Or(Or(EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_collapsing_subject_ld_modifier')), EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_crumbling_subject_ld_modifier'))), Or(EqualTo_string(TimedModifier.GetName, Localize('colonial_overlord_strained_subject_ld_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gp_anti_colonial_policy_modifier')), EqualTo_string(TimedModifier.GetName, Localize('gp_pro_colonial_policy_modifier'))))))), Or(And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_sanctions').GetValue, '(CFixedPoint)0'), EqualTo_string(TimedModifier.GetName, Localize('un_sanctions_enforcer_modifier'))), And(GreaterThan_CFixedPoint(Country.MakeScope.Var('te_nation_src_foreign').GetValue, '(CFixedPoint)0'), EqualTo_string(TimedModifier.GetName, Localize('intelligence_sharing_defense_shield_modifier')))))]"
 }
 
 ### What the judicial_independence row's score gives now.
@@ -527,11 +527,6 @@ types te_nation_generated_types
 				}
 			}
 			te_nation_row = {
-				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_state_trade_advantage_mult_count'), '(CFixedPoint)0' )]"
-				text = "te_nation_type_state_trade_advantage_mult"
-				tooltip = "te_nation_type_state_trade_advantage_mult_tt"
-			}
-			te_nation_row = {
 				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_state_export_advantage_mult_count'), '(CFixedPoint)0' )]"
 				text = "te_nation_type_state_export_advantage_mult"
 				tooltip = "te_nation_type_state_export_advantage_mult_tt"
@@ -670,11 +665,6 @@ types te_nation_generated_types
 				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_country_diplomatic_reputation_add_count'), '(CFixedPoint)0' )]"
 				text = "te_nation_type_country_diplomatic_reputation_add"
 				tooltip = "te_nation_type_country_diplomatic_reputation_add_tt"
-			}
-			te_nation_row = {
-				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_country_improve_relations_speed_mult_count'), '(CFixedPoint)0' )]"
-				text = "te_nation_type_country_improve_relations_speed_mult"
-				tooltip = "te_nation_type_country_improve_relations_speed_mult_tt"
 			}
 			te_nation_row = {
 				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_type_country_leverage_generation_mult_count'), '(CFixedPoint)0' )]"
