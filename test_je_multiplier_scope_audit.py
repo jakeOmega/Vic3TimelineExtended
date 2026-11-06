@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import je_multiplier_scope_audit as audit_module
 from je_multiplier_scope_audit import (
-    AuditResult, audit, load_country_triggers, main, parse_text, render_report, scan_nodes,
+    AuditResult, audit, load_country_triggers, main, parse_text, render_report, scan_journal_entries, scan_nodes,
 )
 
 REPO = Path(__file__).resolve().parent
@@ -151,7 +151,52 @@ multiplier = gdp # REVIEWED 2026-10-03: deliberate probe
             self.assertIsNone(scan(changed)[0].exemption)
 
 
+def scan_je(text: str, values: str = ""):
+    nodes, comments = parse_text(text, "common/journal_entries/j.txt")
+    definitions, _ = parse_text(values, "values.txt")
+    return scan_journal_entries(nodes, comments, {n.key: n for n in definitions}, COUNTRY_READS, LINKS)
+
+
+def scaling_entry(value: str, context: str = "") -> str:
+    return (f"je_x = {{\n{context}\tscaling_modifiers_while_active = {{\n\t\tmodifier = m\n"
+            f"\t\tvalue = {value}\n\t}}\n}}\n")
+
+
+class ScalingModifierTests(unittest.TestCase):
+    """1.15's scaling_modifiers_while_active: the value's root is the owning country in a country-context
+    entry, so a country read is fine there; a contextless entry has no country to read (#1403, #1404)."""
+
+    def test_scaling_value_in_a_country_entry_is_not_flagged(self):
+        self.assertEqual(scan_je(scaling_entry("{ value = gdp }")), [])
+
+    def test_scaling_value_in_a_contextless_entry_flags_country_reads(self):
+        flags = scan_je(scaling_entry("{ value = gdp }", "\tcontext = none\n"))
+        self.assertEqual([(f.read, f.modifier, f.journal_entry, f.line) for f in flags], [("gdp", "m", "je_x", 5)])
+
+    def test_scaling_value_follows_named_values(self):
+        flags = scan_je(scaling_entry("sv", "\tcontext = none\n"), "sv = { value = income }")
+        self.assertEqual([(f.read, f.chain) for f in flags], [("income", ("sv",))])
+
+    def test_scaling_value_reviewed_comment_suppresses(self):
+        text = scaling_entry("{ value = gdp } # REVIEWED 2026-11-06: deliberate", "\tcontext = none\n")
+        self.assertEqual(scan_je(text)[0].exemption, {"date": "2026-11-06", "rationale": "deliberate"})
+
+
 class IntegrationTests(unittest.TestCase):
+    def test_audit_reads_journal_entry_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for rel, text in {
+                "docs/engine/triggers_parsed.txt": "## total_expenses\nScopes: country\n",
+                "docs/engine/event_targets_summary.txt": "country|income|value|Income\n",
+                "common/journal_entries/j.txt": scaling_entry("{ value = income }", "\tcontext = none\n"),
+            }.items():
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8-sig")
+            result = audit(mod_path=str(root))
+            self.assertEqual([(f.file, f.read) for f in result.flags], [("common/journal_entries/j.txt", "income")])
+
     def test_cross_file_resolution_and_missing_metadata(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

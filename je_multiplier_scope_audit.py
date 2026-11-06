@@ -11,6 +11,13 @@ This checks explicit je: links, including inside control flow, across common/
 and events/. It does not infer the input scope of standalone effects or audit
 other scope types. Variable lifetime is covered by modifier_multiplier_var_audit.
 Suppress on the multiplier line with # REVIEWED YYYY-MM-DD: rationale.
+
+1.15's `scaling_modifiers_while_active` (#1403, #1404): a journal entry declares
+the modifier with a `value` the engine re-evaluates. In a country-context entry
+the value's root is the owning country, so a country read is fine there (an
+`owner = { }` wrapper also still works: `owner` takes a country and returns it).
+A contextless entry (`context = none`) has no country, so its values are
+checked like a JE multiplier. Suppress on the `value` line.
 """
 from __future__ import annotations
 
@@ -176,6 +183,32 @@ def scan_nodes(nodes: list[Node], comments: dict[int, str],
     return flags
 
 
+def scan_journal_entries(nodes: list[Node], comments: dict[int, str],
+                         definitions: dict[str, Node], country_triggers: set[str],
+                         links: set[str]) -> list[Flag]:
+    """Country reads in the scaling-modifier values of contextless entries."""
+    flags: list[Flag] = []
+    for entry in nodes:
+        if not any(n.key == "context" and n.value == "none" for n in entry.children):
+            continue
+        for block in (n for n in entry.children if n.key == "scaling_modifiers_while_active"):
+            modifier = next((n.value for n in block.children if n.key == "modifier"), "?")
+            for value in (n for n in block.children if n.key == "value"):
+                seen = set()
+                for read, source, chain in _unsafe_reads([value], definitions, country_triggers,
+                                                         links, entry.key):
+                    identity = (read, source.file, source.line, chain)
+                    if identity in seen:
+                        continue
+                    seen.add(identity)
+                    flags.append(Flag(
+                        entry.file, value.line, entry.key, modifier, read,
+                        source.file, source.line, chain,
+                        _parse_reviewed(comments.get(value.line)),
+                    ))
+    return flags
+
+
 def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
     """Pure file scan; no game install or ModState is needed."""
     if mod_path is None:
@@ -190,15 +223,19 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         rel = path.relative_to(root).as_posix()
         text = path.read_text(encoding="utf-8-sig")
         is_definition = rel.startswith(("common/script_values/", "common/scripted_triggers/"))
-        if not is_definition and "add_modifier" not in text:
+        is_entry = (rel.startswith("common/journal_entries/")
+                    and "scaling_modifiers_while_active" in text)
+        if not is_definition and not is_entry and "add_modifier" not in text:
             continue
         nodes, comments = parse_text(text, rel)
-        parsed.append((nodes, comments))
+        parsed.append((nodes, comments, is_entry))
         if is_definition:
             definitions.update((node.key, node) for node in nodes)
     flags = []
-    for nodes, comments in parsed:
+    for nodes, comments, is_entry in parsed:
         flags.extend(scan_nodes(nodes, comments, definitions, country_triggers, links))
+        if is_entry:
+            flags.extend(scan_journal_entries(nodes, comments, definitions, country_triggers, links))
     return AuditResult(flags, len(files))
 
 
@@ -210,7 +247,9 @@ def render_report(result: AuditResult) -> str:
         "Route reads through `owner = { }`, or precompute a persistent country variable",
         "and read it flat through `root.var:X`. Named script values and triggers are",
         "followed transitively; country-only triggers come from the engine scope catalog.", "",
-        "Suppress on the multiplier line: `# REVIEWED YYYY-MM-DD: rationale`.", "",
+        "A contextless entry's `scaling_modifiers_while_active` values are checked the same way",
+        "(in a country-context entry the value's root is the owning country).", "",
+        "Suppress on the multiplier (or `value`) line: `# REVIEWED YYYY-MM-DD: rationale`.", "",
     ]
     for title, reviewed in (("Unreviewed Flags", False), ("Reviewed Exemptions", True)):
         out.extend((f"## {title}", ""))

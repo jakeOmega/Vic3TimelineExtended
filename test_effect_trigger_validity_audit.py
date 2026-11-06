@@ -350,6 +350,24 @@ class JournalEntry115SchemaTests(unittest.TestCase):
         self.assertEqual({(f.keyword, f.kind) for f in result.flags},
                          {("fire_only_once_forever", "unresolved-helper-call")})
 
+    def test_115_scaling_modifier_block_passes(self):
+        # 1.15's scaling_modifiers_while_active (a block or named value) and
+        # disable_evaluation, before the mod's first use (#1404).
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/journal_entries/j.txt": (
+            "je_x = {\n\tgroup = je_group_internal_affairs\n"
+            "\tactivation_description = { always = yes }\n"
+            "\tdisable_evaluation = { NOT = { has_game_rule = r } }\n"
+            "\tscaling_modifiers_while_active = {\n\t\tmodifier = m\n\t\tvalue = {\n"
+            "\t\t\tvalue = 0\n"
+            "\t\t\tif = { limit = { has_variable = v } add = var:v multiply = 2 max = 5 }\n"
+            "\t\t\tmin = 0\n\t\t}\n\t}\n"
+            "\tscaling_modifiers_while_active = { modifier = m2 value = named_sv }\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual(_flagged(result), set())
+
     @unittest.skipUnless(_install_dir("journal_entries"), "needs the game install")
     def test_vanilla_115_entries_and_bars_are_clean(self):
         # The audit's 1.15 reading against vanilla's own 1.15 files.
