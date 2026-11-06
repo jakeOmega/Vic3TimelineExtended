@@ -4,8 +4,9 @@
 #
 # The picks are scripted GUIs, not the entry's scripted buttons: the Map Room is contextless with nobody involved, and
 # the engine locks a scripted button for a country not involved in its entry (play-test check 14, 2026-11-05).
-# is_valid is false on the current pick, which the button draws pressed; is_shown hides the three census maps while
-# the census doesn't run.
+# is_valid is false on the current pick, which the button draws pressed; is_shown hides the census maps while the
+# census doesn't run. Selector numbers: common/script_values/te_journal_map_values.txt (2 was literacy, retired: vanilla's
+# literacy map mode shows it).
 
 te_jmap_pick_turmoil_sgui = {
 	scope = country
@@ -17,17 +18,29 @@ te_jmap_pick_turmoil_sgui = {
 	}
 }
 
-te_jmap_pick_literacy_sgui = {
+te_jmap_pick_devastation_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
-	is_valid = { NOT = { te_jmap_selector = 2 } }
+	is_valid = { NOT = { te_jmap_selector = 6 } }
 	effect = {
-		te_jmap_set_selector = { SEL = 2 }
+		te_jmap_set_selector = { SEL = 6 }
 	}
 }
 
-# The census maps read each state's figures from the last census.
+# The urban share is the yearly walk's, which runs whatever the Demographics rule.
+te_jmap_pick_urban_share_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 15 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 15 }
+	}
+}
+
+# The census maps read each state's figures from the last census; births, deaths, migrants and the causes of death
+# only once a state has stepped a full year (te_journal_maps.txt).
 te_jmap_pick_life_expectancy_sgui = {
 	scope = country
 	is_shown = {
@@ -64,6 +77,110 @@ te_jmap_pick_median_age_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 5 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 5 }
+	}
+}
+
+te_jmap_pick_natural_change_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 7 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 7 }
+	}
+}
+
+te_jmap_pick_death_rate_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 8 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 8 }
+	}
+}
+
+te_jmap_pick_birth_rate_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 9 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 9 }
+	}
+}
+
+te_jmap_pick_infant_mortality_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 10 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 10 }
+	}
+}
+
+te_jmap_pick_leading_cause_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 11 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 11 }
+	}
+}
+
+te_jmap_pick_sex_balance_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 12 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 12 }
+	}
+}
+
+te_jmap_pick_net_migration_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 13 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 13 }
+	}
+}
+
+te_jmap_pick_old_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 14 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 14 }
 	}
 }
 

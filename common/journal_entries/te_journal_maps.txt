@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# Journal entry map modes: the Map Room (vanilla 1.15; third pass, 2026-11-05)
+# Journal entry map modes: the Map Room (vanilla 1.15; fifth pass, 2026-11-05)
 # ============================================================================
 # docs/systems/mod_systems/journal_map_modes.md; the in-game checks in docs/testing/journal-map-modes-playtest.md.
 #
@@ -55,7 +55,9 @@ je_te_map_room = {
 	}
 
 	# Root: the state being painted. A branch that matches nothing leaves the state unpainted, which is how a map with
-	# no pick (selector 0) should look.
+	# no pick (selector 0) should look. The census's per-state figures (common/scripted_effects/te_demog_effects.txt's
+	# header): the life table's from a state's first seed, a year's births, deaths and migrants only once it has stepped
+	# (te_dg_stepped above 0; a seed writes their rates as 0), as the Demographics panel gates them.
 	map_color = {
 		# 1. Turmoil.
 		if = {
@@ -66,13 +68,25 @@ je_te_map_room = {
 				factor = te_jmap_turmoil_factor
 			}
 		}
-		# 2. Literacy.
+		# 6. Devastation.
 		else_if = {
-			limit = { te_jmap_selector = 2 }
+			limit = { te_jmap_selector = 6 }
 			lerp = {
-				min_color = "te_jmap_literacy_low"
-				max_color = "te_jmap_literacy_high"
-				factor = te_jmap_literacy_factor
+				min_color = "te_jmap_devastation_low"
+				max_color = "te_jmap_devastation_high"
+				factor = te_jmap_devastation_factor
+			}
+		}
+		# 15. The urban share (the yearly walk's, whatever the Demographics rule).
+		else_if = {
+			limit = {
+				te_jmap_selector = 15
+				has_variable = te_dg_urban_share
+			}
+			lerp = {
+				min_color = "te_jmap_urban_low"
+				max_color = "te_jmap_urban_high"
+				factor = te_jmap_urban_factor
 			}
 		}
 		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
@@ -99,6 +113,182 @@ je_te_map_room = {
 				min_color = "te_jmap_e0_mid"
 				max_color = "te_jmap_e0_high"
 				factor = te_jmap_e0_factor_upper
+			}
+		}
+		# 10. Infant mortality (Demographics, the life table's), in two halves at 50 per 1,000 births.
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+				var:te_dg_imr < 50
+			}
+			lerp = {
+				min_color = "te_jmap_imr_low"
+				max_color = "te_jmap_imr_mid"
+				factor = te_jmap_imr_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			lerp = {
+				min_color = "te_jmap_imr_mid"
+				max_color = "te_jmap_imr_high"
+				factor = te_jmap_imr_factor_upper
+			}
+		}
+		# 11. The leading cause of death (Demographics), in the Causes of Death pie's colors: te_dg_dc_lead's codes, 1
+		# infection and hunger, 2 chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 7 killed by
+		# events, 8 war and devastation (6, the deaths added on top until 2026-10-22, as war, as the panel's icon does).
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 1
+			}
+			value = "te_jmap_cause_inf"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 2
+			}
+			value = "te_jmap_cause_chr"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 3
+			}
+			value = "te_jmap_cause_ext"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 4
+			}
+			value = "te_jmap_cause_work"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 5
+			}
+			value = "te_jmap_cause_mat"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 7
+			}
+			value = "te_jmap_cause_kill"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				OR = {
+					var:te_dg_dc_lead = 8
+					var:te_dg_dc_lead = 6
+				}
+			}
+			value = "te_jmap_cause_war"
+		}
+		# 9. Births per 1,000 (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 9
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+			}
+			lerp = {
+				min_color = "te_jmap_cbr_low"
+				max_color = "te_jmap_cbr_high"
+				factor = te_jmap_cbr_factor
+			}
+		}
+		# 8. Deaths per 1,000 (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 8
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cdr
+			}
+			lerp = {
+				min_color = "te_jmap_cdr_low"
+				max_color = "te_jmap_cdr_high"
+				factor = te_jmap_cdr_factor
+			}
+		}
+		# 7. Natural change (Demographics, once stepped), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+				te_demog_natural_change < 0
+			}
+			lerp = {
+				min_color = "te_jmap_natural_low"
+				max_color = "te_jmap_natural_mid"
+				factor = te_jmap_natural_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+			}
+			lerp = {
+				min_color = "te_jmap_natural_mid"
+				max_color = "te_jmap_natural_high"
+				factor = te_jmap_natural_factor_upper
 			}
 		}
 		# 4. Fertility (Demographics), diverging at replacement.
@@ -153,32 +343,117 @@ je_te_map_room = {
 				factor = te_jmap_median_factor_upper
 			}
 		}
-		# The Demographics maps, a state with no census yet, no people to count, or the rule off.
+		# 14. Aged 65 and over (Demographics).
+		else_if = {
+			limit = {
+				te_jmap_selector = 14
+				has_variable = te_dg_old_share
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			lerp = {
+				min_color = "te_jmap_old_low"
+				max_color = "te_jmap_old_high"
+				factor = te_jmap_old_factor
+			}
+		}
+		# 12. Sex balance (Demographics), diverging at 100 men per 100 women.
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+				var:te_dg_sex_balance < 100
+			}
+			lerp = {
+				min_color = "te_jmap_sex_low"
+				max_color = "te_jmap_sex_mid"
+				factor = te_jmap_sex_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+			}
+			lerp = {
+				min_color = "te_jmap_sex_mid"
+				max_color = "te_jmap_sex_high"
+				factor = te_jmap_sex_factor_upper
+			}
+		}
+		# 13. Net migration (Demographics, once stepped), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+				var:te_dg_mig_rate < 0
+			}
+			lerp = {
+				min_color = "te_jmap_mig_low"
+				max_color = "te_jmap_mig_mid"
+				factor = te_jmap_mig_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+			}
+			lerp = {
+				min_color = "te_jmap_mig_mid"
+				max_color = "te_jmap_mig_high"
+				factor = te_jmap_mig_factor_upper
+			}
+		}
+		# Every map that reads a census or walk figure, for a state with none yet (no census, no full year, no people to
+		# count, or the rule off): grey. Every such selector is listed here (test_journal_map_modes.py).
 		else_if = {
 			limit = {
 				OR = {
 					te_jmap_selector = 3
 					te_jmap_selector = 4
 					te_jmap_selector = 5
+					te_jmap_selector = 7
+					te_jmap_selector = 8
+					te_jmap_selector = 9
+					te_jmap_selector = 10
+					te_jmap_selector = 11
+					te_jmap_selector = 12
+					te_jmap_selector = 13
+					te_jmap_selector = 14
+					te_jmap_selector = 15
 				}
 			}
 			value = "te_jmap_no_data"
 		}
 	}
 
-	# Root: the state under the cursor. Never runs as an effect; it only prints.
+	# Root: the state under the cursor. Never runs as an effect; it only prints. Each figure that needs a choice of words
+	# is a branch of its own, not a SelectLocalization in the loc: a key named there loses THIS, and every hover logged
+	# "Promote 'THIS' returned nullptr" and printed nothing (2026-11-05).
 	map_tooltip = {
 		if = {
 			limit = { te_jmap_selector = 1 }
 			custom_tooltip_no_bullet = te_jmap_tt_turmoil
 		}
 		else_if = {
-			limit = { te_jmap_selector = 2 }
-			custom_tooltip_no_bullet = te_jmap_tt_literacy
+			limit = { te_jmap_selector = 6 }
+			custom_tooltip_no_bullet = te_jmap_tt_devastation
 		}
-		# Over 10,000 is a separate branch, not a SelectLocalization in the loc: a key
-		# named there loses THIS, and every hover logged "Promote 'THIS' returned
-		# nullptr" and printed nothing (2026-11-05).
+		else_if = {
+			limit = {
+				te_jmap_selector = 15
+				has_variable = te_dg_urban_share
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_urban_share
+		}
+		# Over 10,000 years: the late game's immortals.
 		else_if = {
 			limit = {
 				te_jmap_selector = 3
@@ -194,6 +469,127 @@ je_te_map_room = {
 				var:te_dg_e0 > 0
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_infant_mortality
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 1
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_inf
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 2
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_chr
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 3
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_ext
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 4
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_work
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_mat
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 7
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_kill
+		}
+		# 8 war and devastation, and 6 from an old save
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_war
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 9
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_birth_rate
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 8
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cdr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_death_rate
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_natural_change
 		}
 		else_if = {
 			limit = {
@@ -213,10 +609,45 @@ je_te_map_room = {
 		}
 		else_if = {
 			limit = {
+				te_jmap_selector = 14
+				has_variable = te_dg_old_share
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_old_share
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_sex_balance
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_migration
+		}
+		else_if = {
+			limit = {
 				OR = {
 					te_jmap_selector = 3
 					te_jmap_selector = 4
 					te_jmap_selector = 5
+					te_jmap_selector = 7
+					te_jmap_selector = 8
+					te_jmap_selector = 9
+					te_jmap_selector = 10
+					te_jmap_selector = 11
+					te_jmap_selector = 12
+					te_jmap_selector = 13
+					te_jmap_selector = 14
+					te_jmap_selector = 15
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census

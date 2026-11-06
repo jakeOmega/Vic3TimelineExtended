@@ -6,10 +6,13 @@
 # ---------------------------------------------------------------------------
 # The selector: which of the Map Room's maps the player picked
 # ---------------------------------------------------------------------------
-# 1 turmoil, 2 literacy, 3 life expectancy, 4 fertility, 5 median age; 0 none (6 was the scope probe, retired). A
-# global variable (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope
-# probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's
-# state roots and the pick buttons' country roots read the same number.
+# 1 turmoil, 3 life expectancy, 4 fertility, 5 median age, 6 devastation, 7 natural change, 8 death rate, 9 birth
+# rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
+# share; 0 none. 2 was literacy, retired because vanilla's own literacy map mode shows it (a save holding 2 shows the
+# unpainted map and "Pick a map" until the next pick); 6 was the scope probe until the fourth session. A global variable
+# (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope probe painted
+# blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's state roots and
+# the pick buttons' country roots read the same number.
 te_jmap_selector = {
 	value = 0
 	if = {
@@ -30,8 +33,11 @@ te_jmap_turmoil_factor = {
 	max = 1
 }
 
-te_jmap_literacy_factor = {
-	value = literacy_rate
+# Devastation is a 0-1 share, as turmoil is (te_demog_crisis reads it bare). Half devastated is ruin (vanilla blocks
+# cultural communities there), so the scale saturates at a half too.
+te_jmap_devastation_factor = {
+	value = devastation
+	multiply = 2
 	min = 0
 	max = 1
 }
@@ -86,6 +92,104 @@ te_jmap_median_factor_upper = {
 	value = var:te_dg_median
 	subtract = 30
 	divide = 15
+	min = 0
+	max = 1
+}
+
+# Natural change, births less deaths per 1,000 people last year (te_demog_natural_change), diverging at none: -15 to 0
+# below it, 0 to +30 above (a pre-industrial state grows by 5-10, one in the demographic transition by 30).
+te_jmap_natural_factor_lower = {
+	value = te_demog_natural_change
+	add = 15
+	divide = 15
+	min = 0
+	max = 1
+}
+te_jmap_natural_factor_upper = {
+	value = te_demog_natural_change
+	divide = 30
+	min = 0
+	max = 1
+}
+
+# Deaths per 1,000 people last year, 5 to 45 (a modern state 8-12, a pre-industrial one 30-40).
+te_jmap_cdr_factor = {
+	value = var:te_dg_cdr
+	subtract = 5
+	divide = 40
+	min = 0
+	max = 1
+}
+
+# Births per 1,000 people last year, 8 to 50.
+te_jmap_cbr_factor = {
+	value = var:te_dg_cbr
+	subtract = 8
+	divide = 42
+	min = 0
+	max = 1
+}
+
+# Infant mortality, deaths in the first year per 1,000 births, in two halves at 50: 0 to 50 (the transition's end, where
+# modern states sit) and 50 to 300 (an 1836 state, 150-250).
+te_jmap_imr_factor_lower = {
+	value = var:te_dg_imr
+	divide = 50
+	min = 0
+	max = 1
+}
+te_jmap_imr_factor_upper = {
+	value = var:te_dg_imr
+	subtract = 50
+	divide = 250
+	min = 0
+	max = 1
+}
+
+# Sex balance, men per 100 women aged 20-59, diverging at 100: the census's own bounds for its effects, fewer men from 90
+# (full at 80; te_demog_k_sex_fewer_from, _span) and more from 110 (full at 130).
+te_jmap_sex_factor_lower = {
+	value = var:te_dg_sex_balance
+	subtract = 80
+	divide = 20
+	min = 0
+	max = 1
+}
+te_jmap_sex_factor_upper = {
+	value = var:te_dg_sex_balance
+	subtract = 100
+	divide = 30
+	min = 0
+	max = 1
+}
+
+# Net migration per 1,000 people last year, diverging at none: -20 to 0 (leaving) and 0 to +20 (arriving).
+te_jmap_mig_factor_lower = {
+	value = var:te_dg_mig_rate
+	add = 20
+	divide = 20
+	min = 0
+	max = 1
+}
+te_jmap_mig_factor_upper = {
+	value = var:te_dg_mig_rate
+	divide = 20
+	min = 0
+	max = 1
+}
+
+# The share aged 65 and over, 2% to 30% (an 1836 state 3-5%, the oldest today near 30%).
+te_jmap_old_factor = {
+	value = var:te_dg_old_share
+	subtract = 0.02
+	divide = 0.28
+	min = 0
+	max = 1
+}
+
+# The urban share (te_dg_urban_share: the people not at a rural workplace, from the yearly walk), 0 to 1.
+te_jmap_urban_factor = {
+	value = var:te_dg_urban_share
 	min = 0
 	max = 1
 }
