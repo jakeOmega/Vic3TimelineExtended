@@ -423,9 +423,6 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_charter_pressure_months }
 	un_dissolve_remove_global = { NAME = un_crisis_active }
 	un_dissolve_remove_global = { NAME = un_crisis_months }
-	# The five-year founding window of earlier versions (seats went to the
-	# first great powers to join); nothing reads it now, but a save may hold it.
-	un_dissolve_remove_global = { NAME = un_founding_window_active }
 	un_dissolve_remove_global = { NAME = un_seat_signing_months_left }
 	un_dissolve_remove_global = { NAME = un_recess_months }
 	# The docket (redesign phase 4). A refounded UN seeds it afresh.

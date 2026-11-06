@@ -20531,10 +20531,6 @@
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]#! innovation a week, on top of funding (as much as two more funding levels).",
   "es": "#bold Coste del enfoque:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]#! de innovación por semana, además de la financiación (hasta dos niveles de financiación más)."
  },
- "sr_approach_cost_ambitious_moon_base": {
-  "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]#! innovation a week, on top of funding (as much as two more funding levels).",
-  "es": "#bold Coste del enfoque:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]#! de innovación por semana, además de la financiación (hasta dos niveles de financiación más)."
- },
  "sr_approach_cost_ambitious_moon_landing": {
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]#! innovation a week, on top of funding (as much as two more funding levels).",
   "es": "#bold Coste del enfoque:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]#! de innovación por semana, además de la financiación (hasta dos niveles de financiación más)."
@@ -20562,10 +20558,6 @@
  "sr_approach_cost_safe_mars_landing": {
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]#! innovation a week, on top of funding (as much as one more funding level).",
   "es": "#bold Coste del enfoque:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]#! de innovación por semana, además de la financiación (hasta un nivel de financiación más)."
- },
- "sr_approach_cost_safe_moon_base": {
-  "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]#! innovation a week, on top of funding (as much as one more funding level).",
-  "es": "#bold Coste del enfoque:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]#! de innovación por semana, además de la financiación (hasta un nivel de financiación más)."
  },
  "sr_approach_cost_safe_moon_landing": {
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]#! innovation a week, on top of funding (as much as one more funding level).",
@@ -20626,18 +20618,6 @@
  "sr_choice_mars_robotic": {
   "en": "Robotic Precursor Strategy",
   "es": "Estrategia de precursores robóticos"
- },
- "sr_choice_moon_base_industrial": {
-  "en": "Industrial Mining Operation",
-  "es": "Operación minera industrial"
- },
- "sr_choice_moon_base_military": {
-  "en": "Military Lunar Installation",
-  "es": "Instalación lunar militar"
- },
- "sr_choice_moon_base_scientific": {
-  "en": "Scientific Research Station",
-  "es": "Estación de investigación científica"
  },
  "sr_choice_orbital_civilian": {
   "en": "Civilian Astronaut Selection",
@@ -21235,18 +21215,6 @@
   "en": "Queue one more level of this colony's second specialization.",
   "es": "Poner en cola un nivel más de la segunda especialización de esta colonia."
  },
- "sr_moon_base_industrial": {
-  "en": "Industrial Lunar Facility",
-  "es": "Instalación lunar industrial"
- },
- "sr_moon_base_military": {
-  "en": "Military Lunar Installation",
-  "es": "Instalación lunar militar"
- },
- "sr_moon_base_scientific": {
-  "en": "Scientific Lunar Outpost",
-  "es": "Puesto lunar científico"
- },
  "sr_mq_module_a": {
   "en": "Specialization I",
   "es": "Especialización I"
@@ -21378,10 +21346,6 @@
  "sr_program_lost_mars_landing_tt": {
   "en": "The #b Mars Landing#! program is closed: the launch complex can no longer carry it, and its progress is lost.",
   "es": "El programa #b Aterrizaje en Marte#! está cerrado: el complejo de lanzamiento ya no puede sostenerlo y su progreso se pierde."
- },
- "sr_program_lost_moon_base_tt": {
-  "en": "The #b Moon Base#! program is closed: the launch complex can no longer carry it, and its progress is lost.",
-  "es": "El programa #b Base lunar#! está cerrado: el complejo de lanzamiento ya no puede sostenerlo y su progreso se pierde."
  },
  "sr_program_lost_moon_landing_tt": {
   "en": "The #b Moon Landing#! program is closed: the launch complex can no longer carry it, and its progress is lost.",
@@ -23518,10 +23482,6 @@
  "te_decision_tt_completed_mars_landing": {
   "en": "We have completed the $je_space_race_mars_landing$",
   "es": "Hemos completado el $je_space_race_mars_landing$"
- },
- "te_decision_tt_completed_moon_base": {
-  "en": "We have completed the $je_space_race_moon_base$",
-  "es": "Hemos completado la $je_space_race_moon_base$"
  },
  "te_decision_tt_completed_moon_landing": {
   "en": "We have completed the $je_space_race_moon_landing$",

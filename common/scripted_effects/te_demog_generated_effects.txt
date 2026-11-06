@@ -7983,8 +7983,7 @@ te_demog_gini_band_add = {
 
 # THIS = a state, after its walk: keep the bands that have people, for the country's sum, and
 # remove the rest (save size), with the layout they follow (te_dg_gini_layout = 2, the
-# country adds no other). Overwrites or removes every band an older layout stored, and an old
-# save's strata sums (before the wealth bands, 2026-10-10).
+# country adds no other). Overwrites or removes every band an older layout stored.
 te_demog_gini_band_store = {
 	set_variable = { name = te_dg_gini_layout value = 2 }
 	if = {
@@ -8397,15 +8396,6 @@ te_demog_gini_band_store = {
 		remove_variable = te_dg_gn41
 		remove_variable = te_dg_gy41
 	}
-	if = {
-		limit = { has_variable = te_dg_n_lo }
-		remove_variable = te_dg_n_lo
-		remove_variable = te_dg_n_mi
-		remove_variable = te_dg_n_up
-		remove_variable = te_dg_y_lo
-		remove_variable = te_dg_y_mi
-		remove_variable = te_dg_y_up
-	}
 }
 
 # THIS = a state, after its store: its bands into the formula's locals (0 where none is stored).
@@ -8705,8 +8695,8 @@ te_demog_gini_band_zero = {
 }
 
 # THIS = a state in its country's loop: add its bands if they follow this layout, and count it in
-# local_var:te_dg_g_states (the caller sets it to 0). A state from an older save (14 bands to 61+,
-# capped income in other units, or strata sums) adds nothing until its own walk stores new ones.
+# local_var:te_dg_g_states (the caller sets it to 0). A state with no bands in this layout adds nothing
+# until its own walk stores them.
 te_demog_gini_band_add_state = {
 	if = {
 		limit = { has_variable = te_dg_gini_layout }

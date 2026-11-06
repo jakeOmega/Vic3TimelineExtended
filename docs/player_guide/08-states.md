@@ -170,6 +170,8 @@ The record is today's climate. With [global warming](15-climate.md) at 0 the
 world runs about a degree colder than that, and winters more toward the
 poles. As it warms, every state's hot days and winters rise, winters most near
 the poles: hot states lose more to heat, and cold ones less to cold.
+The base game's own winter cold, which freezes seas and slows ships, is
+fixed for each region, so warming leaves it as it is.
 
 A mass migration's target needs no arable land, so a city-state or a small
 partial state can draw one. Deserts are kept back by their climate instead,

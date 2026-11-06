@@ -36,11 +36,6 @@ sr_disp_status_probe = {
 	if = { limit = { has_variable = sr_probe_last_status } value = 1 add = var:sr_probe_last_status }
 	max = 3
 }
-sr_disp_status_moon_base = {
-	value = 0
-	if = { limit = { has_variable = sr_moon_base_last_status } value = 1 add = var:sr_moon_base_last_status }
-	max = 3
-}
 sr_disp_status_mars_landing = {
 	value = 0
 	if = { limit = { has_variable = sr_mars_landing_last_status } value = 1 add = var:sr_mars_landing_last_status }
@@ -83,12 +78,6 @@ sr_disp_progress_frac_moon_landing = {
 sr_disp_progress_frac_probe = {
 	value = sr_progress_probe_value
 	divide = sr_probe_goal
-	min = 0
-	max = 1
-}
-sr_disp_progress_frac_moon_base = {
-	value = sr_progress_moon_base_value
-	divide = sr_moon_base_goal
 	min = 0
 	max = 1
 }
@@ -138,10 +127,6 @@ sr_disp_first_claimed_moon_landing = {
 sr_disp_first_claimed_probe = {
 	value = 0
 	if = { limit = { has_global_variable = sr_global_first_probe } value = 1 }
-}
-sr_disp_first_claimed_moon_base = {
-	value = 0
-	if = { limit = { has_global_variable = sr_global_first_moon_base } value = 1 }
 }
 sr_disp_first_claimed_mars_landing = {
 	value = 0
@@ -787,14 +772,6 @@ sr_disp_cost_ambitious_probe = {
 	value = sr_disp_cost_safe_probe
 	multiply = 2
 }
-sr_disp_cost_safe_moon_base = {
-	value = sr_innovation_per_cost_level
-	multiply = sr_cost_factor_moon_base
-}
-sr_disp_cost_ambitious_moon_base = {
-	value = sr_disp_cost_safe_moon_base
-	multiply = 2
-}
 sr_disp_cost_safe_mars_landing = {
 	value = sr_innovation_per_cost_level
 	multiply = sr_cost_factor_mars_landing
@@ -832,7 +809,6 @@ sr_disp_funding_within_cap = {
 	if = { limit = { sr_milestone_billed_orbital = yes } add = sr_funding_orbital_within_cap }
 	if = { limit = { sr_milestone_billed_moon_landing = yes } add = sr_funding_moon_landing_within_cap }
 	if = { limit = { sr_milestone_billed_probe = yes } add = sr_funding_probe_within_cap }
-	if = { limit = { sr_milestone_billed_moon_base = yes } add = sr_funding_moon_base_within_cap }
 	if = { limit = { sr_milestone_billed_mars_landing = yes } add = sr_funding_mars_landing_within_cap }
 	if = { limit = { sr_milestone_billed_interstellar_probe = yes } add = sr_funding_interstellar_probe_within_cap }
 	if = { limit = { sr_milestone_billed_solar_colonization = yes } add = sr_funding_solar_colonization_within_cap }
@@ -843,7 +819,6 @@ sr_disp_funding_past_cap = {
 	if = { limit = { sr_milestone_billed_orbital = yes } add = sr_funding_orbital_past_cap_effective }
 	if = { limit = { sr_milestone_billed_moon_landing = yes } add = sr_funding_moon_landing_past_cap_effective }
 	if = { limit = { sr_milestone_billed_probe = yes } add = sr_funding_probe_past_cap_effective }
-	if = { limit = { sr_milestone_billed_moon_base = yes } add = sr_funding_moon_base_past_cap_effective }
 	if = { limit = { sr_milestone_billed_mars_landing = yes } add = sr_funding_mars_landing_past_cap_effective }
 	if = { limit = { sr_milestone_billed_interstellar_probe = yes } add = sr_funding_interstellar_probe_past_cap_effective }
 	if = { limit = { sr_milestone_billed_solar_colonization = yes } add = sr_funding_solar_colonization_past_cap_effective }
@@ -986,36 +961,6 @@ sr_disp_rival_lo_probe = {
 }
 sr_disp_rival_hi_probe = {
 	value = sr_disp_rival_est_probe
-	add = sr_disp_rival_band
-	min = 0
-	max = 1
-}
-sr_disp_rival_est_moon_base = {
-	value = 0
-	scope:sr_rival = {
-		add = sr_progress_moon_base_value
-	}
-	divide = sr_moon_base_goal
-	scope:sr_rival = {
-		if = {
-			limit = { has_variable = sr_fuzz_moon_base }
-			add = {
-				value = var:sr_fuzz_moon_base
-				multiply = sr_disp_rival_band
-			}
-		}
-	}
-	min = 0
-	max = 1
-}
-sr_disp_rival_lo_moon_base = {
-	value = sr_disp_rival_est_moon_base
-	subtract = sr_disp_rival_band
-	min = 0
-	max = 1
-}
-sr_disp_rival_hi_moon_base = {
-	value = sr_disp_rival_est_moon_base
 	add = sr_disp_rival_band
 	min = 0
 	max = 1

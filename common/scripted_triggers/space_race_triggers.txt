@@ -36,7 +36,7 @@ sr_space_race_participant = {
 	}
 }
 
-# The country holds one of the nine space race entries active.
+# The country holds one of the eight space race entries active.
 # has_journal_entry counts active entries only. Scope: country
 sr_holds_space_race_entry = {
 	OR = {
@@ -44,7 +44,6 @@ sr_holds_space_race_entry = {
 		has_journal_entry = je_space_race_orbital
 		has_journal_entry = je_space_race_moon_landing
 		has_journal_entry = je_space_race_probe
-		has_journal_entry = je_space_race_moon_base
 		has_journal_entry = je_space_race_mars_landing
 		has_journal_entry = je_space_race_interstellar_probe
 		has_journal_entry = je_space_race_interstellar_results
@@ -138,11 +137,11 @@ has_space_company = {
 # ---------------------------------------------------------------------------
 # Shared gates for the milestone controls
 # ---------------------------------------------------------------------------
-# Each of the 32 space race journal-entry buttons and each op on the matching
+# Each of the 28 space race journal-entry buttons and each op on the matching
 # scripted GUI (common/scripted_guis/space_race_sguis.txt) reads its gate from
 # here, so the AI's button grid and the player's widget can never disagree about
-# when a control is offered or allowed. $MILESTONE$ is one of the eight tokens
-# suborbital | orbital | moon_landing | probe | moon_base | mars_landing |
+# when a control is offered or allowed. $MILESTONE$ is one of the seven tokens
+# suborbital | orbital | moon_landing | probe | mars_landing |
 # interstellar_probe | solar_colonization.
 #
 # The `possible` gates phrase their custom tooltips as CONDITIONS rather than
@@ -240,11 +239,10 @@ sr_solar_colonization_running = {
 }
 
 # The race is over (every world was once claimed: sr_all_colonies_complete,
-# kept as history) and a lunar world is free, as in a save whose worlds were
-# all claimed before the Moon existed. Settling the Moon is then a choice
-# (sr_colonization_by_choice). Read by that trigger, the entry's `possible`
-# (to show its line only here), Begin Solar Colonization, Resume Solar System
-# Colonization and the old-save notice. Any scope.
+# kept as history) and a lunar world is free again, released since. Settling
+# the Moon is then a choice (sr_colonization_by_choice). Read by that trigger,
+# the entry's `possible` (to show its line only here), Begin Solar
+# Colonization and Resume Solar System Colonization. Any scope.
 sr_race_over_moon_free = {
 	has_global_variable = sr_all_colonies_complete
 	sr_sites_lunar_open = yes
@@ -286,7 +284,7 @@ sr_colonization_beyond_moon = {
 
 # Whether a milestone's funding and approach are billed, and its funding adds
 # to the programme's pace (sr_apply_milestone_cost_modifiers_base). A running
-# milestone is billed; the seven single-goal milestones run exactly while
+# milestone is billed; the six single-goal milestones run exactly while
 # sr_active_<m> is set, because losing their production method fails the
 # entry. Solar colonization stays open without it (its colonies' modifiers
 # live on the entry), and then it is not billed: the same test as its pulse
@@ -296,7 +294,6 @@ sr_milestone_billed_suborbital = { has_variable = sr_active_suborbital }
 sr_milestone_billed_orbital = { has_variable = sr_active_orbital }
 sr_milestone_billed_moon_landing = { has_variable = sr_active_moon_landing }
 sr_milestone_billed_probe = { has_variable = sr_active_probe }
-sr_milestone_billed_moon_base = { has_variable = sr_active_moon_base }
 sr_milestone_billed_mars_landing = { has_variable = sr_active_mars_landing }
 sr_milestone_billed_interstellar_probe = { has_variable = sr_active_interstellar_probe }
 sr_milestone_billed_solar_colonization = { sr_solar_colonization_running = yes }
@@ -337,7 +334,6 @@ sr_cost_modifiers_missing = {
 		sr_cost_modifiers_missing_base = { MILESTONE = orbital }
 		sr_cost_modifiers_missing_base = { MILESTONE = moon_landing }
 		sr_cost_modifiers_missing_base = { MILESTONE = probe }
-		sr_cost_modifiers_missing_base = { MILESTONE = moon_base }
 		sr_cost_modifiers_missing_base = { MILESTONE = mars_landing }
 		sr_cost_modifiers_missing_base = { MILESTONE = interstellar_probe }
 		sr_cost_modifiers_missing_base = { MILESTONE = solar_colonization }
@@ -378,14 +374,13 @@ sr_has_intel_tier = {
 # running": it reads the per-milestone sr_active_<m> flags, which each journal
 # entry sets on activation and clears on completion or failure. It replaced a
 # shared sr_active_milestone flag that the completion of any one milestone
-# cleared while others (probe, moon base, Mars) were still running (#480).
+# cleared while others (the probe, the Moon Base, Mars) were still running (#480).
 sr_has_running_milestone = {
 	OR = {
 		has_variable = sr_active_suborbital
 		has_variable = sr_active_orbital
 		has_variable = sr_active_moon_landing
 		has_variable = sr_active_probe
-		has_variable = sr_active_moon_base
 		has_variable = sr_active_mars_landing
 		has_variable = sr_active_interstellar_probe
 		sr_solar_colonization_running = yes
@@ -402,10 +397,10 @@ sr_has_running_milestone = {
 # record is a first lunar colony now, which a power may never found once the
 # six lunar worlds are taken (lunar colonization design § 7). All variables,
 # so a revolution's winner inherits the state. sr_all_colonies_complete is
-# history: an old save whose worlds were all claimed before the Moon existed
-# keeps it with the Moon free, so a country that had concluded keeps the
-# dividend until it chooses to resume colonization for the Moon (owner,
-# 2026-10-29; sr_colonization_resumed makes it running again).
+# history: it stays when a lunar world is released after every world was
+# claimed, so a country that had concluded keeps the dividend until it chooses
+# to resume colonization for the Moon (owner, 2026-10-29;
+# sr_colonization_resumed makes it running again).
 sr_space_race_concluded = {
 	has_variable = sr_completed_suborbital
 	has_variable = sr_completed_orbital
@@ -438,7 +433,7 @@ sr_colonizing_moon_first = {
 }
 
 # The milestone's choice event has been answered: the answer is one of these
-# country variables, set by the option (space_race_events.80 / .5 / .81 / .82 /
+# country variables, set by the option (space_race_events.80 / .5 / .81 /
 # .83). The entry's `immediate` asks the question only while none is set, and
 # the event re-checks when it fires. `immediate` runs again when the entry
 # re-activates and on an entry a revolution's winner inherits (the variables
@@ -464,13 +459,6 @@ sr_probe_choice_made = {
 		has_variable = sr_probe_target_venus
 		has_variable = sr_probe_target_mars
 		has_variable = sr_probe_target_asteroid
-	}
-}
-sr_moon_base_choice_made = {
-	OR = {
-		has_variable = sr_moon_base_scientific
-		has_variable = sr_moon_base_industrial
-		has_variable = sr_moon_base_military
 	}
 }
 sr_mars_landing_choice_made = {
@@ -499,7 +487,6 @@ sr_has_setback_marker = {
 		exists = scope:sr_setback_orbital
 		exists = scope:sr_setback_moon_landing
 		exists = scope:sr_setback_probe
-		exists = scope:sr_setback_moon_base
 		exists = scope:sr_setback_mars_landing
 		exists = scope:sr_setback_interstellar_probe
 		exists = scope:sr_setback_solar_colonization
@@ -508,7 +495,6 @@ sr_has_setback_marker = {
 
 sr_setback_is_crewed_outpost = {
 	OR = {
-		exists = scope:sr_setback_moon_base
 		exists = scope:sr_setback_mars_landing
 		exists = scope:sr_setback_solar_colonization
 	}

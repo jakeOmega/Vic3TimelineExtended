@@ -17,7 +17,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
+    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, TROPHY_CODE_BASE,
     TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
@@ -50,7 +50,7 @@ TROPHY_SHARES = {
                "sun_stone", "stela"),
     "piece": ("arch", "gate", "tower", "bell_tower", "round_tower", "rock_cut"),
     "token": ("hall", "hall_of_fame", "pantheon", "forum", "stoa", "court", "colonnade", "mausoleum", "pyramid",
-              "pagoda", "memorial_church", "rock_hewn_church", "hill_shrine", "sacred_oak", "memorial",
+              "pagoda", "memorial_church", "rock_hewn_church", "hill_shrine", "sacred_oak",
               "opera_house", "gardens", "observatory", "exhibition_hall", "stadium"),
 }
 SHARE_VALUES = {"object": 1, "piece": 0.25, "token": 0.1}
@@ -109,7 +109,7 @@ IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners
 
 
 def all_forms():
-    return set(FORMS) | set(RETIRED_FORMS) | set(BUILDING_FORMS.values())
+    return set(FORMS) | set(BUILDING_FORMS.values())
 
 
 def custom_loc_branches(name):

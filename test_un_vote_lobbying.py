@@ -112,9 +112,9 @@ class CastingTimingTest(unittest.TestCase):
     def test_nothing_dispatches_ballots_at_day_thirty_any_more(self):
         self.assertNotIn("un_vote_dispatch_ai_ballots", _all_script("scripted_effects"))
         self.assertNotIn("un_vote_dispatch_ai_ballots", _read(VOTE_EVENTS))
-        vote5 = _event("un_vote.5")
-        self.assertNotIn("un_res_ai_cast", vote5)
-        self.assertNotIn("un_vote_ai_cast", vote5)
+        # un_vote.5, the old dispatcher, stayed only for events queued in saves from before the late ballots; it went
+        # with 1.15, which loads none (#1407)
+        self.assertNotRegex(_read(VOTE_EVENTS), r"(?m)^un_vote\.5 = \{")
 
     def test_opening_sends_every_member_its_lean_and_queues_the_last_call(self):
         opening = _block(self.vote_effects, "un_resolution_open")

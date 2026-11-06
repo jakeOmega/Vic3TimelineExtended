@@ -444,15 +444,12 @@ gm_tr_return_home = {
 	var:gm_tr_site ?= {
 		owner = { save_scope_as = gm_tr_giver }
 	}
-	# No return waits any more (sites spec 2026-10-18 §3.3: records, no
-	# rebuild); one an older save queued (gm_tr_return_queued) comes home from
-	# the monthly pass. A building raised in its origin today (gm_rebuilding)
-	# counts as standing (gm_tr_stands_apart), so a second trophy home the same
-	# day stands beside the first.
+	# No return waits (sites spec 2026-10-18 §3.3: records, no rebuild). A
+	# building raised in its origin today (gm_rebuilding) counts as standing
+	# (gm_tr_stands_apart), so a second trophy home the same day stands beside
+	# the first.
 	if = {
 		limit = { exists = scope:gm_tr_receiver }
-		gm_remove_state_var = { VAR = gm_tr_return_queued }
-		gm_remove_state_var = { VAR = gm_tr_return_relations }
 		# A piece of a secondary rejoins it; anything else with a monument
 		# standing in its origin becomes a monument of its own (spec
 		# 2026-10-13 §4.1); a piece of the primary, or with none standing, is
@@ -872,26 +869,8 @@ gm_trophy_monthly = {
 			# its landmark's unique dedication (signatures spec §4.4).
 			gm_tr_sig_backfill = yes
 		}
-		# Returns that waited for a rebuild (gm_tr_return_home): one to each
-		# state now; another bound for the same state waits again.
 		every_in_global_list = {
 			variable = gm_trophies
-			limit = { has_variable = gm_tr_return_queued }
-			add_to_temporary_list = gm_tr_queued_home
-		}
-		every_in_list = {
-			list = gm_tr_queued_home
-			if = {
-				limit = { has_variable = gm_tr_return_relations }
-				gm_tr_return_home = { RELATIONS = yes }
-			}
-			else = {
-				gm_tr_return_home = { RELATIONS = no }
-			}
-		}
-		every_in_global_list = {
-			variable = gm_trophies
-			limit = { NOT = { has_variable = gm_tr_return_queued } }
 			gm_tr_monthly_one = yes
 		}
 		every_in_list = {
