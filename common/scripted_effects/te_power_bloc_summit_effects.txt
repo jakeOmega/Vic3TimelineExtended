@@ -25,7 +25,11 @@ te_pb_summit_pay = {
 
 # Country scope, the bloc leader: grant a bloc initiative for ten years. The
 # copy already running is removed first, unseen, because a same-name
-# add_modifier stacks; the option's tooltip shows the new one.
+# add_modifier stacks. The option's tooltip line is $MODIFIER$_grant_tt, not
+# the engine's: vanilla's add_modifier line prints the scope's $SUBJECT_NAME$,
+# which is empty for a power bloc, so it read " gets Summit: ..." with no
+# subject. The key names the bloc and prints the modifier through
+# GetStaticModifier, so its lines follow the definition.
 te_pb_summit_grant_bloc_initiative = {
 	power_bloc = {
 		hidden_effect = {
@@ -34,9 +38,12 @@ te_pb_summit_grant_bloc_initiative = {
 				remove_modifier = $MODIFIER$
 			}
 		}
-		add_modifier = {
-			name = $MODIFIER$
-			days = long_modifier_time
+		custom_tooltip = {
+			text = $MODIFIER$_grant_tt
+			add_modifier = {
+				name = $MODIFIER$
+				days = long_modifier_time
+			}
 		}
 	}
 }

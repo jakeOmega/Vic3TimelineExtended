@@ -153,6 +153,24 @@ class TestSummitEvent(unittest.TestCase):
                 if where == "leader":
                     self.assertNotIn("power_bloc", grant)
 
+    def test_bloc_grant_line_names_the_bloc(self):
+        # Vanilla's add_modifier line prints $SUBJECT_NAME$, empty for a power
+        # bloc (" gets Summit: Common Purpose", 2026-11-06), so the bloc helper
+        # prints its own line, which must name the bloc and render the modifier.
+        grant = entity_block(read(EFFECT_FILE), GRANT["bloc"])
+        self.assertRegex(grant, r"custom_tooltip = \{\s*text = \$MODIFIER\$_grant_tt\s*add_modifier = \{")
+        years = json.loads((ROOT / "vanilla_parsed/common/script_values.json").read_text())["long_modifier_time"]
+        self.assertEqual(years, ["=", "3650"])   # the "10 years" the lines say
+        bloc_modifiers = {m for grants in INITIATIVES.values() for m, where in grants if where == "bloc"}
+        self.assertEqual(len(bloc_modifiers), 5)
+        for modifier in bloc_modifiers:
+            with self.subTest(modifier=modifier):
+                line = loc_value(f"{modifier}_grant_tt")
+                self.assertTrue(line.startswith("[ROOT.GetCountry.GetPowerBloc.GetName] gets "))
+                self.assertIn(f"[GetStaticModifier('{modifier}').GetName]", line)
+                self.assertIn(f"[GetStaticModifier('{modifier}').GetDesc]", line)
+                self.assertIn("for #b 10 years#!", line)
+
     def test_a_running_initiative_is_not_offered_again(self):
         for letter, grants in INITIATIVES.items():
             modifier, where = grants[0]
