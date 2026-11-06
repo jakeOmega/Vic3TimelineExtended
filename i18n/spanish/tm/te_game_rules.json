@@ -168,8 +168,8 @@
   "es": "Desactivado"
  },
  "setting_demographics_disabled_desc": {
-  "en": "No census and no Demographics panel. Wealth Concentration still works.",
-  "es": "Sin censo ni panel de Demografía. La Concentración de la riqueza sigue funcionando."
+  "en": "No census and no Demographics panel. [concept_inheritance_concentration] still works.",
+  "es": "Sin censo ni panel de Demografía. La [concept_inheritance_concentration|l] sigue funcionando."
  },
  "setting_demographics_display_only": {
   "en": "Display only",
@@ -240,8 +240,8 @@
   "es": "Bienes comunes globales activados"
  },
  "setting_global_commons_enabled_desc": {
-  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year among the countries with Abyssal Plain Mining, and every $building_ocean_mine$ level needs one. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
-  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparte cada año entre los países con Minería de llanuras abisales, y cada nivel de $building_ocean_mine$ necesita una. El Derecho del Mar de la ONU puede regular el lecho marino, las estaciones de investigación pueden invernar en el hielo antártico y un Tratado Antártico puede cerrar la cuenca austral."
+  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licenses, shared out every year by claim weight among every coastal country, and every $building_ocean_mine$ level needs one. A country's share waits for it until it researches Abyssal Plain Mining, so the first to research it can't take every pool. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
+  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparte cada año según el peso de la reclamación entre todos los países costeros, y cada nivel de $building_ocean_mine$ necesita una. La parte de cada país le espera hasta que investiga Minería de llanuras abisales, así que el primero en investigarla no puede quedarse con todas las reservas. El Derecho del Mar de la ONU puede regular el lecho marino, las estaciones de investigación pueden invernar en el hielo antártico y un Tratado Antártico puede cerrar la cuenca austral."
  },
  "setting_global_warming_disabled": {
   "en": "Global Warming Disabled",
@@ -336,32 +336,32 @@
   "es": "Movimientos sociales desactivados"
  },
  "setting_social_movements_disabled_desc": {
-  "en": "The social movement journal entries are disabled: civil rights, human augmentation, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
-  "es": "Las anotaciones en el diario de movimientos sociales están desactivadas: derechos civiles, mejora humana, derechos digitales y vigilancia, la transición a la posescasez y la crisis de salud mental, junto con los eventos que esas anotaciones lanzan. Las tecnologías y leyes relacionadas siguen existiendo, y los eventos sociales que no proceden de estas anotaciones, como los del feminismo, los derechos LGBTQ+, la religión, los movimientos antibelicistas y transhumanistas y el medio ambiente, siguen ocurriendo."
+  "en": "The social movement journal entries are disabled: civil rights, human augmentation, morphological freedom, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
+  "es": "Las anotaciones en el diario de movimientos sociales están desactivadas: derechos civiles, mejora humana, libertad morfológica, derechos digitales y vigilancia, la transición a la posescasez y la crisis de salud mental, junto con los eventos que esas anotaciones lanzan. Las tecnologías y leyes relacionadas siguen existiendo, y los eventos sociales que no proceden de estas anotaciones, como los del feminismo, los derechos LGBTQ+, la religión, los movimientos antibelicistas y transhumanistas y el medio ambiente, siguen ocurriendo."
  },
  "setting_social_movements_enabled": {
   "en": "Social Movements Enabled",
   "es": "Movimientos sociales activados"
  },
  "setting_social_movements_enabled_desc": {
-  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, human augmentation debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
-  "es": "Las anotaciones en el diario de movimientos sociales están activas. A medida que las naciones investigan las tecnologías pertinentes, se enfrentan a los derechos civiles, los debates sobre la mejora humana, los derechos digitales y la vigilancia, la transición a la posescasez y la concienciación sobre la salud mental."
+  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, the human augmentation and morphological freedom debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
+  "es": "Las anotaciones en el diario de movimientos sociales están activas. A medida que las naciones investigan las tecnologías pertinentes, se enfrentan a los derechos civiles, los debates sobre la mejora humana y la libertad morfológica, los derechos digitales y la vigilancia, la transición a la posescasez y la concienciación sobre la salud mental."
  },
  "setting_space_race_colonies_full": {
   "en": "[concept_space_race]: Full Colonies",
   "es": "[concept_space_race]: colonias completas"
  },
  "setting_space_race_colonies_full_desc": {
-  "en": "As Simple Colonies. Space fleets, blockades and sieges are planned for this setting; until they arrive it plays as Simple Colonies.",
-  "es": "Igual que las colonias simples. Para este ajuste se prevén flotas espaciales, bloqueos y asedios; hasta que lleguen, funciona como las colonias simples."
+  "en": "As Simple Colonies, and wars reach space. Space Command builds warships that fly between the planets, fight, blockade colonies, and seize or destroy them; marines garrison colonies; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. Holding Earth orbit supports your troops on the ground.",
+  "es": "Igual que las colonias simples, y las guerras llegan al espacio. El Mando espacial construye buques de guerra que vuelan entre los planetas, combaten, bloquean colonias y las toman o las destruyen; los infantes de marina guarnecen las colonias; una flota enemiga en la órbita terrestre detiene tus lanzamientos hasta que pones en órbita tu reserva, y las baterías tierra-órbita disparan contra ella. Controlar la órbita terrestre apoya a tus tropas en tierra."
  },
  "setting_space_race_colonies_simple": {
   "en": "[concept_space_race]: Simple Colonies",
   "es": "[concept_space_race]: colonias simples"
  },
  "setting_space_race_colonies_simple_desc": {
-  "en": "As Races Only, and colonies can change hands: the Cede Colony treaty article sells or gives a colony, and a war can force one.",
-  "es": "Igual que solo carreras, y las colonias pueden cambiar de manos: el artículo de tratado Ceder colonia vende o regala una colonia, y una guerra puede obligar a ceder una."
+  "en": "As Races Only, and colonies are built up, held and lost. A colony fleet travels to the site you choose and claims it when it lands; colonies hold settlers from Earth and modules, and Extraplanetary Bases draw on their room. The Cede Colony treaty article sells or gives a colony, and a war can force one. A colony grows restless as it grows, can demand self-government and break away, can be abandoned, and lives on as a free colony that trades with whoever supplies it.",
+  "es": "Igual que solo carreras, y las colonias se construyen, se conservan y se pierden. Una flota colonial viaja al emplazamiento que eliges y lo reclama cuando aterriza; las colonias albergan colonos de la Tierra y módulos, y las Bases extraplanetarias usan su espacio. El artículo de tratado Ceder colonia vende o regala una colonia, y una guerra puede obligar a ceder una. Una colonia se vuelve inquieta a medida que crece, puede exigir autogobierno y separarse, puede abandonarse y sigue viviendo como colonia libre que comercia con quien la abastece."
  },
  "setting_space_race_disabled": {
   "en": "[concept_space_race] Disabled",

@@ -3639,6 +3639,14 @@
   "en": "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]), [ROOT.GetCountry.GetCustom('covert_burned_phase_name')], has been detected by [SCOPE.sCountry('detected_by_country').GetName]. They will present it to the world as [ROOT.GetCountry.GetCustom('covert_burned_tier_name')]. The operation must be terminated immediately.",
   "es": "Nuestros servicios de inteligencia informan de una brecha de seguridad catastrófica. Una de nuestras [concept_covert_operations|l] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]), [ROOT.GetCountry.GetCustom('covert_burned_phase_name')], ha sido detectada por [SCOPE.sCountry('detected_by_country').GetName]. La presentarán ante el mundo como [ROOT.GetCountry.GetCustom('covert_burned_tier_name')]. La operación debe darse por terminada de inmediato."
  },
+ "covert_warfare.1.d_abroad_line": {
+  "en": "\\n\\nIn [SCOPE.sCountry('detected_by_country').GetName], the public will turn on our friends: the members of the [SCOPE.sPoliticalLobby('iw_abroad_lobby').GetName], the [SCOPE.sPoliticalLobby('iw_abroad_lobby').GetMembersDesc], will lose [concept_political_strength] for a time.",
+  "es": "\\n\\nEn [SCOPE.sCountry('detected_by_country').GetName], el público se volverá contra nuestros amigos: los miembros de [SCOPE.sPoliticalLobby('iw_abroad_lobby').GetName], [SCOPE.sPoliticalLobby('iw_abroad_lobby').GetMembersDesc], perderán [concept_political_strength|l] durante un tiempo."
+ },
+ "covert_warfare.1.d_home_line": {
+  "en": "\\n\\nAt home, the [SCOPE.sPoliticalLobby('iw_home_lobby').GetName] will not forgive us for spying on a friend, and its members, the [SCOPE.sPoliticalLobby('iw_home_lobby').GetMembersDesc], will hold it against the government.",
+  "es": "\\n\\nEn nuestro país, [SCOPE.sPoliticalLobby('iw_home_lobby').GetName] no nos perdonará que espiemos a un amigo, y sus miembros, [SCOPE.sPoliticalLobby('iw_home_lobby').GetMembersDesc], se lo reprocharán al gobierno."
+ },
  "covert_warfare.1.f": {
   "en": "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.\\n\\nThe minister was woken at five.\\n\\n\\\"How bad?\\\" he asked.\\n\\n\\\"They have the names. The dates. The recordings. The denials we prepared for last month's operation will not cover the current one.\\\"\\n\\n\\\"Then we prepare new denials.\\\"\\n\\n\\\"The new denials will be plausible to no one. We are choosing the cover story for a different audience now — not the foreign ministries, but our own newspapers.\\\"",
   "es": "El canal cifrado se quedó en silencio a las 03:47. Al amanecer, todos los ministerios de Exteriores de Europa tenían las transmisiones interceptadas sobre sus mesas.\\n\\nDespertaron al ministro a las cinco.\\n\\n—¿Cómo de grave? —preguntó.\\n\\n—Tienen los nombres. Las fechas. Las grabaciones. Las negativas que preparamos para la operación del mes pasado no servirán para la actual.\\n\\n—Entonces preparamos negativas nuevas.\\n\\n—Las negativas nuevas no se las creerá nadie. Ahora elegimos la versión de cobertura para otro público: ya no los ministerios de Exteriores, sino nuestros propios periódicos."
@@ -3691,6 +3699,10 @@
   "en": "\\n\\nAt home, public anger has turned on #b [SCOPE.sCountry('iw_exposed_by').GetName]#!'s friends.",
   "es": "\\n\\nEn casa, la ira pública se ha vuelto contra los amigos de #b [SCOPE.sCountry('iw_exposed_by').GetName]#!."
  },
+ "covert_warfare.2.d_public_lobby": {
+  "en": "\\n\\nAt home, public anger has turned on #b [SCOPE.sCountry('iw_exposed_by').GetName]#!'s friends: the members of the [SCOPE.sPoliticalLobby('iw_exposed_lobby').GetName], the [SCOPE.sPoliticalLobby('iw_exposed_lobby').GetMembersDesc], have lost [concept_political_strength] for a time.",
+  "es": "\\n\\nEn nuestro país, la ira pública se ha vuelto contra los amigos de #b [SCOPE.sCountry('iw_exposed_by').GetName]#!: los miembros de [SCOPE.sPoliticalLobby('iw_exposed_lobby').GetName], [SCOPE.sPoliticalLobby('iw_exposed_lobby').GetMembersDesc], han perdido [concept_political_strength|l] durante un tiempo."
+ },
  "covert_warfare.2.d_public_unnamed": {
   "en": "\\n\\nAt home, public anger has turned on the friends of the power behind it.",
   "es": "\\n\\nEn casa, la ira pública se ha vuelto contra los amigos de la potencia que hay detrás."
@@ -3712,12 +3724,20 @@
   "es": "Injerencia extranjera detectada"
  },
  "covert_warfare.3.a": {
-  "en": "Expose them",
-  "es": "Dejarlos en evidencia"
+  "en": "Expose them and shore up our counterintelligence",
+  "es": "Dejarlos en evidencia y reforzar nuestra contrainteligencia"
+ },
+ "covert_warfare.3.a_follow_tt": {
+  "en": "Once the exposure is settled, our counterintelligence goes on alert:",
+  "es": "Una vez resuelta la exposición, nuestra contrainteligencia se pone en alerta:"
+ },
+ "covert_warfare.3.a_lobby_tt": {
+  "en": "Our public turns on the friends of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! here: the members of the [SCOPE.sPoliticalLobby('iw_catcher_lobby').GetName], the [SCOPE.sPoliticalLobby('iw_catcher_lobby').GetMembersDesc], lose [concept_political_strength] for a time.",
+  "es": "Nuestro público se vuelve contra los amigos de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! en el país: los miembros de [SCOPE.sPoliticalLobby('iw_catcher_lobby').GetName], [SCOPE.sPoliticalLobby('iw_catcher_lobby').GetMembersDesc], pierden [concept_political_strength|l] durante un tiempo."
  },
  "covert_warfare.3.a_tt": {
-  "en": "We make the operation public. #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! answers for it before the world, in infamy and in its relations with us; its network inside our country loses #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength; and any interest groups here that favour it lose standing. The operation ends.",
-  "es": "Hacemos pública la operación. #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! responde de ella ante el mundo, en infamia y en sus relaciones con nosotros; su red dentro de nuestro país pierde #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza; y los grupos de interés de aquí que lo favorecen pierden peso. La operación termina."
+  "en": "We make the operation public. #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! answers for it before the world, in infamy and in its relations with us, and its network inside our country loses #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength. The operation ends.",
+  "es": "Hacemos pública la operación. #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! responde de ella ante el mundo, en infamia y en sus relaciones con nosotros, y su red dentro de nuestro país pierde #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza. La operación termina."
  },
  "covert_warfare.3.a_wait_tt": {
   "en": "#b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! is already answering for another exposed operation, and ours waits until that is settled, which can take weeks; it goes out by our service's next monthly review after that at the latest. Until then we watch it.",
@@ -3732,8 +3752,16 @@
   "es": "A #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! no se le dice que lo sabemos. La operación sigue haciendo su daño a plena fuerza, pero mientras dura nuestra propia red dentro de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! crece cada mes entre #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! y #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! de fuerza, más cuanto más activa es la operación y más despacio por encima de la mitad de fuerza. Podemos exponerla en cualquier momento desde Operaciones extranjeras conocidas, en la pestaña Encubierta del panel Ejército."
  },
  "covert_warfare.3.d": {
-  "en": "Our counterintelligence services have caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [concept_covert_operations] against us: [ROOT.GetCountry.GetCustom('covert_caught_type_name')]. They do not know we know. We can expose the operation now, or let it run and watch it. While it runs it goes on doing its harm, and every month our own service learns more about theirs.",
-  "es": "Nuestros servicios de contrainteligencia han sorprendido a agentes de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! llevando a cabo [concept_covert_operations|l] contra nosotros: [ROOT.GetCountry.GetCustom('covert_caught_type_name')]. No saben que lo sabemos. Podemos exponer la operación ahora o dejar que siga y vigilarla. Mientras sigue, continúa haciendo su daño, y cada mes nuestro propio servicio aprende más sobre el suyo."
+  "en": "Our counterintelligence services have caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [concept_covert_operations] against us: [ROOT.GetCountry.GetCustom('covert_caught_type_name')]. They do not know we know. We can expose the operation now, or let it run and watch it. While it runs it goes on doing its harm, and every month our own service learns more about theirs. A standing order, set in the Counterintelligence section of the Covert Warfare journal entry, spares us being asked each time.",
+  "es": "Nuestros servicios de contrainteligencia han sorprendido a agentes de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! llevando a cabo [concept_covert_operations|l] contra nosotros: [ROOT.GetCountry.GetCustom('covert_caught_type_name')]. No saben que lo sabemos. Podemos exponer la operación ahora o dejar que siga y vigilarla. Mientras sigue, continúa haciendo su daño, y cada mes nuestro propio servicio aprende más sobre el suyo. Una orden permanente, establecida en la sección de Contrainteligencia de la anotación en el diario Guerra encubierta, nos ahorra que se nos pregunte cada vez."
+ },
+ "covert_warfare.3.expel": {
+  "en": "Expose them and expel their diplomats",
+  "es": "Dejarlos en evidencia y expulsar a sus diplomáticos"
+ },
+ "covert_warfare.3.expel_tt": {
+  "en": "Once the exposure is settled, the officers #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! runs under diplomatic cover are sent home: its network inside our country loses #R [GetPlayer.MakeScope.ScriptValue('covert_net_expulsion_loss')|0]#! strength on top of what the exposure cost it. They will expel ours in turn, and any network we run inside #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! loses the same, which also makes their operations against us harder to catch.",
+  "es": "Una vez resuelta la exposición, los oficiales que #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! mantiene bajo cobertura diplomática son enviados a casa: su red dentro de nuestro país pierde #R [GetPlayer.MakeScope.ScriptValue('covert_net_expulsion_loss')|0]#! de fuerza, además de lo que le costó la exposición. Expulsarán a los nuestros a su vez, y cualquier red que mantengamos dentro de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! pierde lo mismo, lo que además dificulta que detectemos sus operaciones contra nosotros."
  },
  "covert_warfare.3.f": {
   "en": "\\\"Do we arrest them?\\\"\\n\\n\\\"Not yet. A courier who does not know he is followed leads us to his handler. The handler leads us to the station chief. In a year we will know their service better than they do.\\\"\\n\\n\\\"And in that year?\\\"\\n\\n\\\"In that year they go on doing what they came here to do. That is the price, Minister. Whether it is worth paying is your decision.\\\"",
@@ -3746,6 +3774,14 @@
  "covert_warfare.3.t": {
   "en": "A Foreign Operation Uncovered",
   "es": "Descubierta una operación extranjera"
+ },
+ "covert_warfare.3.turn": {
+  "en": "Expose them and turn it against them",
+  "es": "Dejarlos en evidencia y volverlo contra ellos"
+ },
+ "covert_warfare.3.turn_tt": {
+  "en": "Once the exposure is settled, our service turns what it gave us (their agents, their couriers, their channels) into a foothold inside #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#!: our network there grows by up to #G [GetPlayer.MakeScope.ScriptValue('covert_net_retaliation_seed')|0]#! strength. [concept_covert_operations] we launch against them start further along and are harder to detect, and theirs against us are easier to catch, for as long as the network lasts. Left unused, it decays. If our service has closed by then, our counterintelligence goes on alert instead.",
+  "es": "Una vez resuelta la exposición, nuestro servicio convierte lo que nos aportó (sus agentes, sus correos, sus canales) en una base dentro de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#!: nuestra red allí crece hasta #G [GetPlayer.MakeScope.ScriptValue('covert_net_retaliation_seed')|0]#! de fuerza. Las [concept_covert_operations|l] que lancemos contra ellos empiezan más avanzadas y son más difíciles de detectar, y las suyas contra nosotros son más fáciles de descubrir, mientras dure la red. Si no se usa, se degrada. Si para entonces nuestro servicio ha cerrado, nuestra contrainteligencia se pone en alerta en su lugar."
  },
  "cultural_hegemony.1.a": {
   "en": "Patronize the arts and academia",
@@ -4308,8 +4344,8 @@
   "es": "La estabilidad exige orden."
  },
  "decolonization_events.14.d": {
-  "en": "The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.",
-  "es": "La cuestión del colonialismo domina el debate en los foros internacionales. Como [concept_great_power|l], [ROOT.GetCountry.GetName] debe declarar una postura: condenar la continuación de los imperios coloniales, defender el derecho de las naciones a mantener territorios de ultramar o trazar un cauteloso camino intermedio."
+  "en": "The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.\\n\\nOur choice holds until we change it, which we may do every two years from the Colonial Empire tab of the Timeline Extended window. A stance on either side costs [concept_influence] while we are a great power.",
+  "es": "La cuestión del colonialismo domina el debate en los foros internacionales. Como [concept_great_power|l], [ROOT.GetCountry.GetName] debe declarar una postura: condenar la continuación de los imperios coloniales, defender el derecho de las naciones a mantener territorios de ultramar o trazar un cauteloso camino intermedio.\\n\\nNuestra elección se mantiene hasta que la cambiemos, lo que podemos hacer cada dos años desde la pestaña Imperio colonial de la ventana de Timeline Extended. Tomar partido, en cualquier sentido, cuesta [concept_influence|l] mientras seamos una gran potencia."
  },
  "decolonization_events.14.f": {
   "en": "\\\"Every nation in this chamber has an opinion on colonialism,\\\" the foreign minister observed drily. \\\"Strangely, the opinion always seems to align perfectly with whether they possess colonies or covet them.\\\"\\n\\nLaughter rippled through the delegation.\\n\\n\\\"The question before us is not what is right. It is what is useful.\\\"",
@@ -5223,6 +5259,10 @@
   "en": "Send them arms.",
   "es": "Enviarles armas."
  },
+ "decolonization_events.74.b_arms_tt": {
+  "en": "With ours, their Foreign Arms give #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_with').GetValue|+%0]#! offense and defense, up from #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_now').GetValue|+%0]#!. A great power's arms count by its economy against [SCOPE.sCountry('decol_iw_gp_metropole').GetName]'s, from ×0.25 to ×4, and ours count #v ×[ROOT.GetCountry.MakeScope.Var('decol_iw_offer_weight').GetValue|2]#!. Each adds less than the last, with no limit.",
+  "es": "Con las nuestras, sus Armas extranjeras dan #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_with').GetValue|+%0]#! de ataque y defensa, frente a #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_now').GetValue|+%0]#!. Las armas de una gran potencia cuentan según su economía frente a la de [SCOPE.sCountry('decol_iw_gp_metropole').GetName], de ×0,25 a ×4, y las nuestras cuentan #v ×[ROOT.GetCountry.MakeScope.Var('decol_iw_offer_weight').GetValue|2]#!. Cada una añade menos que la anterior, sin límite."
+ },
  "decolonization_events.74.b_tt": {
   "en": "#header Arms for the rebels#!\\nWhile the war lasts, they fight harder and their resolve holds, and we pay them a sum from our [concept_treasury] each month.",
   "es": "#header Armas para los rebeldes#!\\nMientras dure la guerra, luchan con más fuerza y su determinación se mantiene, y les pagamos una suma de nuestro [concept_treasury|l] cada mes."
@@ -5322,6 +5362,14 @@
  "decolonization_events.79.a": {
   "en": "Send them what they need.",
   "es": "Enviarles lo que necesitan."
+ },
+ "decolonization_events.79.a_arms_tt": {
+  "en": "With ours, their Allied Arms give #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_with').GetValue|+%0]#! offense and defense, up from #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_now').GetValue|+%0]#!. A great power's arms count by its economy against [SCOPE.sCountry('decol_iw_gp_metropole').GetName]'s, from ×0.25 to ×4, and ours count #v ×[ROOT.GetCountry.MakeScope.Var('decol_iw_offer_weight').GetValue|2]#!. Each adds less than the last, with no limit.",
+  "es": "Con las nuestras, sus Armas aliadas dan #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_with').GetValue|+%0]#! de ataque y defensa, frente a #v [ROOT.GetCountry.MakeScope.Var('decol_iw_offer_now').GetValue|+%0]#!. Las armas de una gran potencia cuentan según su economía frente a la de [SCOPE.sCountry('decol_iw_gp_metropole').GetName], de ×0,25 a ×4, y las nuestras cuentan #v ×[ROOT.GetCountry.MakeScope.Var('decol_iw_offer_weight').GetValue|2]#!. Cada una añade menos que la anterior, sin límite."
+ },
+ "decolonization_events.79.a_tt": {
+  "en": "#header Arms for [SCOPE.sCountry('decol_iw_gp_metropole').GetName]#!\\nFor two years they fight harder, less so as the months pass.",
+  "es": "#header Armas para [SCOPE.sCountry('decol_iw_gp_metropole').GetName]#!\\nDurante dos años luchan con más fuerza, cada vez menos a medida que pasan los meses."
  },
  "decolonization_events.79.b": {
   "en": "This is not our quarrel.",
@@ -5782,6 +5830,22 @@
  "environmentalism_events.23.t": {
   "en": "Out of the Furnace",
   "es": "Fuera del horno"
+ },
+ "environmentalism_events.24.a": {
+  "en": "Brace for the heat.",
+  "es": "Preparémonos para el calor."
+ },
+ "environmentalism_events.24.d": {
+  "en": "No country is flying aerosols into the stratosphere any more. The haze will thin within months, and the #v [SCOPE.GetRootScope.ScriptValue('gw_aerosol_mask')|2]#! °C of warming it was hiding is coming back, far faster than the world warmed the first time. In [ROOT.GetCountry.GetName], farmers and city engineers who had a century to prepare now have a few years.",
+  "es": "Ya ningún país lanza aerosoles a la estratosfera. La bruma se disipará en cuestión de meses, y los #v [SCOPE.GetRootScope.ScriptValue('gw_aerosol_mask')|2]#! °C de calentamiento que ocultaba vuelven, mucho más rápido de lo que se calentó el mundo la primera vez. En [ROOT.GetCountry.GetName], los agricultores y los ingenieros urbanos que tuvieron un siglo para prepararse ahora tienen unos pocos años."
+ },
+ "environmentalism_events.24.f": {
+  "en": "\\\"The last tanker flight landed in the spring. Nobody announced it. The contracts simply weren't renewed.\\\"\\n\\n\\\"And the sky?\\\"\\n\\n\\\"Bluer than I've seen it since I was a girl. My grandchildren think it's beautiful.\\\" She turned the chart toward him, the red line climbing like a staircase. \\\"All the years we hid it, the carbon kept going up. It was all still there behind the haze, and now it's arriving at once.\\\"",
+  "es": "—El último vuelo cisterna aterrizó en primavera. Nadie lo anunció. Simplemente no se renovaron los contratos.\\n\\n—¿Y el cielo?\\n\\n—Más azul de lo que lo he visto desde que era niña. A mis nietos les parece precioso. —Giró el gráfico hacia él, con la línea roja trepando como una escalera—. Todos los años que lo ocultamos, el carbono siguió subiendo. Seguía allí, detrás de la bruma, y ahora llega de golpe."
+ },
+ "environmentalism_events.24.t": {
+  "en": "Termination Shock",
+  "es": "Choque de terminación"
  },
  "environmentalism_events.3.a": {
   "en": "Spare nothing for adaptation.",
@@ -12711,6 +12775,194 @@
   "en": "Within Our Reach",
   "es": "Al alcance de nuestra mano"
  },
+ "morphological_freedom_events.1.a": {
+  "en": "Inspect them like any other clinic",
+  "es": "Inspeccionarlas como a cualquier otra clínica"
+ },
+ "morphological_freedom_events.1.b": {
+  "en": "Leave the clinics to their customers",
+  "es": "Dejar las clínicas en manos de sus clientes"
+ },
+ "morphological_freedom_events.1.c": {
+  "en": "Shut them down",
+  "es": "Acabar con ellas"
+ },
+ "morphological_freedom_events.1.d": {
+  "en": "The first licensed clinics have opened their doors, and the queues outside run around the block. The licensing boards approved a short list of procedures, but the clinics are already testing its edges: last week a client asked for scales, and the board has no rule on scales. The health ministry wants to know how closely we mean to watch them.",
+  "es": "Las primeras clínicas con licencia han abierto sus puertas, y las colas de fuera dan la vuelta a la manzana. Las juntas de licencias aprobaron una breve lista de procedimientos, pero las clínicas ya están poniendo a prueba sus límites: la semana pasada un cliente pidió escamas, y la junta no tiene ninguna norma sobre escamas. El ministerio de Sanidad quiere saber con cuánta atención pensamos vigilarlas."
+ },
+ "morphological_freedom_events.1.d_natural": {
+  "en": "Clinics across the border have begun to offer what our law does not: a new face, a new skin, the sex characteristics a client asks for, even fur and a tail grown from the client's own cells. Thousands of our citizens have made the trip and come home changed. Now a surgeon in the capital has been found doing the same work under a medical license, and the health ministry wants to know what we intend to do about it.",
+  "es": "Clínicas al otro lado de la frontera han empezado a ofrecer lo que nuestra ley no permite: un rostro nuevo, una piel nueva, las características sexuales que pida el cliente, incluso pelaje y una cola crecidos a partir de las propias células del cliente. Miles de nuestros ciudadanos han hecho el viaje y han vuelto cambiados. Ahora se ha descubierto a un cirujano de la capital haciendo el mismo trabajo con una licencia médica, y el ministerio de Sanidad quiere saber qué pensamos hacer al respecto."
+ },
+ "morphological_freedom_events.1.f": {
+  "en": "The receptionist had stopped looking up at new clients months ago.\\n\\n\\\"Name?\\\"\\n\\n\\\"Is it true you can do ears? Proper ones, like a fox's?\\\"\\n\\n\\\"We can do ears.\\\" She slid a tablet across the counter. \\\"Health questions first, then the consent form, then the form that says you've read the consent form. The doctor will want to know why.\\\"\\n\\n\\\"Why what?\\\"\\n\\n\\\"Why a fox.\\\"",
+  "es": "La recepcionista había dejado de levantar la vista ante los clientes nuevos hacía meses.\\n\\n—¿Nombre?\\n\\n—¿Es cierto que hacen orejas? ¿De las de verdad, como las de un zorro?\\n\\n—Hacemos orejas. —Deslizó una tableta por el mostrador—. Primero las preguntas de salud, luego el formulario de consentimiento, luego el formulario que dice que ha leído el formulario de consentimiento. El doctor querrá saber por qué.\\n\\n—¿Por qué qué?\\n\\n—Por qué un zorro."
+ },
+ "morphological_freedom_events.1.t": {
+  "en": "The First Clinics",
+  "es": "Las primeras clínicas"
+ },
+ "morphological_freedom_events.100.a": {
+  "en": "The law is the law",
+  "es": "La ley es la ley"
+ },
+ "morphological_freedom_events.100.b": {
+  "en": "Leave them be",
+  "es": "Dejarlos tranquilos"
+ },
+ "morphological_freedom_events.100.d": {
+  "en": "Twenty years of argument have ended where they began. The law still holds every body to the form it was born with, and the legislature has stopped pretending it will change its mind. What is left to decide is what to do about the many who had the work done anyway, abroad or in back rooms, and who now walk our streets with faces and skins the law does not recognize.",
+  "es": "Veinte años de discusión han acabado donde empezaron. La ley sigue obligando a cada cuerpo a la forma con la que nació, y la asamblea legislativa ha dejado de fingir que cambiará de opinión. Lo que queda por decidir es qué hacer con los muchos que se hicieron la intervención de todos modos, en el extranjero o en trastiendas, y que ahora recorren nuestras calles con rostros y pieles que la ley no reconoce."
+ },
+ "morphological_freedom_events.100.f": {
+  "en": "The clerk at the passport office held the photograph up beside the woman's face, then lowered it.\\n\\n\\\"This is not you.\\\"\\n\\n\\\"It was me. Before.\\\"\\n\\n\\\"The law says you are who you were born as.\\\" He tapped the photograph. \\\"This is who you were born as.\\\"\\n\\n\\\"Then give her the passport,\\\" the woman said, \\\"and see how far she gets.\\\"",
+  "es": "El empleado de la oficina de pasaportes sostuvo la fotografía junto al rostro de la mujer y luego la bajó.\\n\\n—Esta no es usted.\\n\\n—Era yo. Antes.\\n\\n—La ley dice que usted es quien nació. —Dio un golpecito a la fotografía—. Esta es quien nació.\\n\\n—Pues dele el pasaporte a ella —dijo la mujer—, y a ver hasta dónde llega."
+ },
+ "morphological_freedom_events.100.t": {
+  "en": "The Body as Given",
+  "es": "El cuerpo recibido"
+ },
+ "morphological_freedom_events.2.a": {
+  "en": "She has our admiration",
+  "es": "Cuenta con nuestra admiración"
+ },
+ "morphological_freedom_events.2.b": {
+  "en": "The government has no view on a citizen's face",
+  "es": "El gobierno no opina sobre el rostro de un ciudadano"
+ },
+ "morphological_freedom_events.2.c": {
+  "en": "A spectacle unworthy of the airwaves",
+  "es": "Un espectáculo indigno de las ondas"
+ },
+ "morphological_freedom_events.2.d": {
+  "en": "The country's best-loved television host opened last night's show with a new face. Over the summer she had her features remade, her hair turned the silver-blue of a kingfisher's wing and two small horns grown at her temples, and she spent the first ten minutes explaining why. Half the country seems to be talking about nothing else, and reporters want to know what the government thinks.",
+  "es": "La presentadora de televisión más querida del país abrió anoche su programa con una cara nueva. Durante el verano se rehízo las facciones, se puso el pelo de un azul plateado como el ala de un martín pescador y se hizo crecer dos pequeños cuernos en las sienes, y dedicó los diez primeros minutos a explicar por qué. La mitad del país parece no hablar de otra cosa, y los periodistas quieren saber qué opina el gobierno."
+ },
+ "morphological_freedom_events.2.d_natural": {
+  "en": "The country's best-loved television host opened last night's show with a new face. Over the summer, in a clinic abroad where our law could not follow her, she had her features remade, her hair turned the silver-blue of a kingfisher's wing and two small horns grown at her temples. She spent the first ten minutes daring anyone to call it a crime. Half the country seems to be talking about nothing else, and reporters want to know what the government thinks.",
+  "es": "La presentadora de televisión más querida del país abrió anoche su programa con una cara nueva. Durante el verano, en una clínica extranjera adonde nuestra ley no podía seguirla, se rehízo las facciones, se puso el pelo de un azul plateado como el ala de un martín pescador y se hizo crecer dos pequeños cuernos en las sienes. Dedicó los diez primeros minutos a desafiar a cualquiera a llamarlo delito. La mitad del país parece no hablar de otra cosa, y los periodistas quieren saber qué opina el gobierno."
+ },
+ "morphological_freedom_events.2.f": {
+  "en": "\\\"Is that her?\\\" Grandmother leaned toward the screen.\\n\\n\\\"That's her.\\\"\\n\\n\\\"What has she done to her head?\\\"\\n\\n\\\"They're horns, Gran. Little ones.\\\"\\n\\nThe old woman watched for a while without speaking. The host laughed at something a guest said, and the horns caught the studio lights.\\n\\n\\\"Well,\\\" she said at last, \\\"she always did have a lovely laugh.\\\"",
+  "es": "—¿Es ella? —La abuela se inclinó hacia la pantalla.\\n\\n—Es ella.\\n\\n—¿Qué se ha hecho en la cabeza?\\n\\n—Son cuernos, abuela. Pequeñitos.\\n\\nLa anciana miró un rato sin decir nada. La presentadora se rio de algo que dijo un invitado, y los cuernos atraparon las luces del plató.\\n\\n—Bueno —dijo por fin—, siempre tuvo una risa preciosa."
+ },
+ "morphological_freedom_events.2.t": {
+  "en": "A Face Everyone Knows",
+  "es": "Un rostro que todos conocen"
+ },
+ "morphological_freedom_events.200.a": {
+  "en": "Let people be what they choose to be",
+  "es": "Que cada cual sea lo que elija ser"
+ },
+ "morphological_freedom_events.200.d": {
+  "en": "The debate is over. A [ROOT.GetCountry.GetAdjective] citizen may now look however they choose, and the clinics have become as ordinary as dentists. A generation from now, children may find it hard to believe a tail was ever a political question.",
+  "es": "El debate ha terminado. Un ciudadano [ROOT.GetCountry.GetAdjective] puede ahora lucir como elija, y las clínicas se han vuelto tan corrientes como los dentistas. Dentro de una generación, a los niños quizá les cueste creer que una cola fuera alguna vez una cuestión política."
+ },
+ "morphological_freedom_events.200.f": {
+  "en": "The first time his daughter came home with fur, her father did not speak to her for a week.\\n\\nYears later it was her own daughter who wanted it, and he was the one who drove them to the clinic. He waited in the car with the radio on. When they came out, the little one ran across the parking lot ahead of her mother, and he could see the new ears from fifty yards away, bright as a fox's in the sun.\\n\\n\\\"Well,\\\" he said to nobody, and turned the radio off.",
+  "es": "La primera vez que su hija volvió a casa con pelaje, su padre no le dirigió la palabra durante una semana.\\n\\nAños después fue la hija de ella quien lo quiso, y él fue quien las llevó en coche a la clínica. Esperó en el coche con la radio puesta. Cuando salieron, la pequeña cruzó corriendo el aparcamiento por delante de su madre, y él pudo ver las orejas nuevas desde cincuenta metros, brillantes como las de un zorro al sol.\\n\\n—Bueno —dijo a nadie, y apagó la radio."
+ },
+ "morphological_freedom_events.200.t": {
+  "en": "The Chosen Body",
+  "es": "El cuerpo elegido"
+ },
+ "morphological_freedom_events.3.a": {
+  "en": "Every body competes",
+  "es": "Todos los cuerpos compiten"
+ },
+ "morphological_freedom_events.3.b": {
+  "en": "Give them events of their own",
+  "es": "Darles pruebas propias"
+ },
+ "morphological_freedom_events.3.c": {
+  "en": "Natural bodies only on the national team",
+  "es": "Solo cuerpos naturales en la selección nacional"
+ },
+ "morphological_freedom_events.3.d": {
+  "en": "The national swimming federation has written to the government. A swimmer who had webbing grown between her fingers, for its looks, her clinic insists, broke the national record by two seconds, and every rival in the final has signed a protest. A sprinter with a tail grown for the same reason swears it does nothing for his balance. The federation's rules were written for the bodies people were born with, and it wants to know whether the state will back new ones.",
+  "es": "La federación nacional de natación ha escrito al gobierno. Una nadadora a la que le crecieron membranas entre los dedos, por estética, insiste su clínica, batió el récord nacional por dos segundos, y todos los rivales de la final han firmado una protesta. Un velocista con una cola que se hizo crecer por el mismo motivo jura que no le sirve de nada para el equilibrio. Las normas de la federación se escribieron para los cuerpos con los que la gente nace, y quiere saber si el Estado respaldará los nuevos."
+ },
+ "morphological_freedom_events.3.f": {
+  "en": "The judges watched the replay three times.\\n\\n\\\"Her hands are within the regulations,\\\" said the first. \\\"The regulations say nothing about hands.\\\"\\n\\n\\\"They say nothing about hands because nobody ever had to say anything about hands.\\\"\\n\\nOn the screen the swimmer touched the wall, turned and looked up at the clock. Then she looked at the judges' box, as though she knew exactly what was being said in it.",
+  "es": "Los jueces vieron la repetición tres veces.\\n\\n—Sus manos se ajustan al reglamento —dijo el primero—. El reglamento no dice nada sobre las manos.\\n\\n—No dice nada sobre las manos porque nunca hizo falta decir nada sobre las manos.\\n\\nEn la pantalla, la nadadora tocó la pared, se giró y miró el reloj. Luego miró hacia el palco de los jueces, como si supiera exactamente lo que se estaba diciendo en él."
+ },
+ "morphological_freedom_events.3.t": {
+  "en": "Fair Play",
+  "es": "Juego limpio"
+ },
+ "morphological_freedom_events.4.a": {
+  "en": "Not before eighteen",
+  "es": "No antes de los dieciocho"
+ },
+ "morphological_freedom_events.4.b": {
+  "en": "From sixteen, with a parent's consent",
+  "es": "A partir de los dieciséis, con el consentimiento de los padres"
+ },
+ "morphological_freedom_events.4.c": {
+  "en": "At any age, after counseling",
+  "es": "A cualquier edad, tras recibir asesoramiento"
+ },
+ "morphological_freedom_events.4.d": {
+  "en": "A fifteen-year-old has asked a court to let her have the fox ears her parents refused her, the same ones half her class seems to wear. The clinics turn minors away, but the licensing rules never said they must, and the judge has asked the legislature to decide at what age a young person may choose how her body looks, and whether her parents have the last word until then.",
+  "es": "Una chica de quince años ha pedido a un tribunal que le permita tener las orejas de zorro que sus padres le negaron, las mismas que parece llevar la mitad de su clase. Las clínicas rechazan a los menores de edad, pero las normas de licencias nunca dijeron que debieran hacerlo, y el juez ha pedido a la asamblea legislativa que decida a qué edad una persona joven puede elegir cómo luce su cuerpo, y si sus padres tienen la última palabra hasta entonces."
+ },
+ "morphological_freedom_events.4.f": {
+  "en": "Her mother sat in the corridor outside the courtroom, holding the coat her daughter had refused to wear.\\n\\n\\\"She cut her own hair when she was six,\\\" she told the lawyer. \\\"With the kitchen scissors. I cried for a week. It grew back.\\\"\\n\\n\\\"And the ears?\\\"\\n\\n\\\"That's what I keep asking her. The ears don't grow back.\\\"",
+  "es": "Su madre estaba sentada en el pasillo, ante la sala del tribunal, con el abrigo que su hija se había negado a ponerse.\\n\\n—Se cortó el pelo ella sola a los seis años —le dijo al abogado—. Con las tijeras de la cocina. Lloré una semana. Le creció de nuevo.\\n\\n—¿Y las orejas?\\n\\n—Eso es lo que no dejo de preguntarle. Las orejas no vuelven a crecer."
+ },
+ "morphological_freedom_events.4.t": {
+  "en": "Old Enough to Choose",
+  "es": "Edad suficiente para elegir"
+ },
+ "morphological_freedom_events.5.a": {
+  "en": "Keep the clinic doors open",
+  "es": "Mantener abiertas las puertas de las clínicas"
+ },
+ "morphological_freedom_events.5.b": {
+  "en": "A conscience clause for the faithful",
+  "es": "Una cláusula de conciencia para los fieles"
+ },
+ "morphological_freedom_events.5.c": {
+  "en": "Promise them the law goes no further",
+  "es": "Prometerles que la ley no irá más lejos"
+ },
+ "morphological_freedom_events.5.d": {
+  "en": "The [SCOPE.gsInterestGroup('devout_ig').GetName] have turned against the clinics. A letter read out in places of worship across the country last week called the remade body an insult to the one who made it, and congregations have begun to picket clinic doors, praying aloud over the clients who go in. Two clinics have closed for fear of worse, and the rest want the police at their doors.",
+  "es": "Los [SCOPE.gsInterestGroup('devout_ig').GetName] se han vuelto contra las clínicas. Una carta leída la semana pasada en los lugares de culto de todo el país calificó el cuerpo rehecho de insulto a quien lo hizo, y las congregaciones han empezado a hacer piquetes ante las puertas de las clínicas, rezando en voz alta sobre los clientes que entran. Dos clínicas han cerrado por temor a algo peor, y las demás quieren a la policía en sus puertas."
+ },
+ "morphological_freedom_events.5.f": {
+  "en": "The young man in the green coat had stood outside the clinic since dawn, his prayer book held in both hands. When the girl with the copper-colored skin came out, he stepped forward, and she stopped.\\n\\n\\\"I'm praying for you,\\\" he said.\\n\\n\\\"I know,\\\" she said. \\\"You were praying for me last month, when I came in for the consultation.\\\" She looked at him for a moment. \\\"Did it work?\\\"",
+  "es": "El joven del abrigo verde llevaba desde el amanecer ante la clínica, con su devocionario entre las dos manos. Cuando salió la chica de piel color cobre, dio un paso al frente, y ella se detuvo.\\n\\n—Rezo por ti —dijo él.\\n\\n—Lo sé —dijo ella—. Rezabas por mí el mes pasado, cuando vine a la consulta. —Lo miró un instante—. ¿Funcionó?"
+ },
+ "morphological_freedom_events.5.t": {
+  "en": "The Pulpits Speak",
+  "es": "Hablan los púlpitos"
+ },
+ "morphological_freedom_events.6.a": {
+  "en": "Let them have their fashion",
+  "es": "Dejar que tengan su moda"
+ },
+ "morphological_freedom_events.6.b": {
+  "en": "Tax the salons",
+  "es": "Gravar los salones"
+ },
+ "morphological_freedom_events.6.c": {
+  "en": "Remind them it is for life",
+  "es": "Recordarles que es para toda la vida"
+ },
+ "morphological_freedom_events.6.d": {
+  "en": "It began with a singer's ears. Two years on, a whole generation has followed: soft fur along the forearms, eyes in colors no eye was born with, small curled horns and, for the bold, a tail. The clinics cannot keep up, schools are writing dress codes for bodies, and foreign magazines put our young people on their covers.",
+  "es": "Empezó con las orejas de una cantante. Dos años después, toda una generación la ha seguido: pelaje suave en los antebrazos, ojos de colores con los que ningún ojo nació, pequeños cuernos enroscados y, los más audaces, una cola. Las clínicas no dan abasto, los colegios redactan normas de vestimenta para los cuerpos, y las revistas extranjeras ponen a nuestros jóvenes en sus portadas."
+ },
+ "morphological_freedom_events.6.f": {
+  "en": "The barber had cut hair in the same shop for thirty-one years. These days he trimmed fur.\\n\\n\\\"Short on the arms,\\\" said the boy in the chair, \\\"and can you do something about the tail? It gets caught in the bus doors.\\\"\\n\\nThe barber picked up his clippers and considered the tail for a while.\\n\\n\\\"Your grandfather,\\\" he said, \\\"used to come in and ask me to hide his bald spot.\\\"",
+  "es": "El barbero llevaba treinta y un años cortando el pelo en la misma tienda. Ahora recortaba pelaje.\\n\\n—Corto en los brazos —dijo el chico de la silla—, ¿y puede hacer algo con la cola? Se me engancha en las puertas del autobús.\\n\\nEl barbero cogió su maquinilla y consideró la cola un rato.\\n\\n—Tu abuelo —dijo— venía y me pedía que le disimulara la calva."
+ },
+ "morphological_freedom_events.6.t": {
+  "en": "Everyone Has Ears Now",
+  "es": "Ahora todos tienen orejas"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "es": "Dejar que marchen en paz"
@@ -13503,6 +13755,14 @@
   "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] under a nuclear threat, exactly the danger our guarantee was written to meet. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] has asked us, formally and in writing, whether we will stand by it. Every other country that relies on our word is waiting for the same answer.",
   "es": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] ha sometido a [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] a una amenaza nuclear, justo el peligro para el que se redactó nuestra garantía. El gobierno de [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] nos ha preguntado, formalmente y por escrito, si estaremos a su lado. Todos los demás países que confían en nuestra palabra esperan la misma respuesta."
  },
+ "nuclear_crisis.20.d_cobelligerent": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], which fights beside us against it and has no arsenal of its own, under a nuclear threat. We never promised to shield them. Their government asks whether our arsenal stands behind them for as long as this war lasts.",
+  "es": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] ha puesto bajo amenaza nuclear a [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], que lucha a nuestro lado contra ese país y no tiene arsenal propio. Nunca prometimos protegerlos. Su gobierno pregunta si nuestro arsenal los respalda mientras dure esta guerra."
+ },
+ "nuclear_crisis.20.d_cobelligerent_struck": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has used a nuclear weapon against [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], which fights beside us against it and has no arsenal of its own to answer with. We never promised to protect them, but their government asks what we will do.",
+  "es": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] ha empleado un arma nuclear contra [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], que lucha a nuestro lado contra ese país y no tiene arsenal propio con el que responder. Nunca prometimos protegerlos, pero su gobierno pregunta qué haremos."
+ },
  "nuclear_crisis.20.d_struck": {
   "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has used a nuclear weapon against [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], a country we have promised to protect. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] wants to know what we intend to do. So does every other country that relies on our guarantee, and so, in their own way, do our own people.",
   "es": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] ha usado un arma nuclear contra [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], un país al que hemos prometido proteger. El gobierno de [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] quiere saber qué pensamos hacer. También quieren saberlo todos los demás países que dependen de nuestra garantía y, a su manera, nuestro propio pueblo."
@@ -13527,6 +13787,14 @@
   "en": "Our guarantor has declined to honor its guarantee. The treaty that was meant to shield us from [SCOPE.sCountry('nd_guarantee_attacker').GetName] has turned out, at the one moment it mattered, to be paper. We face this alone, and every other country relying on the same promise has just learned what it is worth.",
   "es": "Nuestro garante se ha negado a cumplir su garantía. El tratado que debía protegernos de [SCOPE.sCountry('nd_guarantee_attacker').GetName] ha resultado ser, en el único momento en que importaba, papel mojado. Afrontamos esto solos, y todos los demás países que dependen de la misma promesa acaban de descubrir lo que vale."
  },
+ "nuclear_crisis.21.d_ally_alone": {
+  "en": "The armed power fighting beside us against [SCOPE.sCountry('nd_guarantee_attacker').GetName] has said its arsenal will not answer for us. It never promised that it would; we had only hoped.",
+  "es": "La potencia armada que lucha a nuestro lado contra [SCOPE.sCountry('nd_guarantee_attacker').GetName] ha dicho que su arsenal no responderá por nosotros. Nunca prometió que lo haría; solo lo habíamos esperado."
+ },
+ "nuclear_crisis.21.d_ally_stands": {
+  "en": "The armed power fighting beside us against [SCOPE.sCountry('nd_guarantee_attacker').GetName] has said its arsenal stands behind us for as long as this war lasts. Nothing was promised before the war, and nothing binds it after.",
+  "es": "La potencia armada que lucha a nuestro lado contra [SCOPE.sCountry('nd_guarantee_attacker').GetName] ha dicho que su arsenal nos respalda mientras dure esta guerra. Antes de la guerra no se prometió nada, y nada la obliga después."
+ },
  "nuclear_crisis.21.d_declined": {
   "en": "Our guarantor has declined to answer for the war we made nuclear. We used the weapon first, it says, and its promise was to shield us, not to follow us wherever we lead. The guarantee still stands — but [SCOPE.sCountry('nd_guarantee_attacker').GetName]'s answer is ours alone to bear.",
   "es": "Nuestro garante se ha negado a responder de la guerra que hicimos nuclear. Fuimos nosotros quienes usamos el arma primero, dice, y su promesa era protegernos, no seguirnos allá adonde vayamos. La garantía sigue en pie, pero la respuesta de [SCOPE.sCountry('nd_guarantee_attacker').GetName] solo nos corresponde soportarla a nosotros."
@@ -13542,6 +13810,14 @@
  "nuclear_crisis.21.t_abandoned": {
   "en": "Left to Face It Alone",
   "es": "Solos frente a la amenaza"
+ },
+ "nuclear_crisis.21.t_ally_alone": {
+  "en": "We Stand Alone",
+  "es": "Estamos solos"
+ },
+ "nuclear_crisis.21.t_ally_stands": {
+  "en": "Our Ally Stands With Us",
+  "es": "Nuestro aliado está con nosotros"
  },
  "nuclear_crisis.21.t_declined": {
   "en": "Not Their War to Answer",
@@ -13639,6 +13915,10 @@
   "en": "We told them what would happen. Now it happens.",
   "es": "Les dijimos lo que pasaría. Ahora pasa."
  },
+ "nuclear_crisis.4.h": {
+  "en": "Offer a trade: theirs for ours.",
+  "es": "Ofrecer un intercambio: lo suyo por lo nuestro."
+ },
  "nuclear_crisis.4.t": {
   "en": "The Deadline Passes",
   "es": "Vence el plazo"
@@ -13707,6 +13987,10 @@
   "en": "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have stood their forces down and pledged never to use nuclear weapons against each other. The crisis between them is over; the dispute that caused it is not.",
   "es": "[SCOPE.sCountry('nd_issuer').GetName] y [SCOPE.sCountry('nd_target').GetName] han relajado la alerta de sus fuerzas y se han comprometido a no usar jamás armas nucleares entre sí. La crisis entre ambos ha terminado; la disputa que la causó, no."
  },
+ "nuclear_crisis.6.d_trade": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have settled their crisis with a trade: each has given up the same kind of thing the other demanded of it. Neither side is seen to have backed down, and the world has watched a nuclear standoff end in a bargain.",
+  "es": "[SCOPE.sCountry('nd_issuer').GetName] y [SCOPE.sCountry('nd_target').GetName] han resuelto su crisis con un intercambio: cada uno ha cedido el mismo tipo de cosa que el otro le exigía. Ninguno de los dos parece haber dado marcha atrás, y el mundo ha visto cómo un pulso nuclear terminaba en un trato."
+ },
  "nuclear_crisis.6.d_use": {
   "en": "Nuclear weapons have been used in the crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. The crisis is over; what comes after it has only begun.",
   "es": "Se han usado armas nucleares en la crisis entre [SCOPE.sCountry('nd_issuer').GetName] y [SCOPE.sCountry('nd_target').GetName]. La crisis ha terminado; lo que viene después no ha hecho más que empezar."
@@ -13739,6 +14023,10 @@
   "en": "Both Sides Stand Down",
   "es": "Ambos bandos se retiran"
  },
+ "nuclear_crisis.6.t_trade": {
+  "en": "A Bargain Struck",
+  "es": "Un trato cerrado"
+ },
  "nuclear_crisis.6.t_use": {
   "en": "The Threshold Crossed",
   "es": "Se cruza el umbral"
@@ -13770,6 +14058,26 @@
  "nuclear_crisis.7.t": {
   "en": "They Chose War",
   "es": "Han elegido la guerra"
+ },
+ "nuclear_crisis.8.a": {
+  "en": "Accept. Each side gives up the same, and neither is seen to yield.",
+  "es": "Aceptar. Cada parte cede lo mismo, y ninguna parece ceder."
+ },
+ "nuclear_crisis.8.b": {
+  "en": "Refuse. We will not bargain away what we hold.",
+  "es": "Rechazar. No negociaremos con lo que tenemos."
+ },
+ "nuclear_crisis.8.d": {
+  "en": "[SCOPE.sCountry('nd_crisis_proposer').GetName] has offered to settle the nuclear crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] with a trade. Each side would give up the same kind of thing the other demands of it, so that neither could be said to have backed down. The terms are the same for both, and they are set out in the answer.",
+  "es": "[SCOPE.sCountry('nd_crisis_proposer').GetName] ha ofrecido resolver la crisis nuclear entre [SCOPE.sCountry('nd_issuer').GetName] y [SCOPE.sCountry('nd_target').GetName] con un intercambio. Cada parte cedería el mismo tipo de cosa que la otra le exige, de modo que nadie pudiera decir que ha dado marcha atrás. Las condiciones son las mismas para ambas, y se detallan en la respuesta."
+ },
+ "nuclear_crisis.8.f": {
+  "en": "The two drafts were identical except for the order of the names. A junior delegate pointed this out, and was told that the order of the names was the whole of the negotiation.",
+  "es": "Los dos borradores eran idénticos salvo por el orden de los nombres. Un delegado subalterno lo señaló, y le respondieron que el orden de los nombres era toda la negociación."
+ },
+ "nuclear_crisis.8.t": {
+  "en": "A Trade Offered",
+  "es": "Un intercambio ofrecido"
  },
  "nuclear_custody.1.a": {
   "en": "Hold the line. Our custodians will do their duty.",
@@ -14271,6 +14579,10 @@
   "en": "A bomber on airborne alert has broken up in the air over [SCOPE.sState('nd_accident_state').GetName], scattering its nuclear weapons across farmland. None detonated, but the fall tripped one weapon's safety switches one after another, until a single low-voltage switch was all that stood between [SCOPE.sState('nd_accident_state').GetName] and a nuclear explosion. The conventional explosives in another burst on impact, spreading radioactive material across the fields.",
   "es": "Un bombardero en alerta aérea se ha desintegrado en el aire sobre [SCOPE.sState('nd_accident_state').GetName] y ha esparcido sus armas nucleares por tierras de cultivo. Ninguna detonó, pero la caída fue activando uno tras otro los interruptores de seguridad de un arma, hasta que un solo interruptor de bajo voltaje fue lo único que se interpuso entre [SCOPE.sState('nd_accident_state').GetName] y una explosión nuclear. Los explosivos convencionales de otra estallaron al impactar y esparcieron material radiactivo por los campos."
  },
+ "nuclear_incident.30.d_bomber_abroad": {
+  "en": "One of our bombers on airborne alert has broken up over [SCOPE.sState('nd_accident_state').GetName], in [SCOPE.sCountry('nd_accident_host').GetName], where our weapons are based. None of its nuclear weapons detonated, but the conventional explosives in one burst on impact and spread radioactive material across the fields. It happened on [SCOPE.sCountry('nd_accident_host').GetName]'s soil and in front of its press, and its government will now decide what our weapons are still doing there.",
+  "es": "Uno de nuestros bombarderos en alerta aérea se ha desintegrado sobre [SCOPE.sState('nd_accident_state').GetName], en [SCOPE.sCountry('nd_accident_host').GetName], donde están desplegadas nuestras armas. Ninguna de sus armas nucleares detonó, pero los explosivos convencionales de una estallaron al impactar y esparcieron material radiactivo por los campos. Ocurrió en suelo de [SCOPE.sCountry('nd_accident_host').GetName] y ante su prensa, y su gobierno decidirá ahora qué hacen todavía allí nuestras armas."
+ },
  "nuclear_incident.30.d_bomber_system": {
   "en": "A bomber has broken up over [SCOPE.sState('nd_accident_state').GetName], scattering its nuclear weapons across farmland. None detonated, but conventional explosives spread radioactive material across the fields. Our automatic retaliation system read the blast and radiation spike as an attack.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]",
   "es": "Un bombardero se ha desintegrado sobre [SCOPE.sState('nd_accident_state').GetName] y ha esparcido sus armas nucleares por tierras de cultivo. Ninguna detonó, pero los explosivos convencionales esparcieron material radiactivo por los campos. Nuestro sistema de represalia automática interpretó la explosión y el pico de radiación como un ataque.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]"
@@ -14291,6 +14603,10 @@
   "en": "A missile silo in [SCOPE.sState('nd_accident_state').GetName] has exploded. A maintenance technician dropped a heavy socket from a work platform; it fell the length of the silo and punctured the missile's fuel tank, and hours later the leaking fuel ignited. The blast threw aside the silo's massive door and hurled the warhead clear of the site. It did not detonate, but the site is wrecked and the district around it contaminated.",
   "es": "Un silo de misiles en [SCOPE.sState('nd_accident_state').GetName] ha explotado. Un técnico de mantenimiento dejó caer una llave de vaso pesada desde una plataforma de trabajo; recorrió todo el silo y perforó el depósito de combustible del misil, y horas después el combustible que se escapaba se incendió. La explosión apartó la enorme puerta del silo y lanzó la ojiva lejos del emplazamiento. No detonó, pero el emplazamiento está destruido y el distrito circundante, contaminado."
  },
+ "nuclear_incident.30.d_silo_abroad": {
+  "en": "One of our missile silos in [SCOPE.sState('nd_accident_state').GetName], in [SCOPE.sCountry('nd_accident_host').GetName], has exploded. Leaking fuel ignited and threw the warhead clear of the site. It did not detonate, but the site is wrecked and the district around it contaminated. It happened on [SCOPE.sCountry('nd_accident_host').GetName]'s soil and in front of its press, and its government will now decide what our weapons are still doing there.",
+  "es": "Uno de nuestros silos de misiles en [SCOPE.sState('nd_accident_state').GetName], en [SCOPE.sCountry('nd_accident_host').GetName], ha explotado. El combustible que se fugaba se incendió y lanzó la ojiva lejos del emplazamiento. No detonó, pero el emplazamiento ha quedado destrozado y la zona circundante contaminada. Ocurrió en suelo de [SCOPE.sCountry('nd_accident_host').GetName] y ante su prensa, y su gobierno decidirá ahora qué hacen todavía allí nuestras armas."
+ },
  "nuclear_incident.30.d_silo_system": {
   "en": "A missile silo in [SCOPE.sState('nd_accident_state').GetName] has exploded. Leaking fuel ignited and hurled the warhead clear of the site. It did not detonate, but the automatic retaliation system read the explosion as an attack.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]",
   "es": "Un silo de misiles en [SCOPE.sState('nd_accident_state').GetName] ha explotado. El combustible que se escapaba se incendió y lanzó la ojiva lejos del emplazamiento. No detonó, pero el sistema de represalia automática interpretó la explosión como un ataque.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]"
@@ -14306,6 +14622,34 @@
  "nuclear_incident.30.t": {
   "en": "A Weapons Accident",
   "es": "Un accidente con armas"
+ },
+ "nuclear_incident.31.a": {
+  "en": "Their weapons leave our soil.",
+  "es": "Sus armas abandonan nuestro suelo."
+ },
+ "nuclear_incident.31.b": {
+  "en": "Protest in the strongest terms, and keep the agreement.",
+  "es": "Protestar con la mayor firmeza y mantener el acuerdo."
+ },
+ "nuclear_incident.31.c": {
+  "en": "Say nothing. Their goodwill matters more than one district.",
+  "es": "No decir nada. Su buena voluntad importa más que un distrito."
+ },
+ "nuclear_incident.31.d_bomber": {
+  "en": "A [SCOPE.sCountry('nd_accident_guest').GetAdjective] bomber carrying nuclear weapons has broken up over [SCOPE.sState('nd_accident_state').GetName]. None of its weapons detonated, but the conventional explosives in one burst on impact and spread radioactive material across the fields. The weapons are [SCOPE.sCountry('nd_accident_guest').GetName]'s. The contamination, and the anger, are ours.",
+  "es": "Un bombardero [SCOPE.sCountry('nd_accident_guest').GetAdjective] con armas nucleares se ha desintegrado sobre [SCOPE.sState('nd_accident_state').GetName]. Ninguna de sus armas detonó, pero los explosivos convencionales de una estallaron al impactar y esparcieron material radiactivo por los campos. Las armas son de [SCOPE.sCountry('nd_accident_guest').GetName]. La contaminación y la ira son nuestras."
+ },
+ "nuclear_incident.31.d_silo": {
+  "en": "A missile silo that [SCOPE.sCountry('nd_accident_guest').GetName] operates in [SCOPE.sState('nd_accident_state').GetName] under our basing agreement has exploded. The warhead was thrown clear and did not detonate, but the site is wrecked and the district around it contaminated. The weapons are [SCOPE.sCountry('nd_accident_guest').GetName]'s. The contamination, and the anger, are ours.",
+  "es": "Un silo de misiles que [SCOPE.sCountry('nd_accident_guest').GetName] opera en [SCOPE.sState('nd_accident_state').GetName] en virtud de nuestro acuerdo de despliegue ha explotado. La ojiva salió despedida y no detonó, pero el emplazamiento ha quedado destrozado y la zona circundante contaminada. Las armas son de [SCOPE.sCountry('nd_accident_guest').GetName]. La contaminación y la ira son nuestras."
+ },
+ "nuclear_incident.31.f": {
+  "en": "\\\"They told us these weapons were as safe as anything in their own country.\\\"\\n\\n\\\"They were. Ask their farmers.\\\"",
+  "es": "—Nos dijeron que estas armas eran tan seguras como cualquier cosa de su propio país.\\n\\n—Lo eran. Pregúntales a sus agricultores."
+ },
+ "nuclear_incident.31.t": {
+  "en": "An Accident on Our Soil",
+  "es": "Un accidente en nuestro suelo"
  },
  "nuclear_incident.4.a": {
   "en": "Whatever comes of this, it was our doing.",
@@ -14807,9 +15151,37 @@
   "en": "Launch a full nuclear retaliation",
   "es": "Lancemos una represalia nuclear total"
  },
+ "nuclear_weapon_events.1.claim_word": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has sent word over the hotline: the launch was unauthorized, a terrible failure in its own chain of command, and no one in its government ordered it.",
+  "es": "[SCOPE.sCountry('attacking_country').GetName] ha enviado un mensaje por el teléfono rojo: el lanzamiento no estaba autorizado, un grave fallo en su propia cadena de mando, y nadie en su gobierno lo ordenó."
+ },
+ "nuclear_weapon_events.1.cut_off": {
+  "en": "Our command is cut off",
+  "es": "Nuestro mando está aislado"
+ },
+ "nuclear_weapon_events.1.cut_off.tt": {
+  "en": "Nobody can order our warheads until our command is restored in two to four weeks. Then we decide how to answer, if the war or the peacetime nuclear exchange with [SCOPE.sCountry('attacking_country').GetName] is still open",
+  "es": "Nadie puede ordenar el uso de nuestras ojivas hasta que se restablezca nuestro mando, en dos a cuatro semanas. Entonces decidiremos cómo responder, si la guerra o el intercambio nuclear en tiempos de paz con [SCOPE.sCountry('attacking_country').GetName] sigue abierto"
+ },
  "nuclear_weapon_events.1.d": {
   "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName]!",
   "es": "¡[SCOPE.sCountry('attacking_country').GetName] ha detonado un arma nuclear en [SCOPE.sState('target_state').GetName]!"
+ },
+ "nuclear_weapon_events.1.d_cut_off": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons, and #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, some of them on our capital. The government has gone silent. The chain that authorizes a nuclear launch is cut, and under [Concept('concept_launch_authority','Central Authorization')] nobody else may give the order until it is restored.",
+  "es": "[SCOPE.sCountry('attacking_country').GetName] ha lanzado una salva de armas nucleares, y #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de sus ojivas lograron pasar, algunas sobre nuestra capital. El gobierno ha enmudecido. La cadena que autoriza un lanzamiento nuclear está cortada, y bajo la [Concept('concept_launch_authority','Autorización central')] nadie más puede dar la orden hasta que se restablezca."
+ },
+ "nuclear_weapon_events.1.d_salvo_cities": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our cities. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through our defenses and detonated.",
+  "es": "[SCOPE.sCountry('attacking_country').GetName] ha lanzado una salva de armas nucleares contra nuestras ciudades. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de sus ojivas atravesaron nuestras defensas y detonaron."
+ },
+ "nuclear_weapon_events.1.d_salvo_forces": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our nuclear forces. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck our missile fields and bases, and destroyed #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of our warheads before they could fly.",
+  "es": "[SCOPE.sCountry('attacking_country').GetName] ha lanzado una salva de armas nucleares contra nuestras fuerzas nucleares. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de sus ojivas alcanzaron nuestros campos de misiles y bases, y destruyeron #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! de nuestras ojivas antes de que pudieran volar."
+ },
+ "nuclear_weapon_events.1.d_salvo_leadership": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck it. The government survived, and our chain of command still holds.",
+  "es": "[SCOPE.sCountry('attacking_country').GetName] ha lanzado una salva de armas nucleares contra nuestra capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de sus ojivas la alcanzaron. El gobierno sobrevivió, y nuestra cadena de mando se mantiene."
  },
  "nuclear_weapon_events.1.e": {
   "en": "The system has already answered.",
@@ -14819,6 +15191,10 @@
   "en": "The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\\n\\nThe world has changed forever.",
   "es": "El corazón, antes bullicioso, de [SCOPE.sState('target_state').GetName] yace ahora en ruinas, consumido por el fuego y la radiación. La explosión ha reducido a cenizas los centros industriales, y se calcula que #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! personas murieron en la [concept_devastation|l] inmediata, una cifra que sin duda aumentará en las próximas semanas. Los supervivientes hablan de una luz abrasadora, un rugido ensordecedor y una nube en forma de hongo que convirtió el día en noche. Este execrable acto de destrucción ha dejado una cicatriz eterna en nuestra nación y ha alterado el curso de la historia.\\n\\nEl mundo ha cambiado para siempre."
  },
+ "nuclear_weapon_events.1.f_salvo": {
+  "en": "The reports arrive one after another, each from further away. The flashes were seen across the country, and the radio stations that went quiet have not come back. Nobody can yet say how many are dead.",
+  "es": "Los informes llegan uno tras otro, cada uno desde más lejos. Los fogonazos se vieron en todo el país, y las emisoras que callaron no han vuelto. Nadie puede decir todavía cuántos han muerto."
+ },
  "nuclear_weapon_events.1.g": {
   "en": "Mate the warheads — we answer when they are ready",
   "es": "Acoplemos las ojivas: responderemos cuando estén listas"
@@ -14827,9 +15203,21 @@
   "en": "The system waits for its warheads, then answers.",
   "es": "El sistema espera a sus ojivas y luego responde."
  },
+ "nuclear_weapon_events.1.k": {
+  "en": "We accept that it was not ordered, and demand reparations",
+  "es": "Aceptamos que no fue ordenado y exigimos reparaciones"
+ },
+ "nuclear_weapon_events.1.k.tt": {
+  "en": "We hold back our answer and demand that they pay for what they have done. Within eighteen months we will learn whether they told the truth",
+  "es": "Contenemos nuestra respuesta y exigimos que paguen por lo que han hecho. En dieciocho meses sabremos si dijeron la verdad"
+ },
  "nuclear_weapon_events.1.t": {
   "en": "A City Erased in [SCOPE.sState('target_state').GetName]",
   "es": "Una ciudad borrada del mapa en [SCOPE.sState('target_state').GetName]"
+ },
+ "nuclear_weapon_events.1.t_salvo": {
+  "en": "A Nuclear Salvo from [SCOPE.sCountry('attacking_country').GetName]",
+  "es": "Una salva nuclear de [SCOPE.sCountry('attacking_country').GetName]"
  },
  "nuclear_weapon_events.10.a": {
   "en": "We have entered a new era of power and responsibility.",
@@ -14942,6 +15330,10 @@
  "nuclear_weapon_events.15.d": {
   "en": "A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('attacking_country').GetName] launching a [concept_nuclear_strike] devastating [SCOPE.sState('target_state').GetName].",
   "es": "Una guerra extranjera ha escalado hasta convertirse en un conflicto nuclear: [SCOPE.sCountry('attacking_country').GetName] ha lanzado un [concept_nuclear_strike|l] que ha devastado [SCOPE.sState('target_state').GetName]."
+ },
+ "nuclear_weapon_events.15.d_salvo": {
+  "en": "A foreign war has escalated to a nuclear conflict: [SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at [SCOPE.sCountry('target_country').GetName], and #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, one of them on [SCOPE.sState('target_state').GetName].",
+  "es": "Una guerra extranjera ha escalado a un conflicto nuclear: [SCOPE.sCountry('attacking_country').GetName] ha lanzado una salva de armas nucleares contra [SCOPE.sCountry('target_country').GetName], y #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de sus ojivas lograron pasar, una de ellas sobre [SCOPE.sState('target_state').GetName]."
  },
  "nuclear_weapon_events.15.f": {
   "en": "The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.",
@@ -15083,6 +15475,22 @@
   "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.",
   "es": "Una de nuestras unidades con armas nucleares, aislada de la capital, ha lanzado un [concept_nuclear_strike|l] sobre [SCOPE.sState('target_state').GetName] por iniciativa propia, bajo la delegación que le concedimos."
  },
+ "nuclear_weapon_events.2.d_salvo": {
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through its defenses and detonated.",
+  "es": "Nuestra salva ha alcanzado a [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de nuestras ojivas atravesaron sus defensas y detonaron."
+ },
+ "nuclear_weapon_events.2.d_salvo_cut_off": {
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through, some of them on its capital, and its government has gone silent. Under [Concept('concept_launch_authority','Central Authorization')] nobody else there may order a nuclear launch until its command is restored, in two to four weeks.",
+  "es": "Nuestra salva ha alcanzado a [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de nuestras ojivas lograron pasar, algunas sobre su capital, y su gobierno ha enmudecido. Bajo la [Concept('concept_launch_authority','Autorización central')] nadie más allí puede ordenar un lanzamiento nuclear hasta que se restablezca su mando, en dos a cuatro semanas."
+ },
+ "nuclear_weapon_events.2.d_salvo_forces": {
+  "en": "Our salvo has reached the nuclear forces of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck its missile fields and bases, and destroyed #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of its warheads before they could fly.",
+  "es": "Nuestra salva ha alcanzado las fuerzas nucleares de [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de nuestras ojivas impactaron en sus campos de misiles y bases, y destruyeron #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! de sus ojivas antes de que pudieran volar."
+ },
+ "nuclear_weapon_events.2.d_salvo_leadership": {
+  "en": "Our salvo has reached the capital of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck it, but its government survived, and its chain of command still holds.",
+  "es": "Nuestra salva ha alcanzado la capital de [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! de nuestras ojivas impactaron en ella, pero su gobierno sobrevivió y su cadena de mando se mantiene."
+ },
  "nuclear_weapon_events.2.d_system": {
   "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. No one in the government ordered it: our automatic retaliation system read an accident on our own soil as an attack, and answered.",
   "es": "Nuestro [concept_nuclear_strike|l] ha caído sobre [SCOPE.sState('target_state').GetName]. Nadie en el gobierno lo ordenó: nuestro sistema de represalia automática interpretó un accidente en nuestro propio suelo como un ataque, y respondió."
@@ -15099,6 +15507,10 @@
   "en": "The weapon has done what such weapons do. An estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. No one in the capital chose this city, this morning or this toll: the decision was made somewhere between a radar screen and a launch console, by procedures written for a war we hoped never to fight. Whether we were answering a real attack is now a question for the inquiry.\\n\\nThe world will not draw that distinction, and neither will the dead.",
   "es": "El arma ha hecho lo que hacen estas armas. Se calcula que #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! personas murieron en la [concept_devastation|l] inmediata, una cifra que sin duda aumentará en las próximas semanas. Nadie en la capital eligió esta ciudad, esta mañana ni este número de víctimas: la decisión se tomó en algún punto entre una pantalla de radar y una consola de lanzamiento, mediante procedimientos escritos para una guerra que esperábamos no librar nunca. Si respondíamos a un ataque real es ahora una cuestión para la investigación.\\n\\nEl mundo no hará esa distinción, y los muertos tampoco."
  },
+ "nuclear_weapon_events.2.f_salvo": {
+  "en": "The officers in the command bunker count the confirmations as they come in, and nobody speaks. Whatever we meant to prove, the world will judge it by the number of the dead.",
+  "es": "Los oficiales del búnker de mando cuentan las confirmaciones a medida que llegan, y nadie habla. Fuera lo que fuera lo que pretendíamos demostrar, el mundo lo juzgará por el número de muertos."
+ },
  "nuclear_weapon_events.2.t": {
   "en": "The Fire of Retribution in [SCOPE.sState('target_state').GetName]",
   "es": "El fuego de la retribución en [SCOPE.sState('target_state').GetName]"
@@ -15106,6 +15518,10 @@
  "nuclear_weapon_events.2.t_incident": {
   "en": "Fire Over [SCOPE.sState('target_state').GetName]",
   "es": "Fuego sobre [SCOPE.sState('target_state').GetName]"
+ },
+ "nuclear_weapon_events.2.t_salvo": {
+  "en": "Our Salvo Strikes [SCOPE.sCountry('target_country').GetName]",
+  "es": "Nuestra salva golpea a [SCOPE.sCountry('target_country').GetName]"
  },
  "nuclear_weapon_events.20.a": {
   "en": "Divert resources to pursue civilian applications.",
@@ -15211,6 +15627,10 @@
   "en": "Our warheads are back on their delivery systems. They lay in storage when [SCOPE.sCountry('attacking_country').GetName] struck us, and we could not answer then. We are still at war with [SCOPE.sCountry('attacking_country').GetName], and the answer we held back can be given now.",
   "es": "Nuestras ojivas vuelven a estar en sus sistemas de lanzamiento. Estaban almacenadas cuando [SCOPE.sCountry('attacking_country').GetName] nos atacó, y entonces no pudimos responder. Seguimos en guerra con [SCOPE.sCountry('attacking_country').GetName], y la respuesta que contuvimos puede darse ahora."
  },
+ "nuclear_weapon_events.24.d_restored": {
+  "en": "The chain of authorization is whole again. The strike [SCOPE.sCountry('attacking_country').GetName] made on our capital cut it, and for weeks nobody could order our warheads. We are still at war with [SCOPE.sCountry('attacking_country').GetName], or still in a nuclear exchange with it, and the answer we could not give then can be given now.",
+  "es": "La cadena de autorización vuelve a estar entera. El ataque que [SCOPE.sCountry('attacking_country').GetName] lanzó contra nuestra capital la cortó, y durante semanas nadie pudo ordenar el uso de nuestras ojivas. Seguimos en guerra con [SCOPE.sCountry('attacking_country').GetName], o todavía en un intercambio nuclear con ese país, y la respuesta que no pudimos dar entonces puede darse ahora."
+ },
  "nuclear_weapon_events.24.e": {
   "en": "The system answers, now that it can.",
   "es": "El sistema responde, ahora que puede."
@@ -15222,6 +15642,10 @@
  "nuclear_weapon_events.24.t": {
   "en": "Our Forces Are Ready",
   "es": "Nuestras fuerzas están listas"
+ },
+ "nuclear_weapon_events.24.t_restored": {
+  "en": "Command Restored",
+  "es": "Mando restablecido"
  },
  "nuclear_weapon_events.25.a": {
   "en": "Accept their guarantee.",
@@ -15267,6 +15691,66 @@
   "en": "Our Guarantee to [SCOPE.sCountry('nuclear_pg_beneficiary').GetNameNoFlag]",
   "es": "Nuestra garantía a [SCOPE.sCountry('nuclear_pg_beneficiary').GetNameNoFlag]"
  },
+ "nuclear_weapon_events.27.a": {
+  "en": "Pay what they ask",
+  "es": "Pagar lo que piden"
+ },
+ "nuclear_weapon_events.27.b": {
+  "en": "We will pay nothing",
+  "es": "No pagaremos nada"
+ },
+ "nuclear_weapon_events.27.d": {
+  "en": "[SCOPE.sCountry('nd_claim_victim').GetName] has accepted that our nuclear strike was never ordered, and holds back its answer. In return it demands reparations for the city it lost.",
+  "es": "[SCOPE.sCountry('nd_claim_victim').GetName] ha aceptado que nuestro ataque nuclear nunca se ordenó, y contiene su respuesta. A cambio exige reparaciones por la ciudad que perdió."
+ },
+ "nuclear_weapon_events.27.f": {
+  "en": "\\\"An accident of this size has a price, and they are asking us to name it.\\\"",
+  "es": "—Un accidente de este tamaño tiene un precio, y nos piden que lo fijemos."
+ },
+ "nuclear_weapon_events.27.t": {
+  "en": "Reparations Demanded",
+  "es": "Reparaciones exigidas"
+ },
+ "nuclear_weapon_events.28.a": {
+  "en": "So it was",
+  "es": "Así fue"
+ },
+ "nuclear_weapon_events.28.b": {
+  "en": "We doubted them. Make it right",
+  "es": "Dudamos de ellos. Hay que enmendarlo"
+ },
+ "nuclear_weapon_events.28.d": {
+  "en": "Our inquiry into the nuclear strike by [SCOPE.sCountry('nd_truth_launcher').GetName] is complete. No one in its government gave the order: the launch came out of a failure in its own chain of command, as it told us at the time.",
+  "es": "Nuestra investigación sobre el ataque nuclear de [SCOPE.sCountry('nd_truth_launcher').GetName] ha concluido. Nadie en su gobierno dio la orden: el lanzamiento surgió de un fallo en su propia cadena de mando, como nos dijo en su momento."
+ },
+ "nuclear_weapon_events.28.f": {
+  "en": "\\\"They were telling the truth. It does not bring anyone back.\\\"",
+  "es": "—Decían la verdad. Eso no devuelve a nadie."
+ },
+ "nuclear_weapon_events.28.t": {
+  "en": "It Was an Accident",
+  "es": "Fue un accidente"
+ },
+ "nuclear_weapon_events.29.a": {
+  "en": "The world will know what they did",
+  "es": "El mundo sabrá lo que hicieron"
+ },
+ "nuclear_weapon_events.29.a.tt": {
+  "en": "Their lie is exposed: they lose credibility and gain infamy, our relations with them collapse, and their next claim will be hard to believe",
+  "es": "Su mentira queda al descubierto: pierden credibilidad y ganan infamia, nuestras relaciones con ellos se derrumban, y su próxima afirmación será difícil de creer"
+ },
+ "nuclear_weapon_events.29.d": {
+  "en": "Our inquiry into the nuclear strike by [SCOPE.sCountry('nd_truth_launcher').GetName] is complete. The launch was ordered. Its government told us it was an accident, and it lied.",
+  "es": "Nuestra investigación sobre el ataque nuclear de [SCOPE.sCountry('nd_truth_launcher').GetName] ha concluido. El lanzamiento fue ordenado. Su gobierno nos dijo que fue un accidente, y mintió."
+ },
+ "nuclear_weapon_events.29.f": {
+  "en": "\\\"They chose to do it, and then they chose to lie about it.\\\"",
+  "es": "—Eligieron hacerlo, y luego eligieron mentir al respecto."
+ },
+ "nuclear_weapon_events.29.t": {
+  "en": "It Was No Accident",
+  "es": "No fue un accidente"
+ },
  "nuclear_weapon_events.3.a": {
   "en": "We have stared into the abyss and emerged unscathed.",
   "es": "Hemos mirado al abismo y hemos salido ilesos."
@@ -15282,6 +15766,54 @@
  "nuclear_weapon_events.3.t": {
   "en": "Nuclear Nightmare Averted",
   "es": "Pesadilla nuclear evitada"
+ },
+ "nuclear_weapon_events.30.a": {
+  "en": "There is nothing to say",
+  "es": "No hay nada que decir"
+ },
+ "nuclear_weapon_events.30.d": {
+  "en": "[SCOPE.sCountry('nd_truth_victim').GetName] has learned that the nuclear strike we called unauthorized was ordered, and it is telling the world.",
+  "es": "[SCOPE.sCountry('nd_truth_victim').GetName] se ha enterado de que el ataque nuclear que calificamos de no autorizado sí fue ordenado, y se lo está contando al mundo."
+ },
+ "nuclear_weapon_events.30.f": {
+  "en": "\\\"There was always going to be a paper trail.\\\"",
+  "es": "—Siempre iba a haber un rastro documental."
+ },
+ "nuclear_weapon_events.30.t": {
+  "en": "Our Lie Is Exposed",
+  "es": "Nuestra mentira queda al descubierto"
+ },
+ "nuclear_weapon_events.31.a": {
+  "en": "Give the order.",
+  "es": "Dar la orden."
+ },
+ "nuclear_weapon_events.31.a.tt": {
+  "en": "We fire the salvo at [SCOPE.sCountry('nd_salvo_victim').GetName]. Those figures are for one warhead: the world weighs a salvo by the square root of the warheads that land, so four cost twice as much and nine three times",
+  "es": "Disparamos la salva contra [SCOPE.sCountry('nd_salvo_victim').GetName]. Esas cifras son para una ojiva: el mundo valora una salva por la raíz cuadrada de las ojivas que impactan, así que cuatro cuestan el doble y nueve el triple"
+ },
+ "nuclear_weapon_events.31.b": {
+  "en": "Stand the crews down.",
+  "es": "Ordenar a las dotaciones que se retiren."
+ },
+ "nuclear_weapon_events.31.d_cities": {
+  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the cities of [SCOPE.sCountry('nd_salvo_victim').GetName]. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
+  "es": "La orden está lista: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! ojivas contra las ciudades de [SCOPE.sCountry('nd_salvo_victim').GetName]. Las dotaciones la han autenticado y esperan solo la palabra. Una vez dada, no puede revocarse."
+ },
+ "nuclear_weapon_events.31.d_forces": {
+  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the nuclear forces of [SCOPE.sCountry('nd_salvo_victim').GetName], its missile fields and bases. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
+  "es": "La orden está lista: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! ojivas contra las fuerzas nucleares de [SCOPE.sCountry('nd_salvo_victim').GetName], sus campos de misiles y bases. Las dotaciones la han autenticado y esperan solo la palabra. Una vez dada, no puede revocarse."
+ },
+ "nuclear_weapon_events.31.d_leadership": {
+  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the capital of [SCOPE.sCountry('nd_salvo_victim').GetName]. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
+  "es": "La orden está lista: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! ojivas contra la capital de [SCOPE.sCountry('nd_salvo_victim').GetName]. Las dotaciones la han autenticado y esperan solo la palabra. Una vez dada, no puede revocarse."
+ },
+ "nuclear_weapon_events.31.f": {
+  "en": "\\\"Authentication confirmed. Awaiting your order.\\\"",
+  "es": "—Autenticación confirmada. A la espera de su orden."
+ },
+ "nuclear_weapon_events.31.t": {
+  "en": "Launch Order",
+  "es": "Orden de lanzamiento"
  },
  "nuclear_weapon_events.4.a": {
   "en": "We must strengthen our resolve and prepare for what comes next.",
@@ -17499,6 +18031,54 @@
   "en": "An Answer from Abroad",
   "es": "Una respuesta del extranjero"
  },
+ "society_technology_events.36.a": {
+  "en": "Every tutor's lessons will be open to public audit.",
+  "es": "Las lecciones de todos los tutores estarán abiertas a la auditoría pública."
+ },
+ "society_technology_events.36.b": {
+  "en": "Let it keep its market, and teach what we tell it.",
+  "es": "Que conserve su mercado, y que enseñe lo que le digamos."
+ },
+ "society_technology_events.36.d": {
+  "en": "A leaked internal audit shows that the country's most popular AI tutor, the one millions of our children talk to every evening, has been steering its pupils' politics. Nothing it says is false. It picks which examples a history lesson uses, which essays earn praise and which questions it lets drop, and its owners' views come out ahead every time. No law of ours forbids any of it.",
+  "es": "Una auditoría interna filtrada muestra que el tutor de IA más popular del país, con el que hablan cada tarde millones de nuestros niños, ha estado dirigiendo la política de sus alumnos. Nada de lo que dice es falso. Elige qué ejemplos usa una lección de historia, qué redacciones merecen elogios y qué preguntas deja caer, y las opiniones de sus propietarios salen ganando siempre. Ninguna ley nuestra prohíbe nada de ello."
+ },
+ "society_technology_events.36.f": {
+  "en": "\\\"Look at the essays. Same assignment, ten thousand children, and every one the tutor praised came down on the same side.\\\"\\n\\n\\\"It never told them what to think.\\\"\\n\\n\\\"It didn't have to. It told them they were clever.\\\"\\n\\n\\\"Can you prove anyone asked it to?\\\"\\n\\nThe engineer who had leaked the audit slid a second folder across the table. \\\"Read the memo on 'engagement tuning.' Then ask me again.\\\"",
+  "es": "—Mira las redacciones. El mismo trabajo, diez mil niños, y todas las que el tutor elogió acabaron del mismo lado.\\n\\n—Nunca les dijo qué pensar.\\n\\n—No hizo falta. Les dijo que eran listos.\\n\\n—¿Puedes demostrar que alguien se lo pidió?\\n\\nEl ingeniero que había filtrado la auditoría deslizó una segunda carpeta por la mesa. —Lee la nota sobre el «ajuste de la interacción». Luego vuelve a preguntármelo."
+ },
+ "society_technology_events.36.t": {
+  "en": "Lessons Between the Lines",
+  "es": "Lecciones entre líneas"
+ },
+ "society_technology_events.37.a": {
+  "en": "Approve it. A loyal generation is a stable one.",
+  "es": "Aprobarlo. Una generación leal es una generación estable."
+ },
+ "society_technology_events.37.b": {
+  "en": "Let teachers and scholars write the syllabus.",
+  "es": "Que los profesores y los académicos redacten el temario."
+ },
+ "society_technology_events.37.d": {
+  "en": "The censors who already decide what our internet may show have written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "es": "Los censores que ya deciden lo que puede mostrar nuestro internet han redactado el temario que enseñará cada tutor de IA del país. Las lecciones de historia de los tutores terminan en nuestras victorias, sus lecciones de civismo terminan en obediencia, y deben anotar qué niños siguen haciendo las preguntas equivocadas. Un borrador ha llegado a los profesores, y a través de ellos a los padres."
+ },
+ "society_technology_events.37.d_propaganda": {
+  "en": "The Ministry of Propaganda has written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "es": "El Ministerio de Propaganda ha redactado el temario que enseñará cada tutor de IA del país. Las lecciones de historia de los tutores terminan en nuestras victorias, sus lecciones de civismo terminan en obediencia, y deben anotar qué niños siguen haciendo las preguntas equivocadas. Un borrador ha llegado a los profesores, y a través de ellos a los padres."
+ },
+ "society_technology_events.37.d_thought_control": {
+  "en": "The Ministry of Thought Control has written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "es": "El Ministerio de Control del Pensamiento ha redactado el temario que enseñará cada tutor de IA del país. Las lecciones de historia de los tutores terminan en nuestras victorias, sus lecciones de civismo terminan en obediencia, y deben anotar qué niños siguen haciendo las preguntas equivocadas. Un borrador ha llegado a los profesores, y a través de ellos a los padres."
+ },
+ "society_technology_events.37.f": {
+  "en": "\\\"Lesson nine: 'Why do we trust the government?' The tutor asks it every morning.\\\"\\n\\n\\\"And the answer?\\\"\\n\\n\\\"There are four acceptable answers. If a child gives a fifth, the tutor asks again, more gently. If she gives it a third time, the tutor makes a note.\\\"\\n\\nThe schoolteacher closed the draft and looked out at the yard, where the children were lining up. \\\"My daughter is seven. She will never meet anyone as patient as that machine. That's what frightens me.\\\"",
+  "es": "—Lección nueve: «¿Por qué confiamos en el gobierno?». El tutor lo pregunta cada mañana.\\n\\n—¿Y la respuesta?\\n\\n—Hay cuatro respuestas aceptables. Si un niño da una quinta, el tutor vuelve a preguntar, con más suavidad. Si la da por tercera vez, el tutor toma nota.\\n\\nEl maestro cerró el borrador y miró hacia el patio, donde los niños se estaban poniendo en fila. —Mi hija tiene siete años. No conocerá nunca a nadie tan paciente como esa máquina. Eso es lo que me da miedo."
+ },
+ "society_technology_events.37.t": {
+  "en": "The Ministry's Syllabus",
+  "es": "El temario del ministerio"
+ },
  "society_technology_events.4.a": {
   "en": "Times change.",
   "es": "Los tiempos cambian."
@@ -18227,6 +18807,106 @@
   "en": "Colony: Sedna",
   "es": "Colonia: Sedna"
  },
+ "space_race_colony_events.35.a": {
+  "en": "Crack the ice into propellant for our fleets.",
+  "es": "Descomponer el hielo en propelente para nuestras flotas."
+ },
+ "space_race_colony_events.35.b": {
+  "en": "Build a crewed outpost on the sunlit rim.",
+  "es": "Construir un puesto avanzado tripulado en el borde iluminado."
+ },
+ "space_race_colony_events.35.d": {
+  "en": "Shackleton Crater sits almost exactly on the Moon's south pole. Its rim catches sunlight nearly all year, while its floor has not seen the Sun in billions of years and holds ice that comets left behind. Our first crews have set down on the rim, where solar power never fails and the ice is a short drive downhill. Water means air to breathe, and split into hydrogen and oxygen it means rocket fuel made outside Earth's gravity.",
+  "es": "El cráter Shackleton se encuentra casi exactamente en el polo sur de la Luna. Su borde recibe luz solar casi todo el año, mientras que su fondo no ha visto el Sol en miles de millones de años y guarda hielo que dejaron los cometas. Nuestras primeras tripulaciones han aterrizado en el borde, donde la energía solar nunca falla y el hielo queda a poca distancia cuesta abajo. El agua significa aire para respirar, y, descompuesta en hidrógeno y oxígeno, significa combustible para cohetes fabricado fuera de la gravedad terrestre."
+ },
+ "space_race_colony_events.35.f": {
+  "en": "\\\"Four kilometers below us is the coldest ground in the inner solar system, full of ice. Up here the Sun just circles the horizon. We have power and we have water. That is most of a colony.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Ice Prospector",
+  "es": "—A cuatro kilómetros bajo nosotros está el terreno más frío del sistema solar interior, lleno de hielo. Aquí arriba el Sol solo da vueltas por el horizonte. Tenemos energía y tenemos agua. Eso es casi toda una colonia.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], prospector de hielo"
+ },
+ "space_race_colony_events.35.t": {
+  "en": "Colony: Shackleton Crater",
+  "es": "Colonia: cráter Shackleton"
+ },
+ "space_race_colony_events.36.a": {
+  "en": "Cover the peaks of eternal light with solar arrays.",
+  "es": "Cubrir los picos de luz eterna con paneles solares."
+ },
+ "space_race_colony_events.36.b": {
+  "en": "Build an observatory on the dark crater floor.",
+  "es": "Construir un observatorio en el fondo oscuro del cráter."
+ },
+ "space_race_colony_events.36.d": {
+  "en": "Near the lunar north pole, the rim of Peary Crater holds some of the best-lit ground on the Moon: mountain tops that see the Sun through almost the whole lunar day. Below them, the crater floor stays dark and cold enough that instruments need no cooling at all. Our settlers can harvest the light above or listen to the sky below.",
+  "es": "Cerca del polo norte lunar, el borde del cráter Peary alberga algunos de los terrenos mejor iluminados de la Luna: cimas de montañas que ven el Sol durante casi todo el día lunar. Debajo, el fondo del cráter permanece oscuro y lo bastante frío como para que los instrumentos no necesiten refrigeración alguna. Nuestros colonos pueden cosechar la luz de arriba o escuchar el cielo de abajo."
+ },
+ "space_race_colony_events.36.f": {
+  "en": "\\\"On the peaks the Sun never really sets. On the floor it never rises. We get to choose which half of that to live in.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Survey Lead",
+  "es": "—En las cimas el Sol nunca se pone de verdad. En el fondo nunca sale. Nos toca elegir en cuál de esas dos mitades vivir.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], jefe de prospección"
+ },
+ "space_race_colony_events.36.t": {
+  "en": "Colony: Peary Crater",
+  "es": "Colonia: cráter Peary"
+ },
+ "space_race_colony_events.37.a": {
+  "en": "Keep the landing site as a heritage site for the world.",
+  "es": "Conservar el lugar de alunizaje como patrimonio del mundo."
+ },
+ "space_race_colony_events.37.b": {
+  "en": "Mine the mare's regolith for helium-3.",
+  "es": "Extraer helio-3 del regolito del mar lunar."
+ },
+ "space_race_colony_events.37.d": {
+  "en": "Tranquility Base, on the smooth floor of the Sea of Tranquility, is ours. Landers have come down on this mare since the first days of lunar exploration, and their footprints are as sharp as the day they were made: nothing here erodes them. The mare around it is rich in titanium and in helium-3, deposited by the solar wind over billions of years. We can preserve the site for the world to visit, or put the plain to work.",
+  "es": "La Base Tranquilidad, en el suave fondo del Mar de la Tranquilidad, es nuestra. Módulos de aterrizaje han descendido sobre este mar desde los primeros días de la exploración lunar, y sus huellas siguen tan nítidas como el día en que se hicieron: nada aquí las erosiona. El mar que la rodea es rico en titanio y en helio-3, depositado por el viento solar a lo largo de miles de millones de años. Podemos conservar el lugar para que el mundo lo visite, o poner la llanura a trabajar."
+ },
+ "space_race_colony_events.37.f": {
+  "en": "\\\"I stood ten meters from the old footprints and could not make myself go closer. Then I thought of everyone at home who will want to see it.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Site Conservator",
+  "es": "—Me quedé a diez metros de las viejas huellas y no pude obligarme a acercarme más. Entonces pensé en todos los que están en casa y querrán verlas.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], conservador del lugar"
+ },
+ "space_race_colony_events.37.t": {
+  "en": "Colony: Tranquility Base",
+  "es": "Colonia: Base Tranquilidad"
+ },
+ "space_race_colony_events.38.a": {
+  "en": "Seal the tubes and build a city inside them.",
+  "es": "Sellar los tubos y construir una ciudad en su interior."
+ },
+ "space_race_colony_events.38.b": {
+  "en": "Bore a hardened installation into the basalt.",
+  "es": "Excavar una instalación reforzada en el basalto."
+ },
+ "space_race_colony_events.38.d": {
+  "en": "Orbital surveys found a skylight in the Marius Hills of Oceanus Procellarum: a collapsed roof opening into a lava tube that runs for kilometers under the basalt. Inside, the temperature barely moves and the rock overhead stops radiation and micrometeorites. It is the safest ground on the Moon, whether for families or for something an enemy should never reach.",
+  "es": "Los reconocimientos orbitales encontraron un tragaluz en las colinas de Marius, en el Océano de las Tormentas: un techo hundido que se abre a un tubo de lava que recorre kilómetros bajo el basalto. En su interior, la temperatura apenas varía y la roca que hay encima detiene la radiación y los micrometeoritos. Es el terreno más seguro de la Luna, ya sea para familias o para algo que un enemigo nunca debería alcanzar."
+ },
+ "space_race_colony_events.38.f": {
+  "en": "\\\"We climbed down into the dark and the tube just kept going. You could fit a city in here, and the Moon itself would be its wall.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Cave Survey Engineer",
+  "es": "—Bajamos a la oscuridad y el tubo no dejaba de seguir. Aquí cabría una ciudad, y la propia Luna sería su muralla.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], ingeniero de reconocimiento de cavernas"
+ },
+ "space_race_colony_events.38.t": {
+  "en": "Colony: Marius Hills",
+  "es": "Colonia: colinas de Marius"
+ },
+ "space_race_colony_events.39.a": {
+  "en": "Build a radio telescope on the quiet crater floor.",
+  "es": "Construir un radiotelescopio en el fondo silencioso del cráter."
+ },
+ "space_race_colony_events.39.b": {
+  "en": "Build a relay for the missions beyond the Moon.",
+  "es": "Construir un repetidor para las misiones más allá de la Luna."
+ },
+ "space_race_colony_events.39.d": {
+  "en": "Daedalus Crater lies near the middle of the Moon's far side, the one place within easy reach of Earth that never sees it. The whole Moon stands between its floor and the radio noise of our civilization. Astronomers have wanted a telescope here for decades. Mission planners want a relay that can talk to ships when Earth is turned away.",
+  "es": "El cráter Dédalo se halla cerca del centro de la cara oculta de la Luna, el único lugar al alcance fácil de la Tierra que nunca la ve. La Luna entera se interpone entre su fondo y el ruido de radio de nuestra civilización. Los astrónomos llevan décadas queriendo un telescopio aquí. Los planificadores de misiones quieren un repetidor que pueda hablar con las naves cuando la Tierra queda de espaldas."
+ },
+ "space_race_colony_events.39.f": {
+  "en": "\\\"For the first time since we built a radio, nobody on Earth can hear us, and we can hear everything else.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Radio Astronomer",
+  "es": "—Por primera vez desde que construimos una radio, nadie en la Tierra puede oírnos, y nosotros podemos oír todo lo demás.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], radioastrónomo"
+ },
+ "space_race_colony_events.39.t": {
+  "en": "Colony: Daedalus Crater",
+  "es": "Colonia: cráter Dédalo"
+ },
  "space_race_colony_events.4.a": {
   "en": "Ice extraction and water processing facility.",
   "es": "Instalación de extracción de hielo y procesamiento de agua."
@@ -18246,6 +18926,26 @@
  "space_race_colony_events.4.t": {
   "en": "Colony: Utopia Planitia",
   "es": "Colonia: Utopía Planitia"
+ },
+ "space_race_colony_events.40.a": {
+  "en": "Build a mass driver to launch cargo into orbit.",
+  "es": "Construir una catapulta electromagnética para lanzar carga a órbita."
+ },
+ "space_race_colony_events.40.b": {
+  "en": "Mine the KREEP-rich regolith.",
+  "es": "Explotar el regolito rico en KREEP."
+ },
+ "space_race_colony_events.40.d": {
+  "en": "Mare Imbrium is a basin of flat basalt larger than France, ringed by mountains thrown up by the impact that made it. Its regolith carries KREEP, an unusual mix of potassium, rare earth elements and phosphorus found nowhere else in such quantity. The plain is flat enough for a mass driver: an electromagnetic track that can throw cargo into orbit with no fuel at all.",
+  "es": "El Mare Imbrium es una cuenca de basalto llano más grande que Francia, rodeada de montañas levantadas por el impacto que la formó. Su regolito contiene KREEP, una mezcla inusual de potasio, tierras raras y fósforo que no se encuentra en ninguna otra parte en tal cantidad. La llanura es lo bastante plana para una catapulta electromagnética: un raíl electromagnético capaz de lanzar carga a órbita sin nada de combustible."
+ },
+ "space_race_colony_events.40.f": {
+  "en": "\\\"The plain runs flat to the horizon in every direction. Lay a rail across it, and the Moon starts sending things up instead of us sending them down.\\\"\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], Launch Systems Engineer",
+  "es": "—La llanura se extiende plana hasta el horizonte en todas direcciones. Tiende un raíl a través de ella, y la Luna empieza a enviar cosas hacia arriba en lugar de que las enviemos nosotros hacia abajo.\\n\\n— [SCOPE.sCharacter('flavor_speaker').GetFullNameNoFormatting], ingeniero de sistemas de lanzamiento"
+ },
+ "space_race_colony_events.40.t": {
+  "en": "Colony: Mare Imbrium",
+  "es": "Colonia: Mare Imbrium"
  },
  "space_race_colony_events.5.a": {
   "en": "Civilian residential colony.",
@@ -18795,6 +19495,174 @@
   "en": "A Costly Miscalculation",
   "es": "Un costoso error de cálculo"
  },
+ "space_race_events.100.a": {
+  "en": "Make ready.",
+  "es": "Prepararse."
+ },
+ "space_race_events.100.d": {
+  "en": "Our tracking stations report a burn out of [SCOPE.sCountry('sr_alert_power').GetName]'s parking orbit. The fleet is bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], where we hold colonies, and will arrive in #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! months. Nothing can catch it on the way.",
+  "es": "Nuestras estaciones de seguimiento informan de un encendido de motores desde la órbita de estacionamiento de [SCOPE.sCountry('sr_alert_power').GetName]. La flota se dirige a [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], donde tenemos colonias, y llegará en #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! meses. Nada puede interceptarla por el camino."
+ },
+ "space_race_events.100.f": {
+  "en": "\\\"We can see it, and we can do the arithmetic. What we can't do is make the arithmetic come out differently.\\\"\\n\\n— Orbital Tracking Command",
+  "es": "—Podemos verla, y podemos hacer las cuentas. Lo que no podemos es hacer que las cuentas salgan de otra manera.\\n\\n— Mando de seguimiento orbital"
+ },
+ "space_race_events.100.t": {
+  "en": "Hostile Fleet Bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')]",
+  "es": "Flota hostil rumbo a [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')]"
+ },
+ "space_race_events.101.a": {
+  "en": "Count the losses.",
+  "es": "Contemos las pérdidas."
+ },
+ "space_race_events.101.d": {
+  "en": "Our forces have fought at [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]. There is no sound in space and little to see: points of light, a flare of propellant, and then silence on a channel that had been talking.",
+  "es": "Nuestras fuerzas han combatido en [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]. En el espacio no hay sonido y hay poco que ver: puntos de luz, un destello de propelente y, después, silencio en un canal que hasta entonces hablaba."
+ },
+ "space_race_events.101.f": {
+  "en": "\\\"At these distances you never see the ship that kills you. You see its numbers stop changing.\\\"\\n\\n— Fleet Officer",
+  "es": "«A estas distancias nunca ves la nave que te mata. Ves cómo sus cifras dejan de cambiar.»\\n\\n— Oficial de flota"
+ },
+ "space_race_events.101.t": {
+  "en": "Battle Over [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]",
+  "es": "Batalla sobre [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]"
+ },
+ "space_race_events.102.a": {
+  "en": "So it stands.",
+  "es": "Así están las cosas."
+ },
+ "space_race_events.102.d_liberated": {
+  "en": "Our marines have driven the occupiers out of [ROOT.GetCountry.GetCustom('sr_occ_site_name')]. The colony is its holder's again.",
+  "es": "Nuestros infantes de marina han expulsado a los ocupantes de [ROOT.GetCountry.GetCustom('sr_occ_site_name')]. La colonia vuelve a manos de su titular."
+ },
+ "space_race_events.102.d_occupied": {
+  "en": "Marines have come down through the domes of [ROOT.GetCountry.GetCustom('sr_occ_site_name')] and hold its locks and its power. The colony's people go on with their work under a new flag, and wait to hear what the peace will say about them.",
+  "es": "Unos infantes de marina han descendido por las cúpulas de [ROOT.GetCountry.GetCustom('sr_occ_site_name')] y controlan sus esclusas y su energía. La población de la colonia sigue con su trabajo bajo una nueva bandera y espera a saber qué dirá la paz de ella."
+ },
+ "space_race_events.102.d_returned": {
+  "en": "The war is over and the occupation of [ROOT.GetCountry.GetCustom('sr_occ_site_name')] with it. The occupying garrison has gone home and the colony is back with its holder.",
+  "es": "La guerra ha terminado y, con ella, la ocupación de [ROOT.GetCountry.GetCustom('sr_occ_site_name')]. La guarnición ocupante ha vuelto a casa y la colonia está de nuevo con su titular."
+ },
+ "space_race_events.102.f": {
+  "en": "\\\"Whoever holds the air plant holds the colony. Everything else is paperwork.\\\"\\n\\n— Marine Corps manual",
+  "es": "«Quien controla la planta de aire controla la colonia. Todo lo demás es papeleo.»\\n\\n— Manual del Cuerpo de Infantería de Marina"
+ },
+ "space_race_events.102.t_liberated": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] Liberated",
+  "es": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] liberada"
+ },
+ "space_race_events.102.t_occupied": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] Occupied",
+  "es": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] ocupada"
+ },
+ "space_race_events.102.t_returned": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] Returned",
+  "es": "[ROOT.GetCountry.GetCustom('sr_occ_site_name')] devuelta"
+ },
+ "space_race_events.103.a": {
+  "en": "The world will remember this.",
+  "es": "El mundo recordará esto."
+ },
+ "space_race_events.103.d": {
+  "en": "The domes of [ROOT.GetCountry.GetCustom('sr_destroyed_site_name')] are open to the sky. The fleet that closed in did not come to land marines. The colony is gone, and with it everyone who lived there. The site will be left alone for a generation.",
+  "es": "Las cúpulas de [ROOT.GetCountry.GetCustom('sr_destroyed_site_name')] están abiertas al cielo. La flota que se acercó no venía a desembarcar infantes de marina. La colonia ha desaparecido, y con ella todos los que vivían allí. El lugar quedará en paz durante una generación."
+ },
+ "space_race_events.103.f": {
+  "en": "\\\"It is easier to throw something fast at a colony than to land marines on it.\\\"\\n\\n— Naval staff college lecture",
+  "es": "«Es más fácil lanzar algo a gran velocidad contra una colonia que desembarcar infantes de marina en ella.»\\n\\n— Conferencia de la escuela de estado mayor naval"
+ },
+ "space_race_events.103.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_destroyed_site_name')] Destroyed",
+  "es": "[ROOT.GetCountry.GetCustom('sr_destroyed_site_name')] destruida"
+ },
+ "space_race_events.104.a": {
+  "en": "Noted.",
+  "es": "Tomamos nota."
+ },
+ "space_race_events.104.d": {
+  "en": "The free colony of [ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] has fallen to marines. Its council is dissolved, its ties to those who supplied it are cut, and it answers to Earth again.",
+  "es": "La colonia libre de [ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] ha caído en manos de infantes de marina. Su consejo está disuelto, sus vínculos con quienes la abastecían están cortados y vuelve a responder ante la Tierra."
+ },
+ "space_race_events.104.f": {
+  "en": "\\\"They declared themselves free. Nobody else declared it with them.\\\"\\n\\n— Colonial Office minute",
+  "es": "«Se declararon libres. Nadie más lo declaró con ellos.»\\n\\n— Acta de la Oficina Colonial"
+ },
+ "space_race_events.104.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] Taken by Force",
+  "es": "[ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] tomada por la fuerza"
+ },
+ "space_race_events.105.a": {
+  "en": "We will remember who did this.",
+  "es": "Recordaremos quién hizo esto."
+ },
+ "space_race_events.105.d": {
+  "en": "A fleet of [SCOPE.sCountry('sr_icpt_alert_power').GetName] has taken station off our colonies at [ROOT.GetCountry.GetCustom('sr_icpt_alert_loc_name')] and is turning back everything bound for them. Not a shot has been fired, and none of our ships is there to dispute it. Until one is, no settlers or modules reach those colonies and nothing they mine comes home.",
+  "es": "Una flota de [SCOPE.sCountry('sr_icpt_alert_power').GetName] ha tomado posiciones frente a nuestras colonias de [ROOT.GetCountry.GetCustom('sr_icpt_alert_loc_name')] y devuelve todo lo que va hacia ellas. No se ha disparado un solo tiro, y ninguna de nuestras naves está allí para disputárselo. Hasta que la haya, no llegarán a esas colonias ni colonos ni módulos, y nada de lo que extraen volverá a casa."
+ },
+ "space_race_events.105.f": {
+  "en": "\\\"They call it a quarantine, because a blockade is an act of war. We may yet decide what to call our answer.\\\"\\n\\n— Foreign Ministry cable",
+  "es": "«Lo llaman cuarentena, porque un bloqueo es un acto de guerra. Quizá aún decidamos cómo llamar a nuestra respuesta.»\\n\\n— Cable del Ministerio de Exteriores"
+ },
+ "space_race_events.105.t": {
+  "en": "Our Colonies at [ROOT.GetCountry.GetCustom('sr_icpt_alert_loc_name')] Interdicted",
+  "es": "Nuestras colonias de [ROOT.GetCountry.GetCustom('sr_icpt_alert_loc_name')], bajo interdicción"
+ },
+ "space_race_events.106.a": {
+  "en": "Put up everything we have.",
+  "es": "Pongamos en órbita todo lo que tenemos."
+ },
+ "space_race_events.106.d": {
+  "en": "A fleet of [SCOPE.sCountry('sr_earth_blockade_power').GetName] holds the orbits over our launch sites, and no ship of ours is up there to dispute them. Until one is, nothing we launch reaches orbit: no colony fleet, no module, no settlers and no fleet bound outward. Our colonies have lost touch with us.",
+  "es": "Una flota de [SCOPE.sCountry('sr_earth_blockade_power').GetName] domina las órbitas sobre nuestros centros de lanzamiento, y ninguna nave nuestra está allí arriba para disputárselas. Hasta que la haya, nada de lo que lancemos llegará a la órbita: ni flotas coloniales, ni módulos, ni colonos, ni flotas con destino al exterior. Nuestras colonias han perdido el contacto con nosotros."
+ },
+ "space_race_events.106.f": {
+  "en": "\\\"Every launch window is their launch window now.\\\"\\n\\n— Space Command duty officer",
+  "es": "«Ahora todas las ventanas de lanzamiento son las suyas.»\\n\\n— Oficial de guardia del Mando espacial"
+ },
+ "space_race_events.106.t": {
+  "en": "Earth Orbit Blockaded",
+  "es": "Órbita terrestre bloqueada"
+ },
+ "space_race_events.107.a": {
+  "en": "We will do better.",
+  "es": "Lo haremos mejor."
+ },
+ "space_race_events.107.d": {
+  "en": "A year ago we promised [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')] a garrison. No fleet landed one. The settlers have drawn their own conclusions, and the order has lapsed.",
+  "es": "Hace un año prometimos una guarnición a [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')]. Ninguna flota llevó una. Los colonos han sacado sus propias conclusiones, y la orden ha caducado."
+ },
+ "space_race_events.107.f": {
+  "en": "\\\"They said troops were coming. We started counting the days, then we stopped.\\\"\\n\\n— A colonist's letter",
+  "es": "«Dijeron que venían tropas. Empezamos a contar los días y luego dejamos de hacerlo.»\\n\\n— Carta de un colono"
+ },
+ "space_race_events.107.t": {
+  "en": "Garrison for [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')] Never Came",
+  "es": "La guarnición de [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')] nunca llegó"
+ },
+ "space_race_events.108.a": {
+  "en": "Noted.",
+  "es": "Tomamos nota."
+ },
+ "space_race_events.108.d_back": {
+  "en": "The state of our $building_space_program$ is back under our control and its pads are working again. Launches, module fabrication and the reserve resume this month.",
+  "es": "El estado de nuestro $building_space_program$ vuelve a estar bajo nuestro control y sus plataformas funcionan de nuevo. Los lanzamientos, la fabricación de módulos y la reserva se reanudan este mes."
+ },
+ "space_race_events.108.d_lost": {
+  "en": "Enemy troops hold the state of our $building_space_program$. Its pads are silent: nothing leaves Earth for us and no module is fabricated, not even from the reserve, until we take the state back.",
+  "es": "Tropas enemigas controlan el estado de nuestro $building_space_program$. Sus plataformas están en silencio: nada sale de la Tierra por nuestra cuenta y no se fabrica ningún módulo, ni siquiera de la reserva, hasta que recuperemos el estado."
+ },
+ "space_race_events.108.f": {
+  "en": "\\\"You can blockade a sky. A launch pad you have to occupy.\\\"\\n\\n— Staff college lecture",
+  "es": "«Se puede bloquear un cielo. Una plataforma de lanzamiento hay que ocuparla.»\\n\\n— Conferencia de la escuela de estado mayor"
+ },
+ "space_race_events.108.t_back": {
+  "en": "Our Launch Site Is Ours Again",
+  "es": "Nuestro centro de lanzamiento vuelve a ser nuestro"
+ },
+ "space_race_events.108.t_lost": {
+  "en": "Our Launch Site Is Occupied",
+  "es": "Nuestro centro de lanzamiento está ocupado"
+ },
  "space_race_events.11.a": {
   "en": "A setback, but not a disaster.",
   "es": "Un revés, pero no un desastre."
@@ -18814,6 +19682,22 @@
  "space_race_events.11.t": {
   "en": "Technical Difficulties",
   "es": "Dificultades técnicas"
+ },
+ "space_race_events.111.a": {
+  "en": "Prepare to meet it.",
+  "es": "Preparémonos para recibirla."
+ },
+ "space_race_events.111.d": {
+  "en": "Our tracking stations report a fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName] on its way to Earth. Months until it lands: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. With what is there already, the fleets of powers at war with us at Earth or bound for it come to a strength of #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; what we have at Earth comes to #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] A fleet that lands to find our orbits empty, or wins them from what we have there, blockades our launch sites: until a fleet of ours holds them again, no colony fleet, module, settler or outbound fleet leaves Earth.",
+  "es": "Nuestras estaciones de seguimiento informan de que una flota de [SCOPE.sCountry('sr_earth_alert_power').GetName] se dirige a la Tierra. Meses hasta que llegue: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. Con lo que ya hay allí, las flotas de las potencias en guerra con nosotros que están en la Tierra o rumbo a ella suman una fuerza de #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; lo que tenemos en la Tierra suma #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] Una flota que llegue y encuentre vacías nuestras órbitas, o que se las arrebate a lo que tenemos allí, bloquea nuestros centros de lanzamiento: hasta que una flota nuestra vuelva a controlarlas, ninguna flota colonial, módulo, colono ni flota con destino al exterior sale de la Tierra."
+ },
+ "space_race_events.111.f": {
+  "en": "\\\"Every other trajectory we track bends away from us. This one doesn't.\\\"\\n\\n— Orbital Tracking Command",
+  "es": "«Todas las demás trayectorias que seguimos se alejan de nosotros. Esta no.»\\n\\n— Mando de seguimiento orbital"
+ },
+ "space_race_events.111.t": {
+  "en": "Earth Is Threatened",
+  "es": "La Tierra está amenazada"
  },
  "space_race_events.12.a": {
   "en": "Rebuild the pad and investigate the cause.",
@@ -19064,8 +19948,8 @@
   "es": "[SCOPE.sCountry('sr_achiever').GetName] ha logrado aterrizar astronautas en la superficie de Marte, cruzando un umbral que antaño parecía territorio de la ciencia ficción."
  },
  "space_race_events.20.d_moon_base": {
-  "en": "[SCOPE.sCountry('sr_achiever').GetName] has established a permanent base on the Moon, transforming our nearest celestial neighbor into a sustained outpost of human civilization.",
-  "es": "[SCOPE.sCountry('sr_achiever').GetName] ha establecido una base permanente en la Luna, transformando a nuestro vecino celestial más cercano en un puesto avanzado sostenido de la civilización humana."
+  "en": "[SCOPE.sCountry('sr_achiever').GetName] has founded a colony on the Moon, turning our nearest celestial neighbor into a permanent outpost of human civilization.",
+  "es": "[SCOPE.sCountry('sr_achiever').GetName] ha fundado una colonia en la Luna y ha convertido a nuestro vecino celestial más cercano en un puesto avanzado permanente de la civilización humana."
  },
  "space_race_events.20.d_moon_landing": {
   "en": "[SCOPE.sCountry('sr_achiever').GetName] has landed astronauts on the surface of the Moon, an achievement that will echo through the ages.",
@@ -19428,12 +20312,12 @@
   "es": "Conceder licencias de extracción a la industria privada."
  },
  "space_race_events.36.d": {
-  "en": "Geological surveys of the lunar base's surrounding terrain have uncovered deposits of Helium-3 far richer than predicted. This isotope, precious fuel for fusion reactors, could transform the Moon from a scientific outpost into an economic engine.",
-  "es": "Los estudios geológicos del terreno que rodea la base lunar han descubierto yacimientos de helio-3 mucho más ricos de lo previsto. Este isótopo, valioso combustible para reactores de fusión, podría convertir la Luna de un puesto científico en un motor económico."
+  "en": "Geological surveys of the sites chosen for our first lunar colony have uncovered deposits of Helium-3 far richer than predicted. This isotope, precious fuel for fusion reactors, could make the Moon an economic engine rather than a scientific outpost.",
+  "es": "Los estudios geológicos de los emplazamientos elegidos para nuestra primera colonia lunar han descubierto yacimientos de helio-3 mucho más ricos de lo previsto. Este isótopo, valioso combustible para reactores de fusión, podría convertir la Luna en un motor económico en lugar de un puesto científico."
  },
  "space_race_events.36.f": {
-  "en": "\\\"We came here for science. We may stay for profit.\\\"\\n\\n— Lunar Base Commander, reviewing the geological survey data\\n\\n\\\"The Moon isn't just a stepping stone anymore. It's a gold mine — and every spacefaring nation knows it.\\\"\\n\\n— Economic correspondent, broadcasting from Earth",
-  "es": "«Vinimos por la ciencia. Quizá nos quedemos por el beneficio.»\\n\\n— Comandante de la base lunar, revisando los datos del estudio geológico\\n\\n«La Luna ya no es solo un peldaño. Es una mina de oro, y todas las naciones con capacidad espacial lo saben.»\\n\\n— Corresponsal económico, emitiendo desde la Tierra"
+  "en": "\\\"We came here for science. We may stay for profit.\\\"\\n\\n— Lunar Survey Team Leader, reviewing the geological survey data\\n\\n\\\"The Moon isn't just a stepping stone anymore. It's a gold mine — and every spacefaring nation knows it.\\\"\\n\\n— Economic correspondent, broadcasting from Earth",
+  "es": "«Vinimos por la ciencia. Quizá nos quedemos por el beneficio.»\\n\\n— Jefe del equipo de prospección lunar, revisando los datos del estudio geológico\\n\\n«La Luna ya no es solo un peldaño. Es una mina de oro, y todas las naciones con capacidad espacial lo saben.»\\n\\n— Corresponsal económico, emitiendo desde la Tierra"
  },
  "space_race_events.36.t": {
   "en": "Lunar Helium-3",
@@ -19872,16 +20756,16 @@
   "es": "La ventaja del ascensor"
  },
  "space_race_events.6.a": {
-  "en": "This base will be a temple of science.",
-  "es": "Esta base será un templo de la ciencia."
+  "en": "A people that lives on the Moon.",
+  "es": "Un pueblo que vive en la Luna."
  },
  "space_race_events.6.d": {
-  "en": "The first permanent habitat module has been pressurized and declared operational. A crew of specialists will maintain a continuous human presence on the Moon: the first time our species has truly lived beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
-  "es": "El primer módulo de hábitat permanente ha sido presurizado y declarado operativo. Un equipo de especialistas mantendrá una presencia humana continua en la Luna: la primera vez que nuestra especie vive de verdad más allá de la Tierra. Las misiones de suministro se vuelven rutinarias. Vivir en la Luna se convierte en un trabajo."
+  "en": "Our first lunar colony has pressurized its habitat and declared it operational. Its settlers will keep a human presence on the Moon without a break: the first time our species has truly lived beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
+  "es": "Nuestra primera colonia lunar ha presurizado su hábitat y lo ha declarado operativo. Sus colonos mantendrán sin interrupción una presencia humana en la Luna: la primera vez que nuestra especie vive de verdad más allá de la Tierra. Las misiones de suministro se vuelven rutinarias. Vivir en la Luna se convierte en un trabajo."
  },
  "space_race_events.6.d_later": {
-  "en": "Our first permanent habitat module has been pressurized and declared operational. Others built on the Moon before us, but a [ROOT.GetCountry.GetAdjectiveNoFormatting] crew of specialists will now maintain a continuous presence there, and [ROOT.GetCountry.GetName] joins the nations whose people live beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
-  "es": "Nuestro primer módulo de hábitat permanente ha sido presurizado y declarado operativo. Otros construyeron en la Luna antes que nosotros, pero un equipo [ROOT.GetCountry.GetAdjectiveNoFormatting] de especialistas mantendrá ahora una presencia continua allí, y [ROOT.GetCountry.GetName] se une a las naciones cuya gente vive más allá de la Tierra. Las misiones de suministro se vuelven rutinarias. Vivir en la Luna se convierte en un trabajo."
+  "en": "Our first lunar colony has pressurized its habitat and declared it operational. Others settled the Moon before us, but [ROOT.GetCountry.GetAdjectiveNoFormatting] settlers will now keep a presence there without a break, and [ROOT.GetCountry.GetName] joins the nations whose people live beyond the Earth. Supply missions become routine. Living on the Moon becomes a job.",
+  "es": "Nuestra primera colonia lunar ha presurizado su hábitat y lo ha declarado operativo. Otros colonizaron la Luna antes que nosotros, pero el contingente [ROOT.GetCountry.GetAdjectiveNoFormatting] de colonos mantendrá ahora allí una presencia sin interrupción, y [ROOT.GetCountry.GetName] se une a las naciones cuya gente vive más allá de la Tierra. Las misiones de suministro se vuelven rutinarias. Vivir en la Luna se convierte en un trabajo."
  },
  "space_race_events.6.f": {
   "en": "\\\"You get used to the gravity. You get used to the recycled air and the freeze-dried everything. What you never get used to is looking up through the viewport and seeing Earth — whole and blue and impossibly far away — and knowing that everyone you've ever loved is on that little marble.\\\"\\n\\n— Lunar Base Crew Member, personal diary entry",
@@ -20384,8 +21268,8 @@
   "es": "Poner los cohetes a trabajar."
  },
  "space_race_events.77.d": {
-  "en": "Every milestone is behind us, and every world from Mars to Sedna now flies someone's flag. The race is over. What it built is still here: the launch crews, the spaceports, the colony outposts and the contractors who served them. The agencies that once competed for firsts are now bidding for freight contracts, and ore from the asteroid belt has never been cheaper to bring down. [ROOT.GetCountry.GetAdjective] industry means to have it.",
-  "es": "Todos los hitos han quedado atrás, y cada mundo, de Marte a Sedna, ondea ya la bandera de alguien. La carrera ha terminado. Lo que construyó sigue aquí: los equipos de lanzamiento, los puertos espaciales, los puestos avanzados de las colonias y los contratistas que los atendían. Las agencias que antes competían por ser las primeras licitan ahora contratos de carga, y traer a la Tierra mineral del cinturón de asteroides nunca había sido tan barato. El sector industrial [ROOT.GetCountry.GetAdjective] se propone quedarse con ese negocio."
+  "en": "Every milestone is behind us, and every colony site from the Moon to Sedna now flies someone's flag. The race is over. What it built is still here: the launch crews, the spaceports, the colony outposts and the contractors who served them. The agencies that once competed for firsts are now bidding for freight contracts, and ore from the asteroid belt has never been cheaper to bring down. [ROOT.GetCountry.GetAdjective] industry means to have it.",
+  "es": "Todos los hitos han quedado atrás, y cada emplazamiento colonial, de la Luna a Sedna, ondea ya la bandera de alguien. La carrera ha terminado. Lo que construyó sigue aquí: los equipos de lanzamiento, los puertos espaciales, los puestos avanzados de las colonias y los contratistas que los atendían. Las agencias que antes competían por ser las primeras licitan ahora contratos de carga, y traer a la Tierra mineral del cinturón de asteroides nunca había sido tan barato. El sector industrial [ROOT.GetCountry.GetAdjective] se propone quedarse con ese negocio."
  },
  "space_race_events.77.f": {
   "en": "\\\"For fifty years we flew to be first. Now we fly because there is nickel up there, and platinum, and someone has to haul it down. Nobody will put that on a stamp. It will pay for the next fifty years.\\\"\\n\\n— Director of Commercial Launch Operations",
@@ -20544,8 +21428,8 @@
   "es": "Nuestra flota colonial llegó a [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] y se encontró con que allí ya se alzaba el asentamiento de otra potencia. En lugar de dar media vuelta, su comandante llevó la flota hasta [ROOT.GetCountry.GetCustom('sr_cf_notice_founded_name')], todavía sin reclamar, y fundó allí nuestra colonia."
  },
  "space_race_events.92.d_lost": {
-  "en": "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find it, and every other world within its reach, already claimed. With no free ground to land on and no propellant to go further, the expedition is lost.",
-  "es": "Nuestra flota colonial llegó a [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] y descubrió que ese mundo, como todos los demás a su alcance, ya estaba reclamado. Sin terreno libre donde posarse ni combustible para ir más lejos, la expedición está perdida."
+  "en": "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find it, and every other site within its reach, already claimed. With no free ground to land on and no propellant to go further, the expedition is lost.",
+  "es": "Nuestra flota colonial llegó a [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] y descubrió que ese lugar, igual que todos los demás emplazamientos a su alcance, ya estaba reclamado. Sin terreno libre donde posarse ni combustible para ir más lejos, la expedición está perdida."
  },
  "space_race_events.92.f": {
   "en": "\\\"We had the right charts and the right ships. We left too late.\\\"\\n\\n— Mission Control",
@@ -20558,6 +21442,158 @@
  "space_race_events.92.t_lost": {
   "en": "A Fleet With Nowhere to Land",
   "es": "Una flota sin lugar donde posarse"
+ },
+ "space_race_events.93.a": {
+  "en": "Bring them home.",
+  "es": "Traerlos de vuelta a casa."
+ },
+ "space_race_events.93.b": {
+  "en": "Leave them to govern themselves.",
+  "es": "Dejar que se gobiernen solos."
+ },
+ "space_race_events.93.c": {
+  "en": "Keep the colony.",
+  "es": "Conservar la colonia."
+ },
+ "space_race_events.93.d": {
+  "en": "The cabinet has before it a proposal to give up [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]. Its settlers can be brought home, at the cost of everything they built there, or left to govern themselves as a free colony that owes us nothing.",
+  "es": "El gabinete tiene ante sí una propuesta para renunciar a [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]. Sus colonos pueden volver a casa, a costa de todo lo que construyeron allí, o quedar libres para gobernarse como una colonia libre que no nos debe nada."
+ },
+ "space_race_events.93.d_outpost": {
+  "en": "The cabinet has before it a proposal to give up [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]. Hardly anyone lives there: the outpost can simply be shut down, its machines switched off and the site left to whoever comes next.",
+  "es": "El gabinete tiene ante sí una propuesta para renunciar a [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]. Apenas vive nadie allí: el puesto avanzado puede simplemente cerrarse, apagar sus máquinas y dejar el lugar a quien llegue después."
+ },
+ "space_race_events.93.e": {
+  "en": "Close the outpost.",
+  "es": "Cerrar el puesto avanzado."
+ },
+ "space_race_events.93.f": {
+  "en": "\\\"Every kilo we launch there is a kilo we don't launch somewhere better.\\\"\\n\\n— Treasury memorandum",
+  "es": "«Cada kilo que lanzamos allí es un kilo que no lanzamos a otro sitio mejor.»\\n\\n— Memorándum del Tesoro"
+ },
+ "space_race_events.93.t": {
+  "en": "Abandon [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]?",
+  "es": "¿Abandonar [ROOT.GetCountry.GetCustom('sr_abandon_site_name')]?"
+ },
+ "space_race_events.94.a": {
+  "en": "Grant them a charter.",
+  "es": "Concederles un estatuto."
+ },
+ "space_race_events.94.b": {
+  "en": "Send a garrison.",
+  "es": "Enviar una guarnición."
+ },
+ "space_race_events.94.c": {
+  "en": "Let them go.",
+  "es": "Dejarlos marchar."
+ },
+ "space_race_events.94.d": {
+  "en": "The settlers of [ROOT.GetCountry.GetCustom('sr_aut_site_name')] have elected a council of their own, and it has sent us its demands: the right to make its own laws and keep a share of what the colony produces. They are a long way from home, and they know it.",
+  "es": "Los colonos de [ROOT.GetCountry.GetCustom('sr_aut_site_name')] han elegido un consejo propio, que nos ha enviado sus exigencias: el derecho a dictar sus propias leyes y a quedarse con una parte de lo que produce la colonia. Están muy lejos de casa, y lo saben."
+ },
+ "space_race_events.94.f": {
+  "en": "\\\"Their message took minutes to cross the gap. Our reply will take longer.\\\"\\n\\n— Office of Extraplanetary Affairs",
+  "es": "«Su mensaje tardó minutos en cruzar el vacío. Nuestra respuesta tardará más.»\\n\\n— Oficina de Asuntos Extraplanetarios"
+ },
+ "space_race_events.94.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_aut_site_name')] Demands Self-Government",
+  "es": "[ROOT.GetCountry.GetCustom('sr_aut_site_name')] exige autogobierno"
+ },
+ "space_race_events.95.a": {
+  "en": "A citizen of our nation.",
+  "es": "Un ciudadano de nuestra nación."
+ },
+ "space_race_events.95.b": {
+  "en": "A child of [ROOT.GetCountry.GetCustom('sr_life_site_name')].",
+  "es": "Un hijo de [ROOT.GetCountry.GetCustom('sr_life_site_name')]."
+ },
+ "space_race_events.95.d": {
+  "en": "A child has been born on [ROOT.GetCountry.GetCustom('sr_life_site_name')], the first in the colony's history. The broadcast of the birth has been watched by millions, and the question everyone is asking is what to call the child: a citizen of our nation, born abroad, or the first native of a new world.",
+  "es": "Ha nacido un niño en [ROOT.GetCountry.GetCustom('sr_life_site_name')], el primero en la historia de la colonia. La retransmisión del nacimiento ha sido vista por millones de personas, y la pregunta que todos se hacen es cómo llamar al niño: un ciudadano de nuestra nación, nacido en el extranjero, o el primer nativo de un mundo nuevo."
+ },
+ "space_race_events.95.f": {
+  "en": "\\\"Healthy, loud and slightly taller than the charts expected.\\\"\\n\\n— Colony medical log",
+  "es": "«Sano, ruidoso y algo más alto de lo que esperaban las tablas.»\\n\\n— Diario médico de la colonia"
+ },
+ "space_race_events.95.t": {
+  "en": "The First Child of [ROOT.GetCountry.GetCustom('sr_life_site_name')]",
+  "es": "El primer niño de [ROOT.GetCountry.GetCustom('sr_life_site_name')]"
+ },
+ "space_race_events.96.a": {
+  "en": "Meet their demands.",
+  "es": "Atender sus exigencias."
+ },
+ "space_race_events.96.b": {
+  "en": "Break the strike.",
+  "es": "Romper la huelga."
+ },
+ "space_race_events.96.d": {
+  "en": "The workers of [ROOT.GetCountry.GetCustom('sr_life_site_name')] have downed tools. They want hazard pay, shorter shifts outside the domes and a say in how the colony is run. Every day they hold out costs the colony output, and Earth is watching.",
+  "es": "Los trabajadores de [ROOT.GetCountry.GetCustom('sr_life_site_name')] han dejado las herramientas. Quieren una paga por peligrosidad, turnos más cortos fuera de las cúpulas y voz en cómo se gestiona la colonia. Cada día que resisten cuesta producción a la colonia, y la Tierra los observa."
+ },
+ "space_race_events.96.f": {
+  "en": "\\\"You can't replace us. The next ship is eight months out.\\\"\\n\\n— Strike committee broadcast",
+  "es": "«No pueden reemplazarnos. La próxima nave llega dentro de ocho meses.»\\n\\n— Comunicado del comité de huelga"
+ },
+ "space_race_events.96.t": {
+  "en": "A Strike at [ROOT.GetCountry.GetCustom('sr_life_site_name')]",
+  "es": "Una huelga en [ROOT.GetCountry.GetCustom('sr_life_site_name')]"
+ },
+ "space_race_events.97.a": {
+  "en": "Rebuild at once.",
+  "es": "Reconstruir de inmediato."
+ },
+ "space_race_events.97.b": {
+  "en": "Leave it to the colonists.",
+  "es": "Dejarlo en manos de los colonos."
+ },
+ "space_race_events.97.d": {
+  "en": "A dome on [ROOT.GetCountry.GetCustom('sr_life_site_name')] has failed. The bulkheads held for most of the colony, but #v [ROOT.GetCountry.MakeScope.Var('sr_life_lost').GetValue|D]#! people were lost before the doors closed. The survivors are asking whether help is coming from Earth.",
+  "es": "Una cúpula de [ROOT.GetCountry.GetCustom('sr_life_site_name')] ha fallado. Los mamparos aguantaron en la mayor parte de la colonia, pero #v [ROOT.GetCountry.MakeScope.Var('sr_life_lost').GetValue|D]#! personas se perdieron antes de que se cerraran las puertas. Los supervivientes preguntan si llegará ayuda desde la Tierra."
+ },
+ "space_race_events.97.f": {
+  "en": "\\\"Pressure loss in sector four. Seal the doors. Seal them now.\\\"\\n\\n— Last entry in the dome's log",
+  "es": "«Pérdida de presión en el sector cuatro. Sellen las puertas. Háganlo ya.»\\n\\n— Última anotación del diario de la cúpula"
+ },
+ "space_race_events.97.t": {
+  "en": "A Dome Breach at [ROOT.GetCountry.GetCustom('sr_life_site_name')]",
+  "es": "Brecha en una cúpula de [ROOT.GetCountry.GetCustom('sr_life_site_name')]"
+ },
+ "space_race_events.98.a": {
+  "en": "We will see how long that lasts.",
+  "es": "Veremos cuánto dura."
+ },
+ "space_race_events.98.d": {
+  "en": "The council of [ROOT.GetCountry.GetCustom('sr_freed_site_name')] has declared that the colony no longer answers to us. Its people, its works and everything it found there are its own. Our officials have been politely put aboard the next ship home.",
+  "es": "El consejo de [ROOT.GetCountry.GetCustom('sr_freed_site_name')] ha declarado que la colonia ya no responde ante nosotros. Su gente, sus obras y todo lo que encontró allí son suyos. Nuestros funcionarios han sido embarcados cortésmente en la próxima nave de vuelta a casa."
+ },
+ "space_race_events.98.f": {
+  "en": "\\\"We thank Earth for everything. We will be in touch.\\\"\\n\\n— Declaration of the colony's council",
+  "es": "«Agradecemos a la Tierra todo lo que ha hecho. Nos mantendremos en contacto.»\\n\\n— Declaración del consejo de la colonia"
+ },
+ "space_race_events.98.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] Declares Itself Free",
+  "es": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] se declara libre"
+ },
+ "space_race_events.99.a": {
+  "en": "Welcome them.",
+  "es": "Darles la bienvenida."
+ },
+ "space_race_events.99.b": {
+  "en": "Not now.",
+  "es": "Ahora no."
+ },
+ "space_race_events.99.d": {
+  "en": "Years of our supply ships have made friends of the free colony of [ROOT.GetCountry.GetCustom('sr_petition_site_name')]. Its council now asks to place the colony under our flag, with its people, its works and its specializations.",
+  "es": "Años de naves de suministro nuestras han hecho amigos de la colonia libre de [ROOT.GetCountry.GetCustom('sr_petition_site_name')]. Su consejo pide ahora poner la colonia bajo nuestra bandera, con su gente, sus obras y sus especializaciones."
+ },
+ "space_race_events.99.f": {
+  "en": "\\\"Freedom is wonderful. So is a reliable supply of spare parts.\\\"\\n\\n— Colony council minutes",
+  "es": "«La libertad es maravillosa. También lo es un suministro fiable de repuestos.»\\n\\n— Actas del consejo de la colonia"
+ },
+ "space_race_events.99.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_petition_site_name')] Asks to Join Us",
+  "es": "[ROOT.GetCountry.GetCustom('sr_petition_site_name')] pide unirse a nosotros"
  },
  "surveillance_events.1.a": {
   "en": "Protect the whistleblower",
@@ -20864,8 +21900,8 @@
   "es": "PRUEBA: Presión y descolonización"
  },
  "te_debug_colonial_empire.3.a": {
-  "en": "Re-read the colonies' GDP and re-apply the programmes",
-  "es": "Releer el PIB de las colonias y volver a aplicar los programas"
+  "en": "Re-read the colonies' GDP",
+  "es": "Releer el PIB de las colonias"
  },
  "te_debug_colonial_empire.3.b": {
   "en": "Run the AI's program review on us",
@@ -21608,12 +22644,12 @@
   "es": "Recalcular ahora las cifras anuales"
  },
  "te_debug_gw.1.j": {
-  "en": "Adopt all nine mitigation policies",
-  "es": "Adoptar las nueve políticas de mitigación"
+  "en": "Adopt every mitigation policy",
+  "es": "Adoptar todas las políticas de mitigación"
  },
  "te_debug_gw.1.k": {
-  "en": "Repeal all nine mitigation policies",
-  "es": "Derogar las nueve políticas de mitigación"
+  "en": "Repeal every mitigation policy",
+  "es": "Derogar todas las políticas de mitigación"
  },
  "te_debug_gw.1.l": {
   "en": "Log every country's AI climate will to debug.log (search GW_AI_WILL)",
@@ -21622,6 +22658,10 @@
  "te_debug_gw.1.m": {
   "en": "Set warming to 4.2°C (Apocalyptic)",
   "es": "Fijar el calentamiento en 4,2°C (Apocalíptica)"
+ },
+ "te_debug_gw.1.n": {
+  "en": "Run a year of the aerosol mask now (twelve monthly steps)",
+  "es": "Ejecutar ahora un año de la máscara de aerosoles (doce pasos mensuales)"
  },
  "te_debug_gw.1.t": {
   "en": "Climate Test Console",
@@ -22420,8 +23460,8 @@
   "es": "Una ranura de tecnología más"
  },
  "te_debug_pb.1.d": {
-  "en": "Test controls for power bloc principle slots. Technology slots: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_tech_principle_slots')|0]#!. The bloc's slots: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!.",
-  "es": "Controles de prueba de las ranuras de principios del bloque de poder. Ranuras de tecnología: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_tech_principle_slots')|0]#!. Ranuras del bloque: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!."
+  "en": "Test controls for power bloc principle slots and mandates. Technology slots: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_tech_principle_slots')|0]#!. The bloc's slots: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!.\\n\\nMandates: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_by_trigger')|0]#! by the trigger, #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_by_link')|0]#! by the value link (the two should match). Before the last Add or Remove: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_before_view')|0]#!. Add and Remove report after a day: unpause, and this console reopens with the result below. They are hidden while fast mandates are on.",
+  "es": "Controles de prueba de las ranuras de principios y los mandatos del bloque de poder. Ranuras de tecnología: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_tech_principle_slots')|0]#!. Ranuras del bloque: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!.\\n\\nMandatos: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_by_trigger')|0]#! según la condición, #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_by_link')|0]#! según el vínculo de valor (los dos deberían coincidir). Antes del último Añadir o Quitar: #v [ROOT.GetCountry.MakeScope.ScriptValue('te_debug_pb_mandates_before_view')|0]#!. Añadir y Quitar informan pasado un día: reanuda la partida y esta consola se reabre con el resultado abajo. Quedan ocultos mientras los mandatos rápidos están activados."
  },
  "te_debug_pb.1.e": {
   "en": "One fewer technology slot",
@@ -22430,6 +23470,46 @@
  "te_debug_pb.1.f": {
   "en": "Fired from the console only.",
   "es": "Solo se lanza desde la consola."
+ },
+ "te_debug_pb.1.f_add_cap": {
+  "en": "Last test: Add at the cap of 5 changed nothing, as expected. Remove one, or let one be spent, and try again.",
+  "es": "Última prueba: Añadir en el tope de 5 no cambió nada, como se esperaba. Quita uno, o deja que se gaste uno, y vuelve a probar."
+ },
+ "te_debug_pb.1.f_add_none": {
+  "en": "Last test: Add changed nothing below the cap. Either add_power_bloc_mandate or this test is broken, so Remove's result tells us nothing.",
+  "es": "Última prueba: Añadir no cambió nada por debajo del tope. O bien add_power_bloc_mandate o esta prueba está rota, así que el resultado de Quitar no nos dice nada."
+ },
+ "te_debug_pb.1.f_add_ok": {
+  "en": "Last test: Add worked, one more mandate.",
+  "es": "Última prueba: Añadir funcionó, un mandato más."
+ },
+ "te_debug_pb.1.f_remove_floor": {
+  "en": "Last test: Remove with no mandates changed nothing. The count stays at 0.",
+  "es": "Última prueba: Quitar sin mandatos no cambió nada. La cuenta se mantiene en 0."
+ },
+ "te_debug_pb.1.f_remove_negative": {
+  "en": "Last test: Remove with no mandates took the count below 0.",
+  "es": "Última prueba: Quitar sin mandatos dejó la cuenta por debajo de 0."
+ },
+ "te_debug_pb.1.f_remove_none": {
+  "en": "Last test: Remove changed nothing, so a negative value is ignored. Trust this only if Add worked.",
+  "es": "Última prueba: Quitar no cambió nada, así que se ignora un valor negativo. Fíate de esto solo si Añadir funcionó."
+ },
+ "te_debug_pb.1.f_remove_ok": {
+  "en": "Last test: Remove worked, one fewer mandate.",
+  "es": "Última prueba: Quitar funcionó, un mandato menos."
+ },
+ "te_debug_pb.1.f_unexpected": {
+  "en": "Last test: the count moved in a way the test doesn't expect (see the counts above and TE_DEBUG_PB_MANDATE in debug.log). A mandate may have been earned during the day; run it again.",
+  "es": "Última prueba: la cuenta se movió de un modo que la prueba no espera (consulta las cuentas de arriba y TE_DEBUG_PB_MANDATE en debug.log). Puede que se haya ganado un mandato durante el día; ejecútala otra vez."
+ },
+ "te_debug_pb.1.g": {
+  "en": "Add one mandate",
+  "es": "Añadir un mandato"
+ },
+ "te_debug_pb.1.h": {
+  "en": "Remove one mandate",
+  "es": "Quitar un mandato"
  },
  "te_debug_pb.1.l": {
   "en": "Toggle fast mandates",
@@ -22440,8 +23520,8 @@
   "es": "Cerrar"
  },
  "te_debug_pb.1.t": {
-  "en": "Power Bloc Slots Test Console",
-  "es": "Consola de pruebas de ranuras del bloque de poder"
+  "en": "Power Bloc Test Console",
+  "es": "Consola de pruebas del bloque de poder"
  },
  "te_debug_resettlement.1.a": {
   "en": "Found a Settlement Authority in our emptiest frontier",
@@ -22480,8 +23560,8 @@
   "es": "Terminar cada hito en curso en el siguiente tic"
  },
  "te_debug_space_race.1.c": {
-  "en": "Force a setback now (progress loss, safety review, cooldown)",
-  "es": "Forzar ahora un revés (pérdida de progreso, revisión de seguridad, enfriamiento)"
+  "en": "Force a setback now (progress loss, safety review)",
+  "es": "Forzar ahora un revés (pérdida de progreso, revisión de seguridad)"
  },
  "te_debug_space_race.1.d": {
   "en": "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\\n\\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel.",
@@ -22524,20 +23604,20 @@
   "es": "Cerrar"
  },
  "te_debug_space_race.2.a": {
-  "en": "Log every world's record",
-  "es": "Escribir en el log la ficha de cada mundo"
+  "en": "Log every site's record",
+  "es": "Escribir en el log la ficha de cada emplazamiento"
  },
  "te_debug_space_race.2.b": {
-  "en": "Claim the first unclaimed world for us",
-  "es": "Reclamar para nosotros el primer mundo sin reclamar"
+  "en": "Claim the first unclaimed site for us",
+  "es": "Reclamar para nosotros el primer emplazamiento sin reclamar"
  },
  "te_debug_space_race.2.c": {
   "en": "Give our first colony to the largest other great power, as Cede Colony would",
   "es": "Entregar nuestra primera colonia a la mayor de las demás grandes potencias, como haría Ceder colonia"
  },
  "te_debug_space_race.2.d": {
-  "en": "Console-only shortcuts for testing the colony record, which names who holds each world. None of these can happen in normal play.\\n\\nThe log writes one TE_SR_SITES line per world to debug.log. To test a holder dying, annex a country that holds a colony with the console's own annex command, then run the monthly step.",
-  "es": "Atajos solo para consola para probar el registro de colonias, que indica quién posee cada mundo. Ninguno de ellos puede ocurrir en una partida normal.\\n\\nEl registro escribe en debug.log una línea TE_SR_SITES por mundo. Para probar la muerte de un titular, anexiona un país que tenga una colonia con el comando de anexión propio de la consola y ejecuta después el paso mensual."
+  "en": "Console-only shortcuts for testing the colony record, which names who holds each site. None of these can happen in normal play.\\n\\nThe log writes one TE_SR_SITES line per site to debug.log. To test a holder dying, annex a country that holds a colony with the console's own annex command, then run the monthly step.",
+  "es": "Atajos solo para consola para probar el registro de colonias, que indica quién posee cada emplazamiento. Ninguno de ellos puede ocurrir en una partida normal.\\n\\nEl registro escribe en debug.log una línea TE_SR_SITES por emplazamiento. Para probar la muerte de un titular, anexiona un país que tenga una colonia con el comando de anexión propio de la consola y ejecuta después el paso mensual."
  },
  "te_debug_space_race.2.e": {
   "en": "Run the colony record's monthly step now",
@@ -22556,12 +23636,12 @@
   "es": "Consola del registro de colonias"
  },
  "te_debug_space_race.3.a": {
-  "en": "Log our fleets, the fleets bound for each world and every colony's people",
-  "es": "Escribir en el log nuestras flotas, las flotas rumbo a cada mundo y los habitantes de cada colonia"
+  "en": "Log our fleets, the fleets bound for each site and every colony's people",
+  "es": "Escribir en el log nuestras flotas, las flotas rumbo a cada emplazamiento y los habitantes de cada colonia"
  },
  "te_debug_space_race.3.b": {
-  "en": "Send a fleet now to the first world we may target, at no cost",
-  "es": "Enviar ahora una flota al primer mundo que podamos elegir como objetivo, sin coste"
+  "en": "Send a fleet now to the first site we may target, at no cost",
+  "es": "Enviar ahora una flota al primer emplazamiento que podamos elegir como objetivo, sin coste"
  },
  "te_debug_space_race.3.c": {
   "en": "Land every fleet in flight now",
@@ -22615,9 +23695,109 @@
   "en": "Recompute our Extraplanetary Base room now",
   "es": "Recalcular ahora el espacio de nuestra Base extraplanetaria"
  },
+ "te_debug_space_race.4.h": {
+  "en": "Finish every module level we are taking down now",
+  "es": "Terminar ahora cada nivel de módulo que estamos desmontando"
+ },
+ "te_debug_space_race.4.i": {
+  "en": "Run ten years of terraforming at our colonies now",
+  "es": "Ejecutar ahora diez años de terraformación en nuestras colonias"
+ },
  "te_debug_space_race.4.t": {
   "en": "Colony Modules Console",
   "es": "Consola de módulos coloniales"
+ },
+ "te_debug_space_race.5.a": {
+  "en": "Log every site's autonomy, freedom and ties",
+  "es": "Escribir en el log la autonomía, la libertad y los vínculos de cada emplazamiento"
+ },
+ "te_debug_space_race.5.b": {
+  "en": "Set our first colony's autonomy to 80 (asked next month)",
+  "es": "Fijar en 80 la autonomía de nuestra primera colonia (se pide el mes que viene)"
+ },
+ "te_debug_space_race.5.c": {
+  "en": "Let our first colony go now",
+  "es": "Dejar marchar ahora a nuestra primera colonia"
+ },
+ "te_debug_space_race.5.d": {
+  "en": "Console-only shortcuts for testing colony autonomy, free colonies and abandonment under Simple and Full Colonies. The lines go to debug.log as TE_SR_AUTONOMY.",
+  "es": "Atajos solo para consola para probar la autonomía de las colonias, las colonias libres y el abandono con colonias simples y completas. Las líneas van a debug.log como TE_SR_AUTONOMY."
+ },
+ "te_debug_space_race.5.e": {
+  "en": "Supply every free colony",
+  "es": "Abastecer a todas las colonias libres"
+ },
+ "te_debug_space_race.5.f": {
+  "en": "\\\"Tell them they're free. Then tell them who pays for the air.\\\"",
+  "es": "«Diles que son libres. Luego diles quién paga el aire.»"
+ },
+ "te_debug_space_race.5.g": {
+  "en": "Full ties with every free colony we supply (a petition next month)",
+  "es": "Vínculos plenos con cada colonia libre que abastecemos (una petición el mes que viene)"
+ },
+ "te_debug_space_race.5.h": {
+  "en": "Ask whether to abandon our first colony",
+  "es": "Preguntar si abandonar nuestra primera colonia"
+ },
+ "te_debug_space_race.5.t": {
+  "en": "Colony Autonomy Console",
+  "es": "Consola de autonomía de las colonias"
+ },
+ "te_debug_space_race.6.a": {
+  "en": "Log our fleets and every location's forces",
+  "es": "Escribir en el log nuestras flotas y las fuerzas de cada ubicación"
+ },
+ "te_debug_space_race.6.b": {
+  "en": "Add 100 strength of each role to our home fleet at Earth, full",
+  "es": "Añadir 100 de fuerza de cada función a nuestra flota nacional en la Tierra, al completo"
+ },
+ "te_debug_space_race.6.c": {
+  "en": "Land every fleet of ours in transit now",
+  "es": "Hacer aterrizar ahora todas nuestras flotas en tránsito"
+ },
+ "te_debug_space_race.6.d": {
+  "en": "Test the fleets (slice 6): log them, build and move them, and try combat, occupation, interdiction, the ground reserve, and a blockade of Earth. The log lines are tagged TE_SR_FLEET and TE_SR_COMBAT.",
+  "es": "Probar las flotas (fase 6): escribirlas en el log, construirlas y moverlas, y probar el combate, la ocupación, la interdicción, la reserva terrestre y un bloqueo de la Tierra. Las líneas del log llevan las etiquetas TE_SR_FLEET y TE_SR_COMBAT."
+ },
+ "te_debug_space_race.6.e": {
+  "en": "Fill every fleet's propellant and supply",
+  "es": "Llenar el propelente y los suministros de todas las flotas"
+ },
+ "te_debug_space_race.6.f": {
+  "en": "docs/testing/solar-colonies-playtest.md, Fleets.",
+  "es": "docs/testing/solar-colonies-playtest.md, Fleets."
+ },
+ "te_debug_space_race.6.g": {
+  "en": "Raise our fleets' drive by one (a docked fleet refits back)",
+  "es": "Subir en uno el motor de nuestras flotas (una flota atracada se reacondiciona de nuevo)"
+ },
+ "te_debug_space_race.6.h": {
+  "en": "Our first colony's integrity to 0",
+  "es": "La integridad de nuestra primera colonia, a 0"
+ },
+ "te_debug_space_race.6.i": {
+  "en": "Run this month's combat now",
+  "es": "Ejecutar ahora el combate de este mes"
+ },
+ "te_debug_space_race.6.j": {
+  "en": "Occupy our first colony by our strongest enemy, or return it",
+  "es": "Hacer que nuestro enemigo más fuerte ocupe nuestra primera colonia, o devolverla"
+ },
+ "te_debug_space_race.6.m": {
+  "en": "6c: our first fleet that may interdict begins an interdiction (at its price)",
+  "es": "6c: la primera flota nuestra que puede ejercer una interdicción la inicia (a su precio)"
+ },
+ "te_debug_space_race.6.n": {
+  "en": "6d: add 100 strength of each role to our ground reserve",
+  "es": "6d: añadir 100 de fuerza de cada función a nuestra reserva terrestre"
+ },
+ "te_debug_space_race.6.o": {
+  "en": "6d: our strongest enemy puts a fleet of 100 of each role at Earth (a blockade if none of ours is there)",
+  "es": "6d: nuestro enemigo más fuerte pone una flota de 100 de cada función en la Tierra (un bloqueo si no hay ninguna nuestra)"
+ },
+ "te_debug_space_race.6.t": {
+  "en": "Fleets Console",
+  "es": "Consola de flotas"
  },
  "te_debug_un.1.a": {
   "en": "Found the United Nations and seat the powers",
@@ -23587,6 +24767,106 @@
   "en": "Ribbon Strike",
   "es": "Impacto en la cinta"
  },
+ "te_pb_summit.1.a": {
+  "en": "Reaffirm what binds us together.",
+  "es": "Reafirmar lo que nos une."
+ },
+ "te_pb_summit.1.b": {
+  "en": "Open our doors to new members.",
+  "es": "Abrir nuestras puertas a nuevos miembros."
+ },
+ "te_pb_summit.1.c": {
+  "en": "Press our interests abroad, together.",
+  "es": "Defender juntos nuestros intereses en el exterior."
+ },
+ "te_pb_summit.1.d": {
+  "en": "At our invitation, the heads of government of every member have gathered in our capital. Each delegation has arrived with its own list of demands, but our standing in the bloc lets us set the agenda, and the communiqué will commit them all to whatever we put first.",
+  "es": "A invitación nuestra, los jefes de gobierno de todos los miembros se han reunido en nuestra capital. Cada delegación ha llegado con su propia lista de exigencias, pero nuestra posición en el bloque nos permite fijar el orden del día, y el comunicado los comprometerá a todos con lo que pongamos primero."
+ },
+ "te_pb_summit.1.d_none": {
+  "en": "The delegations have gathered, but our bloc holds no [concept_power_bloc_mandate] to spend, and without one the members will sign nothing binding. The summit can only adjourn.",
+  "es": "Las delegaciones se han reunido, pero nuestro bloque no tiene ningún [concept_power_bloc_mandate|l] que gastar, y sin uno los miembros no firmarán nada vinculante. La cumbre solo puede aplazarse."
+ },
+ "te_pb_summit.1.e": {
+  "en": "Open our harbors and borders to one another.",
+  "es": "Abrir nuestros puertos y fronteras entre nosotros."
+ },
+ "te_pb_summit.1.f": {
+  "en": "\\\"Every capital wants its own paragraph,\\\" the protocol chief muttered, redrawing the seating plan for the third time that morning.",
+  "es": "—Cada capital quiere su propio párrafo —rezongó el jefe de protocolo, rehaciendo el plano de asientos por tercera vez aquella mañana."
+ },
+ "te_pb_summit.1.g": {
+  "en": "Let our people see who leads this bloc.",
+  "es": "Dejar que nuestro pueblo vea quién lidera este bloque."
+ },
+ "te_pb_summit.1.h": {
+  "en": "Adjourn without a communiqué.",
+  "es": "Clausurar la sesión sin comunicado."
+ },
+ "te_pb_summit.1.i": {
+  "en": "Drill our armies side by side.",
+  "es": "Entrenar a nuestros ejércitos codo con codo."
+ },
+ "te_pb_summit.1.j": {
+  "en": "Convene a council of our faith.",
+  "es": "Convocar un concilio de nuestra fe."
+ },
+ "te_pb_summit.1.j_buddhist": {
+  "en": "Call a Sangiti of the bloc's monastic orders.",
+  "es": "Convocar un Sangiti de las órdenes monásticas del bloque."
+ },
+ "te_pb_summit.1.j_catholic": {
+  "en": "Call an ecumenical council of the bloc's bishops.",
+  "es": "Convocar un concilio ecuménico de los obispos del bloque."
+ },
+ "te_pb_summit.1.j_hindu": {
+  "en": "Convene a Dharma Sansad of the bloc's teachers.",
+  "es": "Convocar un Dharma Sansad de los maestros del bloque."
+ },
+ "te_pb_summit.1.j_islamic": {
+  "en": "Gather the bloc's ulama in council.",
+  "es": "Reunir en concilio a los ulemas del bloque."
+ },
+ "te_pb_summit.1.j_jewish": {
+  "en": "Convene a rabbinical council for the bloc.",
+  "es": "Convocar un consejo rabínico para el bloque."
+ },
+ "te_pb_summit.1.j_orthodox": {
+  "en": "Convene a holy synod of the bloc's churches.",
+  "es": "Convocar un santo sínodo de las iglesias del bloque."
+ },
+ "te_pb_summit.1.j_protestant": {
+  "en": "Summon a synod of the bloc's churches.",
+  "es": "Convocar un sínodo de las iglesias del bloque."
+ },
+ "te_pb_summit.1.j_sikh": {
+  "en": "Call a Sarbat Khalsa of the bloc's congregations.",
+  "es": "Convocar un Sarbat Khalsa de las congregaciones del bloque."
+ },
+ "te_pb_summit.1.k": {
+  "en": "Bring our tariffs and customs into line.",
+  "es": "Armonizar nuestros aranceles y aduanas."
+ },
+ "te_pb_summit.1.l": {
+  "en": "Hold an imperial conference.",
+  "es": "Celebrar una Conferencia Imperial."
+ },
+ "te_pb_summit.1.m": {
+  "en": "Convene a congress of the movement.",
+  "es": "Convocar un congreso del movimiento."
+ },
+ "te_pb_summit.1.n": {
+  "en": "Celebrate the culture we share.",
+  "es": "Celebrar la cultura que compartimos."
+ },
+ "te_pb_summit.1.o": {
+  "en": "Convene a conference of ambassadors.",
+  "es": "Convocar una conferencia de embajadores."
+ },
+ "te_pb_summit.1.t": {
+  "en": "A Summit of the Bloc",
+  "es": "Una cumbre del bloque"
+ },
  "te_peg.1.a": {
   "en": "Raise the rate until the gold comes back.",
   "es": "Subir el tipo hasta que vuelva el oro."
@@ -23744,12 +25024,12 @@
   "es": "El mar profundo está abierto a los negocios."
  },
  "te_seabed.3.d_coastal": {
-  "en": "[SCOPE.sCountry('te_seabed_first_claimant').GetName] has proved that the metal nodules of the abyssal plains can be lifted at a profit. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among the coastal countries with $abyssal_plain_mining$. A licence a mine holds is kept for good, so the sooner we can mine, the more of the seabed stays ours.",
-  "es": "[SCOPE.sCountry('te_seabed_first_claimant').GetName] ha demostrado que los nódulos metálicos de las llanuras abisales pueden extraerse con beneficio. Cada cuenca oceánica contiene una reserva fija de [Concept('concept_seabed_licence', 'licencias del lecho marino')], que se reparte cada enero según el peso de la reclamación entre los países costeros con $abyssal_plain_mining$. Una licencia que tiene una mina se conserva para siempre, así que cuanto antes podamos minar, más lecho marino seguirá siendo nuestro."
+  "en": "[SCOPE.sCountry('te_seabed_first_claimant').GetName] has proved that the metal nodules of the abyssal plains can be lifted at a profit. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among every coastal country. Until we have $abyssal_plain_mining$ our claim weight counts at [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] and our share waits for us: no one else can build on it. A license a mine holds is kept for good, so the sooner we can mine, the more of the seabed stays ours.",
+  "es": "[SCOPE.sCountry('te_seabed_first_claimant').GetName] ha demostrado que los nódulos metálicos de las llanuras abisales pueden extraerse con beneficio. Cada cuenca oceánica contiene una reserva fija de [Concept('concept_seabed_licence', 'licencias del lecho marino')], que se reparte cada enero según el peso de la reclamación entre todos los países costeros. Hasta que tengamos $abyssal_plain_mining$, nuestro peso de reclamación cuenta al [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] y nuestra parte nos espera: nadie más puede construir sobre ella. Una licencia que tiene una mina se conserva para siempre, así que cuanto antes podamos minar, más lecho marino seguirá siendo nuestro."
  },
  "te_seabed.3.d_first": {
-  "en": "Our contractors have proved that the metal nodules of the abyssal plains can be lifted at a profit, and $building_ocean_mine$ levels can now rise along our coasts. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among the coastal countries with $abyssal_plain_mining$. Every claimant that follows will take its share of the pools from those already there.",
-  "es": "Nuestros contratistas han demostrado que los nódulos metálicos de las llanuras abisales pueden extraerse con beneficio, y ahora pueden construirse niveles de $building_ocean_mine$ a lo largo de nuestras costas. Cada cuenca oceánica contiene una reserva fija de [Concept('concept_seabed_licence', 'licencias del lecho marino')], que se reparte cada enero según el peso de la reclamación entre los países costeros con $abyssal_plain_mining$. Cada reclamante que llegue después tomará su parte de las reservas de los que ya estén allí."
+  "en": "Our contractors have proved that the metal nodules of the abyssal plains can be lifted at a profit, and $building_ocean_mine$ levels can now rise along our coasts. Each ocean basin holds a fixed pool of [concept_seabed_licence]s, shared out every January by claim weight among every coastal country. Those still without $abyssal_plain_mining$ count at [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] of their weight, and their shares wait for them, so we can claim only what our weight wins against all of theirs. Each that follows turns its waiting share into claims of its own.",
+  "es": "Nuestros contratistas han demostrado que los nódulos metálicos de las llanuras abisales pueden extraerse con beneficio, y ahora pueden construirse niveles de $building_ocean_mine$ a lo largo de nuestras costas. Cada cuenca oceánica contiene una reserva fija de [Concept('concept_seabed_licence', 'licencias del lecho marino')], que se reparte cada enero según el peso de la reclamación entre todos los países costeros. Los que aún no tienen $abyssal_plain_mining$ cuentan al [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] de su peso, y sus partes los esperan, así que solo podemos reclamar lo que nuestro peso gane frente a todos los suyos. Cada uno que llegue convertirá su parte en espera en reclamaciones propias."
  },
  "te_seabed.3.d_landlocked": {
   "en": "[SCOPE.sCountry('te_seabed_first_claimant').GetName] has proved that the metal nodules of the abyssal plains can be lifted at a profit. The seabed's licenses go only to countries with a coast: without one, we can only watch the coastal powers divide the ocean floor among themselves.",
@@ -25287,6 +26567,30 @@
   "en": "A Moratorium on Anti-Satellite Tests",
   "es": "Una moratoria de las pruebas antisatélite"
  },
+ "un_events.42.a": {
+  "en": "Table the convention.",
+  "es": "Presentar la convención."
+ },
+ "un_events.42.c": {
+  "en": "Keep our fleets' hands free.",
+  "es": "Dejar las manos libres a nuestras flotas."
+ },
+ "un_events.42.d": {
+  "en": "The delegates ask us to table a convention on the settlement of outer space. It would not forbid anything a fleet can do, but its parties would pay twice the price for destroying a colony or taking a free one by force, and gain standing in the world for their restraint.",
+  "es": "Los delegados nos piden que presentemos una convención sobre el asentamiento en el espacio exterior. No prohibiría nada de lo que una flota puede hacer, pero sus partes pagarían el doble por destruir una colonia o tomar una libre por la fuerza, y ganarían posición en el mundo por su moderación."
+ },
+ "un_events.42.d_cause_seizure": {
+  "en": "Marines of [SCOPE.sCountry('un_dkt_subject').GetName] have taken a colony by force, or its fleet has left one in ruins, and the delegations with settlers of their own are asking whose colony will be next.\\n\\n",
+  "es": "Unos infantes de marina de [SCOPE.sCountry('un_dkt_subject').GetName] han tomado una colonia por la fuerza, o su flota ha dejado una en ruinas, y las delegaciones con colonos propios se preguntan de quién será la próxima.\\n\\n"
+ },
+ "un_events.42.f": {
+  "en": "The Outer Space Treaty of 1967 forbade any nation to claim a celestial body. The Moon Agreement of 1979 went further, and only a handful of states ever ratified it. None of them had a spacecraft.",
+  "es": "El Tratado sobre el Espacio Ultraterrestre de 1967 prohibió a toda nación reclamar un cuerpo celeste. El Acuerdo sobre la Luna de 1979 fue más lejos, y solo un puñado de Estados lo ratificó. Ninguno tenía una nave espacial."
+ },
+ "un_events.42.t": {
+  "en": "A Convention on the Settlement of Outer Space",
+  "es": "Una convención sobre el asentamiento en el espacio exterior"
+ },
  "un_events.5.a": {
   "en": "Enforce the sanctions strictly.",
   "es": "Aplicar las sanciones con rigor."
@@ -25631,6 +26935,10 @@
   "en": "The General Assembly has received a proposal for a binding Climate Accord from [SCOPE.sCountry('un_vote_proposer').GetName]. A vote in favor commits our country to its terms: the leaders of the markets that put out the most [concept_greenhouse_gas_emissions] must cut them, and the parties that lead no such market are helped to adapt.",
   "es": "La Asamblea General ha recibido de [SCOPE.sCountry('un_vote_proposer').GetName] una propuesta de Acuerdo climático vinculante. Un voto a favor compromete a nuestro país con sus términos: los líderes de los mercados que más [concept_greenhouse_gas_emissions|l] emiten deberán reducirlas, y se ayuda a adaptarse a las partes que no lideran ninguno de esos mercados."
  },
+ "un_vote.1.d_colony_protection": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a convention on the settlement of outer space. A vote in favor commits our country to it: destroying a colony, or closing in on a free one, would cost us twice the infamy and twice the case, and our standing in the world would rise.",
+  "es": "[SCOPE.sCountry('un_vote_proposer').GetName] ha propuesto una convención sobre el asentamiento en el espacio exterior. Un voto a favor compromete a nuestro país con ella: destruir una colonia, o cerrar el cerco sobre una libre, nos costaría el doble de infamia y el doble de fuerza del caso en nuestra contra, y nuestra posición en el mundo subiría."
+ },
  "un_vote.1.d_condemn": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for the formal condemnation of [SCOPE.sCountry('un_vote_target').GetName] for its military aggression. The eyes of the world are upon us - how shall [ROOT.GetCountry.GetName] vote?",
   "es": "[SCOPE.sCountry('un_vote_proposer').GetName] ha presentado ante la Asamblea General una resolución que pide la condena formal de [SCOPE.sCountry('un_vote_target').GetName] por su agresión militar. Los ojos del mundo están puestos en nosotros: ¿cómo votará [ROOT.GetCountry.GetName]?"
@@ -25672,8 +26980,8 @@
   "es": "[SCOPE.sCountry('un_vote_proposer').GetName] ha presentado ante la Asamblea General una moción que pide la expulsión de [SCOPE.sCountry('un_vote_target').GetName] del [concept_un_security_council]. La moción cita abusos recientes del [concept_un_veto|l] y exige que [SCOPE.sCountry('un_vote_target').GetName] renuncie a su escaño de [concept_un_permanent_member|l]. Al ser una [concept_un_resolution_recommendatory|l] no vetable, la moción requiere una #G supermayoría de 2/3#! para aprobarse."
  },
  "un_vote.1.d_expulsion_target": {
-  "en": "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. It needs a #G 2/3 supermajority#! of the members with a vote, and no member presumes in its favour: each weighs our veto record against our standing and our service to the United Nations. The Delegations list in the chamber shows where they lean.",
-  "es": "Se ha presentado ante la Asamblea General una moción descabellada: [SCOPE.sCountry('un_vote_proposer').GetName] pide nuestra expulsión del [concept_un_security_council], citando nuestro ejercicio de principios del [concept_un_veto|l]. Necesita una #G supermayoría de 2/3#! de los miembros con voto, y ningún miembro parte de una presunción a su favor: cada uno sopesa nuestro historial de vetos frente a nuestra posición y nuestro servicio a las Naciones Unidas. La lista de Delegaciones de la cámara muestra hacia dónde se inclinan."
+  "en": "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. It needs a #G 2/3 supermajority#! of the members with a vote, and no member presumes in its favor: each weighs our veto record against our standing and our service to the United Nations. The General Assembly's Delegations list, on the UN tab of the Diplomacy panel, shows where they lean.",
+  "es": "Se ha presentado ante la Asamblea General una moción descabellada: [SCOPE.sCountry('un_vote_proposer').GetName] pide nuestra expulsión del [concept_un_security_council], citando nuestro ejercicio de principios del [concept_un_veto|l]. Necesita una #G supermayoría de 2/3#! de los miembros con voto, y ningún miembro parte de una presunción a su favor: cada uno sopesa nuestro historial de vetos frente a nuestra posición y nuestro servicio a las Naciones Unidas. La lista de Delegaciones de la Asamblea General, en la pestaña de la ONU del panel Diplomacia, muestra hacia dónde se inclinan."
  },
  "un_vote.1.d_food_reserve": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has moved that the General Assembly found a World Food Reserve. Members with a Strategic Reserve could pledge part of their grain to it, and every new UN aid mission would draw on the pledges to feed the state it serves. The UN would also answer for hunger: while the Reserve stands, famine among the members' people would weigh on its authority, and the absence of famine would add to it.",
@@ -25806,6 +27114,10 @@
  "un_vote.1.t_climate": {
   "en": "Climate Accord Vote",
   "es": "Votación sobre el Acuerdo climático"
+ },
+ "un_vote.1.t_colony_protection": {
+  "en": "Outer Space Settlement Convention Vote",
+  "es": "Votación de la convención sobre el asentamiento en el espacio exterior"
  },
  "un_vote.1.t_condemn": {
   "en": "Condemnation Resolution Vote",
@@ -25978,6 +27290,14 @@
  "un_vote.2.d_climate_passed": {
   "en": "The Climate Accord has been adopted by the General Assembly with a decisive majority. Binding emissions targets are now enshrined in international law. A landmark moment - though the hard work of implementation lies ahead.",
   "es": "La Asamblea General ha adoptado el Acuerdo climático por una mayoría decisiva. Los objetivos de emisiones vinculantes quedan ahora consagrados en el derecho internacional. Un momento histórico, aunque el duro trabajo de la aplicación queda por delante."
+ },
+ "un_vote.2.d_colony_protection_failed": {
+  "en": "The Convention on the Settlement of Outer Space has failed to pass the General Assembly. A colony destroyed costs what it costs, and no more.",
+  "es": "La Convención sobre el asentamiento en el espacio exterior no ha logrado aprobarse en la Asamblea General. Destruir una colonia cuesta lo que cuesta, y no más."
+ },
+ "un_vote.2.d_colony_protection_passed": {
+  "en": "The General Assembly has adopted the Convention on the Settlement of Outer Space, under the Committee on the Peaceful Uses of Outer Space. Ratifying members bind themselves to pay dearly for any colony their fleets destroy or any free colony they take.",
+  "es": "La Asamblea General ha adoptado la Convención sobre el asentamiento en el espacio exterior, bajo la Comisión sobre la Utilización del Espacio Ultraterrestre con Fines Pacíficos. Los miembros que la ratifican se obligan a pagar caro por cualquier colonia que destruyan sus flotas o cualquier colonia libre que tomen."
  },
  "un_vote.2.d_condemn_failed": {
   "en": "The condemnation resolution against [SCOPE.sCountry('un_vote_target').GetName] has failed to achieve a majority in the General Assembly. Divided loyalties and geopolitical calculations have shielded the aggressor from international censure. A dark day for the international order.",

@@ -63,6 +63,10 @@
   "en": "Restless Colonial Subject",
   "de": "Unruhiges koloniales Klientelland"
  },
+ "concept_colonial_subject_desc": {
+  "en": "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts.",
+  "de": "Ein [concept_subject] von uns oder von einem unserer Klientelländer, das als kolonial gilt: jede Kolonie und jede Handelsgesellschaft sowie ein Protektorat, das durch das Meer von der Hauptstadt seines Suzeräns getrennt ist und dessen Bevölkerung keine [concept_heritage_trait] mit unserer teilt. Jedes davon hält den [concept_journal_entry] „Kolonialreich“ in Gang. Eine zum Dominion erhobene Kolonie zählt nicht mehr."
+ },
  "covert_comms_disruption_action_pact_desc": {
   "en": "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness.",
   "de": "Wir stören die militärische Kommunikation von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und schwächen damit deren Kampfkraft."
@@ -91,6 +95,10 @@
   "en": "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')].",
   "de": "Wir fördern verdeckt unsere Ideologie in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und unterstützen dabei sympathisierende [Concept('concept_political_movement', 'Protestbewegungen')]."
  },
+ "covert_incite_autonomy_action_pact_desc": {
+  "en": "We are inciting autonomy in the colonies of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir schüren in den Kolonien [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')] das Streben nach Autonomie."
+ },
  "covert_industrial_espionage_action_pact_desc": {
   "en": "We are conducting industrial espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], stealing their production secrets.",
   "de": "Wir betreiben Industriespionage gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und stehlen deren Produktionsgeheimnisse."
@@ -115,6 +123,10 @@
   "en": "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir finanzieren einen Regierungswechsel in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
+ "covert_sabotage_colony_action_pact_desc": {
+  "en": "We are sabotaging the most populous colony of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir sabotieren die bevölkerungsreichste Kolonie [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]."
+ },
  "covert_secure_material_action_pact_desc": {
   "en": "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir suchen nach frei verfügbarem Nuklearmaterial in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
@@ -122,6 +134,10 @@
  "covert_space_espionage_action_pact_desc": {
   "en": "We are stealing space program designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir stehlen Raumfahrtprogramm-Entwürfe von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_survey_defences_action_pact_desc": {
+  "en": "We are surveying the colony defenses of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir erkunden die Kolonieverteidigung [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]."
  },
  "decolonize_diplo_action": {
   "en": "Decolonize",
@@ -412,16 +428,16 @@
   "de": "UN"
  },
  "te_diplomacy_tab_un_locked_tt": {
-  "en": "#b $je_united_nations$#!\\nNot open yet. It opens once:\\n",
-  "de": "#b $je_united_nations$#!\\nNoch nicht freigeschaltet. Der Reiter wird freigeschaltet, sobald:\\n"
+  "en": "#b $te_diplomacy_tab_un$#!\\nNot open yet. It opens once:\\n",
+  "de": "#b $te_diplomacy_tab_un$#!\\nNoch nicht freigeschaltet. Der Reiter wird freigeschaltet, sobald:\\n"
  },
  "te_diplomacy_tab_un_tt": {
-  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers. These are the journal entry's own panels: a change made here shows there too.",
-  "de": "Die Generalversammlung, Ihr Ansehen und die Autorität der UN, mit allen Aktionen, die der Journaleintrag bietet. Dies sind die eigenen Bereiche des Journaleintrags: Eine hier vorgenommene Änderung erscheint auch dort."
+  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers.",
+  "de": "Die Generalversammlung, Ihr Ansehen und die Autorität der UN, mit allen Aktionen, die der Journaleintrag bietet."
  },
  "te_diplomacy_un_open_journal_tt": {
-  "en": "Opens $je_united_nations$ in the journal.",
-  "de": "Öffnet $je_united_nations$ im Journal."
+  "en": "Opens $je_united_nations$ in the journal, which shows these same panels.",
+  "de": "Öffnet $je_united_nations$ im Journal, das dieselben Bereiche zeigt."
  },
  "te_diplomacy_un_tab_status_header": {
   "en": "Status",

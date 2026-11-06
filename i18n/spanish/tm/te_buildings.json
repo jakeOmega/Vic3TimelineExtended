@@ -140,8 +140,8 @@
   "es": "Instalación de antimateria en construcción"
  },
  "building_antimatter_sub_slots_tt": {
-  "en": "Has available [concept_antimatter_facility] slots (including levels [concept_under_construction])",
-  "es": "Tiene espacios disponibles de [concept_antimatter_facility|l] (incluidos los niveles [concept_under_construction|l])"
+  "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "es": "Un espacio libre de [concept_antimatter_facility|l]: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! libres en todo el país (los niveles [concept_under_construction|l] cuentan como ocupados)"
  },
  "building_antimatter_warhead_plant": {
   "en": "Antimatter Warhead Plant",
@@ -956,8 +956,8 @@
   "es": "Estación de transferencia de red"
  },
  "building_grid_transfer_station_desc": {
-  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
-  "es": "Conecta este Estado con su [concept_power_grid|l]: nuestras demás estaciones en la misma [concept_market_area|l] y las estaciones a las que llegan por cable submarino ($building_grid_hvdc_interconnector$) o mediante un $grid_interconnection_agreement$. Cada mes la red reparte su $electricity$ para que todos los Estados conectados tengan la misma proporción entre oferta y demanda. Un Estado con energía de sobra la envía a la red como @grid_power! $grid_power$, y un Estado con déficit toma $grid_power$ y lo convierte de nuevo en $electricity$, perdiendo algo por el camino (#b Eficiencia de transmisión de la red#!). Una red no saca más de lo que mete. Una por Estado. Nuestra primera estación en un área de mercado puede ir en cualquiera de nuestros Estados de allí; cada una de las siguientes debe limitar con un Estado nuestro que ya tenga una. Siempre subvencionada."
+  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid moves $electricity$ from states where it is cheap to states where it is dear, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
+  "es": "Conecta este Estado con su [concept_power_grid|l]: nuestras demás estaciones en la misma [concept_market_area|l] y las estaciones a las que llegan por cable submarino ($building_grid_hvdc_interconnector$) o mediante un $grid_interconnection_agreement$. Cada mes la red traslada $electricity$ de los Estados donde es barata a los Estados donde es cara, hasta que se vende a un mismo precio donde se envía y a ese precio dividido entre la #b Eficiencia de transmisión de la red#! donde se recibe. Una estación que envía $electricity$ cobra por ella en @grid_power! $grid_power$ y una que recibe paga en $grid_power$, cada una al precio de la red, de modo que una estación cubre más o menos lo que cuestan sus bienes. Se pierde algo de energía por el camino. Una red no saca más de lo que mete. Una por Estado. Nuestra primera estación en un área de mercado puede ir en cualquiera de nuestros Estados de allí; cada una de las siguientes debe limitar con un Estado nuestro que ya tenga una. Siempre subvencionada."
  },
  "building_grid_undersea_cable_range_add": {
   "en": "Undersea Cable Range",
@@ -1202,6 +1202,10 @@
  "building_ingen_biological_preserve": {
   "en": "InGen Biological Preserve",
   "es": "Reserva biológica de InGen"
+ },
+ "building_ingen_biological_preserve_desc": {
+  "en": "InGen's island preserve, stocked with animals that were extinct until the company rebuilt their DNA. Visitors cross the world to see them from behind electrified fences, and the same laboratories breed hardier livestock for the mainland.",
+  "es": "La reserva insular de InGen, poblada de animales que estaban extintos hasta que la empresa reconstruyó su ADN. Los visitantes cruzan el mundo para verlos tras vallas electrificadas, y los mismos laboratorios crían ganado más resistente para el continente."
  },
  "building_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
@@ -1639,6 +1643,10 @@
   "en": "Ground-to-Orbit Battery",
   "es": "Batería tierra-órbita"
  },
+ "building_orbital_defense_battery_desc": {
+  "en": "Interceptor silos, and later lasers, aimed at the sky over our own territory. Each level fires on every enemy fleet in Earth orbit every month, by its production method, from states we control. Ground lasers also sweep small debris out of low orbit while we are at peace.",
+  "es": "Silos de interceptores y, más adelante, láseres, apuntados al cielo sobre nuestro propio territorio. Cada nivel dispara cada mes contra todas las flotas enemigas en órbita terrestre, según su método de producción, desde Estados que controlamos. Los láseres terrestres también barren los restos pequeños de la órbita baja mientras estemos en paz."
+ },
  "building_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
   "es": "Terminal Orient Express Sirkeci"
@@ -1759,6 +1767,10 @@
   "en": "Public Housing",
   "es": "Vivienda pública"
  },
+ "building_public_housing_desc": {
+  "en": "Dwellings the state builds and runs, so a city can grow without [concept_migration_crowding] turning migrants away. Each staffed level adds [concept_urban_engineering] to its [concept_state], more on each later method, and each point houses #v 1,000#! more people before crowding sets in, multiplied by the state's $state_migration_crowding_density_mult$. Technology sets how many levels a state can hold. A state below its crowding threshold gains nothing from it.",
+  "es": "Viviendas que el Estado construye y gestiona para que una ciudad pueda crecer sin que el [concept_migration_crowding|l] rechace a los migrantes. Cada nivel con personal añade [concept_urban_engineering|l] a su [concept_state|l], más con cada método posterior, y cada punto aloja a #v 1 000#! personas más antes de que aparezca el hacinamiento, multiplicado por $state_migration_crowding_density_mult$ del Estado. La tecnología fija cuántos niveles puede albergar un Estado. Un Estado por debajo de su umbral de hacinamiento no obtiene nada de él."
+ },
  "building_putilov_works": {
   "en": "Putilov Works",
   "es": "Fábricas Putilov"
@@ -1798,6 +1810,10 @@
  "building_rejoovenesense_compound": {
   "en": "RejoovenEsense Compound",
   "es": "Complejo RejoovenEsense"
+ },
+ "building_rejoovenesense_compound_desc": {
+  "en": "RejoovenEsense's walled campus, where its staff live and work under guard. Its clinics sell treatments that halt aging and wind the body back toward its prime to anyone who can pay, and its laboratories work on a pill that promises the same to everyone.",
+  "es": "El campus amurallado de RejoovenEsense, donde su personal vive y trabaja bajo vigilancia. Sus clínicas venden a quien pueda pagar tratamientos que detienen el envejecimiento y devuelven el cuerpo a su plenitud, y sus laboratorios trabajan en una píldora que promete lo mismo a todo el mundo."
  },
  "building_rekal_hq": {
   "en": "Rekal Memory Center",
@@ -1862,6 +1878,10 @@
  "building_robotic_or_ai_managed_bool": {
   "en": "Robotic or AI-Managed",
   "es": "Robótico o gestionado por IA"
+ },
+ "building_robotic_or_ai_managed_bool_desc": {
+  "en": "Robots or AI do the work people did in this building. Its levels count toward our automated share, on which $law_robot_tax$ and $law_automation_dividend$ pay out, and $law_human_labor_quotas$ withdraws the [concept_production_method].",
+  "es": "Robots o IA hacen el trabajo que hacían las personas en este edificio. Sus niveles cuentan para nuestra proporción automatizada, de la que dependen los pagos de $law_robot_tax$ y de $law_automation_dividend$, y $law_human_labor_quotas$ retira el [concept_production_method|l]."
  },
  "building_robotics_industry": {
   "en": "Robotics Industry",
@@ -2052,8 +2072,8 @@
   "es": "Receptor de energía solar"
  },
  "building_solar_receiver_slots_tt": {
-  "en": "Has available Solar Receiver slots (including levels [concept_under_construction])",
-  "es": "Tiene espacios disponibles de receptor de energía solar (incluidos los niveles [concept_under_construction|l])"
+  "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "es": "Un espacio libre de receptor de energía solar: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! libres en todo el país (los niveles [concept_under_construction|l] cuentan como ocupados)"
  },
  "building_solar_receiver_throughput_add_desc": {
   "en": "A bonus or penalty to both input and output of $building_solar_receiver$ buildings",
@@ -2066,6 +2086,10 @@
  "building_space_command": {
   "en": "Space Command",
   "es": "Mando espacial"
+ },
+ "building_space_command_desc": {
+  "en": "The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep multiplies its maintenance goods.",
+  "es": "Los astilleros, las tripulaciones y el personal que construyen y operan los barcos de guerra de una nación en el espacio. Cada nivel genera cada mes fuerza de la flota, según su método de producción, y el mantenimiento de las flotas multiplica sus bienes de mantenimiento."
  },
  "building_space_elevator": {
   "en": "Space Elevator",
@@ -2159,6 +2183,10 @@
   "en": "$sr_site_name_daedalus$ Colony",
   "es": "Colonia de $sr_site_name_daedalus$"
  },
+ "building_sr_site_daedalus_desc": {
+  "en": "The colony at $sr_site_name_daedalus$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_daedalus$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_enceladus": {
   "en": "$sr_site_name_enceladus$ Colony",
   "es": "Colonia de $sr_site_name_enceladus$"
@@ -2235,6 +2263,10 @@
   "en": "$sr_site_name_imbrium$ Colony",
   "es": "Colonia de $sr_site_name_imbrium$"
  },
+ "building_sr_site_imbrium_desc": {
+  "en": "The colony at $sr_site_name_imbrium$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_imbrium$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_io": {
   "en": "$sr_site_name_io$ Colony",
   "es": "Colonia de $sr_site_name_io$"
@@ -2254,6 +2286,10 @@
  "building_sr_site_marius_hills": {
   "en": "$sr_site_name_marius_hills$ Colony",
   "es": "Colonia de $sr_site_name_marius_hills$"
+ },
+ "building_sr_site_marius_hills_desc": {
+  "en": "The colony at $sr_site_name_marius_hills$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_marius_hills$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_mercury": {
   "en": "$sr_site_name_mercury$ Colony",
@@ -2307,6 +2343,10 @@
   "en": "$sr_site_name_peary$ Colony",
   "es": "Colonia de $sr_site_name_peary$"
  },
+ "building_sr_site_peary_desc": {
+  "en": "The colony at $sr_site_name_peary$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_peary$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_pluto": {
   "en": "$sr_site_name_pluto$ Colony",
   "es": "Colonia de $sr_site_name_pluto$"
@@ -2351,6 +2391,10 @@
   "en": "$sr_site_name_shackleton$ Colony",
   "es": "Colonia de $sr_site_name_shackleton$"
  },
+ "building_sr_site_shackleton_desc": {
+  "en": "The colony at $sr_site_name_shackleton$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_shackleton$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_titan": {
   "en": "$sr_site_name_titan$ Colony",
   "es": "Colonia de $sr_site_name_titan$"
@@ -2370,6 +2414,10 @@
  "building_sr_site_tranquility": {
   "en": "$sr_site_name_tranquility$ Colony",
   "es": "Colonia de $sr_site_name_tranquility$"
+ },
+ "building_sr_site_tranquility_desc": {
+  "en": "The colony at $sr_site_name_tranquility$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_tranquility$ en la Luna, que se nombra aquí para que el artículo de tratado Ceder colonia pueda trasladarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_triton": {
   "en": "$sr_site_name_triton$ Colony",
@@ -2436,8 +2484,8 @@
   "es": "Centro de reserva estratégica"
  },
  "building_strategic_reserve_hub_desc": {
-  "en": "A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.",
-  "es": "Una instalación nacional de reservas de grano, munición, petróleo, armas pequeñas, artillería, aviones, tanques y productos químicos. Cada nivel aporta +5000 de capacidad por bien de reserva y permite que cada bien entre en la reserva o salga de ella hasta 1000 unidades a la semana, ajustadas por separado para cada bien en la pestaña Reserva del panel Mercado. No se puede demoler y siempre se encuentra en la capital: si la capital cambia, el centro se reconstruye allí gratis. Una potencia extranjera que tome el Estado donde se encuentra lo destruye."
+  "en": "A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, chemicals, and conductive metals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.",
+  "es": "Una instalación nacional de reservas de grano, munición, petróleo, armas pequeñas, artillería, aviones, tanques, productos químicos y metales conductores. Cada nivel aporta +5000 de capacidad por bien de reserva y permite que cada bien entre en la reserva o salga de ella hasta 1000 unidades a la semana, ajustadas por separado para cada bien en la pestaña Reserva del panel Mercado. No se puede demoler y siempre se encuentra en la capital: si la capital cambia, el centro se reconstruye allí gratis. Una potencia extranjera que tome el Estado donde se encuentra lo destruye."
  },
  "building_strategic_reserve_silo": {
   "en": "Strategic Reserve Silo",

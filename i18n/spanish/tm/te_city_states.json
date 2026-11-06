@@ -1,0 +1,178 @@
+{
+ "ADN": {
+  "en": "Aden",
+  "es": "Adén"
+ },
+ "ADN_ADJ": {
+  "en": "Adeni",
+  "es": "adení"
+ },
+ "BOM": {
+  "en": "Bombay",
+  "es": "Bombay"
+ },
+ "BOM_ADJ": {
+  "en": "Bombay",
+  "es": "de Bombay"
+ },
+ "BUE": {
+  "en": "Buenos Aires",
+  "es": "Buenos Aires"
+ },
+ "BUE_ADJ": {
+  "en": "Porteño",
+  "es": "porteño"
+ },
+ "CST": {
+  "en": "Constantinople",
+  "es": "Constantinopla"
+ },
+ "CST_ADJ": {
+  "en": "Constantinopolitan",
+  "es": "constantinopolitano"
+ },
+ "CTG": {
+  "en": "Cartagena",
+  "es": "Cartagena"
+ },
+ "CTG_ADJ": {
+  "en": "Cartagenero",
+  "es": "cartagenero"
+ },
+ "DJI": {
+  "en": "Djibouti",
+  "es": "Yibuti"
+ },
+ "DJI_ADJ": {
+  "en": "Djiboutian",
+  "es": "yibutiano"
+ },
+ "DKR": {
+  "en": "Dakar",
+  "es": "Dakar"
+ },
+ "DKR_ADJ": {
+  "en": "Dakarois",
+  "es": "dakarense"
+ },
+ "DXB": {
+  "en": "Dubai",
+  "es": "Dubái"
+ },
+ "DXB_ADJ": {
+  "en": "Dubai",
+  "es": "dubaití"
+ },
+ "FIU": {
+  "en": "Fiume",
+  "es": "Fiume"
+ },
+ "FIU_ADJ": {
+  "en": "Fiuman",
+  "es": "fiumano"
+ },
+ "GOA": {
+  "en": "Goa",
+  "es": "Goa"
+ },
+ "GOA_ADJ": {
+  "en": "Goan",
+  "es": "goano"
+ },
+ "GYE": {
+  "en": "Guayaquil",
+  "es": "Guayaquil"
+ },
+ "GYE_ADJ": {
+  "en": "Guayaquileño",
+  "es": "guayaquileño"
+ },
+ "HKG": {
+  "en": "Hong Kong",
+  "es": "Hong Kong"
+ },
+ "HKG_ADJ": {
+  "en": "Hong Kong",
+  "es": "hongkonés"
+ },
+ "KUW": {
+  "en": "Kuwait",
+  "es": "Kuwait"
+ },
+ "KUW_ADJ": {
+  "en": "Kuwaiti",
+  "es": "kuwaití"
+ },
+ "LAG": {
+  "en": "Lagos",
+  "es": "Lagos"
+ },
+ "LAG_ADJ": {
+  "en": "Lagosian",
+  "es": "de Lagos"
+ },
+ "MCU": {
+  "en": "Macau",
+  "es": "Macao"
+ },
+ "MCU_ADJ": {
+  "en": "Macanese",
+  "es": "macaense"
+ },
+ "NYC": {
+  "en": "New York",
+  "es": "Nueva York"
+ },
+ "NYC_ADJ": {
+  "en": "New York",
+  "es": "neoyorquino"
+ },
+ "OCL": {
+  "en": "Calabar",
+  "es": "Calabar"
+ },
+ "OCL_ADJ": {
+  "en": "Calabar",
+  "es": "de Calabar"
+ },
+ "PDY": {
+  "en": "Pondicherry",
+  "es": "Pondicherry"
+ },
+ "PDY_ADJ": {
+  "en": "Pondicherrian",
+  "es": "de Pondicherry"
+ },
+ "SFO": {
+  "en": "San Francisco",
+  "es": "San Francisco"
+ },
+ "SFO_ADJ": {
+  "en": "San Franciscan",
+  "es": "sanfranciscano"
+ },
+ "SGP": {
+  "en": "Singapore",
+  "es": "Singapur"
+ },
+ "SGP_ADJ": {
+  "en": "Singaporean",
+  "es": "singapurense"
+ },
+ "SHG": {
+  "en": "Shanghai",
+  "es": "Shanghái"
+ },
+ "SHG_ADJ": {
+  "en": "Shanghainese",
+  "es": "shanghainés"
+ },
+ "TAN": {
+  "en": "Tangier",
+  "es": "Tánger"
+ },
+ "TAN_ADJ": {
+  "en": "Tangerine",
+  "es": "tangerino"
+ }
+}

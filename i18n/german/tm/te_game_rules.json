@@ -168,8 +168,8 @@
   "de": "Deaktiviert"
  },
  "setting_demographics_disabled_desc": {
-  "en": "No census and no Demographics panel. Wealth Concentration still works.",
-  "de": "Keine Volkszählung und keine Demografie-Tafel. Die Vermögenskonzentration funktioniert weiterhin."
+  "en": "No census and no Demographics panel. [concept_inheritance_concentration] still works.",
+  "de": "Keine Volkszählung und keine Demografie-Tafel. [concept_inheritance_concentration] funktioniert weiterhin."
  },
  "setting_demographics_display_only": {
   "en": "Display only",
@@ -240,8 +240,8 @@
   "de": "Globale Gemeingüter aktiviert"
  },
  "setting_global_commons_enabled_desc": {
-  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year among the countries with Abyssal Plain Mining, and every $building_ocean_mine$ level needs one. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
-  "de": "Der Meeresboden ist ein Gemeingut. Jedes der fünf Meeresbecken hat ein festes Kontingent an Meeresbodenlizenzen, das jedes Jahr unter den Ländern mit Tiefseeebenen-Bergbau aufgeteilt wird, und jede Stufe der $building_ocean_mine$ braucht eine. Das Seerechtsübereinkommen der UN kann den Meeresboden regulieren, Forschungsstationen können auf dem Antarktiseis überwintern, und ein Antarktisvertrag kann das Südbecken schließen."
+  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licenses, shared out every year by claim weight among every coastal country, and every $building_ocean_mine$ level needs one. A country's share waits for it until it researches Abyssal Plain Mining, so the first to research it can't take every pool. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
+  "de": "Der Meeresboden ist ein Gemeingut. Jedes der fünf Meeresbecken hat ein festes Kontingent an Meeresbodenlizenzen, das jedes Jahr nach Anspruchsgewicht unter allen Küstenländern aufgeteilt wird, und jede Stufe der $building_ocean_mine$ braucht eine. Der Anteil eines Landes wartet auf es, bis es Tiefseeebenen-Bergbau erforscht, sodass der Erste, der ihn erforscht, nicht jedes Kontingent an sich reißen kann. Das Seerechtsübereinkommen der UN kann den Meeresboden regulieren, Forschungsstationen können auf dem Antarktiseis überwintern, und ein Antarktisvertrag kann das Südbecken schließen."
  },
  "setting_global_warming_disabled": {
   "en": "Global Warming Disabled",
@@ -336,32 +336,32 @@
   "de": "Soziale Bewegungen deaktiviert"
  },
  "setting_social_movements_disabled_desc": {
-  "en": "The social movement journal entries are disabled: civil rights, human augmentation, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
-  "de": "Die Journaleinträge der sozialen Bewegungen sind deaktiviert: Bürgerrechte, menschliche Augmentierung, digitale Rechte und Überwachung, der Übergang zum Post-Scarcity-Zeitalter und die Krise der psychischen Gesundheit, zusammen mit den Ereignissen, die diese Einträge auslösen. Zugehörige Technologien und Gesetze bestehen weiterhin, und soziale Ereignisse, die nicht aus diesen Einträgen stammen, etwa zu Feminismus, LGBTQ+-Rechten, Religion, Antikriegs- und transhumanistischen Bewegungen sowie der Umwelt, treten weiterhin auf."
+  "en": "The social movement journal entries are disabled: civil rights, human augmentation, morphological freedom, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
+  "de": "Die Journaleinträge der sozialen Bewegungen sind deaktiviert: Bürgerrechte, menschliche Augmentierung, morphologische Freiheit, digitale Rechte und Überwachung, der Übergang zur Postknappheit und die Krise der psychischen Gesundheit, zusammen mit den Ereignissen, die diese Einträge auslösen. Zugehörige Technologien und Gesetze bestehen weiterhin, und soziale Ereignisse, die nicht aus diesen Einträgen stammen, etwa zu Feminismus, LGBTQ+-Rechten, Religion, Antikriegs- und transhumanistischen Bewegungen sowie der Umwelt, treten weiterhin auf."
  },
  "setting_social_movements_enabled": {
   "en": "Social Movements Enabled",
   "de": "Soziale Bewegungen aktiviert"
  },
  "setting_social_movements_enabled_desc": {
-  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, human augmentation debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
-  "de": "Die Journaleinträge der sozialen Bewegungen sind aktiv. Während Nationen die entsprechenden Technologien erforschen, durchlaufen sie Bürgerrechte, Debatten um menschliche Augmentierung, digitale Rechte und Überwachung, den Übergang zum Post-Scarcity-Zeitalter und das Bewusstsein für psychische Gesundheit."
+  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, the human augmentation and morphological freedom debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
+  "de": "Die Journaleinträge der sozialen Bewegungen sind aktiv. Während Nationen die entsprechenden Technologien erforschen, durchlaufen sie Bürgerrechte, die Debatten um menschliche Augmentierung und morphologische Freiheit, digitale Rechte und Überwachung, den Übergang zur Postknappheit und das Bewusstsein für psychische Gesundheit."
  },
  "setting_space_race_colonies_full": {
   "en": "[concept_space_race]: Full Colonies",
   "de": "[concept_space_race]: Volle Kolonien"
  },
  "setting_space_race_colonies_full_desc": {
-  "en": "As Simple Colonies. Space fleets, blockades and sieges are planned for this setting; until they arrive it plays as Simple Colonies.",
-  "de": "Wie „Einfache Kolonien“. Raumflotten, Blockaden und Belagerungen sind für diese Einstellung geplant; bis sie kommen, spielt sie sich wie „Einfache Kolonien“."
+  "en": "As Simple Colonies, and wars reach space. Space Command builds warships that fly between the planets, fight, blockade colonies, and seize or destroy them; marines garrison colonies; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. Holding Earth orbit supports your troops on the ground.",
+  "de": "Wie „Einfache Kolonien“, und die Kriege reichen bis in den Weltraum. Das Weltraumkommando baut Kriegsschiffe, die zwischen den Planeten fliegen, kämpfen, Kolonien blockieren und sie einnehmen oder zerstören; Marinesoldaten bilden die Garnison der Kolonien; eine feindliche Flotte in der Erdumlaufbahn stoppt Ihre Starts, bis Sie Ihre Reserve aufbieten, und Boden-Orbit-Batterien feuern auf sie. Die Erdumlaufbahn zu halten unterstützt Ihre Truppen am Boden."
  },
  "setting_space_race_colonies_simple": {
   "en": "[concept_space_race]: Simple Colonies",
   "de": "[concept_space_race]: Einfache Kolonien"
  },
  "setting_space_race_colonies_simple_desc": {
-  "en": "As Races Only, and colonies can change hands: the Cede Colony treaty article sells or gives a colony, and a war can force one.",
-  "de": "Wie „Nur Wettläufe“, und Kolonien können den Besitzer wechseln: Der Vertragsartikel „Kolonie abtreten“ verkauft oder verschenkt eine Kolonie, und ein Krieg kann eine erzwingen."
+  "en": "As Races Only, and colonies are built up, held and lost. A colony fleet travels to the site you choose and claims it when it lands; colonies hold settlers from Earth and modules, and Extraplanetary Bases draw on their room. The Cede Colony treaty article sells or gives a colony, and a war can force one. A colony grows restless as it grows, can demand self-government and break away, can be abandoned, and lives on as a free colony that trades with whoever supplies it.",
+  "de": "Wie „Nur Wettläufe“, und Kolonien werden aufgebaut, gehalten und verloren. Eine Kolonieflotte reist zu dem von Ihnen gewählten Standort und beansprucht ihn bei der Landung; Kolonien beherbergen Siedler von der Erde und Module, und Außerplanetare Stützpunkte beanspruchen ihren Platz. Der Vertragsartikel „Kolonie abtreten“ verkauft oder verschenkt eine Kolonie, und ein Krieg kann eine erzwingen. Eine Kolonie wird mit ihrem Wachstum unruhiger, kann Selbstverwaltung fordern und sich abspalten, kann aufgegeben werden und besteht als freie Kolonie fort, die mit jedem Handel treibt, der sie versorgt."
  },
  "setting_space_race_disabled": {
   "en": "[concept_space_race] Disabled",

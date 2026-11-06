@@ -83,6 +83,10 @@
   "en": "Local Conditions",
   "de": "Lokale Bedingungen"
  },
+ "concept_migration_target_desc": {
+  "en": "A [concept_state] selected as a suitable target for a [concept_mass_migration]. Surrounding $concept_states$ may also see some degree of $concept_immigration$ from a $concept_mass_migration$.\\n\\nTo be $concept_mass_migration_eligible$ for $concept_mass_migrations$ a state needs to be [Concept('concept_incorporated_state', '$concept_incorporated|q$')] and have at least #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access]. Additionally, the $concept_state$ cannot already be the target of a different $concept_mass_migration$ and the $concept_country$'s [GetLawGroup('lawgroup_migration').GetName] and [GetLawGroup('lawgroup_citizenship').GetName] [Concept('concept_law', '$concept_laws|q$')] need to allow $concept_migration$ to happen. A harsh [concept_local_climate] makes a state a less likely target.",
+  "de": "Ein [concept_state], der als geeignetes Ziel für eine [concept_mass_migration] ausgewählt wurde. Umliegende $concept_states$ können durch eine $concept_mass_migration$ ebenfalls in gewissem Maß $concept_immigration$ erfahren.\\n\\nUm für $concept_mass_migrations$ $concept_mass_migration_eligible$ zu sein, muss ein Staat [Concept('concept_incorporated_state', '$concept_incorporated|q$')] sein und mindestens #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access] haben. Zudem darf der $concept_state$ nicht bereits Ziel einer anderen $concept_mass_migration$ sein, und die [Concept('concept_law', '$concept_laws|q$')] zu [GetLawGroup('lawgroup_migration').GetName] und [GetLawGroup('lawgroup_citizenship').GetName] müssen in diesem $concept_country$ $concept_migration$ zulassen. Ein raues [concept_local_climate] macht einen Staat zu einem weniger wahrscheinlichen Ziel."
+ },
  "concept_power_bloc_principle_group_desc": {
   "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')] that support the same theme.",
   "de": "Gruppen aus fünf Stufen von [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')], die dasselbe Thema unterstützen."
@@ -126,6 +130,10 @@
  "goods_input_copper_add": {
   "en": "@copper! $copper$ input",
   "de": "@copper! $copper$-Einsatz"
+ },
+ "goods_input_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ consumed by buildings",
+  "de": "Von Gebäuden verbrauchte Menge: @copper! $copper$"
  },
  "goods_input_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Input",
@@ -218,6 +226,10 @@
  "goods_output_copper_add": {
   "en": "@copper! $copper$ output",
   "de": "@copper! $copper$-Ausstoß"
+ },
+ "goods_output_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ produced by buildings",
+  "de": "Von Gebäuden produzierte Menge: @copper! $copper$"
  },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Output",

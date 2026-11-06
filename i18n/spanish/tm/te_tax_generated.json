@@ -1039,261 +1039,357 @@
   "en": "Taxes the wages of employed pops at 22.5%.",
   "es": "Grava con un 22,5% los salarios de los colectivos empleados."
  },
+ "te_tax_hist_promise_broken_armed_forces": {
+  "en": "A promise to the $ig_armed_forces$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_armed_forces$."
+ },
+ "te_tax_hist_promise_broken_devout": {
+  "en": "A promise to the $ig_devout$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_devout$."
+ },
+ "te_tax_hist_promise_broken_industrialists": {
+  "en": "A promise to the $ig_industrialists$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_industrialists$."
+ },
+ "te_tax_hist_promise_broken_intelligentsia": {
+  "en": "A promise to the $ig_intelligentsia$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_intelligentsia$."
+ },
+ "te_tax_hist_promise_broken_landowners": {
+  "en": "A promise to the $ig_landowners$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_landowners$."
+ },
+ "te_tax_hist_promise_broken_petty_bourgeoisie": {
+  "en": "A promise to the $ig_petty_bourgeoisie$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_petty_bourgeoisie$."
+ },
+ "te_tax_hist_promise_broken_rural_folk": {
+  "en": "A promise to the $ig_rural_folk$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_rural_folk$."
+ },
+ "te_tax_hist_promise_broken_trade_unions": {
+  "en": "A promise to the $ig_trade_unions$ was broken.",
+  "es": "Se incumplió una promesa al grupo $ig_trade_unions$."
+ },
+ "te_tax_hist_promise_kept_armed_forces": {
+  "en": "A promise to the $ig_armed_forces$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_armed_forces$."
+ },
+ "te_tax_hist_promise_kept_devout": {
+  "en": "A promise to the $ig_devout$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_devout$."
+ },
+ "te_tax_hist_promise_kept_industrialists": {
+  "en": "A promise to the $ig_industrialists$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_industrialists$."
+ },
+ "te_tax_hist_promise_kept_intelligentsia": {
+  "en": "A promise to the $ig_intelligentsia$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_intelligentsia$."
+ },
+ "te_tax_hist_promise_kept_landowners": {
+  "en": "A promise to the $ig_landowners$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_landowners$."
+ },
+ "te_tax_hist_promise_kept_petty_bourgeoisie": {
+  "en": "A promise to the $ig_petty_bourgeoisie$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_petty_bourgeoisie$."
+ },
+ "te_tax_hist_promise_kept_rural_folk": {
+  "en": "A promise to the $ig_rural_folk$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_rural_folk$."
+ },
+ "te_tax_hist_promise_kept_trade_unions": {
+  "en": "A promise to the $ig_trade_unions$ was kept.",
+  "es": "Se cumplió una promesa al grupo $ig_trade_unions$."
+ },
+ "te_tax_hist_promise_renegotiated_armed_forces": {
+  "en": "A promise to the $ig_armed_forces$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_armed_forces$."
+ },
+ "te_tax_hist_promise_renegotiated_devout": {
+  "en": "A promise to the $ig_devout$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_devout$."
+ },
+ "te_tax_hist_promise_renegotiated_industrialists": {
+  "en": "A promise to the $ig_industrialists$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_industrialists$."
+ },
+ "te_tax_hist_promise_renegotiated_intelligentsia": {
+  "en": "A promise to the $ig_intelligentsia$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_intelligentsia$."
+ },
+ "te_tax_hist_promise_renegotiated_landowners": {
+  "en": "A promise to the $ig_landowners$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_landowners$."
+ },
+ "te_tax_hist_promise_renegotiated_petty_bourgeoisie": {
+  "en": "A promise to the $ig_petty_bourgeoisie$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_petty_bourgeoisie$."
+ },
+ "te_tax_hist_promise_renegotiated_rural_folk": {
+  "en": "A promise to the $ig_rural_folk$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_rural_folk$."
+ },
+ "te_tax_hist_promise_renegotiated_trade_unions": {
+  "en": "A promise to the $ig_trade_unions$ was renegotiated.",
+  "es": "Se renegoció una promesa al grupo $ig_trade_unions$."
+ },
  "te_tax_ig_view_armed_forces_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_armed_forces_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_armed_forces_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_armed_forces_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_armed_forces_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_armed_forces_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_armed_forces_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_armed_forces_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_devout_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_devout_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_devout_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_devout_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_devout_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_devout_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_devout_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_devout_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_industrialists_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_industrialists_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_industrialists_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_industrialists_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_industrialists_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_industrialists_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_industrialists_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_industrialists_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_intelligentsia_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_intelligentsia_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_intelligentsia_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_intelligentsia_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_intelligentsia_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_intelligentsia_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_intelligentsia_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_intelligentsia_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_landowners_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_landowners_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_landowners_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_landowners_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_landowners_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_landowners_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_landowners_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_landowners_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_petty_bourgeoisie_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_petty_bourgeoisie_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_petty_bourgeoisie_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_petty_bourgeoisie_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_petty_bourgeoisie_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_petty_bourgeoisie_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_petty_bourgeoisie_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_petty_bourgeoisie_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_rural_folk_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_rural_folk_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_rural_folk_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_rural_folk_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_rural_folk_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_rural_folk_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_rural_folk_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_rural_folk_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_trade_unions_m1": {
   "en": "Opposes the Tax Code",
   "es": "Se opone al Código fiscal"
  },
  "te_tax_ig_view_trade_unions_m1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_trade_unions_m2": {
   "en": "Strongly Opposes the Tax Code",
   "es": "Rechaza firmemente el Código fiscal"
  },
  "te_tax_ig_view_trade_unions_m2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_trade_unions_p1": {
   "en": "Endorses the Tax Code",
   "es": "Respalda el Código fiscal"
  },
  "te_tax_ig_view_trade_unions_p1_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_ig_view_trade_unions_p2": {
   "en": "Strongly Endorses the Tax Code",
   "es": "Respalda firmemente el Código fiscal"
  },
  "te_tax_ig_view_trade_unions_p2_desc": {
-  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
-  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+  "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
+  "es": "Cómo juzga este grupo el código fiscal: la ley de tributación a la que más se parece, o en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
  },
  "te_tax_light_react_armed_forces_neg": {
   "en": "Resents Recent Tax Changes",
@@ -1464,24 +1560,24 @@
   "es": "Con el código fiscal ligero, «$te_tax_inst_wage$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
  },
  "te_tax_lt_tt_react_cons": {
-  "en": "Paid most by $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$, $ig_devout$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
-  "es": "Pagado sobre todo por $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$ y $ig_devout$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+  "en": "Paid most by $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$, $ig_devout$.",
+  "es": "Pagado sobre todo por $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$ y $ig_devout$."
  },
  "te_tax_lt_tt_react_div": {
-  "en": "Paid most by $ig_industrialists$, $ig_landowners$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
-  "es": "Pagado sobre todo por $ig_industrialists$ y $ig_landowners$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+  "en": "Paid most by $ig_industrialists$, $ig_landowners$.",
+  "es": "Pagado sobre todo por $ig_industrialists$ y $ig_landowners$."
  },
  "te_tax_lt_tt_react_head": {
-  "en": "Paid most by $ig_trade_unions$, $ig_petty_bourgeoisie$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
-  "es": "Pagado sobre todo por $ig_trade_unions$ y $ig_petty_bourgeoisie$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+  "en": "Paid most by $ig_trade_unions$, $ig_petty_bourgeoisie$.",
+  "es": "Pagado sobre todo por $ig_trade_unions$ y $ig_petty_bourgeoisie$."
  },
  "te_tax_lt_tt_react_land": {
-  "en": "Paid most by $ig_rural_folk$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
-  "es": "Pagado sobre todo por $ig_rural_folk$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+  "en": "Paid most by $ig_rural_folk$.",
+  "es": "Pagado sobre todo por $ig_rural_folk$."
  },
  "te_tax_lt_tt_react_wage": {
-  "en": "Paid most by $ig_trade_unions$, $ig_intelligentsia$, $ig_petty_bourgeoisie$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
-  "es": "Pagado sobre todo por $ig_trade_unions$, $ig_intelligentsia$ y $ig_petty_bourgeoisie$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+  "en": "Paid most by $ig_trade_unions$, $ig_intelligentsia$, $ig_petty_bourgeoisie$.",
+  "es": "Pagado sobre todo por $ig_trade_unions$, $ig_intelligentsia$ y $ig_petty_bourgeoisie$."
  },
  "te_tax_offer_untax_clothes": {
   "en": "Leave $clothes$ untaxed.",
