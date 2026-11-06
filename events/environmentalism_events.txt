@@ -282,7 +282,7 @@ environmentalism_events.5 = {
 			has_modifier = crop_failure_modifier
 			has_modifier = crop_failure_ministry_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
 		# Strong environment ministry (level 5) prevents widespread crop failures
 		NOT = {
@@ -376,7 +376,7 @@ environmentalism_events.6 = {
 			has_modifier = climate_refugee_welcome_modifier
 			has_modifier = climate_refugee_rejection_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 	}
 
@@ -522,7 +522,7 @@ environmentalism_events.8 = {
 			has_modifier = climate_political_turmoil_modifier
 			has_modifier = environmentalist_momentum_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 0.5
 		has_technology_researched = pollution_control
 	}
@@ -629,7 +629,7 @@ environmentalism_events.9 = {
 			has_modifier = coastal_flooding_modifier
 			has_modifier = coastal_relocation_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 		any_scope_state = {
 			is_incorporated = yes
@@ -715,7 +715,7 @@ environmentalism_events.10 = {
 			has_modifier = water_crisis_rationing_modifier
 			has_modifier = water_crisis_infrastructure_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
 	}
 
@@ -799,7 +799,7 @@ environmentalism_events.11 = {
 			has_modifier = green_tech_boom_modifier
 			has_modifier = green_tech_market_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		has_technology_researched = environmental_movement
 		any_scope_state = {
 			has_building = building_renewable_energy_plant
@@ -948,7 +948,7 @@ environmentalism_events.13 = {
 			has_modifier = climate_summit_leader_modifier
 			has_modifier = climate_summit_pledge_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 		country_rank >= rank_value:major_power
 		has_technology_researched = pollution_control
@@ -1040,7 +1040,7 @@ environmentalism_events.14 = {
 			has_modifier = tropical_disease_research_modifier
 			has_modifier = tropical_disease_public_health_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
 		# Strong consumer protection (level 5) prevents outbreaks through public health systems
 		NOT = {
@@ -1124,7 +1124,7 @@ environmentalism_events.15 = {
 
 	trigger = {
 		NOT = { has_modifier = climate_political_turmoil_modifier }
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 3.0
 		has_technology_researched = clean_energy_technologies
 		ig:ig_industrialists ?= { is_in_government = yes }
@@ -1231,7 +1231,7 @@ environmentalism_events.16 = {
 			has_modifier = arctic_melting_modifier
 			has_modifier = arctic_adaptation_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.5
 		any_scope_state = {
 			is_coastal = yes

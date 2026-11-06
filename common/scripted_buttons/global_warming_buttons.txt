@@ -514,7 +514,7 @@ gw_carbon_removal_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
+		NOT = { gw_policy_carbon_removal_active = yes }
 		temperature_anomaly_display >= 0.5
 	}
 
@@ -546,7 +546,7 @@ gw_remove_carbon_removal_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = carbon_removal_modifier }
+		gw_policy_carbon_removal_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -647,7 +647,7 @@ gw_aerosol_injection_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = aerosol_injection_modifier } }
+		NOT = { gw_policy_aerosol_injection_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -677,7 +677,7 @@ gw_remove_aerosol_injection_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = aerosol_injection_modifier }
+		gw_policy_aerosol_injection_active = yes
 	}
 
 	# Repeal only once the climate will has fallen gw_ai_repeal_band below the

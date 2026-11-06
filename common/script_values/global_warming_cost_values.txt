@@ -4,7 +4,8 @@
 # The money a climate policy takes from the treasury. Unlike
 # global_warming_values.txt, these have a gameplay effect.
 #
-# Each value is the multiplier on a cost modifier whose one money field is
+# Each value is the scaling value je_global_warming declares a cost modifier at
+# (scaling_modifiers_while_active), and the modifier's one money field is
 # country_expenses_add = 1, so it is the WEEKLY cost: gdp is a year's, so a
 # share of GDP a year is divided by 52 (scripting_best_practices.md, "Expense
 # Scaling with GDP"). Same shape as the Family Policy upkeep

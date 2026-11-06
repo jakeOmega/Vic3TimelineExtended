@@ -151,13 +151,15 @@ gw_policies_active_count_display = {
 	if = { limit = { gw_policy_green_building_codes_active = yes } add = 1 }
 }
 
-# The multiplier the JE's monthly pulse feeds to the `global_warming` modifier.
-# Shown beside [GetStaticModifier('global_warming').GetDesc] so the player can
-# read the per-unit penalty list and the scale it is multiplied by, without any
-# number being retyped here.
+# The scale je_global_warming declares the `global_warming` modifier at: the
+# felt anomaly, floored at 0 (scaling_modifiers_while_active). Shown beside
+# [GetStaticModifier('global_warming').GetDesc] so the player can read the
+# per-unit penalty list and the scale it is multiplied by, without any number
+# being retyped here.
 # Scope: any
 gw_warming_penalty_scale_display = {
 	value = temperature_anomaly_display
+	min = 0
 }
 
 # ----------------------------------------------------------------------------

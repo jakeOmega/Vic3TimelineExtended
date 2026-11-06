@@ -44,6 +44,13 @@ def _round(x):
     return math.floor(x + 0.5)
 
 
+def _declared():
+    """modifier -> value for each scaling_modifiers_while_active block on je_global_warming (#1404)."""
+    entry = load(JE)["je_global_warming"]
+    blocks = entry["scaling_modifiers_while_active"]
+    return {d["modifier"]: d["value"] for d in (blocks if isinstance(blocks, list) else [blocks])}
+
+
 class TechnologyTest(unittest.TestCase):
     def test_era_12_society_after_environmental_movement_and_globalization(self):
         tech = load("common/technology/technologies/era_12.txt")["geoengineering"]
@@ -122,9 +129,25 @@ class MaskedTemperatureTest(unittest.TestCase):
         self.assertEqual(raw["if"]["add"], "global_var:greenhouse_gas_emissions")
 
     def test_the_harms_read_the_felt_anomaly(self):
-        je = _text(JE)
-        self.assertIn("add_modifier = { name = global_warming multiplier = temperature_anomaly_display }", je)
+        """Climate Warming is a scaling modifier at the felt anomaly, floored at 0: with no mask the reading
+        can go negative, and a negative value would invert every harm."""
+        self.assertEqual(_declared()["global_warming"], {"value": "temperature_anomaly_display", "min": "0"})
         self.assertIn("temperature_anomaly_display >= $THRESHOLD$", _text("common/scripted_effects/extra_effects.txt"))
+
+    def test_the_warming_readers_test_its_inputs(self):
+        """has_modifier can't see a scaling modifier, so the recurring events and their monthly roll read
+        gw_warming_felt: the entry active (the declaration applies only then) and the anomaly at least the
+        0.01 C it is quantized to, where the declared value is above 0."""
+        self.assertRegex(_text(TRIGGERS), r"gw_warming_felt = \{\s*has_journal_entry = je_global_warming\s*"
+                                          r"temperature_anomaly_display >= 0\.01\s*\}")
+        events = load(EVENTS)
+        for number in (5, 6, 8, 9, 10, 11, 13, 14, 15, 16):
+            with self.subTest(event=number):
+                self.assertEqual(events[f"environmentalism_events.{number}"]["trigger"]["gw_warming_felt"], "yes")
+        # The roll's nine entries that tested the modifier (.5's tests the temperature alone).
+        self.assertEqual(_text(ON_ACTIONS).count("gw_warming_felt = yes"), 9)
+        for path in (EVENTS, ON_ACTIONS, JE):
+            self.assertNotRegex(_text(path), r"has_modifier = global_warming\b")
 
     def test_cooling_events_and_the_ai_read_the_warming_beneath(self):
         helpers = _text("common/scripted_effects/extra_effects.txt")
@@ -277,31 +300,41 @@ class PolicyTest(unittest.TestCase):
             "country_expenses_add": "1", "country_te_budget_expense_climate_add": "1"})
         self.assertEqual(load("common/script_values/global_warming_cost_values.txt")["gw_aerosol_injection_cost_value"],
                          {"value": "gdp", "multiply": "0.01", "divide": "52", "min": "0"})
+        # A scaling modifier on the entry while the policy's variable is set (#1404), not an add on the
+        # country that a monthly sweep re-applied.
+        self.assertEqual(_declared()[self.COST], {
+            "value": "0",
+            "if": {"limit": {"has_variable": "gw_aerosol_injection_policy"}, "add": "gw_aerosol_injection_cost_value"}})
         effects = load(EFFECTS)
-        self.assertEqual(list(effects["gw_aerosol_injection_cost_apply"]),
-                         ["remove_modifier_if_exists_effect", "add_modifier"])
-        self.assertEqual(effects["gw_aerosol_injection_cost_apply"]["add_modifier"],
-                         {"name": self.COST, "multiplier": "gw_aerosol_injection_cost_value"})
+        for gone in ("gw_aerosol_injection_cost_apply", "gw_aerosol_injection_cost_sync", "gw_refresh_policy_costs_effect"):
+            self.assertNotIn(gone, effects)
+        # The adopt tooltip still prints the weekly expense, outside the policy's custom_tooltip.
         adopt = effects["gw_effect_aerosol_injection"]
-        self.assertEqual(adopt["gw_aerosol_injection_cost_apply"], "yes")
+        self.assertEqual(adopt["show_as_tooltip"]["add_modifier"],
+                         {"name": self.COST, "multiplier": "gw_aerosol_injection_cost_value"})
         repeal = effects["gw_effect_remove_aerosol_injection"]["custom_tooltip"]
-        self.assertEqual(repeal["remove_modifier"], self.COST)
-        sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
-        self.assertEqual(sweep["gw_aerosol_injection_cost_sync"], "yes")
-        self.assertIn(self.COST, sweep["limit"]["OR"]["has_modifier"])
+        self.assertEqual(repeal["hidden_effect"], {"remove_variable": "gw_aerosol_injection_policy"})
+        self.assertNotIn("remove_modifier", repeal)
+        self.assertIn("running cost", _loc("GW_REMOVE_AEROSOL_INJECTION_DESC"))
         from scripts.generators.gen_budget_breakdown import SOURCES
         self.assertIn(self.COST, SOURCES["expense"]["climate"][1])
         for key in (self.COST, self.COST + "_desc", "aerosol_injection_modifier", "aerosol_injection_modifier_desc"):
             self.assertTrue(_loc(key), key)
 
     def test_a_revolutions_winner_keeps_it(self):
+        """The winner inherits variables but no modifiers: the policy is the variable, and the entry declares
+        the policy modifier at 1 while it is set, so nothing has to rebuild it (#1404)."""
         effects = load(EFFECTS)
         adopt = effects["gw_effect_aerosol_injection"]["custom_tooltip"]
         adopt = adopt[0] if isinstance(adopt, list) else adopt
         self.assertEqual(adopt["hidden_effect"]["set_variable"]["name"], "gw_aerosol_injection_policy")
-        restore = effects["gw_restore_aerosol_injection_policy_effect"]["if"]
-        self.assertEqual(restore["limit"]["has_variable"], "gw_aerosol_injection_policy")
-        self.assertIn("gw_restore_aerosol_injection_policy_effect = yes", _text(JE))
+        self.assertNotIn("je:je_global_warming", adopt)
+        self.assertEqual(_declared()["aerosol_injection_modifier"],
+                         {"value": "0", "if": {"limit": {"has_variable": "gw_aerosol_injection_policy"}, "add": "1"}})
+        self.assertEqual(load(TRIGGERS)["gw_policy_aerosol_injection_active"],
+                         {"has_journal_entry": "je_global_warming", "has_variable": "gw_aerosol_injection_policy"})
+        self.assertNotIn("gw_restore_aerosol_injection_policy_effect", effects)
+        self.assertNotIn("gw_restore_aerosol_injection_policy_effect", _text(JE))
 
     def test_it_stirs_the_movement_and_the_movement_does_not_want_it(self):
         modifier = load(MODIFIERS)["aerosol_injection_modifier"]
@@ -310,9 +343,10 @@ class PolicyTest(unittest.TestCase):
                          _text("common/political_movements/new_ideological_movements.txt"))
 
     def test_weakened_monsoons_scale_with_the_mask(self):
-        je = _text(JE)
-        self.assertIn("add_modifier = { name = gw_aerosol_monsoon_modifier multiplier = gw_aerosol_mask }", je)
-        self.assertRegex(je, r"gw_aerosol_mask >= 0\.01\s*gw_country_in_monsoon_region = yes")
+        # Declared at the mask, whoever flies it, for a monsoon-region country (#1404); the mask is
+        # quantized to 0.01, so 0 is its only "off" reading.
+        self.assertEqual(_declared()["gw_aerosol_monsoon_modifier"], {
+            "value": "0", "if": {"limit": {"gw_country_in_monsoon_region": "yes"}, "add": "gw_aerosol_mask"}})
         monsoon = load(MODIFIERS)["gw_aerosol_monsoon_modifier"]
         warming = load(MODIFIERS)["global_warming"]
         # Half the farm relief back, none of the drought relief, per degree masked.

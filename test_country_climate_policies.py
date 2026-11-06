@@ -172,78 +172,47 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         for key in (self.COST, self.COST + "_desc", "renewable_investment_modifier_desc"):
             self.assertTrue(_loc(key), key)
 
-    def test_cost_goes_on_and_off_with_the_policy(self):
+    def declared(self):
+        entry = load("common/journal_entries/je_global_warming.txt")["je_global_warming"]
+        return {d["modifier"]: d["value"] for d in entry["scaling_modifiers_while_active"]}
+
+    def test_cost_is_declared_on_the_entry_while_the_policy_is_in_force(self):
+        """A scaling modifier on je_global_warming since #1404: the value's root is the country, so it reads
+        gdp, and it follows the policy modifier however that went on or off (the button, the widget, treaty
+        109, the debug console), with the climate rule on or off."""
+        self.assertEqual(self.declared()[self.COST], {
+            "value": "0",
+            "if": {"limit": {"gw_policy_renewable_investment_active": "yes"},
+                   "add": "gw_renewable_investment_cost_value"}})
+        # The gate is the policy modifier on the entry, which stays a plain add, with no rule test.
+        self.assertEqual(load(TRIGGERS)["gw_policy_renewable_investment_active"],
+                         {"je:je_global_warming": {"has_modifier": "renewable_investment_modifier"}})
+
+    def test_nothing_adds_or_re_applies_the_cost(self):
         effects = load(EFFECTS)
-        adopt = effects["gw_effect_renewable_investment"]
-        repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
-        # Outside the adopt custom_tooltip, so the tooltip prints the cost (GW-4).
-        self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
-        self.assertNotIn("gw_renewable_investment_cost_apply", adopt["custom_tooltip"])
-        self.assertEqual(repeal["remove_modifier"], self.COST)
-        # The removal comes first: after the add it would strip the fresh cost.
-        self.assertEqual(effects["gw_renewable_investment_cost_apply"], {
-            "remove_modifier_if_exists_effect": {"MODIFIER": self.COST},
-            "add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}})
-        self.assertEqual(list(effects["gw_renewable_investment_cost_apply"]),
-                         ["remove_modifier_if_exists_effect", "add_modifier"])
-        treaty = load("common/treaty_articles/109_enforce_emissions_reduction.txt")["enforce_emissions_reduction"]
-        self.assertIn("gw_renewable_investment_cost_apply", str(treaty["on_entry_into_force"]))
-
-    def apply_cost(self, held):
-        """Run gw_renewable_investment_cost_apply once on a scope holding the modifier names in `held`.
-
-        The engine as the repo documents it: a same-name add_modifier stacks (it adds another copy), and
-        has_modifier reads the scope as it was before the effect, because adds and removes land after it
-        ends. A removal takes every copy of the name. Returns the scope's modifiers afterwards.
-        """
-        before = list(held)
-        queued = []
-        helper = load("common/scripted_effects/extra_effects.txt")["remove_modifier_if_exists_effect"]
-
-        def run(body, args):
-            for key, arg in body.items():
-                if key == "add_modifier":
-                    queued.append(("add", arg["name"]))
-                elif key == "remove_modifier":
-                    queued.append(("remove", args.get(arg, arg)))
-                elif key == "remove_modifier_if_exists_effect":
-                    run(helper, {"$MODIFIER$": arg["MODIFIER"]})
-                elif key == "if":
-                    if args.get(arg["limit"]["has_modifier"], arg["limit"]["has_modifier"]) in before:
-                        run({k: v for k, v in arg.items() if k != "limit"}, args)
-                else:
-                    self.fail(f"gw_renewable_investment_cost_apply uses {key}, which this model cannot run")
-
-        run(load(EFFECTS)["gw_renewable_investment_cost_apply"], {})
-        after = list(held)
-        for op, name in queued:
-            after = [m for m in after if m != name] if op == "remove" else after + [name]
-        return after
-
-    def test_reapplying_the_cost_replaces_it_instead_of_stacking(self):
-        """The monthly sweep re-applies the cost for every adopter; a pass must not add a second copy.
-
-        Before the fix the apply effect was a bare add_modifier, so each month stacked another
-        full-size weekly cost (2026-10-20).
-        """
-        held = []
-        for month in range(1, 13):
-            held = self.apply_cost(held)
-            self.assertEqual(held, [self.COST], f"after {month} monthly passes")
-
-    def test_monthly_sweep_follows_the_policy_with_the_climate_rule_on_or_off(self):
-        effects = load(EFFECTS)
-        sync = effects["gw_renewable_investment_cost_sync"]
-        self.assertEqual(sync["if"]["limit"], {"gw_policy_renewable_investment_active": "yes"})
-        self.assertEqual(sync["if"]["gw_renewable_investment_cost_apply"], "yes")
-        self.assertEqual(sync["else_if"]["remove_modifier"], self.COST)
-        sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
-        self.assertEqual(sweep["gw_renewable_investment_cost_sync"], "yes")
-        self.assertEqual(sweep["limit"]["OR"]["has_journal_entry"], "je_global_warming")
-        held = sweep["limit"]["OR"]["has_modifier"]
-        self.assertIn(self.COST, held if isinstance(held, list) else [held])
+        for gone in ("gw_renewable_investment_cost_apply", "gw_renewable_investment_cost_sync",
+                     "gw_refresh_policy_costs_effect"):
+            self.assertNotIn(gone, effects)
         pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
-        self.assertEqual(pulse["gw_refresh_policy_costs_effect"], "yes")
+        self.assertNotIn("gw_refresh_policy_costs_effect", pulse)
+        repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
+        self.assertEqual(repeal["je:je_global_warming"], {"remove_modifier": "renewable_investment_modifier"})
+        self.assertNotIn("remove_modifier", repeal)
+        from test_gw_top_emitters import _loc
+        self.assertIn("running cost", _loc("GW_REMOVE_RENEWABLE_INVESTMENT_DESC"))
+
+    def test_adopting_previews_the_cost(self):
+        """Outside the adopt custom_tooltip, so the tooltip prints the scaled Expenses line (GW-4); treaty 109,
+        which forces the policy, previews it the same way."""
+        preview = {"add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}}
+        adopt = load(EFFECTS)["gw_effect_renewable_investment"]
+        self.assertEqual(adopt["show_as_tooltip"], preview)
+        self.assertNotIn(self.COST, str(adopt["custom_tooltip"]))
+        treaty = load("common/treaty_articles/109_enforce_emissions_reduction.txt")["enforce_emissions_reduction"]
+        forced = [block for block in treaty["on_entry_into_force"]["scope:article_options"]["source_country"]["if"]
+                  if "renewable_investment_modifier" in str(block.get("limit"))]
+        self.assertEqual(len(forced), 1)
+        self.assertEqual(forced[0]["show_as_tooltip"], preview)
 
 
 if __name__ == "__main__":
