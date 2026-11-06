@@ -432,6 +432,23 @@ in force without the entry) and its "display-only" header and
 `tax_code_schema.md` are reworded. A step's relief lags its tax level by up to 4
 days. The view bands stay (the full code shares them).
 
+As built (PR 6): the 21 values are `te_tax_light_relief_<key>_value` and
+`te_tax_light_react_<ig>_<pos|neg>_value`, each restating its old add's gate: a
+relief while the law levies that tax and its variable is above 0, a reaction's
+rounded size on the side of the running reaction's sign once it is a whole
+point. The levies test is read at each entry update, not at the sync, so a law
+change ends a relief within days. `te_tax_light_gen_apply_reactions` now only
+writes the sizes and is `te_tax_light_gen_reaction_sizes`. The net,
+`te_tax_light_entry_net` on each country's monthly pulse, goes beyond Banking's
+in two ways: it skips decentralized countries (never migrated), and a country
+whose inactive copy waits (`add_journal_entry` is refused then, and the engine
+activates that copy). The entry already had `should_update_on_player_command =
+yes`; whether that update also re-reads its scaling modifiers, so a step's
+relief lands at once, is unprobed, and the loc says "within a few days". The
+Nation tab loses its 21 rows (the reactions section goes). An older save's
+copies go through `legacy_scaling_strip_tax_code`, monthly and from the entry's
+weekly pulse.
+
 ### 4.10 Space Race (24 + 12 + 80 keys)
 
 - **Milestones** (8 entries × `sr_space_program_cost`, `sr_funding_progress`,
