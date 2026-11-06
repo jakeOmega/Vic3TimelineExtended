@@ -217,5 +217,109 @@ class PruneTreeTest(unittest.TestCase):
                 self.assertEqual(prune_problems(entry, triggers), [])
 
 
+# --- scaling_modifiers_while_active (design § 3) -----------------------------------------------------------------
+
+# legacy_je_modifier_cleanup_effect strips the copies an old save added by hand (design § 4.0, rule 7): it may test
+# and remove a declared key, never add one.
+LEGACY_STRIP_FILE = "common/scripted_effects/legacy_modifier_cleanup.txt"
+
+
+def scaling_declarations(entries: list[tuple[str, Node]]) -> dict[str, list[tuple[str, int, str]]]:
+    """modifier → [(file, line, entry)] for every scaling_modifiers_while_active block."""
+    out: dict[str, list[tuple[str, int, str]]] = {}
+    for rel, entry in entries:
+        for block in (c for c in entry.children if c.key == "scaling_modifiers_while_active"):
+            name = child(block, "modifier")
+            out.setdefault(name.value if name else "?", []).append((rel, block.line, entry.key))
+    return out
+
+
+def static_modifier_names() -> set[str]:
+    names = {n.key.split(":", 1)[-1]
+             for path in sorted((ROOT / "common" / "static_modifiers").glob("*.txt")) for n in _parse(path)}
+    vanilla = json.loads((ROOT / "vanilla_parsed" / "common" / "modifiers.json").read_text(encoding="utf-8"))
+    return names | set(vanilla)
+
+
+def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[str, int, str, str]]:
+    """(file, line, kind, modifier) for each has_modifier, add_modifier or remove_modifier of a declared key. An
+    add inside show_as_tooltip is the option's preview (design § 4.0, rule 8); the legacy strip may test and
+    remove."""
+    out: list[tuple[str, int, str, str]] = []
+    legacy = rel == LEGACY_STRIP_FILE
+
+    def walk(items: list[Node], preview: bool):
+        for node in items:
+            name = None
+            if node.key in ("has_modifier", "add_modifier", "remove_modifier"):
+                name = node.value if not node.children else getattr(child(node, "name"), "value", None)
+            elif node.key == "remove_modifier_if_exists_effect":
+                name = getattr(child(node, "MODIFIER"), "value", None)
+            if name in declared:
+                skip = (node.key == "add_modifier" and preview) or (legacy and node.key != "add_modifier")
+                if not skip:
+                    out.append((rel, node.line, node.key, name))
+            walk(node.children, preview or node.key == "show_as_tooltip")
+
+    walk(nodes, False)
+    return out
+
+
+class ScalingModifierFixtureTest(unittest.TestCase):
+    def sites(self, text: str, rel: str = "common/scripted_effects/x.txt") -> list[tuple[str, str]]:
+        return [(kind, name) for _, _, kind, name in misuse_sites(parse_text(text, rel)[0], {"m"}, rel)]
+
+    def test_has_add_and_remove_are_flagged(self):
+        self.assertEqual(self.sites("e = { has_modifier = m }"), [("has_modifier", "m")])
+        self.assertEqual(self.sites("e = { add_modifier = { name = m multiplier = 2 } }"), [("add_modifier", "m")])
+        self.assertEqual(self.sites("e = { add_modifier = m remove_modifier = m }"),
+                         [("add_modifier", "m"), ("remove_modifier", "m")])
+        self.assertEqual(self.sites("e = { remove_modifier_if_exists_effect = { MODIFIER = m } }"),
+                         [("remove_modifier_if_exists_effect", "m")])
+
+    def test_a_preview_is_allowed(self):
+        self.assertEqual(self.sites("o = { show_as_tooltip = { if = { add_modifier = { name = m } } } }"), [])
+
+    def test_the_legacy_strip_may_test_and_remove_but_not_add(self):
+        text = "e = { if = { limit = { has_modifier = m } remove_modifier = m } add_modifier = { name = m } }"
+        self.assertEqual(self.sites(text, LEGACY_STRIP_FILE), [("add_modifier", "m")])
+
+    def test_an_undeclared_key_is_not_flagged(self):
+        self.assertEqual(self.sites("e = { has_modifier = other add_modifier = { name = other } }"), [])
+
+    def test_declarations_are_listed(self):
+        nodes, _ = parse_text("je_x = {\n\tscaling_modifiers_while_active = { modifier = a value = 1 }\n"
+                              "\tscaling_modifiers_while_active = { modifier = b value = 2 }\n}\n", "j.txt")
+        self.assertEqual(scaling_declarations([("j.txt", nodes[0])]),
+                         {"a": [("j.txt", 2, "je_x")], "b": [("j.txt", 3, "je_x")]})
+
+
+class ScalingModifierTreeTest(unittest.TestCase):
+    def test_every_scaling_modifier_exists(self):
+        names = static_modifier_names()
+        self.assertTrue({"base_values", "nuclear_weapon_program_funding"} <= names)
+        for name, sites in scaling_declarations(load_entries()).items():
+            with self.subTest(modifier=name, at=sites[0]):
+                self.assertIn(name, names)
+
+    def test_no_scaling_modifier_is_added_or_tested(self):
+        """has_modifier can't see a scaling modifier, on the entry or the country (probed 2026-11-05), and an
+        add or remove beside the declaration doubles it or does nothing."""
+        declared = set(scaling_declarations(load_entries()))
+        found = []
+        if declared:
+            for sub in ("common", "events"):
+                for path in sorted((ROOT / sub).rglob("*.txt")):
+                    rel = path.relative_to(ROOT).as_posix()
+                    found += misuse_sites(_parse(path), declared, rel)
+            gui = re.compile(r"HasModifier.*\b(" + "|".join(map(re.escape, sorted(declared))) + r")\b")
+            for path in sorted((ROOT / "gui").rglob("*.gui")):
+                for number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), 1):
+                    match = gui.search(line)
+                    if match:
+                        found.append((path.relative_to(ROOT).as_posix(), number, "HasModifier", match.group(1)))
+        self.assertEqual(found, [])
+
+
 if __name__ == "__main__":
     unittest.main()
