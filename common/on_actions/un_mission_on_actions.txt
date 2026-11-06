@@ -56,7 +56,6 @@ un_mission_country_on_action = {
 		if = {
 			limit = {
 				OR = {
-					has_modifier = un_electoral_observers_modifier
 					has_variable = un_msn_electoral_power
 					un_mission_hosts = { TYPE = electoral }
 				}

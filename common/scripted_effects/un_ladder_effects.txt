@@ -504,10 +504,10 @@ un_dissolve_strip_country = {
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
-	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes and
-	# the mandate holder's war support end with it.
+	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes end
+	# with it, and the mandate holder's war support (declared on the entry,
+	# under global_var:un_founded) with the UN itself.
 	un_teeth_lift_embargoes = yes
-	remove_modifier = un_mandate_war_support_modifier
 	if = {
 		limit = { has_variable = un_charter_signed }
 		remove_variable = un_charter_signed

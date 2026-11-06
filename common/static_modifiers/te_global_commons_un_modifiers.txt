@@ -11,10 +11,10 @@
 # ---- The seabed under the Law of the Sea (§3.3) ----
 
 # An ITLOS party's seabed royalty, while the Law of the Sea regulates the
-# seabed: 4% of its Deep-Sea Mine levels' base output value a week. Applied
-# with multiplier = var:te_seabed_royalty_cached (the weekly sum,
-# te_seabed_royalty_weekly_value) by te_seabed_royalty_refresh, the single
-# refresh site, as un_dues_modifier is billed.
+# seabed: 4% of its Deep-Sea Mine levels' base output value a week. Declared
+# on je_united_nations at var:te_seabed_royalty_cached (the weekly sum,
+# te_seabed_royalty_weekly_value, which te_seabed_royalty_refresh writes), as
+# un_dues_modifier is billed.
 te_seabed_royalty_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

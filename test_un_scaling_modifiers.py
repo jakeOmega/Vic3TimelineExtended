@@ -35,6 +35,12 @@ DUES_TRIGGERS = _path("common", "scripted_triggers", "un_dues_triggers.txt")
 ECONOMY_EFFECTS = _path("common", "scripted_effects", "un_economy_effects.txt")
 ECONOMY_TRIGGERS = _path("common", "scripted_triggers", "un_economy_triggers.txt")
 ECONOMY_EVENTS = _path("events", "un_economy_events.txt")
+MISSION_EFFECTS = _path("common", "scripted_effects", "un_mission_effects.txt")
+MISSION_TRIGGERS = _path("common", "scripted_triggers", "un_mission_triggers.txt")
+TEETH_EFFECTS = _path("common", "scripted_effects", "un_teeth_effects.txt")
+UN_ON_ACTIONS = _path("common", "on_actions", "un_on_actions.txt")
+GC_EFFECTS = _path("common", "scripted_effects", "te_global_commons_un_effects.txt")
+GC_TRIGGERS = _path("common", "scripted_triggers", "te_global_commons_un_triggers.txt")
 
 
 def _raw(path):
@@ -120,6 +126,13 @@ EXPECTED = {
         "has_variable = un_dev_fund_patron var:un_dev_fund_patron > 0", "var:un_dev_fund_patron"),
     "un_dev_fund_pool_grant_modifier": _gated("un_dev_fund_grant_into_pool = yes", "var:un_dev_fund_grant"),
     "un_dev_fund_treasury_grant_modifier": _gated("un_dev_fund_grant_into_treasury = yes", "var:un_dev_fund_grant"),
+    # Missions: the cost of those we serve in at will, and an electoral mission's observers.
+    "un_mission_service_cost": _gated("un_mission_service_paying = yes", "var:un_msn_service_cached"),
+    "un_electoral_observers_modifier": _gated("un_mission_observers_present = yes", "var:un_msn_electoral_power"),
+    # A bound mandate's war support, and the seabed royalty.
+    "un_mandate_war_support_modifier": _gated(
+        "has_global_variable = un_founded un_teeth_mandate_support_applies = yes", "un_enforcement"),
+    "te_seabed_royalty_modifier": _gated("te_seabed_royalty_paying = yes", "var:te_seabed_royalty_cached"),
 }
 
 
@@ -243,6 +256,37 @@ class DevelopmentFundTests(unittest.TestCase):
         body = _block(_read(ECONOMY_EFFECTS), "un_dev_fund_patron_pulse")
         self.assertIn("set_variable = { name = un_dev_fund_patron value = un_dev_fund_patron_next_value }", body)
         self.assertNotIn("modifier", body)
+
+
+class MissionMandateSeabedTests(unittest.TestCase):
+    def test_the_mission_gates(self):
+        triggers = _read(MISSION_TRIGGERS)
+        member = "je:je_united_nations ?= { has_modifier = un_member_modifier }"
+        self.assertEqual(_lines(_block(triggers, "un_mission_service_paying")),
+                         ["has_variable = un_msn_service_cached", member])
+        self.assertEqual(_lines(_block(triggers, "un_mission_observers_present")),
+                         ["has_variable = un_msn_electoral_power", member])
+
+    def test_each_cache_has_its_one_writer(self):
+        for variable, owner in (("un_msn_service_cached", "un_mission_service_refresh"),
+                                ("un_msn_electoral_power", "un_mission_electoral_host_refresh"),
+                                ("te_seabed_royalty_cached", "te_seabed_royalty_refresh")):
+            with self.subTest(variable=variable):
+                writes = _writes(variable)
+                self.assertEqual({o for _, o in writes["set_variable"] + writes["remove_variable"]}, {owner})
+
+    def test_a_country_that_stops_paying_the_royalty_reads_zero(self):
+        refresh = _flat(_block(_read(GC_EFFECTS), "te_seabed_royalty_refresh"))
+        self.assertIn("else_if = { limit = { has_variable = te_seabed_royalty_cached var:te_seabed_royalty_cached > 0 } "
+                      "set_variable = { name = te_seabed_royalty_cached value = 0 } }", refresh)
+        self.assertEqual(_lines(_block(_read(GC_TRIGGERS), "te_seabed_royalty_paying")),
+                         ["has_variable = te_seabed_royalty_cached", "var:te_seabed_royalty_cached > 0",
+                          "te_seabed_regime_is_regulated = yes", "te_seabed_itlos_party = yes"])
+
+    def test_the_mandate_refresh_is_gone(self):
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotIn("un_teeth_mandate_support_refresh", _read(path))
 
 
 if __name__ == "__main__":

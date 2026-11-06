@@ -99,6 +99,19 @@ te_seabed_royalty_payer = {
 	te_seabed_ocean_mine_levels > 0
 }
 
+# A party pays its royalty this week: the payer test as of the monthly
+# refresh, cached (var:te_seabed_royalty_cached, 0 once it stops paying), with
+# the cheap halves re-read live, so a defection or a lapse ends it within
+# days. The gate of te_seabed_royalty_modifier's declaration on
+# je_united_nations, and of everything that counts the royalties paid.
+# Scope: country
+te_seabed_royalty_paying = {
+	has_variable = te_seabed_royalty_cached
+	var:te_seabed_royalty_cached > 0
+	te_seabed_regime_is_regulated = yes
+	te_seabed_itlos_party = yes
+}
+
 # ---- The Antarctic Treaty (§4) ------------------------------------------------------
 
 # A country running an Antarctic research station. Scope: country

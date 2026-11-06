@@ -223,6 +223,53 @@
 			}
 		}
 	}
+	# Missions: this month's cost of the missions we serve in at will, and the
+	# observers of an electoral mission we host, at its strength.
+	scaling_modifiers_while_active = {
+		modifier = un_mission_service_cost
+		value = {
+			value = 0
+			if = {
+				limit = { un_mission_service_paying = yes }
+				add = var:un_msn_service_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_electoral_observers_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { un_mission_observers_present = yes }
+				add = var:un_msn_electoral_power
+			}
+		}
+	}
+	# A bound mandate's war support at E (from the Strong tier), and the seabed
+	# royalty a party pays while the Law of the Sea regulates the seabed.
+	scaling_modifiers_while_active = {
+		modifier = un_mandate_war_support_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_global_variable = un_founded
+					un_teeth_mandate_support_applies = yes
+				}
+				add = un_enforcement
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_seabed_royalty_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { te_seabed_royalty_paying = yes }
+				add = var:te_seabed_royalty_cached
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc
@@ -332,15 +379,12 @@
 				}
 
 				# A member that has left stops paying for the contingents it sent at
-				# will (un_mission_service_refresh removes the cost for a
-				# non-member; the members' refresh is below).
+				# will (un_mission_service_refresh removes the cost's variable for
+				# a non-member; the members' refresh is below).
 				if = {
 					limit = {
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-						OR = {
-							has_modifier = un_mission_service_cost
-							has_variable = un_msn_service_cached
-						}
+						has_variable = un_msn_service_cached
 					}
 					un_mission_service_refresh = yes
 				}
@@ -418,7 +462,7 @@
 					# ---- Missions joined at will (un_mission_effects.txt) ----
 					# The AI sends or recalls a contingent the way a player does from
 					# the chamber; then this month's cost of every mission we serve
-					# in at will (un_mission_service_cost's refresh).
+					# in at will (the variable un_mission_service_cost is declared at).
 					if = {
 						limit = { is_ai = yes }
 						un_mission_ai_monthly = yes

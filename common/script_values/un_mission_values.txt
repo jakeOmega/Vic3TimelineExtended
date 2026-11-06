@@ -220,8 +220,8 @@ un_mission_volunteer_count = {
 }
 
 # The week's cost of every mission the scoped country pays to serve in.
-# Cached as var:un_msn_service_cached by un_mission_service_refresh, the
-# multiplier of un_mission_service_cost. Scope: country
+# Cached as var:un_msn_service_cached by un_mission_service_refresh, the value
+# of un_mission_service_cost's declaration on je_united_nations. Scope: country
 un_mission_service_expense_value = {
 	value = un_mission_service_one_expense_value
 	multiply = un_mission_service_count

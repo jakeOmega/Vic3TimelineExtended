@@ -17,8 +17,8 @@
 #   the war-goal surcharge (infamy)      un_teeth_war_goal_surcharge
 #                                        (un_mandate_on_wargoal_added, after the
 #                                        mandate has had its chance to bind)
-#   un_mandate_war_support_modifier      un_teeth_mandate_support_refresh (the
-#                                        country pulse; the single refresh site)
+#   un_mandate_war_support_modifier      nobody: je_united_nations declares it
+#                                        at E under un_teeth_mandate_support_applies
 # ============================================================================
 
 # ---- Condemnation --------------------------------------------------------------
@@ -244,25 +244,7 @@ un_teeth_monthly_update = {
 	}
 }
 
-# The mandate's war support, from the monthly country pulse
-# (un_events_on_action; the single refresh site). Removed and re-added every
-# month, so a tier change reaches it; from a country pulse because the
-# multiplier slot is resolved against ROOT, which the global pulse lacks
-# (scripting_best_practices.md, "ROOT is none").
-# Scope: country
-un_teeth_mandate_support_refresh = {
-	if = {
-		limit = { has_modifier = un_mandate_war_support_modifier }
-		remove_modifier = un_mandate_war_support_modifier
-	}
-	if = {
-		limit = {
-			has_global_variable = un_founded
-			un_teeth_mandate_support_applies = yes
-		}
-		add_modifier = {
-			name = un_mandate_war_support_modifier
-			multiplier = un_enforcement
-		}
-	}
-}
+# The mandate's war support is declared on je_united_nations (1.15, #1404):
+# un_mandate_war_support_modifier at E while un_teeth_mandate_support_applies,
+# re-read by the engine about every four days, so a tier change or a mandate
+# that binds or ends reaches it within days.

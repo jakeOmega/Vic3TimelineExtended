@@ -18,8 +18,9 @@
 #                                           royalties a week, for the World
 #                                           Development Fund or the UN budget
 #   te_seabed_royalty_cached (country)      te_seabed_royalty_refresh, the
-#   te_seabed_royalty_modifier              single refresh site (never removed
-#                                           while the modifier stands)
+#                                           single writer (0 once it stops
+#                                           paying); je_united_nations declares
+#                                           te_seabed_royalty_modifier at it
 #   te_antarctic_station (country)          te_antarctic_station_open / _close:
 #                                           the month it opened
 #   te_antarctic_station_modifier,          te_antarctic_station_refresh (and
@@ -100,25 +101,21 @@ te_gc_un_country_monthly = {
 
 # ---- The seabed royalties (§3.3) ---------------------------------------------------------
 
-# A payer's weekly royalty, re-priced from its levels; anyone else's removed.
-# The single refresh site of te_seabed_royalty_modifier.
+# A payer's weekly royalty, re-priced from its levels; anyone else's zeroed.
+# The single writer of var:te_seabed_royalty_cached, at which je_united_nations
+# declares te_seabed_royalty_modifier (te_seabed_royalty_paying).
 # Scope: country
 te_seabed_royalty_refresh = {
 	if = {
 		limit = { te_seabed_royalty_payer = yes }
 		set_variable = { name = te_seabed_royalty_cached value = te_seabed_royalty_weekly_value }
-		if = {
-			limit = { has_modifier = te_seabed_royalty_modifier }
-			remove_modifier = te_seabed_royalty_modifier
-		}
-		add_modifier = {
-			name = te_seabed_royalty_modifier
-			multiplier = var:te_seabed_royalty_cached
-		}
 	}
 	else_if = {
-		limit = { has_modifier = te_seabed_royalty_modifier }
-		remove_modifier = te_seabed_royalty_modifier
+		limit = {
+			has_variable = te_seabed_royalty_cached
+			var:te_seabed_royalty_cached > 0
+		}
+		set_variable = { name = te_seabed_royalty_cached value = 0 }
 	}
 }
 
@@ -384,10 +381,7 @@ un_chamber_seabed_lines = {
 			custom_tooltip_no_bullet = je_un_chamber_seabed_open
 		}
 		if = {
-			limit = {
-				has_modifier = te_seabed_royalty_modifier
-				has_variable = te_seabed_royalty_cached
-			}
+			limit = { te_seabed_royalty_paying = yes }
 			custom_tooltip_no_bullet = je_un_chamber_seabed_royalty
 		}
 		if = {

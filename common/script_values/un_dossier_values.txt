@@ -337,7 +337,7 @@ un_expulsion_case_service_term = {
 		limit = {
 			OR = {
 				un_standing_program_active_peacekeeping = yes
-				has_modifier = un_mission_service_cost
+				un_mission_service_paying = yes
 			}
 		}
 		add = un_expulsion_case_service_each
