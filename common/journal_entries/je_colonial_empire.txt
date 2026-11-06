@@ -101,6 +101,42 @@
 	scripted_button = ce_round_table_conference
 	scripted_button = ce_planned_decolonization
 
+	# --- The three programmes and Investment's expense line ---
+	# Scaling modifiers (1.15): the engine re-reads each value from the country
+	# about every four days while the entry is active, so a step reaches the
+	# modifier a few days later and nothing re-adds it. Each programme's
+	# static modifier is its full level-3 programme; the value is the share a
+	# level runs (colonial_*_modifier_scale: 0.333 / 0.667 / 1, 0 at level 0).
+	# The level variables are the programmes' only state; both endings remove
+	# them (colonial_empire_je_cleanup_effect).
+	scaling_modifiers_while_active = {
+		modifier = colonial_development_investment_modifier
+		value = {
+			value = colonial_invest_modifier_scale
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = colonial_military_garrison_modifier
+		value = {
+			value = colonial_garrison_modifier_scale
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = colonial_cultural_assimilation_modifier
+		value = {
+			value = colonial_assim_modifier_scale
+		}
+	}
+	# The weekly cost at the current level (country_expenses_add = 1 a unit):
+	# one level's share of the colonies' cached yearly GDP times the level, so
+	# 0 at level 0. O(1): it reads the monthly cache, not the state walk.
+	scaling_modifiers_while_active = {
+		modifier = colonial_development_investment_expense_modifier
+		value = {
+			value = colonial_invest_weekly_cost
+		}
+	}
+
 	immediate = {
 		# Populate the widget's display state on the first frame, so a freshly
 		# activated entry shows real numbers instead of dashes for a month.
@@ -364,17 +400,6 @@
 
 	on_monthly_pulse = {
 		effect = {
-			# --- Programmes from a save made before the levels ---
-			# A save from before the programme levels (2026-10) holds the
-			# modifier of each programme it ran but no level; it becomes the top
-			# level (decol_migrate_programmes, decolonization.txt). Every
-			# programme test below reads the level (colonial_*_level_value),
-			# which is visible at once where a modifier added in this block
-			# would not be. A revolution's winner inherits the levels and gets
-			# the modifiers back from the one refresh further down (and at once
-			# from te_civil_war_on_won, through decol_sync_programmes).
-			decol_migrate_programmes = yes
-
 			# --- Path-dependence tracking ---
 			# Count months each programme runs, weighted by its level: a month
 			# at the top level counts 1 (as a month of the old on/off programme
@@ -449,21 +474,19 @@
 				set_variable = { name = colonial_at_100_months value = 0 }
 			}
 
-			# --- Programme costs, the AI's review, the modifiers ---
+			# --- Programme costs, the AI's review ---
 			# The colonies' GDP that Investment's weekly cost is a share of, cached
 			# once a month (colonial_programmes_refresh_cost_base). Then an AI
 			# reviews its three programmes' levels against the bar and its budget,
 			# reading the widget's projected change (its three iterating groups
-			# from last month's snapshot). Then the one refresh re-applies each
-			# programme's modifier at its level and Investment's expense line at
-			# this week's cost, so the line follows the colonies' GDP; the steps
-			# refresh it too, at once.
+			# from last month's snapshot). The programmes' modifiers and
+			# Investment's expense line follow the levels and the cache on their
+			# own (the scaling_modifiers_while_active blocks above).
 			colonial_programmes_refresh_cost_base = yes
 			if = {
 				limit = { is_ai = yes }
 				colonial_ai_review_programmes = yes
 			}
-			colonial_programmes_refresh_modifiers = yes
 
 			# The pressuring-great-powers leaderboard used to be built here, into
 			# seven colonial_condemner_rank_N slot variables read by the

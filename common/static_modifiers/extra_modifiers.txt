@@ -2299,9 +2299,9 @@ foreign_property_protected_modifier = {
 
 # The three programmes. Each runs at a level from 0 to 3 (colonial_empire_values.txt,
 # PROGRAMME LEVELS); the values below are the FULL programme, level 3, and
-# colonial_programmes_refresh_modifiers (decolonization.txt) applies each at a
-# third, two thirds or all of them. Each is the right pick in different
-# circumstances:
+# je_colonial_empire declares each as a scaling modifier at a third, two thirds
+# or all of them (colonial_*_modifier_scale). Each is the right pick in
+# different circumstances:
 #   - Invest: slow bar push, but pays for itself in economic terms. Right when
 #     stability is OK and you want to grow the empire long-term.
 #   - Garrison: fast bar push, but burns prestige and projection. Right when
@@ -2312,7 +2312,7 @@ foreign_property_protected_modifier = {
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	# The weekly upkeep is carried by colonial_development_investment_expense_modifier
-	# (re-applied each JE pulse at a share of the colonies' GDP per level) so it
+	# (declared on the entry at a share of the colonies' GDP per level) so it
 	# shows up in the budget line rather than being a silent treasury debit.
 	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
@@ -2327,10 +2327,10 @@ colonial_development_investment_modifier = {
 	# that mechanically erodes them.
 }
 
-# Per-pulse-refreshed expense modifier for the Development Investment program.
-# Held isolated (country_expenses_add only) so the refresh can re-apply it with
-# the weekly cost as its multiplier without rescaling the other policy effects:
-# country_expenses_add is a WEEKLY amount, so the multiplier is
+# Expense modifier for the Development Investment program, a scaling modifier
+# on je_colonial_empire. Held isolated (country_expenses_add only) so its value
+# can be the weekly cost without rescaling the other policy effects:
+# country_expenses_add is a WEEKLY amount, so the value is
 # colonial_invest_weekly_cost (a share of the colonies' yearly GDP per level,
 # over 52). Surfaces in the country's budget panel as a line item — players can
 # see what the program is actually costing them.
