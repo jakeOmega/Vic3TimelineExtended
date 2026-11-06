@@ -95,6 +95,7 @@ the same test that is a top-level conjunct of its `is_shown_when_inactive`:
 | `has_game_rule = custom_religions_allowed` | Create New Religion |
 | `has_game_rule = world_war_enabled` | World War |
 | `sr_space_race_on = yes` | the eight live Space Race entries |
+| `te_banking_system_on = yes` | Banking (the rule half of `te_banking_entry_expected`; the decentralized and rebel tests beside it are not permanent and stay out) |
 | `gm_system_enabled = yes` | Grand Monuments |
 | `te_tax_code_on = yes` | Tax Code |
 
@@ -103,15 +104,14 @@ The retired Moon Base (`is_shown_when_inactive` and `possible` both
 inactive record every country holds of it (#1416 counts 286 for each such entry).
 
 Left out, each because a country can still come to qualify: Global Warming
-(the rule, or a law any country can enact), Banking (`te_banking_entry_expected`
-also tests for decentralized nations and rebels), State Collapse (decentralized
+(the rule, or a law any country can enact), State Collapse (decentralized
 nations become recognized ones, `decolonization.txt`), Strategic Reserve (a
 technology), the five vanilla entries the mod copies (vanilla gives none of
 them a prune), and the Map Room's (map modes are out of scope).
 
 Side effect: with the record gone, `add_journal_entry` of the type is no
 longer refused (#1416). Every add site of these types is already behind the
-same rule (`gm_system_enabled`, `has_game_rule = nuclear_weapons_enabled`,
+same rule (`gm_system_enabled`, `te_banking_entry_expected`, `has_game_rule = nuclear_weapons_enabled`,
 `sr_space_race_on`, `ce_reentry_due`'s `decolonization_enabled`), so nothing adds
 them with the rule off.
 
@@ -120,7 +120,11 @@ them with the rule off.
 same entry's `is_shown_when_inactive`. A rule test is `has_game_rule`, or a
 named trigger whose body (followed through further named triggers) reads only
 `has_game_rule` under `AND`/`OR`/`NOT`; `sr_space_race_on`,
-`gm_system_enabled` and `te_tax_code_on` are such wrappers today. So a prune
+`gm_system_enabled`, `te_tax_code_on` and `te_banking_system_on` are such
+wrappers today. Top-level conjuncts are read through named triggers called as
+one (`sr_milestone_followup_is_shown`, `te_banking_entry_expected`). The other
+way round, every mod entry with a rule test among those conjuncts carries a
+prune, so a new rule-gated entry can't go without one. So a prune
 can't drift from the gate it mirrors, and no prune can come to read a variable
 set after the first tick, which would delete the entry for good in a game that
 later qualifies.
@@ -529,8 +533,14 @@ with PR 1.
 
 ## 7. Calls made in this design (owner to check)
 
-1. **Banking's monetary layer stays as it is** (§ 4.7): it serves countries
-   with no banking entry, including every country in a rule-off game.
+1. **Banking's monetary layer stays as it is** (§ 4.7). Every country under
+   the rule holds the entry, dormant until its cycle starts, and the layer's
+   modifiers already sit on it there. But the layer also serves countries no
+   entry reaches: every country in a rule-off game (the rate paid replaces
+   vanilla's cancelled base rate), decentralized nations, rebels and the first
+   fortnight. Converting it means a hybrid that keeps the country branch and
+   adds a second path beside it (owner asked, 2026-11-06; held unless the owner
+   wants the hybrid in PR 4).
 2. **Tax Code Light converts, with a safety net** (§ 4.9): its entry starts to
    carry gameplay, and the net adds it to a country the engine leaves out.
 3. **Bubble inertia keeps six declarations**, so the modifier list still names
