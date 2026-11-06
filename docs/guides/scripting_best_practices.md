@@ -5457,4 +5457,14 @@ Seen in game on 2026-11-05:
   of 14 days). There is no `remove_journal_entry` effect either: an entry leaves the journal by concluding, or by
   `can_deactivate = yes` with its `possible` failing and `is_shown_when_inactive` false (that worked).
 
+- **A map of "your" country needs the player in a global variable.** The Map Room's Nuclear Weapons and Agent
+  Networks maps compare each state's owner with `global_var:te_jmap_viewer` (saved as a temporary scope, then
+  `this = scope:…`), which every pick and map button and a player's monthly pulse set to the player's country. One
+  viewer for every player in multiplayer, as the pick is. That the comparison works in a paint is unverified (sixth
+  pass, checks 12–13).
+- **A map can't walk pops, so keep the figure where it is already computed.** The Emissions map reads each state's
+  yearly snapshot (`gw_state_emis`), written in the pass that sums the country's emissions, and the Colonies map a
+  monthly colony mark written in the pass that counts colonies: one walk each, as before.
+- **`alpha` binds on a side panel's root** (`journal_entry_panel`): the see-through page fades (2026-11-06).
+
 The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.

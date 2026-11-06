@@ -1,0 +1,234 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md): the systems' maps, one trigger
+# per color band. Root: the state being painted (or hovered), every state in the world, so `owner` is that state's
+# country. Each system's own entry (map_color, map_tooltip) and the Map Room's branch for the same map ask the same
+# triggers in the same order, so the two can't drift (test_journal_map_modes.py, the parity test). Cheap reads only:
+# stored variables, engine triggers and the systems' own cached figures; nothing here walks pops.
+#
+# "Your" maps (the nuclear deterrent, the covert networks) are drawn for the maps' viewer, global_var:te_jmap_viewer,
+# the player's country (te_jmap_note_viewer, te_journal_map_effects.txt): a paint can't reach the player.
+
+# ---------------------------------------------------------------------------
+# The viewer
+# ---------------------------------------------------------------------------
+# The state's owner is the viewer.
+te_jmap_owner_is_viewer = {
+	global_var:te_jmap_viewer ?= { save_temporary_scope_as = te_jmap_viewer_scope }
+	owner ?= { this = scope:te_jmap_viewer_scope }
+}
+
+# ---------------------------------------------------------------------------
+# Global Warming: each state's share of the world's emissions last year
+# ---------------------------------------------------------------------------
+# No figure yet: no yearly snapshot of the state (gw_state_emis, gw_snapshot_country_emissions_effect) or no world
+# total (gw_g_global_emis, re-based each January).
+# The figures are read only inside script values' guarded ifs (te_jmap_gw_world, te_jmap_gw_state_emis), never beside
+# their guards in this OR: a multi-child NOT reads every child (scripting_best_practices.md), and an OR may too.
+te_jmap_gw_no_data = {
+	OR = {
+		NOT = { has_variable = gw_state_emis }
+		te_jmap_gw_world <= 0
+	}
+}
+
+# Takes more out of the air than it puts in (Direct Air Capture, capture credits).
+te_jmap_gw_removal = {
+	te_jmap_gw_state_emis < 0
+}
+
+# ---------------------------------------------------------------------------
+# Nuclear Weapons: the world's nuclear powers, and the viewer's deterrent
+# ---------------------------------------------------------------------------
+# Another country's arsenal is shown as the world sees it (nd_believed_armed, the nuclear_power modifier a test
+# earns), never by its true count (nuclear.md's privacy rule). The readers are the deterrent's own
+# (nuclear_deterrence_triggers.txt), so an umbrella or a guarantee counts here exactly as the crisis code counts it.
+
+# Hosts the viewer's weapons (Nuclear Basing: the viewer the guest, the state's owner the host).
+te_jmap_nuke_hosts_yours = {
+	global_var:te_jmap_viewer ?= { save_temporary_scope_as = te_jmap_viewer_scope }
+	owner ?= {
+		NOT = { this = scope:te_jmap_viewer_scope }
+		nd_hosts_weapons_of = { GUEST = scope:te_jmap_viewer_scope }
+	}
+}
+
+# Under the viewer's umbrella: a Nuclear Guarantee the viewer gave it, or the umbrella over the viewer's own direct
+# subject. Wartime cover (nd_cobelligerent_of) lasts only a war, so it isn't shown.
+te_jmap_nuke_umbrella = {
+	global_var:te_jmap_viewer ?= { save_temporary_scope_as = te_jmap_viewer_scope }
+	owner ?= {
+		NOT = { this = scope:te_jmap_viewer_scope }
+		OR = {
+			nd_is_guaranteed_by_treaty = { GUARANTOR = scope:te_jmap_viewer_scope }
+			nd_under_umbrella_of = { OVERLORD = scope:te_jmap_viewer_scope }
+		}
+	}
+}
+
+# Its independence guaranteed by the viewer, while the world believes the viewer a nuclear power (vanilla's
+# guarantee_independence article, directed: the viewer the source). nd_believed_armed, not nd_is_armed: in multiplayer
+# another player sees the viewer's map, and an untested arsenal must not show through it.
+te_jmap_nuke_guaranteed = {
+	global_var:te_jmap_viewer ?= {
+		save_temporary_scope_as = te_jmap_viewer_scope
+		nd_believed_armed = yes
+	}
+	owner ?= {
+		NOT = { this = scope:te_jmap_viewer_scope }
+		save_temporary_scope_as = te_jmap_guaranteed_scope
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = guarantee_independence
+				source_country = scope:te_jmap_viewer_scope
+				target_country = scope:te_jmap_guaranteed_scope
+			}
+		}
+	}
+}
+
+# Any other nuclear power, as the world sees it.
+te_jmap_nuke_armed = {
+	owner ?= { nd_believed_armed = yes }
+}
+
+# ---------------------------------------------------------------------------
+# Covert Warfare: the viewer's network in each country
+# ---------------------------------------------------------------------------
+# The viewer has a network in the state's owner (te_jmap_net_strength, te_journal_map_values.txt).
+te_jmap_net_some = {
+	te_jmap_net_strength > 0
+}
+
+# ---------------------------------------------------------------------------
+# United Nations
+# ---------------------------------------------------------------------------
+# No UN: before the founding, or after a dissolution.
+te_jmap_un_unfounded = {
+	NOT = { has_global_variable = un_founded }
+}
+
+# A UN mission works in the state ($TYPE$: 1 peacekeeping, 2 aid, 3 stabilization, 4 electoral; un_mission_values.txt).
+te_jmap_un_mission = {
+	un_state_mission_type = $TYPE$
+}
+
+# The UN's headquarters stands in the state.
+te_jmap_un_hq = {
+	has_building = building_un_headquarters
+}
+
+# The owner holds a permanent seat on the Security Council (the seat's mirror, un_state_effects.txt: the variable is
+# the truth). The current model has no elected seats.
+te_jmap_un_permanent = {
+	owner ?= { has_variable = un_permanent_member_modifier_on }
+}
+
+# The owner is a member (the membership's mirror).
+te_jmap_un_member = {
+	owner ?= { has_variable = un_member_modifier_on }
+}
+
+# ---------------------------------------------------------------------------
+# Cultural Hegemony: each country's political model
+# ---------------------------------------------------------------------------
+# The owner's model at the last census of models ($MODEL$, 1-15: ch_set_political_model's codes,
+# cultural_hegemony_effects.txt). ch_model_census, the snapshot, not ch_model, which the movement-pressure effect
+# rewrites between rebuilds.
+te_jmap_ch_model = {
+	owner ?= {
+		has_variable = ch_model_census
+		var:ch_model_census = $MODEL$
+	}
+}
+
+# The owner is the leading cultural power (ch_rank_1).
+te_jmap_ch_hegemon = {
+	has_global_variable = ch_rank_1
+	owner ?= { this = global_var:ch_rank_1 }
+}
+
+# No model yet: a country formed since the last census of models.
+te_jmap_ch_no_data = {
+	owner ?= {
+		NOT = { has_variable = ch_model_census }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The Seabed: each coastal state's ocean basin
+# ---------------------------------------------------------------------------
+# $BASIN$: 1 Pacific, 2 Atlantic, 3 Indian, 4 Arctic, 5 Southern (te_seabed_basins_generated.txt).
+te_jmap_seabed_basin = {
+	has_variable = te_seabed_basin
+	var:te_seabed_basin = $BASIN$
+}
+
+# Coastal, with no basin recorded yet: a state made since January's sweep (te_seabed_global_monthly).
+te_jmap_seabed_unrecorded = {
+	is_coastal = yes
+	NOT = { has_variable = te_seabed_basin }
+}
+
+# ---------------------------------------------------------------------------
+# Grand Monuments: each state's grandeur
+# ---------------------------------------------------------------------------
+# A grand monument stands in the state (gm_state_grandeur, 0 without one).
+te_jmap_gm_monument = {
+	gm_state_grandeur > 0
+}
+
+# ---------------------------------------------------------------------------
+# Colonial Empire: the colonies, colored by their empire's stability
+# ---------------------------------------------------------------------------
+# Country scope: the empire's band is known (colonial_empire_tier, 1-5; 0 before the entry's first refresh).
+te_jmap_ce_tier_known = {
+	has_variable = colonial_empire_tier
+	var:colonial_empire_tier >= 1
+}
+
+# A colony of its owner: is_overseas_colonial_state as the entry counts it, marked each month by
+# colonial_empire_refresh_display (te_jmap_ce_colony names the owner, so a state taken since reads as none), while the
+# owner holds the entry.
+te_jmap_ce_colony = {
+	has_variable = te_jmap_ce_colony
+	owner ?= {
+		save_temporary_scope_as = te_jmap_ce_owner_scope
+		has_journal_entry = je_colonial_empire
+		te_jmap_ce_tier_known = yes
+	}
+	var:te_jmap_ce_colony ?= scope:te_jmap_ce_owner_scope
+}
+
+# A colonial subject's state (a colony, a chartered company, a separated protectorate) whose overlord holds the entry.
+te_jmap_ce_subject = {
+	owner ?= {
+		is_qualifying_colonial_subject = yes
+		overlord ?= {
+			has_journal_entry = je_colonial_empire
+			te_jmap_ce_tier_known = yes
+		}
+	}
+}
+
+# The empire's stability band, $TIER$: 1 collapsing, 2 crumbling, 3 strained, 4 stable, 5 solidified (the monthly
+# snapshot of colonial_empire_live_tier, colonial_empire_display_effects.txt; the band ladder in
+# colonial_empire_values.txt is the only place its boundaries live). Asked of the colony's owner or the subject's
+# overlord.
+te_jmap_ce_colony_band = {
+	te_jmap_ce_colony = yes
+	owner ?= { var:colonial_empire_tier = $TIER$ }
+}
+
+te_jmap_ce_subject_band = {
+	te_jmap_ce_subject = yes
+	owner ?= {
+		overlord ?= { var:colonial_empire_tier = $TIER$ }
+	}
+}
+
+# A home state of an empire holding the entry: not a colony.
+te_jmap_ce_metropole = {
+	owner ?= {
+		has_journal_entry = je_colonial_empire
+		te_jmap_ce_tier_known = yes
+	}
+}

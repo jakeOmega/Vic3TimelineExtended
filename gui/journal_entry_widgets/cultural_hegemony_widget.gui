@@ -2904,6 +2904,8 @@ types cultural_hegemony_widget_types
 				blockoverride "text" {
 					text = "je_cultural_hegemony"
 				}
+				### Show the political models on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_ch_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
