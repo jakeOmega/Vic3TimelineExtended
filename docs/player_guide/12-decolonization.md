@@ -468,7 +468,8 @@ condemns colonialism decides in War in (the territory): condemn it (relations
 −20), arm the rebels (they fight harder and keep their resolve, it pays them a
 monthly sum, and relations fall by 30), intervene, or stay out. Intervening
 joins the war on the rebels' side and is rare: it is open only to a great power
-at peace that is your rival with the larger army, and never to your ally,
+at peace that is your rival with the larger army and the reach to get it to the
+rebels, and never to your ally,
 defensive-pact partner, power bloc partner, subject or overlord, or one under a
 truce with you. A great power that backs colonial rule may send you arms
 instead, for two years, but never joins the war.

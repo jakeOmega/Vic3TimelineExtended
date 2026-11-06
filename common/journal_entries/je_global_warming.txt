@@ -166,16 +166,9 @@
 	# Each held its own remove/re-add on this pulse or a monthly sweep until
 	# #1404.
 
-	# Climate Warming, at the felt anomaly (after any aerosol mask). Floored at
-	# 0: with no mask the reading can go negative, and a negative value would
-	# invert every harm.
-	scaling_modifiers_while_active = {
-		modifier = global_warming
-		value = {
-			value = temperature_anomaly_display
-			min = 0
-		}
-	}
+	# Climate Warming itself (global_warming) is the same for every country, so
+	# the contextless World Climate entry declares it once for the world
+	# (je_world_climate.txt, #1448). What stays here differs by country.
 
 	# Weakened Monsoon: the aerosol mask's regional cost, scaled by the mask in
 	# degrees whoever flies it, for a country whose capital lies in a monsoon

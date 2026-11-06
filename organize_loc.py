@@ -118,12 +118,13 @@ def find_company_keys(project_directory):
 
 
 def find_country_keys(project_directory):
-    """Finds the name and adjective keys of every country tag the mod defines.
+    """Finds the name, adjective and formal-name keys of every country tag the mod defines.
 
     The engine reads `TAG` and `TAG_ADJ` for each entry in
     common/country_definitions/ without any script naming them, so a releasable
     or formable whose adjective no dynamic name repeats would otherwise be
-    filed to te_unused_l_english.yml.
+    filed to te_unused_l_english.yml. Vanilla 1.15 also reads `TAG_DEF`, the
+    formal name (`GetNameDef`, the Country Names on Map rule; #1452).
     """
     country_keys = set()
     path = os.path.join(project_directory, "common", "country_definitions")
@@ -133,7 +134,7 @@ def find_country_keys(project_directory):
         if file.endswith(".txt"):
             with open(os.path.join(path, file), "r", encoding="utf-8-sig") as f:
                 for tag in re.findall(r"^([A-Z][A-Z0-9]{2})\s*=\s*\{", f.read(), re.MULTILINE):
-                    country_keys.update((tag, f"{tag}_ADJ"))
+                    country_keys.update((tag, f"{tag}_ADJ", f"{tag}_DEF"))
     return country_keys
 
 
@@ -522,7 +523,7 @@ CITY_STATE_TAGS = (
     "NYC", "SFO", "SGP", "HKG", "SHG", "CST", "MCU", "KUW", "FIU", "BOM", "GOA",
     "PDY", "ADN", "DXB", "TAN", "LAG", "DKR", "DJI", "OCL", "GYE", "CTG", "BUE",
 )
-CITY_STATE_LOC_KEYS = frozenset(CITY_STATE_TAGS) | {f"{t}_ADJ" for t in CITY_STATE_TAGS}
+CITY_STATE_LOC_KEYS = frozenset(CITY_STATE_TAGS) | {f"{t}_{s}" for t in CITY_STATE_TAGS for s in ("ADJ", "DEF")}
 
 # Ordered list of output categories.
 CATEGORIES = [
@@ -709,6 +710,7 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
         or key in {
             "AFU", "INM", "EAF", "EUN", "UNA", "UNE", "ZHO", "BHA", "NUS", "DAR",
             "AFU_ADJ", "INM_ADJ", "EAF_ADJ", "EUN_ADJ", "UNA_ADJ", "UNE_ADJ", "ZHO_ADJ", "BHA_ADJ", "NUS_ADJ", "DAR_ADJ",
+            "AFU_DEF", "INM_DEF", "EAF_DEF", "EUN_DEF", "UNA_DEF", "UNE_DEF", "ZHO_DEF", "BHA_DEF", "NUS_DEF", "DAR_DEF",
         }
     ):
         return "FORMABLE_COUNTRIES"
