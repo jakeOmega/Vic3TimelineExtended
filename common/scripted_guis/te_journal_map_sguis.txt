@@ -190,6 +190,6 @@ te_jmap_reopen_log_sgui = {
 	scope = country
 	ai_is_valid = { always = no }
 	effect = {
-		debug_log = "TE_JMAP reopen date=[TimeKeeper.GetCurrentDate.GetString] (the repainter's reopen ran, a tenth of a second after its close)"
+		debug_log = "TE_JMAP reopen date=[TimeKeeper.GetCurrentDate.GetString] (the repainter's reopen ran, a twentieth of a second after its close)"
 	}
 }

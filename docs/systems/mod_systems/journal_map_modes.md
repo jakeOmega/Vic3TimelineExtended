@@ -82,11 +82,11 @@ entry, in no country's journal.
   widget outside the page (`gui/te_map_widgets.gui`, registered in `gui/scripted_widgets/te_systems_window.txt`), which
   carries the Map Room as its own `datacontext`. A twentieth of a second after the click it closes the page
   (`InformationPanelBar.ClosePanel`), for the scripted GUI's effect to land, and its next state,
-  `te_jmap_repaint_open`, opens the page again a tenth of a second later with the plain `OpenJournalEntryPanel`: the
+  `te_jmap_repaint_open`, opens the page again a twentieth of a second later with the plain `OpenJournalEntryPanel`: the
   page is closed by then, so the toggle opens it. Reopening repainted a paused map (2026-11-05). The third pass ran both
   calls from a state on the pick button itself, `ClosePanel` then `OpenJournalEntryPanelDontToggle`: the page closed
   and stayed closed, with no log line (fifth session). The reopen logs `TE_JMAP reopen` first. It worked with a quarter
-  second's close (sixth session); a twentieth is the fifth pass's test (check 1).
+  second's close and a tenth's reopen (sixth session); a twentieth each is the fifth pass's test (check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
 
 ### Why not a country entry added by a button

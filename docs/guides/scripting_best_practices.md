@@ -5439,7 +5439,7 @@ Seen in game on 2026-11-05:
   close and the open from a widget outside the page, as two states chained by `next`
   (`te_jmap_repainter`, `gui/te_map_widgets.gui`). That works: the second state's plain `OpenJournalEntryPanel`
   reopens the page and repaints its map, with the close a quarter second after the click and the open a tenth after
-  the close (sixth session, 2026-11-05). How short the first wait can be is open (0.05 s in the fifth pass's check 1).
+  the close (sixth session, 2026-11-05). How short the two waits can be is open (0.05 s each in the fifth pass's check 1).
 - **An inactive entry's page opens and paints.** A button holding `GetPlayerJournalEntry('<key>')` opens the inactive
   copy every country holds of an entry with activation triggers, and its map paints, so a map button needn't wait
   for the entry to activate. That page listed a long run of countries under Involved Countries.
