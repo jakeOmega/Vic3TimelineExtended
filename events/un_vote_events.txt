@@ -1580,10 +1580,10 @@ un_vote.2 = {
 				hidden_effect = {
 					every_country = {
 						limit = {
-							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
+							has_variable = un_peacekeeping_contributor_modifier_on
+							NOT = { has_variable = un_peacekeeping_contributor_cost_on }
 						}
-						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+						un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
 					}
 				}
 			}
@@ -1978,10 +1978,10 @@ un_vote.2 = {
 					limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 					every_country = {
 						limit = {
-							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
+							has_variable = un_peacekeeping_contributor_modifier_on
+							NOT = { has_variable = un_peacekeeping_contributor_cost_on }
 						}
-						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+						un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
 					}
 				}
 				if = {

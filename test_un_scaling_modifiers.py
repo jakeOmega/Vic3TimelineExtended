@@ -133,7 +133,33 @@ EXPECTED = {
     "un_mandate_war_support_modifier": _gated(
         "has_global_variable = un_founded un_teeth_mandate_support_applies = yes", "un_enforcement"),
     "te_seabed_royalty_modifier": _gated("te_seabed_royalty_paying = yes", "var:te_seabed_royalty_cached"),
+    # The programmes and stances, while their mirrors are set: the flat ones at
+    # 1, the costs at the weekly expense their start caches, the development
+    # benefits at the contribution's size factor.
+    "un_peacekeeping_contributor_modifier": _gated("has_variable = un_peacekeeping_contributor_modifier_on", "1"),
+    "un_peacekeeping_contributor_cost": _gated(
+        "has_variable = un_peacekeeping_contributor_cost_on has_variable = un_peacekeeping_expense_cached",
+        "var:un_peacekeeping_expense_cached"),
+    "un_development_contributor_modifier": _gated(
+        "has_variable = un_development_contributor_modifier_on has_variable = un_dev_fund_benefit",
+        "var:un_dev_fund_benefit"),
+    "un_development_contributor_cost": _gated(
+        "has_variable = un_development_contributor_cost_on has_variable = un_development_expense_cached",
+        "var:un_development_expense_cached"),
+    "un_human_rights_champion_modifier": _gated("has_variable = un_human_rights_champion_modifier_on", "1"),
+    "un_arms_control_participant_modifier": _gated("has_variable = un_arms_control_participant_modifier_on", "1"),
+    "un_champion_order_cost": _gated("has_variable = un_champion_order_cost_on", "1"),
+    # Championing the order cancels undermining it, as the old two-modifier
+    # merge did (un_policy_counts_in_full).
+    "un_undermine_order_cost": _gated("un_undermines_the_order = yes", "1"),
 }
+
+PROGRAMMES = (
+    "un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost",
+    "un_development_contributor_modifier", "un_development_contributor_cost",
+    "un_human_rights_champion_modifier", "un_arms_control_participant_modifier",
+    "un_champion_order_cost", "un_undermine_order_cost",
+)
 
 
 def _script_files():
@@ -287,6 +313,121 @@ class MissionMandateSeabedTests(unittest.TestCase):
         for path in _script_files():
             with self.subTest(path=os.path.relpath(path, REPO)):
                 self.assertNotIn("un_teeth_mandate_support_refresh", _read(path))
+
+
+BUTTONS = _path("common", "scripted_buttons", "un_buttons.txt")
+SGUIS = _path("common", "scripted_guis", "un_action_sguis.txt")
+STATE_EFFECTS = _path("common", "scripted_effects", "un_state_effects.txt")
+MEMBERSHIP_TRIGGERS = _path("common", "scripted_triggers", "un_membership_triggers.txt")
+VOTE_EFFECTS = _path("common", "scripted_effects", "un_vote_effects.txt")
+
+# start button -> (the mirrors it sets, the influence its start commits or None,
+# the modifiers its show_as_tooltip previews); each has an un_act_*_sgui twin.
+STARTS = {
+    "un_peacekeeping_mission_button": (
+        ("un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost"), "un_programme_influence_cost",
+        ("un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost")),
+    "un_fund_development_button": (
+        ("un_development_contributor_modifier", "un_development_contributor_cost"), None, ()),
+    "un_human_rights_resolution_button": (
+        ("un_human_rights_champion_modifier",), "un_programme_influence_cost", ("un_human_rights_champion_modifier",)),
+    "un_arms_control_button": (
+        ("un_arms_control_participant_modifier",), "un_programme_influence_cost",
+        ("un_arms_control_participant_modifier",)),
+    "un_champion_order_button": (("un_champion_order_cost",), "un_stance_influence_cost", ("un_champion_order_cost",)),
+    "un_undermine_order_button": (("un_undermine_order_cost",), "un_stance_influence_cost", ("un_undermine_order_cost",)),
+}
+STOPS = {
+    "un_end_peacekeeping_button": ("un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost"),
+    "un_defund_development_button": ("un_development_contributor_modifier", "un_development_contributor_cost"),
+    "un_withdraw_human_rights_button": ("un_human_rights_champion_modifier",),
+    "un_withdraw_arms_control_button": ("un_arms_control_participant_modifier",),
+    "un_stop_championing_button": ("un_champion_order_cost",),
+    "un_stop_undermining_button": ("un_undermine_order_cost",),
+}
+
+
+def _twin(button):
+    return "un_act_" + button[len("un_"):-len("_button")] + "_sgui"
+
+
+def _effect(body):
+    """The flattened ``effect = { ... }`` of a button or scripted GUI."""
+    flat = _flat(body)
+    i = flat.index("effect = {")
+    depth = 0
+    for j in range(i + len("effect = "), len(flat)):
+        depth += {"{": 1, "}": -1}.get(flat[j], 0)
+        if depth == 0:
+            return flat[i:j + 1]
+    raise AssertionError("effect is not closed")
+
+
+class ProgrammeTests(unittest.TestCase):
+    def test_the_mirrors_are_written_only_through_the_helpers(self):
+        state = _read(STATE_EFFECTS)
+        self.assertEqual(_lines(_block(state, "un_mirror_set")), ["set_variable = $MIRROR$"])
+        self.assertEqual(_flat(_block(state, "un_mirror_clear")),
+                         "if = { limit = { has_variable = $MIRROR$ } remove_variable = $MIRROR$ }")
+        for modifier in PROGRAMMES:
+            with self.subTest(modifier=modifier):
+                writes = _writes(modifier + "_on")
+                self.assertEqual(writes, {"set_variable": [], "remove_variable": [], "change_variable": []})
+
+    def test_each_start_sets_its_mirrors_previews_and_commits_its_influence(self):
+        files = {BUTTONS: _read(BUTTONS), SGUIS: _read(SGUIS)}
+        for button, (mirrors, influence, previews) in STARTS.items():
+            for path, name in ((BUTTONS, button), (SGUIS, _twin(button))):
+                with self.subTest(start=name):
+                    effect = _effect(_block(files[path], name))
+                    for modifier in mirrors:
+                        self.assertIn(f"un_mirror_set = {{ MIRROR = {modifier}_on }}", effect)
+                    if influence:
+                        self.assertIn(f"un_influence_pending_add = {{ AMOUNT = {influence} }}", effect)
+                    else:
+                        self.assertNotIn("un_influence_pending_add", effect)
+                    if previews:
+                        preview = effect[effect.index("show_as_tooltip = {"):]
+                        for modifier in previews:
+                            self.assertIn(f"add_modifier = {{ name = {modifier}", preview)
+
+    def test_each_stop_clears_its_mirrors(self):
+        files = {BUTTONS: _read(BUTTONS), SGUIS: _read(SGUIS)}
+        for button, mirrors in STOPS.items():
+            for path, name in ((BUTTONS, button), (SGUIS, _twin(button))):
+                with self.subTest(stop=name):
+                    effect = _effect(_block(files[path], name))
+                    for modifier in mirrors:
+                        self.assertIn(f"un_mirror_clear = {{ MIRROR = {modifier}_on }}", effect)
+
+    def test_the_pending_influence_lasts_a_week(self):
+        body = _flat(_block(_read(STATE_EFFECTS), "un_influence_pending_add"))
+        self.assertEqual(body.count("days = 7"), 2)
+        self.assertIn("add = $AMOUNT$", body)
+
+    def test_a_pledge_signs_up_once(self):
+        effects = _flat(_read(VOTE_EFFECTS))
+        for modifier in ("un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost"):
+            with self.subTest(modifier=modifier):
+                self.assertIn(f"if = {{ limit = {{ NOT = {{ has_variable = {modifier}_on }} }} show_as_tooltip = {{",
+                              effects)
+                self.assertIn(f"un_mirror_set = {{ MIRROR = {modifier}_on }}", effects)
+
+    def test_undermining_is_cancelled_by_championing(self):
+        triggers = _read(MEMBERSHIP_TRIGGERS)
+        self.assertEqual(_lines(_block(triggers, "un_undermines_the_order")),
+                         ["has_variable = un_undermine_order_cost_on",
+                          "NOT = { has_variable = un_champion_order_cost_on }"])
+        self.assertIn("NOT = { un_undermines_the_order = yes }", _flat(_block(triggers, "un_policy_counts_in_full")))
+
+    def test_every_way_out_ends_the_programmes(self):
+        state = _read(STATE_EFFECTS)
+        ends = _block(state, "un_programmes_end")
+        for modifier in PROGRAMMES:
+            with self.subTest(modifier=modifier):
+                self.assertIn(f"un_mirror_clear = {{ MIRROR = {modifier}_on }}", ends)
+        self.assertIn("un_programmes_end = yes", _block(_read(LADDER), "un_membership_end_effect"))
+        self.assertIn("un_programmes_end = yes", _block(state, "un_state_forget_representation"))
 
 
 if __name__ == "__main__":

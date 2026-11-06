@@ -270,6 +270,99 @@
 			}
 		}
 	}
+	# The programmes and stances, while their mirrors are set (§0.9: the
+	# variable is the truth, so a revolution's winner keeps them). The two
+	# costs and the Development Programs benefits at their cached figures;
+	# undermining only without the championing a merge may deliver beside it.
+	scaling_modifiers_while_active = {
+		modifier = un_peacekeeping_contributor_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_peacekeeping_contributor_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_peacekeeping_contributor_cost
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_peacekeeping_contributor_cost_on
+					has_variable = un_peacekeeping_expense_cached
+				}
+				add = var:un_peacekeeping_expense_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_development_contributor_modifier
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_development_contributor_modifier_on
+					has_variable = un_dev_fund_benefit
+				}
+				add = var:un_dev_fund_benefit
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_development_contributor_cost
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = un_development_contributor_cost_on
+					has_variable = un_development_expense_cached
+				}
+				add = var:un_development_expense_cached
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_human_rights_champion_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_human_rights_champion_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_arms_control_participant_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_arms_control_participant_modifier_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_champion_order_cost
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = un_champion_order_cost_on }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = un_undermine_order_cost
+		value = {
+			value = 0
+			if = {
+				limit = { un_undermines_the_order = yes }
+				add = 1
+			}
+		}
+	}
 
 	progressbar = no
 	progress_desc = un_authority_progress_desc
@@ -428,11 +521,10 @@
 					# (un_authority_monthly_update, un_authority_effects.txt). Nothing
 					# per-member is applied here.
 
-					# Refresh contributor-cost cached expense vars so the JE-scoped
-					# add_modifier multipliers track current GDP. JE scope can't read
-					# country properties like gdp directly inside multiplier blocks.
+					# Re-price the programmes' weekly costs, which the entry's
+					# declarations read, so they follow today's GDP.
 					if = {
-						limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+						limit = { has_variable = un_peacekeeping_contributor_modifier_on }
 						set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
 					}
 					# Development Programs: the size's expense and benefit factor

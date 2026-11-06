@@ -998,7 +998,7 @@ un_events.6 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -1549,7 +1549,7 @@ un_events.10 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -1557,7 +1557,7 @@ un_events.10 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = -5
 			}
 		}
@@ -1623,7 +1623,7 @@ un_events.10 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -3760,7 +3760,7 @@ un_events.33 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 3
 			}
 			modifier = {
@@ -3891,11 +3891,11 @@ un_events.34 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = -1
 			}
 			# Leaving ends the World Development Fund's grant, which at these
@@ -3946,7 +3946,7 @@ un_events.34 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -4049,7 +4049,7 @@ un_events.35 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 3
 			}
 		}

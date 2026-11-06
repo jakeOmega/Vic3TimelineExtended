@@ -453,11 +453,13 @@ class ProgrammeTests(unittest.TestCase):
     def test_suspension_ends_running_programmes(self):
         body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),
                       "un_representation_monthly_update")
+        # The entry declares every programme while its mirror is set (#1404),
+        # and un_programmes_end clears them all (test_un_state_mirror.py).
+        self.assertIn("un_programmes_end = yes", body)
+        ends = _block(_read(_path("common", "scripted_effects", "un_state_effects.txt")), "un_programmes_end")
         for mod in _PROGRAMME_MODIFIERS:
             with self.subTest(modifier=mod):
-                # Through the mirror helper, which forgets the mirror too
-                # (§0.9, test_un_state_mirror.py).
-                self.assertIn("un_state_off = { MODIFIER = " + mod + " }", body)
+                self.assertIn("un_mirror_clear = { MIRROR = " + mod + "_on }", ends)
 
 
 class ConventionCatchUpTests(unittest.TestCase):

@@ -454,14 +454,6 @@ te_debug_un_wipe_entry = {
 	te_debug_un_drop = { MODIFIER = un_headquarters_modifier }
 	te_debug_un_drop = { MODIFIER = un_security_council_modifier }
 	te_debug_un_drop = { MODIFIER = un_permanent_member_modifier }
-	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_modifier }
-	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_cost }
-	te_debug_un_drop = { MODIFIER = un_development_contributor_modifier }
-	te_debug_un_drop = { MODIFIER = un_development_contributor_cost }
-	te_debug_un_drop = { MODIFIER = un_human_rights_champion_modifier }
-	te_debug_un_drop = { MODIFIER = un_arms_control_participant_modifier }
-	te_debug_un_drop = { MODIFIER = un_champion_order_cost }
-	te_debug_un_drop = { MODIFIER = un_undermine_order_cost }
 	te_debug_un_drop = { MODIFIER = un_human_rights_declaration_modifier }
 	te_debug_un_drop = { MODIFIER = un_nonproliferation_modifier }
 	te_debug_un_drop = { MODIFIER = un_climate_binding_modifier }

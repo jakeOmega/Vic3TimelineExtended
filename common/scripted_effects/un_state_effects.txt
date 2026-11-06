@@ -10,24 +10,31 @@
 # (2026-09-26): the winner continues the nation, and keeps all of it.
 #
 # THE CONTRACT. Every UN state modifier below has a mirror, the country
-# variable <modifier>_on. The variable is the truth; the modifier is rebuilt
-# from it. Every write goes through a helper here, or writes the modifier and
-# calls un_state_record / un_state_forget beside it in the same block (the
-# scripted buttons, whose add_modifier lines gen_un_button_descs.py reads, and
-# the three modifiers whose multiplier reads the caller's root: the two
-# programme costs and the Development Programs benefits).
-# test_un_state_mirror.py holds every write site to that.
+# variable <modifier>_on. The variable is the truth. Two kinds:
+#   - REBUILT: the modifier is added beside its mirror and rebuilt from it.
+#     Every write goes through a helper here (un_state_on / _off, the
+#     convention helpers), or writes the modifier and calls un_state_record /
+#     un_state_forget beside it in the same block.
+#     test_un_state_mirror.py holds every write site to that.
+#   - DECLARED (1.15, #1404): je_united_nations declares the modifier
+#     (scaling_modifiers_while_active) while the mirror is set, so the
+#     variable is all there is: nothing adds, removes, restores or
+#     reconciles it, and its readers test the mirror. Written through
+#     un_mirror_set / un_mirror_clear, which take the variable's name (no
+#     effect may be handed a declared modifier's name). A revolution's winner
+#     inherits the variables, so it keeps them by construction.
 #
-#   journal entry          un_member_modifier, un_founding_member_modifier,
+#   rebuilt, entry         un_member_modifier, un_founding_member_modifier,
 #                          un_headquarters_modifier, un_security_council_modifier,
 #                          un_permanent_member_modifier,
-#                          un_peacekeeping_contributor_modifier (+ _cost),
+#                          the seven convention modifiers
+#   declared               un_peacekeeping_contributor_modifier (+ _cost),
 #                          un_development_contributor_modifier (+ _cost),
 #                          un_human_rights_champion_modifier,
 #                          un_arms_control_participant_modifier,
-#                          un_champion_order_cost, un_undermine_order_cost,
-#                          the seven convention modifiers
-#   country                un_law_of_sea_modifier, un_icc_member_modifier,
+#                          un_champion_order_cost, un_undermine_order_cost
+#                          (un_programmes_end ends them all)
+#   rebuilt, country       un_law_of_sea_modifier, un_icc_member_modifier,
 #                          un_physical_protection_modifier,
 #                          un_cultural_diversity_modifier, un_nuclear_ban_modifier,
 #                          un_narcotics_control_modifier,
@@ -36,11 +43,11 @@
 #                          un_colony_protection_modifier
 #
 # Not mirrored, because the monthly pulse derives them from the above:
-# un_member_privileges_modifier, un_membership_benefits_modifier,
-# un_npt_disarmament_modifier, both pariah modifiers, the un_standing_* tier,
-# un_dues_modifier, every un_regime_* modifier,
-# un_development_patron_modifier (un_dev_fund_patron_pulse) and
-# un_antarctic_policy_modifier (te_antarctic_policy_refresh).
+# un_member_privileges_modifier, un_npt_disarmament_modifier, both pariah
+# modifiers, the un_standing_* tier, every un_regime_* modifier and
+# un_antarctic_policy_modifier (te_antarctic_policy_refresh). Declared from
+# variables of their own (je_united_nations): un_membership_benefits_modifier,
+# un_dues_modifier, un_development_patron_modifier and the rest of § 4.11.
 #
 # WHEN THE ENTRY IS REBUILT. var:un_state_rebuild_pending marks an entry whose
 # modifiers may have been wiped. It is set by the entry's `immediate`, which
@@ -79,6 +86,43 @@ un_state_forget = {
 	if = {
 		limit = { has_variable = $MODIFIER$_on }
 		remove_variable = $MODIFIER$_on
+	}
+}
+
+# The mirror of a modifier the entry declares (scaling_modifiers_while_active,
+# je_united_nations): the variable is all there is, and the entry carries the
+# modifier while it is set. Named by the variable, not the modifier: nothing
+# may hand a declared modifier's name to an effect (test_journal_entry_shape).
+# Parameters: $MIRROR$ = <modifier>_on
+# Scope: country
+un_mirror_set = {
+	set_variable = $MIRROR$
+}
+
+un_mirror_clear = {
+	if = {
+		limit = { has_variable = $MIRROR$ }
+		remove_variable = $MIRROR$
+	}
+}
+
+# Influence a programme or a stance started in the last week will use: the
+# entry's declaration reaches the country within days, and until it does the
+# influence gates (un_programme_influence_gate, un_stance_influence_gate) count
+# it here, so two starts cannot both pass on the same free influence.
+# Parameters: $AMOUNT$ = the influence it uses
+# Scope: country
+un_influence_pending_add = {
+	if = {
+		limit = { has_variable = un_influence_pending }
+		set_variable = {
+			name = un_influence_pending
+			value = { value = var:un_influence_pending add = $AMOUNT$ }
+			days = 7
+		}
+	}
+	else = {
+		set_variable = { name = un_influence_pending value = $AMOUNT$ days = 7 }
 	}
 }
 
@@ -168,19 +212,17 @@ un_convention_country_restore = {
 #     a suspended member keeps them (§0.8).
 #   - The headquarters only while we are its host (un_hq_is_host, which
 #     counts a winner whose predecessor hosted it).
-#   - The permanent seat, the Council seat and the programmes only while we
-#     conduct our own foreign policy: un_representation_monthly_update strips
-#     them from a suspended member. The seat also needs a free place:
+#   - The permanent seat and the Council seat only while we conduct our own
+#     foreign policy: un_representation_monthly_update strips them from a
+#     suspended member. The seat also needs a free place:
 #     un_permanent_seat_count counts our mirror, so five or fewer means nobody
 #     was given our seat in the meantime.
-#   - Championing and undermining exclude each other (their buttons say so).
-#     A merge can deliver both mirrors, the rebels' and the nation's; the
-#     nation's championing is restored and the undermining is not.
-#   - The programme costs, and the Development Programs benefits, are
-#     re-added as their buttons add them. The figure each multiplier reads
-#     (the expense; the size's benefit factor) is inherited with the other
-#     variables; it is created only if missing, and the member block re-prices
-#     it monthly.
+#   - The programmes and stances are declared from their mirrors, which the
+#     winner inherits, so nothing here restores them. Championing and
+#     undermining exclude each other (their buttons say so); a merge can
+#     deliver both mirrors, the rebels' and the nation's, and the nation's
+#     championing wins (un_undermines_the_order; the heal's rebuild drops the
+#     other mirror).
 #   - The regime stamp goes, so our next ordinary pulse re-reads our terms
 #     under the conventions (the un_regime_* modifiers are country modifiers,
 #     and the merge dropped them too) instead of waiting for the next epoch.
@@ -242,53 +284,6 @@ un_state_restore_all = {
 				un_state_restore = { MODIFIER = un_security_council_modifier }
 				un_state_restore = { MODIFIER = un_permanent_member_modifier }
 			}
-			un_state_restore = { MODIFIER = un_peacekeeping_contributor_modifier }
-			un_state_restore = { MODIFIER = un_human_rights_champion_modifier }
-			un_state_restore = { MODIFIER = un_arms_control_participant_modifier }
-			un_state_restore = { MODIFIER = un_champion_order_cost }
-			if = {
-				limit = { NOT = { has_variable = un_champion_order_cost_on } }
-				un_state_restore = { MODIFIER = un_undermine_order_cost }
-			}
-			if = {
-				limit = { un_state_missing = { MODIFIER = un_peacekeeping_contributor_cost } }
-				if = {
-					limit = { NOT = { has_variable = un_peacekeeping_expense_cached } }
-					set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
-				}
-				je:je_united_nations ?= {
-					add_modifier = {
-						name = un_peacekeeping_contributor_cost
-						multiplier = root.var:un_peacekeeping_expense_cached
-					}
-				}
-			}
-			if = {
-				limit = { un_state_missing = { MODIFIER = un_development_contributor_modifier } }
-				if = {
-					limit = { NOT = { has_variable = un_dev_fund_benefit } }
-					set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
-				}
-				je:je_united_nations ?= {
-					add_modifier = {
-						name = un_development_contributor_modifier
-						multiplier = root.var:un_dev_fund_benefit
-					}
-				}
-			}
-			if = {
-				limit = { un_state_missing = { MODIFIER = un_development_contributor_cost } }
-				if = {
-					limit = { NOT = { has_variable = un_development_expense_cached } }
-					set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
-				}
-				je:je_united_nations ?= {
-					add_modifier = {
-						name = un_development_contributor_cost
-						multiplier = root.var:un_development_expense_cached
-					}
-				}
-			}
 		}
 		# The stamp is dropped only for a member whose entry is being restored:
 		# a fresh activation has no stamp, and a non-member's terms (a colony's
@@ -328,7 +323,7 @@ un_state_rebuild = {
 			}
 			if = {
 				limit = { has_variable = un_champion_order_cost_on }
-				un_state_forget = { MODIFIER = un_undermine_order_cost }
+				un_mirror_clear = { MIRROR = un_undermine_order_cost_on }
 			}
 		}
 		else = {
@@ -354,14 +349,22 @@ un_state_rebuild = {
 un_state_forget_representation = {
 	un_state_forget = { MODIFIER = un_security_council_modifier }
 	un_state_forget = { MODIFIER = un_permanent_member_modifier }
-	un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
-	un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
-	un_state_forget = { MODIFIER = un_development_contributor_modifier }
-	un_state_forget = { MODIFIER = un_development_contributor_cost }
-	un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
-	un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
-	un_state_forget = { MODIFIER = un_champion_order_cost }
-	un_state_forget = { MODIFIER = un_undermine_order_cost }
+	un_programmes_end = yes
+}
+
+# Every programme and stance ends: their mirrors, which the entry's
+# declarations read (leaving, a suspension, a rebuild that cannot honour
+# them).
+# Scope: country
+un_programmes_end = {
+	un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
+	un_mirror_clear = { MIRROR = un_peacekeeping_contributor_cost_on }
+	un_mirror_clear = { MIRROR = un_development_contributor_modifier_on }
+	un_mirror_clear = { MIRROR = un_development_contributor_cost_on }
+	un_mirror_clear = { MIRROR = un_human_rights_champion_modifier_on }
+	un_mirror_clear = { MIRROR = un_arms_control_participant_modifier_on }
+	un_mirror_clear = { MIRROR = un_champion_order_cost_on }
+	un_mirror_clear = { MIRROR = un_undermine_order_cost_on }
 }
 
 # Scope: country
@@ -441,14 +444,6 @@ un_state_reconcile = {
 	un_state_reconcile_one = { MODIFIER = un_headquarters_modifier }
 	un_state_reconcile_one = { MODIFIER = un_security_council_modifier }
 	un_state_reconcile_one = { MODIFIER = un_permanent_member_modifier }
-	un_state_reconcile_one = { MODIFIER = un_peacekeeping_contributor_modifier }
-	un_state_reconcile_one = { MODIFIER = un_peacekeeping_contributor_cost }
-	un_state_reconcile_one = { MODIFIER = un_development_contributor_modifier }
-	un_state_reconcile_one = { MODIFIER = un_development_contributor_cost }
-	un_state_reconcile_one = { MODIFIER = un_human_rights_champion_modifier }
-	un_state_reconcile_one = { MODIFIER = un_arms_control_participant_modifier }
-	un_state_reconcile_one = { MODIFIER = un_champion_order_cost }
-	un_state_reconcile_one = { MODIFIER = un_undermine_order_cost }
 	un_state_reconcile_one = { MODIFIER = un_human_rights_declaration_modifier }
 	un_state_reconcile_one = { MODIFIER = un_nonproliferation_modifier }
 	un_state_reconcile_one = { MODIFIER = un_climate_binding_modifier }

@@ -314,7 +314,7 @@ un_member_wars_count = {
 un_peacekeeping_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		limit = { has_variable = un_peacekeeping_contributor_modifier_on }
 		add = 1
 	}
 }
@@ -322,7 +322,7 @@ un_peacekeeping_count = {
 un_development_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		limit = { has_variable = un_development_contributor_modifier_on }
 		add = 1
 	}
 }
@@ -330,7 +330,7 @@ un_development_count = {
 un_human_rights_champion_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+		limit = { has_variable = un_human_rights_champion_modifier_on }
 		add = 1
 	}
 }
@@ -338,7 +338,7 @@ un_human_rights_champion_count = {
 un_arms_control_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+		limit = { has_variable = un_arms_control_participant_modifier_on }
 		add = 1
 	}
 }
@@ -406,6 +406,26 @@ un_stance_influence_cost = { value = 500 }
 # un_arms_control_participant_modifier, while each runs.
 un_programme_influence_cost = { value = 100 }
 
+# What a start asks for: its cost, plus that of any programme or stance
+# started in the last week, which the entry's declaration may not carry yet
+# (un_influence_pending, un_influence_pending_add in un_state_effects.txt).
+# Scope: country
+un_stance_influence_gate = {
+	value = un_stance_influence_cost
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
+
+un_programme_influence_gate = {
+	value = un_programme_influence_cost
+	if = {
+		limit = { has_variable = un_influence_pending }
+		add = var:un_influence_pending
+	}
+}
+
 # Tabling a resolution on our own motion: un_sponsor_cost_modifier, or
 # un_sponsor_punitive_cost_modifier for one that punishes a member (sanctions,
 # mandate, expulsion, arms embargo, court referral, credentials), for
@@ -433,7 +453,7 @@ un_peacekeeping_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+				has_variable = un_peacekeeping_contributor_modifier_on
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -447,7 +467,7 @@ un_aid_donor_count = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+				has_variable = un_development_contributor_modifier_on
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}
@@ -463,7 +483,7 @@ un_peacekeeping_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+				has_variable = un_peacekeeping_contributor_modifier_on
 				has_modifier = un_peacekeeping_deployed_modifier
 			}
 		}
@@ -485,7 +505,7 @@ un_aid_benefit_scale = {
 	every_country = {
 		limit = {
 			OR = {
-				je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+				has_variable = un_development_contributor_modifier_on
 				has_modifier = un_humanitarian_aid_modifier
 			}
 		}

@@ -259,11 +259,11 @@ un_pillar_participation_value = {
 un_member_stance = {
 	value = 0
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 1
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		add = -1
 	}
 	add = modifier:country_un_institutional_alignment

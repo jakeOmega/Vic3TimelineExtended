@@ -567,18 +567,13 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_permanent_member_modifier }
 	un_state_off = { MODIFIER = un_founding_member_modifier }
 	remove_modifier = un_sanctions_enforcer_modifier
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
-	un_state_off = { MODIFIER = un_development_contributor_modifier }
-	un_state_off = { MODIFIER = un_development_contributor_cost }
+	# Every programme and stance, and their costs (declared on the entry
+	# while their mirrors are set).
+	un_programmes_end = yes
 	# The aid programme ends with its cost; keeping the prestige marker
 	# while dropping the bill made leaving a way to stop paying for aid.
 	remove_modifier = un_humanitarian_aid_modifier
 	remove_modifier = un_humanitarian_aid_cost
-	un_state_off = { MODIFIER = un_human_rights_champion_modifier }
-	un_state_off = { MODIFIER = un_arms_control_participant_modifier }
-	un_state_off = { MODIFIER = un_champion_order_cost }
-	un_state_off = { MODIFIER = un_undermine_order_cost }
 	# Permanent treaty commitments
 	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
 	un_state_off = { MODIFIER = un_nonproliferation_modifier }

@@ -138,7 +138,7 @@ un_authority_crisis_block = {
 		}
 		every_country = {
 			limit = {
-				je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+				un_undermines_the_order = yes
 				has_variable = un_power_share
 			}
 			custom_tooltip = je_un_auth_saviour_stop_undermining
@@ -147,8 +147,8 @@ un_authority_crisis_block = {
 			limit = {
 				country_rank >= rank_value:great_power
 				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-				NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				NOT = { has_variable = un_champion_order_cost_on }
+				NOT = { un_undermines_the_order = yes }
 				has_variable = un_power_share
 			}
 			custom_tooltip = je_un_auth_saviour_champion
@@ -166,13 +166,13 @@ un_authority_crisis_block = {
 # Scope: country (the viewer)
 un_authority_champions_block = {
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		custom_tooltip = je_un_auth_power_line
 	}
 }
 un_authority_underminers_block = {
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		custom_tooltip = je_un_auth_power_line
 	}
 }
@@ -196,8 +196,8 @@ un_authority_powers_block = {
 			NOT = {
 				any_country = {
 					OR = {
-						je:je_united_nations ?= { has_modifier = un_champion_order_cost }
-						je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+						has_variable = un_champion_order_cost_on
+						un_undermines_the_order = yes
 						AND = {
 							country_rank >= rank_value:great_power
 							NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }

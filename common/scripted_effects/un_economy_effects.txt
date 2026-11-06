@@ -333,23 +333,21 @@ un_dev_fund_monthly_update = {
 # 2026-10-03; un_fund_development_button's possible): before the Assembly
 # founds it, the programme's money would reach nobody. A contribution that
 # runs with no Fund (one from a save before the gate) ends here, exactly as
-# Stop Contributing ends it: both journal-entry modifiers and their mirrors go
-# (un_state_off, as leaving the UN does), and the contributor is told why.
+# Stop Contributing ends it: both mirrors go (the entry declares the
+# modifiers from them), and the contributor is told why.
 # Scope: none
 un_dev_fund_lapse_contributions = {
 	if = {
 		limit = { NOT = { has_global_variable = un_inst_development_fund } }
 		every_country = {
 			limit = {
-				je:je_united_nations ?= {
-					OR = {
-						has_modifier = un_development_contributor_modifier
-						has_modifier = un_development_contributor_cost
-					}
+				OR = {
+					has_variable = un_development_contributor_modifier_on
+					has_variable = un_development_contributor_cost_on
 				}
 			}
-			un_state_off = { MODIFIER = un_development_contributor_modifier }
-			un_state_off = { MODIFIER = un_development_contributor_cost }
+			un_mirror_clear = { MIRROR = un_development_contributor_modifier_on }
+			un_mirror_clear = { MIRROR = un_development_contributor_cost_on }
 			post_notification = un_dev_fund_contribution_lapsed_notice
 		}
 	}
@@ -399,12 +397,9 @@ un_dev_fund_reduce = {
 	un_dev_fund_resize = { STEP = -1 }
 }
 
-# Move the contribution $STEP$ sizes, held to 1..5, and re-add both modifiers
-# at the new size: the benefits at its factor, the cost at its expense. Both
-# multipliers read root.var, so ROOT must be the contributor (a button's
-# effect). un_state_off takes each modifier off with its mirror and the add
-# records it again: the removes read the modifiers the entry held before the
-# click, which a button's own block can see.
+# Move the contribution $STEP$ sizes, held to 1..5, and re-price it: the
+# benefits' factor and the cost's expense, which the entry's declarations of
+# both modifiers read (they follow within days).
 # Parameters: $STEP$ = 1 | -1
 # Scope: country (the contributor, = ROOT)
 un_dev_fund_resize = {
@@ -415,18 +410,6 @@ un_dev_fund_resize = {
 		clamp_variable = { name = un_dev_fund_size min = 1 max = un_dev_fund_size_max }
 		set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
 		set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
-		un_state_off = { MODIFIER = un_development_contributor_modifier }
-		un_state_off = { MODIFIER = un_development_contributor_cost }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_development_contributor_modifier
-				multiplier = root.var:un_dev_fund_benefit
-			} }
-		un_state_record = { MODIFIER = un_development_contributor_modifier }
-		je:je_united_nations ?= { add_modifier = {
-				name = un_development_contributor_cost
-				multiplier = root.var:un_development_expense_cached
-			} }
-		un_state_record = { MODIFIER = un_development_contributor_cost }
 	}
 }
 
@@ -434,14 +417,12 @@ un_dev_fund_resize = {
 # member): a contribution from before the sizes becomes Substantial, the size
 # it paid for, and one from the four sizes keeps its money and factor under
 # the size number it now has (un_dev_fund_size_stored); the benefit factor and
-# the expense follow the size and today's GDP. The benefit modifier is
-# re-added only for a contribution that was migrated (a save from before the
-# sizes holds it with no multiplier, which is Substantial already, so nothing
-# changes but the variable it will read).
+# the expense follow the size and today's GDP, and the entry's declarations
+# of the benefits and the cost read them.
 # Scope: country (= ROOT)
 un_dev_fund_contribution_monthly = {
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		limit = { has_variable = un_development_contributor_modifier_on }
 		if = {
 			limit = { NOT = { has_variable = un_dev_fund_five_sizes } }
 			set_variable = { name = un_dev_fund_size value = un_dev_fund_size_stored }

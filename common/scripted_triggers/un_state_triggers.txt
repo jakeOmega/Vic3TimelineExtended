@@ -31,14 +31,6 @@ un_state_heal_needed = {
 		un_state_missing = { MODIFIER = un_headquarters_modifier }
 		un_state_missing = { MODIFIER = un_security_council_modifier }
 		un_state_missing = { MODIFIER = un_permanent_member_modifier }
-		un_state_missing = { MODIFIER = un_peacekeeping_contributor_modifier }
-		un_state_missing = { MODIFIER = un_peacekeeping_contributor_cost }
-		un_state_missing = { MODIFIER = un_development_contributor_modifier }
-		un_state_missing = { MODIFIER = un_development_contributor_cost }
-		un_state_missing = { MODIFIER = un_human_rights_champion_modifier }
-		un_state_missing = { MODIFIER = un_arms_control_participant_modifier }
-		un_state_missing = { MODIFIER = un_champion_order_cost }
-		un_state_missing = { MODIFIER = un_undermine_order_cost }
 		un_state_missing = { MODIFIER = un_human_rights_declaration_modifier }
 		un_state_missing = { MODIFIER = un_nonproliferation_modifier }
 		un_state_missing = { MODIFIER = un_climate_binding_modifier }

@@ -977,20 +977,30 @@ un_vote_apply_resolution_compliance = {
 			}
 			country_rank >= rank_value:major_power
 		}
-		un_state_on = { MODIFIER = un_peacekeeping_contributor_modifier }
+		# The entry declares the programme while its mirror is set (#1404); a
+		# member already in it keeps it, once.
+		if = {
+			limit = { NOT = { has_variable = un_peacekeeping_contributor_modifier_on } }
+			show_as_tooltip = {
+				je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+			}
+			hidden_effect = {
+				un_mirror_set = { MIRROR = un_peacekeeping_contributor_modifier_on }
+				un_influence_pending_add = { AMOUNT = un_programme_influence_cost }
+			}
+		}
 		# Joining the deployment enrols the pledger in the paid peacekeeping
 		# programme — the same cost un_peacekeeping_mission_button charges.
 		# A member already running it keeps its existing cost.
 		if = {
-			limit = { NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } } }
-			set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
-			je:je_united_nations ?= {
-				add_modifier = {
-					name = un_peacekeeping_contributor_cost
-					multiplier = root.var:un_peacekeeping_expense_cached
-				}
+			limit = { NOT = { has_variable = un_peacekeeping_contributor_cost_on } }
+			show_as_tooltip = {
+				add_modifier = { name = un_peacekeeping_contributor_cost multiplier = un_program_expense_value }
 			}
-			un_state_record = { MODIFIER = un_peacekeeping_contributor_cost }
+			hidden_effect = {
+				set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+				un_mirror_set = { MIRROR = un_peacekeeping_contributor_cost_on }
+			}
 		}
 		if = {
 			limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }

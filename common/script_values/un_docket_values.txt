@@ -189,7 +189,7 @@ un_docket_share_order = {
 un_docket_peacekeeper_order = {
 	value = un_docket_share_order
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		limit = { has_variable = un_peacekeeping_contributor_modifier_on }
 		add = 1
 	}
 }

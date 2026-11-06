@@ -123,10 +123,19 @@ un_member_draws_benefits = {
 # un_authority_values.txt; docs/systems/un_redesign_design.md §0.10).
 # Scope: country
 un_policy_counts_in_full = {
-	je:je_united_nations ?= {
-		has_modifier = un_member_modifier
-		NOT = { has_modifier = un_undermine_order_cost }
-	}
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_undermines_the_order = yes }
+}
+
+# The scoped country undermines the international order: the stance's mirror,
+# without the championing a merge may have delivered beside it (championing
+# wins, as un_state_rebuild has it). The gate of un_undermine_order_cost's
+# declaration on je_united_nations, and the test of everything that reads
+# the stance.
+# Scope: country
+un_undermines_the_order = {
+	has_variable = un_undermine_order_cost_on
+	NOT = { has_variable = un_champion_order_cost_on }
 }
 
 # ---- Conventions passed during a suspension (§0.8 ruling 14) -------------------

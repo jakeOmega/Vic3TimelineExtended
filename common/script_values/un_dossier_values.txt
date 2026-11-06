@@ -730,8 +730,8 @@ un_lean_interests = {
 		if = {
 			limit = {
 				OR = {
-					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
-					je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+					has_variable = un_champion_order_cost_on
+					has_variable = un_human_rights_champion_modifier_on
 					has_law = law_type:law_humanitarian_regulations
 				}
 			}
@@ -745,7 +745,7 @@ un_lean_interests = {
 			limit = {
 				OR = {
 					has_law = law_type:law_isolationism
-					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+					un_undermines_the_order = yes
 				}
 			}
 			add = -25
