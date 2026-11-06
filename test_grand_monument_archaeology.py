@@ -720,7 +720,7 @@ class PlayerInnovationTests(unittest.TestCase):
                              f"value = gm_arch_innovation_{method} if = {{ limit = {{ has_variable = "
                              f"gm_arch_innovation_pending }} add = var:gm_arch_innovation_pending }}", method)
 
-    def test_a_dig_begun_is_booked_for_a_week(self):
+    def test_a_dig_begun_is_booked_for_two_weeks(self):
         """Every start (a player's launch through arch_events.10, the AI's, the debug event's, Pompeii's seed)
         passes through gm_arch_begin_dig, with the method already set."""
         begin = squash(block(read(EFFECTS), "gm_arch_begin_dig"))
@@ -730,20 +730,21 @@ class PlayerInnovationTests(unittest.TestCase):
         book = squash(block(read(EFFECTS), "gm_arch_book_innovation"))
         self.assertEqual(book, "if = { limit = { has_variable = gm_arch_innovation_pending } set_variable = { "
                                "name = gm_arch_innovation_pending value = { value = var:gm_arch_innovation_pending "
-                               "add = $ADD$ } days = 7 } } else = { set_variable = { name = "
-                               "gm_arch_innovation_pending value = $ADD$ days = 7 } }")
+                               "add = $ADD$ } days = 14 } } else = { set_variable = { name = "
+                               "gm_arch_innovation_pending value = $ADD$ days = 14 } }")
         start = squash(block(read(EFFECTS), "gm_arch_start_dig"))
         self.assertEqual(start.count("gm_arch_begin_dig = { WHO = $WHO$ }"), 3)
         self.assertNotIn("gm_arch_innovation_pending", start, "booked once, in gm_arch_begin_dig")
 
     def test_the_buttons_are_greyed_below_the_floor(self):
         L = loc()
-        for method, units in INNOVATION.items():
+        for method in INNOVATION:
             valid = squash(block(block(read(SGUIS), f"gm_arch_launch_{method}_sgui"), "is_valid"))
             self.assertIn(f"custom_tooltip = {{ text = gm_arch_dig_innovation_{method}_tt "
                           f"gm_arch_spares_{method} = yes }}", valid, method)
-            self.assertIn(f"at least {units} weekly [concept_innovation]", L[f"gm_arch_dig_innovation_{method}_tt"],
-                          "the tooltip's figure is the value's")
+            self.assertIn(f"at least [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_{method}')|0] weekly "
+                          "[concept_innovation]", L[f"gm_arch_dig_innovation_{method}_tt"],
+                          "the tooltip prints the figure the gate tests, booking included")
 
     def test_the_find_offers_only_a_dig_we_can_spare(self):
         body = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.1\s*=\s*\{"))

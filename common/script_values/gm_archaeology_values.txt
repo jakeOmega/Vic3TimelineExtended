@@ -160,7 +160,7 @@ gm_arch_innovation_forensic = { value = 100 }
 
 # Country scope. What a launch by the method asks of country_innovation
 # (gm_arch_spares_<method>): what the method diverts, plus what digs begun in
-# the last week divert, which the journal entry's declaration of
+# the last two weeks divert, which the journal entry's declaration of
 # gm_arch_diversion may not carry yet (gm_arch_book_innovation, #1404).
 gm_arch_innovation_gate_antiquarian = {
 	value = gm_arch_innovation_antiquarian

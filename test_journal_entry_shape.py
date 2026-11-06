@@ -261,13 +261,25 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
     legacy = rel == LEGACY_STRIP_FILE
     selfcheck = rel == SELFCHECK_FILE
 
+    def names(value: str) -> bool:
+        """The value is a declared modifier, or a template with a literal part that makes one
+        (`gm_boon_$SRC$`, the shape of the boons' retired adder; a bare `$MODIFIER$` matches anything)."""
+        if not value:
+            return False
+        if value in declared:
+            return True
+        if "$" not in value or not re.sub(r"\$\w+\$", "", value):
+            return False
+        pattern = re.compile(re.sub(r"\\\$\w+\\\$", r"\\w+", re.escape(value)))
+        return any(pattern.fullmatch(name) for name in declared)
+
     def walk(items: list[Node], parent: str, declaration: bool, preview: bool):
         for node in items:
             if node.children:
                 walk(node.children, node.key, declaration or node.key == "scaling_modifiers_while_active",
                      preview or node.key == "show_as_tooltip")
                 continue
-            if node.value not in declared or declaration:
+            if declaration or not names(node.value):
                 continue
             if node.key in ("has_variable", "remove_variable", "localization_key") or (
                     node.key == "name" and parent in ("set_variable", "change_variable", "clamp_variable")):
@@ -287,6 +299,13 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
 class ScalingModifierFixtureTest(unittest.TestCase):
     def sites(self, text: str, rel: str = "common/scripted_effects/x.txt") -> list[tuple[str, str]]:
         return [(kind, name) for _, _, kind, name in misuse_sites(parse_text(text, rel)[0], {"m"}, rel)]
+
+    def test_a_template_that_makes_a_declared_name_is_flagged(self):
+        sites = lambda text: [(kind, name) for _, _, kind, name in misuse_sites(  # noqa: E731
+            parse_text(text, "common/scripted_effects/x.txt")[0], {"gm_boon_reign"}, "common/scripted_effects/x.txt")]
+        self.assertEqual(sites("e = { add_modifier = { name = gm_boon_$SRC$ } }"), [("add_modifier", "gm_boon_$SRC$")])
+        self.assertEqual(sites("e = { remove_modifier = $MODIFIER$ }"), [])
+        self.assertEqual(sites("e = { add_modifier = { name = gm_local_$KEY$ } }"), [])
 
     def test_has_add_and_remove_are_flagged(self):
         self.assertEqual(self.sites("e = { has_modifier = m }"), [("has_modifier", "m")])

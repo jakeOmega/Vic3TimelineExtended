@@ -442,9 +442,12 @@ left the modifier off. Every off-cycle caller of the apply already ran the whole
 refresh, which still writes the variables, so none needed a replacement. One
 gate reads a declared figure back: a dig's launch button checks weekly
 innovation against the method's diversion, so `gm_arch_begin_dig` books what a
-dig diverts for 7 days (`gm_arch_innovation_pending`) and the three launch gates
-add it (`gm_arch_innovation_gate_<method>`). For up to a week after the drain
-lands the gate counts it twice, which only makes it briefly stricter. Four boons
+dig diverts for 14 days (`gm_arch_innovation_pending`) and the three launch gates
+add it (`gm_arch_innovation_gate_<method>`). Fourteen covers the 2-5 day lag and
+a weekly update of `country_innovation`, whose cadence is unprobed (review of
+PR 5). Until the booking runs out a landed drain counts twice, and each new
+launch restarts the timer for the whole sum; both only make the gate stricter,
+as does a suspended dig's innovation, which comes back days late. Four boons
 carry `state_*` fields too (centenary, faith, athletic and naturalist
 technologies), so `gm_education_reaches_states` answers for them as well. The
 boons' countdown variables share their modifiers' names, so the misuse test

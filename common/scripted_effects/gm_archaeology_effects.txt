@@ -88,8 +88,9 @@ gm_arch_monthly = {
 			gm_arch_ai_decide = yes
 		}
 		# A player the pass has listed is refreshed now: the cost and the drain
-		# follow the digs this month's pass counted, a finished dig's included, and
-		# a site waiting opens the journal entry.
+		# variables follow the digs this month's pass counted, a finished dig's
+		# included (the entry's declarations within days), and a site waiting
+		# opens the journal entry.
 		every_country = {
 			limit = {
 				has_variable = gm_arch_listed
@@ -1138,9 +1139,12 @@ gm_arch_begin_dig = {
 }
 
 # Country scope, from gm_arch_begin_dig: $ADD$ weekly innovation a dig just
-# begun diverts, booked for a week (accumulating) in gm_arch_innovation_pending,
-# which the launch gates add to what the method asks
-# (gm_arch_innovation_gate_<method>, gm_archaeology_values.txt).
+# begun diverts, booked for two weeks (accumulating) in
+# gm_arch_innovation_pending, which the launch gates add to what the method
+# asks (gm_arch_innovation_gate_<method>, gm_archaeology_values.txt). The
+# declared drain reaches the modifier sums 2-5 days after a launch; how often
+# country_innovation itself follows them is unprobed, so the booking covers a
+# weekly tick on top. A booking only makes the gate stricter while both count.
 gm_arch_book_innovation = {
 	if = {
 		limit = { has_variable = gm_arch_innovation_pending }
@@ -1150,11 +1154,11 @@ gm_arch_book_innovation = {
 				value = var:gm_arch_innovation_pending
 				add = $ADD$
 			}
-			days = 7
+			days = 14
 		}
 	}
 	else = {
-		set_variable = { name = gm_arch_innovation_pending value = $ADD$ days = 7 }
+		set_variable = { name = gm_arch_innovation_pending value = $ADD$ days = 14 }
 	}
 }
 
