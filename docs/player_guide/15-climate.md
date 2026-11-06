@@ -168,9 +168,12 @@ with the tier's name beneath it:
 
 ### The Climate Warming modifier
 
-The entry gives every country the Climate Warming modifier, with every value
+Every country carries the Climate Warming modifier, with every value
 multiplied by the current anomaly (read again every few days), after any aerosol mask
-([Aerosol Injection](#aerosol-injection)). At 1 °C it is:
+([Aerosol Injection](#aerosol-injection)). It comes from a second journal entry,
+World Climate, which opens at 0.1 °C as Global Warming does and holds nothing to
+choose: it is the world's climate, shared by every country, and lists them all.
+At 1 °C the modifier is:
 
 - +5% mortality and −1 standard of living in every state;
 - −10% farm throughput and −2.5% throughput for every building;

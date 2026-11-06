@@ -462,6 +462,10 @@ state_pop_support_movement_<name>_mult = {
 }
 ```
 
+### 1.15: a mod ideology's leader-chance modifier is declared and read by hand
+
+1.15's `interest_group_ideology_<ideology>_leader_chance_mult` (an interest group's chance to pick a leader of that ideology) is not engine-generated: vanilla declares one per character ideology in script (`modifier_types.json`, `script_only = yes`), and each ideology's leader weights read it, `multiply = { value = 1 add = modifier:<type> }` in `interest_group_leader_weight` and `interest_group.modifier:<type>` in `non_interest_group_leader_weight` (the character's scope). A mod ideology gets neither, so the mod declares `interest_group_ideology_environmentalists_leader_chance_mult` (`mod_entity_modifier_types.txt`) and Environmentalist's weights read it (`extra_ideologies.txt`, #1446). Without the read the modifier shows on the group and does nothing.
+
 ## A `desc = "KEY"` in Script Is a Loc Lookup — Define the Key
 
 A script value's `desc = "KEY"` labels its line in whatever breakdown shows it: a movement's `additional_radicalism_factors`, a party's attraction, a treaty's AI acceptance, a power bloc's cohesion. `custom_tooltip = KEY`, an event's `title`/`flavor` and a journal entry's `custom_*_header` work the same way. The engine looks the key up at render time and, if no loc file defines it, prints the raw key. Nothing is logged. Copying a vanilla block copies the reference but not the loc: vanilla defines `INSTITUTION_FUNDING_LEVEL_<x>` / `NO_INSTITUTION_<x>` in `interfaces_l_english.yml` for its own seven institutions only. The mod's movements used the same pattern for four mod institutions, and the radicalism tooltip showed `INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs` (fixed 2026-09-25). `script_loc_reference_audit` flags every such reference on `/reload`. Vanilla resolves every one of its own, so a flag is a real raw key. `text` is a loc key only inside `custom_tooltip = { }`. Inside `custom_description = { }` it names a `common/trigger_localization` entry instead.
@@ -3974,7 +3978,7 @@ The keys still resolve at runtime: **all `te_*_l_english.yml` files in `localiza
 
 **Don't try to "fix" this** by renaming the file, registering the keys, or adding a fake script reference. The placement is benign. If the categorizer's misclassification is itself confusing — e.g. a code reviewer flags "why are the political_lobby `_name` keys in te_unused?" — leave a comment on the keys or call it out in the relevant design doc rather than relocating them.
 
-`organize_loc.py` does recognize some conventions structurally, through its `find_*_keys` functions (company `_desc` keys, journal-entry suites, a country tag's `TAG` and `TAG_ADJ` for every entry in `common/country_definitions/`). A convention with a fixed shape is worth one more finder there; one-off keys are not.
+`organize_loc.py` does recognize some conventions structurally, through its `find_*_keys` functions (company `_desc` keys, journal-entry suites, a country tag's `TAG`, `TAG_ADJ` and, since 1.15, `TAG_DEF` (the formal name) for every entry in `common/country_definitions/`). A convention with a fixed shape is worth one more finder there; one-off keys are not.
 
 Caveat: if `organize_loc.py` ever changes to *delete* unused keys instead of relocating them, this convention breaks. Today (2026-05) it relocates, and there's no plan to change that. If the runbook for `organize_loc.py` gains a deletion mode in the future, engine-convention keys need an explicit script reference (e.g. a comment block with `# referenced-by-engine: lobby_<id>_name` that the categorizer learns to recognize, similar to the existing `POWER_BLOC_UNLOCKS` / `UN_BUTTON_EFFECTS` rules).
 
@@ -5409,6 +5413,13 @@ One auto-running probe in an 1836 observer game (`te_probe_nr_*`, the nuclear cr
 ## A Generated Table's Index Is Saved: Append New Rows, Never Insert
 
 When a generator numbers its rows by position (Solar System Colonization's `gen_solar_sites.SITES`: a world's index is its place plus one), that number ends up in saves: a country's `sr_cf_target`, every queued module's `sr_mq_<n>_site`, every fleet's `sr_fl_<n>_target` and the founding event's id all hold it. Inserting a row shifts every later index, so an old save's fleet lands on the wrong world and its queue builds on another colony, with no error. Add new rows at the end, even when they belong earlier in play (the Moon's six worlds are 35 to 40 but stage 0), and order the panel from a separate list (`gss.LOCATIONS`, `panel_order()`). `test_solar_sites.py` holds the first 34 keys to a golden list so a reorder fails the suite.
+
+### 1.15: military reach, losing a war, institution and formal names (#1447–#1452)
+
+- **`has_military_reach = { target = <state or country> min_reach = <value> min_shippable_strength = <value> }`** (country scope) is true with any land route: through one's own territory, subjects, a chain of military access, or a war goal adjacency. Otherwise `military_reach` (0–1: the best landing on a coast of the target's owner, falling with the sea supply distance from the nearest port and the march from the landing; 0 when no strait-aware sea route reaches a coast) must reach `min_reach`, and, when given, `shippable_army_strength_against` (army power projection shippable at once over the target's) must reach `min_shippable_strength`. Naval carrying capacity counts only in the second. Six checks that used army size or "both coastal" read it, with the thresholds in `common/script_values/te_military_reach_values.txt` (#1450). Its cost in an AI loop is unmeasured (C21): put it last among a limit's conditions.
+- **War-scope compare triggers take `{ target = <country> value <op> X }`**: `enemy_pressure` (0–1: occupation, blockade and recent significant battles together), `blockaded_gdp_share`, `has_war_support`. `has_stalled_state_wargoal_against = <country>` (war scope) is true when **any** state-taking enemy goal against the country is neither advanced nor contested, so it can't say that all of them are stalled. The two losing-war triggers (`is_losing_war_against`, `nd_is_losing_war_to`) read both of the first two (#1447).
+- **An institution's `dynamic_name`** is a country-scoped `first_valid` / `triggered_desc` block on the institution, falling back to its key; the mod's five are in `extra_institutions.txt` (#1451).
+- **`<TAG>_DEF`** is a country's formal name (`GetNameDef`, the Country Names on Map rule). Vanilla writes 13, for major tags only; nothing in script names the key, so `organize_loc.py`'s `find_country_keys` keeps it beside `TAG` and `TAG_ADJ` (#1452).
 
 ### 1.15: new law variants, and what a variant takes from its parent
 

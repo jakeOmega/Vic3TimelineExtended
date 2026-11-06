@@ -244,3 +244,43 @@ or Spanish game.
   drift and a flat +0.1 colonial garrison effectiveness (it has no institution to scale it), and
   the Ministry of Propaganda can be enacted once Mass Media is in. The Ottomans on the Millet System: the Ministry of
   Religion can be enacted, and the law shows State Religion's bureaucracy cost line.
+
+**1.15 opportunities (#1445–#1452)**
+
+From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first guesses: note what each AI did, and tune.
+- **World Climate (#1448).** Under the Global Warming rule, once the world reaches 0.1 °C a World Climate entry opens
+  in every country's journal, lists every country as involved (decentralized nations too), and carries Climate
+  Warming, named as the source in a country's modifier tooltip; Global Warming's own entry no longer lists it. One
+  line in `debug.log`, once a game at 0.5 °C or more: `TE_SELF_CHECK OK|BROKEN gw_world_climate` (the largest
+  economy's capital reads `state_harvest_condition_wildfire_duration_mult` at 0.5 a degree, and the country is
+  involved). BROKEN: put the declaration back on `je_global_warming` and `gw_warming_felt` back on
+  `has_journal_entry = je_global_warming` (the parent of #1448's commit). Also note: a `TE_GW_WORLD
+  fallback_involved` line, and its date, says the engine doesn't involve a country created after activation on its
+  own (C21); none after a revolution won means it does. A revolution's winner carries Climate Warming within a month.
+  The recurring climate events (coastal flooding, crop failures) still fire. The page's Involved Countries list and
+  the entry's tooltip are long: say if either is a problem.
+- **Losing a war (#1447).** A country a quarter of whose GDP sits in blockaded states, or whose enemies press it at
+  0.5 or more (`enemy_pressure`), now counts as losing: its covert-operations AI, ASAT strikes and nuclear first use
+  under Flexible First Use follow. Watch an armed AI under a naval blockade, and note `enemy_pressure` readings
+  through a war if a probe is cheap. A war goal on a nuclear power's state that nobody advances or contests
+  (`has_stalled_state_wargoal_against`) no longer counts as a threat to its core unless it is losing.
+- **Military reach (#1450).** `te_military_reach_values.txt` holds the thresholds (0.4 reach for an army, 0.2 for a
+  union's link, shipping as much army strength as the target's at once). Check: a great power across an ocean
+  without a navy no longer intervenes for colonial rebels; a metropole whose army can't reach a colony fights its war
+  of independence half as often; Voluntary Union and Integrate Decentralized Power are no longer offered between two
+  coasts merely because both have one (note how far 0.2 reaches by sea); the AI rarely sends a peacekeeping contingent it can't reach; a Military Treaty
+  bloc's 5× army bond needs the reach. Note any slowdown in an AI month: the reach reads sit in an AI loop (the
+  absorption effect, the UN missions) and in Subjugate's `possible` (C21).
+- **Environmentalist leaders (#1446).** `interest_group_ideology_environmentalists_leader_chance_mult` shows on an
+  interest group with Green Leadership Drift as "Environmentalist Leader Chance +100%", with no `Unknown modifier
+  type` line in `debug.log`, and the group's next leader is more often an Environmentalist. Only The Reckoning (3 °C)
+  still converts a sitting leader (the Intelligentsia's).
+- **Institution names (#1451).** The Ministry of War reads Ministry of Defense with Combined Arms, and Department of
+  War or of Defense in a presidential republic; Britain's National Bank reads Bank of England, America's Bank of the
+  United States (Federal Reserve from 1913), and any under State-Owned Banking, State Bank; Labor, Intelligence and
+  Propaganda follow the form of government. Check the institution panel, the budget's institution rows and a
+  tooltip that names one, and that a country without a matching name reads the plain one.
+- **Formal names (#1452).** With the Country Names on Map rule, the mod's tags show their `_DEF` names (Union of
+  India, State of Indonesia, State of China, Intermarium Federation, Union of Dar-Al-Islam; the unions as they
+  are). C21: whether a formable under a government-flavored dynamic name shows that name or the `_DEF` one, and what
+  a country with no `_DEF` key shows. If a dynamic name shows its key with `_DEF` appended, its 84 names need one each.

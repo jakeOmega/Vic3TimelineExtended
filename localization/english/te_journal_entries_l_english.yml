@@ -3565,6 +3565,8 @@
  je_unite_the_nations_invalid_conclusion_desc:0 "The $concept_journal_entry$ ended with our nations joined in a wider #b union#!"
  je_united_nations:0 "United Nations"
  je_united_nations_reason:0 "An intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that grow with [concept_un_authority], and the institution is as strong as the world's powers make it. How the UN Works, above, explains the rest."
+ je_world_climate:0 "World Climate"
+ je_world_climate_reason:0 "Every country shares one climate. Once the world is 0.1 °C warmer than before industry, each carries $global_warming$ at the world's temperature: a lower standard of living, higher mortality, poorer farms, and harsher floods, droughts, heatwaves and wildfires. What you do about it is in the Global Warming entry."
  je_world_war:0 "The Gathering Storm"
  je_world_war_complete_conclusion_desc:0 "The $concept_journal_entry$ concluded with the #b world war#! over"
  je_world_war_fail_conclusion_desc:0 "The $concept_journal_entry$ concluded with our fall from the #b great powers#!"

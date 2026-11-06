@@ -367,6 +367,11 @@ nd_enemy_threatens_existence = {
 # flags our capital under any country-level goal, a humiliation say (probed
 # 2026-10-28, scripting_best_practices.md § "War Goals, Plays, Adjacency and
 # Claims"). In a play it finds nothing, so this is a war test.
+# 1.15 (#1447): a state-taking goal nobody is advancing on or contesting
+# (has_stalled_state_wargoal_against) is no threat to the core unless the war
+# is going against us anyway. The trigger is true when ANY such goal in the
+# war is stalled, so with two goals against us, one stalled, the core reads
+# safe until we are losing: the error falls on the side of restraint.
 nd_core_threatened_by = {
 	save_temporary_scope_as = nd_ct_self
 	$ENEMY$ = {
@@ -381,21 +386,38 @@ nd_core_threatened_by = {
 		is_incorporated = yes
 		is_target_of_wargoal = $ENEMY$
 	}
+	OR = {
+		NOT = {
+			any_scope_war = {
+				is_war_participant = $ENEMY$
+				has_stalled_state_wargoal_against = scope:nd_ct_self
+			}
+		}
+		nd_is_losing_war_to = { ENEMY = $ENEMY$ }
+	}
 }
 
 # The scoped country is losing its war with $ENEMY$: a quarter of its land
-# occupied, or, after five significant battles in a war with them, under 35 %
-# of the battles won. is_losing_war_against's rule, with the loser read from
-# this scope rather than ROOT.
+# occupied; after five significant battles in a war with them, under 35 % of
+# the battles won; or (1.15, #1447) in that war a quarter of its GDP in
+# blockaded states, or enemy pressure at 0.5 or more. is_losing_war_against's
+# rule, with the loser read from this scope rather than ROOT: change the two
+# together.
 nd_is_losing_war_to = {
 	save_temporary_scope_as = nd_lw_self
 	OR = {
 		enemy_occupation >= 0.25
 		any_scope_war = {
 			is_war_participant = $ENEMY$
-			num_significant_battles >= 5
-			scope:nd_lw_self = {
-				size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+			OR = {
+				AND = {
+					num_significant_battles >= 5
+					scope:nd_lw_self = {
+						size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+					}
+				}
+				blockaded_gdp_share = { target = scope:nd_lw_self value >= 0.25 }
+				enemy_pressure = { target = scope:nd_lw_self value >= 0.5 }
 			}
 		}
 	}

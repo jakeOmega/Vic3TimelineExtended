@@ -259,8 +259,11 @@ once every two years, and the first choice is free.
 | Nuclear Compellence | Also when they defied your public ultimatum, or your threat against them has reached [Confrontation](#crisis-stages-danger-and-pressure) | +15% maneuvers, +10% leverage generation, +10% infamy generation, −10% relations improvement, −1 UN Authority Target |
 | Nuclear Warfighting | In any war | +20% maneuvers, +10% leverage generation, +20% infamy generation, −10% infamy decay, −20% relations improvement, −1.5 UN Authority Target |
 
-Losing means a quarter of your land occupied, or under 35% of battles won after
-five significant battles. Adopting Compellence or Warfighting costs infamy equal
+Losing means a quarter of your land occupied, a quarter of your GDP in
+blockaded states, heavy pressure from the enemy side (occupation, blockade and
+recent battles together, at half the scale or more), or under 35% of battles won
+after five significant battles. A war goal on your states that nobody is
+advancing or contesting counts as a threat only while you are losing. Adopting Compellence or Warfighting costs infamy equal
 to a tenth of the [nuclear taboo](#what-the-nuclear-taboo-costs) (5 at a taboo of
 50) and 10 relations with every rival. Leaving No First Use is a **repudiation**: −20
 credibility, +10 infamy, a ten-year Broken Nuclear Pledge modifier, and your
@@ -786,8 +789,10 @@ invalid launch context, rather than the automatic result of being at peace.
 An AI government that launched by mistake usually stands down. One that was
 struck refuses more often: more so if it took the blow without answering,
 for every state of its that was hit, and if its army is half again the
-launcher's. An AI whose enemy's army is half again its own leans to standing
-down.
+launcher's and can reach it. An AI whose enemy's army is half again its own,
+and can reach it, leans to standing down. An army can reach a country it has a
+land route to, or one it can ship as much army strength to at once as the
+country has.
 
 ### The Monopoly Window
 
@@ -838,8 +843,8 @@ it seized; a crushed one returns it.
 
 ### Deny Them the Bomb
 
-A government losing a revolution while armed (a quarter of its land occupied, or
-most battles lost) is asked once per civil war, "Deny Them the Bomb". Taking the
+A government losing a revolution while armed (by the test above: occupied,
+blockaded or beaten in battle) is asked once per civil war, "Deny Them the Bomb". Taking the
 warheads apart in haste loses some on the way; an accepted foreign custodian can
 take them apart with none lost; or you keep them, and a winning revolution
 inherits them. A secession never asks this, because its winner does not take the

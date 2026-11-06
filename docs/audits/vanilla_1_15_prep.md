@@ -764,6 +764,8 @@ Anything the dumps can't show is a release-day check (C21). Fixes this pass foun
 | 11 | Cessions and reparations become treaties | Irredentism, UN court, decolonization, nuclear crisis | `create_treaty` (1.14.5), `is_one_time` (1.15) | both | Medium |
 | 12 | External Trade graded by interest tier | Power blocs | `country_interest_tier_<tier>_trade_advantage_mult` | 1.15 | Small |
 
+Built (2026-11-06): rows 1 (#1447), 2 (#1448, the declaration and involvement only: the threshold endings and the world temperature map are still on the country side), 4 (#1450), 5 (#1451, the five mod ministries; the three renamed vanilla ones keep one name) and 6 (#1452, the ten tags only), with § 4.11's GDP-per-capita deletion (#1445) and leader-chance modifiers (#1446). Their in-game checks are in `docs/testing/vanilla-1-15-playtest.md`, "1.15 opportunities".
+
 ### 7.2 War, subjects and the AI
 
 - **Losing a war counts blockades.** `is_losing_war_against` (`nuke_triggers.txt:285`) and `nd_is_losing_war_to` (`nuclear_deterrence_triggers.txt:381`) count only occupation (25%) and lost battles (under 35% of at least 5), so a blockaded country never counts as losing.
