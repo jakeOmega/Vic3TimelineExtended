@@ -376,7 +376,16 @@ sr_apply_milestone_reward_base = {
 # Used by JE on_fail blocks. Removes per-milestone variables (sr_active_X is
 # JE-only, so it appears here but not in the completion path) and refreshes the
 # widget's statuses.
+#
+# It also marks the milestone closed on a programme loss, naming the country,
+# for the re-entry pass's self-checks (sr_reentry_monthly): the pass brings the
+# milestone back once the programme can carry it again, since the engine never
+# re-activates a concluded entry. An add of the pass's that closes again before
+# the pass has judged it gives no verdict, so its mark goes here.
 sr_cleanup_milestone_variables_effect = {
+	save_temporary_scope_as = sr_closing_country
+	set_variable = { name = sr_closed_by_loss_$MILESTONE$ value = scope:sr_closing_country }
+	if = { limit = { has_variable = sr_reentry_added_$MILESTONE$ } remove_variable = sr_reentry_added_$MILESTONE$ }
 	if = { limit = { has_variable = sr_active_$MILESTONE$ } remove_variable = sr_active_$MILESTONE$ }
 	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
 	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
@@ -1240,6 +1249,178 @@ sr_take_program_losses = {
 	if = { limit = { has_variable = sr_program_loss_report_queued } remove_variable = sr_program_loss_report_queued }
 }
 
+# --- A milestone starting again after a programme loss (2026-11-06) --------
+# A milestone's failure outcome (the launch complex can no longer carry it: a
+# lowered method, a lost building) concludes its journal entry. The engine
+# deletes a concluded record three days later and never activates the type
+# again (docs/guides/scripting_best_practices.md, "A finished record is
+# deleted": the Colonial Empire's 1910 save), and nothing else adds a
+# milestone back, so a refit ended the milestone for good. This pass gives it
+# back once the programme can carry it again, from zero: the progress lost at
+# the failure stays lost (owner, 2026-11-06), as .76 and the setback tooltips
+# say. Monthly, for every country while the race is on, players and AI alike,
+# from space_race_on_action after the inactive-milestone cleanup. Per
+# milestone (sr_reentry_milestone):
+#
+#   1. The self-check of last month's add, before anything is added this month
+#      (sr_reentry_added_<m>, naming the country it was set on):
+#        TE_SELF_CHECK OK sr_reentry      the entry the pass added is running
+#        TE_SELF_CHECK BROKEN sr_reentry  it is not, though the country is
+#                                         still due it
+#      Judged only for a country whose milestone closed on a programme loss
+#      (sr_closed_by_loss_<m> naming it, set by the failure cleanup), which is
+#      the question the check is for: does add_journal_entry bring back a type
+#      the country has finished? An add to a country without the mark (a save
+#      from before this change, whose milestone may have closed then) is made
+#      and not judged, and so is one whose entry closed again within the
+#      month (the failure cleanup drops the add's mark). A country no longer
+#      due gives no verdict. Once a game for each verdict: an AI may refit
+#      often.
+#   2. The bug's own check, once a game for each verdict:
+#        TE_SELF_CHECK OK sr_closed_record      at an add to a country with
+#                                               the mark (step 3): due for a
+#                                               whole month, with no record of
+#                                               the milestone at all
+#        TE_SELF_CHECK BROKEN sr_closed_record  a milestone with the mark is
+#                                               running again and the pass did
+#                                               not add it: the engine brought
+#                                               it back, and the pass is idle
+#                                               there (its record tests)
+#      "Running" is the entry active with sr_active_<m> set, which its
+#      immediate sets and the failure cleanup removed, so a concluded record
+#      not yet deleted (the three days) never reads as running.
+#   3. A whole month first. The first pass that finds the country due marks it
+#      (sr_reentry_waiting_<m>, naming the country), and the next adds the
+#      entry. The engine updates inactive records every
+#      JOURNAL_ENTRY_UPDATE_INACTIVE = 14 days, so the month takes in at least
+#      two of its updates and the pass never races its activation of a record
+#      that still exists (the due trigger's record tests stop the add while
+#      one does). The mark goes when the country stops being due. Marks name
+#      the country because a revolution's winner inherits the loser's
+#      variables: a mark naming the dead loser is not the winner's.
+#
+# The added entry's immediate starts the milestone afresh (progress 0, funding
+# 1, Standard: the failure cleanup removed them) and keeps a choice already
+# made (sr_<m>_choice_made). A revolution's winner holds fresh records, so its
+# closed marks are dropped (sr_reentry_after_civil_war).
+#
+# If BROKEN sr_reentry reads, add_journal_entry cannot bring back a finished
+# type. The fallback: the milestones stop concluding on a programme loss. Drop
+# the failure outcome, so the entry deactivates instead (can_deactivate = yes,
+# and its possible requires the method) and keeps its record, which the
+# engine re-activates itself; report the loss from the monthly cleanup
+# (docs/testing/space-race-playtest.md, Self-checks).
+# Scope: country. From space_race_on_action (space_race_on_actions.txt).
+sr_reentry_monthly = {
+	save_scope_as = sr_reentry_country
+	sr_reentry_milestone = { MILESTONE = suborbital         }
+	sr_reentry_milestone = { MILESTONE = orbital            }
+	sr_reentry_milestone = { MILESTONE = moon_landing       }
+	sr_reentry_milestone = { MILESTONE = probe              }
+	sr_reentry_milestone = { MILESTONE = mars_landing       }
+	sr_reentry_milestone = { MILESTONE = interstellar_probe }
+	sr_reentry_milestone = { MILESTONE = solar_colonization }
+}
+
+# sr_reentry_monthly's body for one milestone. Country scope, with
+# scope:sr_reentry_country the country itself.
+sr_reentry_milestone = {
+	# 1. Did last month's add take? Read before step 3 can add again.
+	if = {
+		limit = { has_variable = sr_reentry_added_$MILESTONE$ }
+		if = {
+			limit = {
+				var:sr_reentry_added_$MILESTONE$ ?= scope:sr_reentry_country
+				var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+			}
+			if = {
+				limit = {
+					has_journal_entry = je_space_race_$MILESTONE$
+					has_variable = sr_active_$MILESTONE$
+				}
+				if = {
+					limit = { NOT = { has_global_variable = sr_reentry_ok_logged } }
+					set_global_variable = { name = sr_reentry_ok_logged value = yes }
+					debug_log = "TE_SELF_CHECK OK sr_reentry milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_space_race_$MILESTONE$ last month to a country whose milestone had closed on a programme loss, and it is running: add_journal_entry brings back a type the country has finished)"
+				}
+				# It is back: the mark has done its work.
+				remove_variable = sr_closed_by_loss_$MILESTONE$
+			}
+			else_if = {
+				limit = { sr_reentry_due_$MILESTONE$ = yes }
+				if = {
+					limit = { NOT = { has_global_variable = sr_reentry_broken_logged } }
+					set_global_variable = { name = sr_reentry_broken_logged value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN sr_reentry milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_space_race_$MILESTONE$ last month to a country whose milestone had closed on a programme loss; it is still due the milestone but holds no record of it: add_journal_entry does not bring back a type the country has finished; take the fallback in docs/testing/space-race-playtest.md)"
+				}
+			}
+		}
+		remove_variable = sr_reentry_added_$MILESTONE$
+	}
+	# 2. Back without the pass: the engine re-activated a closed milestone.
+	else_if = {
+		limit = {
+			var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+			has_journal_entry = je_space_race_$MILESTONE$
+			has_variable = sr_active_$MILESTONE$
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_closed_record_broken_logged } }
+			set_global_variable = { name = sr_closed_record_broken_logged value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN sr_closed_record milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (je_space_race_$MILESTONE$ closed on a programme loss and is running again, and the re-entry pass did not add it: the engine brings a concluded milestone back by itself, so the pass is idle; correct scripting_best_practices.md's 'A finished record is deleted')"
+		}
+		remove_variable = sr_closed_by_loss_$MILESTONE$
+	}
+
+	# 3. Due for a whole month: add the entry.
+	if = {
+		limit = { sr_reentry_due_$MILESTONE$ = yes }
+		if = {
+			limit = { var:sr_reentry_waiting_$MILESTONE$ ?= scope:sr_reentry_country }
+			remove_variable = sr_reentry_waiting_$MILESTONE$
+			if = {
+				limit = {
+					var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+					NOT = { has_global_variable = sr_closed_record_ok_logged }
+				}
+				set_global_variable = { name = sr_closed_record_ok_logged value = yes }
+				debug_log = "TE_SELF_CHECK OK sr_closed_record milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (je_space_race_$MILESTONE$ closed on a programme loss; the programme has been able to carry it for a whole month and the country holds no record of it, active or inactive: the engine does not bring a concluded milestone back, so the re-entry pass adds it now)"
+			}
+			add_journal_entry = { type = je_space_race_$MILESTONE$ } # REVIEWED 2026-11-06 (add_journal_entry): the re-entry after a programme loss concluded the entry; guarded, through the parameter the test cannot follow, by sr_reentry_due_<m>'s NOT = { has_inactive_journal_entry = je_space_race_<m> } (test_space_race_reentry.py pins it in all seven)
+			set_variable = { name = sr_reentry_added_$MILESTONE$ value = scope:sr_reentry_country }
+		}
+		else = {
+			set_variable = { name = sr_reentry_waiting_$MILESTONE$ value = scope:sr_reentry_country }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_reentry_waiting_$MILESTONE$ }
+		remove_variable = sr_reentry_waiting_$MILESTONE$
+	}
+}
+
+# A revolution's winner holds fresh records of every milestone, so a milestone
+# it closed before the war can come back to it by itself: drop the closed
+# marks, which would read that as BROKEN sr_closed_record. Only self-check
+# state: the milestones themselves don't read the marks. Country scope: the
+# winner, from sr_repair_after_civil_war.
+sr_reentry_after_civil_war = {
+	sr_reentry_forget_closure = { MILESTONE = suborbital         }
+	sr_reentry_forget_closure = { MILESTONE = orbital            }
+	sr_reentry_forget_closure = { MILESTONE = moon_landing       }
+	sr_reentry_forget_closure = { MILESTONE = probe              }
+	sr_reentry_forget_closure = { MILESTONE = mars_landing       }
+	sr_reentry_forget_closure = { MILESTONE = interstellar_probe }
+	sr_reentry_forget_closure = { MILESTONE = solar_colonization }
+}
+
+sr_reentry_forget_closure = {
+	if = {
+		limit = { has_variable = sr_closed_by_loss_$MILESTONE$ }
+		remove_variable = sr_closed_by_loss_$MILESTONE$
+	}
+}
+
 # --- Interstellar probe results describe one shared universe -----------------
 # space_race_events.601–630 each report a specific world. The first nation whose
 # probe returns a result discovers it, and the global record
@@ -1354,6 +1535,9 @@ sr_repair_after_civil_war = {
 	}
 	# Interdiction's records that name the old government (6c).
 	sr_icpt_repair_after_civil_war = yes
+	# The re-entry pass's closed marks (self-check state only): the winner
+	# holds fresh records.
+	sr_reentry_after_civil_war = yes
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,

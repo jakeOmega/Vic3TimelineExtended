@@ -233,6 +233,9 @@ class RewardTests(unittest.TestCase):
         self.assertIn("sr_sync_probe_data = yes", repair)
         # Stateless: it reads none of the shared layer's side information and
         # removes nothing, so it cannot hurt a loyalist or a seceder winner.
+        # Its one call that removes anything, sr_reentry_after_civil_war, drops
+        # only the re-entry self-check's closed marks, which no play reads
+        # (test_space_race_reentry.py).
         for text in (repair, _block(EFFECTS, "sr_restore_milestone_reward_base"),
                      _block(EFFECTS, "sr_sync_probe_data_base")):
             self.assertNotRegex(text, r"te_cw_|remove_")

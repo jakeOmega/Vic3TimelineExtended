@@ -3,10 +3,13 @@
 # Linear milestone competition system
 #
 # `immediate` runs again: when an entry re-activates (every milestone has
-# can_deactivate = yes), and on every entry a revolution's winner inherits,
+# can_deactivate = yes), on every entry a revolution's winner inherits,
 # after the loser's variables have merged in
 # (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"). So it creates only what is missing (progress, funding) and asks
+# Inherits"), and when the re-entry pass adds back a milestone its failure
+# outcome closed (a programme loss: the engine never re-activates a concluded
+# entry; sr_reentry_monthly, space_race_effects.txt, from zero, since the
+# failure cleanup wiped it). So it creates only what is missing (progress, funding) and asks
 # each choice event once per milestone (sr_<m>_choice_made). Each milestone's
 # cost, funding, approach and choice modifiers are declared on its entry
 # (scaling_modifiers_while_active, #1404), from variables the winner inherits,

@@ -55,6 +55,14 @@ space_race_on_action = {
 			sr_earth_alert_step = yes
 		}
 		sr_cleanup_inactive_space_race_milestones = yes
+		# A milestone that closed on a programme loss starts again once the
+		# programme can carry it (space_race_effects.txt): the engine never
+		# re-activates a concluded entry. After the cleanup, so an entry added
+		# here keeps the variables its immediate sets.
+		if = {
+			limit = { sr_space_race_on = yes }
+			sr_reentry_monthly = yes
+		}
 		# A choice to colonize the Moon lasts while a lunar world is free
 		# (sr_site_effects.txt).
 		sr_colonization_resumed_expire = yes
