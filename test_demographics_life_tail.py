@@ -22,6 +22,7 @@ from test_demographics_registry import (  # noqa: E402
 from gui_test_helpers import history_charts  # noqa: E402
 
 GUI = ROOT / "gui" / "te_demographics_widgets.gui"
+MAPS = ROOT / "common" / "journal_entries" / "te_journal_maps.txt"
 LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
 # the figures the panel shows: the state's and the country's (the same names), and a history sample's
 SHOWN = ("te_dg_e0", "te_dg_e0f", "te_dg_e0m", "te_dg_e65", "te_dg_prev_e0")
@@ -151,6 +152,9 @@ class TestE0DisplayCap(unittest.TestCase):
         """Every use of `key` sits behind the cap's switch on `read`, or inside a key every use of which does."""
         self.assertLess(depth, 4, key)
         uses = [(k, t) for k, t in corpus.items() if f"'{key}'" in t]
+        if not uses and depth == 0 and f"custom_tooltip_no_bullet = {key}\n" in _text(MAPS):
+            self.map_guarded(key)
+            return
         self.assertTrue(uses, f"{key} is never used")
         for k, t in uses:
             for m in re.finditer(re.escape(f"'{key}'"), t):
@@ -162,6 +166,16 @@ class TestE0DisplayCap(unittest.TestCase):
                         and f"GreaterThanOrEqualTo_CFixedPoint( {read}, '(CFixedPoint)9999.5' )" not in switch):
                     self.assertNotEqual(k, "<gui>", f"{key} in the GUI with no cap")
                     self.guarded(k, read, corpus, depth + 1)
+
+    def map_guarded(self, key):
+        """A Map Room hover key (te_journal_maps.txt's map_tooltip, the state as THIS): the switch is in script, an
+        earlier branch of the same ladder sending a figure past the cap to the key's _over twin. A SelectLocalization
+        there lost THIS (2026-11-05), so the map can't use the loc-side switch."""
+        text = _text(MAPS)
+        at = text.index(f"custom_tooltip_no_bullet = {key}\n")
+        ladder = text[text.rindex("map_tooltip = {", 0, at):at]
+        self.assertRegex(ladder, rf"var:te_dg_e0 > {P.E0_SHOWN_MAX}\s*\}}\s*custom_tooltip_no_bullet = {key}_over\n",
+                         f"{key}: no branch before it sends life expectancy over {P.E0_SHOWN_MAX} to {key}_over")
 
     def test_every_shown_figure_is_switched(self):
         keys = self.number_keys()
