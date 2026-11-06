@@ -1508,7 +1508,7 @@ rule directly any more.**
 | `te_monetary_refresh_world_rate` | short-circuits to the era base, saving two ~200-country scans a month for an answer that cannot differ |
 | step 5 | reduces to structural + debt load on its own: `te_mon_premium_fx` is 0 at par, `te_mon_premium_monetisation` 0 at level 0, `te_mon_premium_union_overvaluation` 0 for a non-adopter, and `te_mon_premium_unanchored` 0 because the expectation gap (0 against an anchor of 2 or 0) sits inside the 3pp tolerance |
 | step 7 | the lenders' floor becomes `era_base`, and the realised-inflation subtraction is 0 |
-| §16.3 stance channel | `te_mon_stance_gap` is 0, so momentum and bubble get nothing. `banking_cycle_apply_stance_band` is **not** gated: band 3 is already the designed answer for a country with no dial, and the stance bar already sits at its centre for one |
+| §16.3 stance channel | `te_mon_stance_gap` is 0, so momentum and bubble get nothing. the stance band (declared on the entry since #1404, at `var:te_mon_stance_band`; `banking_cycle_apply_stance_band` before) is **not** gated: band 3 is already the designed answer for a country with no dial, and the stance bar already sits at its centre for one |
 | OMO | reverts to its pre-phase-1 gate (unlock bool, 4 points, law lock); the `on_law_enacted` auto-switch-off is gated to match |
 | capital controls | `ai_chance` falls back to the pre-phase-1 cycle rule on both sides — the external-crisis rule reads neutral inputs and would never fire |
 | the ten FX-shock event options | call `te_mon_effect_fx_shock_tt`, which drops **both the shock and its tooltip line**, so no option promises a currency move that cannot happen |

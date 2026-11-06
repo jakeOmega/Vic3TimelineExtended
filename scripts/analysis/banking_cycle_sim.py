@@ -44,6 +44,11 @@ THE ONE-MONTH LAGS, WHICH ARE LOAD-BEARING
 issues them, so within one pulse:
   * `banking_cycle_advance_variables` reads the phase / inertia / fiscal modifiers
     that `banking_cycle_apply_phase_modifiers` put on at the END of LAST month;
+    since vanilla 1.15 the journal entry declares them instead
+    (`scaling_modifiers_while_active`, #1404), so the declarations read at most
+    4 days late (the entry's update) instead of a pulse. The variables they
+    follow move at the pulse, so they still carry last month's end state into
+    this one and the model keeps the one-pulse lag;
   * the stance gap it reads is up to a month old by design (§16.3), because the
     order of `on_monthly_pulse_country` and the JE pulse is not guaranteed.
 The simulation reproduces both. `--pulse-order` flips the second for sensitivity.
@@ -998,7 +1003,7 @@ def era_base(year_index: int) -> float:
 
 
 def bubble_inertia_multiplier(bubble: float) -> float:
-    """bubble_inertia_multiplier_script_value (extra_script_values.txt).
+    """bubble_inertia_curve (extra_script_values.txt).
 
     Hand-ported (the script value is an if-chain). Above 50 it is
     0.25 + 0.005 (x-50) + a (x-50)^2 with `a` set so f(100) = top: 0.45 since

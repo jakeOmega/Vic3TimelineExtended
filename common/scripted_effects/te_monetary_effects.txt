@@ -2545,8 +2545,8 @@ te_monetary_update_inflation = {
 # DECIDED FROM VARIABLES, NEVER FROM has_modifier — add_modifier and
 # remove_modifier results are not visible inside the effect block that issues
 # them (scripting_best_practices.md), so a has_modifier read here would be
-# asking about state this effect is in the middle of changing. Same rule, and
-# the same reason, as banking_cycle_apply_stance_band.
+# asking about state this effect is in the middle of changing. (The stance
+# bands followed the same rule until 1.15; je_banking_cycle declares them now.)
 #
 # COMFORT IS APPLIED THOUGH IT IS EMPTY, on the banking_stance_band_3 precedent
 # and vanilla's own tax_modifier_medium / infamy_reputable: the swap then always
@@ -2554,9 +2554,9 @@ te_monetary_update_inflation = {
 # the country is in. Its loc is written for that job — it says the band costs
 # nothing and that it is the one band in which the real-wage dividend pays.
 #
-# NO FIRST-RUN SWEEP. banking_cycle_apply_stance_band removes all five of its
-# bands once, because its modifiers live on a can_revolution_inherit journal
-# entry that can reach a successor whose tracker does not describe it. These are
+# NO FIRST-RUN SWEEP. The stance bands' old swap removed all five once,
+# because its modifiers lived on a can_revolution_inherit journal entry that
+# can reach a successor whose tracker does not describe it. These are
 # COUNTRY modifiers on the country itself, and a country that has never run this
 # step carries the 0 from step 0 and no band modifier — the two agree. A
 # revolution's winner is the exception to watch: it receives the loser's
