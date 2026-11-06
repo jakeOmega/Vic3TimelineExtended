@@ -719,14 +719,18 @@ gm_country_refresh = {
 	# is_shown_when_inactive auto-activates it for new saves, but a new
 	# auto-activating JE does not reach a save started before it existed
 	# (same doc, following paragraph). Add it explicitly here so saves that
-	# predate this entry, and any save where it lapsed, pick it back up. Not for
+	# predate this entry, and a country whose entry concluded (its invalid
+	# outcome, once it owned nothing: the record is gone, and the engine never
+	# activates the type again), pick it back up. Not for
 	# a decentralized country (has_events = no), which can hold a landmark (Great
 	# Zimbabwe, under the Rozvi) but takes no journal entry: the add logs an error.
-	# Nor while the entry is shown but not yet active: has_journal_entry reads
-	# active entries only, the engine activates that one at its next check of
-	# `possible`, and adding over it logged "already has a journal entry of
-	# type je_grand_monuments" (journal_entry_manager.cpp: 116 lines, 55 countries,
-	# as the first 1.15 game began; the same line on 1.14.5).
+	# Nor over an inactive copy, which every country holds until its entry
+	# first concludes: has_journal_entry reads active entries only, the engine
+	# activates that copy at its next check of `possible`, and adding over it
+	# logged "already has a journal entry of type je_grand_monuments"
+	# (journal_entry_manager.cpp: 116 lines, 55 countries, as the first 1.15
+	# game began; the same line on 1.14.5). So the add reaches only a country
+	# with no record (#1416).
 	if = {
 		limit = {
 			gm_system_enabled = yes

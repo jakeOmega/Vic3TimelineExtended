@@ -14,7 +14,8 @@ common/scripted_triggers/colonial_empire_triggers.txt) for a whole month.
 Pinned here:
 - ce_reentry_due restates the entry's is_shown_when_inactive and possible word
   for word (add_journal_entry skips both) and adds the decentralized,
-  revolutionary, running-entry, separation-cache and voluntary-hold guards;
+  revolutionary, running-entry, inactive-record (the add is refused over one,
+  #1416), separation-cache and voluntary-hold guards;
 - the pass runs for players and AI alike, monthly, straight after the
   separation cache's step; it waits a month, adds, and clears its mark when the
   country stops being due;
@@ -125,6 +126,7 @@ class DueTests(unittest.TestCase):
         due = _norm(DUE)
         for cond in ("NOT = { is_country_type = decentralized }", "is_revolutionary = no",
                      "NOT = { has_journal_entry = je_colonial_empire }",
+                     "NOT = { has_inactive_journal_entry = je_colonial_empire }",
                      "has_variable = ce_separation_cached",
                      "NOT = { has_variable = ce_reentry_voluntary_hold }"):
             self.assertIn(cond, due)
@@ -133,7 +135,8 @@ class DueTests(unittest.TestCase):
         due = _norm(DUE)
         walk = due.index("any_scope_state")
         for cond in ("has_game_rule = decolonization_enabled", "has_technology_researched = decolonization",
-                     "is_country_type = decentralized", "has_journal_entry = je_colonial_empire"):
+                     "is_country_type = decentralized", "has_journal_entry = je_colonial_empire",
+                     "has_inactive_journal_entry = je_colonial_empire"):
             self.assertLess(due.index(cond), walk, cond)
 
 

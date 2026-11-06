@@ -602,7 +602,12 @@ ce_entry_unlocked = {
 #     they inherit the nation's when they win, and with one they would run a
 #     fresh bar of their own, whose values would take precedence at the merge
 #     (te_banking_entry_expected leaves them out for the same reason);
-#   - no entry running;
+#   - no entry running, and no inactive record either: one the engine
+#     activates itself once possible holds (a country's first run), and over
+#     which add_journal_entry is refused with an error ("already has a journal
+#     entry of type", scripting_best_practices.md, the has_journal_entry
+#     bullet). So the add reaches only a country with no record: one whose
+#     entry has ended, or one the engine left out (#1416);
 #   - the separation cache: the colony test reads it (the entry's voluntary
 #     end waits for it for the same reason);
 #   - a year since a voluntary end (ce_reentry_voluntary_hold, set by on_fail's
@@ -621,6 +626,7 @@ ce_reentry_due = {
 	NOT = { is_country_type = decentralized }
 	is_revolutionary = no
 	NOT = { has_journal_entry = je_colonial_empire }
+	NOT = { has_inactive_journal_entry = je_colonial_empire }
 	has_variable = ce_separation_cached
 	NOT = { has_variable = ce_reentry_voluntary_hold }
 	# je_colonial_empire's possible
