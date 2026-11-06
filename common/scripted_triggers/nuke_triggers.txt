@@ -275,11 +275,16 @@ was_nuked_by_enemy = {
 
 # Country scope, ENEMY = the enemy country (scope:country in nuke.txt,
 # scope:target_country in covert_operations.txt). True if ROOT is losing the
-# war it shares with $ENEMY$ on the battlefield: most size-weighted battles in
-# that war lost (gated on enough significant battles -- with none fought the
-# fraction reads 0, i.e. "losing"), or a quarter of ROOT's own territory under
-# enemy occupation. Replaces the 1.14 war-support proxy, which also fires for
-# a merely unpopular war.
+# war it shares with $ENEMY$: most size-weighted battles in that war lost
+# (gated on enough significant battles -- with none fought the fraction reads
+# 0, i.e. "losing"), a quarter of ROOT's own territory under enemy occupation,
+# or (1.15, #1447) a quarter of ROOT's GDP in blockaded states, or its enemies
+# in that war pressing it at 0.5 or more on the engine's 0-1 pressure scale
+# (occupation, blockade and recent significant battles together). Before
+# 1.15 a blockaded country never counted as losing. The two 1.15 thresholds
+# are a first guess, on the play-test list (vanilla-1-15-playtest.md).
+# Replaces the 1.14 war-support proxy, which also fires for a merely
+# unpopular war. nd_is_losing_war_to is the same rule for any scope.
 # NOTE: enemy_side_occupation is how much of the ENEMY's land we hold (high =
 # winning); enemy_occupation is our own occupied share.
 is_losing_war_against = {
@@ -287,9 +292,15 @@ is_losing_war_against = {
 		enemy_occupation >= 0.25
 		any_scope_war = {
 			is_war_participant = $ENEMY$
-			num_significant_battles >= 5
-			ROOT = {
-				size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+			OR = {
+				AND = {
+					num_significant_battles >= 5
+					ROOT = {
+						size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+					}
+				}
+				blockaded_gdp_share = { target = ROOT value >= 0.25 }
+				enemy_pressure = { target = ROOT value >= 0.5 }
 			}
 		}
 	}

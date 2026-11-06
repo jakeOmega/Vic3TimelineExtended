@@ -298,6 +298,27 @@ un_mission_ai_join_score = {
 		limit = { ROOT = { has_law = law_type:law_humanitarian_regulations } }
 		add = 5
 	}
+	# 1.15 (#1450): an armed contingent has to get there. A member whose army
+	# can't realistically reach a peacekeeping or Stabilization mission's state
+	# (has_military_reach, te_military_reach_values.txt) is much less keen.
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_msn_peacekeeping
+				has_tag = un_msn_stabilisation
+			}
+			var:un_msn_state ?= { save_temporary_scope_as = un_msn_reach_state }
+			ROOT = {
+				NOT = {
+					has_military_reach = {
+						target = scope:un_msn_reach_state
+						min_reach = te_reach_realistic
+					}
+				}
+			}
+		}
+		add = -15
+	}
 	if = {
 		limit = { ROOT = { country_rank >= rank_value:great_power } }
 		add = 5

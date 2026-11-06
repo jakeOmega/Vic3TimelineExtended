@@ -627,6 +627,8 @@
  goods_trade_advantage_small_arms_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('small_arms').GetName]."
  goods_trade_advantage_tanks_mult:0 "[concept_trade_advantage] for [GetGoods('tanks').GetName]"
  goods_trade_advantage_tanks_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('tanks').GetName]."
+ interest_group_ideology_environmentalists_leader_chance_mult:0 "$ideology_environmentalists$ [concept_leader] Chance"
+ interest_group_ideology_environmentalists_leader_chance_mult_desc:0 "An increase or decrease to the chance for this [concept_interest_group] to select a [concept_leader] with the $ideology_environmentalists$ [concept_ideology]"
  ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult:0 "$ship_type_amphibious_assault_ship$ $ship_accuracy_add$"
  ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult_desc:0 "$ship_accuracy_add_desc$"
  ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult:0 "$ship_type_amphibious_assault_ship$ $ship_hull_damage_add$"

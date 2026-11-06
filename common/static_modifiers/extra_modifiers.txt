@@ -1645,6 +1645,15 @@ environmentalist_momentum_modifier = {
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.05
 }
 
+# Interest-group-scoped: makes the group likelier to pick an Environmentalist
+# leader the next time it chooses one, in place of converting the sitting
+# leader (environmentalism events .3, .4, .8 and .15; #1446). Vanilla's one
+# use of the pattern is +50% (modifier_agent_of_the_sovereign_ig).
+environmentalist_leader_pull_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ideology_environmentalists_leader_chance_mult = 1
+}
+
 # Movement-scoped: applied to environmental movement via every_political_movement
 environmentalist_momentum_movement_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds

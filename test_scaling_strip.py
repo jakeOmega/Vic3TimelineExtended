@@ -19,6 +19,9 @@ ROOT = Path(__file__).resolve().parent
 JE_DIR = ROOT / "common" / "journal_entries"
 LEGACY = ROOT / "common" / "scripted_effects" / "legacy_modifier_cleanup.txt"
 PREFIX = "legacy_scaling_strip_"
+# An entry added after the conversion holds no old copies of its own: an old save's copies of what it declares sit on
+# the entry that used to declare it, whose weekly strip removes them. New entry -> that entry.
+MOVED_FROM = {"je_world_climate": "je_global_warming"}  # Climate Warming (#1448)
 
 
 def _parse(path: Path) -> list[Node]:
@@ -62,8 +65,12 @@ def _removed(effect: Node) -> set[str]:
 class StripShapeTest(unittest.TestCase):
     def test_every_declaring_entry_strips_its_keys_weekly(self):
         effects = _strip_effects()
-        for key, (entry, declared) in _declaring_entries().items():
+        entries = _declaring_entries()
+        bare = {e.key: e for path in sorted(JE_DIR.glob("*.txt")) for e in _parse(path) if ":" not in e.key}
+        for key, (entry, declared) in entries.items():
             with self.subTest(entry=key):
+                if key in MOVED_FROM:
+                    entry = bare[MOVED_FROM[key]]
                 weekly = _child(entry, "on_weekly_pulse")
                 self.assertIsNotNone(weekly, "no on_weekly_pulse to run the strip from")
                 calls = {n.key for n in _walk(weekly.children) if n.key.startswith(PREFIX) and n.value == "yes"}
@@ -72,6 +79,14 @@ class StripShapeTest(unittest.TestCase):
                 self.assertIn(call, effects, f"{call} is not defined in {LEGACY.name}")
                 self.assertEqual(sorted(declared - _removed(effects[call])), [],
                                  f"{call} leaves these declared keys' old copies")
+
+    def test_a_moved_declaration_is_new_on_its_entry(self):
+        """The exemption is for an entry that never held an added copy: it runs no strip of its own."""
+        entries = _declaring_entries()
+        for key in MOVED_FROM:
+            with self.subTest(entry=key):
+                self.assertIn(key, entries)
+                self.assertIsNone(_child(entries[key][0], "on_weekly_pulse"))
 
     def test_the_monthly_strip_runs_every_system(self):
         cleanup = next(n for n in _parse(LEGACY) if n.key == "legacy_je_modifier_cleanup_effect")
