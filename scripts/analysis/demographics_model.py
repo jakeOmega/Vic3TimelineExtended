@@ -156,7 +156,7 @@ def cause_factors(inp):
         if factor == "literacy":
             return 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
         if factor == "crowding":
-            return 1 + P.CROWDING_INFECTION_PER_PULL * inp.crowding
+            return 1 + P.CROWDING_INFECTION_PER_PULL * min(inp.crowding, P.CROWDING_INFECTION_PULL_MAX)
         if factor == "laws":
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
@@ -1313,7 +1313,7 @@ def ring_migrate(ring):
     return ring
 
 
-def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
+def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0, ceiling=None):
     """The census's births or deaths modifier for one state (phase 2 step 4). Returns (M, clamped).
 
     The engine gives each pop bare x max(0, 1 + its terms + M) (growth probe), so over a state M adds
@@ -1327,8 +1327,9 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
     go lower. `added` is the moved lines' on-top family (owner, 2026-10-11; the engine-lines plan): script-only, so the
     engine doesn't apply it, and the census adds it at its own rate, + added x target / bare. `other` is the state read without the census's and fast mode's
     terms: other + M stays at or above RATE_TOTAL_FLOOR, the engine's own per-pop floor, and M never goes below 0 when
-    other alone is past it. No ceiling (owner, 2026-10-20). The script also skips a walk under RATE_BARE_MIN, less than
-    one person at the curves' lowest, in its own units; callers here never pass one.
+    other alone is past it. `ceiling`, births' P.RATE_BIRTHS_CEILING (#1476), caps M where no figure in range reaches;
+    deaths have none (owner, 2026-10-20). The script also skips a walk under RATE_BARE_MIN, less than one person at the
+    curves' lowest, in its own units; callers here never pass one.
     """
     if bare <= 0:
         return 0.0, False
@@ -1336,7 +1337,24 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
     lo = min(0.0, P.RATE_TOTAL_FLOOR - other)
     if m < lo:
         return lo, True
+    if ceiling is not None and m > ceiling:
+        return ceiling, True
     return m, False
+
+
+def census_out_of_range(people, e0=None, cbr_model=None, cdr_model=None):
+    """Why the census's own figures are out of range (#1476), the script's te_demog_census_out_of_range in the order
+    te_demog_rates_refresh stores it as te_dg_rate_guard: 1 its people's sum below 0 (wrapped at the script's fixed-point
+    limit) or above P.RATE_GUARD_PEOPLE_MAX, 2 life expectancy under P.RATE_GUARD_E0_MIN, 3 the model's birth or death
+    rate below 0; 0 in range. A figure the state doesn't hold (None) says nothing. Out of range, the census clears its
+    terms and the engine's own rates run, as under Display only."""
+    if people is not None and (people < 0 or people > P.RATE_GUARD_PEOPLE_MAX):
+        return 1
+    if e0 is not None and e0 < P.RATE_GUARD_E0_MIN:
+        return 2
+    if (cbr_model is not None and cbr_model < 0) or (cdr_model is not None and cdr_model < 0):
+        return 3
+    return 0
 
 
 def on_top_scale(engine, target):

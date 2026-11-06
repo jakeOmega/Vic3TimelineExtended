@@ -573,8 +573,14 @@ INFECTION_ADULT_MEDICINE = 0.8
 # floor adds almost nothing, the 1837 median crowded person +4%, a state at ten times the floor +45%. The Ministry
 # of Urban Planning and Urban Engineering (sewerage, steel frames) lower it through the crowding itself.
 MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of multiplier (a test pins it)
-CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls, with no ceiling
+CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
 # (owner, 2026-10-20: the old +50% cap was a guess; Ile-de-France's pull 1.008 doubles its infection)
+# ... up to a pull of 5, infection x 6 (#1476, 2026-11-06: a guard, not a calibration). Past it the factor has outrun
+# anything the census was built for: Sindh's 91 in the 1.15 observer game (1.2 billion people, a runaway) killed every
+# age group at 55-100% a year, so the ring emptied and its rates turned to nonsense; at 5 a poor state's infants all
+# die but its adults die at 4-5% a year. No sane state reached it: the most crowded of the 2020, 1940 and 1926 saves
+# read 1.64 (the runaway tripwire's sign 6 is the same bound, on the uncapped input te_dg_in_crowd).
+CROWDING_INFECTION_PULL_MAX = 5.0
 
 # ---- Causes of Death (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md) ----
 # Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
@@ -680,10 +686,29 @@ STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this
 # gave no deaths at all. The state read with M in it stays at or above this, and when the lines left on top alone
 # are past it, M is 0. The self-check rate_below_measured watches the stretch from -0.9 down.
 RATE_TOTAL_FLOOR = -1.0
-# M has no ceiling (until 2026-10-20 +3, "a guard against a nonsense target"). target / bare is at most the model's rate
-# over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a state whose
-# walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x the curve).
+# M had no ceiling from 2026-10-20 (until then +3, "a guard against a nonsense target"). target / bare is at most the
+# model's rate over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a
+# state whose walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x
+# the curve).
 RATE_BARE_MIN = 80.0
+# The census's guards (#1476, 2026-11-06), after the 1.15 observer game's East Bengal reached some 9e15 people. Each sits
+# where the census's own figures stop meaning anything, past every sane state of the 2020, 1940 and 1926 saves, and at
+# the same bound as the runaway tripwire's sign for it (te_debug_demog_runaway_selfcheck), so a sane game never meets one.
+# Out of range, the census clears its terms (te_demog_rates_clear) and the engine's own rates run, as under Display only,
+# instead of setting M from nonsense (Sindh's model death rate of -474 per 1,000 put deaths at the floor, so the engine
+# killed nobody there): its people's sum below 0 (wrapped) or above RATE_GUARD_PEOPLE_MAX, life expectancy under
+# RATE_GUARD_E0_MIN, or the model's birth or death rate below 0 (demographics_model.census_out_of_range).
+# RATE_GUARD_PEOPLE_MAX: four times the largest sane state (128 million, 2020), and below the first of the census's sums
+# to wrap at the script's fixed-point limit (about 9.2e13): a seed's normalization, people x 100,000, at 9.2e8.
+RATE_GUARD_PEOPLE_MAX = 500_000_000
+# RATE_GUARD_E0_MIN: sane states read 26 or more; a life table this short has all but its adults dying.
+RATE_GUARD_E0_MIN = 5.0
+# A ceiling on M for births, the guard behind the guard (the 2026-10-20 "no ceiling" stands for any figure in range):
+# target / bare reaches about 6 at most (the highest model birth rate over the lowest curve), and the largest sane term
+# was +4.05 (Turkmenia, 2020). Past the sums' fixed-point limit M would be computed from wrapped numbers with no ceiling;
+# the people guard clears the terms long before that, and this bounds what anything it misses can do. Births only: deaths
+# have the floor, and a high deaths term shrinks a state rather than running it away.
+RATE_BIRTHS_CEILING = 10.0
 # The step's births and deaths scales (the engine's events over the model's target, less 1) have only the natural
 # floor, -1 (no events), and no ceiling (until 2026-10-20 -0.9 and +4): each age's probability is already capped at 1.
 # Under 1 + scale = ON_TOP_FACTOR_MIN the ring's events are too few to read the model's own rate back from, so the step

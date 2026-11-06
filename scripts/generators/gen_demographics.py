@@ -1713,7 +1713,9 @@ def _factor_body(o, cause, factor):
     elif factor == "literacy":
         o(f"value = var:te_dg_in_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
     elif factor == "crowding":
-        o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)} add = 1")
+        # at most P.CROWDING_INFECTION_PULL_MAX (#1476): the input stays as read, for the runaway tripwire's sign 6
+        o(f"value = var:te_dg_in_crowd max = {lit(P.CROWDING_INFECTION_PULL_MAX)} "
+          f"multiply = {lit(P.CROWDING_INFECTION_PER_PULL)} add = 1")
     elif factor == "laws":
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
@@ -1899,6 +1901,9 @@ def constants(o):
         "cause_scale_min_deaths": P.CAUSE_SCALE_MIN_DEATHS, "cause_scale_min": P.CAUSE_SCALE_MIN,
         "rate_total_floor": P.RATE_TOTAL_FLOOR,
         "rate_bare_min": P.RATE_BARE_MIN,
+        # the census's guards (#1476)
+        "rate_guard_people": P.RATE_GUARD_PEOPLE_MAX, "rate_guard_e0": P.RATE_GUARD_E0_MIN,
+        "rate_births_ceiling": P.RATE_BIRTHS_CEILING, "crowding_pull_max": P.CROWDING_INFECTION_PULL_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,
         "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
