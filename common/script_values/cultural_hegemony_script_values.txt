@@ -71,6 +71,24 @@ cultural_pull_art_dr_steepness = 0.04390
 # test_international_influence_costs.py pins them together.
 ch_cultural_institutes_influence_cost = 150
 ch_global_media_influence_cost = 200
+# What each gate asks for: the programme's cost, plus the cost of a programme
+# started in the last week, which the entry's declaration may not carry yet
+# (ch_influence_pending, set by ch_effect_cultural_institutes and
+# ch_effect_global_media_campaign).
+ch_cultural_institutes_influence_gate = {
+	value = ch_cultural_institutes_influence_cost
+	if = {
+		limit = { has_variable = ch_influence_pending }
+		add = var:ch_influence_pending
+	}
+}
+ch_global_media_influence_gate = {
+	value = ch_global_media_influence_cost
+	if = {
+		limit = { has_variable = ch_influence_pending }
+		add = var:ch_influence_pending
+	}
+}
 # The AI takes one up only with 200 to spare after its cost, so dropping it in
 # deficit (te_ai_influence_deficit_repeal_weight) never leaves enough to take
 # it straight back up.
@@ -116,6 +134,25 @@ ch_program_funding_total_cost_mult = {
 	value = ch_program_funding_cost_mult
 	multiply = ch_program_funding_level_value
 	min = 0
+}
+
+# PENDING REMOVAL with the "1.15 scaling modifiers" block of
+# legacy_je_modifier_cleanup_effect (after 2026-12-31): the multipliers of the
+# funding pair and the exposition's cost that a save from before #1404 still
+# holds on the entry name these, until that block strips the copies.
+ch_program_funding_level_value_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_level_value }
+}
+
+ch_program_funding_cost_mult_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_cost_mult }
+}
+
+ch_program_funding_total_cost_mult_for_je = {
+	value = 0
+	owner = { add = ch_program_funding_total_cost_mult }
 }
 
 # The funding tooltip's two figures, in money a week: one level's cost and the

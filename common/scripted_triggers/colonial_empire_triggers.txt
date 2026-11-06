@@ -748,8 +748,9 @@ colonial_empire_possible_garrison_up = {
 	# Hard authority gate: each level costs colonial_garrison_authority_per_level
 	# (100) authority for as long as it runs. The cruel/Iron-Fist state has
 	# authority to spare; a liberal one without the regressive law stack runs
-	# dry after a level or none.
-	authority > 100
+	# dry after a level or none. A level raised in the last week counts too:
+	# its upkeep reaches authority a few days late.
+	authority > colonial_garrison_raise_authority_gate
 }
 
 colonial_empire_possible_garrison_down = {

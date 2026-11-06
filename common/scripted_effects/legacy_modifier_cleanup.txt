@@ -983,25 +983,56 @@ legacy_je_modifier_cleanup_effect = {
 	# entry. The four programmes had no variable before the change: set it
 	# from the old copy, then take the copy off (the entry declares the
 	# programme while the variable is set; the variable sits on the country).
+	# The copy goes either way. The variable isn't set without the Ministry of
+	# Culture (the entry's pulse ends every programme then), nor when the
+	# programme was started again since the load, nor when the programme it
+	# excludes was started since (during the wait the old copy is invisible to
+	# the exclusion; the newer choice stands).
 	if = { limit = { has_modifier = cultural_hegemony_foreign_benchmark } remove_modifier = cultural_hegemony_foreign_benchmark }
 	if = {
 		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition } }
-		set_variable = { name = ch_world_exposition_on value = yes }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_world_exposition_on }
+			}
+			set_variable = { name = ch_world_exposition_on value = yes }
+		}
 		je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
 	}
 	if = {
 		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program } }
-		set_variable = { name = ch_cultural_institutes_on value = yes }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_cultural_institutes_on }
+			}
+			set_variable = { name = ch_cultural_institutes_on value = yes }
+		}
 		je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
 	}
 	if = {
 		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign } }
-		set_variable = { name = ch_global_media_campaign_on value = yes }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_global_media_campaign_on }
+				NOT = { has_variable = ch_cultural_protectionism_on }
+			}
+			set_variable = { name = ch_global_media_campaign_on value = yes }
+		}
 		je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
 	}
 	if = {
 		limit = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program } }
-		set_variable = { name = ch_cultural_protectionism_on value = yes }
+		if = {
+			limit = {
+				has_law = law_type:law_ministry_of_culture
+				NOT = { has_variable = ch_cultural_protectionism_on }
+				NOT = { has_variable = ch_global_media_campaign_on }
+			}
+			set_variable = { name = ch_cultural_protectionism_on value = yes }
+		}
 		je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
 	}
 	je:je_cultural_hegemony ?= {

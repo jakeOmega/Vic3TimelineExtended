@@ -465,6 +465,19 @@ colonial_assim_startup_weeks = 13
 # country_authority_cost_add (300) over the three levels. The raise gate
 # (colonial_empire_possible_garrison_up) and the widget's cost line read it.
 colonial_garrison_authority_per_level = 100
+# What the raise gate asks for: one level's upkeep, plus the upkeep of levels
+# raised in the last week, which the entry's declaration may not carry yet
+# (colonial_empire_effect_garrison_up).
+colonial_garrison_raise_authority_gate = {
+	value = colonial_garrison_authority_per_level
+	if = {
+		limit = { has_variable = colonial_garrison_pending_levels }
+		add = {
+			value = var:colonial_garrison_pending_levels
+			multiply = colonial_garrison_authority_per_level
+		}
+	}
+}
 # Infamy on starting the garrison (colonial_programme_garrison_up's step from
 # level 0 to 1); its row's hover prints it.
 colonial_garrison_start_infamy = 5

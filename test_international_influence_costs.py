@@ -284,10 +284,19 @@ class UnGateTest(unittest.TestCase):
 class CulturalHegemonyGateTest(unittest.TestCase):
     def test_programmes_ask_for_their_cost(self):
         triggers = _read(CH_TRIGGERS)
-        self.assertIn("influence >= ch_cultural_institutes_influence_cost",
-                      _block(triggers, "ch_possible_cultural_institutes"))
-        self.assertIn("influence >= ch_global_media_influence_cost",
-                      _block(triggers, "ch_possible_global_media_campaign"))
+        # The gate is the cost plus any programme started in the last week,
+        # whose use the entry's declaration may not carry yet (#1404).
+        values = _read(CH_VALUES)
+        for gate, cost, possible in (
+                ("ch_cultural_institutes_influence_gate", "ch_cultural_institutes_influence_cost",
+                 "ch_possible_cultural_institutes"),
+                ("ch_global_media_influence_gate", "ch_global_media_influence_cost",
+                 "ch_possible_global_media_campaign")):
+            with self.subTest(gate=gate):
+                self.assertIn(f"influence >= {gate}", _block(triggers, possible))
+                body = _block(values, gate)
+                self.assertIn(f"value = {cost}", body)
+                self.assertIn("add = var:ch_influence_pending", body)
 
     def test_ai_start_leaves_influence_to_spare(self):
         values = _read(CH_VALUES)

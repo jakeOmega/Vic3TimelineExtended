@@ -285,7 +285,10 @@ class RefreshGoneTests(unittest.TestCase):
                     self.assertNotIn("ch_refresh_funding_modifiers", text)
                     self.assertNotIn("ch_effect_mult_cached", text)
                     for wrapper in WRAPPERS:
-                        self.assertNotIn(wrapper, text)
+                        # Kept, uncalled, until the old-save strip's removal date: an old
+                        # save's entry copies still name them in their multipliers.
+                        allowed = 1 if path == VALUES else 0
+                        self.assertEqual(text.count(wrapper), allowed, wrapper)
 
     def test_the_pulse_only_ends_programmes_writes_the_benchmark_and_fires_milestones(self):
         pulse = _pulse()
@@ -293,6 +296,42 @@ class RefreshGoneTests(unittest.TestCase):
         self.assertNotIn("_modifier", pulse)
         self.assertIn("trigger_event = { id = cultural_hegemony.8 }", pulse)
         self.assertIn("trigger_event = { id = cultural_hegemony.9 }", pulse)
+
+
+class LateCostTests(unittest.TestCase):
+    """A programme's influence use reaches the country a few days after it starts (the entry declares it), so
+    the influence gates count what was started in the last week (review of PR 3, #1404)."""
+
+    def test_both_influence_programmes_book_their_cost(self):
+        effects = _text(EFFECTS)
+        for prog, cost in (("cultural_institutes", "ch_cultural_institutes_influence_cost"),
+                           ("global_media_campaign", "ch_global_media_influence_cost")):
+            with self.subTest(programme=prog):
+                block = _top_level_block(effects, f"ch_effect_{prog} = {{")
+                self.assertIn(f"value = {{ value = var:ch_influence_pending add = {cost} }}", block)
+                self.assertIn(f"set_variable = {{ name = ch_influence_pending value = {cost} days = 7 }}", block)
+
+
+class OldSaveMigrationTests(unittest.TestCase):
+    """The strip sets a programme's variable from an older save's copy only under the Ministry of Culture, and
+    not when the programme it excludes was started since the load (the copy is invisible to the exclusion)."""
+
+    def test_the_migration_keeps_the_law_and_the_exclusion(self):
+        text = _text(ROOT / LEGACY)
+        for modifier, var in (("ch_world_exposition", "ch_world_exposition_on"),
+                              ("ch_cultural_institutes_program", "ch_cultural_institutes_on"),
+                              ("ch_global_media_campaign", "ch_global_media_campaign_on"),
+                              ("ch_cultural_protectionism_program", "ch_cultural_protectionism_on")):
+            with self.subTest(programme=modifier):
+                head = f"limit = {{ je:je_cultural_hegemony ?= {{ has_modifier = {modifier} }} }}"
+                block = text[text.index(head):]
+                block = block[:block.index(f"je:je_cultural_hegemony = {{ remove_modifier = {modifier} }}")]
+                self.assertIn("has_law = law_type:law_ministry_of_culture", block)
+                self.assertIn(f"set_variable = {{ name = {var} value = yes }}", block)
+                partner = {"ch_global_media_campaign_on": "ch_cultural_protectionism_on",
+                           "ch_cultural_protectionism_on": "ch_global_media_campaign_on"}.get(var)
+                if partner:
+                    self.assertIn(f"NOT = {{ has_variable = {partner} }}", block)
 
 
 if __name__ == "__main__":

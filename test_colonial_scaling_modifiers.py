@@ -191,5 +191,24 @@ class RefreshGoneTests(unittest.TestCase):
             self.assertIn("text = CE_%s_TT" % core.upper(), block)
 
 
+class LateCostTests(unittest.TestCase):
+    """A Garrison level's authority upkeep reaches the country a few days after the step (the entry declares
+    it), so the raise gate counts the levels raised in the last week (review of PR 3, #1404)."""
+
+    def test_the_raise_gate_counts_recent_levels(self):
+        triggers = _text(ROOT / "common/scripted_triggers/colonial_empire_triggers.txt")
+        gate = _top_level_block(triggers, "colonial_empire_possible_garrison_up = {")
+        self.assertIn("authority > colonial_garrison_raise_authority_gate", gate)
+        value = _top_level_block(_text(VALUES), "colonial_garrison_raise_authority_gate = {")
+        self.assertIn("value = colonial_garrison_authority_per_level", value)
+        self.assertIn("value = var:colonial_garrison_pending_levels", value)
+        self.assertIn("multiply = colonial_garrison_authority_per_level", value)
+
+    def test_a_player_step_books_the_level(self):
+        step = _top_level_block(_text(EFFECTS), "colonial_empire_effect_garrison_up = {")
+        self.assertIn("value = { value = var:colonial_garrison_pending_levels add = 1 }", step)
+        self.assertIn("set_variable = { name = colonial_garrison_pending_levels value = 1 days = 7 }", step)
+
+
 if __name__ == "__main__":
     unittest.main()

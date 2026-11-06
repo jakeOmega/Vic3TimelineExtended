@@ -76,7 +76,7 @@ ch_possible_cultural_institutes = {
 	}
 	custom_tooltip = {
 		text = CH_INSTITUTES_INFLUENCE_TT
-		influence >= ch_cultural_institutes_influence_cost
+		influence >= ch_cultural_institutes_influence_gate
 	}
 }
 
@@ -100,7 +100,7 @@ ch_possible_global_media_campaign = {
 	}
 	custom_tooltip = {
 		text = CH_MEDIA_INFLUENCE_TT
-		influence >= ch_global_media_influence_cost
+		influence >= ch_global_media_influence_gate
 	}
 }
 

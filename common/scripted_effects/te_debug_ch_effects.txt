@@ -26,11 +26,16 @@ te_debug_ch_setup = {
 	}
 	set_variable = { name = ch_program_funding_level value = 2 }
 
-	ch_effect_world_exposition = yes
-	ch_effect_cultural_institutes = yes
-	# Protectionism only — it is mutually exclusive with the media campaign, and
-	# leaving media off is what makes the greyed-out Enable control testable.
-	ch_effect_cultural_protectionism = yes
+	# Only with the entry, as the old adds onto it were: a programme's
+	# variable set before the entry activates would start it then.
+	if = {
+		limit = { has_journal_entry = je_cultural_hegemony }
+		ch_effect_world_exposition = yes
+		ch_effect_cultural_institutes = yes
+		# Protectionism only — it is mutually exclusive with the media campaign, and
+		# leaving media off is what makes the greyed-out Enable control testable.
+		ch_effect_cultural_protectionism = yes
+	}
 
 	ch_set_display_state = yes
 }

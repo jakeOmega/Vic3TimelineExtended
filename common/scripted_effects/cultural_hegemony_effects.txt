@@ -421,6 +421,19 @@ ch_effect_cultural_institutes = {
 	}
 	hidden_effect = {
 		set_variable = { name = ch_cultural_institutes_on value = yes }
+		# Its influence use reaches the country within a few days (the entry
+		# declares it, #1404); until then the influence gates count it here.
+		if = {
+			limit = { has_variable = ch_influence_pending }
+			set_variable = {
+				name = ch_influence_pending
+				value = { value = var:ch_influence_pending add = ch_cultural_institutes_influence_cost }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = ch_influence_pending value = ch_cultural_institutes_influence_cost days = 7 }
+		}
 		ch_set_display_state = yes
 	}
 }
@@ -441,6 +454,18 @@ ch_effect_global_media_campaign = {
 	}
 	hidden_effect = {
 		set_variable = { name = ch_global_media_campaign_on value = yes }
+		# As Cultural Institutes: the gates count the cost until it lands.
+		if = {
+			limit = { has_variable = ch_influence_pending }
+			set_variable = {
+				name = ch_influence_pending
+				value = { value = var:ch_influence_pending add = ch_global_media_influence_cost }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = ch_influence_pending value = ch_global_media_influence_cost days = 7 }
+		}
 		ch_set_display_state = yes
 	}
 }

@@ -1313,6 +1313,22 @@ colonial_empire_effect_invest_down = {
 colonial_empire_effect_garrison_up = {
 	colonial_programme_garrison_up = yes
 	colonial_programme_after_step = yes
+	# The level's authority upkeep reaches the country within a few days (the
+	# entry declares it, #1404); until then the raise gate counts it here, so
+	# clicks in a row can't each pass on authority the last one already spent.
+	hidden_effect = {
+		if = {
+			limit = { has_variable = colonial_garrison_pending_levels }
+			set_variable = {
+				name = colonial_garrison_pending_levels
+				value = { value = var:colonial_garrison_pending_levels add = 1 }
+				days = 7
+			}
+		}
+		else = {
+			set_variable = { name = colonial_garrison_pending_levels value = 1 days = 7 }
+		}
+	}
 }
 
 colonial_empire_effect_garrison_down = {
