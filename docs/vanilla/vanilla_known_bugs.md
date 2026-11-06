@@ -1243,7 +1243,7 @@ Div/0 near
 has_law_or_variant trigger [ Wrong scope for trigger: diplomatic_pact, expected country ]
 ```
 
-In `liberty_desire_weekly_change` the communist-subject term's `limit` tests `ROOT.second_country` and `ROOT.first_country`, but the two `if`s inside its `add` call `has_radical_leftist_government` and `has_radical_leftist_economy` with no country in front, so their `has_law_or_variant` runs on the pact and neither 0.5 is added. 150 lines in five minutes on 2026-11-06, from subject pacts with a radical-left subject under a non-radical overlord.
+In `liberty_desire_weekly_change` the communist-subject term's `limit` tests `ROOT.second_country` and `ROOT.first_country`, but the two `if`s inside its `add` call `has_radical_leftist_government` and `has_radical_leftist_economy` with no country in front, so their `has_law_or_variant` runs on the pact: the government half logs, and the economy half runs in the same scope. 150 lines in five minutes on 2026-11-06, from subject pacts with a radical-left subject under a non-radical overlord.
 
 ### `events/agitators_events/agitators_law_events.txt:274` — an agitator event hands a variant law to `has_law_or_variant`
 - stack: vanilla only
