@@ -1086,7 +1086,7 @@ un_lean_regime = {
 			add = -50
 		}
 		else_if = {
-			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+			limit = { ch_trails_hegemon = yes }
 			add = 10
 		}
 	}

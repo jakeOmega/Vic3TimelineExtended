@@ -339,6 +339,16 @@ bar from a country root (a self-check); `colonial_empire_solidified_modifier`
 stays the ending's permanent country reward too. Tests:
 `test_decolonization_civil_war.py`.
 
+As built (PR 3): each programme's value is a ladder giving today's literals
+(0 / 0.333 / 0.667 / 1), not the exact thirds. The pre-levels migration went
+after all: 1.15 loads no save from before 2026-11-05 (#1430), levels landed
+2026-10-09, and its `has_modifier` fallbacks would have read an old copy as
+level 3 beside the declaration. The bands stay on the pulse: Solidified is
+also the ending's permanent country reward, so declaring it needs an exception
+in the misuse test (the two copies never coexist: the entry ends before the
+grant), and declaring only four would leave two bands or none at the 90 edge
+for up to a month. Follow-up: #1466.
+
 ### 4.6 Cultural Hegemony (5 keys + 4 programmes)
 
 | Key | Held | Value |
@@ -356,6 +366,15 @@ benchmark's 23 readers become `ch_trails_hegemon`; the debug harness sets the
 variable instead of adding the modifier. Goes: the pulse blocks
 (`je_cultural_hegemony.txt:140-166`), `ch_refresh_funding_modifiers`, the three
 `_for_je` wrappers. Tests: `test_cultural_hegemony_layout.py`.
+
+As built (PR 3): the mirror variables are `ch_world_exposition_on`,
+`ch_cultural_institutes_on`, `ch_global_media_campaign_on` and
+`ch_cultural_protectionism_on`, set by the enable effects and removed by the
+disable effects and the Ministry-repeal strip; the old-save strip sets each
+from an old copy before removing it. The funding pair's gate is
+`ch_program_funding_in_force` (the law and a level of at least 1), so a repeal
+takes it off within days. A revolution's winner now keeps its programmes (the
+variables carry), which closes audit F8 for them.
 
 ### 4.7 Banking (10 cycle keys + 23 derived flats; the monetary layer stays)
 

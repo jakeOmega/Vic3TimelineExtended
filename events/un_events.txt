@@ -3289,7 +3289,7 @@ un_events.37 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.37.d_benchmark
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 			}
 			desc = un_events.37.d
 		}
@@ -3323,7 +3323,7 @@ un_events.37 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 				add = 3
 			}
 			modifier = {
