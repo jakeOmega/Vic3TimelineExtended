@@ -133,14 +133,13 @@ retain law Multilingual Federalism
 retain law Traditional IP Protection
 retain law Colonial Slavery
 retain law Legal Limbo
-retain law Intrusive Surveillance System
-retain law Total War
-retain law State Secrets
-retain law Penal Labor Camps
 retain law Constitutional Review
+retain law State-Led Language Reform
+retain law Freedom of Contract
+retain law Elected Bureaucrats
 ```
 
-Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, the USA's Constitutional Review, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 146 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
+Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, the USA's Constitutional Review, Greece's and Serbia's State-Led Language Reform, …), and, since #1408 stopped the law sweep running mid-history, seeds the first monthly sweep replaces (Freedom of Contract, vanilla's Elected Bureaucrats). The lines for Intrusive Surveillance, Total War, State Secrets, Penal Labor Camps and Violent Hostility are not here: they were decentralized nations holding each group's first law for the whole game, not a transient, and are fixed (2026-11-05), so they should be gone and show if they return. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
 
 ### `jomini_eventmanager.cpp:376` — console-only debug test events reported orphaned
 - source: `jomini_eventmanager.cpp:376`

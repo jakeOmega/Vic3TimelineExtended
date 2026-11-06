@@ -1183,6 +1183,24 @@ Event target link 'owner' returned an invalid object
 
 The Lands of Anarchy monthly pulse reads `scope:al_rif_state_scope ?= { if = { limit = { owner = root } … } }`; the `?=` guards the saved scope, not the state's owner, so once the state has none the `owner` link errors each month. The `else` branch runs, as it would for a foreign owner. Vanilla 1.15 (2026-11-05).
 
+### `events/iberia_events/ip4_portuguese_political_events.txt:140` — Devorismo's option cancels an enactment that isn't running (1.15)
+- stack: vanilla only
+
+```
+cancel_enactment effect [ Country is not enacting any law ]
+```
+
+`devorismo.2.a` runs `cancel_enactment = yes` and then `start_enactment = law_type:law_wealth_voting` with no `is_enacting_law` test, so when Portugal isn't enacting anything the cancel errors. The start still runs. One line, 1836, in the first new game after #1410 (2026-11-05).
+
+### `events/iberia_events/after_revolution_technical.txt:40` — `abandon_revolution` on a group with no revolution growing (1.15)
+- stack: vanilla only
+
+```
+abandon_revolution effect [ InterestGroup's country doesn't have a valid growing revolution ]
+```
+
+The post-revolution cleanup runs `abandon_revolution = yes` on every interest group with `ig_to_take_power`, whether or not its country still has a revolution growing. The same message comes from vanilla's peoples_springtime.txt:1270 (its own entry above), which the morning's games logged too. One line in the same game (2026-11-05).
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
