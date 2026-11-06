@@ -22,75 +22,28 @@ gw_effect_remove_carbon_tax = {
 	}
 }
 
-# The running cost is applied outside the custom_tooltip, so the adopt
-# tooltip prints its scaled Expenses line (GW-4, 2026-10-27). Its opening
-# remove_modifier_if_exists_effect prints nothing for a country without one.
+# The running cost (renewable_investment_cost_modifier, 0.5% of GDP a year) is
+# a scaling modifier je_global_warming declares while the policy modifier is on
+# the entry, so adopting and repealing the policy moves it, a few days later.
+# The adopt tooltip previews it outside the custom_tooltip, so its scaled
+# Expenses line prints (GW-4, 2026-10-27); the repeal text names it.
 gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
 		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
 	}
-	gw_renewable_investment_cost_apply = yes
+	show_as_tooltip = {
+		add_modifier = {
+			name = renewable_investment_cost_modifier
+			multiplier = gw_renewable_investment_cost_value
+		}
+	}
 }
 
 gw_effect_remove_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
 		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
-		remove_modifier = renewable_investment_cost_modifier
-	}
-}
-
-# Renewable Investment's running cost (renewable_investment_cost_modifier,
-# 0.5% of GDP a year). The policy modifier sits on the journal entry; the cost
-# sits on the country because its multiplier reads gdp, so the two are kept in
-# step here and by the monthly sweep below. Every way the policy goes on (the
-# button, the widget, treaty 109) applies the cost through
-# gw_renewable_investment_cost_apply; the sweep corrects whatever else added
-# or removed the policy modifier (the debug console, a lost entry).
-# A same-name add_modifier stacks, so the apply removes the copy it already
-# holds first: the monthly sweep runs it for every adopter every month, and
-# without the removal each pass would add another full-size weekly cost.
-# Scope: country
-gw_renewable_investment_cost_apply = {
-	remove_modifier_if_exists_effect = { MODIFIER = renewable_investment_cost_modifier }
-	add_modifier = {
-		name = renewable_investment_cost_modifier
-		multiplier = gw_renewable_investment_cost_value
-	}
-}
-
-# Scope: country. Reads the policy's actual state, so it cannot be called from
-# the effect that has just added or removed the policy modifier: an
-# add_modifier is not visible in the same effect block.
-gw_renewable_investment_cost_sync = {
-	if = {
-		limit = { gw_policy_renewable_investment_active = yes }
-		gw_renewable_investment_cost_apply = yes
-	}
-	else_if = {
-		limit = { has_modifier = renewable_investment_cost_modifier }
-		remove_modifier = renewable_investment_cost_modifier
-	}
-}
-
-# Monthly, from global_warming_events_on_action's global scope: the single
-# refresh site for the policy running costs, so the weekly amount follows GDP.
-# Runs with the climate rule off too: a policy adopted earlier keeps its
-# bonuses, so it keeps its bill. The second limit clause reaches a country
-# that has lost its journal entry while still holding the cost.
-# Scope: any
-gw_refresh_policy_costs_effect = {
-	every_country = {
-		limit = {
-			OR = {
-				has_journal_entry = je_global_warming
-				has_modifier = renewable_investment_cost_modifier
-				has_modifier = aerosol_injection_cost_modifier
-			}
-		}
-		gw_renewable_investment_cost_sync = yes
-		gw_aerosol_injection_cost_sync = yes
 	}
 }
 
@@ -515,11 +468,14 @@ gw_top_emitters_selfcheck = {
 	}
 }
 
+# The policy is the country variable gw_carbon_removal_policy: je_global_warming
+# declares carbon_removal_modifier while it is set, so a civil war's winner,
+# which inherits variables but no modifiers, keeps the policy. The text prints
+# the modifier (GetStaticModifier in GW_CARBON_REMOVAL_DESC).
 gw_effect_carbon_removal = {
 	custom_tooltip = {
 		text = "GW_CARBON_REMOVAL_DESC"
 		hidden_effect = { set_variable = { name = gw_carbon_removal_policy value = yes } }
-		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
 	}
 }
 
@@ -527,18 +483,6 @@ gw_effect_remove_carbon_removal = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CARBON_REMOVAL_DESC"
 		hidden_effect = { remove_variable = gw_carbon_removal_policy }
-		je:je_global_warming = { remove_modifier = carbon_removal_modifier }
-	}
-}
-
-# A revolution inherits the country flag; rebuild the journal-entry modifier.
-gw_restore_carbon_removal_policy_effect = {
-	if = {
-		limit = {
-			has_variable = gw_carbon_removal_policy
-			NOT = { gw_policy_carbon_removal_active = yes }
-		}
-		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
 	}
 }
 
@@ -592,22 +536,27 @@ gw_refresh_tariff_policies_effect = {
 # ============================================================================
 # STRATOSPHERIC AEROSOL INJECTION (Geoengineering, era 13 spec § 7.5)
 # ============================================================================
-# A national policy on the journal entry, mirrored in a country variable so a
-# civil war's winner keeps it (as Carbon Removal Support does), with a running
-# cost on the country (as Renewable Investment's). What it buys is the world's
-# aerosol mask (global_warming_aerosol_values.txt), moved monthly by
+# A national policy, the country variable gw_aerosol_injection_policy, so a
+# civil war's winner keeps it (as Carbon Removal Support does): je_global_warming
+# declares the policy modifier and its running cost (aerosol_injection_cost_modifier,
+# 1% of GDP a year) while it is set. What it buys is the world's aerosol mask
+# (global_warming_aerosol_values.txt), moved monthly by
 # gw_aerosol_update_mask_effect below.
 
-# The running cost and the objectors' relations sit outside the first
+# The cost's preview and the objectors' relations sit outside the first
 # custom_tooltip: the cost prints its scaled Expenses line, and the relations
 # line says once what the hidden loop does.
 gw_effect_aerosol_injection = {
 	custom_tooltip = {
 		text = "GW_AEROSOL_INJECTION_DESC"
 		hidden_effect = { set_variable = { name = gw_aerosol_injection_policy value = yes } }
-		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
 	}
-	gw_aerosol_injection_cost_apply = yes
+	show_as_tooltip = {
+		add_modifier = {
+			name = aerosol_injection_cost_modifier
+			multiplier = gw_aerosol_injection_cost_value
+		}
+	}
 	custom_tooltip = {
 		text = gw_aerosol_objection_tt
 		save_scope_as = gw_aerosol_deployer
@@ -625,43 +574,6 @@ gw_effect_remove_aerosol_injection = {
 	custom_tooltip = {
 		text = "GW_REMOVE_AEROSOL_INJECTION_DESC"
 		hidden_effect = { remove_variable = gw_aerosol_injection_policy }
-		je:je_global_warming = { remove_modifier = aerosol_injection_modifier }
-		remove_modifier = aerosol_injection_cost_modifier
-	}
-}
-
-# A revolution inherits the country variable; rebuild the journal-entry
-# modifier. The cost follows on the next monthly sweep. From the journal
-# entry's monthly pulse.
-gw_restore_aerosol_injection_policy_effect = {
-	if = {
-		limit = {
-			has_variable = gw_aerosol_injection_policy
-			NOT = { gw_policy_aerosol_injection_active = yes }
-		}
-		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
-	}
-}
-
-# The running cost, 1% of GDP a year, as Renewable Investment's: the removal
-# first, since a same-name add_modifier stacks. Scope: country.
-gw_aerosol_injection_cost_apply = {
-	remove_modifier_if_exists_effect = { MODIFIER = aerosol_injection_cost_modifier }
-	add_modifier = {
-		name = aerosol_injection_cost_modifier
-		multiplier = gw_aerosol_injection_cost_value
-	}
-}
-
-# From gw_refresh_policy_costs_effect, monthly. Scope: country.
-gw_aerosol_injection_cost_sync = {
-	if = {
-		limit = { gw_policy_aerosol_injection_active = yes }
-		gw_aerosol_injection_cost_apply = yes
-	}
-	else_if = {
-		limit = { has_modifier = aerosol_injection_cost_modifier }
-		remove_modifier = aerosol_injection_cost_modifier
 	}
 }
 

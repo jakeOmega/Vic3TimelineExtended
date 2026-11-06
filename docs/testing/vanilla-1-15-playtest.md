@@ -26,7 +26,25 @@ game, in English.
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
-  entry is `can_revolution_inherit = no`).
+  entry is `can_revolution_inherit = no`). Since #1404 the Strategic Reserve, Covert Warfare, Global Warming and
+  Nuclear Program entries declare their standing modifiers (design
+  `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md` § 4): open each entry and a country's modifier
+  tooltip. If a zero row shows, hide the scaling-modifier icon strip on the mod's entries in `gui/journal_entry.gui`.
+  Two once-a-game lines in `debug.log`:
+  - `TE_SELF_CHECK OK|BROKEN scaling_live`: the Strategic Reserve's declared sales income reaches the country (needs a
+    country with a staffed hub selling for two weeks with no panel change in between). BROKEN: put the weekly
+    `add_modifier` back.
+  - `TE_SELF_CHECK OK|BROKEN scaling_inherited`: 30 days after revolutionaries win a civil war, the winner's Covert
+    Warfare funding cost is declared again (rebels who ran a Covert Warfare entry of their own don't count). BROKEN
+    means every inherited entry has lost its declarations, which this change already relies on: Covert Warfare's five,
+    Global Warming's six (Carbon Removal's and Aerosol Injection's restore effects are gone), and later the
+    revolution repairs PRs 3, 7 and 8 delete. Fallback: the design's § 5.
+  Also look at: the Budget panel's Strategic Reserve Sales, Covert Actions and Nuclear Program rows still list their
+  amounts (they read the modifiers' budget mirror fields); a converted modifier's tooltip names its entry as the
+  source; and **Carbon Removal's forced coal subsidy**: `carbon_removal_modifier` carries
+  `country_building_synthetics_plant_coal_require_subsidies_bool`, and no vanilla scaling modifier carries a `_bool`
+  field. With the policy on, a synthetics plant on a coal method should show as subsidized and unable to drop it. If
+  it doesn't, add that modifier to the entry by hand again (it is a flat 1).
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

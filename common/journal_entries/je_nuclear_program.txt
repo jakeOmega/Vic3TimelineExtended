@@ -111,13 +111,146 @@ je_nuclear_program = {
 	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt. Once
 	# the nuclear taboo exists it holds for every non-decentralized country, so
 	# the entry no longer closes when a country disarms: whatever a disarmed
-	# country must shed (posture modifiers, upkeep, the taboo's possession cost,
-	# interest-group bands) comes off because it is not armed, from the entry's
-	# own pulses. Before the first warhead (and with the rule off) can_deactivate
+	# country must shed comes off because it is not armed — the posture
+	# modifiers, upkeep and the taboo's possession cost from their declared
+	# values below, interest-group bands from the entry's own pulses. Before the
+	# first warhead (and with the rule off) can_deactivate
 	# still lets a disarmed country's entry close, and the status line explains
 	# why.
 	possible = {
 		nuclear_program_entry_applies = yes
+	}
+
+	# ==== THE ENTRY'S MODIFIERS (vanilla 1.15) ================================
+	# Re-read on the entry's own update, about every four days, with the
+	# owning country as root, and on only while the entry is active. Every
+	# country that pays or holds one meets `possible` above: a programme
+	# (funding) or an arsenal (the rest, all gated on nd_is_armed). Nothing
+	# adds, removes or tests these by name: has_modifier cannot see a declared
+	# modifier, and an add_modifier beside a declaration would double it. Each
+	# value is 0 wherever the old add-and-remove code took the modifier off.
+	#
+	# The programme's weekly innovation: funding steps × the step's cost, 0
+	# unfunded (a pause treaty, lost standing and the buttons all move the
+	# variable).
+	scaling_modifiers_while_active = {
+		modifier = nuclear_weapon_program_funding
+		value = { value = nuclear_program_display_weekly_cost }
+	}
+	# The arsenal's upkeep in money: the cached weekly figure the panel shows,
+	# refreshed by nd_apply_posture_modifiers (monthly and on every posture
+	# change).
+	scaling_modifiers_while_active = {
+		modifier = nd_upkeep_cost
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					has_variable = nd_upkeep_weekly_cached
+				}
+				add = var:nd_upkeep_weekly_cached
+			}
+		}
+	}
+	# The nuclear taboo's possession burden, 0 to 1 (0 unarmed or below a
+	# taboo of 40). Live: it reads the stockpile and the world's taboo score.
+	scaling_modifiers_while_active = {
+		modifier = nd_taboo_possession_cost
+		value = { value = nd_taboo_burden_value }
+	}
+	# The posture: one doctrine modifier, and one readiness modifier at
+	# Heightened or High Alert (Recessed and Routine carry none).
+	scaling_modifiers_while_active = {
+		modifier = nd_doctrine_mod_1
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_doctrine = 1
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_doctrine_mod_2
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_doctrine = 2
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_doctrine_mod_3
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_doctrine = 3
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_doctrine_mod_4
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_doctrine = 4
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_doctrine_mod_5
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_doctrine = 5
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_readiness_mod_2
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_readiness = 2
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = nd_readiness_mod_3
+		value = {
+			value = 0
+			if = {
+				limit = {
+					nd_posture_in_force = yes
+					var:nd_readiness = 3
+				}
+				add = 1
+			}
+		}
 	}
 
 	immediate = {
@@ -153,35 +286,24 @@ je_nuclear_program = {
 			name = nuclear_weapon_program_progress
 			value = 0
 		}
-		set_variable = { # REVIEWED 2026-09-26: a new record has no nuclear_weapon_program_funding modifier, so funding restarts at 0 to match it
+		set_variable = { # REVIEWED 2026-11-06: every activation starts the programme unfunded, as it did while the funding modifier died with the old record; the declared cost reads this variable, so the two agree
 			name = nuclear_weapons_program_funding
 			value = 0
 		}
 		nuclear_program_refresh_state_effect = yes
 
-		# Posture. A freshly activated entry is a new object: none of the
-		# managed modifiers are on it, whatever the trackers from a previous
-		# activation say. They are put on by nd_rebuild_posture_modifiers from
-		# the first weekly pulse, not here — see its header.
-		set_variable = { name = nd_doctrine_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
-		set_variable = { name = nd_readiness_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
-		set_variable = { name = nd_upkeep_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
-		if = { # REVIEWED 2026-09-26: clearing the marker makes the first weekly pulse rebuild the posture modifiers on this record
-			limit = { has_variable = nd_posture_on_merged_entry }
-			remove_variable = nd_posture_on_merged_entry
-		}
+		# Posture. The declared modifiers above follow the posture variables on
+		# their own; the upkeep reads a cache, which an armed country refreshes
+		# here so the first update after activation charges the arsenal it has.
 		if = {
 			limit = { nd_is_armed = yes }
 			nd_init_posture = yes
+			nd_apply_posture_modifiers = yes # REVIEWED 2026-11-06: recomputes the upkeep cache and the risk band from this country's own arsenal and posture, it resets nothing
 		}
 	}
 
 	on_weekly_pulse = {
 		effect = {
-			# Once per activation, and once for a save made while posture had
-			# its own entry.
-			nd_rebuild_posture_modifiers = yes
-
 			# A winning revolution's new regime carries the old state's
 			# progress toward the next warhead over the activation that
 			# zeroed it (nuclear_custody_effects.txt). Before the programme
@@ -228,8 +350,8 @@ je_nuclear_program = {
 			# Armed and in the entry, but without the standing to build (a
 			# demoted power), or a non-nuclear party to a crisis: nothing is
 			# being built, so nothing is paid for. Zeroing the variable is
-			# enough — nuclear_program_refresh_state_effect below takes the
-			# funding modifier off, as it does for a pause treaty.
+			# enough: the declared funding cost reads it, as it does for a
+			# pause treaty.
 			else_if = {
 				limit = { var:nuclear_weapons_program_funding > 0 }
 				set_variable = {
@@ -240,9 +362,8 @@ je_nuclear_program = {
 
 			# The one site that derives the programme's display state. After the
 			# programme block, so it sees this week's funding change, this
-			# week's warheads and this week's first-device flag. Also owns the
-			# funding modifier — see its header in
-			# common/scripted_effects/nuclear_weapon_effects.txt.
+			# week's warheads and this week's first-device flag — see its
+			# header in common/scripted_effects/nuclear_weapon_effects.txt.
 			nuclear_program_refresh_state_effect = yes
 
 			# ==== POSTURE AND CRISES =========================================
@@ -271,9 +392,8 @@ je_nuclear_program = {
 		effect = {
 			nd_monthly_update = yes
 			nd_crisis_target_watchdog = yes
-			# The nuclear taboo's country half: the possession cost, the exits
-			# and the history samples (nuclear_taboo_effects.txt). ROOT = this
-			# country, which the possession cost's multiplier needs.
+			# The nuclear taboo's country half: the exits and the history
+			# samples (nuclear_taboo_effects.txt). ROOT = this country.
 			nd_taboo_country_monthly = yes
 		}
 	}

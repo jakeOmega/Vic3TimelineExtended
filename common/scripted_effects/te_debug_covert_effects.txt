@@ -9,8 +9,10 @@
 # testing a state also tests the code that maintains it.
 # ============================================================================
 
-# Put funding at an exact level and bring every dependent modifier and display
-# value with it, exactly as a stepper click would.
+# Put funding at an exact level and bring every dependent display value with
+# it, exactly as a stepper click would. The funding modifiers (cost and
+# counterintelligence) are je_covert_warfare's scaling modifiers and follow
+# within a few days.
 # Parameters: $LEVEL$ = 0 .. iw_funding_level_max
 # Scope: country
 te_debug_covert_set_funding = {
@@ -332,9 +334,10 @@ te_debug_covert_tick_nets = {
 	covert_ops_sync_all = yes
 }
 
-# Put the agency's Tradecraft at an exact score (slice 5) and re-apply the tier
-# bonus at once, so the command centre's line, the capacity breakdown and the
-# unlocks can be checked without months of play. Records no reason: the line
+# Put the agency's Tradecraft at an exact score (slice 5), so the command
+# center's line, the capacity breakdown and the unlocks can be checked without
+# months of play. The tier bonus (iw_tradecraft_bonus, a scaling modifier on
+# je_covert_warfare) follows within a few days. Records no reason: the line
 # keeps showing whatever last moved the score for real.
 # Parameters: $VALUE$ = 0 .. covert_tradecraft_max
 # Scope: country
@@ -342,7 +345,6 @@ te_debug_covert_set_tradecraft = {
 	covert_tradecraft_init = yes
 	set_variable = { name = iw_tradecraft value = $VALUE$ }
 	covert_tradecraft_clamp = yes
-	covert_tradecraft_refresh_bonus = yes
 }
 
 # One monthly Tradecraft pass without waiting for the pulse (gain, or idle

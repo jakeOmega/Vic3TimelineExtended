@@ -133,6 +133,15 @@
 #      common/scripted_effects/te_monetary_effects.txt
 #   4. its entry in the banking expense row of SOURCES in
 #      scripts/generators/gen_budget_breakdown.py, then re-run that generator
+#
+# ── PENDING REMOVAL: 1.15 scaling modifiers (added 2026-11-06, #1404) ──
+# Each system converted to 1.15's scaling_modifiers_while_active declares its
+# modifiers on its journal entry; nothing adds them any more. A save made before
+# the conversion still holds the copy the old pulse added (on the entry, or on
+# the country), which would stack with the declaration. The "1.15 scaling
+# modifiers" block at the foot of legacy_je_modifier_cleanup_effect strips each
+# copy once. has_modifier sees only an added copy, never a declared one, so the
+# block can't touch the declarations. Remove the block after 2026-12-31.
 ########################################
 
 legacy_je_modifier_cleanup_effect = {
@@ -931,4 +940,37 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = ch_adopted_education } remove_modifier = ch_adopted_education }
 	if = { limit = { has_modifier = ch_domestic_education_defense } remove_modifier = ch_domestic_education_defense }
 	if = { limit = { has_modifier = ch_selective_education } remove_modifier = ch_selective_education }
+
+	# ── 1.15 scaling modifiers (#1404) ── PENDING REMOVAL after 2026-12-31 ──
+	# The copies an older save added by hand, where the old code put them; the
+	# entries now declare these (header note above).
+	# Strategic Reserve and Global Warming's two costs sat on the country.
+	if = { limit = { has_modifier = st_res_sell_profit_modifier } remove_modifier = st_res_sell_profit_modifier }
+	if = { limit = { has_modifier = renewable_investment_cost_modifier } remove_modifier = renewable_investment_cost_modifier }
+	if = { limit = { has_modifier = aerosol_injection_cost_modifier } remove_modifier = aerosol_injection_cost_modifier }
+	je:je_covert_warfare ?= {
+		if = { limit = { has_modifier = intelligence_capacity_defense } remove_modifier = intelligence_capacity_defense }
+		if = { limit = { has_modifier = iw_domestic_defense } remove_modifier = iw_domestic_defense }
+		if = { limit = { has_modifier = iw_funding_defense } remove_modifier = iw_funding_defense }
+		if = { limit = { has_modifier = covert_operation_funding_cost } remove_modifier = covert_operation_funding_cost }
+		if = { limit = { has_modifier = iw_tradecraft_bonus } remove_modifier = iw_tradecraft_bonus }
+	}
+	je:je_global_warming ?= {
+		if = { limit = { has_modifier = global_warming } remove_modifier = global_warming }
+		if = { limit = { has_modifier = gw_aerosol_monsoon_modifier } remove_modifier = gw_aerosol_monsoon_modifier }
+		if = { limit = { has_modifier = carbon_removal_modifier } remove_modifier = carbon_removal_modifier }
+		if = { limit = { has_modifier = aerosol_injection_modifier } remove_modifier = aerosol_injection_modifier }
+	}
+	je:je_nuclear_program ?= {
+		if = { limit = { has_modifier = nuclear_weapon_program_funding } remove_modifier = nuclear_weapon_program_funding }
+		if = { limit = { has_modifier = nd_upkeep_cost } remove_modifier = nd_upkeep_cost }
+		if = { limit = { has_modifier = nd_taboo_possession_cost } remove_modifier = nd_taboo_possession_cost }
+		if = { limit = { has_modifier = nd_doctrine_mod_1 } remove_modifier = nd_doctrine_mod_1 }
+		if = { limit = { has_modifier = nd_doctrine_mod_2 } remove_modifier = nd_doctrine_mod_2 }
+		if = { limit = { has_modifier = nd_doctrine_mod_3 } remove_modifier = nd_doctrine_mod_3 }
+		if = { limit = { has_modifier = nd_doctrine_mod_4 } remove_modifier = nd_doctrine_mod_4 }
+		if = { limit = { has_modifier = nd_doctrine_mod_5 } remove_modifier = nd_doctrine_mod_5 }
+		if = { limit = { has_modifier = nd_readiness_mod_2 } remove_modifier = nd_readiness_mod_2 }
+		if = { limit = { has_modifier = nd_readiness_mod_3 } remove_modifier = nd_readiness_mod_3 }
+	}
 }

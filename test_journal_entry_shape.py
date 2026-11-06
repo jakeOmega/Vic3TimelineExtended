@@ -222,6 +222,15 @@ class PruneTreeTest(unittest.TestCase):
 # legacy_je_modifier_cleanup_effect strips the copies an old save added by hand (design § 4.0, rule 7): it may test
 # and remove a declared key, never add one.
 LEGACY_STRIP_FILE = "common/scripted_effects/legacy_modifier_cleanup.txt"
+# The temporary scaling self-checks (#1404) test for an older save's added copy, which has_modifier sees and a
+# declaration never is, so a check can wait for the strip instead of misreading the sum.
+SELFCHECK_FILE = "common/scripted_effects/te_scaling_selfcheck_effects.txt"
+
+
+def _walk(nodes: list[Node]):
+    for node in nodes:
+        yield node
+        yield from _walk(node.children)
 
 
 def scaling_declarations(entries: list[tuple[str, Node]]) -> dict[str, list[tuple[str, int, str]]]:
@@ -245,9 +254,11 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
     """(file, line, kind, modifier) for every `key = <declared modifier>` outside its declaration: a has_modifier,
     add_modifier or remove_modifier of it, and a helper argument that passes it on (`un_state_on = { MODIFIER = x }`,
     whose body adds `$MODIFIER$`). Allowed: the declaration's own `modifier =`, an add inside show_as_tooltip (the
-    option's preview, design § 4.0 rule 8), and the legacy strip's tests and removals (rule 7)."""
+    option's preview, design § 4.0 rule 8), the legacy strip's tests and removals (rule 7), and the self-checks'
+    tests for an old copy."""
     out: list[tuple[str, int, str, str]] = []
     legacy = rel == LEGACY_STRIP_FILE
+    selfcheck = rel == SELFCHECK_FILE
 
     def walk(items: list[Node], parent: str, declaration: bool, preview: bool):
         for node in items:
@@ -261,7 +272,7 @@ def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[
             if kind == "MODIFIER" and parent == "remove_modifier_if_exists_effect":
                 kind = parent
             adds = kind not in ("has_modifier", "remove_modifier", "remove_modifier_if_exists_effect")
-            if (preview and adds) or (legacy and not adds):
+            if (preview and adds) or (legacy and not adds) or (selfcheck and kind == "has_modifier"):
                 continue
             out.append((rel, node.line, kind, node.value))
 
@@ -283,6 +294,10 @@ class ScalingModifierFixtureTest(unittest.TestCase):
 
     def test_a_preview_is_allowed(self):
         self.assertEqual(self.sites("o = { show_as_tooltip = { if = { add_modifier = { name = m } } } }"), [])
+
+    def test_the_self_checks_may_test_but_not_remove_or_add(self):
+        text = "e = { if = { limit = { NOT = { has_modifier = m } } } remove_modifier = m add_modifier = m }"
+        self.assertEqual(self.sites(text, SELFCHECK_FILE), [("remove_modifier", "m"), ("add_modifier", "m")])
 
     def test_the_legacy_strip_may_test_and_remove_but_not_add(self):
         text = "e = { if = { limit = { has_modifier = m } remove_modifier = m } add_modifier = { name = m } }"
@@ -311,6 +326,15 @@ class ScalingModifierTreeTest(unittest.TestCase):
         for name, sites in scaling_declarations(load_entries()).items():
             with self.subTest(modifier=name, at=sites[0]):
                 self.assertIn(name, names)
+
+    def test_every_scaling_modifier_is_stripped_from_old_saves(self):
+        """A save from before a conversion holds the copy the old code added, which stacks with the declaration
+        (design § 4.0, rule 7). Delete this test with the strip block after 2026-12-31."""
+        stripped = {node.value for node in _walk(_parse(ROOT / LEGACY_STRIP_FILE))
+                    if node.key == "remove_modifier" and not node.children}
+        for name in scaling_declarations(load_entries()):
+            with self.subTest(modifier=name):
+                self.assertIn(name, stripped)
 
     def test_no_scaling_modifier_is_added_or_tested(self):
         """has_modifier can't see a scaling modifier, on the entry or the country (probed 2026-11-05), and an

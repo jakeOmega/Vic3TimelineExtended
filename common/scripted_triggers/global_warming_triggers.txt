@@ -7,9 +7,12 @@
 # (common/scripted_guis/global_warming_sguis.txt) call these, so a click through
 # either surface is gated by exactly the same rules.
 #
-# The nine policy modifiers live on the JOURNAL ENTRY, not the country, so
-# "is it active" is always `je:je_global_warming ?= { has_modifier = X }` --
-# a country-scope has_modifier cannot see them.
+# The policy modifiers live on the JOURNAL ENTRY, not the country, so "is it
+# active" is `je:je_global_warming ?= { has_modifier = X }` -- a country-scope
+# has_modifier cannot see them. Carbon Removal Support and Aerosol Injection
+# are the exception: scaling modifiers the entry declares while a country
+# variable is set, which has_modifier cannot see at all, so their
+# gw_policy_*_active triggers read the variable.
 #
 # EVERY CLAUSE IS PHRASED AS A CONDITION, NOT A COMPLAINT. The widget renders
 # these through `ScriptedGui.IsValidTooltip`, which prints each line with a tick
@@ -131,6 +134,18 @@ gw_entry_unlocked = {
 			rt_restrictive_transition_law = yes
 		}
 	}
+}
+
+# Is the Climate Warming modifier (global_warming) on this country? It is a
+# scaling modifier on the entry at the felt anomaly floored at 0
+# (je_global_warming.txt), so it is on while the entry is active and the
+# anomaly is at least the 0.01 C it is quantized to. has_modifier cannot see a
+# scaling modifier: the recurring climate events and their monthly roll
+# (extra_on_actions.txt, environmentalism_events.txt) read this instead.
+# Scope: country.
+gw_warming_felt = {
+	has_journal_entry = je_global_warming
+	temperature_anomaly_display >= 0.01
 }
 
 
@@ -333,13 +348,16 @@ gw_state_has_staple_farm = {
 }
 
 
+# carbon_removal_modifier is a scaling modifier on the entry, on while this
+# variable is set (je_global_warming.txt), and has_modifier cannot see it.
 gw_policy_carbon_removal_active = {
-	je:je_global_warming ?= { has_modifier = carbon_removal_modifier }
+	has_journal_entry = je_global_warming
+	has_variable = gw_carbon_removal_policy
 }
 
 gw_possible_carbon_removal = {
 	hidden_trigger = {
-		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
+		NOT = { gw_policy_carbon_removal_active = yes }
 	}
 	custom_tooltip = {
 		text = gw_cond_warming_mild
@@ -351,7 +369,7 @@ gw_possible_carbon_removal = {
 
 gw_possible_remove_carbon_removal = {
 	hidden_trigger = {
-		je:je_global_warming = { has_modifier = carbon_removal_modifier }
+		gw_policy_carbon_removal_active = yes
 	}
 	custom_tooltip = {
 		text = gw_cond_not_treaty_bound
@@ -386,8 +404,12 @@ gw_possible_remove_fossil_fuel_tariffs = {
 # Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5). The
 # mask it buys and its constants are in global_warming_aerosol_values.txt.
 # ---------------------------------------------------------------------------
+# aerosol_injection_modifier and its cost are scaling modifiers on the entry,
+# on while this variable is set (je_global_warming.txt), and has_modifier
+# cannot see them.
 gw_policy_aerosol_injection_active = {
-	je:je_global_warming ?= { has_modifier = aerosol_injection_modifier }
+	has_journal_entry = je_global_warming
+	has_variable = gw_aerosol_injection_policy
 }
 
 # A last resort, so it waits for a degree of warming, measured beneath any
@@ -395,7 +417,7 @@ gw_policy_aerosol_injection_active = {
 # pushed the felt reading down, to share the work.
 gw_possible_aerosol_injection = {
 	hidden_trigger = {
-		NOT = { je:je_global_warming = { has_modifier = aerosol_injection_modifier } }
+		NOT = { gw_policy_aerosol_injection_active = yes }
 	}
 	custom_tooltip = {
 		text = gw_cond_unmasked_warming_moderate
@@ -408,7 +430,7 @@ gw_possible_aerosol_injection = {
 # cuts none.
 gw_possible_remove_aerosol_injection = {
 	hidden_trigger = {
-		je:je_global_warming = { has_modifier = aerosol_injection_modifier }
+		gw_policy_aerosol_injection_active = yes
 	}
 }
 

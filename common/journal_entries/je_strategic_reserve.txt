@@ -51,6 +51,22 @@ je_strategic_reserve = {
 		st_res_je_immediate_effect = yes
 	}
 
+	# The week's reserve sales income, booked weekly into st_res_sell_profit by
+	# st_res_apply_sell_profit_effect: a 1.15 scaling modifier (#1404), so the
+	# engine follows the variable (a few days late) instead of the week's
+	# remove and re-add on the country. 0 with no hub, before the first week,
+	# and in a save that predates the variable.
+	scaling_modifiers_while_active = {
+		modifier = st_res_sell_profit_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = st_res_sell_profit }
+				add = var:st_res_sell_profit
+			}
+		}
+	}
+
 	# No invalid. An entry that goes invalid is finished for good: the engine
 	# never activates it again, even once a hub stands again. Losing the hub
 	# used to end it, so a country whose hub state fell to the rebels lost

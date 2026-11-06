@@ -105,7 +105,15 @@ def _authority_cost(policy):
     shared `gw_policy_<p>_active` trigger (the button's key and the modifier's
     name differ for reforestation)."""
     trigger = _top_level_block(_text(TRIGGERS), f"gw_policy_{policy}_active")
-    modifier = re.search(r"has_modifier = (\w+)", trigger).group(1)
+    held = re.search(r"has_modifier = (\w+)", trigger)
+    if held:
+        modifier = held.group(1)
+    else:
+        # A policy mirrored in a country variable: the entry declares its modifier at 1 while the
+        # variable is set (scaling_modifiers_while_active, #1404).
+        variable = re.search(r"has_variable = (\w+)", trigger).group(1)
+        modifier = re.search(r"modifier = (\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = "
+                             + variable + r" \}\s*add = 1\s*\}", _text(JE)).group(1)
     block = _top_level_block(_text(MODIFIERS), modifier)
     m = re.search(r"country_authority_cost_add = (-?\d+)", block)
     return int(m.group(1)) if m else 0

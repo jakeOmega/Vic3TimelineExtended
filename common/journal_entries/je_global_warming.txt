@@ -155,41 +155,98 @@
 	scripted_button = rt_start_power_button
 	scripted_button = rt_stop_power_button
 
+	# ---- Scaling modifiers (vanilla 1.15) --------------------------------
+	# The engine applies each to the entry, re-reading its value on the entry's
+	# update (every few days), while the entry is active; at 0 it is off. The
+	# value's root is the owning country. has_modifier cannot see one, on the
+	# entry or the country, so nothing adds, removes or tests these keys: a
+	# reader tests the value's inputs instead (gw_warming_felt,
+	# gw_policy_carbon_removal_active, gw_policy_aerosol_injection_active,
+	# gw_policy_renewable_investment_active, global_warming_triggers.txt).
+	# Each held its own remove/re-add on this pulse or a monthly sweep until
+	# #1404.
+
+	# Climate Warming, at the felt anomaly (after any aerosol mask). Floored at
+	# 0: with no mask the reading can go negative, and a negative value would
+	# invert every harm.
+	scaling_modifiers_while_active = {
+		modifier = global_warming
+		value = {
+			value = temperature_anomaly_display
+			min = 0
+		}
+	}
+
+	# Weakened Monsoon: the aerosol mask's regional cost, scaled by the mask in
+	# degrees whoever flies it, for a country whose capital lies in a monsoon
+	# region.
+	scaling_modifiers_while_active = {
+		modifier = gw_aerosol_monsoon_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { gw_country_in_monsoon_region = yes }
+				add = gw_aerosol_mask
+			}
+		}
+	}
+
+	# The two policy running costs, 0.5% and 1% of GDP a year (weekly; Budget
+	# Breakdown: Climate Policy), while the policy is in force. They sat on the
+	# country before, because a modifier's multiplier on the entry could not
+	# read gdp; a declared value's root is the country, so they live here now.
+	scaling_modifiers_while_active = {
+		modifier = renewable_investment_cost_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { gw_policy_renewable_investment_active = yes }
+				add = gw_renewable_investment_cost_value
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = aerosol_injection_cost_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_aerosol_injection_policy }
+				add = gw_aerosol_injection_cost_value
+			}
+		}
+	}
+
+	# The two policies mirrored in a country variable, which a civil war's
+	# winner inherits (it inherits no modifiers): on while the variable is set.
+	# The other nine policies are still added to the entry as plain modifiers.
+	scaling_modifiers_while_active = {
+		modifier = carbon_removal_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_carbon_removal_policy }
+				add = 1
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = aerosol_injection_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = gw_aerosol_injection_policy }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 	}
 
 	on_monthly_pulse = {
 		effect = {
-			gw_restore_carbon_removal_policy_effect = yes
-			gw_restore_aerosol_injection_policy_effect = yes
-			# ---- Update warming modifier: temperature anomaly used directly as multiplier ----
-			# The anomaly is the felt one, after any aerosol mask (Geoengineering).
-			if = {
-				limit = { temperature_anomaly_display >= 0.01 }
-				je:je_global_warming = { remove_modifier = global_warming }
-				je:je_global_warming = { add_modifier = { name = global_warming multiplier = temperature_anomaly_display } }
-			}
-			else_if = {
-				limit = { je:je_global_warming = { has_modifier = global_warming } }
-				je:je_global_warming = { remove_modifier = global_warming }
-			}
-
-			# ---- Weakened monsoons: the aerosol mask's regional cost ----
-			# Scaled by the mask in degrees, whoever flies it, for a country
-			# whose capital lies in a monsoon region (global_warming_triggers.txt).
-			if = {
-				limit = {
-					gw_aerosol_mask >= 0.01
-					gw_country_in_monsoon_region = yes
-				}
-				je:je_global_warming = { remove_modifier = gw_aerosol_monsoon_modifier }
-				je:je_global_warming = { add_modifier = { name = gw_aerosol_monsoon_modifier multiplier = gw_aerosol_mask } }
-			}
-			else_if = {
-				limit = { je:je_global_warming = { has_modifier = gw_aerosol_monsoon_modifier } }
-				je:je_global_warming = { remove_modifier = gw_aerosol_monsoon_modifier }
-			}
-
 			# History samples for the widget's two charts. Gated on the game rule
 			# and on te_history_country_is_tracked inside the helper, and wrapped
 			# in hidden_effect there, so this costs nothing for an untracked
