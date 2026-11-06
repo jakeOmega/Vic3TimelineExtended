@@ -6070,6 +6070,9 @@ te_fix_inconsistent_lawgroup_ministry_of_propaganda = {
 				NOR = {
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_secret_police
+					has_law = law_type:law_shinsengumi
+					has_law = law_type:law_okhrana
+					has_law = law_type:law_third_section
 					has_law = law_type:law_outlawed_dissent
 				}
 			}
@@ -6091,6 +6094,9 @@ te_fix_inconsistent_lawgroup_ministry_of_thought_control = {
 				NOR = {
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_secret_police
+					has_law = law_type:law_shinsengumi
+					has_law = law_type:law_okhrana
+					has_law = law_type:law_third_section
 					has_law = law_type:law_outlawed_dissent
 				}
 			}
@@ -6132,6 +6138,8 @@ te_fix_inconsistent_lawgroup_ministry_of_religion = {
 				NOR = {
 					has_law = law_type:law_state_religion
 					has_law = law_type:law_caesaropapism
+					has_law = law_type:law_millet_system
+					has_law = law_type:law_people_of_the_book
 					has_law = law_type:law_freedom_of_conscience
 				}
 			}

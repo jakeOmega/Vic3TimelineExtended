@@ -1116,6 +1116,10 @@ add_arable_land_effect = {
 	}
 }
 
+# Every interest-group ideology, vanilla's and the mod's: not the character
+# ideologies (an interest group never holds one) or the movements' own
+# (*_movement). test_remove_all_ideologies.py fails when one is missing or
+# when an entry names anything else.
 remove_all_ideologies = {
 	remove_ideology = ideology_paternalistic
 	remove_ideology = ideology_laissez_faire
@@ -1167,9 +1171,6 @@ remove_all_ideologies = {
 	remove_ideology = ideology_heavenly_kingdom_theocratic
 	remove_ideology = ideology_agrarian_jeffersonian
 	remove_ideology = ideology_constitutionalist
-	remove_ideology = ideology_orleanist
-	remove_ideology = ideology_legitimist
-	remove_ideology = ideology_bonapartist
 	# Interest-group ideologies vanilla 1.15 added
 	remove_ideology = ideology_autocratic
 	remove_ideology = ideology_defensist
@@ -1184,6 +1185,65 @@ remove_all_ideologies = {
 	remove_ideology = ideology_tsarist
 	remove_ideology = ideology_universalist
 	remove_ideology = ideology_universalist_modern
+	# Vanilla interest-group ideologies the list missed until #1406
+	remove_ideology = ideology_interventionist
+	remove_ideology = ideology_hierarchic
+	remove_ideology = ideology_montenegrin_moralist
+	remove_ideology = ideology_pro_slavery_colonial
+	remove_ideology = ideology_hindu_moralist_british_india
+	remove_ideology = ideology_sikh_militancy
+	remove_ideology = ideology_colonialist
+	remove_ideology = ideology_utilitarian_millian
+	remove_ideology = ideology_sovereignist
+	remove_ideology = ideology_enclavist
+	remove_ideology = ideology_malthusian
+	remove_ideology = ideology_technocratic
+	remove_ideology = ideology_magnatial
+	remove_ideology = ideology_moderantist
+	remove_ideology = ideology_carlist_ig
+	remove_ideology = ideology_carlist_ig_2
+	remove_ideology = ideology_ibadi_shura
+	remove_ideology = ideology_ibadi_imamate
+	remove_ideology = ideology_military_absolutist
+	remove_ideology = ideology_cartist
+	remove_ideology = ideology_regenerator
+	remove_ideology = ideology_ilustrado
+	remove_ideology = ideology_liberal_praetorian
+	remove_ideology = ideology_conservative_praetorian
+	remove_ideology = ideology_rangaku
+	remove_ideology = ideology_mercantile
+	remove_ideology = ideology_japan_paternalistic
+	remove_ideology = ideology_japan_hierarchic
+	remove_ideology = ideology_japan_hierarchic_2
+	# The mod's own (common/ideologies/extra_ideologies.txt), the custom
+	# religion's among them, so a second pick replaces the first
+	remove_ideology = ideology_multicultural_ig
+	remove_ideology = ideology_anti_colonialist
+	remove_ideology = ideology_islamic_inheritance
+	remove_ideology = ideology_custom_religion_traditionalist_economy
+	remove_ideology = ideology_custom_religion_free_market_economy
+	remove_ideology = ideology_custom_religion_socialist_economy
+	remove_ideology = ideology_custom_religion_social_democratic_economy
+	remove_ideology = ideology_custom_religion_imperial_cult_economy
+	remove_ideology = ideology_custom_religion_theocratic_economy
+	remove_ideology = ideology_custom_religion_traditionalist_society
+	remove_ideology = ideology_custom_religion_inclusive_society
+	remove_ideology = ideology_custom_religion_totalitarian_society
+	remove_ideology = ideology_custom_religion_meritocratic_society
+	remove_ideology = ideology_custom_religion_imperial_cult_society
+	remove_ideology = ideology_custom_religion_theocratic_society
+	remove_ideology = ideology_custom_religion_aristocratic_governance
+	remove_ideology = ideology_custom_religion_technocratic_governance
+	remove_ideology = ideology_custom_religion_republican_governance
+	remove_ideology = ideology_custom_religion_corporate_governance
+	remove_ideology = ideology_custom_religion_imperial_cult_governance
+	remove_ideology = ideology_custom_religion_theocratic_governance
+	remove_ideology = ideology_custom_religion_pacifist_outlook
+	remove_ideology = ideology_custom_religion_militarist_outlook
+	remove_ideology = ideology_custom_religion_isolationist_outlook
+	remove_ideology = ideology_custom_religion_exploitative_outlook
+	remove_ideology = ideology_custom_religion_imperialist_outlook
+	remove_ideology = ideology_custom_religion_theocratic_outlook
 }
 
 fix_incompatible_laws = {

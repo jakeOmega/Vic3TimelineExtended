@@ -20,6 +20,16 @@ INJECT:law_women_own_property = {
 	}
 }
 
+# No Women's Rights' variant. A variant takes its parent's stances but none of
+# its modifiers, and the mod places this one between No Women's Rights and
+# Women Own Property (cultural pull, extra_laws.txt), so it takes the latter's
+# value (owner, 2026-11-05).
+INJECT:law_women_in_the_fields = {
+	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = -0.05
+	}
+}
+
 # Vanilla gives Women's Suffrage its voting laws as unlocking_laws; an INJECTed
 # list adds to them, so Liquid Democracy, a voting law, keeps it.
 INJECT:law_womens_suffrage = {
@@ -802,9 +812,22 @@ INJECT:law_state_religion = {
 	}
 }
 
-# Caesaropapism (1.15, a State Religion variant: the church run as a department
-# of state) carries its parent's line; a variant inherits stances, not modifiers.
+# State Religion's variants carry its line; a variant inherits stances, not
+# modifiers: Caesaropapism (1.15: the church run as a department of state), the
+# Millet System and People of the Book.
 INJECT:law_caesaropapism = {
+	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = -0.05
+	}
+}
+
+INJECT:law_millet_system = {
+	modifier = {
+		country_bureaucracy_investment_cost_factor_mult = -0.05
+	}
+}
+
+INJECT:law_people_of_the_book = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 	}
@@ -846,9 +869,16 @@ INJECT:law_secret_police = {
 	}
 }
 
-# 1.15's Secret Police variants (Okhrana, Third Section) carry its lines, and so
-# does the Extraordinary Commission, whose institution modifier is Secret
-# Police's with a class edge.
+# Secret Police's variants (Shinsengumi, and 1.15's Okhrana and Third Section)
+# carry its lines, and so does the Extraordinary Commission, whose institution
+# modifier is Secret Police's with a class edge.
+INJECT:law_shinsengumi = {
+	modifier = {
+		goods_output_tourism_mult = -0.30
+		country_intelligence_capacity_add = 5
+	}
+}
+
 INJECT:law_okhrana = {
 	modifier = {
 		goods_output_tourism_mult = -0.30

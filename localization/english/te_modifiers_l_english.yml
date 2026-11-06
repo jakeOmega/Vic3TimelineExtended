@@ -535,8 +535,6 @@
  goods_output_electronic_components_mult_desc:0 "The amount of @electronic_components! $electronic_components$ produced by buildings"
  goods_output_explosives_mult:0 "Building @explosives! $explosives$ output"
  goods_output_explosives_mult_desc:0 "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings"
- goods_output_fertilizer_mult:0 "Building @fertilizer! $fertilizer$ output"
- goods_output_fertilizer_mult_desc:0 "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings"
  goods_output_fish_mult:0 "Building @fish! $fish$ output"
  goods_output_fish_mult_desc:0 "A bonus or penalty to the amount of @fish! $fish$ produced by buildings"
  goods_output_furniture_mult:0 "Building @furniture! $furniture$ output"

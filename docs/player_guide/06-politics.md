@@ -636,12 +636,12 @@ included, from 5 levels to 9.
 | Ministry of the Environment | Pollution Control | | −5% pollution and emissions, larger national parks, slightly lower extraction output |
 | Ministry of Intelligence and Security | Mass Surveillance | | +4 intelligence capacity and one more covert operation slot |
 | Ministry of Refugee Affairs | Civil Rights Movement | Any migration law except Closed Borders | Faster cultural acceptance, more mass migration |
-| Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
+| Ministry of Propaganda | Mass Media | Single-Party State, Secret Police (or a variant) or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
-| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
+| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police (or a variant) or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research, −10% opium plantation throughput a level |
 | Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](08-states.md#raising-crowding-tolerance); faster recovery from devastation |
-| Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
+| Ministry of Religion | Mass Media | State Religion (or a variant) or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
 | Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more; +0.15 UN Authority Target a level (see [What counts toward Policy](10-united-nations.md#what-counts-toward-policy)) |
 
 The Environmental Movement radicalizes while your Ministry of the Environment is

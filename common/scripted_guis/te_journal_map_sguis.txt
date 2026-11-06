@@ -66,3 +66,13 @@ te_jmap_pick_median_age_sgui = {
 		te_jmap_set_selector = { SEL = 5 }
 	}
 }
+
+# The repainter's log line (gui/te_map_widgets.gui, te_jmap_repainter): it runs just before the reopen, so a page that
+# closes after a pick and stays closed says whether the reopen ran. Goes with the pick's line when the play-test is done.
+te_jmap_reopen_log_sgui = {
+	scope = country
+	ai_is_valid = { always = no }
+	effect = {
+		debug_log = "TE_JMAP reopen date=[TimeKeeper.GetCurrentDate.GetString] (the repainter's reopen ran, a tenth of a second after its close)"
+	}
+}
