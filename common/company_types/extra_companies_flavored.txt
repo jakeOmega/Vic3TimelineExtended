@@ -2918,6 +2918,7 @@ company_vale = {
 	possible_prestige_goods = {
 		prestige_good_generic_steel
 		prestige_good_generic_tech_metals
+		prestige_good_generic_copper
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
@@ -3692,6 +3693,7 @@ company_bhp_group = {
 	possible_prestige_goods = {
 		prestige_good_generic_lead
 		prestige_good_generic_tech_metals
+		prestige_good_generic_copper
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
