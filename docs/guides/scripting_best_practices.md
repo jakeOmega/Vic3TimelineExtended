@@ -4141,7 +4141,7 @@ Always grep `common/laws/` for the actual ID before writing `has_law = law_type:
 
 ### 1.15: power bloc effects exist
 
-1.15 adds `add_power_bloc_mandate` (capped by `MAX_MANDATES`), `change_power_bloc_name`, `destroy_power_bloc`, `leave_power_bloc` and the `on_power_bloc_formed` on-action. The "no scripted dissolution" and "no `add_power_bloc_mandate`" claims above are 1.14.5 facts. Identity is still creation-only, no effect removes a mandate, `num_mandates` still has no script-value accessor, and there is still no `on_yearly_pulse_power_bloc`.
+1.15 adds `add_power_bloc_mandate` (capped by `MAX_MANDATES`), `change_power_bloc_name`, `destroy_power_bloc`, `leave_power_bloc` and the `on_power_bloc_formed` on-action. The "no scripted dissolution" and "no `add_power_bloc_mandate`" claims above are 1.14.5 facts. Identity is still creation-only, and there is still no `on_yearly_pulse_power_bloc`. **Unverified (written before 1.15 shipped, from the docs alone):** whether `add_power_bloc_mandate = -1` removes a mandate (the docs' only example is `= 1`), and whether `power_bloc.num_mandates` reads the count as a value from country scope. The script docs have listed `num_mandates` as a value link since 1.12, and the mod reads `power_bloc.num_power_bloc_members` that way (`te_pb_bloc_member_count`). The tiered ladder above was needed because its multiplier ran in country scope, where the bare `num_mandates` is invalid. The power bloc test console's Add and Remove mandate options (`te_debug_pb.1`, verdict in `te_debug_pb.2`) test both, and whether the change shows within the click; steps in `docs/testing/vanilla-1-15-playtest.md`, "Power bloc mandates".
 
 ## `add_treasury` Accepts Script Values for GDP-Scaled Drains
 

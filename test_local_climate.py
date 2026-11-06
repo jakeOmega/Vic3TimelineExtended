@@ -20,16 +20,17 @@ gen = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gen)
 
 VALUES = ("te_climate_has_record", "te_climate_summer_humidity", "te_climate_winter_mean", "te_climate_aridity",
-          "te_climate_malaria", "te_climate_latitude", "te_climate_hot_day", "te_climate_heat_index")
+          "te_climate_malaria", "te_climate_latitude", "te_climate_hot_day", "te_climate_heat_index",
+          "te_climate_winter_sun")
 DEFAULTS = {"te_climate_has_record": 0, "te_climate_summer_humidity": 0, "te_climate_winter_mean": 15,
             "te_climate_aridity": 0, "te_climate_malaria": 0, "te_climate_latitude": 0, "te_climate_hot_day": 20,
-            "te_climate_heat_index": 0}
+            "te_climate_heat_index": 0, "te_climate_winter_sun": 2.4}
 
 
 def row(state="STATE_GEORGIA", summer=28, humidity=3, winter=8, aridity=0, malaria=2, latitude=32, hot_day=36.6,
-        heat_index=30.2, source="KSVN:1km"):
-    return gen.Row(state, "Savannah", summer, humidity, winter, aridity, malaria, latitude, hot_day, heat_index, source,
-                   "x")
+        heat_index=30.2, source="KSVN:1km", sun=5.3):
+    return gen.Row(state, "Savannah", summer, humidity, winter, aridity, malaria, latitude, hot_day, heat_index, sun,
+                   source, "x")
 
 
 def block(text, name):
@@ -53,6 +54,7 @@ class Render(unittest.TestCase):
             self.assertIn("limit = { state_region = s:STATE_GEORGIA }", body, name)
         self.assertIn("value = 36.6", block(text, "te_climate_hot_day"))
         self.assertIn("value = 30.2", block(text, "te_climate_heat_index"))
+        self.assertIn("value = 5.3", block(text, "te_climate_winter_sun"))
         self.assertIn("value = 8", block(text, "te_climate_winter_mean"))
         # The warmest month's mean stays in the CSV, for validation and the fill, but no script reads it.
         self.assertIsNone(block(text, "te_climate_summer_mean"))
@@ -84,7 +86,9 @@ class Validate(unittest.TestCase):
                row(humidity=4), row(aridity=3), row(malaria=3), row(latitude=91), row(humidity=-1),
                row(hot_day=53), row(hot_day=9, summer=5, winter=0, heat_index=8), row(heat_index=41, hot_day=45),
                row(heat_index=4), row(heat_index=37, hot_day=36.6), row(hot_day=27, summer=28, heat_index=26),
-               row(source=""), row(source="KSVN"), row(source="nearby")]
+               row(source=""), row(source="KSVN"), row(source="nearby"),
+               # Winter sunshine: hours a day, and no more than the winter's daylight at the latitude (10.3 h at 32°).
+               row(sun=-0.5), row(sun=11), row(latitude=-80, sun=0.5)]
         for r in bad:
             errs = self.errors([r])
             self.assertEqual(len(errs), 1, (r, errs))
@@ -284,7 +288,7 @@ class Tile(unittest.TestCase):
         """Every reading row hides when the region has no row, so the no-data line shows alone."""
         body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
         rows = body.split("te_state_climate_row = {")[1:]
-        self.assertEqual(len(rows), 9)  # five readings and Comfort's four (cost, bonus, none, pending)
+        self.assertEqual(len(rows), 10)  # six readings and Comfort's four (cost, bonus, none, pending)
         for row in rows:
             self.assertIn("row_visible", row)
             self.assertIn("ScriptValue('te_climate_has_record'), '(CFixedPoint)0')", row.split("row_tooltip")[0])

@@ -73,3 +73,19 @@ heat v2 figures above where they differ: Georgia is now about −27%, Hawaii abo
 | The Sun Belt | In an observer run to era 7, the US South's migration attraction overtakes New England's | Heat relief or the winter term's weights |
 | A save from heat v2 | Every state refreshes within a month of loading (the first application keys on `te_climate_bonus_applied`), so Madeira shows its bonus by then | The monthly on-action's trigger |
 | Signed hover figures | Madeira's Winter hover shows its draw as a green +7%, Massachusetts' as a red −4%; London's draw of −0.02 may print −0% or +0% | `|+=0` shows a sign but no color: wrap the figures in `#G`/`#R` by sign |
+
+## Winter sunshine (2026-11-06)
+
+A sixth term, signed like winter's mildness: London's 2.4 h of winter sun neutral, 1% per hour either way, the draw
+capped at 6 h and cancelled by a hot summer (spec § 13). It supersedes the figures above where they differ: Madeira is
+now about +10%, Hawaii +9%, Cape Colony +8%, Glasgow −2%.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The row | A Sunshine row between Winter and Water: Denver (Colorado) 5.5 h, London 2.4 h, Seattle 2.2 h, Kola 0.6 h; "Sunshine" fits its column | A raw key or `0 h`: `te_climate_winter_sun` not read; "Sunsh...": widen the label |
+| Sunshine hover | Colorado's: +3.1% before relief, Winter Sun Relief 0%, +3.1% left; Bergen's (Western Norway) −1.1% | `te_climate_sun_draw` signs |
+| Comfort hover | Lists sunshine between winter and dry land | |
+| Hot states | Khartoum, Riyadh and Calcutta still never show a green Comfort | The sun draw missing `te_climate_summer_share` |
+| Relief | Geoengineering's and Terraforming's tooltips list Winter Sun Relief +30% and +70%; with both, every state's Sunshine hover reads 0% left | The relief lines in `era_12.txt` and `era_13.txt` |
+| Old save | A save from before this shows the sunshine part in the Comfort hover at once, and the total takes it at each state's next yearly refresh | |
+| The Map Room | Base Comfort paints Madeira and Hawaii the deepest green (the scale's end is now −10.8) | `gen_journal_map_scales.py`'s comfort knots |

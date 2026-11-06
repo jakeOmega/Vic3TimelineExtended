@@ -1233,6 +1233,22 @@ types te_state_panel_widget_types
 			}
 		}
 
+		# Winter sunshine (spec § 13): hours of sun a day around midwinter.
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_sun_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_SUN"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_sun_value"
+			}
+		}
+
 		te_state_climate_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"

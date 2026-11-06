@@ -1,11 +1,11 @@
-﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12).
+﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12, § 13).
 # State scope throughout. Each state region's climate record (local_climate_generated.txt), the
-# five technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
-# and the world's felt warming become five terms, kept separate for the state panel, and their sum,
+# six technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
+# and the world's felt warming become six terms, kept separate for the state panel, and their sum,
 # te_climate_penalty: the percent of its migration attraction a state loses (local_climate_discomfort,
-# state_migration_pull_mult). Four terms only cost; winter's mildness is signed, so a mild-wintered
-# state with little else against it gains (te_climate_bonus, local_climate_amenity; § 12). A region
-# with no row reads 0. The constants are the
+# state_migration_pull_mult). Four terms only cost; winter's mildness and its sunshine are signed, so a
+# mild-wintered or sunny state with little else against it gains (te_climate_bonus, local_climate_amenity;
+# § 12, § 13). A region with no row reads 0. The constants are the
 # calibration's (§ 11.4); scripts/analysis/local_climate_calibration.py mirrors this file and prints
 # its anchor table, and test_local_climate_comfort.py pins the anchors' targets. Change a constant
 # here and rerun both.
@@ -21,7 +21,9 @@
 #   summer share = max(0, 1 - raw heat / K): a hot summer cancels a mild winter's draw
 #   dry     = W x aridity x (1 - water relief)
 #   disease = D x malaria x (1 - disease relief)
-#   penalty = min(P_max, heat + cold + mildness + dry + disease)
+#   sun     = (max(0, S0 - sun) - max(0, min(sun, S1) - S0) x summer share) x per hour
+#             x (1 - sun relief)                                       negative: a bonus
+#   penalty = min(P_max, heat + cold + winter + dry + disease + sun)
 
 # Tuning constants (§ 11.4), in percent of migration attraction.
 te_climate_heat_start = 26 # H0: the heat index (0.7 x wet-bulb + 0.3 x air, on a typical year's worst day, °C) above which heat costs
@@ -37,6 +39,10 @@ te_climate_winter_heat_cancel = 20 # K: the heat cost before relief, percent, at
 te_climate_dry_per_class = 16 # W: per aridity class (1 limited water, 2 scarce)
 te_climate_malaria_per_class = 5 # D: per malaria class (1 seasonal or local, 2 endemic)
 te_climate_penalty_max = 80 # P_max: climate alone never takes all of a state's pull; a boom's jobs can still draw people
+# Winter sunshine (§ 13): the mean daily hours of sun in the three months around the winter solstice.
+te_climate_sun_neutral = 2.4 # S0: London's (the same satellite estimate as every row), which neither costs nor draws
+te_climate_sun_full = 6 # S1: winters sunnier than this draw no more, so the bonus is at most 3.6
+te_climate_sun_per_hour = 1 # per hour of winter sun from S0: Denver's 5.5 h draws 3.1, Bergen's 1.3 h costs 1.1
 # Winter warming's amplification by latitude (§ 6, § 11.3): 1 up to the low latitude, rising in a straight
 # line to the maximum at the Arctic (or Antarctic) Circle and beyond, as observed warming runs. Arctic
 # amplification is a cold-season effect, so the hot days take the world's warming as it is.
@@ -116,6 +122,13 @@ te_climate_relief_cold = {
 # and only the era 11+ technologies close it (owner, 2026-11-01; § 12).
 te_climate_relief_winter = {
 	value = modifier:state_climate_winter_relief_add
+	min = 0
+	max = 1
+}
+# A gloomy winter's cost and a sunny one's draw shrink together, and only geoengineering's weather
+# modification and the era 13 technologies close it: a heated, lit house doesn't bring the sun out (§ 13).
+te_climate_relief_sun = {
+	value = modifier:state_climate_sun_relief_add
 	min = 0
 	max = 1
 }
@@ -201,6 +214,27 @@ te_climate_disease_raw = {
 	value = te_climate_malaria
 	multiply = te_climate_malaria_per_class
 }
+# A winter gloomier than S0 costs and a sunnier one draws, per hour of daily sun; past S1 more sun draws no
+# more. Negative is a bonus. A hot summer cancels the draw as it cancels a mild winter's, so Khartoum's or
+# Riyadh's bright winter doesn't out-draw London once air conditioning eases their heat (§ 13).
+te_climate_sun_gloom = {
+	value = te_climate_sun_neutral
+	subtract = te_climate_winter_sun
+	min = 0
+	multiply = te_climate_sun_per_hour
+}
+te_climate_sun_bright = {
+	value = te_climate_winter_sun
+	max = te_climate_sun_full
+	subtract = te_climate_sun_neutral
+	min = 0
+	multiply = te_climate_sun_per_hour
+	multiply = te_climate_summer_share
+}
+te_climate_sun_raw = {
+	value = te_climate_sun_gloom
+	subtract = te_climate_sun_bright
+}
 
 # Each term after relief: what the state panel shows, term by term.
 te_climate_heat_term = {
@@ -238,10 +272,18 @@ te_climate_disease_term = {
 		subtract = te_climate_relief_disease
 	}
 }
+te_climate_sun_term = {
+	value = te_climate_sun_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_sun
+	}
+}
 
-# The comfort penalty, at most te_climate_penalty_max. Negative only through a mild winter, so never
-# below minus te_climate_winter_per_degree x (te_climate_winter_mild - te_climate_winter_neutral). A
-# region with no row reads 0 whatever the warming.
+# The comfort penalty, at most te_climate_penalty_max. Negative only through a mild winter and a sunny one,
+# so never below minus te_climate_winter_per_degree x (te_climate_winter_mild - te_climate_winter_neutral)
+# less te_climate_sun_per_hour x (te_climate_sun_full - te_climate_sun_neutral). A region with no row reads
+# 0 whatever the warming.
 te_climate_penalty = {
 	value = 0
 	if = {
@@ -251,6 +293,7 @@ te_climate_penalty = {
 		add = te_climate_winter_term
 		add = te_climate_dry_term
 		add = te_climate_disease_term
+		add = te_climate_sun_term
 	}
 	max = te_climate_penalty_max
 }
@@ -266,6 +309,7 @@ te_climate_penalty_raw = {
 		add = te_climate_winter_raw
 		add = te_climate_dry_raw
 		add = te_climate_disease_raw
+		add = te_climate_sun_raw
 	}
 	max = te_climate_penalty_max
 }
@@ -306,6 +350,15 @@ te_climate_winter_draw = {
 }
 te_climate_winter_draw_raw = {
 	value = te_climate_winter_raw
+	multiply = -1
+}
+# Sunshine's likewise.
+te_climate_sun_draw = {
+	value = te_climate_sun_term
+	multiply = -1
+}
+te_climate_sun_draw_raw = {
+	value = te_climate_sun_raw
 	multiply = -1
 }
 # 1 once the state's first monthly application has run; until then the row says Pending.

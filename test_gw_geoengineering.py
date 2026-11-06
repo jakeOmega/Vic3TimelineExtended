@@ -96,6 +96,9 @@ class TechnologyTest(unittest.TestCase):
                 "state_harvest_condition_drought_impact_mult": -0.10,
                 "state_harvest_condition_drought_duration_mult": -0.10,
                 "state_harvest_condition_hailstorm_impact_mult": -0.20,
+                # Local Climate's Winter Sun Relief: cloud seeding thins the winter overcast (spec § 13,
+                # test_local_climate_comfort.py).
+                "state_climate_sun_relief_add": 0.3,
             },
         )
         reforestation = load(MODIFIERS)["reforestation_subsidies_modifier"]

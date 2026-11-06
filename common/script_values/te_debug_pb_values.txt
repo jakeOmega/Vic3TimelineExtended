@@ -1,0 +1,61 @@
+﻿# Power bloc test console only (`event te_debug_pb.1`): the mandate count, read
+# two ways, for the Add and Remove mandate test (te_debug_pb.1 options g and h,
+# verdict in te_debug_pb.2). Country scope, on the bloc leader.
+
+# The count from the num_mandates trigger, which the base game's alerts use
+# (num_mandates > 0), so it is the reading to trust. A ladder, because a
+# trigger gives no number: 6 means 6 or more (above MAX_MANDATES = 5) and -1
+# means below 0.
+te_debug_pb_mandates_by_trigger = {
+	value = 0
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 1 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 2 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 3 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 4 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 5 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates >= 6 } }
+		add = 1
+	}
+	if = {
+		limit = { power_bloc ?= { num_mandates < 0 } }
+		value = -1
+	}
+}
+
+# The count from the num_mandates value link, read from country scope the way
+# te_pb_bloc_member_count reads power_bloc.num_power_bloc_members. The script
+# docs list the link as a value; whether it reads the count is the second thing
+# the test shows (it should match the trigger's count). A spend costing two or
+# more, or a panel line showing the count, would need it.
+te_debug_pb_mandates_by_link = {
+	value = 0
+	if = {
+		limit = { is_in_power_bloc = yes }
+		add = power_bloc.num_mandates
+	}
+}
+
+# The trigger's count when Add or Remove was last clicked.
+te_debug_pb_mandates_before_view = {
+	value = 0
+	if = {
+		limit = { has_variable = te_debug_pb_mandates_before }
+		add = var:te_debug_pb_mandates_before
+	}
+}
