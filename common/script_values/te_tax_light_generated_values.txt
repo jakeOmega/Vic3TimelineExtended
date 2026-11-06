@@ -825,6 +825,98 @@ te_tax_light_rlv_trade_unions = {
 	}
 }
 
+# je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the
+# engine reads each from the owning country about every four days, so the sync only writes
+# the variables. te_tax_light_relief_<key>_value: the tax's relief steps
+# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_react_<ig>_<pos|neg>_value:
+# the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of
+# its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the
+# modifier off the entry: the gates under which the sync used to remove it.
+te_tax_light_relief_wage_value = {
+	value = 0
+	if = { limit = { te_tax_light_levies_wage = yes has_variable = te_tax_light_rl_wage var:te_tax_light_rl_wage > 0 } value = var:te_tax_light_rl_wage }
+}
+te_tax_light_relief_div_value = {
+	value = 0
+	if = { limit = { te_tax_light_levies_div = yes has_variable = te_tax_light_rl_div var:te_tax_light_rl_div > 0 } value = var:te_tax_light_rl_div }
+}
+te_tax_light_relief_land_value = {
+	value = 0
+	if = { limit = { te_tax_light_levies_land = yes has_variable = te_tax_light_rl_land var:te_tax_light_rl_land > 0 } value = var:te_tax_light_rl_land }
+}
+te_tax_light_relief_head_value = {
+	value = 0
+	if = { limit = { te_tax_light_levies_head = yes has_variable = te_tax_light_rl_head var:te_tax_light_rl_head > 0 } value = var:te_tax_light_rl_head }
+}
+te_tax_light_relief_cons_value = {
+	value = 0
+	if = { limit = { te_tax_light_levies_cons = yes has_variable = te_tax_light_rl_cons var:te_tax_light_rl_cons > 0 } value = var:te_tax_light_rl_cons }
+}
+te_tax_light_react_armed_forces_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_armed_forces var:te_tax_lr_armed_forces > 0 has_variable = te_tax_lr_mag_armed_forces var:te_tax_lr_mag_armed_forces >= 1 } value = var:te_tax_lr_mag_armed_forces }
+}
+te_tax_light_react_armed_forces_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_armed_forces var:te_tax_lr_armed_forces < 0 has_variable = te_tax_lr_mag_armed_forces var:te_tax_lr_mag_armed_forces >= 1 } value = var:te_tax_lr_mag_armed_forces }
+}
+te_tax_light_react_devout_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_devout var:te_tax_lr_devout > 0 has_variable = te_tax_lr_mag_devout var:te_tax_lr_mag_devout >= 1 } value = var:te_tax_lr_mag_devout }
+}
+te_tax_light_react_devout_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_devout var:te_tax_lr_devout < 0 has_variable = te_tax_lr_mag_devout var:te_tax_lr_mag_devout >= 1 } value = var:te_tax_lr_mag_devout }
+}
+te_tax_light_react_industrialists_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_industrialists var:te_tax_lr_industrialists > 0 has_variable = te_tax_lr_mag_industrialists var:te_tax_lr_mag_industrialists >= 1 } value = var:te_tax_lr_mag_industrialists }
+}
+te_tax_light_react_industrialists_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_industrialists var:te_tax_lr_industrialists < 0 has_variable = te_tax_lr_mag_industrialists var:te_tax_lr_mag_industrialists >= 1 } value = var:te_tax_lr_mag_industrialists }
+}
+te_tax_light_react_intelligentsia_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_intelligentsia var:te_tax_lr_intelligentsia > 0 has_variable = te_tax_lr_mag_intelligentsia var:te_tax_lr_mag_intelligentsia >= 1 } value = var:te_tax_lr_mag_intelligentsia }
+}
+te_tax_light_react_intelligentsia_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_intelligentsia var:te_tax_lr_intelligentsia < 0 has_variable = te_tax_lr_mag_intelligentsia var:te_tax_lr_mag_intelligentsia >= 1 } value = var:te_tax_lr_mag_intelligentsia }
+}
+te_tax_light_react_landowners_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_landowners var:te_tax_lr_landowners > 0 has_variable = te_tax_lr_mag_landowners var:te_tax_lr_mag_landowners >= 1 } value = var:te_tax_lr_mag_landowners }
+}
+te_tax_light_react_landowners_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_landowners var:te_tax_lr_landowners < 0 has_variable = te_tax_lr_mag_landowners var:te_tax_lr_mag_landowners >= 1 } value = var:te_tax_lr_mag_landowners }
+}
+te_tax_light_react_petty_bourgeoisie_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_petty_bourgeoisie var:te_tax_lr_petty_bourgeoisie > 0 has_variable = te_tax_lr_mag_petty_bourgeoisie var:te_tax_lr_mag_petty_bourgeoisie >= 1 } value = var:te_tax_lr_mag_petty_bourgeoisie }
+}
+te_tax_light_react_petty_bourgeoisie_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_petty_bourgeoisie var:te_tax_lr_petty_bourgeoisie < 0 has_variable = te_tax_lr_mag_petty_bourgeoisie var:te_tax_lr_mag_petty_bourgeoisie >= 1 } value = var:te_tax_lr_mag_petty_bourgeoisie }
+}
+te_tax_light_react_rural_folk_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_rural_folk var:te_tax_lr_rural_folk > 0 has_variable = te_tax_lr_mag_rural_folk var:te_tax_lr_mag_rural_folk >= 1 } value = var:te_tax_lr_mag_rural_folk }
+}
+te_tax_light_react_rural_folk_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_rural_folk var:te_tax_lr_rural_folk < 0 has_variable = te_tax_lr_mag_rural_folk var:te_tax_lr_mag_rural_folk >= 1 } value = var:te_tax_lr_mag_rural_folk }
+}
+te_tax_light_react_trade_unions_pos_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_trade_unions var:te_tax_lr_trade_unions > 0 has_variable = te_tax_lr_mag_trade_unions var:te_tax_lr_mag_trade_unions >= 1 } value = var:te_tax_lr_mag_trade_unions }
+}
+te_tax_light_react_trade_unions_neg_value = {
+	value = 0
+	if = { limit = { has_variable = te_tax_lr_trade_unions var:te_tax_lr_trade_unions < 0 has_variable = te_tax_lr_mag_trade_unions var:te_tax_lr_mag_trade_unions >= 1 } value = var:te_tax_lr_mag_trade_unions }
+}
+
 # Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0
 # when absent.
 te_tax_view_light_on = {

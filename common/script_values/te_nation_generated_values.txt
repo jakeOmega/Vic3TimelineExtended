@@ -153,75 +153,6 @@ te_nation_src_governance_count = {
 	}
 }
 
-# Used by: the monthly pulse, for te_nation_src_tax_reactions
-te_nation_src_tax_reactions_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_pos }
-		add = 1
-	}
-}
-
 # Used by: the monthly pulse, for te_nation_src_un_regimes
 te_nation_src_un_regimes_count = {
 	value = 0
@@ -574,26 +505,6 @@ te_nation_src_inheritance_count = {
 # Used by: the monthly pulse, for te_nation_src_tax_relief
 te_nation_src_tax_relief_count = {
 	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_cons }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_div }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_head }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_land }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_wage }
-		add = 1
-	}
 	if = {
 		limit = { has_modifier = te_tax_relief_ag_1 }
 		add = 1
@@ -1021,7 +932,7 @@ te_nation_src_foreign_count = {
 te_nation_list_governance_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_fad57c5e }
+		limit = { has_variable = te_nation_src_set_96520cb8 }
 		if = {
 			limit = { var:te_nation_src_governance > 0 }
 			add = te_nation_src_governance_count
@@ -1033,7 +944,7 @@ te_nation_list_governance_count = {
 te_nation_list_society_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_fad57c5e }
+		limit = { has_variable = te_nation_src_set_96520cb8 }
 		if = {
 			limit = { var:te_nation_src_living_standards > 0 }
 			add = te_nation_src_living_standards_count
@@ -1084,7 +995,7 @@ te_nation_list_society_count = {
 te_nation_list_economy_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_fad57c5e }
+		limit = { has_variable = te_nation_src_set_96520cb8 }
 		if = {
 			limit = { var:te_nation_src_construction > 0 }
 			add = te_nation_src_construction_count
@@ -1092,10 +1003,6 @@ te_nation_list_economy_count = {
 		if = {
 			limit = { var:te_nation_src_agriculture > 0 }
 			add = te_nation_src_agriculture_count
-		}
-		if = {
-			limit = { var:te_nation_src_tax_reactions > 0 }
-			add = te_nation_src_tax_reactions_count
 		}
 		if = {
 			limit = { var:te_nation_src_monetary > 0 }
@@ -1128,7 +1035,7 @@ te_nation_list_economy_count = {
 te_nation_list_science_and_space_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_fad57c5e }
+		limit = { has_variable = te_nation_src_set_96520cb8 }
 		if = {
 			limit = { var:te_nation_src_transhumanism > 0 }
 			if = {
@@ -1151,7 +1058,7 @@ te_nation_list_science_and_space_count = {
 te_nation_list_international_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_fad57c5e }
+		limit = { has_variable = te_nation_src_set_96520cb8 }
 		if = {
 			limit = { var:te_nation_src_nuclear_order > 0 }
 			add = te_nation_src_nuclear_order_count
@@ -1522,70 +1429,6 @@ te_nation_types_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_trade_unions_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_pos }
 		add = 1
 	}
 	if = {
@@ -2145,70 +1988,6 @@ te_nation_group_interest_groups_count = {
 		limit = { has_modifier = te_tax_ig_view_trade_unions_p2 }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_pos }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_pos }
-		add = 1
-	}
 }
 
 # Used by: the interest_group_ig_armed_forces_approval_add row
@@ -2244,14 +2023,6 @@ te_nation_type_interest_group_ig_armed_forces_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_armed_forces_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_armed_forces_pos }
 		add = 1
 	}
 }
@@ -2315,14 +2086,6 @@ te_nation_type_interest_group_ig_devout_approval_add_count = {
 		limit = { has_modifier = te_tax_ig_view_devout_p2 }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_devout_pos }
-		add = 1
-	}
 }
 
 # Used by: the interest_group_ig_industrialists_approval_add row
@@ -2376,14 +2139,6 @@ te_nation_type_interest_group_ig_industrialists_approval_add_count = {
 		limit = { has_modifier = te_tax_ig_view_industrialists_p2 }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_industrialists_pos }
-		add = 1
-	}
 }
 
 # Used by: the interest_group_ig_intelligentsia_approval_add row
@@ -2427,14 +2182,6 @@ te_nation_type_interest_group_ig_intelligentsia_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_intelligentsia_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_intelligentsia_pos }
 		add = 1
 	}
 }
@@ -2484,14 +2231,6 @@ te_nation_type_interest_group_ig_landowners_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_landowners_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_landowners_pos }
 		add = 1
 	}
 }
@@ -2545,14 +2284,6 @@ te_nation_type_interest_group_ig_petty_bourgeoisie_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_petty_bourgeoisie_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_petty_bourgeoisie_pos }
 		add = 1
 	}
 }
@@ -2640,14 +2371,6 @@ te_nation_type_interest_group_ig_rural_folk_approval_add_count = {
 		limit = { has_modifier = te_tax_ig_view_rural_folk_p2 }
 		add = 1
 	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_rural_folk_pos }
-		add = 1
-	}
 }
 
 # Used by: the interest_group_ig_trade_unions_approval_add row
@@ -2719,14 +2442,6 @@ te_nation_type_interest_group_ig_trade_unions_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_ig_view_trade_unions_p2 }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_neg }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_react_trade_unions_pos }
 		add = 1
 	}
 }
@@ -3660,26 +3375,6 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_tax_light_relief_cons }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_div }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_head }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_land }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_wage }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_tax_relief_ag_1 }
 		add = 1
 	}
@@ -3909,26 +3604,6 @@ te_nation_group_taxes_count = {
 		add = 1
 	}
 	if = {
-		limit = { has_modifier = te_tax_light_relief_cons }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_div }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_head }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_land }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_tax_light_relief_wage }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_tax_relief_ag_1 }
 		add = 1
 	}
@@ -3989,51 +3664,6 @@ te_nation_type_building_group_bg_agriculture_tax_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = te_tax_relief_ag_2 }
-		add = 1
-	}
-}
-
-# Used by: the tax_income_add row
-te_nation_type_tax_income_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_wage }
-		add = 1
-	}
-}
-
-# Used by: the tax_consumption_add row
-te_nation_type_tax_consumption_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_cons }
-		add = 1
-	}
-}
-
-# Used by: the tax_dividends_add row
-te_nation_type_tax_dividends_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_div }
-		add = 1
-	}
-}
-
-# Used by: the tax_land_add row
-te_nation_type_tax_land_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_land }
-		add = 1
-	}
-}
-
-# Used by: the tax_per_capita_add row
-te_nation_type_tax_per_capita_add_count = {
-	value = 0
-	if = {
-		limit = { has_modifier = te_tax_light_relief_head }
 		add = 1
 	}
 }

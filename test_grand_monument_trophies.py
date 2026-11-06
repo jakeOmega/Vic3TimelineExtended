@@ -18,7 +18,7 @@ from collections import namedtuple
 
 from test_grand_monument_registry import (
     BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, TROPHY_CODE_BASE,
-    TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
+    TROPHY_PICTURES, block, committed, declaration, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
 TR_EFFECTS = "common/scripted_effects/gm_trophy_effects.txt"
@@ -367,8 +367,8 @@ class ConsequenceTests(unittest.TestCase):
         home = squash(block(read(TR_EFFECTS), "gm_tr_return_home"))
         self.assertIn("set_variable = { name = gm_boon_homecoming value = gm_boon_months }", home)
         e = read(EFFECTS)
-        self.assertIn("gm_tr_add_national = yes", squash(block(e, "gm_apply_national_modifiers")))
-        self.assertIn("gm_tr_remove_national = yes", squash(block(e, "gm_remove_national_modifiers")))
+        # The entry declares it while the countdown runs.
+        self.assertIn("limit = { has_variable = gm_boon_homecoming } add = 1", declaration("gm_boon_homecoming") or "")
         self.assertIn("gm_tr_country_monthly = yes", squash(block(e, "gm_country_monthly")))
         self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_country_monthly")), "gm_tick_boon = { SRC = homecoming }")
         L = loc()

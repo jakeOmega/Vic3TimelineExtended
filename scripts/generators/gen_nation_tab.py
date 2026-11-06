@@ -122,8 +122,9 @@ SECTIONS = {
         "agdiff_*",
         # The private share of construction
         "te_construction_market_private_share_modifier",
-        # The tax code: interest groups' views and reactions, relief
-        "te_tax_ig_view_*", "te_tax_light_react_*", "te_tax_light_relief_*", "te_tax_relief_*",
+        # The tax code: interest groups' views, relief (the light code's reactions
+        # and relief are its entry's scaling modifiers since #1404)
+        "te_tax_ig_view_*", "te_tax_relief_*",
         # Monetary arrangements, inflation and exchange rate bands, while the
         # country holds no banking entry (te_mon_mod_home; since #1020 only the
         # game's first fortnight and a running revolution's rebels): on the
@@ -301,7 +302,6 @@ SOURCE_GROUPS = {
     # Barracks doctrine, heir education, Liquid Democracy
     "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
                    "te_continuous_vote"),
-    "tax_reactions": ("te_tax_light_react_*",),
     "un_regimes": (
         "un_regime_rights_violator_modifier", "un_regime_colon*", "un_regime_climate_*",
         "un_regime_cultural_hegemon_modifier", "un_regime_heritage_site_modifier", "un_regime_naval_curb_modifier",
@@ -320,7 +320,7 @@ SOURCE_GROUPS = {
     "sanctions": ("un_arms_embargo_*", "un_sanctions_*"),
     # A dynasty's continuity
     "inheritance": ("inh_*",),
-    "tax_relief": ("te_tax_light_relief_*", "te_tax_relief_*"),
+    "tax_relief": ("te_tax_relief_*",),
     # The tax code's interest-group views, all eight groups' in one: each group's
     # four bands read the same ("Opposes the Tax Code"), and a list matches the
     # text, so a band split across two groups would show under the wrong flag
@@ -416,7 +416,6 @@ TYPE_ROWS = {
         ),
         "taxes": (
             "state_tax_collection_mult", "state_tax_waste_add", "building_group_bg_agriculture_tax_mult",
-            "tax_income_add", "tax_consumption_add", "tax_dividends_add", "tax_land_add", "tax_per_capita_add",
             "country_minting_add", "country_minting_mult",
         ),
         "investment": (
