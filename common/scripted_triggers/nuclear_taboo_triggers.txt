@@ -35,10 +35,7 @@ nd_taboo_has_ceiling = {
 # modifier in a block where it is not yet visible.
 nd_taboo_is_ban_party = {
 	has_global_variable = un_agency_tpnw
-	OR = {
-		has_modifier = un_nuclear_ban_modifier
-		has_variable = un_nuclear_ban_modifier_on
-	}
+	has_variable = un_nuclear_ban_modifier_on
 }
 
 # The Prohibition Treaty's ceiling (nd_tpnw_ceiling) is the lowest that binds

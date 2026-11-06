@@ -67,10 +67,7 @@ te_seabed_was_unilateral = {
 # Scope: country
 te_seabed_itlos_ratified = {
 	has_global_variable = un_agency_itlos
-	OR = {
-		has_modifier = un_law_of_sea_modifier
-		has_variable = un_law_of_sea_modifier_on
-	}
+	has_variable = un_law_of_sea_modifier_on
 }
 
 # A defector that has left Unilateral Licensing and is not yet a party again.
@@ -99,6 +96,19 @@ te_seabed_royalty_payer = {
 	te_seabed_ocean_mine_levels > 0
 }
 
+# A party pays its royalty this week: the payer test as of the monthly
+# refresh, cached (var:te_seabed_royalty_cached, 0 once it stops paying), with
+# the cheap halves re-read live, so a defection or a lapse ends it within
+# days. The gate of te_seabed_royalty_modifier's declaration on
+# je_united_nations, and of everything that counts the royalties paid.
+# Scope: country
+te_seabed_royalty_paying = {
+	has_variable = te_seabed_royalty_cached
+	var:te_seabed_royalty_cached > 0
+	te_seabed_regime_is_regulated = yes
+	te_seabed_itlos_party = yes
+}
+
 # ---- The Antarctic Treaty (§4) ------------------------------------------------------
 
 # A country running an Antarctic research station. Scope: country
@@ -110,10 +120,7 @@ te_antarctic_has_station = {
 # Scope: country
 te_antarctic_treaty_party = {
 	has_global_variable = un_agency_ats
-	OR = {
-		has_modifier = un_antarctic_treaty_modifier
-		has_variable = un_antarctic_treaty_modifier_on
-	}
+	has_variable = un_antarctic_treaty_modifier_on
 }
 
 # A great power outside the treaty (it refused it, denounced it, or is not a

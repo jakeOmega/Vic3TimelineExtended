@@ -337,7 +337,7 @@ un_expulsion_case_service_term = {
 		limit = {
 			OR = {
 				un_standing_program_active_peacekeeping = yes
-				has_modifier = un_mission_service_cost
+				un_mission_service_paying = yes
 			}
 		}
 		add = un_expulsion_case_service_each
@@ -730,8 +730,8 @@ un_lean_interests = {
 		if = {
 			limit = {
 				OR = {
-					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
-					je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+					has_variable = un_champion_order_cost_on
+					has_variable = un_human_rights_champion_modifier_on
 					has_law = law_type:law_humanitarian_regulations
 				}
 			}
@@ -745,7 +745,7 @@ un_lean_interests = {
 			limit = {
 				OR = {
 					has_law = law_type:law_isolationism
-					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+					un_undermines_the_order = yes
 				}
 			}
 			add = -25
@@ -1005,7 +1005,7 @@ un_lean_interests = {
 		else = {
 			add = 20
 			if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+				limit = { has_variable = un_nonproliferation_modifier_on }
 				add = 10
 			}
 		}

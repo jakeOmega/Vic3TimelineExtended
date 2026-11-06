@@ -8,6 +8,11 @@ and none of its modifiers, so every UN state modifier has a mirror variable,
 the mirrors: one write site that adds or removes a modifier without its mirror
 and the winner of the next revolution silently gains or loses it. Nothing in
 the engine checks that, so these tests do.
+
+Since 1.15 (#1404) the entry declares some of them (scaling_modifiers_while_active)
+while their mirrors are set: for those the mirror is all there is, and the
+rebuild machinery must leave them alone (DECLARED; test_un_scaling_modifiers.py
+pins the declarations).
 """
 
 import os
@@ -52,43 +57,46 @@ JE_PLAIN = [
     "un_headquarters_modifier",
     "un_security_council_modifier",
     "un_permanent_member_modifier",
+]
+MIRRORED = JE_PLAIN
+
+# Declared on je_united_nations while the mirror is set (#1404): the
+# programmes and stances (un_programmes_end clears them all), and the
+# convention member modifiers, nine of which sat on the country before 1.15
+# (test_un_convention_registry.CONVENTIONS is the single list;
+# un_conventions_end clears them all).
+PROGRAMMES = [
     "un_peacekeeping_contributor_modifier",
+    "un_peacekeeping_contributor_cost",
+    "un_development_contributor_modifier",
+    "un_development_contributor_cost",
     "un_human_rights_champion_modifier",
     "un_arms_control_participant_modifier",
     "un_champion_order_cost",
     "un_undermine_order_cost",
 ]
-# Added with multiplier = root.var:<figure>, so written at the site itself:
-# the two programme costs (the expense) and the Development Programs benefits
-# (the contribution size's benefit factor).
-JE_COST = [
-    "un_peacekeeping_contributor_cost",
-    "un_development_contributor_cost",
-    "un_development_contributor_modifier",
-]
-# The convention member modifiers, on the journal entry and on the country
-# (test_un_convention_registry.CONVENTIONS is the single list).
-MIRRORED = JE_PLAIN + JE_COST + JE_CONVENTION + COUNTRY_CONVENTION
+CONVENTIONS = JE_CONVENTION + COUNTRY_CONVENTION
+DECLARED = PROGRAMMES + CONVENTIONS
 
 # Which names each helper may be called with.
 HELPER_NAMES = {
     "un_state_on": set(JE_PLAIN),
-    "un_state_off": set(JE_PLAIN + JE_COST + JE_CONVENTION),
-    "un_convention_on": set(JE_CONVENTION),
-    "un_convention_country_on": set(COUNTRY_CONVENTION),
-    "un_state_country_off": set(COUNTRY_CONVENTION),
+    "un_state_off": set(JE_PLAIN),
     "un_state_record": set(MIRRORED),
     "un_state_forget": set(MIRRORED),
     "un_state_restore": set(JE_PLAIN),
-    "un_convention_restore": set(JE_CONVENTION),
-    "un_convention_country_restore": set(COUNTRY_CONVENTION),
-    "un_state_missing": set(JE_PLAIN + JE_COST + JE_CONVENTION),
-    "un_state_country_missing": set(COUNTRY_CONVENTION),
-    "un_state_reconcile_one": set(JE_PLAIN + JE_COST + JE_CONVENTION),
-    "un_state_reconcile_country": set(COUNTRY_CONVENTION),
+    "un_state_missing": set(JE_PLAIN),
+    "un_state_reconcile_one": set(JE_PLAIN),
 }
+# The helpers retired with the conventions' declaration (#1404).
+RETIRED_HELPERS = ("un_convention_country_on", "un_state_country_off", "un_convention_restore",
+                   "un_convention_country_restore", "un_state_country_missing", "un_state_reconcile_country",
+                   "un_state_forget_conventions", "un_regime_reapply_conventions", "un_regime_reapply_je",
+                   "un_regime_reapply_country")
 
 STATE_EFFECTS = _path("common", "scripted_effects", "un_state_effects.txt")
+LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
+MEMBERSHIP = _path("common", "scripted_effects", "un_membership_effects.txt")
 STATE_TRIGGERS = _path("common", "scripted_triggers", "un_state_triggers.txt")
 JE = _path("common", "journal_entries", "je_united_nations.txt")
 
@@ -113,7 +121,7 @@ DISPLAY_ONLY_BLOCKS = {"show_as_tooltip", "event_outcome_activated_effect_desc",
 # Blocks that wrap a single write and are not the site's own statement list.
 WRAPPER_BLOCKS = {"je:je_united_nations", "add_modifier"}
 
-_NAMES = "|".join(MIRRORED)
+_NAMES = "|".join(MIRRORED + DECLARED)
 _WRITE = re.compile(
     r"\b(?P<op>add_modifier|remove_modifier)\s*=\s*"
     r"(?:\{\s*name\s*=\s*(?P<a>" + _NAMES + r")\b|(?P<r>" + _NAMES + r")\b)"
@@ -220,6 +228,30 @@ class WriteSiteTests(unittest.TestCase):
                     wrong.append(f"{rel}:{line} {helper} {name}")
         self.assertEqual(wrong, [])
 
+    def test_declared_mirrors_go_through_their_helpers_by_variable(self):
+        """un_mirror_set / un_mirror_clear take a declared modifier's mirror,
+        never anything else (and the declared modifiers' names are handed to no
+        helper at all: test_journal_entry_shape)."""
+        call = re.compile(r"\b(un_mirror_set|un_mirror_clear)\s*=\s*\{\s*MIRROR\s*=\s*(\w+)\s*\}")
+        allowed = {name + "_on" for name in DECLARED}
+        wrong, seen = [], set()
+        for path in _script_files():
+            text = _read(path)
+            for m in call.finditer(text):
+                seen.add(m.group(2))
+                if m.group(2) not in allowed:
+                    rel = os.path.relpath(path, REPO)
+                    wrong.append(f"{rel}:{text.count(chr(10), 0, m.start()) + 1} {m.group(1)} {m.group(2)}")
+        self.assertEqual(wrong, [])
+        self.assertEqual(seen, allowed, "every declared mirror is written somewhere")
+
+    def test_the_retired_helpers_are_gone(self):
+        for path in _script_files():
+            text = _read(path)
+            for helper in RETIRED_HELPERS:
+                with self.subTest(path=os.path.relpath(path, REPO), helper=helper):
+                    self.assertNotRegex(text, r"\b" + helper + r"\b")
+
     def test_the_check_finds_an_unpaired_write(self):
         text = (
             "x = {\n"
@@ -282,7 +314,7 @@ class RebuildTests(unittest.TestCase):
                                  ["un_regime_stamp"] if name == "un_state_restore_all" else [])
 
     def test_mirrors_are_recorded_only_where_the_entry_exists(self):
-        for name in ("un_state_on", "un_convention_on"):
+        for name in ("un_state_on",):
             with self.subTest(helper=name):
                 self.assertRegex(
                     _block(self.effects, name),
@@ -290,24 +322,63 @@ class RebuildTests(unittest.TestCase):
                     r"un_state_record")
 
     def test_rebuild_forgets_what_it_cannot_honour(self):
-        forgotten = (_block(self.effects, "un_state_forget_representation")
-                     + _block(self.effects, "un_state_forget_conventions"))
+        forgotten = _block(self.effects, "un_state_forget_representation")
         for name in MIRRORED:
             if name in ("un_member_modifier", "un_founding_member_modifier",
                         "un_headquarters_modifier"):
                 continue
             with self.subTest(modifier=name):
                 self.assertIn("MODIFIER = " + name + " }", forgotten)
+        self.assertIn("un_programmes_end = yes", _block(self.effects, "un_state_forget_representation"))
+        # A rebuild that finds us no member ends our conventions too.
+        rebuild = _block(self.effects, "un_state_rebuild")
+        self.assertIn("un_conventions_end = yes", rebuild[rebuild.index("else = {"):])
+
+    def test_conventions_end_clears_every_convention(self):
+        body = _block(self.effects, "un_conventions_end")
+        self.assertEqual(sorted(re.findall(r"un_mirror_clear = \{ MIRROR = (\w+) \}", body)),
+                         sorted(name + "_on" for name in CONVENTIONS))
+        self.assertIn("un_conventions_end = yes", _block(_read(LADDER), "un_membership_end_effect"))
+
+    def test_programmes_end_clears_every_programme(self):
+        body = _block(self.effects, "un_programmes_end")
+        self.assertEqual(sorted(re.findall(r"un_mirror_clear = \{ MIRROR = (\w+) \}", body)),
+                         sorted(name + "_on" for name in PROGRAMMES))
+        for site, name in ((LADDER, "un_membership_end_effect"), (MEMBERSHIP, "un_representation_monthly_update")):
+            with self.subTest(site=name):
+                self.assertIn("un_programmes_end = yes", _block(_read(site), name))
 
     def test_reconcile_and_heal_cover_every_mirror(self):
         reconcile = _block(self.effects, "un_state_reconcile")
         heal = _block(self.triggers, "un_state_heal_needed")
+        restore = _block(self.effects, "un_state_restore_all")
         for name in MIRRORED:
             with self.subTest(modifier=name):
                 self.assertIn("MODIFIER = " + name + " }", reconcile)
                 self.assertIn("MODIFIER = " + name + " }", heal)
+        # Exactly the rebuilt set: a declared one here would stack, be forgotten
+        # or be waited for for ever (test_the_machinery_leaves_the_declared_alone).
+        for site, body in (("un_state_reconcile", reconcile), ("un_state_heal_needed", heal),
+                           ("un_state_restore_all", restore)):
+            with self.subTest(site=site):
+                self.assertLessEqual(set(re.findall(r"MODIFIER = (\w+) \}", body)), set(MIRRORED))
 
-    def test_debug_wipe_strips_every_mirrored_modifier(self):
+    def test_the_machinery_leaves_the_declared_alone(self):
+        """A declared modifier is not added, so has_modifier never sees it: a
+        restore would stack it on the declaration, a reconcile would forget
+        its mirror, and the heal would wait for it for ever."""
+        bodies = {name: _block(self.effects, name) for name in
+                  ("un_state_restore_all", "un_state_reconcile", "te_debug_un_wipe_entry")
+                  if name != "te_debug_un_wipe_entry"}
+        bodies["un_state_heal_needed"] = _block(self.triggers, "un_state_heal_needed")
+        bodies["te_debug_un_wipe_entry"] = _block(
+            _read(_path("common", "scripted_effects", "te_debug_un_effects.txt")), "te_debug_un_wipe_entry")
+        for site, body in bodies.items():
+            for name in DECLARED:
+                with self.subTest(site=site, modifier=name):
+                    self.assertNotRegex(body, r"\b" + name + r"\b")
+
+    def test_debug_wipe_strips_every_rebuilt_modifier(self):
         body = _block(_read(_path("common", "scripted_effects", "te_debug_un_effects.txt")),
                       "te_debug_un_wipe_entry")
         for name in MIRRORED:
@@ -410,8 +481,6 @@ class GlobalPulseTests(unittest.TestCase):
         self.assertRegex(_block(effects, "un_state_off"),
                          r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_modifier = \$MODIFIER\$\s*\}\s*"
                          r"remove_modifier = \$MODIFIER\$")
-        self.assertIn("remove_modifier_if_exists_effect = { MODIFIER = $MODIFIER$ }",
-                      _block(effects, "un_state_country_off"))
         for m in re.finditer(r"^([a-z_]+)\s*=\s*\{", effects, re.M):
             body = _block(effects, m.group(1))
             for v in re.finditer(r"remove_variable\s*=\s*(\S+)", body):

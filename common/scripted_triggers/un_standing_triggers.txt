@@ -96,25 +96,25 @@ un_standing_benefits_suspended = {
 # Scope: country
 
 un_standing_program_active_peacekeeping = {
-	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-	je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost }
+	has_variable = un_peacekeeping_contributor_modifier_on
+	has_variable = un_peacekeeping_contributor_cost_on
 }
 
 un_standing_program_active_development = {
-	je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
-	je:je_united_nations ?= { has_modifier = un_development_contributor_cost }
+	has_variable = un_development_contributor_modifier_on
+	has_variable = un_development_contributor_cost_on
 }
 
 un_standing_program_active_human_rights = {
-	je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+	has_variable = un_human_rights_champion_modifier_on
 }
 
 un_standing_program_active_arms_control = {
-	je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+	has_variable = un_arms_control_participant_modifier_on
 }
 
 un_standing_program_active_champion = {
-	je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+	has_variable = un_champion_order_cost_on
 }
 
 # ---- Gates ----

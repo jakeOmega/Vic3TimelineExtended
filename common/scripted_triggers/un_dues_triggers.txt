@@ -31,6 +31,19 @@ un_dues_is_withholding = {
 	has_variable = un_dues_withheld
 }
 
+# The scoped member pays its dues: this month's weekly figure is cached, it is
+# assessed its own (un_dues_self_assessed, so a member), it is not withholding,
+# and the UN assesses any. The gate of un_dues_modifier's declaration on
+# je_united_nations, which the engine re-reads about every four days; every
+# way out also removes the cache (un_dues_stop_paying).
+# Scope: country
+un_dues_in_force = {
+	has_variable = un_dues_cached
+	un_dues_self_assessed = yes
+	NOT = { un_dues_is_withholding = yes }
+	un_dues_assessed = yes
+}
+
 # Article 19: the scoped member has been in arrears long enough to lose its
 # vote. It casts no ballot, tables no resolution and is not counted in the
 # two-thirds supermajority until it pays (un_pay_dues_button).

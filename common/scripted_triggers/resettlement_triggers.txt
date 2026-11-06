@@ -181,7 +181,7 @@ resettlement_valid_source = {
 # Country scope. Party to the Universal Declaration of Human Rights (read as
 # un_human_rights_signatories does).
 resettlement_is_declaration_party = {
-	je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+	has_variable = un_human_rights_declaration_modifier_on
 }
 
 # Country scope. A program's political reaction has not yet faded.

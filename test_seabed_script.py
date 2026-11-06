@@ -549,7 +549,8 @@ class FeeScriptTest(unittest.TestCase):
     def test_fee_joins_royalties_under_regulation(self):
         total = strip_comments(block(read(self.UN_VALUES), "te_seabed_royalties_total_value"))
         self.assertIn("te_seabed_fee_cached", total)
-        fee = total[total.index("te_seabed_holding_fee_modifier") - 300:]
+        at = total.index("te_seabed_holding_fee_modifier")
+        fee = total[total.rindex("every_country", 0, at):]
         self.assertIn("te_seabed_regime_is_regulated = yes", fee)
         self.assertIn("te_seabed_itlos_party = yes", fee)
 

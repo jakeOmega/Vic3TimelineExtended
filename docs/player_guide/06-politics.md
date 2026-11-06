@@ -1057,7 +1057,7 @@ gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, the arable-land bonuses from
 farming breakthroughs, and under the Legislated Tax Code rule the tax code with
 its passed bills and promises (under the Light Tax Code, its rates), all carry
-over. So do UN sanctions on the nation, which return within a month. A Civil
+over. So do UN sanctions on the nation. A Civil
 Rights Movement, Human
 Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
 journal entry you already finished

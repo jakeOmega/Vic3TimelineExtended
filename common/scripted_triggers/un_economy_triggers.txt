@@ -154,6 +154,28 @@ un_dev_fund_pays_into_pool = {
 	NOT = { modifier:country_disable_investment_pool_bool = yes }
 }
 
+# The Fund pays the scoped country a grant this month (var:un_dev_fund_grant,
+# which un_dev_fund_monthly_update writes and sets to 0 when it stops), into
+# its investment pool or, where the pool can't take it, into its treasury: the
+# gates of the two grant modifiers' declarations on je_united_nations, and of
+# the chamber's lines that name them.
+# Scope: country
+un_dev_fund_grant_paid = {
+	has_global_variable = un_inst_development_fund
+	has_variable = un_dev_fund_grant
+	var:un_dev_fund_grant > 0
+}
+
+un_dev_fund_grant_into_pool = {
+	un_dev_fund_grant_paid = yes
+	un_dev_fund_pays_into_pool = yes
+}
+
+un_dev_fund_grant_into_treasury = {
+	un_dev_fund_grant_paid = yes
+	NOT = { un_dev_fund_pays_into_pool = yes }
+}
+
 # Recipients of the Fund among our subjects, bloc partners and allies, whose
 # goodwill the grants buy (and whose votes our lobbying moves the more for
 # it). Read by the AI's Development Programs scores (un_ai_values.txt). PREV,

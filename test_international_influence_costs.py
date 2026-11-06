@@ -137,14 +137,20 @@ INFLUENCE_ONLY = (
     "gp_pro_colonial_policy_modifier",
 )
 
-# Each button's `possible` asks for its tooltip's figure.
+# Each button's `possible` asks for its tooltip's figure. A stance or programme
+# asks for its cost plus what a start in the last week has committed and the
+# entry's declared cost doesn't show yet (un_influence_pending, #1404).
 BUTTON_GATES = {
     "un_found_button": "un_found_influence_cost",
-    "un_champion_order_button": "un_stance_influence_cost",
-    "un_undermine_order_button": "un_stance_influence_cost",
-    "un_peacekeeping_mission_button": "un_programme_influence_cost",
-    "un_human_rights_resolution_button": "un_programme_influence_cost",
-    "un_arms_control_button": "un_programme_influence_cost",
+    "un_champion_order_button": "un_stance_influence_gate",
+    "un_undermine_order_button": "un_stance_influence_gate",
+    "un_peacekeeping_mission_button": "un_programme_influence_gate",
+    "un_human_rights_resolution_button": "un_programme_influence_gate",
+    "un_arms_control_button": "un_programme_influence_gate",
+}
+INFLUENCE_GATES = {
+    "un_stance_influence_gate": "un_stance_influence_cost",
+    "un_programme_influence_gate": "un_programme_influence_cost",
 }
 
 # Own-motion topics by the sponsor's cost they take. Requests for help take none.
@@ -210,6 +216,15 @@ class UnGateTest(unittest.TestCase):
         for button, value in BUTTON_GATES.items():
             with self.subTest(button=button):
                 self.assertIn(f"influence >= {value}", self._possible(button))
+
+    def test_each_gate_is_the_cost_plus_what_is_pending(self):
+        values = _read(UN_VALUES)
+        for gate, cost in INFLUENCE_GATES.items():
+            with self.subTest(gate=gate):
+                body = " ".join(_block(values, gate).split())
+                self.assertIn(f"value = {cost}", body)
+                self.assertIn("limit = { has_variable = un_influence_pending } "
+                              "add = var:un_influence_pending", body)
 
     def _possible(self, button):
         body = _block(self.buttons, button)

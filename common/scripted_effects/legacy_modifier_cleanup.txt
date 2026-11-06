@@ -292,62 +292,63 @@ legacy_je_modifier_cleanup_effect = {
 	# the journal entry. un_events.7 and the aid-request pledge in
 	# un_vote_apply_resolution_compliance add it to the country, so stripping it
 	# here made every aid commitment free after its first month.
-	# One-shot membership program modifiers moved to JE scope
+	# One-shot membership program modifiers, from before they moved to the entry.
+	# The ratification is the mirror now (#1404): the copy sets it and goes.
 	if = {
 		limit = { has_modifier = un_human_rights_declaration_modifier }
-		remove_modifier = un_human_rights_declaration_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+			set_variable = un_human_rights_declaration_modifier_on
 		}
+		remove_modifier = un_human_rights_declaration_modifier
 	}
 	if = {
 		limit = { has_modifier = un_nonproliferation_modifier }
-		remove_modifier = un_nonproliferation_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+			set_variable = un_nonproliferation_modifier_on
 		}
+		remove_modifier = un_nonproliferation_modifier
 	}
 	if = {
 		limit = { has_modifier = un_climate_binding_modifier }
-		remove_modifier = un_climate_binding_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+			set_variable = un_climate_binding_modifier_on
 		}
+		remove_modifier = un_climate_binding_modifier
 	}
 	if = {
 		limit = { has_modifier = un_heritage_program_modifier }
-		remove_modifier = un_heritage_program_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+			set_variable = un_heritage_program_modifier_on
 		}
+		remove_modifier = un_heritage_program_modifier
 	}
 	if = {
 		limit = { has_modifier = un_pandemic_cooperation_modifier }
-		remove_modifier = un_pandemic_cooperation_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+			set_variable = un_pandemic_cooperation_modifier_on
 		}
+		remove_modifier = un_pandemic_cooperation_modifier
 	}
 	if = {
 		limit = { has_modifier = un_refugee_program_modifier }
-		remove_modifier = un_refugee_program_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+			set_variable = un_refugee_program_modifier_on
 		}
+		remove_modifier = un_refugee_program_modifier
 	}
 	if = {
 		limit = { has_modifier = un_space_partnership_modifier }
-		remove_modifier = un_space_partnership_modifier
 		if = {
 			limit = { has_journal_entry = je_united_nations }
-			je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+			set_variable = un_space_partnership_modifier_on
 		}
+		remove_modifier = un_space_partnership_modifier
 	}
 
 	# ── Space Race (je:je_space_race_*) ──
@@ -483,6 +484,7 @@ legacy_je_modifier_cleanup_effect = {
 	legacy_scaling_strip_space_race_mars_landing = yes
 	legacy_scaling_strip_space_race_interstellar_probe = yes
 	legacy_scaling_strip_space_race_solar_colonization = yes
+	legacy_scaling_strip_united_nations = yes
 }
 
 # Country scope. The monthly strip above and je_strategic_reserve's weekly pulse.
@@ -984,4 +986,112 @@ legacy_scaling_strip_space_race_solar_colonization = {
 		if = { limit = { has_modifier = sr_module_train } remove_modifier = sr_module_train }
 		if = { limit = { has_modifier = sr_module_foundry } remove_modifier = sr_module_foundry }
 	}
+}
+
+# Country scope. The monthly strip above and je_united_nations' weekly pulse.
+legacy_scaling_strip_united_nations = {
+	# The mirrors first: the old monthly reconcile made the modifier the truth
+	# and recorded a mirror for any copy it found, so a copy an older save holds
+	# sets its mirror once, before it goes. Never clears a mirror: this runs
+	# every week and nothing adds a copy any more. The caches the values read
+	# (dues, fund, missions, seabed, the contributors' expenses) predate #1404.
+	if = { limit = { NOT = { has_variable = un_peacekeeping_contributor_modifier_on } je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } } set_variable = un_peacekeeping_contributor_modifier_on }
+	if = { limit = { NOT = { has_variable = un_peacekeeping_contributor_cost_on } je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } } set_variable = un_peacekeeping_contributor_cost_on }
+	if = { limit = { NOT = { has_variable = un_development_contributor_modifier_on } je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } } set_variable = un_development_contributor_modifier_on }
+	if = { limit = { NOT = { has_variable = un_development_contributor_cost_on } je:je_united_nations ?= { has_modifier = un_development_contributor_cost } } set_variable = un_development_contributor_cost_on }
+	if = { limit = { NOT = { has_variable = un_human_rights_champion_modifier_on } je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } } set_variable = un_human_rights_champion_modifier_on }
+	if = { limit = { NOT = { has_variable = un_arms_control_participant_modifier_on } je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } } set_variable = un_arms_control_participant_modifier_on }
+	if = { limit = { NOT = { has_variable = un_champion_order_cost_on } je:je_united_nations ?= { has_modifier = un_champion_order_cost } } set_variable = un_champion_order_cost_on }
+	if = { limit = { NOT = { has_variable = un_undermine_order_cost_on } je:je_united_nations ?= { has_modifier = un_undermine_order_cost } } set_variable = un_undermine_order_cost_on }
+	if = { limit = { NOT = { has_variable = un_human_rights_declaration_modifier_on } je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } } set_variable = un_human_rights_declaration_modifier_on }
+	if = { limit = { NOT = { has_variable = un_nonproliferation_modifier_on } je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } } set_variable = un_nonproliferation_modifier_on }
+	if = { limit = { NOT = { has_variable = un_climate_binding_modifier_on } je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } } set_variable = un_climate_binding_modifier_on }
+	if = { limit = { NOT = { has_variable = un_heritage_program_modifier_on } je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } } set_variable = un_heritage_program_modifier_on }
+	if = { limit = { NOT = { has_variable = un_pandemic_cooperation_modifier_on } je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } } set_variable = un_pandemic_cooperation_modifier_on }
+	if = { limit = { NOT = { has_variable = un_refugee_program_modifier_on } je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } } set_variable = un_refugee_program_modifier_on }
+	if = { limit = { NOT = { has_variable = un_space_partnership_modifier_on } je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } } set_variable = un_space_partnership_modifier_on }
+	# Sanctions: the regime is un_sanctions_target_on now. The old pulse re-added
+	# the modifier wherever un_sanctions_enforced_by stood without it, so that
+	# counts too (every lift path removes both variables).
+	if = {
+		limit = {
+			OR = {
+				has_modifier = un_sanctions_target_modifier
+				has_variable = un_sanctions_enforced_by
+			}
+			NOT = { has_variable = un_sanctions_target_on }
+		}
+		set_variable = un_sanctions_target_on
+	}
+	# Dues: an older save kept the weekly figure when a member stopped paying
+	# (it removed only the modifier), and the declaration would charge it again
+	# on rejoining or a restored seat until the next monthly update. Every way
+	# out removes it now (un_dues_stop_paying); a cache, not a mirror.
+	if = {
+		limit = {
+			has_variable = un_dues_cached
+			NOT = { un_dues_in_force = yes }
+		}
+		un_dues_stop_paying = yes
+	}
+	# The entry's copies.
+	je:je_united_nations ?= {
+		if = { limit = { has_modifier = un_membership_benefits_modifier } remove_modifier = un_membership_benefits_modifier }
+		if = { limit = { has_modifier = un_development_patron_modifier } remove_modifier = un_development_patron_modifier }
+		if = { limit = { has_modifier = un_peacekeeping_contributor_modifier } remove_modifier = un_peacekeeping_contributor_modifier }
+		if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
+		if = { limit = { has_modifier = un_development_contributor_modifier } remove_modifier = un_development_contributor_modifier }
+		if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
+		if = { limit = { has_modifier = un_human_rights_champion_modifier } remove_modifier = un_human_rights_champion_modifier }
+		if = { limit = { has_modifier = un_arms_control_participant_modifier } remove_modifier = un_arms_control_participant_modifier }
+		if = { limit = { has_modifier = un_champion_order_cost } remove_modifier = un_champion_order_cost }
+		if = { limit = { has_modifier = un_undermine_order_cost } remove_modifier = un_undermine_order_cost }
+		if = { limit = { has_modifier = un_human_rights_declaration_modifier } remove_modifier = un_human_rights_declaration_modifier }
+		if = { limit = { has_modifier = un_nonproliferation_modifier } remove_modifier = un_nonproliferation_modifier }
+		if = { limit = { has_modifier = un_climate_binding_modifier } remove_modifier = un_climate_binding_modifier }
+		if = { limit = { has_modifier = un_heritage_program_modifier } remove_modifier = un_heritage_program_modifier }
+		if = { limit = { has_modifier = un_pandemic_cooperation_modifier } remove_modifier = un_pandemic_cooperation_modifier }
+		if = { limit = { has_modifier = un_refugee_program_modifier } remove_modifier = un_refugee_program_modifier }
+		if = { limit = { has_modifier = un_space_partnership_modifier } remove_modifier = un_space_partnership_modifier }
+	}
+	# The nine country conventions: the mirror, then the copy goes.
+	if = { limit = { has_modifier = un_law_of_sea_modifier } set_variable = un_law_of_sea_modifier_on remove_modifier = un_law_of_sea_modifier }
+	if = { limit = { has_modifier = un_icc_member_modifier } set_variable = un_icc_member_modifier_on remove_modifier = un_icc_member_modifier }
+	if = { limit = { has_modifier = un_physical_protection_modifier } set_variable = un_physical_protection_modifier_on remove_modifier = un_physical_protection_modifier }
+	if = { limit = { has_modifier = un_narcotics_control_modifier } set_variable = un_narcotics_control_modifier_on remove_modifier = un_narcotics_control_modifier }
+	if = { limit = { has_modifier = un_cultural_diversity_modifier } set_variable = un_cultural_diversity_modifier_on remove_modifier = un_cultural_diversity_modifier }
+	if = { limit = { has_modifier = un_nuclear_ban_modifier } set_variable = un_nuclear_ban_modifier_on remove_modifier = un_nuclear_ban_modifier }
+	if = { limit = { has_modifier = un_antarctic_treaty_modifier } set_variable = un_antarctic_treaty_modifier_on remove_modifier = un_antarctic_treaty_modifier }
+	if = { limit = { has_modifier = un_asat_moratorium_modifier } set_variable = un_asat_moratorium_modifier_on remove_modifier = un_asat_moratorium_modifier }
+	if = { limit = { has_modifier = un_colony_protection_modifier } set_variable = un_colony_protection_modifier_on remove_modifier = un_colony_protection_modifier }
+	# The regime terms: a presence variable for each (the next un_regime_bump
+	# derives them again).
+	if = { limit = { has_modifier = un_regime_climate_emitter_modifier } set_variable = un_regime_climate_emitter_modifier_on remove_modifier = un_regime_climate_emitter_modifier }
+	if = { limit = { has_modifier = un_regime_climate_adaptation_modifier } set_variable = un_regime_climate_adaptation_modifier_on remove_modifier = un_regime_climate_adaptation_modifier }
+	if = { limit = { has_modifier = un_regime_npt_inspection_modifier } set_variable = un_regime_npt_inspection_modifier_on remove_modifier = un_regime_npt_inspection_modifier }
+	if = { limit = { has_modifier = un_regime_npt_guarantee_modifier } set_variable = un_regime_npt_guarantee_modifier_on remove_modifier = un_regime_npt_guarantee_modifier }
+	if = { limit = { has_modifier = un_regime_naval_curb_modifier } set_variable = un_regime_naval_curb_modifier_on remove_modifier = un_regime_naval_curb_modifier }
+	if = { limit = { has_modifier = un_regime_rights_violator_modifier } set_variable = un_regime_rights_violator_modifier_on remove_modifier = un_regime_rights_violator_modifier }
+	if = { limit = { has_modifier = un_regime_colonial_pressure_modifier } set_variable = un_regime_colonial_pressure_modifier_on remove_modifier = un_regime_colonial_pressure_modifier }
+	if = { limit = { has_modifier = un_regime_colony_liberty_modifier } set_variable = un_regime_colony_liberty_modifier_on remove_modifier = un_regime_colony_liberty_modifier }
+	if = { limit = { has_modifier = un_regime_refugee_host_modifier } set_variable = un_regime_refugee_host_modifier_on remove_modifier = un_regime_refugee_host_modifier }
+	if = { limit = { has_modifier = un_regime_refugee_source_modifier } set_variable = un_regime_refugee_source_modifier_on remove_modifier = un_regime_refugee_source_modifier }
+	if = { limit = { has_modifier = un_regime_space_leader_modifier } set_variable = un_regime_space_leader_modifier_on remove_modifier = un_regime_space_leader_modifier }
+	if = { limit = { has_modifier = un_regime_space_laggard_modifier } set_variable = un_regime_space_laggard_modifier_on remove_modifier = un_regime_space_laggard_modifier }
+	if = { limit = { has_modifier = un_regime_space_weapon_modifier } set_variable = un_regime_space_weapon_modifier_on remove_modifier = un_regime_space_weapon_modifier }
+	if = { limit = { has_modifier = un_regime_heritage_site_modifier } set_variable = un_regime_heritage_site_modifier_on remove_modifier = un_regime_heritage_site_modifier }
+	if = { limit = { has_modifier = un_regime_cultural_hegemon_modifier } set_variable = un_regime_cultural_hegemon_modifier_on remove_modifier = un_regime_cultural_hegemon_modifier }
+	if = { limit = { has_modifier = un_regime_antarctic_station_modifier } set_variable = un_regime_antarctic_station_modifier_on remove_modifier = un_regime_antarctic_station_modifier }
+	if = { limit = { has_modifier = un_regime_shared_intelligence_modifier } set_variable = un_regime_shared_intelligence_modifier_on remove_modifier = un_regime_shared_intelligence_modifier }
+	# The rest sat on the country and read caches the sync still writes.
+	if = { limit = { has_modifier = un_sanctions_target_modifier } remove_modifier = un_sanctions_target_modifier }
+	if = { limit = { has_modifier = un_arms_embargo_target_modifier } remove_modifier = un_arms_embargo_target_modifier }
+	if = { limit = { has_modifier = un_arms_embargo_voluntary_modifier } remove_modifier = un_arms_embargo_voluntary_modifier }
+	if = { limit = { has_modifier = un_dues_modifier } remove_modifier = un_dues_modifier }
+	if = { limit = { has_modifier = un_dev_fund_pool_grant_modifier } remove_modifier = un_dev_fund_pool_grant_modifier }
+	if = { limit = { has_modifier = un_dev_fund_treasury_grant_modifier } remove_modifier = un_dev_fund_treasury_grant_modifier }
+	if = { limit = { has_modifier = un_mission_service_cost } remove_modifier = un_mission_service_cost }
+	if = { limit = { has_modifier = un_electoral_observers_modifier } remove_modifier = un_electoral_observers_modifier }
+	if = { limit = { has_modifier = un_mandate_war_support_modifier } remove_modifier = un_mandate_war_support_modifier }
+	if = { limit = { has_modifier = te_seabed_royalty_modifier } remove_modifier = te_seabed_royalty_modifier }
 }

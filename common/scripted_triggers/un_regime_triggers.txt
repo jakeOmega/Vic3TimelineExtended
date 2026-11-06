@@ -254,55 +254,51 @@ un_regime_any_convention = {
 # Scope: country
 un_regime_has_terms = {
 	OR = {
-		has_modifier = un_regime_climate_emitter_modifier
-		has_modifier = un_regime_climate_adaptation_modifier
-		has_modifier = un_regime_npt_inspection_modifier
-		has_modifier = un_regime_npt_guarantee_modifier
-		has_modifier = un_regime_naval_curb_modifier
-		has_modifier = un_regime_rights_violator_modifier
-		has_modifier = un_regime_colonial_pressure_modifier
-		has_modifier = un_regime_refugee_host_modifier
-		has_modifier = un_regime_refugee_source_modifier
-		has_modifier = un_regime_space_leader_modifier
-		has_modifier = un_regime_space_laggard_modifier
-		has_modifier = un_regime_space_weapon_modifier
-		has_modifier = un_regime_heritage_site_modifier
-		has_modifier = un_regime_cultural_hegemon_modifier
-		has_modifier = un_regime_antarctic_station_modifier
-		has_modifier = un_regime_shared_intelligence_modifier
-		has_modifier = un_regime_colony_liberty_modifier
+		has_variable = un_regime_climate_emitter_modifier_on
+		has_variable = un_regime_climate_adaptation_modifier_on
+		has_variable = un_regime_npt_inspection_modifier_on
+		has_variable = un_regime_npt_guarantee_modifier_on
+		has_variable = un_regime_naval_curb_modifier_on
+		has_variable = un_regime_rights_violator_modifier_on
+		has_variable = un_regime_colonial_pressure_modifier_on
+		has_variable = un_regime_refugee_host_modifier_on
+		has_variable = un_regime_refugee_source_modifier_on
+		has_variable = un_regime_space_leader_modifier_on
+		has_variable = un_regime_space_laggard_modifier_on
+		has_variable = un_regime_space_weapon_modifier_on
+		has_variable = un_regime_heritage_site_modifier_on
+		has_variable = un_regime_cultural_hegemon_modifier_on
+		has_variable = un_regime_antarctic_station_modifier_on
+		has_variable = un_regime_shared_intelligence_modifier_on
+		has_variable = un_regime_colony_liberty_modifier_on
 	}
 }
 
 # The scoped country carries something the enforcement footnote under Our
-# Obligations describes: a convention's member modifier (on the journal entry
-# or the country, as un_regime_reapply_conventions has them), decolonization's
+# Obligations describes: a convention it is party to (its mirror, which the
+# entry's declaration of the member modifier reads), decolonization's
 # pressure on a colonial power, or its reach into a member colony. Display
 # only (un_chamber_regime_lines).
 # Scope: country
 un_chamber_party_to_a_convention = {
 	OR = {
-		je:je_united_nations ?= {
-			OR = {
-				has_modifier = un_human_rights_declaration_modifier
-				has_modifier = un_nonproliferation_modifier
-				has_modifier = un_climate_binding_modifier
-				has_modifier = un_heritage_program_modifier
-				has_modifier = un_pandemic_cooperation_modifier
-				has_modifier = un_refugee_program_modifier
-				has_modifier = un_space_partnership_modifier
-			}
-		}
-		has_modifier = un_law_of_sea_modifier
-		has_modifier = un_icc_member_modifier
-		has_modifier = un_physical_protection_modifier
-		has_modifier = un_narcotics_control_modifier
-		has_modifier = un_cultural_diversity_modifier
-		has_modifier = un_nuclear_ban_modifier
-		has_modifier = un_antarctic_treaty_modifier
-		has_modifier = un_asat_moratorium_modifier
-		has_modifier = un_colony_protection_modifier
-		has_modifier = un_regime_colonial_pressure_modifier
-		has_modifier = un_regime_colony_liberty_modifier
+		has_variable = un_human_rights_declaration_modifier_on
+		has_variable = un_nonproliferation_modifier_on
+		has_variable = un_climate_binding_modifier_on
+		has_variable = un_heritage_program_modifier_on
+		has_variable = un_pandemic_cooperation_modifier_on
+		has_variable = un_refugee_program_modifier_on
+		has_variable = un_space_partnership_modifier_on
+		has_variable = un_law_of_sea_modifier_on
+		has_variable = un_icc_member_modifier_on
+		has_variable = un_physical_protection_modifier_on
+		has_variable = un_narcotics_control_modifier_on
+		has_variable = un_cultural_diversity_modifier_on
+		has_variable = un_nuclear_ban_modifier_on
+		has_variable = un_antarctic_treaty_modifier_on
+		has_variable = un_asat_moratorium_modifier_on
+		has_variable = un_colony_protection_modifier_on
+		has_variable = un_regime_colonial_pressure_modifier_on
+		has_variable = un_regime_colony_liberty_modifier_on
 	}
 }

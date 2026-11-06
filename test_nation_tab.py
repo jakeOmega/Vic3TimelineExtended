@@ -498,9 +498,12 @@ class TypeRowsTest(unittest.TestCase):
         # fewer since Colonial Empire's programmes moved onto their entry as
         # scaling modifiers (#1404), which the tab doesn't list; three types
         # and five rows (the five taxes' types, which only the light relief
-        # fed) fewer since the light tax code's relief did the same (#1404)
-        self.assertGreaterEqual(len(self.carried), 145)
-        self.assertGreaterEqual(len(self._rows()), 106)
+        # fed) fewer since the light tax code's relief did the same (#1404);
+        # 29 types and 21 rows fewer since the UN's conventions, regime terms,
+        # embargoes and programmes moved onto its entry as scaling modifiers
+        # (#1404), the only modifiers that carried them
+        self.assertGreaterEqual(len(self.carried), 116)
+        self.assertGreaterEqual(len(self._rows()), 85)
         self.assertIn("state_arable_land_mult", self.carried)
         self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
                         <= set(self.carried["state_arable_land_mult"]))

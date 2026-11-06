@@ -3922,8 +3922,8 @@ un_development_contributor_modifier = {
 # What the World Development Fund's recipients remember of a contributor's
 # money: added with multiplier = root.var:un_dev_fund_patron, which moves a
 # twelfth of the way each month toward the contribution's benefit factor
-# (un_dev_fund_patron_pulse, un_economy_effects.txt), and is derived from that
-# variable every month rather than mirrored. Members the Fund pays are more
+# (un_dev_fund_patron_pulse, un_economy_effects.txt), at which
+# je_united_nations declares it. Members the Fund pays are more
 # receptive to the contributor's lobbying.
 un_development_patron_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -4076,10 +4076,11 @@ un_mandate_war_support_modifier = {
 }
 
 # ---- UN redesign phase 5: convention regimes (un_regime_effects.txt) ----
-# Each is a unit value applied with multiplier = un_enforcement (E) by
-# un_regime_refresh_country, the single refresh site, except the climate
-# adaptation aid (x temperature anomaly x E) and shared intelligence (x the
-# steps above Established: 1 at Strong, 2 at Supranational).
+# Each is a unit value, declared by je_united_nations at un_enforcement (E)
+# while the presence variable un_regime_refresh_country sets (the single
+# refresh site) is held, except the climate adaptation aid (x temperature
+# anomaly x E) and shared intelligence (x the steps above Established: 1 at
+# Strong, 2 at Supranational).
 # Climate, a high emitter: the binding cut, paid in heavy-industry output.
 un_regime_climate_emitter_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
@@ -4538,9 +4539,9 @@ un_mission_service_cost = {
 }
 
 # Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
-# the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
-# dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
-# refresh site; removed while the member withholds.
+# the UN's tier. Declared on je_united_nations at var:un_dues_cached (the
+# weekly dues, un_dues_weekly_value, cached by un_dues_country_monthly_update)
+# while the member pays (un_dues_in_force); 0 while it withholds.
 un_dues_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

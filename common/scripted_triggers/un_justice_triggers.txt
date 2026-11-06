@@ -147,6 +147,21 @@ un_arms_embargo_in_force = {
 	has_variable = un_arms_embargo_months
 }
 
+# Which: je_united_nations declares un_arms_embargo_voluntary_modifier or
+# un_arms_embargo_target_modifier at E from these (#1404). A record without
+# its form is the full embargo, as the old monthly re-apply had it.
+# Scope: country
+un_arms_embargo_voluntary_in_force = {
+	has_variable = un_arms_embargo_months
+	has_variable = un_arms_embargo_form
+	var:un_arms_embargo_form = 2
+}
+
+un_arms_embargo_full_in_force = {
+	has_variable = un_arms_embargo_months
+	NOT = { un_arms_embargo_voluntary_in_force = yes }
+}
+
 # A country ROOT could name: not itself, its subject, its overlord or its
 # ally, not a decentralized people, its record gives grounds (case 40), it is
 # ROOT's rival or at war with a represented member, and no arms embargo is
@@ -257,13 +272,13 @@ un_credentials_can_table = {
 # voluntary measures a veto leaves, which lapse in five years by themselves.
 # Scope: country
 un_sanctions_regime_on = {
-	has_modifier = un_sanctions_target_modifier
+	has_variable = un_sanctions_target_on
 }
 
 # The regime on the scoped country names an enforcer that no longer enforces
 # it: the enforcer left the UN (un_membership_end_effect drops its modifier),
 # ceased to exist, or won or lost a revolution (the winner inherits no
-# modifiers). A regime from a save made before the target recorded its
+# modifiers, and un_sanctions_enforcer_modifier is one). A regime from a save made before the target recorded its
 # enforcer names nobody and is not orphaned by this test: nothing tells
 # whether its enforcer still stands.
 # Scope: country

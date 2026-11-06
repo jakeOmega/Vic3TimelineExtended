@@ -259,10 +259,24 @@ class HandTypedFiguresTest(unittest.TestCase):
 
 class DerivedStateTest(unittest.TestCase):
     """A revolution's winner keeps variables and the conventions' mirrors, not
-    modifiers: each modifier here is rebuilt from them, in one file."""
+    modifiers: each modifier here is rebuilt from them, in one file. The seabed
+    royalty is declared on je_united_nations (test_un_scaling_modifiers.py):
+    only its cache is written, here."""
 
-    DERIVED = ("te_seabed_royalty_modifier", "te_antarctic_station_modifier",
-               "te_antarctic_station_upkeep", "un_antarctic_policy_modifier")
+    DERIVED = ("te_antarctic_station_modifier", "te_antarctic_station_upkeep", "un_antarctic_policy_modifier")
+
+    def test_the_royalty_cache_has_one_writer(self):
+        writers = set()
+        for top in ("common", "events"):
+            for root, _dirs, files in os.walk(_path(top)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        path = os.path.join(root, name)
+                        with open(path, encoding="utf-8-sig") as f:
+                            if re.search(r"set_variable\s*=\s*\{\s*name\s*=\s*te_seabed_royalty_cached\b",
+                                         _strip(f.read())):
+                                writers.add(os.path.relpath(path, REPO))
+        self.assertEqual(writers, {os.path.join("common", "scripted_effects", "te_global_commons_un_effects.txt")})
 
     def test_each_derived_modifier_has_one_writer_file(self):
         writers = {m: set() for m in self.DERIVED}

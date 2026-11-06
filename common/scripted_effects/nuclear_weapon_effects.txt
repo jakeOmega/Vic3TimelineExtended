@@ -105,7 +105,7 @@ nuclear_program_weekly_progress = {
 			if = {
 				limit = {
 					un_propose_npt_in_force = yes
-					NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+					NOT = { has_variable = un_nonproliferation_modifier_on }
 				}
 				set_variable = un_npt_built_outside
 			}

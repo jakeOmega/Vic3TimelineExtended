@@ -54,6 +54,9 @@
 #   what we're agreeing to before we commit. show_as_tooltip renders the
 #   add_modifier without executing — the actual application happens later in
 #   un_vote.3 option A via un_vote_apply_treaty_modifier.
+#
+# Every convention's member modifier is declared on je_united_nations while
+# its mirror is set (#1404), so each previews there, at the enforcement.
 un_vote_cast_yes = {
 	if = {
 		limit = { un_vote_can_cast_ballot = yes }
@@ -104,39 +107,39 @@ un_vote_cast_yes = {
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
-				add_modifier = { name = un_law_of_sea_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_law_of_sea_modifier multiplier = un_convention_multiplier } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
-				add_modifier = { name = un_physical_protection_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_physical_protection_modifier multiplier = un_convention_multiplier } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
-				add_modifier = { name = un_narcotics_control_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_narcotics_control_modifier multiplier = un_convention_multiplier } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_antarctic } }
-				add_modifier = { name = un_antarctic_treaty_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_antarctic_treaty_modifier multiplier = un_convention_multiplier } }
 				custom_tooltip = un_antarctic_terms_tt
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_asat } }
-				add_modifier = { name = un_asat_moratorium_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_asat_moratorium_modifier multiplier = un_convention_multiplier } }
 				custom_tooltip = un_asat_terms_tt
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
-				add_modifier = { name = un_colony_protection_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_colony_protection_modifier multiplier = un_convention_multiplier } }
 				custom_tooltip = un_colony_protection_terms_tt
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
-				add_modifier = { name = un_cultural_diversity_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_cultural_diversity_modifier multiplier = un_convention_multiplier } }
 				un_cultural_diversity_terms_tt = yes
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
-				add_modifier = { name = un_nuclear_ban_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_nuclear_ban_modifier multiplier = un_convention_multiplier } }
 				un_nuclear_ban_terms_tt = yes
 			}
 			if = {
@@ -144,7 +147,7 @@ un_vote_cast_yes = {
 					scope:un_resolution ?= { has_tag = un_topic_icc }
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
-				add_modifier = { name = un_icc_member_modifier multiplier = un_convention_multiplier }
+				je:je_united_nations ?= { add_modifier = { name = un_icc_member_modifier multiplier = un_convention_multiplier } }
 			}
 		}
 

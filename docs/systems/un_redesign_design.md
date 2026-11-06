@@ -1283,30 +1283,45 @@ credit, its conventions, and its terms under the regimes.
 
 ### The contract
 
-- **Every UN state modifier has a mirror variable, `<modifier>_on`. The variable is the truth,
-  and the modifier is rebuilt from it.**
-- Mirrored on the journal entry: membership, founding member, headquarters, the Security Council
-  seat, the permanent seat, the six programmes and stances, the two programme costs, and the
-  seven convention modifiers. Mirrored on the country: the law of the sea, the ICC and the physical
-  protection of nuclear material (#474).
-- Not mirrored, because the monthly pulse derives them: the privileges and benefits, NPT
-  enforcement, both pariah modifiers, the standing tier, the dues and every `un_regime_*`
-  modifier.
-- **Every write goes through a helper** in `common/scripted_effects/un_state_effects.txt`
-  (`un_state_on`/`_off`, `un_convention_on`, `un_convention_country_on`,
-  `un_state_country_off`). `un_state_on` and `un_convention_on` record the mirror only where
-  the entry exists, so the modifier was really added. A country that signs the charter before
-  its entry is active therefore stays outside, as before (see Known roughnesses). The
-  removals are guarded: `remove_modifier` on a modifier the scope does not hold logs an error
-  (#469), and the suspension strip runs every month. Two kinds of site write the modifier
-  themselves and call
-  `un_state_record`/`un_state_forget` beside it:
-  - the programme buttons, because `gen_un_button_descs.py` reads their literal modifier
-    lines;
-  - the two programme costs, because their multiplier reads the caller's root.
-- `test_un_state_mirror.py` fails on any add or remove of a mirrored modifier whose statement
-  list lacks its mirror write. A new UN state modifier needs a helper call, a line in each list
-  in `un_state_effects.txt` and `un_state_triggers.txt`, and a line in the test's table.
+- **Every UN state modifier has a mirror variable, `<modifier>_on`. The variable is the truth.**
+  Since 1.15 (#1404) there are two kinds:
+  - **Rebuilt:** the modifier is added beside its mirror and rebuilt from it. Membership,
+    founding member, headquarters, the Security Council seat and the permanent seat, all on the
+    journal entry.
+  - **Declared:** `je_united_nations` declares the modifier (`scaling_modifiers_while_active`)
+    while the mirror is set, so the variable is all there is. Nothing adds, removes, restores or
+    reconciles it, its readers test the mirror, and a revolution's winner keeps it by
+    construction. A loyalist winner would keep the rebels' as well, so an uprising may not
+    join or found the UN (the Join and Found buttons, the charter's invitation, a treaty's
+    enrolment, `un_events.10` and a founding conference's top power test
+    `is_revolutionary = no`). The six programmes and stances, the two programme costs, and the sixteen
+    convention modifiers, at the UN's enforcement. Nine of them sat on the country before
+    1.15 (the law of the sea, the ICC and the physical protection of nuclear material from
+    #474, then six more); all sit on the entry now.
+- Not mirrored, because the monthly pulse derives them: the privileges, NPT enforcement, both
+  pariah modifiers and the standing tier. Declared from variables of their own: the benefits, the
+  dues, the Development Fund's patron and grants, the missions' cost and observers, the mandate's
+  war support, the seabed royalty, every `un_regime_*` term (a presence variable that
+  `un_regime_refresh_country` sets once an epoch), both arms embargoes and the sanctions regime
+  (`un_sanctions_target_on`).
+- **Every write of a rebuilt modifier goes through a helper** in
+  `common/scripted_effects/un_state_effects.txt` (`un_state_on`/`_off`). `un_state_on` records
+  the mirror only where the entry exists, so the modifier was really added. A country that signs
+  the charter before its entry is active therefore stays outside, as before (see Known
+  roughnesses). The removals are guarded: `remove_modifier` on a modifier the scope does not
+  hold logs an error (#469), and the suspension strip runs every month.
+- **A declared mirror is written by its variable's name**, since no effect may be handed a
+  declared modifier's name (`test_journal_entry_shape.py`): `un_mirror_set`/`un_mirror_clear`
+  (`MIRROR = <modifier>_on`), `un_convention_on` (`CONVENTION = <stem>`, which previews the
+  modifier), and `un_programmes_end` / `un_conventions_end`, which end them all. A start
+  previews its modifier with `show_as_tooltip`, and a programme or stance commits its influence
+  for a week (`un_influence_pending`), which the influence gates count until the declared cost
+  reaches the country.
+- `test_un_state_mirror.py` fails on any add or remove of a mirrored or declared modifier whose
+  statement list lacks its mirror write, and on any declared modifier the rebuild machinery
+  names. A new rebuilt modifier needs a helper call, a line in each list in
+  `un_state_effects.txt` and `un_state_triggers.txt`, and a line in the test's table; a new
+  declared one needs a declaration, the `_on` helpers and a line in `test_un_scaling_modifiers.py`.
 
 ### When the entry is rebuilt
 
@@ -1351,18 +1366,18 @@ credit, its conventions, and its terms under the regimes.
 
 ### What the restore brings back, and what the heal forgets
 
-- Membership, founding status and conventions come back for any member. A suspended member
-  keeps them (§0.8).
+- Membership and founding status come back for any member. A suspended member keeps them
+  (§0.8), as it keeps its conventions, which are declared from their mirrors.
 - The headquarters comes back only while we are the host.
-- The permanent seat, the Council seat and the programmes come back only while we conduct our
-  own foreign policy, as `un_representation_monthly_update` would strip them otherwise. The seat
-  also needs `un_permanent_seat_count` ≤ 5, counting our own mirror.
+- The permanent seat and the Council seat come back only while we conduct our own foreign
+  policy, as `un_representation_monthly_update` would strip them otherwise. The seat also needs
+  `un_permanent_seat_count` ≤ 5, counting our own mirror. The programmes are declared from their
+  mirrors, and the heal ends them (`un_programmes_end`) where we no longer conduct it.
 - Championing and undermining exclude each other. If a merge delivers both mirrors, the
-  nation's championing is kept.
-- The programme costs are re-added from a fresh expense figure, as their buttons add them.
-- `un_regime_stamp` is removed, so the next ordinary pulse re-reads our regime terms. Those are
-  country modifiers, and the merge dropped them too. Without this they would wait for the next
-  epoch.
+  nation's championing is kept (`un_undermines_the_order`, and the heal drops the other mirror).
+- `un_regime_stamp` is removed, so the next ordinary pulse re-reads our regime terms. The winner
+  inherits the loser's presence variables, which describe the loser; without this they would
+  wait for the next epoch.
 - The restore never forgets. At the pulse heal, a mirror the rebuild still cannot honour is
   forgotten, never forced.
 - **No rejoining in the gap.** The Join button, `un_events.10` option E and the charter
@@ -2248,9 +2263,8 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
    Established a full deployment. The state-mission forms wait for phase 6.
 10. **Mandates by tier:** from Strong the holder of a bound mandate carries
     `un_mandate_war_support_modifier` (war support lost to casualties and defeats −15% × E),
-    removed and re-added every month from the country pulse (`un_teeth_mandate_support_refresh`
-    in `un_events_on_action`), so a tier change reaches it, and from a country ROOT, which the
-    multiplier slot needs. **Not built:** "cannot be contested by members" at Supranational.
+    declared by `je_united_nations` at E while `un_teeth_mandate_support_applies` holds (#1404;
+    it was re-added every month until 1.15), so a tier change reaches it within days. **Not built:** "cannot be contested by members" at Supranational.
 11. **Veto restraint (Charter Reform II):** §4.1 names the reform but not the rule. Ruling: once
     the charter carries Reform II, a simple-majority topic that a veto would have downgraded or
     blocked carries in full when it also has a two-thirds supermajority of the members with a
@@ -2272,13 +2286,16 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
     exists before there is a treaty to be outside of. An AI threshold state at Supranational
     refuses ratification a quarter as often.
 14. **Convention regimes (§5.3):**
-    - Every convention's member modifier is applied with `multiplier = un_convention_multiplier`:
-      E, but never below 0.01, so ×0.01 at Moribund and ×2.5 at Supranational. Holding the
-      member modifier **is** having ratified (the terms, the court's reach and the lean read
-      it), and nothing guarantees a ×0 modifier is kept, so a Moribund spell leaves the
-      conventions dormant rather than risk every ratification (review fix).
+    - Every convention's member modifier is declared by `je_united_nations` at
+      `un_convention_multiplier`, E: ×0 at Moribund (off) and ×2.5 at Supranational. The mirror
+      `<modifier>_on` **is** the ratification (the terms, the court's reach and the lean read
+      it), so a Moribund spell takes the modifiers off and keeps every ratification. Until 1.15
+      the modifier was the ratification, and the multiplier floored at ×0.01 so a ×0 copy could
+      not be lost (#1404).
     - Each convention names a winner or a loser (`un_regime_*_modifier`, × E); the table is at
-      the top of `un_regime_values.txt`.
+      the top of `un_regime_values.txt`. The refresh decides the terms and sets a presence
+      variable per term; the entry declares each modifier from it, at its multiplier read live
+      (#1404).
     - **Ratification binds (reconciled with PR #422):** the terms reach only members that carry
       the convention's member modifier. A member that chose "Refuse to ratify it" stays outside
       the convention: no benefit and no cost. The decolonisation declaration is a decision, not
