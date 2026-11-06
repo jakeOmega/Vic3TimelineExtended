@@ -41,7 +41,12 @@ te_debug_un_setup = {
 # Scope: country
 te_debug_un_seat_member = {
 	if = {
-		limit = { NOT = { has_journal_entry = je_united_nations } }
+		# The rule too: with it off the entry's inactive record is pruned
+		# (disable_evaluation), so nothing would refuse the add.
+		limit = {
+			has_game_rule = united_nations_enabled
+			NOT = { has_journal_entry = je_united_nations }
+		}
 		add_journal_entry = { type = je_united_nations }
 	}
 	# Through the mirror helpers (un_state_effects.txt), so the seat count

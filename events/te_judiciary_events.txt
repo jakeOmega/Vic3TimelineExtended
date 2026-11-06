@@ -697,8 +697,9 @@ te_judiciary_events.22 = {
 # ======================================================================
 #  PHASE 4: LANDMARK CASES (spec § 14.3)
 #  Each is keyed to game state, never to a date or a tag, and comes once
-#  per country (te_jud_heard_<case>, a variable, so a revolution's winner
-#  doesn't hear it again). Rolled yearly from te_jud_landmark_* in
+#  per country (fire_only_once; whether a revolution's winner keeps the
+#  engine's fire record is the C20 canary's question, and saves from before
+#  the change still read the old te_jud_heard_<case> variables). Rolled yearly from te_jud_landmark_* in
 #  te_judiciary_on_actions.txt; the Voided Election from
 #  on_election_campaign_end and the Doctrine of Necessity a fortnight after
 #  a paper-court law is activated (te_jud_law_activated).

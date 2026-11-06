@@ -151,10 +151,11 @@ multiplier = gdp # REVIEWED 2026-10-03: deliberate probe
             self.assertIsNone(scan(changed)[0].exemption)
 
 
-def scan_je(text: str, values: str = ""):
+def scan_je(text: str, values: str = "", groups: dict[str, str] | None = None):
     nodes, comments = parse_text(text, "common/journal_entries/j.txt")
     definitions, _ = parse_text(values, "values.txt")
-    return scan_journal_entries(nodes, comments, {n.key: n for n in definitions}, COUNTRY_READS, LINKS)
+    return scan_journal_entries(nodes, comments, {n.key: n for n in definitions}, COUNTRY_READS, LINKS,
+                                groups)
 
 
 def scaling_entry(value: str, context: str = "") -> str:
@@ -176,6 +177,27 @@ class ScalingModifierTests(unittest.TestCase):
     def test_scaling_value_follows_named_values(self):
         flags = scan_je(scaling_entry("sv", "\tcontext = none\n"), "sv = { value = income }")
         self.assertEqual([(f.read, f.chain) for f in flags], [("income", ("sv",))])
+
+    def test_a_contextless_value_has_no_root_to_read(self):
+        contextless = "\tcontext = none\n"
+        self.assertEqual([f.read for f in scan_je(scaling_entry("{ owner = { value = gdp } }", contextless))],
+                         ["owner"])
+        self.assertEqual([f.read for f in scan_je(scaling_entry("var:x", contextless))], ["var:x"])
+        self.assertEqual([f.read for f in scan_je(scaling_entry("root.var:x", contextless))], ["root.var:x"])
+        self.assertEqual(scan_je(scaling_entry("global_var:x", contextless)), [])
+        self.assertEqual(scan_je(scaling_entry("{ owner = { value = gdp } add = var:x }")), [])
+
+    def test_a_contextless_group_makes_its_entries_contextless(self):
+        text = scaling_entry("{ value = gdp }", "\tgroup = g\n")
+        self.assertEqual([f.read for f in scan_je(text, groups={"g": "none"})], ["gdp"])
+        self.assertEqual(scan_je(text, groups={"g": "country"}), [])
+        overridden = scaling_entry("{ value = gdp }", "\tgroup = g\n\tcontext = country\n")
+        self.assertEqual(scan_je(overridden, groups={"g": "none"}), [])
+
+    def test_group_contexts_load_from_the_snapshot_and_the_mod(self):
+        contexts = audit_module.load_group_contexts(str(REPO))
+        self.assertEqual(contexts.get("je_group_global_international_situations"), "none")
+        self.assertTrue(contexts)
 
     def test_scaling_value_reviewed_comment_suppresses(self):
         text = scaling_entry("{ value = gdp } # REVIEWED 2026-11-06: deliberate", "\tcontext = none\n")

@@ -952,8 +952,9 @@ cultural_hegemony.9 = {
 	# "The undisputed cultural center of the world": a 25% share alone can be
 	# held by up to four countries, so the event also needs this country to
 	# be the leaderboard's #1 (ch_rank_1, set by the monthly ranking pass).
-	# The latch is set in `immediate`, so a country at 25% but not #1 keeps
-	# the milestone open and the JE pulse re-offers it once it takes the lead.
+	# fire_only_once counts only a firing, not a try whose trigger fails, so a
+	# country at 25% but not #1 keeps the milestone open and the JE pulse
+	# re-offers it once it takes the lead.
 	fire_only_once = yes
 
 	trigger = {

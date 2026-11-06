@@ -55,9 +55,11 @@ def _top_level(body: str) -> str:
         body = reduced
 
 
-def _script_files():
+def _script_files(gui: bool = False):
     for sub in ("common", "events"):
         yield from sorted((ROOT / sub).rglob("*.txt"))
+    if gui:
+        yield from sorted((ROOT / "gui").rglob("*.gui"))
 
 
 class OnceOnlyEventsTest(unittest.TestCase):
@@ -74,10 +76,11 @@ class OnceOnlyEventsTest(unittest.TestCase):
                     self.assertNotRegex(body, rf"set_variable\s*=\s*{guard}\b")
 
     def test_guard_variables_have_no_other_reader(self):
-        """The condition that made each safe to convert: nothing outside the event reads its variable."""
+        """The condition that made each safe to convert: nothing outside the event (no script, no GUI) reads its
+        variable."""
         guards = {guard: event_id for event_id, (_, guard) in ONCE_ONLY.items()}
         pattern = re.compile(r"\b(" + "|".join(map(re.escape, guards)) + r")\b")
-        for path in _script_files():
+        for path in _script_files(gui=True):
             text = strip_comments(path.read_text(encoding="utf-8-sig"))
             rel = path.relative_to(ROOT).as_posix()
             for name in set(pattern.findall(text)):

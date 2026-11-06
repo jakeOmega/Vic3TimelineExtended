@@ -16,11 +16,14 @@ Suppress on the multiplier line with # REVIEWED YYYY-MM-DD: rationale.
 the modifier with a `value` the engine re-evaluates. In a country-context entry
 the value's root is the owning country, so a country read is fine there (an
 `owner = { }` wrapper also still works: `owner` takes a country and returns it).
-A contextless entry (`context = none`) has no country, so its values are
-checked like a JE multiplier. Suppress on the `value` line.
+A contextless entry (`context = none`, its own or its group's) has no root
+scope at all, so its values are checked like a JE multiplier and, beyond that,
+for `owner`, `root` and bare `var:` reads, which have nothing to read from.
+Suppress on the `value` line.
 """
 from __future__ import annotations
 
+import json
 import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
@@ -120,11 +123,20 @@ def _scope(key: str, journal_entry: str | None, links: set[str]) -> str | None:
     return journal_entry
 
 
+def _rootless_read(bare: str) -> bool:
+    """A read that needs a root scope: none exists in a contextless entry's value."""
+    lowered = bare.lower()
+    return (lowered in {"owner", "root"} or lowered.startswith(("owner.", "root."))
+            or bare.startswith("var:"))
+
+
 def _unsafe_reads(nodes: list[Node], definitions: dict[str, Node],
                   country_triggers: set[str], links: set[str],
                   journal_entry: str | None,
-                  chain: tuple[str, ...] = ()):
-    """Yield (read, source node, reference chain); cycles terminate per path."""
+                  chain: tuple[str, ...] = (), rootless: bool = False):
+    """Yield (read, source node, reference chain); cycles terminate per path.
+    `rootless`: the value has no root scope (a contextless entry's scaling
+    modifier), so owner, root and var: reads are unsafe too."""
     def inspect(token: str | None, node: Node):
         if token is None:
             return
@@ -132,7 +144,8 @@ def _unsafe_reads(nodes: list[Node], definitions: dict[str, Node],
         # c:TAG.income, var:X, global_var:X, ...) are not bare country reads.
         bare = token.removeprefix("this.").removeprefix("THIS.")
         if journal_entry and (bare in country_triggers
-                              or bare.startswith("modifier:country_")):
+                              or bare.startswith("modifier:country_")
+                              or (rootless and _rootless_read(bare))):
             yield token, node, chain
         elif bare in definitions and bare not in chain:
             definition = definitions[bare]
@@ -141,7 +154,7 @@ def _unsafe_reads(nodes: list[Node], definitions: dict[str, Node],
             )]
             yield from _unsafe_reads(
                 body, definitions, country_triggers,
-                links, journal_entry, chain + (bare,),
+                links, journal_entry, chain + (bare,), rootless,
             )
 
     for node in nodes:
@@ -151,7 +164,7 @@ def _unsafe_reads(nodes: list[Node], definitions: dict[str, Node],
             # scope. The trigger key itself can be a country-only read.
             yield from inspect(node.key, node)
             yield from _unsafe_reads(node.children, definitions, country_triggers,
-                                     links, scope, chain)
+                                     links, scope, chain, rootless)
         else:
             yield from inspect(node.key, node)
             yield from inspect(node.value, node)
@@ -183,20 +196,45 @@ def scan_nodes(nodes: list[Node], comments: dict[int, str],
     return flags
 
 
+def load_group_contexts(mod_path: str) -> dict[str, str]:
+    """Journal entry group → its `context`: vanilla's (from the committed
+    snapshot, when present), then the mod's over it."""
+    root = Path(mod_path)
+    contexts: dict[str, str] = {}
+    snapshot = root / "vanilla_parsed/common/journal_entry_groups.json"
+    if snapshot.exists():
+        for name, entry in json.loads(snapshot.read_text(encoding="utf-8")).items():
+            body = entry[1] if isinstance(entry, list) and len(entry) == 2 else entry
+            context = body.get("context") if isinstance(body, dict) else None
+            if isinstance(context, list) and len(context) == 2:
+                contexts[name] = context[1]
+    for path in sorted((root / "common/journal_entry_groups").glob("*.txt")):
+        for group in parse_text(path.read_text(encoding="utf-8-sig"), path.name)[0]:
+            context = next((n.value for n in group.children if n.key == "context"), None)
+            if context:
+                contexts[group.key.split(":", 1)[-1]] = context
+    return contexts
+
+
 def scan_journal_entries(nodes: list[Node], comments: dict[int, str],
                          definitions: dict[str, Node], country_triggers: set[str],
-                         links: set[str]) -> list[Flag]:
-    """Country reads in the scaling-modifier values of contextless entries."""
+                         links: set[str],
+                         group_contexts: dict[str, str] | None = None) -> list[Flag]:
+    """Root-dependent reads in the scaling-modifier values of contextless
+    entries. An entry's own `context` overrides its group's."""
     flags: list[Flag] = []
     for entry in nodes:
-        if not any(n.key == "context" and n.value == "none" for n in entry.children):
+        own = next((n.value for n in entry.children if n.key == "context"), None)
+        group = next((n.value for n in entry.children if n.key == "group"), None)
+        context = own or (group_contexts or {}).get(group or "", "country")
+        if context != "none":
             continue
         for block in (n for n in entry.children if n.key == "scaling_modifiers_while_active"):
             modifier = next((n.value for n in block.children if n.key == "modifier"), "?")
             for value in (n for n in block.children if n.key == "value"):
                 seen = set()
                 for read, source, chain in _unsafe_reads([value], definitions, country_triggers,
-                                                         links, entry.key):
+                                                         links, entry.key, rootless=True):
                     identity = (read, source.file, source.line, chain)
                     if identity in seen:
                         continue
@@ -216,6 +254,7 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
     root = Path(mod_path)
     country_triggers = load_country_triggers(mod_path)
     links = load_links(mod_path) | {"owner"}
+    group_contexts = load_group_contexts(mod_path)
     files = sorted(p for sub in ("common", "events") for p in (root / sub).rglob("*.txt"))
     parsed = []
     definitions: dict[str, Node] = {}
@@ -235,7 +274,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
     for nodes, comments, is_entry in parsed:
         flags.extend(scan_nodes(nodes, comments, definitions, country_triggers, links))
         if is_entry:
-            flags.extend(scan_journal_entries(nodes, comments, definitions, country_triggers, links))
+            flags.extend(scan_journal_entries(nodes, comments, definitions, country_triggers, links,
+                                              group_contexts))
     return AuditResult(flags, len(files))
 
 

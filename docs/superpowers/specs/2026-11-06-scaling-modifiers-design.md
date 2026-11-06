@@ -110,10 +110,12 @@ technology), the five vanilla entries the mod copies (vanilla gives none of
 them a prune), and the Map Room's (map modes are out of scope).
 
 Side effect: with the record gone, `add_journal_entry` of the type is no
-longer refused (#1416). Every add site of these types is already behind the
-same rule (`gm_system_enabled`, `te_banking_entry_expected`, `has_game_rule = nuclear_weapons_enabled`,
-`sr_space_race_on`, `ce_reentry_due`'s `decolonization_enabled`), so nothing adds
-them with the rule off.
+longer refused (#1416). So every add site of these types reads the same rule in
+its own `limit` (`gm_system_enabled`, `te_banking_entry_expected`,
+`has_game_rule = nuclear_weapons_enabled`, `sr_space_race_on`, `ce_reentry_due`'s
+`decolonization_enabled`, `has_game_rule = united_nations_enabled`); two did not
+until PR 1, the commission offer's add (`gm_com_send_offer`) and the UN debug
+seat (`te_debug_un_seat_member`).
 
 **Test:** every `disable_evaluation` in a mod entry is `always = yes` or a
 `NOT` of rule tests, and each rule test it names is a top-level conjunct of the
@@ -175,15 +177,18 @@ Fallback on the play-test list: put the variables back.
   and returns it, `event_targets.log`), so the mod's `*_for_je` wrappers keep
   reading correctly, and each conversion calls the bare value and deletes the
   wrapper once nothing else calls it. In a contextless entry (`context = none`)
-  it flags country reads, as it does for `je:` multipliers. Suppression as
-  today, on the `value` line.
+  (its own or its group's: vanilla's `je_group_global_*`) the value has no root
+  scope at all, so it flags country reads as it does for `je:` multipliers, and
+  `owner`, `root` and bare `var:` reads too. Suppression as today, on the
+  `value` line.
 - **A scaling modifier must exist.** A test: every `modifier =` in a
   `scaling_modifiers_while_active` names a static modifier the mod or vanilla
   defines.
 - **`has_modifier` can't see one.** An audit or test fails on `has_modifier = X`
   (script or GUI `HasModifier`) for any X that a mod entry declares in
-  `scaling_modifiers_while_active`, and on an `add_modifier`/`remove_modifier`
-  of it.
+  `scaling_modifiers_while_active`, on an `add_modifier`/`remove_modifier`
+  of it, and on any other `key = X` that hands it to a helper
+  (`un_state_on = { MODIFIER = X }` adds `$MODIFIER$`).
 - **The Nation tab** (`gen_nation_tab.py`) registers modifiers script *adds*
   without a duration. A converted key is no longer added, so its registry lines
   (SECTIONS, ROWS, SOURCE_GROUPS, NOT_ON_COUNTRY) go with its conversion and the

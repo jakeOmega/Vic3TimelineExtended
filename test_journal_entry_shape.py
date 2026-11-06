@@ -242,26 +242,30 @@ def static_modifier_names() -> set[str]:
 
 
 def misuse_sites(nodes: list[Node], declared: set[str], rel: str) -> list[tuple[str, int, str, str]]:
-    """(file, line, kind, modifier) for each has_modifier, add_modifier or remove_modifier of a declared key. An
-    add inside show_as_tooltip is the option's preview (design § 4.0, rule 8); the legacy strip may test and
-    remove."""
+    """(file, line, kind, modifier) for every `key = <declared modifier>` outside its declaration: a has_modifier,
+    add_modifier or remove_modifier of it, and a helper argument that passes it on (`un_state_on = { MODIFIER = x }`,
+    whose body adds `$MODIFIER$`). Allowed: the declaration's own `modifier =`, an add inside show_as_tooltip (the
+    option's preview, design § 4.0 rule 8), and the legacy strip's tests and removals (rule 7)."""
     out: list[tuple[str, int, str, str]] = []
     legacy = rel == LEGACY_STRIP_FILE
 
-    def walk(items: list[Node], preview: bool):
+    def walk(items: list[Node], parent: str, declaration: bool, preview: bool):
         for node in items:
-            name = None
-            if node.key in ("has_modifier", "add_modifier", "remove_modifier"):
-                name = node.value if not node.children else getattr(child(node, "name"), "value", None)
-            elif node.key == "remove_modifier_if_exists_effect":
-                name = getattr(child(node, "MODIFIER"), "value", None)
-            if name in declared:
-                skip = (node.key == "add_modifier" and preview) or (legacy and node.key != "add_modifier")
-                if not skip:
-                    out.append((rel, node.line, node.key, name))
-            walk(node.children, preview or node.key == "show_as_tooltip")
+            if node.children:
+                walk(node.children, node.key, declaration or node.key == "scaling_modifiers_while_active",
+                     preview or node.key == "show_as_tooltip")
+                continue
+            if node.value not in declared or declaration:
+                continue
+            kind = parent if node.key == "name" and parent in ("add_modifier", "remove_modifier") else node.key
+            if kind == "MODIFIER" and parent == "remove_modifier_if_exists_effect":
+                kind = parent
+            adds = kind not in ("has_modifier", "remove_modifier", "remove_modifier_if_exists_effect")
+            if (preview and adds) or (legacy and not adds):
+                continue
+            out.append((rel, node.line, kind, node.value))
 
-    walk(nodes, False)
+    walk(nodes, "", False, False)
     return out
 
 
@@ -283,6 +287,12 @@ class ScalingModifierFixtureTest(unittest.TestCase):
     def test_the_legacy_strip_may_test_and_remove_but_not_add(self):
         text = "e = { if = { limit = { has_modifier = m } remove_modifier = m } add_modifier = { name = m } }"
         self.assertEqual(self.sites(text, LEGACY_STRIP_FILE), [("add_modifier", "m")])
+
+    def test_a_helper_argument_is_flagged(self):
+        self.assertEqual(self.sites("e = { un_state_on = { MODIFIER = m } }"), [("MODIFIER", "m")])
+
+    def test_the_declaration_itself_is_not_flagged(self):
+        self.assertEqual(self.sites("je_x = { scaling_modifiers_while_active = { modifier = m value = 1 } }"), [])
 
     def test_an_undeclared_key_is_not_flagged(self):
         self.assertEqual(self.sites("e = { has_modifier = other add_modifier = { name = other } }"), [])
