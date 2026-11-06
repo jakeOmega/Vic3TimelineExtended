@@ -70,6 +70,15 @@ colors = {
 	te_jmap_cause_mat = hsv360 { 338 62 84 }
 	te_jmap_cause_kill = hsv360 { 247 43 91 }
 	te_jmap_cause_war = hsv360 { 0 55 90 }
+	# Each cause's pale end, for a state where it leads with a small share (te_jmap_cause_factor, 30% to 90%): the same
+	# hue, a third of the saturation, near white.
+	te_jmap_cause_inf_pale = hsv360 { 213 25 95 }
+	te_jmap_cause_chr_pale = hsv360 { 17 27 95 }
+	te_jmap_cause_ext_pale = hsv360 { 159 28 92 }
+	te_jmap_cause_work_pale = hsv360 { 40 33 95 }
+	te_jmap_cause_mat_pale = hsv360 { 338 21 95 }
+	te_jmap_cause_kill_pale = hsv360 { 247 14 96 }
+	te_jmap_cause_war_pale = hsv360 { 0 18 96 }
 
 	# je_te_map_room, Demographics: sex balance, men per 100 women aged 20-59, diverging at 100: fewer men rose, even
 	# cream, more men blue.

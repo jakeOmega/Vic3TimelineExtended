@@ -24,6 +24,30 @@ te_jmap_selector = {
 }
 
 # ---------------------------------------------------------------------------
+# The census's figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# The runner-up cause of death's deaths over the leader's, 0-1 (te_demog_dc_second_share over te_demog_dc_lead_share):
+# the Leading Cause map stripes the runner-up's color over the leader's from 0.5, half the leader's deaths (owner,
+# 2026-11-06). 0 for a state with no deaths, or whose last count came before te_dg_dc_second was stored.
+te_jmap_cause_second_ratio = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_dc_total
+			has_variable = te_dg_dc_lead
+			has_variable = te_dg_dc_second
+		}
+		value = te_demog_dc_second_share
+		divide = {
+			value = te_demog_dc_lead_share
+			min = 0.001
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# ---------------------------------------------------------------------------
 # The systems' figures (state scope: the state being painted or hovered)
 # ---------------------------------------------------------------------------
 # The state's share of the world's greenhouse gas emissions last year, 0-1 (negative for a state that takes more out of

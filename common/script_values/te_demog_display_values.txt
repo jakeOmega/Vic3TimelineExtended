@@ -651,6 +651,43 @@ te_demog_dc_lead_share = {
 	}
 }
 
+# The next largest slice's share (te_dg_dc_second), the Map Room's Leading Cause stripes; 0 with no runner-up, and for a
+# state or country whose last count came before te_dg_dc_second was stored.
+te_demog_dc_second_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_second }
+		if = {
+			limit = { var:te_dg_dc_second = 1 }
+			value = te_demog_dc_share_inf
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 2 }
+			value = te_demog_dc_share_chr
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 3 }
+			value = te_demog_dc_share_ext
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 4 }
+			value = te_demog_dc_share_work
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 5 }
+			value = te_demog_dc_share_mat
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 7 }
+			value = te_demog_dc_share_kill
+		}
+		else_if = {
+			limit = { var:te_dg_dc_second = 8 }
+			value = te_demog_dc_share_war
+		}
+	}
+}
+
 # Births less deaths per 1,000 people last year, the overview's Natural Change (read under a stepped census's gate).
 te_demog_natural_change = {
 	value = var:te_dg_cbr
