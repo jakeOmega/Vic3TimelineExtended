@@ -697,8 +697,9 @@ te_judiciary_events.22 = {
 # ======================================================================
 #  PHASE 4: LANDMARK CASES (spec § 14.3)
 #  Each is keyed to game state, never to a date or a tag, and comes once
-#  per country (te_jud_heard_<case>, a variable, so a revolution's winner
-#  doesn't hear it again). Rolled yearly from te_jud_landmark_* in
+#  per country (fire_only_once; whether a revolution's winner keeps the
+#  engine's fire record is the C20 canary's question, and saves from before
+#  the change still read the old te_jud_heard_<case> variables). Rolled yearly from te_jud_landmark_* in
 #  te_judiciary_on_actions.txt; the Voided Election from
 #  on_election_campaign_end and the Doctrine of Necessity a fortnight after
 #  a paper-court law is activated (te_jud_law_activated).
@@ -725,7 +726,10 @@ te_judiciary_events.30 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_free_soil }
 		te_jud_court_can_strike_laws = yes
 		has_variable = te_judicial_independence
@@ -735,10 +739,6 @@ te_judiciary_events.30 = {
 			is_political_movement_type = movement_anti_slavery
 			political_movement_support >= 0.05
 		}
-	}
-
-	immediate = {
-		set_variable = te_jud_heard_free_soil
 	}
 
 	option = { # Property in persons is protected
@@ -816,7 +816,10 @@ te_judiciary_events.31 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_otsu }
 		NOT = { te_jud_paper_court = yes }
 		has_variable = te_judicial_independence
@@ -831,7 +834,6 @@ te_judiciary_events.31 = {
 	}
 
 	immediate = {
-		set_variable = te_jud_heard_otsu
 		# REVIEWED 2026-10-25 (imputed_foreign_action): the demanding power is an AI great power (is_ai), so no player is blamed for a demand it never made; the relations change follows our answer to it
 		random_country = {
 			limit = {
@@ -897,7 +899,10 @@ te_judiciary_events.32 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_freedom_of_contract }
 		has_law = law_type:law_judicial_supremacy
 		te_jud_court_can_strike_laws = yes
@@ -911,10 +916,6 @@ te_judiciary_events.32 = {
 			is_marginal = no
 			te_ap_ig_strong = yes
 		}
-	}
-
-	immediate = {
-		set_variable = te_jud_heard_freedom_of_contract
 	}
 
 	option = { # Accept the ruling
@@ -990,7 +991,10 @@ te_judiciary_events.33 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_voided_election }
 		te_jud_elected_government = yes
 		NOT = { te_jud_paper_court = yes }
@@ -999,7 +1003,6 @@ te_judiciary_events.33 = {
 	}
 
 	immediate = {
-		set_variable = te_jud_heard_voided_election
 		ordered_interest_group = {
 			limit = { is_in_government = yes }
 			order_by = ig_clout
@@ -1071,16 +1074,15 @@ te_judiciary_events.34 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_necessity }
 		has_variable = te_jud_seeded
 		te_jud_paper_court = yes
 		has_variable = te_judicial_independence
 		var:te_judicial_independence >= 30
-	}
-
-	immediate = {
-		set_variable = te_jud_heard_necessity
 	}
 
 	option = { # Necessity knows no law
@@ -1132,16 +1134,15 @@ te_judiciary_events.35 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_house_of_justice }
 		has_law = law_type:law_religious_courts
 		has_technology_researched = rationalism
 		NOT = { enacting_any_law = yes }
 		te_ap_unrest = yes
-	}
-
-	immediate = {
-		set_variable = te_jud_heard_house_of_justice
 	}
 
 	option = { # Grant a house of justice
@@ -1200,7 +1201,10 @@ te_judiciary_events.36 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
+		# A save from before fire_only_once holds this but no fire record: remove after 2026-12-31.
 		NOT = { has_variable = te_jud_heard_new_code }
 		has_law = law_type:law_religious_courts
 		has_technology_researched = rationalism
@@ -1217,7 +1221,6 @@ te_judiciary_events.36 = {
 	}
 
 	immediate = {
-		set_variable = te_jud_heard_new_code
 		active_law:lawgroup_judiciary ?= { save_scope_as = te_jud_court_law }
 		ordered_interest_group = {
 			limit = {

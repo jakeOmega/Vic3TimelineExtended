@@ -454,42 +454,7 @@ gw_top_emitters_refresh = {
 			}
 			remove_variable = gw_emitters_own_emis
 		}
-		# The five slot variables the rows read before the list (a save from
-		# before GW-11 still holds them).
-		gw_top_emitters_drop_slots = yes
 		gw_top_emitters_selfcheck = yes
-	}
-}
-
-# Scope: the viewer. The display variables the slot rows read before the list.
-gw_top_emitters_drop_slots = {
-	if = {
-		limit = { has_variable = gw_emitter_1 }
-		remove_variable = gw_emitter_1
-	}
-	if = {
-		limit = { has_variable = gw_emitter_2 }
-		remove_variable = gw_emitter_2
-	}
-	if = {
-		limit = { has_variable = gw_emitter_3 }
-		remove_variable = gw_emitter_3
-	}
-	if = {
-		limit = { has_variable = gw_emitter_4 }
-		remove_variable = gw_emitter_4
-	}
-	if = {
-		limit = { has_variable = gw_emitter_5 }
-		remove_variable = gw_emitter_5
-	}
-	if = {
-		limit = { has_variable = gw_emitters_shown }
-		remove_variable = gw_emitters_shown
-	}
-	if = {
-		limit = { has_variable = gw_emitters_own_slot }
-		remove_variable = gw_emitters_own_slot
 	}
 }
 

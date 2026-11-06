@@ -998,10 +998,6 @@ gm_tr_disp_sig_counts = {
 }
 
 # ---- Special dedications held (§5.3, §8) --------------------------------------------
-# The seeding's round for old saves (gm_sig_seed_monthly): a game seeded in an
-# earlier round runs it again.
-gm_sig_seed_rounds = { value = 1 }
-
 # Country scope. How many of each special the country holds, for the rows
 # under Opportunities Seized.
 gm_disp_sig_held_to_victory = {

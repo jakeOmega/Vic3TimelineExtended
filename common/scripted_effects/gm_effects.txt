@@ -285,8 +285,6 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_sig_first_emperor
 	b:building_grand_monument ?= {
 		remove_modifier = gm_upkeep
-		remove_modifier = gm_policy_upkeep_open
-		remove_modifier = gm_policy_upkeep_mothballed
 	}
 }
 
@@ -705,7 +703,6 @@ gm_decay_ledgers = {
 # a scripted GUI effect or a country event option. Never call it where ROOT is
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
-	gm_policy_migrate = yes
 	gm_init_ledgers = yes
 	if = {
 		limit = {
@@ -1195,8 +1192,6 @@ gm_remove_national_modifiers = {
 	remove_modifier = gm_national_industrial
 	remove_modifier = gm_national_teardown
 	remove_modifier = gm_national_vanity
-	# v2's commission reward: nothing adds it now, but a save may carry it.
-	remove_modifier = gm_national_promise
 	remove_modifier = gm_national_sig_archive
 	remove_modifier = gm_national_sig_archive_spread
 	remove_modifier = gm_national_sig_throne

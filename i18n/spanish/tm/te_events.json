@@ -20483,10 +20483,6 @@
   "en": "Where Shall We Send the Probe?",
   "es": "¿Adónde enviaremos la sonda?"
  },
- "space_race_events.82.a": {
-  "en": "A scientific outpost: knowledge is the ultimate resource.",
-  "es": "Un puesto científico: el conocimiento es el recurso supremo."
- },
  "space_race_events.82.b": {
   "en": "An industrial facility: the Moon's wealth will fuel our growth.",
   "es": "Una instalación industrial: la riqueza de la Luna impulsará nuestro crecimiento."
@@ -20494,18 +20490,6 @@
  "space_race_events.82.c": {
   "en": "A military installation: the ultimate high ground.",
   "es": "Una instalación militar: la posición dominante definitiva."
- },
- "space_race_events.82.d": {
-  "en": "With a permanent lunar presence becoming reality, we must decide the base's primary mission. A scientific outpost would advance pure research and attract international collaboration. An industrial facility could begin extracting helium-3 and rare minerals. A military installation would provide unmatched strategic observation capabilities and serve as a staging point for force projection.",
-  "es": "Con una presencia lunar permanente a punto de hacerse realidad, debemos decidir la misión principal de la base. Un puesto científico impulsaría la investigación pura y atraería la colaboración internacional. Una instalación industrial podría empezar a extraer helio-3 y minerales raros. Una instalación militar proporcionaría una capacidad de observación estratégica sin igual y serviría de punto de partida para la proyección de fuerza."
- },
- "space_race_events.82.f": {
-  "en": "\\\"A laboratory, a mine, or a fortress. Each choice shapes not just what we do on the Moon, but who we become as a spacefaring nation.\\\"\\n\\n— Lunar Planning Commission",
-  "es": "«Un laboratorio, una mina o una fortaleza. Cada elección determina no solo lo que hacemos en la Luna, sino en qué nos convertimos como nación espacial.»\\n\\n— Comisión de planificación lunar"
- },
- "space_race_events.82.t": {
-  "en": "The Purpose of the Base",
-  "es": "El propósito de la base"
  },
  "space_race_events.83.a": {
   "en": "Direct landing: plant our flag on Mars now.",

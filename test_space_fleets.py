@@ -381,12 +381,11 @@ class UpkeepTest(unittest.TestCase):
         self.assertNotIn("sr_fleet_upkeep_per_building_value", values)
         refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
         self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value \}\s*"
-                                  r"if = \{\s*limit = \{ has_variable = sr_fleet_upkeep_per_building \}\s*"
-                                  r"remove_variable = sr_fleet_upkeep_per_building\s*\}\s*sr_fl_upkeep_apply = yes")
-        # Nothing reads the old split's variable any more.
+                                  r"sr_fl_upkeep_apply = yes")
+        # Nothing names the old split's variable any more: its old-save strip
+        # went with vanilla 1.15, which loads no older save (#1407).
         everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
-        self.assertNotIn("var:sr_fleet_upkeep_per_building", everything)
-        self.assertNotIn("name = sr_fleet_upkeep_per_building", everything)
+        self.assertNotIn("sr_fleet_upkeep_per_building", everything)
         # The count the sweep reads: every state's buildings (an occupied one's
         # included), of a level or more, as the apply walks them.
         count = _block(values, "sr_sc_buildings")

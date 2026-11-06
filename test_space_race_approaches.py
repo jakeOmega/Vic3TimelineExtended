@@ -25,11 +25,11 @@ JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")
 # The cost factors sr_<m>_cost multiplied by before they became named values.
 # Solar colonization's is no longer a constant (CostTest below).
-FACTORS = {"suborbital": "1", "orbital": "1.5", "moon_landing": "2", "probe": "2", "moon_base": "5",
+FACTORS = {"suborbital": "1", "orbital": "1.5", "moon_landing": "2", "probe": "2",
            "mars_landing": "6", "interstellar_probe": "12"}
 
 
@@ -100,21 +100,16 @@ class NoDriftTest(unittest.TestCase):
 class NoCooldownTest(unittest.TestCase):
     """The post-setback cooldown skipped the roll for six months on every
     milestone, so switching them all to Ambitious after a failure was free
-    progress. It went on 2026-10-31 (owner): nothing sets or reads it but the
-    monthly old-save strip."""
+    progress. It went on 2026-10-31 (owner), and its old-save strip with
+    vanilla 1.15, which loads no older save (#1407): nothing names it."""
 
     def test_nothing_sets_or_reads_the_cooldown(self):
-        strip = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
         for sub in ("common", "events"):
             for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
                 text = _read(path)
                 with self.subTest(path=os.path.relpath(path, REPO)):
                     self.assertNotIn("sr_has_failure_cooldown", text)
-                    if os.path.samefile(path, strip):
-                        self.assertIn("remove_variable = sr_failure_cooldown", text)
-                        self.assertNotIn("name = sr_failure_cooldown", text)
-                    else:
-                        self.assertNotIn("sr_failure_cooldown", text)
+                    self.assertNotIn("sr_failure_cooldown", text)
 
 
 class StandardControlTest(unittest.TestCase):
@@ -158,15 +153,14 @@ class CostTest(unittest.TestCase):
                 self.assertEqual(_block(values, f"sr_cost_factor_{m}").split(), ["value", "=", factor])
                 self.assertIn(f"multiply = sr_cost_factor_{m}", _block(values, f"sr_{m}_cost"))
 
-    def test_colonization_costs_the_moon_base_s_factor_until_the_mars_landing(self):
-        """Lunar colonization design § 4: 5 until the country's own Mars Landing, then 8,
-        read through owner so it holds in the journal entry's scope (the cost modifier's
-        multiplier) as in the country's."""
+    def test_colonization_costs_5_until_the_mars_landing(self):
+        """Lunar colonization design § 4: 5 (the retired Moon Base's factor) until the
+        country's own Mars Landing, then 8, read through owner so it holds in the journal
+        entry's scope (the cost modifier's multiplier) as in the country's."""
         values = _read(VALUES)
         body = _block(values, "sr_cost_factor_solar_colonization").split()
         self.assertEqual(body, ["value", "=", "5", "owner", "=", "{", "if", "=", "{", "limit", "=", "{",
                                 "has_variable", "=", "sr_completed_mars_landing", "}", "add", "=", "3", "}", "}"])
-        self.assertEqual(_block(values, "sr_cost_factor_moon_base").split(), ["value", "=", "5"])
         self.assertIn("multiply = sr_cost_factor_solar_colonization", _block(values, "sr_solar_colonization_cost"))
         # The Mars Landing's completion re-posts the cost with the new factor.
         effects = _read(EFFECTS)

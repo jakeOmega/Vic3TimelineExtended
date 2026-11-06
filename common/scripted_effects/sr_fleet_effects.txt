@@ -611,12 +611,6 @@ sr_sc_clear_pause = {
 sr_fl_upkeep_refresh = {
 	sr_fl_upkeep_self_check = yes
 	set_variable = { name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value }
-	# PR 7's split between two buildings, gone with one Space Command a
-	# nation: a save's stale copy (owner, 2026-10-31; remove after 2026-12-31).
-	if = {
-		limit = { has_variable = sr_fleet_upkeep_per_building }
-		remove_variable = sr_fleet_upkeep_per_building
-	}
 	sr_fl_upkeep_apply = yes
 }
 

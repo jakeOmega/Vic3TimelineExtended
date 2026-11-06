@@ -176,7 +176,7 @@ te_jud_law_activated = {
 # Landmark cases (phase 4, spec § 14.3; te_judiciary_events.30-.36). Each
 # rolls on its own once a year, in the amendment petitions' idiom (a
 # no-event weight with the event, summing to 1000), and comes once per
-# country (te_jud_heard_<case>); the events' triggers hold the conditions.
+# country (fire_only_once); the events' triggers hold the conditions.
 
 # The Free Soil Case: an abolition movement in a slave state with a
 # constitutional court. 5%.

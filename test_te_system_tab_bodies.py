@@ -555,7 +555,7 @@ class MountContextTest(unittest.TestCase):
         roots = _journal_roots()
         self.assertEqual(sorted({f for f, _, _, _ in roots}), sorted(JOURNAL_ROOT_FILES + CONTEXTLESS_ROOT_FILES))
         roots = [r for r in roots if r[0] not in CONTEXTLESS_ROOT_FILES]
-        self.assertGreaterEqual(len(roots), 44)
+        self.assertGreaterEqual(len(roots), 42)
         for path, line, name, body in roots:
             with self.subTest(root=f"{path}:{line} {name}"):
                 items = _children(body)

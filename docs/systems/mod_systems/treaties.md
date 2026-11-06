@@ -13,6 +13,7 @@ Key gotchas:
 - **Direction convention** (`kind = directed`): source_country makes the concession. Use `scope:article_options` (NOT `scope:article`) in `on_entry_into_force`.
 - **Company picker:** `WarGoalDraft.GetTarget.GetCompanies` for punitive articles, `GetHolder.GetCompanies` for player's own entities.
 - **Invalid triggers:** `is_owned_by_company` and `company` do NOT exist — use `exists = owning_company` + `owning_company = scope:article.input_company`.
+- **One-off articles** (#1407): an article whose work is done at entry into force, with nothing to revert, carries `is_one_time` and not `can_be_renegotiated`, as vanilla's transfers do: `disband_company`, `seize_company`, `return_cultural_property`, `surrender_monument`, `te_cede_colony`, `population_transfer`. The AI withdraws from a treaty of mostly one-offs once its binding period ends, so it stops paying their upkeep, and a renegotiation keeps them locked and doesn't re-run them. `test_treaty_one_time_articles.py` holds the list. The money transfer (vanilla's weekly payment, despite its involvement tag) and the seabed leases stay renegotiable.
 - Always guard `scope:article.input_company` with `exists = scope:article.input_company`.
 
 ### Enforce Emissions Reduction Treaty

@@ -1301,38 +1301,13 @@ te_seabed_build_in_slot = {
 # 2026-10-27; the Space Race's Rivals and Space Powers pattern, SPC-9). The
 # viewer's own row is drawn apart. A sharing runs the month after a civil war
 # is won, so a revolution's winner, which inherits no list, has its own then.
-# It replaced six global seats (te_seabed_rk_$B$_1..6, te_seabed_rk_more_$B$,
-# each country's te_seabed_rank_$B$ and the players' te_seabed_rkcap_*), which
-# an older save drops here.
 te_seabed_rank_basin = {
-	te_seabed_rank_clear = { B = $B$ N = 1 }
-	te_seabed_rank_clear = { B = $B$ N = 2 }
-	te_seabed_rank_clear = { B = $B$ N = 3 }
-	te_seabed_rank_clear = { B = $B$ N = 4 }
-	te_seabed_rank_clear = { B = $B$ N = 5 }
-	te_seabed_rank_clear = { B = $B$ N = 6 }
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_$B$ }
-		remove_global_variable = te_seabed_rk_more_$B$
-	}
-	every_country = {
-		limit = { has_variable = te_seabed_rank_$B$ }
-		remove_variable = te_seabed_rank_$B$
-	}
 	every_country = {
 		limit = {
 			is_player = yes
 			has_variable = te_seabed_shared
 		}
 		te_seabed_rank_list = { B = $B$ }
-	}
-}
-
-# An older save's seat. No scope.
-te_seabed_rank_clear = {
-	if = {
-		limit = { has_global_variable = te_seabed_rk_$B$_$N$ }
-		remove_global_variable = te_seabed_rk_$B$_$N$
 	}
 }
 
@@ -1343,16 +1318,6 @@ te_seabed_rank_clear = {
 # Order").
 te_seabed_rank_list = {
 	save_scope_as = te_seabed_rank_viewer
-	te_seabed_rank_seat_clear = { B = $B$ N = 1 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 2 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 3 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 4 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 5 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 6 }
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_$B$ }
-		remove_variable = te_seabed_rkcap_count_$B$
-	}
 	if = {
 		limit = { has_variable_list = te_seabed_rk_list_$B$ }
 		clear_variable_list = te_seabed_rk_list_$B$
@@ -1374,14 +1339,6 @@ te_seabed_rank_list = {
 		}
 	}
 	te_seabed_rank_list_selfcheck = { B = $B$ }
-}
-
-# An older save's flag seat on a player (te_seabed_rkcap_<b>_<n>). Country scope.
-te_seabed_rank_seat_clear = {
-	if = {
-		limit = { has_variable = te_seabed_rkcap_$B$_$N$ }
-		remove_variable = te_seabed_rkcap_$B$_$N$
-	}
 }
 
 # TE_SELF_CHECK seabed_claimant_list (audit SEA-3, 2026-10-27), once a game:

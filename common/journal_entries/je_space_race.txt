@@ -66,6 +66,10 @@ je_space_race_suborbital = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_technology_researched = rocketry
@@ -236,6 +240,10 @@ je_space_race_orbital = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
 
 	possible = {
@@ -399,6 +407,10 @@ je_space_race_moon_landing = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -562,6 +574,10 @@ je_space_race_probe = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -687,130 +703,6 @@ je_space_race_probe = {
 }
 
 # ===========================================
-# 5. MOON BASE: retired 2026-10-29 (lunar colonization design § 7)
-# The Moon is Solar System Colonization's stage 0 now, six worlds, and the
-# first lunar world a country founds takes the Moon Base's place in the race
-# (sr_lunar_colony_founded, space_race_effects.txt), keeping its record's
-# names. The entry stays defined, as the mod retires entities: never shown,
-# never possible, never completed or failed. An old save's open copy
-# deactivates (can_deactivate), and the monthly country pulse carries its
-# progress onto Solar System Colonization before the inactive-milestone
-# cleanup clears the rest (sr_lunar_carry_moon_base, space_race_on_actions.txt);
-# a completed one's country is given a lunar world once
-# (sr_lunar_migrate_country, sr_site_effects.txt).
-# ===========================================
-je_space_race_moon_base = {
-	icon = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
-	group = je_group_foreign_affairs
-
-	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
-	# always = yes is vanilla's own default, in 369 of its 449 entries.
-	activation_description = {
-		always = yes
-	}
-
-	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
-	# the overview above the status line, the live sections below it, How the
-	# Space Race Works last. The vanilla button grid below is hidden from humans
-	# (every space race button carries `is_ai = yes`), so every action it offered
-	# is offered in the live sections, through
-	# common/scripted_guis/space_race_sguis.txt.
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_moon_base_overview"
-		container = "custom_widget_container_1"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_moon_base"
-		container = "custom_widget_container_2"
-	}
-	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
-	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
-	# of the panel, because the overview above draws the same progress.
-	widget = {
-		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
-		name = "widget_te_je_bars_on_top_marker"
-		container = "custom_widget_container_7"
-	}
-
-	# Retired 2026-10-29: see the header.
-	is_shown_when_inactive = { always = no }
-
-	possible = { always = no }
-
-	immediate = {
-		set_variable = { name = sr_active_moon_base value = yes }
-		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
-		sr_power_fuzz_first = { MILESTONE = moon_base }
-		if = { limit = { NOT = { has_variable = sr_progress_moon_base } } set_variable = { name = sr_progress_moon_base value = 0 } }
-		if = { limit = { NOT = { has_variable = sr_funding_moon_base } } set_variable = { name = sr_funding_moon_base value = 1 } }
-		sr_sync_moon_base_entry = yes
-		sr_recalculate_cost = yes
-		# The moon base purpose choice, asked once per milestone
-		# (sr_moon_base_choice_made, space_race_triggers.txt).
-		if = {
-			limit = { NOT = { sr_moon_base_choice_made = yes } }
-			trigger_event = { id = space_race_events.82 days = 30 }
-		}
-	}
-
-	scripted_button = sr_btn_safe_moon_base
-	scripted_button = sr_btn_ambitious_moon_base
-	scripted_button = sr_btn_fund_up_moon_base
-	scripted_button = sr_btn_fund_down_moon_base
-
-	current_value = {
-		value = sr_progress_moon_base_value
-	}
-
-	# Pins the goal at sr_moon_base_goal: see the file header.
-	goal_add_value = {
-		value = sr_moon_base_goal
-		subtract = sr_progress_moon_base_value
-	}
-
-	# Kept for the journal list (the entry's own goal bar is hidden in the panel
-	# by the bars-on-top marker above; the overview draws the progress).
-	progressbar = yes
-
-	# Only while the entry is inactive. An active entry's overview shows its
-	# state, and the reason text below repeats the rest.
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_space_race_moon_base_status
-				trigger = { NOT = { has_journal_entry = je_space_race_moon_base } }
-			}
-		}
-	}
-
-	# Retired: no outcomes, so an old save's copy that lingers active neither
-	# completes nor fails.
-
-	# Retired: only while an old save's copy still carries its active flag,
-	# which the carry removes (sr_lunar_carry_moon_base), so a copy that lingers
-	# active after it adds no progress, rolls no risk and recreates nothing.
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { has_variable = sr_active_moon_base }
-				sr_monthly_progress_update_effect = { MILESTONE = moon_base }
-			}
-			else = {
-				sr_lunar_carry_lingering_check = yes
-			}
-		}
-	}
-
-	weight = 95
-	should_be_pinned_by_default_uninvolved_or_context = yes
-	can_revolution_inherit = yes
-	can_deactivate = yes
-	should_update_on_player_command = yes
-}
-
-# ===========================================
 # 6. MARS LANDING
 # Prereq: knowledge_economy tech + Moon Landing complete
 # Linear after the prior milestone chain
@@ -850,6 +742,10 @@ je_space_race_mars_landing = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
 
 	possible = {
@@ -1015,6 +911,10 @@ je_space_race_interstellar_probe = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_variable = sr_completed_probe
@@ -1170,6 +1070,10 @@ je_space_race_interstellar_results = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_variable = sr_probe_launched
@@ -1298,6 +1202,11 @@ je_space_race_solar_colonization = {
 		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
 		name = "widget_te_je_bars_on_top_marker"
 		container = "custom_widget_container_7"
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
 	}
 
 	# Shown to a country that can colonize, and to any country holding a

@@ -510,24 +510,6 @@ sr_probe_target_asteroid = {
 	country_weekly_innovation_max_add = 25
 }
 
-# --- Moon Base Purpose ---
-sr_moon_base_scientific = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_tech_research_speed_mult = 0.04
-	country_weekly_innovation_max_add = 50
-}
-sr_moon_base_industrial = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_space_mine_throughput_add = 0.07
-	goods_output_launch_capacity_mult = 0.03
-}
-sr_moon_base_military = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_military_tech_research_speed_mult = 0.04
-	country_influence_mult = 0.05
-	country_military_goods_cost_mult = -0.02
-}
-
 # --- Mars Landing Strategy ---
 sr_mars_direct_landing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -589,21 +571,6 @@ sr_choice_probe_mars = {
 sr_choice_probe_asteroid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_space_race_risk_mult = 0.35
-}
-
-# --- Moon Base Purpose (Event 82) ---
-sr_choice_moon_base_scientific = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_space_race_risk_mult = -0.10
-	country_space_race_progress_add = 0.2
-}
-sr_choice_moon_base_industrial = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_space_race_risk_mult = 0.20
-}
-sr_choice_moon_base_military = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_space_race_risk_mult = 0.30
 }
 
 # --- Mars Landing Strategy (Event 83) ---

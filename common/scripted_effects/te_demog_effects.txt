@@ -67,8 +67,7 @@
 #                       15-17, 18-35, 36-59, 60-298): next step's flow shares
 #   te_dg_fam, te_dg_faw  the conscription pool (phase 2 step 4; the consequences design §4.1-4.2): men of calendar
 #                       age 20 or more and biological age 39 or less (te_demog_k_pool_from, _to), and the women of
-#                       the same ages, after the step: the conscription term's input and next step's war shares.
-#                       They replaced the 18-40 sums te_dg_f1840 and te_dg_m1840, which a census removes
+#                       the same ages, after the step: the conscription term's input and next step's war shares
 #   te_dg_sxb           the sex balance the step's fertility and women's rate read (the ring's before its sweep),
 #                       stored only below te_demog_k_sex_fewer_from (te_demog_sex_births_store); a seed removes it
 #   te_dg_births, te_dg_deaths  this year's, people (0 after a seed)
@@ -1051,12 +1050,6 @@ te_demog_close_accumulators = {
 	te_demog_flush_class = yes
 	set_variable = { name = te_dg_faw value = local_var:te_dg_acc_faw }
 	set_variable = { name = te_dg_fam value = local_var:te_dg_acc_fam }
-	# a census from before phase 2 step 4 kept the 18-40 sums instead (te_demog_flows reads them once)
-	if = {
-		limit = { has_variable = te_dg_m1840 }
-		remove_variable = te_dg_m1840
-		remove_variable = te_dg_f1840
-	}
 }
 
 # ---- Phase 2 step 1: who works, the pensioners and health need ---------------------------------------------------
@@ -1404,20 +1397,13 @@ te_demog_flows = {
 		set_local_variable = { name = te_dg_war value = var:te_dg_war_in }
 		remove_variable = te_dg_war_in
 	}
-	# from the pool's men and the women of its ages (phase 2 step 4, §4.2), the people the next sweep takes them from;
-	# a census from before step 4 has its 18-40 sums instead, for this one step (the sweep takes the dead at the pool's
-	# ages, so these divide by a few more cohorts than they reach)
+	# from the pool's men and the women of its ages (phase 2 step 4, §4.2), the people the next sweep takes them from
 	set_local_variable = { name = te_dg_war_den_m value = 0 }
 	set_local_variable = { name = te_dg_war_den_f value = 0 }
 	if = {
 		limit = { has_variable = te_dg_fam }
 		set_local_variable = { name = te_dg_war_den_m value = var:te_dg_fam }
 		set_local_variable = { name = te_dg_war_den_f value = var:te_dg_faw }
-	}
-	else_if = {
-		limit = { has_variable = te_dg_m1840 }
-		set_local_variable = { name = te_dg_war_den_m value = var:te_dg_m1840 }
-		set_local_variable = { name = te_dg_war_den_f value = var:te_dg_f1840 }
 	}
 	set_local_variable = {
 		name = te_dg_war_fm
@@ -2507,7 +2493,6 @@ te_demog_cause_deaths_store = {
 	set_variable = { name = te_dg_dc_war value = { value = var:te_dg_dc_war_top min = 0 add = local_var:te_dg_war } }
 	set_variable = { name = te_dg_dc_kill value = local_var:te_dg_kills }
 	te_demog_cause_deaths_total = yes
-	te_demog_cause_deaths_old_clear = yes
 	set_variable = { name = te_dg_dc_fit value = { value = local_var:te_dg_dc_est divide = { value = local_var:te_dg_dc_nat min = 1 } } }
 	# once a game: the estimate against the sweep (te_debug_demog_effects.txt)
 	te_debug_demog_cause_deaths_selfcheck = yes
@@ -2568,7 +2553,6 @@ te_demog_cause_deaths_zero = {
 	set_variable = { name = te_dg_dc_war_top value = 0 }
 	set_variable = { name = te_dg_dc_total value = 0 }
 	set_variable = { name = te_dg_dc_lead value = 0 }
-	te_demog_cause_deaths_old_clear = yes
 	if = {
 		limit = { has_variable = te_dg_dc_fit }
 		remove_variable = te_dg_dc_fit
@@ -2668,16 +2652,6 @@ te_demog_cause_deaths_country_store = {
 	set_variable = { name = te_dg_dc_work_top value = local_var:te_dg_c_dc_work_top }
 	set_variable = { name = te_dg_dc_war_top value = local_var:te_dg_c_dc_war_top }
 	te_demog_cause_deaths_total = yes
-	te_demog_cause_deaths_old_clear = yes
-}
-
-# THIS = a state or a country: the deaths added on top as a slice of their own, which a save from before 2026-10-22
-# holds, go (they count under their causes since).
-te_demog_cause_deaths_old_clear = {
-	if = {
-		limit = { has_variable = te_dg_dc_ontop }
-		remove_variable = te_dg_dc_ontop
-	}
 }
 
 # THIS = a state, after its census (demographics_model.structure, by band): the

@@ -1002,7 +1002,7 @@ class TestCohortScript(unittest.TestCase):
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
                   flows=None, entry="te_demog_step", engine=None, on_top=None, full=False, inp=None,
-                  pool=(12.0, 7.0), men_factor=None, old_census=False, causes=None):
+                  pool=(12.0, 7.0), men_factor=None, causes=None):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -1017,10 +1017,9 @@ class TestCohortScript(unittest.TestCase):
         above the model's rates M aimed at (phase 2 step 4); full = the rule's Full setting, under which
         alone the step takes those as its on-top scales. inp: the inputs (default INP); pool: (women, men) in the pool
         (phase 2 step 1's figures count it). men_factor scales the men aged 20-59 (phase 2 step 4's sex balance: the
-        census's te_dg_sex_balance is the ring's, as its last census stored it); old_census gives the script a census
-        from before step 4, with the 18-40 sums' names (te_dg_m1840, te_dg_f1840) holding the pool's sums. causes (Causes
-        of Death, owner 2026-10-22; with on_top under Full): {cause: its deaths on top over the window}, the walk's split
-        (te_dg_ot_<c>), which the model takes as its shares of the target."""
+        census's te_dg_sex_balance is the ring's, as its last census stored it). causes (Causes of Death, owner
+        2026-10-22; with on_top under Full): {cause: its deaths on top over the window}, the walk's split (te_dg_ot_<c>),
+        which the model takes as its shares of the target."""
         base = inp or self.INP
         ring = demographics_model.seed(base, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
@@ -1105,10 +1104,7 @@ class TestCohortScript(unittest.TestCase):
                         te_dg_year=self.YEAR, te_dg_ring=float(P.RING_YEARS), te_dg_people=ring.total,
                         te_dg_raw=ring.total / scale,
                         te_dg_sex_balance=balance)
-        if old_census:
-            eng.vars.update(te_dg_f1840=ring.faw, te_dg_m1840=ring.fam)
-        else:
-            eng.vars.update(te_dg_faw=ring.faw, te_dg_fam=ring.fam)
+        eng.vars.update(te_dg_faw=ring.faw, te_dg_fam=ring.fam)
         # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)
         if ring.fws_work is not None:
             eng.vars["te_dg_fws_wk"] = ring.fws_work
@@ -1584,15 +1580,6 @@ class TestCohortScript(unittest.TestCase):
         _eng, ring = self.seed_both()
         self.close(eng.vars["te_dg_tfr"], _eng.vars["te_dg_tfr"], what="the seed's children per woman")
 
-    def test_a_census_from_before_step_4_takes_its_war_dead_once(self):
-        """An old save's state holds the 18-40 sums' names: the step's flows divide by them once, and the census that
-        follows writes the pool's and removes them."""
-        flows = dict(eb=1200.0, ed=900.0, crisis=0.0, fjob_share=0.3, migration=0.0, war=900.0)
-        eng, ring, figures, pop = self.step_both(flows=flows, old_census=True)
-        self.check_step(eng, ring, figures, pop)
-        self.assertNotIn("te_dg_m1840", eng.vars)
-        self.assertNotIn("te_dg_f1840", eng.vars)
-
 
 class TestWorkWalk(unittest.TestCase):
     """The walk's three sums (phase 2 step 1): under the cohorts only (D5), in three gated effects (D11)."""
@@ -1807,15 +1794,12 @@ class TestLinesScript(unittest.TestCase):
     the census doesn't set its births and deaths, at the two families' sum, by a fixed-sign pair per field."""
 
     def _eng(self, sums, full=False, census_term=False, held=None):
-        """census_term: a census step has set M (te_dg_mb, with this build's te_dg_q_b), its deaths pair in force;
-        "stale" is a step from a save made before this build (no te_dg_q_b)."""
+        """census_term: a census step has set M (te_dg_mb, with te_dg_q_b), its deaths pair in force."""
         fixtures = {f"modifier:{name}": sums.get(name, 0.0) for name in P.ENGINE_LINE_TYPES.values()}
         eng = _Engine(fixtures, triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": full})
         if census_term:
-            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3)
+            eng.vars.update(te_dg_mb=-0.3, te_dg_md=-0.3, te_dg_q_b=0.0, te_dg_q_d=0.0)
             eng.modifiers["te_demog_census_deaths_down"] = 0.3
-            if census_term != "stale":
-                eng.vars.update(te_dg_q_b=0.0, te_dg_q_d=0.0)
         for short, m in (held or {}).items():
             eng.vars[f"te_dg_ln_{short}"] = m
             eng.modifiers[f"te_demog_line_{short}_{'up' if m > 0 else 'down'}"] = abs(m)
@@ -1890,15 +1874,6 @@ class TestLinesScript(unittest.TestCase):
         self.assertIn("te_demog_line_deaths_down", eng.modifiers, "Disabled after Full: the pairs apply")
         self.assertNotIn("te_demog_census_deaths_down", eng.modifiers, "Disabled after Full: the census's term is off")
         self.assertNotIn("te_dg_mb", eng.vars)
-
-    def test_a_term_saved_before_this_build_comes_off(self):
-        """Review M2: a Full save from before the moved lines has a census term built for vanilla's lines (no
-        te_dg_q_b). The refresh takes it off so the pairs carry the state until its next step sets M afresh."""
-        eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, full=True, census_term="stale")
-        eng.call("te_demog_lines_refresh")
-        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers)
-        self.assertNotIn("te_dg_mb", eng.vars)
-        self.assertIn("te_demog_line_deaths_down", eng.modifiers)
 
     def test_unchanged_sums_are_left_alone(self):
         eng = self._eng({"state_demog_absorbed_mortality_mult": -0.03}, held={"deaths": -0.03})
@@ -3611,10 +3586,11 @@ class _OwnerEngine(_Engine):
     absorbed terms. owner = { } and state = { } read the same facts (one state, one owner, one pop); the state's
     incorporation and the pop's starvation are trigger fixtures (is_incorporated, is_in_*_starvation)."""
 
-    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, workplace=None, **kwargs):
+    def __init__(self, fixtures, laws=(), techs=(), levels=None, pop_type=None, workplace=None, strata=None, **kwargs):
         super().__init__(fixtures, **kwargs)
         self.laws, self.techs, self.levels, self.pop_type = set(laws), set(techs), dict(levels or {}), pop_type
         self.workplace = workplace   # the pop's workplace's building group; None: not employed (calibration step 3)
+        self.strata = strata         # the pop's stratum (lower, middle, upper); None: no stratum line applies
 
     def _test(self, key, op, arg):
         if key in ("owner", "state"):
@@ -3638,6 +3614,8 @@ class _OwnerEngine(_Engine):
             return {">=": level >= float(n), ">": level > float(n), "=": level == float(n)}[vop]
         if key == "is_pop_type":
             return arg == self.pop_type
+        if key == "strata":
+            return arg == self.strata
         return super()._test(key, op, arg)
 
 
@@ -3868,6 +3846,22 @@ class TestPopMultiplierScript(unittest.TestCase):
                 self.assertAlmostEqual(self._term("te_demog_pop_death_mult", food),
                                        P.STARVATION_MILD["deaths"] * scale, places=6)
         self.assertEqual(self._term("te_demog_pop_death_mult", 0.6), 0.0)
+
+    def test_each_pop_reads_its_own_stratums_birth_line(self):
+        """Vanilla 1.15's birth lines by stratum (#1407): a pop adds its own stratum's line and no other's, as the death
+        multiplier adds its class's, so the window's births count what the Malthusian Foundations amendment cuts."""
+        text = _block(_text(GENERATED_VALUES), "te_demog_pop_birth_mult")
+        reads = dict.fromkeys(re.findall(r"(?:state|workplace)\.modifier:\w+", text), 0.0)
+        lines = {s: -0.01 * (i + 1) for i, s in enumerate(P.BIRTH_STRATA)}
+        for s, line in lines.items():
+            reads[f"state.modifier:state_{s}_strata_birth_rate_mult"] = line
+        for s, line in [*lines.items(), (None, 0.0)]:
+            with self.subTest(strata=s):
+                eng = _OwnerEngine({"literacy_rate": 0.0, "food_security": 1.0, "wealth": 20.0, **reads},
+                                   pop_type="laborers", strata=s,
+                                   triggers={"is_in_severe_starvation": False, "is_in_mild_starvation": False,
+                                             "is_employed": False, "is_homeland_of_country_cultures": True})
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_pop_birth_mult")), 1 + line, places=9)
 
     def test_a_severe_pops_births_floor_only_when_the_rest_runs_low(self):
         """Germany's famine (the probe): births read about -0.28 and literacy 0.5, so a severe pop at food security
@@ -5272,10 +5266,9 @@ class TestWealth(unittest.TestCase):
         expected = demographics_model.shown_gini(demographics_model.grouped_gini(bands))
         self.assertAlmostEqual(v["te_dg_gini"], expected, places=9, msg="the Gini of the summed bands")
 
-    def test_a_state_from_an_old_save_adds_no_bands(self):
-        # Review Focus 1: before its own pulse a state has only the old strata sums
+    def test_a_state_before_its_walk_adds_no_bands(self):
+        # Review Focus 1: before its own pulse a state has no bands and no layout marker
         old = self.scored(60, 55, bands={}, layout=None)
-        old.update(te_dg_n_lo=900.0, te_dg_y_lo=1350.0)
         new = self.scored(40, 50, bands={2: (900e3, 12.0), 9: (1e4, 2.0)})
         v = self.national([old, new])
         want = demographics_model.shown_gini(demographics_model.grouped_gini([(900e3, 12.0), (1e4, 2.0)]))
@@ -7484,9 +7477,7 @@ class TestGiniBands(unittest.TestCase):
         eng.call("te_demog_gini_band_init")
         for k, (n, y) in bands.items():
             eng.locals[f"te_dg_w_gn{k}"], eng.locals[f"te_dg_w_gy{k}"] = n, y
-        # a save from before: 14 bands, every one stored, and the strata sums before them
-        old = ("te_dg_n_lo", "te_dg_n_mi", "te_dg_n_up", "te_dg_y_lo", "te_dg_y_mi", "te_dg_y_up")
-        eng.vars.update({name: 1.0 for name in old})
+        # an older layout's 14 bands, every one stored
         eng.vars.update({f"te_dg_g{s}{k}": 5.0 for k in range(1, 15) for s in "ny"})
         eng.call("te_demog_gini_band_store")
         self.assertEqual(eng.vars["te_dg_gini_layout"], P.GINI_LAYOUT)
@@ -7496,8 +7487,6 @@ class TestGiniBands(unittest.TestCase):
             else:
                 self.assertNotIn(f"te_dg_gn{k}", eng.vars, "an empty band is not stored: save size")
                 self.assertNotIn(f"te_dg_gy{k}", eng.vars)
-        for name in old:
-            self.assertNotIn(name, eng.vars)
         eng.locals.clear()
         eng.call("te_demog_state_gini")
         want = demographics_model.shown_gini(demographics_model.grouped_gini(list(bands.values())))
