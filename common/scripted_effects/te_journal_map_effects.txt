@@ -6,5 +6,5 @@
 # player in a multiplayer game shares it.
 te_jmap_set_selector = {
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
-	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; its button reopens the page a quarter second later, which repaints the map)"
+	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; a pick on the page reopens it a quarter second later, which repaints the map)"
 }

@@ -4,8 +4,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 Third pass, 2026-11-05 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
-and the third adds what its play-test asked for: picks that repaint a paused map, the see-through journal page, and
-Banking's map before its cycle. `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file
+and the third adds what its play-test asked for: picks that repaint a paused map, and the see-through journal page. `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file
 says which parts rest on an unverified engine fact. Update both as the answers come in.
 
 ## How a Journal Entry Paints the Map
@@ -65,10 +64,10 @@ entry, in no country's journal.
   pressed (`down`, seen working 2026-11-05); the census maps' `is_shown` hides them while the census doesn't run.
 - **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then triggers its own
   `te_jmap_repaint` state, which a quarter second later closes the page (`InformationPanelBar.ClosePanel`) and opens
-  it again (`OpenJournalEntryPanel`, which toggles, hence the close first). Reopening repainted a paused map
-  (2026-11-05); the delay lets the scripted GUI's effect land before the page asks for the map. The button carries the
-  Map Room as its own `datacontext`, so the second line still names it after the page closes. Untested in game (third
-  pass, check 1).
+  it again (`OpenJournalEntryPanelDontToggle`: `OpenJournalEntryPanel` toggles, so if the close hadn't landed it would
+  close the page for good). Reopening repainted a paused map (2026-11-05); the delay lets the scripted GUI's effect land
+  before the page asks for the map. The button carries the Map Room as its own `datacontext`, so the second line still
+  names it after the page closes. Untested in game (third pass, check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
 
 ### Why not a country entry added by a button
@@ -86,8 +85,10 @@ takes it out again short of an outcome, which leaves it in the concluded tab. Th
 `gui/journal_entry.gui` (the mod's copy of vanilla's panel) puts a crossed-out eye (`visibility.dds`) in the header's
 top-left button slot, which vanilla leaves empty on this panel, on every journal page. It toggles a GUI flag,
 `GetVariableSystem` key `te_je_see_through`, and the panel's root binds `alpha` to it: 0.3 while set, so the page's
-map shows through. The page's `_show` state clears the flag, so every page opens whole, a Map Room pick included
-(its reopen). The faded page still takes clicks: the window's frame is a `clickthrough_blocker` in no block the panel
+map shows through. The flag outlives a reopen, so the Map Room stays faded from pick to pick; the header's close and
+back buttons clear it (vanilla's own lines first; Escape runs the close), and so do the two map buttons before they open
+a page. Clearing on `_show` would unfade the page at every pick, since a pick's reopen fires it. Leave a faded page by
+opening another panel and the next journal page opened from the journal is faded too. The faded page still takes clicks: the window's frame is a `clickthrough_blocker` in no block the panel
 can override, and a fold that hid the content would leave the same full-height frame. On every page because the GUI
 can't tell which entries carry a map, and vanilla's own map entries gain from it too. Whether `alpha` binds on a side
 panel's root is untested (vanilla binds it only on inner widgets; third pass, check 2).
@@ -98,8 +99,8 @@ panel's root is untested (vanilla binds it only on inner widgets; third pass, ch
 bands (`banking_cycle_is_*`, `market_triggers.txt`), panic red to frenzy magenta, with yellow stripes where
 `banking_cycle_bubble_risk_high` holds (the overview's crash-risk badge). A country whose cycle has not started is grey;
 one without the entry is unpainted. The tooltip names the country, the phase word (`banking_dash_phase_word`) and the
-cycle value. Every country holds the entry, so this is a world map read from each state's owner. Its button shows
-before the player's cycle starts: the entry's inactive page opens and paints (2026-11-05). The stripes are unconfirmed
+cycle value. Every country holds the entry, active from the engine's first check (`possible = { always = yes }`), so
+this is a world map read from each state's owner, and its button needs no `IsActive` gate. The stripes are unconfirmed
 in game, since nothing overheats early on.
 
 ## Buttons
@@ -110,8 +111,9 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 
 - `te_jmap_demog_map_button`, in the Demographics tab's header (`te_demog_window_body`, so the Population panel's tab and
   the Timeline Extended window's), left of the "?": one click picks life expectancy and opens the Map Room.
-- `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`, active
-  or not.
+- `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
+
+Both map buttons clear the see-through flag before they open a page.
 - `te_jmap_pick_row`: the Map Room's picks, a row of two and a row of three, on its page.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the

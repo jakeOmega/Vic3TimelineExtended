@@ -6,8 +6,9 @@
 ### ("requires non const promote"; gui_modding_guide.md gotcha #29).
 ###   - te_jmap_demog_map_button, in the Demographics tab's header (te_demog_window_body): one click picks life
 ###     expectancy and opens the Map Room (je_te_map_room, contextless, in no journal, there from the game's start);
-###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle, active or
-###     not (an inactive entry's page opens and paints its map, check 7).
+###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle, which
+###     every country holds active from the engine's first check, before its cycle starts.
+### Both clear the see-through flag first, so a page they open is whole.
 ### Both sit left of the header's "?" (te_help_button, 10 in from the right; this one 45 in), hidden for an observer.
 ###
 ### te_jmap_pick_row is the Map Room's picks: scripted GUIs, since the engine locks a contextless entry's own scripted
@@ -15,7 +16,8 @@
 ### new pick at the next tick, and at once when the page reopens (check 4), so each pick closes and reopens the page a
 ### quarter second after the click: long enough for the scripted GUI's effect to land first.
 ###
-### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map.
+### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map. The
+### flag outlives a pick's reopen, so a faded Map Room stays faded from map to map.
 
 types te_map_widgets
 {
@@ -29,8 +31,8 @@ types te_map_widgets
 		}
 	}
 
-	### Demographics: pick life expectancy and open the Map Room, in one click. The pick lands at the next tick (a
-	### scripted GUI's effect, play-test check 2), so a paused game shows the old pick until unpaused.
+	### Demographics: pick life expectancy and open the Map Room, in one click. Opening the page repaints the map; whether
+	### the pick has landed by then while paused is third-pass check 4 (if not, the delayed reopen the picks use).
 	type te_jmap_demog_map_button = widget {
 		size = { 29 29 }
 		parentanchor = right|vcenter
@@ -40,14 +42,16 @@ types te_map_widgets
 		te_map_button = {
 			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 			tooltip = "te_jmap_demog_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
 			onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
 	}
 
 	### Banking: every country holds the entry, so the button only opens it (vanilla's own pattern, states_panel.gui's
-	### Meiji domain button: the entry as datacontext, then OpenJournalEntryPanel). Before the country's cycle starts
-	### the entry is inactive, and its page still opens and paints (check 7), so the button shows from the start.
+	### Meiji domain button: the entry as datacontext, then OpenJournalEntryPanel). No IsActive gate: the entry is active
+	### for every country from the engine's first check (possible = yes), and the tab waits for that anyway; an inactive
+	### page would open and paint too (check 7).
 	type te_jmap_banking_map_button = widget {
 		size = { 29 29 }
 		parentanchor = right|vcenter
@@ -57,6 +61,7 @@ types te_map_widgets
 		te_map_button = {
 			datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
 			tooltip = "te_jmap_banking_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
 	}
@@ -64,8 +69,9 @@ types te_map_widgets
 	### One pick: a button that runs its scripted GUI, then (te_jmap_repaint) closes and reopens the Map Room's page a
 	### quarter second later, which repaints the map at once, paused or not (check 4: reopening repainted). The delay
 	### lets the scripted GUI's effect land before the page asks for the map again; a callback's lines run in order,
-	### but whether the effect lands within the same click is unknown. ClosePanel first, since OpenJournalEntryPanel
-	### toggles: on the open page it would only close it. The entry is the button's own datacontext, not the page's, so
+	### but whether the effect lands within the same click is unknown. ClosePanel first, then the DontToggle open:
+	### OpenJournalEntryPanel toggles, so if the close hadn't taken effect it would close the page for good, where
+	### DontToggle at worst leaves it open unrepainted. The entry is the button's own datacontext, not the page's, so
 	### the second line still names it once the page is closed.
 	type te_jmap_pick_button = button {
 		using = default_button
@@ -76,7 +82,7 @@ types te_map_widgets
 			name = te_jmap_repaint
 			duration = 0.25
 			on_finish = "[InformationPanelBar.ClosePanel]"
-			on_finish = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+			on_finish = "[InformationPanelBar.OpenJournalEntryPanelDontToggle(JournalEntry.AccessSelf)]"
 		}
 	}
 

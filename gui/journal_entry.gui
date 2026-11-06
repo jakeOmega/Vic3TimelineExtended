@@ -20,15 +20,16 @@ types journal_entry_panel_types
 		### TIMELINE EXTENDED — the see-through page, the third change to this vanilla file (the bars-on-top marker
 		### below is the other two). The eye in the header (top_left_button_*, below) fades the whole page so its
 		### journal map shows through: a journal entry's map shows only while its page is open (journal_map_modes.md).
-		### The faded page still takes clicks (the window's frame is a clickthrough_blocker), and every page reopens
-		### opaque (_show clears the flag). On every journal page: the GUI can't tell which entries carry a map, and
+		### The faded page still takes clicks (the window's frame is a clickthrough_blocker). The flag outlives a
+		### reopen, so a Map Room pick (which reopens the page to repaint) keeps it faded; the header's close and back
+		### buttons clear it, and so do the map buttons (te_map_widgets.gui) before they open a page. Not on _show,
+		### which the pick's reopen fires too. On every journal page: the GUI can't tell which entries carry a map, and
 		### 1.15's own map entries (the Great Game, the Forest of Bayonets, the Hungry Forties) gain from it too.
 		alpha = "[Select_float( GetVariableSystem.Exists('te_je_see_through'), '(float)0.3', '(float)1' )]"
 
 		blockoverride "animation_state_block" {
 			state = {
 				name = _show
-				on_start = "[GetVariableSystem.Clear('te_je_see_through')]"
 				start_sound = {
 					soundeffect = "event:/SFX/UI/Global/panel_show"
 				}
@@ -921,6 +922,19 @@ types journal_entry_panel_types
 
 		blockoverride "top_left_button_texture" {
 			texture = "gfx/interface/icons/military_icons/navy_icons/visibility.dds"
+		}
+
+		### TIMELINE EXTENDED — closing or leaving the page by its header brings it back whole (see alpha above).
+		### Vanilla's own lines first (default_block_window); the close button's Escape shortcut runs these too.
+		blockoverride "header_close_button" {
+			onclick = "[InformationPanelBar.ClosePanel]"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+		}
+
+		blockoverride "header_back_button" {
+			onclick = "[InformationPanelBar.OpenPreviousPanel]"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			input_action = "back"
 		}
 	}
 

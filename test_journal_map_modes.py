@@ -10,7 +10,7 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - each pick reopens the Map Room's page a beat after its click, so a paused map repaints (check 4);
 - the map buttons are mounted, Banking's shows while its entry is inactive (check 7), and every GUI reach into an
   entry names one that exists;
-- every journal page has the see-through eye (gui/journal_entry.gui), which every reopening clears.
+- every journal page has the see-through eye (gui/journal_entry.gui): a pick's reopen keeps it, closing clears it.
 """
 import os
 import re
@@ -216,8 +216,9 @@ class MapRoomTest(unittest.TestCase):
         self.assertRegex(state, r"name\s*=\s*te_jmap_repaint\b")
         self.assertRegex(state, r"duration\s*=\s*0?\.\d+")
         finish = re.findall(r'on_finish\s*=\s*"([^"]*)"', state)
+        # DontToggle: if the close hadn't landed, the toggling open would close the page for good
         self.assertEqual(finish, ["[InformationPanelBar.ClosePanel]",
-                                  "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"])
+                                  "[InformationPanelBar.OpenJournalEntryPanelDontToggle(JournalEntry.AccessSelf)]"])
 
     def test_the_room_is_contextless_and_in_no_journal(self):
         # check 7 (2026-11-05): a contextless entry nobody is involved in is active from the start, in no journal, and
@@ -270,9 +271,16 @@ class GuiTest(unittest.TestCase):
         self.assertIn("te_jmap_demog_map_button = {}", code(DEMOG_LAYOUT))
         self.assertIn("te_jmap_banking_map_button = {}", code(BANKING_LAYOUT))
 
-    def test_banking_button_shows_while_the_entry_is_inactive(self):
-        # check 7 (2026-11-05): an inactive entry's page opens from a button and paints its map
+    def test_banking_button_has_no_activity_gate(self):
+        # the entry is active from the engine's first check (possible = yes), and an inactive page would open and
+        # paint too (check 7, 2026-11-05), so the button needs no IsActive gate
         self.assertNotIn("IsActive", block(code(WIDGETS), "te_jmap_banking_map_button"))
+        self.assertRegex(block(code(BANKING), "je_banking_cycle"), r"\bpossible\s*=\s*\{\s*always\s*=\s*yes\s*\}")
+
+    def test_map_buttons_open_pages_whole(self):
+        for name in ("te_jmap_demog_map_button", "te_jmap_banking_map_button"):
+            clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', block(code(WIDGETS), name))
+            self.assertEqual(clicks[0], "[GetVariableSystem.Clear('te_je_see_through')]", name)
 
     def test_every_entry_the_gui_opens_exists(self):
         entries = set(re.findall(r"^([a-z_0-9]+)\s*=\s*\{", code(HOST), re.M)) | {"je_banking_cycle"}
@@ -284,7 +292,7 @@ class GuiTest(unittest.TestCase):
         # ("requires non const promote", third session): the button carries the entry as its datacontext
         text = code(WIDGETS)
         self.assertNotRegex(text, r'onclick\s*=\s*"[^"]*GetPlayerJournalEntry')
-        for m in re.finditer(r"OpenJournalEntryPanel\(([^)]*)\)", text):
+        for m in re.finditer(r"OpenJournalEntryPanel(?:DontToggle)?\(([^)]*)\)", text):
             self.assertEqual(m.group(1), "JournalEntry.AccessSelf")
             start, end = enclosing_span(text, m.start())
             if re.search(r"\bstate\s*=\s*\{\s*$", text[:start]):
@@ -296,9 +304,9 @@ class GuiTest(unittest.TestCase):
     def test_demographics_button_is_one_click(self):
         button = block(code(WIDGETS), "te_jmap_demog_map_button")
         clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', button)
-        self.assertEqual(len(clicks), 2, "pick, then open")
-        self.assertIn("te_jmap_pick_life_expectancy_sgui", clicks[0])
-        self.assertIn("OpenJournalEntryPanel", clicks[1])
+        self.assertEqual(len(clicks), 3, "unfade, pick, then open")
+        self.assertIn("te_jmap_pick_life_expectancy_sgui", clicks[1])
+        self.assertIn("OpenJournalEntryPanel", clicks[2])
         self.assertIn("GetPlayerJournalEntry('je_te_map_room')", button)
 
 
@@ -319,10 +327,16 @@ class SeeThroughTest(unittest.TestCase):
         self.assertIn("[GetVariableSystem.Toggle('te_je_see_through')]", props)
         self.assertIn("JournalEntryPanel.HasJournalEntry", override(self.panel, "top_left_button_visibility"))
 
-    def test_every_reopening_clears_it(self):
-        show = override(self.panel, "animation_state_block")
-        self.assertIn("name = _show", show)
-        self.assertIn("[GetVariableSystem.Clear('te_je_see_through')]", show)
+    def test_closing_clears_it_but_a_reopen_keeps_it(self):
+        # a Map Room pick reopens the page (te_jmap_repaint), which fires _show: clearing there would unfade the page
+        # at every pick
+        self.assertNotIn("te_je_see_through", override(self.panel, "animation_state_block"))
+        close = re.findall(r'onclick\s*=\s*"([^"]*)"', override(self.panel, "header_close_button"))
+        self.assertEqual(close, ["[InformationPanelBar.ClosePanel]", "[GetVariableSystem.Clear('te_je_see_through')]"])
+        back = override(self.panel, "header_back_button")
+        self.assertEqual(re.findall(r'onclick\s*=\s*"([^"]*)"', back),
+                         ["[InformationPanelBar.OpenPreviousPanel]", "[GetVariableSystem.Clear('te_je_see_through')]"])
+        self.assertRegex(back, r'input_action\s*=\s*"back"', "vanilla's back shortcut kept")
 
 
 class MapModeTest(unittest.TestCase):

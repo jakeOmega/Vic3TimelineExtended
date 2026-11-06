@@ -31,8 +31,8 @@ opens the Map Room, a page of world maps with a button for each: Turmoil,
 Literacy and, from the census, Life Expectancy, Fertility and Median Age. Hover a
 state for its figure. A journal entry's map shows only while its page is open,
 so the crossed-out eye at the top left of every journal page fades the page
-until you click it again, and the map shows through. The faded page still takes
-your clicks.
+until you click it again or close the page, and the map shows through. The
+faded page still takes your clicks.
 
 National Info, the base game's Census Data window under a new name, shows
 another country's panels. Open it from the foot of that country's Politics tab,

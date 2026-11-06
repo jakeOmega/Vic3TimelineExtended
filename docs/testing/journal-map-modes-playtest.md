@@ -2,8 +2,7 @@
 
 The in-game checks for vanilla 1.15's journal entry maps (`docs/systems/mod_systems/journal_map_modes.md`, issue
 #1404), most important first. The first two passes (#1410, #1414, #1417) answered their lists (below); this is the
-third pass's list: picks that repaint a paused map, the see-through journal page, and Banking's map before its cycle
-starts. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
+third pass's list: picks that repaint a paused map, and the see-through journal page. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` § 2 under C6, and each engine fact in
 `docs/guides/scripting_best_practices.md` § "Journal Entry Map Modes".
 
 ## How to run
@@ -22,11 +21,10 @@ starts. Record each answer under Results, in `docs/audits/vanilla_1_15_prep.md` 
 
 | # | Check | How | What each answer means | If it's the bad answer |
 |---|---|---|---|---|
-| 1 | A pick repaints a paused map | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks (each pick closes and reopens it a quarter second later, `te_jmap_repaint`) and the map shows the new pick at once, paused or not. Say whether the blink is acceptable while running. | The page blinks but the old map stays: the reopen came before the pick's effect landed; lengthen the delay (0.5 s), or failing that say "at unpause" in the picks' tooltips. The page closes and stays closed: the reopen line failed; read `error.log` for a callback line naming `te_map_widgets.gui`. |
-| 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Click it again. Then fade it, close the page and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through; the second click brings it back; a reopened page is whole again. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
-| 3 | Banking's map before the cycle starts | Early in a game, before your banking cycle starts, click the Banking tab header's map button. | The entry's inactive page opens and the map paints: other countries in their phases, yours grey. Note whether the page lists every country under Involved Countries, as the Potential probe's page did (fourth session). | No page, or an error: give the button back its `IsActive` gate. A long list of countries: hide Involved Countries on an inactive page (`journal_entry.gui`). |
-| 4 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
-| 5 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
+| 1 | A pick repaints a paused map | Open the Map Room (Demographics header's map button). Pause. Click another map on the page. Then the same with the game running. | The page blinks (each pick closes and reopens it a quarter second later, `te_jmap_repaint`, the reopen by `OpenJournalEntryPanelDontToggle`, which no mod or vanilla `.gui` used before) and the map shows the new pick at once, paused or not. Say whether the blink is acceptable while running. | The page blinks but the old map stays: the reopen came before the pick's effect landed; lengthen the delay (0.5 s), or failing that say "at unpause" in the picks' tooltips. The page stays open with the old map and doesn't blink: the close hadn't landed when the reopen ran; the delay between them needs a second state. The page closes and stays closed: the reopen line failed; read `error.log` for a callback line naming `te_map_widgets.gui`. |
+| 2 | The see-through page | On the Map Room's page, click the crossed-out eye at the header's top left, beside the back arrow (`te_je_see_through`). Pick a few maps. Click the eye again. Then fade it and close the page with X (or Escape), and reopen it. Try a vanilla entry's page too. | The page fades to 30% and the map shows through, and stays faded from pick to pick; the second click brings it back; after a close it reopens whole. Say whether 30% is right: the header still findable, the map clear enough. The faded page still takes clicks (expected). Known edge: leave a faded page by opening another panel (a state, say) and the next journal page you open from the journal opens faded; the map buttons and the X clear it. | Nothing fades: `alpha` bound on the panel's root doesn't work (vanilla binds it only on inner widgets); fade the page's contents instead, which leaves the frame opaque. No eye: read `error.log` for `journal_entry.gui`. |
+| 3 | The Demographics button while paused | Pick Turmoil, close the page, pause, then click the Demographics header's map button. | The page opens on life expectancy at once: the pick and the open in one click are enough when the page starts closed. | Turmoil until unpause: give that button the same delayed reopen as the picks. |
+| 4 | Banking's stripes | Whenever a country's cycle overheats (later in a game), with Banking's map up. | Yellow stripes on that country's states (`map_color_second`; vanilla's own entries draw stripes the same way). | No stripes: note it; the tooltip still names the crash risk. |
 
 ## The second pass's checks, answered
 
@@ -40,7 +38,7 @@ From #1417's list (its numbering), by the fourth session under Results:
 | 4 | Repaint while paused | (a) Reopening the page repaints. The picks now reopen it themselves (third-pass check 1). |
 | 5 | The map with the page closed | Neither: the lens toolbar's lock doesn't keep it (the map went back to political), and the listed copy painted nothing with no page open and the open page's map otherwise. The copy is gone; the see-through page is the answer instead. |
 | 6 | Does the Banking tab paint its map | No: only its button (opening the entry's page) does. |
-| 7 | An inactive entry's page | Opens from a button and paints its map (magenta). (b), the wait for Potential, is moot. |
+| 7 | An inactive entry's page | Opens from a button and paints its map (magenta). (b), the wait for Potential, is moot. Banking's button lost its `IsActive` gate, which never mattered: the entry is active from the engine's first check. |
 | 8 | Look and feel | Good for now. |
 | 9 | Water, wasteland, unowned, decentralized | Land no branch paints draws dark grey; water keeps its normal look. |
 | 10 | Cost | Somewhat slower, hard to tell; not measured. |
@@ -179,10 +177,12 @@ them on Jan 1 while paused):
 - **Check 7: an inactive entry's page opens and paints.** The strip's Open Potential Probe, clicked before anything
   else, opened the inactive `je_te_map_potential_probe` ("Potential Probe (Test)", a Domestic Affairs entry), and the
   map turned magenta at once (screenshot). So `GetPlayerJournalEntry` returns an inactive copy, the panel opens it,
-  and its map paints: Banking's button no longer waits for the cycle. (b) wasn't answered and is moot: the log's
+  and its map paints: a map button needn't wait for its entry. Banking's button lost its `IsActive` gate on that
+  ground, though it gated nothing a player meets: the entry is active for every country from the engine's first check
+  (`possible = { always = yes }`), and the Banking tab waits for that. (b) wasn't answered and is moot: the log's
   `potential probe on` (Jan 4) and `off` (Jan 7) are the toggle, not the day the entry showed in Potential. The
   inactive page listed a long run of countries under Involved Countries, over a hundred flags and running off the
-  screen; third-pass check 3 asks whether Banking's does too.
+  screen; nothing opens an inactive page now, so it waits for a map that does.
 - **Check 8: good for now.**
 - **Check 9: land no branch paints draws dark grey, and water keeps its normal look.** A branch that matches paints
   any land: the probe's flat magenta covered all of it in the screenshot.
@@ -191,7 +191,7 @@ them on Jan 1 while paused):
   `gm_arch_country_has_any`, which reads its counts despite a `has_variable` guard in the same `AND` (1,104 lines;
   issue #1418), and vanilla's Indian Famines outcome (270 lines; `docs/vanilla/vanilla_known_bugs.md`).
 - **Third pass built on these** (this list): picks reopen the page to repaint, every journal page has a see-through
-  eye, Banking's button shows before the cycle, and the scope probe, the Potential probe, the test strip and the listed
+  eye, Banking's button has no `IsActive` gate, and the scope probe, the Potential probe, the test strip and the listed
   copy are gone.
 
 ## Not tested here
