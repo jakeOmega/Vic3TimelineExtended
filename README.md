@@ -70,7 +70,7 @@ Nineteen mod systems can be turned on or off at game setup. Defaults below; full
 | `united_nations_rule` | enabled | UN JE, vote events, specialized agencies |
 | `nuclear_weapons_rule` | enabled | Nuclear program JE, strike events, nuclear-disarmament treaty article |
 | `decolonization_rule` | enabled | Decolonization events, colonial-collapse absorption |
-| `space_race_rule` | Simple Colonies | Space race JEs and events. *Races Only*: the milestones, with colonies founded at once and kept by their holder. *Simple Colonies*: colony fleets that travel, settlers, modules, Extraplanetary Base room, Cede Colony, colony autonomy, abandonment and free colonies. *Full Colonies*: plays as Simple Colonies until the fleets phase. *Disabled*: no space race |
+| `space_race_rule` | Full Colonies | Space race JEs and events. *Races Only*: the milestones, with colonies founded at once and kept by their holder. *Simple Colonies*: colony fleets that travel, settlers, modules, Extraplanetary Base room, Cede Colony, colony autonomy, abandonment and free colonies. *Full Colonies*: Simple Colonies plus space fleets: Space Command, warships, battles, blockade, seizure and destruction of colonies, interdiction in peace and a contested Earth orbit. *Disabled*: no space race |
 | `social_movements_rule` | enabled | 5 social-movement JEs (civil rights, human augmentation, digital rights, post-scarcity, mental health) and the events they fire |
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
