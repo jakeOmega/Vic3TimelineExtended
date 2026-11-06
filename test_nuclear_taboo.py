@@ -16,7 +16,8 @@ import unittest
 from pathlib import Path
 
 from gui_test_helpers import history_charts
-from test_nuclear_deterrence import block, loc_keys, loc_value, read, sgui_ops, strip_comments
+from test_nuclear_deterrence import (block, loc_keys, loc_value, read, scaling_declarations, sgui_ops,
+                                     strip_comments)
 
 ROOT = Path(__file__).resolve().parent
 TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
@@ -371,7 +372,13 @@ class TestEveryoneActive(unittest.TestCase):
         unarmed = monthly[monthly.index("else = {"):]
         self.assertIn("nd_apply_posture_modifiers = yes", unarmed)
         self.assertIn("nd_clear_domestic_stance = yes", unarmed)
-        self.assertIn("remove_modifier = nd_upkeep_cost", block(self.det, "nd_apply_posture_modifiers"))
+        # The posture's modifiers are declared on the entry and gated on the
+        # arsenal; the unarmed branch only zeroes the upkeep the panel shows.
+        apply = block(self.det, "nd_apply_posture_modifiers")
+        self.assertIn("nd_posture_in_force = yes", apply)
+        self.assertIn("set_variable = { name = nd_upkeep_weekly_cached value = 0 }", apply[apply.index("else = {"):])
+        self.assertIn("nd_posture_in_force = yes",
+                      scaling_declarations(strip_comments(read(JE)))["nd_upkeep_cost"][0])
         weekly = block(strip_comments(read(JE)), "on_weekly_pulse")
         self.assertIn("has_variable = nd_arsenal_record", weekly)
         # A disarmed country now keeps the entry, so its weekly clean-up runs
@@ -438,13 +445,13 @@ class TestPossession(unittest.TestCase):
         self.assertIn("subtract = nd_taboo_burden_floor", factor)
         self.assertIn("min = 0", factor)
 
-    def test_refresh_runs_with_the_country_as_root(self):
-        body = block(self.effects, "nd_taboo_refresh_possession")
-        self.assertIn("multiplier = root.var:nd_taboo_burden_cached", body)
-        self.assertIn("je:je_nuclear_program ?=", body)
-        self.assertNotIn("remove_variable = nd_taboo_burden_cached", self.effects)
-        self.assertEqual(block(self.effects, "nd_taboo_country_monthly").count("nd_taboo_refresh_possession = yes"), 1)
-        self.assertNotIn("nd_taboo_refresh_possession", block(self.effects, "nd_taboo_monthly_update"))
+    def test_possession_cost_is_declared_on_the_entry(self):
+        # Vanilla 1.15: the entry declares it with the live burden (country
+        # root, O(1), 0 unarmed or below the floor); no pulse adds or caches it.
+        declared = scaling_declarations(strip_comments(read(JE)))
+        self.assertEqual(declared["nd_taboo_possession_cost"], ["value = nd_taboo_burden_value"])
+        self.assertNotIn("nd_taboo_refresh_possession", self.effects)
+        self.assertNotIn("nd_taboo_burden_cached", self.effects)
         self.assertIn("nd_taboo_country_monthly = yes", block(strip_comments(read(JE)), "on_monthly_pulse"))
 
     def test_restraint_groups_weigh_the_arsenal(self):

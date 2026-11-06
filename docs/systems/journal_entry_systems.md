@@ -1561,7 +1561,7 @@ Traced states: fresh activation (status variable absent → guarded fallback bra
 ### Modifiers
 - `nuclear_power` — applied when stockpile > 0
 - `country_nuclear_disarmament_bool` — not a static modifier: the flag the `nuclear_disarmament` **treaty article** puts on its source (and `un_npt_disarmament_modifier` carries); blocks program growth
-- `nuclear_weapon_program_funding` — the weekly innovation cost, applied **in `je:je_nuclear_program` scope** with `multiplier = nuclear_weapons_program_current_cost`. Owned by `nuclear_program_refresh_state_effect`, which takes it off when funding reaches 0. A `remove_modifier` for it in country scope is a silent no-op.
+- `nuclear_weapon_program_funding` — the weekly innovation cost, declared on `je_nuclear_program` (`scaling_modifiers_while_active`, vanilla 1.15) with value `nuclear_program_display_weekly_cost`, funding steps × the step's cost, so it is off at funding 0. Nothing adds, removes or tests it; the buttons, the pause treaty and lost standing move only `nuclear_weapons_program_funding`.
 - `nuclear_program_debug_pause` — console-only, carries `country_nuclear_program_pause_bool` for the test harness. Nothing in the mod applies it.
 - War support (1.14): an enemy with `nuclear_power` costs a non-nuclear country −0.25 per beat — `common/script_values/zz_te_war_support_injections.txt` (see `mod_systems/war.md` § War Support Feeds)
 
