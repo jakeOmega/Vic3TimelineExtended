@@ -9157,7 +9157,6 @@
  te_nation_grp_taxes:0 "Taxes and Minting"
  te_nation_grp_trade:0 "Trade"
  te_nation_grp_unrest:0 "Unrest"
- te_nation_grp_war_support:0 "War Support"
  te_nation_how_construction:0 "A rich country needs more construction for each building and each level of upkeep once few of its workers are idle, so it can't outbuild its population, and a poor one catches up. The scaling is set each year from GDP per capita and the share of the workforce that are peasants or unemployed, and multiplies with the other construction-cost modifiers."
  te_nation_how_header:0 "How the Nation Works"
  te_nation_how_jud:0 "Hover [concept_judicial_independence] for each court law's ceiling and what the courts give. The score starts at the first monthly update, and forcing a law through spends some of it."
