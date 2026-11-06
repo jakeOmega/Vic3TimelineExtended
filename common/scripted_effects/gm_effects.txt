@@ -719,14 +719,18 @@ gm_country_refresh = {
 	# is_shown_when_inactive auto-activates it for new saves, but a new
 	# auto-activating JE does not reach a save started before it existed
 	# (same doc, following paragraph). Add it explicitly here so saves that
-	# predate this entry, and any save where it lapsed, pick it back up. Not for
+	# predate this entry, and a country whose entry concluded (its invalid
+	# outcome, once it owned nothing: the record is gone, and the engine never
+	# activates the type again), pick it back up. Not for
 	# a decentralized country (has_events = no), which can hold a landmark (Great
 	# Zimbabwe, under the Rozvi) but takes no journal entry: the add logs an error.
-	# Nor while the entry is shown but not yet active: has_journal_entry reads
-	# active entries only, the engine activates that one at its next check of
-	# `possible`, and adding over it logged "already has a journal entry of
-	# type je_grand_monuments" (journal_entry_manager.cpp: 116 lines, 55 countries,
-	# as the first 1.15 game began; the same line on 1.14.5).
+	# Nor over an inactive copy, which every country holds until its entry
+	# first concludes: has_journal_entry reads active entries only, the engine
+	# activates that copy at its next check of `possible`, and adding over it
+	# logged "already has a journal entry of type je_grand_monuments"
+	# (journal_entry_manager.cpp: 116 lines, 55 countries, as the first 1.15
+	# game began; the same line on 1.14.5). So the add reaches only a country
+	# with no record (#1416).
 	if = {
 		limit = {
 			gm_system_enabled = yes
@@ -1494,7 +1498,7 @@ gm_state_tear_down = {
 # nothing, so the reads of gm_rebuild_cost and gm_rebuild_level found them
 # unset (~600 error lines a frame through the level switch's 200 cases while
 # the Rededicate button was hovered, 2026-10-12). Every caller already shows
-# gm_rededicate_tt in place of these effects (gm_state_choose_rededicate) or
+# a gm_rededicate_*tt in place of these effects (gm_state_choose_rededicate) or
 # needs no tooltip (the AI), so the guard hides nothing
 # (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects").
 gm_state_rededicate = {
@@ -1581,18 +1585,44 @@ gm_state_preserve = {
 # State scope. Each choice with the tooltip that says what it does. One
 # wrapper per choice, so the notice, the per-monument event and the journal
 # entry's buttons show the same words. The loc reads the state as THIS.
+#
+# Pull Down and Rededicate add a line for each group whose approval the
+# choice moves, only while it moves (gm_preview_choices' figures). The case is
+# picked here, one key each splicing the shared text, not in the loc: a key
+# named in SelectLocalization loses THIS (#1413; gui_modding_guide.md's
+# SelectLocalization note). One custom_tooltip whatever the case, since two
+# lines in the state's scope list under its name in monument_events.17.
 gm_state_choose_tear_down = {
-	custom_tooltip = {
-		text = gm_tear_down_tt
-		gm_state_tear_down = yes
+	if = {
+		limit = {
+			gm_state_disp_prev_td_base != 0
+			gm_state_disp_prev_td_sup != 0
+		}
+		custom_tooltip = gm_tear_down_base_sup_tt
 	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_base != 0 }
+		custom_tooltip = gm_tear_down_base_tt
+	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_sup != 0 }
+		custom_tooltip = gm_tear_down_sup_tt
+	}
+	else = {
+		custom_tooltip = gm_tear_down_tt
+	}
+	hidden_effect = { gm_state_tear_down = yes }
 }
 
 gm_state_choose_rededicate = {
-	custom_tooltip = {
-		text = gm_rededicate_tt
-		gm_state_rededicate = yes
+	if = {
+		limit = { gm_state_disp_prev_rd_sup != 0 }
+		custom_tooltip = gm_rededicate_sup_tt
 	}
+	else = {
+		custom_tooltip = gm_rededicate_tt
+	}
+	hidden_effect = { gm_state_rededicate = yes }
 }
 
 gm_state_choose_preserve = {

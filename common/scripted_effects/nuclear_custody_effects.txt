@@ -360,6 +360,16 @@ nd_custody_reconcile_soon = {
 # immediate): a rebel given its share at an outbreak, or the successor of an
 # ended arsenal. Everything the arsenal needs that must run with ROOT = the
 # holder, then the one notice.
+#
+# The entry: being armed meets its possible and is_shown_when_inactive
+# (nuclear_program_entry_applies), so a holder with an inactive copy, which is
+# every country (the entry never concludes, and can_deactivate keeps the
+# record), gets it at the engine's next check, within two weeks. The add is
+# only for a holder with no record (one the engine left out): over an inactive
+# copy it is refused with an error ("already has a journal entry of type",
+# scripting_best_practices.md, the has_journal_entry bullet; #1416). The
+# entry's weekly pulse restores the carried progress whenever it activates
+# (nd_custody_restore_progress).
 nd_custody_after_arrival = {
 	if = {
 		limit = { has_variable = nd_custody_arrival_pending }
@@ -371,6 +381,7 @@ nd_custody_after_arrival = {
 			limit = {
 				has_game_rule = nuclear_weapons_enabled
 				NOT = { has_journal_entry = je_nuclear_program }
+				NOT = { has_inactive_journal_entry = je_nuclear_program }
 			}
 			add_journal_entry = { type = je_nuclear_program }
 		}

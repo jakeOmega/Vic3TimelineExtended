@@ -1722,6 +1722,16 @@ monument_events.29 = {
 			set_variable = { name = gm_rebuilding days = 1 }
 			remove_building = building_grand_monument
 			debug_log = "TE_MONUMENTS: a Grand Monument building no record describes, with no monument of its region to take it (a revolt's part of a monument's state), is removed"
+			# Whose part it was, and whether records came with it (issue #1409):
+			# a revolt's part is a new state holding none, so a gm_seen here
+			# means the engine copied the old state's variables to it.
+			if = {
+				limit = { has_variable = gm_seen }
+				debug_log = "TE_MONUMENTS: that building stood in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], which holds a monument's records all the same (gm_seen with no gm_migrated): the engine copied them to it"
+			}
+			else = {
+				debug_log = "TE_MONUMENTS: that building stood in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], which holds no monument's records"
+			}
 		}
 		else_if = {
 			limit = { gm_state_newcomer_settled = yes }

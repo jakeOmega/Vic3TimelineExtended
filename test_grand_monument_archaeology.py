@@ -625,11 +625,14 @@ class EntryTests(unittest.TestCase):
         self.assertIn("gm_arch_country_idle = yes", idle, "the entry does not close on a dig")
 
     def test_the_counts_the_pass_writes(self):
-        t = read(TRIGGERS)
-        self.assertEqual(squash(block(t, "gm_arch_country_idle")), "gm_arch_country_has_any = no")
-        has = squash(block(t, "gm_arch_country_has_any"))
-        self.assertIn("has_variable = gm_arch_dig_count var:gm_arch_dig_count > 0", has)
-        self.assertIn("has_variable = gm_arch_open_count var:gm_arch_open_count > 0", has)
+        t = strip_comments(read(TRIGGERS))
+        self.assertEqual(squash(block(t, "gm_arch_country_has_any")), "gm_arch_country_idle = no")
+        idle = squash(block(t, "gm_arch_country_idle"))
+        # Each read behind its guard in a trigger_if, never beside it in an AND,
+        # which a journal entry's possible reads child by child (#1418).
+        self.assertIn("trigger_if = { limit = { has_variable = gm_arch_dig_count } var:gm_arch_dig_count <= 0 }", idle)
+        self.assertIn("trigger_if = { limit = { has_variable = gm_arch_open_count } var:gm_arch_open_count <= 0 }", idle)
+        self.assertNotIn("AND", idle)
 
     def test_a_country_that_digs_keeps_its_pulse(self):
         body = squash(block(read(EFFECTS), "gm_arch_country_listed"))

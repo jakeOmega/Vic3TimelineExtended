@@ -43,7 +43,9 @@ gm_mon_take_sgui = {
 # ---- A contested monument beside another (ageing spec 2026-10-16 §4.3) ---------------
 # Its row's three choices in Our Monuments. Pull Down and Rededicate only
 # order the work (gm_mon_order_choice, monument_events.30); Keep as Heritage
-# rebuilds nothing and runs here, as gm_preserve_sgui does.
+# rebuilds nothing and runs here, as gm_preserve_sgui does. Pull Down's and
+# Rededicate's approval lines are picked in script, one key per case, as
+# gm_state_choose_tear_down's are (#1413).
 gm_mon_tear_down_sgui = {
 	scope = country
 	saved_scopes = { gm_mon }
@@ -73,10 +75,25 @@ gm_mon_tear_down_sgui = {
 
 	effect = {
 		scope:gm_mon = {
-			custom_tooltip = {
-				text = gm_mon_tear_down_tt
-				gm_mon_order_choice = { CHOICE = tear_down }
+			if = {
+				limit = {
+					gm_mon_disp_prev_td_base != 0
+					gm_mon_disp_prev_td_sup != 0
+				}
+				custom_tooltip = gm_mon_tear_down_base_sup_tt
 			}
+			else_if = {
+				limit = { gm_mon_disp_prev_td_base != 0 }
+				custom_tooltip = gm_mon_tear_down_base_tt
+			}
+			else_if = {
+				limit = { gm_mon_disp_prev_td_sup != 0 }
+				custom_tooltip = gm_mon_tear_down_sup_tt
+			}
+			else = {
+				custom_tooltip = gm_mon_tear_down_tt
+			}
+			hidden_effect = { gm_mon_order_choice = { CHOICE = tear_down } }
 		}
 	}
 
@@ -118,10 +135,14 @@ gm_mon_rededicate_sgui = {
 
 	effect = {
 		scope:gm_mon = {
-			custom_tooltip = {
-				text = gm_mon_rededicate_tt
-				gm_mon_order_choice = { CHOICE = rededicate }
+			if = {
+				limit = { gm_mon_disp_prev_rd_sup != 0 }
+				custom_tooltip = gm_mon_rededicate_sup_tt
 			}
+			else = {
+				custom_tooltip = gm_mon_rededicate_tt
+			}
+			hidden_effect = { gm_mon_order_choice = { CHOICE = rededicate } }
 		}
 	}
 

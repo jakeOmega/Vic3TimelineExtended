@@ -4702,6 +4702,10 @@ LIGHT_BAND_TOLERANCE = Decimal("0.0005")
 LIGHT_PAYER_EXPOSURE = Decimal("0.5")
 # Scratch values of one sync or step, persistent so a tooltip pass never reads them unset.
 LIGHT_SCRATCH = ("te_tax_light_tgt", "te_tax_light_d", "te_tax_light_was", "te_tax_light_s", "te_tax_light_rlv")
+# What the code was last carried into: the law (te_tax_light_law_id) and the native tax level.
+# The migration writes them (te_tax_light_migrate_country) and the sync keeps them; with
+# light_tokens() and the marker te_tax_light_on they are the whole of a country's light code.
+LIGHT_CARRIED = ("te_tax_light_law", "te_tax_light_level")
 # te_tax_light_step_<key>_sgui's op table: 0 one step down, 1 one step up, 2 to the floor
 # (LIGHT_FLOOR, no tax), 3 to the law's very-high rate (te_tax_light_cmd_step DIR).
 LIGHT_OPS = (0, 1, 2, 3)
@@ -4709,6 +4713,20 @@ LIGHT_OPS = (0, 1, 2, 3)
 # its law's very-low rate; changed 2026-10-20.) A rate below the very-low rate sits on the
 # very-low step and is collected through relief, like any rate below the tax level.
 LIGHT_FLOOR = 0
+
+
+def light_tokens():
+    """[(name, default)]: every country token te_tax_light_gen_init defaults, in its order: each
+    tax's rate index, relief steps and step; each group's running reaction, its rounded size and
+    its band; the scratch values. The outbreak copy (te_tax_light_gen_copy_code) copies these and
+    LIGHT_CARRIED, so a token added here is copied too."""
+    tokens = []
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        tokens += [(f"te_tax_en_{key}", 0), (f"te_tax_light_rl_{key}", 0), (f"te_tax_light_rg_{key}", -1)]
+    for ig in IGS:
+        tokens += [(f"te_tax_lr_{ig}", 0), (f"te_tax_lr_mag_{ig}", 0), (f"te_tax_light_band_{ig}", 0)]
+    return tokens + [(var, 0) for var in LIGHT_SCRATCH]
 
 
 def light_ladders():
@@ -5048,21 +5066,12 @@ def light_effects():
         "# Every light token, with its default where absent. Never overwrites one.",
         "te_tax_light_gen_init = {",
     ]
-    for instrument in INSTRUMENTS:
-        key = instrument.key
-        for var, default in ((f"te_tax_en_{key}", 0), (f"te_tax_light_rl_{key}", 0), (f"te_tax_light_rg_{key}", -1)):
-            lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                         f"value = {default} }} }}")
-    for ig in IGS:
-        for var in (f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}", f"te_tax_light_band_{ig}"):
-            lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                         "value = 0 } }")
-    # The scratch values of one sync or step. A button's tooltip walks its hidden effect without
-    # running it, so a limit that reads one set earlier in the same effect reads it as unset
-    # (scripting_best_practices.md, "ExecuteTooltip"): these persist between runs instead.
-    for var in LIGHT_SCRATCH:
+    # The scratch values (LIGHT_SCRATCH) come last. A button's tooltip walks its hidden effect
+    # without running it, so a limit that reads one set earlier in the same effect reads it as
+    # unset (scripting_best_practices.md, "ExecuteTooltip"): these persist between runs instead.
+    for var, default in light_tokens():
         lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                     "value = 0 } }")
+                     f"value = {default} }} }}")
     lines += [
         "}",
         "",
@@ -5076,6 +5085,18 @@ def light_effects():
     for instrument in INSTRUMENTS:
         lines += [f"\tset_variable = {{ name = te_tax_light_rl_{instrument.key} value = 0 }}",
                   f"\tset_variable = {{ name = te_tax_light_rg_{instrument.key} value = -1 }}"]
+    lines += [
+        "}",
+        "",
+        "# Outbreak copy (te_tax_light_copy_code, te_tax_civil_war_effects.txt): every light token",
+        "# from scope:te_tax_source, the country the uprising rose against, onto the uprising: each",
+        "# tax's rate index, relief steps and step, each group's running reaction, its size and its",
+        "# band, the scratch values, and the law and the tax level the code was last carried into.",
+        "# The marker te_tax_light_on is the caller's, written last.",
+        "te_tax_light_gen_copy_code = {",
+    ]
+    lines += [_copy(name) for name, _ in light_tokens()]
+    lines += [_copy(name) for name in LIGHT_CARRIED]
     lines += [
         "}",
         "",
@@ -5103,12 +5124,13 @@ def light_effects():
     lines += [
         "}",
         "",
-        "# The active law changed (a player's country): a tax it does not levy goes to 0; one it",
-        "# newly levies (the previous law, te_tax_light_law, did not) starts at its rate for the tax",
-        "# level the code last set, as enacting the law gives in the base game; every other tax is",
-        "# clamped between 0 (a tax cut to nothing stays at nothing) and its rate at that tax level,",
-        "# so a law change never raises the tax level (Proportional's 20% wage tax would sit on",
-        "# Graduated's very-high step). No reaction: the law change's own approval covers it.",
+        "# The active law changed (a player's country, or an uprising holding a copied code): a tax",
+        "# it does not levy goes to 0; one it newly levies (the previous law, te_tax_light_law, did",
+        "# not) starts at its rate for the tax level the code last set, as enacting the law gives in",
+        "# the base game; every other tax is clamped between 0 (a tax cut to nothing stays at",
+        "# nothing) and its rate at that tax level, so a law change never raises the tax level",
+        "# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the",
+        "# law change's own approval covers it.",
         "te_tax_light_gen_clamp = {",
     ]
     for instrument in INSTRUMENTS:
@@ -5123,10 +5145,11 @@ def light_effects():
     lines += [
         "}",
         "",
-        "# The native tax level moved outside the code (a player's country; the buttons are greyed,",
-        "# so only script reaches this): each levied tax moves by its law's difference between the",
-        "# new level and the one the code last set, clamped into the range, which is what the",
-        "# country already collects. Each tax that moves draws its reaction.",
+        "# The native tax level moved outside the code (a player's country, where the buttons are",
+        "# greyed, so only script reaches this; or an uprising holding a copied code, whose AI sets",
+        "# its level): each levied tax moves by its law's difference between the new level and the",
+        "# one the code last set, clamped into the range, which is what the country already",
+        "# collects. Each tax that moves draws its reaction.",
         "te_tax_light_gen_shift = {",
     ]
     for instrument in INSTRUMENTS:

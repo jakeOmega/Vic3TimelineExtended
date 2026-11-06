@@ -34,7 +34,10 @@
 # The AI. An AI country keeps choosing its native tax level as in the base
 # game; at each sync its code follows it, every tax at the law's rate for that
 # level, and each change draws the same reactions. Its code never carries
-# relief, so a level change collects the right rates at once.
+# relief, so a level change collects the right rates at once. The exception is
+# an uprising while its war lasts (te_tax_light_ai_uniform): it holds the code
+# of the country it rose against, and the sync keeps that code as it keeps a
+# player's, each tax moving with the level its AI sets.
 #
 # The relief and reaction modifiers are je_tax_code's scaling modifiers
 # (scaling_modifiers_while_active): the entry reads each from the country's
@@ -45,22 +48,27 @@
 # engine left without the entry gets it from te_tax_light_entry_net
 # (te_tax_on_actions.txt).
 #
-# A revolution's winner inherits every variable here and no modifier; the next
-# sync (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds the
-# view bands back from the variables.
+# Civil wars. At an outbreak the rebels receive every light token of the
+# original's (te_tax_light_copy_code, te_tax_civil_war_effects.txt), and
+# te_tax_light.4 sets their tax level to the code's
+# (te_tax_light_adopt_copied_code, below). A revolution's winner inherits every
+# variable here it does not hold itself and no modifier; both sides hold every
+# token from the outbreak, so the winner keeps its own code, and the next sync
+# (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds the view
+# bands back from the variables.
 #
 # Every entry point is a country effect in the country's own scope: a country
-# event (te_tax_light.1-.3) or the player's scripted GUI (te_tax_light_step_
+# event (te_tax_light.1-.4) or the player's scripted GUI (te_tax_light_step_
 # <key>_sgui).
 # ============================================================================
 
 # Country scope (te_tax_light.2: every country after the lobby, a formed or
-# released country, the rebels of an uprising, and any country the monthly
-# dispatch finds unmigrated). Every tax at the active law's rate for the native
-# tax level, so the country collects what it did; then the first sync, which
-# needs te_tax_light_on. Runs once: a country holding te_tax_light_on at 1 is
-# left alone. A released or rebel country has it cleared first, so it starts from
-# its own law.
+# released country, the rebels of an uprising against a country whose code is
+# not yet in force, and any country the monthly dispatch finds unmigrated).
+# Every tax at the active law's rate for the native tax level, so the country
+# collects what it did; then the first sync, which needs te_tax_light_on. Runs
+# once: a country holding te_tax_light_on at 1 is left alone. A released or
+# rebel country has it cleared first, so it starts from its own law.
 te_tax_light_migrate_country = {
 	if = {
 		limit = {
@@ -95,6 +103,10 @@ te_tax_light_migrate_country = {
 #      a player's: if the native level moved outside the code (only script can
 #      move it; the buttons are greyed), each tax moves by its law's difference
 #      between the two levels (te_tax_light_gen_shift), scored;
+#      "an AI country" is te_tax_light_ai_uniform: an uprising while its war
+#      lasts takes the player's branches, so the code it copied from the
+#      country it rose against keeps its shape, every tax moving with the level
+#      its AI sets;
 #   3. each tax's step, and for a player's country the tax level they give;
 #   4. relief steps, reaction sizes and bands (the view-band modifiers).
 # Every limit on the way reads a variable that persists between runs
@@ -114,7 +126,7 @@ te_tax_light_sync = {
 				}
 			}
 			if = {
-				limit = { is_ai = yes }
+				limit = { te_tax_light_ai_uniform = yes }
 				te_tax_light_gen_uniform = yes
 			}
 			else = {
@@ -124,7 +136,7 @@ te_tax_light_sync = {
 			debug_log = "TE_TAX light_law_changed the code was carried into the new taxation law's range; law=[SCOPE.ScriptValue('te_tax_light_law_id')|0] month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 		if = {
-			limit = { is_ai = yes }
+			limit = { te_tax_light_ai_uniform = yes }
 			if = {
 				limit = { NOT = { var:te_tax_light_level = te_tax_light_native_level } }
 				set_variable = { name = te_tax_light_was value = var:te_tax_light_level }
@@ -161,6 +173,34 @@ te_tax_light_sync = {
 		te_tax_light_gen_relief = yes
 		te_tax_light_gen_reaction_sizes = yes
 		te_tax_light_gen_bands = yes
+	}
+}
+
+# Country scope (te_tax_light.4, raised by te_tax_on_uprising on the rebels
+# once te_tax_light_copy_code has given them the original's code; #1469). The
+# native tax level is set to the code's (te_tax_light_gen_set_level, from the
+# copied te_tax_light_level; left alone on no vanilla taxation law, as the sync
+# does), as the legislated code's te_tax.6 installs the carrier, and the first
+# sync runs the next day (te_tax_light.3), once the new level reads: it finds
+# the level where the code put it and keeps every rate, re-deriving the steps,
+# the relief, the reaction sizes and the view bands. A taxation law the rebels
+# hold apart from the original's is the sync's first step: the code is clamped
+# into its range and the tax level never rises. Whether this fires before or
+# after the engine has finished setting the rebels' laws and tax level is
+# unread; a level the engine sets later is a level moved outside the code, and
+# every tax moves with it (te_tax_light_gen_shift, light_level_adopted).
+te_tax_light_adopt_copied_code = {
+	if = {
+		limit = { te_tax_light_in_force = yes }
+		if = {
+			limit = {
+				has_variable = te_tax_light_law
+				var:te_tax_light_law > 0
+				has_variable = te_tax_light_level
+			}
+			te_tax_light_gen_set_level = yes
+		}
+		trigger_event = { id = te_tax_light.3 days = 1 }
 	}
 }
 

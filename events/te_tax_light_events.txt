@@ -1,11 +1,12 @@
 ﻿# ============================================================================
 # LIGHT TAX CODE — internal country events
 # ============================================================================
-# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt and by
+# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt, by
 # te_tax_on_uprising / te_tax_repair_after_civil_war
-# (common/scripted_effects/te_tax_civil_war_effects.txt). Each runs in the
-# country it fires on; the relief and reaction modifiers are je_tax_code's
-# scaling modifiers, which read the variables the sync writes. Logic:
+# (common/scripted_effects/te_tax_civil_war_effects.txt) and by
+# te_tax_light_adopt_copied_code (te_tax_light.4 raises te_tax_light.3). Each
+# runs in the country it fires on; the relief and reaction modifiers are
+# je_tax_code's scaling modifiers, which read the variables the sync writes. Logic:
 # common/scripted_effects/te_tax_light_effects.txt;
 # design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md.
 # ============================================================================
@@ -40,7 +41,8 @@ te_tax_light.2 = {
 }
 
 # Sync: raised a moment after a taxation law is activated (on_law_activated),
-# so it sees the new law, and for a civil war's winner. Firing it again
+# so it sees the new law, for a civil war's winner, and a day after an
+# uprising adopts a copied code (te_tax_light.4). Firing it again
 # (console: event te_tax_light.3) changes nothing.
 te_tax_light.3 = {
 	type = country_event
@@ -50,5 +52,21 @@ te_tax_light.3 = {
 
 	immediate = {
 		te_tax_light_sync = yes
+	}
+}
+
+# Adoption of a copied code (#1469): on the rebels of an uprising, raised by
+# te_tax_on_uprising once te_tax_light_copy_code has given them the original's
+# code. The tax level is set to the code's and the first sync follows the next
+# day (te_tax_light.3). Firing it again (console: event te_tax_light.4) puts the
+# tax level back where the code last set it and syncs again.
+te_tax_light.4 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_light_on = yes }
+
+	immediate = {
+		te_tax_light_adopt_copied_code = yes
 	}
 }

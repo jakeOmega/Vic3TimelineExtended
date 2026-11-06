@@ -91,6 +91,60 @@ te_tax_light_gen_reset = {
 	set_variable = { name = te_tax_light_rg_cons value = -1 }
 }
 
+# Outbreak copy (te_tax_light_copy_code, te_tax_civil_war_effects.txt): every light token
+# from scope:te_tax_source, the country the uprising rose against, onto the uprising: each
+# tax's rate index, relief steps and step, each group's running reaction, its size and its
+# band, the scratch values, and the law and the tax level the code was last carried into.
+# The marker te_tax_light_on is the caller's, written last.
+te_tax_light_gen_copy_code = {
+	te_tax_copy_token = { NAME = te_tax_en_wage }
+	te_tax_copy_token = { NAME = te_tax_light_rl_wage }
+	te_tax_copy_token = { NAME = te_tax_light_rg_wage }
+	te_tax_copy_token = { NAME = te_tax_en_div }
+	te_tax_copy_token = { NAME = te_tax_light_rl_div }
+	te_tax_copy_token = { NAME = te_tax_light_rg_div }
+	te_tax_copy_token = { NAME = te_tax_en_land }
+	te_tax_copy_token = { NAME = te_tax_light_rl_land }
+	te_tax_copy_token = { NAME = te_tax_light_rg_land }
+	te_tax_copy_token = { NAME = te_tax_en_head }
+	te_tax_copy_token = { NAME = te_tax_light_rl_head }
+	te_tax_copy_token = { NAME = te_tax_light_rg_head }
+	te_tax_copy_token = { NAME = te_tax_en_cons }
+	te_tax_copy_token = { NAME = te_tax_light_rl_cons }
+	te_tax_copy_token = { NAME = te_tax_light_rg_cons }
+	te_tax_copy_token = { NAME = te_tax_lr_armed_forces }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_armed_forces }
+	te_tax_copy_token = { NAME = te_tax_light_band_armed_forces }
+	te_tax_copy_token = { NAME = te_tax_lr_devout }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_devout }
+	te_tax_copy_token = { NAME = te_tax_light_band_devout }
+	te_tax_copy_token = { NAME = te_tax_lr_industrialists }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_industrialists }
+	te_tax_copy_token = { NAME = te_tax_light_band_industrialists }
+	te_tax_copy_token = { NAME = te_tax_lr_intelligentsia }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_intelligentsia }
+	te_tax_copy_token = { NAME = te_tax_light_band_intelligentsia }
+	te_tax_copy_token = { NAME = te_tax_lr_landowners }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_landowners }
+	te_tax_copy_token = { NAME = te_tax_light_band_landowners }
+	te_tax_copy_token = { NAME = te_tax_lr_petty_bourgeoisie }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_petty_bourgeoisie }
+	te_tax_copy_token = { NAME = te_tax_light_band_petty_bourgeoisie }
+	te_tax_copy_token = { NAME = te_tax_lr_rural_folk }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_rural_folk }
+	te_tax_copy_token = { NAME = te_tax_light_band_rural_folk }
+	te_tax_copy_token = { NAME = te_tax_lr_trade_unions }
+	te_tax_copy_token = { NAME = te_tax_lr_mag_trade_unions }
+	te_tax_copy_token = { NAME = te_tax_light_band_trade_unions }
+	te_tax_copy_token = { NAME = te_tax_light_tgt }
+	te_tax_copy_token = { NAME = te_tax_light_d }
+	te_tax_copy_token = { NAME = te_tax_light_was }
+	te_tax_copy_token = { NAME = te_tax_light_s }
+	te_tax_copy_token = { NAME = te_tax_light_rlv }
+	te_tax_copy_token = { NAME = te_tax_light_law }
+	te_tax_copy_token = { NAME = te_tax_light_level }
+}
+
 # Every tax at the active law's rate for the native tax level: the migration, and an AI
 # country's code after a law change. No reaction.
 te_tax_light_gen_uniform = {
@@ -126,12 +180,13 @@ te_tax_light_gen_uniform_scored = {
 	set_variable = { name = te_tax_en_cons value = te_tax_light_idx_cons_native }
 }
 
-# The active law changed (a player's country): a tax it does not levy goes to 0; one it
-# newly levies (the previous law, te_tax_light_law, did not) starts at its rate for the tax
-# level the code last set, as enacting the law gives in the base game; every other tax is
-# clamped between 0 (a tax cut to nothing stays at nothing) and its rate at that tax level,
-# so a law change never raises the tax level (Proportional's 20% wage tax would sit on
-# Graduated's very-high step). No reaction: the law change's own approval covers it.
+# The active law changed (a player's country, or an uprising holding a copied code): a tax
+# it does not levy goes to 0; one it newly levies (the previous law, te_tax_light_law, did
+# not) starts at its rate for the tax level the code last set, as enacting the law gives in
+# the base game; every other tax is clamped between 0 (a tax cut to nothing stays at
+# nothing) and its rate at that tax level, so a law change never raises the tax level
+# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the
+# law change's own approval covers it.
 te_tax_light_gen_clamp = {
 	if = { limit = { NOT = { te_tax_light_levies_wage = yes } } set_variable = { name = te_tax_en_wage value = 0 } }
 	else_if = { limit = { NOT = { te_tax_light_old_levies_wage = yes } } set_variable = { name = te_tax_en_wage value = te_tax_light_idx_wage_at_level } }
@@ -150,10 +205,11 @@ te_tax_light_gen_clamp = {
 	else = { clamp_variable = { name = te_tax_en_cons min = te_tax_light_min_cons max = te_tax_light_idx_cons_at_level } }
 }
 
-# The native tax level moved outside the code (a player's country; the buttons are greyed,
-# so only script reaches this): each levied tax moves by its law's difference between the
-# new level and the one the code last set, clamped into the range, which is what the
-# country already collects. Each tax that moves draws its reaction.
+# The native tax level moved outside the code (a player's country, where the buttons are
+# greyed, so only script reaches this; or an uprising holding a copied code, whose AI sets
+# its level): each levied tax moves by its law's difference between the new level and the
+# one the code last set, clamped into the range, which is what the country already
+# collects. Each tax that moves draws its reaction.
 te_tax_light_gen_shift = {
 	if = {
 		limit = { te_tax_light_levies_wage = yes }

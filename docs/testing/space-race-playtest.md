@@ -60,3 +60,9 @@ The Space Program now stands in its owner's capital (`sr_space_program_site`, `s
 1. **Founding it as a customs-union member.** As a great or major power in another country's customs union, with Guided Missiles: Found a Space Program is possible, and the building appears in our capital, running Earth Orbit, and still stands two months later (the monthly `remove_invalid_buildings` sweep spares it).
 2. **A market capital that is not the capital.** As the USA (market capital New York, capital Washington), found one: it stands in Washington. The build menu lists only the capital, and the greyed reason on other states reads "This state is our capital".
 3. **Space Command's tie.** With two Space Commands of the same size after an annexation, the one in the capital stays.
+
+## An idle Solar System Colonization's approach (2026-11-06, #1472)
+
+Solar System Colonization's entry stays open for its colonies after its programme stops, and its approach declarations now also need the programme billed (`sr_milestone_billed_solar_colonization`), as its cost and funding declarations already did.
+
+1. **The approach goes with the programme.** Run Solar System Colonization on Ambitious beside another milestone, and note that milestone's pace. Switch the Space Program's colonization method off and wait a week: `sr_ambitious_approach` leaves the solar entry (hover its modifiers), the other milestone's pace falls by the +50%, and the solar overview reads Idle. Switch the method back on: within a week the modifier is back, and so is the pace.

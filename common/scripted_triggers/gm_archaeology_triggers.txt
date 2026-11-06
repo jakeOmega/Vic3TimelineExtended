@@ -207,25 +207,28 @@ gm_arch_order_spared = {
 }
 
 # ---- A country's side -------------------------------------------------------------------------
-# Country scope. It digs, or a site waits for it (gm_arch_pass writes the
-# counts): the journal entry stays for either.
-gm_arch_country_has_any = {
-	OR = {
-		AND = {
-			has_variable = gm_arch_dig_count
-			var:gm_arch_dig_count > 0
-		}
-		AND = {
-			has_variable = gm_arch_open_count
-			var:gm_arch_open_count > 0
-		}
+# Country scope. Nothing dug, nothing waiting, no cost or drain still on
+# (gm_arch_pass writes the counts; a country it hasn't visited has neither).
+# Part of gm_ledgers_idle.
+# Each read sits in a trigger_if behind its has_variable, never beside it in an
+# AND: a journal entry's possible and outcome read every child of an AND, so
+# the guard protected nothing and an unset count logged three errors per read
+# (#1418; scripting_best_practices.md, "A multi-child NOT reads every child").
+gm_arch_country_idle = {
+	trigger_if = {
+		limit = { has_variable = gm_arch_dig_count }
+		var:gm_arch_dig_count <= 0
+	}
+	trigger_if = {
+		limit = { has_variable = gm_arch_open_count }
+		var:gm_arch_open_count <= 0
 	}
 }
 
-# Country scope. Nothing dug, nothing waiting, no cost or drain still on.
-# Part of gm_ledgers_idle.
-gm_arch_country_idle = {
-	gm_arch_country_has_any = no
+# Country scope. It digs, or a site waits for it: the journal entry stays for
+# either.
+gm_arch_country_has_any = {
+	gm_arch_country_idle = no
 }
 
 # Country scope, the host. A site on its ground is open to $WHO$: the

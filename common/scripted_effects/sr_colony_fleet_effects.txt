@@ -235,10 +235,13 @@ sr_cf_after_found = {
 # needs the entry that holds its modifiers: opened, after the sync has counted
 # the colony (so `possible` holds), before the founding event offers its
 # specialization (declared on the entry, which applies it only while active).
+# Only for a country holding no record of it (sr_site_gained_base says why):
+# one with an inactive copy gets the entry at the engine's next check.
 sr_cf_open_entry = {
 	if = {
 		limit = {
 			NOT = { has_journal_entry = je_space_race_solar_colonization }
+			NOT = { has_inactive_journal_entry = je_space_race_solar_colonization }
 			sr_space_race_on = yes
 		}
 		add_journal_entry = { type = je_space_race_solar_colonization }
