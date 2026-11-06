@@ -91,6 +91,12 @@ je_tax_code = {
 	can_revolution_inherit = yes
 	should_update_on_player_command = yes
 
+	on_weekly_pulse = {
+		effect = {
+			legacy_scaling_strip_tax_code = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+		}
+	}
+
 	# The light code's relief and reactions (docs/systems/tax_code_schema.md,
 	# "Light code"), one declaration per modifier. Each value is generated
 	# (te_tax_light_generated_values.txt) and reads the country's variables,
