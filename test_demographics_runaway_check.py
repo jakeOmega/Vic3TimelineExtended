@@ -71,6 +71,7 @@ class TestTripwire(unittest.TestCase):
     def assert_quiet(self, state, **kw):
         eng = self.run_check(state, **kw)
         self.assertNotIn("te_dg_chk_runaway", eng.vars)
+        self.assertNotIn("te_dg_chk_runaway_year", eng.vars)
         self.assertEqual(_verdicts(eng), [])
 
     def test_a_sane_state_is_quiet(self):
@@ -121,10 +122,12 @@ class TestTripwire(unittest.TestCase):
 
     def test_once_a_state(self):
         eng = self.assert_trips(SINDH, 2)
-        eng.vars.update(te_dg_walk_pop=-1.0)
+        self.assertEqual(eng.vars["te_dg_chk_runaway_year"], 1922.0, "a save dates the trip")
+        eng.vars.update(te_dg_walk_pop=-1.0, te_dg_year=1923.0)
         eng.call(CHECK)
         self.assertEqual(len(_verdicts(eng)), 1)
         self.assertEqual(eng.vars["te_dg_chk_runaway"], 2)
+        self.assertEqual(eng.vars["te_dg_chk_runaway_year"], 1922.0)
 
     def test_only_under_full(self):
         self.assert_quiet(SINDH, full=False)

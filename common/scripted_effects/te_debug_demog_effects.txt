@@ -1201,7 +1201,8 @@ te_debug_demog_cause_deaths_selfcheck = {
 #   6  crowding's input over 5 (sane states: 1.64 at most)
 #   7  the births term over 10 (sane states: 4.05 at most)
 # 4 to 7 only in a state of 10,000 people or more, and 3 only from 10,000. Under Full only: the census's terms move the
-# engine's rates only there. te_dg_chk_runaway keeps the code, so a state logs once a game.
+# engine's rates only there. te_dg_chk_runaway keeps the code, so a state logs once a game, and te_dg_chk_runaway_year
+# the census year: a later save dates the trip after debug.log has rolled the line away.
 # THIS = a state, at the end of its census (te_demog_state_yearly, fast mode's te_demog_state_clock_step), with the
 # census's locals: te_dg_prov_step is te_debug_demog_province_change's, set only when the state held a census before.
 # docs/testing/demographics-playtest.md, § Self-checks.
@@ -1279,6 +1280,8 @@ te_debug_demog_runaway_selfcheck = {
 		if = {
 			limit = { local_var:te_dg_rw_why > 0 }
 			set_variable = { name = te_dg_chk_runaway value = local_var:te_dg_rw_why }
+			# the census year beside the code: debug.log rolls over in minutes in a long run, a save keeps both
+			set_variable = { name = te_dg_chk_runaway_year value = var:te_dg_year }
 			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] mb=[THIS.Var('te_dg_mb').GetValue|3] md=[THIS.Var('te_dg_md').GetValue|3] tb_b=[THIS.Var('te_dg_tb_b').GetValue|3] tb_d=[THIS.Var('te_dg_tb_d').GetValue|3] os_b=[THIS.Var('te_dg_os_b').GetValue|3] os_d=[THIS.Var('te_dg_os_d').GetValue|3] q_b=[THIS.Var('te_dg_q_b').GetValue|3] q_d=[THIS.Var('te_dg_q_d').GetValue|3] floor_d=[THIS.Var('te_dg_rate_clamp_d').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, 4 life expectancy under 5, 5 the deaths term at its floor, 6 crowding over 5, 7 the births term over 10; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 		}
