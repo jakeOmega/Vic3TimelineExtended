@@ -97,6 +97,14 @@ game, in English.
     modifier on the bloc (or, for Mandate at Home, on the leader). Convene again: the option just taken is gone,
     except Common Purpose. With a bloc holding Navy III and Freedom of Movement III, the Open Borders Accord is gone.
     Spend the last mandate on a principle while the event is open, then answer: only Adjourn is offered.
+    *Partly answered 2026-11-06* (Great Britain, Common Purpose): the bloc took Summit: Common Purpose (+10 under
+    "Timed Modifiers" in the cohesion tooltip) and cohesion jumped 20, from about 43 to 63, then fell 1 a week
+    toward the new target of 53. But the option's modifier line read " gets Summit: Common Purpose", with no
+    subject. The bloc options now print their own line: check that Common Purpose, Recruitment Drive, Leverage
+    Campaign, Open Borders Accord and Customs Harmonization each read "<bloc name> gets Summit: … for 10 years"
+    with the modifier's lines indented under it. Take Common Purpose a second time while it runs: the Timed
+    Modifiers line should still say +10, not +20. A +20 means `has_modifier` is false in bloc scope (the engine
+    docs' description leaves power blocs out), so the remove-first never runs and the copies stack.
   - **The identity initiative.** Each bloc sees one more option, its identity's. Check at least a Religious
     Convocation (the council's name follows the leader's faith: a Catholic leader's reads "ecumenical council", and
     a faith with no name of its own the plain "council of our faith", never both), and one with "Relations between
