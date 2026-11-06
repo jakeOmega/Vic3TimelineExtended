@@ -17,6 +17,15 @@ colors = {
 	te_jmap_urban_low = hsv360 { 95 40 55 }
 	te_jmap_urban_high = hsv360 { 15 75 78 }
 
+	# je_te_map_room: the Gini coefficient, 0.30 to 0.80 (pale blue to burnt orange).
+	te_jmap_gini_low = hsv360 { 200 20 90 }
+	te_jmap_gini_high = hsv360 { 25 85 55 }
+
+	# je_te_map_room: Dynastic Wealth, diverging at 50: dispersed teal, cream at 50, concentrated plum.
+	te_jmap_wc_low = hsv360 { 165 55 50 }
+	te_jmap_wc_mid = hsv360 { 50 6 92 }
+	te_jmap_wc_high = hsv360 { 315 60 45 }
+
 	# je_te_map_room, Demographics: life expectancy at birth, 25 to 80 years (oxblood, amber, teal).
 	te_jmap_e0_low = hsv360 { 355 75 42 }
 	te_jmap_e0_mid = hsv360 { 38 72 88 }

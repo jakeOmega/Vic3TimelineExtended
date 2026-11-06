@@ -6,8 +6,8 @@ Fifth pass, 2026-11-05 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1).
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
-worked. The fifth tries a shorter repaint, adds Devastation, Urban People and eight more census maps, and drops
-Literacy, which vanilla's own literacy map mode shows.
+worked. The fifth tries a shorter repaint, adds Devastation, Urban People, the Gini coefficient, Dynastic Wealth and
+eight more census maps, and drops Literacy, which vanilla's own literacy map mode shows.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -58,8 +58,9 @@ entry, in no country's journal.
   pass proved the shape with a test entry (`je_te_map_hidden_world`, 2026-11-05).
 - **Several maps.** `map_color` is an `if` / `else_if` ladder on `te_jmap_selector`
   (`common/script_values/te_journal_map_values.txt` lists the numbers). The world's: 1 turmoil, 6 devastation (both the
-  engine's own figures, saturating at a half), 15 urban people (`te_dg_urban_share`, the yearly walk's, which runs
-  whatever the Demographics rule). The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
+  engine's own figures, saturating at a half), and from the yearly walk, which runs whatever the Demographics rule, 15
+  urban people (`te_dg_urban_share`), 16 the Gini coefficient (`te_dg_gini`, 0.30–0.80) and 17 Dynastic Wealth
+  (`te_dg_wc`, 0–50–100, diverging where its effects turn from dispersed to concentrated property). The census's, from each state's figures (`te_demog_effects.txt`'s header): 3 life
   expectancy, 10 infant mortality, 4 fertility, 5 median age, 14 aged 65 and over and 12 sex balance from a state's first
   seed; 9 births, 8 deaths and 7 natural change per 1,000, 13 net migration and 11 the leading cause of death only once
   the state has stepped a full year (`te_dg_stepped` above 0, as the panel gates them: a seed writes those rates as 0).
@@ -133,8 +134,8 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
 
 Both map buttons clear the see-through flag before they open a page.
-- `te_jmap_pick_row`: the Map Room's picks on its page, the world's three maps in a row and the census's eleven three
-  to a row.
+- `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three and a row of two (Gini,
+  Dynastic Wealth), then the census's eleven three to a row.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).

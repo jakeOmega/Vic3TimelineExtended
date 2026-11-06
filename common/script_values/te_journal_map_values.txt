@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------------
 # 1 turmoil, 3 life expectancy, 4 fertility, 5 median age, 6 devastation, 7 natural change, 8 death rate, 9 birth
 # rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
-# share; 0 none. 2 was literacy, retired because vanilla's own literacy map mode shows it (a save holding 2 shows the
+# share, 16 Gini coefficient, 17 Dynastic Wealth; 0 none. 2 was literacy, retired because vanilla's own literacy map mode shows it (a save holding 2 shows the
 # unpainted map and "Pick a map" until the next pick); 6 was the scope probe until the fourth session. A global variable
 # (te_jmap_set_selector), since a state's map_color reaches neither the entry nor a country (the scope probe painted
 # blue, 2026-11-05): one player's pick is every player's in multiplayer. Root-free, so the Map Room's state roots and
@@ -190,6 +190,32 @@ te_jmap_old_factor = {
 # The urban share (te_dg_urban_share: the people not at a rural workplace, from the yearly walk), 0 to 1.
 te_jmap_urban_factor = {
 	value = var:te_dg_urban_share
+	min = 0
+	max = 1
+}
+
+# The state's shown Gini coefficient (te_dg_gini, the yearly walk's, 0.3-1), 0.30 to 0.80 (Britain in 1836 about 0.55;
+# the Inequality effect's steep part starts at 0.70).
+te_jmap_gini_factor = {
+	value = var:te_dg_gini
+	subtract = 0.3
+	divide = 0.5
+	min = 0
+	max = 1
+}
+
+# Dynastic Wealth, the state's score (te_dg_wc, 0-100), diverging at 50, where its effects turn from dispersed property
+# to concentrated property (te_inheritance_effects.txt).
+te_jmap_wc_factor_lower = {
+	value = var:te_dg_wc
+	divide = 50
+	min = 0
+	max = 1
+}
+te_jmap_wc_factor_upper = {
+	value = var:te_dg_wc
+	subtract = 50
+	divide = 50
 	min = 0
 	max = 1
 }

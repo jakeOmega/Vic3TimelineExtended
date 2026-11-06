@@ -120,6 +120,32 @@ types te_map_widgets
 			}
 		}
 
+		# Wealth, from the same walk.
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_gini"
+				tooltip = "te_jmap_pick_gini_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_gini_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_gini_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_gini_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_dynastic_wealth"
+				tooltip = "te_jmap_pick_dynastic_wealth_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
 		# The census maps, three to a row: how long people live and what they die of,
 		flowcontainer = {
 			direction = horizontal

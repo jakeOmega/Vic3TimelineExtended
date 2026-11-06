@@ -206,7 +206,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 16)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 18)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))

@@ -28,7 +28,8 @@ Escape or click outside the page to close it.
 Two tabs have a map button left of the "?". Banking's opens its journal entry,
 which colors every country by the phase of its banking cycle. Demographics'
 opens the Map Room, a page of world maps with a button for each: Turmoil,
-Devastation and Urban People and, from the census, Life Expectancy, Infant
+Devastation, Urban People, Gini Coefficient and Dynastic Wealth and, from the
+census, Life Expectancy, Infant
 Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility,
 Median Age, Aged 65 and Over, Sex Balance and Net Migration. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes

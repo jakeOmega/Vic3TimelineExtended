@@ -28,7 +28,8 @@ te_jmap_pick_devastation_sgui = {
 	}
 }
 
-# The urban share is the yearly walk's, which runs whatever the Demographics rule.
+# The urban share, the Gini coefficient and Dynastic Wealth are the yearly walk's, which runs whatever the Demographics
+# rule.
 te_jmap_pick_urban_share_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
@@ -36,6 +37,26 @@ te_jmap_pick_urban_share_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 15 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 15 }
+	}
+}
+
+te_jmap_pick_gini_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 16 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 16 }
+	}
+}
+
+te_jmap_pick_dynastic_wealth_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 17 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 17 }
 	}
 }
 
