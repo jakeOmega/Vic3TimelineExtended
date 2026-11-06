@@ -56,8 +56,8 @@ class Script:
         self.cash_delta = 0
         self.pending_removals = set()
         self.shown = []
-        # The weekly bills' charge modifiers: name -> multiplier (BNK-14).
-        self.charges = {}
+        # The adds a show_as_tooltip previews (name, multiplier); never run.
+        self.previews = []
 
     def number(self, value):
         if isinstance(value, list):
@@ -196,13 +196,12 @@ class Script:
                 else:
                     self.tools.discard(tool)
             elif key == 'add_modifier':
-                name = self.field(val, 'name')
-                if name.endswith('_charge'):
-                    self.charges[name] = self.number(self.field(val, 'multiplier'))
-                else:
-                    self.tools.add(name.removeprefix('banking_'))
-            elif key == 'remove_modifier_if_exists_effect':
-                self.charges.pop(self.field(val, 'MODIFIER'), None)
+                self.tools.add(self.field(val, 'name').removeprefix('banking_'))
+            elif key == 'show_as_tooltip':
+                # A preview: the tooltip draws it, the effect never runs it.
+                for item, _, body in val:
+                    assert item == 'add_modifier', item
+                    self.previews.append((self.field(body, 'name'), self.field(body, 'multiplier')))
             elif key in ('te_history_record_banking_marker', 'te_demog_wc_shock'):
                 # other systems' calls (the history chart, Wealth Concentration's crash shock):
                 # no banking state
@@ -218,6 +217,15 @@ class Script:
                 self.execute(self.effects[key])
             else:
                 raise AssertionError(f'Unsupported effect {key}')
+
+
+def declared(script, modifier):
+    """The value je_banking_cycle declares `modifier` at (scaling_modifiers_while_active), run by the Script."""
+    entry = definitions('common/journal_entries/je_banking.txt')['je_banking_cycle']
+    blocks = [body for key, _, body in entry
+              if key == 'scaling_modifiers_while_active' and Script.field(body, 'modifier') == modifier]
+    assert len(blocks) == 1, (modifier, len(blocks))
+    return script.value(Script.field(blocks[0], 'value'))
 
 
 class ExternalPolicyScenarios(unittest.TestCase):
@@ -296,38 +304,78 @@ class ExternalPolicyScenarios(unittest.TestCase):
         """The owner, 2026-10-27 (BNK-14): Sterilize Capital Inflows and
         Emergency Import Financing pay a weekly government expense of a
         month's cost / 4, not a monthly add_treasury, so the budget shows them;
-        FX Surrender's purchase stays monthly, one sum moved treasury to vault."""
+        FX Surrender's purchase stays monthly, one sum moved treasury to vault.
+        Since 1.15 (#1404) the entry declares each charge from a cache the
+        Enable effect and the monthly update write, while the tool is on."""
         s = Script(cash=1e6)
         sterile = 'banking_external_sterilization_charge'
         imports = 'banking_external_import_charge'
         s.effect('banking_effect_cb_sterilize_inflows')
         s.effect('banking_effect_cb_emergency_import_financing')
         self.assertEqual(s.inputs['gold_reserves'], 1e6)            # nothing debited at once
-        self.assertAlmostEqual(s.charges[sterile], s.number('banking_external_sterilization_cost') / 4)
-        self.assertAlmostEqual(s.charges[imports], s.number('banking_external_import_cost') / 4)
-        s.tools.update(('sterilize_inflows', 'emergency_import_financing'))
+        self.assertAlmostEqual(declared(s, sterile), s.number('banking_external_sterilization_cost') / 4)
+        self.assertAlmostEqual(declared(s, imports), s.number('banking_external_import_cost') / 4)
+        # Each Enable previews the charge the entry will declare, at the cached value.
+        self.assertIn((sterile, 'banking_external_sterilization_weekly_charge'), s.previews)
+        self.assertIn((imports, 'banking_external_import_weekly_charge'), s.previews)
+        self.assertEqual(s.tools, {'sterilize_inflows', 'emergency_import_financing'})
         first = s.number('banking_external_import_cost')
         s.effect('banking_external_monthly_update')
         self.assertEqual(s.inputs['gold_reserves'], 1e6)            # and nothing each month
-        self.assertAlmostEqual(s.charges[imports], first / 4)       # this month's rate, then the rise
+        self.assertAlmostEqual(declared(s, imports), first / 4)     # this month's rate, then the rise
         for _ in range(12):
             s.effect('banking_external_monthly_update')
-        self.assertAlmostEqual(s.charges[imports], s.number('banking_external_import_cost') / 4)
-        self.assertGreater(s.charges[imports], first / 4)
+        self.assertAlmostEqual(declared(s, imports), s.number('banking_external_import_cost') / 4)
+        self.assertGreater(declared(s, imports), first / 4)
         s.effect('banking_effect_cb_disable_sterilize_inflows')
         s.effect('banking_effect_cb_disable_emergency_import_financing')
-        self.assertEqual(s.charges, {})
+        self.assertEqual((declared(s, sterile), declared(s, imports)), (0, 0))
+        self.assertEqual((s.vars[sterile + '_cached'], s.vars[imports + '_cached']), (0, 0))
         effects = (ROOT/'common/scripted_effects/banking_external_effects.txt').read_text(encoding='utf-8-sig')
         policy = (ROOT/'common/scripted_effects/banking_policy_effects.txt').read_text(encoding='utf-8-sig')
         self.assertNotIn('banking_external_sterilization_payment', effects + policy)
         self.assertNotIn('banking_external_import_payment', effects + policy)
         self.assertIn('add_treasury = banking_external_surrender_payment', effects)
-        # one refresh site each, and a change of economic system ends both
-        self.assertEqual(effects.count('name = banking_external_sterilization_charge'), 1)
-        self.assertEqual(effects.count('name = banking_external_import_charge'), 1)
+        # one write of each charge, and a change of economic system ends both
+        self.assertEqual(effects.count('value = banking_external_sterilization_weekly_charge }'), 1)
+        self.assertEqual(effects.count('value = banking_external_import_weekly_charge }'), 1)
         strip = (ROOT/'common/scripted_effects/extra_effects.txt').read_text(encoding='utf-8-sig')
         self.assertIn('banking_external_end_charges = yes',
                       strip.split('remove_banking_market_modifiers_effect = {', 1)[1].split('\n}', 1)[0])
+
+    def test_every_off_path_ends_the_declared_charge(self):
+        """A charge is declared only while its tool is on and its cache holds a bill:
+        the tool's Disable, a change of economic system (banking_external_end_charges),
+        an unfunded month and a revolution (the winner inherits the cache, never the
+        tool) each leave it at 0."""
+        names = ('banking_external_sterilization_charge', 'banking_external_import_charge')
+
+        def running():
+            s = Script(cash=1e6)
+            s.effect('banking_effect_cb_sterilize_inflows')
+            s.effect('banking_effect_cb_emergency_import_financing')
+            self.assertTrue(all(declared(s, n) > 0 for n in names))
+            return s
+
+        s = running()
+        s.effect('banking_external_end_charges')
+        self.assertEqual([declared(s, n) for n in names], [0, 0])
+        s = running()
+        s.inputs['gold_reserves'] = 0                                # the month cannot be funded
+        s.effect('banking_external_monthly_update')
+        self.assertEqual(s.tools, set())
+        self.assertEqual([declared(s, n) for n in names], [0, 0])
+        s = running()
+        s.tools.clear()                                              # a revolution's winner: no modifiers
+        self.assertEqual([declared(s, n) for n in names], [0, 0])
+        self.assertTrue(all(s.vars[n + '_cached'] > 0 for n in names))
+        s.effect('banking_external_monthly_update')                  # and the next month clears the cache
+        self.assertEqual([s.vars[n + '_cached'] for n in names], [0, 0])
+        # A country that never ran either tool gets no cache from the monthly update.
+        s = Script(cash=1e6)
+        s.effect('banking_external_monthly_update')
+        self.assertFalse({n + '_cached' for n in names} & set(s.vars))
+        self.assertEqual([declared(s, n) for n in names], [0, 0])
 
     def test_import_cost_escalates_caps_and_cannot_be_reset_by_toggling(self):
         s = Script(cash=1e6)

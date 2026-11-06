@@ -27,7 +27,7 @@ game, in English.
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe
   entry is `can_revolution_inherit = no`). Since #1404 the Strategic Reserve, Covert Warfare, Global Warming,
-  Nuclear Program, Colonial Empire and Cultural Hegemony entries declare their standing modifiers (design
+  Nuclear Program, Colonial Empire, Cultural Hegemony and Banking cycle entries declare their standing modifiers (design
   `docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md` § 4): open each entry and a country's modifier
   tooltip. If a zero row shows, hide the scaling-modifier icon strip on the mod's entries in `gui/journal_entry.gui`.
   Two once-a-game lines in `debug.log`:
@@ -50,7 +50,9 @@ game, in English.
   count drops in the same click and the modifier leaves the entry within a few days; starting Outreach previews
   the program and its cost, which then follows GDP; repealing the Ministry of Culture stops the four programs at
   the next monthly update and the funding pair within days; a country trailing the hegemon shows the Foreign
-  Cultural Benchmark on the entry, named as the source.
+  Cultural Benchmark on the entry, named as the source. Banking cycle: the Neutral stance (`banking_stance_band_3`,
+  an empty modifier declared at 1) still shows in the entry's list; the Budget Breakdown's Banking row still lists the
+  planning pool's balance and both external charges; the momentum tooltip names the bubble inertia tier.
 - **C20**: whether a fired `fire_only_once` event stays fired across a save and load, and for a revolution's winner
   (save before and after, `scripts/analysis/save_country_probe.py`). Since #1404, 32 once-only events rely on it, and
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in

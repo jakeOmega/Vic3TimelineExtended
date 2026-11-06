@@ -140,8 +140,10 @@
 # the conversion still holds the copy the old pulse added (on the entry, or on
 # the country), which would stack with the declaration. The "1.15 scaling
 # modifiers" block at the foot of legacy_je_modifier_cleanup_effect strips each
-# copy once. has_modifier sees only an added copy, never a declared one, so the
-# block can't touch the declarations. Remove the block after 2026-12-31.
+# copy once, through one legacy_scaling_strip_<system> effect a system, which
+# the system's entry also runs from its weekly pulse. has_modifier sees only an
+# added copy, never a declared one, so the block can't touch the declarations.
+# Remove the block, the effects and their weekly calls after 2026-12-31.
 ########################################
 
 legacy_je_modifier_cleanup_effect = {
@@ -943,11 +945,27 @@ legacy_je_modifier_cleanup_effect = {
 
 	# ── 1.15 scaling modifiers (#1404) ── PENDING REMOVAL after 2026-12-31 ──
 	# The copies an older save added by hand, where the old code put them; the
-	# entries now declare these (header note above).
-	# Strategic Reserve and Global Warming's two costs sat on the country.
+	# entries now declare these (header note above). One effect a system,
+	# below: each converted entry's weekly pulse runs its own as well, since
+	# the monthly strip alone left an old copy stacked with its declaration
+	# for up to a month after a load.
+	legacy_scaling_strip_strategic_reserve = yes
+	legacy_scaling_strip_covert_warfare = yes
+	legacy_scaling_strip_global_warming = yes
+	legacy_scaling_strip_nuclear_program = yes
+	legacy_scaling_strip_colonial_empire = yes
+	legacy_scaling_strip_cultural_hegemony = yes
+	legacy_scaling_strip_banking_cycle = yes
+}
+
+# Country scope. The monthly strip above and je_strategic_reserve's weekly pulse.
+legacy_scaling_strip_strategic_reserve = {
+	# Its sales income sat on the country.
 	if = { limit = { has_modifier = st_res_sell_profit_modifier } remove_modifier = st_res_sell_profit_modifier }
-	if = { limit = { has_modifier = renewable_investment_cost_modifier } remove_modifier = renewable_investment_cost_modifier }
-	if = { limit = { has_modifier = aerosol_injection_cost_modifier } remove_modifier = aerosol_injection_cost_modifier }
+}
+
+# Country scope. The monthly strip above and je_covert_warfare's weekly pulse.
+legacy_scaling_strip_covert_warfare = {
 	je:je_covert_warfare ?= {
 		if = { limit = { has_modifier = intelligence_capacity_defense } remove_modifier = intelligence_capacity_defense }
 		if = { limit = { has_modifier = iw_domestic_defense } remove_modifier = iw_domestic_defense }
@@ -955,12 +973,23 @@ legacy_je_modifier_cleanup_effect = {
 		if = { limit = { has_modifier = covert_operation_funding_cost } remove_modifier = covert_operation_funding_cost }
 		if = { limit = { has_modifier = iw_tradecraft_bonus } remove_modifier = iw_tradecraft_bonus }
 	}
+}
+
+# Country scope. The monthly strip above and je_global_warming's weekly pulse.
+legacy_scaling_strip_global_warming = {
+	# The two policy costs sat on the country, the rest on the entry.
+	if = { limit = { has_modifier = renewable_investment_cost_modifier } remove_modifier = renewable_investment_cost_modifier }
+	if = { limit = { has_modifier = aerosol_injection_cost_modifier } remove_modifier = aerosol_injection_cost_modifier }
 	je:je_global_warming ?= {
 		if = { limit = { has_modifier = global_warming } remove_modifier = global_warming }
 		if = { limit = { has_modifier = gw_aerosol_monsoon_modifier } remove_modifier = gw_aerosol_monsoon_modifier }
 		if = { limit = { has_modifier = carbon_removal_modifier } remove_modifier = carbon_removal_modifier }
 		if = { limit = { has_modifier = aerosol_injection_modifier } remove_modifier = aerosol_injection_modifier }
 	}
+}
+
+# Country scope. The monthly strip above and je_nuclear_program's weekly pulse.
+legacy_scaling_strip_nuclear_program = {
 	je:je_nuclear_program ?= {
 		if = { limit = { has_modifier = nuclear_weapon_program_funding } remove_modifier = nuclear_weapon_program_funding }
 		if = { limit = { has_modifier = nd_upkeep_cost } remove_modifier = nd_upkeep_cost }
@@ -973,12 +1002,20 @@ legacy_je_modifier_cleanup_effect = {
 		if = { limit = { has_modifier = nd_readiness_mod_2 } remove_modifier = nd_readiness_mod_2 }
 		if = { limit = { has_modifier = nd_readiness_mod_3 } remove_modifier = nd_readiness_mod_3 }
 	}
+}
+
+# Country scope. The monthly strip above and je_colonial_empire's weekly pulse.
+legacy_scaling_strip_colonial_empire = {
 	# Colonial Empire's three programmes and the investment's expense sat on
 	# the country. Every 1.15 save holds the level variables they now read.
 	if = { limit = { has_modifier = colonial_development_investment_modifier } remove_modifier = colonial_development_investment_modifier }
 	if = { limit = { has_modifier = colonial_military_garrison_modifier } remove_modifier = colonial_military_garrison_modifier }
 	if = { limit = { has_modifier = colonial_cultural_assimilation_modifier } remove_modifier = colonial_cultural_assimilation_modifier }
 	if = { limit = { has_modifier = colonial_development_investment_expense_modifier } remove_modifier = colonial_development_investment_expense_modifier }
+}
+
+# Country scope. The monthly strip above and je_cultural_hegemony's weekly pulse.
+legacy_scaling_strip_cultural_hegemony = {
 	# Cultural Hegemony: the benchmark sat on the country, the rest on the
 	# entry. The four programmes had no variable before the change: set it
 	# from the old copy, then take the copy off (the entry declares the
@@ -1040,5 +1077,69 @@ legacy_je_modifier_cleanup_effect = {
 		if = { limit = { has_modifier = ch_cultural_program_funding } remove_modifier = ch_cultural_program_funding }
 		if = { limit = { has_modifier = ch_cultural_program_funding_cost } remove_modifier = ch_cultural_program_funding_cost }
 		if = { limit = { has_modifier = ch_world_exposition_cost } remove_modifier = ch_world_exposition_cost }
+	}
+}
+
+# Country scope. The monthly strip above and je_banking_cycle's weekly pulse.
+legacy_scaling_strip_banking_cycle = {
+	# The Banking cycle's modifiers sat on its entry. The planning pool and the
+	# two external charges now read caches an older save lacks: write each
+	# before its copy goes, or the line would pay nothing until its next
+	# refresh.
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = planning_treasury_pool_balance }
+			NOT = { has_variable = ce_pool_balance_cached }
+		}
+		banking_cycle_update_ce_pool_balance = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_sterilization_charge }
+			NOT = { has_variable = banking_external_sterilization_charge_cached }
+		}
+		banking_external_charge_sterilization = yes
+	}
+	if = {
+		limit = {
+			je:je_banking_cycle ?= { has_modifier = banking_external_import_charge }
+			NOT = { has_variable = banking_external_import_charge_cached }
+		}
+		banking_external_charge_import = yes
+	}
+	je:je_banking_cycle ?= {
+		if = { limit = { has_modifier = financial_cycle_government_fiscal_policy_effect } remove_modifier = financial_cycle_government_fiscal_policy_effect }
+		if = { limit = { has_modifier = bubble_inertia_moderate } remove_modifier = bubble_inertia_moderate }
+		if = { limit = { has_modifier = bubble_inertia_high } remove_modifier = bubble_inertia_high }
+		if = { limit = { has_modifier = bubble_inertia_extreme } remove_modifier = bubble_inertia_extreme }
+		if = { limit = { has_modifier = bubble_inertia_moderate_coop } remove_modifier = bubble_inertia_moderate_coop }
+		if = { limit = { has_modifier = bubble_inertia_high_coop } remove_modifier = bubble_inertia_high_coop }
+		if = { limit = { has_modifier = bubble_inertia_extreme_coop } remove_modifier = bubble_inertia_extreme_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_panic } remove_modifier = financial_cycle_phase_panic }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn } remove_modifier = financial_cycle_phase_downturn }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation } remove_modifier = financial_cycle_phase_stagnation }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion } remove_modifier = financial_cycle_phase_expansion }
+		if = { limit = { has_modifier = financial_cycle_phase_boom } remove_modifier = financial_cycle_phase_boom }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy } remove_modifier = financial_cycle_phase_frenzy }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_cmd } remove_modifier = financial_cycle_phase_panic_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_cmd } remove_modifier = financial_cycle_phase_downturn_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_cmd } remove_modifier = financial_cycle_phase_stagnation_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_cmd } remove_modifier = financial_cycle_phase_expansion_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_cmd } remove_modifier = financial_cycle_phase_boom_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_cmd } remove_modifier = financial_cycle_phase_frenzy_cmd }
+		if = { limit = { has_modifier = financial_cycle_phase_panic_coop } remove_modifier = financial_cycle_phase_panic_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_downturn_coop } remove_modifier = financial_cycle_phase_downturn_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_stagnation_coop } remove_modifier = financial_cycle_phase_stagnation_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_expansion_coop } remove_modifier = financial_cycle_phase_expansion_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_boom_coop } remove_modifier = financial_cycle_phase_boom_coop }
+		if = { limit = { has_modifier = financial_cycle_phase_frenzy_coop } remove_modifier = financial_cycle_phase_frenzy_coop }
+		if = { limit = { has_modifier = banking_stance_band_1 } remove_modifier = banking_stance_band_1 }
+		if = { limit = { has_modifier = banking_stance_band_2 } remove_modifier = banking_stance_band_2 }
+		if = { limit = { has_modifier = banking_stance_band_3 } remove_modifier = banking_stance_band_3 }
+		if = { limit = { has_modifier = banking_stance_band_4 } remove_modifier = banking_stance_band_4 }
+		if = { limit = { has_modifier = banking_stance_band_5 } remove_modifier = banking_stance_band_5 }
+		if = { limit = { has_modifier = planning_treasury_pool_balance } remove_modifier = planning_treasury_pool_balance }
+		if = { limit = { has_modifier = banking_external_sterilization_charge } remove_modifier = banking_external_sterilization_charge }
+		if = { limit = { has_modifier = banking_external_import_charge } remove_modifier = banking_external_import_charge }
 	}
 }

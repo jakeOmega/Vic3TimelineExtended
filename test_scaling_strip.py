@@ -1,0 +1,88 @@
+# -*- coding: utf-8 -*-
+"""The old-save strip of 1.15's scaling modifiers runs within a week of a load (#1404).
+
+A save made before a system's conversion still holds the copies its old pulse added, which stack with the entry's
+declarations until `legacy_je_modifier_cleanup_effect` removes them. That runs monthly, so each system's part is its
+own `legacy_scaling_strip_<system>` effect, which the system's entry also runs from its weekly pulse (review of PR 4:
+up to a month of doubled banking phases). These tests hold every declaring entry to that shape. Delete with the strip
+(after 2026-12-31).
+"""
+
+from __future__ import annotations
+
+import unittest
+from pathlib import Path
+
+from je_multiplier_scope_audit import Node, parse_text
+
+ROOT = Path(__file__).resolve().parent
+JE_DIR = ROOT / "common" / "journal_entries"
+LEGACY = ROOT / "common" / "scripted_effects" / "legacy_modifier_cleanup.txt"
+PREFIX = "legacy_scaling_strip_"
+
+
+def _parse(path: Path) -> list[Node]:
+    return parse_text(path.read_text(encoding="utf-8-sig"), path.relative_to(ROOT).as_posix())[0]
+
+
+def _walk(nodes):
+    for node in nodes:
+        yield node
+        yield from _walk(node.children)
+
+
+def _child(node: Node, key: str) -> Node | None:
+    return next((c for c in node.children if c.key == key), None)
+
+
+def _declaring_entries() -> dict[str, tuple[Node, set[str]]]:
+    """entry key -> (entry, the modifiers it declares)."""
+    out = {}
+    for path in sorted(JE_DIR.glob("*.txt")):
+        for entry in _parse(path):
+            names = {_child(b, "modifier").value for b in entry.children
+                     if b.key == "scaling_modifiers_while_active" and _child(b, "modifier") is not None}
+            if names:
+                out[entry.key] = (entry, names)
+    return out
+
+
+def _strip_effects() -> dict[str, Node]:
+    return {n.key: n for n in _parse(LEGACY) if n.key.startswith(PREFIX)}
+
+
+def _removed(effect: Node) -> set[str]:
+    return {n.value for n in _walk(effect.children) if n.key == "remove_modifier" and not n.children}
+
+
+class StripShapeTest(unittest.TestCase):
+    def test_every_declaring_entry_strips_its_keys_weekly(self):
+        effects = _strip_effects()
+        for key, (entry, declared) in _declaring_entries().items():
+            with self.subTest(entry=key):
+                weekly = _child(entry, "on_weekly_pulse")
+                self.assertIsNotNone(weekly, "no on_weekly_pulse to run the strip from")
+                calls = {n.key for n in _walk(weekly.children) if n.key.startswith(PREFIX) and n.value == "yes"}
+                self.assertEqual(len(calls), 1, f"weekly pulse calls {sorted(calls)}")
+                (call,) = calls
+                self.assertIn(call, effects, f"{call} is not defined in {LEGACY.name}")
+                self.assertEqual(sorted(declared - _removed(effects[call])), [],
+                                 f"{call} leaves these declared keys' old copies")
+
+    def test_the_monthly_strip_runs_every_system(self):
+        cleanup = next(n for n in _parse(LEGACY) if n.key == "legacy_je_modifier_cleanup_effect")
+        called = {n.key for n in cleanup.children if n.key.startswith(PREFIX) and n.value == "yes"}
+        self.assertEqual(called, set(_strip_effects()))
+
+    def test_banking_seeds_its_caches_before_the_copies_go(self):
+        body = (LEGACY.read_text(encoding="utf-8-sig")
+                .split(f"{PREFIX}banking_cycle = {{", 1)[1].split("\n}\n", 1)[0])
+        for modifier, seed in (("planning_treasury_pool_balance", "banking_cycle_update_ce_pool_balance = yes"),
+                               ("banking_external_sterilization_charge", "banking_external_charge_sterilization = yes"),
+                               ("banking_external_import_charge", "banking_external_charge_import = yes")):
+            with self.subTest(modifier=modifier):
+                self.assertLess(body.index(seed), body.index(f"remove_modifier = {modifier} }}"))
+
+
+if __name__ == "__main__":
+    unittest.main()

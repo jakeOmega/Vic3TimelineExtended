@@ -304,6 +304,7 @@ je_nuclear_program = {
 
 	on_weekly_pulse = {
 		effect = {
+			legacy_scaling_strip_nuclear_program = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
 			# A winning revolution's new regime carries the old state's
 			# progress toward the next warhead over the activation that
 			# zeroed it (nuclear_custody_effects.txt). Before the programme
