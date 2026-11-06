@@ -1036,7 +1036,9 @@ class QuietTooltipsTest(unittest.TestCase):
     def test_every_remove_modifier_in_the_cleanup_is_guarded(self):
         cleanup = _strip_comments(_block(_read(DECOLONIZATION), "colonial_empire_je_cleanup_effect"))
         removes = re.findall(r"remove_modifier = (\w+)", cleanup)
-        self.assertEqual(len(removes), 9)
+        # Two movement and three subject modifiers. The programmes' four went in
+        # 1.15: the entry declares them, and they leave with it (#1404).
+        self.assertEqual(len(removes), 5)
         for mod in removes:
             with self.subTest(modifier=mod):
                 self.assertEqual(len(re.findall(rf"remove_modifier = {mod}\b", cleanup)),
