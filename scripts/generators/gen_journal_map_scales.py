@@ -111,6 +111,10 @@ SCALES = [
          note="Sex balance, men per 100 women aged 20-59, split at 100: the census's own bounds for its effects"),
     dict(name="mig", input="var:te_dg_mig_rate", guards=["te_dg_mig_rate"], three=True,
          knots=diverging((-20, -60), 0, (20, 60)), note="Net migration per 1,000 people last year, split at none"),
+    dict(name="cause", input="te_demog_dc_lead_share", guards=["te_dg_dc_total", "te_dg_dc_lead"], three=False,
+         knots=linear(0.3, 0.9),
+         note="The leading cause of death's share of last year's deaths, its color pale at 30% and full at 90%: with "
+              "seven causes the lead takes at least a seventh, and states ran 31-97% in 1838, 1940 and 2020 saves"),
     # The systems' maps, each on its own entry too (te_journal_map_triggers.txt).
     dict(name="gw", input="te_jmap_gw_share", guards=["gw_state_emis"], three=False, knots=soft_cap(0, 0.01, 0.05),
          note="Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): "

@@ -114,7 +114,7 @@ wonder_events.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_elevator_generation.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_complete.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -171,7 +171,7 @@ wonder_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_elevator_generation.dds" }
+	event_image = { texture = "gfx/event_pictures/space_elevator_complete.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -326,7 +326,7 @@ wonder_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/orbital_peace_deterrence.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_sovereignty_dispute.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -388,7 +388,7 @@ wonder_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/orbital_earth_view.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_solar_first_light.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -913,7 +913,7 @@ wonder_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/orbital_battlestation_construction.dds" }
+	event_image = { texture = "gfx/event_pictures/orbital_arms_race.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -1022,7 +1022,7 @@ wonder_events.26 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/space_debris_collision.dds" }
+	event_image = { texture = "gfx/event_pictures/asteroid_deflection_heroic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 

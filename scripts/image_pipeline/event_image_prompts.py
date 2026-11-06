@@ -61,6 +61,19 @@ DO NOT:
     limbs). Prefer seated, standing, or crowd poses
   - Request holographic displays, data overlays, or floating UI — they render as
     random blobs or infinity symbols
+  - Name a building by its use ("a clinic", "a conference centre") — FLUX writes
+    the name on it. Describe its materials instead. Riot police come back with
+    POLICE on their vests, and a protest crowd seen up close carries lettered
+    placards; a crowd seen from a high rooftop keeps them to specks
+  - Leave an official chamber's back wall bare — it grows a seal, a portrait or
+    a flag. Fill it (curtained windows). And keep a figure off the furniture:
+    a signer bending over a table merged into it in three of four renders;
+    a standing figure at the table's corner held up (batch 10, 2026-11-06)
+  - Ask for "an orbital mirror array" (flying saucers) or tether "climbers"
+    (people climbing the cable); say "a field of ground antennas" and "cargo
+    capsules". "Colonies linked by ship traffic" drew no colony: put the
+    camera on the surface, among the domes
+  - Zoom every pick at full size: FLUX signs paintings in a corner
 """
 
 IMAGES = {
@@ -78,7 +91,7 @@ IMAGES = {
         "events": ["augmentation_events.2", "extra_law_events.76", "morphological_freedom_events.100"],
     },
     "anti_augmentation_protest": {
-        "prompt": "Night street protest outside a neon-lit clinic, raised hands and a police line in rain.",
+        "prompt": "Night, heavy rain: a crowd of protesters in dark hooded raincoats, seen from behind, stands with raised open hands in a wet street before a modern white building with tall brightly lit glass doors, facing a distant line of riot police in plain black armor and helmets. Street lamps reflect in long streaks on the wet asphalt.",
         "style": "oil painting, social realism, dramatic evening light",
         "events": ["augmentation_events.3"],
     },
@@ -300,7 +313,15 @@ IMAGES = {
     # DECOLONIZATION EVENTS
     # =========================================================================
     "independence_celebration": {
-        "prompt": "A flag-raising at a newly independent nation's palace.",
+        # Redrawn 2026-11-06 (#898): "a flag-raising at a newly independent
+        # nation's palace" drew India's flag. The square is pinned and no flag named.
+        "prompt": (
+            "Evening in a wide square before a long colonnaded sandstone government house "
+            "with a flat roof and no dome. A vast crowd in light cotton clothes fills the "
+            "square, arms raised and children on shoulders, as fireworks burst in the dusky "
+            "sky above the roofline. On the broad front steps a row of small distant figures "
+            "in dark suits and white uniforms stands looking out over the crowd."
+        ),
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.1", "decolonization_events.5", "decolonization_events.200"],
     },
@@ -925,9 +946,19 @@ IMAGES = {
         "style": "digital painting, atmospheric, near-future protest",
         "events": ["movement_events_te.15", "movement_events_te.16"],
     },
-    "movement_triumph_celebration": {
-        "prompt": "A massive public celebration after a movement's victory.",
-        "style": "oil painting, social realism, dramatic light",
+    # Replaces movement_triumph_celebration (2026-11-06, #898), which drew the
+    # US Capitol and flag, and a cheering crowd for two events about a quiet
+    # signing that nobody celebrates.
+    "movement_signing_ceremony": {
+        "prompt": (
+            "A formal signing ceremony in a high oak-panelled chamber with tall windows hung "
+            "with heavy red curtains. At a long table "
+            "draped in dark green cloth, an official in a dark suit, seen from behind, bends "
+            "to sign with a fountain pen, while a row of men and women in sober suits stands "
+            "behind the table with hands clasped. At both sides of the room, press photographers "
+            "stand behind large cameras on tripods, their flashes lighting the room in cold white bursts."
+        ),
+        "style": "oil painting, social realism, cool muted light",
         "events": ["movement_events_te.222", "movement_events_te.223"],
     },
     "movement_crushed_aftermath": {
@@ -1214,7 +1245,7 @@ IMAGES = {
     # Pending (#982): the first render's placards came out as gibberish
     # lettering, so the .dds was deleted and both events show interim art.
     "globalization_protest_march": {
-        "prompt": "A dense crowd of marchers fills a wide boulevard before a glass-fronted conference centre, seen from a raised vantage point. A line of riot police in dark uniforms stands across the road ahead of them under an overcast sky.",
+        "prompt": "Seen from a high rooftop far above, a vast crowd of marchers fills a wide boulevard between rows of grey stone buildings, flowing toward a curved tower of mirrored glass that reflects the overcast sky. Far ahead, a thin dark line of riot police blocks the road.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.15", "social_tensions_events.16"],
     },
@@ -1502,7 +1533,7 @@ IMAGES = {
     # SPACE RACE COLONY EVENTS — Kuiper Belt & Beyond (30-34)
     # =========================================================================
     "colony_pluto_charon": {
-        "prompt": "Twin colonies on Pluto and Charon linked by ship traffic across deep darkness and distant starlight.",
+        "prompt": "On the icy reddish-tan plains of Pluto, a cluster of small domed habitat modules glows warm yellow in the darkness, while the large grey disc of Charon hangs low over the jagged horizon. A small shuttle's engine trail arcs up toward Charon through the black star-filled sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.30"],
     },
@@ -1590,7 +1621,7 @@ IMAGES = {
         "events": ["space_race_events.604"],
     },
     "probe_asteroid_belts": {
-        "prompt": "Dense asteroid field of tumbling rocks lit by distant starlight, stretching endlessly in all directions.",
+        "prompt": "Many irregular grey rocks of different sizes float scattered through black space with wide gaps between them, lit hard from one side by a distant small sun, a few large cratered asteroids close in the foreground.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.605"],
     },
@@ -2057,7 +2088,7 @@ IMAGES = {
         "events": ["wonder_events.2", "te_orbital_debris.1"],
     },
     "space_elevator_complete": {
-        "prompt": "Fully operational space elevator with multiple climbers moving along a tether above a vast coastal spaceport.",
+        "prompt": "A thin silver ribbon tether rises from a broad offshore platform beside a vast coastal spaceport, climbing straight up into a deep blue sky; several boxy metal cargo capsules are spaced along it, the highest a glinting speck. Seen from above the sea at golden hour.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.3", "wonder_events.4"],
     },
@@ -2081,7 +2112,7 @@ IMAGES = {
     # WONDER EVENTS — Orbital Solar Collector (10-15)
     # =========================================================================
     "orbital_solar_first_light": {
-        "prompt": "Orbital mirror array casting a bright energy beam onto a desert receiving station.",
+        "prompt": "Night over a flat desert: a vast field of dark rectangular receiving antennas spreads across the sand toward a low concrete control building, and a narrow column of pale golden light falls into the center of the field from a single bright star-like point high in the starry sky. A few small figures watch from beside parked trucks.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.10"],
     },
@@ -2130,7 +2161,7 @@ IMAGES = {
         "events": ["wonder_events.23"],
     },
     "orbital_arms_race": {
-        "prompt": "Earth orbit crowded with competing armed platforms and launch trails rising from multiple continents.",
+        "prompt": "Seen from high orbit above the curve of the blue Earth, several large boxy armed satellites with long gun barrels and wide solar panels hang far apart from one another, while bright rocket exhaust trails climb up out of the clouds far below.",
         "style": "digital painting, cinematic light, military sci-fi",
         "events": ["wonder_events.24"],
     },

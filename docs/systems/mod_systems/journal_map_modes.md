@@ -22,8 +22,9 @@ Vanilla 1.15 gives a journal entry three optional blocks (`game/common/journal_e
   `lerp = { min_color max_color factor }` with a 0–1 factor. It takes `if` / `else_if` like a script value (vanilla's
   ACW, Meiji and Hungry Forties entries branch on it), and a branch that matches nothing leaves the state unpainted.
 - `map_color_second` is the same, drawn as stripes over the first color (vanilla's Great Game and Forest of Bayonets
-  stripe through the state's `owner`). Under `owner ?= { is_player = yes }` it drew nothing (2026-11-05), so a map most
-  likely can't single out the player's own states.
+  stripe through the state's `owner`). It draws on a contextless entry too (the Map Room's Leading Cause, seen
+  2026-11-06), so the nothing it drew under `owner ?= { is_player = yes }` (2026-11-05) was `is_player`: a map can't
+  single out the player's own states.
 - `map_tooltip` is an effect block that only prints: `custom_tooltip_no_bullet = key` per branch. Its loc reaches the
   state as `[THIS.GetState…]` (`GetName`, `GetOwner.GetName`, `CalcTurmoil|v%1`, `GetLiteracy|%1v`,
   `MakeScope.Var('x').GetValue`).
@@ -98,8 +99,19 @@ entry, in no country's journal.
   500, natural change −40 to −15 (soft), 0, +30 (soft) to +45, net migration ±20 (soft) to ±60, sex balance 80–100–130
   from the census's own effect thresholds, Dynastic Wealth 0–50–100. Linear: births 8–50, 65 and over 2–30%, Gini
   0.30–0.80. Each pick's tooltip says where its bends are, since the map has no legend. The leading cause is categorical, in the Causes of Death
-  pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), and its hover
-  is a branch per cause. 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
+  pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), each faded to
+  a pale end of its own hue (`te_jmap_cause_<cause>_pale`) by the cause's share of last year's deaths
+  (`te_jmap_cause_factor` on `te_demog_dc_lead_share`, linear from 30% to 90%; states ran 31–97% in 1838, 1940 and
+  2020 saves), so a state where a cause barely leads reads apart from one where it takes nearly all. Where the
+  runner-up took at least half the leader's deaths (owner, 2026-11-06), the map stripes it over the leader in its own
+  pie color: the Map Room's only `map_color_second`, a branch per cause on `te_dg_dc_second` (the census stores the
+  next largest slice's code beside `te_dg_dc_lead`, `te_demog_cause_deaths_total`) and `te_jmap_cause_second_ratio`
+  (`te_demog_dc_second_share` over `te_demog_dc_lead_share`) at 0.5. A state whose last count came before the
+  runner-up was stored has no stripes until its next. Its hover is a branch per cause, and a second line per cause
+  names the runner-up where it is striped (a branch, not a `SelectLocalization`, for the reason `map_tooltip`'s header
+  gives). The colors aren't mixed: a `lerp` mixes two fixed colors, so a blend of the top two would need a branch per
+  pair, and a mixed hue reads as another cause (infection's blue and war's red make a purple near killed by events'
+  lavender). 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
   the unpainted map and "Pick a map" until the next pick. 18-25 are the systems' maps, each also on its own entry
   (below).
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
