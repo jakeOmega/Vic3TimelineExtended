@@ -6824,7 +6824,8 @@ class MergeRecordTests(unittest.TestCase):
 
     SHADOW_EFFECTS = ("gm_shadow_monthly", "gm_state_write_shadow", "gm_state_drop_shadow", "gm_sh_drop",
                       "gm_sh_mirror", "gm_state_adopt_orphans", "gm_sh_settle_region", "gm_sh_settle_one",
-                      "gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_lost", "gm_monument_merge_self_check")
+                      "gm_sh_adopt_beside", "gm_state_raise_orphan", "gm_sh_lost", "gm_monument_merge_self_check",
+                      "gm_sh_drop_copy", "gm_sh_log_numbers", "gm_sh_log_clear")
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
@@ -6933,6 +6934,111 @@ class MergeRecordTests(unittest.TestCase):
                   "NOT = { has_global_variable = gm_merge_self_checked }"):
             self.assertIn(s, check)
         self.assertNotIn("found", check)
+
+    def test_a_copy_of_a_standing_landmark_is_dropped_not_lost(self):
+        """Issue #1409: an orphan whose landmark already stands is a second copy
+        of that monument's records. It goes before any part of its region is
+        looked for, logged, and monument_merge_kept reads nothing for it: no
+        monument was merged away, so neither OK nor BROKEN may come of it."""
+        one = self.body(MON_EFFECTS, "gm_sh_settle_one")
+        self.assertIn("clear_saved_scope = gm_sh_target if = { limit = { gm_sh_landmark_stands = yes } "
+                      "gm_sh_drop_copy = yes } else = { var:gm_sh_owner ?= { save_scope_as = gm_sh_was_owner }", one)
+        drop = self.body(MON_EFFECTS, "gm_sh_drop_copy")
+        self.assertTrue(drop.startswith('gm_sh_log_numbers = yes debug_log = "TE_MONUMENTS: '), drop)
+        self.assertTrue(drop.endswith("gm_sh_drop = yes"), drop)
+        for s in ("gm_monument_merge_self_check", "gm_sh_log_kept_now", "gm_sh_lost", "gm_sh_adopt_beside"):
+            self.assertNotIn(s, drop)
+        # The self-check is read only where a monument was kept or lost.
+        callers = {name for name, body in top_level_blocks(read(MON_EFFECTS))
+                   if re.search(r"\bgm_monument_merge_self_check = yes", strip_comments(body))}
+        self.assertEqual(callers, {"gm_sh_adopt_beside", "gm_sh_lost"})
+        # Where a landmark stands: a standing building of its region, a monument
+        # beside another, or another live shadow. Not a trophy (a landmark's
+        # pieces abroad share its key) nor a buried site.
+        stands = self.body(MON_TRIGGERS, "gm_sh_landmark_stands")
+        self.assertTrue(stands.startswith("has_variable = gm_tr_landmark OR = { "), stands)
+        self.assertIn("scope:gm_sh_region = { any_scope_state = { has_building = building_grand_monument "
+                      "has_variable = gm_landmark var:gm_landmark = scope:gm_sh_pick.var:gm_tr_landmark } }", stands)
+        self.assertIn("variable = gm_monuments exists = var:gm_tr_origin has_variable = gm_tr_landmark "
+                      "var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark", stands)
+        self.assertIn("variable = gm_shadows NOT = { this = scope:gm_sh_pick } exists = var:gm_tr_origin "
+                      "has_variable = gm_tr_landmark var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark", stands)
+        for lst in ("gm_trophies", "gm_arch_sites"):
+            self.assertNotIn(lst, stands)
+
+    def test_no_shadow_is_written_for_a_copy(self):
+        """Issue #1409: one monument, one shadow. A state whose records are a
+        copy of another standing state's gets none: its link names a shadow
+        another state holds and is linked back from, or, with no live link of
+        its own, its landmark is kept by another standing state's shadow."""
+        write = self.body(MON_EFFECTS, "gm_state_write_shadow")
+        self.assertIn("NOT = { has_variable = gm_rebuilding } gm_state_records_a_copy = no } "
+                      "save_scope_as = gm_tr_state", write)
+        noted = write[write.index("else_if = { limit = { has_building = building_grand_monument has_variable = gm_seen "
+                                  "NOT = { has_variable = gm_sh_copy_noted } gm_state_records_a_copy = yes }"):]
+        self.assertIn("set_variable = { name = gm_sh_copy_noted days = 365 }", noted)
+        self.assertNotIn("create_container", noted)
+        self.assertNotIn("set_variable = { name = gm_shadow", noted)
+        self.assertLess(write.index("create_container"), write.index(noted))
+        copy = self.body(MON_TRIGGERS, "gm_state_records_a_copy")
+        self.assertTrue(copy.startswith("save_temporary_scope_as = gm_tmp_sh_copy_state OR = { "), copy)
+        self.assertIn("var:gm_shadow ?= { save_temporary_scope_as = gm_tmp_sh_copy_link var:gm_tr_origin ?= { "
+                      "NOT = { this = scope:gm_tmp_sh_copy_state } var:gm_shadow ?= scope:gm_tmp_sh_copy_link } }", copy)
+        self.assertIn("NOT = { AND = { has_variable = gm_shadow exists = var:gm_shadow } } has_variable = gm_landmark", copy)
+        self.assertIn("var:gm_tr_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark var:gm_tr_origin ?= { "
+                      "NOT = { this = scope:gm_tmp_sh_copy_state } has_building = building_grand_monument "
+                      "has_variable = gm_landmark var:gm_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark }", copy)
+
+    def test_the_loss_and_the_self_check_name_the_monument(self):
+        """Issue #1409: the loss line and monument_merge_kept name the monument
+        (its landmark or style, a state of its region, its last owner), read in
+        the shadow's own scope through chains scripting_best_practices.md shows
+        printing; the names come off a shadow that stays."""
+        log = self.body(MON_EFFECTS, "gm_sh_log_numbers")
+        for s in ("set_variable = { name = gm_sh_log_id value = var:gm_tr_landmark }",
+                  "set_variable = { name = gm_sh_log_id value = var:gm_tr_skin }",
+                  "set_variable = { name = gm_sh_log_id value = flag:none }",
+                  "set_variable = { name = gm_sh_log_place value = scope:gm_sh_log_state }",
+                  "set_variable = { name = gm_sh_log_owner_at value = scope:gm_sh_log_owner_cap }",
+                  "if = { limit = { is_country_alive = yes } capital ?= { save_scope_as = gm_sh_log_owner_cap } }"):
+            self.assertIn(s, log)
+        lost = self.body(MON_EFFECTS, "gm_sh_lost")
+        check = self.body(MON_EFFECTS, "gm_monument_merge_self_check")
+        lines = re.findall(r'debug_log = "([^"]*)"', lost + " " + check)
+        self.assertEqual(len(lines), 5)
+        for line in lines:
+            self.assertIn("[THIS.Var('gm_sh_log_id').GetFlagName] in "
+                          "[THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting]", line)
+        losses = [line for line in lines if "OK monument_merge_kept" not in line]
+        owner = "last owner [THIS.Var('gm_sh_log_owner_at').GetState.GetOwner.GetTagName]"
+        self.assertEqual(sum(owner in line for line in losses), 2)
+        self.assertEqual(sum("its last owner gone" in line for line in losses), 2)
+        # The owner's tag only where its capital was put on the shadow.
+        for body in (lost, check):
+            self.assertIn("limit = { has_variable = gm_sh_log_owner_at }", body)
+        # No chain the docs list as printing blanks, nothing that can't take a
+        # #-free line (a # in a quoted string is cut by comment strippers).
+        drop = self.body(MON_EFFECTS, "gm_sh_drop_copy")
+        write = self.body(MON_EFFECTS, "gm_state_write_shadow")
+        for line in lines + re.findall(r'debug_log = "([^"]*)"', drop + " " + write):
+            self.assertNotRegex(line, r"SCOPE\.s[A-Z]\w*\(|SCOPE\.Var|MakeScope|Var\('[^']*'\)\.GetCountry|"
+                                      r"GetTag\]|ROOT\.|#")
+        beside = self.body(MON_EFFECTS, "gm_sh_adopt_beside")
+        self.assertTrue(beside.endswith("gm_monument_merge_self_check = yes gm_sh_log_clear = yes"), beside)
+        clear = self.body(MON_EFFECTS, "gm_sh_log_clear")
+        for var in ("gm_sh_log_id", "gm_sh_log_place", "gm_sh_log_owner_at"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {var} }}", clear)
+
+    def test_the_stray_pass_says_whether_records_came_with_it(self):
+        """Issue #1409: a revolt's part is a new state with no records, so a
+        gm_seen where the stray pass removes a building means the engine copied
+        the old state's variables to it."""
+        ev29 = squash(strip_comments(raw_block_at(read(EVENTS), r"(?m)^monument_events\.29\s*=\s*\{")))
+        stray = ev29[ev29.index("limit = { gm_state_stray_building = yes }"):]
+        self.assertIn('if = { limit = { has_variable = gm_seen } debug_log = "TE_MONUMENTS: that building stood in '
+                      "[THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], which holds "
+                      "a monument's records all the same", stray)
+        self.assertIn('else = { debug_log = "TE_MONUMENTS: that building stood in ', stray)
 
 
 class UpkeepTests(unittest.TestCase):

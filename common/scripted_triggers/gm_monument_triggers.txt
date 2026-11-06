@@ -650,6 +650,94 @@ gm_state_unrecorded = {
 	NOT = { has_variable = gm_newcomer }
 }
 
+# State scope, a recorded primary about to have its shadow written
+# (gm_state_write_shadow; issue #1409). Its records are a second copy of a
+# monument another standing state keeps: its link (gm_shadow) names a shadow
+# another state holds and is linked back from, or, with no live link of its
+# own, its landmark is kept by another standing state's shadow and recorded
+# there. No script gives two states one monument's records (a revolt's part of
+# a state is a new state with none, and the stray pass removes its building),
+# so only the engine copying a state's variables at a split or a merge could;
+# a shadow written from the copy would orphan when its part merges back. The
+# landmark comparison is gm_state_stands_for_moving's cross-scope flag
+# comparison, which monument_piece_rejoins reads.
+gm_state_records_a_copy = {
+	save_temporary_scope_as = gm_tmp_sh_copy_state
+	OR = {
+		AND = {
+			has_variable = gm_shadow
+			var:gm_shadow ?= {
+				save_temporary_scope_as = gm_tmp_sh_copy_link
+				var:gm_tr_origin ?= {
+					NOT = { this = scope:gm_tmp_sh_copy_state }
+					var:gm_shadow ?= scope:gm_tmp_sh_copy_link
+				}
+			}
+		}
+		AND = {
+			NOT = {
+				AND = {
+					has_variable = gm_shadow
+					exists = var:gm_shadow
+				}
+			}
+			has_variable = gm_landmark
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark
+				var:gm_tr_origin ?= {
+					NOT = { this = scope:gm_tmp_sh_copy_state }
+					has_building = building_grand_monument
+					has_variable = gm_landmark
+					var:gm_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark
+				}
+			}
+		}
+	}
+}
+
+# Container scope, an orphaned shadow being settled (scope:gm_sh_pick, with
+# scope:gm_sh_region its region; issue #1409). Its landmark stands already: a
+# part of its region holds it as its own monument in a standing building, a
+# monument beside another records it, or another shadow keeps it for a state
+# that stands. The orphan is then a second copy of that monument's records,
+# not a monument lost. Trophies (a landmark's pieces abroad) and buried sites
+# share the key and are not read. A monument with no landmark has no key to
+# compare and settles as before. The comparison is gm_state_records_a_copy's.
+gm_sh_landmark_stands = {
+	has_variable = gm_tr_landmark
+	OR = {
+		scope:gm_sh_region = {
+			any_scope_state = {
+				has_building = building_grand_monument
+				has_variable = gm_landmark
+				var:gm_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_monuments
+			any_in_global_list = {
+				variable = gm_monuments
+				exists = var:gm_tr_origin
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				NOT = { this = scope:gm_sh_pick }
+				exists = var:gm_tr_origin
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+	}
+}
+
 # ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
 # Container scope. A monument beside another that Clear Away may take: not
 # contested (that one's three choices are its own), with no order of its own.
