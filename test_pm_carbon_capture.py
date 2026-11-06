@@ -149,11 +149,12 @@ class CaptureGeneratorTest(unittest.TestCase):
         self.assertEqual(tiers, 360)
 
     def test_modern_coal_tier_two_costs_follow_design_anchors(self):
-        pm = self.methods["pm_carbon_capture_2_base_building_power_plant_coal25_oil0"]
+        pm = self.methods["pm_carbon_capture_2_base_building_power_plant_coal19_oil0"]
         mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
-        self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), Decimal("-2.50"))
-        expected = {"goods_output_electricity_add": "-12",
-                    "goods_input_engines_add": "5", "goods_input_steel_add": "6", "goods_input_fertilizer_add": "7"}
+        self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), Decimal("-1.90"))
+        # 19 coal since #1405 (25 before: -2.50, -12, 5 / 6 / 7).
+        expected = {"goods_output_electricity_add": "-9",
+                    "goods_input_engines_add": "4", "goods_input_steel_add": "4", "goods_input_fertilizer_add": "5"}
         for key, value in expected.items():
             self.assertEqual(scalar(workforce(pm), key), Decimal(value))
 

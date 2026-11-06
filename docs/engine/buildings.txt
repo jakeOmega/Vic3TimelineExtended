@@ -1772,18 +1772,18 @@ Power Plants (bg_power):
 		Partial Carbon Capture (20 Oil)
 		Carbon Capture and Storage (20 Oil)
 		Advanced Carbon Capture (20 Oil)
-		Partial Carbon Capture (35 Oil)
-		Carbon Capture and Storage (35 Oil)
-		Advanced Carbon Capture (35 Oil)
+		Partial Carbon Capture (28 Oil)
+		Carbon Capture and Storage (28 Oil)
+		Advanced Carbon Capture (28 Oil)
 		Partial Carbon Capture (5 Coal)
 		Carbon Capture and Storage (5 Coal)
 		Advanced Carbon Capture (5 Coal)
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-		Partial Carbon Capture (25 Coal)
-		Carbon Capture and Storage (25 Coal)
-		Advanced Carbon Capture (25 Coal)
+		Partial Carbon Capture (19 Coal)
+		Carbon Capture and Storage (19 Coal)
+		Advanced Carbon Capture (19 Coal)
 
 Government Administration (bg_bureaucracy):
 	Unlocking Technology: Bureaucracy
@@ -4060,7 +4060,7 @@ Settlement Authority (bg_resettlement):
 		Airlift
 
 Strategic Reserve Hub (bg_public_infrastructure):
-	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.
+	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, chemicals, and conductive metals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.
 	Unlocking Technology: Logistics
 	Hub Reserve:
 		Reserve Control

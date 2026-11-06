@@ -1940,7 +1940,7 @@ pm_carbon_capture_3_base_building_power_plant_coal0_oil20 = {
 	}
 }
 
-pm_carbon_capture_1_base_building_power_plant_coal0_oil35 = {
+pm_carbon_capture_1_base_building_power_plant_coal0_oil28 = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
 	is_hidden_when_unavailable = yes
 	unlocking_technologies = { clean_energy_technologies }
@@ -1948,7 +1948,27 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil35 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -1.52
+			state_greenhouse_gas_emissions_add = -1.22
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 4
+			goods_input_steel_add = 4
+			goods_input_fertilizer_add = 5
+			goods_output_electricity_add = -6
+		}
+	}
+}
+
+pm_carbon_capture_2_base_building_power_plant_coal0_oil28 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_modern_oil-fired_plant }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -2.44
 		}
 	}
 	building_modifiers = {
@@ -1956,47 +1976,27 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil35 = {
 			goods_input_engines_add = 5
 			goods_input_steel_add = 5
 			goods_input_fertilizer_add = 6
-			goods_output_electricity_add = -8
+			goods_output_electricity_add = -11
 		}
 	}
 }
 
-pm_carbon_capture_2_base_building_power_plant_coal0_oil35 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { carbon_capture_and_storage }
-	unlocking_production_methods = { pm_modern_oil-fired_plant }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -3.05
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 6
-			goods_input_steel_add = 7
-			goods_input_fertilizer_add = 8
-			goods_output_electricity_add = -14
-		}
-	}
-}
-
-pm_carbon_capture_3_base_building_power_plant_coal0_oil35 = {
+pm_carbon_capture_3_base_building_power_plant_coal0_oil28 = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
 	is_hidden_when_unavailable = yes
 	unlocking_technologies = { modern_material_science }
 	unlocking_production_methods = { pm_modern_oil-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -4.57
+			state_greenhouse_gas_emissions_add = -3.65
 		}
 	}
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_engines_add = 7
-			goods_input_steel_add = 7
-			goods_input_fertilizer_add = 8
-			goods_output_electricity_add = -15
+			goods_input_engines_add = 5
+			goods_input_steel_add = 5
+			goods_input_fertilizer_add = 7
+			goods_output_electricity_add = -12
 		}
 	}
 }
@@ -2123,7 +2123,7 @@ pm_carbon_capture_3_base_building_power_plant_coal15_oil0 = {
 	}
 }
 
-pm_carbon_capture_1_base_building_power_plant_coal25_oil0 = {
+pm_carbon_capture_1_base_building_power_plant_coal19_oil0 = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_partial.dds"
 	is_hidden_when_unavailable = yes
 	unlocking_technologies = { clean_energy_technologies }
@@ -2131,7 +2131,27 @@ pm_carbon_capture_1_base_building_power_plant_coal25_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -1.25
+			state_greenhouse_gas_emissions_add = -0.95
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_engines_add = 3
+			goods_input_steel_add = 3
+			goods_input_fertilizer_add = 4
+			goods_output_electricity_add = -5
+		}
+	}
+}
+
+pm_carbon_capture_2_base_building_power_plant_coal19_oil0 = {
+	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_technologies = { carbon_capture_and_storage }
+	unlocking_production_methods = { pm_modern_coal-fired_plant }
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -1.90
 		}
 	}
 	building_modifiers = {
@@ -2139,47 +2159,27 @@ pm_carbon_capture_1_base_building_power_plant_coal25_oil0 = {
 			goods_input_engines_add = 4
 			goods_input_steel_add = 4
 			goods_input_fertilizer_add = 5
-			goods_output_electricity_add = -7
+			goods_output_electricity_add = -9
 		}
 	}
 }
 
-pm_carbon_capture_2_base_building_power_plant_coal25_oil0 = {
-	texture = "gfx/interface/icons/production_method_icons/carbon_capture_storage.dds"
-	is_hidden_when_unavailable = yes
-	unlocking_technologies = { carbon_capture_and_storage }
-	unlocking_production_methods = { pm_modern_coal-fired_plant }
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -2.50
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			goods_input_engines_add = 5
-			goods_input_steel_add = 6
-			goods_input_fertilizer_add = 7
-			goods_output_electricity_add = -12
-		}
-	}
-}
-
-pm_carbon_capture_3_base_building_power_plant_coal25_oil0 = {
+pm_carbon_capture_3_base_building_power_plant_coal19_oil0 = {
 	texture = "gfx/interface/icons/production_method_icons/carbon_capture_advanced.dds"
 	is_hidden_when_unavailable = yes
 	unlocking_technologies = { modern_material_science }
 	unlocking_production_methods = { pm_modern_coal-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = -3.75
+			state_greenhouse_gas_emissions_add = -2.85
 		}
 	}
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_engines_add = 5
-			goods_input_steel_add = 6
-			goods_input_fertilizer_add = 7
-			goods_output_electricity_add = -13
+			goods_input_engines_add = 4
+			goods_input_steel_add = 4
+			goods_input_fertilizer_add = 5
+			goods_output_electricity_add = -10
 		}
 	}
 }
