@@ -203,7 +203,7 @@ class RecordTest(unittest.TestCase):
                 # preview: has_modifier can't see a declared one, and nothing adds it);
                 # the record, the held mark and the sync are bookkeeping, hidden.
                 self.assertTrue(body.strip().startswith(
-                    "show_as_tooltip = { je:je_space_race_solar_colonization = "
+                    "show_as_tooltip = { je:je_space_race_solar_colonization ?= "
                     f"{{ add_modifier = {{ name = {modifier} }} }} }}"))
                 hidden = _block(body, "hidden_effect")
                 self.assertIn(f"set_variable = {{ name = {modifier}_held value = yes }}", hidden)
@@ -1053,7 +1053,11 @@ class MoonStageTest(unittest.TestCase):
         self.assertIn("country_sr_module_fabrication_add", _block(modifiers, "sr_colony_imbrium_massdriver"))
         check = _block(_strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt")),
                        "sr_mod_fabrication_self_check")
-        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_mult }", _block(check, "limit"))
+        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_held }", _block(check, "limit"))
+        # the record the declaration's gate reads, which the generated code writes (#1404)
+        generated = _raw("common", "scripted_effects", "sr_sites_generated.txt")
+        self.assertIn("sr_site_mark_held = { VAR = sr_colony_imbrium_massdriver_held }", generated)
+        self.assertNotIn("_mult", _block(check, "limit"))
         # the only specialization that fabricates
         fabricating = [m for s in gss.SITES for m in gss.spec_modifiers(s)
                        if "country_sr_module_fabrication_add" in _block(modifiers, m)]

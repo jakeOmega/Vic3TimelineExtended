@@ -941,7 +941,7 @@ def render_dispatcher() -> list[str]:
     for modifier, site, kind, option in choices():
         k = site.key
         out += [f"sr_site_choose_{modifier} = {{",
-                f"\tshow_as_tooltip = {{ je:je_space_race_solar_colonization = {{ add_modifier = {{ name = {modifier} }} }} }}",
+                f"\tshow_as_tooltip = {{ je:je_space_race_solar_colonization ?= {{ add_modifier = {{ name = {modifier} }} }} }}",
                 "\thidden_effect = {",
                 f"\t\tset_variable = {{ name = {modifier}_held value = yes }}",
                 f"\t\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_holder_{k} }} }} "

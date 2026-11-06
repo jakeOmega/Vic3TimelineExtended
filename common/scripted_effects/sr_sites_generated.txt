@@ -12824,7 +12824,7 @@ sr_site_monthly_imbrium = {
 # choosing. A world claimed under a save from before the record existed gets
 # its holder here.
 sr_site_choose_sr_colony_valles_marineris_research = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_research } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_valles_marineris_research } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_valles_marineris_research_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_valles_marineris } } set_global_variable = { name = sr_site_holder_valles_marineris value = root } }
@@ -12833,7 +12833,7 @@ sr_site_choose_sr_colony_valles_marineris_research = {
 	}
 }
 sr_site_choose_sr_colony_valles_marineris_mining = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_valles_marineris_mining } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_valles_marineris_mining } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_valles_marineris_mining_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_valles_marineris } } set_global_variable = { name = sr_site_holder_valles_marineris value = root } }
@@ -12842,7 +12842,7 @@ sr_site_choose_sr_colony_valles_marineris_mining = {
 	}
 }
 sr_site_choose_sr_colony_olympus_mons_atmospheric = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_atmospheric } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_olympus_mons_atmospheric } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_olympus_mons_atmospheric_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = root } }
@@ -12851,7 +12851,7 @@ sr_site_choose_sr_colony_olympus_mons_atmospheric = {
 	}
 }
 sr_site_choose_sr_colony_olympus_mons_geothermal = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_olympus_mons_geothermal } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_olympus_mons_geothermal } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_olympus_mons_geothermal_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = root } }
@@ -12860,7 +12860,7 @@ sr_site_choose_sr_colony_olympus_mons_geothermal = {
 	}
 }
 sr_site_choose_sr_discovery_olympus_tubes_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_olympus_tubes_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_olympus_tubes_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_olympus_tubes_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = root } }
@@ -12870,7 +12870,7 @@ sr_site_choose_sr_discovery_olympus_tubes_a = {
 	}
 }
 sr_site_choose_sr_discovery_olympus_tubes_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_olympus_tubes_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_olympus_tubes_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_olympus_tubes_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_olympus_mons } } set_global_variable = { name = sr_site_holder_olympus_mons value = root } }
@@ -12880,7 +12880,7 @@ sr_site_choose_sr_discovery_olympus_tubes_b = {
 	}
 }
 sr_site_choose_sr_colony_hellas_settlement = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_settlement } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_hellas_settlement } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_hellas_settlement_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = root } }
@@ -12889,7 +12889,7 @@ sr_site_choose_sr_colony_hellas_settlement = {
 	}
 }
 sr_site_choose_sr_colony_hellas_astrobiology = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hellas_astrobiology } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_hellas_astrobiology } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_hellas_astrobiology_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = root } }
@@ -12898,7 +12898,7 @@ sr_site_choose_sr_colony_hellas_astrobiology = {
 	}
 }
 sr_site_choose_sr_discovery_hellas_fossils_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_hellas_fossils_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_hellas_fossils_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_hellas_fossils_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = root } }
@@ -12908,7 +12908,7 @@ sr_site_choose_sr_discovery_hellas_fossils_a = {
 	}
 }
 sr_site_choose_sr_discovery_hellas_fossils_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_hellas_fossils_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_hellas_fossils_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_hellas_fossils_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hellas_planitia } } set_global_variable = { name = sr_site_holder_hellas_planitia value = root } }
@@ -12918,7 +12918,7 @@ sr_site_choose_sr_discovery_hellas_fossils_b = {
 	}
 }
 sr_site_choose_sr_colony_utopia_ice = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_ice } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_utopia_ice } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_utopia_ice_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = root } }
@@ -12927,7 +12927,7 @@ sr_site_choose_sr_colony_utopia_ice = {
 	}
 }
 sr_site_choose_sr_colony_utopia_agriculture = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_utopia_agriculture } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_utopia_agriculture } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_utopia_agriculture_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = root } }
@@ -12936,7 +12936,7 @@ sr_site_choose_sr_colony_utopia_agriculture = {
 	}
 }
 sr_site_choose_sr_discovery_utopia_glacier_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_utopia_glacier_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_utopia_glacier_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_utopia_glacier_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = root } }
@@ -12946,7 +12946,7 @@ sr_site_choose_sr_discovery_utopia_glacier_a = {
 	}
 }
 sr_site_choose_sr_discovery_utopia_glacier_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_utopia_glacier_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_utopia_glacier_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_utopia_glacier_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_utopia_planitia } } set_global_variable = { name = sr_site_holder_utopia_planitia value = root } }
@@ -12956,7 +12956,7 @@ sr_site_choose_sr_discovery_utopia_glacier_b = {
 	}
 }
 sr_site_choose_sr_colony_arcadia_civilian = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_civilian } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_arcadia_civilian } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_arcadia_civilian_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = root } }
@@ -12965,7 +12965,7 @@ sr_site_choose_sr_colony_arcadia_civilian = {
 	}
 }
 sr_site_choose_sr_colony_arcadia_military = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_arcadia_military } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_arcadia_military } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_arcadia_military_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = root } }
@@ -12974,7 +12974,7 @@ sr_site_choose_sr_colony_arcadia_military = {
 	}
 }
 sr_site_choose_sr_discovery_arcadia_brines_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_arcadia_brines_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_arcadia_brines_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_arcadia_brines_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = root } }
@@ -12984,7 +12984,7 @@ sr_site_choose_sr_discovery_arcadia_brines_a = {
 	}
 }
 sr_site_choose_sr_discovery_arcadia_brines_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_arcadia_brines_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_arcadia_brines_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_arcadia_brines_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_arcadia_planitia } } set_global_variable = { name = sr_site_holder_arcadia_planitia value = root } }
@@ -12994,7 +12994,7 @@ sr_site_choose_sr_discovery_arcadia_brines_b = {
 	}
 }
 sr_site_choose_sr_colony_ceres_waystation = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_waystation } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ceres_waystation } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ceres_waystation_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = root } }
@@ -13003,7 +13003,7 @@ sr_site_choose_sr_colony_ceres_waystation = {
 	}
 }
 sr_site_choose_sr_colony_ceres_observatory = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ceres_observatory } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ceres_observatory } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ceres_observatory_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = root } }
@@ -13012,7 +13012,7 @@ sr_site_choose_sr_colony_ceres_observatory = {
 	}
 }
 sr_site_choose_sr_discovery_ceres_reservoir_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_ceres_reservoir_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_ceres_reservoir_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_ceres_reservoir_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = root } }
@@ -13022,7 +13022,7 @@ sr_site_choose_sr_discovery_ceres_reservoir_a = {
 	}
 }
 sr_site_choose_sr_discovery_ceres_reservoir_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_ceres_reservoir_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_ceres_reservoir_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_ceres_reservoir_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ceres } } set_global_variable = { name = sr_site_holder_ceres value = root } }
@@ -13032,7 +13032,7 @@ sr_site_choose_sr_discovery_ceres_reservoir_b = {
 	}
 }
 sr_site_choose_sr_colony_vesta_mining = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_mining } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_vesta_mining } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_vesta_mining_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = root } }
@@ -13041,7 +13041,7 @@ sr_site_choose_sr_colony_vesta_mining = {
 	}
 }
 sr_site_choose_sr_colony_vesta_science = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_vesta_science } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_vesta_science } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_vesta_science_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = root } }
@@ -13050,7 +13050,7 @@ sr_site_choose_sr_colony_vesta_science = {
 	}
 }
 sr_site_choose_sr_discovery_vesta_impactor_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_vesta_impactor_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_vesta_impactor_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_vesta_impactor_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = root } }
@@ -13060,7 +13060,7 @@ sr_site_choose_sr_discovery_vesta_impactor_a = {
 	}
 }
 sr_site_choose_sr_discovery_vesta_impactor_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_vesta_impactor_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_vesta_impactor_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_vesta_impactor_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_vesta } } set_global_variable = { name = sr_site_holder_vesta value = root } }
@@ -13070,7 +13070,7 @@ sr_site_choose_sr_discovery_vesta_impactor_b = {
 	}
 }
 sr_site_choose_sr_colony_psyche_industrial = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_industrial } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_psyche_industrial } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_psyche_industrial_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = root } }
@@ -13079,7 +13079,7 @@ sr_site_choose_sr_colony_psyche_industrial = {
 	}
 }
 sr_site_choose_sr_colony_psyche_careful = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_psyche_careful } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_psyche_careful } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_psyche_careful_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = root } }
@@ -13088,7 +13088,7 @@ sr_site_choose_sr_colony_psyche_careful = {
 	}
 }
 sr_site_choose_sr_discovery_psyche_metal_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_psyche_metal_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_psyche_metal_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_psyche_metal_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = root } }
@@ -13098,7 +13098,7 @@ sr_site_choose_sr_discovery_psyche_metal_a = {
 	}
 }
 sr_site_choose_sr_discovery_psyche_metal_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_psyche_metal_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_psyche_metal_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_psyche_metal_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_psyche } } set_global_variable = { name = sr_site_holder_psyche value = root } }
@@ -13108,7 +13108,7 @@ sr_site_choose_sr_discovery_psyche_metal_b = {
 	}
 }
 sr_site_choose_sr_colony_pallas_composites = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_composites } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_pallas_composites } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_pallas_composites_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = root } }
@@ -13117,7 +13117,7 @@ sr_site_choose_sr_colony_pallas_composites = {
 	}
 }
 sr_site_choose_sr_colony_pallas_observatory = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pallas_observatory } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_pallas_observatory } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_pallas_observatory_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = root } }
@@ -13126,7 +13126,7 @@ sr_site_choose_sr_colony_pallas_observatory = {
 	}
 }
 sr_site_choose_sr_discovery_pallas_water_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_pallas_water_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_pallas_water_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_pallas_water_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = root } }
@@ -13136,7 +13136,7 @@ sr_site_choose_sr_discovery_pallas_water_a = {
 	}
 }
 sr_site_choose_sr_discovery_pallas_water_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_pallas_water_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_pallas_water_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_pallas_water_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pallas } } set_global_variable = { name = sr_site_holder_pallas value = root } }
@@ -13146,7 +13146,7 @@ sr_site_choose_sr_discovery_pallas_water_b = {
 	}
 }
 sr_site_choose_sr_colony_hygiea_volatiles = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_volatiles } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_hygiea_volatiles } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_hygiea_volatiles_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hygiea } } set_global_variable = { name = sr_site_holder_hygiea value = root } }
@@ -13155,7 +13155,7 @@ sr_site_choose_sr_colony_hygiea_volatiles = {
 	}
 }
 sr_site_choose_sr_colony_hygiea_automated = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_hygiea_automated } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_hygiea_automated } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_hygiea_automated_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_hygiea } } set_global_variable = { name = sr_site_holder_hygiea value = root } }
@@ -13164,7 +13164,7 @@ sr_site_choose_sr_colony_hygiea_automated = {
 	}
 }
 sr_site_choose_sr_colony_io_mining = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_mining } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_io_mining } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_io_mining_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = root } }
@@ -13173,7 +13173,7 @@ sr_site_choose_sr_colony_io_mining = {
 	}
 }
 sr_site_choose_sr_colony_io_research = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_io_research } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_io_research } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_io_research_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = root } }
@@ -13182,7 +13182,7 @@ sr_site_choose_sr_colony_io_research = {
 	}
 }
 sr_site_choose_sr_discovery_io_roof_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_io_roof_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_io_roof_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_io_roof_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = root } }
@@ -13192,7 +13192,7 @@ sr_site_choose_sr_discovery_io_roof_a = {
 	}
 }
 sr_site_choose_sr_discovery_io_roof_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_io_roof_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_io_roof_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_io_roof_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_io } } set_global_variable = { name = sr_site_holder_io value = root } }
@@ -13202,7 +13202,7 @@ sr_site_choose_sr_discovery_io_roof_b = {
 	}
 }
 sr_site_choose_sr_colony_europa_drilling = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_drilling } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_europa_drilling } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_europa_drilling_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13211,7 +13211,7 @@ sr_site_choose_sr_colony_europa_drilling = {
 	}
 }
 sr_site_choose_sr_colony_europa_surface = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_europa_surface } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_europa_surface } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_europa_surface_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13220,7 +13220,7 @@ sr_site_choose_sr_colony_europa_surface = {
 	}
 }
 sr_site_choose_sr_discovery_europa_life_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_europa_life_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_europa_life_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_europa_life_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13230,7 +13230,7 @@ sr_site_choose_sr_discovery_europa_life_a = {
 	}
 }
 sr_site_choose_sr_discovery_europa_life_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_europa_life_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_europa_life_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_europa_life_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13240,7 +13240,7 @@ sr_site_choose_sr_discovery_europa_life_b = {
 	}
 }
 sr_site_choose_sr_discovery_europa_vents_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_europa_vents_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_europa_vents_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_europa_vents_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13250,7 +13250,7 @@ sr_site_choose_sr_discovery_europa_vents_a = {
 	}
 }
 sr_site_choose_sr_discovery_europa_vents_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_europa_vents_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_europa_vents_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_europa_vents_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_europa } } set_global_variable = { name = sr_site_holder_europa value = root } }
@@ -13260,7 +13260,7 @@ sr_site_choose_sr_discovery_europa_vents_b = {
 	}
 }
 sr_site_choose_sr_colony_ganymede_settlement = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_settlement } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ganymede_settlement } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ganymede_settlement_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = root } }
@@ -13269,7 +13269,7 @@ sr_site_choose_sr_colony_ganymede_settlement = {
 	}
 }
 sr_site_choose_sr_colony_ganymede_command = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ganymede_command } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ganymede_command } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ganymede_command_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = root } }
@@ -13278,7 +13278,7 @@ sr_site_choose_sr_colony_ganymede_command = {
 	}
 }
 sr_site_choose_sr_discovery_ganymede_layers_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_ganymede_layers_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_ganymede_layers_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_ganymede_layers_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = root } }
@@ -13288,7 +13288,7 @@ sr_site_choose_sr_discovery_ganymede_layers_a = {
 	}
 }
 sr_site_choose_sr_discovery_ganymede_layers_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_ganymede_layers_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_ganymede_layers_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_ganymede_layers_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ganymede } } set_global_variable = { name = sr_site_holder_ganymede value = root } }
@@ -13298,7 +13298,7 @@ sr_site_choose_sr_discovery_ganymede_layers_b = {
 	}
 }
 sr_site_choose_sr_colony_callisto_gateway = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_gateway } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_callisto_gateway } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_callisto_gateway_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = root } }
@@ -13307,7 +13307,7 @@ sr_site_choose_sr_colony_callisto_gateway = {
 	}
 }
 sr_site_choose_sr_colony_callisto_agricultural = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_callisto_agricultural } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_callisto_agricultural } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_callisto_agricultural_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = root } }
@@ -13316,7 +13316,7 @@ sr_site_choose_sr_colony_callisto_agricultural = {
 	}
 }
 sr_site_choose_sr_discovery_callisto_archive_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_callisto_archive_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_callisto_archive_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_callisto_archive_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = root } }
@@ -13326,7 +13326,7 @@ sr_site_choose_sr_discovery_callisto_archive_a = {
 	}
 }
 sr_site_choose_sr_discovery_callisto_archive_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_callisto_archive_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_callisto_archive_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_callisto_archive_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_callisto } } set_global_variable = { name = sr_site_holder_callisto value = root } }
@@ -13336,7 +13336,7 @@ sr_site_choose_sr_discovery_callisto_archive_b = {
 	}
 }
 sr_site_choose_sr_colony_himalia_telescope = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_telescope } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_himalia_telescope } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_himalia_telescope_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_himalia } } set_global_variable = { name = sr_site_holder_himalia value = root } }
@@ -13345,7 +13345,7 @@ sr_site_choose_sr_colony_himalia_telescope = {
 	}
 }
 sr_site_choose_sr_colony_himalia_depot = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_himalia_depot } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_himalia_depot } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_himalia_depot_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_himalia } } set_global_variable = { name = sr_site_holder_himalia value = root } }
@@ -13354,7 +13354,7 @@ sr_site_choose_sr_colony_himalia_depot = {
 	}
 }
 sr_site_choose_sr_colony_amalthea_physics = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_physics } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_amalthea_physics } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_amalthea_physics_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_amalthea } } set_global_variable = { name = sr_site_holder_amalthea value = root } }
@@ -13363,7 +13363,7 @@ sr_site_choose_sr_colony_amalthea_physics = {
 	}
 }
 sr_site_choose_sr_colony_amalthea_rings = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_amalthea_rings } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_amalthea_rings } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_amalthea_rings_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_amalthea } } set_global_variable = { name = sr_site_holder_amalthea value = root } }
@@ -13372,7 +13372,7 @@ sr_site_choose_sr_colony_amalthea_rings = {
 	}
 }
 sr_site_choose_sr_colony_venus_atmospheric = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_atmospheric } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_venus_atmospheric } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_venus_atmospheric_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = root } }
@@ -13381,7 +13381,7 @@ sr_site_choose_sr_colony_venus_atmospheric = {
 	}
 }
 sr_site_choose_sr_colony_venus_extraction = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_venus_extraction } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_venus_extraction } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_venus_extraction_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = root } }
@@ -13390,7 +13390,7 @@ sr_site_choose_sr_colony_venus_extraction = {
 	}
 }
 sr_site_choose_sr_discovery_venus_waves_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_venus_waves_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_venus_waves_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_venus_waves_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = root } }
@@ -13400,7 +13400,7 @@ sr_site_choose_sr_discovery_venus_waves_a = {
 	}
 }
 sr_site_choose_sr_discovery_venus_waves_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_venus_waves_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_venus_waves_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_venus_waves_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_venus } } set_global_variable = { name = sr_site_holder_venus value = root } }
@@ -13410,7 +13410,7 @@ sr_site_choose_sr_discovery_venus_waves_b = {
 	}
 }
 sr_site_choose_sr_colony_mercury_solar = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_solar } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_mercury_solar } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_mercury_solar_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = root } }
@@ -13419,7 +13419,7 @@ sr_site_choose_sr_colony_mercury_solar = {
 	}
 }
 sr_site_choose_sr_colony_mercury_ice = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mercury_ice } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_mercury_ice } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_mercury_ice_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = root } }
@@ -13428,7 +13428,7 @@ sr_site_choose_sr_colony_mercury_ice = {
 	}
 }
 sr_site_choose_sr_discovery_mercury_archive_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_mercury_archive_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_mercury_archive_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_mercury_archive_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = root } }
@@ -13438,7 +13438,7 @@ sr_site_choose_sr_discovery_mercury_archive_a = {
 	}
 }
 sr_site_choose_sr_discovery_mercury_archive_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_mercury_archive_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_mercury_archive_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_mercury_archive_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mercury } } set_global_variable = { name = sr_site_holder_mercury value = root } }
@@ -13448,7 +13448,7 @@ sr_site_choose_sr_discovery_mercury_archive_b = {
 	}
 }
 sr_site_choose_sr_colony_titan_hydrocarbons = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_hydrocarbons } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_titan_hydrocarbons } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_titan_hydrocarbons_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = root } }
@@ -13457,7 +13457,7 @@ sr_site_choose_sr_colony_titan_hydrocarbons = {
 	}
 }
 sr_site_choose_sr_colony_titan_prebiotic = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titan_prebiotic } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_titan_prebiotic } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_titan_prebiotic_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = root } }
@@ -13466,7 +13466,7 @@ sr_site_choose_sr_colony_titan_prebiotic = {
 	}
 }
 sr_site_choose_sr_discovery_titan_chemistry_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_titan_chemistry_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_titan_chemistry_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_titan_chemistry_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = root } }
@@ -13476,7 +13476,7 @@ sr_site_choose_sr_discovery_titan_chemistry_a = {
 	}
 }
 sr_site_choose_sr_discovery_titan_chemistry_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_titan_chemistry_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_titan_chemistry_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_titan_chemistry_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titan } } set_global_variable = { name = sr_site_holder_titan value = root } }
@@ -13486,7 +13486,7 @@ sr_site_choose_sr_discovery_titan_chemistry_b = {
 	}
 }
 sr_site_choose_sr_colony_enceladus_astrobiology = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_astrobiology } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_enceladus_astrobiology } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_enceladus_astrobiology_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = root } }
@@ -13495,7 +13495,7 @@ sr_site_choose_sr_colony_enceladus_astrobiology = {
 	}
 }
 sr_site_choose_sr_colony_enceladus_water = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_enceladus_water } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_enceladus_water } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_enceladus_water_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = root } }
@@ -13504,7 +13504,7 @@ sr_site_choose_sr_colony_enceladus_water = {
 	}
 }
 sr_site_choose_sr_discovery_enceladus_life_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_enceladus_life_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_enceladus_life_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_enceladus_life_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = root } }
@@ -13514,7 +13514,7 @@ sr_site_choose_sr_discovery_enceladus_life_a = {
 	}
 }
 sr_site_choose_sr_discovery_enceladus_life_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_enceladus_life_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_enceladus_life_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_enceladus_life_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_enceladus } } set_global_variable = { name = sr_site_holder_enceladus value = root } }
@@ -13524,7 +13524,7 @@ sr_site_choose_sr_discovery_enceladus_life_b = {
 	}
 }
 sr_site_choose_sr_colony_rhea_propellant = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_propellant } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_rhea_propellant } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_rhea_propellant_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_rhea } } set_global_variable = { name = sr_site_holder_rhea value = root } }
@@ -13533,7 +13533,7 @@ sr_site_choose_sr_colony_rhea_propellant = {
 	}
 }
 sr_site_choose_sr_colony_rhea_observation = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_rhea_observation } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_rhea_observation } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_rhea_observation_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_rhea } } set_global_variable = { name = sr_site_holder_rhea value = root } }
@@ -13542,7 +13542,7 @@ sr_site_choose_sr_colony_rhea_observation = {
 	}
 }
 sr_site_choose_sr_colony_mimas_installation = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_installation } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_mimas_installation } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_mimas_installation_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mimas } } set_global_variable = { name = sr_site_holder_mimas value = root } }
@@ -13551,7 +13551,7 @@ sr_site_choose_sr_colony_mimas_installation = {
 	}
 }
 sr_site_choose_sr_colony_mimas_gravity = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_mimas_gravity } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_mimas_gravity } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_mimas_gravity_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_mimas } } set_global_variable = { name = sr_site_holder_mimas value = root } }
@@ -13560,7 +13560,7 @@ sr_site_choose_sr_colony_mimas_gravity = {
 	}
 }
 sr_site_choose_sr_colony_iapetus_ridge = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_ridge } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_iapetus_ridge } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_iapetus_ridge_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_iapetus } } set_global_variable = { name = sr_site_holder_iapetus value = root } }
@@ -13569,7 +13569,7 @@ sr_site_choose_sr_colony_iapetus_ridge = {
 	}
 }
 sr_site_choose_sr_colony_iapetus_organics = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_iapetus_organics } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_iapetus_organics } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_iapetus_organics_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_iapetus } } set_global_variable = { name = sr_site_holder_iapetus value = root } }
@@ -13578,7 +13578,7 @@ sr_site_choose_sr_colony_iapetus_organics = {
 	}
 }
 sr_site_choose_sr_colony_titania_mining = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_mining } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_titania_mining } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_titania_mining_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = root } }
@@ -13587,7 +13587,7 @@ sr_site_choose_sr_colony_titania_mining = {
 	}
 }
 sr_site_choose_sr_colony_titania_geophysics = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_titania_geophysics } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_titania_geophysics } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_titania_geophysics_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = root } }
@@ -13596,7 +13596,7 @@ sr_site_choose_sr_colony_titania_geophysics = {
 	}
 }
 sr_site_choose_sr_discovery_titania_ocean_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_titania_ocean_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_titania_ocean_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_titania_ocean_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = root } }
@@ -13606,7 +13606,7 @@ sr_site_choose_sr_discovery_titania_ocean_a = {
 	}
 }
 sr_site_choose_sr_discovery_titania_ocean_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_titania_ocean_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_titania_ocean_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_titania_ocean_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_titania } } set_global_variable = { name = sr_site_holder_titania value = root } }
@@ -13616,7 +13616,7 @@ sr_site_choose_sr_discovery_titania_ocean_b = {
 	}
 }
 sr_site_choose_sr_colony_oberon_relay = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_relay } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_oberon_relay } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_oberon_relay_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_oberon } } set_global_variable = { name = sr_site_holder_oberon value = root } }
@@ -13625,7 +13625,7 @@ sr_site_choose_sr_colony_oberon_relay = {
 	}
 }
 sr_site_choose_sr_colony_oberon_research = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_oberon_research } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_oberon_research } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_oberon_research_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_oberon } } set_global_variable = { name = sr_site_holder_oberon value = root } }
@@ -13634,7 +13634,7 @@ sr_site_choose_sr_colony_oberon_research = {
 	}
 }
 sr_site_choose_sr_colony_miranda_rupes = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_rupes } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_miranda_rupes } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_miranda_rupes_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_miranda } } set_global_variable = { name = sr_site_holder_miranda value = root } }
@@ -13643,7 +13643,7 @@ sr_site_choose_sr_colony_miranda_rupes = {
 	}
 }
 sr_site_choose_sr_colony_miranda_drilling = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_miranda_drilling } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_miranda_drilling } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_miranda_drilling_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_miranda } } set_global_variable = { name = sr_site_holder_miranda value = root } }
@@ -13652,7 +13652,7 @@ sr_site_choose_sr_colony_miranda_drilling = {
 	}
 }
 sr_site_choose_sr_colony_ariel_cryovolcanic = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_cryovolcanic } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ariel_cryovolcanic } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ariel_cryovolcanic_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ariel } } set_global_variable = { name = sr_site_holder_ariel value = root } }
@@ -13661,7 +13661,7 @@ sr_site_choose_sr_colony_ariel_cryovolcanic = {
 	}
 }
 sr_site_choose_sr_colony_ariel_quarrying = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_ariel_quarrying } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_ariel_quarrying } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_ariel_quarrying_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_ariel } } set_global_variable = { name = sr_site_holder_ariel value = root } }
@@ -13670,7 +13670,7 @@ sr_site_choose_sr_colony_ariel_quarrying = {
 	}
 }
 sr_site_choose_sr_colony_triton_geyser = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_geyser } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_triton_geyser } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_triton_geyser_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = root } }
@@ -13679,7 +13679,7 @@ sr_site_choose_sr_colony_triton_geyser = {
 	}
 }
 sr_site_choose_sr_colony_triton_gateway = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_triton_gateway } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_triton_gateway } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_triton_gateway_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = root } }
@@ -13688,7 +13688,7 @@ sr_site_choose_sr_colony_triton_gateway = {
 	}
 }
 sr_site_choose_sr_discovery_triton_jet_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_triton_jet_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_triton_jet_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_triton_jet_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = root } }
@@ -13698,7 +13698,7 @@ sr_site_choose_sr_discovery_triton_jet_a = {
 	}
 }
 sr_site_choose_sr_discovery_triton_jet_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_triton_jet_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_triton_jet_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_triton_jet_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_triton } } set_global_variable = { name = sr_site_holder_triton value = root } }
@@ -13708,7 +13708,7 @@ sr_site_choose_sr_discovery_triton_jet_b = {
 	}
 }
 sr_site_choose_sr_colony_proteus_probe = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_probe } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_proteus_probe } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_proteus_probe_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_proteus } } set_global_variable = { name = sr_site_holder_proteus value = root } }
@@ -13717,7 +13717,7 @@ sr_site_choose_sr_colony_proteus_probe = {
 	}
 }
 sr_site_choose_sr_colony_proteus_extraction = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_proteus_extraction } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_proteus_extraction } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_proteus_extraction_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_proteus } } set_global_variable = { name = sr_site_holder_proteus value = root } }
@@ -13726,7 +13726,7 @@ sr_site_choose_sr_colony_proteus_extraction = {
 	}
 }
 sr_site_choose_sr_colony_pluto_research = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_research } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_pluto_research } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_pluto_research_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = root } }
@@ -13735,7 +13735,7 @@ sr_site_choose_sr_colony_pluto_research = {
 	}
 }
 sr_site_choose_sr_colony_pluto_harvesting = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_pluto_harvesting } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_pluto_harvesting } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_pluto_harvesting_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = root } }
@@ -13744,7 +13744,7 @@ sr_site_choose_sr_colony_pluto_harvesting = {
 	}
 }
 sr_site_choose_sr_discovery_pluto_antifreeze_a = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_pluto_antifreeze_a } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_pluto_antifreeze_a } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_pluto_antifreeze_a_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = root } }
@@ -13754,7 +13754,7 @@ sr_site_choose_sr_discovery_pluto_antifreeze_a = {
 	}
 }
 sr_site_choose_sr_discovery_pluto_antifreeze_b = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_discovery_pluto_antifreeze_b } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_discovery_pluto_antifreeze_b } } }
 	hidden_effect = {
 		set_variable = { name = sr_discovery_pluto_antifreeze_b_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_pluto } } set_global_variable = { name = sr_site_holder_pluto value = root } }
@@ -13764,7 +13764,7 @@ sr_site_choose_sr_discovery_pluto_antifreeze_b = {
 	}
 }
 sr_site_choose_sr_colony_eris_selfsufficiency = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_selfsufficiency } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_eris_selfsufficiency } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_eris_selfsufficiency_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_eris } } set_global_variable = { name = sr_site_holder_eris value = root } }
@@ -13773,7 +13773,7 @@ sr_site_choose_sr_colony_eris_selfsufficiency = {
 	}
 }
 sr_site_choose_sr_colony_eris_monitoring = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_eris_monitoring } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_eris_monitoring } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_eris_monitoring_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_eris } } set_global_variable = { name = sr_site_holder_eris value = root } }
@@ -13782,7 +13782,7 @@ sr_site_choose_sr_colony_eris_monitoring = {
 	}
 }
 sr_site_choose_sr_colony_makemake_chemistry = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_chemistry } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_makemake_chemistry } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_makemake_chemistry_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_makemake } } set_global_variable = { name = sr_site_holder_makemake value = root } }
@@ -13791,7 +13791,7 @@ sr_site_choose_sr_colony_makemake_chemistry = {
 	}
 }
 sr_site_choose_sr_colony_makemake_solarwind = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_makemake_solarwind } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_makemake_solarwind } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_makemake_solarwind_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_makemake } } set_global_variable = { name = sr_site_holder_makemake value = root } }
@@ -13800,7 +13800,7 @@ sr_site_choose_sr_colony_makemake_solarwind = {
 	}
 }
 sr_site_choose_sr_colony_haumea_dynamics = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_dynamics } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_haumea_dynamics } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_haumea_dynamics_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_haumea } } set_global_variable = { name = sr_site_holder_haumea value = root } }
@@ -13809,7 +13809,7 @@ sr_site_choose_sr_colony_haumea_dynamics = {
 	}
 }
 sr_site_choose_sr_colony_haumea_rings = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_haumea_rings } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_haumea_rings } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_haumea_rings_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_haumea } } set_global_variable = { name = sr_site_holder_haumea value = root } }
@@ -13818,7 +13818,7 @@ sr_site_choose_sr_colony_haumea_rings = {
 	}
 }
 sr_site_choose_sr_colony_sedna_outpost = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_outpost } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_sedna_outpost } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_sedna_outpost_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_sedna } } set_global_variable = { name = sr_site_holder_sedna value = root } }
@@ -13827,7 +13827,7 @@ sr_site_choose_sr_colony_sedna_outpost = {
 	}
 }
 sr_site_choose_sr_colony_sedna_interstellar = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_sedna_interstellar } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_sedna_interstellar } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_sedna_interstellar_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_sedna } } set_global_variable = { name = sr_site_holder_sedna value = root } }
@@ -13836,7 +13836,7 @@ sr_site_choose_sr_colony_sedna_interstellar = {
 	}
 }
 sr_site_choose_sr_colony_shackleton_depot = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_shackleton_depot } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_shackleton_depot } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_shackleton_depot_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_shackleton } } set_global_variable = { name = sr_site_holder_shackleton value = root } }
@@ -13845,7 +13845,7 @@ sr_site_choose_sr_colony_shackleton_depot = {
 	}
 }
 sr_site_choose_sr_colony_shackleton_outpost = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_shackleton_outpost } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_shackleton_outpost } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_shackleton_outpost_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_shackleton } } set_global_variable = { name = sr_site_holder_shackleton value = root } }
@@ -13854,7 +13854,7 @@ sr_site_choose_sr_colony_shackleton_outpost = {
 	}
 }
 sr_site_choose_sr_colony_peary_solar = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_peary_solar } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_peary_solar } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_peary_solar_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_peary } } set_global_variable = { name = sr_site_holder_peary value = root } }
@@ -13863,7 +13863,7 @@ sr_site_choose_sr_colony_peary_solar = {
 	}
 }
 sr_site_choose_sr_colony_peary_observatory = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_peary_observatory } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_peary_observatory } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_peary_observatory_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_peary } } set_global_variable = { name = sr_site_holder_peary value = root } }
@@ -13872,7 +13872,7 @@ sr_site_choose_sr_colony_peary_observatory = {
 	}
 }
 sr_site_choose_sr_colony_tranquility_heritage = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_tranquility_heritage } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_tranquility_heritage } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_tranquility_heritage_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_tranquility } } set_global_variable = { name = sr_site_holder_tranquility value = root } }
@@ -13881,7 +13881,7 @@ sr_site_choose_sr_colony_tranquility_heritage = {
 	}
 }
 sr_site_choose_sr_colony_tranquility_helium = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_tranquility_helium } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_tranquility_helium } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_tranquility_helium_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_tranquility } } set_global_variable = { name = sr_site_holder_tranquility value = root } }
@@ -13890,7 +13890,7 @@ sr_site_choose_sr_colony_tranquility_helium = {
 	}
 }
 sr_site_choose_sr_colony_marius_lavatubes = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_marius_lavatubes } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_marius_lavatubes } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_marius_lavatubes_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_marius_hills } } set_global_variable = { name = sr_site_holder_marius_hills value = root } }
@@ -13899,7 +13899,7 @@ sr_site_choose_sr_colony_marius_lavatubes = {
 	}
 }
 sr_site_choose_sr_colony_marius_hardened = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_marius_hardened } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_marius_hardened } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_marius_hardened_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_marius_hills } } set_global_variable = { name = sr_site_holder_marius_hills value = root } }
@@ -13908,7 +13908,7 @@ sr_site_choose_sr_colony_marius_hardened = {
 	}
 }
 sr_site_choose_sr_colony_daedalus_telescope = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_daedalus_telescope } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_daedalus_telescope } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_daedalus_telescope_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_daedalus } } set_global_variable = { name = sr_site_holder_daedalus value = root } }
@@ -13917,7 +13917,7 @@ sr_site_choose_sr_colony_daedalus_telescope = {
 	}
 }
 sr_site_choose_sr_colony_daedalus_relay = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_daedalus_relay } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_daedalus_relay } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_daedalus_relay_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_daedalus } } set_global_variable = { name = sr_site_holder_daedalus value = root } }
@@ -13926,7 +13926,7 @@ sr_site_choose_sr_colony_daedalus_relay = {
 	}
 }
 sr_site_choose_sr_colony_imbrium_massdriver = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_imbrium_massdriver } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_imbrium_massdriver } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_imbrium_massdriver_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_imbrium } } set_global_variable = { name = sr_site_holder_imbrium value = root } }
@@ -13935,7 +13935,7 @@ sr_site_choose_sr_colony_imbrium_massdriver = {
 	}
 }
 sr_site_choose_sr_colony_imbrium_kreep = {
-	show_as_tooltip = { je:je_space_race_solar_colonization = { add_modifier = { name = sr_colony_imbrium_kreep } } }
+	show_as_tooltip = { je:je_space_race_solar_colonization ?= { add_modifier = { name = sr_colony_imbrium_kreep } } }
 	hidden_effect = {
 		set_variable = { name = sr_colony_imbrium_kreep_held value = yes }
 		if = { limit = { NOT = { has_global_variable = sr_site_holder_imbrium } } set_global_variable = { name = sr_site_holder_imbrium value = root } }

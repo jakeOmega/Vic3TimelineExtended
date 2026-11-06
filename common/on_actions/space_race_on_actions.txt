@@ -20,6 +20,11 @@ space_race_on_action = {
 			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes
 		}
+		# The propellant_depots_bool self-check (sr_launch_window_effects.txt), for
+		# every country: it gates itself on holding, having held or reading the
+		# depot. It is also the canary for the INJECT that declares the colonies'
+		# modifiers (common/journal_entries/sr_sites_generated.txt; #1404).
+		sr_depots_self_check = yes
 		# Fleets (solar colonization slice 6, sr_fleet_effects.txt): a fleet
 		# power's month under Full Colonies, Space Command's construction first.
 		if = {

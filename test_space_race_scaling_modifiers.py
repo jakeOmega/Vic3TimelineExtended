@@ -26,6 +26,7 @@ import re
 import unittest
 
 from test_space_race_soft_cap import Script, _ctx, _parse
+from test_sr_solar_scaling_modifiers import HAND
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
@@ -133,9 +134,8 @@ def _billed_ctx(m, level, cap, approach=None, player=True, rank=1, solar_method=
 
 
 # The solar entry's own colony declarations, written by hand beside the milestone keys
-# (test_sr_solar_scaling_modifiers.py; the generated 126 are an INJECT in another file).
-SOLAR_COLONY_KEYS = {"sr_solar_system_trade", "sr_emigration_programme", "sr_offworld_population",
-                     "sr_module_upkeep", "sr_free_colony_supply", "sr_free_colony_trade", "sr_colonial_garrisons"}
+# (the generated 126 are an INJECT in another file), as test_sr_solar_scaling_modifiers.py lists them.
+SOLAR_COLONY_KEYS = set(HAND)
 
 
 class DeclarationShapeTest(unittest.TestCase):

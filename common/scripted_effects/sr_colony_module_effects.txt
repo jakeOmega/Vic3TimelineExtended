@@ -444,13 +444,14 @@ sr_ebase_hook_fire = {
 # (a modifier sum can lag a day after a method changes); re-armed if it no
 # longer qualifies by then. Once a game. A holder of Mare Imbrium's Mass Driver
 # is skipped: its +3 points need no method, so its OK would prove nothing
-# (sr_colony_imbrium_massdriver_mult is set on the country while it shows).
+# (sr_colony_imbrium_massdriver_held is set on the country while the entry
+# declares it, sr_sites_generated.txt; #1404).
 sr_mod_fabrication_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = sr_mod_fab_checked }
 			sr_mod_fab_qualifies = yes
-			NOT = { has_variable = sr_colony_imbrium_massdriver_mult }
+			NOT = { has_variable = sr_colony_imbrium_massdriver_held }
 		}
 		if = {
 			limit = {

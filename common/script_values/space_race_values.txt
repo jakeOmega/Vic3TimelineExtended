@@ -554,13 +554,15 @@ sr_funding_solar_colonization_effective = {
 	}
 }
 
-# Per-JE cost values for JE-scoped funding modifiers
-# Uses owner = { } wrapper for universal scope compatibility (country scope = no-op, JE scope = owner country)
+# Per-milestone cost values, which each milestone's entry declares as
+# sr_space_program_cost (je_space_race.txt; #1404) with the country as root.
+# The owner = { } wrapper is a no-op there; it stays because an older save's
+# added copies name these values until the old-save strip removes them.
 # The approach terms (safe 1, ambitious 2) count only for a country that
 # passes sr_ai_should_participate: an AI outside the top three makes no
 # progress (sr_monthly_progress_update_effect), so it pays nothing for the
-# approach it chose (owner ruling, PR #507). space_race_on_action recalculates
-# when that changes; players always pass.
+# approach it chose (owner ruling, PR #507). The declaration reads that live,
+# so the cost follows within days when it changes; players always pass.
 # Per-JE innovation cost multipliers (scaling with tech era), read by
 # sr_<m>_cost and by the approach-cost lines the panel and the buttons print
 # (sr_disp_cost_*_<m>, space_race_display_values.txt).

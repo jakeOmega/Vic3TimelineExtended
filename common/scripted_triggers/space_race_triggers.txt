@@ -396,8 +396,9 @@ sr_colonizing_moon_first = {
 # .83). The entry's `immediate` asks the question only while none is set, and
 # the event re-checks when it fires. `immediate` runs again when the entry
 # re-activates and on an entry a revolution's winner inherits (the variables
-# merge in), and the answer stands in both cases: sr_sync_<m>_entry puts its
-# modifier back instead (common/scripted_effects/space_race_effects.txt).
+# merge in), and the answer stands in both cases: the entry declares its
+# choice modifier from the answer while the milestone runs (je_space_race.txt,
+# scaling_modifiers_while_active; #1404).
 sr_orbital_choice_made = {
 	OR = {
 		has_variable = sr_orbital_civilian

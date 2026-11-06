@@ -1415,7 +1415,20 @@ sr_refresh_space_dividend = {
 		limit = { has_modifier = sr_commercial_space_dividend }
 		remove_modifier = sr_commercial_space_dividend
 	}
+	# The month the race concludes, the last milestone's funding is still
+	# declared on its entry for a few days (scaling_modifiers_while_active
+	# follows the variables 2-5 days late, #1404; solar colonization's entry stays
+	# open for its colonies), so the first payment waits a month rather than
+	# count it. A country that was paid before the wait existed is settled.
 	if = {
+		limit = {
+			sr_space_race_concluded = yes
+			NOT = { has_variable = sr_space_dividend_settled }
+			NOT = { has_variable = sr_space_dividend_announced }
+		}
+		set_variable = { name = sr_space_dividend_settled value = yes }
+	}
+	else_if = {
 		limit = {
 			sr_space_race_concluded = yes
 			sr_space_dividend_points > 0

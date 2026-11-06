@@ -486,8 +486,12 @@ As built (PR 7): 181 declarations on seven entries.
   appends repeated `scaling_modifiers_while_active` blocks is unprobed. The
   existing `propellant_depots_bool` self-check covers it: Shackleton's depot is
   a generated key and the only source of `country_sr_propellant_depots_bool`, so
-  its BROKEN line now names the INJECT, and the fallback is the declarations
-  written into the entry itself. The 120 founding and discovery options call a
+  its BROKEN line now names the INJECT, and it runs monthly for every country
+  instead of only in a launch month (review of PR 7), so a holder whose
+  programme has finished is read too. The fallback is the declarations written
+  into the entry itself. An INJECT that replaced the entry's own blocks instead
+  of appending would leave the depot OK and drop the 12 hand-written
+  declarations; the C7 row opens the entry to see both kinds. The 120 founding and discovery options call a
   generated `sr_site_choose_<m>`: a `show_as_tooltip` add for the preview, then
   the record, hidden. The 69 country blocks in `legacy_modifier_cleanup.txt` (68
   colony keys and the trade reward) only remove now.
@@ -506,6 +510,14 @@ As built (PR 7): 181 declarations on seven entries.
 - **Old saves**: one `legacy_scaling_strip_space_race_<m>` per entry, monthly and
   from a new weekly pulse on each. Nothing needed migrating: the `_held` records
   date from 2026-09-26.
+- **Review fixes**: the Commercial Space dividend's first payment waits a month
+  after the race concludes (`sr_space_dividend_settled`), since the last
+  milestone's declared funding stays on solar colonization's open entry for a
+  few days and the dividend reads `country_space_race_progress_add`. The
+  fabrication self-check's Mass Driver exclusion reads `_held`, not the retired
+  `_mult`. The AI's fund-up and fund-down weights read `country_innovation`,
+  which now follows a click by days, so an AI near 25 or 50 may step twice
+  before the first lands; the cap bounds it, and an observer run is the check.
 
 ### 4.11 United Nations (48 keys + 5 mirrored flats)
 
