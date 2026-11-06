@@ -3,14 +3,6 @@
   "en": "Tax Code",
   "es": "Código fiscal"
  },
- "je_tax_code_desc_full": {
-  "en": "The taxes the legislature has enacted, and the bills that would change them.",
-  "es": "Los impuestos que ha promulgado el legislativo y los proyectos de ley que los cambiarían."
- },
- "je_tax_code_desc_light": {
-  "en": "The taxes in force, each set within the range of the taxation law.",
-  "es": "Los impuestos en vigor, cada uno fijado dentro del rango de la ley de tributación."
- },
  "je_tax_code_reason_full": {
   "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
   "es": "Todos los impuestos se fijan por ley. Un tipo del [concept_tax_code|l] se mantiene hasta que un [concept_tax_bill|l] lo cambia o llega su expiración. Una reforma empieza como borrador, se presenta como proyecto de ley, se aprueba cuando suficientes [Concept('concept_interest_group','$concept_interest_groups|q$')|l] se comprometen con él, y entra en vigor en su [concept_tax_commencement|l]."
@@ -187,17 +179,9 @@
   "en": "The Budget's [concept_budget_poll_taxes] line, which rural assessment and head tax both collect.",
   "es": "La línea de [concept_budget_poll_taxes|l] del Presupuesto, que recaudan tanto la contribución rural como el impuesto de capitación."
  },
- "te_tax_est_consumption": {
-  "en": "About @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_bill') )|K]#! a week with this bill, against @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_law') )|K]#! under existing law: @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') )|+K]#!",
-  "es": "Unos @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_bill') )|K]#! a la semana con este proyecto de ley, frente a @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_law') )|K]#! con la ley vigente: @money!#v [Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') )|+K]#!"
- },
  "te_tax_est_customs": {
   "en": "Customs: no estimate (tariff revenue depends on trade volumes).",
   "es": "Aduanas: sin estimación (la recaudación arancelaria depende del volumen comercial)."
- },
- "te_tax_est_dividends": {
-  "en": "About @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_bill') )|K]#! a week with this bill, against @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_law') )|K]#! under existing law: @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') )|+K]#!",
-  "es": "Unos @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_bill') )|K]#! a la semana con este proyecto de ley, frente a @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_law') )|K]#! con la ley vigente: @money!#v [Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') )|+K]#!"
  },
  "te_tax_est_goods": {
   "en": "Taxed goods: the effect depends on how much pops buy of these goods, so it is not estimated.",
@@ -211,10 +195,6 @@
   "en": "A static estimate at today's economy, not a forecast. Each Budget line's receipts today are scaled by the rate existing law and the draft set in its month, against the rate in force at the economy snapshot. It assumes pops, wages, prices and purchases stay as they are. Receipts are counted where the law collects them; part of a tax may pass on through prices and wages.\\n\\nNot counted: taxed goods and agricultural relief; other collection modifiers, taken as unchanged; any tax outside the code that the same Budget line collects, scaled with the rest. Rural assessment and head tax share the Poll line, so while both are collected it shows the range any split between them allows, and bringing in or removing rural assessment or head tax moves some of the other's payers. Receipts can lag a new rate for some days after it takes effect.\\n\\nA tax that was not collected at the snapshot, or any tax before the first snapshot, has no receipts to scale: it shows no current base and no figure.",
   "es": "Una estimación estática con la economía de hoy, no un pronóstico. La recaudación actual de cada línea del Presupuesto se escala según el tipo que fijan la ley vigente y el borrador en su mes, frente al tipo en vigor en la instantánea de la economía. Supone que los colectivos, los salarios, los precios y las compras se mantienen como están. La recaudación se cuenta donde la recauda la ley; parte de un impuesto puede trasladarse a los precios y los salarios.\\n\\nNo se cuentan: los bienes gravados y la desgravación agraria; otros modificadores de recaudación, que se toman como inalterados; cualquier impuesto ajeno al código que recaude la misma línea del Presupuesto, que se escala con el resto. La contribución rural y el impuesto de capitación comparten la línea de Capitación, así que mientras se cobren ambos muestra el rango que permite cualquier reparto entre ellos, y introducir o quitar la contribución rural o el impuesto de capitación traslada a algunos de los contribuyentes del otro. La recaudación puede ir con retraso respecto a un tipo nuevo durante algunos días tras entrar en vigor.\\n\\nUn impuesto que no se cobraba en la instantánea, o cualquier impuesto antes de la primera instantánea, no tiene recaudación que escalar: no muestra base actual ni cifra."
  },
- "te_tax_est_income": {
-  "en": "About @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_bill') )|K]#! a week with this bill, against @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_law') )|K]#! under existing law: @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') )|+K]#!",
-  "es": "Unos @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_bill') )|K]#! a la semana con este proyecto de ley, frente a @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_law') )|K]#! con la ley vigente: @money!#v [Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') )|+K]#!"
- },
  "te_tax_est_nobase": {
   "en": "No current base — estimate unavailable.",
   "es": "Sin base actual — estimación no disponible."
@@ -222,14 +202,6 @@
  "te_tax_est_none": {
   "en": "No economy snapshot yet: the first is taken the day after this country's taxes come under the code. Until then no tax has a current base to estimate from.",
   "es": "Aún no hay instantánea de la economía: la primera se toma el día después de que los impuestos del país pasen al código. Hasta entonces ningún impuesto tiene una base actual sobre la que estimar."
- },
- "te_tax_est_poll": {
-  "en": "About @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_lo') )|K]#! a week with this bill, against @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_lo') )|K]#! under existing law: @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+K]#!",
-  "es": "Unos @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_lo') )|K]#! a la semana con este proyecto de ley, frente a @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_lo') )|K]#! con la ley vigente: @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+K]#!"
- },
- "te_tax_est_poll_range": {
-  "en": "@money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_lo') )|K]#! to @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_hi') )|K]#! a week with this bill, against @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_lo') )|K]#! to @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_hi') )|K]#! under existing law: @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+K]#! to @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') )|+K]#!. Rural assessment and head tax share this line, and today's receipts do not say how they divide.",
-  "es": "Entre @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_lo') )|K]#! y @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_bill_hi') )|K]#! a la semana con este proyecto de ley, frente a entre @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_lo') )|K]#! y @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_law_hi') )|K]#! con la ley vigente: entre @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+K]#! y @money!#v [Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') )|+K]#!. La contribución rural y el impuesto de capitación comparten esta línea, y la recaudación de hoy no indica cómo se reparte."
  },
  "te_tax_est_regrel": {
   "en": "Regional relief: reduces collections in the named states. Each state above shows its own estimate.",
@@ -448,7 +420,7 @@
   "es": "El día 1 de cada mes el código restablece sus tipos, bienes gravados y desgravaciones y, en un país que posee su mercado, sus aranceles y subvenciones, así que un cambio hecho de otro modo dura como mucho hasta entonces."
  },
  "te_tax_how_replaces_views": {
-  "en": "No group takes a stance on the tax code law itself. Instead each judges the code as the taxation law it comes closest to: $law_graduated_taxation$ if it taxes wages at 10% or more and dividends at least as heavily, $law_proportional_taxation$ if it taxes wages at 10% or more and dividends at all, $law_per_capita_based_taxation$ if it levies a wage tax and a head tax, $law_land_based_taxation$ if it levies a rural assessment, $law_consumption_based_taxation$ otherwise. Its approval then counts as it would for that law, so the change to the code leaves it as it was. The judgement is renewed on the 1st of every month.",
+  "en": "No group takes a stance on the tax code law itself. Instead each judges the code as the taxation law it comes closest to: $law_graduated_taxation$ if it taxes wages at 10% or more and dividends at least as heavily, $law_proportional_taxation$ if it taxes wages at 10% or more and dividends at all, $law_per_capita_based_taxation$ if it levies a wage tax and a head tax, $law_land_based_taxation$ if it levies a rural assessment, $law_consumption_based_taxation$ otherwise. Its approval then counts as it would for that law, so the change to the code leaves it as it was. The judgment is renewed on the 1st of every month.",
   "es": "Ningún grupo toma postura sobre la propia ley del código fiscal. En cambio, cada uno juzga el código como la ley de tributación a la que más se parece: $law_graduated_taxation$ si grava los salarios al 10% o más y los dividendos al menos con la misma dureza, $law_proportional_taxation$ si grava los salarios al 10% o más y grava los dividendos en alguna medida, $law_per_capita_based_taxation$ si cobra un impuesto sobre salarios y un impuesto de capitación, $law_land_based_taxation$ si cobra una contribución rural, $law_consumption_based_taxation$ en cualquier otro caso. Su aprobación cuenta entonces como contaría para esa ley, de modo que el cambio al código la deja como estaba. El juicio se renueva el día 1 de cada mes."
  },
  "te_tax_how_sub_commencement": {
@@ -700,7 +672,7 @@
   "es": "Cada tipo está en un paso: el nivel de impuestos más bajo cuyo tipo bajo tu ley es igual o superior a él. Tu nivel de impuestos es el paso más alto entre tus impuestos, y sus efectos sobre la legitimidad, el radicalismo y el nivel de vida esperado se aplican como en el juego base. Un impuesto por debajo de ese paso se recauda a su propio tipo, así que bajar un impuesto cuesta ingresos pero solo baja el nivel de impuestos cuando ningún otro impuesto comparte su paso."
  },
  "te_tax_lt_how_native": {
-  "en": "The tax level buttons on the Budget panel are greyed, because your rates set the tax level. You still choose which goods carry consumption tax, and tariffs and subsidies work as in the base game.",
+  "en": "The tax level buttons on the Budget panel are grayed, because your rates set the tax level. You still choose which goods carry consumption tax, and tariffs and subsidies work as in the base game.",
   "es": "Los botones de nivel de impuestos del panel Presupuesto están en gris, porque tus tipos fijan el nivel de impuestos. Sigues eligiendo qué bienes llevan impuesto al consumo, y los aranceles y las subvenciones funcionan como en el juego base."
  },
  "te_tax_lt_how_rates": {
@@ -758,22 +730,6 @@
  "te_tax_lt_ov_level_tt": {
   "en": "The highest step any of your taxes sits on. Its legitimacy, radicalism and expected standard of living effects are the base game's. A tax below that step is still collected at its own rate.",
   "es": "El paso más alto en el que se sitúa alguno de tus impuestos. Sus efectos sobre la legitimidad, el radicalismo y el nivel de vida esperado son los del juego base. Un impuesto por debajo de ese paso se sigue recaudando a su propio tipo."
- },
- "te_tax_lt_ov_setter": {
-  "en": "Set By",
-  "es": "Fijado por"
- },
- "te_tax_lt_ov_setter_tt": {
-  "en": "A tax on the tax level's step. Lowering it lowers the tax level, unless another tax sits on the same step.",
-  "es": "Un impuesto en el paso del nivel de impuestos. Bajarlo baja el nivel de impuestos, salvo que otro impuesto esté en el mismo paso."
- },
- "te_tax_lt_ov_title": {
-  "en": "Light [concept_tax_code]",
-  "es": "[concept_tax_code] ligero"
- },
- "te_tax_lt_ov_title_tt": {
-  "en": "Your taxation law sets the range of each tax it levies. Within that range you set each rate, and a change applies at once.",
-  "es": "Tu ley de tributación fija el rango de cada impuesto que grava. Dentro de ese rango fijas cada tipo, y el cambio se aplica al instante."
  },
  "te_tax_lt_row_cons_tt": {
   "en": "$te_tax_inst_cons_tt$ Click − or + to move it one step, shift-click to set it to zero or to the highest rate your taxation law allows. Which goods carry it is chosen on the Budget panel, as in the base game.",
@@ -1087,57 +1043,17 @@
   "en": "[Concept('concept_tax_bill','Bill')], Revision #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_rev')|0]#!",
   "es": "[Concept('concept_tax_bill','Proyecto de ley')], revisión #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_rev')|0]#!"
  },
- "te_tax_ov_bill_tt": {
-  "en": "The bill under debate, from the month it would take effect. Each revision starts the debate again and releases every commitment to the last one.",
-  "es": "El proyecto en debate, desde el mes en que entraría en vigor. Cada revisión reinicia el debate y libera todos los compromisos con la anterior."
- },
- "te_tax_ov_bill_value": {
-  "en": "From #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left')|0]#! days left",
-  "es": "Desde #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left')|0]#! días restantes"
- },
- "te_tax_ov_bill_value_debated": {
-  "en": "From #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0]#!, debated",
-  "es": "Desde #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0]#!, debatido"
- },
- "te_tax_ov_bills_none": {
-  "en": "None",
-  "es": "Ninguno"
- },
- "te_tax_ov_bills_none_tt": {
-  "en": "No draft is open, no bill is under debate and no passed bill is waiting to take effect.",
-  "es": "No hay ningún borrador abierto, ningún proyecto de ley en debate ni ningún proyecto aprobado esperando a entrar en vigor."
- },
  "te_tax_ov_draft": {
   "en": "Draft Reform",
   "es": "Borrador de reforma"
- },
- "te_tax_ov_draft_tt": {
-  "en": "An open draft reform, from the month it would take effect. A draft changes nothing until it is introduced as a [concept_tax_bill], passes and takes effect.",
-  "es": "Un borrador de reforma abierto, desde el mes en que entraría en vigor. Un borrador no cambia nada hasta que se presenta como [concept_tax_bill|l], se aprueba y entra en vigor."
  },
  "te_tax_ov_draft_value": {
   "en": "From #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
   "es": "Desde #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!"
  },
- "te_tax_ov_last_change": {
-  "en": "Last Change",
-  "es": "Último cambio"
- },
- "te_tax_ov_last_change_tt": {
-  "en": "The month the enacted code last changed.",
-  "es": "El mes en que el código promulgado cambió por última vez."
- },
- "te_tax_ov_next_change": {
-  "en": "Next Change",
-  "es": "Próximo cambio"
- },
  "te_tax_ov_next_change_none": {
   "en": "None scheduled",
   "es": "Ninguno previsto"
- },
- "te_tax_ov_next_change_tt": {
-  "en": "The month in which, on the 1st, the next passed bill takes effect (its [concept_tax_commencement]) or the next temporary rate expires.",
-  "es": "El mes en que, el día 1, entra en vigor el próximo proyecto aprobado (su [concept_tax_commencement|l]) o expira el próximo tipo temporal."
  },
  "te_tax_ov_obligations": {
   "en": "Promises",
@@ -1146,10 +1062,6 @@
  "te_tax_ov_obligations_tt": {
   "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups|q$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.",
   "es": "Promesas que el gobierno hizo a los [Concept('concept_interest_group','$concept_interest_groups|q$')|l] para aprobar sus proyectos de ley fiscales. Una pendiente vincula solo si se aprueba su proyecto; una vinculante se comprueba el día 1 de cada mes hasta que se cumple o se rompe."
- },
- "te_tax_ov_obligations_value": {
-  "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#! binding, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#! pending",
-  "es": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#! vinculantes, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#! pendientes"
  },
  "te_tax_ov_package_a_awaiting": {
   "en": "From #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, awaiting",
@@ -1187,29 +1099,9 @@
   "en": "Held back, and none of it applied: its month went by before it could take effect. If it is at most #v [GetPlayer.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0]#! months late and no later bill has changed what it changes, it can be moved to next month; otherwise it can only be dropped.",
   "es": "Retenido, y no se ha aplicado nada: su mes pasó antes de que pudiera entrar en vigor. Si lleva como mucho #v [GetPlayer.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0]#! meses de retraso y ningún proyecto de ley posterior ha cambiado lo que él cambia, se puede pasar al mes siguiente; si no, solo se puede descartar."
  },
- "te_tax_ov_snapshot": {
-  "en": "Economy Snapshot",
-  "es": "Instantánea de la economía"
- },
- "te_tax_ov_snapshot_tt": {
-  "en": "The economy the revenue estimates are measured against: the rates in force and the country's income, taken on the 1st of each month and whenever a bill is introduced, revised or takes an offer.",
-  "es": "La economía con la que se miden las estimaciones de ingresos: los tipos en vigor y los ingresos del país, tomados el día 1 de cada mes y siempre que se presenta o revisa un proyecto de ley o se acepta una oferta."
- },
- "te_tax_ov_snapshot_value_stale": {
-  "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!, #R out of date#!",
-  "es": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!, #R obsoleta#!"
- },
  "te_tax_ov_snapshot_value_tt": {
   "en": "At the snapshot:\\nDomestic tax aggregate (unclassified): @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_tax_income')|K]#! a week\\nNet fixed income: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_net_fixed')|+K]#! a week\\nNet total income: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_net_total')|+K]#! a week\\n[concept_gdp]: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_gdp')|K]#!\\n\\nThe domestic tax aggregate is the engine's own figure for taxation, and what it counts is not established, so the estimates do not use it.",
   "es": "En la instantánea:\\nAgregado de impuestos internos (sin clasificar): @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_tax_income')|K]#! a la semana\\nIngresos fijos netos: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_net_fixed')|+K]#! a la semana\\nIngresos totales netos: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_net_total')|+K]#! a la semana\\n[concept_gdp]: @money!#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_gdp')|K]#!\\n\\nEl agregado de impuestos internos es la cifra propia del motor para la tributación, y no está establecido qué cuenta, así que las estimaciones no lo usan."
- },
- "te_tax_ov_title": {
-  "en": "[concept_tax_code], Version #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_code_version')|0]#!",
-  "es": "[concept_tax_code], versión #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_code_version')|0]#!"
- },
- "te_tax_ov_title_tt": {
-  "en": "The code's version rises by one at every change to it: a passed bill taking effect, a temporary rate expiring, the carry-over from the taxation law.",
-  "es": "La versión del código sube una unidad con cada cambio: la entrada en vigor de un proyecto aprobado, la expiración de un tipo temporal o el traspaso desde la ley de tributación."
  },
  "te_tax_pk_a_cons": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! from #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
@@ -1399,10 +1291,6 @@
   "en": "Move to Next Month",
   "es": "Pasar al mes siguiente"
  },
- "te_tax_pol_bar_label": {
-  "en": "Committed",
-  "es": "Comprometidos"
- },
  "te_tax_pol_bar_tt": {
   "en": "The [concept_clout] of interest groups committed to this revision of the bill (solid) and of those still persuadable (pale green), as a share of every group that is not marginal. Pale red is the share opposed or drawing a red line. The line marks the share passage must exceed.",
   "es": "El [concept_clout|l] de los grupos de interés comprometidos con esta revisión del proyecto (sólido) y de los que aún son persuasibles (verde claro), como proporción de todos los grupos que no son marginales. El rojo claro es la proporción de los opuestos o que trazan una línea roja. La línea marca la proporción que hay que superar para aprobar."
@@ -1475,10 +1363,6 @@
   "en": "Interest Groups",
   "es": "Grupos de interés"
  },
- "te_tax_pol_groups_note": {
-  "en": "Each group weighs the bill every month. One that scores #v [GetPlayer.MakeScope.ScriptValue('te_tax_commit_threshold')|0]#! or more commits to this revision, and one at #v [GetPlayer.MakeScope.ScriptValue('te_tax_redline_threshold')|0]#! or below draws a red line. A revision releases every commitment.",
-  "es": "Cada grupo sopesa el proyecto cada mes. Uno que puntúe #v [GetPlayer.MakeScope.ScriptValue('te_tax_commit_threshold')|0]#! o más se compromete con esta revisión, y uno con #v [GetPlayer.MakeScope.ScriptValue('te_tax_redline_threshold')|0]#! o menos traza una línea roja. Una revisión libera todos los compromisos."
- },
  "te_tax_pol_header": {
   "en": "Bill Under Debate",
   "es": "Proyecto en debate"
@@ -1534,10 +1418,6 @@
  "te_tax_pol_support_tt": {
   "en": "Groups committed to this revision must hold more than this share of the [concept_clout] of every group that is not marginal.",
   "es": "Los grupos comprometidos con esta revisión deben sumar más de esta proporción del [concept_clout|l] de todos los grupos que no son marginales."
- },
- "te_tax_pol_support_value": {
-  "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_committed_share')|%0]#!, more than #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_passage_share')|%0]#! needed",
-  "es": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_committed_share')|%0]#!, se necesita más de #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_passage_share')|%0]#!"
  },
  "te_tax_pol_threshold_tt": {
   "en": "Passage needs more than #v [GetPlayer.MakeScope.ScriptValue('te_tax_passage_share')|%0]#! of the clout of the groups that are not marginal.",
@@ -1814,10 +1694,6 @@
  "te_tax_rv_relief_forgoes": {
   "en": "Forgoes",
   "es": "Renuncia a"
- },
- "te_tax_rv_unchanged": {
-  "en": "Present collections remain unchanged until commencement.",
-  "es": "La recaudación actual no cambia hasta la entrada en vigor."
  },
  "te_tax_spectrum_auction_desc": {
   "en": "Selling the airwaves to the highest bidders has cost the government public trust.",

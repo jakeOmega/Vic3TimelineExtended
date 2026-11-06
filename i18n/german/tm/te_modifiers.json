@@ -464,7 +464,7 @@
   "de": "Inflationsdruck"
  },
  "country_inflation_pressure_add_desc": {
-  "en": "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetisation level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target.",
+  "en": "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetization level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target.",
   "de": "Dauerhafter Aufwärtsdruck auf die Preise — wie weit die Inflation über den Erwartungen einpendelt, solange diese Quelle besteht, nicht ein Betrag, der jeden Monat hinzukommt. Eine Abwertung der Währung wirkt hier hinein. Auch zur Staatsfinanzierung gedrucktes Geld treibt die Preise, wird aber gesondert erfasst, ausgehend vom Monetarisierungsgrad statt von diesem Wert. Ein negativer Wert wirkt in die andere Richtung. Ihre Zentralbank kann dem Druck mit einer strafferen Ausrichtung entgegenwirken, und wie viel davon tatsächlich in den Preisen ankommt, hängt davon ab, ob jemand an das Ziel der Bank glaubt."
  },
  "country_institution_cost_institution_migration_controls_mult": {
@@ -1372,7 +1372,7 @@
   "de": "Wirksamkeit der UN-Lobbyarbeit"
  },
  "country_un_lobbying_mult_desc": {
-  "en": "How well this country lobbies the [concept_un_general_assembly]. Its campaigns move a member's vote this much faster and further, and a member weighing a vote commitment it asks for counts the same share in its favour: +20 for every 25%.",
+  "en": "How well this country lobbies the [concept_un_general_assembly]. Its campaigns move a member's vote this much faster and further, and a member weighing a vote commitment it asks for counts the same share in its favor: +20 for every 25%.",
   "de": "Wie gut dieses Land bei der [concept_un_general_assembly] lobbyiert. Seine Kampagnen bewegen die Stimme eines Mitglieds um so viel schneller und weiter, und ein Mitglied, das eine von ihm erbetene Stimmzusage abwägt, rechnet denselben Anteil zu seinen Gunsten: +20 für je 25%."
  },
  "country_wage_pressure_add": {
@@ -1380,7 +1380,7 @@
   "de": "Lohndruck auf die Preise"
  },
  "country_wage_pressure_add_desc": {
-  "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labour and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarised#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
+  "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labor and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarized#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
   "de": "Dauerhafter Aufwärtsdruck auf die Preise, der von Löhnen ausgeht — wie weit die Inflation über den Erwartungen einpendelt, solange diese Arbeits- und Sozialgesetze bestehen. Arbeiter, die verhandeln können, und Arbeiter mit einer Einkommensuntergrenze unter sich, kosten Arbeitgeber mehr, und Arbeitgeber geben dies weiter. Dies wird getrennt von jeder anderen Inflationsquelle erfasst, weil dieselben Gesetze es zurückzahlen, sobald die Preise unter Kontrolle sind: Solange die Inflation in der #b stabilen Spanne#! liegt, senkt jedes #v 0,1%#! an Lohndruck auch das, was Ihre #b Unterschicht vom Leben erwartet#! — die Lohnerhöhung war real, also fällt die Enttäuschung geringer aus — und erhöht Ihre #b Finanzdynamik#!, weil Geld, das seinen Wert behält, ausgegeben wird. Außerhalb dieser Spanne entfällt die Dividende, und sie wird niemals an eine #b Kommandowirtschaft#! oder ein #b dollarisiertes#! Land gezahlt, da keines der beiden sich die Stabilität verdient hat, für die sie gezahlt würde. Sobald die Gesamtinflation #v 8%#! erreicht, zählen diese Gesetze #b ein zweites Mal#!, da Arbeiter, die mit weiter steigenden Preisen rechnen, bereits im Voraus höhere Löhne fordern. Gesetze, die Löhne unterdrücken, tragen stattdessen einen negativen Wert und erhalten keine Dividende."
  },
  "country_wealth_concentration_economy_add": {
@@ -1823,14 +1823,6 @@
   "en": "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @explosives! $explosives$ von Gebäuden produziert wird"
  },
- "goods_output_fertilizer_mult": {
-  "en": "Building @fertilizer! $fertilizer$ output",
-  "de": "Gebäude-Ausstoß: @fertilizer! $fertilizer$"
- },
- "goods_output_fertilizer_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
-  "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
- },
  "goods_output_fish_mult": {
   "en": "Building @fish! $fish$ output",
   "de": "Gebäude-Ausstoß: @fish! $fish$"
@@ -1918,14 +1910,6 @@
  "goods_output_launch_capacity_mult_desc": {
   "en": "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @launch_capacity! $launch_capacity$ von Gebäuden produziert wird"
- },
- "goods_output_lead_mult": {
-  "en": "Building @lead! $lead$ output",
-  "de": "Gebäude-Ausstoß: @lead! $lead$"
- },
- "goods_output_lead_mult_desc": {
-  "en": "A bonus or penalty to the amount of @lead! $lead$ produced by buildings",
-  "de": "Ein Bonus oder Malus darauf, wie viel @lead! $lead$ von Gebäuden produziert wird"
  },
  "goods_output_luxury_clothes_mult": {
   "en": "Building @luxury_clothes! $luxury_clothes$ output",
@@ -2204,11 +2188,11 @@
   "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('tanks').GetName]."
  },
  "state_ageing_rate_add": {
-  "en": "Ageing in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "en": "Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "de": "Alterung in der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_ageing_rate_add_desc": {
-  "en": "How much more slowly the bodies of people in longevity care age: at -10% a body ages nine-tenths of a year each year, at -100% it stops ageing. Who is in care depends on the health laws, the augmentation laws and wealth. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "en": "How much more slowly the bodies of people in longevity care age: at -10% a body ages nine-tenths of a year each year, at -100% it stops aging. Who is in care depends on the health laws, the augmentation laws and wealth. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "de": "Um wie viel langsamer die Körper von Menschen in Langlebigkeitsmedizin altern: bei -10% altert ein Körper jedes Jahr um neun Zehntel eines Jahres, bei -100% hört er auf zu altern. Wer in Behandlung ist, hängt von den Gesundheitsgesetzen, den Augmentierungsgesetzen und dem Vermögen ab. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_arable_land_mult": {

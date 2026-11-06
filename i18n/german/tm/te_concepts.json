@@ -472,7 +472,7 @@
   "de": "In Öffentliche Transportmittel investieren"
  },
  "GW_REFORESTATION": {
-  "en": "Subsidise Reforestation",
+  "en": "Subsidize Reforestation",
   "de": "Aufforstung subventionieren"
  },
  "GW_REFORESTATION_DESC": {
@@ -840,7 +840,7 @@
   "de": "Verbreitung der Grünen Revolution"
  },
  "agdiff_green_revolution_desc": {
-  "en": "Semi-dwarf high-yield cereal varieties, integrated fertilizer-irrigation packages, and the agronomic extension services that deploy them have crossed borders. Norman Borlaug and the international agricultural research centres (CIMMYT, IRRI) have ensured the techniques reach even the nations that did not pioneer them.",
+  "en": "Semi-dwarf high-yield cereal varieties, integrated fertilizer-irrigation packages, and the agronomic extension services that deploy them have crossed borders. Norman Borlaug and the international agricultural research centers (CIMMYT, IRRI) have ensured the techniques reach even the nations that did not pioneer them.",
   "de": "Halbzwergige, ertragreiche Getreidesorten, integrierte Dünge- und Bewässerungspakete sowie die landwirtschaftlichen Beratungsdienste, die sie verbreiten, haben Grenzen überschritten. Norman Borlaug und die internationalen Agrarforschungszentren (CIMMYT, IRRI) haben dafür gesorgt, dass die Techniken selbst die Nationen erreichen, die sie nicht als Erste entwickelt haben."
  },
  "agdiff_modern_chemical_processes_desc": {
@@ -984,7 +984,7 @@
   "de": "Kompromiss-Nachtrag"
  },
  "amendment_compromise_modifier_desc": {
-  "en": "Accepting an [concept_amendment] has broadened the coalition in favour of the law, easing its passage.",
+  "en": "Accepting an [concept_amendment] has broadened the coalition in favor of the law, easing its passage.",
   "de": "Die Annahme eines [concept_amendment] hat die Koalition zugunsten des Gesetzes erweitert und seine Verabschiedung erleichtert."
  },
  "amendment_cooperative_preference": {
@@ -1056,7 +1056,7 @@
   "de": "Der Staat hat eine völlig neue Plansprache übernommen, die auf logische Grammatik und universelle Zugänglichkeit ausgelegt ist, was den technologischen Austausch beschleunigt, aber traditionelle kulturelle Bindungen kostet."
  },
  "amendment_langreform_minority_protection_desc": {
-  "en": "The state language reform includes protections and revival programmes for minority and regional languages, reducing separatist sentiment.",
+  "en": "The state language reform includes protections and revival programs for minority and regional languages, reducing separatist sentiment.",
   "de": "Die staatliche Sprachreform umfasst Schutzmaßnahmen und Wiederbelebungsprogramme für Minderheiten- und Regionalsprachen und verringert separatistische Stimmungen."
  },
  "amendment_langreform_national_focus_desc": {
@@ -1564,7 +1564,7 @@
   "de": "Banken bündeln ihre Reserven, um sich gegenseitig abzusichern. Das Vertrauen zwischen den Geschäftspartnern kehrt langsam zurück, doch die Industriellen missbilligen die Kostenteilung."
  },
  "banking_crash_intervention_nationalize_desc": {
-  "en": "Failing institutions have been taken into state hands. Capitalists are furious; the labour movement applauds; the public purse bleeds.",
+  "en": "Failing institutions have been taken into state hands. Capitalists are furious; the labor movement applauds; the public purse bleeds.",
   "de": "Scheiternde Institute wurden verstaatlicht. Die Kapitalisten sind empört; die Arbeiterbewegung applaudiert; die Staatskasse blutet."
  },
  "banking_crash_intervention_open_market_desc": {
@@ -1586,18 +1586,6 @@
  "banking_crisis_protectionism_modifier_desc": {
   "en": "Emergency capital controls and trade restrictions imposed to contain financial contagion.",
   "de": "Notfall-Kapitalverkehrskontrollen und Handelsbeschränkungen, verhängt zur Eindämmung der Finanzansteckung."
- },
- "banking_cycle_progress_desc": {
-  "en": "Free Intervention Points: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
-  "de": "Freie Interventionspunkte: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
- },
- "banking_cycle_progress_desc_command": {
-  "en": "Free Planning Budget: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
-  "de": "Freies Planungsbudget: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
- },
- "banking_cycle_progress_desc_coop": {
-  "en": "Free Council Mandate Points: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]",
-  "de": "Freie Ratsmandatspunkte: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]/[ROOT.ScriptValue('banking_law_base_points_value')]"
  },
  "banking_directed_credit_agriculture_desc": {
   "en": "Applies the effects of the Directed Credit to Agriculture banking policy.",
@@ -1676,7 +1664,7 @@
   "de": "Spekulation auf Kredit ist in der [concept_middle_strata] zu weit verbreitet. Durch höhere Anforderungen an die Eigenkapitaldeckung von Krediten stellen wir sicher, dass nur solide Vorhaben verwirklicht werden, und schützen so die Wirtschaft."
  },
  "banking_rescue_programme": {
-  "en": "Rescue Programme",
+  "en": "Rescue Program",
   "de": "Rettungsprogramm"
  },
  "banking_rescue_programme_desc": {
@@ -1684,7 +1672,7 @@
   "de": "Eine ausländische Regierung leiht uns Geld unter Auflagen. Die Märkte vertrauen ihrer Rückendeckung; unsere Wähler grollen ihren Bedingungen."
  },
  "banking_rescue_programme_suspended_desc": {
-  "en": "Our rescue programme was suspended for breaking its conditions, and lenders charge for the broken promise.",
+  "en": "Our rescue program was suspended for breaking its conditions, and lenders charge for the broken promise.",
   "de": "Unser Rettungsprogramm wurde wegen Verstoßes gegen seine Auflagen ausgesetzt, und die Kreditgeber verlangen einen Aufschlag für das gebrochene Versprechen."
  },
  "banking_reserve_requirements": {
@@ -2056,7 +2044,7 @@
   "de": "Ideologischer Kordon"
  },
  "ch_ideological_cordon_desc": {
-  "en": "Customs officers, censors and police are stretched along the border to keep a neighbour's political example out.",
+  "en": "Customs officers, censors and police are stretched along the border to keep a neighbor's political example out.",
   "de": "Zollbeamte, Zensoren und Polizei sind entlang der Grenze postiert, um das politische Vorbild eines Nachbarn fernzuhalten."
  },
  "ch_international_university": {
@@ -2396,7 +2384,7 @@
   "de": "Klimaanpassungsprogramm"
  },
  "climate_adaptation_modifier_desc": {
-  "en": "Government spending on climate resilience infrastructure - flood defences, heat-resistant crops, cooling centres. Lowers mortality and raises local standards of living, but carries a large political authority cost.",
+  "en": "Government spending on climate resilience infrastructure - flood defenses, heat-resistant crops, cooling centers. Lowers mortality and raises local standards of living, but carries a large political authority cost.",
   "de": "Staatliche Ausgaben für klimaresiliente Infrastruktur – Hochwasserschutz, hitzebeständige Nutzpflanzen, Kühlzentren. Senkt die Sterblichkeit und hebt den örtlichen Lebensstandard, kostet aber viel politische Autorität."
  },
  "climate_awareness_modifier": {
@@ -2412,7 +2400,7 @@
   "de": "Weiter wie bisher"
  },
  "climate_carrying_on_modifier_desc": {
-  "en": "At four degrees of warming we have launched no programme and diverted nothing from industry. The factories keep running while the heat kills and the harvests fail.",
+  "en": "At four degrees of warming we have launched no program and diverted nothing from industry. The factories keep running while the heat kills and the harvests fail.",
   "de": "Bei vier Grad Erwärmung haben wir kein Programm gestartet und der Industrie nichts entzogen. Die Fabriken laufen weiter, während die Hitze tötet und die Ernten ausfallen."
  },
  "climate_crisis_emergency_modifier": {
@@ -2492,7 +2480,7 @@
   "de": "Politischer Aufruhr um das Klima"
  },
  "climate_political_turmoil_modifier_desc": {
-  "en": "The clash between environmental and industrial interests has radicalised [Concept('concept_political_movement', 'political movements')] across the country.",
+  "en": "The clash between environmental and industrial interests has radicalized [Concept('concept_political_movement', 'political movements')] across the country.",
   "de": "Der Zusammenstoß zwischen Umwelt- und Industrieinteressen hat [Concept('concept_political_movement', 'Protestbewegungen')] im ganzen Land radikalisiert."
  },
  "climate_refugee_rejection_modifier": {
@@ -2628,7 +2616,7 @@
   "de": "Kolonialer Kulturwandel ist eine [concept_diplomatic_action], die es einem Land erlaubt, die Kultur und Religion eines kolonialen Klientelstaats zu ändern."
  },
  "colonial_development_investment_expense_modifier_desc": {
-  "en": "Weekly upkeep of the Colonial Development Investment programme: a share of our colonies' [concept_gdp] for each level it runs at. Appears as a line item in the budget.",
+  "en": "Weekly upkeep of the Colonial Development Investment program: a share of our colonies' [concept_gdp] for each level it runs at. Appears as a line item in the budget.",
   "de": "Wöchentlicher Unterhalt des Programms Koloniale Entwicklungsinvestition: ein Anteil am [concept_gdp] unserer Kolonien für jede Stufe, auf der es läuft. Erscheint als Posten im Etat."
  },
  "colonial_development_investment_modifier_desc": {
@@ -2716,7 +2704,7 @@
   "de": "Staatlicher Aufkauf notleidender Finanzanlagen von Privatbanken während eines [concept_banking_crash], um Solvenz und Vertrauen wiederherzustellen. Politisch hochbrisant — die Steuerzahler finanzieren, was weithin als Rettung des Finanzsektors wahrgenommen wird."
  },
  "concept_banking_asset_purchases_desc": {
-  "en": "What your central bank adds to inflation by buying assets with money it creates: the [concept_open_market_operations] programme you switch on, and the bank's own purchases when its [concept_banking_mandate] asks for a lower rate than its floor allows. Counted on its own rather than as a modifier, so [concept_banking_inflation_anchoring] does not absorb it.",
+  "en": "What your central bank adds to inflation by buying assets with money it creates: the [concept_open_market_operations] program you switch on, and the bank's own purchases when its [concept_banking_mandate] asks for a lower rate than its floor allows. Counted on its own rather than as a modifier, so [concept_banking_inflation_anchoring] does not absorb it.",
   "de": "Was Ihre Zentralbank der Inflation hinzufügt, indem sie Vermögenswerte mit selbst geschaffenem Geld kauft: das Programm für [concept_open_market_operations], das Sie einschalten, und die eigenen Käufe der Bank, wenn ihr [Concept('concept_banking_mandate', 'Mandat')] einen niedrigeren Zins verlangt, als ihre Untergrenze zulässt. Sie wird für sich gezählt und nicht als Modifikator, sodass die [concept_banking_inflation_anchoring] sie nicht auffängt."
  },
  "concept_banking_backstops": {
@@ -2788,7 +2776,7 @@
   "de": "Inflation"
  },
  "concept_banking_inflation_desc": {
-  "en": "What the prices your people actually pay did over the last year. It is a reading, not a lever: you reach it through the [concept_banking_policy_rate], through what you print, and through the laws that set what labour costs. Where it stands on a ladder of six price bands, from Deflation through Stable prices to Hyperinflation, puts a modifier on your country.",
+  "en": "What the prices your people actually pay did over the last year. It is a reading, not a lever: you reach it through the [concept_banking_policy_rate], through what you print, and through the laws that set what labor costs. Where it stands on a ladder of six price bands, from Deflation through Stable prices to Hyperinflation, puts a modifier on your country.",
   "de": "Wie sich die Preise, die Ihre Bevölkerung tatsächlich zahlt, im letzten Jahr entwickelt haben. Sie ist ein Messwert, kein Hebel: Sie beeinflussen sie über den [concept_banking_policy_rate], über das, was Sie drucken, und über die Gesetze, die festlegen, was Arbeit kostet. Ihr Stand auf einer Leiter aus sechs Preisstufen, von Deflation über Stabile Preise bis Hyperinflation, belegt Ihr Land mit einem Modifikator."
  },
  "concept_banking_intervention_budget_desc": {
@@ -2800,7 +2788,7 @@
   "de": "Mandat"
  },
  "concept_banking_mandate_desc": {
-  "en": "The rule a delegated or independent central bank follows when it sets the target each month: Inflation Targeting, the Dual Mandate, Growth, or, on a gold standard, Peg Defence. It does nothing while you hold the dial yourself. Under $law_central_bank_independence$ it is an act of law rather than your choice.",
+  "en": "The rule a delegated or independent central bank follows when it sets the target each month: Inflation Targeting, the Dual Mandate, Growth, or, on a gold standard, Peg Defense. It does nothing while you hold the dial yourself. Under $law_central_bank_independence$ it is an act of law rather than your choice.",
   "de": "Die Regel, der eine Zentralbank mit übertragener oder unabhängiger Steuerung folgt, wenn sie jeden Monat das Ziel festlegt: Inflationssteuerung, Doppelmandat, Wachstum oder, beim Goldstandard, Bindungsverteidigung. Sie bewirkt nichts, solange Sie den Regler selbst bedienen. Unter $law_central_bank_independence$ ist sie ein Rechtsakt statt Ihrer Wahl."
  },
  "concept_banking_momentum": {
@@ -2812,7 +2800,7 @@
   "de": "Die Geschwindigkeit und Richtung der Veränderung im [concept_banking_cycle]. Positive Dynamik treibt den Zyklus in Richtung Expansion, negative Dynamik in Richtung Kontraktion. Die Dynamik wird durch zufällige Impulse (skaliert durch Volatilitätsmodifikatoren des Bankwesens), Finanzpolitik und Rückkehrkräfte zum Gleichgewicht beeinflusst. In Planwirtschaften spiegelt dies die Koordinationsgeschwindigkeit wider, in genossenschaftlichen Wirtschaften das Reinvestitionstempo."
  },
  "concept_banking_monetary_anchor_desc": {
-  "en": "Whether your money is tied to another country's. An anchored country has no dial: it takes its anchor's policy rate, plus a spread, and its anchor's exchange rate, and it cannot monetise its deficit.",
+  "en": "Whether your money is tied to another country's. An anchored country has no dial: it takes its anchor's policy rate, plus a spread, and its anchor's exchange rate, and it cannot monetize its deficit.",
   "de": "Ob Ihre Währung an die eines anderen Landes gebunden ist. Ein verankertes Land hat keinen Regler: Es übernimmt den Leitzins seines Ankerlandes zuzüglich eines Aufschlags sowie dessen Wechselkurs und kann sein Defizit nicht monetarisieren."
  },
  "concept_banking_monetary_union_desc": {
@@ -2820,7 +2808,7 @@
   "de": "Das Währungsprinzip Ihres Machtblocks und Ihre Stellung darin. Seine Stufen addieren sich nicht; jede schließt die vorherige ein."
  },
  "concept_banking_monetisation": {
-  "en": "Monetising the Deficit",
+  "en": "Monetizing the Deficit",
   "de": "Monetarisierung des Defizits"
  },
  "concept_banking_monetisation_desc": {
@@ -2924,7 +2912,7 @@
   "de": "Weitere Modifikatoren"
  },
  "concept_ch_modifiers_desc": {
-  "en": "[concept_cultural_pull] from the $country_cultural_pull_add$ modifier. This is a catch-all for bonuses granted by events, cultural programme funding, [concept_power_bloc] principles, diplomatic treaties such as a cultural exchange, and other game mechanics. Check your country's modifier tooltip to see what is contributing. Part of [concept_cultural_pull_components].",
+  "en": "[concept_cultural_pull] from the $country_cultural_pull_add$ modifier. This is a catch-all for bonuses granted by events, cultural program funding, [concept_power_bloc] principles, diplomatic treaties such as a cultural exchange, and other game mechanics. Check your country's modifier tooltip to see what is contributing. Part of [concept_cultural_pull_components].",
   "de": "[concept_cultural_pull] durch den Modifikator $country_cultural_pull_add$. Dies ist eine Sammelkategorie für Boni aus Ereignissen, Kulturprogrammförderung, Prinzipien des [concept_power_bloc], diplomatischen Verträgen wie einem Kulturaustausch und anderen Spielmechaniken. Sehen Sie im Modifikator-Tooltip Ihres Landes nach, was dazu beiträgt. Teil der [concept_cultural_pull_components]."
  },
  "concept_ch_monuments": {
@@ -3008,7 +2996,7 @@
   "de": "Umstrittenes Denkmal"
  },
  "concept_contested_monument_desc": {
-  "en": "A $building_grand_monument$ that honours something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from its row on the Grand Monuments tab of the Timeline Extended window.",
+  "en": "A $building_grand_monument$ that honors something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from its row on the Grand Monuments tab of the Timeline Extended window.",
   "de": "Ein $building_grand_monument$, das etwas ehrt, was die Regierung nicht verkörpert: eine Krone, eine Republik, eine Revolution, einen Anführer oder einen Glauben, die gefallen sind, oder das Regime oder den Herrscher eines anderen Landes, wenn der Staat, in dem es steht, den Besitzer wechselt. Es behält seinen Tourismus und seine Wirkung in seinem Staat, gibt aber kein Prestige, keine Legitimität und keine Zustimmung, und die Interessengruppe, die sich an seiner Botschaft gestört hat, grollt ihm jeden Monat, in dem es unentschieden dasteht. In seiner Zeile auf dem Reiter „Große Monumente“ im Fenster „Timeline Extended“ lässt es sich abreißen, neu widmen oder als [concept_heritage_monument] bewahren."
  },
  "concept_covert_efficiency": {
@@ -3048,7 +3036,7 @@
   "de": "Kulturelle Anziehungskraft"
  },
  "concept_cultural_pull_components_desc": {
-  "en": "The factors that determine a nation's [concept_cultural_pull]:\\n• [concept_ch_art_production] — Fine art output relative to global production\\n• [concept_ch_prestige] — National [concept_prestige] relative to world total\\n• [concept_ch_sol] — [concept_sol] compared to global average\\n• [concept_ch_tech_leadership] — World-first technology breakthroughs\\n• [concept_ch_monuments] — Wonder buildings and cultural landmarks\\n• [concept_ch_megaprojects] — Advanced megastructures\\n• [concept_ch_modifiers] — Bonuses from events, programme funding, [concept_power_bloc] principles and treaties\\n• [concept_ch_infamy] — Penalty from aggressive foreign policy\\n• [concept_ch_instability] — Penalty from [concept_turmoil] and [concept_civil_war]\\n• [concept_ch_modifier_bonus] — Percentage multiplier from modifiers",
+  "en": "The factors that determine a nation's [concept_cultural_pull]:\\n• [concept_ch_art_production] — Fine art output relative to global production\\n• [concept_ch_prestige] — National [concept_prestige] relative to world total\\n• [concept_ch_sol] — [concept_sol] compared to global average\\n• [concept_ch_tech_leadership] — World-first technology breakthroughs\\n• [concept_ch_monuments] — Wonder buildings and cultural landmarks\\n• [concept_ch_megaprojects] — Advanced megastructures\\n• [concept_ch_modifiers] — Bonuses from events, program funding, [concept_power_bloc] principles and treaties\\n• [concept_ch_infamy] — Penalty from aggressive foreign policy\\n• [concept_ch_instability] — Penalty from [concept_turmoil] and [concept_civil_war]\\n• [concept_ch_modifier_bonus] — Percentage multiplier from modifiers",
   "de": "Die Faktoren, die die [concept_cultural_pull] einer Nation bestimmen:\\n• [concept_ch_art_production] — Kunstproduktion im Verhältnis zur weltweiten Produktion\\n• [concept_ch_prestige] — Nationales [concept_prestige] im Verhältnis zum Weltgesamtwert\\n• [concept_ch_sol] — [concept_sol] im Vergleich zum weltweiten Durchschnitt\\n• [concept_ch_tech_leadership] — Weltweit erste technologische Durchbrüche\\n• [concept_ch_monuments] — Wunderbauten und kulturelle Wahrzeichen\\n• [concept_ch_megaprojects] — Fortschrittliche Megastrukturen\\n• [concept_ch_modifiers] — Boni aus Ereignissen, Programmförderung, Prinzipien des [concept_power_bloc] und Verträgen\\n• [concept_ch_infamy] — Abzug durch aggressive Außenpolitik\\n• [concept_ch_instability] — Abzug durch [concept_turmoil] und [concept_civil_war]\\n• [concept_ch_modifier_bonus] — Prozentualer Multiplikator aus Modifikatoren"
  },
  "concept_cultural_pull_desc": {
@@ -3172,7 +3160,7 @@
   "de": "Fossilwende"
  },
  "concept_fossil_transition_desc": {
-  "en": "Retiring coal mines, oil rigs and power plants through Resource Transition laws. [GetLawType('law_fossil_expansion_moratorium').GetName] stops new ones being built or expanded; [GetLawType('law_managed_fossil_phaseout').GetName] requires Carbon Capture and Storage and at least 50% capture on eligible sources. Its retirement programmes close the smallest building every #v 3#! months, pay compensation from the treasury that no owner receives, and support displaced workers. Both laws need a Ministry of the Environment. Closing supply does not cut emissions by itself: the market's buildings and households can keep burning imported fuel. The transition and capture costs remain active with the Global Warming game rule off.",
+  "en": "Retiring coal mines, oil rigs and power plants through Resource Transition laws. [GetLawType('law_fossil_expansion_moratorium').GetName] stops new ones being built or expanded; [GetLawType('law_managed_fossil_phaseout').GetName] requires Carbon Capture and Storage and at least 50% capture on eligible sources. Its retirement programs close the smallest building every #v 3#! months, pay compensation from the treasury that no owner receives, and support displaced workers. Both laws need a Ministry of the Environment. Closing supply does not cut emissions by itself: the market's buildings and households can keep burning imported fuel. The transition and capture costs remain active with the Global Warming game rule off.",
   "de": "Die Stilllegung von Kohleminen, Ölbohranlagen und Kraftwerken durch die Gesetze der Ressourcenwende. [GetLawType('law_fossil_expansion_moratorium').GetName] verhindert, dass neue gebaut oder erweitert werden; [GetLawType('law_managed_fossil_phaseout').GetName] verlangt CO2-Abscheidung und -Speicherung sowie eine Abscheidung von mindestens 50% bei geeigneten Quellen. Dessen Stilllegungsprogramme schließen alle #v 3#! Monate das kleinste Gebäude, zahlen eine Entschädigung aus der Landeskasse, die kein Besitzer erhält, und unterstützen entlassene Arbeiter. Beide Gesetze erfordern ein Umweltministerium. Eine Verknappung des Angebots senkt die Emissionen nicht von selbst: Die Gebäude und Haushalte des Marktes können weiterhin importierten Brennstoff verbrennen. Die Kosten für Wende und Abscheidung bleiben auch bei ausgeschalteter Spielregel Globale Erwärmung bestehen."
  },
  "concept_funding_stealth": {
@@ -3216,7 +3204,7 @@
   "de": "Kulturerbe-Denkmal"
  },
  "concept_heritage_monument_desc": {
-  "en": "A $building_grand_monument$ kept under a government it does not honour: a [concept_contested_monument] kept as heritage, or a shrine in a state taken from another country. It gives prestige, cultural pull, tourism and its effect in its state, but no legitimacy and no approval. Keeping a contested monument costs the approval of the group that objected to it, less each year. If what it honours returns, it counts in full again.",
+  "en": "A $building_grand_monument$ kept under a government it does not honor: a [concept_contested_monument] kept as heritage, or a shrine in a state taken from another country. It gives prestige, cultural pull, tourism and its effect in its state, but no legitimacy and no approval. Keeping a contested monument costs the approval of the group that objected to it, less each year. If what it honors returns, it counts in full again.",
   "de": "Ein $building_grand_monument$, das unter einer Regierung bewahrt wird, die es nicht ehrt: ein [concept_contested_monument], das als Kulturerbe bewahrt wird, oder ein Schrein in einem Staat, der einem anderen Land abgenommen wurde. Es bringt Prestige, kulturelle Anziehungskraft, Tourismus und seine Wirkung in seinem Staat, aber keine Legitimität und keine Zustimmung. Ein umstrittenes Denkmal zu bewahren kostet die Zustimmung der Gruppe, die sich daran gestört hat, und zwar jedes Jahr weniger. Kehrt zurück, was es ehrt, zählt es wieder voll."
  },
  "concept_homeland_dynamics": {
@@ -3336,7 +3324,7 @@
   "de": "Nukleararsenal"
  },
  "concept_nuclear_stockpile_desc": {
-  "en": "The quantity of nuclear weapons a country possesses. Only its [concept_nuclear_program] builds them: funding advances the programme's progress, and each time the progress bar fills, one warhead is added. A strike spends one, and a disarmament treaty takes them all. A larger stockpile increases deterrence value but may provoke international concern.",
+  "en": "The quantity of nuclear weapons a country possesses. Only its [concept_nuclear_program] builds them: funding advances the program's progress, and each time the progress bar fills, one warhead is added. A strike spends one, and a disarmament treaty takes them all. A larger stockpile increases deterrence value but may provoke international concern.",
   "de": "Die Anzahl der Nuklearwaffen, die ein Land besitzt. Nur sein [concept_nuclear_program] baut sie: Finanzierung treibt den Fortschritt des Programms voran, und jedes Mal, wenn der Fortschrittsbalken sich füllt, kommt ein Sprengkopf hinzu. Ein Schlag verbraucht einen, und ein Abrüstungsvertrag nimmt sie alle. Ein größeres Arsenal erhöht den Abschreckungswert, kann aber internationale Besorgnis hervorrufen."
  },
  "concept_nuclear_strike": {
@@ -3464,11 +3452,11 @@
   "de": "Meeresbodenanspruch"
  },
  "concept_seabed_claim_desc": {
-  "en": "A country's unused share of an ocean basin's [concept_seabed_licence]s: licences it is entitled to that no Deep-Sea Mine level holds yet. Every January the pools are divided again by claim weight, so a rival's naval buildup can take unused claims; on Sponsor Contractors at most a quarter of them go each January. Building a level, or queueing one, turns a claim into a licence for good.",
+  "en": "A country's unused share of an ocean basin's [concept_seabed_licence]s: licenses it is entitled to that no Deep-Sea Mine level holds yet. Every January the pools are divided again by claim weight, so a rival's naval buildup can take unused claims; on Sponsor Contractors at most a quarter of them go each January. Building a level, or queuing one, turns a claim into a license for good.",
   "de": "Der ungenutzte Anteil eines Landes an den [Concept('concept_seabed_licence', 'Meeresbodenlizenzen')] eines Meeresbeckens: Lizenzen, auf die es Anspruch hat und die noch keine Stufe einer Tiefseemine hält. Jeden Januar werden die Kontingente nach Anspruchsgewicht neu aufgeteilt, sodass der Flottenausbau eines Rivalen ungenutzte Ansprüche an sich ziehen kann; unter Auftragnehmer-Sponsoring geht jeden Januar höchstens ein Viertel davon verloren. Eine Stufe zu bauen oder in die Warteschlange zu stellen, macht aus einem Anspruch dauerhaft eine Lizenz."
  },
  "concept_seabed_licence": {
-  "en": "Seabed Licence",
+  "en": "Seabed License",
   "de": "Meeresbodenlizenz"
  },
  "concept_seabed_licence_desc": {
@@ -3516,11 +3504,11 @@
   "de": "Ansatz"
  },
  "concept_sr_approach_desc": {
-  "en": "How a [concept_space_milestone] is run. #bold Standard#!, where every milestone starts, has no modifier and no cost. #bold Safe#! halves the [concept_sr_setback_risk] for as much innovation as one more funding level; #bold Ambitious#! adds half again to the pace for as much as two. They count for the whole programme: a Safe milestone lowers the risk on every milestone, an Ambitious one speeds them all.",
+  "en": "How a [concept_space_milestone] is run. #bold Standard#!, where every milestone starts, has no modifier and no cost. #bold Safe#! halves the [concept_sr_setback_risk] for as much innovation as one more funding level; #bold Ambitious#! adds half again to the pace for as much as two. They count for the whole program: a Safe milestone lowers the risk on every milestone, an Ambitious one speeds them all.",
   "de": "Wie ein [concept_space_milestone] durchgeführt wird. #bold Standard#!, womit jeder Meilenstein beginnt, hat keinen Modifikator und keine Kosten. #bold Sicher#! halbiert das [concept_sr_setback_risk] für so viel Innovation wie eine weitere Finanzierungsstufe; #bold Ehrgeizig#! steigert das Tempo um nochmals die Hälfte, für so viel wie zwei. Sie gelten für das gesamte Programm: Ein sicherer Meilenstein senkt das Risiko aller Meilensteine, ein ehrgeiziger beschleunigt sie alle."
  },
  "concept_sr_funding": {
-  "en": "Programme Funding",
+  "en": "Program Funding",
   "de": "Programmfinanzierung"
  },
  "concept_sr_funding_desc": {
@@ -3632,7 +3620,7 @@
   "de": "Überschüssige Infrastruktur"
  },
  "concept_tourism_infrastructure_desc": {
-  "en": "The [concept_infrastructure] a state has left once its buildings have taken their share. Visitors use the roads, rails and harbours the local economy is not already using, so spare capacity raises [concept_tourism_throughput]. Each extra point adds less than the one before.",
+  "en": "The [concept_infrastructure] a state has left once its buildings have taken their share. Visitors use the roads, rails and harbors the local economy is not already using, so spare capacity raises [concept_tourism_throughput]. Each extra point adds less than the one before.",
   "de": "Die [concept_infrastructure], die einem Staat bleibt, nachdem seine Gebäude ihren Anteil genommen haben. Besucher nutzen die Straßen, Schienen und Häfen, die die örtliche Wirtschaft nicht ohnehin schon nutzt, sodass freie Kapazität den [concept_tourism_throughput] erhöht. Jeder weitere Punkt bringt weniger als der vorherige."
  },
  "concept_tourism_monuments": {
@@ -3712,7 +3700,7 @@
   "de": "Vollmachten"
  },
  "concept_un_credentials_desc": {
-  "en": "A member's right to speak and vote in the [concept_un_general_assembly]. Once the [concept_un_charter] carries Charter Reform I, the Assembly may suspend the credentials of a member, other than the proposer's ally, overlord or subject, whose case strength is 50 or more and that holds a law the Declaration of Human Rights condemns (Ethnostate, Outlawed Dissent, Penal Labor Camps or slavery, whether or not the Declaration is in force) or has defied its binding decisions (a defiance record of 10 or more); a [concept_un_permanent_member] only after Charter Reform II. The motion needs two thirds of the members with a vote and cannot be vetoed. A member whose credentials are suspended keeps its membership and pays its [concept_un_dues], but its representation is suspended as a subject's is: it casts no vote, tables nothing, draws no benefits of membership, runs no UN programme and gives up any permanent seat for good. It loses 8 International Standing (4 if it voted for its own suspension). The suspension lasts five years, or until its case falls below 30. If the member has left the United Nations, or its case has fallen below 30, by the time the vote closes, the motion is moot and nothing is suspended.",
+  "en": "A member's right to speak and vote in the [concept_un_general_assembly]. Once the [concept_un_charter] carries Charter Reform I, the Assembly may suspend the credentials of a member, other than the proposer's ally, overlord or subject, whose case strength is 50 or more and that holds a law the Declaration of Human Rights condemns (Ethnostate, Outlawed Dissent, Penal Labor Camps or slavery, whether or not the Declaration is in force) or has defied its binding decisions (a defiance record of 10 or more); a [concept_un_permanent_member] only after Charter Reform II. The motion needs two thirds of the members with a vote and cannot be vetoed. A member whose credentials are suspended keeps its membership and pays its [concept_un_dues], but its representation is suspended as a subject's is: it casts no vote, tables nothing, draws no benefits of membership, runs no UN program and gives up any permanent seat for good. It loses 8 International Standing (4 if it voted for its own suspension). The suspension lasts five years, or until its case falls below 30. If the member has left the United Nations, or its case has fallen below 30, by the time the vote closes, the motion is moot and nothing is suspended.",
   "de": "Das Recht eines Mitglieds, in der [concept_un_general_assembly] zu sprechen und abzustimmen. Sobald die [concept_un_charter] die Charta-Reform I enthält, kann die Versammlung die Vollmachten eines Mitglieds aussetzen, das weder Verbündeter noch Suzerän noch Klientelland des Antragstellers ist, dessen Fallstärke bei 50 oder mehr liegt und das ein Gesetz hat, das die Allgemeine Erklärung der Menschenrechte verurteilt (Ethnostaat, verbotener Widerspruch, Strafarbeitslager oder Sklaverei, ob die Erklärung in Kraft ist oder nicht), oder sich ihren verbindlichen Beschlüssen widersetzt hat (eine Missachtungsbilanz von 10 oder mehr); ein [concept_un_permanent_member] erst nach der Charta-Reform II. Der Antrag braucht zwei Drittel der stimmberechtigten Mitglieder und kann nicht per Veto gestoppt werden. Ein Mitglied, dessen Vollmachten ausgesetzt sind, behält seine Mitgliedschaft und zahlt seine [Concept('concept_un_dues', 'UN-Beiträge')], doch seine Vertretung ist ausgesetzt wie die eines Klientellandes: Es gibt keine Stimme ab, bringt nichts zur Abstimmung, bezieht keine Vorteile der Mitgliedschaft, führt kein UN-Programm durch und gibt jeden ständigen Sitz endgültig auf. Es verliert 8 Punkte Internationales Ansehen (4, wenn es für die eigene Aussetzung gestimmt hat). Die Aussetzung dauert fünf Jahre oder bis seine Fallstärke unter 30 fällt. Hat das Mitglied die Vereinten Nationen verlassen oder ist seine Fallstärke bis zum Abschluss der Abstimmung unter 30 gefallen, ist der Antrag gegenstandslos, und nichts wird ausgesetzt."
  },
  "concept_un_development_fund_desc": {
@@ -3748,31 +3736,31 @@
   "de": "UN-Mission"
  },
  "concept_un_mission_aid_desc": {
-  "en": "A [concept_un_mission] that feeds and supplies a state in want. It is opened when an aid request is carried, or when a member answers a famine, in the requester's state most in need, or in the famine-stricken state. The members that pledge or answer serve in it as donors.\\n\\n#bold Effect#! (at strength 1): #G +1.5#! standard of living, #G +0.2#! food security and #G -5%#! mortality in its state.\\n\\n#bold Progress#!\\nShows how far the state's standard of living has come toward the mission's goal, counting what the state has recovered on its own and not what the mission itself adds. The goal is a standard of living of 10, or 1 above where the state started, whichever is higher. Progress shows at most 99 until the mission is done.\\n\\n#G Accomplished#! once at least six months have passed, the state has no famine and its standard of living, without the mission's help, has reached the goal. A mission cannot succeed by its own modifier, or in a state that never needed it.\\n#R Fails#! if the host is attacked after the mission arrives. It does not fail when its donors leave: an aid mission with nobody serving goes on at reduced strength.\\n#v Lapses#! if its host or state is gone.\\n\\nIt has no time limit, so an aid mission lasts as long as the state needs it. A member pays for a contingent it sends of its own accord; the peacekeeping programme does not cover aid.",
+  "en": "A [concept_un_mission] that feeds and supplies a state in want. It is opened when an aid request is carried, or when a member answers a famine, in the requester's state most in need, or in the famine-stricken state. The members that pledge or answer serve in it as donors.\\n\\n#bold Effect#! (at strength 1): #G +1.5#! standard of living, #G +0.2#! food security and #G -5%#! mortality in its state.\\n\\n#bold Progress#!\\nShows how far the state's standard of living has come toward the mission's goal, counting what the state has recovered on its own and not what the mission itself adds. The goal is a standard of living of 10, or 1 above where the state started, whichever is higher. Progress shows at most 99 until the mission is done.\\n\\n#G Accomplished#! once at least six months have passed, the state has no famine and its standard of living, without the mission's help, has reached the goal. A mission cannot succeed by its own modifier, or in a state that never needed it.\\n#R Fails#! if the host is attacked after the mission arrives. It does not fail when its donors leave: an aid mission with nobody serving goes on at reduced strength.\\n#v Lapses#! if its host or state is gone.\\n\\nIt has no time limit, so an aid mission lasts as long as the state needs it. A member pays for a contingent it sends of its own accord; the peacekeeping program does not cover aid.",
   "de": "Eine [concept_un_mission], die einen notleidenden Staat mit Nahrung und Gütern versorgt. Sie wird eröffnet, wenn ein Hilfeersuchen angenommen wird oder wenn ein Mitglied auf eine Hungersnot reagiert, und zwar im bedürftigsten Staat des Antragstellers oder im von der Hungersnot betroffenen Staat. Die Mitglieder, die zusagen oder reagieren, dienen darin als Geber.\\n\\n#bold Wirkung#! (bei Stärke 1): #G +1,5#! Lebensstandard, #G +0,2#! Ernährungssicherheit und #G -5%#! Sterblichkeit in ihrem Staat.\\n\\n#bold Fortschritt#!\\nZeigt, wie weit der Lebensstandard des Staates dem Ziel der Mission nähergekommen ist, wobei gezählt wird, was der Staat aus eigener Kraft zurückgewonnen hat, und nicht, was die Mission selbst beiträgt. Das Ziel ist ein Lebensstandard von 10 oder 1 über dem Ausgangswert des Staates, je nachdem, was höher ist. Der Fortschritt zeigt höchstens 99, bis die Mission abgeschlossen ist.\\n\\n#G Erfüllt#!, sobald mindestens sechs Monate vergangen sind, der Staat keine Hungersnot hat und sein Lebensstandard ohne die Hilfe der Mission das Ziel erreicht hat. Eine Mission kann nicht durch ihren eigenen Modifikator erfolgreich sein und auch nicht in einem Staat, der sie nie gebraucht hat.\\n#R Scheitert#!, wenn das Gastland nach der Ankunft der Mission angegriffen wird. Sie scheitert nicht, wenn ihre Geber abziehen: Eine Hilfsmission, in der niemand dient, läuft mit verminderter Stärke weiter.\\n#v Verfällt#!, wenn ihr Gastland oder Staat nicht mehr besteht.\\n\\nSie hat kein Zeitlimit, sodass eine Hilfsmission so lange dauert, wie der Staat sie braucht. Ein Mitglied bezahlt ein Kontingent, das es aus eigenem Antrieb entsendet, selbst; das Friedenssicherungsprogramm deckt keine Hilfe ab."
  },
  "concept_un_mission_desc": {
-  "en": "A United Nations mission works in one state, where the [concept_un_general_assembly]'s decisions meet the ground. There are four kinds: the [concept_un_mission_peacekeeping], the [concept_un_mission_aid], the [concept_un_mission_stabilisation] and the [concept_un_mission_electoral]. Each has its own way of opening, its own effect on the state and its own test of success; open the one you are reading about to see them.\\n\\n#bold Strength#!\\nA mission's effect on its state is multiplied by its strength: the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues], times 0.75 plus 0.25 for every member serving in it, counted up to three. While the [concept_un_standing_force] stands it counts as one of them in every peacekeeping and stabilisation mission; an electoral mission's paid observers count as one. A Moribund UN's missions do nothing.\\n\\n#bold Progress#!\\nEvery mission shows its progress out of 100 and the months it has been in the field. What moves progress depends on the kind. At 100 the mission is accomplished.\\n\\n#bold Serving#!\\nA state holds one mission at a time. Members that pledge to a resolution, or answer a collapse or a famine, serve in it as contributors. Any [concept_major_power] member may also send a contingent of its own accord from the UN tab of the Diplomacy panel, for a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year (the peacekeeping programme pays for peacekeeping and stabilisation contingents). Bringing one home before the work is done costs standing and the host's regard, and it cannot be sent back. Contributors build intelligence networks in the host faster.\\n\\n#bold How it ends#!\\n#G Accomplished#!: progress reaches 100. The UN's delivery grows, and every member that served gains standing and relations with the host.\\n#R Failed#!: the host is attacked after the mission arrives, or every contributor goes home (peacekeeping and stabilisation only, and not while the [concept_un_standing_force] stands), or the host sends a stabilisation mission away, or an electoral mission's host stops holding elections. The UN's delivery falls.\\n#v Lapsed#!: the mission has nothing left to do, because its host or state is gone, nobody ever joined a force the Assembly voted for, or electoral observers waited five years for an election. Nothing is gained or lost.\\n\\n#bold No time limit#!\\nA mission that is not done goes on for as long as it keeps contributors and its host is not attacked: a member that keeps paying for its contingent can keep a mission in the field for as long as it likes. Time works on the AI instead. The longer a mission has run, the less willing the AI is to send it a contingent; contingents already in the field stay.",
+  "en": "A United Nations mission works in one state, where the [concept_un_general_assembly]'s decisions meet the ground. There are four kinds: the [concept_un_mission_peacekeeping], the [concept_un_mission_aid], the [concept_un_mission_stabilisation] and the [concept_un_mission_electoral]. Each has its own way of opening, its own effect on the state and its own test of success; open the one you are reading about to see them.\\n\\n#bold Strength#!\\nA mission's effect on its state is multiplied by its strength: the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues], times 0.75 plus 0.25 for every member serving in it, counted up to three. While the [concept_un_standing_force] stands it counts as one of them in every peacekeeping and stabilization mission; an electoral mission's paid observers count as one. A Moribund UN's missions do nothing.\\n\\n#bold Progress#!\\nEvery mission shows its progress out of 100 and the months it has been in the field. What moves progress depends on the kind. At 100 the mission is accomplished.\\n\\n#bold Serving#!\\nA state holds one mission at a time. Members that pledge to a resolution, or answer a collapse or a famine, serve in it as contributors. Any [concept_major_power] member may also send a contingent of its own accord from the UN tab of the Diplomacy panel, for a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year (the peacekeeping program pays for peacekeeping and stabilization contingents). Bringing one home before the work is done costs standing and the host's regard, and it cannot be sent back. Contributors build intelligence networks in the host faster.\\n\\n#bold How it ends#!\\n#G Accomplished#!: progress reaches 100. The UN's delivery grows, and every member that served gains standing and relations with the host.\\n#R Failed#!: the host is attacked after the mission arrives, or every contributor goes home (peacekeeping and stabilization only, and not while the [concept_un_standing_force] stands), or the host sends a stabilization mission away, or an electoral mission's host stops holding elections. The UN's delivery falls.\\n#v Lapsed#!: the mission has nothing left to do, because its host or state is gone, nobody ever joined a force the Assembly voted for, or electoral observers waited five years for an election. Nothing is gained or lost.\\n\\n#bold No time limit#!\\nA mission that is not done goes on for as long as it keeps contributors and its host is not attacked: a member that keeps paying for its contingent can keep a mission in the field for as long as it likes. Time works on the AI instead. The longer a mission has run, the less willing the AI is to send it a contingent; contingents already in the field stay.",
   "de": "Eine UN-Mission wirkt in einem Staat, dort, wo die Beschlüsse der [concept_un_general_assembly] auf die Wirklichkeit treffen. Es gibt vier Arten: die [concept_un_mission_peacekeeping], die [concept_un_mission_aid], die [concept_un_mission_stabilisation] und die [concept_un_mission_electoral]. Jede hat ihre eigene Art, zu beginnen, ihre eigene Wirkung auf den Staat und ihren eigenen Erfolgstest; öffnen Sie diejenige, über die Sie lesen, um sie zu sehen.\\n\\n#bold Stärke#!\\nDie Wirkung einer Mission auf ihren Staat wird mit ihrer Stärke multipliziert. Die Stärke ist die [concept_un_enforcement], abzüglich bis zur Hälfte davon, wenn Mitglieder [concept_un_dues] zurückhalten, mal 0,75 plus 0,25 für jedes Mitglied, das in ihr dient, höchstens drei gezählt. Solange die [concept_un_standing_force] besteht, zählt sie in jeder Friedens- und Stabilisierungsmission als eines davon; die bezahlten Beobachter einer Wahlbeobachtungsmission zählen als eines. Die Missionen einer maroden UN bewirken nichts.\\n\\n#bold Fortschritt#!\\nJede Mission zeigt ihren Fortschritt von 100 und die Monate, die sie im Einsatz ist. Was den Fortschritt bewegt, hängt von der Art ab. Bei 100 ist die Mission erfüllt.\\n\\n#bold Dienst#!\\nEin Staat hat immer nur eine Mission. Mitglieder, die einer Resolution zusagen oder auf einen Zusammenbruch oder eine Hungersnot reagieren, dienen darin als Beitragende. Jedes Mitglied im Rang einer [concept_major_power] kann zudem aus eigenem Antrieb ein Kontingent entsenden, auf dem Reiter „UN“ der Diplomatietafel, für ein Viertelprozent seines [Concept('concept_gdp', 'BIP')] pro Jahr (das Friedenssicherungsprogramm bezahlt die Kontingente für Friedens- und Stabilisierungsmissionen). Ein Kontingent vor Abschluss der Arbeit heimzuholen kostet Ansehen und die Wertschätzung des Gastlandes, und es kann nicht zurückgeschickt werden. Beitragende bauen im Gastland schneller Geheimdienstnetzwerke auf.\\n\\n#bold So endet sie#!\\n#G Erfüllt#!: Der Fortschritt erreicht 100. Die Leistung der UN wächst, und jedes Mitglied, das gedient hat, gewinnt Ansehen und Beziehungen zum Gastland.\\n#R Gescheitert#!: Das Gastland wird nach der Ankunft der Mission angegriffen, oder alle Beitragenden ziehen ab (nur bei Friedens- und Stabilisierungsmissionen, und nicht, solange die [concept_un_standing_force] besteht), oder das Gastland schickt eine Stabilisierungsmission weg, oder das Gastland einer Wahlbeobachtungsmission hält keine Wahlen mehr ab. Die Leistung der UN sinkt.\\n#v Verfallen#!: Die Mission hat nichts mehr zu tun, weil ihr Gastland oder Staat nicht mehr besteht, sich nie jemand einer von der Versammlung beschlossenen Streitmacht angeschlossen hat oder Wahlbeobachter fünf Jahre auf eine Wahl gewartet haben. Nichts wird gewonnen oder verloren.\\n\\n#bold Kein Zeitlimit#!\\nEine Mission, die nicht abgeschlossen ist, läuft weiter, solange sie Beitragende behält und ihr Gastland nicht angegriffen wird: Ein Mitglied, das weiter für sein Kontingent zahlt, kann eine Mission so lange im Einsatz halten, wie es will. Stattdessen wirkt die Zeit auf die KI. Je länger eine Mission läuft, desto weniger bereit ist die KI, ihr ein Kontingent zu schicken; bereits im Einsatz befindliche Kontingente bleiben."
  },
  "concept_un_mission_electoral_desc": {
-  "en": "A [concept_un_mission] that watches an election. It is opened when a member's request for electoral observers is carried, in the requester's capital (or, if the capital already holds another mission, its most populous state without one). The observers are paid from the UN's budget: the mission has no contributors, members cannot send it contingents, and it never lapses for want of them. Its strength is the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues].\\n\\n#bold Effect#! (at strength 1): #G +5#! [concept_legitimacy] and #G +15#! ideological covert defence for the host while it is a member, which makes Election Interference and the other ideological operations against it easier to detect; #G -10%#! turmoil effects and #G -10%#! radicals from political movements in its state. While it runs, the cut Election Interference deals to the host's [concept_electoral_confidence] when an election campaign ends is halved, unless the UN is [concept_un_tier_moribund] and the mission has no strength; Election Interference's other harm is not.\\n\\n#bold Progress#!\\n50 while the host is in an election campaign, 0 otherwise.\\n\\n#G Accomplished#! when an election campaign in the host ends while the mission is there: UN delivery grows, and the host gains standing.\\n#R Fails#! if the host is attacked after the mission arrives, or stops holding elections (which also costs the host standing).\\n#v Lapses#! after five years without an election, or if its host or state is gone, or if the host leaves the UN.",
+  "en": "A [concept_un_mission] that watches an election. It is opened when a member's request for electoral observers is carried, in the requester's capital (or, if the capital already holds another mission, its most populous state without one). The observers are paid from the UN's budget: the mission has no contributors, members cannot send it contingents, and it never lapses for want of them. Its strength is the UN's [concept_un_enforcement], less up to half of it as members withhold [concept_un_dues].\\n\\n#bold Effect#! (at strength 1): #G +5#! [concept_legitimacy] and #G +15#! ideological covert defense for the host while it is a member, which makes Election Interference and the other ideological operations against it easier to detect; #G -10%#! turmoil effects and #G -10%#! radicals from political movements in its state. While it runs, the cut Election Interference deals to the host's [concept_electoral_confidence] when an election campaign ends is halved, unless the UN is [concept_un_tier_moribund] and the mission has no strength; Election Interference's other harm is not.\\n\\n#bold Progress#!\\n50 while the host is in an election campaign, 0 otherwise.\\n\\n#G Accomplished#! when an election campaign in the host ends while the mission is there: UN delivery grows, and the host gains standing.\\n#R Fails#! if the host is attacked after the mission arrives, or stops holding elections (which also costs the host standing).\\n#v Lapses#! after five years without an election, or if its host or state is gone, or if the host leaves the UN.",
   "de": "Eine [concept_un_mission], die eine Wahl beobachtet. Sie wird eröffnet, wenn der Antrag eines Mitglieds auf Wahlbeobachter angenommen wird, in der Hauptstadt des Antragstellers (oder, falls die Hauptstadt bereits eine andere Mission beherbergt, in seinem bevölkerungsreichsten Staat ohne eine). Die Beobachter werden aus dem Haushalt der UN bezahlt: Die Mission hat keine Beitragenden, Mitglieder können ihr keine Kontingente schicken, und sie verfällt nie mangels solcher. Ihre Stärke ist die [concept_un_enforcement], abzüglich bis zur Hälfte davon, wenn Mitglieder [concept_un_dues] zurückhalten.\\n\\n#bold Wirkung#! (bei Stärke 1): #G +5#! [concept_legitimacy] und #G +15#! ideologische Abwehr verdeckter Operationen für das Gastland, solange es Mitglied ist, wodurch Wahleinmischung und die übrigen ideologischen Operationen gegen es leichter zu entdecken sind; #G -10%#! Unruhewirkungen und #G -10%#! Radikale aus politischen Bewegungen in ihrem Staat. Solange sie läuft, wird der Einschnitt, den Wahleinmischung dem [concept_electoral_confidence] des Gastlandes zufügt, wenn ein Wahlkampf endet, halbiert, es sei denn, die UN befindet sich auf der Stufe [concept_un_tier_moribund] und die Mission hat keine Stärke; der übrige Schaden der Wahleinmischung wird nicht halbiert.\\n\\n#bold Fortschritt#!\\n50, solange sich das Gastland in einem Wahlkampf befindet, sonst 0.\\n\\n#G Erfüllt#!, wenn ein Wahlkampf im Gastland endet, während die Mission dort ist: Die Leistung der UN wächst, und das Gastland gewinnt Ansehen.\\n#R Scheitert#!, wenn das Gastland nach der Ankunft der Mission angegriffen wird oder keine Wahlen mehr abhält (was das Gastland auch Ansehen kostet).\\n#v Verfällt#! nach fünf Jahren ohne Wahl, wenn ihr Gastland oder Staat nicht mehr besteht oder wenn das Gastland die UN verlässt."
  },
  "concept_un_mission_peacekeeping_desc": {
-  "en": "A [concept_un_mission] that keeps the peace in a state recovering from war. It is opened when a peacekeeping request is carried in full: the [concept_un_general_assembly] passes it, no [concept_un_permanent_member] vetoes it and the UN is at least Established (a vetoed or weak request sends unarmed observers instead, and no mission). It deploys to the requester's most devastated state, and the members that pledge serve in it.\\n\\n#bold Effect#! (at strength 1): #G -20%#! turmoil effects and #G +50%#! devastation recovery in its state.\\n\\n#bold Progress#!\\nAdvances about 4 points a month while the host is at peace, so it takes 24 months. It stands still while the host is at war.\\n\\n#G Accomplished#! at 100: two years of peace for the host.\\n#R Fails#! if the host is attacked after the mission arrives (a host already at war when it arrived is not counted as attacked until it has known a month of peace), or if every contributor goes home (not while the [concept_un_standing_force] stands).\\n#v Lapses#! if nobody has joined it within six months (not while the [concept_un_standing_force] stands), or if its host or state is gone.\\n\\nIt has no time limit. Members sending a contingent of their own accord get the cost of it paid by the peacekeeping programme, if they run one.",
+  "en": "A [concept_un_mission] that keeps the peace in a state recovering from war. It is opened when a peacekeeping request is carried in full: the [concept_un_general_assembly] passes it, no [concept_un_permanent_member] vetoes it and the UN is at least Established (a vetoed or weak request sends unarmed observers instead, and no mission). It deploys to the requester's most devastated state, and the members that pledge serve in it.\\n\\n#bold Effect#! (at strength 1): #G -20%#! turmoil effects and #G +50%#! devastation recovery in its state.\\n\\n#bold Progress#!\\nAdvances about 4 points a month while the host is at peace, so it takes 24 months. It stands still while the host is at war.\\n\\n#G Accomplished#! at 100: two years of peace for the host.\\n#R Fails#! if the host is attacked after the mission arrives (a host already at war when it arrived is not counted as attacked until it has known a month of peace), or if every contributor goes home (not while the [concept_un_standing_force] stands).\\n#v Lapses#! if nobody has joined it within six months (not while the [concept_un_standing_force] stands), or if its host or state is gone.\\n\\nIt has no time limit. Members sending a contingent of their own accord get the cost of it paid by the peacekeeping program, if they run one.",
   "de": "Eine [concept_un_mission], die in einem Staat, der sich von einem Krieg erholt, den Frieden sichert. Sie wird eröffnet, wenn ein Friedenssicherungsersuchen vollständig angenommen wird: Die [concept_un_general_assembly] verabschiedet es, kein [concept_un_permanent_member] legt ein Veto ein und die UN ist mindestens Etabliert (ein mit Veto belegtes oder schwaches Ersuchen entsendet stattdessen unbewaffnete Beobachter und keine Mission). Sie wird im am stärksten verwüsteten Staat des Antragstellers eingesetzt, und die zusagenden Mitglieder dienen darin.\\n\\n#bold Wirkung#! (bei Stärke 1): #G -20%#! Unruhewirkungen und #G +50%#! Erholung von der Verwüstung in ihrem Staat.\\n\\n#bold Fortschritt#!\\nSchreitet um etwa 4 Punkte pro Monat voran, solange das Gastland im Frieden lebt, sodass es 24 Monate dauert. Steht still, solange das Gastland im Krieg ist.\\n\\n#G Erfüllt#! bei 100: zwei Jahre Frieden für das Gastland.\\n#R Scheitert#!, wenn das Gastland nach der Ankunft der Mission angegriffen wird (ein Gastland, das bei ihrer Ankunft schon im Krieg war, gilt erst als angegriffen, wenn es einen Monat Frieden erlebt hat) oder wenn alle Beitragenden abziehen (nicht, solange die [concept_un_standing_force] besteht).\\n#v Verfällt#!, wenn sich ihr binnen sechs Monaten niemand angeschlossen hat (nicht, solange die [concept_un_standing_force] besteht) oder wenn ihr Gastland oder Staat nicht mehr besteht.\\n\\nSie hat kein Zeitlimit. Mitglieder, die aus eigenem Antrieb ein Kontingent entsenden, bekommen die Kosten dafür vom Friedenssicherungsprogramm bezahlt, falls sie eines betreiben."
  },
  "concept_un_mission_stabilisation_desc": {
-  "en": "A [concept_un_mission] that holds a collapsing country together. It is opened when a power answers a state collapse, in the collapsing country's most populous state, and the powers that answered serve in it.\\n\\n#bold Effect#! (at strength 1): #G -30%#! turmoil effects and #G +0.5#! standard of living in its state.\\n\\n#bold Progress#!\\nAdvances about 8 points a month once the collapse is over, so a year after it ends, and only about 2 a month while the host is still collapsing.\\n\\n#G Accomplished#! at 100: about a year after the collapse ends, sooner if the mission served through it.\\n#R Fails#! if the host is attacked after the mission arrives, if every contributor goes home (not while the [concept_un_standing_force] stands), or if the host sends it away.\\n#v Lapses#! if nobody has joined it within six months (not while the [concept_un_standing_force] stands), or if its host or state is gone.\\n\\nIt has no time limit. Members sending a contingent of their own accord get the cost of it paid by the peacekeeping programme, if they run one.",
+  "en": "A [concept_un_mission] that holds a collapsing country together. It is opened when a power answers a state collapse, in the collapsing country's most populous state, and the powers that answered serve in it.\\n\\n#bold Effect#! (at strength 1): #G -30%#! turmoil effects and #G +0.5#! standard of living in its state.\\n\\n#bold Progress#!\\nAdvances about 8 points a month once the collapse is over, so a year after it ends, and only about 2 a month while the host is still collapsing.\\n\\n#G Accomplished#! at 100: about a year after the collapse ends, sooner if the mission served through it.\\n#R Fails#! if the host is attacked after the mission arrives, if every contributor goes home (not while the [concept_un_standing_force] stands), or if the host sends it away.\\n#v Lapses#! if nobody has joined it within six months (not while the [concept_un_standing_force] stands), or if its host or state is gone.\\n\\nIt has no time limit. Members sending a contingent of their own accord get the cost of it paid by the peacekeeping program, if they run one.",
   "de": "Eine [concept_un_mission], die ein zerfallendes Land zusammenhält. Sie wird eröffnet, wenn eine Macht auf einen Staatszusammenbruch reagiert, und zwar im bevölkerungsreichsten Staat des zusammenbrechenden Landes; die Mächte, die reagiert haben, dienen darin.\\n\\n#bold Wirkung#! (bei Stärke 1): #G -30%#! Unruhewirkungen und #G +0,5#! Lebensstandard in ihrem Staat.\\n\\n#bold Fortschritt#!\\nSchreitet um etwa 8 Punkte pro Monat voran, sobald der Zusammenbruch vorbei ist, also ein Jahr nach seinem Ende, und nur um etwa 2 pro Monat, solange das Gastland noch zusammenbricht.\\n\\n#G Erfüllt#! bei 100: etwa ein Jahr nach dem Ende des Zusammenbruchs, früher, wenn die Mission währenddessen im Einsatz war.\\n#R Scheitert#!, wenn das Gastland nach der Ankunft der Mission angegriffen wird, wenn alle Beitragenden abziehen (nicht, solange die [concept_un_standing_force] besteht) oder wenn das Gastland sie wegschickt.\\n#v Verfällt#!, wenn sich ihr binnen sechs Monaten niemand angeschlossen hat (nicht, solange die [concept_un_standing_force] besteht) oder wenn ihr Gastland oder Staat nicht mehr besteht.\\n\\nSie hat kein Zeitlimit. Mitglieder, die aus eigenem Antrieb ein Kontingent entsenden, bekommen die Kosten dafür vom Friedenssicherungsprogramm bezahlt, falls sie eines betreiben."
  },
  "concept_un_passage_majority_desc": {
-  "en": "A resolution passes when the votes in favour outnumber the votes against. Abstentions, and members that have not voted, count for neither side. Every topic but two passes this way.",
+  "en": "A resolution passes when the votes in favor outnumber the votes against. Abstentions, and members that have not voted, count for neither side. Every topic but two passes this way.",
   "de": "Eine Resolution wird angenommen, wenn die Ja-Stimmen die Nein-Stimmen übersteigen. Enthaltungen und Mitglieder, die nicht abgestimmt haben, zählen für keine Seite. Alle Themen bis auf zwei werden auf diese Weise angenommen."
  },
  "concept_un_passage_two_thirds_desc": {
-  "en": "A resolution passes only with the votes in favour of two-thirds of all members with a vote, not two-thirds of those voting. A member two years in arrears on its [concept_un_dues] has no vote, nor does a member with [concept_un_suspended_representation]. Charter reform and the expulsion of a [concept_un_permanent_member] need it.",
+  "en": "A resolution passes only with the votes in favor of two-thirds of all members with a vote, not two-thirds of those voting. A member two years in arrears on its [concept_un_dues] has no vote, nor does a member with [concept_un_suspended_representation]. Charter reform and the expulsion of a [concept_un_permanent_member] need it.",
   "de": "Eine Resolution wird nur angenommen, wenn zwei Drittel aller stimmberechtigten Mitglieder dafür stimmen, nicht zwei Drittel der Abstimmenden. Ein Mitglied, das mit seinen [Concept('concept_un_dues', 'UN-Beiträgen')] zwei Jahre im Rückstand ist, hat keine Stimme, ebenso wenig ein Mitglied mit [Concept('concept_un_suspended_representation', 'Ausgesetzter Vertretung')]. Charta-Reformen und der Ausschluss eines [Concept('concept_un_permanent_member', 'Ständigen Mitglieds')] erfordern sie."
  },
  "concept_un_peacekeeping": {
@@ -3800,7 +3788,7 @@
   "de": "Eine Resolution, die zum Handeln zwingt: Sanktionen, Verurteilungen, Entsendungen von Friedenstruppen, der Internationale Strafgerichtshof, militärische Mandate, Charta-Reformen und, sobald die Charta sie zulässt, Verweisungen an den Internationalen Gerichtshof, Waffenembargos, verbindliche Waffenruhen, beaufsichtigte Referenden und die Ständige UN-Streitmacht. Verbindliche Resolutionen benötigen die Zustimmung des [concept_un_security_council] — jedes [concept_un_permanent_member] kann gegen sie ein [concept_un_veto] einlegen. Eine mit Veto belegte verbindliche Resolution, die dennoch eine Mehrheit hat, tritt nur in abgestufter oder schwacher Form in Kraft (freiwillige Sanktionen, Beobachter, kein Gericht, ein unverbindlicher Tadel, ein Gutachten, ein freiwilliges Embargo, ein einmaliger Aufruf zur Waffenruhe). Eine Charta-Reform, ein militärisches Mandat, ein beaufsichtigtes Referendum und die Ständige UN-Streitmacht haben keine abgestufte Form: Ein Veto blockiert sie vollständig."
  },
  "concept_un_resolution_recommendatory_desc": {
-  "en": "A resolution no member can veto: the declarations, conventions and programmes (human rights, the NPT, the climate accord, heritage, [concept_decolonization_system], pandemic and refugee programmes, the law of the sea, space cooperation and the later conventions), humanitarian aid, electoral observers, the World Food Reserve and the World Development Fund, an expulsion and a suspension of credentials. Most pass on a simple [concept_un_general_assembly] majority; an expulsion and a suspension of credentials need two thirds of the members with a vote. A convention binds the members that ratify it, but some of its terms reach every country, and the decolonization declaration binds every member however it voted.",
+  "en": "A resolution no member can veto: the declarations, conventions and programs (human rights, the NPT, the climate accord, heritage, [concept_decolonization_system], pandemic and refugee programs, the law of the sea, space cooperation and the later conventions), humanitarian aid, electoral observers, the World Food Reserve and the World Development Fund, an expulsion and a suspension of credentials. Most pass on a simple [concept_un_general_assembly] majority; an expulsion and a suspension of credentials need two thirds of the members with a vote. A convention binds the members that ratify it, but some of its terms reach every country, and the decolonization declaration binds every member however it voted.",
   "de": "Eine Resolution, gegen die kein Mitglied ein Veto einlegen kann: die Erklärungen, Konventionen und Programme (Menschenrechte, der NPT, das Klimaabkommen, Kulturerbe, [concept_decolonization_system], Pandemie- und Flüchtlingsprogramme, das Seerecht, Weltraumkooperation und die späteren Konventionen), humanitäre Hilfe, Wahlbeobachter, die Welternährungsreserve und der Weltentwicklungsfonds, ein Ausschluss und eine Aussetzung der Vollmachten. Die meisten werden mit einfacher Mehrheit der [concept_un_general_assembly] angenommen; ein Ausschluss und eine Aussetzung der Vollmachten benötigen zwei Drittel der stimmberechtigten Mitglieder. Eine Konvention bindet die Mitglieder, die sie ratifizieren, doch einige ihrer Bestimmungen reichen bis in jedes Land, und die Dekolonisierungserklärung bindet jedes Mitglied, wie auch immer es abgestimmt hat."
  },
  "concept_un_sanctions": {
@@ -3820,7 +3808,7 @@
   "de": "Ständige Organisationen der Vereinten Nationen. Fünfzehn werden gegründet, wenn die Generalversammlung die passende Konvention annimmt: die WHO (Pandemiebekämpfung), die UNESCO (Schutz des Kulturerbes), der UNHRC (Menschenrechte), die IAEO (nukleare Nichtverbreitung), das UNEP (Klima), der UNHCR (Flüchtlinge), das UNOOSA (Weltraumkooperation), der ITLOS (das Seerecht), der IStGH (internationale Strafjustiz), das Regime für den physischen Schutz von Nuklearmaterial, der INCB (Suchtstoffe), die Konvention über kulturelle Vielfalt, der Vertrag über das Verbot von Nuklearwaffen, der ATS (der Antarktisvertrag) und das UNODA (das Antisatellitenmoratorium). Der ICJ (internationaler Gerichtshof) wird gegründet, wenn ein Land erstmals ein Urteil des Internationalen Gerichtshofs gegen sich selbst akzeptiert. Eine Organisation steht für ihre Konvention: Die Bestimmungen der Konvention binden die Mitglieder, die sie ratifizieren, und einige reichen bis in jedes Land, ob Mitglied oder nicht. Bewegen Sie in der Übersicht den Mauszeiger über eine Organisation, um ihre Bestimmungen zu sehen. Der ICJ hat keine eigenen Wirkungen."
  },
  "concept_un_standing_force_desc": {
-  "en": "A body of troops held ready under the UN flag and paid from the UN's budget, founded once by a binding resolution of the [concept_un_general_assembly] under Charter Reform I. A [concept_major_power] member tables it; a [concept_un_veto] blocks it outright. It stands until the United Nations dissolves.\\n\\n#bold Missions#!\\nEvery [Concept('concept_un_mission_peacekeeping', 'peacekeeping')] and [Concept('concept_un_mission_stabilisation', 'stabilisation')] mission counts the Force as one contributor, so its strength is 0.25 higher (up to the usual three). Such a mission no longer lapses when no member joins it within six months, and no longer fails when its last contributor goes home.\\n\\n#bold Budget#!\\nThe Force takes a tenth of what the paying members' [concept_un_dues] bring in each week, which the UN's lending facility can no longer lend.\\n\\n#bold War goals#!\\nFrom the Strong tier a war goal against a country that hosts an active peacekeeping or stabilisation mission already costs twice the usual [concept_infamy] surcharge, Force or no Force. While the Force stands, at the [concept_un_tier_supranational] tier a member that adds such a goal to a play it started has it struck the moment it is added. The goal the play opens with cannot be struck, nor another goal of the same kind, nor a unification goal: these still pay the doubled surcharge. So does every goal of a country outside the UN, or of a member whose credentials are suspended.",
+  "en": "A body of troops held ready under the UN flag and paid from the UN's budget, founded once by a binding resolution of the [concept_un_general_assembly] under Charter Reform I. A [concept_major_power] member tables it; a [concept_un_veto] blocks it outright. It stands until the United Nations dissolves.\\n\\n#bold Missions#!\\nEvery [Concept('concept_un_mission_peacekeeping', 'peacekeeping')] and [Concept('concept_un_mission_stabilisation', 'stabilization')] mission counts the Force as one contributor, so its strength is 0.25 higher (up to the usual three). Such a mission no longer lapses when no member joins it within six months, and no longer fails when its last contributor goes home.\\n\\n#bold Budget#!\\nThe Force takes a tenth of what the paying members' [concept_un_dues] bring in each week, which the UN's lending facility can no longer lend.\\n\\n#bold War goals#!\\nFrom the Strong tier a war goal against a country that hosts an active peacekeeping or stabilization mission already costs twice the usual [concept_infamy] surcharge, Force or no Force. While the Force stands, at the [concept_un_tier_supranational] tier a member that adds such a goal to a play it started has it struck the moment it is added. The goal the play opens with cannot be struck, nor another goal of the same kind, nor a unification goal: these still pay the doubled surcharge. So does every goal of a country outside the UN, or of a member whose credentials are suspended.",
   "de": "Ein Truppenkörper, der unter der UN-Flagge bereitgehalten und aus dem Haushalt der UN bezahlt wird, einmalig gegründet durch eine verbindliche Resolution der [concept_un_general_assembly] unter der Charta-Reform I. Ein Mitglied im Rang einer [concept_major_power] bringt sie ein; ein [concept_un_veto] blockiert sie vollständig. Sie besteht, bis die Vereinten Nationen sich auflösen.\\n\\n#bold Missionen#!\\nJede [Concept('concept_un_mission_peacekeeping', 'Friedensmission')] und jede [Concept('concept_un_mission_stabilisation', 'Stabilisierungsmission')] zählt die Streitmacht als einen Beitragenden, sodass ihre Stärke um 0,25 höher liegt (bis zu den üblichen drei). Eine solche Mission verfällt nicht mehr, wenn sich ihr binnen sechs Monaten kein Mitglied anschließt, und scheitert nicht mehr, wenn ihr letzter Beitragender abzieht.\\n\\n#bold Haushalt#!\\nDie Streitmacht nimmt ein Zehntel dessen, was die [concept_un_dues] der zahlenden Mitglieder jede Woche einbringen, was die Kreditfazilität der UN nicht mehr verleihen kann.\\n\\n#bold Kriegsziele#!\\nAb der Stufe Stark kostet ein Kriegsziel gegen ein Land, das eine aktive Friedens- oder Stabilisierungsmission beherbergt, bereits den doppelten üblichen Aufschlag auf die [concept_infamy], mit oder ohne Streitmacht. Solange die Streitmacht besteht, wird auf der Stufe [concept_un_tier_supranational] ein solches Kriegsziel, das ein Mitglied einem von ihm begonnenen Diplomatiespiel hinzufügt, im Moment des Hinzufügens gestrichen. Das Kriegsziel, mit dem das Diplomatiespiel beginnt, kann nicht gestrichen werden, ebenso wenig ein weiteres Kriegsziel derselben Art oder ein Einigungskriegsziel: Diese zahlen weiterhin den doppelten Aufschlag. Das gilt auch für jedes Kriegsziel eines Landes außerhalb der UN oder eines Mitglieds, dessen Vollmachten ausgesetzt sind."
  },
  "concept_un_suspended_representation_desc": {
@@ -3860,7 +3848,7 @@
   "de": "Stimmgewicht"
  },
  "concept_un_weight_desc": {
-  "en": "How much a country's acts count at the United Nations: everything it does there, its votes, vetoes, programmes and event choices, enters the pillars of [concept_un_authority] multiplied by its weight, up to ×5. A country's weight is its share of world [concept_prestige] against a typical [concept_great_power]'s 10%.",
+  "en": "How much a country's acts count at the United Nations: everything it does there, its votes, vetoes, programs and event choices, enters the pillars of [concept_un_authority] multiplied by its weight, up to ×5. A country's weight is its share of world [concept_prestige] against a typical [concept_great_power]'s 10%.",
   "de": "Wie viel die Handlungen eines Landes bei den Vereinten Nationen zählen: Alles, was es dort tut, seine Stimmen, Vetos, Programme und Ereignisentscheidungen, geht multipliziert mit seinem Stimmgewicht, bis zu ×5, in die Säulen der [concept_un_authority] ein. Das Stimmgewicht eines Landes ist sein Anteil am weltweiten [concept_prestige] im Verhältnis zu den 10% einer typischen [concept_great_power]."
  },
  "concept_un_world_court_desc": {
@@ -3996,7 +3984,7 @@
   "de": "Einsatz des Fonds für Gegenseitige Hilfe"
  },
  "cooperative_mutual_aid_desc": {
-  "en": "Federation mutual aid reserves are being deployed to cooperatives near financial distress, stabilising the network and boosting [concept_lower_strata] loyalty.",
+  "en": "Federation mutual aid reserves are being deployed to cooperatives near financial distress, stabilizing the network and boosting [concept_lower_strata] loyalty.",
   "de": "Die Reserven der Föderation für Gegenseitige Hilfe werden an Genossenschaften nahe der finanziellen Notlage ausgeschüttet, was das Netzwerk stabilisiert und die Loyalität der [concept_lower_strata] stärkt."
  },
  "cooperative_solidarity_campaign": {
@@ -4184,7 +4172,7 @@
   "de": "Dieses Land hat zugestimmt, seine Nuklearwaffen aufzugeben."
  },
  "country_nuclear_program_pause_bool_desc": {
-  "en": "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the programme builds nothing and cannot be funded.",
+  "en": "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the program builds nothing and cannot be funded.",
   "de": "Die Entwicklung von Nuklearwaffen ist gestoppt, durch ein vertraglich vereinbartes Einfrieren oder eine erreichte Arsenalobergrenze: Das Programm produziert nichts und kann nicht finanziert werden."
  },
  "country_receiving_nuclear_program_aid_bool_desc": {
@@ -4280,7 +4268,7 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat begonnen, unsere Spionageabwehr zu unterstützen."
  },
  "covert_counterintel_support_action_desc": {
-  "en": "Lend our officers and analysts to a friend's counterintelligence service. Raises its economic, military and ideological covert defences, more once established and at a higher priority. Only for a friend (cordial relations together with an [concept_alliance], a [concept_defensive_pact], a shared [concept_power_bloc] or a subject tie, or amicable relations alone), and it lapses if the friendship does. One country at a time may support each; an Intelligence Sharing Pact with them does not stand in the way.\\n#lore An open arrangement, not a secret: it is never rolled for detection and never exposed. We gain nothing from it ourselves: no network inside them, no Tradecraft.#!",
+  "en": "Lend our officers and analysts to a friend's counterintelligence service. Raises its economic, military and ideological covert defenses, more once established and at a higher priority. Only for a friend (cordial relations together with an [concept_alliance], a [concept_defensive_pact], a shared [concept_power_bloc] or a subject tie, or amicable relations alone), and it lapses if the friendship does. One country at a time may support each; an Intelligence Sharing Pact with them does not stand in the way.\\n#lore An open arrangement, not a secret: it is never rolled for detection and never exposed. We gain nothing from it ourselves: no network inside them, no Tradecraft.#!",
   "de": "Stellt unsere Offiziere und Analysten dem Spionageabwehrdienst eines Freundes zur Verfügung. Erhöht dessen wirtschaftliche, militärische und ideologische Abwehr gegen verdeckte Operationen, mehr, sobald sie etabliert ist, und bei höherer Priorität. Nur für einen Freund (herzliche Beziehungen zusammen mit einem [concept_alliance], einem [concept_defensive_pact], einem gemeinsamen [concept_power_bloc] oder einem Klientelverhältnis, oder einvernehmliche Beziehungen allein); sie endet, wenn die Freundschaft endet. Jedes Land kann jeweils nur von einem Land unterstützt werden; ein Geheimdienst-Kooperationspakt mit ihm steht dem nicht im Weg.\\n#lore Eine offene Vereinbarung, kein Geheimnis: Sie wird nie auf Entdeckung ausgewürfelt und nie aufgedeckt. Wir selbst gewinnen nichts daraus: kein Netzwerk in ihrem Land, kein Spionagehandwerk.#!"
  },
  "covert_counterintel_support_desc": {
@@ -4620,7 +4608,7 @@
   "de": "Durch Spionage gewonnene Informationen verschaffen [Concept('concept_unit', 'Militäreinheiten')] einen taktischen Vorteil."
  },
  "covert_nuclear_sabotage": {
-  "en": "Nuclear Programme Sabotage",
+  "en": "Nuclear Program Sabotage",
   "de": "Sabotage des Nuklearprogramms"
  },
  "covert_nuclear_sabotage_action_action_notification_break_desc": {
@@ -4684,11 +4672,11 @@
   "de": "Gestohlene Raketenpläne"
  },
  "covert_space_espionage_action_action_notification_break_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] has discontinued their space-programme espionage operation.",
+  "en": "[INITIATOR_COUNTRY.GetName] has discontinued their space-program espionage operation.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Raumfahrtprogramm-Spionageoperation eingestellt."
  },
  "covert_space_espionage_action_action_notification_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] has launched a space-programme espionage operation.",
+  "en": "[INITIATOR_COUNTRY.GetName] has launched a space-program espionage operation.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Raumfahrtprogramm-Spionageoperation gestartet."
  },
  "covert_space_espionage_action_desc": {
@@ -4696,11 +4684,11 @@
   "de": "Stiehlt die Entwürfe eines ausländischen Raumfahrtprogramms, das unserem voraus ist. Unsere Meilensteine im Wettlauf ins All schreiten schneller voran und scheitern seltener. Erfordert, dass das Ziel einen Meilenstein erreicht hat, den wir nicht erreicht haben.$iw_exposure_tier_mild_note$"
  },
  "covert_space_espionage_desc": {
-  "en": "Our intelligence services are passing us the designs of a foreign space programme: our milestones progress faster and fail less often.",
+  "en": "Our intelligence services are passing us the designs of a foreign space program: our milestones progress faster and fail less often.",
   "de": "Unsere Geheimdienste liefern uns die Entwürfe eines ausländischen Raumfahrtprogramms: Unsere Meilensteine schreiten schneller voran und scheitern seltener."
  },
  "covert_space_espionage_detected_desc": {
-  "en": "Counterintelligence has uncovered foreign agents inside our space programme, and plugging the leak consumes administrative focus.",
+  "en": "Counterintelligence has uncovered foreign agents inside our space program, and plugging the leak consumes administrative focus.",
   "de": "Die Spionageabwehr hat ausländische Agenten in unserem Raumfahrtprogramm aufgedeckt, und das Stopfen des Lecks beansprucht administrative Aufmerksamkeit."
  },
  "cr_cooptation_expired": {
@@ -4944,7 +4932,7 @@
   "de": "Ein [concept_country] bindet seine Währung an die eines anderen und gibt dafür seinen eigenen Zinssatz zugunsten der Glaubwürdigkeit des Ankerlandes auf."
  },
  "currency_peg_effects_desc": {
-  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +0.5 percentage points#!, adopts its exchange rate and cannot monetise deficits.\\n• #G −0.5 percentage points#! of structural risk premium; imports up to #v 80%#! of the anchor’s monetary credibility.\\n• Keeps its own inflation and business cycle. Overvaluation drains Peg Confidence and can force a currency crisis.\\n#b Anchor:#!\\n• Structural risk premium falls by #G 0.1 percentage points#! per #v 5%#! of world GDP anchored to it, normally capped at #v 0.5#! (#v 1.0#! with the tier-5 reserve-currency principle). No bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate, or either country declares war on or expels the other’s diplomats.",
+  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +0.5 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• #G −0.5 percentage points#! of structural risk premium; imports up to #v 80%#! of the anchor’s monetary credibility.\\n• Keeps its own inflation and business cycle. Overvaluation drains Peg Confidence and can force a currency crisis.\\n#b Anchor:#!\\n• Structural risk premium falls by #G 0.1 percentage points#! per #v 5%#! of world GDP anchored to it, normally capped at #v 0.5#! (#v 1.0#! with the tier-5 reserve-currency principle). No bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate, or either country declares war on or expels the other’s diplomats.",
   "de": "#b Bindendes Land:#!\\n• Gibt die Kontrolle über seinen Leitzins auf: folgt dem Zinssatz des Ankerlandes #v +0,5 Prozentpunkte#!, übernimmt dessen Wechselkurs und kann Defizite nicht monetarisieren.\\n• #G −0,5 Prozentpunkte#! struktureller Risikoaufschlag; importiert bis zu #v 80%#! der geldpolitischen Glaubwürdigkeit des Ankerlandes.\\n• Behält seine eigene Inflation und seinen eigenen Konjunkturzyklus. Überbewertung zehrt am Bindungsvertrauen und kann eine Währungskrise erzwingen.\\n#b Ankerland:#!\\n• Der strukturelle Risikoaufschlag sinkt um #G 0,1 Prozentpunkte#! je #v 5%#! des an es gebundenen Welt-BIP, normalerweise begrenzt auf #v 0,5#! (#v 1,0#! mit dem Prinzip der Reservewährung der Stufe 5). Keine Rettungspflicht.\\n#b Endet, wenn:#! das Ankerland seine Nationalbank oder seinen unabhängigen Leitzins verliert, oder eines der beiden Länder dem anderen den Krieg erklärt oder dessen Diplomaten ausweist."
  },
  "cyber_defense_strengthened_modifier_desc": {
@@ -6312,7 +6300,7 @@
   "de": "Die Nation hat eine Welle von Einwanderern willkommen geheißen, was den Arbeitskräftepool vergrößert, aber die öffentlichen Dienste belastet."
  },
  "imperial_federation_act_civilizing_mission_desc": {
-  "en": "Three years of unbroken Solidified [concept_colonial_stability] under our developmentalist programme have demonstrated that an empire of consent is possible. Pass the Civilizing Mission Compact, formally embedding the colonies in our liberal-democratic legal framework as permanent constituent territories.\\n\\nRequires: Solidified band sustained 36 months, Colonial Exploitation/Resettlement, pluralist Citizenship, Protected Speech or Right of Assembly, Broad-franchise distribution of power, Protective Minority Rights, [concept_great_power] rank, ≥4 colonial states, 300 [concept_authority], 100 [concept_prestige].",
+  "en": "Three years of unbroken Solidified [concept_colonial_stability] under our developmentalist program have demonstrated that an empire of consent is possible. Pass the Civilizing Mission Compact, formally embedding the colonies in our liberal-democratic legal framework as permanent constituent territories.\\n\\nRequires: Solidified band sustained 36 months, Colonial Exploitation/Resettlement, pluralist Citizenship, Protected Speech or Right of Assembly, Broad-franchise distribution of power, Protective Minority Rights, [concept_great_power] rank, ≥4 colonial states, 300 [concept_authority], 100 [concept_prestige].",
   "de": "Drei Jahre ununterbrochener gefestigter [concept_colonial_stability] unter unserem entwicklungspolitischen Programm haben gezeigt, dass ein Imperium des Einvernehmens möglich ist. Verabschiedet den Zivilisierungsmissions-Pakt, der die Kolonien formell als dauerhafte Bestandteile in unseren liberal-demokratischen Rechtsrahmen einbindet.\\n\\nErfordert: gefestigtes Band 36 Monate gehalten, Koloniale Ausbeutung/Umsiedlung, pluralistische Staatsbürgerschaft, Meinungsfreiheit oder Versammlungsfreiheit, breite Machtverteilung, schützende Minderheitenrechte, Rang [concept_great_power], ≥4 Kolonialstaaten, 300 [concept_authority], 100 [concept_prestige]."
  },
  "imperial_federation_act_iron_fist_desc": {
@@ -6340,7 +6328,7 @@
   "de": "Eine Währungsbindung, die eine stärkere Macht diktiert, statt dass eine schwächere sie wählt. Das bindende Land übernimmt den Zinssatz des Ankerlandes mit einem Strafaufschlag, erwirbt keine der Bonität, die eine freiwillige Disziplin einbringt, und kann sich nicht einfach zurückziehen."
  },
  "imposed_currency_peg_effects_desc": {
-  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +1.0 percentage points#!, adopts its exchange rate and cannot monetise deficits.\\n• Imports up to #v 80%#! of the anchor’s monetary credibility, but gets #R none#! of a voluntary peg’s #v 0.5-point#! structural risk-premium reduction.\\n• Overvaluation drains Peg Confidence and can force a currency crisis. In that crisis it #R cannot choose to abandon the peg#!: it must defend or devalue it.\\n#b Anchor:#! benefits from reserve-currency risk-premium relief, but has no bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate. War does not automatically end an imposed peg.",
+  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +1.0 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• Imports up to #v 80%#! of the anchor’s monetary credibility, but gets #R none#! of a voluntary peg’s #v 0.5-point#! structural risk-premium reduction.\\n• Overvaluation drains Peg Confidence and can force a currency crisis. In that crisis it #R cannot choose to abandon the peg#!: it must defend or devalue it.\\n#b Anchor:#! benefits from reserve-currency risk-premium relief, but has no bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate. War does not automatically end an imposed peg.",
   "de": "#b Bindendes Land:#!\\n• Gibt die Kontrolle über seinen Leitzins auf: folgt dem Zinssatz des Ankerlandes #v +1,0 Prozentpunkte#!, übernimmt dessen Wechselkurs und kann Defizite nicht monetarisieren.\\n• Importiert bis zu #v 80%#! der geldpolitischen Glaubwürdigkeit des Ankerlandes, erhält aber #R nichts#! von der #v 0,5-Punkte#!-Senkung des strukturellen Risikoaufschlags einer freiwilligen Bindung.\\n• Überbewertung zehrt am Bindungsvertrauen und kann eine Währungskrise erzwingen. In dieser Krise #R kann es die Bindung nicht einfach aufgeben#!: Es muss sie verteidigen oder abwerten.\\n#b Ankerland:#! profitiert von der Risikoaufschlagsentlastung als Reservewährung, hat aber keine Rettungspflicht.\\n#b Endet, wenn:#! das Ankerland seine Nationalbank oder seinen unabhängigen Leitzins verliert. Krieg beendet eine aufgezwungene Bindung nicht automatisch."
  },
  "independence_nationalization_modifier": {
@@ -6728,7 +6716,7 @@
   "de": "Offiziere und Analysten, die ein Freund unserem Spionageabwehrdienst zur Verfügung gestellt hat. Sie erhöhen unsere Abwehr gegen verdeckte Operationen und richten nichts gegen uns aus."
  },
  "iw_op_exposed_desc_cultivate_assets": {
-  "en": "Dinners, favours and a slow list of names. It does nothing to its target: it only builds the intelligence network of the country running it there.",
+  "en": "Dinners, favors and a slow list of names. It does nothing to its target: it only builds the intelligence network of the country running it there.",
   "de": "Abendessen, Gefälligkeiten und eine langsam wachsende Namensliste. Bewirkt beim Ziel nichts: Sie baut dort lediglich das Geheimdienstnetzwerk des ausführenden Landes auf."
  },
  "iw_op_exposed_desc_destabilization": {
@@ -6884,7 +6872,7 @@
   "de": "Schutz von Minderheitensprachen"
  },
  "langreform_minority_protection_desc": {
-  "en": "The state language reform includes protections and revival programmes for minority and regional languages, reducing separatist sentiment.",
+  "en": "The state language reform includes protections and revival programs for minority and regional languages, reducing separatist sentiment.",
   "de": "Die staatliche Sprachreform umfasst Schutzmaßnahmen und Wiederbelebungsprogramme für Minderheiten- und Regionalsprachen und verringert separatistische Stimmungen."
  },
  "langreform_national_focus": {
@@ -7832,7 +7820,7 @@
   "de": "Eine nukleare Krise endete damit, dass beide Seiten gemeinsam zurücksteckten."
  },
  "nd_crisis_programme_freeze_desc": {
-  "en": "We agreed to freeze our nuclear weapons programme under threat.",
+  "en": "We agreed to freeze our nuclear weapons program under threat.",
   "de": "Wir haben zugestimmt, unser Nuklearwaffenprogramm unter Druck einzufrieren."
  },
  "nd_crisis_stood_firm_desc": {
@@ -7980,7 +7968,7 @@
   "de": "Die Bombe wurde eingesetzt"
  },
  "nd_proliferation_spur_desc": {
-  "en": "A nuclear weapon has been used in war, and every weapons programme in the world is hurrying.",
+  "en": "A nuclear weapon has been used in war, and every weapons program in the world is hurrying.",
   "de": "Eine Atomwaffe wurde im Krieg eingesetzt, und jedes Waffenprogramm der Welt beeilt sich."
  },
  "nd_readiness_mod_2_desc": {
@@ -8104,7 +8092,7 @@
   "de": "Eine für beide Parteien gleiche Obergrenze für Nukleararsenale, überprüft und eingehalten."
  },
  "nuclear_arms_limitation_effects_desc": {
-  "en": "• Neither party holds more warheads than the agreed ceiling: those above it are taken apart, a tenth of the excess a month, and neither programme builds past it once the month's review has run.\\n• The ceiling can be set at most a quarter above the larger of the two arsenals.\\n• Every country such a treaty binds strengthens the nuclear taboo.\\n• Leaving it weakens the taboo, unless another treaty already holds the party to the same ceiling or a lower one.",
+  "en": "• Neither party holds more warheads than the agreed ceiling: those above it are taken apart, a tenth of the excess a month, and neither program builds past it once the month's review has run.\\n• The ceiling can be set at most a quarter above the larger of the two arsenals.\\n• Every country such a treaty binds strengthens the nuclear taboo.\\n• Leaving it weakens the taboo, unless another treaty already holds the party to the same ceiling or a lower one.",
   "de": "• Keine Partei besitzt mehr Sprengköpfe als die vereinbarte Obergrenze: Der Überschuss wird abgebaut, ein Zehntel davon pro Monat, und kein Programm baut nach der monatlichen Überprüfung mehr darüber hinaus.\\n• Die Obergrenze kann höchstens ein Viertel über dem größeren der beiden Arsenale liegen.\\n• Jedes Land, das ein solcher Vertrag bindet, stärkt das nukleare Tabu.\\n• Der Austritt schwächt das Tabu, es sei denn, ein anderer Vertrag bindet die Partei bereits an dieselbe oder eine niedrigere Obergrenze."
  },
  "nuclear_brinkmanship_modifier": {
@@ -8168,7 +8156,7 @@
   "de": "Ein Versprechen, Drohungen gegen ein anderes Land mit unserem eigenen Nukleararsenal zu beantworten – erweiterte Abschreckung. Das ist keine Unverwundbarkeit und kein automatischer Krieg: Wenn der Moment kommt, muss der Garant sich entscheiden."
  },
  "nuclear_guarantee_effects_desc": {
-  "en": "• The protected country no longer loses war support for facing a nuclear-armed enemy without weapons of its own.\\n• Countries threatening it must reckon with the guarantor's arsenal, and their pressure on it is weaker.\\n• The guarantor may issue nuclear warnings over attacks on the protected country, and is asked to honour the guarantee when it is threatened or struck — walking away costs it dearly with every country it protects.",
+  "en": "• The protected country no longer loses war support for facing a nuclear-armed enemy without weapons of its own.\\n• Countries threatening it must reckon with the guarantor's arsenal, and their pressure on it is weaker.\\n• The guarantor may issue nuclear warnings over attacks on the protected country, and is asked to honor the guarantee when it is threatened or struck — walking away costs it dearly with every country it protects.",
   "de": "• Das geschützte Land verliert keine Kriegsunterstützung mehr dafür, einem atomar bewaffneten Feind ohne eigene Waffen gegenüberzustehen.\\n• Länder, die es bedrohen, müssen mit dem Arsenal des Garanten rechnen, und ihr Druck auf es fällt schwächer aus.\\n• Der Garant darf nukleare Warnungen wegen Angriffen auf das geschützte Land aussprechen und wird aufgefordert, die Garantie einzuhalten, wenn es bedroht oder getroffen wird – ein Rückzug kostet ihn bei jedem Land, das er schützt, teuer."
  },
  "nuclear_mobilization_modifier": {
@@ -8656,7 +8644,7 @@
   "de": "Die Unterdrückung des Pride-Marschs hat Unmut und internationale Verurteilung hervorgerufen."
  },
  "principle_advanced_research_4_desc": {
-  "en": "A Ministry of Science coordinates strategic research, with military R&D specialised behind the bloc's lead. Universities, when given a research mandate, employ academics by the hundred and feed innovation directly.",
+  "en": "A Ministry of Science coordinates strategic research, with military R&D specialized behind the bloc's lead. Universities, when given a research mandate, employ academics by the hundred and feed innovation directly.",
   "de": "Ein Wissenschaftsministerium koordiniert die strategische Forschung, wobei sich militärische Forschung und Entwicklung hinter dem Vorsprung des Blocks spezialisiert. Universitäten mit Forschungsmandat beschäftigen Akademiker zu Hunderten und speisen Innovation direkt ein."
  },
  "principle_advanced_research_5_desc": {
@@ -9639,10 +9627,6 @@
   "en": "Slavic Union",
   "de": "Slawische Union"
  },
- "sm_te_unused_mandate_reserve_desc": {
-  "en": "Holding mandates in reserve signals strength and restraint to bloc members, reinforcing [concept_power_bloc_cohesion]. Spending all mandates erodes this bonus.",
-  "de": "Mandate in Reserve zu halten signalisiert den Blockmitgliedern Stärke und Zurückhaltung und stärkt den [concept_power_bloc_cohesion]. Das Ausgeben aller Mandate untergräbt diesen Bonus."
- },
  "social_media_regulation_modifier_desc": {
   "en": "Social media regulation reduces youth mental health harm.",
   "de": "Die Regulierung sozialer Medien verringert die Beeinträchtigung der psychischen Gesundheit von Jugendlichen."
@@ -10040,11 +10024,11 @@
   "de": "Die Stufen unseres Außerplanetaren Stützpunkts nutzen den Raum der erdnahen Asteroiden und unserer Kolonien, die reichsten zuerst. Der Raum der äußeren Welten ist dürftig, und eine Stufe jenseits unseres gesamten Raums arbeitet mit -50%."
  },
  "sr_emigration_programme": {
-  "en": "Emigration Programme",
+  "en": "Emigration Program",
   "de": "Auswanderungsprogramm"
  },
  "sr_emigration_programme_desc": {
-  "en": "Our programme sends settlers to our colonies each month. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
+  "en": "Our program sends settlers to our colonies each month. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
   "de": "Unser Programm schickt jeden Monat Siedler zu unseren Kolonien. Jede Stufe erhöht den Durchsatz des Raumfahrtprogramms und mit ihm den Bedarf an Startkapazität."
  },
  "sr_engineering_breakthrough": {
@@ -10263,14 +10247,6 @@
   "en": "Our first astronaut was a scientist, accelerating research breakthroughs from orbit.",
   "de": "Unser erster Astronaut war ein Wissenschaftler und beschleunigt Forschungsdurchbrüche aus dem Orbit."
  },
- "sr_powers_entry": {
-  "en": "[THIS.GetCountry.GetName]: #v [THIS.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! of 8",
-  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: #v [THIS.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! von 8"
- },
- "sr_powers_intro": {
-  "en": "Every other power in the space race, and how many of the eight entries with a goal it has achieved:",
-  "de": "Jede andere Macht im Wettlauf ins All und wie viele der acht Einträge mit einem Ziel sie erreicht hat:"
- },
  "sr_probe": {
   "en": "Deep-Space Probe Completed",
   "de": "Tiefraumsonde fertiggestellt"
@@ -10308,12 +10284,8 @@
   "de": "Unsere Sonde untersuchte die Atmosphäre der Venus und lieferte unschätzbare atmosphärenwissenschaftliche Daten."
  },
  "sr_profile_none": {
-  "en": "The programme is between stages.",
+  "en": "The program is between stages.",
   "de": "Das Programm befindet sich zwischen zwei Phasen."
- },
- "sr_rivals_intro": {
-  "en": "Programmes of their own are under way in:",
-  "de": "Eigene Programme laufen derzeit in:"
  },
  "sr_rivals_none": {
   "en": "No other power is working on this milestone at the moment.",
@@ -10372,7 +10344,7 @@
   "de": "Suborbitaler Schwung"
  },
  "sr_suborbital_momentum_desc": {
-  "en": "The success of our suborbital flight is being channelled into the next milestone.",
+  "en": "The success of our suborbital flight is being channeled into the next milestone.",
   "de": "Der Erfolg unseres Suborbitalflugs wird in den nächsten Meilenstein investiert."
  },
  "sr_supply_chain_disruption_desc": {
@@ -11016,7 +10988,7 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat die Satelliten [TARGET_COUNTRY.GetAltName('GEN')] mit Abfangraketen zerstört. Der Schrott ist eine Gefahr für jedes Land im Orbit."
  },
  "te_asat_strike_action_desc": {
-  "en": "Destroy their satellites with interceptor missiles. Their forces and their space programme lose their eyes and links in orbit for a year, but the debris stays up for everyone, us included, and the world will hold it against us.",
+  "en": "Destroy their satellites with interceptor missiles. Their forces and their space program lose their eyes and links in orbit for a year, but the debris stays up for everyone, us included, and the world will hold it against us.",
   "de": "Zerstört ihre Satelliten mit Abfangraketen. Ihre Streitkräfte und ihr Raumfahrtprogramm verlieren ein Jahr lang ihre Augen und Verbindungen im Orbit, doch der Schrott bleibt für alle oben, uns eingeschlossen, und die Welt wird es uns anlasten."
  },
  "te_asat_strike_action_effect_desc_first": {
@@ -11096,7 +11068,7 @@
   "de": "Wir baten eine andere Regierung, unsere Banken zu retten, und die Welt sah uns dabei zu."
  },
  "te_ea_ir_agent_in_place_modifier_desc": {
-  "en": "An agent inside a rival's defence ministry is passing its weapons designs to our engineers.",
+  "en": "An agent inside a rival's defense ministry is passing its weapons designs to our engineers.",
   "de": "Ein Agent im Verteidigungsministerium eines Rivalen gibt dessen Waffenkonstruktionen an unsere Ingenieure weiter."
  },
  "te_ea_ir_election_meddling_modifier_desc": {
@@ -11248,7 +11220,7 @@
   "de": "Schrott im Erdorbit macht jeden Start riskanter, jede Mission langsamer und jedes orbitale Gebäude weniger produktiv. Er skaliert mit dem [concept_orbital_debris]-Index und klingt ab, sobald der Schrott verschwindet."
  },
  "te_orbital_network_disrupted_desc": {
-  "en": "An anti-satellite strike destroyed our satellites. Our forces have lost their reconnaissance and links, and our space programme its tracking network, until replacements are launched.",
+  "en": "An anti-satellite strike destroyed our satellites. Our forces have lost their reconnaissance and links, and our space program its tracking network, until replacements are launched.",
   "de": "Ein Antisatellitenschlag hat unsere Satelliten zerstört. Unsere Streitkräfte haben ihre Aufklärung und Verbindungen verloren und unser Raumfahrtprogramm sein Verfolgungsnetz, bis Ersatz gestartet ist."
  },
  "te_political_commissars_indoctrination_desc": {
@@ -11268,19 +11240,19 @@
   "de": "Schrott hat das Seil des Aufzugs angeschnitten. Die Kletterkapseln laufen auf den unbeschädigten Strängen mit halber Geschwindigkeit, bis das Band neu verlegt ist."
  },
  "te_seabed_administer_claims_action_notification_break_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] no longer administers our [concept_seabed_claim]s. We keep our own share again from the next sharing; licences it built on our claims still count against it.",
+  "en": "[INITIATOR_COUNTRY.GetName] no longer administers our [concept_seabed_claim]s. We keep our own share again from the next sharing; licenses it built on our claims still count against it.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] verwaltet unsere [Concept('concept_seabed_claim', 'Meeresbodenansprüche')] nicht mehr. Ab der nächsten Aufteilung behalten wir unseren Anteil wieder selbst; Lizenzen, die dieses Land auf unseren Ansprüchen gebaut hat, werden ihm weiterhin angerechnet."
  },
  "te_seabed_administer_claims_action_notification_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] has taken over our unused [concept_seabed_claim]s. They pass to it after every sharing for as long as it keeps the arrangement. Our licences stay ours.",
+  "en": "[INITIATOR_COUNTRY.GetName] has taken over our unused [concept_seabed_claim]s. They pass to it after every sharing for as long as it keeps the arrangement. Our licenses stay ours.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat unsere ungenutzten [Concept('concept_seabed_claim', 'Meeresbodenansprüche')] übernommen. Sie gehen nach jeder Aufteilung an dieses Land über, solange es die Vereinbarung aufrechterhält. Unsere Lizenzen bleiben unsere."
  },
  "te_seabed_administer_claims_desc": {
-  "en": "An [concept_overlord] takes over its [concept_subject]'s unused [concept_seabed_claim]s: they pass to it at once and after every sharing, with no limit. The subject keeps its own [concept_seabed_licence]s. Licences the overlord builds on the passed claims count against the subject's share at each sharing, even after the action ends, and in a basin where the overlord has no coast its levels on them are long-haul. The subject's liberty desire rises while it stands.",
+  "en": "An [concept_overlord] takes over its [concept_subject]'s unused [concept_seabed_claim]s: they pass to it at once and after every sharing, with no limit. The subject keeps its own [concept_seabed_licence]s. Licenses the overlord builds on the passed claims count against the subject's share at each sharing, even after the action ends, and in a basin where the overlord has no coast its levels on them are long-haul. The subject's liberty desire rises while it stands.",
   "de": "Ein [concept_overlord] übernimmt die ungenutzten [Concept('concept_seabed_claim', 'Meeresbodenansprüche')] seines [Concept('concept_subject', 'Klientellands')]: Sie gehen sofort und nach jeder Aufteilung ohne Begrenzung an ihn über. Das Klientelland behält seine eigenen [Concept('concept_seabed_licence', 'Meeresbodenlizenzen')]. Lizenzen, die der Suzerän auf den übergebenen Ansprüchen baut, werden bei jeder Aufteilung auf den Anteil des Klientellands angerechnet, auch nachdem die Aktion endet, und in einem Becken, in dem der Suzerän keine Küste hat, gelten seine Stufen darauf als Tiefseebergbau in fernen Becken. Der Freiheitsdrang des Klientellands steigt, solange sie besteht."
  },
  "te_seabed_holding_fee_modifier_desc": {
-  "en": "This country holds seabed licences on $building_ocean_mine$ levels still unbuilt a year or more after they were queued, and pays 2% of a level's base output value a week on each, half the royalty. Building the level ends it. While the country is party to the Convention on the Law of the Sea and it regulates the seabed, the fee goes with its royalties to the World Development Fund, otherwise to the UN budget; outside the convention nobody receives it.",
+  "en": "This country holds seabed licenses on $building_ocean_mine$ levels still unbuilt a year or more after they were queued, and pays 2% of a level's base output value a week on each, half the royalty. Building the level ends it. While the country is party to the Convention on the Law of the Sea and it regulates the seabed, the fee goes with its royalties to the World Development Fund, otherwise to the UN budget; outside the convention nobody receives it.",
   "de": "Dieses Land hält Meeresbodenlizenzen für Stufen einer $building_ocean_mine$, die ein Jahr oder länger nach ihrer Einreihung noch ungebaut sind, und zahlt dafür pro Woche 2% des Grundproduktionswerts einer Stufe je Lizenz, die Hälfte der Förderabgabe. Der Bau der Stufe beendet dies. Solange das Land Vertragspartei des Seerechtsübereinkommens ist und dieses den Meeresboden regelt, fließt die Gebühr mit seinen Förderabgaben an den Weltentwicklungsfonds, sonst in den UN-Haushalt; außerhalb des Übereinkommens erhält sie niemand."
  },
  "te_seabed_lease_arctic": {
@@ -11296,7 +11268,7 @@
   "de": "Ein Land verpachtet einen Teil seiner Meeresbodenansprüche im Becken $te_seabed_basin_arctic$ an ein anderes, das darauf Stufen einer Tiefseemine lizenzieren darf."
  },
  "te_seabed_lease_arctic_effects_desc": {
-  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_arctic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licences the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licences the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licences built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_arctic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "de": "• Bis zur vereinbarten Anzahl gehen eigene Ansprüche des Verpächters im Becken $te_seabed_basin_arctic$ sofort an den Pächter über.\\n• Jede Aufteilung teilt sie erneut auf, und die Pacht nimmt sie dann aus dem neuen Anteil des Verpächters zurück, soweit er reicht, bis die Lizenzen, die der Pächter auf der Pacht gebaut hat, und seine ungenutzten gepachteten Ansprüche zusammen die vereinbarte Anzahl ergeben.\\n• Lizenzen, die der Pächter auf der Pacht baut, gehören ihm dauerhaft. Bei jeder Aufteilung werden sie auf den Anteil des Verpächters angerechnet, sodass der eigene Anteil des Pächters unberührt bleibt.\\n• Endet die Pacht, gehen ihre ungenutzten Ansprüche bei der nächsten Aufteilung zurück, und die darauf gebauten Lizenzen werden weiter auf den Anteil des Verpächters angerechnet, solange beide Länder teilnehmen.\\n• Auftragnehmer-Sponsoring schützt gepachtete Ansprüche nicht."
  },
  "te_seabed_lease_atlantic": {
@@ -11312,7 +11284,7 @@
   "de": "Ein Land verpachtet einen Teil seiner Meeresbodenansprüche im Becken $te_seabed_basin_atlantic$ an ein anderes, das darauf Stufen einer Tiefseemine lizenzieren darf."
  },
  "te_seabed_lease_atlantic_effects_desc": {
-  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_atlantic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licences the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licences the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licences built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_atlantic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "de": "• Bis zur vereinbarten Anzahl gehen eigene Ansprüche des Verpächters im Becken $te_seabed_basin_atlantic$ sofort an den Pächter über.\\n• Jede Aufteilung teilt sie erneut auf, und die Pacht nimmt sie dann aus dem neuen Anteil des Verpächters zurück, soweit er reicht, bis die Lizenzen, die der Pächter auf der Pacht gebaut hat, und seine ungenutzten gepachteten Ansprüche zusammen die vereinbarte Anzahl ergeben.\\n• Lizenzen, die der Pächter auf der Pacht baut, gehören ihm dauerhaft. Bei jeder Aufteilung werden sie auf den Anteil des Verpächters angerechnet, sodass der eigene Anteil des Pächters unberührt bleibt.\\n• Endet die Pacht, gehen ihre ungenutzten Ansprüche bei der nächsten Aufteilung zurück, und die darauf gebauten Lizenzen werden weiter auf den Anteil des Verpächters angerechnet, solange beide Länder teilnehmen.\\n• Auftragnehmer-Sponsoring schützt gepachtete Ansprüche nicht."
  },
  "te_seabed_lease_indian": {
@@ -11328,7 +11300,7 @@
   "de": "Ein Land verpachtet einen Teil seiner Meeresbodenansprüche im Becken $te_seabed_basin_indian$ an ein anderes, das darauf Stufen einer Tiefseemine lizenzieren darf."
  },
  "te_seabed_lease_indian_effects_desc": {
-  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_indian$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licences the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licences the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licences built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_indian$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "de": "• Bis zur vereinbarten Anzahl gehen eigene Ansprüche des Verpächters im Becken $te_seabed_basin_indian$ sofort an den Pächter über.\\n• Jede Aufteilung teilt sie erneut auf, und die Pacht nimmt sie dann aus dem neuen Anteil des Verpächters zurück, soweit er reicht, bis die Lizenzen, die der Pächter auf der Pacht gebaut hat, und seine ungenutzten gepachteten Ansprüche zusammen die vereinbarte Anzahl ergeben.\\n• Lizenzen, die der Pächter auf der Pacht baut, gehören ihm dauerhaft. Bei jeder Aufteilung werden sie auf den Anteil des Verpächters angerechnet, sodass der eigene Anteil des Pächters unberührt bleibt.\\n• Endet die Pacht, gehen ihre ungenutzten Ansprüche bei der nächsten Aufteilung zurück, und die darauf gebauten Lizenzen werden weiter auf den Anteil des Verpächters angerechnet, solange beide Länder teilnehmen.\\n• Auftragnehmer-Sponsoring schützt gepachtete Ansprüche nicht."
  },
  "te_seabed_lease_pacific": {
@@ -11344,7 +11316,7 @@
   "de": "Ein Land verpachtet einen Teil seiner Meeresbodenansprüche im Becken $te_seabed_basin_pacific$ an ein anderes, das darauf Stufen einer Tiefseemine lizenzieren darf."
  },
  "te_seabed_lease_pacific_effects_desc": {
-  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_pacific$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licences the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licences the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licences built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_pacific$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "de": "• Bis zur vereinbarten Anzahl gehen eigene Ansprüche des Verpächters im Becken $te_seabed_basin_pacific$ sofort an den Pächter über.\\n• Jede Aufteilung teilt sie erneut auf, und die Pacht nimmt sie dann aus dem neuen Anteil des Verpächters zurück, soweit er reicht, bis die Lizenzen, die der Pächter auf der Pacht gebaut hat, und seine ungenutzten gepachteten Ansprüche zusammen die vereinbarte Anzahl ergeben.\\n• Lizenzen, die der Pächter auf der Pacht baut, gehören ihm dauerhaft. Bei jeder Aufteilung werden sie auf den Anteil des Verpächters angerechnet, sodass der eigene Anteil des Pächters unberührt bleibt.\\n• Endet die Pacht, gehen ihre ungenutzten Ansprüche bei der nächsten Aufteilung zurück, und die darauf gebauten Lizenzen werden weiter auf den Anteil des Verpächters angerechnet, solange beide Länder teilnehmen.\\n• Auftragnehmer-Sponsoring schützt gepachtete Ansprüche nicht."
  },
  "te_seabed_lease_southern": {
@@ -11360,7 +11332,7 @@
   "de": "Ein Land verpachtet einen Teil seiner Meeresbodenansprüche im Becken $te_seabed_basin_southern$ an ein anderes, das darauf Stufen einer Tiefseemine lizenzieren darf."
  },
  "te_seabed_lease_southern_effects_desc": {
-  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_southern$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licences the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licences the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licences built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_southern$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "de": "• Bis zur vereinbarten Anzahl gehen eigene Ansprüche des Verpächters im Becken $te_seabed_basin_southern$ sofort an den Pächter über.\\n• Jede Aufteilung teilt sie erneut auf, und die Pacht nimmt sie dann aus dem neuen Anteil des Verpächters zurück, soweit er reicht, bis die Lizenzen, die der Pächter auf der Pacht gebaut hat, und seine ungenutzten gepachteten Ansprüche zusammen die vereinbarte Anzahl ergeben.\\n• Lizenzen, die der Pächter auf der Pacht baut, gehören ihm dauerhaft. Bei jeder Aufteilung werden sie auf den Anteil des Verpächters angerechnet, sodass der eigene Anteil des Pächters unberührt bleibt.\\n• Endet die Pacht, gehen ihre ungenutzten Ansprüche bei der nächsten Aufteilung zurück, und die darauf gebauten Lizenzen werden weiter auf den Anteil des Verpächters angerechnet, solange beide Länder teilnehmen.\\n• Auftragnehmer-Sponsoring schützt gepachtete Ansprüche nicht."
  },
  "te_seabed_long_haul_desc": {
@@ -11368,7 +11340,7 @@
   "de": "Einige Stufen von Tiefseeminen dieses Staates arbeiten mit der [concept_seabed_licence] eines anderen Meeresbeckens. Ihre Besatzungen und ihr Erz nehmen den langen Weg. Der Malus sinkt, sobald lokale Lizenzen die entfernten ersetzen."
  },
  "te_seabed_policy_sponsor_cost_desc": {
-  "en": "We sponsor contractors to claim seabed licences, the lawful route under the Law of the Sea.",
+  "en": "We sponsor contractors to claim seabed licenses, the lawful route under the Law of the Sea.",
   "de": "Mit Auftragnehmer-Sponsoring fördern wir Vertragsunternehmen dabei, Meeresbodenlizenzen zu beanspruchen, den rechtmäßigen Weg nach dem Seerecht."
  },
  "te_seabed_policy_unilateral_cost_desc": {
@@ -11524,7 +11496,7 @@
   "de": "Dieses Land hat sich geweigert, den Antarktisvertrag einzubringen, und kann ihn nicht vorschlagen, solange dieser Malus andauert."
  },
  "un_antarctic_treaty_modifier_desc": {
-  "en": "This country is party to the Antarctic Treaty, which earns it [concept_prestige]. It holds no new Southern seabed licences; the levels it built before ratifying keep theirs. The prestige is scaled by UN enforcement; the rule on licences is not.",
+  "en": "This country is party to the Antarctic Treaty, which earns it [concept_prestige]. It holds no new Southern seabed licenses; the levels it built before ratifying keep theirs. The prestige is scaled by UN enforcement; the rule on licenses is not.",
   "de": "Dieses Land ist Vertragspartei des Antarktisvertrags, was ihm [concept_prestige] einbringt. Es hält keine neuen Meeresbodenlizenzen im Südpolarmeer; die Stufen, die es vor der Ratifizierung gebaut hat, behalten ihre. Das Prestige wird mit der UN-Durchsetzung skaliert; die Regel zu den Lizenzen nicht."
  },
  "un_appeal_withheld_modifier_desc": {
@@ -11816,11 +11788,11 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat aufgehört, bei uns zur Resolution vor der [concept_un_general_assembly] zu lobbyieren."
  },
  "un_lobby_for_action_action_notification_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] is lobbying us to vote in favour of the resolution before the [concept_un_general_assembly].",
+  "en": "[INITIATOR_COUNTRY.GetName] is lobbying us to vote in favor of the resolution before the [concept_un_general_assembly].",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] versucht, uns dazu zu bewegen, für die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_lobby_for_action_desc": {
-  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote in favour of the resolution in session. Each full month the campaign runs moves the member's lean 3 points in favour, up to 15, both raised by our UN lobbying effectiveness with that member (the members the [concept_un_development_fund] pays listen more to its contributors); campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
+  "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote in favor of the resolution in session. Each full month the campaign runs moves the member's lean 3 points in favor, up to 15, both raised by our UN lobbying effectiveness with that member (the members the [concept_un_development_fund] pays listen more to its contributors); campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
   "de": "Schickt unsere Delegation, um ein KI-Mitglied der [concept_un_general_assembly] zu bedrängen, für die laufende Resolution zu stimmen. Jeder volle Monat der Kampagne verschiebt die Neigung des Mitglieds um 3 Punkte dafür, bis zu 15, beides erhöht durch die Wirksamkeit unserer UN-Lobbyarbeit bei diesem Mitglied (die Mitglieder, die der [concept_un_development_fund] bezahlt, hören stärker auf dessen Beitragszahler); Kampagnen auf derselben Seite stapeln sich bis 20, und Kampagnen auf entgegengesetzten Seiten heben sich auf. Sie verbraucht [concept_influence], solange sie läuft, und endet, wenn das Mitglied abstimmt, wenn die Resolution schließt oder wenn wir sie beenden, wodurch auch der erzielte Effekt verlorengeht."
  },
  "un_mandate_war_support_modifier_desc": {
@@ -11860,7 +11832,7 @@
   "de": "Die Kosten für die Kontingente, die dieses Land aus eigenem Antrieb zu [Concept('concept_un_mission', 'UN-Missionen')] entsandt hat: ein Viertelprozent seines BIP pro Jahr für jede Mission, an der es sich beteiligt."
  },
  "un_mission_stabilisation_state_modifier_desc": {
-  "en": "A [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors.",
+  "en": "A [Concept('concept_un_mission_stabilisation', 'UN stabilization mission')] is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors.",
   "de": "Eine [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] ist in diesem Staat im Einsatz, um den Zusammenbruch zu beenden. Ihre Stärke richtet sich nach der Durchsetzungskraft der UN, ihrem Budget und ihren Truppenstellern."
  },
  "un_narcotics_control_modifier_desc": {
@@ -11892,7 +11864,7 @@
   "de": "Dieses Land hat sich geweigert, den Atomwaffensperrvertrag zu unterzeichnen, und stellt seine nukleare Abschreckung über diplomatische Anerkennung."
  },
  "un_npt_disarmament_modifier_desc": {
-  "en": "Under the Non-Proliferation Treaty enforced by the IAEA, this country may hold no nuclear weapons: any nuclear programme and stockpile it has are wiped every week.",
+  "en": "Under the Non-Proliferation Treaty enforced by the IAEA, this country may hold no nuclear weapons: any nuclear program and stockpile it has are wiped every week.",
   "de": "Unter dem von der IAEO durchgesetzten Atomwaffensperrvertrag darf dieses Land keine Nuklearwaffen besitzen: Jedes Nuklearprogramm und jeder Bestand, den es hat, wird jede Woche gelöscht."
  },
  "un_nuclear_ban_modifier_desc": {
@@ -12016,11 +11988,11 @@
   "de": "Dieses Land führt einen Markt an, der einen großen Anteil der weltweiten Treibhausgase ausstößt. Das UN-Klimaabkommen verpflichtet es, die eigenen zu senken, und seine Schwerindustrie bezahlt dafür. Skaliert mit der UN-Durchsetzung."
  },
  "un_regime_colonial_pressure_modifier_desc": {
-  "en": "The UN's declaration on decolonisation makes holding a colonial empire harder. Scaled by UN enforcement.",
+  "en": "The UN's declaration on decolonization makes holding a colonial empire harder. Scaled by UN enforcement.",
   "de": "Die Erklärung der UN zur Dekolonisierung erschwert das Halten eines Kolonialreichs. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_colony_liberty_modifier_desc": {
-  "en": "This colony's overlord sits in a United Nations that has declared for decolonisation, and its people take the declaration at its word. Scaled by UN enforcement.",
+  "en": "This colony's overlord sits in a United Nations that has declared for decolonization, and its people take the declaration at its word. Scaled by UN enforcement.",
   "de": "Der Suzerän dieser Kolonie sitzt in Vereinten Nationen, die sich für Dekolonisierung ausgesprochen haben, und die Bevölkerung nimmt die Erklärung beim Wort. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_cultural_hegemon_modifier_desc": {
@@ -12040,7 +12012,7 @@
   "de": "Dieses Land besitzt keine Nuklearwaffen. Die Sicherheitsgarantie des Atomwaffensperrvertrags erschwert einen Nuklearschlag gegen es. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_npt_inspection_modifier_desc": {
-  "en": "This country is running a nuclear programme without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement.",
+  "en": "This country is running a nuclear program without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement.",
   "de": "Dieses Land betreibt ein Nuklearprogramm ohne die Bombe. Die Inspektoren des Atomwaffensperrvertrags bremsen es. Skaliert nach der Durchsetzungskraft der UN."
  },
  "un_regime_refugee_host_modifier_desc": {
@@ -12120,11 +12092,11 @@
   "de": "Eine Sanktionsresolution gegen dieses Land wurde von der Generalversammlung verabschiedet, jedoch im Sicherheitsrat mit einem Veto belegt. Die Mitglieder wenden nur freiwillige Maßnahmen an: mildere Handels- und diplomatische Nachteile, die mit der Zeit nachlassen."
  },
  "un_secure_commitment_action_desc": {
-  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote in favour of the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100. An undertaking is not a vote: the chamber records it separately, and the member remains free to break its word at the cost of its standing in the organisation, our [concept_relations], and the [concept_obligation] itself.",
+  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote in favor of the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100. An undertaking is not a vote: the chamber records it separately, and the member remains free to break its word at the cost of its standing in the organization, our [concept_relations], and the [concept_obligation] itself.",
   "de": "Bittet ein anderes Mitglied der [concept_un_general_assembly], sich zu verpflichten, für die laufende Resolution zu stimmen, im Austausch für eine [concept_obligation], die wir ihm gegenüber eingehen. Jedes Mitglied kann gefragt werden, bis das andere Mitglied abgestimmt hat, und nur einmal pro Mitglied und Resolution. Ein Mitglied verspricht seine Stimme einmal pro Resolution, und ein Land kann zwei Zusagen pro Resolution einsammeln. Eine Zusage verschiebt die Neigung des Mitglieds um 100. Eine Verpflichtung ist keine Stimme: Die Kammer verzeichnet sie gesondert, und das Mitglied bleibt frei, sein Wort zu brechen – auf Kosten seines Ansehens in der Organisation, unserer [concept_relations] und der [concept_obligation] selbst."
  },
  "un_secure_commitment_against_action_desc": {
-  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote against the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100 against, but never decides a [concept_un_veto]: a permanent member that would have vetoed still does, and one that would not have still does not. An undertaking is not a vote: the member remains free to break its word at the cost of its standing in the organisation, our [concept_relations], and the [concept_obligation] itself.",
+  "en": "Ask another member of the [concept_un_general_assembly] to undertake to vote against the resolution in session, in exchange for an [concept_obligation] we take on toward them. Any member may ask, until the other member has voted, and only once per member per resolution. A member pledges its vote once per resolution, and a country can collect two pledges per resolution. A pledge moves the member's lean by 100 against, but never decides a [concept_un_veto]: a permanent member that would have vetoed still does, and one that would not have still does not. An undertaking is not a vote: the member remains free to break its word at the cost of its standing in the organization, our [concept_relations], and the [concept_obligation] itself.",
   "de": "Bittet ein anderes Mitglied der [concept_un_general_assembly], sich zu verpflichten, gegen die laufende Resolution zu stimmen, im Austausch für eine [concept_obligation], die wir ihm gegenüber eingehen. Jedes Mitglied kann gefragt werden, bis das andere Mitglied abgestimmt hat, und nur einmal pro Mitglied und Resolution. Ein Mitglied verspricht seine Stimme einmal pro Resolution, und ein Land kann zwei Zusagen pro Resolution einsammeln. Eine Zusage verschiebt die Neigung des Mitglieds um 100 dagegen, entscheidet aber nie über ein [concept_un_veto]: Ein ständiges Mitglied, das ein Veto eingelegt hätte, tut dies weiterhin, und eines, das es nicht getan hätte, weiterhin nicht. Eine Verpflichtung ist keine Stimme: Das Mitglied bleibt frei, sein Wort zu brechen – auf Kosten seines Ansehens in der Organisation, unserer [concept_relations] und der [concept_obligation] selbst."
  },
  "un_security_council_modifier_desc": {
@@ -12168,7 +12140,7 @@
   "de": "Die Bilanz dieses Landes bei den Vereinten Nationen liegt in Trümmern: gebrochene Zusagen, missachtete Beschlüsse. Andere Regierungen schenken seinen Worten wenig Glauben, und die Welt vergisst nur langsam, was es getan hat."
  },
  "un_standing_exemplary_modifier_desc": {
-  "en": "Years of delivered commitments have made this country one of the organisation's most trusted members. Its word carries weight at the negotiating table, old scandals fade faster, and its approaches are better received.",
+  "en": "Years of delivered commitments have made this country one of the organization's most trusted members. Its word carries weight at the negotiating table, old scandals fade faster, and its approaches are better received.",
   "de": "Jahre eingehaltener Zusagen haben dieses Land zu einem der vertrauenswürdigsten Mitglieder der Organisation gemacht. Sein Wort hat Gewicht am Verhandlungstisch, alte Skandale verblassen schneller, und seine Vorstöße werden besser aufgenommen."
  },
  "un_standing_poor_modifier_desc": {
@@ -12576,7 +12548,7 @@
   "de": "Whistleblower-Geschichte unterdrückt"
  },
  "whistleblower_suppressed_modifier_desc": {
-  "en": "The press was gagged before the story spread past its first reports. The surveillance programme carries on, and its critics know it.",
+  "en": "The press was gagged before the story spread past its first reports. The surveillance program carries on, and its critics know it.",
   "de": "Die Presse wurde mundtot gemacht, bevor sich die Geschichte über die ersten Meldungen hinaus verbreitete. Das Überwachungsprogramm läuft weiter, und seine Kritiker wissen es."
  },
  "women_combat_roles_modifier_desc": {

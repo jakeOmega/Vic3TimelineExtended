@@ -383,18 +383,6 @@
   "en": "Consciousness Network Construction Site",
   "es": "Red de conciencia en construcción"
  },
- "building_copper_mine": {
-  "en": "Copper Mine",
-  "es": "Mina de cobre"
- },
- "building_copper_mine_throughput_add": {
-  "en": "$building_copper_mine$ building [concept_throughput]",
-  "es": "[concept_throughput] del edificio $building_copper_mine$"
- },
- "building_copper_mine_throughput_add_desc": {
-  "en": "$building_copper_mine$ building [concept_throughput]",
-  "es": "[concept_throughput] del edificio $building_copper_mine$"
- },
  "building_cordoba_railway_alta_gracia_works": {
   "en": "Córdoba Railway Alta Gracia Works",
   "es": "Talleres Córdoba Railway Alta Gracia"
@@ -700,7 +688,7 @@
   "es": "Un laboratorio de investigación y pruebas de componentes eléctricos y electrónica de consumo."
  },
  "building_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "es": "Centro nacional de exposiciones"
  },
  "building_generic_export_warehouse": {
@@ -928,7 +916,7 @@
   "es": "Gran monumento"
  },
  "building_grand_monument_desc": {
-  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
+  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favor of like-minded interest groups while what it honors still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
   "es": "Un monumento que un gobierno levanta a aquello que representa: su corona, su república, su revolución, su líder, su fe o la nación. Se construye como $building_grand_monument_site$ y se termina al inaugurarse, con la [concept_grandeur|l] de los niveles construidos. Aporta prestigio, además de legitimidad y el favor de los grupos de interés afines, mientras siga en pie aquello a lo que rinde homenaje. Cuando eso cae, el siguiente gobierno debe decidir qué hacer con él. Consulta la pestaña Grandes monumentos de la ventana de Timeline Extended."
  },
  "building_grand_monument_site": {
@@ -1232,7 +1220,7 @@
   "es": "Casa Princeps Jardine"
  },
  "building_jardine_princeps_house_desc": {
-  "en": "Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.",
+  "en": "Jardine, Matheson & Co.'s Hong Kong head office, nerve center of a sprawling China-coast trading empire.",
   "es": "La sede de Jardine, Matheson & Co. en Hong Kong, centro neurálgico de un extenso imperio comercial en la costa china."
  },
  "building_jiangnan_nanjing_brocade_hall": {
@@ -1400,7 +1388,7 @@
   "es": "Fábricas Michelin Clermont-Ferrand"
  },
  "building_michelin_clermont_ferrand_desc": {
-  "en": "Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.",
+  "en": "Michelin's Clermont-Ferrand tire works, putting the automobile age on pneumatic rubber.",
   "es": "La fábrica de neumáticos de Michelin en Clermont-Ferrand, que puso la era del automóvil sobre ruedas de caucho neumático."
  },
  "building_microsoft_redmond_campus": {
@@ -1708,7 +1696,7 @@
   "es": "Planta Pirelli Bicocca"
  },
  "building_pirelli_bicocca_plant_desc": {
-  "en": "Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.",
+  "en": "Pirelli's Bicocca works in Milan, producing tires and the insulated cables wiring the modern world.",
   "es": "La fábrica de Pirelli en Bicocca, Milán, que produce neumáticos y los cables aislados que cablean el mundo moderno."
  },
  "building_platinum_group_metals_mine": {

@@ -27,10 +27,6 @@
   "en": "Cooperative Finance Dashboard",
   "es": "Panel de finanzas cooperativas"
  },
- "je_banking_cycle_desc": {
-  "en": "Steer the boom-bust cycle through the policy rate, prudential regulation, and bailouts to keep credit flowing without inflating bubbles.",
-  "es": "Dirige el ciclo de auge y caída mediante el tipo de interés oficial, la regulación prudencial y los rescates para mantener el flujo del crédito sin inflar burbujas."
- },
  "je_banking_cycle_reason_command_economy": {
   "en": "In a Command Economy the cycle should be read as a logistics coordination gauge: momentum and [concept_bubble_pressure] track supply-chain synchronization and administrative strain rather than investor confidence. Use plan revisions, emergency allocations and production target reductions to resolve bottlenecks.",
   "es": "En una Economía planificada, el ciclo debe leerse como un indicador de coordinación logística: el impulso y la [concept_bubble_pressure|l] reflejan la sincronización de la cadena de suministro y la tensión administrativa, más que la confianza de los inversores. Usa revisiones del plan, asignaciones de emergencia y reducciones de los objetivos de producción para resolver los cuellos de botella."
@@ -46,10 +42,6 @@
  "je_banking_cycle_title_market": {
   "en": "Boom & Bust Cycle",
   "es": "Ciclo de auge y caída"
- },
- "je_ch_board_row_hint_tt": {
-  "en": "#lore The bracketed figure is the change since the last recount.#!",
-  "es": "#lore La cifra entre paréntesis es el cambio desde el último recuento.#!"
  },
  "je_ch_how_benchmark": {
   "en": "A country with this journal entry whose share trails the leading cultural power's by more than a few points carries the [concept_foreign_cultural_benchmark]: its people measure their government against the leader's, and [concept_legitimacy] falls. The wider the gap, the larger the loss. The leader never carries it. While we do, the overview shows it.",
@@ -92,7 +84,7 @@
   "es": "Modelos políticos del mundo"
  },
  "je_ch_how_sub_programmes": {
-  "en": "Cultural Programmes",
+  "en": "Cultural Programs",
   "es": "Programas culturales"
  },
  "je_ch_how_sub_pull": {
@@ -228,7 +220,7 @@
   "es": "#title $je_ch_widget_prog_media$#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_global_media_campaign').GetDesc]"
  },
  "je_ch_prog_needs_ministry": {
-  "en": "Funding and every programme require [GetLawType('law_ministry_of_culture').GetName].",
+  "en": "Funding and every program require [GetLawType('law_ministry_of_culture').GetName].",
   "es": "La financiación y todos los programas requieren la ley [GetLawType('law_ministry_of_culture').GetName]."
  },
  "je_ch_prog_outreach_tt": {
@@ -304,7 +296,7 @@
   "es": "De dónde procede nuestro atractivo"
  },
  "je_ch_widget_funding_label": {
-  "en": "Programme Funding",
+  "en": "Program Funding",
   "es": "Financiación del programa"
  },
  "je_ch_widget_history_header": {
@@ -344,7 +336,7 @@
   "es": "Proteccionismo cultural"
  },
  "je_ch_widget_programmes_header": {
-  "en": "Cultural Programmes",
+  "en": "Cultural Programs",
   "es": "Programas culturales"
  },
  "je_ch_widget_rank_tt": {
@@ -358,10 +350,6 @@
  "je_civil_rights_complete_bar_tt": {
   "en": "Movement support reaches 100",
   "es": "El apoyo al movimiento llega a 100"
- },
- "je_civil_rights_desc": {
-  "en": "A [concept_political_movement] demanding equal rights for discriminated communities has taken root. How we respond will shape our nation's character.",
-  "es": "Ha arraigado un [concept_political_movement|l] que exige igualdad de derechos para las comunidades discriminadas. Nuestra respuesta moldeará el carácter de la nación."
  },
  "je_civil_rights_reason": {
   "en": "Discriminated communities are demanding equal treatment under the law.",
@@ -420,7 +408,7 @@
   "es": "#lore desconocida#!"
  },
  "je_colonial_empire_bloc_alone": {
-  "en": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people. No neighbouring state of ours is their [concept_homeland], so it would go alone.",
+  "en": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people. No neighboring state of ours is their [concept_homeland], so it would go alone.",
   "es": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! habitantes. Ninguno de nuestros estados vecinos es su [concept_homeland|l], así que saldría solo."
  },
  "je_colonial_empire_bloc_member_line": {
@@ -432,7 +420,7 @@
   "es": "Una vez liberado, forma una nación con su pueblo #v [SCOPE.sCulture('ce_bloc_culture').GetName]#!."
  },
  "je_colonial_empire_bloc_states": {
-  "en": "It takes with it every neighbouring state of ours where they are at home, so one release takes all #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! of these, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people:",
+  "en": "It takes with it every neighboring state of ours where they are at home, so one release takes all #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! of these, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people:",
   "es": "Se lleva consigo todos los estados vecinos nuestros donde ese pueblo está en su tierra, así que una sola liberación se lleva los #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! estados, con #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! habitantes:"
  },
  "je_colonial_empire_bloc_states_tail": {
@@ -471,25 +459,9 @@
   "en": "Completes when the Colonial Stability bar holds at #G 100#! for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] sustained months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Drops below 100 reset the counter. Alternatively, completes when the Imperial Federation Act is taken; that decision separately requires sustaining the Solidified band (bar ≥ 90) for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) plus the Act's other prerequisites.",
   "es": "Se completa cuando la barra de Estabilidad colonial se mantiene en #G 100#! durante [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] meses seguidos (actual: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Si baja de 100, el contador se reinicia. También se completa al adoptar la Ley de Federación Imperial; esa decisión exige además mantener la banda Consolidada (barra ≥ 90) durante [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] meses (actual: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!), así como los demás requisitos de la ley."
  },
- "je_colonial_empire_condemner_entry_tt": {
-  "en": "#R Condemning#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)",
-  "es": "#R Condena#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)"
- },
  "je_colonial_empire_conditions_pending": {
   "en": "#lore The figures appear after the next monthly assessment.#!",
   "es": "#lore Las cifras aparecen tras la próxima evaluación mensual.#!"
- },
- "je_colonial_empire_cost_assimilation": {
-  "en": "#lore [concept_bureaucracy] drag and [concept_authority] upkeep, one-off#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]#lore  a step  ·  stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#!#lore /mo (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!#lore  a level)#!",
-  "es": "#lore Lastre de [concept_bureaucracy|l] y mantenimiento de [concept_authority|l], pago único#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]#lore  por escalón  ·  estabilidad#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#!#lore /mes (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!#lore  por nivel)#!"
- },
- "je_colonial_empire_cost_garrison": {
-  "en": "#lore [concept_authority] upkeep#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_authority_display')|0]#!#lore  (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_authority_per_level')|0]#!#lore  a level), [concept_infamy] on starting  ·  stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#!#lore /mo (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!#lore  a level)#!",
-  "es": "#lore Mantenimiento de [concept_authority|l]#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_authority_display')|0]#!#lore  (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_authority_per_level')|0]#!#lore  por nivel), [concept_infamy|l] al empezar  ·  estabilidad#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#!#lore /mes (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!#lore  por nivel)#!"
- },
- "je_colonial_empire_cost_invest": {
-  "en": "#lore Upkeep#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D]#lore /wk (#!@money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_cost')|D]#lore  a level), one-off#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D]#lore  a step  ·  stability#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#!#lore /mo (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!#lore  a level)#!",
-  "es": "#lore Mantenimiento#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D]#lore /sem (#!@money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_cost')|D]#lore  por nivel), pago único#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D]#lore  por escalón  ·  estabilidad#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#!#lore /mes (#!#v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!#lore  por nivel)#!"
  },
  "je_colonial_empire_decision_planned": {
   "en": "Planned Full Decolonization",
@@ -498,10 +470,6 @@
  "je_colonial_empire_decision_planned_tt": {
   "en": "Wind up the entire colonial empire at once. Every eligible territory is listed for confirmation before anything is released, and you can withdraw.",
   "es": "Liquida todo el imperio colonial de una vez. Todos los territorios aptos se enumeran para su confirmación antes de liberar nada, y puedes echarte atrás."
- },
- "je_colonial_empire_desc": {
-  "en": "The age of [concept_decolonization_system] is at hand. Whether through direct overseas possessions or colonial subjects, choose between integration, devolution, or repression for our overseas holdings.",
-  "es": "La era de la [concept_decolonization_system|l] está en ciernes. Ya sea mediante posesiones directas de ultramar o súbditos coloniales, elige entre integración, devolución o represión para nuestros dominios de ultramar."
  },
  "je_colonial_empire_drift_acceptance": {
   "en": "Colonial [concept_acceptance]",
@@ -568,7 +536,7 @@
   "es": "Mantener más colonias de las que la metrópoli puede sostener. Se actualiza cada mes.\\n#lore La barra abarca de [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_min')|1] a [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_max')|1]; la cifra que figura a su lado es exacta.#!"
  },
  "je_colonial_empire_drift_policies": {
-  "en": "Programmes",
+  "en": "Programs",
   "es": "Programas"
  },
  "je_colonial_empire_drift_policies_tt": {
@@ -596,7 +564,7 @@
   "es": "Lo que se mueve la barra este mes: las filas de arriba, tras aplicar el límite mensual."
  },
  "je_colonial_empire_fail_tt": {
-  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programmes let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
+  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programs let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
   "es": "Fracasa cuando la barra de Estabilidad colonial llega a #R 0#!: el sistema colonial se derrumba. Hasta tres territorios coloniales declaran la independencia, los más inquietos primero, con dos meses de diferencia; cada declaración puede concederse, negociarse o combatirse, y cada territorio que se va se lleva las tierras contiguas que son la [concept_homeland|l] de su pueblo. El [concept_liberty_desire|l] de nuestros súbditos coloniales se dispara y esta anotación en el diario no puede volver durante diez años. A menos que años de programas de desarrollo o asimilación nos permitan negociar la retirada, el derrumbe también cuesta [concept_prestige|l] y [concept_sol|l] durante años."
  },
  "je_colonial_empire_history_header": {
@@ -676,7 +644,7 @@
   "es": "Cada [concept_great_power|l] puede condenar el colonialismo, respaldar a las potencias coloniales o mantenerse al margen. Cada una cuenta en proporción a su [concept_prestige|l] frente al nuestro, desde una cuarta parte del peso de un igual hasta el doble. Cuando las potencias que condenan reúnen un tercio del prestigio de todas las grandes potencias y el nuestro, afrontamos el aislamiento diplomático, y con dos tercios, un consenso internacional en nuestra contra. Cada uno supone una pérdida mensual adicional, y se acumulan. El apoyo suma a la estabilidad cada mes, pero no cuenta frente a estos umbrales."
  },
  "je_colonial_empire_how_programmes": {
-  "en": "Each programme runs at a level from 0 to 3. Every month a level adds a third of the programme's full effect to the bar and costs a third of its upkeep; hover a row for all its effects. Our laws make each programme worth more or less. Investment and Assimilation also charge a one-off payment on each step up, and the Garrison costs [concept_infamy] when it starts. The programme we run longest, counting a month at a lower level as a share of a month, also decides how the empire ends.",
+  "en": "Each program runs at a level from 0 to 3. Every month a level adds a third of the program's full effect to the bar and costs a third of its upkeep; hover a row for all its effects. Our laws make each program worth more or less. Investment and Assimilation also charge a one-off payment on each step up, and the Garrison costs [concept_infamy] when it starts. The program we run longest, counting a month at a lower level as a share of a month, also decides how the empire ends.",
   "es": "Cada programa funciona en un nivel de 0 a 3. Cada mes, un nivel suma a la barra un tercio del efecto completo del programa y cuesta un tercio de su mantenimiento; pasa el cursor sobre una fila para ver todos sus efectos. Nuestras leyes hacen que cada programa valga más o menos. La Inversión y la Asimilación cobran además un pago único en cada subida de nivel, y la Guarnición cuesta [concept_infamy|l] al comenzar. El programa que mantenemos durante más tiempo, contando un mes en un nivel inferior como una fracción de mes, determina además cómo termina el imperio."
  },
  "je_colonial_empire_how_sub_bar": {
@@ -696,7 +664,7 @@
   "es": "Presión de las grandes potencias"
  },
  "je_colonial_empire_how_sub_programmes": {
-  "en": "Colonial Programmes",
+  "en": "Colonial Programs",
   "es": "Programas coloniales"
  },
  "je_colonial_empire_negotiated_tt": {
@@ -747,10 +715,6 @@
   "en": "#header Where it is heading#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The #G green#! stretch on the bar is the rise to come, the #R red#! stretch what would be lost. The rate is assessed again every month.",
   "es": "#header Hacia dónde se dirige#!\\nEn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] meses, al ritmo de este mes: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. El tramo #G verde#! de la barra es la subida por venir, y el tramo #R rojo#!, lo que se perdería. El ritmo se vuelve a evaluar cada mes."
  },
- "je_colonial_empire_ov_held": {
-  "en": "Colonies: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Colonial subjects: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
-  "es": "Colonias: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Súbditos coloniales: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
- },
  "je_colonial_empire_ov_held_tt": {
   "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]",
   "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]"
@@ -787,10 +751,6 @@
   "en": "Condemning: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
   "es": "Condenan: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
  },
- "je_colonial_empire_ov_legend_note": {
-  "en": "#lore Isolation and consensus count only the condemning share.#!",
-  "es": "#lore El aislamiento y el consenso solo cuentan la cuota de quienes condenan.#!"
- },
  "je_colonial_empire_ov_legend_support": {
   "en": "Supporting: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
   "es": "Apoyan: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
@@ -800,7 +760,7 @@
   "es": "Siguiente [Concept('concept_colonial_band','banda')]: [Country.GetCustom('colonial_empire_next_band_name')] en #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
  },
  "je_colonial_empire_ov_programmes_label": {
-  "en": "Programmes",
+  "en": "Programs",
   "es": "Programas"
  },
  "je_colonial_empire_ov_stability_value": {
@@ -827,32 +787,8 @@
   "en": "International Pressure",
   "es": "Presión internacional"
  },
- "je_colonial_empire_pressure_quiet_tt": {
-  "en": "#G No [concept_great_power] is pressing us over our colonies.#!",
-  "es": "#G Ninguna [concept_great_power|l] nos presiona por nuestras colonias.#!"
- },
- "je_colonial_empire_pressure_scaling_tt": {
-  "en": "Our [concept_prestige]: @prestige! #v [ROOT.GetCountry.GetPrestige|0]#!",
-  "es": "Nuestro [concept_prestige|l]: @prestige! #v [ROOT.GetCountry.GetPrestige|0]#!"
- },
- "je_colonial_empire_pressure_share_note": {
-  "en": "The share of [concept_prestige] the condemning great powers hold, out of the prestige of all great powers and ourselves. At a third we face diplomatic isolation, at two thirds an international consensus against us, each a further monthly loss of [concept_colonial_stability]. Only this share counts: support does not offset it.",
-  "es": "La parte del [concept_prestige|l] que tienen las grandes potencias que condenan, sobre el prestigio de todas las grandes potencias y el nuestro. Con un tercio afrontamos el aislamiento diplomático; con dos tercios, un consenso internacional en nuestra contra, cada uno con una pérdida mensual adicional de [concept_colonial_stability|l]. Solo cuenta esta parte: el apoyo no la compensa."
- },
- "je_colonial_empire_pressure_share_tt": {
-  "en": "#tooltippable;tooltip:je_colonial_empire_pressure_share_note Condemners' share#!: #v [ROOT.GetCountry.MakeScope.Var('colonial_empire_condemner_share').GetValue|%0]#!",
-  "es": "#tooltippable;tooltip:je_colonial_empire_pressure_share_note Cuota de quienes condenan#!: #v [ROOT.GetCountry.MakeScope.Var('colonial_empire_condemner_share').GetValue|%0]#!"
- },
- "je_colonial_empire_pressure_support_share_note": {
-  "en": "The share of [concept_prestige] the supporting great powers hold, out of the prestige of all great powers and ourselves. Each supporter adds to [concept_colonial_stability] every month, but support does not offset the escalations: diplomatic isolation and an international consensus count only the condemning share.",
-  "es": "La parte del [concept_prestige|l] que tienen las grandes potencias que apoyan, sobre el prestigio de todas las grandes potencias y el nuestro. Cada apoyo suma a la [concept_colonial_stability|l] cada mes, pero el apoyo no compensa las escaladas: el aislamiento diplomático y el consenso internacional solo cuentan la cuota de quienes condenan."
- },
- "je_colonial_empire_pressure_support_share_tt": {
-  "en": "#tooltippable;tooltip:je_colonial_empire_pressure_support_share_note Supporters' share#!: #v [ROOT.GetCountry.MakeScope.Var('colonial_empire_supporter_share').GetValue|%0]#!",
-  "es": "#tooltippable;tooltip:je_colonial_empire_pressure_support_share_note Cuota de quienes apoyan#!: #v [ROOT.GetCountry.MakeScope.Var('colonial_empire_supporter_share').GetValue|%0]#!"
- },
  "je_colonial_empire_programmes_header": {
-  "en": "Colonial Programmes",
+  "en": "Colonial Programs",
   "es": "Programas coloniales"
  },
  "je_colonial_empire_reason": {
@@ -860,7 +796,7 @@
   "es": "Nuestra nación controla territorios de ultramar que no forman parte de nuestra [concept_homeland|l] cultural. La era de la [concept_decolonization_system|l] ha llegado: ¿integraremos plenamente estas tierras en nuestra nación o las dejaremos autogobernarse?"
  },
  "je_colonial_empire_row_assimilation": {
-  "en": "#bold Cultural Assimilation Programme#!",
+  "en": "#bold Cultural Assimilation Program#!",
   "es": "#bold Programa de asimilación cultural#!"
  },
  "je_colonial_empire_row_garrison": {
@@ -979,18 +915,6 @@
   "en": "A protectorate separated from our capital by sea, whose people share no [concept_heritage_trait] with ours. A protectorate has no looser kind of subject to become, so its way out is independence.",
   "es": "Un protectorado separado de nuestra capital por mar, cuyo pueblo no comparte [concept_heritage_trait|l] con el nuestro. Un protectorado no tiene un tipo de súbdito más laxo al que pasar, así que su salida es la independencia."
  },
- "je_colonial_empire_subjects_caption": {
-  "en": "#lore Largest GDP first. Release grants independence. Dominion makes a colony a dominion, a looser tie that no longer counts as colonial. Each opens a decision first.#!",
-  "es": "#lore De mayor a menor PIB. Liberar concede la independencia. Dominio convierte una colonia en un dominio, un vínculo más laxo que ya no cuenta como colonial. Cada uno abre antes una decisión.#!"
- },
- "je_colonial_empire_subjects_more": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] más"
- },
- "je_colonial_empire_subjects_more_head": {
-  "en": "#header Every colonial subject, largest GDP first#!",
-  "es": "#header Todos los súbditos coloniales, de mayor a menor PIB#!"
- },
  "je_colonial_empire_subjects_none": {
   "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]",
   "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]"
@@ -998,26 +922,6 @@
  "je_colonial_empire_subjects_none_ours": {
   "en": "#lore We hold no colonial subject.#!",
   "es": "#lore No tenemos ningún súbdito colonial.#!"
- },
- "je_colonial_empire_supporter_entry_tt": {
-  "en": "#G Supporting#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)",
-  "es": "#G Apoya#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)"
- },
- "je_colonial_empire_territories_caption": {
-  "en": "#lore Largest GDP first. A territory shares its row with the states one release would take with it (+N). A lit icon: a colony among them. A red figure: the test that makes it one. Hover a name for the states, the people who would form the new nation and the weight on stability. Release opens a decision on that row alone.#!",
-  "es": "#lore De mayor a menor PIB. Un territorio comparte su fila con los estados que se llevaría consigo una liberación (+N). Un icono iluminado: hay una colonia entre ellos. Una cifra roja: la prueba que la convierte en una. Pasa el cursor por un nombre para ver los estados, el pueblo que formaría la nueva nación y el peso sobre la estabilidad. Liberar abre una decisión solo sobre esa fila.#!"
- },
- "je_colonial_empire_territories_more": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] más"
- },
- "je_colonial_empire_territories_more_head": {
-  "en": "#header The rest, largest GDP first#!",
-  "es": "#header El resto, de mayor a menor PIB#!"
- },
- "je_colonial_empire_territories_more_tail": {
-  "en": "#lore The list stops here; [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0] are eligible in all.#!",
-  "es": "#lore La lista termina aquí; en total hay [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0] aptos.#!"
  },
  "je_colonial_empire_territories_none": {
   "en": "#lore No territory is eligible.#!",
@@ -1163,17 +1067,9 @@
   "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nAt war with us for #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! great powers arm them.",
   "es": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nEn guerra con nosotros desde hace #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! meses; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! grandes potencias los arman."
  },
- "je_colonial_empire_wars_caption": {
-  "en": "#lore Holding their land does not end a war of independence: only their capitulation, or a peace, does. Open Talks begins the accords.#!",
-  "es": "#lore Ocupar su territorio no pone fin a una guerra de independencia: solo lo hacen su capitulación o una paz. Abrir negociaciones inicia los acuerdos.#!"
- },
  "je_covert_warfare": {
   "en": "Covert Warfare",
   "es": "Guerra encubierta"
- },
- "je_covert_warfare_desc": {
-  "en": "Conduct espionage, sabotage, and counter-intelligence in the shadow war between [Concept('concept_great_power', 'great powers')].",
-  "es": "Lleva a cabo espionaje, sabotaje y contrainteligencia en la guerra en la sombra entre [Concept('concept_great_power', 'grandes potencias')]."
  },
  "je_covert_warfare_reason": {
   "en": "The covert battlefield is invisible but decisive. Our intelligence services wage shadow wars of subversion and sabotage, while our [concept_intelligence_capacity] protects us from foreign interference.",
@@ -1183,10 +1079,6 @@
   "en": "Create New Religion",
   "es": "Crear una nueva religión"
  },
- "je_create_new_religion_desc": {
-  "en": "Found a new faith and shape its tenets, doctrine, and reach.",
-  "es": "Funda una nueva fe y da forma a sus principios, su doctrina y su alcance."
- },
  "je_create_new_religion_reason": {
   "en": "We have the opportunity to create a new religion that will shape the beliefs and practices of our people. This will require significant resources and effort, but the potential benefits are immense. What path shall we choose?",
   "es": "Tenemos la oportunidad de crear una nueva religión que moldeará las creencias y prácticas de nuestro pueblo. Ello requerirá recursos y esfuerzo considerables, pero los beneficios potenciales son inmensos. ¿Qué camino elegiremos?"
@@ -1195,10 +1087,6 @@
   "en": "Cultural Hegemony",
   "es": "Hegemonía cultural"
  },
- "je_cultural_hegemony_desc": {
-  "en": "Project our nation's arts, language, and ideals abroad for [concept_prestige] and durable influence.",
-  "es": "Proyecta al exterior las artes, la lengua y los ideales de nuestra nación para obtener [concept_prestige|l] e influencia duradera."
- },
  "je_cultural_hegemony_reason": {
   "en": "Our nation's arts, technology, and way of life project influence across the globe. The world watches, imitates, or resents our cultural dominance.",
   "es": "Las artes, la tecnología y el modo de vida de nuestra nación proyectan influencia por todo el globo. El mundo observa, imita o aborrece nuestro dominio cultural."
@@ -1206,10 +1094,6 @@
  "je_digital_rights": {
   "en": "Digital Rights & Surveillance",
   "es": "Derechos digitales y vigilancia"
- },
- "je_digital_rights_desc": {
-  "en": "Balance state surveillance against citizen privacy as the digital age arrives.",
-  "es": "Equilibra la vigilancia estatal y la privacidad de los ciudadanos con la llegada de la era digital."
  },
  "je_digital_rights_reason": {
   "en": "As digital surveillance becomes ubiquitous, citizens demand privacy protections. The state must balance security against liberty in the digital age.",
@@ -1230,10 +1114,6 @@
  "je_global_warming": {
   "en": "Global Warming",
   "es": "Calentamiento global"
- },
- "je_global_warming_desc": {
-  "en": "Confront the long-term climate consequences of industrial coal and oil consumption: emissions policy, adaptation, and the politics of decarbonization.",
-  "es": "Afronta las consecuencias climáticas a largo plazo del consumo industrial de carbón y petróleo: política de emisiones, adaptación y política de la descarbonización."
  },
  "je_global_warming_progress": {
   "en": "#bold Global Temperature:#! #v [ROOT.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C - [ROOT.GetCountry.GetCustom('gw_severity_short')]",
@@ -1268,7 +1148,7 @@
   "es": "#bold Calentamiento:#! #G Insignificante#! - Las temperaturas globales se mantienen cerca de los niveles preindustriales."
  },
  "je_global_warming_status_severe": {
-  "en": "#bold Warming:#! #R Severe#! - The climate crisis is dire. Famine, ecological collapse, and surging mortality threaten civilisation.",
+  "en": "#bold Warming:#! #R Severe#! - The climate crisis is dire. Famine, ecological collapse, and surging mortality threaten civilization.",
   "es": "#bold Calentamiento:#! #R Grave#! - La crisis climática es dramática. La hambruna, el colapso ecológico y el aumento de la mortalidad amenazan la civilización."
  },
  "je_global_warming_status_significant": {
@@ -1282,10 +1162,6 @@
  "je_grand_monuments": {
   "en": "Monuments",
   "es": "Monumentos"
- },
- "je_grand_monuments_desc": {
-  "en": "What our monuments honour, and what they give us for it.",
-  "es": "Lo que honran nuestros monumentos y lo que nos dan a cambio."
  },
  "je_grand_monuments_reason": {
   "en": "A monument says something about the government that raised it. While its crown, republic, revolution or leader still stands, it lends legitimacy; every monument that is not contested lends prestige, and each pleases the interest groups that share its message. When that falls, the next government must decide what to do with it. Everything here grows with [concept_grandeur].",
@@ -1302,10 +1178,6 @@
  "je_heir_education": {
   "en": "Heir Education",
   "es": "Educación del heredero"
- },
- "je_heir_education_desc": {
-  "en": "The future of the realm hangs upon the character of the next sovereign. By setting the direction of our [concept_heir]'s education: choosing between administrative, diplomatic, and military training, and selecting tutors of various political persuasions: we shape the next generation of leadership. Education proceeds gradually; the heir's aptitudes, ideology, and factional loyalties will be determined when they come of age.",
-  "es": "El futuro del reino depende del carácter del próximo soberano. Al fijar la orientación de la educación de nuestro [concept_heir|l] —eligiendo entre formación administrativa, diplomática y militar, y escogiendo tutores de distintas tendencias políticas— moldeamos a la próxima generación de dirigentes. La educación avanza de forma gradual; las aptitudes, la ideología y las lealtades de facción del heredero se determinarán cuando alcance la mayoría de edad."
  },
  "je_heir_education_reason": {
   "en": "Set educational focuses for the [concept_heir]. Each active focus has a monthly chance of advancing that area of study.\\n\\n#bold Trait Focuses:#! Administrative, diplomatic, or military: only one at a time. Greater investment improves chances of developing better aptitude traits.\\n\\n#bold Ideology:#! Progressive or conservative tutors shape the heir's political outlook.\\n\\n#bold Faction:#! Radical, moderate, or regressive mentors influence the heir's [concept_interest_group] affiliation.\\n\\n#bold Completion:#! The heir's education resolves when they reach adulthood. Outcomes are probabilistic: sustained focus improves odds but guarantees nothing.",
@@ -1331,20 +1203,16 @@
   "en": "Human Augmentation Debate",
   "es": "Debate sobre la mejora humana"
  },
- "je_human_augmentation_desc": {
-  "en": "Set the legal status of mechanical and biotechnological enhancement of the human body.",
-  "es": "Establece el estatuto jurídico de la mejora mecánica y biotecnológica del cuerpo humano."
- },
  "je_human_augmentation_reason": {
   "en": "Augmentation technology forces society to confront fundamental questions about human identity. The divide between enhanced and natural citizens threatens social [concept_power_bloc_cohesion].",
   "es": "La tecnología de mejora humana obliga a la sociedad a afrontar cuestiones fundamentales sobre la identidad humana. La brecha entre ciudadanos mejorados y naturales amenaza la [concept_power_bloc_cohesion|l] social."
  },
  "je_iw_ci_economic_label": {
-  "en": "Economic defence",
+  "en": "Economic defense",
   "es": "Defensa económica"
  },
  "je_iw_ci_economic_tt": {
-  "en": "#bold Economic defence#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_economic_add')]",
+  "en": "#bold Economic defense#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_economic_add')]",
   "es": "#bold Defensa económica#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_economic_add')]"
  },
  "je_iw_ci_funding_label": {
@@ -1356,19 +1224,19 @@
   "es": "La [concept_intelligence_capacity|l] que aporta nuestra [concept_covert_funding|l]. Cada nivel por encima de 1 otorga:\\n[GetStaticModifier('iw_funding_defense').GetDesc]"
  },
  "je_iw_ci_ideological_label": {
-  "en": "Ideological defence",
+  "en": "Ideological defense",
   "es": "Defensa ideológica"
  },
  "je_iw_ci_ideological_tt": {
-  "en": "#bold Ideological defence#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_ideological_add')]",
+  "en": "#bold Ideological defense#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_ideological_add')]",
   "es": "#bold Defensa ideológica#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_ideological_add')]"
  },
  "je_iw_ci_military_label": {
-  "en": "Military defence",
+  "en": "Military defense",
   "es": "Defensa militar"
  },
  "je_iw_ci_military_tt": {
-  "en": "#bold Military defence#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_military_add')]",
+  "en": "#bold Military defense#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_military_add')]",
   "es": "#bold Defensa militar#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_covert_defense_military_add')]"
  },
  "je_iw_ci_slots_label": {
@@ -1440,7 +1308,7 @@
   "es": "Niveles de financiación"
  },
  "je_iw_how_ci": {
-  "en": "Our [concept_intelligence_capacity] also catches operations run against us. Each unused operation slot is redirected to counterintelligence, and funding from level 2 adds capacity. Three covert defences, economic, military and ideological, come from laws and from a friend's Counterintelligence Support; each is added to our capacity against operations of its kind, as a target's is against ours.\\n\\nWhen a foreign operation against us is exposed, its sponsor is named under Last Caught for ten years, and one we let run is named under Known Foreign Operations while it runs. Beyond the events that report a catch and an exposure, nothing else names the country behind an operation against us, though a strong network inside its service can count them.",
+  "en": "Our [concept_intelligence_capacity] also catches operations run against us. Each unused operation slot is redirected to counterintelligence, and funding from level 2 adds capacity. Three covert defenses, economic, military and ideological, come from laws and from a friend's Counterintelligence Support; each is added to our capacity against operations of its kind, as a target's is against ours.\\n\\nWhen a foreign operation against us is exposed, its sponsor is named under Last Caught for ten years, and one we let run is named under Known Foreign Operations while it runs. Beyond the events that report a catch and an exposure, nothing else names the country behind an operation against us, though a strong network inside its service can count them.",
   "es": "Nuestra [concept_intelligence_capacity|l] también detecta las operaciones que se ejecutan contra nosotros. Cada cupo de operaciones sin usar se redirige a la contrainteligencia, y la financiación a partir del nivel 2 añade capacidad. Tres defensas encubiertas —económica, militar e ideológica— proceden de las leyes y del Apoyo de contrainteligencia de un amigo; cada una se suma a nuestra capacidad frente a operaciones de su tipo, igual que la de un objetivo frente a las nuestras.\\n\\nCuando se expone una operación extranjera contra nosotros, su patrocinador figura en Última captura durante diez años, y una que dejamos seguir figura en Operaciones extranjeras conocidas mientras dura. Aparte de los eventos que informan de una captura y de una exposición, nada más nombra al país que está detrás de una operación contra nosotros, aunque una red sólida dentro de su servicio puede contarlas."
  },
  "je_iw_how_detection": {
@@ -1500,7 +1368,7 @@
   "es": "Las [concept_tradecraft|l] son la experiencia de nuestra agencia, de 0 a [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_max')|0]: aumentan cada mes con las operaciones que han pasado su fase preparatoria, bajan con una operación expuesta y, sin ninguna operación en marcha, van disminuyendo. El Apoyo de contrainteligencia no cuenta para nada de esto. Cada nivel suma a nuestra [concept_intelligence_capacity|l] y hace que nuestras redes crezcan un #G [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! más rápido.\\n#bold Novato#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Consolidado#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: prioridad [GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Curtido#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Cambio de régimen y Sabotaje del programa nuclear; #bold Veterano#! a partir de [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: una operación más de cada tipo.\\nBajar de un nivel nunca termina una operación en curso. Pasa el cursor por Técnicas de espionaje en la vista general para ver las cifras de este mes."
  },
  "je_iw_how_watching": {
-  "en": "When our counterintelligence catches an operation and we run a covert service of our own, we may expose it at once or let it run and watch it. Exposing it is the exposure described under Detection: its sponsor pays the costs, our public turns on the sponsor's friends at home, and the operation ends. Letting it run costs us, because the operation keeps doing its full harm, and its sponsor is not told. In return our network inside the sponsor stops decaying and grows each month, by #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! to #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! the busier the operation is, more slowly above half strength.\\n\\nA watched operation is not caught again. It is listed under Known Foreign Operations with its sponsor, how long we have watched it and an Expose button that works at any time; while another exposure of that sponsor's operations is still open, the button is greyed until the sponsor has answered for it, which can take weeks.",
+  "en": "When our counterintelligence catches an operation and we run a covert service of our own, we may expose it at once or let it run and watch it. Exposing it is the exposure described under Detection: its sponsor pays the costs, our public turns on the sponsor's friends at home, and the operation ends. Letting it run costs us, because the operation keeps doing its full harm, and its sponsor is not told. In return our network inside the sponsor stops decaying and grows each month, by #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! to #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! the busier the operation is, more slowly above half strength.\\n\\nA watched operation is not caught again. It is listed under Known Foreign Operations with its sponsor, how long we have watched it and an Expose button that works at any time; while another exposure of that sponsor's operations is still open, the button is grayed until the sponsor has answered for it, which can take weeks.",
   "es": "Cuando nuestra contrainteligencia descubre una operación y gestionamos un servicio encubierto propio, podemos exponerla de inmediato o dejarla seguir y vigilarla. Exponerla es la exposición descrita en Detección: su patrocinador paga los costes, nuestra opinión pública se vuelve contra los amigos del patrocinador en nuestro país, y la operación termina. Dejarla seguir nos cuesta, porque la operación sigue haciendo todo su daño, y a su patrocinador no se le avisa. A cambio, nuestra red dentro del patrocinador deja de decaer y crece cada mes, de #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! a #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! según lo activa que sea la operación, más despacio por encima de la mitad de fuerza.\\n\\nUna operación vigilada no se vuelve a descubrir. Figura en Operaciones extranjeras conocidas con su patrocinador, cuánto tiempo la hemos vigilado y un botón Exponer que funciona en cualquier momento; mientras otra exposición de las operaciones de ese patrocinador siga abierta, el botón aparece atenuado hasta que el patrocinador haya respondido por ella, lo que puede llevar semanas."
  },
  "je_iw_known_expose_button": {
@@ -1547,10 +1415,6 @@
   "en": "Every country we have run operations against keeps a network of agents that outlives the operations. It grows while operations run there, #v faster with more of them#! and #v slower above half strength#!, and decays once they stop — #v half as fast#! at funding level [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] or above. A burned operation costs its network #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength. Counterintelligence Support neither builds nor feeds a network.\\n\\nA strong network lowers the detection risk of every operation in that country (up to #G -[GetPlayer.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! points before efficiency) and gives a new operation there a head start of up to #G [GetPlayer.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! months. It also raises the detection risk of every operation that country runs against us (up to #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! points before their efficiency), because our agents inside their service hear of it.\\n\\nA strong network also reports on the service it has penetrated: from strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! its [concept_intelligence_capacity] and technology count, from #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! how many operations it is running against us - the only way to learn of an operation our counterintelligence has not caught.",
   "es": "Cada país contra el que hemos ejecutado operaciones conserva una red de agentes que sobrevive a las operaciones. Crece mientras se ejecutan operaciones allí, #v más rápido cuantas más haya#! y #v más despacio por encima de la mitad de fuerza#!, y decae cuando cesan —#v a la mitad de velocidad#! con un nivel de financiación de [GetPlayer.MakeScope.ScriptValue('covert_net_maintain_funding_level')|0] o superior. Una operación quemada cuesta a su red #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! de fuerza. El Apoyo de contrainteligencia no construye ni alimenta ninguna red.\\n\\nUna red sólida reduce el riesgo de detección de toda operación en ese país (hasta #G -[GetPlayer.MakeScope.ScriptValue('covert_net_detect_reduction_max_display')|1]#! puntos antes de aplicar la eficiencia) y da a una operación nueva allí una ventaja inicial de hasta #G [GetPlayer.MakeScope.ScriptValue('covert_net_head_start_max')|0]#! meses. También aumenta el riesgo de detección de toda operación que ese país ejecute contra nosotros (hasta #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! puntos antes de aplicar su eficiencia), porque nuestros agentes dentro de su servicio se enteran.\\n\\nUna red sólida también informa sobre el servicio que ha penetrado: a partir de una fuerza de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#! cuentan su [concept_intelligence_capacity|l] y su número de tecnologías, y a partir de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! cuántas operaciones ejecuta contra nosotros: la única forma de enterarse de una operación que nuestra contrainteligencia no ha descubierto."
  },
- "je_iw_net_row_benefit": {
-  "en": "Head start for a new operation: #v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! months",
-  "es": "Ventaja inicial para una operación nueva: #v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! meses"
- },
  "je_iw_net_row_catch": {
   "en": "Catching their operations: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! detection risk",
   "es": "Detectar sus operaciones: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! de riesgo de detección"
@@ -1559,17 +1423,9 @@
   "en": "Our agents inside their service hear of the operations it runs against us. Each of those operations carries this many more points of monthly [concept_operation_detection], before their [concept_covert_efficiency] cuts it: #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! at full strength.\\n\\nOur counterintelligence still has to catch each one.",
   "es": "Nuestros agentes dentro de su servicio se enteran de las operaciones que ejecuta contra nosotros. Cada una de esas operaciones lleva tantos puntos más de [concept_operation_detection|l] mensual, antes de que su [concept_covert_efficiency|l] lo reduzca: #G +[GetPlayer.MakeScope.ScriptValue('covert_net_catch_max_display')|0]#! a plena fuerza.\\n\\nNuestra contrainteligencia todavía tiene que descubrir cada una."
  },
- "je_iw_net_row_intel_none": {
-  "en": "Their service: nothing yet",
-  "es": "Su servicio: nada todavía"
- },
  "je_iw_net_row_intel_ops": {
   "en": "Their operations against us: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! running",
   "es": "Sus operaciones contra nosotros: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! en curso"
- },
- "je_iw_net_row_intel_ops_locked": {
-  "en": "Their operations against us: not yet known",
-  "es": "Sus operaciones contra nosotros: aún no se conocen"
  },
  "je_iw_net_row_intel_ops_tooltip": {
   "en": "Counted by our agents inside their service at the last monthly report, whether or not our own counterintelligence has noticed any of them. Every phase counts, from an operation's first month.\\n\\nIt says how many, not which operations or what they are doing. Our counterintelligence still has to catch each one to expose it.",
@@ -1582,18 +1438,6 @@
  "je_iw_net_row_intel_service_tooltip": {
   "en": "What our agents inside their service reported at the last monthly report; our own figures are today's.\\n\\nAt strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#! the network also counts the [concept_covert_operations] they are running against us. A burn that drops it below a threshold loses that part of the report at once.",
   "es": "Lo que informaron nuestros agentes dentro de su servicio en el último informe mensual; nuestras propias cifras son las de hoy.\\n\\nCon una fuerza de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#!, la red también cuenta las [concept_covert_operations|l] que ejecutan contra nosotros. Si una operación quemada la deja por debajo de un umbral, esa parte del informe se pierde al instante."
- },
- "je_iw_net_row_ops": {
-  "en": "Operations there: #v [ScriptContainer.GetVariableValue('iw_net_ops')|0]#!",
-  "es": "Operaciones allí: #v [ScriptContainer.GetVariableValue('iw_net_ops')|0]#!"
- },
- "je_iw_net_row_strength": {
-  "en": "Strength #v [ScriptContainer.GetVariableValue('iw_net_strength')|0]#!",
-  "es": "Fuerza #v [ScriptContainer.GetVariableValue('iw_net_strength')|0]#!"
- },
- "je_iw_net_row_strength_tt": {
-  "en": "#bold What the network reports#!\\nFrom strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#!: their service, meaning its [concept_intelligence_capacity] and technology count beside ours.\\nFrom strength #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#!: their operations, meaning how many [concept_covert_operations] they are running against us.\\n\\nA burn that drops the network below either mark loses that part of the report at once.",
-  "es": "#bold Qué informa la red#!\\nA partir de una fuerza de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_1_strength')|0]#!: su servicio, es decir, su [concept_intelligence_capacity|l] y su número de tecnologías junto a los nuestros.\\nA partir de una fuerza de #v [GetPlayer.MakeScope.ScriptValue('covert_net_intel_tier_2_strength')|0]#!: sus operaciones, es decir, cuántas [concept_covert_operations|l] ejecutan contra nosotros.\\n\\nSi una operación quemada deja la red por debajo de cualquiera de los dos umbrales, esa parte del informe se pierde al instante."
  },
  "je_iw_net_row_title": {
   "en": "Network in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
@@ -1847,10 +1691,6 @@
   "en": "Mental Health Crisis",
   "es": "Crisis de salud mental"
  },
- "je_mental_health_crisis_desc": {
-  "en": "Modern life has produced an epidemic of depression, anxiety, and addiction. Decide how the state will respond.",
-  "es": "La vida moderna ha producido una epidemia de depresión, ansiedad y adicciones. Decide cómo responderá el Estado."
- },
  "je_mental_health_crisis_reason": {
   "en": "Modern life has produced a mental health epidemic. Depression, anxiety, and addiction sweep through the population, demanding a response.",
   "es": "La vida moderna ha producido una epidemia de salud mental. La depresión, la ansiedad y las adicciones recorren la población y exigen una respuesta."
@@ -1872,7 +1712,7 @@
   "es": "La postura se compone de tres elecciones independientes: la [concept_nuclear_doctrine|l], cuándo decimos que usaríamos la bomba; la [concept_nuclear_readiness|l], con qué rapidez pueden responder nuestras fuerzas; y la [concept_launch_authority|l], quién puede lanzar cuando una alerta es incierta. Cada una tiene un precio en dinero, en reputación en el exterior o en riesgo en casa, y cada una solo puede cambiarse cada cierto tiempo: la regla figura sobre sus opciones en Postura nuclear. Las fuerzas que sustentan la postura evolucionan mes a mes: la capacidad de supervivencia con lo que gastamos en blindaje, la fiabilidad del mando con las salvaguardas y la tensión de las dotaciones con la preparación."
  },
  "je_nuclear_how_programme": {
-  "en": "Each step of funding spends weekly [concept_innovation] on progress toward the next warhead, the bar below the programme. Once the first device exists, the same funding builds ten times as fast. Programme aid from another power speeds it up, sabotage and United Nations inspections slow it, and a pause treaty, an arsenal ceiling or dismantling stops it.",
+  "en": "Each step of funding spends weekly [concept_innovation] on progress toward the next warhead, the bar below the program. Once the first device exists, the same funding builds ten times as fast. Program aid from another power speeds it up, sabotage and United Nations inspections slow it, and a pause treaty, an arsenal ceiling or dismantling stops it.",
   "es": "Cada nivel de financiación gasta [concept_innovation|l] cada semana en avanzar hacia la siguiente ojiva, la barra bajo el programa. En cuanto existe el primer artefacto, la misma financiación avanza diez veces más rápido. La ayuda al programa de otra potencia lo acelera, el sabotaje y las inspecciones de las Naciones Unidas lo frenan, y un tratado de pausa, un tope de arsenal o el desmantelamiento lo detienen."
  },
  "je_nuclear_how_sub_crisis": {
@@ -1880,7 +1720,7 @@
   "es": "Crisis"
  },
  "je_nuclear_how_sub_delivery": {
-  "en": "Delivery and Defence",
+  "en": "Delivery and Defense",
   "es": "Lanzamiento y defensa"
  },
  "je_nuclear_how_sub_home": {
@@ -1896,7 +1736,7 @@
   "es": "Potencias nucleares"
  },
  "je_nuclear_how_sub_programme": {
-  "en": "The Programme",
+  "en": "The Program",
   "es": "El programa"
  },
  "je_nuclear_how_sub_reputation": {
@@ -1944,7 +1784,7 @@
   "es": "Desmantelando"
  },
  "je_nuclear_ov_prog_6": {
-  "en": "No Programme",
+  "en": "No Program",
   "es": "Sin programa"
  },
  "je_nuclear_ov_prog_7": {
@@ -1979,12 +1819,8 @@
   "en": "Nuclear Weapons",
   "es": "Armas nucleares"
  },
- "je_nuclear_program_desc": {
-  "en": "Build nuclear weapons, decide when we say we will use them and how ready our forces stand, and live through the crises they bring — the threats we make and the ones made against us.",
-  "es": "Construye armas nucleares, decide cuándo decimos que las usaremos y cuán preparadas están nuestras fuerzas, y sobrevive a las crisis que traen: las amenazas que lanzamos y las que se lanzan contra nosotros."
- },
  "je_nuclear_program_reason": {
-  "en": "A weapons programme is the most expensive thing a state can build out of pure research, and whoever finishes first changes every calculation made about them. Once built, an arsenal is not only a stock of weapons. It is a promise about when they will be used, a standing force that must be paid for and kept ready, and a chain of command that has to hold under pressure. Every choice here buys something abroad or at home, and every one of them changes how likely it is that something goes wrong.",
+  "en": "A weapons program is the most expensive thing a state can build out of pure research, and whoever finishes first changes every calculation made about them. Once built, an arsenal is not only a stock of weapons. It is a promise about when they will be used, a standing force that must be paid for and kept ready, and a chain of command that has to hold under pressure. Every choice here buys something abroad or at home, and every one of them changes how likely it is that something goes wrong.",
   "es": "Un programa de armamento es lo más caro que un Estado puede construir a partir de pura investigación, y quien lo termina primero cambia todos los cálculos que se hacen sobre él. Una vez construido, un arsenal no es solo un almacén de armas. Es una promesa sobre cuándo se usarán, una fuerza permanente que hay que pagar y mantener lista, y una cadena de mando que ha de resistir la presión. Cada decisión aquí compra algo en el exterior o en casa, y todas cambian la probabilidad de que algo salga mal."
  },
  "je_nuclear_program_status_line": {
@@ -1992,7 +1828,7 @@
   "es": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Ojivas en nuestro poder: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]"
  },
  "je_nuclear_program_widget_defence_label": {
-  "en": "Home defence",
+  "en": "Home defense",
   "es": "Defensa nacional"
  },
  "je_nuclear_program_widget_defence_tt": {
@@ -2012,7 +1848,7 @@
   "es": "Primer artefacto"
  },
  "je_nuclear_program_widget_funding_label": {
-  "en": "Programme funding",
+  "en": "Program funding",
   "es": "Financiación del programa"
  },
  "je_nuclear_program_widget_funding_tt": {
@@ -2032,7 +1868,7 @@
   "es": "#tooltip_header Tiempo hasta la siguiente ojiva#!\\n$TOOLTIP_DELIMITER$\\nFaltan #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_progress_remaining')|1]#! de avance al ritmo actual. La barra bajo este panel representa la misma cifra frente a los #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_weapon_program_goal_value')|0]#! que requiere una ojiva."
  },
  "je_nuclear_program_widget_odds_header": {
-  "en": "Delivery and Defence",
+  "en": "Delivery and Defense",
   "es": "Lanzamiento y defensa"
  },
  "je_nuclear_program_widget_odds_note": {
@@ -2048,7 +1884,7 @@
   "es": "#lore Los diez mayores arsenales según las estimaciones del mundo. Cada uno se vuelve a observar una vez al año y se ajusta a la verdad tras una prueba o un ataque; nuestro recuento exacto es la cifra de Ojivas en la parte superior de esta anotación.#!"
  },
  "je_nuclear_program_widget_programme_header": {
-  "en": "The Programme",
+  "en": "The Program",
   "es": "El programa"
  },
  "je_nuclear_program_widget_rate_label": {
@@ -2082,10 +1918,6 @@
  "je_nuclear_program_widget_taboo_header": {
   "en": "The Nuclear Taboo",
   "es": "El tabú nuclear"
- },
- "je_nuclear_program_widget_taboo_heading_label": {
-  "en": "Heading toward",
-  "es": "Rumbo a"
  },
  "je_nuclear_program_widget_taboo_history_header": {
   "en": "The Taboo Over Time",
@@ -2131,10 +1963,6 @@
   "en": "Post-Scarcity Transition",
   "es": "Transición a la posescasez"
  },
- "je_post_scarcity_desc": {
-  "en": "Automation and AI render traditional labor obsolete. Decide what comes next as the old economic order ends.",
-  "es": "La automatización y la IA vuelven obsoleto el trabajo tradicional. Decide qué viene después, cuando termina el viejo orden económico."
- },
  "je_post_scarcity_reason": {
   "en": "Automation and AI are making traditional labor obsolete. Society must decide what comes next as the old economic order crumbles.",
   "es": "La automatización y la IA están volviendo obsoleto el trabajo tradicional. La sociedad debe decidir qué viene después, a medida que se desmorona el viejo orden económico."
@@ -2158,10 +1986,6 @@
  "je_space_race_interstellar_probe_completion_header": {
   "en": "Probe Leaves the Solar System",
   "es": "La sonda abandona el sistema solar"
- },
- "je_space_race_interstellar_probe_desc": {
-  "en": "Build and launch a probe capable of reaching another star system.",
-  "es": "Construye y lanza una sonda capaz de llegar a otro sistema estelar."
  },
  "je_space_race_interstellar_probe_failure_header": {
   "en": "Interstellar Program Suspended",
@@ -2188,7 +2012,7 @@
   "es": "Estamos desarrollando una sonda capaz de llegar a otro sistema estelar, ampliando los límites de lo posible."
  },
  "je_space_race_interstellar_probe_setback_header": {
-  "en": "If the interstellar program is cancelled",
+  "en": "If the interstellar program is canceled",
   "es": "Si se cancela el programa interestelar"
  },
  "je_space_race_interstellar_probe_setback_tt": {
@@ -2227,10 +2051,6 @@
   "en": "Signal From the Stars",
   "es": "Señal desde las estrellas"
  },
- "je_space_race_interstellar_results_desc": {
-  "en": "Await scientific data from the interstellar probe — what the probe finds is genuinely uncertain.",
-  "es": "Espera los datos científicos de la sonda interestelar: lo que encuentre es genuinamente incierto."
- },
  "je_space_race_interstellar_results_on_completion_header": {
   "en": "Our probe sends back its findings",
   "es": "Nuestra sonda envía sus hallazgos"
@@ -2259,10 +2079,6 @@
   "en": "Boots on Mars",
   "es": "Pisadas en Marte"
  },
- "je_space_race_mars_landing_desc": {
-  "en": "Send a crewed mission to land on Mars.",
-  "es": "Envía una misión tripulada para aterrizar en Marte."
- },
  "je_space_race_mars_landing_failure_header": {
   "en": "Mars Program Suspended",
   "es": "Programa marciano suspendido"
@@ -2288,7 +2104,7 @@
   "es": "El planeta rojo nos llama. Un aterrizaje tripulado en Marte sería el mayor logro de la humanidad en la exploración espacial."
  },
  "je_space_race_mars_landing_setback_header": {
-  "en": "If the Mars program is cancelled",
+  "en": "If the Mars program is canceled",
   "es": "Si se cancela el programa marciano"
  },
  "je_space_race_mars_landing_setback_tt": {
@@ -2331,10 +2147,6 @@
   "en": "Even a follow-on Mars expedition delivers major [concept_prestige] and research gains, plus durable cultural reach.",
   "es": "Incluso una expedición posterior a Marte aporta un gran [concept_prestige|l] y mejoras de investigación, además de un alcance cultural duradero."
  },
- "je_space_race_moon_base_desc": {
-  "en": "Establish a permanent crewed outpost on the lunar surface.",
-  "es": "Establece un puesto avanzado permanente con tripulación en la superficie lunar."
- },
  "je_space_race_moon_landing": {
   "en": "Moon Landing",
   "es": "Alunizaje"
@@ -2342,10 +2154,6 @@
  "je_space_race_moon_landing_completion_header": {
   "en": "Boots on the Moon",
   "es": "Pisadas en la Luna"
- },
- "je_space_race_moon_landing_desc": {
-  "en": "Land humans on the Moon and return them safely to Earth.",
-  "es": "Lleva humanos a la Luna y devuélvelos sanos y salvos a la Tierra."
  },
  "je_space_race_moon_landing_failure_header": {
   "en": "Lunar Program Suspended",
@@ -2427,10 +2235,6 @@
   "en": "Earth Orbit Achieved",
   "es": "Órbita terrestre alcanzada"
  },
- "je_space_race_orbital_desc": {
-  "en": "Place a satellite or capsule into stable orbit around Earth.",
-  "es": "Pon un satélite o una cápsula en una órbita estable alrededor de la Tierra."
- },
  "je_space_race_orbital_failure_header": {
   "en": "Orbital Program Suspended",
   "es": "Programa orbital suspendido"
@@ -2507,10 +2311,6 @@
   "en": "Probe Reaches Its Target",
   "es": "La sonda llega a su objetivo"
  },
- "je_space_race_probe_desc": {
-  "en": "Dispatch unmanned probes to nearby worlds and the asteroid belt.",
-  "es": "Envía sondas no tripuladas a mundos cercanos y al cinturón de asteroides."
- },
  "je_space_race_probe_failure_header": {
   "en": "Probe Program Suspended",
   "es": "Programa de sondas suspendido"
@@ -2536,7 +2336,7 @@
   "es": "Con la capacidad orbital demostrada, ahora podemos enviar sondas no tripuladas a mundos cercanos y al cinturón de asteroides y reunir datos para la siguiente fase de la [concept_space_race|l]."
  },
  "je_space_race_probe_setback_header": {
-  "en": "If the probe program is cancelled",
+  "en": "If the probe program is canceled",
   "es": "Si se cancela el programa de sondas"
  },
  "je_space_race_probe_setback_tt": {
@@ -2583,10 +2383,6 @@
   "en": "Solar System Colonization",
   "es": "Colonización del sistema solar"
  },
- "je_space_race_solar_colonization_desc": {
-  "en": "Establish permanent settlements throughout the solar system.",
-  "es": "Establece asentamientos permanentes por todo el sistema solar."
- },
  "je_space_race_solar_colonization_reason": {
   "en": "The colonization of the solar system represents the next great chapter for our civilization, establishing permanent settlements beyond Earth.",
   "es": "La colonización del sistema solar representa el próximo gran capítulo de nuestra civilización, con asentamientos permanentes más allá de la Tierra."
@@ -2626,10 +2422,6 @@
  "je_space_race_suborbital_completion_header": {
   "en": "Edge of Space Reached",
   "es": "Borde del espacio alcanzado"
- },
- "je_space_race_suborbital_desc": {
-  "en": "Develop rocketry capable of reaching the edge of space.",
-  "es": "Desarrolla cohetes capaces de llegar al borde del espacio."
  },
  "je_space_race_suborbital_failure_header": {
   "en": "Suborbital Program Suspended",
@@ -2699,18 +2491,6 @@
   "en": "The programme chooses where our next colony fleet goes: the best world it can reach within 15 years, near and cheap first, avoiding worlds a rival will reach first. Pick one with Target in the Solar System list, even a far one.",
   "es": "El programa elige adónde va nuestra próxima flota colonial: el mejor mundo que puede alcanzar en 15 años, primero los cercanos y baratos, evitando los mundos a los que llegará antes un rival. Elige uno con Fijar objetivo en la lista Sistema solar, incluso uno lejano."
  },
- "je_space_race_widget_cf_destination_target": {
-  "en": "Our next colony fleet goes to #v [JournalEntry.GetCountry.GetCustom('sr_cf_target_name')]#!, our choice in the Solar System list. Clear it there to let the programme choose again.",
-  "es": "Nuestra próxima flota colonial va a #v [JournalEntry.GetCountry.GetCustom('sr_cf_target_name')]#!, elección nuestra en la lista Sistema solar. Quítala allí para que el programa vuelva a elegir."
- },
- "je_space_race_widget_cf_drive_line": {
-  "en": "Drive: #v [JournalEntry.GetCountry.GetCustom('sr_cf_drive_name')]#!",
-  "es": "Propulsión: #v [JournalEntry.GetCountry.GetCustom('sr_cf_drive_name')]#!"
- },
- "je_space_race_widget_cf_drive_tt": {
-  "en": "#header Drives#!\\nThe drive sets how long a colony fleet takes to reach its world.\\n• #v Chemical#!: the classic transfer orbits, in launch windows. About 9 months to Mars, 33 to Jupiter, 16 years to Uranus, 50 to the Kuiper Belt.\\n• #v Fusion#! (Fusion Power): about 3 months to Mars, 8 to Jupiter, 3 years to Uranus, in a window; slower outside one.\\n• #v Fusion torch#! (Muon-Catalyzed Fusion Reactors): any month, about 1 month to Mars and a year to the Kuiper Belt.\\n• #v Antimatter#! (Antimatter Production and an Antimatter Containment Facility): any month, 1 to 4 months anywhere.",
-  "es": "#header Propulsiones#!\\nLa propulsión determina cuánto tarda una flota colonial en llegar a su mundo.\\n• #v Química#!: las clásicas órbitas de transferencia, en ventanas de lanzamiento. Unos 9 meses a Marte, 33 a Júpiter, 16 años a Urano, 50 al cinturón de Kuiper.\\n• #v Fusión#! (Energía de fusión): unos 3 meses a Marte, 8 a Júpiter, 3 años a Urano, dentro de una ventana; más lenta fuera de ella.\\n• #v Antorcha de fusión#! (Reactores de fusión catalizada por muones): cualquier mes, cerca de 1 mes a Marte y un año al cinturón de Kuiper.\\n• #v Antimateria#! (Producción de antimateria y una Instalación de contención de antimateria): cualquier mes, de 1 a 4 meses a cualquier parte."
- },
  "je_space_race_widget_cf_in_flight_figure": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] of 6",
   "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] de 6"
@@ -2718,10 +2498,6 @@
  "je_space_race_widget_cf_in_flight_label": {
   "en": "Fleets in flight",
   "es": "Flotas en vuelo"
- },
- "je_space_race_widget_cf_races_only_note": {
-  "en": "Under Races Only a colony is founded the month its fleet leaves.",
-  "es": "En el modo solo carreras, una colonia se funda el mes en que parte su flota."
  },
  "je_space_race_widget_cf_slot_1_eta": {
   "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])",
@@ -2940,7 +2716,7 @@
   "es": "Potencias espaciales"
  },
  "je_space_race_widget_how_sub_programme": {
-  "en": "The Programme",
+  "en": "The Program",
   "es": "El programa"
  },
  "je_space_race_widget_how_sub_rivals": {
@@ -2994,14 +2770,6 @@
  "je_space_race_widget_modules_col_staffing": {
   "en": "Crew",
   "es": "Dotación"
- },
- "je_space_race_widget_modules_header": {
-  "en": "Colony Modules",
-  "es": "Módulos coloniales"
- },
- "je_space_race_widget_modules_note": {
-  "en": "Build up each colony with modules. Its two specializations share four levels, and its Habitats, Spaceports and Defences share its slots. The Space Program's Module Fabrication method builds the queue in order, 100 points a module: the first entry is next, and a new one joins at the end, up to 20. A module then waits for its world's launch window and lands after the transit our drive buys.",
-  "es": "Desarrolla cada colonia con módulos. Sus dos especializaciones comparten cuatro niveles, y sus Hábitats, Puertos espaciales y Defensas comparten sus huecos. El método de Fabricación de módulos del Programa espacial construye la cola por orden, a 100 puntos el módulo: la primera entrada es la siguiente, y una nueva se une al final, hasta 20. Después, un módulo espera la ventana de lanzamiento de su mundo y aterriza tras el trayecto que permite nuestra propulsión."
  },
  "je_space_race_widget_modules_staffing_tt": {
   "en": "#header Staffing#!\\nThe share of the colony's modules its crews can run. Every level past the first needs a crew of 5,000 people, except Habitats, which house the crews. An understaffed colony's specializations give that share of their bonus. Artificial General Intelligence runs every module.",
@@ -3126,10 +2894,6 @@
  "je_space_race_widget_ov_safe_suborbital": {
   "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/wk",
   "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/sem"
- },
- "je_space_race_widget_ov_shielded": {
-  "en": "Shielded: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cooldown_months')|0] mo",
-  "es": "Protegido: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cooldown_months')|0] meses"
  },
  "je_space_race_widget_ov_stage": {
   "en": "Stage: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
@@ -3279,10 +3043,6 @@
   "en": "Space Powers",
   "es": "Potencias espaciales"
  },
- "je_space_race_widget_powers_more": {
-  "en": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] more",
-  "es": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] más"
- },
  "je_space_race_widget_powers_none": {
   "en": "No other power is in the space race yet.",
   "es": "Aún no hay ninguna otra potencia en la carrera espacial."
@@ -3344,7 +3104,7 @@
   "es": "#bold Vuelo suborbital#! — [Country.GetCustom('sr_prog_suborbital')]"
  },
  "je_space_race_widget_programme_header": {
-  "en": "Programme",
+  "en": "Program",
   "es": "Programa"
  },
  "je_space_race_widget_progress_interstellar_probe": {
@@ -3439,38 +3199,6 @@
   "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
   "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
  },
- "je_space_race_widget_rival_more_interstellar_probe": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] más"
- },
- "je_space_race_widget_rival_more_mars_landing": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_mars_landing')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_mars_landing')|0] más"
- },
- "je_space_race_widget_rival_more_moon_base": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_base')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_base')|0] más"
- },
- "je_space_race_widget_rival_more_moon_landing": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_landing')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_landing')|0] más"
- },
- "je_space_race_widget_rival_more_orbital": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_orbital')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_orbital')|0] más"
- },
- "je_space_race_widget_rival_more_probe": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_probe')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_probe')|0] más"
- },
- "je_space_race_widget_rival_more_solar_colonization": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_solar_colonization')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_solar_colonization')|0] más"
- },
- "je_space_race_widget_rival_more_suborbital": {
-  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_suborbital')|0] more",
-  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_suborbital')|0] más"
- },
  "je_space_race_widget_rival_tt_interstellar_probe": {
   "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands between #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]#! and #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! of the goal (the marker: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_interstellar_probe')|%0]). The band is ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it; where in the band the marker sits is drawn again once a year. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",
   "es": "#bold Una estimación, no un informe.#! Según lo que ha anunciado [State.GetCountry.GetName], su programa se sitúa entre #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]#! y #v [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! del objetivo (el marcador: [GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_est_interstellar_probe')|%0]). La banda es de ±[GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] del objetivo, y la cifra real siempre queda dentro; el lugar de la banda donde se sitúa el marcador se vuelve a sortear una vez al año. Una red de inteligencia en el país reduce la banda: ±10% con fuerza 50, ±5% con 75."
@@ -3515,29 +3243,9 @@
   "en": "AGI",
   "es": "IAG"
  },
- "je_space_race_widget_settlers_agi_note": {
-  "en": "Artificial General Intelligence runs every module: our colonies need no crews.",
-  "es": "La Inteligencia artificial general opera todos los módulos: nuestras colonias no necesitan tripulaciones."
- },
- "je_space_race_widget_settlers_crews_note": {
-  "en": "People are crews: a colony's people can run one module level for every 5,000 of them. Its founding specialization runs without a crew, as an automated outpost.",
-  "es": "Las personas son las tripulaciones: la población de una colonia puede operar un nivel de módulo por cada 5 000 de sus habitantes. Su especialización fundacional funciona sin tripulación, como un puesto avanzado automatizado."
- },
  "je_space_race_widget_settlers_crews_tt": {
   "en": "Module levels the colony's people can crew, one for every 5,000.",
   "es": "Niveles de módulo que la población de la colonia puede tripular, uno por cada 5 000."
- },
- "je_space_race_widget_settlers_empty": {
-  "en": "We hold no colony to settle.",
-  "es": "No tenemos ninguna colonia que poblar."
- },
- "je_space_race_widget_settlers_header": {
-  "en": "Settlers",
-  "es": "Colonos"
- },
- "je_space_race_widget_settlers_note": {
-  "en": "Colonies hold people: settlers we send from the state of our Space Program, and their children. A colony grows slowly up to its room. Set how many leave each month, and which colonies they go to.",
-  "es": "Las colonias albergan personas: los colonos que enviamos desde el estado de nuestro Programa espacial, y sus hijos. Una colonia crece despacio hasta llenar su espacio. Fija cuántos parten cada mes y a qué colonias van."
  },
  "je_space_race_widget_settlers_people_tt": {
   "en": "The colony's people, and the room it has for them.",
@@ -3554,10 +3262,6 @@
  "je_space_race_widget_solar_system_header": {
   "en": "Solar System",
   "es": "Sistema solar"
- },
- "je_space_race_widget_solar_system_note": {
-  "en": "Every world and who holds it. A world can be claimed once; when its holder is annexed, it passes to whoever owns that holder's last capital. Target sends our next colony fleet to a world.",
-  "es": "Cada mundo y quién lo posee. Un mundo puede reclamarse una sola vez; cuando se anexiona a su titular, pasa a quien posea la última capital de ese titular. Fijar objetivo envía nuestra próxima flota colonial a un mundo."
  },
  "je_space_race_widget_ss_inbound_tt": {
   "en": "#header Colony fleets on their way#!\\nThe first figure is how many fleets are flying to this world, the second the months until the first lands. Highlighted when the first is ours. The first to land claims the world; the others go on to another free world of the same planet or belt, or are lost.",
@@ -3635,10 +3339,6 @@
   "en": "State Collapse",
   "es": "Colapso del Estado"
  },
- "je_state_collapse_desc": {
-  "en": "Authority is failing. Restore order before the state fragments under [concept_turmoil], [concept_devastation], and corruption.",
-  "es": "La autoridad se desmorona. Restablece el orden antes de que el Estado se fragmente bajo la [concept_turmoil|l], la [concept_devastation|l] y la corrupción."
- },
  "je_state_collapse_reason": {
   "en": "State Collapse is the failure of a state to provide basic services and security to its citizens. This can be caused by a variety of factors, including corruption, conflict, and natural disasters. State Collapse can lead to widespread suffering, displacement, and violence.",
   "es": "El colapso del Estado es el fracaso de un Estado a la hora de proporcionar servicios básicos y seguridad a sus ciudadanos. Puede deberse a diversos factores, como la corrupción, los conflictos y los desastres naturales. El colapso del Estado puede provocar sufrimiento generalizado, desplazamientos y violencia."
@@ -3646,10 +3346,6 @@
  "je_strategic_reserve": {
   "en": "Strategic Reserve",
   "es": "Reserva estratégica"
- },
- "je_strategic_reserve_desc": {
-  "en": "Manage the national stockpile of grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Set a signed weekly reserve rate for each good: positive values store goods, negative values withdraw them, and zero idles that lane. Each good can instead be handed a price-triggered policy — Buy When Cheap, Release When Expensive, Stabilize Prices or Stockpile — which re-decides its rate every week from the national market price, within limits you set.\\nMax rate: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] units/week. Stored goods decay over time, so a large reserve is not free.",
-  "es": "Gestiona la reserva nacional de grano, munición, petróleo, armas pequeñas, artillería, aviones, tanques y productos químicos. Fija una tasa semanal de reserva con signo para cada bien: los valores positivos almacenan bienes, los negativos los retiran y el cero deja ese carril inactivo. A cada bien se le puede asignar en su lugar una política activada por el precio —Comprar cuando esté barato, Liberar cuando esté caro, Estabilizar precios o Acumular— que vuelve a decidir su tasa cada semana a partir del precio nacional de mercado, dentro de los límites que establezcas.\\nTasa máxima: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] unidades/semana. Los bienes almacenados se deterioran con el tiempo, así que una reserva grande no sale gratis."
  },
  "je_strategic_reserve_how_decay": {
   "en": "Stock decays every week at a yearly rate that technology lowers. The hub buys each week's decay on top of whatever rate you set, so a rate of 0 holds a stockpile steady at a small ongoing cost. A row's tooltip breaks the good's decay rate down by source.",
@@ -3836,7 +3532,7 @@
   "es": "$je_un_auth_tbl_target_tt$\\n\\n#b Ahora:#! $je_un_auth_tbl_target_detail$"
  },
  "je_un_auth_conference": {
-  "en": "No United Nations exists. A founding conference is in session: a new organisation will be founded, weak and under the founding charter, unless the world's leading power wrecks the conference. The breakdown appears after its first monthly update.",
+  "en": "No United Nations exists. A founding conference is in session: a new organization will be founded, weak and under the founding charter, unless the world's leading power wrecks the conference. The breakdown appears after its first monthly update.",
   "es": "No existen las Naciones Unidas. Hay una conferencia fundacional en sesión: se fundará una nueva organización, débil y bajo la carta fundacional, a menos que la principal potencia del mundo malogre la conferencia. El desglose aparece tras su primera actualización mensual."
  },
  "je_un_auth_crisis_clock": {
@@ -3872,15 +3568,15 @@
   "es": "#bold Peso en los asuntos mundiales.#! El peso de un país es su proporción del [concept_prestige|l] mundial medida frente a la de una [concept_great_power|l] típica (×1), hasta ×5. Los gestos de un microestado apenas se notan; los de una superpotencia cuentan varias veces."
  },
  "je_un_auth_help_3": {
-  "en": "#bold The pillars.#! Participation (who is in), great-power commitment (who champions or undermines it), funding (who runs its programmes) and peace and order (wars between members, nuclear use) are read from the world as it is each month, and so is policy: what countries' own laws and institutions add to or take from the UN, by weight. Only a member that is not undermining the UN can add to policy; any country can take from it. Credibility and delivery are ledgers. Credibility records votes and whether the UN is obeyed: resolutions carried, fallen or vetoed, mandates abused, rulings and orders defied. Delivery records what it got done: aid and peacekeepers sent, mandates discharged, missions accomplished or failed. Credibility entries halve every ten years, delivery entries every four. While the [concept_un_food_reserve] stands, delivery also answers for hunger among the members' people. Hover a pillar to see how it is computed.",
+  "en": "#bold The pillars.#! Participation (who is in), great-power commitment (who champions or undermines it), funding (who runs its programs) and peace and order (wars between members, nuclear use) are read from the world as it is each month, and so is policy: what countries' own laws and institutions add to or take from the UN, by weight. Only a member that is not undermining the UN can add to policy; any country can take from it. Credibility and delivery are ledgers. Credibility records votes and whether the UN is obeyed: resolutions carried, fallen or vetoed, mandates abused, rulings and orders defied. Delivery records what it got done: aid and peacekeepers sent, mandates discharged, missions accomplished or failed. Credibility entries halve every ten years, delivery entries every four. While the [concept_un_food_reserve] stands, delivery also answers for hunger among the members' people. Hover a pillar to see how it is computed.",
   "es": "#bold Los pilares.#! La participación (quién está dentro), el compromiso de las grandes potencias (quién la defiende o la socava), la financiación (quién dirige sus programas) y la paz y el orden (guerras entre miembros, uso nuclear) se leen del mundo tal como es cada mes, y también la política: lo que las leyes e instituciones propias de los países añaden a la ONU o le quitan, según su peso. Solo un miembro que no esté socavando la ONU puede sumar a la política; cualquier país puede restarle. La credibilidad y el cumplimiento son registros. La credibilidad registra los votos y si se obedece a la ONU: resoluciones aprobadas, caídas o vetadas, mandatos abusados, fallos y órdenes desacatados. El cumplimiento registra lo que ha logrado: ayuda y fuerzas de paz enviadas, mandatos cumplidos, misiones logradas o fallidas. Las entradas de credibilidad se reducen a la mitad cada diez años, y las de cumplimiento cada cuatro. Mientras exista la [concept_un_food_reserve|l], el cumplimiento también responde del hambre entre la población de los miembros. Pasa el cursor por un pilar para ver cómo se calcula."
  },
  "je_un_auth_help_4": {
-  "en": "#bold What moves it:#! joining or leaving, championing or undermining the order, running UN programmes, carrying or blocking resolutions, delivering aid and peacekeepers, honouring or abusing mandates, wars between members, and nuclear use. A permanent member walking out is a shock.",
+  "en": "#bold What moves it:#! joining or leaving, championing or undermining the order, running UN programs, carrying or blocking resolutions, delivering aid and peacekeepers, honoring or abusing mandates, wars between members, and nuclear use. A permanent member walking out is a shock.",
   "es": "#bold Qué lo mueve:#! entrar o salir, defender o socavar el orden, dirigir programas de la ONU, aprobar o bloquear resoluciones, enviar ayuda y fuerzas de paz, respetar o abusar de los mandatos, guerras entre miembros y uso nuclear. Que un miembro permanente se marche es una conmoción."
  },
  "je_un_auth_help_5": {
-  "en": "#bold What does not:#! switching a programme on and off. A programme counts for exactly as long as it runs, and never for more.",
+  "en": "#bold What does not:#! switching a program on and off. A program counts for exactly as long as it runs, and never for more.",
   "es": "#bold Qué no lo mueve:#! activar y desactivar un programa. Un programa cuenta exactamente mientras funciona, y nunca más."
  },
  "je_un_auth_help_6": {
@@ -3984,7 +3680,7 @@
   "es": "Base"
  },
  "je_un_auth_tbl_base_tt": {
-  "en": "#title Base#!\\nA constant: what an organisation with no members, friends or record would be worth.",
+  "en": "#title Base#!\\nA constant: what an organization with no members, friends or record would be worth.",
   "es": "#title Base#!\\nUna constante: lo que valdría una organización sin miembros, amigos ni historial."
  },
  "je_un_auth_tbl_commitment_detail": {
@@ -4008,7 +3704,7 @@
   "es": "Credibilidad"
  },
  "je_un_auth_tbl_credibility_tt": {
-  "en": "#title Credibility#! (−25 to +25)\\nA ledger of the Assembly's record. Resolutions carried add to it and resolutions that fall take from it. Vetoes take from it, weighted by the vetoer. Members backing or defying the organisation in UN events count, weighted by the member, as do lifted sanctions and violated mandates. Each entry halves every ten years; the recent ones are listed below.",
+  "en": "#title Credibility#! (−25 to +25)\\nA ledger of the Assembly's record. Resolutions carried add to it and resolutions that fall take from it. Vetoes take from it, weighted by the vetoer. Members backing or defying the organization in UN events count, weighted by the member, as do lifted sanctions and violated mandates. Each entry halves every ten years; the recent ones are listed below.",
   "es": "#title Credibilidad#! (−25 a +25)\\nUn registro del historial de la Asamblea. Las resoluciones aprobadas suman y las que caen restan. Los vetos restan, ponderados según quien veta. Los miembros que respaldan o desafían a la organización en eventos de la ONU cuentan, ponderados por el miembro, igual que las sanciones levantadas y los mandatos violados. Cada entrada se reduce a la mitad cada diez años; las recientes figuran debajo."
  },
  "je_un_auth_tbl_delivery_detail": {
@@ -4032,7 +3728,7 @@
   "es": "#title Cumplimiento#! (−10 a +10)\\nUn registro de lo que ha logrado la ONU, de 0 a +10: ayuda humanitaria y fuerzas de paz enviadas, préstamos de emergencia concedidos, mandatos militares cumplidos tal como estaban escritos, grano enviado por la Reserva Mundial de Alimentos, y #bold misiones cumplidas#! (+1 cada una, −1 por cada una que fracasa; la cámara las enumera en Misiones sobre el terreno). Cada entrada se reduce a la mitad cada cuatro años.\\n\\n$je_un_auth_tbl_delivery_hunger_tt$"
  },
  "je_un_auth_tbl_funding_detail": {
-  "en": "programmes [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_programmes_pct')|0]% and development aid [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_dev_money_pct')|0]%, together [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_pct')|0]%; dues withheld [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_arrears_share_pct')|0]%",
+  "en": "programs [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_programmes_pct')|0]% and development aid [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_dev_money_pct')|0]%, together [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_pct')|0]%; dues withheld [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_arrears_share_pct')|0]%",
   "es": "programas [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_programmes_pct')|0]% y ayuda al desarrollo [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_dev_money_pct')|0]%, en conjunto [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_funding_pct')|0]%; cuotas retenidas [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_arrears_share_pct')|0]%"
  },
  "je_un_auth_tbl_funding_label": {
@@ -4042,10 +3738,6 @@
  "je_un_auth_tbl_funding_tt": {
   "en": "#title Funding#! (−10 to +10)\\nWho pays for the United Nations. First, how much of the power of members of [concept_major_power] rank and above runs UN programmes: peacekeeping, human rights and arms control. Two programmes count in full, one counts half. Then development aid, counted by its money, not by who gives it: the members' Development Programs contributions to the [concept_un_development_fund] count in full on their own once they reach 0.7% of the members' GDP a year. The two together, at most in full, run from −5 to +10. Then the [concept_un_dues]: members withholding theirs cost up to 15 more points, in proportion to their share of the members' GDP.",
   "es": "#title Financiación#! (−10 a +10)\\nQuién paga las Naciones Unidas. Primero, qué parte del poder de los miembros con rango de [concept_major_power|l] o superior dirige programas de la ONU: mantenimiento de la paz, derechos humanos y control de armas. Dos programas cuentan por completo, uno cuenta la mitad. Después, la ayuda al desarrollo, contada por su dinero y no por quién la da: las contribuciones de los miembros a Programas de desarrollo para el [concept_un_development_fund|l] cuentan por completo por sí solas cuando alcanzan el 0,7% del PIB de los miembros al año. Los dos juntos, como máximo en su totalidad, van de −5 a +10. Después, las [concept_un_dues|l]: los miembros que retienen las suyas restan hasta 15 puntos más, en proporción a su parte del PIB de los miembros."
- },
- "je_un_auth_tbl_headline": {
-  "en": "#bold [concept_un_authority]#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|1]#! → #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|1]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+2]/mo)",
-  "es": "#bold [concept_un_authority]#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|1]#! → #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|1]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+2]/mes)"
  },
  "je_un_auth_tbl_order_detail": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_at_war_pct')|0]% of world power at war with members",
@@ -4123,30 +3815,6 @@
   "en": "#lore Every ballot on the record, side by side with any pledged vote. A pledge is an undertaking, not a vote — it is never counted in the tally above.#!",
   "es": "#lore Todos los votos que constan, junto a cualquier voto prometido. Una promesa es un compromiso, no un voto: nunca se cuenta en el recuento anterior.#!"
  },
- "je_un_chamber_budget_dev_fund": {
-  "en": "The [concept_un_development_fund] takes #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! of it, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a week, and the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs add @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average).",
-  "es": "El [concept_un_development_fund] se lleva #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! del presupuesto, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a la semana, y los #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! miembros que financian Programas de desarrollo aportan @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a la semana, repartidos entre #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! miembros por debajo de @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! de PIB per cápita (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! de la media de los miembros)."
- },
- "je_un_chamber_budget_dev_fund_floored": {
-  "en": "The [concept_un_development_fund] takes #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! of it, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a week, and the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs add @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one).",
-  "es": "El [concept_un_development_fund] se lleva #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! del presupuesto, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a la semana, y los #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! miembros que financian Programas de desarrollo aportan @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a la semana, repartidos entre #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! miembros en o por debajo de @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! de PIB per cápita, el del miembro más pobre que paga cuotas (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! de la media de los miembros está por debajo de todos ellos)."
- },
- "je_un_chamber_budget_dev_fund_voluntary": {
-  "en": "The [concept_un_development_fund] takes none of it under the founding charter: it pays out only what the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs contribute, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average).",
-  "es": "El [concept_un_development_fund] no se lleva nada del presupuesto con la carta fundacional: solo reparte lo que aportan los #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! miembros que financian Programas de desarrollo, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a la semana, repartidos entre #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! miembros por debajo de @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! de PIB per cápita (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! de la media de los miembros)."
- },
- "je_un_chamber_budget_dev_fund_voluntary_floored": {
-  "en": "The [concept_un_development_fund] takes none of it under the founding charter: it pays out only what the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs contribute, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one).",
-  "es": "El [concept_un_development_fund] no se lleva nada del presupuesto con la carta fundacional: solo reparte lo que aportan los #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! miembros que financian Programas de desarrollo, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a la semana, repartidos entre #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! miembros en o por debajo de @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! de PIB per cápita, el del miembro más pobre que paga cuotas (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! de la media de los miembros está por debajo de todos ellos)."
- },
- "je_un_chamber_budget_force": {
-  "en": "The Standing UN Force takes #v [THIS.ScriptValue('un_disp_force_budget_pct')|0]%#! of it: @money!#v [THIS.ScriptValue('un_disp_force_budget_weekly')|D]#! a week.",
-  "es": "La Fuerza permanente de la ONU se lleva #v [THIS.ScriptValue('un_disp_force_budget_pct')|0]%#! del presupuesto: @money!#v [THIS.ScriptValue('un_disp_force_budget_weekly')|D]#! a la semana."
- },
- "je_un_chamber_budget_free": {
-  "en": "Left for the emergency lending facility: @money!#v [THIS.ScriptValue('un_disp_budget_free_weekly')|D]#! a week, so at most @money!#v [THIS.ScriptValue('un_disp_loan_budget_cap')|D]#! in one loan.",
-  "es": "Queda para el servicio de préstamos de emergencia: @money!#v [THIS.ScriptValue('un_disp_budget_free_weekly')|D]#! a la semana, de modo que un préstamo no puede superar @money!#v [THIS.ScriptValue('un_disp_loan_budget_cap')|D]#!."
- },
  "je_un_chamber_ceasefire_bound": {
   "en": "#bold Binding Ceasefire:#! #R the Assembly has ordered us to cease fire#! for #v [THIS.ScriptValue('un_disp_cf_months_left')|0]#! more months. Each month we fight on against a member costs us #R [THIS.ScriptValue('un_disp_cf_drain')|1]#! war support in that war.",
   "es": "#bold Alto el fuego vinculante:#! #R la Asamblea nos ha ordenado cesar el fuego#! durante #v [THIS.ScriptValue('un_disp_cf_months_left')|0]#! meses más. Cada mes que sigamos combatiendo contra un miembro nos cuesta #R [THIS.ScriptValue('un_disp_cf_drain')|1]#! de respaldo a la guerra en ese conflicto."
@@ -4164,7 +3832,7 @@
   "es": "#G Cumplido#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] votó como había prometido."
  },
  "je_un_chamber_commitment_pending": {
-  "en": "#v Pledged for#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] undertook to vote in favour. No vote of theirs is on the record.",
+  "en": "#v Pledged for#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] undertook to vote in favor. No vote of theirs is on the record.",
   "es": "#v Prometido a favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] se comprometió a votar a favor. No consta ningún voto suyo."
  },
  "je_un_chamber_commitment_pending_no": {
@@ -4499,26 +4167,6 @@
   "en": "The odds the [concept_un_world_court] would find for us if it ruled today, to the nearest ten. They start at 50%. Our [concept_primary_cultures] being at least half the state's people adds 20% (a quarter, 10%), and the holder's take away as much. A [concept_homeland] of ours adds 10%, one of the holder's takes 10% away, and so does the holder having incorporated the state. Each point of International Standing we hold above the holder adds 0.3%, up to 15% either way. Each point of the holder's case strength adds 0.15%, and each point of ours takes 0.15% away, each up to 15%. They never fall below 10% or rise above 90%, and the court reckons them again when it rules.",
   "es": "La probabilidad de que el [concept_un_world_court] falle a nuestro favor si resolviera hoy, redondeada a la decena. Parte del 50%. Que nuestras [concept_primary_cultures|l] sean al menos la mitad de los habitantes del estado suma un 20% (una cuarta parte, un 10%), y las del titular restan otro tanto. Una [concept_homeland|l] nuestra suma un 10%, una del titular resta un 10%, y lo mismo ocurre si el titular ha incorporado el estado. Cada punto de posición internacional que tengamos por encima del titular suma un 0,3%, hasta un 15% en cualquiera de los dos sentidos. Cada punto de fuerza del caso del titular suma un 0,15%, y cada punto del nuestro resta un 0,15%, cada uno hasta un 15%. Nunca bajan del 10% ni suben del 90%, y el tribunal las vuelve a calcular cuando falla."
  },
- "je_un_chamber_deleg_band_firm_against": {
-  "en": "[SCOPE.sCountry('un_deleg_m').GetName]: #R firmly against#!",
-  "es": "[SCOPE.sCountry('un_deleg_m').GetName]: #R firmemente en contra#!"
- },
- "je_un_chamber_deleg_band_firm_for": {
-  "en": "[SCOPE.sCountry('un_deleg_m').GetName]: #G firmly for#!",
-  "es": "[SCOPE.sCountry('un_deleg_m').GetName]: #G firmemente a favor#!"
- },
- "je_un_chamber_deleg_band_leaning_against": {
-  "en": "[SCOPE.sCountry('un_deleg_m').GetName]: #R leaning against#!",
-  "es": "[SCOPE.sCountry('un_deleg_m').GetName]: #R se inclina en contra#!"
- },
- "je_un_chamber_deleg_band_leaning_for": {
-  "en": "[SCOPE.sCountry('un_deleg_m').GetName]: #G leaning for#!",
-  "es": "[SCOPE.sCountry('un_deleg_m').GetName]: #G se inclina a favor#!"
- },
- "je_un_chamber_deleg_band_undecided": {
-  "en": "[SCOPE.sCountry('un_deleg_m').GetName]: #v undecided#!",
-  "es": "[SCOPE.sCountry('un_deleg_m').GetName]: #v sin decidir#!"
- },
  "je_un_chamber_deleg_bulk_against_label": {
   "en": "Lobby Top Members Against",
   "es": "Presionar en contra a los principales miembros"
@@ -4588,20 +4236,12 @@
   "es": "  #v Comprometido#! a votar #R en contra#!, ante [SCOPE.sCountry('un_deleg_pledgee').GetName]"
  },
  "je_un_chamber_deleg_pledged_for": {
-  "en": "  #v Pledged#! to vote #G in favour#!, to [SCOPE.sCountry('un_deleg_pledgee').GetName]",
+  "en": "  #v Pledged#! to vote #G in favor#!, to [SCOPE.sCountry('un_deleg_pledgee').GetName]",
   "es": "  #v Prometido#! el voto #G a favor#!, a [SCOPE.sCountry('un_deleg_pledgee').GetName]"
  },
  "je_un_chamber_deleg_pledged_for_proposer": {
-  "en": "  #v Pledged#! to vote #G in favour#!, to the proposer",
+  "en": "  #v Pledged#! to vote #G in favor#!, to the proposer",
   "es": "  #v Prometido#! el voto #G a favor#!, al proponente"
- },
- "je_un_chamber_deleg_reading_estimate": {
-  "en": "  #lore The Assembly's estimate, off by up to 10 points.#!",
-  "es": "  #lore Estimación de la Asamblea, con un margen de hasta 10 puntos.#!"
- },
- "je_un_chamber_deleg_reading_true": {
-  "en": "  #lore Our delegation's reading, from our campaign: where they truly stand.#!",
-  "es": "  #lore Lectura de nuestra delegación, a partir de nuestra campaña: su posición real.#!"
  },
  "je_un_chamber_deleg_stop_label": {
   "en": "Stop Lobbying",
@@ -4678,10 +4318,6 @@
  "je_un_chamber_dev_fund_withholding": {
   "en": "#bold [concept_un_development_fund]:#! #R nothing while we withhold our dues#!, though we are below its line.",
   "es": "#bold [concept_un_development_fund]:#! #R nada mientras retengamos nuestras cuotas#!, aunque estamos por debajo de su umbral."
- },
- "je_un_chamber_docket_intro": {
-  "en": "The Assembly takes up real situations as they arise, the gravest first and at most one every three months, and sends each to the countries it concerns. A wronged country is asked first; business with no party goes to a human delegation first when one qualifies.",
-  "es": "La Asamblea aborda las situaciones reales a medida que surgen, las más graves primero y como máximo una cada tres meses, y envía cada una a los países a los que concierne. Se consulta primero al país agraviado; los asuntos sin parte afectada pasan primero a una delegación humana cuando hay alguna que cumple los requisitos."
  },
  "je_un_chamber_docket_last_1": {
   "en": "  Last taken up, #v [GetGlobalVariable('un_dkt_last_age').GetValue|0]#! month(s) ago: #bold a nuclear strike#! by [GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName].",
@@ -4766,10 +4402,6 @@
  "je_un_chamber_dues_article_19": {
   "en": "#bold Our [concept_un_dues]:#! #R withheld, vote lost#! (Article 19). #v [THIS.ScriptValue('un_disp_arrears_months')|0]#! months in arrears, @money!#v [THIS.ScriptValue('un_disp_arrears_owed')|D]#! owed.",
   "es": "#bold Nuestras [concept_un_dues|l]:#! #R retenidas, voto perdido#! (artículo 19). #v [THIS.ScriptValue('un_disp_arrears_months')|0]#! meses en mora, @money!#v [THIS.ScriptValue('un_disp_arrears_owed')|D]#! adeudados."
- },
- "je_un_chamber_dues_budget": {
-  "en": "#bold All members' [concept_un_dues]:#! @money!#v [THIS.ScriptValue('un_disp_budget_weekly')|D]#! a week. Members with #v [THIS.ScriptValue('un_disp_arrears_share_pct')|0]%#! of the members' GDP are in arrears (funding #R −[THIS.ScriptValue('un_disp_arrears_funding_cost')|1]#!).",
-  "es": "#bold Las [concept_un_dues|l] de todos los miembros:#! @money!#v [THIS.ScriptValue('un_disp_budget_weekly')|D]#! a la semana. Los miembros que suman #v [THIS.ScriptValue('un_disp_arrears_share_pct')|0]%#! del PIB de los miembros están en mora (financiación #R −[THIS.ScriptValue('un_disp_arrears_funding_cost')|1]#!)."
  },
  "je_un_chamber_dues_carried": {
   "en": "Ours include the seats of #v [THIS.ScriptValue('un_carried_seat_count')|0]#! subjects with [concept_un_suspended_representation].",
@@ -4876,7 +4508,7 @@
   "es": "  Caduca dentro de [THIS.ScriptValue('un_mandate_months_left')|0] meses si no se ejerce."
  },
  "je_un_chamber_mandate_forfeit": {
-  "en": "  #R The authorized power has left the organisation. Finishing the war now counts as a violation.#!",
+  "en": "  #R The authorized power has left the organization. Finishing the war now counts as a violation.#!",
   "es": "  #R La potencia autorizada ha abandonado la organización. Terminar la guerra ahora cuenta como una infracción.#!"
  },
  "je_un_chamber_mandate_header": {
@@ -4934,10 +4566,6 @@
  "je_un_chamber_mandates_header": {
   "en": "Mandates in Force",
   "es": "Mandatos en vigor"
- },
- "je_un_chamber_mission_active": {
-  "en": "  #G In the field#!, month #v [THIS.Var('un_msn_months').GetValue|0]#!: #v [THIS.Var('un_msn_progress').GetValue|0]%#! of the way, at strength ×#v [THIS.Var('un_msn_strength').GetValue|2]#!.",
-  "es": "  #G Sobre el terreno#!, mes #v [THIS.Var('un_msn_months').GetValue|0]#!: #v [THIS.Var('un_msn_progress').GetValue|0]%#! del camino, con una fuerza de ×#v [THIS.Var('un_msn_strength').GetValue|2]#!."
  },
  "je_un_chamber_mission_aid": {
   "en": "#bold [concept_un_mission_aid]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
@@ -5028,7 +4656,7 @@
   "es": "Misiones sobre el terreno"
  },
  "je_un_chamber_missions_help": {
-  "en": "#lore A [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] succeeds after two years of peace for its host; an [Concept('concept_un_mission_aid', 'aid mission')] after at least six months, once its state has no famine and a standard of living, without the mission's own help, of 10 or 1 above where it started, whichever is higher; a [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] once the collapse is over and a year has passed; an [Concept('concept_un_mission_electoral', 'electoral mission')] when an election campaign in its host ends while it is there. A mission fails if its host is attacked; a peacekeeping or stabilisation mission also fails if every contributor goes home. It has no time limit: it goes on for as long as someone keeps paying for it. Success is delivery for the United Nations and standing for its contributors; failure takes delivery away.\\n\\nAny [concept_major_power] member may send a contingent to a mission without waiting to be asked, at a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year for each mission; the peacekeeping programme pays for its members' peacekeeping and stabilisation contingents. A contributor's covert networks in the host grow a quarter faster while it serves there. Electoral observers are paid from the UN's budget, so nobody sends a contingent to them. While the [concept_un_standing_force] stands it serves in every peacekeeping and stabilisation mission, which then never lapses or fails for want of contributors. From the [concept_un_tier_strong] tier, a country hosting a peacekeeping or stabilisation mission is under UN protection: war goals added against it pay the UN's war-goal surcharge twice over. The longer a mission has run, the less willing the AI is to send it one. A contingent brought home before the work is done costs standing and the host's regard, and cannot be sent back.#!",
+  "en": "#lore A [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] succeeds after two years of peace for its host; an [Concept('concept_un_mission_aid', 'aid mission')] after at least six months, once its state has no famine and a standard of living, without the mission's own help, of 10 or 1 above where it started, whichever is higher; a [Concept('concept_un_mission_stabilisation', 'stabilization mission')] once the collapse is over and a year has passed; an [Concept('concept_un_mission_electoral', 'electoral mission')] when an election campaign in its host ends while it is there. A mission fails if its host is attacked; a peacekeeping or stabilization mission also fails if every contributor goes home. It has no time limit: it goes on for as long as someone keeps paying for it. Success is delivery for the United Nations and standing for its contributors; failure takes delivery away.\\n\\nAny [concept_major_power] member may send a contingent to a mission without waiting to be asked, at a quarter of a percent of its [Concept('concept_gdp', 'GDP')] a year for each mission; the peacekeeping program pays for its members' peacekeeping and stabilization contingents. A contributor's covert networks in the host grow a quarter faster while it serves there. Electoral observers are paid from the UN's budget, so nobody sends a contingent to them. While the [concept_un_standing_force] stands it serves in every peacekeeping and stabilization mission, which then never lapses or fails for want of contributors. From the [concept_un_tier_strong] tier, a country hosting a peacekeeping or stabilization mission is under UN protection: war goals added against it pay the UN's war-goal surcharge twice over. The longer a mission has run, the less willing the AI is to send it one. A contingent brought home before the work is done costs standing and the host's regard, and cannot be sent back.#!",
   "es": "#lore Una [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] tiene éxito tras dos años de paz para su anfitrión; una [Concept('concept_un_mission_aid', 'misión de ayuda')], tras al menos seis meses, una vez que su estado ya no sufre hambruna y tiene un nivel de vida, sin la ayuda de la propia misión, de 10 o de 1 por encima del que tenía al empezar, el que sea mayor; una [Concept('concept_un_mission_stabilisation', 'misión de estabilización')], cuando el colapso ha terminado y ha pasado un año; una [Concept('concept_un_mission_electoral', 'misión electoral')], cuando termina una campaña electoral en su anfitrión mientras la misión está allí. Una misión fracasa si su anfitrión es atacado; una misión de mantenimiento de la paz o de estabilización también fracasa si todos los aportantes se van a casa. No tiene límite de tiempo: continúa mientras alguien siga pagándola. El éxito supone cumplimiento para las Naciones Unidas y posición para quienes aportan; el fracaso quita cumplimiento.\\n\\nCualquier [concept_major_power|l] miembro puede enviar un contingente a una misión sin esperar a que se lo pidan, a un cuarto del uno por ciento de su [Concept('concept_gdp', 'PIB')] al año por cada misión; el programa de mantenimiento de la paz paga los contingentes de mantenimiento de la paz y de estabilización de sus miembros. Las redes encubiertas de un aportante en el anfitrión crecen un cuarto más rápido mientras sirve allí. Los observadores electorales se pagan con el presupuesto de la ONU, así que nadie les envía un contingente. Mientras exista la [concept_un_standing_force|l], participa en todas las misiones de mantenimiento de la paz y de estabilización, que entonces nunca caducan ni fracasan por falta de aportantes. A partir del nivel [concept_un_tier_strong|l], un país que acoge una misión de mantenimiento de la paz o de estabilización está bajo protección de la ONU: los objetivos de guerra añadidos contra él pagan dos veces el recargo por objetivo de guerra de la ONU. Cuanto más tiempo lleva en marcha una misión, menos dispuesta está la IA a enviarle un contingente. Un contingente que vuelve a casa antes de terminar el trabajo cuesta posición y la estima del anfitrión, y no puede volver a enviarse.#!"
  },
  "je_un_chamber_missions_intro": {
@@ -5042,10 +4670,6 @@
  "je_un_chamber_missions_none_ended": {
   "en": "No mission has ended yet.",
   "es": "Aún no ha terminado ninguna misión."
- },
- "je_un_chamber_months": {
-  "en": "  In session for [THIS.Var('un_res_months').GetValue|0] months. The proposer reports back at twelve; an unreported resolution lapses at fourteen.",
-  "es": "  En sesión desde hace [THIS.Var('un_res_months').GetValue|0] meses. El proponente informa a los doce; una resolución sin informe caduca a los catorce."
  },
  "je_un_chamber_no_active": {
   "en": "#v No resolution is currently before the Assembly.#!",
@@ -5244,7 +4868,7 @@
   "es": "#bold Asuntos que podemos llevar ante la Asamblea por iniciativa propia.#! El pleno admite una resolución a la vez, y cada tema siguiente tiene sus propias condiciones y su propio coste. Patrocinar una resolución consume #bold 150#! de [concept_influence|l] durante dos años, #bold 300#! si actúa contra un miembro; una petición de ayuda no consume nada. Tras presentar un asunto por iniciativa propia debemos esperar antes de presentar otro: diez años, la mitad para una [Concept('concept_great_power', 'gran potencia')], y más o menos según nuestra posición internacional.\\n"
  },
  "je_un_chamber_propose_need_aid": {
-  "en": "A state of ours is in want, and no aid programme is already running",
+  "en": "A state of ours is in want, and no aid program is already running",
   "es": "Un estado nuestro pasa necesidad, y no hay ya ningún programa de ayuda en marcha"
  },
  "je_un_chamber_propose_need_antarctic": {
@@ -5368,7 +4992,7 @@
   "es": "No aplicamos ya un régimen de sanciones, y el historial de un rival respalda sanciones (fuerza del caso de 50 o más)"
  },
  "je_un_chamber_propose_need_space": {
-  "en": "The space cooperation programme is not already in force",
+  "en": "The space cooperation program is not already in force",
   "es": "El programa de cooperación espacial no está ya en vigor"
  },
  "je_un_chamber_propose_need_standing_force": {
@@ -6012,7 +5636,7 @@
   "es": "[GetStaticModifier('un_regime_npt_guarantee_modifier').GetName|v]\\n[GetStaticModifier('un_regime_npt_guarantee_modifier').GetDesc]\\n#lore Se muestra a ×1: el nuestro se escala con la [concept_un_enforcement|l].#!"
  },
  "je_un_chamber_regime_npt_inspection": {
-  "en": "    #tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_regime_npt_inspection_tt #R Inspected#!#!: inspectors slow our nuclear programme.",
+  "en": "    #tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_regime_npt_inspection_tt #R Inspected#!#!: inspectors slow our nuclear program.",
   "es": "    #tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_regime_npt_inspection_tt #R Inspeccionado#!#!: los inspectores frenan nuestro programa nuclear."
  },
  "je_un_chamber_regime_npt_inspection_tt": {
@@ -6028,7 +5652,7 @@
   "es": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Sin ojivas#!#!: no podemos tener ni construir ninguna."
  },
  "je_un_chamber_regime_nuclear_ban_tt": {
-  "en": "The Treaty on the Prohibition of Nuclear Weapons holds us to the #v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#! warheads we held when we ratified it, a fifth less every five years and none after 25 years. Warheads above the ceiling are taken apart, a tenth of the excess a month, and our programme builds nothing while our arsenal is at or above the ceiling, which is for as long as we are a party. The ceiling is not scaled by [concept_un_enforcement], but it does not step down while the UN is Moribund. Leaving the United Nations ends it, and the world counts that as walking out of an arms-control treaty.",
+  "en": "The Treaty on the Prohibition of Nuclear Weapons holds us to the #v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#! warheads we held when we ratified it, a fifth less every five years and none after 25 years. Warheads above the ceiling are taken apart, a tenth of the excess a month, and our program builds nothing while our arsenal is at or above the ceiling, which is for as long as we are a party. The ceiling is not scaled by [concept_un_enforcement], but it does not step down while the UN is Moribund. Leaving the United Nations ends it, and the world counts that as walking out of an arms-control treaty.",
   "es": "El Tratado sobre la Prohibición de las Armas Nucleares nos limita a las #v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#! ojivas que teníamos al ratificarlo, un quinto menos cada cinco años y ninguna pasados 25 años. Las ojivas por encima del techo se desmantelan, una décima parte del exceso al mes, y nuestro programa no construye nada mientras nuestro arsenal esté en el techo o por encima, lo cual dura mientras seamos parte. El techo no se escala con la [concept_un_enforcement|l], pero no baja mientras la ONU esté moribunda. Abandonar las Naciones Unidas lo termina, y el mundo lo cuenta como abandonar un tratado de control de armas."
  },
  "je_un_chamber_regime_refugee_host": {
@@ -6199,30 +5823,6 @@
   "en": "Ended",
   "es": "Finalizadas"
  },
- "je_un_chamber_sub_propose_censure": {
-  "en": "Censure and Enforcement",
-  "es": "Censura e imposición"
- },
- "je_un_chamber_sub_propose_charter": {
-  "en": "The Charter",
-  "es": "La Carta"
- },
- "je_un_chamber_sub_propose_conventions": {
-  "en": "Conventions and Declarations",
-  "es": "Convenciones y declaraciones"
- },
- "je_un_chamber_sub_propose_help": {
-  "en": "Requests for Help",
-  "es": "Peticiones de ayuda"
- },
- "je_un_chamber_sub_propose_institutions": {
-  "en": "Institutions of the United Nations",
-  "es": "Instituciones de las Naciones Unidas"
- },
- "je_un_chamber_sub_propose_justice": {
-  "en": "Courts and Self-Determination",
-  "es": "Tribunales y autodeterminación"
- },
  "je_un_chamber_sub_reach": {
   "en": "The UN's Reach",
   "es": "El alcance de la ONU"
@@ -6240,7 +5840,7 @@
   "es": "Ante la Asamblea"
  },
  "je_un_chamber_tally": {
-  "en": "  In favour #G [THIS.Var('un_res_support').GetValue|0]#!, opposed #R [THIS.Var('un_res_oppose').GetValue|0]#!.",
+  "en": "  In favor #G [THIS.Var('un_res_support').GetValue|0]#!, opposed #R [THIS.Var('un_res_oppose').GetValue|0]#!.",
   "es": "  A favor #G [THIS.Var('un_res_support').GetValue|0]#!, en contra #R [THIS.Var('un_res_oppose').GetValue|0]#!."
  },
  "je_un_chamber_tally_committed": {
@@ -6432,7 +6032,7 @@
   "es": "Nuestra delegación ya ha #R vetado#! esta resolución — un veto también registra un voto en contra."
  },
  "je_un_chamber_vote_already_yes_tt": {
-  "en": "Our delegation has already voted #G in favour#! of this resolution.",
+  "en": "Our delegation has already voted #G in favor#! of this resolution.",
   "es": "Nuestra delegación ya ha votado #G a favor#! de esta resolución."
  },
  "je_un_chamber_vote_article_19_tt": {
@@ -6444,7 +6044,7 @@
   "es": "Votar en contra"
  },
  "je_un_chamber_vote_not_proposer_tt": {
-  "en": "We did not propose this resolution — a sponsor is counted in favour the moment the motion opens",
+  "en": "We did not propose this resolution — a sponsor is counted in favor the moment the motion opens",
   "es": "No propusimos esta resolución — un patrocinador se cuenta a favor en cuanto se abre la moción"
  },
  "je_un_chamber_vote_not_yet_cast_tt": {
@@ -6472,7 +6072,7 @@
   "es": "Vetar…"
  },
  "je_un_chamber_vote_yes_label": {
-  "en": "Vote in Favour",
+  "en": "Vote in Favor",
   "es": "Votar a favor"
  },
  "je_un_chamber_voter_entry_no": {
@@ -6484,11 +6084,11 @@
   "es": "#R En contra#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (inclinación [THIS.Var('un_lean_total').GetValue|+0])#!"
  },
  "je_un_chamber_voter_entry_yes": {
-  "en": "#G In favour#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "en": "#G In favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
   "es": "#G A favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
  },
  "je_un_chamber_voter_entry_yes_lean": {
-  "en": "#G In favour#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (lean [THIS.Var('un_lean_total').GetValue|+0])#!",
+  "en": "#G In favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (lean [THIS.Var('un_lean_total').GetValue|+0])#!",
   "es": "#G A favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')] #lore (inclinación [THIS.Var('un_lean_total').GetValue|+0])#!"
  },
  "je_un_chamber_votes_header": {
@@ -6756,7 +6356,7 @@
   "es": "      #lore en respuesta a: $un_events.6.t$#!"
  },
  "je_un_led_reason_1061": {
-  "en": "      #lore defended the Charter as it stands, when the organisation had outgrown it#!",
+  "en": "      #lore defended the Charter as it stands, when the organization had outgrown it#!",
   "es": "      #lore defendió la Carta tal como está, cuando la organización ya la había superado#!"
  },
  "je_un_led_reason_107": {
@@ -6848,7 +6448,7 @@
   "es": "      #lore en respuesta a: $un_events.12.t$#!"
  },
  "je_un_led_reason_1121": {
-  "en": "      #lore defended its overseas development programmes against a decolonization resolution#!",
+  "en": "      #lore defended its overseas development programs against a decolonization resolution#!",
   "es": "      #lore defendió sus programas de desarrollo en ultramar frente a una resolución sobre la descolonización#!"
  },
  "je_un_led_reason_113": {
@@ -7032,7 +6632,7 @@
   "es": "      #lore la#! [Concept('concept_un_mission_aid', 'misión de ayuda')] #lore en#! $je_un_led_subject_state$ #lore cumplió su cometido#!"
  },
  "je_un_led_reason_23": {
-  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] #lore in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilization mission')] #lore in#! $je_un_led_subject_state$ #lore accomplished its work#!",
   "es": "      #lore la#! [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] #lore en#! $je_un_led_subject_state$ #lore cumplió su cometido#!"
  },
  "je_un_led_reason_24": {
@@ -7044,7 +6644,7 @@
   "es": "      #lore la#! [Concept('concept_un_mission_aid', 'misión de ayuda')] #lore en#! $je_un_led_subject_state$ #lore fracasó#!"
  },
  "je_un_led_reason_26": {
-  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
+  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilization mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
   "es": "      #lore la#! [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] #lore en#! $je_un_led_subject_state$ #lore fracasó#!"
  },
  "je_un_led_reason_27": {
@@ -7483,10 +7083,6 @@
   "en": "The members' share of the world's population, as of the last monthly update.",
   "es": "La proporción de la población mundial que corresponde a los miembros, según la última actualización mensual."
  },
- "je_un_ov_standing_label": {
-  "en": "Standing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#!",
-  "es": "Posición #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#!"
- },
  "je_un_ov_status_no_un": {
   "en": "#v There is no $je_united_nations$.#! None has been founded, or the last one was dissolved.",
   "es": "#v No existen las $je_united_nations$.#! No se ha fundado ninguna, o la última se disolvió."
@@ -7511,10 +7107,6 @@
   "en": "Supranational",
   "es": "Supranacional"
  },
- "je_un_ov_vacant_tt": {
-  "en": "A vacant permanent seat. Hover over the Security Council label to see who is in line.",
-  "es": "Un puesto permanente vacante. Pasa el ratón por encima de la etiqueta del Consejo de Seguridad para ver quién es el siguiente."
- },
  "je_un_preview_dues_header": {
   "en": "If we are a member",
   "es": "Si somos miembros"
@@ -7536,7 +7128,7 @@
   "es": "Si las Naciones Unidas imponen la no proliferación"
  },
  "je_un_preview_npt_tt": {
-  "en": "From the Strong tier, once the IAEA exists, a member without nuclear weapons is held to disarmament: any nuclear programme it runs is wiped back to nothing every week, for as long as it remains a member.",
+  "en": "From the Strong tier, once the IAEA exists, a member without nuclear weapons is held to disarmament: any nuclear program it runs is wiped back to nothing every week, for as long as it remains a member.",
   "es": "A partir del nivel Fuerte, una vez que existe el OIEA, un miembro sin armas nucleares queda sujeto al desarme: cualquier programa nuclear que tenga se reduce a cero cada semana, mientras siga siendo miembro."
  },
  "je_un_preview_pariah_header": {
@@ -7592,7 +7184,7 @@
   "es": "Bajo sanciones"
  },
  "je_un_programmes_header": {
-  "en": "Programmes and Conventions",
+  "en": "Programs and Conventions",
   "es": "Programas y convenciones"
  },
  "je_un_record_aggression": {
@@ -7624,7 +7216,7 @@
   "es": "#tooltippable Argumentos para expulsarnos#!"
  },
  "je_un_record_expulsion_tt": {
-  "en": "What every other member adds to its lean on a motion to expel us from a permanent seat: our veto record #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, our standing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and our service #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (−5 each for hosting the headquarters, running the development programme, and running the peacekeeping programme or serving in a mission; −10 at most). The motion needs two thirds of the members with a vote.",
+  "en": "What every other member adds to its lean on a motion to expel us from a permanent seat: our veto record #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, our standing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and our service #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (−5 each for hosting the headquarters, running the development program, and running the peacekeeping program or serving in a mission; −10 at most). The motion needs two thirds of the members with a vote.",
   "es": "Lo que cada uno de los demás miembros suma a su inclinación en una moción para expulsarnos de un escaño permanente: nuestro historial de vetos #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, nuestra posición #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Ejemplar −10, Respetada −5, Deficiente +5, Desprestigiada +10) y nuestro servicio #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (−5 por cada uno de estos: acoger la sede, dirigir el programa de desarrollo, y dirigir el programa de mantenimiento de la paz o participar en una misión; −10 como máximo). La moción necesita dos tercios de los miembros con voto."
  },
  "je_un_record_infamy": {
@@ -7644,7 +7236,7 @@
   "es": "#tooltippable Caso permanente#!"
  },
  "je_un_record_standing_tt": {
-  "en": "A supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear programme or arsenal, answerable for staying out. Joining ends it.\\n\\nIt holds a member to the same account for staying outside the Non-Proliferation Treaty with a nuclear programme and no bomb yet, or with a bomb it built outside the treaty. Leaving the UN and joining again accedes to the treaty and ends it.",
+  "en": "A supranational United Nations holds every outsider of [concept_major_power] rank, and every outsider with a nuclear program or arsenal, answerable for staying out. Joining ends it.\\n\\nIt holds a member to the same account for staying outside the Non-Proliferation Treaty with a nuclear program and no bomb yet, or with a bomb it built outside the treaty. Leaving the UN and joining again accedes to the treaty and ends it.",
   "es": "Una ONU supranacional pide cuentas por quedarse fuera a todo país ajeno con rango de [concept_major_power|l], y a todo país ajeno con un programa o arsenal nuclear. Ingresar lo termina.\\n\\nPide cuentas de la misma manera a un miembro por quedarse fuera del Tratado de no proliferación con un programa nuclear y aún sin bomba, o con una bomba que construyó fuera del tratado. Abandonar la ONU y volver a ingresar supone adherirse al tratado y termina con ello."
  },
  "je_un_record_supports_condemn": {
@@ -7716,31 +7308,31 @@
   "es": "  #R En contra#! — lazos con el país señalado: #v [THIS.Var('un_res_why_no_target').GetValue|0]#!"
  },
  "je_un_res_why_yes_accepted": {
-  "en": "  #G In favour#! — the target accepted the verdict: #v [THIS.Var('un_res_why_yes_accepted').GetValue|0]#!",
+  "en": "  #G In favor#! — the target accepted the verdict: #v [THIS.Var('un_res_why_yes_accepted').GetValue|0]#!",
   "es": "  #G A favor#! — el país señalado aceptó el veredicto: #v [THIS.Var('un_res_why_yes_accepted').GetValue|0]#!"
  },
  "je_un_res_why_yes_grounds": {
-  "en": "  #G In favour#! — the case against the target: #v [THIS.Var('un_res_why_yes_grounds').GetValue|0]#!",
+  "en": "  #G In favor#! — the case against the target: #v [THIS.Var('un_res_why_yes_grounds').GetValue|0]#!",
   "es": "  #G A favor#! — el caso contra el país señalado: #v [THIS.Var('un_res_why_yes_grounds').GetValue|0]#!"
  },
  "je_un_res_why_yes_interests": {
-  "en": "  #G In favour#! — their interests on this topic: #v [THIS.Var('un_res_why_yes_interests').GetValue|0]#!",
+  "en": "  #G In favor#! — their interests on this topic: #v [THIS.Var('un_res_why_yes_interests').GetValue|0]#!",
   "es": "  #G A favor#! — sus intereses en este tema: #v [THIS.Var('un_res_why_yes_interests').GetValue|0]#!"
  },
  "je_un_res_why_yes_lobbying": {
-  "en": "  #G In favour#! — lobbied for it: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!",
+  "en": "  #G In favor#! — lobbied for it: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!",
   "es": "  #G A favor#! — presionado a favor: #v [THIS.Var('un_res_why_yes_lobbying').GetValue|0]#!"
  },
  "je_un_res_why_yes_pledge": {
-  "en": "  #G In favour#! — a vote pledged for it: #v [THIS.Var('un_res_why_yes_pledge').GetValue|0]#!",
+  "en": "  #G In favor#! — a vote pledged for it: #v [THIS.Var('un_res_why_yes_pledge').GetValue|0]#!",
   "es": "  #G A favor#! — un voto prometido a favor: #v [THIS.Var('un_res_why_yes_pledge').GetValue|0]#!"
  },
  "je_un_res_why_yes_proposer": {
-  "en": "  #G In favour#! — ties to the proposer: #v [THIS.Var('un_res_why_yes_proposer').GetValue|0]#!",
+  "en": "  #G In favor#! — ties to the proposer: #v [THIS.Var('un_res_why_yes_proposer').GetValue|0]#!",
   "es": "  #G A favor#! — lazos con el proponente: #v [THIS.Var('un_res_why_yes_proposer').GetValue|0]#!"
  },
  "je_un_res_why_yes_target": {
-  "en": "  #G In favour#! — rivalry with the target: #v [THIS.Var('un_res_why_yes_target').GetValue|0]#!",
+  "en": "  #G In favor#! — rivalry with the target: #v [THIS.Var('un_res_why_yes_target').GetValue|0]#!",
   "es": "  #G A favor#! — rivalidad con el país señalado: #v [THIS.Var('un_res_why_yes_target').GetValue|0]#!"
  },
  "je_un_session_months": {
@@ -7756,7 +7348,7 @@
   "es": "  En vigor: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$"
  },
  "je_un_standing_effects_neutral": {
-  "en": "  #v No standing modifier is in force. The Assembly neither rewards nor penalises a member with an unremarkable record.#!",
+  "en": "  #v No standing modifier is in force. The Assembly neither rewards nor penalizes a member with an unremarkable record.#!",
   "es": "  #v No hay ningún modificador de posición en vigor. La Asamblea no premia ni penaliza a un miembro con un historial sin nada destacable.#!"
  },
  "je_un_standing_effects_poor": {
@@ -7788,11 +7380,11 @@
   "es": "#bold Lo que la aumenta:#!\\n Cada uno de los cinco programas permanentes —contribuciones al mantenimiento de la paz, financiación del desarrollo, defensores de los derechos humanos, control de armas y defensores del orden— aporta #bold 0,3 al mes#! una vez que lleva #bold dos años completos sin interrupción#! (la financiación del desarrollo aporta una cuarta parte de eso en tamaño simbólico, la mitad en pequeño y una cuarta parte más en generoso; cambiar su tamaño no la interrumpe). Prestar ayuda humanitaria real o desplegar una fuerza real de mantenimiento de la paz aporta 3. Asumir una parte de un programa de ayuda o de mantenimiento de la paz aprobado por la Asamblea aporta 2 y granjea buena voluntad con el país que lo pidió. Acatar una decisión vinculante contra la que argumentamos, hacer cumplir sanciones o aceptar un fallo en nuestra contra aporta 2. Cumplir al pie de la letra un mandato militar autorizado aporta 6. Emitir un voto que habíamos comprometido aporta una cantidad simbólica: la palabra cumplida vale algo, pero no es un programa.\\n"
  },
  "je_un_standing_nonmember": {
-  "en": "  #v We hold no standing: it is a record of membership, and we are outside the organisation.#!",
+  "en": "  #v We hold no standing: it is a record of membership, and we are outside the organization.#!",
   "es": "  #v No tenemos posición: es un historial de pertenencia, y estamos fuera de la organización.#!"
  },
  "je_un_standing_reason_1": {
-  "en": "  Most recently: our sustained programme commitments.",
+  "en": "  Most recently: our sustained program commitments.",
   "es": "  Lo más reciente: nuestros compromisos sostenidos con los programas."
  },
  "je_un_standing_reason_2": {
@@ -7800,11 +7392,11 @@
   "es": "  Lo más reciente: la ayuda humanitaria que prestamos."
  },
  "je_un_standing_reason_20": {
-  "en": "  Most recently: #R a programme we abandoned before it had run its course.#!",
+  "en": "  Most recently: #R a program we abandoned before it had run its course.#!",
   "es": "  Lo más reciente: #R un programa que abandonamos antes de que concluyera.#!"
  },
  "je_un_standing_reason_21": {
-  "en": "  Most recently: #R our campaign against the organisation.#!",
+  "en": "  Most recently: #R our campaign against the organization.#!",
   "es": "  Lo más reciente: #R nuestra campaña contra la organización.#!"
  },
  "je_un_standing_reason_22": {
@@ -7832,7 +7424,7 @@
   "es": "  Lo más reciente: #R una autorización que quebrantamos.#!"
  },
  "je_un_standing_reason_28": {
-  "en": "  Most recently: #R our withdrawal from the organisation.#!",
+  "en": "  Most recently: #R our withdrawal from the organization.#!",
   "es": "  Lo más reciente: #R nuestra salida de la organización.#!"
  },
  "je_un_standing_reason_29": {
@@ -7884,7 +7476,7 @@
   "es": "  Lo más reciente: #R una guerra que seguimos librando pese a una orden de alto el fuego.#!"
  },
  "je_un_standing_reason_4": {
-  "en": "  Most recently: our share of a programme the Assembly voted through.",
+  "en": "  Most recently: our share of a program the Assembly voted through.",
   "es": "  Lo más reciente: nuestra parte de un programa que la Asamblea aprobó."
  },
  "je_un_standing_reason_40": {
@@ -7928,7 +7520,7 @@
   "es": "  Nada ha modificado aún nuestra posición."
  },
  "je_un_standing_suspended_undermining": {
-  "en": "  #R Benefits suspended:#! we have been working against the organisation for two years or more. They resume the month we stop.",
+  "en": "  #R Benefits suspended:#! we have been working against the organization for two years or more. They resume the month we stop.",
   "es": "  #R Beneficios suspendidos:#! llevamos dos años o más actuando contra la organización. Se reanudan el mes en que dejemos de hacerlo."
  },
  "je_un_standing_suspended_violation": {
@@ -7960,23 +7552,11 @@
   "es": "#v Posición internacional: aún sin registrar.#! La secretaría abrirá nuestro expediente a final de mes."
  },
  "je_un_standing_year_budget": {
-  "en": "  Programme accrual this year: [THIS.ScriptValue('un_standing_year_gain_display')|1] of [THIS.ScriptValue('un_standing_program_yearly_cap')|1] allowed.",
+  "en": "  Program accrual this year: [THIS.ScriptValue('un_standing_year_gain_display')|1] of [THIS.ScriptValue('un_standing_program_yearly_cap')|1] allowed.",
   "es": "  Acumulación de los programas este año: [THIS.ScriptValue('un_standing_year_gain_display')|1] de [THIS.ScriptValue('un_standing_program_yearly_cap')|1] permitidos."
  },
- "je_un_statistics": {
-  "en": "#bold [Concept('concept_un_represented', 'Represented')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]",
-  "es": "#bold [Concept('concept_un_represented', 'Representados')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] elegibles\\n#bold [Concept('concept_great_power', 'Grandes potencias')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]"
- },
- "je_un_statistics_suspended_many": {
-  "en": "#bold [Concept('concept_un_represented', 'Represented')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible\\n#bold [Concept('concept_un_suspended_representation', 'Suspended')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0]#!\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]",
-  "es": "#bold [Concept('concept_un_represented', 'Representados')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] elegibles\\n#bold [Concept('concept_un_suspended_representation', 'Suspendidos')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0]#!\\n#bold [Concept('concept_great_power', 'Grandes potencias')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]"
- },
- "je_un_statistics_suspended_one": {
-  "en": "#bold [Concept('concept_un_represented', 'Represented')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible\\n#bold [Concept('concept_un_suspended_representation', 'Suspended')]:#! #v 1#!\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]",
-  "es": "#bold [Concept('concept_un_represented', 'Representados')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] elegibles\\n#bold [Concept('concept_un_suspended_representation', 'Suspendidos')]:#! #v 1#!\\n#bold [Concept('concept_great_power', 'Grandes potencias')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]"
- },
  "je_un_status_conference": {
-  "en": "#bold No United Nations exists.#! A founding conference convened by [GetGlobalVariable('un_founding_conference').GetCountry.GetName] is in session: the new organisation is founded in #v [SCOPE.GetRootScope.ScriptValue('un_conference_months_left')|0]#! months, unless the world's leading power wrecks the conference.",
+  "en": "#bold No United Nations exists.#! A founding conference convened by [GetGlobalVariable('un_founding_conference').GetCountry.GetName] is in session: the new organization is founded in #v [SCOPE.GetRootScope.ScriptValue('un_conference_months_left')|0]#! months, unless the world's leading power wrecks the conference.",
   "es": "#bold No existen las Naciones Unidas.#! Una conferencia fundacional convocada por [GetGlobalVariable('un_founding_conference').GetCountry.GetName] está en sesión: la nueva organización se fundará dentro de #v [SCOPE.GetRootScope.ScriptValue('un_conference_months_left')|0]#! meses, a menos que la principal potencia del mundo haga fracasar la conferencia."
  },
  "je_un_status_dissolved": {
@@ -8004,7 +7584,7 @@
   "es": "Solo se aprueba con dos tercios de los miembros con voto (la marca)."
  },
  "je_un_tally_tt": {
-  "en": "The members with a vote: #G green#! have voted for, #R red#! against, grey have not yet voted. Members who lost their vote for arrears, or whose representation is suspended, are not counted.",
+  "en": "The members with a vote: #G green#! have voted for, #R red#! against, gray have not yet voted. Members who lost their vote for arrears, or whose representation is suspended, are not counted.",
   "es": "Los miembros con voto: en #G verde#! han votado a favor, en #R rojo#! en contra y en gris aún no han votado. No se cuentan los miembros que perdieron su voto por impago o cuya representación está suspendida."
  },
  "je_un_terms_aid": {
@@ -8012,7 +7592,7 @@
   "es": "#bold Aprobada:#! se abre una [concept_un_mission_aid|l] en el estado más necesitado del solicitante, con un efecto escalado según la fuerza de la misión:\\n[GetStaticModifier('un_mission_aid_state_modifier').GetDesc]\\nSi todos sus estados ya cuentan con una misión, el solicitante recibe en su lugar, durante diez años y con escala según el PIB de los miembros que ya aportan ayuda y dinero para el desarrollo frente al suyo (de ×0,5 a ×5):\\n[GetStaticModifier('un_aid_received_modifier').GetDesc]\\nMientras exista la [concept_un_food_reserve|l], desde la categoría [concept_un_tier_contested|l], la nueva misión también toma grano de las reservas estratégicas de los países comprometidos para alimentar a su estado durante un año.\\n$je_un_terms_pledge_rules$ Cada país comprometido paga el 0,5% de su PIB al año durante diez años y recibe, durante diez años:\\n[GetStaticModifier('un_humanitarian_aid_modifier').GetDesc]\\nLa misión tiene éxito tras al menos seis meses sin hambruna y con el nivel de vida del estado, sin contar la ayuda de la propia misión, en 10 o en 1 por encima de donde empezó, lo que sea mayor: cumplimiento para la ONU, 3 de posición y #G 15#! de [concept_relations|l] con el anfitrión por cada contribuyente. Solo fracasa si el anfitrión es atacado.\\n$je_un_terms_request_infamy$\\n$je_un_terms_scaled$"
  },
  "je_un_terms_antarctic": {
-  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_antarctic_treaty_modifier').GetDesc]\\n#bold Every party#! (not scaled): it holds no new Southern seabed licences, and the levels it built before ratifying keep theirs. It counts toward [concept_un_authority]'s target:\\n[GetStaticModifier('un_antarctic_policy_modifier').GetDesc]\\n#bold A party with an Antarctic research station#! (scaled):\\n[GetStaticModifier('un_regime_antarctic_station_modifier').GetDesc]\\n#bold Denouncing it#! costs #R 10#! infamy, #R 5#! standing and #R 10#! to the case against the denouncer, which rejoining the UN does not undo. #bold It lapses#! when two or more [Concept('concept_great_power','great powers')] outside it hold Southern licences, and the Southern basin opens to all.\\n$je_un_terms_scaled$",
+  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_antarctic_treaty_modifier').GetDesc]\\n#bold Every party#! (not scaled): it holds no new Southern seabed licenses, and the levels it built before ratifying keep theirs. It counts toward [concept_un_authority]'s target:\\n[GetStaticModifier('un_antarctic_policy_modifier').GetDesc]\\n#bold A party with an Antarctic research station#! (scaled):\\n[GetStaticModifier('un_regime_antarctic_station_modifier').GetDesc]\\n#bold Denouncing it#! costs #R 10#! infamy, #R 5#! standing and #R 10#! to the case against the denouncer, which rejoining the UN does not undo. #bold It lapses#! when two or more [Concept('concept_great_power','great powers')] outside it hold Southern licenses, and the Southern basin opens to all.\\n$je_un_terms_scaled$",
   "es": "#bold Cada parte#! (escalado):\\n[GetStaticModifier('un_antarctic_treaty_modifier').GetDesc]\\n#bold Cada parte#! (sin escalar): no obtiene nuevas licencias en el fondo marino austral, y los niveles que construyó antes de ratificar conservan las suyas. Cuenta para el objetivo de la [concept_un_authority|l]:\\n[GetStaticModifier('un_antarctic_policy_modifier').GetDesc]\\n#bold Una parte con una estación de investigación antártica#! (escalado):\\n[GetStaticModifier('un_regime_antarctic_station_modifier').GetDesc]\\n#bold Denunciarlo#! cuesta #R 10#! de infamia, #R 5#! de posición y #R 10#! al caso en contra de quien lo denuncia, algo que volver a unirse a la ONU no deshace. #bold Caduca#! cuando dos o más [Concept('concept_great_power','grandes potencias')] ajenas al tratado tienen licencias australes, y la cuenca austral se abre a todos.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_arms_embargo": {
@@ -8044,7 +7624,7 @@
   "es": "#bold Aprobada:#! el [concept_un_world_court|l] dicta fallo aproximadamente un mes después, según las probabilidades de entonces. El caso se archiva si el estado ha cambiado de manos o se ha convertido en la capital del titular.\\n#bold A favor del demandante#!, el titular debe elegir. Acatar: el estado pasa al demandante, el titular gana 2 de posición y #G 10#! de [concept_relations|l] con él, y se funda la Corte Internacional de Justicia. Desafiar: el titular pierde 5 de posición y 20 de relaciones con el demandante, obtiene un historial de desacato de 6, resta credibilidad a la ONU y soporta durante cinco años:\\n[GetStaticModifier('un_court_defiance_modifier').GetDesc]\\nDurante diez años tras un desacato, el demandante puede solicitar un mandato militar sobre la región sin el caso habitual.\\n#bold A favor del titular#!: se retira la reclamación del demandante sobre la región y, durante veinte años, cada [concept_diplomatic_play|l] en la que presione por un objetivo para tomar un estado de esa región le cuesta 10 de [concept_infamy|l], escalado.\\n#bold Vetada:#! el tribunal emite una opinión consultiva. Nada cambia de manos, pero una opinión contra el titular le cuesta 2 de posición.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_credentials": {
-  "en": "#bold Two thirds of the members with a vote#! decide it, and no veto can stop it. It is moot if, by the vote, the member has left or its case has fallen below 30.\\n#bold Carried:#! for five years, or until its case falls below 30, the member's representation is suspended. It casts no ballot, tables nothing, is asked nothing and is not lobbied. It loses the benefits of membership, scaled by authority, and these privileges:\\n[GetStaticModifier('un_member_privileges_modifier').GetDesc]\\nIt gives up any permanent seat for good, to the next [concept_great_power] in line, and the headquarters if it hosts them. Its UN programmes end, it draws no Development Fund grant, pledges no grain and sends no contingents, and the [concept_un_standing_force] does not strike its war goals: it pays the doubled surcharge instead. It still pays its [concept_un_dues].\\nIt loses 8 standing (4 if it voted for its own suspension), and the proposer loses 20 [concept_relations] with it.",
+  "en": "#bold Two thirds of the members with a vote#! decide it, and no veto can stop it. It is moot if, by the vote, the member has left or its case has fallen below 30.\\n#bold Carried:#! for five years, or until its case falls below 30, the member's representation is suspended. It casts no ballot, tables nothing, is asked nothing and is not lobbied. It loses the benefits of membership, scaled by authority, and these privileges:\\n[GetStaticModifier('un_member_privileges_modifier').GetDesc]\\nIt gives up any permanent seat for good, to the next [concept_great_power] in line, and the headquarters if it hosts them. Its UN programs end, it draws no Development Fund grant, pledges no grain and sends no contingents, and the [concept_un_standing_force] does not strike its war goals: it pays the doubled surcharge instead. It still pays its [concept_un_dues].\\nIt loses 8 standing (4 if it voted for its own suspension), and the proposer loses 20 [concept_relations] with it.",
   "es": "#bold Dos tercios de los miembros con voto#! lo deciden, y ningún veto puede impedirlo. Queda sin objeto si, para cuando se vota, el miembro se ha ido o su caso ha caído por debajo de 30.\\n#bold Aprobada:#! durante cinco años, o hasta que su caso caiga por debajo de 30, se suspende la representación del miembro. No emite voto, no presenta nada, no se le consulta nada y nadie le hace presión. Pierde los beneficios de la pertenencia, escalados según la autoridad, y estos privilegios:\\n[GetStaticModifier('un_member_privileges_modifier').GetDesc]\\nRenuncia para siempre a cualquier puesto permanente en favor de la siguiente [concept_great_power|l] en la lista, y a la sede si la alberga. Sus programas de la ONU terminan, no recibe ninguna subvención del Fondo Mundial de Desarrollo, no compromete grano ni envía contingentes, y la [concept_un_standing_force|l] no ataca sus objetivos de guerra: paga en su lugar el recargo doble. Sigue pagando sus [concept_un_dues|l].\\nPierde 8 de posición (4 si votó a favor de su propia suspensión), y el proponente pierde 20 de [concept_relations|l] con él."
  },
  "je_un_terms_cultural_diversity": {
@@ -8060,7 +7640,7 @@
   "es": "#bold Aprobada:#! abre los Programas de Desarrollo: cualquier miembro que pague sus cuotas y no reciba subvención puede contribuir, del 0,0625% al 1% de su PIB al año, a cambio de posición, capacidad de presión ante los receptores del Fondo y, de ×0,25 a ×1,25 según su tamaño:\\n[GetStaticModifier('un_development_contributor_modifier').GetDesc]\\nCada mes se pagan las contribuciones y, desde la Reforma de la Carta I, una parte del presupuesto de la ONU, a los miembros cuyo PIB per cápita sea igual o inferior al umbral, repartidas según la población. Un receptor que gestione la anotación en el diario de Banca lo ingresa en su [concept_investment_pool|l] donde sus leyes lo permitan; cualquier otro, en su tesorería. Bajo la carta fundacional el umbral es una décima parte del [concept_gdp_per_capita|l] medio de los miembros; con la Reforma I, una cuarta parte (y el 5% del presupuesto); con la Reforma II, la mitad (y una cuarta parte del presupuesto). El miembro más pobre que paga sus cuotas siempre cumple los requisitos.\\nLas cuotas de ningún miembro suben: la parte del presupuesto reduce lo que puede prestar el mecanismo de préstamo."
  },
  "je_un_terms_expulsion": {
-  "en": "#bold Two thirds of the members with a vote#! decide it, and no veto can stop it.\\nNo member presumes in its favour: each weighs the case for expulsion, the target's veto record less its standing and its service, and holds it a little against a proposer that would take the seat itself.\\n#bold Carried:#! the target loses its permanent seat, its veto and both seat modifiers:\\n[GetStaticModifier('un_permanent_member_modifier').GetDesc]\\n[GetStaticModifier('un_security_council_modifier').GetDesc]\\nIt loses 5 standing, every benefit of its standing for five years, and 25 [concept_relations] with the proposer. For ten years it carries the modifier below, and while it does it cannot be seated again, or rejoin if it leaves:\\n[GetStaticModifier('un_withdrawal_penalty_modifier').GetDesc]\\nThe [concept_great_power] member with the most [concept_prestige] that holds no seat takes it, the proposer included.\\n#bold Falls:#! UN credibility −1, and the proposer loses 15 relations with the target.\\nBeyond the seat, an expulsion pays its proposer nothing and costs it nothing more, whatever the outcome.",
+  "en": "#bold Two thirds of the members with a vote#! decide it, and no veto can stop it.\\nNo member presumes in its favor: each weighs the case for expulsion, the target's veto record less its standing and its service, and holds it a little against a proposer that would take the seat itself.\\n#bold Carried:#! the target loses its permanent seat, its veto and both seat modifiers:\\n[GetStaticModifier('un_permanent_member_modifier').GetDesc]\\n[GetStaticModifier('un_security_council_modifier').GetDesc]\\nIt loses 5 standing, every benefit of its standing for five years, and 25 [concept_relations] with the proposer. For ten years it carries the modifier below, and while it does it cannot be seated again, or rejoin if it leaves:\\n[GetStaticModifier('un_withdrawal_penalty_modifier').GetDesc]\\nThe [concept_great_power] member with the most [concept_prestige] that holds no seat takes it, the proposer included.\\n#bold Falls:#! UN credibility −1, and the proposer loses 15 relations with the target.\\nBeyond the seat, an expulsion pays its proposer nothing and costs it nothing more, whatever the outcome.",
   "es": "#bold Dos tercios de los miembros con voto#! lo deciden, y ningún veto puede impedirlo.\\nNingún miembro parte de una presunción a su favor: cada uno sopesa el argumento a favor de la expulsión, el historial de vetos del objetivo menos su posición y su servicio, y se lo reprocha un poco a un proponente que se quedaría él mismo con el puesto.\\n#bold Aprobada:#! el objetivo pierde su puesto permanente, su veto y ambos modificadores del puesto:\\n[GetStaticModifier('un_permanent_member_modifier').GetDesc]\\n[GetStaticModifier('un_security_council_modifier').GetDesc]\\nPierde 5 de posición, todos los beneficios de su posición durante cinco años y 25 de [concept_relations|l] con el proponente. Durante diez años soporta el modificador siguiente y, mientras lo soporte, no puede volver a ocupar un puesto ni reincorporarse si se marcha:\\n[GetStaticModifier('un_withdrawal_penalty_modifier').GetDesc]\\nEl miembro que sea [concept_great_power|l] con más [concept_prestige|l] y no tenga puesto lo ocupa, incluido el proponente.\\n#bold Rechazada:#! la credibilidad de la ONU baja 1 y el proponente pierde 15 de relaciones con el objetivo.\\nMás allá del puesto, una expulsión no reporta nada a quien la propone ni le cuesta nada más, sea cual sea el resultado."
  },
  "je_un_terms_food_reserve": {
@@ -8108,15 +7688,15 @@
   "es": "#bold Cada parte#! (escalado):\\n[GetStaticModifier('un_narcotics_control_modifier').GetDesc]\\nNo designa ganadores ni perdedores, y ningún otro sistema lo tiene en cuenta.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_npt": {
-  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_nonproliferation_modifier').GetDesc]\\n#bold A party running a [concept_nuclear_program] with no bomb yet#! (scaled):\\n[GetStaticModifier('un_regime_npt_inspection_modifier').GetDesc]\\n#bold A party with neither a bomb nor a programme#! (scaled): strikes on its states succeed less often.\\n[GetStaticModifier('un_regime_npt_guarantee_modifier').GetDesc]\\n#bold Every member without the bomb, party or not#!, from the [concept_un_tier_strong] tier: its programme and stockpile are wiped every week, and it can receive no $nuclear_program_aid$.\\n#bold Every country#!: the [concept_nuclear_taboo]'s target rises by up to #G 8#!, in proportion to UN authority, and while authority is 60 or more no new $nuclear_program_aid$ treaty article can be agreed.\\nA country referred to the Assembly over its programme gains a nuclear record of 30, or 20 if it is not a party. At [concept_un_tier_supranational] a member outside the treaty that built its bomb while the treaty stood carries a standing case of 50.\\nThe Treaty on the Prohibition of Nuclear Weapons can be tabled only while it is in force.\\n$je_un_terms_scaled$",
+  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_nonproliferation_modifier').GetDesc]\\n#bold A party running a [concept_nuclear_program] with no bomb yet#! (scaled):\\n[GetStaticModifier('un_regime_npt_inspection_modifier').GetDesc]\\n#bold A party with neither a bomb nor a program#! (scaled): strikes on its states succeed less often.\\n[GetStaticModifier('un_regime_npt_guarantee_modifier').GetDesc]\\n#bold Every member without the bomb, party or not#!, from the [concept_un_tier_strong] tier: its program and stockpile are wiped every week, and it can receive no $nuclear_program_aid$.\\n#bold Every country#!: the [concept_nuclear_taboo]'s target rises by up to #G 8#!, in proportion to UN authority, and while authority is 60 or more no new $nuclear_program_aid$ treaty article can be agreed.\\nA country referred to the Assembly over its program gains a nuclear record of 30, or 20 if it is not a party. At [concept_un_tier_supranational] a member outside the treaty that built its bomb while the treaty stood carries a standing case of 50.\\nThe Treaty on the Prohibition of Nuclear Weapons can be tabled only while it is in force.\\n$je_un_terms_scaled$",
   "es": "#bold Cada parte#! (escalado):\\n[GetStaticModifier('un_nonproliferation_modifier').GetDesc]\\n#bold Una parte con un [concept_nuclear_program|l] y aún sin bomba#! (escalado):\\n[GetStaticModifier('un_regime_npt_inspection_modifier').GetDesc]\\n#bold Una parte sin bomba ni programa#! (escalado): los ataques contra sus estados tienen éxito con menos frecuencia.\\n[GetStaticModifier('un_regime_npt_guarantee_modifier').GetDesc]\\n#bold Todo miembro sin bomba, sea parte o no#!, desde la categoría [concept_un_tier_strong|l]: su programa y sus existencias se eliminan cada semana, y no puede recibir $nuclear_program_aid$.\\n#bold Todo país#!: el objetivo del [concept_nuclear_taboo|l] sube hasta #G 8#!, en proporción a la autoridad de la ONU, y mientras la autoridad sea 60 o más no puede acordarse ningún nuevo artículo de tratado de $nuclear_program_aid$.\\nUn país remitido a la Asamblea por su programa obtiene un historial nuclear de 30, o de 20 si no es parte. En la categoría [concept_un_tier_supranational|l], un miembro ajeno al tratado que construyó su bomba mientras el tratado estaba en vigor soporta un caso vigente de 50.\\nEl Tratado sobre la Prohibición de las Armas Nucleares solo puede presentarse mientras esté en vigor.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_nuclear_ban": {
-  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_nuclear_ban_modifier').GetDesc]\\n#bold Who is bound:#! every member without warheads; a member holding warheads only if it voted on the treaty and accepts it. An armed member that cast no ballot, or joins later, stays outside.\\n#bold An armed party#! is held to the warheads it held when it ratified, #R a fifth less every five years#! and none after 25 years. A tenth of any excess is taken apart each month, and its [concept_nuclear_program] builds nothing while its arsenal is at or above the ceiling, which it is from the first month. The ceiling is not scaled, but it does not step down while the UN is Moribund.\\n#bold An unarmed party#! may build none: any programme it runs is held.\\n#bold Every country#!: the [concept_nuclear_taboo]'s target rises by up to #G 6#!, in proportion to UN authority. Each warhead taken apart strengthens the taboo, and a party that leaves the United Nations while the treaty stands weakens it.\\nIt can be tabled only under Charter Reform II and while the Non-Proliferation Treaty is in force.\\n$je_un_terms_scaled$",
+  "en": "#bold Every party#! (scaled):\\n[GetStaticModifier('un_nuclear_ban_modifier').GetDesc]\\n#bold Who is bound:#! every member without warheads; a member holding warheads only if it voted on the treaty and accepts it. An armed member that cast no ballot, or joins later, stays outside.\\n#bold An armed party#! is held to the warheads it held when it ratified, #R a fifth less every five years#! and none after 25 years. A tenth of any excess is taken apart each month, and its [concept_nuclear_program] builds nothing while its arsenal is at or above the ceiling, which it is from the first month. The ceiling is not scaled, but it does not step down while the UN is Moribund.\\n#bold An unarmed party#! may build none: any program it runs is held.\\n#bold Every country#!: the [concept_nuclear_taboo]'s target rises by up to #G 6#!, in proportion to UN authority. Each warhead taken apart strengthens the taboo, and a party that leaves the United Nations while the treaty stands weakens it.\\nIt can be tabled only under Charter Reform II and while the Non-Proliferation Treaty is in force.\\n$je_un_terms_scaled$",
   "es": "#bold Cada parte#! (escalado):\\n[GetStaticModifier('un_nuclear_ban_modifier').GetDesc]\\n#bold Quién queda obligado:#! todo miembro sin ojivas; un miembro que tenga ojivas, solo si votó el tratado y lo acepta. Un miembro armado que no emitió voto, o que se une más tarde, queda fuera.\\n#bold Una parte armada#! se limita a las ojivas que tenía al ratificar, #R una quinta parte menos cada cinco años#! y ninguna pasados 25 años. Cada mes se desmantela una décima parte de cualquier exceso, y su [concept_nuclear_program|l] no construye nada mientras su arsenal esté en el límite o por encima, cosa que ocurre desde el primer mes. El límite no se escala, pero no baja mientras la ONU esté Moribunda.\\n#bold Una parte sin armas#! no puede construir ninguna: cualquier programa que tenga queda detenido.\\n#bold Todo país#!: el objetivo del [concept_nuclear_taboo|l] sube hasta #G 6#!, en proporción a la autoridad de la ONU. Cada ojiva desmantelada refuerza el tabú, y una parte que abandona las Naciones Unidas mientras el tratado está en vigor lo debilita.\\nSolo puede presentarse bajo la Reforma de la Carta II y mientras esté en vigor el Tratado de no proliferación.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_observer_request": {
-  "en": "#bold Carried:#! if we are still at peace and still hold elections, an [concept_un_mission_electoral] opens in our capital. It has no contributors and costs no one anything. Its effects are scaled by its strength, which is the UN's [concept_un_enforcement] less what withheld dues take. In its state:\\n[GetStaticModifier('un_mission_electoral_state_modifier').GetDesc]\\nOn us, while we are a member; its covert defence guards against Election Interference and the other ideological operations:\\n[GetStaticModifier('un_electoral_observers_modifier').GetDesc]\\nElection Interference's blow to our electoral confidence at the end of a campaign is halved, unless the UN is [concept_un_tier_moribund] and the mission has no strength. Its other harm is not.\\nIt succeeds when a campaign ends while it is here: delivery for the UN and 3 standing for us. It fails if we are attacked, or if we stop holding elections, which also costs us 2 standing. It lapses after five years without an election.",
+  "en": "#bold Carried:#! if we are still at peace and still hold elections, an [concept_un_mission_electoral] opens in our capital. It has no contributors and costs no one anything. Its effects are scaled by its strength, which is the UN's [concept_un_enforcement] less what withheld dues take. In its state:\\n[GetStaticModifier('un_mission_electoral_state_modifier').GetDesc]\\nOn us, while we are a member; its covert defense guards against Election Interference and the other ideological operations:\\n[GetStaticModifier('un_electoral_observers_modifier').GetDesc]\\nElection Interference's blow to our electoral confidence at the end of a campaign is halved, unless the UN is [concept_un_tier_moribund] and the mission has no strength. Its other harm is not.\\nIt succeeds when a campaign ends while it is here: delivery for the UN and 3 standing for us. It fails if we are attacked, or if we stop holding elections, which also costs us 2 standing. It lapses after five years without an election.",
   "es": "#bold Aprobada:#! si seguimos en paz y seguimos celebrando elecciones, se abre una [concept_un_mission_electoral|l] en nuestra capital. No tiene contribuyentes y no le cuesta nada a nadie. Sus efectos se escalan según su fuerza, que es la [concept_un_enforcement|l] de la ONU menos lo que restan las cuotas retenidas. En su estado:\\n[GetStaticModifier('un_mission_electoral_state_modifier').GetDesc]\\nSobre nosotros, mientras seamos miembros; su defensa encubierta protege contra la Injerencia electoral y las demás operaciones ideológicas:\\n[GetStaticModifier('un_electoral_observers_modifier').GetDesc]\\nEl golpe de la Injerencia electoral a nuestra confianza electoral al final de una campaña se reduce a la mitad, salvo que la ONU esté [concept_un_tier_moribund|l] y la misión carezca de fuerza. Su otro daño no se reduce.\\nTiene éxito cuando termina una campaña mientras está presente: cumplimiento para la ONU y 3 de posición para nosotros. Fracasa si nos atacan, o si dejamos de celebrar elecciones, lo que además nos cuesta 2 de posición. Caduca tras cinco años sin elecciones."
  },
  "je_un_terms_pandemic": {
@@ -8124,7 +7704,7 @@
   "es": "#bold Cada parte#! (escalado):\\n[GetStaticModifier('un_pandemic_cooperation_modifier').GetDesc]\\nNo designa ganadores ni perdedores, y ningún otro sistema lo tiene en cuenta salvo el censo, por su difusión de la medicina.\\n$je_un_terms_humanitarian_infamy$\\n$je_un_terms_scaled$"
  },
  "je_un_terms_peacekeepers": {
-  "en": "#bold Carried in full#! (from the [concept_un_tier_established] tier, not vetoed): a [concept_un_mission_peacekeeping] opens in the requester's most devastated state, its effect scaled by the mission's strength:\\n[GetStaticModifier('un_mission_peacekeeping_state_modifier').GetDesc]\\nIf every one of its states already holds a mission, the requester carries this instead for ten years, scaled by the GDP of the Peacekeeping programme's members against its own, ×0.5 to ×5:\\n[GetStaticModifier('un_peacekeeping_received_modifier').GetDesc]\\n$je_un_terms_mission_protection$\\n$je_un_terms_pledge_rules$ A pledger joins the Peacekeeping programme, paying 0.5% of its GDP a year with no end date:\\n[GetStaticModifier('un_peacekeeping_contributor_modifier').GetDesc]\\nA pledger cannot leave the programme for ten years.\\nThe mission succeeds after two years of peace for its host: delivery for the UN, 3 standing and #G 15#! [concept_relations] with the host for each contributor. It fails if the host is attacked or every contributor goes home, and lapses if no one has joined it in six months, unless the [concept_un_standing_force] serves in it.\\n#bold Vetoed, or below Established:#! no mission and no pledges; the requester carries, for five years:\\n[GetStaticModifier('un_observer_mission_modifier').GetDesc]\\n$je_un_terms_request_infamy$\\n$je_un_terms_scaled$",
+  "en": "#bold Carried in full#! (from the [concept_un_tier_established] tier, not vetoed): a [concept_un_mission_peacekeeping] opens in the requester's most devastated state, its effect scaled by the mission's strength:\\n[GetStaticModifier('un_mission_peacekeeping_state_modifier').GetDesc]\\nIf every one of its states already holds a mission, the requester carries this instead for ten years, scaled by the GDP of the Peacekeeping program's members against its own, ×0.5 to ×5:\\n[GetStaticModifier('un_peacekeeping_received_modifier').GetDesc]\\n$je_un_terms_mission_protection$\\n$je_un_terms_pledge_rules$ A pledger joins the Peacekeeping program, paying 0.5% of its GDP a year with no end date:\\n[GetStaticModifier('un_peacekeeping_contributor_modifier').GetDesc]\\nA pledger cannot leave the program for ten years.\\nThe mission succeeds after two years of peace for its host: delivery for the UN, 3 standing and #G 15#! [concept_relations] with the host for each contributor. It fails if the host is attacked or every contributor goes home, and lapses if no one has joined it in six months, unless the [concept_un_standing_force] serves in it.\\n#bold Vetoed, or below Established:#! no mission and no pledges; the requester carries, for five years:\\n[GetStaticModifier('un_observer_mission_modifier').GetDesc]\\n$je_un_terms_request_infamy$\\n$je_un_terms_scaled$",
   "es": "#bold Aprobada en su totalidad#! (desde la categoría [concept_un_tier_established|l], sin veto): se abre una [concept_un_mission_peacekeeping|l] en el estado más devastado del solicitante, con un efecto escalado según la fuerza de la misión:\\n[GetStaticModifier('un_mission_peacekeeping_state_modifier').GetDesc]\\nSi todos sus estados ya cuentan con una misión, el solicitante recibe en su lugar, durante diez años y con escala según el PIB de los miembros del programa de mantenimiento de la paz frente al suyo (de ×0,5 a ×5):\\n[GetStaticModifier('un_peacekeeping_received_modifier').GetDesc]\\n$je_un_terms_mission_protection$\\n$je_un_terms_pledge_rules$ Cada país comprometido se une al programa de mantenimiento de la paz y paga el 0,5% de su PIB al año sin fecha de fin:\\n[GetStaticModifier('un_peacekeeping_contributor_modifier').GetDesc]\\nUn país comprometido no puede abandonar el programa durante diez años.\\nLa misión tiene éxito tras dos años de paz para su anfitrión: cumplimiento para la ONU, 3 de posición y #G 15#! de [concept_relations|l] con el anfitrión por cada contribuyente. Fracasa si el anfitrión es atacado o si todos los contribuyentes regresan a casa, y caduca si nadie se ha unido a ella en seis meses, salvo que la [concept_un_standing_force|l] sirva en ella.\\n#bold Vetada, o por debajo de Consolidada:#! sin misión ni compromisos; el solicitante recibe, durante cinco años:\\n[GetStaticModifier('un_observer_mission_modifier').GetDesc]\\n$je_un_terms_request_infamy$\\n$je_un_terms_scaled$"
  },
  "je_un_terms_physical_protection": {
@@ -8140,7 +7720,7 @@
   "es": "#bold Aprobada:#! el [concept_overlord|l] debe celebrar la votación o rehusarla. La probabilidad de independencia es el [concept_liberty_desire|l] del súbdito cuando llega la orden, del 20% al 90%.\\n#bold Celebrada:#! el soberano gana 4 de posición y aumenta el cumplimiento de la ONU. Si se gana, el súbdito se libera, y una colonia cuenta como recién descolonizada durante veinte años y como una liberación que eligió su soberano; si se pierde, su deseo de libertad baja 20.\\n#bold Rehusada#! (no disponible para un soberano que votó a favor): el deseo de libertad del súbdito sube 15, el soberano pierde 5 de posición, obtiene un historial de desacato de 10, resta credibilidad a la ONU y, durante cinco años, no puede presentar ningún referéndum y soporta (escalado):\\n[GetStaticModifier('un_referendum_refused_modifier').GetDesc]\\n#bold Vetada:#! no se celebra ninguna votación.\\n$je_un_terms_scaled$"
  },
  "je_un_terms_reform": {
-  "en": "#bold Two thirds of all members#! decide it, and a veto blocks it outright.\\n#bold Carried:#! UN credibility #G +2#!. It raises the [concept_un_authority_cap]; the tier itself follows only as authority climbs. Every member that accepts it, and its proposer, carries for five years:\\n[GetStaticModifier('un_reform_champion_modifier').GetDesc]\\n#bold What the Strong tier brings#! (Reform I): [concept_un_enforcement] ×1.5 on every penalty and mission; the war-goal surcharge rises to 4 [concept_infamy] a goal, doubled against a country under UN peacekeeping; sanctions become embargoes by the major-power members that voted for them; a condemnation also isolates; dues of 0.4% of GDP; members without the bomb are held to disarmament once the IAEA stands; members share intelligence, and their nationalist groups resent the UN, perhaps enough to demand leaving it; a bound mandate's holder keeps its war support; and eligible non-members carry:\\n[GetStaticModifier('un_nonmember_pariah_strong_modifier').GetDesc]\\n#bold What the Supranational tier brings#! (Reform II): enforcement ×2.5; a surcharge of 10 a goal; the Standing UN Force strikes goals against mission hosts; dues of 1% of GDP; every major-power member embargoes a sanctioned country; a condemnation also restrains; outsiders of major rank, or with the bomb or a programme, carry a standing case of 50; the International Criminal Court reaches every country; and the United Earth formable comes within reach.\\n#bold Reform II also#! lets two thirds of the members with a vote override a veto on any other binding resolution, and lets a [concept_un_permanent_member]'s credentials be suspended.",
+  "en": "#bold Two thirds of all members#! decide it, and a veto blocks it outright.\\n#bold Carried:#! UN credibility #G +2#!. It raises the [concept_un_authority_cap]; the tier itself follows only as authority climbs. Every member that accepts it, and its proposer, carries for five years:\\n[GetStaticModifier('un_reform_champion_modifier').GetDesc]\\n#bold What the Strong tier brings#! (Reform I): [concept_un_enforcement] ×1.5 on every penalty and mission; the war-goal surcharge rises to 4 [concept_infamy] a goal, doubled against a country under UN peacekeeping; sanctions become embargoes by the major-power members that voted for them; a condemnation also isolates; dues of 0.4% of GDP; members without the bomb are held to disarmament once the IAEA stands; members share intelligence, and their nationalist groups resent the UN, perhaps enough to demand leaving it; a bound mandate's holder keeps its war support; and eligible non-members carry:\\n[GetStaticModifier('un_nonmember_pariah_strong_modifier').GetDesc]\\n#bold What the Supranational tier brings#! (Reform II): enforcement ×2.5; a surcharge of 10 a goal; the Standing UN Force strikes goals against mission hosts; dues of 1% of GDP; every major-power member embargoes a sanctioned country; a condemnation also restrains; outsiders of major rank, or with the bomb or a program, carry a standing case of 50; the International Criminal Court reaches every country; and the United Earth formable comes within reach.\\n#bold Reform II also#! lets two thirds of the members with a vote override a veto on any other binding resolution, and lets a [concept_un_permanent_member]'s credentials be suspended.",
   "es": "#bold Dos tercios de todos los miembros#! lo deciden, y un veto la bloquea de plano.\\n#bold Aprobada:#! la credibilidad de la ONU #G +2#!. Eleva el [concept_un_authority_cap|l]; la categoría en sí solo se alcanza a medida que sube la autoridad. Todo miembro que la acepta, y su proponente, recibe durante cinco años:\\n[GetStaticModifier('un_reform_champion_modifier').GetDesc]\\n#bold Lo que aporta la categoría Fuerte#! (Reforma I): [concept_un_enforcement|l] ×1,5 en cada penalización y misión; el recargo de objetivo de guerra sube a 4 de [concept_infamy|l] por objetivo, el doble contra un país bajo mantenimiento de la paz de la ONU; las sanciones pasan a ser embargos de los miembros que son potencias importantes y votaron a favor; una condena también aísla; cuotas del 0,4% del PIB; los miembros sin bomba quedan obligados al desarme una vez que exista el OIEA; los miembros comparten inteligencia, y sus grupos nacionalistas desconfían de la ONU, quizá hasta el punto de exigir abandonarla; el titular de un mandato vinculado conserva su respaldo a la guerra; y los no miembros elegibles soportan:\\n[GetStaticModifier('un_nonmember_pariah_strong_modifier').GetDesc]\\n#bold Lo que aporta la categoría Supranacional#! (Reforma II): imposición ×2,5; un recargo de 10 por objetivo; la Fuerza permanente de la ONU ataca los objetivos contra anfitriones de misiones; cuotas del 1% del PIB; todo miembro que es potencia importante embarga a un país sancionado; una condena también restringe; los países ajenos de rango importante, o con bomba o programa, soportan un caso vigente de 50; la Corte Penal Internacional alcanza a todos los países; y el país formable Tierra Unida queda al alcance.\\n#bold La Reforma II también#! permite que dos tercios de los miembros con voto anulen un veto en cualquier otra resolución vinculante, y que se suspendan las credenciales de un [concept_un_permanent_member|l]."
  },
  "je_un_terms_refugee": {
@@ -8191,10 +7771,6 @@
   "en": "United Nations",
   "es": "Naciones Unidas"
  },
- "je_united_nations_desc": {
-  "en": "Membership in the United Nations grants diplomatic benefits that scale with [concept_un_authority]. The institution is as strong as the world's powers make it: who joins, who champions it, and whether its decisions are carried out.",
-  "es": "Pertenecer a las Naciones Unidas otorga beneficios diplomáticos que escalan con la [concept_un_authority|l]. La institución es tan fuerte como la hacen las potencias del mundo: quién se une, quién la defiende y si se cumplen sus decisiones."
- },
  "je_united_nations_reason": {
   "en": "The United Nations is an intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that scale with [concept_un_authority].\\n\\n#bold [concept_un_authority]#! (0–100) follows the world. Each month it moves toward a target: a base plus six pillars. #bold Participation#! is how much of the world's power is in the UN. #bold Great-power commitment#! is who champions or undermines it. #bold Credibility#! is its record of resolutions carried, vetoed and defied. #bold Funding#! is who runs its programmes. #bold Peace and order#! covers wars between members and nuclear use. #bold Delivery#! is aid, peacekeeping and mandates delivered. Every act counts in proportion to the actor's share of world [concept_prestige]. See #bold Why UN Authority Is Moving#! below.\\n\\n#bold Membership benefits#! (from the Contested tier, authority 20 or more) scale with authority ÷ 50. At 50: #G +10% relations improvement speed, +1% research speed, +3% [concept_prestige]#!. At 100: twice that.\\n\\n#bold Security Council:#! five permanent seats carry the [concept_un_veto]. The founder takes one at the founding; the others go to the [Concept('concept_great_power','Great Power')] members with the most [concept_prestige] that hold none, never to whoever joined first: when the signing period closes a year after the founding, and whenever a seat falls vacant. A seat is lost by leaving, by ten years below great-power rank, or by a two-thirds expulsion vote. The permanent members are named in the chamber.\\n\\n#bold Headquarters:#! the founder hosts the UN and may build the United Nations Headquarters in its territory. If the host leaves, another member takes over.\\n\\n#bold Specialized agencies:#! ten are founded when the General Assembly adopts the matching convention (WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS, the ICC and the regime for the physical protection of nuclear material). The ICJ is founded when a country first accepts a World Court ruling against it.\\n\\n#bold Resolutions#! are tabled and voted on in the General Assembly chamber below. A permanent member can veto the binding ones.\\n\\n#bold Programmes#! (peacekeeping, development, human rights and arms control) each carry a cost, and count toward the UN's funding while they run.",
   "es": "Las Naciones Unidas son una organización intergubernamental que promueve la cooperación internacional. Sus miembros obtienen beneficios diplomáticos que escalan con la [concept_un_authority|l].\\n\\n#bold [concept_un_authority]#! (0–100) sigue al mundo. Cada mes se mueve hacia un objetivo: una base más seis pilares. #bold Participación#! es cuánto poder del mundo está en la ONU. #bold Compromiso de las grandes potencias#! es quién la defiende o la socava. #bold Credibilidad#! es su historial de resoluciones aprobadas, vetadas y desafiadas. #bold Financiación#! es quién gestiona sus programas. #bold Paz y orden#! abarca las guerras entre miembros y el uso nuclear. #bold Cumplimiento#! es la ayuda, el mantenimiento de la paz y los mandatos cumplidos. Cada acto cuenta en proporción a la cuota del actor en el [concept_prestige|l] mundial. Consulta #bold Por qué se mueve la autoridad de la ONU#! más abajo.\\n\\n#bold Los beneficios de pertenencia#! (desde la categoría Cuestionada, con autoridad 20 o más) escalan con la autoridad ÷ 50. Con 50: #G +10% de velocidad de mejora de las relaciones, +1% de velocidad de investigación, +3% de [concept_prestige|l]#!. Con 100: el doble.\\n\\n#bold Consejo de Seguridad:#! cinco puestos permanentes tienen el [concept_un_veto|l]. El fundador ocupa uno en la fundación; los demás van a las [Concept('concept_great_power','grandes potencias')] miembros con más [concept_prestige|l] que no tengan ninguno, nunca a quien se unió primero: cuando termina el plazo de firma un año después de la fundación, y siempre que un puesto queda vacante. Un puesto se pierde por abandonar, por diez años por debajo del rango de gran potencia o por una votación de expulsión por dos tercios. Los miembros permanentes se nombran en la cámara.\\n\\n#bold Sede:#! el fundador acoge la ONU y puede construir la Sede de las Naciones Unidas en su territorio. Si el anfitrión se marcha, otro miembro toma el relevo.\\n\\n#bold Organismos especializados:#! se fundan diez cuando la Asamblea General adopta la convención correspondiente (OMS, UNESCO, UNHRC, OIEA, PNUMA, ACNUR, UNOOSA, TIDM, la CPI y el régimen de protección física del material nuclear). La CIJ se funda cuando un país acepta por primera vez un fallo del Tribunal Mundial en su contra.\\n\\n#bold Las resoluciones#! se presentan y se votan en la cámara de la Asamblea General de abajo. Un miembro permanente puede vetar las vinculantes.\\n\\n#bold Los programas#! (mantenimiento de la paz, desarrollo, derechos humanos y control de armas) tienen cada uno un coste y cuentan para la financiación de la ONU mientras están en marcha."
@@ -8202,10 +7778,6 @@
  "je_world_war": {
   "en": "The Gathering Storm",
   "es": "La tormenta que se avecina"
- },
- "je_world_war_desc": {
-  "en": "Ideological tensions are pushing the [Concept('concept_great_power', 'great powers')] toward a global war. Pick a side, prepare, or try to stop it.",
-  "es": "Las tensiones ideológicas empujan a las [Concept('concept_great_power', 'grandes potencias')] hacia una guerra mundial. Elige un bando, prepárate o intenta detenerla."
  },
  "je_world_war_ideology_authoritarian": {
   "en": "\\n#bold Our Ideology:#! Authoritarian",

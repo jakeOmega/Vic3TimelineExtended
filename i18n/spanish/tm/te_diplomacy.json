@@ -108,7 +108,7 @@
   "es": "Estamos llevando a cabo espionaje militar contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], recabando información sobre sus fuerzas armadas."
  },
  "covert_nuclear_sabotage_action_pact_desc": {
-  "en": "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "en": "We are sabotaging the nuclear weapons program of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "es": "Estamos saboteando el programa de armas nucleares de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "covert_regime_change_action_pact_desc": {
@@ -120,7 +120,7 @@
   "es": "Estamos buscando material nuclear extraviado en [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "covert_space_espionage_action_pact_desc": {
-  "en": "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "en": "We are stealing space program designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "es": "Estamos robando diseños del programa espacial de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "decolonize_diplo_action": {
@@ -423,10 +423,6 @@
   "en": "Opens $je_united_nations$ in the journal.",
   "es": "Abre $je_united_nations$ en el diario."
  },
- "te_diplomacy_un_tab_actions_header": {
-  "en": "Actions",
-  "es": "Acciones"
- },
  "te_diplomacy_un_tab_status_header": {
   "en": "Status",
   "es": "Situación"
@@ -468,7 +464,7 @@
   "es": "Nuestra delegación presiona a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] para que vote #R en contra#! de la resolución ante la [concept_un_general_assembly]."
  },
  "un_lobby_for_action_pact_desc": {
-  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favour#! of the resolution before the [concept_un_general_assembly].",
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favor#! of the resolution before the [concept_un_general_assembly].",
   "es": "Nuestra delegación presiona a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] para que vote #G a favor#! de la resolución ante la [concept_un_general_assembly]."
  },
  "un_refuse_aid_diplomatic_penalty_tt": {
@@ -476,7 +472,7 @@
   "es": "Como #bold [concept_major_power|l]#! que rechaza la ayuda con [concept_un_authority|l] por encima de 40, sufriremos #R penalizaciones diplomáticas#! ([concept_prestige|l] y relaciones)."
  },
  "un_secure_commitment_action_proposal_accepted_desc": {
-  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favour of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favor of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
   "es": "[TARGET_COUNTRY.GetName] se ha comprometido a votar a favor de la resolución ante la [concept_un_general_assembly]. Le debemos una [concept_obligation|l] por ello."
  },
  "un_secure_commitment_action_proposal_accepted_name": {
@@ -484,7 +480,7 @@
   "es": "Un voto comprometido a nuestro favor"
  },
  "un_secure_commitment_action_proposal_declined_desc": {
-  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favour of the resolution.",
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favor of the resolution.",
   "es": "[TARGET_COUNTRY.GetName] no comprometerá su voto a favor de la resolución."
  },
  "un_secure_commitment_action_proposal_declined_name": {
@@ -492,7 +488,7 @@
   "es": "Nuestra petición fue rechazada"
  },
  "un_secure_commitment_action_proposal_notification_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favour of the resolution before the [concept_un_general_assembly].",
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favor of the resolution before the [concept_un_general_assembly].",
   "es": "[INITIATOR_COUNTRY.GetName] nos pide que votemos a favor de la resolución ante la [concept_un_general_assembly]."
  },
  "un_secure_commitment_action_proposal_notification_name": {

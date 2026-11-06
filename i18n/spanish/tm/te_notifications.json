@@ -336,7 +336,7 @@
   "es": "Condena rechazada"
  },
  "notification_gp_support_accepted_notice_desc": {
-  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defence of the colonial powers.",
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defense of the colonial powers.",
   "es": "[SCOPE.sCountry('backed_colonial_power').GetName] ha acogido abiertamente nuestra postura en defensa de los poderes coloniales."
  },
  "notification_gp_support_accepted_notice_name": {
@@ -344,7 +344,7 @@
   "es": "Un poder colonial nos respalda"
  },
  "notification_gp_support_declined_notice_desc": {
-  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defence of the colonial powers.",
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defense of the colonial powers.",
   "es": "[SCOPE.sCountry('backed_colonial_power').GetName] ha mantenido públicamente las distancias con nuestra postura en defensa de los poderes coloniales."
  },
  "notification_gp_support_declined_notice_name": {
@@ -1756,7 +1756,7 @@
   "es": "Se ha dado por terminada una operación cibernética."
  },
  "notification_iw_operation_cancelled_name": {
-  "en": "Cyber Operation Cancelled",
+  "en": "Cyber Operation Canceled",
   "es": "Operación cibernética cancelada"
  },
  "notification_iw_operation_launched_desc": {
@@ -1808,7 +1808,7 @@
   "es": "Sin guerra tras el intercambio"
  },
  "notification_rt_coal_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "es": "Nuestro programa de retirada ha cerrado las $building_coal_mine$ en [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! niveles, con @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! pagados en compensación desde el tesoro."
  },
  "notification_rt_coal_retired_notice_name": {
@@ -1816,7 +1816,7 @@
   "es": "$building_coal_mine$ retiradas"
  },
  "notification_rt_oil_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "es": "Nuestro programa de retirada ha cerrado las $building_oil_rig$ en [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! niveles, con @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! pagados en compensación desde el tesoro."
  },
  "notification_rt_oil_retired_notice_name": {
@@ -1824,7 +1824,7 @@
   "es": "$building_oil_rig$ retiradas"
  },
  "notification_rt_power_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "es": "Nuestro programa de retirada ha cerrado las $building_power_plant$ en [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! niveles, con @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! pagados en compensación desde el tesoro."
  },
  "notification_rt_power_retired_notice_name": {
@@ -1864,7 +1864,7 @@
   "es": "[concept_nuclear_strike] táctico sufrido"
  },
  "notification_te_antarctic_treaty_lapsed_notice_desc": {
-  "en": "Two great powers outside the Antarctic Treaty hold Southern seabed licences, and it can no longer hold. Its parties are released, and the Southern basin is open to every claimant.",
+  "en": "Two great powers outside the Antarctic Treaty hold Southern seabed licenses, and it can no longer hold. Its parties are released, and the Southern basin is open to every claimant.",
   "es": "Dos grandes potencias ajenas al Tratado Antártico tienen licencias sobre el lecho marino austral, y el tratado ya no puede sostenerse. Sus partes quedan liberadas, y la cuenca austral queda abierta a cualquier reclamante."
  },
  "notification_te_antarctic_treaty_lapsed_notice_name": {
@@ -1920,11 +1920,11 @@
   "es": "Fin de la anticoncepción gratuita"
  },
  "notification_te_demog_ms_ended_honours_desc": {
-  "en": "Our laws no longer allow Honours for Large Families: our $lawgroup_family_reproductive_policy$ law, or under $law_communal_child_rearing$ our government, changed. It has ended, and its running cost with it. Under laws that allow it, it can start again, for a new five-year term.",
+  "en": "Our laws no longer allow Honors for Large Families: our $lawgroup_family_reproductive_policy$ law, or under $law_communal_child_rearing$ our government, changed. It has ended, and its running cost with it. Under laws that allow it, it can start again, for a new five-year term.",
   "es": "Nuestras leyes ya no permiten los honores a las familias numerosas: ha cambiado nuestra ley de $lawgroup_family_reproductive_policy$ o, con $law_communal_child_rearing$, nuestro gobierno. Han terminado, y con ellos su coste de funcionamiento. Con leyes que los permitan, pueden volver a empezar por un nuevo plazo de cinco años."
  },
  "notification_te_demog_ms_ended_honours_name": {
-  "en": "Honours for Large Families Ended",
+  "en": "Honors for Large Families Ended",
   "es": "Fin de los honores a las familias numerosas"
  },
  "notification_te_demog_ms_ended_later_longer_fewer_desc": {
@@ -1968,7 +1968,7 @@
   "es": "Fin de la educación sexual"
  },
  "notification_te_seabed_basin_full_notice_arctic_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_arctic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_arctic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "es": "Cada [concept_seabed_licence|l] del océano $te_seabed_basin_arctic$ está en manos de un nivel de $building_ocean_mine$, construido o en cola. Nadie tiene ya una [concept_seabed_claim|l] allí hasta que se reduzca o destruya un nivel; una nueva $building_ocean_mine$ nuestra en sus costas toma una licencia de otra cuenca donde tengamos reclamaciones, con un rendimiento reducido. Consulta la pestaña Lecho marino de la ventana $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_arctic_name": {
@@ -1976,7 +1976,7 @@
   "es": "Licencias agotadas en el océano $te_seabed_basin_arctic$"
  },
  "notification_te_seabed_basin_full_notice_atlantic_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_atlantic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_atlantic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "es": "Cada [concept_seabed_licence|l] del océano $te_seabed_basin_atlantic$ está en manos de un nivel de $building_ocean_mine$, construido o en cola. Nadie tiene ya una [concept_seabed_claim|l] allí hasta que se reduzca o destruya un nivel; una nueva $building_ocean_mine$ nuestra en sus costas toma una licencia de otra cuenca donde tengamos reclamaciones, con un rendimiento reducido. Consulta la pestaña Lecho marino de la ventana $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_atlantic_name": {
@@ -1984,7 +1984,7 @@
   "es": "Licencias agotadas en el océano $te_seabed_basin_atlantic$"
  },
  "notification_te_seabed_basin_full_notice_indian_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_indian$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_indian$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "es": "Cada [concept_seabed_licence|l] del océano $te_seabed_basin_indian$ está en manos de un nivel de $building_ocean_mine$, construido o en cola. Nadie tiene ya una [concept_seabed_claim|l] allí hasta que se reduzca o destruya un nivel; una nueva $building_ocean_mine$ nuestra en sus costas toma una licencia de otra cuenca donde tengamos reclamaciones, con un rendimiento reducido. Consulta la pestaña Lecho marino de la ventana $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_indian_name": {
@@ -1992,7 +1992,7 @@
   "es": "Licencias agotadas en el océano $te_seabed_basin_indian$"
  },
  "notification_te_seabed_basin_full_notice_pacific_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_pacific$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_pacific$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "es": "Cada [concept_seabed_licence|l] del océano $te_seabed_basin_pacific$ está en manos de un nivel de $building_ocean_mine$, construido o en cola. Nadie tiene ya una [concept_seabed_claim|l] allí hasta que se reduzca o destruya un nivel; una nueva $building_ocean_mine$ nuestra en sus costas toma una licencia de otra cuenca donde tengamos reclamaciones, con un rendimiento reducido. Consulta la pestaña Lecho marino de la ventana $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_pacific_name": {
@@ -2000,7 +2000,7 @@
   "es": "Licencias agotadas en el océano $te_seabed_basin_pacific$"
  },
  "notification_te_seabed_basin_full_notice_southern_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_southern$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_southern$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "es": "Cada [concept_seabed_licence|l] del océano $te_seabed_basin_southern$ está en manos de un nivel de $building_ocean_mine$, construido o en cola. Nadie tiene ya una [concept_seabed_claim|l] allí hasta que se reduzca o destruya un nivel; una nueva $building_ocean_mine$ nuestra en sus costas toma una licencia de otra cuenca donde tengamos reclamaciones, con un rendimiento reducido. Consulta la pestaña Lecho marino de la ventana $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_southern_name": {
@@ -2048,7 +2048,7 @@
   "es": "Un nuevo reclamante en el océano $te_seabed_basin_southern$"
  },
  "notification_te_seabed_regime_open_notice_desc": {
-  "en": "The Law of the Sea no longer regulates the seabed. Each basin's licences are shared by weight among all claimants, and no royalties are owed.",
+  "en": "The Law of the Sea no longer regulates the seabed. Each basin's licenses are shared by weight among all claimants, and no royalties are owed.",
   "es": "El Derecho del Mar ya no regula el lecho marino. Las licencias de cada cuenca se reparten según el peso entre todos los reclamantes y no se debe ninguna regalía."
  },
  "notification_te_seabed_regime_open_notice_name": {
@@ -2056,7 +2056,7 @@
   "es": "El lecho marino queda abierto"
  },
  "notification_te_seabed_regime_regulated_notice_desc": {
-  "en": "Half of each ocean basin's licences are now reserved for the poorer parties to the Convention on the Law of the Sea, and parties pay royalties on their $building_ocean_mine$ levels.",
+  "en": "Half of each ocean basin's licenses are now reserved for the poorer parties to the Convention on the Law of the Sea, and parties pay royalties on their $building_ocean_mine$ levels.",
   "es": "La mitad de las licencias de cada cuenca oceánica queda ahora reservada a las partes más pobres de la Convención sobre el Derecho del Mar, y las partes pagan regalías por sus niveles de $building_ocean_mine$."
  },
  "notification_te_seabed_regime_regulated_notice_name": {
@@ -2096,7 +2096,7 @@
   "es": "La Carta se ha quedado pequeña"
  },
  "notification_un_conference_opened_notice_desc": {
-  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organisation will be founded in a year, and every country invited to sign its charter.",
+  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organization will be founded in a year, and every country invited to sign its charter.",
   "es": "[SCOPE.sCountry('un_conference_convener').GetName] ha convocado una conferencia fundacional para unas nuevas Naciones Unidas. Si la principal potencia del mundo no la hace fracasar, la nueva organización se fundará en un año y todos los países serán invitados a firmar su carta."
  },
  "notification_un_conference_opened_notice_name": {
@@ -2120,7 +2120,7 @@
   "es": "Se restablecen nuestras credenciales"
  },
  "notification_un_credentials_suspended_notice_desc": {
-  "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programmes are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
+  "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programs are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
   "es": "La Asamblea General ha suspendido las credenciales de nuestra delegación. Seguimos siendo miembros y pagando nuestras cuotas de la ONU, pero no votamos ni presentamos resoluciones, renunciamos a cualquier puesto permanente y a nuestros programas de la ONU, y no disfrutamos de ninguno de los beneficios de ser miembros. La suspensión dura cinco años o hasta que nuestro historial mejore hasta una fuerza del caso inferior a 30."
  },
  "notification_un_credentials_suspended_notice_name": {
@@ -2136,7 +2136,7 @@
   "es": "La crisis de la ONU ha pasado"
  },
  "notification_un_crisis_opened_notice_desc": {
-  "en": "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it.",
+  "en": "UN authority has fallen below 10. The organization is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it.",
   "es": "La autoridad de la ONU ha caído por debajo de 10. La organización está en crisis hasta que vuelva a superar los 20 y, si el mundo renuncia a ella por completo, se disolverá. La pestaña ONU del panel Diplomacia muestra la cuenta atrás y quién podría salvarla."
  },
  "notification_un_crisis_opened_notice_name": {
@@ -2184,7 +2184,7 @@
   "es": "Grano de la Reserva Mundial de Alimentos"
  },
  "notification_un_force_war_goal_struck_notice_desc": {
-  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilisation mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
+  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
   "es": "Hemos añadido un objetivo de guerra contra [SCOPE.sCountry('un_force_protected').GetName], que alberga una misión de mantenimiento de la paz o de estabilización de la ONU. Con la [concept_un_standing_force|l] en funcionamiento y las Naciones Unidas en el nivel supranacional, ningún miembro puede plantear más objetivos de guerra contra un país bajo su protección: los nuestros han sido eliminados de la jugada. Solo pueden quedarse el objetivo con el que se abrió la jugada y otros de su misma clase, con el doble de [concept_infamy|l] de lo habitual."
  },
  "notification_un_force_war_goal_struck_notice_name": {
@@ -2208,7 +2208,7 @@
   "es": "Fracasa una misión de ayuda de la ONU"
  },
  "notification_un_mission_aid_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "es": "La [Concept('concept_un_mission_aid', 'misión de ayuda')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_aid_succeeded_notice_name": {
@@ -2264,7 +2264,7 @@
   "es": "Fracasa una misión de mantenimiento de la paz de la ONU"
  },
  "notification_un_mission_peacekeeping_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "es": "La [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_peacekeeping_succeeded_notice_name": {
@@ -2280,23 +2280,23 @@
   "es": "Refuerzo de una misión de la ONU"
  },
  "notification_un_mission_stabilisation_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilization mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
   "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado, se la envió de vuelta a casa o todos los que participaban en ella se marcharon. El cumplimiento de la ONU empeora."
  },
  "notification_un_mission_stabilisation_failed_notice_name": {
-  "en": "A UN Stabilisation Mission Fails",
+  "en": "A UN Stabilization Mission Fails",
   "es": "Fracasa una misión de estabilización de la ONU"
  },
  "notification_un_mission_stabilisation_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilization mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_stabilisation_succeeded_notice_name": {
-  "en": "A UN Stabilisation Mission Accomplished",
+  "en": "A UN Stabilization Mission Accomplished",
   "es": "Misión de estabilización de la ONU cumplida"
  },
  "notification_un_mission_withdrawn_notice_desc": {
-  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has brought its contingent home from the UN mission in [SCOPE.sState('un_msn_notice_state').GetName]. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
+  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has brought its contingent home from the UN mission in [SCOPE.sState('un_msn_notice_state').GetName]. A peacekeeping or stabilization mission with nobody left to serve in it fails.",
   "es": "[SCOPE.sCountry('un_msn_notice_member').GetName] ha hecho regresar a su contingente de la misión de la ONU en [SCOPE.sState('un_msn_notice_state').GetName]. Una misión de mantenimiento de la paz o de estabilización sin nadie que participe en ella fracasa."
  },
  "notification_un_mission_withdrawn_notice_name": {
@@ -2320,7 +2320,7 @@
   "es": "Se restablece nuestra representación en la ONU"
  },
  "notification_un_representation_suspended_notice_desc": {
-  "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programmes are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
+  "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programs are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
   "es": "Ya no llevamos nuestra propia política exterior, así que nuestro asiento en las Naciones Unidas queda suspendido. Seguimos siendo miembros, pero no votamos ni presentamos resoluciones; renunciamos a cualquier puesto permanente, a la sede y a nuestros programas de la ONU. Mientras nuestro soberano tenga asiento en la Asamblea y pague sus cuotas, paga también las nuestras y conservamos los beneficios de ser miembros."
  },
  "notification_un_representation_suspended_notice_name": {
@@ -2360,7 +2360,7 @@
   "es": "Concesiones comerciales ofrecidas"
  },
  "notification_un_war_surcharge_notice_desc": {
-  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilisation mission.",
+  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilization mission.",
   "es": "Hemos añadido un objetivo de guerra sin un mandato militar de las Naciones Unidas. Con su fuerza actual, la Asamblea hace que cada objetivo de este tipo cueste infamia adicional: 2 en la categoría Consolidada, 4 en la Fuerte y 10 en la Supranacional, y el doble a partir de la Fuerte contra un país que albergue una misión de mantenimiento de la paz o de estabilización de la ONU."
  },
  "notification_un_war_surcharge_notice_name": {

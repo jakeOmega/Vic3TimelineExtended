@@ -647,27 +647,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "es": "Captura de carbono parcial (10 de petróleo)"
- },
- "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5": {
   "en": "Partial Carbon Capture (5 Oil)",
   "es": "Captura de carbono parcial (5 de petróleo)"
  },
  "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0": {
-  "en": "Partial Carbon Capture (15 Coal)",
-  "es": "Captura de carbono parcial (15 de carbón)"
- },
- "pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -727,27 +711,11 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "es": "Captura de carbono parcial (10 de petróleo)"
- },
- "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil5": {
   "en": "Partial Carbon Capture (5 Oil)",
   "es": "Captura de carbono parcial (5 de petróleo)"
  },
  "pm_carbon_capture_1_automation_building_munition_plant_coal0_oil5_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0": {
-  "en": "Partial Carbon Capture (15 Coal)",
-  "es": "Captura de carbono parcial (15 de carbón)"
- },
- "pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -780,14 +748,6 @@
   "es": "Captura de carbono parcial (5 de carbón)"
  },
  "pm_carbon_capture_1_automation_building_steel_mill_coal5_oil0_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "es": "Captura de carbono parcial (10 de petróleo)"
- },
- "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -860,14 +820,6 @@
   "es": "Captura de carbono parcial (10 de carbón)"
  },
  "pm_carbon_capture_1_base_building_oil_rig_coal10_oil0_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil25": {
-  "en": "Partial Carbon Capture (25 Oil)",
-  "es": "Captura de carbono parcial (25 de petróleo)"
- },
- "pm_carbon_capture_1_base_building_power_plant_coal0_oil25_desc": {
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -1599,22 +1551,6 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Partial Carbon Capture (10 Oil)",
-  "es": "Captura de carbono parcial (10 de petróleo)"
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Partial Carbon Capture (5 Oil)",
-  "es": "Captura de carbono parcial (5 de petróleo)"
- },
- "pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_1_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Partial Carbon Capture (10 Coal)",
   "es": "Captura de carbono parcial (10 de carbón)"
@@ -1791,14 +1727,6 @@
   "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Partial Carbon Capture (4 Coal)",
-  "es": "Captura de carbono parcial (4 de carbón)"
- },
- "pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
-  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 25,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_1_steelmaking_process_coal10_oil0": {
   "en": "Partial Carbon Capture (10 Coal)",
   "es": "Captura de carbono parcial (10 de carbón)"
@@ -1911,27 +1839,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
- },
- "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5": {
   "en": "Carbon Capture and Storage (5 Oil)",
   "es": "Captura y almacenamiento de carbono (5 de petróleo)"
  },
  "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0": {
-  "en": "Carbon Capture and Storage (15 Coal)",
-  "es": "Captura y almacenamiento de carbono (15 de carbón)"
- },
- "pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -1991,27 +1903,11 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
- },
- "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil5": {
   "en": "Carbon Capture and Storage (5 Oil)",
   "es": "Captura y almacenamiento de carbono (5 de petróleo)"
  },
  "pm_carbon_capture_2_automation_building_munition_plant_coal0_oil5_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0": {
-  "en": "Carbon Capture and Storage (15 Coal)",
-  "es": "Captura y almacenamiento de carbono (15 de carbón)"
- },
- "pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2044,14 +1940,6 @@
   "es": "Captura y almacenamiento de carbono (5 de carbón)"
  },
  "pm_carbon_capture_2_automation_building_steel_mill_coal5_oil0_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
- },
- "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2124,14 +2012,6 @@
   "es": "Captura y almacenamiento de carbono (10 de carbón)"
  },
  "pm_carbon_capture_2_base_building_oil_rig_coal10_oil0_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil25": {
-  "en": "Carbon Capture and Storage (25 Oil)",
-  "es": "Captura y almacenamiento de carbono (25 de petróleo)"
- },
- "pm_carbon_capture_2_base_building_power_plant_coal0_oil25_desc": {
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -2863,22 +2743,6 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Carbon Capture and Storage (10 Oil)",
-  "es": "Captura y almacenamiento de carbono (10 de petróleo)"
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Carbon Capture and Storage (5 Oil)",
-  "es": "Captura y almacenamiento de carbono (5 de petróleo)"
- },
- "pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_2_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Carbon Capture and Storage (10 Coal)",
   "es": "Captura y almacenamiento de carbono (10 de carbón)"
@@ -3055,14 +2919,6 @@
   "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Carbon Capture and Storage (4 Coal)",
-  "es": "Captura y almacenamiento de carbono (4 de carbón)"
- },
- "pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
-  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 50,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_2_steelmaking_process_coal10_oil0": {
   "en": "Carbon Capture and Storage (10 Coal)",
   "es": "Captura y almacenamiento de carbono (10 de carbón)"
@@ -3175,27 +3031,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "es": "Captura de carbono avanzada (10 de petróleo)"
- },
- "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5": {
   "en": "Advanced Carbon Capture (5 Oil)",
   "es": "Captura de carbono avanzada (5 de petróleo)"
  },
  "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0": {
-  "en": "Advanced Carbon Capture (15 Coal)",
-  "es": "Captura de carbono avanzada (15 de carbón)"
- },
- "pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -3255,27 +3095,11 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "es": "Captura de carbono avanzada (10 de petróleo)"
- },
- "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil5": {
   "en": "Advanced Carbon Capture (5 Oil)",
   "es": "Captura de carbono avanzada (5 de petróleo)"
  },
  "pm_carbon_capture_3_automation_building_munition_plant_coal0_oil5_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0": {
-  "en": "Advanced Carbon Capture (15 Coal)",
-  "es": "Captura de carbono avanzada (15 de carbón)"
- },
- "pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -3308,14 +3132,6 @@
   "es": "Captura de carbono avanzada (5 de carbón)"
  },
  "pm_carbon_capture_3_automation_building_steel_mill_coal5_oil0_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "es": "Captura de carbono avanzada (10 de petróleo)"
- },
- "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -3388,14 +3204,6 @@
   "es": "Captura de carbono avanzada (10 de carbón)"
  },
  "pm_carbon_capture_3_base_building_oil_rig_coal10_oil0_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil25": {
-  "en": "Advanced Carbon Capture (25 Oil)",
-  "es": "Captura de carbono avanzada (25 de petróleo)"
- },
- "pm_carbon_capture_3_base_building_power_plant_coal0_oil25_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -4127,22 +3935,6 @@
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10": {
-  "en": "Advanced Carbon Capture (10 Oil)",
-  "es": "Captura de carbono avanzada (10 de petróleo)"
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5": {
-  "en": "Advanced Carbon Capture (5 Oil)",
-  "es": "Captura de carbono avanzada (5 de petróleo)"
- },
- "pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
  "pm_carbon_capture_3_norsk_hydro_rjukan_plant_coal10_oil0": {
   "en": "Advanced Carbon Capture (10 Coal)",
   "es": "Captura de carbono avanzada (10 de carbón)"
@@ -4316,14 +4108,6 @@
   "es": "Captura de carbono avanzada (4 de carbón)"
  },
  "pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0_desc": {
-  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
-  "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
- },
- "pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0": {
-  "en": "Advanced Carbon Capture (4 Coal)",
-  "es": "Captura de carbono avanzada (4 de carbón)"
- },
- "pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0_desc": {
   "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
   "es": "Captura el 75,00% de las emisiones de combustible de este grupo de métodos de producción. La dotación de personal y el rendimiento escalan los costes de eliminación y de funcionamiento."
  },
@@ -4687,14 +4471,6 @@
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
- "pm_carbon_capture_na_mining_equipment_building_tech_metals_mine": {
-  "en": "Capture Not Applicable",
-  "es": "Captura no aplicable"
- },
- "pm_carbon_capture_na_mining_equipment_building_tech_metals_mine_desc": {
-  "en": "This production method has no eligible stationary fuel emissions to capture.",
-  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
- },
  "pm_carbon_capture_na_refinement_building_sugar_plantation": {
   "en": "Capture Not Applicable",
   "es": "Captura no aplicable"
@@ -4820,14 +4596,6 @@
   "es": "Captura no aplicable"
  },
  "pm_carbon_capture_na_steam_automation_building_sulfur_mine_desc": {
-  "en": "This production method has no eligible stationary fuel emissions to capture.",
-  "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
- },
- "pm_carbon_capture_na_steam_automation_building_tech_metals_mine": {
-  "en": "Capture Not Applicable",
-  "es": "Captura no aplicable"
- },
- "pm_carbon_capture_na_steam_automation_building_tech_metals_mine_desc": {
   "en": "This production method has no eligible stationary fuel emissions to capture.",
   "es": "Este método de producción no tiene emisiones de combustible estacionarias aptas para la captura."
  },
@@ -5180,7 +4948,7 @@
   "es": "Sin retirada de basura espacial"
  },
  "pm_debris_removal_none_desc": {
-  "en": "The programme flies its missions and leaves the debris to others.",
+  "en": "The program flies its missions and leaves the debris to others.",
   "es": "El programa realiza sus misiones y deja la basura espacial a otros."
  },
  "pm_decentralized_religious_structures": {
@@ -5296,7 +5064,7 @@
   "es": "Captura directa de aire"
  },
  "pm_direct_air_capture_desc": {
-  "en": "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no saleable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions.",
+  "en": "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no salable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions.",
   "es": "Elimina dióxido de carbono de la atmósfera y lo almacena de forma permanente. No produce bienes vendibles y necesita subvenciones para funcionar. La generación de electricidad sigue contribuyendo a las emisiones del mercado."
  },
  "pm_directed_energy_point_defense": {
@@ -5776,7 +5544,7 @@
   "es": "Investigación electrónica"
  },
  "pm_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "es": "Centro nacional de exposiciones"
  },
  "pm_generic_export_warehouse": {
@@ -7008,7 +6776,7 @@
   "es": "A la historia"
  },
  "pm_monument_historic_desc": {
-  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honours no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
+  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honors no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
   "es": "Un monumento de una época más antigua, conservado por sí mismo y por quienes viajan a verlo. No honra a ningún gobierno ni complace a ningún grupo, así que ningún gobierno puede enemistarse con él. #R La dedicatoria es permanente.#!"
  },
  "pm_monument_industrial": {
@@ -7040,7 +6808,7 @@
   "es": "Gran santuario"
  },
  "pm_monument_religious_desc": {
-  "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honours. #R The dedication is permanent.#!",
+  "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honors. #R The dedication is permanent.#!",
   "es": "Una catedral, un templo, una mezquita construidos para durar más que el gobierno que los pagó. Complace a los Devotos y pasa a ser objeto de disputa si el país abandona la fe a la que rinde honor. #R La dedicatoria es permanente.#!"
  },
  "pm_monument_republic": {
@@ -7531,10 +7299,6 @@
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
- "pm_no_carbon_capture_mining_equipment_building_tech_metals_mine": {
-  "en": "No Carbon Capture",
-  "es": "Sin captura de carbono"
- },
  "pm_no_carbon_capture_norsk_hydro_rjukan_plant": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
@@ -7612,10 +7376,6 @@
   "es": "Sin captura de carbono"
  },
  "pm_no_carbon_capture_steam_automation_building_sulfur_mine": {
-  "en": "No Carbon Capture",
-  "es": "Sin captura de carbono"
- },
- "pm_no_carbon_capture_steam_automation_building_tech_metals_mine": {
   "en": "No Carbon Capture",
   "es": "Sin captura de carbono"
  },
@@ -8040,7 +7800,7 @@
   "es": "Mandato de investigación"
  },
  "pm_principle_advanced_research_4_desc": {
-  "en": "When the bloc holds the Advanced Research [concept_power_bloc_principle], the university is reorganised around frontier research: hundreds of academics employed per level, paper consumed in volume, innovation feeding directly into the country's research.",
+  "en": "When the bloc holds the Advanced Research [concept_power_bloc_principle], the university is reorganized around frontier research: hundreds of academics employed per level, paper consumed in volume, innovation feeding directly into the country's research.",
   "es": "Cuando el bloque tiene el [concept_power_bloc_principle|l] de Investigación avanzada, la universidad se reorganiza en torno a la investigación de vanguardia: cientos de académicos empleados por nivel, papel consumido en grandes cantidades y la innovación alimentando directamente la investigación del país."
  },
  "pm_principle_artistic_expression_2": {
@@ -8704,7 +8464,7 @@
   "es": "Sin fabricación de módulos"
  },
  "pm_sr_fabrication_none_desc": {
-  "en": "The programme builds no modules for our colonies.",
+  "en": "The program builds no modules for our colonies.",
   "es": "El programa no construye módulos para nuestras colonias."
  },
  "pm_sr_fabrication_orbital_assembly": {
@@ -9803,10 +9563,6 @@
   "en": "Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$)",
   "es": "Captura de carbono ($pmg_mining_equipment_building_sulfur_mine$)"
  },
- "pmg_carbon_capture_mining_equipment_building_tech_metals_mine": {
-  "en": "Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$)",
-  "es": "Captura de carbono ($pmg_mining_equipment_building_tech_metals_mine$)"
- },
  "pmg_carbon_capture_norsk_hydro_rjukan_plant": {
   "en": "Carbon Capture ($pmg_norsk_hydro_rjukan_plant$)",
   "es": "Captura de carbono ($pmg_norsk_hydro_rjukan_plant$)"
@@ -9890,10 +9646,6 @@
  "pmg_carbon_capture_steam_automation_building_sulfur_mine": {
   "en": "Carbon Capture ($pmg_steam_automation_building_sulfur_mine$)",
   "es": "Captura de carbono ($pmg_steam_automation_building_sulfur_mine$)"
- },
- "pmg_carbon_capture_steam_automation_building_tech_metals_mine": {
-  "en": "Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$)",
-  "es": "Captura de carbono ($pmg_steam_automation_building_tech_metals_mine$)"
  },
  "pmg_carbon_capture_steelmaking_process": {
   "en": "Carbon Capture ($pmg_steelmaking_process$)",
@@ -10264,7 +10016,7 @@
   "es": "Operaciones del laboratorio de electrónica"
  },
  "pmg_generic_exhibition_centre": {
-  "en": "National Exhibition Centre",
+  "en": "National Exhibition Center",
   "es": "Centro nacional de exposiciones"
  },
  "pmg_generic_export_warehouse": {
