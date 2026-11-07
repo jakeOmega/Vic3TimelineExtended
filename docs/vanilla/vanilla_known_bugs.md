@@ -1388,25 +1388,6 @@ Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data refere
 
 The signature names the file a save load reports (a save, or none), not the message. The same source and message report a script file's literal-key field given something it can't read at load, and those are real. Until 2026-10-27 the signature was `Failed to read key reference`, which tagged `create_pop`'s `culture = scope:sr_evac_culture` in sr_colony_autonomy_effects.txt as save noise (#1194 found it through its PostValidate line instead).
 
-### `character_templates_utils.cpp:1814` — vanilla character missing last-name loc
-- source: `character_templates_utils.cpp:1814`
-- source: `character_templates_utils.cpp:1812`
-
-```
-Missing localization key for character last name
-```
-
-A vanilla generated character (e.g. `Ricchieri`, from `common/character_templates/country_arg.txt`) has no last-name loc key, so the engine reverts to a random name. Vanilla character-template gap, not mod content. Cosmetic. (Emit point drifted `:1812` → `:1814` in vanilla 1.13.9 — source-anchored entries need re-anchoring when engine patches shift cpp line numbers; both anchors kept.)
-
-### `pdx_localize.cpp:187` — benign loc-key hash collision
-- source: `pdx_localize.cpp:187`
-
-```
-Localization key hash collision
-```
-
-Two loc keys hash to the same value (observed: vanilla character name `Ricchieri` vs mod key `extra_law_events.42.f`). The engine warns but resolves by exact key, so both render correctly. Hash collisions are unavoidable across large loc sets and harmless. Not actionable.
-
 ### `pdx_named_index_impl.h:257` — engine `PdxDebugConstants` named-index lookup miss
 - source: `pdx_named_index_impl.h:257`
 

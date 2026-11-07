@@ -4983,10 +4983,6 @@
   "en": "[GetBuildingType('building_thyssen_steelworks').GetName] Max Level",
   "de": "Maximalstufe von [GetBuildingType('building_thyssen_steelworks').GetName]"
  },
- "state_building_thyssen_steelworks_max_level_add_desc": {
-  "en": "Increases the maximum number of levels that [GetBuildingType('building_thyssen_steelworks').GetName] can expand to in this state",
-  "de": "Erhöht die maximale Anzahl an Stufen, auf die [GetBuildingType('building_thyssen_steelworks').GetName] in diesem Staat ausgebaut werden kann"
- },
  "state_building_tobacco_regie_cibali_factory_max_level_add": {
   "en": "[GetBuildingType('building_tobacco_regie_cibali_factory').GetName] Max Level",
   "de": "Maximalstufe von [GetBuildingType('building_tobacco_regie_cibali_factory').GetName]"

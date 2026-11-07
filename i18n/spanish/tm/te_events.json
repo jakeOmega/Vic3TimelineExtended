@@ -6951,7 +6951,7 @@
   "en": "Opponents of [SCOPE.sLaw('current_law_scope').GetName] have mounted a coordinated communications campaign in the press. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have spent freely to flood the channels with counter-messaging.",
   "es": "Los detractores de [SCOPE.sLaw('current_law_scope').GetName] han montado una campaña de comunicación coordinada en la prensa. [SCOPE.gsInterestGroup('opposing_ig').GetName] han gastado sin tasa para inundar los canales con mensajes en contra."
  },
- "extra_law_events.42.f": {
+ "extra_law_events.42.flavor": {
   "en": "\\\"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\\\"\\n\\n\\\"And the other?\\\"\\n\\n\\\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\\\"",
   "es": "—Puedes combatir el mal discurso con más discurso. O puedes aprobar una ley. Solo una de las dos honra a un pueblo libre.\\n\\n—¿Y la otra?\\n\\n—La otra honra a quien sostiene la pluma cuando se redacta la ley. Es un tipo de mérito más práctico, pero no es el mismo."
  },

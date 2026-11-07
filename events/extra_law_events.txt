@@ -4527,7 +4527,7 @@ extra_law_events.42 = {
 
 	title = extra_law_events.42.t
 	desc = extra_law_events.42.d
-	flavor = extra_law_events.42.f
+	flavor = extra_law_events.42.flavor
 
 	category = enactment
 

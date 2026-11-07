@@ -6951,7 +6951,7 @@
   "en": "Opponents of [SCOPE.sLaw('current_law_scope').GetName] have mounted a coordinated communications campaign in the press. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have spent freely to flood the channels with counter-messaging.",
   "de": "Gegner von [SCOPE.sLaw('current_law_scope').GetName] haben eine koordinierte Kommunikationskampagne in der Presse gestartet. Die [SCOPE.gsInterestGroup('opposing_ig').GetName] haben freigiebig Geld ausgegeben, um die Kanäle mit Gegenbotschaften zu fluten."
  },
- "extra_law_events.42.f": {
+ "extra_law_events.42.flavor": {
   "en": "\\\"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\\\"\\n\\n\\\"And the other?\\\"\\n\\n\\\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\\\"",
   "de": "„Man kann schlechten Reden mit mehr Reden begegnen. Oder man kann ein Gesetz erlassen. Nur eines davon macht einem freien Volk Ehre.“\\n\\n„Und das andere?“\\n\\n„Das andere macht demjenigen Ehre, der die Feder führt, wenn das Gesetz verfasst wird. Das ist eine praktischere Art von Ehre, aber nicht dieselbe Art.“"
  },
