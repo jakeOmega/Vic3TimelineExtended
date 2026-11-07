@@ -1064,14 +1064,14 @@ Subject Pact not found for Country
 
 `krakatoa.5` (the eruption in a country you don't own) checks that `scope:krakatoa_country` is a subject of `root`, then runs `add_liberty_desire = -30` in `root`, the overlord, which has no subject pact of its own. Once (Netherlands), 2026-11-06 observer run (1.15, about 1898).
 
-### `common/laws/00_church_and_state.txt:37, 592` — State Religion's and Total Separation's `on_activate` give a new country the religion of a definition it doesn't have
+### `common/laws/00_church_and_state.txt:37, 493, 592` — the church laws' `on_activate` give a new country the religion of a definition it doesn't have
 - stack: vanilla only
 
 ```
 set_state_religion effect [ 'Country '
 ```
 
-`law_total_separation`'s `on_activate` (line 592) sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898). `law_state_religion`'s (line 37) does the same, so a dynamic country that starts with State Religion and an atheist state religion logs it too: once from a vanilla uprising ('H27_ADJ Uprising', 2026-11-07, about 2018). Twice the same day a country the mod's planned decolonization formed from an atheist metropole (`create_dynamic_country` inherits the origin's laws and religion) logged it with the mod's frame, so those lines stay visible: issue #1499.
+`law_total_separation`'s `on_activate` (line 592) sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898). `law_state_religion`'s (line 37) and `law_freedom_of_conscience`'s (line 493) do the same, so a dynamic country that starts with either law and an atheist state religion logs it too: once each on 2026-11-07 (about 2018), from a vanilla uprising ('H27_ADJ Uprising', State Religion) and a revolution ('Revolutionary PREFIX Entre Douro and Minho', Freedom of Conscience). Twice the same day a country the mod's planned decolonization formed from an atheist metropole (`create_dynamic_country` inherits the origin's laws and religion) logged it with the mod's frame, so those lines stay visible: issue #1499.
 
 ### `common/laws/01_economic_system.txt:694` — Command Economy's `ai_will_do` reads the ruler of a country with none
 - stack: vanilla only
@@ -1080,7 +1080,7 @@ set_state_religion effect [ 'Country '
 Event target link 'ruler' returned an invalid object
 ```
 
-`law_command_economy`'s `ai_will_do` counts `ruler = { law_stance = { law = law_type:law_command_economy value >= approve } }` among its reasons, with no check that the country has a ruler. Six lines in a 1.15 observer game (2026-11-07, 2018 to 2020), no mod frame. The mod doesn't override the file.
+`law_command_economy`'s `ai_will_do` counts `ruler = { law_stance = { law = law_type:law_command_economy value >= approve } }` among its reasons, with no check that the country has a ruler. Six lines in a 1.15 observer game (2026-11-07, 2018 to 2020), no mod frame. The mod doesn't override the file; it injects into `law_command_economy` twice (the construction-system and legislative-override law files), and neither injection touches `ai_will_do`. The same unguarded read as the `ruler = { ... }` events entry above, which says to treat each new one as that pattern.
 
 ### `events/election_events/election_contextual_events.txt:520` — `election_contextual_events.4` compares ages with a leader it may not have saved
 - stack: vanilla only
