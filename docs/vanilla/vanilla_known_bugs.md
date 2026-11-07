@@ -1026,6 +1026,26 @@ change_relations effect [ Trying to change relations between the same country
 
 `change_relations = { country = overlord value = -50 }` in option e of `poland_events.5`, with no check that `overlord` is another country; in the log it resolved to the country taking the option ('Congress Poland'). Once, 2026-11-06 observer run (1.15, 1885).
 
+### `events/red_scare_events.txt:872, 873` — option b of `red_scare.8` marks an anticommunist leader who is gone
+- stack: vanilla only
+
+```
+Event target link 'scope' returned an invalid object
+add_modifier effect [ Scoped object is not valid. Type: Character
+```
+
+`immediate` saves `scope:anticommunist_leader` and gives the character three days of event immortality. Option b then gives the character `modifier_dangerous_warmonger` with no `?=`, so a leader who is no longer valid by the time the option is taken logs both lines. Once, 2026-11-06 observer run (1.15, about 1894).
+
+### `events/russia_events/ip5_communism_events.txt:1704, 1705` — `nomenklatura.4` reads the general's formation after removing the role
+- stack: vanilla only
+
+```
+Event target link 'commander_military_formation' returned an invalid object
+show_as_tooltip effect [ Scoped object is not valid. Type: Military Formation
+```
+
+Option a of `nomenklatura.4` (a general voted out) runs `remove_character_role = general` and then `commander_military_formation = { show_as_tooltip = { … } }`, which no longer has a formation to reach. Once, 2026-11-06 observer run (1.15, about 1894).
+
 ### `events/resignation.txt:414` — capitulating to a revolution that is no longer growing
 
 ```
