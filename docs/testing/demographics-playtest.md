@@ -1711,6 +1711,11 @@ of millions to around 10¹⁵ came before 1917.
 4. **A `guard=` line in a state of normal size** (`why=4` or `8`) is the guard acting on a state that hadn't run away
    yet: the census's model has collapsed there. Note the state's crowding, standard of living and medicine; that is the
    onset the guards stopped.
+5. **Sign 5 alone is not an onset, so far** (2026-11-07, #1500). The first 1.15 observer game past 2015 logged one
+   line, `why=5` in Witu's Amhara in 2018, and its 2017–2021 autosaves held the mark on eight states, tripped from 1913
+   to 2018. All eight read sane in those saves (people steady, life expectancy 36 to 58), and Amhara's tenfold year
+   was a merge of a split state's parts. Read a `why=5` against the next saves before calling it a runaway; whether
+   the sign stays is the owner's call in #1500. Saves and logs: `/mnt/d/vic3te-data/demog-runaway-sign5-2026-11-07/`.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 
