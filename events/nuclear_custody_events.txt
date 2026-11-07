@@ -80,8 +80,14 @@ nuclear_custody.1 = {
 		}
 		ai_chance = {
 			base = 2
+			# has_variable: a second copy of this event, opened by a second
+			# uprising in the same tick, can be scored after the first
+			# answer cleared the roll (nd_cw_apply_split rolls it again).
 			modifier = {
-				trigger = { var:nd_cw_hold_taken < 1 }
+				trigger = {
+					has_variable = nd_cw_hold_taken
+					var:nd_cw_hold_taken < 1
+				}
 				add = 6
 			}
 		}
@@ -94,7 +100,10 @@ nuclear_custody.1 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { var:nd_cw_hold_taken >= 1 }
+				trigger = {
+					has_variable = nd_cw_hold_taken
+					var:nd_cw_hold_taken >= 1
+				}
 				add = 6
 			}
 			modifier = {
