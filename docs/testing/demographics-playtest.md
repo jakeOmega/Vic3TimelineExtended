@@ -1713,7 +1713,7 @@ of millions to around 10¹⁵ came before 1917.
    onset the guards stopped.
 5. **Sign 5 alone is not an onset, so far** (2026-11-07, #1500). The first 1.15 observer game past 2015 logged one
    line, `why=5` in Witu's Amhara in 2018, and its 2017–2021 autosaves held the mark on eight states, tripped from 1913
-   to 2018. All eight read sane in those saves (people steady, life expectancy 36 to 58), and Amhara's tenfold year
+   to 2018. Seven read sane in those saves (people steady, life expectancy 41 to 58); the eighth, Hereroland, had emptied (no people). Amhara's tenfold year
    was a merge of a split state's parts. Read a `why=5` against the next saves before calling it a runaway; whether
    the sign stays is the owner's call in #1500. Saves and logs: `/mnt/d/vic3te-data/demog-runaway-sign5-2026-11-07/`.
 
