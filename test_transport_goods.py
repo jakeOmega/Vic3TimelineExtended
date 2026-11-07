@@ -141,6 +141,26 @@ class TestLiveFiles(unittest.TestCase):
                 self.assertNotIn("goods_output_merchant_marine_add", self.blocks[name])
                 self.assertIn("goods_output_transportation_add", self.blocks[name])
 
+    def test_partial_bulk_pays_against_road_carts(self):
+        # Partial Bulk Transport is the pre-railway step for mines and
+        # plantations: it buys transportation instead of Road Carts' extra
+        # laborers. At base price that transportation must cost less than those
+        # laborers at the economy sim's wage floor (GBP 0.05 a worker a week),
+        # or it pays only where wages are high and loses wherever a state is
+        # short of transportation, the usual case before railways. At 5 it cost
+        # GBP 150 against GBP 100 (transport_goods.md, "Mine and plantation
+        # transport tiers").
+        def value(name, key):
+            m = re.search(r"\b" + key + r"\s*=\s*(-?[\d.]+)", re.sub(r"#[^\n]*", "", self.blocks[name]))
+            return float(m.group(1)) if m else 0.0
+
+        transportation_price, wage_floor = 30, 0.05
+        carters = value("pm_road_carts", "building_employment_laborers_add")
+        bought = value("pm_partial_bulk_transport", "goods_input_transportation_add")
+        self.assertGreater(carters, 0)
+        self.assertGreater(bought, 0)
+        self.assertLess(bought * transportation_price, carters * wage_floor)
+
 
 if __name__ == "__main__":
     unittest.main()

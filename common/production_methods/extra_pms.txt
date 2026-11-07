@@ -19519,14 +19519,21 @@ INJECT:pm_road_carts = {
 pm_partial_bulk_transport = {
 	texture = "gfx/interface/icons/production_method_icons/pm_partial_bulk_transport.dds"
 
+	# The pre-railway step between Road Carts (+2,000 laborers a level, no economy
+	# of scale) and Rail Transportation (1 transportation, -1,000 laborers). It
+	# buys the state's carts and boats instead of hiring carters, so it must pay
+	# where transportation is dear before Railways: at 2 a level, a level-5 Picks
+	# and Shovels coal mine gains on Road Carts from a wage of GBP 0.02 at base
+	# price and GBP 0.05 at twice base. At 5 it took GBP 0.07 and 0.15, and one
+	# level drew what 2.5 Urban Center levels make (transport_goods.md).
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
+			goods_input_transportation_add = 2                   # Price:   30, Total cost:    60.0 (100.00%)
 			# Output goods
-			# Total input cost: 150.0
+			# Total input cost: 60.0
 			# Total output cost: 0
-			# Profit: -150.0
+			# Profit: -60.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0

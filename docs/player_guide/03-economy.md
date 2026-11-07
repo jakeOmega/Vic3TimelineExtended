@@ -396,8 +396,9 @@ more inputs.
 - Railway, logistics and fulfillment company buildings.
 
 Pops buy it to travel, and industry buys it to move its own goods:
-Construction Sectors from Iron-Frame Buildings onward, the rail-transport and
-tanker-car methods of logging camps, mines, plantations and oil rigs, the cold
+Construction Sectors from Iron-Frame Buildings onward, the Partial Bulk
+Transport, rail-transport and tanker-car methods of logging camps, mines,
+plantations and oil rigs, the cold
 chain of fishing wharves, whaling stations and ranches, later mining and
 oil-well methods, and many late-game factory and retail methods.
 
