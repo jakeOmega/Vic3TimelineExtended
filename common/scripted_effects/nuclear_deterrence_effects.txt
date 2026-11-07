@@ -3276,7 +3276,10 @@ nd_accident_site_home = {
 # damage and the politics fall there (nuclear_incident.31); nd_accident_abroad
 # tells .30's texts and options, and nd_system_reads_attack, so. Called only
 # when such a host exists. Country scope = the guest, saved as
-# scope:nd_accident_guest.
+# scope:nd_accident_guest. nd_accident_abroad is set only once a host is
+# saved, and with none the accident happens at home: on 2026-11-07 a French
+# accident was marked abroad with no host saved, though .30's own check had
+# found one, and its host branch read the unset scope (cause not found).
 nd_accident_site_abroad = {
 	random_country = {
 		limit = {
@@ -3289,7 +3292,11 @@ nd_accident_site_abroad = {
 			save_scope_as = nd_accident_state
 		}
 	}
-	set_variable = nd_accident_abroad
+	if = {
+		limit = { exists = scope:nd_accident_host }
+		set_variable = nd_accident_abroad
+	}
+	else = { nd_accident_site_home = yes }
 }
 
 # A weapons accident: local contamination in the state the event picked
