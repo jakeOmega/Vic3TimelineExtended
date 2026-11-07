@@ -88,6 +88,8 @@ gm_state_tr_take = {
 		# One monument of the state: a secondary monument named by
 		# gm_mon_tr_order_take or the AI's choice (gm_monument_effects.txt), else
 		# the primary, as before.
+		# A carry-off logs a line (log triage 2026-11-06): it was silent, so an
+		# observer run read a landmark carried off as one lost.
 		if = {
 			limit = { has_variable = gm_tr_take_target }
 			gm_mon_tr_take = yes
@@ -104,6 +106,13 @@ gm_state_tr_take = {
 			if = {
 				limit = { exists = scope:gm_tr_new }
 				if = {
+					limit = { has_variable = gm_landmark }
+					debug_log = "TE_MONUMENTS: carried off: landmark [THIS.Var('gm_landmark').GetFlagName], [THIS.Var('gm_tr_take_levels').GetValue|0] levels (whole [THIS.Var('gm_tr_take_whole').GetValue|0]), from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
+				}
+				else = {
+					debug_log = "TE_MONUMENTS: carried off: a monument, [THIS.Var('gm_tr_take_levels').GetValue|0] levels (whole [THIS.Var('gm_tr_take_whole').GetValue|0]), from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
+				}
+				if = {
 					limit = { var:gm_tr_take_whole = 1 }
 					gm_state_tr_remove_whole = yes
 				}
@@ -115,6 +124,13 @@ gm_state_tr_take = {
 		if = {
 			limit = { exists = scope:gm_tr_new }
 			gm_state_tr_consequences_$ROUTE$ = yes
+		}
+		if = {
+			limit = {
+				exists = scope:gm_tr_new
+				has_variable = gm_tr_take_target
+			}
+			debug_log = "TE_MONUMENTS: carried off: a monument beside another, from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
 		}
 		gm_remove_state_var = { VAR = gm_tr_take_target }
 		gm_remove_state_var = { VAR = gm_tr_take_levels }

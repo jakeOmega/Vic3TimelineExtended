@@ -6,9 +6,9 @@ case-sensitive. Two keys with the same hash log one line at load,
     [pdx_localize.cpp:187]: Localization key hash collision. Key 'Ricchieri' and 'extra_law_events.42.f' have the
     same hash: 36017217.
 
-and only one of the two strings survives. In the 2026-11-06 observer game, vanilla's Argentine general lost his
-surname to the mod's event flavor text: `No such localization key found for Character Ricchieri`
-(character_templates_utils.cpp:40). The registry had filed both lines as harmless. The two pairs that load logged are
+and the one case seen lost a string: in the 2026-11-06 observer game, vanilla's Argentine general had no surname
+(`No such localization key found for Character Ricchieri`, character_templates_utils.cpp:40), and the key sharing
+his hash was the mod's event flavor text. The registry had filed both lines as harmless. The two pairs that load logged are
 exactly the two this test finds, and the hash reproduces both values.
 
 With about 145,000 keys loaded, a new key has roughly a 1 in 30,000 chance of a collision, so this is rare and
