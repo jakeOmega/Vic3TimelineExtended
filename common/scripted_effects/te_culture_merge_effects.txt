@@ -355,13 +355,17 @@ te_cm_sol_track = {
 	}
 }
 
-# Country scope: an optional part's own SoL gate, te_cm_sol_ok_<m>_<c>: the gap over the
-# core cultures that have a figure plus this part, closed above te_cm_sol_gap_close and
-# reopened below te_cm_sol_gap_open. $MERGE$, $CULTURE$. It reads the core range the caller
-# just built (te_cm_sg_min, te_cm_sg_max) and te_cm_sg_all (1 when every core slot is met),
-# so it can only open while the core is whole; with every core part already switched there
-# is no figure left to compare, and the gap is the part's own, zero. A part whose gates
-# aren't on has no figure of its own: its gate is closed.
+# Country scope: an optional part's own SoL gate, te_cm_sol_ok_<m>_<c>, closed above
+# te_cm_sol_gap_close and reopened below te_cm_sol_gap_open. $MERGE$, $CULTURE$. It reads
+# what the caller just built and needs every core slot met (te_cm_sg_all = 1); a part whose
+# own gates aren't on has no figure of its own, and its gate is closed.
+#   - While some core part still has a figure (te_cm_sg_n > 0), the gap is over the core range
+#     (te_cm_sg_min, te_cm_sg_max) plus this part.
+#   - Once every core part has switched there is no core figure left, and the part is compared
+#     with the result culture instead: the gap is |part - result|, the result's average standard
+#     of living (te_cm_sg_ref, from te_cmg_<m>_result_sol) in the sphere's part of the core parts'
+#     homeland states. With no reference figure either (the walk wasn't needed, or the result has
+#     no pops there) the gate stays as it was.
 te_cm_sol_gate_part = {
 	if = {
 		limit = { NOT = { has_variable = te_cm_sol_ok_$MERGE$_$CULTURE$ } }
@@ -372,29 +376,50 @@ te_cm_sol_gate_part = {
 			local_var:te_cm_sg_all = 1
 			var:te_cm_ok_$MERGE$_$CULTURE$ = 1
 		}
-		set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }
-		set_local_variable = { name = te_cm_sg_hi value = local_var:te_cm_sg_max }
+		set_local_variable = { name = te_cm_sg_known value = 0 }
 		if = {
-			limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }
-			set_local_variable = { name = te_cm_sg_lo value = var:te_cm_sol_$MERGE$_$CULTURE$ }
-		}
-		if = {
-			limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }
-			set_local_variable = { name = te_cm_sg_hi value = var:te_cm_sol_$MERGE$_$CULTURE$ }
-		}
-		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_hi }
-		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_lo }
-		if = {
-			limit = { var:te_cm_sol_ok_$MERGE$_$CULTURE$ = 1 }
+			limit = { local_var:te_cm_sg_n > 0 }
+			set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }
+			set_local_variable = { name = te_cm_sg_hi value = local_var:te_cm_sg_max }
 			if = {
-				limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close }
-				set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
+				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }
+				set_local_variable = { name = te_cm_sg_lo value = var:te_cm_sol_$MERGE$_$CULTURE$ }
 			}
-		}
-		else = {
 			if = {
-				limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open }
-				set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 }
+				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }
+				set_local_variable = { name = te_cm_sg_hi value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+			}
+			set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_hi }
+			change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_lo }
+			set_local_variable = { name = te_cm_sg_known value = 1 }
+		}
+		else_if = {
+			limit = { local_var:te_cm_sg_ref > 0 }
+			if = {
+				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ >= local_var:te_cm_sg_ref }
+				set_local_variable = { name = te_cm_sg_gap value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+				change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_ref }
+			}
+			else = {
+				set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_ref }
+				change_local_variable = { name = te_cm_sg_gap subtract = var:te_cm_sol_$MERGE$_$CULTURE$ }
+			}
+			set_local_variable = { name = te_cm_sg_known value = 1 }
+		}
+		if = {
+			limit = { local_var:te_cm_sg_known = 1 }
+			if = {
+				limit = { var:te_cm_sol_ok_$MERGE$_$CULTURE$ = 1 }
+				if = {
+					limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close }
+					set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
+				}
+			}
+			else = {
+				if = {
+					limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open }
+					set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 }
+				}
 			}
 		}
 	}

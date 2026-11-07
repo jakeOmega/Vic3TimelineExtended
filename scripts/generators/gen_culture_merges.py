@@ -43,7 +43,8 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   ``te_cmg_<m>_is_candidate``, ``_core_ok``, ``_census_wanted`` (triggers);
   ``te_cmg_<m>_<c>_available``, ``_measured``, ``_years_met`` (tiers 2 and 3),
   ``_switched_in`` and ``_can_join`` per slot culture; ``te_cmg_census_<m>`` /
-  ``te_cmg_census_<m>_country`` (effects), plus the global ``te_cmg_census_all``.
+  ``te_cmg_census_<m>_country`` (effects), ``te_cmg_<m>_result_sol`` (merges with optional
+  parts), plus the global ``te_cmg_census_all``.
   A part that has switched is skipped by the census and counts as met in
   ``core_ok``; a part that has joined is walked with its merge's result.
   The hand-written helpers they call are in
@@ -699,12 +700,41 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
         optional = [c for part in merge.optional for c in part.cultures]
         out.line()
         out.line("# ---- %s ----" % key)
+        if optional:
+            out.line()
+            out.line("# Country scope: the candidate (or the running merge's starter). The %s result's average standard of" % key)
+            out.line("# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state")
+            out.line("# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.")
+            out.line("# The reference an optional part is held against once no core part has a figure left; run only then.")
+            with out.block("te_cmg_%s_result_sol" % key):
+                out.line("save_temporary_scope_as = te_cm_starter")
+                out.line("set_local_variable = { name = te_cm_sg_rpops value = 0 }")
+                out.line("set_local_variable = { name = te_cm_sg_rsolw value = 0 }")
+                with out.block("every_country"):
+                    out.line("limit = { te_cm_in_sphere = yes }")
+                    with out.block("every_scope_state"):
+                        with out.block("limit"):
+                            with out.block("OR"):
+                                for culture in _core_cultures(merge):
+                                    out.line("state_region = { is_homeland = cu:%s }" % culture)
+                        with out.block("every_scope_pop"):
+                            out.line("limit = { culture = cu:%s }" % merge.result)
+                            out.line("change_local_variable = { name = te_cm_sg_rpops add = total_size }")
+                            out.line("change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }")
+                with out.block("if"):
+                    out.line("limit = { local_var:te_cm_sg_rpops >= 1 }")
+                    with out.block("set_local_variable"):
+                        out.line("name = te_cm_sg_ref")
+                        with out.block("value"):
+                            out.line("value = local_var:te_cm_sg_rsolw")
+                            out.line("divide = local_var:te_cm_sg_rpops")
         out.line()
         out.line("# Country scope: one candidate (or the running merge's starter). Measures every part that hasn't")
         out.line("# switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_%s, with hysteresis:" % key)
         out.line("# it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every")
         out.line("# core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,")
-        out.line("# te_cm_sol_ok_%s_<culture>, over the core range plus that part." % key)
+        out.line("# te_cm_sol_ok_%s_<culture>, over the core range plus that part; with no core figure left, against the" % key)
+        out.line("# result's (walked only then, and only while an optional part is neither joined nor switched).")
         with out.block("te_cmg_census_%s_country" % key):
             for culture in cultures:
                 tier = cfg.derive_tier(merge, culture, vanilla, merges)
@@ -756,6 +786,18 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                             out.line("local_var:te_cm_sg_gap < te_cm_sol_gap_open")
                             out.line("local_var:te_cm_sg_all = 1")
                         out.line("set_variable = { name = te_cm_sol_ok_%s value = 1 }" % key)
+            if optional:
+                out.line("set_local_variable = { name = te_cm_sg_ref value = 0 }")
+                with out.block("if"):
+                    with out.block("limit"):
+                        out.line("local_var:te_cm_sg_n = 0")
+                        out.line("local_var:te_cm_sg_all = 1")
+                        with out.block("OR"):
+                            for culture in optional:
+                                with out.block("AND"):
+                                    out.line("NOT = { global_var:te_cm_joined_%s_%s ?= 1 }" % (key, culture))
+                                    out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                    out.line("te_cmg_%s_result_sol = yes" % key)
             for culture in optional:
                 with out.block("if"):
                     out.line("limit = { NOT = { has_global_variable = te_cm_switched_%s } }" % culture)

@@ -2,11 +2,48 @@
 
 # ---- german ----
 
+# Country scope: the candidate (or the running merge's starter). The german result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_german_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:north_german }
+					state_region = { is_homeland = cu:south_german }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_german }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_german, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_german_<culture>, over the core range plus that part.
+# te_cm_sol_ok_german_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_german_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_german } }
@@ -84,6 +121,24 @@ te_cmg_census_german_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_german_alemannic ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_alemannic }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_german_east_german ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_east_german }
+				}
+			}
+		}
+		te_cmg_german_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_alemannic } }
 		te_cm_sol_gate_part = { MERGE = german CULTURE = alemannic }
@@ -114,11 +169,48 @@ te_cmg_census_german = {
 
 # ---- italian ----
 
+# Country scope: the candidate (or the running merge's starter). The italian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_italian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:north_italian }
+					state_region = { is_homeland = cu:south_italian }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_italian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_italian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_italian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_italian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_italian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_italian } }
@@ -192,6 +284,20 @@ te_cmg_census_italian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_italian_corsican ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_corsican }
+				}
+			}
+		}
+		te_cmg_italian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_corsican } }
 		te_cm_sol_gate_part = { MERGE = italian CULTURE = corsican }
@@ -218,11 +324,49 @@ te_cmg_census_italian = {
 
 # ---- scandinavian ----
 
+# Country scope: the candidate (or the running merge's starter). The scandinavian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_scandinavian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:swedish }
+					state_region = { is_homeland = cu:danish }
+					state_region = { is_homeland = cu:norwegian }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_scandinavian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_scandinavian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_scandinavian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_scandinavian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_scandinavian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swedish } }
@@ -313,6 +457,20 @@ te_cmg_census_scandinavian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_scandinavian_icelandic ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_icelandic }
+				}
+			}
+		}
+		te_cmg_scandinavian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_icelandic } }
 		te_cm_sol_gate_part = { MERGE = scandinavian CULTURE = icelandic }
@@ -343,7 +501,8 @@ te_cmg_census_scandinavian = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_east_slavic, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_east_slavic_<culture>, over the core range plus that part.
+# te_cm_sol_ok_east_slavic_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_east_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_russian } }
@@ -452,11 +611,49 @@ te_cmg_census_east_slavic = {
 
 # ---- yugoslav ----
 
+# Country scope: the candidate (or the running merge's starter). The yugoslav result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_yugoslav_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:serb }
+					state_region = { is_homeland = cu:croat }
+					state_region = { is_homeland = cu:bosniak }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_yugoslav }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_yugoslav, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_yugoslav_<culture>, over the core range plus that part.
+# te_cm_sol_ok_yugoslav_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_yugoslav_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_serb } }
@@ -551,6 +748,24 @@ te_cmg_census_yugoslav_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_yugoslav_slovene ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_slovene }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_yugoslav_bulgarian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_bulgarian }
+				}
+			}
+		}
+		te_cmg_yugoslav_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_slovene } }
 		te_cm_sol_gate_part = { MERGE = yugoslav CULTURE = slovene }
@@ -581,11 +796,48 @@ te_cmg_census_yugoslav = {
 
 # ---- czechoslovak ----
 
+# Country scope: the candidate (or the running merge's starter). The czechoslovak result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_czechoslovak_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:czech }
+					state_region = { is_homeland = cu:slovak }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_czechoslovak }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_czechoslovak, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_czechoslovak_<culture>, over the core range plus that part.
+# te_cm_sol_ok_czechoslovak_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_czechoslovak_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_czech } }
@@ -659,6 +911,20 @@ te_cmg_census_czechoslovak_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_czechoslovak_sorb ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_sorb }
+				}
+			}
+		}
+		te_cmg_czechoslovak_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_sorb } }
 		te_cm_sol_gate_part = { MERGE = czechoslovak CULTURE = sorb }
@@ -689,7 +955,8 @@ te_cmg_census_czechoslovak = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_hungarian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_hungarian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_hungarian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_hungarian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hungarian } }
@@ -780,7 +1047,8 @@ te_cmg_census_hungarian = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_dutch, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_dutch_<culture>, over the core range plus that part.
+# te_cm_sol_ok_dutch_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_dutch_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_dutch } }
@@ -871,7 +1139,8 @@ te_cmg_census_dutch = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_finnish, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_finnish_<culture>, over the core range plus that part.
+# te_cm_sol_ok_finnish_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_finnish_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_finnish } }
@@ -958,11 +1227,49 @@ te_cmg_census_finnish = {
 
 # ---- french ----
 
+# Country scope: the candidate (or the running merge's starter). The french result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_french_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:french }
+					state_region = { is_homeland = cu:wallonian }
+					state_region = { is_homeland = cu:occitan }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:french }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_french, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_french_<culture>, over the core range plus that part.
+# te_cm_sol_ok_french_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_french_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -1048,6 +1355,20 @@ te_cmg_census_french_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_french_catalan ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_catalan }
+				}
+			}
+		}
+		te_cmg_french_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_catalan } }
 		te_cm_sol_gate_part = { MERGE = french CULTURE = catalan }
@@ -1078,7 +1399,8 @@ te_cmg_census_french = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_british, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_british_<culture>, over the core range plus that part.
+# te_cm_sol_ok_british_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_british_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -1165,11 +1487,48 @@ te_cmg_census_british = {
 
 # ---- american ----
 
+# Country scope: the candidate (or the running merge's starter). The american result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_american_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:yankee }
+					state_region = { is_homeland = cu:dixie }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_american }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_american, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_american_<culture>, over the core range plus that part.
+# te_cm_sol_ok_american_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_american_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_yankee } }
@@ -1243,6 +1602,20 @@ te_cmg_census_american_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_american_afro_american ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_afro_american }
+				}
+			}
+		}
+		te_cmg_american_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_afro_american } }
 		te_cm_sol_gate_part = { MERGE = american CULTURE = afro_american }
@@ -1269,11 +1642,49 @@ te_cmg_census_american = {
 
 # ---- anglophone ----
 
+# Country scope: the candidate (or the running merge's starter). The anglophone result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_anglophone_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:british }
+					state_region = { is_homeland = cu:yankee }
+					state_region = { is_homeland = cu:cm_american }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_anglophone }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_anglophone, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_anglophone_<culture>, over the core range plus that part.
+# te_cm_sol_ok_anglophone_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_anglophone_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -1373,6 +1784,36 @@ te_cmg_census_anglophone_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_anglophone_anglo_canadian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_anglo_canadian }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_anglophone_australian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_australian }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_anglophone_scottish ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_scottish }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_anglophone_dixie ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_dixie }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_anglophone_afro_american ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_afro_american }
+				}
+			}
+		}
+		te_cmg_anglophone_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_anglo_canadian } }
 		te_cm_sol_gate_part = { MERGE = anglophone CULTURE = anglo_canadian }
@@ -1415,11 +1856,51 @@ te_cmg_census_anglophone = {
 
 # ---- brazilian ----
 
+# Country scope: the candidate (or the running merge's starter). The brazilian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_brazilian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:brazilian }
+					state_region = { is_homeland = cu:nordestino }
+					state_region = { is_homeland = cu:paulista }
+					state_region = { is_homeland = cu:amazonic }
+					state_region = { is_homeland = cu:sulista }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:brazilian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_brazilian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_brazilian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_brazilian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_brazilian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_brazilian } }
@@ -1539,6 +2020,20 @@ te_cmg_census_brazilian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_brazilian_afro_brazilian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_afro_brazilian }
+				}
+			}
+		}
+		te_cmg_brazilian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_afro_brazilian } }
 		te_cm_sol_gate_part = { MERGE = brazilian CULTURE = afro_brazilian }
@@ -1569,7 +2064,8 @@ te_cmg_census_brazilian = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_platine, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_platine_<culture>, over the core range plus that part.
+# te_cm_sol_ok_platine_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_platine_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_platinean } }
@@ -1699,7 +2195,8 @@ te_cmg_census_platine = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_andean, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_andean_<culture>, over the core range plus that part.
+# te_cm_sol_ok_andean_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_andean_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_andean } }
@@ -1829,7 +2326,8 @@ te_cmg_census_andean = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_gran_colombian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_gran_colombian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_gran_colombian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_gran_colombian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_colombian } }
@@ -1942,7 +2440,8 @@ te_cmg_census_gran_colombian = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_chinese, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_chinese_<culture>, over the core range plus that part.
+# te_cm_sol_ok_chinese_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_chinese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_han } }
@@ -2067,7 +2566,8 @@ te_cmg_census_chinese = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_japanese, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_japanese_<culture>, over the core range plus that part.
+# te_cm_sol_ok_japanese_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_japanese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_japanese } }
@@ -2154,11 +2654,51 @@ te_cmg_census_japanese = {
 
 # ---- arab ----
 
+# Country scope: the candidate (or the running merge's starter). The arab result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_arab_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:maghrebi }
+					state_region = { is_homeland = cu:misri }
+					state_region = { is_homeland = cu:mashriqi }
+					state_region = { is_homeland = cu:bedouin }
+					state_region = { is_homeland = cu:yemenite }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_arab }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_arab, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_arab_<culture>, over the core range plus that part.
+# te_cm_sol_ok_arab_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_arab_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_maghrebi } }
@@ -2291,6 +2831,28 @@ te_cmg_census_arab_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_arab_sudanese ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_sudanese }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_arab_haratin ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_haratin }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_arab_bidan ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_bidan }
+				}
+			}
+		}
+		te_cmg_arab_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_sudanese } }
 		te_cm_sol_gate_part = { MERGE = arab CULTURE = sudanese }
@@ -2325,11 +2887,48 @@ te_cmg_census_arab = {
 
 # ---- persian ----
 
+# Country scope: the candidate (or the running merge's starter). The persian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_persian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:persian }
+					state_region = { is_homeland = cu:luri }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:persian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_persian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_persian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_persian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_persian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_persian } }
@@ -2402,6 +3001,24 @@ te_cmg_census_persian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_persian_tajik ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_tajik }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_persian_hazara ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_hazara }
+				}
+			}
+		}
+		te_cmg_persian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_tajik } }
 		te_cm_sol_gate_part = { MERGE = persian CULTURE = tajik }
@@ -2432,11 +3049,48 @@ te_cmg_census_persian = {
 
 # ---- oghuz_turkic ----
 
+# Country scope: the candidate (or the running merge's starter). The oghuz_turkic result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_oghuz_turkic_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:turkish }
+					state_region = { is_homeland = cu:azerbaijani }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_oghuz_turkic }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_oghuz_turkic, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_oghuz_turkic_<culture>, over the core range plus that part.
+# te_cm_sol_ok_oghuz_turkic_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_oghuz_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_turkish } }
@@ -2510,6 +3164,20 @@ te_cmg_census_oghuz_turkic_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_turkmen }
+				}
+			}
+		}
+		te_cmg_oghuz_turkic_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_turkmen } }
 		te_cm_sol_gate_part = { MERGE = oghuz_turkic CULTURE = turkmen }
@@ -2540,7 +3208,8 @@ te_cmg_census_oghuz_turkic = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_hindustani, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_hindustani_<culture>, over the core range plus that part.
+# te_cm_sol_ok_hindustani_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_hindustani_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hindustani } }
@@ -2678,11 +3347,49 @@ te_cmg_census_hindustani = {
 
 # ---- dravidian ----
 
+# Country scope: the candidate (or the running merge's starter). The dravidian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_dravidian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:tamil }
+					state_region = { is_homeland = cu:kannada }
+					state_region = { is_homeland = cu:malayalam }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_dravidian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_dravidian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_dravidian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_dravidian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_dravidian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_tamil } }
@@ -2773,6 +3480,20 @@ te_cmg_census_dravidian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_dravidian_telegu ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_telegu }
+				}
+			}
+		}
+		te_cmg_dravidian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_telegu } }
 		te_cm_sol_gate_part = { MERGE = dravidian CULTURE = telegu }
@@ -2799,11 +3520,50 @@ te_cmg_census_dravidian = {
 
 # ---- indonesian ----
 
+# Country scope: the candidate (or the running merge's starter). The indonesian result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_indonesian_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:javan }
+					state_region = { is_homeland = cu:malay }
+					state_region = { is_homeland = cu:sumatran }
+					state_region = { is_homeland = cu:bornean }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_indonesian }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_indonesian, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_indonesian_<culture>, over the core range plus that part.
+# te_cm_sol_ok_indonesian_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_indonesian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_javan } }
@@ -2911,6 +3671,20 @@ te_cmg_census_indonesian_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_indonesian_balinese ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_balinese }
+				}
+			}
+		}
+		te_cmg_indonesian_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_balinese } }
 		te_cm_sol_gate_part = { MERGE = indonesian CULTURE = balinese }
@@ -2941,7 +3715,8 @@ te_cmg_census_indonesian = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_filipino, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_filipino_<culture>, over the core range plus that part.
+# te_cm_sol_ok_filipino_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_filipino_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_filipino } }
@@ -3066,7 +3841,8 @@ te_cmg_census_filipino = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_nguni, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_nguni_<culture>, over the core range plus that part.
+# te_cm_sol_ok_nguni_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_nguni_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_nguni } }
@@ -3175,11 +3951,50 @@ te_cmg_census_nguni = {
 
 # ---- latin ----
 
+# Country scope: the candidate (or the running merge's starter). The latin result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_latin_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:french }
+					state_region = { is_homeland = cu:cm_italian }
+					state_region = { is_homeland = cu:spanish }
+					state_region = { is_homeland = cu:portuguese }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_latin }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_latin, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_latin_<culture>, over the core range plus that part.
+# te_cm_sol_ok_latin_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_latin_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -3303,6 +4118,36 @@ te_cmg_census_latin_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_latin_romanian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_romanian }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_latin_platinean ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_platinean }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_latin_argentine ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_argentine }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_latin_uruguayan ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_uruguayan }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_latin_chilean ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_chilean }
+				}
+			}
+		}
+		te_cmg_latin_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_romanian } }
 		te_cm_sol_gate_part = { MERGE = latin CULTURE = romanian }
@@ -3345,11 +4190,49 @@ te_cmg_census_latin = {
 
 # ---- pan_slavic ----
 
+# Country scope: the candidate (or the running merge's starter). The pan_slavic result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_pan_slavic_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:cm_east_slavic }
+					state_region = { is_homeland = cu:cm_czechoslovak }
+					state_region = { is_homeland = cu:cm_yugoslav }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_pan_slavic }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_pan_slavic, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_pan_slavic_<culture>, over the core range plus that part.
+# te_cm_sol_ok_pan_slavic_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_pan_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_east_slavic } }
@@ -3448,6 +4331,28 @@ te_cmg_census_pan_slavic_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_slavic_polish ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_polish }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_slavic_slovene ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_slovene }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_slavic_bulgarian ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_bulgarian }
+				}
+			}
+		}
+		te_cmg_pan_slavic_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_polish } }
 		te_cm_sol_gate_part = { MERGE = pan_slavic CULTURE = polish }
@@ -3482,11 +4387,51 @@ te_cmg_census_pan_slavic = {
 
 # ---- pan_turkic ----
 
+# Country scope: the candidate (or the running merge's starter). The pan_turkic result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_pan_turkic_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:cm_oghuz_turkic }
+					state_region = { is_homeland = cu:uzbek }
+					state_region = { is_homeland = cu:kazak }
+					state_region = { is_homeland = cu:tatar }
+					state_region = { is_homeland = cu:kirgiz }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_pan_turkic }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_pan_turkic, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_pan_turkic_<culture>, over the core range plus that part.
+# te_cm_sol_ok_pan_turkic_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_pan_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic } }
@@ -3623,6 +4568,32 @@ te_cmg_census_pan_turkic_country = {
 			}
 		}
 	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_turkic_bashkir ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_bashkir }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_crimean_tatar }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_caucasian_turk }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_pan_turkic_uighur ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_uighur }
+				}
+			}
+		}
+		te_cmg_pan_turkic_result_sol = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_bashkir } }
 		te_cm_sol_gate_part = { MERGE = pan_turkic CULTURE = bashkir }
@@ -3665,7 +4636,8 @@ te_cmg_census_pan_turkic = {
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_pan_malay, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_pan_malay_<culture>, over the core range plus that part.
+# te_cm_sol_ok_pan_malay_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_pan_malay_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_indonesian } }
@@ -3757,11 +4729,49 @@ te_cmg_census_pan_malay = {
 
 # ---- east_african ----
 
+# Country scope: the candidate (or the running merge's starter). The east_african result's average standard of
+# living, pop-weighted, over its pops in the sphere's part of the core parts' homeland states (a state
+# that is the homeland of several counts once). Sets te_cm_sg_ref, 0 when the result has no pops there.
+# The reference an optional part is held against once no core part has a figure left; run only then.
+te_cmg_east_african_result_sol = {
+	save_temporary_scope_as = te_cm_starter
+	set_local_variable = { name = te_cm_sg_rpops value = 0 }
+	set_local_variable = { name = te_cm_sg_rsolw value = 0 }
+	every_country = {
+		limit = { te_cm_in_sphere = yes }
+		every_scope_state = {
+			limit = {
+				OR = {
+					state_region = { is_homeland = cu:swahili }
+					state_region = { is_homeland = cu:nyamwezi }
+					state_region = { is_homeland = cu:sukuma }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:cm_east_african }
+				change_local_variable = { name = te_cm_sg_rpops add = total_size }
+				change_local_variable = { name = te_cm_sg_rsolw add = { value = standard_of_living multiply = total_size } }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_sg_rpops >= 1 }
+		set_local_variable = {
+			name = te_cm_sg_ref
+			value = {
+				value = local_var:te_cm_sg_rsolw
+				divide = local_var:te_cm_sg_rpops
+			}
+		}
+	}
+}
+
 # Country scope: one candidate (or the running merge's starter). Measures every part that hasn't
 # switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_east_african, with hysteresis:
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
-# te_cm_sol_ok_east_african_<culture>, over the core range plus that part.
+# te_cm_sol_ok_east_african_<culture>, over the core range plus that part; with no core figure left, against the
+# result's (walked only then, and only while an optional part is neither joined nor switched).
 te_cmg_census_east_african_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swahili } }
@@ -3863,6 +4873,32 @@ te_cmg_census_east_african_country = {
 				set_variable = { name = te_cm_sol_ok_east_african value = 1 }
 			}
 		}
+	}
+	set_local_variable = { name = te_cm_sg_ref value = 0 }
+	if = {
+		limit = {
+			local_var:te_cm_sg_n = 0
+			local_var:te_cm_sg_all = 1
+			OR = {
+				AND = {
+					NOT = { global_var:te_cm_joined_east_african_yao ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_yao }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_east_african_makua ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_makua }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
+				}
+				AND = {
+					NOT = { global_var:te_cm_joined_east_african_kikuyu ?= 1 }
+					NOT = { has_global_variable = te_cm_switched_kikuyu }
+				}
+			}
+		}
+		te_cmg_east_african_result_sol = yes
 	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_yao } }

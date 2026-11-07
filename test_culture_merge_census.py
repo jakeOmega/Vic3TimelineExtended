@@ -494,7 +494,9 @@ class SolGateTest(unittest.TestCase):
                     continue
                 self.assertEqual(body.count(track), 1, culture)
                 self.assertIn("if = { limit = { te_cmg_%s_%s_measured = yes } %s }" % (merge.key, culture, track), body)
-            self.assertNotIn("te_cm_joined", body, merge.key)
+            # A joined part isn't a condition of the merge-wide gap; the only reads of `joined` are the
+            # result walk's "needed" limit, one per optional part.
+            self.assertEqual(body.count("te_cm_joined"), len(optional), merge.key)
 
     def test_the_merge_wide_gate_opens_only_when_every_core_slot_is_met(self):
         # M2: a slot is met when one of its alternatives has a figure, or joined and switched. The gate
@@ -532,13 +534,80 @@ class SolGateTest(unittest.TestCase):
         self.assertIn("set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }", gate)
         self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }", gate)
         self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }", gate)
+        # One hysteresis for both references: closed above te_cm_sol_gap_close, reopened below te_cm_sol_gap_open.
         self.assertIn(
+            "if = { limit = { local_var:te_cm_sg_known = 1 } "
             "if = { limit = { var:te_cm_sol_ok_$MERGE$_$CULTURE$ = 1 } "
             "if = { limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close } "
             "set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 } } } "
             "else = { if = { limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open } "
-            "set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 } } }",
+            "set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 } } } }",
             gate,
+        )
+
+    def test_with_no_core_figure_left_a_part_is_held_against_the_result(self):
+        # R26: once every core part has switched, the optional part is compared with the result culture's
+        # pop-weighted SoL, |part - result|; a merge with core figures keeps using their range.
+        gate = squash(block(self.helpers, "te_cm_sol_gate_part"))
+        core = gate.index("if = { limit = { local_var:te_cm_sg_n > 0 }")
+        result = gate.index("else_if = { limit = { local_var:te_cm_sg_ref > 0 }")
+        self.assertLess(core, result)
+        branch = gate[result:gate.index("if = { limit = { local_var:te_cm_sg_known = 1 }")]
+        # The absolute difference, from whichever side is larger.
+        self.assertIn(
+            "if = { limit = { var:te_cm_sol_$MERGE$_$CULTURE$ >= local_var:te_cm_sg_ref } "
+            "set_local_variable = { name = te_cm_sg_gap value = var:te_cm_sol_$MERGE$_$CULTURE$ } "
+            "change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_ref } } "
+            "else = { set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_ref } "
+            "change_local_variable = { name = te_cm_sg_gap subtract = var:te_cm_sol_$MERGE$_$CULTURE$ } }",
+            branch,
+        )
+        # No reference figure either: the gate is left as it was (known stays 0).
+        self.assertEqual(gate.count("set_local_variable = { name = te_cm_sg_known value = 1 }"), 2)
+        self.assertIn("set_local_variable = { name = te_cm_sg_known value = 0 }", gate)
+
+    def test_the_result_walk_sits_under_its_needed_limit(self):
+        # R26: walk only while it is needed: no measured core figure, every core slot met, and some optional
+        # part neither joined nor switched. A merge with no optional part never walks.
+        for merge in cfg.MERGES:
+            body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
+            optional = [c for part in merge.optional for c in part.cultures]
+            call = "te_cmg_%s_result_sol = yes" % merge.key
+            if not optional:
+                self.assertNotIn("result_sol", body, merge.key)
+                self.assertIsNone(block(self.effects, "te_cmg_%s_result_sol" % merge.key), merge.key)
+                continue
+            self.assertEqual(body.count(call), 1, merge.key)
+            needed = " ".join(
+                "AND = { NOT = { global_var:te_cm_joined_%s_%s ?= 1 } NOT = { has_global_variable = te_cm_switched_%s } }"
+                % (merge.key, c, c) for c in optional
+            )
+            self.assertIn(
+                "set_local_variable = { name = te_cm_sg_ref value = 0 } "
+                "if = { limit = { local_var:te_cm_sg_n = 0 local_var:te_cm_sg_all = 1 OR = { %s } } %s }" % (needed, call),
+                body, merge.key,
+            )
+            # Before the optional gates read the reference.
+            self.assertLess(body.index(call), body.index("te_cm_sol_gate_part"))
+
+    def test_the_result_reference_is_the_results_sol_in_the_cores_homeland_states_in_the_sphere(self):
+        for merge in cfg.MERGES:
+            optional = [c for part in merge.optional for c in part.cultures]
+            if not optional:
+                continue
+            body = squash(block(self.effects, "te_cmg_%s_result_sol" % merge.key))
+            homelands = " ".join("state_region = { is_homeland = cu:%s }" % c for part in merge.core for c in part.cultures)
+            self.assertTrue(body.startswith("save_temporary_scope_as = te_cm_starter"), merge.key)
+            self.assertIn(
+                "every_country = { limit = { te_cm_in_sphere = yes } every_scope_state = { limit = { OR = { %s } } "
+                "every_scope_pop = { limit = { culture = cu:%s } " % (homelands, merge.result),
+                body, merge.key,
+            )
+            self.assertIn("value = standard_of_living multiply = total_size", body)
+            self.assertIn("limit = { local_var:te_cm_sg_rpops >= 1 }", body)
+            self.assertIn("divide = local_var:te_cm_sg_rpops", body)
+        self.assertIn(
+            "culture = cu:cm_german", squash(block(self.effects, "te_cmg_german_result_sol"))
         )
 
     def test_no_slot_qualifying_leaves_the_gate_as_it_was(self):
