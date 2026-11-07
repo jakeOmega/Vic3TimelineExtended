@@ -3335,8 +3335,16 @@ class TestCustody(unittest.TestCase):
         self.assertIn("set_variable = { name = nd_cw_roll_rebel value = scope:nd_cw_rebel }", " ".join(roll.split()))
         apply = " ".join(block(self.ce, "nd_cw_apply_split").split())
         reroll = "if = { limit = { NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel } } nd_cw_roll_split = yes }"
-        self.assertIn(reroll, apply)
-        self.assertLess(apply.index(reroll), apply.index("var:nd_cw_$MODE$_seized"))
+        # Behind a click-only marker, in a hidden_effect: the option's tooltip
+        # walk tests every limit and writes nothing, so unfenced it would read
+        # the roll it never set.
+        fenced = ("hidden_effect = { set_variable = nd_cw_roll_click if = { limit = { has_variable = nd_cw_roll_click }"
+                  " remove_variable = nd_cw_roll_click " + reroll + " } }")
+        self.assertIn(fenced, apply)
+        self.assertLess(apply.index(fenced), apply.index("var:nd_cw_$MODE$_seized >"))
+        # And the split's own reads test the variable first, for that walk.
+        for read in ("var:nd_cw_$MODE$_seized > nd_stockpile", "var:nd_cw_$MODE$_seized > 0"):
+            self.assertIn("has_variable = nd_cw_$MODE$_seized " + read, apply, read)
         self.assertIn("remove_variable = nd_cw_roll_rebel", block(self.ce, "nd_cw_clear_roll"))
         # The AI's weights read the roll only where it is set.
         for option in ("nuclear_custody.1.a", "nuclear_custody.1.b"):

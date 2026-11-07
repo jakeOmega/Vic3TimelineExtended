@@ -540,20 +540,33 @@ nd_cw_roll_one = {
 # nd_cw_clear_roll removes it before the second answer applies (Russian
 # Republic, 2026-11-07: the second "pull back" read nothing set, and its rebels
 # got no share). So an answer whose roll is another uprising's, or gone, rolls
-# again for its own rebels first.
+# again for its own rebels first. The re-roll sits behind a click-only marker:
+# the option's tooltip walk tests every limit, inside hidden_effect too, and
+# writes nothing, so unfenced it would read the roll it never set, every frame
+# (scripting_best_practices.md, § An Option's Tooltip Walks Its Effects). The
+# reads below test has_variable for the same walk, which a second copy of the
+# event shows once the first answer has cleared the roll.
 nd_cw_apply_split = {
 	hidden_effect = {
+		set_variable = nd_cw_roll_click
 		if = {
-			limit = {
-				NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel }
+			limit = { has_variable = nd_cw_roll_click }
+			remove_variable = nd_cw_roll_click
+			if = {
+				limit = {
+					NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel }
+				}
+				nd_cw_roll_split = yes
 			}
-			nd_cw_roll_split = yes
 		}
 	}
 	custom_tooltip = {
 		text = $TT$
 		if = {
-			limit = { var:nd_cw_$MODE$_seized > nd_stockpile }
+			limit = {
+				has_variable = nd_cw_$MODE$_seized
+				var:nd_cw_$MODE$_seized > nd_stockpile
+			}
 			set_variable = { name = nd_cw_$MODE$_seized value = nd_stockpile }
 			if = {
 				limit = { var:nd_cw_$MODE$_lost > var:nd_cw_$MODE$_seized }
@@ -569,6 +582,7 @@ nd_cw_apply_split = {
 		}
 		if = {
 			limit = {
+				has_variable = nd_cw_$MODE$_seized
 				var:nd_cw_$MODE$_seized > 0
 				exists = scope:nd_cw_rebel
 				scope:nd_cw_rebel = { is_country_alive = yes }
