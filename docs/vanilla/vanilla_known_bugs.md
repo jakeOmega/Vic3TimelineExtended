@@ -1010,6 +1010,22 @@ Scoped object of type 'country' is not valid
 
 The `visible` block is evaluated with a country that has died (`Country  (64)` in the message). 13 lines, 2026-10-10 observer run. The engine's own `<unknown>:0` form of this line is the source-anchored entry below.
 
+### `common/treaty_articles/24_transit_rights.txt:96` — the AI's evaluation reads the capital of a country that has none
+
+```
+Event target link 'capital' returned an invalid object
+```
+
+The article's `ai = { evaluation_chance = { … } }` tests `capital.world_market_access` with no `exists = capital` guard, so a country with no capital (one being torn apart, or a revolt with no state yet) logs the line each time the AI weighs the article. 3 lines, 2026-11-06 observer run (1.15, 1885). Line 28 of the same file, above, is a different read.
+
+### `events/poland_events.txt:792` — option e of the Polish uprising changes relations with its own country
+
+```
+change_relations effect [ Trying to change relations between the same country
+```
+
+`change_relations = { country = overlord value = -50 }` in option e of `poland_events.5`, with no check that `overlord` is another country; in the log it resolved to the country taking the option ('Congress Poland'). Once, 2026-11-06 observer run (1.15, 1885).
+
 ### `events/resignation.txt:414` — capitulating to a revolution that is no longer growing
 
 ```
