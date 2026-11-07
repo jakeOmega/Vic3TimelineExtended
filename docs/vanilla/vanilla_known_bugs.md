@@ -1064,14 +1064,32 @@ Subject Pact not found for Country
 
 `krakatoa.5` (the eruption in a country you don't own) checks that `scope:krakatoa_country` is a subject of `root`, then runs `add_liberty_desire = -30` in `root`, the overlord, which has no subject pact of its own. Once (Netherlands), 2026-11-06 observer run (1.15, about 1898).
 
-### `common/laws/00_church_and_state.txt:592` — Total Separation's `on_activate` gives a revolution the religion of a definition it doesn't have
+### `common/laws/00_church_and_state.txt:37, 592` — State Religion's and Total Separation's `on_activate` give a new country the religion of a definition it doesn't have
 - stack: vanilla only
 
 ```
-set_state_religion effect [ 'Country 'Revolutionary
+set_state_religion effect [ 'Country '
 ```
 
-`law_total_separation`'s `on_activate` sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898).
+`law_total_separation`'s `on_activate` (line 592) sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898). `law_state_religion`'s (line 37) does the same, so a dynamic country that starts with State Religion and an atheist state religion logs it too: once from a vanilla uprising ('H27_ADJ Uprising', 2026-11-07, about 2018). Twice the same day a country the mod's planned decolonization formed from an atheist metropole (`create_dynamic_country` inherits the origin's laws and religion) logged it with the mod's frame, so those lines stay visible: issue #1499.
+
+### `common/laws/01_economic_system.txt:694` — Command Economy's `ai_will_do` reads the ruler of a country with none
+- stack: vanilla only
+
+```
+Event target link 'ruler' returned an invalid object
+```
+
+`law_command_economy`'s `ai_will_do` counts `ruler = { law_stance = { law = law_type:law_command_economy value >= approve } }` among its reasons, with no check that the country has a ruler. Six lines in a 1.15 observer game (2026-11-07, 2018 to 2020), no mod frame. The mod doesn't override the file.
+
+### `events/election_events/election_contextual_events.txt:520` — `election_contextual_events.4` compares ages with a leader it may not have saved
+- stack: vanilla only
+
+```
+Got value of type 'none'
+```
+
+The event saves `scope:popular_leader_scope` from an `ordered_scope_character`, or else from a `create_character` in ROOT, then compares `age < scope:popular_leader_scope.age` for every character of the group. When neither saved one, each comparison logs this line: four at once (2026-11-07, about 2008), no mod frame. The block reads no script value the mod overrides. The `:243` lines in the unguarded-leader entry are another event.
 
 ### `events/agitators_events/revolution_events_03.txt:117` — `revolution_pulse2_events.1` makes an immortal leader busy and immortal
 - stack: vanilla only
@@ -1988,12 +2006,13 @@ Engine assertions fired when formation bookkeeping (exile-status update, `loiter
 
 ### `building_manager.cpp:1575` — building level reduced to fit support cap
 - source: `building_manager.cpp:1575`
+- source: `building_manager.cpp:1580`
 
 ```
 and can only support
 ```
 
-Engine reports that a state has more levels of a building type than the state can support (e.g. `Building in Natalia has 10 of building type Barracks and can only support 5, its level will be reduced`) and auto-downsizes. Normal vanilla rebalancing, not an error. Cosmetic.
+Engine reports that a state has more levels of a building type than the state can support (e.g. `Building in Natalia has 10 of building type Barracks and can only support 5, its level will be reduced`) and auto-downsizes. Normal vanilla rebalancing, not an error. Cosmetic. 1.15 logs it at `:1580` (2026-11-07). The mod's Grid Transfer Station shows up here when two parts of a split state merge: it is one level a state (a flat `state_building_grid_transfer_station_max_level_add = 1` in `base_values`), so the merged state holds two and the engine takes one away, once (Gujarat and Bundelkhand, 2026-11-07).
 
 ### `pdx_data_callstack.cpp:52` — vanilla GUI `interest_group_top` animation on missing widget
 - source: `pdx_data_callstack.cpp:52`
@@ -2232,12 +2251,13 @@ An engine assertion in the battle state machine, with no script frame attached. 
 
 ### `naval_battle_manager.cpp:452` — a naval battle not spawned because the units were not worth it
 - source: `naval_battle_manager.cpp:452`
+- source: `naval_battle_manager.cpp:450`
 
 ```
 Failed to create battle in province
 ```
 
-Logged with a `Script error:` prefix, but it reports a decision, not a failure: vanilla's `naval_battle_size` script value (`common/script_values/command_values.txt`) judged the available units too few to spawn a battle. One line on 2026-09-26.
+Logged with a `Script error:` prefix, but it reports a decision, not a failure: vanilla's `naval_battle_size` script value (`common/script_values/command_values.txt`) judged the available units too few to spawn a battle. One line on 2026-09-26; on 1.15 at `:450` (four lines, 2026-11-07).
 
 ### `controlcommands.cpp:470` — the load's set-playable step finds no player
 - source: `controlcommands.cpp:470`
@@ -2265,6 +2285,17 @@ SecondBest.Lookup().IsValid()
 ```
 
 An engine assertion with no script frame, once in a 27-minute session (2026-10-05). The same second error.log logged the registered `<unknown>:0` null-country line (`Country  (4294967295)`), so the engine was ranking against a country that no longer existed. Not actionable from script.
+
+### `pdx_assert.cpp:641` — city hub asserts for a state that no longer resolves
+- source: `pdx_assert.cpp:641`
+
+```
+Assertion failed: State.Lookup().IsValid()
+Assertion failed: !PossibleHubs.IsEmpty()
+Assertion failed: Hub != ECityType::Count
+```
+
+Three engine assertions in one second with no script frame: a state that doesn't resolve, so no city hub can be picked for it, and no hub type either. Once on 2026-11-07 (1.15 observer game, 2004); the same three, with `FirstBest.Lookup().IsValid()`, once in the 2026-10-12 overnight run, where error.log that second held only vanilla `capital` / `market_capital` / `owner` reads of a country that had just lost its last state (`00_canada_australia`, `00_corn_laws`, `goods_ban_decisions`, `05_struggle_for_the_highveld_buttons`). Not actionable from script. `FirstBest` is left out of the signature: it has come only with these, once, and stays visible.
 
 ### `pdx_assert.cpp:641` — `Country.IsValid()`
 - source: `pdx_assert.cpp:641`
