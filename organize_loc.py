@@ -536,10 +536,10 @@ CULTURE_MERGE_RESULT_KEYS = (
     "cm_czechoslovak", "cm_american", "cm_anglophone", "cm_platine", "cm_andean",
     "cm_gran_colombian", "cm_arab", "cm_oghuz_turkic", "cm_dravidian", "cm_indonesian",
     "cm_nguni", "cm_latin", "cm_pan_slavic", "cm_pan_turkic", "cm_pan_malay", "cm_east_african",
-    # The language and heritage traits of the merges that start at tier 3.
+    # The traits of the merges that start at tier 3: a language trait each, and a
+    # heritage trait where the core parts do not share one.
     "language_cm_latin", "heritage_cm_latin", "language_cm_pan_slavic", "heritage_cm_pan_slavic",
-    "language_cm_pan_turkic", "heritage_cm_pan_turkic", "language_cm_pan_malay",
-    "heritage_cm_pan_malay", "language_cm_east_african", "heritage_cm_east_african",
+    "language_cm_pan_turkic", "heritage_cm_pan_turkic", "language_cm_pan_malay", "language_cm_east_african",
 )
 
 # Ordered list of output categories.

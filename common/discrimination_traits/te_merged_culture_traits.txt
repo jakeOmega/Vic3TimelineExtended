@@ -42,20 +42,8 @@ language_cm_pan_malay = {
 	trait_group = language_group_austronesian
 }
 
-# Pan-Malay
-heritage_cm_pan_malay = {
-	type = heritage
-	trait_group = heritage_group_southeast_asian
-}
-
 # East African
 language_cm_east_african = {
 	type = language
 	trait_group = language_group_bantu
-}
-
-# East African
-heritage_cm_east_african = {
-	type = heritage
-	trait_group = heritage_group_african
 }

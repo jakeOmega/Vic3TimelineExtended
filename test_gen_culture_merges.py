@@ -8,6 +8,7 @@ import re
 import sys
 import tempfile
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -59,6 +60,11 @@ def vanilla():
 def _vanilla_fields(body):
     fields = unwrap(body)
     return fields if isinstance(fields, dict) else ()
+
+
+def core_heritages(merge):
+    """The heritage traits of the merge's core parts."""
+    return {cfg.culture_traits(part.cultures[0], vanilla(), cfg.MERGES)[0] for part in merge.core}
 
 
 def start_tier(merge):
@@ -208,32 +214,54 @@ class TraitTest(unittest.TestCase):
         self.assertEqual(field(heritage, "type"), "heritage")
         self.assertEqual(field(heritage, "trait_group"), "heritage_group_european")
 
-    def test_traits_go_to_every_merge_that_starts_at_tier_3(self):
+    def test_a_language_trait_goes_to_every_merge_that_starts_at_tier_3(self):
         starts = [m for m in cfg.MERGES if m.new is not None and start_tier(m) == 3]
         self.assertEqual(
             sorted(m.key for m in starts),
             ["east_african", "latin", "pan_malay", "pan_slavic", "pan_turkic"],
         )
-        expected = {f"{kind}_cm_{m.key}" for m in starts for kind in ("language", "heritage")}
-        self.assertEqual(set(self.traits), expected)
+        languages = {key for key in self.traits if key.startswith("language_")}
+        self.assertEqual(languages, {f"language_cm_{m.key}" for m in starts})
 
-    def test_a_tier_3_culture_uses_its_own_traits(self):
+    def test_unshared_heritage_gets_a_minted_trait(self):
+        # R16, the branch that mints: Latin's core heritages are gallic, italic and iberian.
+        for key in ("latin", "pan_slavic", "pan_turkic"):
+            merge = cfg.merge_by_key(key)
+            self.assertGreater(len(core_heritages(merge)), 1, key)
+            self.assertIn(f"heritage_cm_{key}", self.traits, key)
+            self.assertEqual(field(self.cultures[merge.result], "heritage"), f"heritage_cm_{key}", key)
+
+    def test_a_shared_heritage_is_reused_not_minted(self):
+        # R16, the branch that reuses: East African's core parts all have heritage_eastern_bantu.
+        for key, heritage in (("east_african", "heritage_eastern_bantu"), ("pan_malay", "heritage_insulindian")):
+            merge = cfg.merge_by_key(key)
+            self.assertEqual(core_heritages(merge), {heritage}, key)
+            self.assertNotIn(f"heritage_cm_{key}", self.traits, key)
+            self.assertEqual(field(self.cultures[merge.result], "heritage"), heritage, key)
+            # ... while the language trait is still minted
+            self.assertEqual(field(self.cultures[merge.result], "language"), f"language_cm_{key}", key)
+
+    def test_the_traits_are_exactly_the_minted_ones(self):
+        expected = set()
         for merge in cfg.MERGES:
-            if merge.new is None:
-                continue
-            body = self.cultures[merge.result]
-            if start_tier(merge) == 3:
-                self.assertEqual(field(body, "language"), f"language_cm_{merge.key}", merge.key)
-                self.assertEqual(field(body, "heritage"), f"heritage_cm_{merge.key}", merge.key)
-            else:
+            if merge.new is not None and start_tier(merge) == 3:
+                expected.add(f"language_cm_{merge.key}")
+                if len(core_heritages(merge)) > 1:
+                    expected.add(f"heritage_cm_{merge.key}")
+        self.assertEqual(set(self.traits), expected)
+        self.assertEqual(len(expected), 8)
+
+    def test_a_culture_below_tier_3_uses_no_minted_trait(self):
+        for merge in cfg.MERGES:
+            if merge.new is not None and start_tier(merge) < 3:
+                body = self.cultures[merge.result]
                 self.assertNotIn("_cm_", field(body, "language"), merge.key)
                 self.assertNotIn("_cm_", field(body, "heritage"), merge.key)
 
-    def test_east_african_has_traits_without_components(self):
+    def test_east_african_has_a_trait_without_components(self):
         merge = cfg.merge_by_key("east_african")
         self.assertEqual(merge.components, ())
         self.assertEqual(field(self.traits["language_cm_east_african"], "trait_group"), "language_group_bantu")
-        self.assertEqual(field(self.traits["heritage_cm_east_african"], "trait_group"), "heritage_group_african")
 
     def test_heritage_group_falls_back_to_the_first_core_part_when_none_is_shared(self):
         # Pan-Turkic's parts span middle eastern, central Asian and European heritage groups.
@@ -313,6 +341,113 @@ class OrganizeLocTest(unittest.TestCase):
         self.assertIn("gen_culture_merges.py", organize_loc.GENERATED_CATEGORIES["CULTURE_MERGES_GENERATED"])
 
 
+def flat_ethnicities(body):
+    """Counter of (weight, ethnicity) in a parsed culture body, repeats included.
+
+    Written for the test, apart from the generator's own reader: a weight that
+    appears twice parses as a list of (operator, value) pairs.
+    """
+    entries = Counter()
+    for weight, raw in field(body, "ethnicities").items():
+        if isinstance(raw, list) and raw and all(isinstance(v, tuple) for v in raw):
+            values = [unwrap(v) for v in raw]
+        else:
+            values = [unwrap(raw)]
+        for value in values:
+            entries[(weight, value)] += 1
+    return entries
+
+
+class EthnicitiesTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.cultures = parse(CULTURES)
+
+    def first_core_body(self, merge):
+        first = merge.core[0].cultures[0]
+        return unwrap(vanilla()[first]) if first in vanilla() else self.cultures[first]
+
+    def test_each_result_keeps_its_first_core_parts_ethnicities_repeats_included(self):
+        for merge in cfg.MERGES:
+            if merge.new is not None:
+                self.assertEqual(
+                    flat_ethnicities(self.cultures[merge.result]),
+                    flat_ethnicities(self.first_core_body(merge)),
+                    merge.key,
+                )
+
+    def test_a_repeated_weight_is_written_as_separate_lines(self):
+        # Turkish writes `1 = arab` and `1 = slavic`; Oghuz Turkic and Pan-Turkic inherit that.
+        for result in ("cm_oghuz_turkic", "cm_pan_turkic"):
+            entries = flat_ethnicities(self.cultures[result])
+            self.assertEqual(entries[("1", "arab")], 1, result)
+            self.assertEqual(entries[("1", "slavic")], 1, result)
+        self.assertTrue(any(len({w for w, _ in e}) < sum(e.values()) for e in map(flat_ethnicities, self.cultures.values())))
+
+    def test_no_output_line_holds_a_python_repr(self):
+        for relative in gen.plan_outputs():
+            for number, line in enumerate((ROOT / relative).read_text(encoding="utf-8-sig").splitlines(), 1):
+                self.assertNotIn("[(", line, f"{relative}:{number}")
+                self.assertNotIn("('", line, f"{relative}:{number}")
+
+    def test_every_ethnicity_line_is_a_weight_and_a_name(self):
+        in_block = False
+        seen = 0
+        for line in CULTURES.read_text(encoding="utf-8-sig").splitlines():
+            if line == "\tethnicities = {":
+                in_block = True
+            elif in_block and line == "\t}":
+                in_block = False
+            elif in_block:
+                seen += 1
+                self.assertRegex(line, r"^\t\t[0-9]+ = [a-z_]+$")
+        self.assertGreater(seen, 21)
+
+    def test_every_line_of_the_cultures_file_has_a_known_shape(self):
+        token = r'(?:[A-Za-z0-9_.\-]+|"[^"]*")'
+        single = "religion|heritage|language|graphics|name_format|assimilation_rate"
+        shapes = [
+            r"^#.*$", r"^$", r"^cm_[a-z_]+ = \{$", r"^\}$",
+            r"^\tcolor = rgb\{ [0-9]+ [0-9]+ [0-9]+ \}$",
+            rf"^\t(?:{single}) = [a-z_0-9.]+$",
+            r'^\tseal_and_signature_texture = "gfx/[A-Za-z0-9_/]+\.dds"$',
+            r"^\ttraditions = \{ (?:tradition_[a-z_]+ )*\}$",
+            r"^\t[a-z_]+ = \{$", r"^\t\}$",
+            rf"^\t\t{token}(?: {token})*$",
+            r"^\t\t[0-9]+ = [a-z_]+$",
+        ]
+        compiled = [re.compile(shape) for shape in shapes]
+        lines = CULTURES.read_text(encoding="utf-8-sig").splitlines()
+        for number, line in enumerate(lines[1:], 2):
+            self.assertTrue(any(c.match(line) for c in compiled), f"{CULTURES.name}:{number}: {line[:100]}")
+
+    def test_only_ethnicities_and_name_lists_ever_repeat_a_key_in_vanilla(self):
+        repeated = {}
+        for culture, body in vanilla().items():
+            if culture == cfg.TRAITS_KEY:
+                continue
+            for name, raw in _vanilla_fields(body).items():
+                value = unwrap(raw)
+                if gen._repeats(value) is not None:
+                    repeated.setdefault(name, set()).add(culture)
+                if name == "ethnicities" and isinstance(value, dict) and any(gen._repeats(v) is not None for v in value.values()):
+                    repeated.setdefault(name, set()).add(culture)
+        self.assertLessEqual(set(repeated), {"ethnicities", *gen.NAME_LISTS}, repeated)
+        self.assertIn("turkish", repeated["ethnicities"])
+        self.assertLessEqual(set(repeated) - {"ethnicities"}, set(gen.NAME_LISTS))
+        # Single-valued fields are one name each, in every vanilla culture.
+        for culture, body in vanilla().items():
+            if culture == cfg.TRAITS_KEY:
+                continue
+            fields = gen._fields(body)
+            for name in ("religion", "heritage", "language", "graphics", *gen.OPTIONAL_SCALARS):
+                if name in fields:
+                    gen._single(fields, name, culture)
+            for name in ("obsessions", "taboos", "traditions", *gen.NAME_LISTS):
+                gen._list(fields, name)
+            self.assertTrue(gen._ethnicities(fields), culture)
+
+
 class TraditionsTest(unittest.TestCase):
     """A result keeps the traditions every core part has."""
 
@@ -389,10 +524,14 @@ class MechanicsTest(unittest.TestCase):
         self.assertEqual(gen.merged_names(["a", "b", "c"], "female_common_last_names", cultures), ["Aova", "Bov", "Aov"])
         self.assertEqual(gen.merged_names(["a", "b", "c"], "common_last_names", cultures), ["Aov", "Bov"])
 
-    def test_a_list_a_vanilla_file_wrote_twice_is_read_once(self):
-        # Vanilla's Marathi repeats three name lists, which the parser nests.
-        cultures = {"m": ["=", {"noble_last_names": ["=", ["=", ["Ali", "Sultan"]]]}]}
-        self.assertEqual(gen.merged_names(["m"], "noble_last_names", cultures), ["Ali", "Sultan"])
+    def test_a_list_a_vanilla_file_wrote_twice_is_read_whole(self):
+        # Vanilla's Marathi writes three name lists twice; the parser returns the key as a list of pairs.
+        cultures = {"m": ("=", {"noble_last_names": ("=", [("=", ["Ali", "Sultan"]), ("=", ["Bhat", "Ali"])])})}
+        self.assertEqual(gen.merged_names(["m"], "noble_last_names", cultures), ["Ali", "Sultan", "Bhat"])
+        marathi = gen._fields(vanilla()["marathi"])
+        names = gen._list(marathi, "noble_last_names")
+        self.assertIn("Bhat", names)  # the first writing
+        self.assertIn("Sultan", names)  # the second
 
     def test_names_are_wrapped_in_tabbed_lines(self):
         text = gen.render_name_list("male_common_first_names", [f"Name{n}" for n in range(60)])
@@ -407,9 +546,28 @@ class MechanicsTest(unittest.TestCase):
         self.assertIn('"von Moltke"', text)
         self.assertNotIn('"Plain"', text)
 
+    def test_a_name_with_an_apostrophe_is_quoted(self):
+        text = gen.render_name_list("noble_last_names", ["O'Neil", "Plain"])
+        self.assertIn('"O\'Neil"', text)
+        self.assertNotIn('"Plain"', text)
+
     def test_a_name_with_a_quote_mark_is_refused(self):
         with self.assertRaises(ValueError):
             gen.render_name_list("noble_last_names", ['O"Neil'])
+
+    def test_a_weight_written_twice_is_two_entries_in_source_order(self):
+        fields = {"ethnicities": ("=", {"2": ("=", "arab"), "1": [("=", "arab"), ("=", "slavic")], "3": ("=", "x")})}
+        self.assertEqual(gen._ethnicities(fields), [("2", "arab"), ("1", "arab"), ("1", "slavic"), ("3", "x")])
+
+    def test_a_shape_the_generator_does_not_know_fails_loudly(self):
+        with self.assertRaises(ValueError):
+            gen._list({"obsessions": ("=", "meat")}, "obsessions")  # not in braces
+        with self.assertRaises(ValueError):
+            gen._list({"obsessions": ("=", [("=", "meat"), ("=", "fish")])}, "obsessions")  # repeated, but not lists
+        with self.assertRaises(ValueError):
+            gen._single({"religion": ("=", [("=", "a"), ("=", "b")])}, "religion", "x")  # a single field written twice
+        with self.assertRaises(ValueError):
+            gen._ethnicities({"ethnicities": ("=", {"1": ("=", {"nested": ("=", "x")})})})
 
     def test_regenerate_writes_on_change_only(self):
         with tempfile.TemporaryDirectory() as tmp:

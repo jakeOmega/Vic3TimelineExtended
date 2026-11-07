@@ -1355,7 +1355,8 @@ cm_platine = {
 	}
 	graphics = european
 	ethnicities = {
-		1 = [('=', 'south_american'), ('=', 'caucasian')]
+		1 = south_american
+		1 = caucasian
 	}
 }
 
@@ -1594,7 +1595,8 @@ cm_oghuz_turkic = {
 	}
 	graphics = arabic
 	ethnicities = {
-		1 = [('=', 'arab'), ('=', 'slavic')]
+		1 = arab
+		1 = slavic
 		2 = north_caucasian
 	}
 	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_ottoman.dds"
@@ -2645,7 +2647,8 @@ cm_pan_turkic = {
 	}
 	graphics = arabic
 	ethnicities = {
-		1 = [('=', 'arab'), ('=', 'slavic')]
+		1 = arab
+		1 = slavic
 		2 = north_caucasian
 	}
 	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_ottoman.dds"
@@ -2655,7 +2658,7 @@ cm_pan_turkic = {
 cm_pan_malay = {
 	color = rgb{ 236 150 30 }
 	religion = sunni
-	heritage = heritage_cm_pan_malay
+	heritage = heritage_insulindian
 	language = language_cm_pan_malay
 	traditions = { }
 	male_common_first_names = {
@@ -2713,7 +2716,7 @@ cm_pan_malay = {
 cm_east_african = {
 	color = rgb{ 20 130 120 }
 	religion = sunni
-	heritage = heritage_cm_east_african
+	heritage = heritage_eastern_bantu
 	language = language_cm_east_african
 	traditions = { }
 	male_common_first_names = {
@@ -2812,7 +2815,8 @@ cm_east_african = {
 	}
 	graphics = african
 	ethnicities = {
-		1 = [('=', 'african'), ('=', 'east_african')]
+		1 = african
+		1 = east_african
 	}
 	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_middle_east.dds"
 }

@@ -46,7 +46,7 @@ def vanilla_cultures():
 
 
 def color_rgb(raw):
-    """A vanilla culture colour (rgb{}, hsv{}, hsv360{} or a list) as an (r, g, b) tuple."""
+    """A vanilla culture color (rgb{}, hsv{}, hsv360{} or a list) as an (r, g, b) tuple."""
     raw = _body(raw)
     if isinstance(raw, (list, tuple)):
         return tuple(int(float(v)) for v in raw)
@@ -87,7 +87,7 @@ class RosterTest(unittest.TestCase):
 
     def test_tier_follows_the_slot_not_the_alternative(self):
         # Yankee and cm_american share traits; both fill one slot, so neither
-        # makes the other a tier-1 neighbour. Anglophone's core is tier 1b.
+        # makes the other a tier-1 neighbor. Anglophone's core is tier 1b.
         anglo = cfg.merge_by_key("anglophone")
         self.assertEqual(cfg.derive_tier(anglo, "british", self.cultures), 2)
         self.assertEqual(cfg.derive_tier(anglo, "yankee", self.cultures), 2)
@@ -113,7 +113,7 @@ class RosterTest(unittest.TestCase):
         self.assertEqual(cfg.derive_tier(bare, "yue", d), 3)
         self.assertEqual(cfg.derive_tier(bare, "han", d), 3)
 
-    def test_a_hand_set_core_part_is_still_a_neighbour(self):
+    def test_a_hand_set_core_part_is_still_a_neighbor(self):
         """Derivation measures against every other core slot, hand-set or not.
 
         Catalan shares Occitan's language but not French's, so with Occitan in

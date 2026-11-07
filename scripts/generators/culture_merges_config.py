@@ -245,37 +245,40 @@ def merge_by_key(key: str) -> Merge:
 # ---------------------------------------------------------------------------
 
 
-def _unwrap(value):
-    """Strip the ("=", x) pair the parser wraps every value in."""
+def unwrap(value):
+    """Strip the ("=", x) pair the parser wraps every value in. A key the file
+    writes more than once comes back as a list of such pairs, which this leaves
+    alone."""
     while isinstance(value, (list, tuple)) and len(value) == 2 and value[0] in ("=", "?="):
         value = value[1]
     return value
 
 
-def _culture_traits(culture, cultures, merges, depth=0):
+def culture_traits(culture, cultures, merges, depth=0):
     """(heritage, language) of a culture, or None when it is unknown.
 
     A ``cm_`` result counts as having its merge's first core part's traits.
     """
     body = cultures.get(culture) if culture != TRAITS_KEY else None
     if body is not None:
-        body = _unwrap(body)
+        body = unwrap(body)
         if isinstance(body, dict):
-            return _unwrap(body.get("heritage")), _unwrap(body.get("language"))
+            return unwrap(body.get("heritage")), unwrap(body.get("language"))
         return None
     if depth < _MAX_RESULT_CHAIN:
         for m in merges:
             if m.new is not None and m.result == culture:
-                return _culture_traits(m.core[0].cultures[0], cultures, merges, depth + 1)
+                return culture_traits(m.core[0].cultures[0], cultures, merges, depth + 1)
     return None
 
 
-def _language_group(language, cultures):
-    """The trait_group of a language trait (language_group_romance), or None."""
-    traits = _unwrap(cultures.get(TRAITS_KEY)) or {}
-    entry = _unwrap(traits.get(language)) if language else None
+def trait_group(trait, cultures):
+    """The trait_group of a language or heritage trait (language_group_romance,
+    heritage_group_european), or None for an unknown trait."""
+    traits = unwrap(cultures.get(TRAITS_KEY)) or {}
+    entry = unwrap(traits.get(trait)) if trait else None
     if isinstance(entry, dict):
-        entry = _unwrap(entry.get("trait_group"))
+        entry = unwrap(entry.get("trait_group"))
     return entry if isinstance(entry, str) else None
 
 
@@ -291,7 +294,7 @@ def derive_tier(merge: Merge, culture: str, cultures: dict, merges: tuple[Merge,
 
     The hand-set tier if the roster gives one. Otherwise it is measured against
     every core part other than its own slot (a hand-set core part still counts
-    as a neighbour; the slot is excluded whole, so Yankee and ``cm_american``,
+    as a neighbor; the slot is excluded whole, so Yankee and ``cm_american``,
     which fill one slot, don't make each other tier 1):
 
     * 1: shares a language with a core part that also shares its heritage;
@@ -306,21 +309,21 @@ def derive_tier(merge: Merge, culture: str, cultures: dict, merges: tuple[Merge,
     if slot.tier is not None:
         return slot.tier
     refs = [c for p in merge.core if p is not slot for c in p.cultures]
-    mine = _culture_traits(culture, cultures, merges)
+    mine = culture_traits(culture, cultures, merges)
     if mine is None:
         raise ValueError("%s: no traits for %s" % (merge.key, culture))
     heritage, language = mine
-    group = _language_group(language, cultures)
+    group = trait_group(language, cultures)
     tier = None
     for ref in refs:
-        theirs = _culture_traits(ref, cultures, merges)
+        theirs = culture_traits(ref, cultures, merges)
         if theirs is None:
             raise ValueError("%s: no traits for %s" % (merge.key, ref))
         if theirs[1] == language:
             if theirs[0] == heritage:
                 return 1
             tier = 2
-        elif tier is None and group is not None and _language_group(theirs[1], cultures) == group:
+        elif tier is None and group is not None and trait_group(theirs[1], cultures) == group:
             tier = 3
     if tier is None:
         raise ValueError("%s: %s shares no language group with the core parts" % (merge.key, culture))
@@ -390,19 +393,19 @@ def validate(cultures: dict, merges: tuple[Merge, ...] | None = None) -> list[st
         # A part with no language group in common with a core part is cross-family.
         for part in m.core + m.optional:
             ref_groups = {
-                _language_group(t[1], cultures)
+                trait_group(t[1], cultures)
                 for p in m.core
                 if p is not part
                 for c in p.cultures
-                for t in [_culture_traits(c, cultures, merges)]
+                for t in [culture_traits(c, cultures, merges)]
                 if t is not None
             }
             ref_groups.discard(None)
             for c in part.cultures:
-                traits = _culture_traits(c, cultures, merges)
+                traits = culture_traits(c, cultures, merges)
                 if traits is None or not ref_groups:
                     continue  # unknown culture, already reported
-                group = _language_group(traits[1], cultures)
+                group = trait_group(traits[1], cultures)
                 if group is None:
                     errors.append("%s: %s has no language group" % (where, c))
                 elif group not in ref_groups:
