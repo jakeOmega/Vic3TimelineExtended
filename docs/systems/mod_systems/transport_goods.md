@@ -18,6 +18,36 @@ The two goods are cut by geography, as vanilla cuts them:
 
 **Passenger tiers.** The passenger-trains group (loc "Rolling Stock") and the ports' passenger-ships group (`pmg_water_personal_transport`, `most_productive`) are upgrades that make more transportation for more inputs. From double-decker carriages up, and in every water tier, the inputs cost about 40–45% of the output at base prices (the two early carriage tiers, unchanged, about 55%), so a tier on a state that's already supplied loses little.
 
+**Mine and plantation transport tiers** (`pmg_train_automation_*`, `extra_pm_groups.txt`; every mine, the co-product mines included, and ten plantations). Each tier buys more transportation and needs fewer workers than the one before (owner, 2026-11-07; `test_transport_goods.py` pins the order):
+
+| Tier | Unlock | Transportation a level | Staff a level |
+|---|---|---|---|
+| Road Carts | none | 0 | +2,000 laborers; −20 economy-of-scale cap |
+| Partial Bulk Transport | none | 2.5 | base |
+| Rail Transportation | Railways | 5 | −1,000 laborers; 10 pollution |
+| Extensive Rail Transport | Railways, Transport principle IV or V, a modern pump | 10 | −1,000 laborers, −500 machinists |
+
+Road Carts is vanilla's empty default `INJECT`ed. Rail Transportation is vanilla's `pm_rail_transport_mine` (mines) and `pm_steam_rail_transport` (plantations, rubber too), which the mod doesn't override: the owner keeps vanilla values without a good reason to change them (2026-11-07), so Partial Bulk is set below vanilla's 5. For a level-5 Picks and Shovels coal mine at base prices, each tier beats the one before from a higher wage:
+
+- Partial Bulk beats Road Carts from about £0.03 a worker.
+- Rail beats Partial Bulk from about £0.08.
+- Extensive Rail beats Rail from about £0.21. It is for developed, high-wage countries (owner, 2026-11-07).
+
+Before Railways, a state's transportation comes only from Urban Centers (2 a level) and ports' sailing ships (15), so a state short of it stays on Road Carts. Rubber plantations, logging camps and oil rigs have no Partial Bulk step, though the Road Carts `INJECT` applies to them.
+
+**The 1.9 slip.** When the tiers were written (2024-08) they read 0, 5, 10 and 20 Transportation; the rail tiers were the mod's `REPLACE`s of vanilla's 5. The 1.9 update (`67ee009a`, 2025-06-26) moved industry's transportation inputs onto Merchant Marine, then the mod's freight good, at roughly half (5 → 3, 10 → 5, 20 → 10). It wrote 0.50 for 5 in ten methods, and 0.52 in Drone Delivery, whose 12 the same rule makes 6. Apparently its 1 → 0.5 substitution also rewrote the "1" at the front of "10" and "12". #1050's ×50/30 carried 0.50 forward as 1, so Partial Bulk cost five times Rail.
+
+On 2026-11-07 the rail tiers' `REPLACE`s were deleted, so Rail is vanilla's 5, and Partial Bulk went from 5 to 2.5 to stay below it. Extensive Rail, which the slip missed (20 → 10 → 16.5), went to 10, twice vanilla Rail as it was twice the mod's Rail when written. Every other method the slip hit went back to the 10 it was written with, copies made from the slipped methods since included:
+
+- Cleanroom Fabs and AI-Managed Fab, set to 5 Merchant Marine (8.5 after #1050) on 2026-01-31.
+- Iron-Frame Buildings and its Construction Site twin. At 1 it cost £735 a construction point, less than Steel-Frame's £759; at 10 it costs £870, between Wooden (£1,000) and Steel-Frame.
+- The chemical plants' Advanced Process Control, Distributed Control Systems and AI Managed Chemical Plant, with their Explosives Factory copies.
+- The power plants' Power Integrated Smart Systems and AI Managed Power Plant, with its reactor, aneutronic and hydro copies.
+
+Drone Delivery went to 20: its original 12, plus the 8 of passenger transport it already bought. That puts it between E-Commerce (14.5) and Robotic Service Providers (26.5); at 9 it bought less than E-Commerce. `test_transport_goods.py` checks that each of these ladders buys no less transportation at a later tier. A bulk conversion of a good's quantities is engine-silent, so compare each changed value's old/new ratio afterwards: these were the only ratios near 0.05.
+
+**Why 10 and not 8.5.** The pipeline without the slip would give 8.5: the 1.9 update's rule took 10 to 5 Merchant Marine, and #1050's ×50/30, rounded to the half, takes 5 to 8.5. Steel-Frame took that path (20 → 10 → 16.5), as Extensive Rail did before it went to 10. The owner kept the values as written over a derived one (2026-11-07), so these tiers sit about 18% above their converted siblings.
+
 **Vactrains** (era 12, the `vactrains` technology, era 13 spec § 7.9) end both railway ladders. `pm_vactrains` follows Maglev Trains in Rolling Stock: 160 transportation (Maglev 100) and +15 infrastructure a level (Bullet Trains 5, Maglev 10), on steel, electronic components, tech metals and electricity, about 44% of the output at base prices. `pm_vactrain_freight` follows Autonomous Trains in the base group: 170 transportation (Autonomous 133.5) and 60 infrastructure a level (every base method from the diesel variant on has 55), on electricity, electronic components, tech metals and digital assets. It is the base group's first method since Electric Trains with no oil or coal, so it carries no emissions line. Both take `required_input_goods = electricity`. Freight goes in the base group because the base methods are the freight ladder (Containerized Cargo, Automated Loading and Unloading), the evacuated-tube ventures of the 2010s turned to cargo, and every base method after Electric Trains burns oil.
 
 **Prestige goods** stay on merchant marine (a local good can't carry one): `prestige_good_generic_merchant_marine` and `prestige_good_integrated_logistics`. Each company that lists one keeps a roster port. SAP and Shopify no longer list Integrated Logistics, since their rosters make transportation now (`prestige_good_roster_audit`).

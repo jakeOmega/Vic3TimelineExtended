@@ -7,6 +7,7 @@ these tests read the same tables, so the construction fallback
 Design: docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md.
 """
 
+import json
 import re
 import sys
 import unittest
@@ -140,6 +141,62 @@ class TestLiveFiles(unittest.TestCase):
             with self.subTest(pm=name):
                 self.assertNotIn("goods_output_merchant_marine_add", self.blocks[name])
                 self.assertIn("goods_output_transportation_add", self.blocks[name])
+
+    def _value(self, name, key):
+        """The sum of a method's `key = N` lines (key is a regex). A method the
+        mod doesn't define is read from vanilla_parsed/, so a vanilla patch to
+        it is checked once the snapshot is rebuilt. pm_road_carts is the mod's
+        INJECT, which is the whole method: vanilla's is empty."""
+        if name in self.blocks:
+            body = re.sub(r"#[^\n]*", "", self.blocks[name])
+            return sum(float(v) for v in re.findall(r"\b" + key + r"\s*=\s*(-?[\d.]+)", body))
+        if not hasattr(type(self), "vanilla_pms"):
+            type(self).vanilla_pms = json.loads((ROOT / "vanilla_parsed" / "common" / "pms.json").read_text(encoding="utf-8"))
+        text = json.dumps(self.vanilla_pms[name])
+        return sum(float(v) for v in re.findall(r'"' + key + r'": \["=", "(-?[\d.]+)"\]', text))
+
+    def test_mine_and_plantation_transport_tiers_ascend(self):
+        # Each tier buys more transportation and needs fewer workers than the
+        # one before it, so Partial Bulk Transport sits between Road Carts and
+        # Rail, vanilla's rail methods (owner, 2026-11-07). The 1.9 update
+        # wrote the mod's rail tiers' 5 Merchant Marine as 0.50, which left
+        # Partial Bulk dearer than Rail for 17 months (transport_goods.md,
+        # "Mine and plantation transport tiers").
+        value = self._value
+        for rail in ("pm_rail_transport_mine", "pm_steam_rail_transport"):
+            tiers = ["pm_road_carts", "pm_partial_bulk_transport", rail]
+            if rail == "pm_rail_transport_mine":
+                tiers.append("pm_rail_transport_mine_infrastructure_4")
+            bought = [value(t, "goods_input_transportation_add") for t in tiers]
+            staff = [value(t, r"building_employment_\w+_add") for t in tiers]
+            with self.subTest(tiers=tiers):
+                self.assertEqual(bought, sorted(set(bought)), "transportation must rise tier by tier")
+                self.assertEqual(staff, sorted(set(staff), reverse=True), "staff must fall tier by tier")
+
+    def test_later_tiers_buy_no_less_transportation(self):
+        # The 1.9 update's 10 -> 0.50 slip left these ladders buying less
+        # transportation at a later tier than an earlier one, which nothing
+        # caught for 17 months (transport_goods.md, "The 1.9 slip").
+        ladders = [
+            ["pm_wooden_buildings", "pm_iron_frame_buildings", "pm_steel_frame_buildings",
+             "pm_arc_welded_buildings", "pm_reinforced_concrete_buildings"],
+            ["pm_continuous_processing", "pm_advanced_process_control",
+             "pm_distributed_control_systems", "pm_ai_managed_chemical_plant"],
+            ["pm_continuous_processing", "pm_advanced_process_control_explosives_factory",
+             "pm_distributed_control_systems_explosives_factory", "pm_ai_managed_explosives_factory"],
+            ["pm_power_centralized_control_systems", "pm_power_integrated_smart_systems", "pm_ai_managed_power_plant"],
+            ["pm_department_stores", "pm_shopping_malls", "pm_e-commerce",
+             "pm_drone_delivery_systems", "pm_robotic_service_providers"],
+            ["pm_automated_assembly_lines", "pm_cleanroom_fabs", "pm_ai_managed_fab"],
+        ]
+        for variant in ("_reactor", "_aneutronic", "_hydro"):
+            ladders.append(["pm_power_centralized_control_systems", "pm_power_integrated_smart_systems",
+                            "pm_ai_managed_power_plant" + variant])
+
+        for ladder in ladders:
+            with self.subTest(ladder=ladder):
+                amounts = [self._value(t, "goods_input_transportation_add") for t in ladder]
+                self.assertEqual(amounts, sorted(amounts), dict(zip(ladder, amounts)))
 
 
 if __name__ == "__main__":
