@@ -172,6 +172,103 @@ class TestWorkforceTerm(unittest.TestCase):
         eng.call("te_demog_workforce_refresh")
         self.assertEqual(eng.modifiers, {"te_demog_line_working_adults_up": 0.22})
 
+    def _lead_state(self, wa, at, engine, cbr, read=0.0, w=0.0, wbase=0.25, **kw):
+        eng = _state(wa=wa, at=at, read=read, w=w if w else None, wbase=wbase, **kw)
+        eng.vars.update(te_dg_wf_engine=engine, te_dg_cbr=cbr)
+        return eng
+
+    def test_the_lead_runs_w_past_its_target_while_the_figure_trails(self):
+        """W's lead (2026-11-07): 1836, an aim 0.03 above the game's 0.257 at 38 births per 1,000. Closing half the gap
+        in a year takes the pops set 0.37 past the aim, so the lead stands at its cap of 0.2."""
+        eng = self._lead_state(wa=0.7, at=0.41, engine=0.257, cbr=38.0)
+        eng.call("te_demog_workforce_refresh")
+        target = _target(0.7, 0.41)
+        self.assertAlmostEqual(0.25 + target, 0.287, places=5)
+        lead = M.workforce_lead(target, 0.0, 0.25, 0.257, 38.0)
+        self.assertAlmostEqual(lead, P.WF_LEAD_CAP)
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], target + P.WF_LEAD_CAP, places=5)
+        self.assertAlmostEqual(eng.value("te_demog_wf_engine_target"), 0.287, places=5)
+        self.assertAlmostEqual(eng.modifiers["te_demog_census_workforce_up"], target + P.WF_LEAD_CAP, places=5)
+
+    def test_the_lead_shrinks_as_the_gap_closes(self):
+        """A small gap takes a lead under the cap; at the aim, none; the figure above the aim, a lead down."""
+        target = _target(0.7, 0.41)
+        for engine in (0.284, 0.287, 0.290):
+            with self.subTest(engine=engine):
+                eng = self._lead_state(wa=0.7, at=0.41, engine=engine, cbr=38.0)
+                eng.call("te_demog_workforce_refresh")
+                want = M.workforce_term(target, 0.0, M.workforce_lead(target, 0.0, 0.25, engine, 38.0))
+                self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4)
+                lead = eng.vars["te_dg_mw"] - target
+                self.assertLess(abs(lead), P.WF_LEAD_CAP)
+                self.assertEqual(lead > 1e-4, engine < 0.287)
+                self.assertEqual(lead < -1e-4, engine > 0.287)
+
+    def test_the_lead_is_capped_both_ways(self):
+        """An aim of 0.42 (W's target 0.17): a figure far below or above it, or a small gap at few births or none,
+        takes the cap; the floor (aristocrats' 0.2 + W at least 0.05) doesn't bind at W = -0.03."""
+        for engine, cbr, sign in ((0.30, 38.0, 1), (0.55, 38.0, -1), (0.43, 3.0, -1), (0.41, 0.0, 1)):
+            with self.subTest(engine=engine, cbr=cbr):
+                eng = self._lead_state(wa=0.7, at=0.6, engine=engine, cbr=cbr)
+                eng.call("te_demog_workforce_refresh")
+                self.assertAlmostEqual(eng.vars["te_dg_mw"] - _target(0.7, 0.6), sign * P.WF_LEAD_CAP, places=5)
+
+    def test_the_ceiling_takes_the_lead_and_never_the_target(self):
+        """A lead up stops where slaves' 0.5 + W + the lines on top reaches 0.95; a target past it stands (no cap)."""
+        for wa, at, extra in ((0.8, 0.8, 0.0), (0.8, 0.8, 0.05), (0.9, 1.0, 0.0)):
+            with self.subTest(wa=wa, at=at, extra=extra):
+                target = _target(wa, at)
+                eng = self._lead_state(wa=wa, at=at, engine=0.3, cbr=12.0, read=extra)
+                eng.call("te_demog_workforce_refresh")
+                want = M.workforce_term(target, extra, M.workforce_lead(target, extra, 0.25, 0.3, 12.0))
+                self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4)
+                self.assertLessEqual(eng.vars["te_dg_mw"],
+                                     max(target, P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX - extra) + 1e-5)
+                self.assertGreaterEqual(eng.vars["te_dg_mw"], target - 1e-5)
+
+    def test_the_lead_matches_the_model(self):
+        rng = random.Random(1107)
+        for _ in range(60):
+            wa, at = rng.uniform(0.4, 0.8), rng.uniform(0.21, 0.77)
+            w, extra = rng.uniform(-0.2, 0.3), rng.uniform(-0.2, 0.1)
+            wbase, engine, cbr = rng.uniform(0.22, 0.3), rng.uniform(0.15, 0.6), rng.choice((0.0, 1.0, 6.0, 12.0, 38.0))
+            eng = self._lead_state(wa=wa, at=at, engine=engine, cbr=cbr, read=w + extra, w=w, wbase=wbase)
+            eng.call("te_demog_workforce_refresh")
+            target = _target(wa, at)
+            want = M.workforce_term(target, extra, M.workforce_lead(target, extra, wbase, engine, cbr))
+            self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4, msg=(wa, at, w, extra, wbase, engine, cbr))
+            self.assertAlmostEqual(eng.value("te_demog_wf_pull_share"), M.workforce_pull_share(cbr), places=4)
+
+    def test_a_seed_and_a_state_with_no_walk_take_no_lead(self):
+        eng = self._lead_state(wa=0.7, at=0.41, engine=0.257, cbr=38.0, stepped=0.0, read=0.12, w=0.12)
+        eng.call("te_demog_workforce_refresh")
+        self.assertEqual(eng.vars["te_dg_mw"], 0.12, "a seed lands W as it is")
+        eng = _state(wa=0.7, at=0.41)
+        eng.vars["te_dg_cbr"] = 38.0
+        eng.call("te_demog_workforce_refresh")
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], _target(0.7, 0.41), places=5, msg="no figure read yet: no lead")
+
+    def test_the_lead_closes_half_the_gap_a_year_under_the_births_pull(self):
+        """The design (demographics_params.WF_LEAD_HALF) on the pull it assumes, x' = b (set - x), stepped monthly with
+        the census's yearly refresh: half of a 0.03 rise in two census years at 1836's 38 births per 1,000 (19 without
+        the lead) and in six at 12 (58 without), and the figure ends on the aim without overshooting it."""
+        def years_to_half(cbr, lead_on):
+            x, aim = 0.257, 0.287
+            for year in range(1, 81):
+                target = aim - 0.25
+                lead = M.workforce_lead(target, 0.0, 0.25, x, cbr) if lead_on else 0.0
+                s = 0.25 + M.workforce_term(target, 0.0, lead)
+                for _ in range(12):
+                    x += cbr / 1000 / 12 * (s - x)
+                self.assertLessEqual(x, aim + 0.002, (cbr, year))
+                if x - 0.257 >= 0.015:
+                    return year
+            return None
+        self.assertLessEqual(years_to_half(38.0, True), 2)
+        self.assertGreaterEqual(years_to_half(38.0, False), 15)
+        self.assertLessEqual(years_to_half(12.0, True), 6)
+        self.assertGreaterEqual(years_to_half(12.0, False), 50)
+
     def test_one_refresh_site_beside_the_census_terms(self):
         """§2.1: refreshed by the census's yearly step from the state pulse (ROOT the state) and fast mode's clock step,
         beside te_demog_rates_refresh; the pair is added only in te_demog_workforce_apply."""
@@ -553,12 +650,14 @@ class TestCountryFigures(unittest.TestCase):
 
 
 class TestWorkTermSelfChecks(unittest.TestCase):
-    """The two engine facts §2.1 and §1.8 rest on, each a once-a-game TE_SELF_CHECK line (owner, 2026-10-12)."""
+    """The engine facts §2.1 and §1.8 rest on, each a once-a-game TE_SELF_CHECK line (owner, 2026-10-12), and W's lead's
+    (2026-11-07): that the pull is the births."""
 
     def test_both_checks_log_both_verdicts_once_a_game(self):
         body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_checks")
         for name, flag in (("workforce_ratio_scale", "te_demog_selfcheck_wf_scale_done"),
-                           ("workforce_follows_target", "te_demog_selfcheck_wft_done")):
+                           ("workforce_follows_target", "te_demog_selfcheck_wft_done"),
+                           ("workforce_pull_births", "te_demog_selfcheck_wfp_done")):
             self.assertIn(f"TE_SELF_CHECK OK {name}", body)
             self.assertIn(f"TE_SELF_CHECK BROKEN {name}", body)
             self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", body)
@@ -579,34 +678,96 @@ class TestWorkTermSelfChecks(unittest.TestCase):
         self.assertIn("set_variable = { name = te_dg_wft_e0 value = var:te_dg_wf_engine }", landing)
         self.assertIn("divide = { value = te_demog_wf_set add = 1", _block(values, "te_debug_demog_wf_per_dependents"))
 
-    def _follows(self, e0, engine, read, wbase=0.25):
-        """The follows check's figures in a capital whose pops are set to wbase + read now, its engine figure engine
-        now and e0 when W landed."""
-        eng = _Engine({FIELD: read})
+    def _follows(self, e0, engine, aim, lead=0.0, wbase=0.25):
+        """The follows check's figures in a capital whose census aims at aim now (its pops' bases at wbase, no lines on
+        top) and whose pops are set lead past it, its engine figure engine now and e0 when W landed."""
+        eng = _Engine({FIELD: aim - wbase + lead})
         eng.values.update(_raw_blocks([DEBUG_VALUES]))
-        eng.vars.update(te_dg_wbase=wbase, te_dg_wf_engine=engine, te_dg_wft_e0=e0)
+        eng.vars.update(te_dg_wbase=wbase, te_dg_wf_engine=engine, te_dg_wft_e0=e0, te_dg_wa_share=1.0,
+                        te_dg_at_work=aim - wbase + P.WORKING_ADULT_BASE, te_dg_wf_rem=0.0)
+        self.assertAlmostEqual(eng.value("te_demog_wf_engine_target"), aim, places=5)
         return {name: eng.value(eng._tree(eng.values, f"te_debug_demog_wft_{name}"))
                 for name in ("needed", "moved", "engine_moved", "half_move", "min_move")}
 
-    def test_the_follows_check_asks_for_the_move_to_the_set_ratio(self):
+    def test_the_follows_check_asks_for_the_move_to_the_aim(self):
         """2026-10-17, Braunschweig's capital: W landed from the moved lines' pair (0.039) with the engine at 0.249,
-        about 0.04 below the 0.289 its pops were set to, and fell to 0.002 by 1842, the engine then at 0.252 beside a
-        set ratio of 0.252. W's rule asked half of W's 0.037 fall (0.018) of a move down and read BROKEN. The move due
-        was 0.003 up, under the 0.03 the check waits for: no verdict."""
-        f = self._follows(e0=0.249, engine=0.252, read=0.002)
+        about 0.04 below the 0.289 its pops were set to, and fell to 0.002 by 1842, the engine then at 0.252 beside an
+        aim of 0.252. W's rule asked half of W's 0.037 fall (0.018) of a move down and read BROKEN. The move due was
+        0.003 up, under the 0.03 the check waits for: no verdict. Since W's lead (2026-11-07) the move is to the aim,
+        not to the ratio the pops are set to, which runs past it while the figure trails."""
+        f = self._follows(e0=0.249, engine=0.252, aim=0.252)
         self.assertAlmostEqual(f["needed"], 0.003)
         self.assertLess(f["moved"], f["min_move"])
-        # a fast pull after a W that rose 0.04 from the engine's figure: OK
-        f = self._follows(e0=0.25, engine=0.285, read=0.04)
+        # a fast pull after an aim that rose 0.04 from the engine's figure: OK
+        f = self._follows(e0=0.25, engine=0.285, aim=0.29)
         self.assertGreaterEqual(f["moved"], f["min_move"])
         self.assertGreaterEqual(f["engine_moved"], f["half_move"])
-        # a slow pull, the same W: BROKEN
-        f = self._follows(e0=0.25, engine=0.255, read=0.04)
+        # a slow pull, the same aim: BROKEN
+        f = self._follows(e0=0.25, engine=0.255, aim=0.29)
         self.assertLess(f["engine_moved"], f["half_move"])
         # a fall the engine follows down: OK, signed the move's way
-        f = self._follows(e0=0.29, engine=0.258, read=0.0)
+        f = self._follows(e0=0.29, engine=0.258, aim=0.25)
         self.assertAlmostEqual(f["needed"], -0.04)
         self.assertGreaterEqual(f["engine_moved"], f["half_move"])
+        # the lead sets the pops 0.2 past a 0.29 aim: the move due is still the 0.04 to the aim, which 0.025 passes
+        f = self._follows(e0=0.25, engine=0.275, aim=0.29, lead=0.2)
+        self.assertAlmostEqual(f["needed"], 0.04)
+        self.assertGreaterEqual(f["engine_moved"], f["half_move"])
+
+    def _pull(self, e0, engine, pred):
+        """workforce_pull_births's figures in a capital marked a year ago at e0 with a predicted move pred."""
+        eng = _Engine({})
+        eng.values.update(_raw_blocks([DEBUG_VALUES]))
+        eng.vars.update(te_dg_wf_engine=engine, te_dg_wfp_e0=e0, te_dg_wfp_pred=pred)
+        return {name: eng.value(eng._tree(eng.values, f"te_debug_demog_wfp_{name}"))
+                for name in ("pred_size", "min_move", "moved", "ratio")}
+
+    def test_the_pull_check_reads_the_move_against_the_births(self):
+        """OK from half to twice the births' prediction, both ways; a prediction under 0.01 gives no verdict."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_checks")
+        pull = body.split("TE_SELF_CHECK OK workforce_follows_target", 1)[1]
+        for needle in ("te_debug_demog_wfp_years >= 1", "te_debug_demog_wfp_years < 2",
+                       "te_debug_demog_wfp_pred_size >= te_debug_demog_wfp_min_move",
+                       "te_debug_demog_wfp_ratio >= 0.5", "te_debug_demog_wfp_ratio <= 2",
+                       "TE_SELF_CHECK BROKEN workforce_pull_births", "te_debug_demog_wf_pull_unmark = yes"):
+            self.assertIn(needle, pull)
+        self.assertEqual(pull.count("TE_SELF_CHECK BROKEN workforce_pull_births"), 2, "slow and fast")
+        f = self._pull(e0=0.257, engine=0.272, pred=0.015)
+        self.assertGreaterEqual(f["pred_size"], f["min_move"])
+        self.assertAlmostEqual(f["ratio"], 1.0, places=4)
+        f = self._pull(e0=0.30, engine=0.29, pred=-0.015)
+        self.assertAlmostEqual(f["pred_size"], 0.015, places=5)
+        self.assertAlmostEqual(f["ratio"], 2 / 3, places=4)
+        self.assertLess(self._pull(e0=0.257, engine=0.260, pred=0.015)["ratio"], 0.5, "slow")
+        self.assertGreater(self._pull(e0=0.257, engine=0.300, pred=0.015)["ratio"], 2, "fast")
+        f = self._pull(e0=0.257, engine=0.26, pred=0.004)
+        self.assertLess(f["pred_size"], f["min_move"], "a figure with nowhere to go gives no verdict")
+
+    def test_the_pull_mark_predicts_from_the_set_ratio(self):
+        """The mark: on a capital after a step, the walk's figure, the set ratio for the year to come (bases, the W
+        just set and the lines on top) and the births' move (demographics_model.workforce_pull_move); each step
+        replaces the last's, and it stops once the check has run."""
+        mark = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_pull_mark")
+        for needle in ("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", "is_capital = yes",
+                       "var:te_dg_stepped > 0", "add = local_var:te_dg_wf_rem", "multiply = te_demog_wf_pull_share",
+                       "te_debug_demog_wf_pull_unmark = yes"):
+            self.assertIn(needle, mark)
+        self.assertLess(mark.index("te_debug_demog_wf_pull_unmark = yes"), mark.index("set_variable"))
+        refresh = _block(_text(WORK_EFFECTS), "te_demog_workforce_refresh")
+        self.assertLess(refresh.index("te_demog_workforce_apply = yes"), refresh.index("te_debug_demog_wf_pull_mark = yes"))
+        effects = dict(_raw_blocks([CONSOLE_EFFECTS]))
+        eng = _state(wa=0.7, at=0.45, read=0.0, w=0.0)
+        eng.vars.update(te_dg_wf_engine=0.257, te_dg_cbr=38.0)
+        eng.fixtures["year"] = 1840.0
+        eng.effects["te_debug_demog_wf_pull_mark"] = effects["te_debug_demog_wf_pull_mark"].replace(
+            "is_capital = yes", "").replace("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", "")
+        eng.effects["te_debug_demog_wf_pull_unmark"] = effects["te_debug_demog_wf_pull_unmark"]
+        eng.call("te_demog_workforce_refresh")
+        w = eng.vars["te_dg_mw"]
+        self.assertAlmostEqual(eng.vars["te_dg_wfp_set"], 0.25 + w, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_wfp_pred"], M.workforce_pull_move(0.25, w, 0.0, 0.257, 38.0), places=4)
+        self.assertAlmostEqual(eng.vars["te_dg_wfp_e0"], 0.257)
+        self.assertEqual(eng.vars["te_dg_wfp_cbr"], 38.0)
 
     def test_they_read_before_the_refresh_moves_anything(self):
         body = _block(_text(WORK_EFFECTS), "te_demog_workforce_refresh")

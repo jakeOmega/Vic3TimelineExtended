@@ -381,8 +381,11 @@ law. This replaces the laws' and technologies' own flat workforce lines: in 1836
 a state works about as in the base game, but a rich modern country has a sixth
 to a quarter fewer workers than the flat lines would give it. Each yearly count
 sets a state's workforce to the census's figure, shown as Census: Workforce in
-its workforce tooltip, and the game's own count moves toward it over the years
-that follow. Under Full, the laws' and technologies' Workforce Ratio lines say
+its workforce tooltip. The game's own count takes up a new figure only as people
+are born, so while it trails, the census sets the line past its figure, by
+enough to close about half the gap in a year (at most 20% either way). A new
+pension age or women's rights law shows in the workforce within a few years,
+more slowly where few children are born. Under Full, the laws' and technologies' Workforce Ratio lines say
 what the census does with them: the ones it counts toward how many women work
 read Women's Work, and the rest read Workforce Ratio (replaced by the census).
 

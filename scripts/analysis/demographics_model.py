@@ -908,11 +908,39 @@ def workforce_term_target(figures):
     return wf_target(figures) - P.WORKING_ADULT_BASE
 
 
-def workforce_term(target_w, remainder):
-    """W after one census step (te_demog_workforce_refresh): its target, raised so the lowest pop base plus W plus the
-    remainder (the lines on top) stays at P.WF_POP_RATIO_MIN. No ramp (owner, 2026-10-20): the engine's own pull toward
-    a pop's ratio phases the change in."""
-    return max(target_w, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+def workforce_pull_share(cbr):
+    """The share of the gap between a state's workforce share and the ratio its pops are set to that the engine closes
+    in one census step: newborns join at the set ratio and the dead leave at the pop's own, so the share moves
+    b x (set - share) a year, b the births per head (P.WF_LEAD_HALF's comment). 1 - e^-b, to fourth order as the script
+    computes it (te_demog_wf_pull_share). cbr: the census's births per 1,000 over its last step (te_dg_cbr)."""
+    b = min(max(cbr / 1000.0, 0.0), P.WF_PULL_B_MAX)
+    return b * (1 - b / 2 + b * b / 6)
+
+
+def workforce_lead(target_w, remainder, wbase, engine, cbr):
+    """W's lead past its target at a census step (te_demog_workforce_lead): as much as makes the game's figure (engine,
+    the walk's te_dg_wf_engine) close P.WF_LEAD_HALF of its gap to the aim (wbase + target_w + remainder) in the census
+    year to come, at most P.WF_LEAD_CAP either way; a lead up never takes the highest pop base + W + the remainder past
+    P.WF_POP_RATIO_MAX (it takes the lead only, never the target)."""
+    gap = wbase + target_w + remainder - engine
+    lead = gap * (P.WF_LEAD_HALF / max(workforce_pull_share(cbr), P.WF_PULL_SHARE_MIN) - 1)
+    lead = max(-P.WF_LEAD_CAP, min(P.WF_LEAD_CAP, lead))
+    if lead > 0:
+        lead = min(lead, max(0.0, P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX - remainder - target_w))
+    return lead
+
+
+def workforce_term(target_w, remainder, lead=0.0):
+    """W after one census step (te_demog_workforce_refresh): its target plus its lead (workforce_lead; 0 before the walk
+    has read the game's figure), raised so the lowest pop base plus W plus the remainder (the lines on top) stays at
+    P.WF_POP_RATIO_MIN. No ramp (owner, 2026-10-20): it lands at once, and the lead makes up for the engine's own pull."""
+    return max(target_w + lead, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+
+
+def workforce_pull_move(wbase, w, remainder, engine, cbr):
+    """What the game's figure should move by in the census step to come, by the births (workforce_pull_share): the
+    self-check workforce_pull_births's prediction (te_debug_demog_wf_pull_mark)."""
+    return (wbase + w + remainder - engine) * workforce_pull_share(cbr)
 
 
 def engine_total(figures, wbase, remainder=0.0):

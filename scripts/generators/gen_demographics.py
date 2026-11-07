@@ -2039,6 +2039,12 @@ def work_step2_values(o):
         # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
         # least this
         "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,
+        # W's lead (te_demog_workforce_lead): the share of the gap to close in a census year, the cap either way, and
+        # the ceiling: the highest pop base + W + the lines on top at most WF_POP_RATIO_MAX, so W + the lines on top at
+        # most this; the pull's clamp on births per head and its least divisor
+        "wf_lead_half": P.WF_LEAD_HALF, "wf_lead_cap": P.WF_LEAD_CAP, "wf_lead_cap_neg": -P.WF_LEAD_CAP,
+        "wf_pop_ceiling": P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX,
+        "wf_pull_b_max": P.WF_PULL_B_MAX, "wf_pull_share_min": P.WF_PULL_SHARE_MIN,
         "pension_age_early": P.PENSION_AGE["early"], "pension_age_raised": P.PENSION_AGE["raised"],
         "pension_link_offset": P.PENSION_LINK_OFFSET, "pension_link_floor": P.PENSION_LINK_FLOOR,
         "pension_link_step": P.PENSION_LINK_STEP, "pension_link_step_neg": -P.PENSION_LINK_STEP,

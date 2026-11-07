@@ -874,8 +874,10 @@ te_debug_demog_wf_dependents_gap = {
 }
 
 # workforce_follows_target: the census years since W landed in this capital; the move the engine's figure had to make
-# since, from where it stood at the landing (te_dg_wft_e0, the walk's then) to the ratio its pops are set to now
-# (te_demog_wf_set: the pops' bases, W and the lines on top), signed (te_debug_demog_wft_needed); its size
+# since, from where it stood at the landing (te_dg_wft_e0, the walk's then) to the census's aim now
+# (te_demog_wf_engine_target: the pops' bases, W's target and the lines on top; until W's lead of 2026-11-07 the ratio
+# the pops are set to, te_demog_wf_set, which now runs past the aim while the figure trails), signed
+# (te_debug_demog_wft_needed); its size
 # (te_debug_demog_wft_moved: the check waits until it is at least te_debug_demog_wft_min_move, so an OK can't come
 # from a figure that had nowhere to go); how far the engine has moved that way; and half of the move, the OK line.
 # Not W's own move: W lands from the moved lines' pair, which the engine may not have reached, and then a W that falls
@@ -887,7 +889,7 @@ te_debug_demog_wft_years = {
 	subtract = var:te_dg_wft_y0
 }
 te_debug_demog_wft_needed = {
-	value = te_demog_wf_set
+	value = te_demog_wf_engine_target
 	subtract = var:te_dg_wft_e0
 }
 te_debug_demog_wft_moved = {
@@ -927,6 +929,48 @@ te_debug_demog_wft_w_target = {
 }
 te_debug_demog_wft_y0_read = {
 	value = var:te_dg_wft_y0
+}
+
+# workforce_pull_births (W's lead, 2026-11-07): the census years since the capital's mark (te_debug_demog_wf_pull_mark;
+# the check asks for exactly one); the move the births predicted, its size (at least te_debug_demog_wfp_min_move, so
+# an OK can't come from a figure that had nowhere to go), the engine's move since, signed as the figure moved, and the
+# two's ratio, the verdict (OK from 0.5 to 2). The ratio is read only once the size has passed its minimum.
+te_debug_demog_wfp_years = {
+	value = te_demog_year
+	subtract = var:te_dg_wfp_y
+}
+te_debug_demog_wfp_pred_read = {
+	value = var:te_dg_wfp_pred
+}
+te_debug_demog_wfp_pred_size = {
+	value = var:te_dg_wfp_pred
+	if = {
+		limit = { var:te_dg_wfp_pred < 0 }
+		multiply = -1
+	}
+}
+te_debug_demog_wfp_min_move = {
+	value = 0.01
+}
+te_debug_demog_wfp_moved = {
+	value = var:te_dg_wf_engine
+	subtract = var:te_dg_wfp_e0
+}
+te_debug_demog_wfp_ratio = {
+	value = te_debug_demog_wfp_moved
+	divide = var:te_dg_wfp_pred
+}
+te_debug_demog_wfp_e0_read = {
+	value = var:te_dg_wfp_e0
+}
+te_debug_demog_wfp_set_read = {
+	value = var:te_dg_wfp_set
+}
+te_debug_demog_wfp_cbr_read = {
+	value = var:te_dg_wfp_cbr
+}
+te_debug_demog_wfp_y_read = {
+	value = var:te_dg_wfp_y
 }
 
 # ---- Option r (phase 2 step 2): -1 where a figure doesn't exist -----------------------------------------------
