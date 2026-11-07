@@ -2514,7 +2514,7 @@
  je_un_chamber_dev_fund_none:0 "#bold [concept_un_development_fund]:#! nothing for us: it pays only members with a seat in the Assembly."
  je_un_chamber_dev_fund_patron:0 "#bold Recipients' goodwill:#! the members the Fund pays remember our contributions, #G +[THIS.ScriptValue('un_disp_dev_fund_patron_pct')|0]%#! to our lobbying with them."
  je_un_chamber_dev_fund_pool:0 "#bold [concept_un_development_fund]:#! we receive @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week, into our [concept_investment_pool]."
- je_un_chamber_dev_fund_treasury:0 "#bold [concept_un_development_fund]:#! we receive @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week, into our [concept_treasury]: our laws allow no investment pool, or we have no banking system yet."
+ je_un_chamber_dev_fund_treasury:0 "#bold [concept_un_development_fund]:#! we receive @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week, into our [concept_treasury]: our laws allow no investment pool, or we have no banking system."
  je_un_chamber_dev_fund_withholding:0 "#bold [concept_un_development_fund]:#! #R nothing while we withhold our dues#!, though we are below its line."
  je_un_chamber_docket_last_1:0 "Last taken up, #v [GetGlobalVariable('un_dkt_last_age').GetValue|0]#! month(s) ago: #bold a nuclear strike#! by [GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName]."
  je_un_chamber_docket_last_10:0 "Last taken up, #v [GetGlobalVariable('un_dkt_last_age').GetValue|0]#! month(s) ago: #bold the end of a war between great powers#!."

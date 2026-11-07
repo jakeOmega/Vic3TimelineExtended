@@ -177,10 +177,11 @@ starting_investment_pool = {
 	multiply = 2
 }
 
-# What banking_cycle_weekly_effects adds to the pool each week: a share of the
-# pool's weekly gross income (country_weekly_investment_pool_mult) plus a flat
-# amount (country_weekly_investment_pool_add: the command economy's treasury
-# balance and the UN World Development Fund's grant).
+# What banking_weekly_investment_pool_add adds to the pool each week, for every
+# holder of je_banking_cycle whether or not its cycle has started: a share of
+# the pool's weekly gross income (country_weekly_investment_pool_mult) plus a
+# flat amount (country_weekly_investment_pool_add: the command economy's
+# treasury balance and the UN World Development Fund's grant).
 #
 # The share is of INCOME, not of the balance (2026-10-05,
 # banking_cycle_simulation.md §21). Until then it multiplied investment_pool
