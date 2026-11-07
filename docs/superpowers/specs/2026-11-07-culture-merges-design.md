@@ -335,7 +335,12 @@ switches:
    cultures' homelands keep finding them (§7). Dynamic Homeland Progress
    would otherwise remove it wherever a law raises the removal threshold
    above 0 and the owner lacks the part as primary
-   (`te_homeland_removal_candidate`), so that trigger skips switched parts.
+   (`te_homeland_removal_candidate`), so that trigger skips a switched part
+   **while the state is also a homeland of the culture it switched into**
+   (owner, 2026-11-07). When Dynamic Homeland Progress removes the result's
+   homeland from a state, the same step removes the homelands there of every
+   part that switched into it, so an old homeland never outlives its
+   successor.
 3. **Primary cultures**: every country with a joined part as primary gets the
    result as primary too (§7).
 

@@ -353,7 +353,8 @@ It returns `"MISCELLANEOUS"` for a key starting `te_cm_`, placed before the `_ad
   - `common/scripted_effects/te_culture_merge_effects.txt`, adding `te_cm_convert_part`, `te_cm_census_dominance`, `te_cm_switch_part` and `te_cm_monthly_switched_culture`.
   - `common/on_actions/te_culture_merge_on_actions.txt`, adding `on_monthly_pulse_country` and `on_country_formed`.
   - The generator, adding `te_cmg_yearly_country`, `te_cmg_dominance_all`, `te_cmg_monthly_country` and `te_cmg_is_switched_part`.
-  - `common/scripted_triggers/homeland_triggers.txt`: `te_homeland_removal_candidate` gains `NOT = { te_cmg_is_switched_part = yes }`.
+  - `common/scripted_triggers/homeland_triggers.txt`: `te_homeland_removal_candidate` gains `NOT = { te_cmg_switched_part_kept = yes }`.
+  - `common/scripted_effects/homeland_effects.txt`: where `te_homeland_removal_monthly_effect` completes (`remove_homeland = scope:…`), call `te_cmg_remove_switched_part_homelands` on the same `state_region` with the removed culture saved as `scope:te_cm_removed_culture`.
   - `common/script_values/te_culture_merge_values.txt`, adding the dominance sums.
 - Test: `test_culture_merge_switch.py`. Also update `test_homeland_progress.py` if its interpreter rejects the new trigger.
 
@@ -378,11 +379,14 @@ It returns `"MISCELLANEOUS"` for a key starting `te_cm_`, placed before the `_ad
   - **`te_cmg_monthly_country`** calls `te_cm_monthly_switched_culture` for every culture with `te_cm_switched_<c>` set.
   - **`te_cmg_formed_country`** (generated) runs from `on_country_formed`. It calls `te_cmg_monthly_country`, then, for every running or complete merge whose starter's sphere includes the formed country and where it has already converted, adds the result as primary if it's missing.
   - **`te_cmg_is_switched_part`** (culture scope): an OR over `this = cu:<c>` together with `has_global_variable = te_cm_switched_<c>`.
+  - **`te_cmg_switched_part_kept`** (culture scope, ROOT = the state, as in `te_homeland_removal_candidate`): an OR over `this = cu:<c>`, `has_global_variable = te_cm_switched_<c>`, and `ROOT.state_region = { is_homeland = global_var:te_cm_switched_<c> }`. A switched part's homeland is kept only while its successor's homeland is there too (owner, 2026-11-07).
+  - **`te_cmg_remove_switched_part_homelands`** (state_region scope): for every culture `<c>` with `global_var:te_cm_switched_<c> = scope:te_cm_removed_culture` and a homeland here, `remove_homeland = cu:<c>`.
 
 - [ ] **Step 1: Write the failing tests** in `test_culture_merge_switch.py`:
   - `test_conversion_uses_the_rate_value`: `change_pop_culture` in `te_cm_convert_part` uses `value = te_cm_pop_rate`, and only the switch uses `value = 1`.
   - `test_switch_keeps_part_homeland`: `te_cm_switch_part` has `add_homeland` and no `remove_homeland`.
-  - `test_homeland_removal_skips_switched_parts`: `te_homeland_removal_candidate` contains `te_cmg_is_switched_part = yes` inside a `NOT`.
+  - `test_homeland_removal_skips_kept_parts_only`: `te_homeland_removal_candidate` contains `te_cmg_switched_part_kept = yes` inside a `NOT`, and the generated `te_cmg_switched_part_kept` tests `is_homeland = global_var:te_cm_switched_<c>` for every switched-capable culture.
+  - `test_part_homeland_follows_its_successor`: `te_homeland_removal_monthly_effect` calls `te_cmg_remove_switched_part_homelands` right after its `remove_homeland`.
   - `test_dominance_value_guards_zero`: the dominance helper branches on a zero denominator before dividing.
   - `test_primary_refresh_is_wired`: the on_actions file wires `on_monthly_pulse_country` to `te_cmg_monthly_country` and `on_country_formed` to `te_cmg_formed_country`.
   - `test_result_never_converts_into_itself`: no generated call to `te_cm_join_part`, `te_cm_convert_part`, `te_cm_census_dominance` or `te_cm_switch_part` passes `CULTURE` equal to that merge's `RESULT` (French, Han and the other absorb merges).
