@@ -26,9 +26,11 @@ Conventions
   unless the roster sets it by hand where history disagrees with the traits.
 
 Hand-set tiers (spec section 3: vanilla's traits sometimes disagree with history):
-Occitan, Walloon (heritage Netherlandish, not Gallic) and Yue, Hakka, Min
-(four vanilla languages, one Han identity), Ryukyuan, and Kannada (heritage
-Deccani, not Carnatic) join their merges as tier 1.
+* tier 1: Occitan, Walloon (heritage Netherlandish, not Gallic), French (which
+  Walloon's heritage would otherwise put at tier 2), Han with Yue, Hakka and Min
+  (four vanilla languages, one Han identity), Japanese with Ryukyuan, and Kannada
+  (heritage Deccani, not Carnatic);
+* tier 3: Catalan, which shares Occitan's language but stays a later join.
 """
 
 from __future__ import annotations
@@ -115,8 +117,8 @@ MERGES: tuple[Merge, ...] = (
         # Walloon (Netherlandish heritage) and Occitan (its own language) read as
         # French from the Third Republic on; Catalan, mostly in Spain, stays a
         # later, tier-3 join.
-        core=(_p("french"), _p("wallonian", tier=1), _p("occitan", tier=1)),
-        optional=(_p("catalan"),),
+        core=(_p("french", tier=1), _p("wallonian", tier=1), _p("occitan", tier=1)),
+        optional=(_p("catalan", tier=3),),
     ),
     Merge("british", "british", None, core=(_p("british"), _p("scottish"))),
     Merge(
@@ -156,9 +158,9 @@ MERGES: tuple[Merge, ...] = (
     Merge(
         "chinese", "han", None,
         # Four vanilla languages, one historical Han identity (spec section 3).
-        core=(_p("han"), _p("yue", tier=1), _p("min", tier=1), _p("hakka", tier=1)),
+        core=(_p("han", tier=1), _p("yue", tier=1), _p("min", tier=1), _p("hakka", tier=1)),
     ),
-    Merge("japanese", "japanese", None, core=(_p("japanese"), _p("ryukyuan", tier=1))),
+    Merge("japanese", "japanese", None, core=(_p("japanese", tier=1), _p("ryukyuan", tier=1))),
     Merge(
         "arab", "cm_arab", _new("Arab", 30, 112, 70),
         core=(_p("maghrebi"), _p("misri"), _p("mashriqi"), _p("bedouin"), _p("yemenite")),
@@ -288,26 +290,22 @@ def derive_tier(merge: Merge, culture: str, cultures: dict, merges: tuple[Merge,
     """How close a part is to the merge's core parts: 1, 2 or 3.
 
     The hand-set tier if the roster gives one. Otherwise it is measured against
-    the core parts other than its own slot, leaving out core parts whose tier is
-    hand-set (they are in by history, not by traits, and shouldn't pull a
-    neighbour closer: Catalan shares Occitan's language but stays tier 3):
+    every core part other than its own slot (a hand-set core part still counts
+    as a neighbour; the slot is excluded whole, so Yankee and ``cm_american``,
+    which fill one slot, don't make each other tier 1):
 
     * 1: shares a language with a core part that also shares its heritage;
     * 2: shares a language, but no such core part has its heritage;
     * 3: shares only a language group.
 
-    With no core part left to measure against (Han once Yue, Hakka and Min are
-    set aside) the part is the anchor and is tier 1. Raises ValueError for a
-    culture outside the merge, or one sharing no language group at all
-    (``validate`` reports those).
+    Raises ValueError for a culture outside the merge, or one sharing no
+    language group with any core part (``validate`` reports the latter).
     """
     merges = MERGES if merges is None else merges
     slot = _slot_of(merge, culture)
     if slot.tier is not None:
         return slot.tier
-    refs = [c for p in merge.core if p is not slot and p.tier is None for c in p.cultures]
-    if not refs:
-        return 1
+    refs = [c for p in merge.core if p is not slot for c in p.cultures]
     mine = _culture_traits(culture, cultures, merges)
     if mine is None:
         raise ValueError("%s: no traits for %s" % (merge.key, culture))

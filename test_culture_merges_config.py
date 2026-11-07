@@ -95,14 +95,45 @@ class RosterTest(unittest.TestCase):
         self.assertEqual(cfg.derive_tier(anglo, "afro_american", self.cultures), 2)
         self.assertEqual(cfg.derive_tier(anglo, "australian", self.cultures), 1)
 
-    def test_hand_set_tiers_do_not_anchor_others(self):
-        # Yue, Hakka and Min are tier 1 by hand; with them set aside Han has
-        # nothing to be measured against and is the anchor.
+    def test_hand_set_tiers_are_in_the_roster(self):
+        # Where vanilla's traits disagree with history the roster sets the tier.
+        d = self.cultures
         chinese = cfg.merge_by_key("chinese")
         for culture in ("han", "yue", "hakka", "min"):
-            self.assertEqual(cfg.derive_tier(chinese, culture, self.cultures), 1, culture)
+            self.assertEqual(cfg.derive_tier(chinese, culture, d), 1, culture)
         japanese = cfg.merge_by_key("japanese")
-        self.assertEqual(cfg.derive_tier(japanese, "ryukyuan", self.cultures), 1)
+        for culture in ("japanese", "ryukyuan"):
+            self.assertEqual(cfg.derive_tier(japanese, culture, d), 1, culture)
+        french = cfg.merge_by_key("french")
+        for culture in ("french", "wallonian", "occitan"):
+            self.assertEqual(cfg.derive_tier(french, culture, d), 1, culture)
+        self.assertEqual(cfg.derive_tier(cfg.merge_by_key("dravidian"), "kannada", d), 1)
+        # Without the overrides the traits alone would say otherwise.
+        bare = cfg.Merge("x", "han", None, tuple(cfg.Part(p.cultures) for p in chinese.core))
+        self.assertEqual(cfg.derive_tier(bare, "yue", d), 3)
+        self.assertEqual(cfg.derive_tier(bare, "han", d), 3)
+
+    def test_a_hand_set_core_part_is_still_a_neighbour(self):
+        """Derivation measures against every other core slot, hand-set or not.
+
+        Catalan shares Occitan's language but not French's, so with Occitan in
+        the core (tier set by hand) it derives tier 2 from Occitan alone; the
+        French merge sets Catalan's tier 3 by hand instead.
+        """
+        d = self.cultures
+        p = cfg.Part
+        probe = cfg.Merge("x", "french", None, (p(("french",)), p(("occitan",), tier=1)), (p(("catalan",)),))
+        self.assertEqual(cfg.derive_tier(probe, "catalan", d), 2)
+        # The same with Occitan dropped: nothing shares Catalan's language.
+        alone = cfg.Merge("x", "french", None, (p(("french",)), p(("wallonian",))), (p(("catalan",)),))
+        self.assertEqual(cfg.derive_tier(alone, "catalan", d), 3)
+        # A non-overridden culture beside an overridden one still derives normally.
+        beside = cfg.Merge("x", "british", None, (p(("british",)), p(("scottish",), tier=3)), (p(("australian",)),))
+        self.assertEqual(cfg.derive_tier(beside, "australian", d), 1)
+        self.assertEqual(cfg.derive_tier(beside, "british", d), 1)
+        self.assertEqual(cfg.derive_tier(beside, "scottish", d), 3)
+        # The roster's own Catalan is set by hand.
+        self.assertEqual(cfg.derive_tier(cfg.merge_by_key("french"), "catalan", d), 3)
 
     def test_core_tiers_match_appendix_a(self):
         """Appendix A's tier column: 1, except 1b (here 2) and tier 2 (here 3)."""
