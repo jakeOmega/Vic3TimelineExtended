@@ -1046,6 +1046,42 @@ show_as_tooltip effect [ Scoped object is not valid. Type: Military Formation
 
 Option a of `nomenklatura.4` (a general voted out) runs `remove_character_role = general` and then `commander_military_formation = { show_as_tooltip = { … } }`, which no longer has a formation to reach. Once, 2026-11-06 observer run (1.15, about 1894).
 
+### `common/treaty_articles/13_goods_transfer.txt:75` — the goods transfer's weekly check reads a source market's goods that aren't there
+- stack: vanilla only
+
+```
+Event target link 'input_market_goods' returned an invalid object
+```
+
+The article's `non_fulfillment` conditions test `"scope:article.input_market_goods(scope:article.source_country)" = { treaty_exports > market_export_cap }` every week with no guard, so a transfer whose good has no market goods entry for the source country logs a line per check. The mod creates no goods transfers in script (only its treaty panels draw them). 21 lines in 90 seconds, 2026-11-06 observer run (1.15, about 1902).
+
+### `events/krakatoa_events.txt:204` — `krakatoa.5` cuts the overlord's liberty desire instead of the subject's
+- stack: vanilla only
+
+```
+Subject Pact not found for Country
+```
+
+`krakatoa.5` (the eruption in a country you don't own) checks that `scope:krakatoa_country` is a subject of `root`, then runs `add_liberty_desire = -30` in `root`, the overlord, which has no subject pact of its own. Once (Netherlands), 2026-11-06 observer run (1.15, about 1898).
+
+### `common/laws/00_church_and_state.txt:592` — Total Separation's `on_activate` gives a revolution the religion of a definition it doesn't have
+- stack: vanilla only
+
+```
+set_state_religion effect [ 'Country 'Revolutionary
+```
+
+`law_total_separation`'s `on_activate` sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898).
+
+### `events/agitators_events/revolution_events_03.txt:117` — `revolution_pulse2_events.1` makes an immortal leader busy and immortal
+- stack: vanilla only
+
+```
+You cannot apply this effect when set_character_immortal is 'yes', ignoring this
+```
+
+The event sends `scope:army_lad_leader_scope` on a military mission with `set_character_busy_and_immortal = yes`, and that character can already be immortal; the engine ignores the effect. The mod sets no character immortal. Once, 2026-11-06 observer run (1.15, about 1899). The `marx_events.3.a` entry below is the same message from another event.
+
 ### `events/resignation.txt:414` — capitulating to a revolution that is no longer growing
 
 ```
