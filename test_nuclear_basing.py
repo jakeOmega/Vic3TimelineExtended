@@ -132,6 +132,10 @@ class TestHostAccidents(unittest.TestCase):
         self.assertIn("if = { limit = { exists = scope:nd_accident_host } set_variable = nd_accident_abroad }"
                       " else = { nd_accident_site_home = yes }", abroad)
         self.assertLess(abroad.index("save_scope_as = nd_accident_host"), abroad.index("set_variable = nd_accident_abroad"))
+        # The pick reports itself: OK once a game, BROKEN each time it fails.
+        self.assertIn("TE_SELF_CHECK OK nd_accident_host_pick", abroad)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_accident_host_pick", abroad)
+        self.assertIn("has_global_variable = nd_accident_host_pick_self_check_done", abroad)
         # And no flag from an earlier accident survives into this one's siting.
         clear = "if = { limit = { has_variable = nd_accident_abroad } remove_variable = nd_accident_abroad }"
         self.assertIn(clear, self.immediate)
