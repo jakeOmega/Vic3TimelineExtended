@@ -7,6 +7,8 @@ The description for the Workshop as of 1.3.0 (2026-11-06; 1.2.0's is in git hist
 
 ## Images to add
 
+The Workshop page's screenshots (2026-11-06) are annotated by `scripts/image_pipeline/workshop_screenshots.py`: a header naming the system, numbered callouts, and headline counts on the overview shots. Their counts come from the mod files; the description below still gives older ones (about 160 technologies in 7 eras, 36 buried sites, against 191, eras VI to XIII, and 50), so bring it in line when it is next published.
+
 When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these locations in the BBCode block below:
 
 1. **Hero image** — between the tagline italic and the `[hr]` above "At a glance". Strongest candidates: Saturn V / lunar landing, a flooded-coastline or wildfire climate scene, or a UN founding scene. Pick whichever best matches the timeline framing.
