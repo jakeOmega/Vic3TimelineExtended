@@ -1273,6 +1273,15 @@ Scope commander is not assigned to a formation
 
 The law's `on_activate` walks every general and admiral who doesn't back the council republic, saves `commander_military_formation` and, in the 75-weight branch, runs `unassign_from_formation`, with no check that the commander leads a formation. Three lines once, on 2026-11-06.
 
+### `common/journal_entries/00_treaty_of_london.txt:322` — the Conference of London's random votes read a voter's prestige as none (1.15)
+- stack: vanilla only
+
+```
+Got value of type 'none'
+```
+
+When the conference assigns the votes of countries that haven't voted, each involved country saves itself as the temporary scope `voting_country` and one `random_list` branch adds `scope:voting_country.prestige` to a proposal's tally. Once, in June 1838 of the 2026-11-06 observer game, that read came back none at the fourth proposal's branch; the other branches read the same scope the same way and didn't log. The mod neither overrides the file nor writes its variables, and the line has no script frame. That proposal's tally misses one voter's prestige.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
