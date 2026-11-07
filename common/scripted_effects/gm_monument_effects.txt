@@ -568,6 +568,14 @@ gm_mon_order_choice = {
 # 2026-10-18 §3.3: the building is not rebuilt).
 gm_mon_tear_down_one = {
 	save_scope_as = gm_mon_down
+	# Logged, as gm_state_tear_down is (log triage 2026-11-06).
+	if = {
+		limit = { has_variable = gm_tr_landmark }
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: landmark [THIS.Var('gm_tr_landmark').GetFlagName] in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: a monument in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
 	set_variable = { name = gm_tr_g value = gm_mon_grandeur }
 	var:gm_tr_origin ?= {
 		owner = {
@@ -1230,7 +1238,14 @@ gm_shadow_monthly = {
 				save_temporary_scope_as = gm_tmp_sh
 				var:gm_tr_origin = {
 					OR = {
-						NOT = { has_building = building_grand_monument }
+						# Not while its building may stand, unrecorded, in another
+						# part of its region: a merge's old state still resolves for
+						# a day or two before the shadow reads as an orphan
+						# (2026-11-06, Jantar Mantar).
+						AND = {
+							NOT = { has_building = building_grand_monument }
+							NOT = { state_region = { any_scope_state = { gm_state_unrecorded = yes } } }
+						}
 						NOT = { has_variable = gm_seen }
 						NOT = { var:gm_shadow ?= scope:gm_tmp_sh }
 					}
@@ -1493,8 +1508,10 @@ gm_sh_settle_region = {
 # takes a finished building no record describes as its own (the merge brought
 # it), stands beside the monument there, or, with no finished building there,
 # is raised as that part's monument into a new one. With no such part (it
-# changed hands as it merged), the most populous part of the region with a
-# finished building takes it beside its monument. Else it is lost. First, an
+# changed hands as it merged), a part with a finished building no record
+# describes takes it as its own (an annexation brought the building there),
+# else the most populous part of the region with a finished building takes it
+# beside its monument. Else it is lost. First, an
 # orphan whose landmark already stands is a second copy of that monument's
 # records (issue #1409): dropped, neither kept nor lost.
 gm_sh_settle_one = {
@@ -1514,6 +1531,19 @@ gm_sh_settle_one = {
 				scope:gm_sh_region = {
 					random_scope_state = {
 						limit = { exists = owner owner = scope:gm_sh_was_owner }
+						save_scope_as = gm_sh_target
+					}
+				}
+			}
+			# Its last owner holds no part, but the merge brought its building
+			# into another's (an annexation: 2026-11-06, Jantar Mantar in the
+			# East India Company's part of Rajputana): the part with a
+			# finished building no record describes takes it as its own.
+			if = {
+				limit = { NOT = { exists = scope:gm_sh_target } }
+				scope:gm_sh_region = {
+					random_scope_state = {
+						limit = { gm_state_unrecorded = yes }
 						save_scope_as = gm_sh_target
 					}
 				}

@@ -351,7 +351,7 @@ class TestSelfChecks(unittest.TestCase):
         for needle in ("NOT = { has_global_variable = te_demog_fl_selfcheck_done }",
                        "NOT = { has_modifier = te_demog_family_limitation }",
                        "var:te_dg_fl_line >= te_demog_k_fl_line_min", "var:te_dg_fl_line <= 0.3",
-                       "value = modifier:state_fertility_means_add", "trigger_event = { id = te_debug_demog.90 days = 7 }",
+                       "value = modifier:state_fertility_means_add", "owner = { trigger_event = { id = te_debug_demog.290 days = 7 } }",
                        "TE_SELF_CHECK START family_limitation_scaled"):
             self.assertIn(needle, start)
         apply = re.sub(r"#[^\n]*", "", _block(_text(FL_EFFECTS), "te_demog_fl_apply"))

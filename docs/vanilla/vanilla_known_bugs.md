@@ -346,6 +346,24 @@ Event target link 'leader' returned an unset scope
 
 Vanilla's exile event reads `leader` on every interest group of the country without checking it has one. On 2026-10-25 (1915) it fired for India, whose groups' leaders had been deleted (the Indian-revolution entry, `00_code_on_actions.txt:5440`): five unset `leader` lines and one `Could not get leader` line a group. The mod doesn't override the file.
 
+### `events/agitators_events/exiles_events_02.txt:1169, 1173` — an exile freed by the melodrama event is made a group leader before joining a group
+- stack: vanilla only
+
+```
+set_as_interest_group_leader effect [ Character has no valid Interest Group ]
+```
+
+`exiles_more_events.6`'s first outcome moves the villain to the country (`transfer_character = ROOT`), frees the character from exile and then runs `set_as_interest_group_leader = yes`, once in the effect and once inside its `custom_tooltip`. A character freed from exile has no interest group yet, so both lines error and the character leads nothing. Once each, 2026-11-06 observer game (about 1850). The mod neither overrides the file nor calls `free_from_exile_effect`.
+
+### `events/russo_chinese_events.txt:372` — Vladivostok's option adds loyalists in a state scope
+- stack: vanilla only
+
+```
+add_loyalists effect [ Wrong scope for effect: state, expected country ]
+```
+
+`russo_chinese.3.b` runs `add_loyalists = { value = large_radicals strata = upper }` inside `scope:vladivostok_scope`, a state; the effect takes a country, so no loyalists are added. The port and `modifier_vladivostok_civilian` in the same block still apply. Once, 2026-11-06 observer game (about 1850). The mod doesn't override the file.
+
 ### `events/neighbor_events.txt:627, 628` — `neighbor_neighbor_state` unset
 - stack: vanilla only
 
@@ -933,6 +951,33 @@ Event target link 'market' returned an invalid object
 
 The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through the diplomatic strategies. `- stack: vanilla only` keeps those visible (#863). The diplomatic strategies' British secret-goal scores for Southern Africa (`dominate` and `conquer`, commented "Cleaning up Boers and Zulu") read `capital.region` for every subject and for the target (lines 724 and 778); on 2026-10-24 they logged a `capital` and a `region` line each, twice in one session, with no mod frame. Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
 
+### `common/journal_entries/05_grunderzeit.txt:19` and `common/scripted_triggers/00_ip3_victoria_scripted_triggers.txt:1656` — the Gründerzeit entry reads a stateless overlord's capital (1.15)
+- stack: vanilla only
+
+```
+Event target link 'capital' returned an invalid object
+```
+
+`je_grunderzeit`'s `should_show_when_not_involved` runs `top_overlord ?= { country_is_in_german_confederation = yes }`, and that trigger reads `capital = { … }` with no guard; the `?=` guards the overlord, not its capital, so an overlord with no states logs this line wherever the entry is weighed for showing. 11 lines in two minutes, 2026-11-06 observer game (about 1857). The mod overrides neither file.
+
+### `common/diplomatic_actions/38_subjects_increase_autonomy.txt:191` — a declined autonomy request adds liberty desire to a country that is no longer a subject (1.15)
+- stack: vanilla only
+
+```
+add_liberty_desire effect [ Subject Pact not found for Country:
+```
+
+The action's `decline_effect` runs `add_liberty_desire = 10` on the subject with no check that its subject pact still exists, so a request declined after the pact ended (Indore, about 1855, in the 2026-11-06 observer game) logs this once and adds nothing. The mod doesn't override the file.
+
+### `events/hawaii_events.txt:352` — the annexation option creates an incident against the Hawaii it just annexed (1.15)
+- stack: vanilla only
+
+```
+create_incident effect [ Trying to create a diplomatic incident targeted to an invalid country.
+```
+
+`hawaii_events.4.b` runs `annex = c:HAW` and then `create_incident = { country = c:HAW value = 10 }`; once annexed, Hawaii no longer exists, so the incident goes nowhere and logs this. Once, for Great Britain, about 1866, in the 2026-11-06 observer game. The mod doesn't override the file.
+
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
 ```
@@ -964,6 +1009,78 @@ Scoped object of type 'country' is not valid
 ```
 
 The `visible` block is evaluated with a country that has died (`Country  (64)` in the message). 13 lines, 2026-10-10 observer run. The engine's own `<unknown>:0` form of this line is the source-anchored entry below.
+
+### `common/treaty_articles/24_transit_rights.txt:96` — the AI's evaluation reads the capital of a country that has none
+
+```
+Event target link 'capital' returned an invalid object
+```
+
+The article's `ai = { evaluation_chance = { … } }` tests `capital.world_market_access` with no `exists = capital` guard, so a country with no capital (one being torn apart, or a revolt with no state yet) logs the line each time the AI weighs the article. 3 lines, 2026-11-06 observer run (1.15, 1885). Line 28 of the same file, above, is a different read.
+
+### `events/poland_events.txt:792` — option e of the Polish uprising changes relations with its own country
+
+```
+change_relations effect [ Trying to change relations between the same country
+```
+
+`change_relations = { country = overlord value = -50 }` in option e of `poland_events.5`, with no check that `overlord` is another country; in the log it resolved to the country taking the option ('Congress Poland'). Once, 2026-11-06 observer run (1.15, 1885).
+
+### `events/red_scare_events.txt:872, 873` — option b of `red_scare.8` marks an anticommunist leader who is gone
+- stack: vanilla only
+
+```
+Event target link 'scope' returned an invalid object
+add_modifier effect [ Scoped object is not valid. Type: Character
+```
+
+`immediate` saves `scope:anticommunist_leader` and gives the character three days of event immortality. Option b then gives the character `modifier_dangerous_warmonger` with no `?=`, so a leader who is no longer valid by the time the option is taken logs both lines. Once, 2026-11-06 observer run (1.15, about 1894).
+
+### `events/russia_events/ip5_communism_events.txt:1704, 1705` — `nomenklatura.4` reads the general's formation after removing the role
+- stack: vanilla only
+
+```
+Event target link 'commander_military_formation' returned an invalid object
+show_as_tooltip effect [ Scoped object is not valid. Type: Military Formation
+```
+
+Option a of `nomenklatura.4` (a general voted out) runs `remove_character_role = general` and then `commander_military_formation = { show_as_tooltip = { … } }`, which no longer has a formation to reach. Once, 2026-11-06 observer run (1.15, about 1894).
+
+### `common/treaty_articles/13_goods_transfer.txt:75` — the goods transfer's weekly check reads a source market's goods that aren't there
+- stack: vanilla only
+
+```
+Event target link 'input_market_goods' returned an invalid object
+```
+
+The article's `non_fulfillment` conditions test `"scope:article.input_market_goods(scope:article.source_country)" = { treaty_exports > market_export_cap }` every week with no guard, so a transfer whose good has no market goods entry for the source country logs a line per check. The mod creates no goods transfers in script (only its treaty panels draw them). 21 lines in 90 seconds, 2026-11-06 observer run (1.15, about 1902).
+
+### `events/krakatoa_events.txt:204` — `krakatoa.5` cuts the overlord's liberty desire instead of the subject's
+- stack: vanilla only
+
+```
+Subject Pact not found for Country
+```
+
+`krakatoa.5` (the eruption in a country you don't own) checks that `scope:krakatoa_country` is a subject of `root`, then runs `add_liberty_desire = -30` in `root`, the overlord, which has no subject pact of its own. Once (Netherlands), 2026-11-06 observer run (1.15, about 1898).
+
+### `common/laws/00_church_and_state.txt:592` — Total Separation's `on_activate` gives a revolution the religion of a definition it doesn't have
+- stack: vanilla only
+
+```
+set_state_religion effect [ 'Country 'Revolutionary
+```
+
+`law_total_separation`'s `on_activate` sets an atheist state's religion to `root.country_definition.religion`, and a revolutionary country's definition doesn't resolve ("doesn't exist"). Once ('Revolutionary El Salvador'), 2026-11-06 observer run (1.15, about 1898).
+
+### `events/agitators_events/revolution_events_03.txt:117` — `revolution_pulse2_events.1` makes an immortal leader busy and immortal
+- stack: vanilla only
+
+```
+You cannot apply this effect when set_character_immortal is 'yes', ignoring this
+```
+
+The event sends `scope:army_lad_leader_scope` on a military mission with `set_character_busy_and_immortal = yes`, and that character can already be immortal; the engine ignores the effect. The mod sets no character immortal. Once, 2026-11-06 observer run (1.15, about 1899). The `marx_events.3.a` entry below is the same message from another event.
 
 ### `events/resignation.txt:414` — capitulating to a revolution that is no longer growing
 
@@ -1273,6 +1390,15 @@ Scope commander is not assigned to a formation
 
 The law's `on_activate` walks every general and admiral who doesn't back the council republic, saves `commander_military_formation` and, in the 75-weight branch, runs `unassign_from_formation`, with no check that the commander leads a formation. Three lines once, on 2026-11-06.
 
+### `common/journal_entries/00_treaty_of_london.txt:322` — the Conference of London's random votes read a voter's prestige as none (1.15)
+- stack: vanilla only
+
+```
+Got value of type 'none'
+```
+
+When the conference assigns the votes of countries that haven't voted, each involved country saves itself as the temporary scope `voting_country` and one `random_list` branch adds `scope:voting_country.prestige` to a proposal's tally. Once, in June 1838 of the 2026-11-06 observer game, that read came back none at the fourth proposal's branch; the other branches read the same scope the same way and didn't log. The mod neither overrides the file nor writes its variables, and the line has no script frame. That proposal's tally misses one voter's prestige.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -1317,25 +1443,6 @@ in file: "" near line
 Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
 
 The signature names the file a save load reports (a save, or none), not the message. The same source and message report a script file's literal-key field given something it can't read at load, and those are real. Until 2026-10-27 the signature was `Failed to read key reference`, which tagged `create_pop`'s `culture = scope:sr_evac_culture` in sr_colony_autonomy_effects.txt as save noise (#1194 found it through its PostValidate line instead).
-
-### `character_templates_utils.cpp:1814` — vanilla character missing last-name loc
-- source: `character_templates_utils.cpp:1814`
-- source: `character_templates_utils.cpp:1812`
-
-```
-Missing localization key for character last name
-```
-
-A vanilla generated character (e.g. `Ricchieri`, from `common/character_templates/country_arg.txt`) has no last-name loc key, so the engine reverts to a random name. Vanilla character-template gap, not mod content. Cosmetic. (Emit point drifted `:1812` → `:1814` in vanilla 1.13.9 — source-anchored entries need re-anchoring when engine patches shift cpp line numbers; both anchors kept.)
-
-### `pdx_localize.cpp:187` — benign loc-key hash collision
-- source: `pdx_localize.cpp:187`
-
-```
-Localization key hash collision
-```
-
-Two loc keys hash to the same value (observed: vanilla character name `Ricchieri` vs mod key `extra_law_events.42.f`). The engine warns but resolves by exact key, so both render correctly. Hash collisions are unavoidable across large loc sets and harmless. Not actionable.
 
 ### `pdx_named_index_impl.h:257` — engine `PdxDebugConstants` named-index lookup miss
 - source: `pdx_named_index_impl.h:257`

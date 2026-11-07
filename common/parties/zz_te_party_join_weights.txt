@@ -4,8 +4,9 @@
 # Each join_weight restates vanilla's lines, then adds the First Past the Post
 # terms. An injected join_weight replaces vanilla's whole field, so leaving
 # vanilla's lines out would drop them. Vanilla's usa_two_party_system terms are
-# left out: amendment_first_past_the_post replaces them. The zz_ prefix sorts
-# this file after the vanilla files it injects into.
+# left out: amendment_first_past_the_post replaces them. Vanilla's unguarded
+# `leader = {` reads are restated `leader ?= {` (marked on the line). The zz_
+# prefix sorts this file after the vanilla files it injects into.
 
 INJECT:agrarian_party = {
 	join_weight = {
@@ -283,7 +284,7 @@ INJECT:agrarian_party = {
 		if = { # Carlists and Miguelists were against participating in electoral politics for a good while
 			limit = {
 				NOT = { owner = { has_technology_researched = corporatism } }
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					OR = {
 						character_has_carlist_ideology = yes
 						character_has_miguelist_ideology = yes
@@ -1428,7 +1429,7 @@ INJECT:conservative_party = {
 		# His Highness Marshal Baldomero Espartero, Viceroy of Navarre, Prince of Vergara, Duke of la Victoria, Duke of Morella, Count of Luchana, and Viscount of Banderas will never, ever join the Moderate Party.
 		if = {
 			limit = {
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					has_template = SPA_baldomero_espartero
 				}
 			}
@@ -1439,7 +1440,7 @@ INJECT:conservative_party = {
 		}
 		else_if = { # Narváez totally will, though
 			limit = {
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					has_template = SPA_ramon_maria_narvaez
 				}
 			}
@@ -1479,7 +1480,7 @@ INJECT:conservative_party = {
 		if = { # Carlists and Miguelists were against participating in electoral politics for a good while
 			limit = {
 				NOT = { owner = { has_technology_researched = corporatism } }
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					OR = {
 						character_has_carlist_ideology = yes
 						character_has_miguelist_ideology = yes
@@ -3393,7 +3394,7 @@ INJECT:liberal_party = {
 		if = { # Carlists and Miguelists were against participating in electoral politics for a good while
 			limit = {
 				NOT = { owner = { has_technology_researched = corporatism } }
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					OR = {
 						character_has_carlist_ideology = yes
 						character_has_miguelist_ideology = yes
@@ -3666,7 +3667,7 @@ INJECT:military_party = {
 		if = { # Carlists and Miguelists were against participating in electoral politics for a good while
 			limit = {
 				NOT = { owner = { has_technology_researched = corporatism } }
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					OR = {
 						character_has_carlist_ideology = yes
 						character_has_miguelist_ideology = yes
@@ -4310,7 +4311,7 @@ INJECT:religious_party = {
 		}
 		if = {
 			limit = {
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					has_ideology = ideology:ideology_legitimist
 				}
 				owner = {
@@ -4423,7 +4424,7 @@ INJECT:religious_party = {
 		if = { # Carlists and Miguelists were against participating in electoral politics for a good while
 			limit = {
 				NOT = { owner = { has_technology_researched = corporatism } }
-				leader = {
+				leader ?= { # ?= by the generator: vanilla reads the leader unguarded
 					OR = {
 						character_has_carlist_ideology = yes
 						character_has_miguelist_ideology = yes

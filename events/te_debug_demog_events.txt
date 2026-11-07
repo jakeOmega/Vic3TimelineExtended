@@ -70,6 +70,9 @@
 # writes them at a capital's census, before its workforce refresh.
 # Hidden too: .30, phase 2 step 4's conscription_term_read (te_debug_demog_conscription_selfcheck_start), one line a
 # game, only while conscription's effect applies.
+# A state verdict's week waits on a country event, .2nn for .nn (.202 to .290; .330 and .331 for the uploaded minds'
+# .130 and .131), since a state event triggered with a delay never ran (the section at the end of this file), and
+# .199 and .198 test that fact once a game (delayed_state_event).
 #
 # Phase 3's event wave: .80, the console's chooser (option w; visible), and the hidden .81, the self-check
 # wave_timed_country_type's second half (te_debug_demog_wave_selfcheck_start, te_demog_wave_effects.txt), one line a
@@ -1141,6 +1144,158 @@ te_debug_demog.140 = { # REVIEWED 2026-10-19: console-only test event (`event te
 		every_scope_state = {
 			limit = { has_variable = te_dg_mt }
 			debug_log = "TE_DEMOG_METRO tag=[ROOT.GetCountry.GetTagName] state=[THIS.GetState.GetNameNoFormatting] share=[THIS.Var('te_dg_mt').GetValue|1] target=[THIS.ScriptValue('te_demog_mt_target')|1] capital=[THIS.ScriptValue('te_demog_mt_t_capital')|1] gateway=[THIS.ScriptValue('te_demog_mt_t_gateway')|1] area=[THIS.ScriptValue('te_demog_mt_t_area')|1] work=[THIS.ScriptValue('te_demog_mt_t_work')|1] urban=[THIS.ScriptValue('te_demog_mt_t_urban')|1] infra=[THIS.ScriptValue('te_demog_mt_t_infra')|1] crowding=[THIS.ScriptValue('te_demog_mt_t_crowding')|1] planning=[THIS.ScriptValue('te_demog_mt_t_planning')|1] metropolis=[THIS.ScriptValue('te_demog_mt_e_pos')|2] dispersed=[THIS.ScriptValue('te_demog_mt_e_neg')|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# ---- The verdicts' week waits on the owner (log triage 2026-11-06) --------------------------------------------------
+# A state event triggered with a delay (trigger_event = { id = <state event> days = 7 } in a state's scope) never ran
+# for any self-check here. In the 2026-11-06 observer game (1.15) and the October 1.14.5 games (greece_1864_12_15,
+# wallachia_1849_11_21), every one that armed printed START and no verdict, and the variable each verdict removes was
+# still on its state years later (te_inh_pr_chk_before on Malta, te_dg_ms_chk_before on Saxony, te_dg_fl_chk_before
+# on Senegal or Flanders). workforce_lines_net (.8), armed at every game's first monthly pulse, never printed a line.
+# The country events .40 and .41, delayed the same way, read OK. So each arm site now waits the week on a country
+# event: .2nn on the state's owner, which runs the state's verdict (.nn, unchanged) with an undelayed trigger_event,
+# and that runs the event at once, inside the effect (scripting_best_practices.md). A state that changed hands in the
+# week isn't the old owner's any more and logs no verdict, as before. The same goes for .130 and .131
+# (te_debug_demog_um_events.txt, .330 and .331). .199 and .198 test the fact itself (delayed_state_event, below);
+# docs/testing/demographics-playtest.md's Self-checks table has the row.
+
+# .2 (the console's engine-scaling probe, option o): the capital that holds the probe's modifier.
+te_debug_demog.202 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_modifier = te_debug_demog_scaled_probe }
+			trigger_event = { id = te_debug_demog.2 }
+		}
+	}
+}
+
+# .5 (primogeniture_scaled): the state that took the line fresh.
+te_debug_demog.205 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_inh_pr_chk_before }
+			trigger_event = { id = te_debug_demog.5 }
+		}
+	}
+}
+
+# .6, .7, .8 (workforce_amendment_type, workforce_ig_trait_type, workforce_lines_net): the capital.
+te_debug_demog.206 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		capital ?= { trigger_event = { id = te_debug_demog.6 } }
+	}
+}
+
+te_debug_demog.207 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		capital ?= { trigger_event = { id = te_debug_demog.7 } }
+	}
+}
+
+te_debug_demog.208 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		capital ?= { trigger_event = { id = te_debug_demog.8 } }
+	}
+}
+
+# .10 (measure_country_types): the capital that took the reading.
+te_debug_demog.210 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_ms_chk_before }
+			trigger_event = { id = te_debug_demog.10 }
+		}
+	}
+}
+
+# .30 (conscription_term_read): the state that took the fresh pair.
+te_debug_demog.230 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_chk_consc_before }
+			trigger_event = { id = te_debug_demog.30 }
+		}
+	}
+}
+
+# .81 (wave_timed_country_type): the capital that took the reading.
+te_debug_demog.281 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_wv_chk_before }
+			trigger_event = { id = te_debug_demog.81 }
+		}
+	}
+}
+
+# .90 (family_limitation_scaled): the capital that took the reading.
+te_debug_demog.290 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_fl_chk_before }
+			trigger_event = { id = te_debug_demog.90 }
+		}
+	}
+}
+
+# delayed_state_event: does a delayed state event run at all? Armed once a game with workforce_lines_net
+# (te_debug_demog_wf_selfchecks): the capital is sent .199 with days = 7, the old path, and its country .198 with
+# days = 14. OK: .199 ran, and logged its scopes (debug_log_scopes) a week before. BROKEN: it never ran, as the saves
+# say; then the mod's three gameplay state events triggered with a delay never run either: te_demog_events.4's
+# day-later refresh (te_demog_lines_country_on_action), monument_events.30's next order a day on
+# (gm_state_run_mon_orders) and monument_events.31's day-later orphan adoption (gm_state_adopt_orphans). They want the
+# same move to a country event (test_delayed_state_events.py lists them).
+te_debug_demog.199 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		set_global_variable = { name = te_dbg_delayed_state_ran value = yes }
+		debug_log = "TE_PROBE delayed_state_event ran (a state event triggered with days = 7; the scopes follow) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+	}
+}
+
+te_debug_demog.198 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_global_variable = te_dbg_delayed_state_ran }
+			debug_log = "TE_SELF_CHECK OK delayed_state_event (a state event triggered with days = 7 ran a week on: the TE_PROBE line before this one has its scopes) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN delayed_state_event (a state event triggered with days = 7 never ran: move the delayed calls of te_demog_events.4, monument_events.30 and .31 to a country event) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

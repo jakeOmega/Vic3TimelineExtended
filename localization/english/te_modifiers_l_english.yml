@@ -1326,7 +1326,6 @@
  state_building_thonet_bystrice_bentwood_factory_max_level_add:0 "[GetBuildingType('building_thonet_bystrice_bentwood_factory').GetName] Max Level"
  state_building_thonet_bystrice_bentwood_factory_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_thonet_bystrice_bentwood_factory').GetName] can expand to in this state"
  state_building_thyssen_steelworks_max_level_add:0 "[GetBuildingType('building_thyssen_steelworks').GetName] Max Level"
- state_building_thyssen_steelworks_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_thyssen_steelworks').GetName] can expand to in this state"
  state_building_tobacco_regie_cibali_factory_max_level_add:0 "[GetBuildingType('building_tobacco_regie_cibali_factory').GetName] Max Level"
  state_building_tobacco_regie_cibali_factory_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_tobacco_regie_cibali_factory').GetName] can expand to in this state"
  state_building_tokyo_electric_asakusa_station_max_level_add:0 "[GetBuildingType('building_tokyo_electric_asakusa_station').GetName] Max Level"

@@ -1721,7 +1721,11 @@ monument_events.29 = {
 			limit = { gm_state_stray_building = yes }
 			set_variable = { name = gm_rebuilding days = 1 }
 			remove_building = building_grand_monument
-			debug_log = "TE_MONUMENTS: a Grand Monument building no record describes, with no monument of its region to take it (a revolt's part of a monument's state), is removed"
+			debug_log = "TE_MONUMENTS: a Grand Monument building no record describes, with no monument of its region to take it (a revolt's copy beside the part it copies, or unclaimed a month), is removed"
+			if = {
+				limit = { has_variable = gm_stray_seen }
+				remove_variable = gm_stray_seen
+			}
 			# Whose part it was, and whether records came with it (issue #1409):
 			# a revolt's part is a new state holding none, so a gm_seen here
 			# means the engine copied the old state's variables to it.

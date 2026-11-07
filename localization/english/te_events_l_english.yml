@@ -1667,7 +1667,7 @@
  extra_law_events.42.a:0 "Yield to the public mood and pause the bill"
  extra_law_events.42.b:0 "Press through the opposition's noise"
  extra_law_events.42.d:0 "Opponents of [SCOPE.sLaw('current_law_scope').GetName] have mounted a coordinated communications campaign in the press. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have spent freely to flood the channels with counter-messaging."
- extra_law_events.42.f:0 "\"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\"\n\n\"And the other?\"\n\n\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\""
+ extra_law_events.42.flavor:0 "\"You can fight bad speech with more speech. Or you can pass a law. Only one of these reflects credit on a free people.\"\n\n\"And the other?\"\n\n\"The other reflects credit on whoever holds the pen when the law is drafted. That is a more practical kind of credit, but it is not the same kind.\""
  extra_law_events.42.t:0 "The Counter-Campaign"
  extra_law_events.43.a:0 "Bow to public conscience and shelve the bill"
  extra_law_events.43.b:0 "Stay the course - science cannot be ruled by superstition"

@@ -579,15 +579,84 @@ gm_state_needs_migration = {
 
 # State scope. A finished building no record describes, from no older save and
 # made by no script (gm_migrated, gm_premigration), with no orphan in its
-# region to take it: the engine's copy in a revolt's part of a monument's
-# state. The monument stays whole with the part that keeps its records (owner,
-# 2026-10-18; sites spec §3.7), so monument_events.29 removes it. Only once
-# the save's first pass has marked an older save's monuments.
-gm_state_stray_building = {
+# region to take it. Only once the save's first pass has marked an older
+# save's monuments. Either a revolt's copy (gm_state_stray_building) or a
+# merge's building whose orphan doesn't read as one yet (gm_state_stray_waits).
+gm_state_unclaimed_building = {
 	has_global_variable = gm_sites_marked
 	has_building = building_grand_monument
 	NOT = { has_variable = gm_migrated }
 	NOT = { has_variable = gm_premigration }
 	NOT = { has_variable = gm_rebuilding }
 	gm_state_orphan_in_region = no
+}
+
+# State scope. Another part of this state's region keeps a monument's records
+# and still stands with its building: the original a revolt's copy copies.
+gm_state_region_original_stands = {
+	save_temporary_scope_as = gm_tmp_stray_self
+	state_region = {
+		any_scope_state = {
+			NOT = { this = scope:gm_tmp_stray_self }
+			has_variable = gm_migrated
+			has_building = building_grand_monument
+		}
+	}
+}
+
+# State scope. A shadow of this state's region links a state that still
+# resolves but has no building: a monument whose building may be this one,
+# merged in before its old state is gone (2026-11-06).
+gm_state_region_shadow_unhoused = {
+	state_region = { save_temporary_scope_as = gm_tmp_unhoused_region }
+	has_global_variable_list = gm_shadows
+	any_in_global_list = {
+		variable = gm_shadows
+		var:gm_tr_origin_region ?= scope:gm_tmp_unhoused_region
+		exists = var:gm_tr_origin
+		var:gm_tr_origin = { NOT = { has_building = building_grand_monument } }
+	}
+}
+
+# State scope. The unclaimed building waited a month (gm_stray_wait, set by
+# gm_country_refresh while gm_state_stray_waits held) and no orphan came.
+gm_state_stray_waited = {
+	has_variable = gm_stray_seen
+	NOT = { has_variable = gm_stray_wait }
+}
+
+# State scope. The engine's copy in a revolt's part of a monument's state: an
+# unclaimed building beside the recorded part it copies, while no monument of
+# the region is missing its building, or one that waited a month for an
+# orphan. The monument stays whole with the part that keeps its records
+# (owner, 2026-10-18; sites spec §3.7), so monument_events.29 removes it.
+gm_state_stray_building = {
+	gm_state_unclaimed_building = yes
+	OR = {
+		AND = {
+			gm_state_region_original_stands = yes
+			gm_state_region_shadow_unhoused = no
+		}
+		gm_state_stray_waited = yes
+	}
+}
+
+# State scope. An unclaimed building with no recorded part of its region
+# standing beside it, or in a region where a monument's old state has no
+# building: what a merge leaves before its orphan reads as one. On
+# 2026-11-06 the East India Company annexed Dhundhar (JAI); Dhundhar's part of
+# Rajputana merged into the Company's, and Jantar Mantar's building stood in
+# the Company's part while the shadow's old state still resolved (its orphan
+# read as one two days later). The stray pass had removed the building by then
+# and the five-level monument was lost (docs/testing/grand-monuments-ageing-playtest.md).
+# Neither a copy nor a first sight: gm_country_refresh lets it wait up to a
+# month for its orphan (gm_state_merge_pending adopts it), then it counts as a
+# copy.
+gm_state_stray_waits = {
+	gm_state_unclaimed_building = yes
+	gm_state_stray_waited = no
+	OR = {
+		gm_state_region_original_stands = no
+		gm_state_region_shadow_unhoused = yes
+	}
 }
