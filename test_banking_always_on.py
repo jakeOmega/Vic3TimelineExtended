@@ -170,12 +170,21 @@ class EntryTest(unittest.TestCase):
             self.assertIn(f"{step} = yes", running, step)
             self.assertNotIn(f"{step} = yes", first_if, step)
 
-    def test_the_weekly_pulse_waits_for_the_cycle(self):
+    def test_the_weekly_pulse_moves_the_pool_and_waits_for_the_cycle(self):
+        # The pool's weekly add runs for every holder, the cycle started or not
+        # (owner, 2026-11-07); the cycle's own weekly effects wait for it.
         effect = _norm(_key_block(_key_block(self.je, "on_weekly_pulse"), "effect"))
         # The old-save strip runs first until 2026-12-31 (#1404, test_scaling_strip.py).
         effect = effect.replace("legacy_scaling_strip_banking_cycle = yes ", "")
-        self.assertEqual(effect, "{ if = { limit = { te_banking_cycle_running = yes } "
+        self.assertEqual(effect, "{ banking_weekly_investment_pool_add = yes "
+                                 "if = { limit = { te_banking_cycle_running = yes } "
                                  "banking_cycle_weekly_effects = yes } }")
+
+    def test_the_pool_add_lives_only_in_the_ungated_effect(self):
+        effects = _strip_comments(_read(CYCLE_EFFECTS))
+        self.assertEqual(_norm(_top_block(effects, "banking_weekly_investment_pool_add")),
+                         "{ add_investment_pool = investment_pool_banking_cycle_add }")
+        self.assertNotIn("add_investment_pool", _top_block(effects, "banking_cycle_weekly_effects"))
 
     def test_no_status_text(self):
         # The dormant entry draws an overview (its Not Started cell), so the
@@ -248,6 +257,9 @@ ENTRY_OBJECT_READERS = {
     ("common/on_actions/extra_on_actions.txt", "te_banking_law_change_cleanup"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_economy_law_cleanup"),
     ("common/on_actions/te_banking_entry_on_actions.txt", "te_banking_entry_net"),
+    # the UN grant goes into the pool wherever the entry's weekly pulse moves
+    # it, which since 2026-11-07 is every holder, the cycle started or not
+    ("common/scripted_triggers/un_economy_triggers.txt", "un_dev_fund_pays_into_pool"),
     ("common/script_values/te_banking_entry_values.txt", "te_banking_entry_missing_count"),
     # the self-check names the countries te_banking_entry_missing_count counts
     ("events/te_debug_banking_events.txt", "te_debug_banking.1"),
@@ -265,7 +277,6 @@ CYCLE_READERS = {
     "common/scripted_triggers/legacy_event_integration_triggers.txt": (
         "banking_is_bailout_recipient", "banking_can_offer_bailout"),
     "common/scripted_triggers/banking_debt_triggers.txt": ("banking_restructuring_shown",),
-    "common/scripted_triggers/un_economy_triggers.txt": ("un_dev_fund_pays_into_pool",),
     "common/scripted_triggers/un_docket_triggers.txt": ("un_docket_loan_candidate",),
     "common/scripted_triggers/amendment_petition_triggers.txt": ("te_ap_economy_faltering",),
     "common/scripted_triggers/banking_policy_triggers.txt": ("banking_external_available",),

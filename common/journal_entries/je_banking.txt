@@ -769,10 +769,12 @@
 	# which the Budget tab shows too. A dormant entry's overview says the cycle
 	# has not started, with what it needs on hover, so it needs no line either.
 
-	# A dormant entry's pulses do one thing: the monthly one starts the cycle
+	# A dormant entry's pulses do two things: the monthly one starts the cycle
 	# once te_banking_cycle_unlocked holds (the technology is its first test, so
 	# most dormant countries never reach the building scan), and posts the start
-	# to a human player. Everything else runs only while the cycle does.
+	# to a human player; the weekly one moves the investment pool's weekly add
+	# (banking_weekly_investment_pool_add), which every holder of the entry gets.
+	# Everything else runs only while the cycle does.
 	on_monthly_pulse = {
 		effect = {
 			if = {
@@ -837,6 +839,12 @@
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_banking_cycle = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
+			# The pool's weekly add, country_weekly_investment_pool_mult and _add,
+			# runs whether or not the cycle has started (owner, 2026-11-07): the
+			# modifiers that carry it are not all the cycle's (Neocolonial
+			# Dependency, the UN Development Fund's grant), and a dormant cycle
+			# declares none of its own, so before the start only those move it.
+			banking_weekly_investment_pool_add = yes
 			if = {
 				limit = { te_banking_cycle_running = yes }
 				banking_cycle_weekly_effects = yes
