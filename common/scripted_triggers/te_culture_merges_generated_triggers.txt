@@ -14,17 +14,36 @@ te_cmg_german_is_candidate = {
 	NOT = { global_var:te_cm_state_german ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_german_core_ok = {
-	var:te_cm_ok_german_north_german ?= 1
-	te_cmg_german_north_german_available = yes
-	var:te_cm_ok_german_south_german ?= 1
-	te_cmg_german_south_german_available = yes
+	OR = {
+		te_cmg_german_north_german_measured = yes
+		te_cmg_german_north_german_switched_in = yes
+	}
+	OR = {
+		te_cmg_german_south_german_measured = yes
+		te_cmg_german_south_german_switched_in = yes
+	}
 }
 
 # Any scope. north_german is free for the german merge.
 te_cmg_german_north_german_available = {
 	always = yes
+}
+
+# Country scope. north_german passes its gates for the german merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_german_north_german_measured = {
+	var:te_cm_ok_german_north_german ?= 1
+	te_cmg_german_north_german_available = yes
+	NOT = { has_global_variable = te_cm_switched_north_german }
+}
+
+# Country scope. north_german joined the german merge and has switched into its result.
+te_cmg_german_north_german_switched_in = {
+	global_var:te_cm_joined_german_north_german ?= 1
+	has_global_variable = te_cm_switched_north_german
 }
 
 # Country scope. north_german (tier 1) passes its gates and can join the german merge now.
@@ -40,6 +59,20 @@ te_cmg_german_south_german_available = {
 	always = yes
 }
 
+# Country scope. south_german passes its gates for the german merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_german_south_german_measured = {
+	var:te_cm_ok_german_south_german ?= 1
+	te_cmg_german_south_german_available = yes
+	NOT = { has_global_variable = te_cm_switched_south_german }
+}
+
+# Country scope. south_german joined the german merge and has switched into its result.
+te_cmg_german_south_german_switched_in = {
+	global_var:te_cm_joined_german_south_german ?= 1
+	has_global_variable = te_cm_switched_south_german
+}
+
 # Country scope. south_german (tier 1) passes its gates and can join the german merge now.
 te_cmg_german_south_german_can_join = {
 	var:te_cm_ok_german_south_german ?= 1
@@ -53,17 +86,46 @@ te_cmg_german_alemannic_available = {
 	always = yes
 }
 
+# Country scope. alemannic passes its gates for the german merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_german_alemannic_measured = {
+	var:te_cm_ok_german_alemannic ?= 1
+	te_cmg_german_alemannic_available = yes
+	NOT = { has_global_variable = te_cm_switched_alemannic }
+}
+
+# Country scope. alemannic joined the german merge and has switched into its result.
+te_cmg_german_alemannic_switched_in = {
+	global_var:te_cm_joined_german_alemannic ?= 1
+	has_global_variable = te_cm_switched_alemannic
+}
+
 # Country scope. alemannic (tier 1) passes its gates and can join the german merge now.
 te_cmg_german_alemannic_can_join = {
 	var:te_cm_ok_german_alemannic ?= 1
 	te_cmg_german_alemannic_available = yes
 	NOT = { global_var:te_cm_joined_german_alemannic ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_german_alemannic ?= 1
 }
 
 # Any scope. east_german is free for the german merge.
 te_cmg_german_east_german_available = {
 	always = yes
+}
+
+# Country scope. east_german passes its gates for the german merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_german_east_german_measured = {
+	var:te_cm_ok_german_east_german ?= 1
+	te_cmg_german_east_german_available = yes
+	NOT = { has_global_variable = te_cm_switched_east_german }
+}
+
+# Country scope. east_german joined the german merge and has switched into its result.
+te_cmg_german_east_german_switched_in = {
+	global_var:te_cm_joined_german_east_german ?= 1
+	has_global_variable = te_cm_switched_east_german
 }
 
 # Country scope. east_german (tier 1) passes its gates and can join the german merge now.
@@ -72,6 +134,7 @@ te_cmg_german_east_german_can_join = {
 	te_cmg_german_east_german_available = yes
 	NOT = { global_var:te_cm_joined_german_east_german ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_german_east_german ?= 1
 }
 
 # Any scope. Is the yearly census of the german merge worth running? An idle merge with a
@@ -127,17 +190,36 @@ te_cmg_italian_is_candidate = {
 	NOT = { global_var:te_cm_state_italian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_italian_core_ok = {
-	var:te_cm_ok_italian_north_italian ?= 1
-	te_cmg_italian_north_italian_available = yes
-	var:te_cm_ok_italian_south_italian ?= 1
-	te_cmg_italian_south_italian_available = yes
+	OR = {
+		te_cmg_italian_north_italian_measured = yes
+		te_cmg_italian_north_italian_switched_in = yes
+	}
+	OR = {
+		te_cmg_italian_south_italian_measured = yes
+		te_cmg_italian_south_italian_switched_in = yes
+	}
 }
 
 # Any scope. north_italian is free for the italian merge.
 te_cmg_italian_north_italian_available = {
 	always = yes
+}
+
+# Country scope. north_italian passes its gates for the italian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_italian_north_italian_measured = {
+	var:te_cm_ok_italian_north_italian ?= 1
+	te_cmg_italian_north_italian_available = yes
+	NOT = { has_global_variable = te_cm_switched_north_italian }
+}
+
+# Country scope. north_italian joined the italian merge and has switched into its result.
+te_cmg_italian_north_italian_switched_in = {
+	global_var:te_cm_joined_italian_north_italian ?= 1
+	has_global_variable = te_cm_switched_north_italian
 }
 
 # Country scope. north_italian (tier 1) passes its gates and can join the italian merge now.
@@ -153,6 +235,20 @@ te_cmg_italian_south_italian_available = {
 	always = yes
 }
 
+# Country scope. south_italian passes its gates for the italian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_italian_south_italian_measured = {
+	var:te_cm_ok_italian_south_italian ?= 1
+	te_cmg_italian_south_italian_available = yes
+	NOT = { has_global_variable = te_cm_switched_south_italian }
+}
+
+# Country scope. south_italian joined the italian merge and has switched into its result.
+te_cmg_italian_south_italian_switched_in = {
+	global_var:te_cm_joined_italian_south_italian ?= 1
+	has_global_variable = te_cm_switched_south_italian
+}
+
 # Country scope. south_italian (tier 1) passes its gates and can join the italian merge now.
 te_cmg_italian_south_italian_can_join = {
 	var:te_cm_ok_italian_south_italian ?= 1
@@ -166,12 +262,27 @@ te_cmg_italian_corsican_available = {
 	always = yes
 }
 
+# Country scope. corsican passes its gates for the italian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_italian_corsican_measured = {
+	var:te_cm_ok_italian_corsican ?= 1
+	te_cmg_italian_corsican_available = yes
+	NOT = { has_global_variable = te_cm_switched_corsican }
+}
+
+# Country scope. corsican joined the italian merge and has switched into its result.
+te_cmg_italian_corsican_switched_in = {
+	global_var:te_cm_joined_italian_corsican ?= 1
+	has_global_variable = te_cm_switched_corsican
+}
+
 # Country scope. corsican (tier 1) passes its gates and can join the italian merge now.
 te_cmg_italian_corsican_can_join = {
 	var:te_cm_ok_italian_corsican ?= 1
 	te_cmg_italian_corsican_available = yes
 	NOT = { global_var:te_cm_joined_italian_corsican ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_italian_corsican ?= 1
 }
 
 # Any scope. Is the yearly census of the italian merge worth running? An idle merge with a
@@ -224,19 +335,40 @@ te_cmg_scandinavian_is_candidate = {
 	NOT = { global_var:te_cm_state_scandinavian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_scandinavian_core_ok = {
-	var:te_cm_ok_scandinavian_swedish ?= 1
-	te_cmg_scandinavian_swedish_available = yes
-	var:te_cm_ok_scandinavian_danish ?= 1
-	te_cmg_scandinavian_danish_available = yes
-	var:te_cm_ok_scandinavian_norwegian ?= 1
-	te_cmg_scandinavian_norwegian_available = yes
+	OR = {
+		te_cmg_scandinavian_swedish_measured = yes
+		te_cmg_scandinavian_swedish_switched_in = yes
+	}
+	OR = {
+		te_cmg_scandinavian_danish_measured = yes
+		te_cmg_scandinavian_danish_switched_in = yes
+	}
+	OR = {
+		te_cmg_scandinavian_norwegian_measured = yes
+		te_cmg_scandinavian_norwegian_switched_in = yes
+	}
 }
 
 # Any scope. swedish is free for the scandinavian merge.
 te_cmg_scandinavian_swedish_available = {
 	always = yes
+}
+
+# Country scope. swedish passes its gates for the scandinavian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_scandinavian_swedish_measured = {
+	var:te_cm_ok_scandinavian_swedish ?= 1
+	te_cmg_scandinavian_swedish_available = yes
+	NOT = { has_global_variable = te_cm_switched_swedish }
+}
+
+# Country scope. swedish joined the scandinavian merge and has switched into its result.
+te_cmg_scandinavian_swedish_switched_in = {
+	global_var:te_cm_joined_scandinavian_swedish ?= 1
+	has_global_variable = te_cm_switched_swedish
 }
 
 # Country scope. swedish (tier 1) passes its gates and can join the scandinavian merge now.
@@ -252,6 +384,20 @@ te_cmg_scandinavian_danish_available = {
 	always = yes
 }
 
+# Country scope. danish passes its gates for the scandinavian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_scandinavian_danish_measured = {
+	var:te_cm_ok_scandinavian_danish ?= 1
+	te_cmg_scandinavian_danish_available = yes
+	NOT = { has_global_variable = te_cm_switched_danish }
+}
+
+# Country scope. danish joined the scandinavian merge and has switched into its result.
+te_cmg_scandinavian_danish_switched_in = {
+	global_var:te_cm_joined_scandinavian_danish ?= 1
+	has_global_variable = te_cm_switched_danish
+}
+
 # Country scope. danish (tier 1) passes its gates and can join the scandinavian merge now.
 te_cmg_scandinavian_danish_can_join = {
 	var:te_cm_ok_scandinavian_danish ?= 1
@@ -263,6 +409,20 @@ te_cmg_scandinavian_danish_can_join = {
 # Any scope. norwegian is free for the scandinavian merge.
 te_cmg_scandinavian_norwegian_available = {
 	always = yes
+}
+
+# Country scope. norwegian passes its gates for the scandinavian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_scandinavian_norwegian_measured = {
+	var:te_cm_ok_scandinavian_norwegian ?= 1
+	te_cmg_scandinavian_norwegian_available = yes
+	NOT = { has_global_variable = te_cm_switched_norwegian }
+}
+
+# Country scope. norwegian joined the scandinavian merge and has switched into its result.
+te_cmg_scandinavian_norwegian_switched_in = {
+	global_var:te_cm_joined_scandinavian_norwegian ?= 1
+	has_global_variable = te_cm_switched_norwegian
 }
 
 # Country scope. norwegian (tier 1) passes its gates and can join the scandinavian merge now.
@@ -278,12 +438,27 @@ te_cmg_scandinavian_icelandic_available = {
 	always = yes
 }
 
+# Country scope. icelandic passes its gates for the scandinavian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_scandinavian_icelandic_measured = {
+	var:te_cm_ok_scandinavian_icelandic ?= 1
+	te_cmg_scandinavian_icelandic_available = yes
+	NOT = { has_global_variable = te_cm_switched_icelandic }
+}
+
+# Country scope. icelandic joined the scandinavian merge and has switched into its result.
+te_cmg_scandinavian_icelandic_switched_in = {
+	global_var:te_cm_joined_scandinavian_icelandic ?= 1
+	has_global_variable = te_cm_switched_icelandic
+}
+
 # Country scope. icelandic (tier 1) passes its gates and can join the scandinavian merge now.
 te_cmg_scandinavian_icelandic_can_join = {
 	var:te_cm_ok_scandinavian_icelandic ?= 1
 	te_cmg_scandinavian_icelandic_available = yes
 	NOT = { global_var:te_cm_joined_scandinavian_icelandic ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_scandinavian_icelandic ?= 1
 }
 
 # Any scope. Is the yearly census of the scandinavian merge worth running? An idle merge with a
@@ -340,19 +515,40 @@ te_cmg_east_slavic_is_candidate = {
 	NOT = { global_var:te_cm_state_east_slavic ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_east_slavic_core_ok = {
-	var:te_cm_ok_east_slavic_russian ?= 1
-	te_cmg_east_slavic_russian_available = yes
-	var:te_cm_ok_east_slavic_ukrainian ?= 1
-	te_cmg_east_slavic_ukrainian_available = yes
-	var:te_cm_ok_east_slavic_byelorussian ?= 1
-	te_cmg_east_slavic_byelorussian_available = yes
+	OR = {
+		te_cmg_east_slavic_russian_measured = yes
+		te_cmg_east_slavic_russian_switched_in = yes
+	}
+	OR = {
+		te_cmg_east_slavic_ukrainian_measured = yes
+		te_cmg_east_slavic_ukrainian_switched_in = yes
+	}
+	OR = {
+		te_cmg_east_slavic_byelorussian_measured = yes
+		te_cmg_east_slavic_byelorussian_switched_in = yes
+	}
 }
 
 # Any scope. russian is free for the east_slavic merge.
 te_cmg_east_slavic_russian_available = {
 	always = yes
+}
+
+# Country scope. russian passes its gates for the east_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_slavic_russian_measured = {
+	var:te_cm_ok_east_slavic_russian ?= 1
+	te_cmg_east_slavic_russian_available = yes
+	NOT = { has_global_variable = te_cm_switched_russian }
+}
+
+# Country scope. russian joined the east_slavic merge and has switched into its result.
+te_cmg_east_slavic_russian_switched_in = {
+	global_var:te_cm_joined_east_slavic_russian ?= 1
+	has_global_variable = te_cm_switched_russian
 }
 
 # Country scope. russian (tier 1) passes its gates and can join the east_slavic merge now.
@@ -368,6 +564,20 @@ te_cmg_east_slavic_ukrainian_available = {
 	always = yes
 }
 
+# Country scope. ukrainian passes its gates for the east_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_slavic_ukrainian_measured = {
+	var:te_cm_ok_east_slavic_ukrainian ?= 1
+	te_cmg_east_slavic_ukrainian_available = yes
+	NOT = { has_global_variable = te_cm_switched_ukrainian }
+}
+
+# Country scope. ukrainian joined the east_slavic merge and has switched into its result.
+te_cmg_east_slavic_ukrainian_switched_in = {
+	global_var:te_cm_joined_east_slavic_ukrainian ?= 1
+	has_global_variable = te_cm_switched_ukrainian
+}
+
 # Country scope. ukrainian (tier 1) passes its gates and can join the east_slavic merge now.
 te_cmg_east_slavic_ukrainian_can_join = {
 	var:te_cm_ok_east_slavic_ukrainian ?= 1
@@ -379,6 +589,20 @@ te_cmg_east_slavic_ukrainian_can_join = {
 # Any scope. byelorussian is free for the east_slavic merge.
 te_cmg_east_slavic_byelorussian_available = {
 	always = yes
+}
+
+# Country scope. byelorussian passes its gates for the east_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_slavic_byelorussian_measured = {
+	var:te_cm_ok_east_slavic_byelorussian ?= 1
+	te_cmg_east_slavic_byelorussian_available = yes
+	NOT = { has_global_variable = te_cm_switched_byelorussian }
+}
+
+# Country scope. byelorussian joined the east_slavic merge and has switched into its result.
+te_cmg_east_slavic_byelorussian_switched_in = {
+	global_var:te_cm_joined_east_slavic_byelorussian ?= 1
+	has_global_variable = te_cm_switched_byelorussian
 }
 
 # Country scope. byelorussian (tier 1) passes its gates and can join the east_slavic merge now.
@@ -439,19 +663,40 @@ te_cmg_yugoslav_is_candidate = {
 	NOT = { global_var:te_cm_state_yugoslav ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_yugoslav_core_ok = {
-	var:te_cm_ok_yugoslav_serb ?= 1
-	te_cmg_yugoslav_serb_available = yes
-	var:te_cm_ok_yugoslav_croat ?= 1
-	te_cmg_yugoslav_croat_available = yes
-	var:te_cm_ok_yugoslav_bosniak ?= 1
-	te_cmg_yugoslav_bosniak_available = yes
+	OR = {
+		te_cmg_yugoslav_serb_measured = yes
+		te_cmg_yugoslav_serb_switched_in = yes
+	}
+	OR = {
+		te_cmg_yugoslav_croat_measured = yes
+		te_cmg_yugoslav_croat_switched_in = yes
+	}
+	OR = {
+		te_cmg_yugoslav_bosniak_measured = yes
+		te_cmg_yugoslav_bosniak_switched_in = yes
+	}
 }
 
 # Any scope. serb is free for the yugoslav merge.
 te_cmg_yugoslav_serb_available = {
 	always = yes
+}
+
+# Country scope. serb passes its gates for the yugoslav merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_yugoslav_serb_measured = {
+	var:te_cm_ok_yugoslav_serb ?= 1
+	te_cmg_yugoslav_serb_available = yes
+	NOT = { has_global_variable = te_cm_switched_serb }
+}
+
+# Country scope. serb joined the yugoslav merge and has switched into its result.
+te_cmg_yugoslav_serb_switched_in = {
+	global_var:te_cm_joined_yugoslav_serb ?= 1
+	has_global_variable = te_cm_switched_serb
 }
 
 # Country scope. serb (tier 1) passes its gates and can join the yugoslav merge now.
@@ -467,6 +712,20 @@ te_cmg_yugoslav_croat_available = {
 	always = yes
 }
 
+# Country scope. croat passes its gates for the yugoslav merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_yugoslav_croat_measured = {
+	var:te_cm_ok_yugoslav_croat ?= 1
+	te_cmg_yugoslav_croat_available = yes
+	NOT = { has_global_variable = te_cm_switched_croat }
+}
+
+# Country scope. croat joined the yugoslav merge and has switched into its result.
+te_cmg_yugoslav_croat_switched_in = {
+	global_var:te_cm_joined_yugoslav_croat ?= 1
+	has_global_variable = te_cm_switched_croat
+}
+
 # Country scope. croat (tier 1) passes its gates and can join the yugoslav merge now.
 te_cmg_yugoslav_croat_can_join = {
 	var:te_cm_ok_yugoslav_croat ?= 1
@@ -478,6 +737,20 @@ te_cmg_yugoslav_croat_can_join = {
 # Any scope. bosniak is free for the yugoslav merge.
 te_cmg_yugoslav_bosniak_available = {
 	always = yes
+}
+
+# Country scope. bosniak passes its gates for the yugoslav merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_yugoslav_bosniak_measured = {
+	var:te_cm_ok_yugoslav_bosniak ?= 1
+	te_cmg_yugoslav_bosniak_available = yes
+	NOT = { has_global_variable = te_cm_switched_bosniak }
+}
+
+# Country scope. bosniak joined the yugoslav merge and has switched into its result.
+te_cmg_yugoslav_bosniak_switched_in = {
+	global_var:te_cm_joined_yugoslav_bosniak ?= 1
+	has_global_variable = te_cm_switched_bosniak
 }
 
 # Country scope. bosniak (tier 1) passes its gates and can join the yugoslav merge now.
@@ -493,19 +766,59 @@ te_cmg_yugoslav_slovene_available = {
 	NOT = { global_var:te_cm_in_slovene ?= 29 }
 }
 
+# Country scope. slovene passes its gates for the yugoslav merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_yugoslav_slovene_measured = {
+	var:te_cm_ok_yugoslav_slovene ?= 1
+	te_cmg_yugoslav_slovene_available = yes
+	NOT = { has_global_variable = te_cm_switched_slovene }
+}
+
+# Country scope. slovene (tier 2) has spent the years together its tier asks for.
+te_cmg_yugoslav_slovene_years_met = {
+	has_variable = te_cm_years_yugoslav_slovene
+	trigger_if = { limit = { has_variable = te_cm_years_yugoslav_slovene } var:te_cm_years_yugoslav_slovene >= te_cm_years_tier3 }
+}
+
+# Country scope. slovene joined the yugoslav merge and has switched into its result.
+te_cmg_yugoslav_slovene_switched_in = {
+	global_var:te_cm_joined_yugoslav_slovene ?= 1
+	has_global_variable = te_cm_switched_slovene
+}
+
 # Country scope. slovene (tier 2) passes its gates and can join the yugoslav merge now.
 te_cmg_yugoslav_slovene_can_join = {
 	var:te_cm_ok_yugoslav_slovene ?= 1
 	te_cmg_yugoslav_slovene_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_slovene ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_yugoslav_slovene
-	trigger_if = { limit = { has_variable = te_cm_years_yugoslav_slovene } var:te_cm_years_yugoslav_slovene >= te_cm_years_tier3 }
+	te_cmg_yugoslav_slovene_years_met = yes
+	var:te_cm_sol_ok_yugoslav_slovene ?= 1
 }
 
 # Any scope. bulgarian is free for the yugoslav merge.
 te_cmg_yugoslav_bulgarian_available = {
 	NOT = { global_var:te_cm_in_bulgarian ?= 29 }
+}
+
+# Country scope. bulgarian passes its gates for the yugoslav merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_yugoslav_bulgarian_measured = {
+	var:te_cm_ok_yugoslav_bulgarian ?= 1
+	te_cmg_yugoslav_bulgarian_available = yes
+	NOT = { has_global_variable = te_cm_switched_bulgarian }
+}
+
+# Country scope. bulgarian (tier 2) has spent the years together its tier asks for.
+te_cmg_yugoslav_bulgarian_years_met = {
+	has_variable = te_cm_years_yugoslav_bulgarian
+	trigger_if = { limit = { has_variable = te_cm_years_yugoslav_bulgarian } var:te_cm_years_yugoslav_bulgarian >= te_cm_years_tier3 }
+}
+
+# Country scope. bulgarian joined the yugoslav merge and has switched into its result.
+te_cmg_yugoslav_bulgarian_switched_in = {
+	global_var:te_cm_joined_yugoslav_bulgarian ?= 1
+	has_global_variable = te_cm_switched_bulgarian
 }
 
 # Country scope. bulgarian (tier 2) passes its gates and can join the yugoslav merge now.
@@ -514,8 +827,8 @@ te_cmg_yugoslav_bulgarian_can_join = {
 	te_cmg_yugoslav_bulgarian_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_bulgarian ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_yugoslav_bulgarian
-	trigger_if = { limit = { has_variable = te_cm_years_yugoslav_bulgarian } var:te_cm_years_yugoslav_bulgarian >= te_cm_years_tier3 }
+	te_cmg_yugoslav_bulgarian_years_met = yes
+	var:te_cm_sol_ok_yugoslav_bulgarian ?= 1
 }
 
 # Any scope. Is the yearly census of the yugoslav merge worth running? An idle merge with a
@@ -575,17 +888,36 @@ te_cmg_czechoslovak_is_candidate = {
 	NOT = { global_var:te_cm_state_czechoslovak ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_czechoslovak_core_ok = {
-	var:te_cm_ok_czechoslovak_czech ?= 1
-	te_cmg_czechoslovak_czech_available = yes
-	var:te_cm_ok_czechoslovak_slovak ?= 1
-	te_cmg_czechoslovak_slovak_available = yes
+	OR = {
+		te_cmg_czechoslovak_czech_measured = yes
+		te_cmg_czechoslovak_czech_switched_in = yes
+	}
+	OR = {
+		te_cmg_czechoslovak_slovak_measured = yes
+		te_cmg_czechoslovak_slovak_switched_in = yes
+	}
 }
 
 # Any scope. czech is free for the czechoslovak merge.
 te_cmg_czechoslovak_czech_available = {
 	always = yes
+}
+
+# Country scope. czech passes its gates for the czechoslovak merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_czechoslovak_czech_measured = {
+	var:te_cm_ok_czechoslovak_czech ?= 1
+	te_cmg_czechoslovak_czech_available = yes
+	NOT = { has_global_variable = te_cm_switched_czech }
+}
+
+# Country scope. czech joined the czechoslovak merge and has switched into its result.
+te_cmg_czechoslovak_czech_switched_in = {
+	global_var:te_cm_joined_czechoslovak_czech ?= 1
+	has_global_variable = te_cm_switched_czech
 }
 
 # Country scope. czech (tier 1) passes its gates and can join the czechoslovak merge now.
@@ -601,6 +933,20 @@ te_cmg_czechoslovak_slovak_available = {
 	always = yes
 }
 
+# Country scope. slovak passes its gates for the czechoslovak merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_czechoslovak_slovak_measured = {
+	var:te_cm_ok_czechoslovak_slovak ?= 1
+	te_cmg_czechoslovak_slovak_available = yes
+	NOT = { has_global_variable = te_cm_switched_slovak }
+}
+
+# Country scope. slovak joined the czechoslovak merge and has switched into its result.
+te_cmg_czechoslovak_slovak_switched_in = {
+	global_var:te_cm_joined_czechoslovak_slovak ?= 1
+	has_global_variable = te_cm_switched_slovak
+}
+
 # Country scope. slovak (tier 1) passes its gates and can join the czechoslovak merge now.
 te_cmg_czechoslovak_slovak_can_join = {
 	var:te_cm_ok_czechoslovak_slovak ?= 1
@@ -614,12 +960,27 @@ te_cmg_czechoslovak_sorb_available = {
 	always = yes
 }
 
+# Country scope. sorb passes its gates for the czechoslovak merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_czechoslovak_sorb_measured = {
+	var:te_cm_ok_czechoslovak_sorb ?= 1
+	te_cmg_czechoslovak_sorb_available = yes
+	NOT = { has_global_variable = te_cm_switched_sorb }
+}
+
+# Country scope. sorb joined the czechoslovak merge and has switched into its result.
+te_cmg_czechoslovak_sorb_switched_in = {
+	global_var:te_cm_joined_czechoslovak_sorb ?= 1
+	has_global_variable = te_cm_switched_sorb
+}
+
 # Country scope. sorb (tier 1) passes its gates and can join the czechoslovak merge now.
 te_cmg_czechoslovak_sorb_can_join = {
 	var:te_cm_ok_czechoslovak_sorb ?= 1
 	te_cmg_czechoslovak_sorb_available = yes
 	NOT = { global_var:te_cm_joined_czechoslovak_sorb ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_czechoslovak_sorb ?= 1
 }
 
 # Any scope. Is the yearly census of the czechoslovak merge worth running? An idle merge with a
@@ -671,17 +1032,27 @@ te_cmg_hungarian_is_candidate = {
 	NOT = { global_var:te_cm_state_hungarian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_hungarian_core_ok = {
-	var:te_cm_ok_hungarian_hungarian ?= 1
-	te_cmg_hungarian_hungarian_available = yes
-	var:te_cm_ok_hungarian_szekely ?= 1
-	te_cmg_hungarian_szekely_available = yes
+	te_cmg_hungarian_hungarian_measured = yes
+	OR = {
+		te_cmg_hungarian_szekely_measured = yes
+		te_cmg_hungarian_szekely_switched_in = yes
+	}
 }
 
 # Any scope. hungarian is free for the hungarian merge.
 te_cmg_hungarian_hungarian_available = {
 	always = yes
+}
+
+# Country scope. hungarian passes its gates for the hungarian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hungarian_hungarian_measured = {
+	var:te_cm_ok_hungarian_hungarian ?= 1
+	te_cmg_hungarian_hungarian_available = yes
+	NOT = { has_global_variable = te_cm_switched_hungarian }
 }
 
 # Country scope. hungarian (tier 1) passes its gates and can join the hungarian merge now.
@@ -695,6 +1066,20 @@ te_cmg_hungarian_hungarian_can_join = {
 # Any scope. szekely is free for the hungarian merge.
 te_cmg_hungarian_szekely_available = {
 	always = yes
+}
+
+# Country scope. szekely passes its gates for the hungarian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hungarian_szekely_measured = {
+	var:te_cm_ok_hungarian_szekely ?= 1
+	te_cmg_hungarian_szekely_available = yes
+	NOT = { has_global_variable = te_cm_switched_szekely }
+}
+
+# Country scope. szekely joined the hungarian merge and has switched into its result.
+te_cmg_hungarian_szekely_switched_in = {
+	global_var:te_cm_joined_hungarian_szekely ?= 1
+	has_global_variable = te_cm_switched_szekely
 }
 
 # Country scope. szekely (tier 1) passes its gates and can join the hungarian merge now.
@@ -746,17 +1131,27 @@ te_cmg_dutch_is_candidate = {
 	NOT = { global_var:te_cm_state_dutch ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_dutch_core_ok = {
-	var:te_cm_ok_dutch_dutch ?= 1
-	te_cmg_dutch_dutch_available = yes
-	var:te_cm_ok_dutch_flemish ?= 1
-	te_cmg_dutch_flemish_available = yes
+	te_cmg_dutch_dutch_measured = yes
+	OR = {
+		te_cmg_dutch_flemish_measured = yes
+		te_cmg_dutch_flemish_switched_in = yes
+	}
 }
 
 # Any scope. dutch is free for the dutch merge.
 te_cmg_dutch_dutch_available = {
 	always = yes
+}
+
+# Country scope. dutch passes its gates for the dutch merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dutch_dutch_measured = {
+	var:te_cm_ok_dutch_dutch ?= 1
+	te_cmg_dutch_dutch_available = yes
+	NOT = { has_global_variable = te_cm_switched_dutch }
 }
 
 # Country scope. dutch (tier 1) passes its gates and can join the dutch merge now.
@@ -770,6 +1165,20 @@ te_cmg_dutch_dutch_can_join = {
 # Any scope. flemish is free for the dutch merge.
 te_cmg_dutch_flemish_available = {
 	always = yes
+}
+
+# Country scope. flemish passes its gates for the dutch merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dutch_flemish_measured = {
+	var:te_cm_ok_dutch_flemish ?= 1
+	te_cmg_dutch_flemish_available = yes
+	NOT = { has_global_variable = te_cm_switched_flemish }
+}
+
+# Country scope. flemish joined the dutch merge and has switched into its result.
+te_cmg_dutch_flemish_switched_in = {
+	global_var:te_cm_joined_dutch_flemish ?= 1
+	has_global_variable = te_cm_switched_flemish
 }
 
 # Country scope. flemish (tier 1) passes its gates and can join the dutch merge now.
@@ -821,17 +1230,27 @@ te_cmg_finnish_is_candidate = {
 	NOT = { global_var:te_cm_state_finnish ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_finnish_core_ok = {
-	var:te_cm_ok_finnish_finnish ?= 1
-	te_cmg_finnish_finnish_available = yes
-	var:te_cm_ok_finnish_karelian ?= 1
-	te_cmg_finnish_karelian_available = yes
+	te_cmg_finnish_finnish_measured = yes
+	OR = {
+		te_cmg_finnish_karelian_measured = yes
+		te_cmg_finnish_karelian_switched_in = yes
+	}
 }
 
 # Any scope. finnish is free for the finnish merge.
 te_cmg_finnish_finnish_available = {
 	always = yes
+}
+
+# Country scope. finnish passes its gates for the finnish merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_finnish_finnish_measured = {
+	var:te_cm_ok_finnish_finnish ?= 1
+	te_cmg_finnish_finnish_available = yes
+	NOT = { has_global_variable = te_cm_switched_finnish }
 }
 
 # Country scope. finnish (tier 1) passes its gates and can join the finnish merge now.
@@ -845,6 +1264,20 @@ te_cmg_finnish_finnish_can_join = {
 # Any scope. karelian is free for the finnish merge.
 te_cmg_finnish_karelian_available = {
 	always = yes
+}
+
+# Country scope. karelian passes its gates for the finnish merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_finnish_karelian_measured = {
+	var:te_cm_ok_finnish_karelian ?= 1
+	te_cmg_finnish_karelian_available = yes
+	NOT = { has_global_variable = te_cm_switched_karelian }
+}
+
+# Country scope. karelian joined the finnish merge and has switched into its result.
+te_cmg_finnish_karelian_switched_in = {
+	global_var:te_cm_joined_finnish_karelian ?= 1
+	has_global_variable = te_cm_switched_karelian
 }
 
 # Country scope. karelian (tier 1) passes its gates and can join the finnish merge now.
@@ -897,19 +1330,31 @@ te_cmg_french_is_candidate = {
 	NOT = { global_var:te_cm_state_french ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_french_core_ok = {
-	var:te_cm_ok_french_french ?= 1
-	te_cmg_french_french_available = yes
-	var:te_cm_ok_french_wallonian ?= 1
-	te_cmg_french_wallonian_available = yes
-	var:te_cm_ok_french_occitan ?= 1
-	te_cmg_french_occitan_available = yes
+	te_cmg_french_french_measured = yes
+	OR = {
+		te_cmg_french_wallonian_measured = yes
+		te_cmg_french_wallonian_switched_in = yes
+	}
+	OR = {
+		te_cmg_french_occitan_measured = yes
+		te_cmg_french_occitan_switched_in = yes
+	}
 }
 
 # Any scope. french is free for the french merge.
 te_cmg_french_french_available = {
 	NOT = { global_var:te_cm_in_french ?= 28 }
+}
+
+# Country scope. french passes its gates for the french merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_french_french_measured = {
+	var:te_cm_ok_french_french ?= 1
+	te_cmg_french_french_available = yes
+	NOT = { has_global_variable = te_cm_switched_french }
 }
 
 # Country scope. french (tier 1) passes its gates and can join the french merge now.
@@ -925,6 +1370,20 @@ te_cmg_french_wallonian_available = {
 	always = yes
 }
 
+# Country scope. wallonian passes its gates for the french merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_french_wallonian_measured = {
+	var:te_cm_ok_french_wallonian ?= 1
+	te_cmg_french_wallonian_available = yes
+	NOT = { has_global_variable = te_cm_switched_wallonian }
+}
+
+# Country scope. wallonian joined the french merge and has switched into its result.
+te_cmg_french_wallonian_switched_in = {
+	global_var:te_cm_joined_french_wallonian ?= 1
+	has_global_variable = te_cm_switched_wallonian
+}
+
 # Country scope. wallonian (tier 1) passes its gates and can join the french merge now.
 te_cmg_french_wallonian_can_join = {
 	var:te_cm_ok_french_wallonian ?= 1
@@ -936,6 +1395,20 @@ te_cmg_french_wallonian_can_join = {
 # Any scope. occitan is free for the french merge.
 te_cmg_french_occitan_available = {
 	always = yes
+}
+
+# Country scope. occitan passes its gates for the french merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_french_occitan_measured = {
+	var:te_cm_ok_french_occitan ?= 1
+	te_cmg_french_occitan_available = yes
+	NOT = { has_global_variable = te_cm_switched_occitan }
+}
+
+# Country scope. occitan joined the french merge and has switched into its result.
+te_cmg_french_occitan_switched_in = {
+	global_var:te_cm_joined_french_occitan ?= 1
+	has_global_variable = te_cm_switched_occitan
 }
 
 # Country scope. occitan (tier 1) passes its gates and can join the french merge now.
@@ -951,14 +1424,34 @@ te_cmg_french_catalan_available = {
 	always = yes
 }
 
+# Country scope. catalan passes its gates for the french merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_french_catalan_measured = {
+	var:te_cm_ok_french_catalan ?= 1
+	te_cmg_french_catalan_available = yes
+	NOT = { has_global_variable = te_cm_switched_catalan }
+}
+
+# Country scope. catalan (tier 2) has spent the years together its tier asks for.
+te_cmg_french_catalan_years_met = {
+	has_variable = te_cm_years_french_catalan
+	trigger_if = { limit = { has_variable = te_cm_years_french_catalan } var:te_cm_years_french_catalan >= te_cm_years_tier3 }
+}
+
+# Country scope. catalan joined the french merge and has switched into its result.
+te_cmg_french_catalan_switched_in = {
+	global_var:te_cm_joined_french_catalan ?= 1
+	has_global_variable = te_cm_switched_catalan
+}
+
 # Country scope. catalan (tier 2) passes its gates and can join the french merge now.
 te_cmg_french_catalan_can_join = {
 	var:te_cm_ok_french_catalan ?= 1
 	te_cmg_french_catalan_available = yes
 	NOT = { global_var:te_cm_joined_french_catalan ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_french_catalan
-	trigger_if = { limit = { has_variable = te_cm_years_french_catalan } var:te_cm_years_french_catalan >= te_cm_years_tier3 }
+	te_cmg_french_catalan_years_met = yes
+	var:te_cm_sol_ok_french_catalan ?= 1
 }
 
 # Any scope. Is the yearly census of the french merge worth running? An idle merge with a
@@ -1010,17 +1503,27 @@ te_cmg_british_is_candidate = {
 	NOT = { global_var:te_cm_state_british ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_british_core_ok = {
-	var:te_cm_ok_british_british ?= 1
-	te_cmg_british_british_available = yes
-	var:te_cm_ok_british_scottish ?= 1
-	te_cmg_british_scottish_available = yes
+	te_cmg_british_british_measured = yes
+	OR = {
+		te_cmg_british_scottish_measured = yes
+		te_cmg_british_scottish_switched_in = yes
+	}
 }
 
 # Any scope. british is free for the british merge.
 te_cmg_british_british_available = {
 	NOT = { global_var:te_cm_in_british ?= 13 }
+}
+
+# Country scope. british passes its gates for the british merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_british_british_measured = {
+	var:te_cm_ok_british_british ?= 1
+	te_cmg_british_british_available = yes
+	NOT = { has_global_variable = te_cm_switched_british }
 }
 
 # Country scope. british (tier 1) passes its gates and can join the british merge now.
@@ -1034,6 +1537,20 @@ te_cmg_british_british_can_join = {
 # Any scope. scottish is free for the british merge.
 te_cmg_british_scottish_available = {
 	NOT = { global_var:te_cm_in_scottish ?= 13 }
+}
+
+# Country scope. scottish passes its gates for the british merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_british_scottish_measured = {
+	var:te_cm_ok_british_scottish ?= 1
+	te_cmg_british_scottish_available = yes
+	NOT = { has_global_variable = te_cm_switched_scottish }
+}
+
+# Country scope. scottish joined the british merge and has switched into its result.
+te_cmg_british_scottish_switched_in = {
+	global_var:te_cm_joined_british_scottish ?= 1
+	has_global_variable = te_cm_switched_scottish
 }
 
 # Country scope. scottish (tier 1) passes its gates and can join the british merge now.
@@ -1085,17 +1602,36 @@ te_cmg_american_is_candidate = {
 	NOT = { global_var:te_cm_state_american ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_american_core_ok = {
-	var:te_cm_ok_american_yankee ?= 1
-	te_cmg_american_yankee_available = yes
-	var:te_cm_ok_american_dixie ?= 1
-	te_cmg_american_dixie_available = yes
+	OR = {
+		te_cmg_american_yankee_measured = yes
+		te_cmg_american_yankee_switched_in = yes
+	}
+	OR = {
+		te_cmg_american_dixie_measured = yes
+		te_cmg_american_dixie_switched_in = yes
+	}
 }
 
 # Any scope. yankee is free for the american merge.
 te_cmg_american_yankee_available = {
 	NOT = { global_var:te_cm_in_yankee ?= 13 }
+}
+
+# Country scope. yankee passes its gates for the american merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_american_yankee_measured = {
+	var:te_cm_ok_american_yankee ?= 1
+	te_cmg_american_yankee_available = yes
+	NOT = { has_global_variable = te_cm_switched_yankee }
+}
+
+# Country scope. yankee joined the american merge and has switched into its result.
+te_cmg_american_yankee_switched_in = {
+	global_var:te_cm_joined_american_yankee ?= 1
+	has_global_variable = te_cm_switched_yankee
 }
 
 # Country scope. yankee (tier 1) passes its gates and can join the american merge now.
@@ -1111,6 +1647,20 @@ te_cmg_american_dixie_available = {
 	NOT = { global_var:te_cm_in_dixie ?= 13 }
 }
 
+# Country scope. dixie passes its gates for the american merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_american_dixie_measured = {
+	var:te_cm_ok_american_dixie ?= 1
+	te_cmg_american_dixie_available = yes
+	NOT = { has_global_variable = te_cm_switched_dixie }
+}
+
+# Country scope. dixie joined the american merge and has switched into its result.
+te_cmg_american_dixie_switched_in = {
+	global_var:te_cm_joined_american_dixie ?= 1
+	has_global_variable = te_cm_switched_dixie
+}
+
 # Country scope. dixie (tier 1) passes its gates and can join the american merge now.
 te_cmg_american_dixie_can_join = {
 	var:te_cm_ok_american_dixie ?= 1
@@ -1124,14 +1674,34 @@ te_cmg_american_afro_american_available = {
 	NOT = { global_var:te_cm_in_afro_american ?= 13 }
 }
 
+# Country scope. afro_american passes its gates for the american merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_american_afro_american_measured = {
+	var:te_cm_ok_american_afro_american ?= 1
+	te_cmg_american_afro_american_available = yes
+	NOT = { has_global_variable = te_cm_switched_afro_american }
+}
+
+# Country scope. afro_american (tier 1b) has spent the years together its tier asks for.
+te_cmg_american_afro_american_years_met = {
+	has_variable = te_cm_years_american_afro_american
+	trigger_if = { limit = { has_variable = te_cm_years_american_afro_american } var:te_cm_years_american_afro_american >= te_cm_years_tier2 }
+}
+
+# Country scope. afro_american joined the american merge and has switched into its result.
+te_cmg_american_afro_american_switched_in = {
+	global_var:te_cm_joined_american_afro_american ?= 1
+	has_global_variable = te_cm_switched_afro_american
+}
+
 # Country scope. afro_american (tier 1b) passes its gates and can join the american merge now.
 te_cmg_american_afro_american_can_join = {
 	var:te_cm_ok_american_afro_american ?= 1
 	te_cmg_american_afro_american_available = yes
 	NOT = { global_var:te_cm_joined_american_afro_american ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_american_afro_american
-	trigger_if = { limit = { has_variable = te_cm_years_american_afro_american } var:te_cm_years_american_afro_american >= te_cm_years_tier2 }
+	te_cmg_american_afro_american_years_met = yes
+	var:te_cm_sol_ok_american_afro_american ?= 1
 }
 
 # Any scope. Is the yearly census of the american merge worth running? An idle merge with a
@@ -1184,19 +1754,27 @@ te_cmg_anglophone_is_candidate = {
 	NOT = { global_var:te_cm_state_anglophone ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_anglophone_core_ok = {
-	var:te_cm_ok_anglophone_british ?= 1
-	te_cmg_anglophone_british_available = yes
 	OR = {
 		AND = {
-			var:te_cm_ok_anglophone_yankee ?= 1
-			te_cmg_anglophone_yankee_available = yes
+			te_cmg_anglophone_british_measured = yes
+			te_cmg_anglophone_british_years_met = yes
 		}
+		te_cmg_anglophone_british_switched_in = yes
+	}
+	OR = {
 		AND = {
-			var:te_cm_ok_anglophone_cm_american ?= 1
-			te_cmg_anglophone_cm_american_available = yes
+			te_cmg_anglophone_yankee_measured = yes
+			te_cmg_anglophone_yankee_years_met = yes
 		}
+		te_cmg_anglophone_yankee_switched_in = yes
+		AND = {
+			te_cmg_anglophone_cm_american_measured = yes
+			te_cmg_anglophone_cm_american_years_met = yes
+		}
+		te_cmg_anglophone_cm_american_switched_in = yes
 	}
 }
 
@@ -1205,19 +1783,58 @@ te_cmg_anglophone_british_available = {
 	NOT = { global_var:te_cm_in_british ?= 11 }
 }
 
+# Country scope. british passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_british_measured = {
+	var:te_cm_ok_anglophone_british ?= 1
+	te_cmg_anglophone_british_available = yes
+	NOT = { has_global_variable = te_cm_switched_british }
+}
+
+# Country scope. british (tier 1b) has spent the years together its tier asks for.
+te_cmg_anglophone_british_years_met = {
+	has_variable = te_cm_years_anglophone_british
+	trigger_if = { limit = { has_variable = te_cm_years_anglophone_british } var:te_cm_years_anglophone_british >= te_cm_years_tier2 }
+}
+
+# Country scope. british joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_british_switched_in = {
+	global_var:te_cm_joined_anglophone_british ?= 1
+	has_global_variable = te_cm_switched_british
+}
+
 # Country scope. british (tier 1b) passes its gates and can join the anglophone merge now.
 te_cmg_anglophone_british_can_join = {
 	var:te_cm_ok_anglophone_british ?= 1
 	te_cmg_anglophone_british_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_british ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_anglophone_british
-	trigger_if = { limit = { has_variable = te_cm_years_anglophone_british } var:te_cm_years_anglophone_british >= te_cm_years_tier2 }
+	te_cmg_anglophone_british_years_met = yes
 }
 
 # Any scope. yankee is free for the anglophone merge.
 te_cmg_anglophone_yankee_available = {
 	NOT = { global_var:te_cm_in_yankee ?= 12 }
+}
+
+# Country scope. yankee passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_yankee_measured = {
+	var:te_cm_ok_anglophone_yankee ?= 1
+	te_cmg_anglophone_yankee_available = yes
+	NOT = { has_global_variable = te_cm_switched_yankee }
+}
+
+# Country scope. yankee (tier 1b) has spent the years together its tier asks for.
+te_cmg_anglophone_yankee_years_met = {
+	has_variable = te_cm_years_anglophone_yankee
+	trigger_if = { limit = { has_variable = te_cm_years_anglophone_yankee } var:te_cm_years_anglophone_yankee >= te_cm_years_tier2 }
+}
+
+# Country scope. yankee joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_yankee_switched_in = {
+	global_var:te_cm_joined_anglophone_yankee ?= 1
+	has_global_variable = te_cm_switched_yankee
 }
 
 # Country scope. yankee (tier 1b) passes its gates and can join the anglophone merge now.
@@ -1226,13 +1843,32 @@ te_cmg_anglophone_yankee_can_join = {
 	te_cmg_anglophone_yankee_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_yankee ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_anglophone_yankee
-	trigger_if = { limit = { has_variable = te_cm_years_anglophone_yankee } var:te_cm_years_anglophone_yankee >= te_cm_years_tier2 }
+	te_cmg_anglophone_yankee_years_met = yes
 }
 
 # Any scope. cm_american is free for the anglophone merge.
 te_cmg_anglophone_cm_american_available = {
 	global_var:te_cm_state_american ?= 2
+}
+
+# Country scope. cm_american passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_cm_american_measured = {
+	var:te_cm_ok_anglophone_cm_american ?= 1
+	te_cmg_anglophone_cm_american_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_american }
+}
+
+# Country scope. cm_american (tier 1b) has spent the years together its tier asks for.
+te_cmg_anglophone_cm_american_years_met = {
+	has_variable = te_cm_years_anglophone_cm_american
+	trigger_if = { limit = { has_variable = te_cm_years_anglophone_cm_american } var:te_cm_years_anglophone_cm_american >= te_cm_years_tier2 }
+}
+
+# Country scope. cm_american joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_cm_american_switched_in = {
+	global_var:te_cm_joined_anglophone_cm_american ?= 1
+	has_global_variable = te_cm_switched_cm_american
 }
 
 # Country scope. cm_american (tier 1b) passes its gates and can join the anglophone merge now.
@@ -1241,13 +1877,26 @@ te_cmg_anglophone_cm_american_can_join = {
 	te_cmg_anglophone_cm_american_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_cm_american ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_anglophone_cm_american
-	trigger_if = { limit = { has_variable = te_cm_years_anglophone_cm_american } var:te_cm_years_anglophone_cm_american >= te_cm_years_tier2 }
+	te_cmg_anglophone_cm_american_years_met = yes
 }
 
 # Any scope. anglo_canadian is free for the anglophone merge.
 te_cmg_anglophone_anglo_canadian_available = {
 	always = yes
+}
+
+# Country scope. anglo_canadian passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_anglo_canadian_measured = {
+	var:te_cm_ok_anglophone_anglo_canadian ?= 1
+	te_cmg_anglophone_anglo_canadian_available = yes
+	NOT = { has_global_variable = te_cm_switched_anglo_canadian }
+}
+
+# Country scope. anglo_canadian joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_anglo_canadian_switched_in = {
+	global_var:te_cm_joined_anglophone_anglo_canadian ?= 1
+	has_global_variable = te_cm_switched_anglo_canadian
 }
 
 # Country scope. anglo_canadian (tier 1) passes its gates and can join the anglophone merge now.
@@ -1256,11 +1905,26 @@ te_cmg_anglophone_anglo_canadian_can_join = {
 	te_cmg_anglophone_anglo_canadian_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_anglo_canadian ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_anglophone_anglo_canadian ?= 1
 }
 
 # Any scope. australian is free for the anglophone merge.
 te_cmg_anglophone_australian_available = {
 	always = yes
+}
+
+# Country scope. australian passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_australian_measured = {
+	var:te_cm_ok_anglophone_australian ?= 1
+	te_cmg_anglophone_australian_available = yes
+	NOT = { has_global_variable = te_cm_switched_australian }
+}
+
+# Country scope. australian joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_australian_switched_in = {
+	global_var:te_cm_joined_anglophone_australian ?= 1
+	has_global_variable = te_cm_switched_australian
 }
 
 # Country scope. australian (tier 1) passes its gates and can join the anglophone merge now.
@@ -1269,11 +1933,26 @@ te_cmg_anglophone_australian_can_join = {
 	te_cmg_anglophone_australian_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_australian ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_anglophone_australian ?= 1
 }
 
 # Any scope. scottish is free for the anglophone merge.
 te_cmg_anglophone_scottish_available = {
 	NOT = { global_var:te_cm_in_scottish ?= 11 }
+}
+
+# Country scope. scottish passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_scottish_measured = {
+	var:te_cm_ok_anglophone_scottish ?= 1
+	te_cmg_anglophone_scottish_available = yes
+	NOT = { has_global_variable = te_cm_switched_scottish }
+}
+
+# Country scope. scottish joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_scottish_switched_in = {
+	global_var:te_cm_joined_anglophone_scottish ?= 1
+	has_global_variable = te_cm_switched_scottish
 }
 
 # Country scope. scottish (tier 1) passes its gates and can join the anglophone merge now.
@@ -1282,11 +1961,26 @@ te_cmg_anglophone_scottish_can_join = {
 	te_cmg_anglophone_scottish_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_scottish ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_anglophone_scottish ?= 1
 }
 
 # Any scope. dixie is free for the anglophone merge.
 te_cmg_anglophone_dixie_available = {
 	NOT = { global_var:te_cm_in_dixie ?= 12 }
+}
+
+# Country scope. dixie passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_dixie_measured = {
+	var:te_cm_ok_anglophone_dixie ?= 1
+	te_cmg_anglophone_dixie_available = yes
+	NOT = { has_global_variable = te_cm_switched_dixie }
+}
+
+# Country scope. dixie joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_dixie_switched_in = {
+	global_var:te_cm_joined_anglophone_dixie ?= 1
+	has_global_variable = te_cm_switched_dixie
 }
 
 # Country scope. dixie (tier 1) passes its gates and can join the anglophone merge now.
@@ -1295,11 +1989,32 @@ te_cmg_anglophone_dixie_can_join = {
 	te_cmg_anglophone_dixie_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_dixie ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_anglophone_dixie ?= 1
 }
 
 # Any scope. afro_american is free for the anglophone merge.
 te_cmg_anglophone_afro_american_available = {
 	NOT = { global_var:te_cm_in_afro_american ?= 12 }
+}
+
+# Country scope. afro_american passes its gates for the anglophone merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_anglophone_afro_american_measured = {
+	var:te_cm_ok_anglophone_afro_american ?= 1
+	te_cmg_anglophone_afro_american_available = yes
+	NOT = { has_global_variable = te_cm_switched_afro_american }
+}
+
+# Country scope. afro_american (tier 1b) has spent the years together its tier asks for.
+te_cmg_anglophone_afro_american_years_met = {
+	has_variable = te_cm_years_anglophone_afro_american
+	trigger_if = { limit = { has_variable = te_cm_years_anglophone_afro_american } var:te_cm_years_anglophone_afro_american >= te_cm_years_tier2 }
+}
+
+# Country scope. afro_american joined the anglophone merge and has switched into its result.
+te_cmg_anglophone_afro_american_switched_in = {
+	global_var:te_cm_joined_anglophone_afro_american ?= 1
+	has_global_variable = te_cm_switched_afro_american
 }
 
 # Country scope. afro_american (tier 1b) passes its gates and can join the anglophone merge now.
@@ -1308,8 +2023,8 @@ te_cmg_anglophone_afro_american_can_join = {
 	te_cmg_anglophone_afro_american_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_afro_american ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_anglophone_afro_american
-	trigger_if = { limit = { has_variable = te_cm_years_anglophone_afro_american } var:te_cm_years_anglophone_afro_american >= te_cm_years_tier2 }
+	te_cmg_anglophone_afro_american_years_met = yes
+	var:te_cm_sol_ok_anglophone_afro_american ?= 1
 }
 
 # Any scope. Is the yearly census of the anglophone merge worth running? An idle merge with a
@@ -1385,23 +2100,39 @@ te_cmg_brazilian_is_candidate = {
 	NOT = { has_dlc_feature = rp1_content }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_brazilian_core_ok = {
-	var:te_cm_ok_brazilian_brazilian ?= 1
-	te_cmg_brazilian_brazilian_available = yes
-	var:te_cm_ok_brazilian_nordestino ?= 1
-	te_cmg_brazilian_nordestino_available = yes
-	var:te_cm_ok_brazilian_paulista ?= 1
-	te_cmg_brazilian_paulista_available = yes
-	var:te_cm_ok_brazilian_amazonic ?= 1
-	te_cmg_brazilian_amazonic_available = yes
-	var:te_cm_ok_brazilian_sulista ?= 1
-	te_cmg_brazilian_sulista_available = yes
+	te_cmg_brazilian_brazilian_measured = yes
+	OR = {
+		te_cmg_brazilian_nordestino_measured = yes
+		te_cmg_brazilian_nordestino_switched_in = yes
+	}
+	OR = {
+		te_cmg_brazilian_paulista_measured = yes
+		te_cmg_brazilian_paulista_switched_in = yes
+	}
+	OR = {
+		te_cmg_brazilian_amazonic_measured = yes
+		te_cmg_brazilian_amazonic_switched_in = yes
+	}
+	OR = {
+		te_cmg_brazilian_sulista_measured = yes
+		te_cmg_brazilian_sulista_switched_in = yes
+	}
 }
 
 # Any scope. brazilian is free for the brazilian merge.
 te_cmg_brazilian_brazilian_available = {
 	always = yes
+}
+
+# Country scope. brazilian passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_brazilian_measured = {
+	var:te_cm_ok_brazilian_brazilian ?= 1
+	te_cmg_brazilian_brazilian_available = yes
+	NOT = { has_global_variable = te_cm_switched_brazilian }
 }
 
 # Country scope. brazilian (tier 1) passes its gates and can join the brazilian merge now.
@@ -1417,6 +2148,20 @@ te_cmg_brazilian_nordestino_available = {
 	always = yes
 }
 
+# Country scope. nordestino passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_nordestino_measured = {
+	var:te_cm_ok_brazilian_nordestino ?= 1
+	te_cmg_brazilian_nordestino_available = yes
+	NOT = { has_global_variable = te_cm_switched_nordestino }
+}
+
+# Country scope. nordestino joined the brazilian merge and has switched into its result.
+te_cmg_brazilian_nordestino_switched_in = {
+	global_var:te_cm_joined_brazilian_nordestino ?= 1
+	has_global_variable = te_cm_switched_nordestino
+}
+
 # Country scope. nordestino (tier 1) passes its gates and can join the brazilian merge now.
 te_cmg_brazilian_nordestino_can_join = {
 	var:te_cm_ok_brazilian_nordestino ?= 1
@@ -1428,6 +2173,20 @@ te_cmg_brazilian_nordestino_can_join = {
 # Any scope. paulista is free for the brazilian merge.
 te_cmg_brazilian_paulista_available = {
 	always = yes
+}
+
+# Country scope. paulista passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_paulista_measured = {
+	var:te_cm_ok_brazilian_paulista ?= 1
+	te_cmg_brazilian_paulista_available = yes
+	NOT = { has_global_variable = te_cm_switched_paulista }
+}
+
+# Country scope. paulista joined the brazilian merge and has switched into its result.
+te_cmg_brazilian_paulista_switched_in = {
+	global_var:te_cm_joined_brazilian_paulista ?= 1
+	has_global_variable = te_cm_switched_paulista
 }
 
 # Country scope. paulista (tier 1) passes its gates and can join the brazilian merge now.
@@ -1443,6 +2202,20 @@ te_cmg_brazilian_amazonic_available = {
 	always = yes
 }
 
+# Country scope. amazonic passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_amazonic_measured = {
+	var:te_cm_ok_brazilian_amazonic ?= 1
+	te_cmg_brazilian_amazonic_available = yes
+	NOT = { has_global_variable = te_cm_switched_amazonic }
+}
+
+# Country scope. amazonic joined the brazilian merge and has switched into its result.
+te_cmg_brazilian_amazonic_switched_in = {
+	global_var:te_cm_joined_brazilian_amazonic ?= 1
+	has_global_variable = te_cm_switched_amazonic
+}
+
 # Country scope. amazonic (tier 1) passes its gates and can join the brazilian merge now.
 te_cmg_brazilian_amazonic_can_join = {
 	var:te_cm_ok_brazilian_amazonic ?= 1
@@ -1454,6 +2227,20 @@ te_cmg_brazilian_amazonic_can_join = {
 # Any scope. sulista is free for the brazilian merge.
 te_cmg_brazilian_sulista_available = {
 	always = yes
+}
+
+# Country scope. sulista passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_sulista_measured = {
+	var:te_cm_ok_brazilian_sulista ?= 1
+	te_cmg_brazilian_sulista_available = yes
+	NOT = { has_global_variable = te_cm_switched_sulista }
+}
+
+# Country scope. sulista joined the brazilian merge and has switched into its result.
+te_cmg_brazilian_sulista_switched_in = {
+	global_var:te_cm_joined_brazilian_sulista ?= 1
+	has_global_variable = te_cm_switched_sulista
 }
 
 # Country scope. sulista (tier 1) passes its gates and can join the brazilian merge now.
@@ -1469,14 +2256,34 @@ te_cmg_brazilian_afro_brazilian_available = {
 	always = yes
 }
 
+# Country scope. afro_brazilian passes its gates for the brazilian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_brazilian_afro_brazilian_measured = {
+	var:te_cm_ok_brazilian_afro_brazilian ?= 1
+	te_cmg_brazilian_afro_brazilian_available = yes
+	NOT = { has_global_variable = te_cm_switched_afro_brazilian }
+}
+
+# Country scope. afro_brazilian (tier 1b) has spent the years together its tier asks for.
+te_cmg_brazilian_afro_brazilian_years_met = {
+	has_variable = te_cm_years_brazilian_afro_brazilian
+	trigger_if = { limit = { has_variable = te_cm_years_brazilian_afro_brazilian } var:te_cm_years_brazilian_afro_brazilian >= te_cm_years_tier2 }
+}
+
+# Country scope. afro_brazilian joined the brazilian merge and has switched into its result.
+te_cmg_brazilian_afro_brazilian_switched_in = {
+	global_var:te_cm_joined_brazilian_afro_brazilian ?= 1
+	has_global_variable = te_cm_switched_afro_brazilian
+}
+
 # Country scope. afro_brazilian (tier 1b) passes its gates and can join the brazilian merge now.
 te_cmg_brazilian_afro_brazilian_can_join = {
 	var:te_cm_ok_brazilian_afro_brazilian ?= 1
 	te_cmg_brazilian_afro_brazilian_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_afro_brazilian ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_brazilian_afro_brazilian
-	trigger_if = { limit = { has_variable = te_cm_years_brazilian_afro_brazilian } var:te_cm_years_brazilian_afro_brazilian >= te_cm_years_tier2 }
+	te_cmg_brazilian_afro_brazilian_years_met = yes
+	var:te_cm_sol_ok_brazilian_afro_brazilian ?= 1
 }
 
 # Any scope. Is the yearly census of the brazilian merge worth running? An idle merge with a
@@ -1538,21 +2345,44 @@ te_cmg_platine_is_candidate = {
 	NOT = { global_var:te_cm_state_platine ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_platine_core_ok = {
-	var:te_cm_ok_platine_platinean ?= 1
-	te_cmg_platine_platinean_available = yes
-	var:te_cm_ok_platine_argentine ?= 1
-	te_cmg_platine_argentine_available = yes
-	var:te_cm_ok_platine_uruguayan ?= 1
-	te_cmg_platine_uruguayan_available = yes
-	var:te_cm_ok_platine_paraguayan ?= 1
-	te_cmg_platine_paraguayan_available = yes
+	OR = {
+		te_cmg_platine_platinean_measured = yes
+		te_cmg_platine_platinean_switched_in = yes
+	}
+	OR = {
+		te_cmg_platine_argentine_measured = yes
+		te_cmg_platine_argentine_switched_in = yes
+	}
+	OR = {
+		te_cmg_platine_uruguayan_measured = yes
+		te_cmg_platine_uruguayan_switched_in = yes
+	}
+	OR = {
+		te_cmg_platine_paraguayan_measured = yes
+		te_cmg_platine_paraguayan_switched_in = yes
+	}
 }
 
 # Any scope. platinean is free for the platine merge.
 te_cmg_platine_platinean_available = {
 	NOT = { global_var:te_cm_in_platinean ?= 28 }
+}
+
+# Country scope. platinean passes its gates for the platine merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_platine_platinean_measured = {
+	var:te_cm_ok_platine_platinean ?= 1
+	te_cmg_platine_platinean_available = yes
+	NOT = { has_global_variable = te_cm_switched_platinean }
+}
+
+# Country scope. platinean joined the platine merge and has switched into its result.
+te_cmg_platine_platinean_switched_in = {
+	global_var:te_cm_joined_platine_platinean ?= 1
+	has_global_variable = te_cm_switched_platinean
 }
 
 # Country scope. platinean (tier 1) passes its gates and can join the platine merge now.
@@ -1568,6 +2398,20 @@ te_cmg_platine_argentine_available = {
 	NOT = { global_var:te_cm_in_argentine ?= 28 }
 }
 
+# Country scope. argentine passes its gates for the platine merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_platine_argentine_measured = {
+	var:te_cm_ok_platine_argentine ?= 1
+	te_cmg_platine_argentine_available = yes
+	NOT = { has_global_variable = te_cm_switched_argentine }
+}
+
+# Country scope. argentine joined the platine merge and has switched into its result.
+te_cmg_platine_argentine_switched_in = {
+	global_var:te_cm_joined_platine_argentine ?= 1
+	has_global_variable = te_cm_switched_argentine
+}
+
 # Country scope. argentine (tier 1) passes its gates and can join the platine merge now.
 te_cmg_platine_argentine_can_join = {
 	var:te_cm_ok_platine_argentine ?= 1
@@ -1581,6 +2425,20 @@ te_cmg_platine_uruguayan_available = {
 	NOT = { global_var:te_cm_in_uruguayan ?= 28 }
 }
 
+# Country scope. uruguayan passes its gates for the platine merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_platine_uruguayan_measured = {
+	var:te_cm_ok_platine_uruguayan ?= 1
+	te_cmg_platine_uruguayan_available = yes
+	NOT = { has_global_variable = te_cm_switched_uruguayan }
+}
+
+# Country scope. uruguayan joined the platine merge and has switched into its result.
+te_cmg_platine_uruguayan_switched_in = {
+	global_var:te_cm_joined_platine_uruguayan ?= 1
+	has_global_variable = te_cm_switched_uruguayan
+}
+
 # Country scope. uruguayan (tier 1) passes its gates and can join the platine merge now.
 te_cmg_platine_uruguayan_can_join = {
 	var:te_cm_ok_platine_uruguayan ?= 1
@@ -1592,6 +2450,20 @@ te_cmg_platine_uruguayan_can_join = {
 # Any scope. paraguayan is free for the platine merge.
 te_cmg_platine_paraguayan_available = {
 	always = yes
+}
+
+# Country scope. paraguayan passes its gates for the platine merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_platine_paraguayan_measured = {
+	var:te_cm_ok_platine_paraguayan ?= 1
+	te_cmg_platine_paraguayan_available = yes
+	NOT = { has_global_variable = te_cm_switched_paraguayan }
+}
+
+# Country scope. paraguayan joined the platine merge and has switched into its result.
+te_cmg_platine_paraguayan_switched_in = {
+	global_var:te_cm_joined_platine_paraguayan ?= 1
+	has_global_variable = te_cm_switched_paraguayan
 }
 
 # Country scope. paraguayan (tier 1) passes its gates and can join the platine merge now.
@@ -1657,21 +2529,44 @@ te_cmg_andean_is_candidate = {
 	NOT = { global_var:te_cm_state_andean ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_andean_core_ok = {
-	var:te_cm_ok_andean_north_andean ?= 1
-	te_cmg_andean_north_andean_available = yes
-	var:te_cm_ok_andean_south_andean ?= 1
-	te_cmg_andean_south_andean_available = yes
-	var:te_cm_ok_andean_peruvian ?= 1
-	te_cmg_andean_peruvian_available = yes
-	var:te_cm_ok_andean_bolivian ?= 1
-	te_cmg_andean_bolivian_available = yes
+	OR = {
+		te_cmg_andean_north_andean_measured = yes
+		te_cmg_andean_north_andean_switched_in = yes
+	}
+	OR = {
+		te_cmg_andean_south_andean_measured = yes
+		te_cmg_andean_south_andean_switched_in = yes
+	}
+	OR = {
+		te_cmg_andean_peruvian_measured = yes
+		te_cmg_andean_peruvian_switched_in = yes
+	}
+	OR = {
+		te_cmg_andean_bolivian_measured = yes
+		te_cmg_andean_bolivian_switched_in = yes
+	}
 }
 
 # Any scope. north_andean is free for the andean merge.
 te_cmg_andean_north_andean_available = {
 	always = yes
+}
+
+# Country scope. north_andean passes its gates for the andean merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_andean_north_andean_measured = {
+	var:te_cm_ok_andean_north_andean ?= 1
+	te_cmg_andean_north_andean_available = yes
+	NOT = { has_global_variable = te_cm_switched_north_andean }
+}
+
+# Country scope. north_andean joined the andean merge and has switched into its result.
+te_cmg_andean_north_andean_switched_in = {
+	global_var:te_cm_joined_andean_north_andean ?= 1
+	has_global_variable = te_cm_switched_north_andean
 }
 
 # Country scope. north_andean (tier 1) passes its gates and can join the andean merge now.
@@ -1687,6 +2582,20 @@ te_cmg_andean_south_andean_available = {
 	always = yes
 }
 
+# Country scope. south_andean passes its gates for the andean merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_andean_south_andean_measured = {
+	var:te_cm_ok_andean_south_andean ?= 1
+	te_cmg_andean_south_andean_available = yes
+	NOT = { has_global_variable = te_cm_switched_south_andean }
+}
+
+# Country scope. south_andean joined the andean merge and has switched into its result.
+te_cmg_andean_south_andean_switched_in = {
+	global_var:te_cm_joined_andean_south_andean ?= 1
+	has_global_variable = te_cm_switched_south_andean
+}
+
 # Country scope. south_andean (tier 1) passes its gates and can join the andean merge now.
 te_cmg_andean_south_andean_can_join = {
 	var:te_cm_ok_andean_south_andean ?= 1
@@ -1700,6 +2609,20 @@ te_cmg_andean_peruvian_available = {
 	always = yes
 }
 
+# Country scope. peruvian passes its gates for the andean merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_andean_peruvian_measured = {
+	var:te_cm_ok_andean_peruvian ?= 1
+	te_cmg_andean_peruvian_available = yes
+	NOT = { has_global_variable = te_cm_switched_peruvian }
+}
+
+# Country scope. peruvian joined the andean merge and has switched into its result.
+te_cmg_andean_peruvian_switched_in = {
+	global_var:te_cm_joined_andean_peruvian ?= 1
+	has_global_variable = te_cm_switched_peruvian
+}
+
 # Country scope. peruvian (tier 1) passes its gates and can join the andean merge now.
 te_cmg_andean_peruvian_can_join = {
 	var:te_cm_ok_andean_peruvian ?= 1
@@ -1711,6 +2634,20 @@ te_cmg_andean_peruvian_can_join = {
 # Any scope. bolivian is free for the andean merge.
 te_cmg_andean_bolivian_available = {
 	always = yes
+}
+
+# Country scope. bolivian passes its gates for the andean merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_andean_bolivian_measured = {
+	var:te_cm_ok_andean_bolivian ?= 1
+	te_cmg_andean_bolivian_available = yes
+	NOT = { has_global_variable = te_cm_switched_bolivian }
+}
+
+# Country scope. bolivian joined the andean merge and has switched into its result.
+te_cmg_andean_bolivian_switched_in = {
+	global_var:te_cm_joined_andean_bolivian ?= 1
+	has_global_variable = te_cm_switched_bolivian
 }
 
 # Country scope. bolivian (tier 1) passes its gates and can join the andean merge now.
@@ -1775,19 +2712,40 @@ te_cmg_gran_colombian_is_candidate = {
 	NOT = { global_var:te_cm_state_gran_colombian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_gran_colombian_core_ok = {
-	var:te_cm_ok_gran_colombian_colombian ?= 1
-	te_cmg_gran_colombian_colombian_available = yes
-	var:te_cm_ok_gran_colombian_venezuelan ?= 1
-	te_cmg_gran_colombian_venezuelan_available = yes
-	var:te_cm_ok_gran_colombian_ecuadorian ?= 1
-	te_cmg_gran_colombian_ecuadorian_available = yes
+	OR = {
+		te_cmg_gran_colombian_colombian_measured = yes
+		te_cmg_gran_colombian_colombian_switched_in = yes
+	}
+	OR = {
+		te_cmg_gran_colombian_venezuelan_measured = yes
+		te_cmg_gran_colombian_venezuelan_switched_in = yes
+	}
+	OR = {
+		te_cmg_gran_colombian_ecuadorian_measured = yes
+		te_cmg_gran_colombian_ecuadorian_switched_in = yes
+	}
 }
 
 # Any scope. colombian is free for the gran_colombian merge.
 te_cmg_gran_colombian_colombian_available = {
 	always = yes
+}
+
+# Country scope. colombian passes its gates for the gran_colombian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_gran_colombian_colombian_measured = {
+	var:te_cm_ok_gran_colombian_colombian ?= 1
+	te_cmg_gran_colombian_colombian_available = yes
+	NOT = { has_global_variable = te_cm_switched_colombian }
+}
+
+# Country scope. colombian joined the gran_colombian merge and has switched into its result.
+te_cmg_gran_colombian_colombian_switched_in = {
+	global_var:te_cm_joined_gran_colombian_colombian ?= 1
+	has_global_variable = te_cm_switched_colombian
 }
 
 # Country scope. colombian (tier 1) passes its gates and can join the gran_colombian merge now.
@@ -1803,6 +2761,20 @@ te_cmg_gran_colombian_venezuelan_available = {
 	always = yes
 }
 
+# Country scope. venezuelan passes its gates for the gran_colombian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_gran_colombian_venezuelan_measured = {
+	var:te_cm_ok_gran_colombian_venezuelan ?= 1
+	te_cmg_gran_colombian_venezuelan_available = yes
+	NOT = { has_global_variable = te_cm_switched_venezuelan }
+}
+
+# Country scope. venezuelan joined the gran_colombian merge and has switched into its result.
+te_cmg_gran_colombian_venezuelan_switched_in = {
+	global_var:te_cm_joined_gran_colombian_venezuelan ?= 1
+	has_global_variable = te_cm_switched_venezuelan
+}
+
 # Country scope. venezuelan (tier 1) passes its gates and can join the gran_colombian merge now.
 te_cmg_gran_colombian_venezuelan_can_join = {
 	var:te_cm_ok_gran_colombian_venezuelan ?= 1
@@ -1814,6 +2786,20 @@ te_cmg_gran_colombian_venezuelan_can_join = {
 # Any scope. ecuadorian is free for the gran_colombian merge.
 te_cmg_gran_colombian_ecuadorian_available = {
 	always = yes
+}
+
+# Country scope. ecuadorian passes its gates for the gran_colombian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_gran_colombian_ecuadorian_measured = {
+	var:te_cm_ok_gran_colombian_ecuadorian ?= 1
+	te_cmg_gran_colombian_ecuadorian_available = yes
+	NOT = { has_global_variable = te_cm_switched_ecuadorian }
+}
+
+# Country scope. ecuadorian joined the gran_colombian merge and has switched into its result.
+te_cmg_gran_colombian_ecuadorian_switched_in = {
+	global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
+	has_global_variable = te_cm_switched_ecuadorian
 }
 
 # Country scope. ecuadorian (tier 1) passes its gates and can join the gran_colombian merge now.
@@ -1875,21 +2861,35 @@ te_cmg_chinese_is_candidate = {
 	NOT = { global_var:te_cm_state_chinese ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_chinese_core_ok = {
-	var:te_cm_ok_chinese_han ?= 1
-	te_cmg_chinese_han_available = yes
-	var:te_cm_ok_chinese_yue ?= 1
-	te_cmg_chinese_yue_available = yes
-	var:te_cm_ok_chinese_min ?= 1
-	te_cmg_chinese_min_available = yes
-	var:te_cm_ok_chinese_hakka ?= 1
-	te_cmg_chinese_hakka_available = yes
+	te_cmg_chinese_han_measured = yes
+	OR = {
+		te_cmg_chinese_yue_measured = yes
+		te_cmg_chinese_yue_switched_in = yes
+	}
+	OR = {
+		te_cmg_chinese_min_measured = yes
+		te_cmg_chinese_min_switched_in = yes
+	}
+	OR = {
+		te_cmg_chinese_hakka_measured = yes
+		te_cmg_chinese_hakka_switched_in = yes
+	}
 }
 
 # Any scope. han is free for the chinese merge.
 te_cmg_chinese_han_available = {
 	always = yes
+}
+
+# Country scope. han passes its gates for the chinese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_chinese_han_measured = {
+	var:te_cm_ok_chinese_han ?= 1
+	te_cmg_chinese_han_available = yes
+	NOT = { has_global_variable = te_cm_switched_han }
 }
 
 # Country scope. han (tier 1) passes its gates and can join the chinese merge now.
@@ -1905,6 +2905,20 @@ te_cmg_chinese_yue_available = {
 	always = yes
 }
 
+# Country scope. yue passes its gates for the chinese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_chinese_yue_measured = {
+	var:te_cm_ok_chinese_yue ?= 1
+	te_cmg_chinese_yue_available = yes
+	NOT = { has_global_variable = te_cm_switched_yue }
+}
+
+# Country scope. yue joined the chinese merge and has switched into its result.
+te_cmg_chinese_yue_switched_in = {
+	global_var:te_cm_joined_chinese_yue ?= 1
+	has_global_variable = te_cm_switched_yue
+}
+
 # Country scope. yue (tier 1) passes its gates and can join the chinese merge now.
 te_cmg_chinese_yue_can_join = {
 	var:te_cm_ok_chinese_yue ?= 1
@@ -1918,6 +2932,20 @@ te_cmg_chinese_min_available = {
 	always = yes
 }
 
+# Country scope. min passes its gates for the chinese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_chinese_min_measured = {
+	var:te_cm_ok_chinese_min ?= 1
+	te_cmg_chinese_min_available = yes
+	NOT = { has_global_variable = te_cm_switched_min }
+}
+
+# Country scope. min joined the chinese merge and has switched into its result.
+te_cmg_chinese_min_switched_in = {
+	global_var:te_cm_joined_chinese_min ?= 1
+	has_global_variable = te_cm_switched_min
+}
+
 # Country scope. min (tier 1) passes its gates and can join the chinese merge now.
 te_cmg_chinese_min_can_join = {
 	var:te_cm_ok_chinese_min ?= 1
@@ -1929,6 +2957,20 @@ te_cmg_chinese_min_can_join = {
 # Any scope. hakka is free for the chinese merge.
 te_cmg_chinese_hakka_available = {
 	always = yes
+}
+
+# Country scope. hakka passes its gates for the chinese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_chinese_hakka_measured = {
+	var:te_cm_ok_chinese_hakka ?= 1
+	te_cmg_chinese_hakka_available = yes
+	NOT = { has_global_variable = te_cm_switched_hakka }
+}
+
+# Country scope. hakka joined the chinese merge and has switched into its result.
+te_cmg_chinese_hakka_switched_in = {
+	global_var:te_cm_joined_chinese_hakka ?= 1
+	has_global_variable = te_cm_switched_hakka
 }
 
 # Country scope. hakka (tier 1) passes its gates and can join the chinese merge now.
@@ -1988,17 +3030,27 @@ te_cmg_japanese_is_candidate = {
 	NOT = { global_var:te_cm_state_japanese ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_japanese_core_ok = {
-	var:te_cm_ok_japanese_japanese ?= 1
-	te_cmg_japanese_japanese_available = yes
-	var:te_cm_ok_japanese_ryukyuan ?= 1
-	te_cmg_japanese_ryukyuan_available = yes
+	te_cmg_japanese_japanese_measured = yes
+	OR = {
+		te_cmg_japanese_ryukyuan_measured = yes
+		te_cmg_japanese_ryukyuan_switched_in = yes
+	}
 }
 
 # Any scope. japanese is free for the japanese merge.
 te_cmg_japanese_japanese_available = {
 	always = yes
+}
+
+# Country scope. japanese passes its gates for the japanese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_japanese_japanese_measured = {
+	var:te_cm_ok_japanese_japanese ?= 1
+	te_cmg_japanese_japanese_available = yes
+	NOT = { has_global_variable = te_cm_switched_japanese }
 }
 
 # Country scope. japanese (tier 1) passes its gates and can join the japanese merge now.
@@ -2012,6 +3064,20 @@ te_cmg_japanese_japanese_can_join = {
 # Any scope. ryukyuan is free for the japanese merge.
 te_cmg_japanese_ryukyuan_available = {
 	always = yes
+}
+
+# Country scope. ryukyuan passes its gates for the japanese merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_japanese_ryukyuan_measured = {
+	var:te_cm_ok_japanese_ryukyuan ?= 1
+	te_cmg_japanese_ryukyuan_available = yes
+	NOT = { has_global_variable = te_cm_switched_ryukyuan }
+}
+
+# Country scope. ryukyuan joined the japanese merge and has switched into its result.
+te_cmg_japanese_ryukyuan_switched_in = {
+	global_var:te_cm_joined_japanese_ryukyuan ?= 1
+	has_global_variable = te_cm_switched_ryukyuan
 }
 
 # Country scope. ryukyuan (tier 1) passes its gates and can join the japanese merge now.
@@ -2066,23 +3132,48 @@ te_cmg_arab_is_candidate = {
 	NOT = { global_var:te_cm_state_arab ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_arab_core_ok = {
-	var:te_cm_ok_arab_maghrebi ?= 1
-	te_cmg_arab_maghrebi_available = yes
-	var:te_cm_ok_arab_misri ?= 1
-	te_cmg_arab_misri_available = yes
-	var:te_cm_ok_arab_mashriqi ?= 1
-	te_cmg_arab_mashriqi_available = yes
-	var:te_cm_ok_arab_bedouin ?= 1
-	te_cmg_arab_bedouin_available = yes
-	var:te_cm_ok_arab_yemenite ?= 1
-	te_cmg_arab_yemenite_available = yes
+	OR = {
+		te_cmg_arab_maghrebi_measured = yes
+		te_cmg_arab_maghrebi_switched_in = yes
+	}
+	OR = {
+		te_cmg_arab_misri_measured = yes
+		te_cmg_arab_misri_switched_in = yes
+	}
+	OR = {
+		te_cmg_arab_mashriqi_measured = yes
+		te_cmg_arab_mashriqi_switched_in = yes
+	}
+	OR = {
+		te_cmg_arab_bedouin_measured = yes
+		te_cmg_arab_bedouin_switched_in = yes
+	}
+	OR = {
+		te_cmg_arab_yemenite_measured = yes
+		te_cmg_arab_yemenite_switched_in = yes
+	}
 }
 
 # Any scope. maghrebi is free for the arab merge.
 te_cmg_arab_maghrebi_available = {
 	always = yes
+}
+
+# Country scope. maghrebi passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_maghrebi_measured = {
+	var:te_cm_ok_arab_maghrebi ?= 1
+	te_cmg_arab_maghrebi_available = yes
+	NOT = { has_global_variable = te_cm_switched_maghrebi }
+}
+
+# Country scope. maghrebi joined the arab merge and has switched into its result.
+te_cmg_arab_maghrebi_switched_in = {
+	global_var:te_cm_joined_arab_maghrebi ?= 1
+	has_global_variable = te_cm_switched_maghrebi
 }
 
 # Country scope. maghrebi (tier 1) passes its gates and can join the arab merge now.
@@ -2098,6 +3189,20 @@ te_cmg_arab_misri_available = {
 	always = yes
 }
 
+# Country scope. misri passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_misri_measured = {
+	var:te_cm_ok_arab_misri ?= 1
+	te_cmg_arab_misri_available = yes
+	NOT = { has_global_variable = te_cm_switched_misri }
+}
+
+# Country scope. misri joined the arab merge and has switched into its result.
+te_cmg_arab_misri_switched_in = {
+	global_var:te_cm_joined_arab_misri ?= 1
+	has_global_variable = te_cm_switched_misri
+}
+
 # Country scope. misri (tier 1) passes its gates and can join the arab merge now.
 te_cmg_arab_misri_can_join = {
 	var:te_cm_ok_arab_misri ?= 1
@@ -2109,6 +3214,20 @@ te_cmg_arab_misri_can_join = {
 # Any scope. mashriqi is free for the arab merge.
 te_cmg_arab_mashriqi_available = {
 	always = yes
+}
+
+# Country scope. mashriqi passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_mashriqi_measured = {
+	var:te_cm_ok_arab_mashriqi ?= 1
+	te_cmg_arab_mashriqi_available = yes
+	NOT = { has_global_variable = te_cm_switched_mashriqi }
+}
+
+# Country scope. mashriqi joined the arab merge and has switched into its result.
+te_cmg_arab_mashriqi_switched_in = {
+	global_var:te_cm_joined_arab_mashriqi ?= 1
+	has_global_variable = te_cm_switched_mashriqi
 }
 
 # Country scope. mashriqi (tier 1) passes its gates and can join the arab merge now.
@@ -2124,6 +3243,20 @@ te_cmg_arab_bedouin_available = {
 	always = yes
 }
 
+# Country scope. bedouin passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_bedouin_measured = {
+	var:te_cm_ok_arab_bedouin ?= 1
+	te_cmg_arab_bedouin_available = yes
+	NOT = { has_global_variable = te_cm_switched_bedouin }
+}
+
+# Country scope. bedouin joined the arab merge and has switched into its result.
+te_cmg_arab_bedouin_switched_in = {
+	global_var:te_cm_joined_arab_bedouin ?= 1
+	has_global_variable = te_cm_switched_bedouin
+}
+
 # Country scope. bedouin (tier 1) passes its gates and can join the arab merge now.
 te_cmg_arab_bedouin_can_join = {
 	var:te_cm_ok_arab_bedouin ?= 1
@@ -2135,6 +3268,20 @@ te_cmg_arab_bedouin_can_join = {
 # Any scope. yemenite is free for the arab merge.
 te_cmg_arab_yemenite_available = {
 	always = yes
+}
+
+# Country scope. yemenite passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_yemenite_measured = {
+	var:te_cm_ok_arab_yemenite ?= 1
+	te_cmg_arab_yemenite_available = yes
+	NOT = { has_global_variable = te_cm_switched_yemenite }
+}
+
+# Country scope. yemenite joined the arab merge and has switched into its result.
+te_cmg_arab_yemenite_switched_in = {
+	global_var:te_cm_joined_arab_yemenite ?= 1
+	has_global_variable = te_cm_switched_yemenite
 }
 
 # Country scope. yemenite (tier 1) passes its gates and can join the arab merge now.
@@ -2150,19 +3297,59 @@ te_cmg_arab_sudanese_available = {
 	always = yes
 }
 
+# Country scope. sudanese passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_sudanese_measured = {
+	var:te_cm_ok_arab_sudanese ?= 1
+	te_cmg_arab_sudanese_available = yes
+	NOT = { has_global_variable = te_cm_switched_sudanese }
+}
+
+# Country scope. sudanese (tier 1b) has spent the years together its tier asks for.
+te_cmg_arab_sudanese_years_met = {
+	has_variable = te_cm_years_arab_sudanese
+	trigger_if = { limit = { has_variable = te_cm_years_arab_sudanese } var:te_cm_years_arab_sudanese >= te_cm_years_tier2 }
+}
+
+# Country scope. sudanese joined the arab merge and has switched into its result.
+te_cmg_arab_sudanese_switched_in = {
+	global_var:te_cm_joined_arab_sudanese ?= 1
+	has_global_variable = te_cm_switched_sudanese
+}
+
 # Country scope. sudanese (tier 1b) passes its gates and can join the arab merge now.
 te_cmg_arab_sudanese_can_join = {
 	var:te_cm_ok_arab_sudanese ?= 1
 	te_cmg_arab_sudanese_available = yes
 	NOT = { global_var:te_cm_joined_arab_sudanese ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_arab_sudanese
-	trigger_if = { limit = { has_variable = te_cm_years_arab_sudanese } var:te_cm_years_arab_sudanese >= te_cm_years_tier2 }
+	te_cmg_arab_sudanese_years_met = yes
+	var:te_cm_sol_ok_arab_sudanese ?= 1
 }
 
 # Any scope. haratin is free for the arab merge.
 te_cmg_arab_haratin_available = {
 	always = yes
+}
+
+# Country scope. haratin passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_haratin_measured = {
+	var:te_cm_ok_arab_haratin ?= 1
+	te_cmg_arab_haratin_available = yes
+	NOT = { has_global_variable = te_cm_switched_haratin }
+}
+
+# Country scope. haratin (tier 1b) has spent the years together its tier asks for.
+te_cmg_arab_haratin_years_met = {
+	has_variable = te_cm_years_arab_haratin
+	trigger_if = { limit = { has_variable = te_cm_years_arab_haratin } var:te_cm_years_arab_haratin >= te_cm_years_tier2 }
+}
+
+# Country scope. haratin joined the arab merge and has switched into its result.
+te_cmg_arab_haratin_switched_in = {
+	global_var:te_cm_joined_arab_haratin ?= 1
+	has_global_variable = te_cm_switched_haratin
 }
 
 # Country scope. haratin (tier 1b) passes its gates and can join the arab merge now.
@@ -2171,13 +3358,33 @@ te_cmg_arab_haratin_can_join = {
 	te_cmg_arab_haratin_available = yes
 	NOT = { global_var:te_cm_joined_arab_haratin ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_arab_haratin
-	trigger_if = { limit = { has_variable = te_cm_years_arab_haratin } var:te_cm_years_arab_haratin >= te_cm_years_tier2 }
+	te_cmg_arab_haratin_years_met = yes
+	var:te_cm_sol_ok_arab_haratin ?= 1
 }
 
 # Any scope. bidan is free for the arab merge.
 te_cmg_arab_bidan_available = {
 	always = yes
+}
+
+# Country scope. bidan passes its gates for the arab merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_arab_bidan_measured = {
+	var:te_cm_ok_arab_bidan ?= 1
+	te_cmg_arab_bidan_available = yes
+	NOT = { has_global_variable = te_cm_switched_bidan }
+}
+
+# Country scope. bidan (tier 1b) has spent the years together its tier asks for.
+te_cmg_arab_bidan_years_met = {
+	has_variable = te_cm_years_arab_bidan
+	trigger_if = { limit = { has_variable = te_cm_years_arab_bidan } var:te_cm_years_arab_bidan >= te_cm_years_tier2 }
+}
+
+# Country scope. bidan joined the arab merge and has switched into its result.
+te_cmg_arab_bidan_switched_in = {
+	global_var:te_cm_joined_arab_bidan ?= 1
+	has_global_variable = te_cm_switched_bidan
 }
 
 # Country scope. bidan (tier 1b) passes its gates and can join the arab merge now.
@@ -2186,8 +3393,8 @@ te_cmg_arab_bidan_can_join = {
 	te_cmg_arab_bidan_available = yes
 	NOT = { global_var:te_cm_joined_arab_bidan ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_arab_bidan
-	trigger_if = { limit = { has_variable = te_cm_years_arab_bidan } var:te_cm_years_arab_bidan >= te_cm_years_tier2 }
+	te_cmg_arab_bidan_years_met = yes
+	var:te_cm_sol_ok_arab_bidan ?= 1
 }
 
 # Any scope. Is the yearly census of the arab merge worth running? An idle merge with a
@@ -2259,17 +3466,27 @@ te_cmg_persian_is_candidate = {
 	NOT = { global_var:te_cm_state_persian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_persian_core_ok = {
-	var:te_cm_ok_persian_persian ?= 1
-	te_cmg_persian_persian_available = yes
-	var:te_cm_ok_persian_luri ?= 1
-	te_cmg_persian_luri_available = yes
+	te_cmg_persian_persian_measured = yes
+	OR = {
+		te_cmg_persian_luri_measured = yes
+		te_cmg_persian_luri_switched_in = yes
+	}
 }
 
 # Any scope. persian is free for the persian merge.
 te_cmg_persian_persian_available = {
 	always = yes
+}
+
+# Country scope. persian passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_persian_measured = {
+	var:te_cm_ok_persian_persian ?= 1
+	te_cmg_persian_persian_available = yes
+	NOT = { has_global_variable = te_cm_switched_persian }
 }
 
 # Country scope. persian (tier 1) passes its gates and can join the persian merge now.
@@ -2285,6 +3502,20 @@ te_cmg_persian_luri_available = {
 	always = yes
 }
 
+# Country scope. luri passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_luri_measured = {
+	var:te_cm_ok_persian_luri ?= 1
+	te_cmg_persian_luri_available = yes
+	NOT = { has_global_variable = te_cm_switched_luri }
+}
+
+# Country scope. luri joined the persian merge and has switched into its result.
+te_cmg_persian_luri_switched_in = {
+	global_var:te_cm_joined_persian_luri ?= 1
+	has_global_variable = te_cm_switched_luri
+}
+
 # Country scope. luri (tier 1) passes its gates and can join the persian merge now.
 te_cmg_persian_luri_can_join = {
 	var:te_cm_ok_persian_luri ?= 1
@@ -2298,17 +3529,52 @@ te_cmg_persian_tajik_available = {
 	always = yes
 }
 
+# Country scope. tajik passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_tajik_measured = {
+	var:te_cm_ok_persian_tajik ?= 1
+	te_cmg_persian_tajik_available = yes
+	NOT = { has_global_variable = te_cm_switched_tajik }
+}
+
+# Country scope. tajik joined the persian merge and has switched into its result.
+te_cmg_persian_tajik_switched_in = {
+	global_var:te_cm_joined_persian_tajik ?= 1
+	has_global_variable = te_cm_switched_tajik
+}
+
 # Country scope. tajik (tier 1) passes its gates and can join the persian merge now.
 te_cmg_persian_tajik_can_join = {
 	var:te_cm_ok_persian_tajik ?= 1
 	te_cmg_persian_tajik_available = yes
 	NOT = { global_var:te_cm_joined_persian_tajik ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_persian_tajik ?= 1
 }
 
 # Any scope. hazara is free for the persian merge.
 te_cmg_persian_hazara_available = {
 	always = yes
+}
+
+# Country scope. hazara passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_hazara_measured = {
+	var:te_cm_ok_persian_hazara ?= 1
+	te_cmg_persian_hazara_available = yes
+	NOT = { has_global_variable = te_cm_switched_hazara }
+}
+
+# Country scope. hazara (tier 1b) has spent the years together its tier asks for.
+te_cmg_persian_hazara_years_met = {
+	has_variable = te_cm_years_persian_hazara
+	trigger_if = { limit = { has_variable = te_cm_years_persian_hazara } var:te_cm_years_persian_hazara >= te_cm_years_tier2 }
+}
+
+# Country scope. hazara joined the persian merge and has switched into its result.
+te_cmg_persian_hazara_switched_in = {
+	global_var:te_cm_joined_persian_hazara ?= 1
+	has_global_variable = te_cm_switched_hazara
 }
 
 # Country scope. hazara (tier 1b) passes its gates and can join the persian merge now.
@@ -2317,8 +3583,8 @@ te_cmg_persian_hazara_can_join = {
 	te_cmg_persian_hazara_available = yes
 	NOT = { global_var:te_cm_joined_persian_hazara ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_persian_hazara
-	trigger_if = { limit = { has_variable = te_cm_years_persian_hazara } var:te_cm_years_persian_hazara >= te_cm_years_tier2 }
+	te_cmg_persian_hazara_years_met = yes
+	var:te_cm_sol_ok_persian_hazara ?= 1
 }
 
 # Any scope. Is the yearly census of the persian merge worth running? An idle merge with a
@@ -2370,17 +3636,36 @@ te_cmg_oghuz_turkic_is_candidate = {
 	NOT = { global_var:te_cm_state_oghuz_turkic ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_oghuz_turkic_core_ok = {
-	var:te_cm_ok_oghuz_turkic_turkish ?= 1
-	te_cmg_oghuz_turkic_turkish_available = yes
-	var:te_cm_ok_oghuz_turkic_azerbaijani ?= 1
-	te_cmg_oghuz_turkic_azerbaijani_available = yes
+	OR = {
+		te_cmg_oghuz_turkic_turkish_measured = yes
+		te_cmg_oghuz_turkic_turkish_switched_in = yes
+	}
+	OR = {
+		te_cmg_oghuz_turkic_azerbaijani_measured = yes
+		te_cmg_oghuz_turkic_azerbaijani_switched_in = yes
+	}
 }
 
 # Any scope. turkish is free for the oghuz_turkic merge.
 te_cmg_oghuz_turkic_turkish_available = {
 	always = yes
+}
+
+# Country scope. turkish passes its gates for the oghuz_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_oghuz_turkic_turkish_measured = {
+	var:te_cm_ok_oghuz_turkic_turkish ?= 1
+	te_cmg_oghuz_turkic_turkish_available = yes
+	NOT = { has_global_variable = te_cm_switched_turkish }
+}
+
+# Country scope. turkish joined the oghuz_turkic merge and has switched into its result.
+te_cmg_oghuz_turkic_turkish_switched_in = {
+	global_var:te_cm_joined_oghuz_turkic_turkish ?= 1
+	has_global_variable = te_cm_switched_turkish
 }
 
 # Country scope. turkish (tier 1) passes its gates and can join the oghuz_turkic merge now.
@@ -2396,6 +3681,20 @@ te_cmg_oghuz_turkic_azerbaijani_available = {
 	always = yes
 }
 
+# Country scope. azerbaijani passes its gates for the oghuz_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_oghuz_turkic_azerbaijani_measured = {
+	var:te_cm_ok_oghuz_turkic_azerbaijani ?= 1
+	te_cmg_oghuz_turkic_azerbaijani_available = yes
+	NOT = { has_global_variable = te_cm_switched_azerbaijani }
+}
+
+# Country scope. azerbaijani joined the oghuz_turkic merge and has switched into its result.
+te_cmg_oghuz_turkic_azerbaijani_switched_in = {
+	global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
+	has_global_variable = te_cm_switched_azerbaijani
+}
+
 # Country scope. azerbaijani (tier 1) passes its gates and can join the oghuz_turkic merge now.
 te_cmg_oghuz_turkic_azerbaijani_can_join = {
 	var:te_cm_ok_oghuz_turkic_azerbaijani ?= 1
@@ -2409,14 +3708,34 @@ te_cmg_oghuz_turkic_turkmen_available = {
 	always = yes
 }
 
+# Country scope. turkmen passes its gates for the oghuz_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_oghuz_turkic_turkmen_measured = {
+	var:te_cm_ok_oghuz_turkic_turkmen ?= 1
+	te_cmg_oghuz_turkic_turkmen_available = yes
+	NOT = { has_global_variable = te_cm_switched_turkmen }
+}
+
+# Country scope. turkmen (tier 1b) has spent the years together its tier asks for.
+te_cmg_oghuz_turkic_turkmen_years_met = {
+	has_variable = te_cm_years_oghuz_turkic_turkmen
+	trigger_if = { limit = { has_variable = te_cm_years_oghuz_turkic_turkmen } var:te_cm_years_oghuz_turkic_turkmen >= te_cm_years_tier2 }
+}
+
+# Country scope. turkmen joined the oghuz_turkic merge and has switched into its result.
+te_cmg_oghuz_turkic_turkmen_switched_in = {
+	global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1
+	has_global_variable = te_cm_switched_turkmen
+}
+
 # Country scope. turkmen (tier 1b) passes its gates and can join the oghuz_turkic merge now.
 te_cmg_oghuz_turkic_turkmen_can_join = {
 	var:te_cm_ok_oghuz_turkic_turkmen ?= 1
 	te_cmg_oghuz_turkic_turkmen_available = yes
 	NOT = { global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_oghuz_turkic_turkmen
-	trigger_if = { limit = { has_variable = te_cm_years_oghuz_turkic_turkmen } var:te_cm_years_oghuz_turkic_turkmen >= te_cm_years_tier2 }
+	te_cmg_oghuz_turkic_turkmen_years_met = yes
+	var:te_cm_sol_ok_oghuz_turkic_turkmen ?= 1
 }
 
 # Any scope. Is the yearly census of the oghuz_turkic merge worth running? An idle merge with a
@@ -2471,23 +3790,39 @@ te_cmg_hindustani_is_candidate = {
 	NOT = { global_var:te_cm_state_hindustani ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_hindustani_core_ok = {
-	var:te_cm_ok_hindustani_hindustani ?= 1
-	te_cmg_hindustani_hindustani_available = yes
-	var:te_cm_ok_hindustani_avadhi ?= 1
-	te_cmg_hindustani_avadhi_available = yes
-	var:te_cm_ok_hindustani_bundeli ?= 1
-	te_cmg_hindustani_bundeli_available = yes
-	var:te_cm_ok_hindustani_chhattisgarhi ?= 1
-	te_cmg_hindustani_chhattisgarhi_available = yes
-	var:te_cm_ok_hindustani_bageli ?= 1
-	te_cmg_hindustani_bageli_available = yes
+	te_cmg_hindustani_hindustani_measured = yes
+	OR = {
+		te_cmg_hindustani_avadhi_measured = yes
+		te_cmg_hindustani_avadhi_switched_in = yes
+	}
+	OR = {
+		te_cmg_hindustani_bundeli_measured = yes
+		te_cmg_hindustani_bundeli_switched_in = yes
+	}
+	OR = {
+		te_cmg_hindustani_chhattisgarhi_measured = yes
+		te_cmg_hindustani_chhattisgarhi_switched_in = yes
+	}
+	OR = {
+		te_cmg_hindustani_bageli_measured = yes
+		te_cmg_hindustani_bageli_switched_in = yes
+	}
 }
 
 # Any scope. hindustani is free for the hindustani merge.
 te_cmg_hindustani_hindustani_available = {
 	always = yes
+}
+
+# Country scope. hindustani passes its gates for the hindustani merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hindustani_hindustani_measured = {
+	var:te_cm_ok_hindustani_hindustani ?= 1
+	te_cmg_hindustani_hindustani_available = yes
+	NOT = { has_global_variable = te_cm_switched_hindustani }
 }
 
 # Country scope. hindustani (tier 1) passes its gates and can join the hindustani merge now.
@@ -2503,6 +3838,20 @@ te_cmg_hindustani_avadhi_available = {
 	always = yes
 }
 
+# Country scope. avadhi passes its gates for the hindustani merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hindustani_avadhi_measured = {
+	var:te_cm_ok_hindustani_avadhi ?= 1
+	te_cmg_hindustani_avadhi_available = yes
+	NOT = { has_global_variable = te_cm_switched_avadhi }
+}
+
+# Country scope. avadhi joined the hindustani merge and has switched into its result.
+te_cmg_hindustani_avadhi_switched_in = {
+	global_var:te_cm_joined_hindustani_avadhi ?= 1
+	has_global_variable = te_cm_switched_avadhi
+}
+
 # Country scope. avadhi (tier 1) passes its gates and can join the hindustani merge now.
 te_cmg_hindustani_avadhi_can_join = {
 	var:te_cm_ok_hindustani_avadhi ?= 1
@@ -2514,6 +3863,20 @@ te_cmg_hindustani_avadhi_can_join = {
 # Any scope. bundeli is free for the hindustani merge.
 te_cmg_hindustani_bundeli_available = {
 	always = yes
+}
+
+# Country scope. bundeli passes its gates for the hindustani merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hindustani_bundeli_measured = {
+	var:te_cm_ok_hindustani_bundeli ?= 1
+	te_cmg_hindustani_bundeli_available = yes
+	NOT = { has_global_variable = te_cm_switched_bundeli }
+}
+
+# Country scope. bundeli joined the hindustani merge and has switched into its result.
+te_cmg_hindustani_bundeli_switched_in = {
+	global_var:te_cm_joined_hindustani_bundeli ?= 1
+	has_global_variable = te_cm_switched_bundeli
 }
 
 # Country scope. bundeli (tier 1) passes its gates and can join the hindustani merge now.
@@ -2529,6 +3892,20 @@ te_cmg_hindustani_chhattisgarhi_available = {
 	always = yes
 }
 
+# Country scope. chhattisgarhi passes its gates for the hindustani merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hindustani_chhattisgarhi_measured = {
+	var:te_cm_ok_hindustani_chhattisgarhi ?= 1
+	te_cmg_hindustani_chhattisgarhi_available = yes
+	NOT = { has_global_variable = te_cm_switched_chhattisgarhi }
+}
+
+# Country scope. chhattisgarhi joined the hindustani merge and has switched into its result.
+te_cmg_hindustani_chhattisgarhi_switched_in = {
+	global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1
+	has_global_variable = te_cm_switched_chhattisgarhi
+}
+
 # Country scope. chhattisgarhi (tier 1) passes its gates and can join the hindustani merge now.
 te_cmg_hindustani_chhattisgarhi_can_join = {
 	var:te_cm_ok_hindustani_chhattisgarhi ?= 1
@@ -2540,6 +3917,20 @@ te_cmg_hindustani_chhattisgarhi_can_join = {
 # Any scope. bageli is free for the hindustani merge.
 te_cmg_hindustani_bageli_available = {
 	always = yes
+}
+
+# Country scope. bageli passes its gates for the hindustani merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_hindustani_bageli_measured = {
+	var:te_cm_ok_hindustani_bageli ?= 1
+	te_cmg_hindustani_bageli_available = yes
+	NOT = { has_global_variable = te_cm_switched_bageli }
+}
+
+# Country scope. bageli joined the hindustani merge and has switched into its result.
+te_cmg_hindustani_bageli_switched_in = {
+	global_var:te_cm_joined_hindustani_bageli ?= 1
+	has_global_variable = te_cm_switched_bageli
 }
 
 # Country scope. bageli (tier 1) passes its gates and can join the hindustani merge now.
@@ -2604,19 +3995,40 @@ te_cmg_dravidian_is_candidate = {
 	NOT = { global_var:te_cm_state_dravidian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_dravidian_core_ok = {
-	var:te_cm_ok_dravidian_tamil ?= 1
-	te_cmg_dravidian_tamil_available = yes
-	var:te_cm_ok_dravidian_kannada ?= 1
-	te_cmg_dravidian_kannada_available = yes
-	var:te_cm_ok_dravidian_malayalam ?= 1
-	te_cmg_dravidian_malayalam_available = yes
+	OR = {
+		te_cmg_dravidian_tamil_measured = yes
+		te_cmg_dravidian_tamil_switched_in = yes
+	}
+	OR = {
+		te_cmg_dravidian_kannada_measured = yes
+		te_cmg_dravidian_kannada_switched_in = yes
+	}
+	OR = {
+		te_cmg_dravidian_malayalam_measured = yes
+		te_cmg_dravidian_malayalam_switched_in = yes
+	}
 }
 
 # Any scope. tamil is free for the dravidian merge.
 te_cmg_dravidian_tamil_available = {
 	always = yes
+}
+
+# Country scope. tamil passes its gates for the dravidian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dravidian_tamil_measured = {
+	var:te_cm_ok_dravidian_tamil ?= 1
+	te_cmg_dravidian_tamil_available = yes
+	NOT = { has_global_variable = te_cm_switched_tamil }
+}
+
+# Country scope. tamil joined the dravidian merge and has switched into its result.
+te_cmg_dravidian_tamil_switched_in = {
+	global_var:te_cm_joined_dravidian_tamil ?= 1
+	has_global_variable = te_cm_switched_tamil
 }
 
 # Country scope. tamil (tier 1) passes its gates and can join the dravidian merge now.
@@ -2632,6 +4044,20 @@ te_cmg_dravidian_kannada_available = {
 	always = yes
 }
 
+# Country scope. kannada passes its gates for the dravidian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dravidian_kannada_measured = {
+	var:te_cm_ok_dravidian_kannada ?= 1
+	te_cmg_dravidian_kannada_available = yes
+	NOT = { has_global_variable = te_cm_switched_kannada }
+}
+
+# Country scope. kannada joined the dravidian merge and has switched into its result.
+te_cmg_dravidian_kannada_switched_in = {
+	global_var:te_cm_joined_dravidian_kannada ?= 1
+	has_global_variable = te_cm_switched_kannada
+}
+
 # Country scope. kannada (tier 1) passes its gates and can join the dravidian merge now.
 te_cmg_dravidian_kannada_can_join = {
 	var:te_cm_ok_dravidian_kannada ?= 1
@@ -2643,6 +4069,20 @@ te_cmg_dravidian_kannada_can_join = {
 # Any scope. malayalam is free for the dravidian merge.
 te_cmg_dravidian_malayalam_available = {
 	always = yes
+}
+
+# Country scope. malayalam passes its gates for the dravidian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dravidian_malayalam_measured = {
+	var:te_cm_ok_dravidian_malayalam ?= 1
+	te_cmg_dravidian_malayalam_available = yes
+	NOT = { has_global_variable = te_cm_switched_malayalam }
+}
+
+# Country scope. malayalam joined the dravidian merge and has switched into its result.
+te_cmg_dravidian_malayalam_switched_in = {
+	global_var:te_cm_joined_dravidian_malayalam ?= 1
+	has_global_variable = te_cm_switched_malayalam
 }
 
 # Country scope. malayalam (tier 1) passes its gates and can join the dravidian merge now.
@@ -2658,14 +4098,34 @@ te_cmg_dravidian_telegu_available = {
 	always = yes
 }
 
+# Country scope. telegu passes its gates for the dravidian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_dravidian_telegu_measured = {
+	var:te_cm_ok_dravidian_telegu ?= 1
+	te_cmg_dravidian_telegu_available = yes
+	NOT = { has_global_variable = te_cm_switched_telegu }
+}
+
+# Country scope. telegu (tier 2) has spent the years together its tier asks for.
+te_cmg_dravidian_telegu_years_met = {
+	has_variable = te_cm_years_dravidian_telegu
+	trigger_if = { limit = { has_variable = te_cm_years_dravidian_telegu } var:te_cm_years_dravidian_telegu >= te_cm_years_tier3 }
+}
+
+# Country scope. telegu joined the dravidian merge and has switched into its result.
+te_cmg_dravidian_telegu_switched_in = {
+	global_var:te_cm_joined_dravidian_telegu ?= 1
+	has_global_variable = te_cm_switched_telegu
+}
+
 # Country scope. telegu (tier 2) passes its gates and can join the dravidian merge now.
 te_cmg_dravidian_telegu_can_join = {
 	var:te_cm_ok_dravidian_telegu ?= 1
 	te_cmg_dravidian_telegu_available = yes
 	NOT = { global_var:te_cm_joined_dravidian_telegu ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_dravidian_telegu
-	trigger_if = { limit = { has_variable = te_cm_years_dravidian_telegu } var:te_cm_years_dravidian_telegu >= te_cm_years_tier3 }
+	te_cmg_dravidian_telegu_years_met = yes
+	var:te_cm_sol_ok_dravidian_telegu ?= 1
 }
 
 # Any scope. Is the yearly census of the dravidian merge worth running? An idle merge with a
@@ -2723,21 +4183,44 @@ te_cmg_indonesian_is_candidate = {
 	NOT = { global_var:te_cm_state_indonesian ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_indonesian_core_ok = {
-	var:te_cm_ok_indonesian_javan ?= 1
-	te_cmg_indonesian_javan_available = yes
-	var:te_cm_ok_indonesian_malay ?= 1
-	te_cmg_indonesian_malay_available = yes
-	var:te_cm_ok_indonesian_sumatran ?= 1
-	te_cmg_indonesian_sumatran_available = yes
-	var:te_cm_ok_indonesian_bornean ?= 1
-	te_cmg_indonesian_bornean_available = yes
+	OR = {
+		te_cmg_indonesian_javan_measured = yes
+		te_cmg_indonesian_javan_switched_in = yes
+	}
+	OR = {
+		te_cmg_indonesian_malay_measured = yes
+		te_cmg_indonesian_malay_switched_in = yes
+	}
+	OR = {
+		te_cmg_indonesian_sumatran_measured = yes
+		te_cmg_indonesian_sumatran_switched_in = yes
+	}
+	OR = {
+		te_cmg_indonesian_bornean_measured = yes
+		te_cmg_indonesian_bornean_switched_in = yes
+	}
 }
 
 # Any scope. javan is free for the indonesian merge.
 te_cmg_indonesian_javan_available = {
 	always = yes
+}
+
+# Country scope. javan passes its gates for the indonesian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_indonesian_javan_measured = {
+	var:te_cm_ok_indonesian_javan ?= 1
+	te_cmg_indonesian_javan_available = yes
+	NOT = { has_global_variable = te_cm_switched_javan }
+}
+
+# Country scope. javan joined the indonesian merge and has switched into its result.
+te_cmg_indonesian_javan_switched_in = {
+	global_var:te_cm_joined_indonesian_javan ?= 1
+	has_global_variable = te_cm_switched_javan
 }
 
 # Country scope. javan (tier 1) passes its gates and can join the indonesian merge now.
@@ -2753,6 +4236,20 @@ te_cmg_indonesian_malay_available = {
 	always = yes
 }
 
+# Country scope. malay passes its gates for the indonesian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_indonesian_malay_measured = {
+	var:te_cm_ok_indonesian_malay ?= 1
+	te_cmg_indonesian_malay_available = yes
+	NOT = { has_global_variable = te_cm_switched_malay }
+}
+
+# Country scope. malay joined the indonesian merge and has switched into its result.
+te_cmg_indonesian_malay_switched_in = {
+	global_var:te_cm_joined_indonesian_malay ?= 1
+	has_global_variable = te_cm_switched_malay
+}
+
 # Country scope. malay (tier 1) passes its gates and can join the indonesian merge now.
 te_cmg_indonesian_malay_can_join = {
 	var:te_cm_ok_indonesian_malay ?= 1
@@ -2764,6 +4261,20 @@ te_cmg_indonesian_malay_can_join = {
 # Any scope. sumatran is free for the indonesian merge.
 te_cmg_indonesian_sumatran_available = {
 	always = yes
+}
+
+# Country scope. sumatran passes its gates for the indonesian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_indonesian_sumatran_measured = {
+	var:te_cm_ok_indonesian_sumatran ?= 1
+	te_cmg_indonesian_sumatran_available = yes
+	NOT = { has_global_variable = te_cm_switched_sumatran }
+}
+
+# Country scope. sumatran joined the indonesian merge and has switched into its result.
+te_cmg_indonesian_sumatran_switched_in = {
+	global_var:te_cm_joined_indonesian_sumatran ?= 1
+	has_global_variable = te_cm_switched_sumatran
 }
 
 # Country scope. sumatran (tier 1) passes its gates and can join the indonesian merge now.
@@ -2779,6 +4290,20 @@ te_cmg_indonesian_bornean_available = {
 	always = yes
 }
 
+# Country scope. bornean passes its gates for the indonesian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_indonesian_bornean_measured = {
+	var:te_cm_ok_indonesian_bornean ?= 1
+	te_cmg_indonesian_bornean_available = yes
+	NOT = { has_global_variable = te_cm_switched_bornean }
+}
+
+# Country scope. bornean joined the indonesian merge and has switched into its result.
+te_cmg_indonesian_bornean_switched_in = {
+	global_var:te_cm_joined_indonesian_bornean ?= 1
+	has_global_variable = te_cm_switched_bornean
+}
+
 # Country scope. bornean (tier 1) passes its gates and can join the indonesian merge now.
 te_cmg_indonesian_bornean_can_join = {
 	var:te_cm_ok_indonesian_bornean ?= 1
@@ -2792,12 +4317,27 @@ te_cmg_indonesian_balinese_available = {
 	always = yes
 }
 
+# Country scope. balinese passes its gates for the indonesian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_indonesian_balinese_measured = {
+	var:te_cm_ok_indonesian_balinese ?= 1
+	te_cmg_indonesian_balinese_available = yes
+	NOT = { has_global_variable = te_cm_switched_balinese }
+}
+
+# Country scope. balinese joined the indonesian merge and has switched into its result.
+te_cmg_indonesian_balinese_switched_in = {
+	global_var:te_cm_joined_indonesian_balinese ?= 1
+	has_global_variable = te_cm_switched_balinese
+}
+
 # Country scope. balinese (tier 1) passes its gates and can join the indonesian merge now.
 te_cmg_indonesian_balinese_can_join = {
 	var:te_cm_ok_indonesian_balinese ?= 1
 	te_cmg_indonesian_balinese_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_balinese ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_indonesian_balinese ?= 1
 }
 
 # Any scope. Is the yearly census of the indonesian merge worth running? An idle merge with a
@@ -2859,21 +4399,35 @@ te_cmg_filipino_is_candidate = {
 	NOT = { global_var:te_cm_state_filipino ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_filipino_core_ok = {
-	var:te_cm_ok_filipino_filipino ?= 1
-	te_cmg_filipino_filipino_available = yes
-	var:te_cm_ok_filipino_visayan ?= 1
-	te_cmg_filipino_visayan_available = yes
-	var:te_cm_ok_filipino_tagalog ?= 1
-	te_cmg_filipino_tagalog_available = yes
-	var:te_cm_ok_filipino_ilocano ?= 1
-	te_cmg_filipino_ilocano_available = yes
+	te_cmg_filipino_filipino_measured = yes
+	OR = {
+		te_cmg_filipino_visayan_measured = yes
+		te_cmg_filipino_visayan_switched_in = yes
+	}
+	OR = {
+		te_cmg_filipino_tagalog_measured = yes
+		te_cmg_filipino_tagalog_switched_in = yes
+	}
+	OR = {
+		te_cmg_filipino_ilocano_measured = yes
+		te_cmg_filipino_ilocano_switched_in = yes
+	}
 }
 
 # Any scope. filipino is free for the filipino merge.
 te_cmg_filipino_filipino_available = {
 	NOT = { global_var:te_cm_in_filipino ?= 31 }
+}
+
+# Country scope. filipino passes its gates for the filipino merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_filipino_filipino_measured = {
+	var:te_cm_ok_filipino_filipino ?= 1
+	te_cmg_filipino_filipino_available = yes
+	NOT = { has_global_variable = te_cm_switched_filipino }
 }
 
 # Country scope. filipino (tier 1) passes its gates and can join the filipino merge now.
@@ -2889,6 +4443,20 @@ te_cmg_filipino_visayan_available = {
 	always = yes
 }
 
+# Country scope. visayan passes its gates for the filipino merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_filipino_visayan_measured = {
+	var:te_cm_ok_filipino_visayan ?= 1
+	te_cmg_filipino_visayan_available = yes
+	NOT = { has_global_variable = te_cm_switched_visayan }
+}
+
+# Country scope. visayan joined the filipino merge and has switched into its result.
+te_cmg_filipino_visayan_switched_in = {
+	global_var:te_cm_joined_filipino_visayan ?= 1
+	has_global_variable = te_cm_switched_visayan
+}
+
 # Country scope. visayan (tier 1) passes its gates and can join the filipino merge now.
 te_cmg_filipino_visayan_can_join = {
 	var:te_cm_ok_filipino_visayan ?= 1
@@ -2902,6 +4470,20 @@ te_cmg_filipino_tagalog_available = {
 	always = yes
 }
 
+# Country scope. tagalog passes its gates for the filipino merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_filipino_tagalog_measured = {
+	var:te_cm_ok_filipino_tagalog ?= 1
+	te_cmg_filipino_tagalog_available = yes
+	NOT = { has_global_variable = te_cm_switched_tagalog }
+}
+
+# Country scope. tagalog joined the filipino merge and has switched into its result.
+te_cmg_filipino_tagalog_switched_in = {
+	global_var:te_cm_joined_filipino_tagalog ?= 1
+	has_global_variable = te_cm_switched_tagalog
+}
+
 # Country scope. tagalog (tier 1) passes its gates and can join the filipino merge now.
 te_cmg_filipino_tagalog_can_join = {
 	var:te_cm_ok_filipino_tagalog ?= 1
@@ -2913,6 +4495,20 @@ te_cmg_filipino_tagalog_can_join = {
 # Any scope. ilocano is free for the filipino merge.
 te_cmg_filipino_ilocano_available = {
 	always = yes
+}
+
+# Country scope. ilocano passes its gates for the filipino merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_filipino_ilocano_measured = {
+	var:te_cm_ok_filipino_ilocano ?= 1
+	te_cmg_filipino_ilocano_available = yes
+	NOT = { has_global_variable = te_cm_switched_ilocano }
+}
+
+# Country scope. ilocano joined the filipino merge and has switched into its result.
+te_cmg_filipino_ilocano_switched_in = {
+	global_var:te_cm_joined_filipino_ilocano ?= 1
+	has_global_variable = te_cm_switched_ilocano
 }
 
 # Country scope. ilocano (tier 1) passes its gates and can join the filipino merge now.
@@ -2973,19 +4569,40 @@ te_cmg_nguni_is_candidate = {
 	NOT = { global_var:te_cm_state_nguni ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_nguni_core_ok = {
-	var:te_cm_ok_nguni_nguni ?= 1
-	te_cmg_nguni_nguni_available = yes
-	var:te_cm_ok_nguni_zulu ?= 1
-	te_cmg_nguni_zulu_available = yes
-	var:te_cm_ok_nguni_xhosa ?= 1
-	te_cmg_nguni_xhosa_available = yes
+	OR = {
+		te_cmg_nguni_nguni_measured = yes
+		te_cmg_nguni_nguni_switched_in = yes
+	}
+	OR = {
+		te_cmg_nguni_zulu_measured = yes
+		te_cmg_nguni_zulu_switched_in = yes
+	}
+	OR = {
+		te_cmg_nguni_xhosa_measured = yes
+		te_cmg_nguni_xhosa_switched_in = yes
+	}
 }
 
 # Any scope. nguni is free for the nguni merge.
 te_cmg_nguni_nguni_available = {
 	always = yes
+}
+
+# Country scope. nguni passes its gates for the nguni merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_nguni_nguni_measured = {
+	var:te_cm_ok_nguni_nguni ?= 1
+	te_cmg_nguni_nguni_available = yes
+	NOT = { has_global_variable = te_cm_switched_nguni }
+}
+
+# Country scope. nguni joined the nguni merge and has switched into its result.
+te_cmg_nguni_nguni_switched_in = {
+	global_var:te_cm_joined_nguni_nguni ?= 1
+	has_global_variable = te_cm_switched_nguni
 }
 
 # Country scope. nguni (tier 1) passes its gates and can join the nguni merge now.
@@ -3001,6 +4618,20 @@ te_cmg_nguni_zulu_available = {
 	always = yes
 }
 
+# Country scope. zulu passes its gates for the nguni merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_nguni_zulu_measured = {
+	var:te_cm_ok_nguni_zulu ?= 1
+	te_cmg_nguni_zulu_available = yes
+	NOT = { has_global_variable = te_cm_switched_zulu }
+}
+
+# Country scope. zulu joined the nguni merge and has switched into its result.
+te_cmg_nguni_zulu_switched_in = {
+	global_var:te_cm_joined_nguni_zulu ?= 1
+	has_global_variable = te_cm_switched_zulu
+}
+
 # Country scope. zulu (tier 1) passes its gates and can join the nguni merge now.
 te_cmg_nguni_zulu_can_join = {
 	var:te_cm_ok_nguni_zulu ?= 1
@@ -3012,6 +4643,20 @@ te_cmg_nguni_zulu_can_join = {
 # Any scope. xhosa is free for the nguni merge.
 te_cmg_nguni_xhosa_available = {
 	always = yes
+}
+
+# Country scope. xhosa passes its gates for the nguni merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_nguni_xhosa_measured = {
+	var:te_cm_ok_nguni_xhosa ?= 1
+	te_cmg_nguni_xhosa_available = yes
+	NOT = { has_global_variable = te_cm_switched_xhosa }
+}
+
+# Country scope. xhosa joined the nguni merge and has switched into its result.
+te_cmg_nguni_xhosa_switched_in = {
+	global_var:te_cm_joined_nguni_xhosa ?= 1
+	has_global_variable = te_cm_switched_xhosa
 }
 
 # Country scope. xhosa (tier 1) passes its gates and can join the nguni merge now.
@@ -3073,21 +4718,62 @@ te_cmg_latin_is_candidate = {
 	NOT = { global_var:te_cm_state_latin ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_latin_core_ok = {
-	var:te_cm_ok_latin_french ?= 1
-	te_cmg_latin_french_available = yes
-	var:te_cm_ok_latin_cm_italian ?= 1
-	te_cmg_latin_cm_italian_available = yes
-	var:te_cm_ok_latin_spanish ?= 1
-	te_cmg_latin_spanish_available = yes
-	var:te_cm_ok_latin_portuguese ?= 1
-	te_cmg_latin_portuguese_available = yes
+	OR = {
+		AND = {
+			te_cmg_latin_french_measured = yes
+			te_cmg_latin_french_years_met = yes
+		}
+		te_cmg_latin_french_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_latin_cm_italian_measured = yes
+			te_cmg_latin_cm_italian_years_met = yes
+		}
+		te_cmg_latin_cm_italian_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_latin_spanish_measured = yes
+			te_cmg_latin_spanish_years_met = yes
+		}
+		te_cmg_latin_spanish_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_latin_portuguese_measured = yes
+			te_cmg_latin_portuguese_years_met = yes
+		}
+		te_cmg_latin_portuguese_switched_in = yes
+	}
 }
 
 # Any scope. french is free for the latin merge.
 te_cmg_latin_french_available = {
 	NOT = { global_var:te_cm_in_french ?= 10 }
+}
+
+# Country scope. french passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_french_measured = {
+	var:te_cm_ok_latin_french ?= 1
+	te_cmg_latin_french_available = yes
+	NOT = { has_global_variable = te_cm_switched_french }
+}
+
+# Country scope. french (tier 2) has spent the years together its tier asks for.
+te_cmg_latin_french_years_met = {
+	has_variable = te_cm_years_latin_french
+	trigger_if = { limit = { has_variable = te_cm_years_latin_french } var:te_cm_years_latin_french >= te_cm_years_tier3 }
+}
+
+# Country scope. french joined the latin merge and has switched into its result.
+te_cmg_latin_french_switched_in = {
+	global_var:te_cm_joined_latin_french ?= 1
+	has_global_variable = te_cm_switched_french
 }
 
 # Country scope. french (tier 2) passes its gates and can join the latin merge now.
@@ -3096,13 +4782,32 @@ te_cmg_latin_french_can_join = {
 	te_cmg_latin_french_available = yes
 	NOT = { global_var:te_cm_joined_latin_french ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_latin_french
-	trigger_if = { limit = { has_variable = te_cm_years_latin_french } var:te_cm_years_latin_french >= te_cm_years_tier3 }
+	te_cmg_latin_french_years_met = yes
 }
 
 # Any scope. cm_italian is free for the latin merge.
 te_cmg_latin_cm_italian_available = {
 	global_var:te_cm_state_italian ?= 2
+}
+
+# Country scope. cm_italian passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_cm_italian_measured = {
+	var:te_cm_ok_latin_cm_italian ?= 1
+	te_cmg_latin_cm_italian_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_italian }
+}
+
+# Country scope. cm_italian (tier 2) has spent the years together its tier asks for.
+te_cmg_latin_cm_italian_years_met = {
+	has_variable = te_cm_years_latin_cm_italian
+	trigger_if = { limit = { has_variable = te_cm_years_latin_cm_italian } var:te_cm_years_latin_cm_italian >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_italian joined the latin merge and has switched into its result.
+te_cmg_latin_cm_italian_switched_in = {
+	global_var:te_cm_joined_latin_cm_italian ?= 1
+	has_global_variable = te_cm_switched_cm_italian
 }
 
 # Country scope. cm_italian (tier 2) passes its gates and can join the latin merge now.
@@ -3111,13 +4816,32 @@ te_cmg_latin_cm_italian_can_join = {
 	te_cmg_latin_cm_italian_available = yes
 	NOT = { global_var:te_cm_joined_latin_cm_italian ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_latin_cm_italian
-	trigger_if = { limit = { has_variable = te_cm_years_latin_cm_italian } var:te_cm_years_latin_cm_italian >= te_cm_years_tier3 }
+	te_cmg_latin_cm_italian_years_met = yes
 }
 
 # Any scope. spanish is free for the latin merge.
 te_cmg_latin_spanish_available = {
 	always = yes
+}
+
+# Country scope. spanish passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_spanish_measured = {
+	var:te_cm_ok_latin_spanish ?= 1
+	te_cmg_latin_spanish_available = yes
+	NOT = { has_global_variable = te_cm_switched_spanish }
+}
+
+# Country scope. spanish (tier 2) has spent the years together its tier asks for.
+te_cmg_latin_spanish_years_met = {
+	has_variable = te_cm_years_latin_spanish
+	trigger_if = { limit = { has_variable = te_cm_years_latin_spanish } var:te_cm_years_latin_spanish >= te_cm_years_tier3 }
+}
+
+# Country scope. spanish joined the latin merge and has switched into its result.
+te_cmg_latin_spanish_switched_in = {
+	global_var:te_cm_joined_latin_spanish ?= 1
+	has_global_variable = te_cm_switched_spanish
 }
 
 # Country scope. spanish (tier 2) passes its gates and can join the latin merge now.
@@ -3126,13 +4850,32 @@ te_cmg_latin_spanish_can_join = {
 	te_cmg_latin_spanish_available = yes
 	NOT = { global_var:te_cm_joined_latin_spanish ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_latin_spanish
-	trigger_if = { limit = { has_variable = te_cm_years_latin_spanish } var:te_cm_years_latin_spanish >= te_cm_years_tier3 }
+	te_cmg_latin_spanish_years_met = yes
 }
 
 # Any scope. portuguese is free for the latin merge.
 te_cmg_latin_portuguese_available = {
 	always = yes
+}
+
+# Country scope. portuguese passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_portuguese_measured = {
+	var:te_cm_ok_latin_portuguese ?= 1
+	te_cmg_latin_portuguese_available = yes
+	NOT = { has_global_variable = te_cm_switched_portuguese }
+}
+
+# Country scope. portuguese (tier 2) has spent the years together its tier asks for.
+te_cmg_latin_portuguese_years_met = {
+	has_variable = te_cm_years_latin_portuguese
+	trigger_if = { limit = { has_variable = te_cm_years_latin_portuguese } var:te_cm_years_latin_portuguese >= te_cm_years_tier3 }
+}
+
+# Country scope. portuguese joined the latin merge and has switched into its result.
+te_cmg_latin_portuguese_switched_in = {
+	global_var:te_cm_joined_latin_portuguese ?= 1
+	has_global_variable = te_cm_switched_portuguese
 }
 
 # Country scope. portuguese (tier 2) passes its gates and can join the latin merge now.
@@ -3141,13 +4884,32 @@ te_cmg_latin_portuguese_can_join = {
 	te_cmg_latin_portuguese_available = yes
 	NOT = { global_var:te_cm_joined_latin_portuguese ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_latin_portuguese
-	trigger_if = { limit = { has_variable = te_cm_years_latin_portuguese } var:te_cm_years_latin_portuguese >= te_cm_years_tier3 }
+	te_cmg_latin_portuguese_years_met = yes
 }
 
 # Any scope. romanian is free for the latin merge.
 te_cmg_latin_romanian_available = {
 	always = yes
+}
+
+# Country scope. romanian passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_romanian_measured = {
+	var:te_cm_ok_latin_romanian ?= 1
+	te_cmg_latin_romanian_available = yes
+	NOT = { has_global_variable = te_cm_switched_romanian }
+}
+
+# Country scope. romanian (tier 2) has spent the years together its tier asks for.
+te_cmg_latin_romanian_years_met = {
+	has_variable = te_cm_years_latin_romanian
+	trigger_if = { limit = { has_variable = te_cm_years_latin_romanian } var:te_cm_years_latin_romanian >= te_cm_years_tier3 }
+}
+
+# Country scope. romanian joined the latin merge and has switched into its result.
+te_cmg_latin_romanian_switched_in = {
+	global_var:te_cm_joined_latin_romanian ?= 1
+	has_global_variable = te_cm_switched_romanian
 }
 
 # Country scope. romanian (tier 2) passes its gates and can join the latin merge now.
@@ -3156,13 +4918,33 @@ te_cmg_latin_romanian_can_join = {
 	te_cmg_latin_romanian_available = yes
 	NOT = { global_var:te_cm_joined_latin_romanian ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_latin_romanian
-	trigger_if = { limit = { has_variable = te_cm_years_latin_romanian } var:te_cm_years_latin_romanian >= te_cm_years_tier3 }
+	te_cmg_latin_romanian_years_met = yes
+	var:te_cm_sol_ok_latin_romanian ?= 1
 }
 
 # Any scope. platinean is free for the latin merge.
 te_cmg_latin_platinean_available = {
 	NOT = { global_var:te_cm_in_platinean ?= 15 }
+}
+
+# Country scope. platinean passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_platinean_measured = {
+	var:te_cm_ok_latin_platinean ?= 1
+	te_cmg_latin_platinean_available = yes
+	NOT = { has_global_variable = te_cm_switched_platinean }
+}
+
+# Country scope. platinean (tier 1b) has spent the years together its tier asks for.
+te_cmg_latin_platinean_years_met = {
+	has_variable = te_cm_years_latin_platinean
+	trigger_if = { limit = { has_variable = te_cm_years_latin_platinean } var:te_cm_years_latin_platinean >= te_cm_years_tier2 }
+}
+
+# Country scope. platinean joined the latin merge and has switched into its result.
+te_cmg_latin_platinean_switched_in = {
+	global_var:te_cm_joined_latin_platinean ?= 1
+	has_global_variable = te_cm_switched_platinean
 }
 
 # Country scope. platinean (tier 1b) passes its gates and can join the latin merge now.
@@ -3171,13 +4953,33 @@ te_cmg_latin_platinean_can_join = {
 	te_cmg_latin_platinean_available = yes
 	NOT = { global_var:te_cm_joined_latin_platinean ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_latin_platinean
-	trigger_if = { limit = { has_variable = te_cm_years_latin_platinean } var:te_cm_years_latin_platinean >= te_cm_years_tier2 }
+	te_cmg_latin_platinean_years_met = yes
+	var:te_cm_sol_ok_latin_platinean ?= 1
 }
 
 # Any scope. argentine is free for the latin merge.
 te_cmg_latin_argentine_available = {
 	NOT = { global_var:te_cm_in_argentine ?= 15 }
+}
+
+# Country scope. argentine passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_argentine_measured = {
+	var:te_cm_ok_latin_argentine ?= 1
+	te_cmg_latin_argentine_available = yes
+	NOT = { has_global_variable = te_cm_switched_argentine }
+}
+
+# Country scope. argentine (tier 1b) has spent the years together its tier asks for.
+te_cmg_latin_argentine_years_met = {
+	has_variable = te_cm_years_latin_argentine
+	trigger_if = { limit = { has_variable = te_cm_years_latin_argentine } var:te_cm_years_latin_argentine >= te_cm_years_tier2 }
+}
+
+# Country scope. argentine joined the latin merge and has switched into its result.
+te_cmg_latin_argentine_switched_in = {
+	global_var:te_cm_joined_latin_argentine ?= 1
+	has_global_variable = te_cm_switched_argentine
 }
 
 # Country scope. argentine (tier 1b) passes its gates and can join the latin merge now.
@@ -3186,13 +4988,33 @@ te_cmg_latin_argentine_can_join = {
 	te_cmg_latin_argentine_available = yes
 	NOT = { global_var:te_cm_joined_latin_argentine ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_latin_argentine
-	trigger_if = { limit = { has_variable = te_cm_years_latin_argentine } var:te_cm_years_latin_argentine >= te_cm_years_tier2 }
+	te_cmg_latin_argentine_years_met = yes
+	var:te_cm_sol_ok_latin_argentine ?= 1
 }
 
 # Any scope. uruguayan is free for the latin merge.
 te_cmg_latin_uruguayan_available = {
 	NOT = { global_var:te_cm_in_uruguayan ?= 15 }
+}
+
+# Country scope. uruguayan passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_uruguayan_measured = {
+	var:te_cm_ok_latin_uruguayan ?= 1
+	te_cmg_latin_uruguayan_available = yes
+	NOT = { has_global_variable = te_cm_switched_uruguayan }
+}
+
+# Country scope. uruguayan (tier 1b) has spent the years together its tier asks for.
+te_cmg_latin_uruguayan_years_met = {
+	has_variable = te_cm_years_latin_uruguayan
+	trigger_if = { limit = { has_variable = te_cm_years_latin_uruguayan } var:te_cm_years_latin_uruguayan >= te_cm_years_tier2 }
+}
+
+# Country scope. uruguayan joined the latin merge and has switched into its result.
+te_cmg_latin_uruguayan_switched_in = {
+	global_var:te_cm_joined_latin_uruguayan ?= 1
+	has_global_variable = te_cm_switched_uruguayan
 }
 
 # Country scope. uruguayan (tier 1b) passes its gates and can join the latin merge now.
@@ -3201,13 +5023,33 @@ te_cmg_latin_uruguayan_can_join = {
 	te_cmg_latin_uruguayan_available = yes
 	NOT = { global_var:te_cm_joined_latin_uruguayan ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_latin_uruguayan
-	trigger_if = { limit = { has_variable = te_cm_years_latin_uruguayan } var:te_cm_years_latin_uruguayan >= te_cm_years_tier2 }
+	te_cmg_latin_uruguayan_years_met = yes
+	var:te_cm_sol_ok_latin_uruguayan ?= 1
 }
 
 # Any scope. chilean is free for the latin merge.
 te_cmg_latin_chilean_available = {
 	always = yes
+}
+
+# Country scope. chilean passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_chilean_measured = {
+	var:te_cm_ok_latin_chilean ?= 1
+	te_cmg_latin_chilean_available = yes
+	NOT = { has_global_variable = te_cm_switched_chilean }
+}
+
+# Country scope. chilean (tier 1b) has spent the years together its tier asks for.
+te_cmg_latin_chilean_years_met = {
+	has_variable = te_cm_years_latin_chilean
+	trigger_if = { limit = { has_variable = te_cm_years_latin_chilean } var:te_cm_years_latin_chilean >= te_cm_years_tier2 }
+}
+
+# Country scope. chilean joined the latin merge and has switched into its result.
+te_cmg_latin_chilean_switched_in = {
+	global_var:te_cm_joined_latin_chilean ?= 1
+	has_global_variable = te_cm_switched_chilean
 }
 
 # Country scope. chilean (tier 1b) passes its gates and can join the latin merge now.
@@ -3216,8 +5058,8 @@ te_cmg_latin_chilean_can_join = {
 	te_cmg_latin_chilean_available = yes
 	NOT = { global_var:te_cm_joined_latin_chilean ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_latin_chilean
-	trigger_if = { limit = { has_variable = te_cm_years_latin_chilean } var:te_cm_years_latin_chilean >= te_cm_years_tier2 }
+	te_cmg_latin_chilean_years_met = yes
+	var:te_cm_sol_ok_latin_chilean ?= 1
 }
 
 # Any scope. Is the yearly census of the latin merge worth running? An idle merge with a
@@ -3294,19 +5136,55 @@ te_cmg_pan_slavic_is_candidate = {
 	NOT = { global_var:te_cm_state_pan_slavic ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_pan_slavic_core_ok = {
-	var:te_cm_ok_pan_slavic_cm_east_slavic ?= 1
-	te_cmg_pan_slavic_cm_east_slavic_available = yes
-	var:te_cm_ok_pan_slavic_cm_czechoslovak ?= 1
-	te_cmg_pan_slavic_cm_czechoslovak_available = yes
-	var:te_cm_ok_pan_slavic_cm_yugoslav ?= 1
-	te_cmg_pan_slavic_cm_yugoslav_available = yes
+	OR = {
+		AND = {
+			te_cmg_pan_slavic_cm_east_slavic_measured = yes
+			te_cmg_pan_slavic_cm_east_slavic_years_met = yes
+		}
+		te_cmg_pan_slavic_cm_east_slavic_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_pan_slavic_cm_czechoslovak_measured = yes
+			te_cmg_pan_slavic_cm_czechoslovak_years_met = yes
+		}
+		te_cmg_pan_slavic_cm_czechoslovak_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_pan_slavic_cm_yugoslav_measured = yes
+			te_cmg_pan_slavic_cm_yugoslav_years_met = yes
+		}
+		te_cmg_pan_slavic_cm_yugoslav_switched_in = yes
+	}
 }
 
 # Any scope. cm_east_slavic is free for the pan_slavic merge.
 te_cmg_pan_slavic_cm_east_slavic_available = {
 	global_var:te_cm_state_east_slavic ?= 2
+}
+
+# Country scope. cm_east_slavic passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_cm_east_slavic_measured = {
+	var:te_cm_ok_pan_slavic_cm_east_slavic ?= 1
+	te_cmg_pan_slavic_cm_east_slavic_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+}
+
+# Country scope. cm_east_slavic (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_slavic_cm_east_slavic_years_met = {
+	has_variable = te_cm_years_pan_slavic_cm_east_slavic
+	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_east_slavic } var:te_cm_years_pan_slavic_cm_east_slavic >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_east_slavic joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_cm_east_slavic_switched_in = {
+	global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1
+	has_global_variable = te_cm_switched_cm_east_slavic
 }
 
 # Country scope. cm_east_slavic (tier 2) passes its gates and can join the pan_slavic merge now.
@@ -3315,13 +5193,32 @@ te_cmg_pan_slavic_cm_east_slavic_can_join = {
 	te_cmg_pan_slavic_cm_east_slavic_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_slavic_cm_east_slavic
-	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_east_slavic } var:te_cm_years_pan_slavic_cm_east_slavic >= te_cm_years_tier3 }
+	te_cmg_pan_slavic_cm_east_slavic_years_met = yes
 }
 
 # Any scope. cm_czechoslovak is free for the pan_slavic merge.
 te_cmg_pan_slavic_cm_czechoslovak_available = {
 	global_var:te_cm_state_czechoslovak ?= 2
+}
+
+# Country scope. cm_czechoslovak passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_cm_czechoslovak_measured = {
+	var:te_cm_ok_pan_slavic_cm_czechoslovak ?= 1
+	te_cmg_pan_slavic_cm_czechoslovak_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+}
+
+# Country scope. cm_czechoslovak (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_slavic_cm_czechoslovak_years_met = {
+	has_variable = te_cm_years_pan_slavic_cm_czechoslovak
+	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_czechoslovak } var:te_cm_years_pan_slavic_cm_czechoslovak >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_czechoslovak joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_cm_czechoslovak_switched_in = {
+	global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1
+	has_global_variable = te_cm_switched_cm_czechoslovak
 }
 
 # Country scope. cm_czechoslovak (tier 2) passes its gates and can join the pan_slavic merge now.
@@ -3330,13 +5227,32 @@ te_cmg_pan_slavic_cm_czechoslovak_can_join = {
 	te_cmg_pan_slavic_cm_czechoslovak_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_slavic_cm_czechoslovak
-	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_czechoslovak } var:te_cm_years_pan_slavic_cm_czechoslovak >= te_cm_years_tier3 }
+	te_cmg_pan_slavic_cm_czechoslovak_years_met = yes
 }
 
 # Any scope. cm_yugoslav is free for the pan_slavic merge.
 te_cmg_pan_slavic_cm_yugoslav_available = {
 	global_var:te_cm_state_yugoslav ?= 2
+}
+
+# Country scope. cm_yugoslav passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_cm_yugoslav_measured = {
+	var:te_cm_ok_pan_slavic_cm_yugoslav ?= 1
+	te_cmg_pan_slavic_cm_yugoslav_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+}
+
+# Country scope. cm_yugoslav (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_slavic_cm_yugoslav_years_met = {
+	has_variable = te_cm_years_pan_slavic_cm_yugoslav
+	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_yugoslav } var:te_cm_years_pan_slavic_cm_yugoslav >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_yugoslav joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_cm_yugoslav_switched_in = {
+	global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
+	has_global_variable = te_cm_switched_cm_yugoslav
 }
 
 # Country scope. cm_yugoslav (tier 2) passes its gates and can join the pan_slavic merge now.
@@ -3345,13 +5261,26 @@ te_cmg_pan_slavic_cm_yugoslav_can_join = {
 	te_cmg_pan_slavic_cm_yugoslav_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_slavic_cm_yugoslav
-	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_cm_yugoslav } var:te_cm_years_pan_slavic_cm_yugoslav >= te_cm_years_tier3 }
+	te_cmg_pan_slavic_cm_yugoslav_years_met = yes
 }
 
 # Any scope. polish is free for the pan_slavic merge.
 te_cmg_pan_slavic_polish_available = {
 	always = yes
+}
+
+# Country scope. polish passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_polish_measured = {
+	var:te_cm_ok_pan_slavic_polish ?= 1
+	te_cmg_pan_slavic_polish_available = yes
+	NOT = { has_global_variable = te_cm_switched_polish }
+}
+
+# Country scope. polish joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_polish_switched_in = {
+	global_var:te_cm_joined_pan_slavic_polish ?= 1
+	has_global_variable = te_cm_switched_polish
 }
 
 # Country scope. polish (tier 1) passes its gates and can join the pan_slavic merge now.
@@ -3360,11 +5289,32 @@ te_cmg_pan_slavic_polish_can_join = {
 	te_cmg_pan_slavic_polish_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_polish ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_pan_slavic_polish ?= 1
 }
 
 # Any scope. slovene is free for the pan_slavic merge.
 te_cmg_pan_slavic_slovene_available = {
 	NOT = { global_var:te_cm_in_slovene ?= 5 }
+}
+
+# Country scope. slovene passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_slovene_measured = {
+	var:te_cm_ok_pan_slavic_slovene ?= 1
+	te_cmg_pan_slavic_slovene_available = yes
+	NOT = { has_global_variable = te_cm_switched_slovene }
+}
+
+# Country scope. slovene (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_slavic_slovene_years_met = {
+	has_variable = te_cm_years_pan_slavic_slovene
+	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_slovene } var:te_cm_years_pan_slavic_slovene >= te_cm_years_tier3 }
+}
+
+# Country scope. slovene joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_slovene_switched_in = {
+	global_var:te_cm_joined_pan_slavic_slovene ?= 1
+	has_global_variable = te_cm_switched_slovene
 }
 
 # Country scope. slovene (tier 2) passes its gates and can join the pan_slavic merge now.
@@ -3373,13 +5323,33 @@ te_cmg_pan_slavic_slovene_can_join = {
 	te_cmg_pan_slavic_slovene_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_slovene ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_slavic_slovene
-	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_slovene } var:te_cm_years_pan_slavic_slovene >= te_cm_years_tier3 }
+	te_cmg_pan_slavic_slovene_years_met = yes
+	var:te_cm_sol_ok_pan_slavic_slovene ?= 1
 }
 
 # Any scope. bulgarian is free for the pan_slavic merge.
 te_cmg_pan_slavic_bulgarian_available = {
 	NOT = { global_var:te_cm_in_bulgarian ?= 5 }
+}
+
+# Country scope. bulgarian passes its gates for the pan_slavic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_slavic_bulgarian_measured = {
+	var:te_cm_ok_pan_slavic_bulgarian ?= 1
+	te_cmg_pan_slavic_bulgarian_available = yes
+	NOT = { has_global_variable = te_cm_switched_bulgarian }
+}
+
+# Country scope. bulgarian (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_slavic_bulgarian_years_met = {
+	has_variable = te_cm_years_pan_slavic_bulgarian
+	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_bulgarian } var:te_cm_years_pan_slavic_bulgarian >= te_cm_years_tier3 }
+}
+
+# Country scope. bulgarian joined the pan_slavic merge and has switched into its result.
+te_cmg_pan_slavic_bulgarian_switched_in = {
+	global_var:te_cm_joined_pan_slavic_bulgarian ?= 1
+	has_global_variable = te_cm_switched_bulgarian
 }
 
 # Country scope. bulgarian (tier 2) passes its gates and can join the pan_slavic merge now.
@@ -3388,8 +5358,8 @@ te_cmg_pan_slavic_bulgarian_can_join = {
 	te_cmg_pan_slavic_bulgarian_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_bulgarian ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_slavic_bulgarian
-	trigger_if = { limit = { has_variable = te_cm_years_pan_slavic_bulgarian } var:te_cm_years_pan_slavic_bulgarian >= te_cm_years_tier3 }
+	te_cmg_pan_slavic_bulgarian_years_met = yes
+	var:te_cm_sol_ok_pan_slavic_bulgarian ?= 1
 }
 
 # Any scope. Is the yearly census of the pan_slavic merge worth running? An idle merge with a
@@ -3456,23 +5426,63 @@ te_cmg_pan_turkic_is_candidate = {
 	NOT = { global_var:te_cm_state_pan_turkic ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_pan_turkic_core_ok = {
-	var:te_cm_ok_pan_turkic_cm_oghuz_turkic ?= 1
-	te_cmg_pan_turkic_cm_oghuz_turkic_available = yes
-	var:te_cm_ok_pan_turkic_uzbek ?= 1
-	te_cmg_pan_turkic_uzbek_available = yes
-	var:te_cm_ok_pan_turkic_kazak ?= 1
-	te_cmg_pan_turkic_kazak_available = yes
-	var:te_cm_ok_pan_turkic_tatar ?= 1
-	te_cmg_pan_turkic_tatar_available = yes
-	var:te_cm_ok_pan_turkic_kirgiz ?= 1
-	te_cmg_pan_turkic_kirgiz_available = yes
+	OR = {
+		AND = {
+			te_cmg_pan_turkic_cm_oghuz_turkic_measured = yes
+			te_cmg_pan_turkic_cm_oghuz_turkic_years_met = yes
+		}
+		te_cmg_pan_turkic_cm_oghuz_turkic_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_pan_turkic_uzbek_measured = yes
+			te_cmg_pan_turkic_uzbek_years_met = yes
+		}
+		te_cmg_pan_turkic_uzbek_switched_in = yes
+	}
+	OR = {
+		te_cmg_pan_turkic_kazak_measured = yes
+		te_cmg_pan_turkic_kazak_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_pan_turkic_tatar_measured = yes
+			te_cmg_pan_turkic_tatar_years_met = yes
+		}
+		te_cmg_pan_turkic_tatar_switched_in = yes
+	}
+	OR = {
+		te_cmg_pan_turkic_kirgiz_measured = yes
+		te_cmg_pan_turkic_kirgiz_switched_in = yes
+	}
 }
 
 # Any scope. cm_oghuz_turkic is free for the pan_turkic merge.
 te_cmg_pan_turkic_cm_oghuz_turkic_available = {
 	global_var:te_cm_state_oghuz_turkic ?= 2
+}
+
+# Country scope. cm_oghuz_turkic passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_cm_oghuz_turkic_measured = {
+	var:te_cm_ok_pan_turkic_cm_oghuz_turkic ?= 1
+	te_cmg_pan_turkic_cm_oghuz_turkic_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+}
+
+# Country scope. cm_oghuz_turkic (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_turkic_cm_oghuz_turkic_years_met = {
+	has_variable = te_cm_years_pan_turkic_cm_oghuz_turkic
+	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_cm_oghuz_turkic } var:te_cm_years_pan_turkic_cm_oghuz_turkic >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_oghuz_turkic joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_cm_oghuz_turkic_switched_in = {
+	global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1
+	has_global_variable = te_cm_switched_cm_oghuz_turkic
 }
 
 # Country scope. cm_oghuz_turkic (tier 2) passes its gates and can join the pan_turkic merge now.
@@ -3481,13 +5491,32 @@ te_cmg_pan_turkic_cm_oghuz_turkic_can_join = {
 	te_cmg_pan_turkic_cm_oghuz_turkic_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_turkic_cm_oghuz_turkic
-	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_cm_oghuz_turkic } var:te_cm_years_pan_turkic_cm_oghuz_turkic >= te_cm_years_tier3 }
+	te_cmg_pan_turkic_cm_oghuz_turkic_years_met = yes
 }
 
 # Any scope. uzbek is free for the pan_turkic merge.
 te_cmg_pan_turkic_uzbek_available = {
 	always = yes
+}
+
+# Country scope. uzbek passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_uzbek_measured = {
+	var:te_cm_ok_pan_turkic_uzbek ?= 1
+	te_cmg_pan_turkic_uzbek_available = yes
+	NOT = { has_global_variable = te_cm_switched_uzbek }
+}
+
+# Country scope. uzbek (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_turkic_uzbek_years_met = {
+	has_variable = te_cm_years_pan_turkic_uzbek
+	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_uzbek } var:te_cm_years_pan_turkic_uzbek >= te_cm_years_tier3 }
+}
+
+# Country scope. uzbek joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_uzbek_switched_in = {
+	global_var:te_cm_joined_pan_turkic_uzbek ?= 1
+	has_global_variable = te_cm_switched_uzbek
 }
 
 # Country scope. uzbek (tier 2) passes its gates and can join the pan_turkic merge now.
@@ -3496,13 +5525,26 @@ te_cmg_pan_turkic_uzbek_can_join = {
 	te_cmg_pan_turkic_uzbek_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_uzbek ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_turkic_uzbek
-	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_uzbek } var:te_cm_years_pan_turkic_uzbek >= te_cm_years_tier3 }
+	te_cmg_pan_turkic_uzbek_years_met = yes
 }
 
 # Any scope. kazak is free for the pan_turkic merge.
 te_cmg_pan_turkic_kazak_available = {
 	always = yes
+}
+
+# Country scope. kazak passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_kazak_measured = {
+	var:te_cm_ok_pan_turkic_kazak ?= 1
+	te_cmg_pan_turkic_kazak_available = yes
+	NOT = { has_global_variable = te_cm_switched_kazak }
+}
+
+# Country scope. kazak joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_kazak_switched_in = {
+	global_var:te_cm_joined_pan_turkic_kazak ?= 1
+	has_global_variable = te_cm_switched_kazak
 }
 
 # Country scope. kazak (tier 1) passes its gates and can join the pan_turkic merge now.
@@ -3518,19 +5560,52 @@ te_cmg_pan_turkic_tatar_available = {
 	always = yes
 }
 
+# Country scope. tatar passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_tatar_measured = {
+	var:te_cm_ok_pan_turkic_tatar ?= 1
+	te_cmg_pan_turkic_tatar_available = yes
+	NOT = { has_global_variable = te_cm_switched_tatar }
+}
+
+# Country scope. tatar (tier 1b) has spent the years together its tier asks for.
+te_cmg_pan_turkic_tatar_years_met = {
+	has_variable = te_cm_years_pan_turkic_tatar
+	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_tatar } var:te_cm_years_pan_turkic_tatar >= te_cm_years_tier2 }
+}
+
+# Country scope. tatar joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_tatar_switched_in = {
+	global_var:te_cm_joined_pan_turkic_tatar ?= 1
+	has_global_variable = te_cm_switched_tatar
+}
+
 # Country scope. tatar (tier 1b) passes its gates and can join the pan_turkic merge now.
 te_cmg_pan_turkic_tatar_can_join = {
 	var:te_cm_ok_pan_turkic_tatar ?= 1
 	te_cmg_pan_turkic_tatar_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_tatar ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_pan_turkic_tatar
-	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_tatar } var:te_cm_years_pan_turkic_tatar >= te_cm_years_tier2 }
+	te_cmg_pan_turkic_tatar_years_met = yes
 }
 
 # Any scope. kirgiz is free for the pan_turkic merge.
 te_cmg_pan_turkic_kirgiz_available = {
 	always = yes
+}
+
+# Country scope. kirgiz passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_kirgiz_measured = {
+	var:te_cm_ok_pan_turkic_kirgiz ?= 1
+	te_cmg_pan_turkic_kirgiz_available = yes
+	NOT = { has_global_variable = te_cm_switched_kirgiz }
+}
+
+# Country scope. kirgiz joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_kirgiz_switched_in = {
+	global_var:te_cm_joined_pan_turkic_kirgiz ?= 1
+	has_global_variable = te_cm_switched_kirgiz
 }
 
 # Country scope. kirgiz (tier 1) passes its gates and can join the pan_turkic merge now.
@@ -3546,17 +5621,46 @@ te_cmg_pan_turkic_bashkir_available = {
 	always = yes
 }
 
+# Country scope. bashkir passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_bashkir_measured = {
+	var:te_cm_ok_pan_turkic_bashkir ?= 1
+	te_cmg_pan_turkic_bashkir_available = yes
+	NOT = { has_global_variable = te_cm_switched_bashkir }
+}
+
+# Country scope. bashkir joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_bashkir_switched_in = {
+	global_var:te_cm_joined_pan_turkic_bashkir ?= 1
+	has_global_variable = te_cm_switched_bashkir
+}
+
 # Country scope. bashkir (tier 1) passes its gates and can join the pan_turkic merge now.
 te_cmg_pan_turkic_bashkir_can_join = {
 	var:te_cm_ok_pan_turkic_bashkir ?= 1
 	te_cmg_pan_turkic_bashkir_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_bashkir ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_pan_turkic_bashkir ?= 1
 }
 
 # Any scope. crimean_tatar is free for the pan_turkic merge.
 te_cmg_pan_turkic_crimean_tatar_available = {
 	always = yes
+}
+
+# Country scope. crimean_tatar passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_crimean_tatar_measured = {
+	var:te_cm_ok_pan_turkic_crimean_tatar ?= 1
+	te_cmg_pan_turkic_crimean_tatar_available = yes
+	NOT = { has_global_variable = te_cm_switched_crimean_tatar }
+}
+
+# Country scope. crimean_tatar joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_crimean_tatar_switched_in = {
+	global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1
+	has_global_variable = te_cm_switched_crimean_tatar
 }
 
 # Country scope. crimean_tatar (tier 1) passes its gates and can join the pan_turkic merge now.
@@ -3565,11 +5669,32 @@ te_cmg_pan_turkic_crimean_tatar_can_join = {
 	te_cmg_pan_turkic_crimean_tatar_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_pan_turkic_crimean_tatar ?= 1
 }
 
 # Any scope. caucasian_turk is free for the pan_turkic merge.
 te_cmg_pan_turkic_caucasian_turk_available = {
 	always = yes
+}
+
+# Country scope. caucasian_turk passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_caucasian_turk_measured = {
+	var:te_cm_ok_pan_turkic_caucasian_turk ?= 1
+	te_cmg_pan_turkic_caucasian_turk_available = yes
+	NOT = { has_global_variable = te_cm_switched_caucasian_turk }
+}
+
+# Country scope. caucasian_turk (tier 1b) has spent the years together its tier asks for.
+te_cmg_pan_turkic_caucasian_turk_years_met = {
+	has_variable = te_cm_years_pan_turkic_caucasian_turk
+	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_caucasian_turk } var:te_cm_years_pan_turkic_caucasian_turk >= te_cm_years_tier2 }
+}
+
+# Country scope. caucasian_turk joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_caucasian_turk_switched_in = {
+	global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1
+	has_global_variable = te_cm_switched_caucasian_turk
 }
 
 # Country scope. caucasian_turk (tier 1b) passes its gates and can join the pan_turkic merge now.
@@ -3578,13 +5703,33 @@ te_cmg_pan_turkic_caucasian_turk_can_join = {
 	te_cmg_pan_turkic_caucasian_turk_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_pan_turkic_caucasian_turk
-	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_caucasian_turk } var:te_cm_years_pan_turkic_caucasian_turk >= te_cm_years_tier2 }
+	te_cmg_pan_turkic_caucasian_turk_years_met = yes
+	var:te_cm_sol_ok_pan_turkic_caucasian_turk ?= 1
 }
 
 # Any scope. uighur is free for the pan_turkic merge.
 te_cmg_pan_turkic_uighur_available = {
 	always = yes
+}
+
+# Country scope. uighur passes its gates for the pan_turkic merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_turkic_uighur_measured = {
+	var:te_cm_ok_pan_turkic_uighur ?= 1
+	te_cmg_pan_turkic_uighur_available = yes
+	NOT = { has_global_variable = te_cm_switched_uighur }
+}
+
+# Country scope. uighur (tier 1b) has spent the years together its tier asks for.
+te_cmg_pan_turkic_uighur_years_met = {
+	has_variable = te_cm_years_pan_turkic_uighur
+	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_uighur } var:te_cm_years_pan_turkic_uighur >= te_cm_years_tier2 }
+}
+
+# Country scope. uighur joined the pan_turkic merge and has switched into its result.
+te_cmg_pan_turkic_uighur_switched_in = {
+	global_var:te_cm_joined_pan_turkic_uighur ?= 1
+	has_global_variable = te_cm_switched_uighur
 }
 
 # Country scope. uighur (tier 1b) passes its gates and can join the pan_turkic merge now.
@@ -3593,8 +5738,8 @@ te_cmg_pan_turkic_uighur_can_join = {
 	te_cmg_pan_turkic_uighur_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_uighur ?= 1 }
 	te_cm_tier_tech = { TIER = 2 }
-	has_variable = te_cm_years_pan_turkic_uighur
-	trigger_if = { limit = { has_variable = te_cm_years_pan_turkic_uighur } var:te_cm_years_pan_turkic_uighur >= te_cm_years_tier2 }
+	te_cmg_pan_turkic_uighur_years_met = yes
+	var:te_cm_sol_ok_pan_turkic_uighur ?= 1
 }
 
 # Any scope. Is the yearly census of the pan_turkic merge worth running? An idle merge with a
@@ -3670,17 +5815,48 @@ te_cmg_pan_malay_is_candidate = {
 	NOT = { global_var:te_cm_state_pan_malay ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_pan_malay_core_ok = {
-	var:te_cm_ok_pan_malay_cm_indonesian ?= 1
-	te_cmg_pan_malay_cm_indonesian_available = yes
-	var:te_cm_ok_pan_malay_filipino ?= 1
-	te_cmg_pan_malay_filipino_available = yes
+	OR = {
+		AND = {
+			te_cmg_pan_malay_cm_indonesian_measured = yes
+			te_cmg_pan_malay_cm_indonesian_years_met = yes
+		}
+		te_cmg_pan_malay_cm_indonesian_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_pan_malay_filipino_measured = yes
+			te_cmg_pan_malay_filipino_years_met = yes
+		}
+		te_cmg_pan_malay_filipino_switched_in = yes
+	}
 }
 
 # Any scope. cm_indonesian is free for the pan_malay merge.
 te_cmg_pan_malay_cm_indonesian_available = {
 	global_var:te_cm_state_indonesian ?= 2
+}
+
+# Country scope. cm_indonesian passes its gates for the pan_malay merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_malay_cm_indonesian_measured = {
+	var:te_cm_ok_pan_malay_cm_indonesian ?= 1
+	te_cmg_pan_malay_cm_indonesian_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+}
+
+# Country scope. cm_indonesian (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_malay_cm_indonesian_years_met = {
+	has_variable = te_cm_years_pan_malay_cm_indonesian
+	trigger_if = { limit = { has_variable = te_cm_years_pan_malay_cm_indonesian } var:te_cm_years_pan_malay_cm_indonesian >= te_cm_years_tier3 }
+}
+
+# Country scope. cm_indonesian joined the pan_malay merge and has switched into its result.
+te_cmg_pan_malay_cm_indonesian_switched_in = {
+	global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
+	has_global_variable = te_cm_switched_cm_indonesian
 }
 
 # Country scope. cm_indonesian (tier 2) passes its gates and can join the pan_malay merge now.
@@ -3689,13 +5865,32 @@ te_cmg_pan_malay_cm_indonesian_can_join = {
 	te_cmg_pan_malay_cm_indonesian_available = yes
 	NOT = { global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_malay_cm_indonesian
-	trigger_if = { limit = { has_variable = te_cm_years_pan_malay_cm_indonesian } var:te_cm_years_pan_malay_cm_indonesian >= te_cm_years_tier3 }
+	te_cmg_pan_malay_cm_indonesian_years_met = yes
 }
 
 # Any scope. filipino is free for the pan_malay merge.
 te_cmg_pan_malay_filipino_available = {
 	NOT = { global_var:te_cm_in_filipino ?= 26 }
+}
+
+# Country scope. filipino passes its gates for the pan_malay merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_pan_malay_filipino_measured = {
+	var:te_cm_ok_pan_malay_filipino ?= 1
+	te_cmg_pan_malay_filipino_available = yes
+	NOT = { has_global_variable = te_cm_switched_filipino }
+}
+
+# Country scope. filipino (tier 2) has spent the years together its tier asks for.
+te_cmg_pan_malay_filipino_years_met = {
+	has_variable = te_cm_years_pan_malay_filipino
+	trigger_if = { limit = { has_variable = te_cm_years_pan_malay_filipino } var:te_cm_years_pan_malay_filipino >= te_cm_years_tier3 }
+}
+
+# Country scope. filipino joined the pan_malay merge and has switched into its result.
+te_cmg_pan_malay_filipino_switched_in = {
+	global_var:te_cm_joined_pan_malay_filipino ?= 1
+	has_global_variable = te_cm_switched_filipino
 }
 
 # Country scope. filipino (tier 2) passes its gates and can join the pan_malay merge now.
@@ -3704,8 +5899,7 @@ te_cmg_pan_malay_filipino_can_join = {
 	te_cmg_pan_malay_filipino_available = yes
 	NOT = { global_var:te_cm_joined_pan_malay_filipino ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_pan_malay_filipino
-	trigger_if = { limit = { has_variable = te_cm_years_pan_malay_filipino } var:te_cm_years_pan_malay_filipino >= te_cm_years_tier3 }
+	te_cmg_pan_malay_filipino_years_met = yes
 }
 
 # Any scope. Is the yearly census of the pan_malay merge worth running? An idle merge with a
@@ -3754,19 +5948,55 @@ te_cmg_east_african_is_candidate = {
 	NOT = { global_var:te_cm_state_east_african ?= 2 }
 }
 
-# Country scope. Every core slot has a passing, available alternative.
+# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
+# tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_east_african_core_ok = {
-	var:te_cm_ok_east_african_swahili ?= 1
-	te_cmg_east_african_swahili_available = yes
-	var:te_cm_ok_east_african_nyamwezi ?= 1
-	te_cmg_east_african_nyamwezi_available = yes
-	var:te_cm_ok_east_african_sukuma ?= 1
-	te_cmg_east_african_sukuma_available = yes
+	OR = {
+		AND = {
+			te_cmg_east_african_swahili_measured = yes
+			te_cmg_east_african_swahili_years_met = yes
+		}
+		te_cmg_east_african_swahili_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_east_african_nyamwezi_measured = yes
+			te_cmg_east_african_nyamwezi_years_met = yes
+		}
+		te_cmg_east_african_nyamwezi_switched_in = yes
+	}
+	OR = {
+		AND = {
+			te_cmg_east_african_sukuma_measured = yes
+			te_cmg_east_african_sukuma_years_met = yes
+		}
+		te_cmg_east_african_sukuma_switched_in = yes
+	}
 }
 
 # Any scope. swahili is free for the east_african merge.
 te_cmg_east_african_swahili_available = {
 	always = yes
+}
+
+# Country scope. swahili passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_swahili_measured = {
+	var:te_cm_ok_east_african_swahili ?= 1
+	te_cmg_east_african_swahili_available = yes
+	NOT = { has_global_variable = te_cm_switched_swahili }
+}
+
+# Country scope. swahili (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_swahili_years_met = {
+	has_variable = te_cm_years_east_african_swahili
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_swahili } var:te_cm_years_east_african_swahili >= te_cm_years_tier3 }
+}
+
+# Country scope. swahili joined the east_african merge and has switched into its result.
+te_cmg_east_african_swahili_switched_in = {
+	global_var:te_cm_joined_east_african_swahili ?= 1
+	has_global_variable = te_cm_switched_swahili
 }
 
 # Country scope. swahili (tier 2) passes its gates and can join the east_african merge now.
@@ -3775,13 +6005,32 @@ te_cmg_east_african_swahili_can_join = {
 	te_cmg_east_african_swahili_available = yes
 	NOT = { global_var:te_cm_joined_east_african_swahili ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_swahili
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_swahili } var:te_cm_years_east_african_swahili >= te_cm_years_tier3 }
+	te_cmg_east_african_swahili_years_met = yes
 }
 
 # Any scope. nyamwezi is free for the east_african merge.
 te_cmg_east_african_nyamwezi_available = {
 	always = yes
+}
+
+# Country scope. nyamwezi passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_nyamwezi_measured = {
+	var:te_cm_ok_east_african_nyamwezi ?= 1
+	te_cmg_east_african_nyamwezi_available = yes
+	NOT = { has_global_variable = te_cm_switched_nyamwezi }
+}
+
+# Country scope. nyamwezi (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_nyamwezi_years_met = {
+	has_variable = te_cm_years_east_african_nyamwezi
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_nyamwezi } var:te_cm_years_east_african_nyamwezi >= te_cm_years_tier3 }
+}
+
+# Country scope. nyamwezi joined the east_african merge and has switched into its result.
+te_cmg_east_african_nyamwezi_switched_in = {
+	global_var:te_cm_joined_east_african_nyamwezi ?= 1
+	has_global_variable = te_cm_switched_nyamwezi
 }
 
 # Country scope. nyamwezi (tier 2) passes its gates and can join the east_african merge now.
@@ -3790,13 +6039,32 @@ te_cmg_east_african_nyamwezi_can_join = {
 	te_cmg_east_african_nyamwezi_available = yes
 	NOT = { global_var:te_cm_joined_east_african_nyamwezi ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_nyamwezi
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_nyamwezi } var:te_cm_years_east_african_nyamwezi >= te_cm_years_tier3 }
+	te_cmg_east_african_nyamwezi_years_met = yes
 }
 
 # Any scope. sukuma is free for the east_african merge.
 te_cmg_east_african_sukuma_available = {
 	always = yes
+}
+
+# Country scope. sukuma passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_sukuma_measured = {
+	var:te_cm_ok_east_african_sukuma ?= 1
+	te_cmg_east_african_sukuma_available = yes
+	NOT = { has_global_variable = te_cm_switched_sukuma }
+}
+
+# Country scope. sukuma (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_sukuma_years_met = {
+	has_variable = te_cm_years_east_african_sukuma
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_sukuma } var:te_cm_years_east_african_sukuma >= te_cm_years_tier3 }
+}
+
+# Country scope. sukuma joined the east_african merge and has switched into its result.
+te_cmg_east_african_sukuma_switched_in = {
+	global_var:te_cm_joined_east_african_sukuma ?= 1
+	has_global_variable = te_cm_switched_sukuma
 }
 
 # Country scope. sukuma (tier 2) passes its gates and can join the east_african merge now.
@@ -3805,13 +6073,32 @@ te_cmg_east_african_sukuma_can_join = {
 	te_cmg_east_african_sukuma_available = yes
 	NOT = { global_var:te_cm_joined_east_african_sukuma ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_sukuma
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_sukuma } var:te_cm_years_east_african_sukuma >= te_cm_years_tier3 }
+	te_cmg_east_african_sukuma_years_met = yes
 }
 
 # Any scope. yao is free for the east_african merge.
 te_cmg_east_african_yao_available = {
 	always = yes
+}
+
+# Country scope. yao passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_yao_measured = {
+	var:te_cm_ok_east_african_yao ?= 1
+	te_cmg_east_african_yao_available = yes
+	NOT = { has_global_variable = te_cm_switched_yao }
+}
+
+# Country scope. yao (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_yao_years_met = {
+	has_variable = te_cm_years_east_african_yao
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_yao } var:te_cm_years_east_african_yao >= te_cm_years_tier3 }
+}
+
+# Country scope. yao joined the east_african merge and has switched into its result.
+te_cmg_east_african_yao_switched_in = {
+	global_var:te_cm_joined_east_african_yao ?= 1
+	has_global_variable = te_cm_switched_yao
 }
 
 # Country scope. yao (tier 2) passes its gates and can join the east_african merge now.
@@ -3820,13 +6107,33 @@ te_cmg_east_african_yao_can_join = {
 	te_cmg_east_african_yao_available = yes
 	NOT = { global_var:te_cm_joined_east_african_yao ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_yao
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_yao } var:te_cm_years_east_african_yao >= te_cm_years_tier3 }
+	te_cmg_east_african_yao_years_met = yes
+	var:te_cm_sol_ok_east_african_yao ?= 1
 }
 
 # Any scope. makua is free for the east_african merge.
 te_cmg_east_african_makua_available = {
 	always = yes
+}
+
+# Country scope. makua passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_makua_measured = {
+	var:te_cm_ok_east_african_makua ?= 1
+	te_cmg_east_african_makua_available = yes
+	NOT = { has_global_variable = te_cm_switched_makua }
+}
+
+# Country scope. makua (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_makua_years_met = {
+	has_variable = te_cm_years_east_african_makua
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_makua } var:te_cm_years_east_african_makua >= te_cm_years_tier3 }
+}
+
+# Country scope. makua joined the east_african merge and has switched into its result.
+te_cmg_east_african_makua_switched_in = {
+	global_var:te_cm_joined_east_african_makua ?= 1
+	has_global_variable = te_cm_switched_makua
 }
 
 # Country scope. makua (tier 2) passes its gates and can join the east_african merge now.
@@ -3835,13 +6142,33 @@ te_cmg_east_african_makua_can_join = {
 	te_cmg_east_african_makua_available = yes
 	NOT = { global_var:te_cm_joined_east_african_makua ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_makua
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_makua } var:te_cm_years_east_african_makua >= te_cm_years_tier3 }
+	te_cmg_east_african_makua_years_met = yes
+	var:te_cm_sol_ok_east_african_makua ?= 1
 }
 
 # Any scope. lacustrine_bantu is free for the east_african merge.
 te_cmg_east_african_lacustrine_bantu_available = {
 	always = yes
+}
+
+# Country scope. lacustrine_bantu passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_lacustrine_bantu_measured = {
+	var:te_cm_ok_east_african_lacustrine_bantu ?= 1
+	te_cmg_east_african_lacustrine_bantu_available = yes
+	NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
+}
+
+# Country scope. lacustrine_bantu (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_lacustrine_bantu_years_met = {
+	has_variable = te_cm_years_east_african_lacustrine_bantu
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_lacustrine_bantu } var:te_cm_years_east_african_lacustrine_bantu >= te_cm_years_tier3 }
+}
+
+# Country scope. lacustrine_bantu joined the east_african merge and has switched into its result.
+te_cmg_east_african_lacustrine_bantu_switched_in = {
+	global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1
+	has_global_variable = te_cm_switched_lacustrine_bantu
 }
 
 # Country scope. lacustrine_bantu (tier 2) passes its gates and can join the east_african merge now.
@@ -3850,13 +6177,33 @@ te_cmg_east_african_lacustrine_bantu_can_join = {
 	te_cmg_east_african_lacustrine_bantu_available = yes
 	NOT = { global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_lacustrine_bantu
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_lacustrine_bantu } var:te_cm_years_east_african_lacustrine_bantu >= te_cm_years_tier3 }
+	te_cmg_east_african_lacustrine_bantu_years_met = yes
+	var:te_cm_sol_ok_east_african_lacustrine_bantu ?= 1
 }
 
 # Any scope. kikuyu is free for the east_african merge.
 te_cmg_east_african_kikuyu_available = {
 	always = yes
+}
+
+# Country scope. kikuyu passes its gates for the east_african merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_east_african_kikuyu_measured = {
+	var:te_cm_ok_east_african_kikuyu ?= 1
+	te_cmg_east_african_kikuyu_available = yes
+	NOT = { has_global_variable = te_cm_switched_kikuyu }
+}
+
+# Country scope. kikuyu (tier 2) has spent the years together its tier asks for.
+te_cmg_east_african_kikuyu_years_met = {
+	has_variable = te_cm_years_east_african_kikuyu
+	trigger_if = { limit = { has_variable = te_cm_years_east_african_kikuyu } var:te_cm_years_east_african_kikuyu >= te_cm_years_tier3 }
+}
+
+# Country scope. kikuyu joined the east_african merge and has switched into its result.
+te_cmg_east_african_kikuyu_switched_in = {
+	global_var:te_cm_joined_east_african_kikuyu ?= 1
+	has_global_variable = te_cm_switched_kikuyu
 }
 
 # Country scope. kikuyu (tier 2) passes its gates and can join the east_african merge now.
@@ -3865,8 +6212,8 @@ te_cmg_east_african_kikuyu_can_join = {
 	te_cmg_east_african_kikuyu_available = yes
 	NOT = { global_var:te_cm_joined_east_african_kikuyu ?= 1 }
 	te_cm_tier_tech = { TIER = 3 }
-	has_variable = te_cm_years_east_african_kikuyu
-	trigger_if = { limit = { has_variable = te_cm_years_east_african_kikuyu } var:te_cm_years_east_african_kikuyu >= te_cm_years_tier3 }
+	te_cmg_east_african_kikuyu_years_met = yes
+	var:te_cm_sol_ok_east_african_kikuyu ?= 1
 }
 
 # Any scope. Is the yearly census of the east_african merge worth running? An idle merge with a

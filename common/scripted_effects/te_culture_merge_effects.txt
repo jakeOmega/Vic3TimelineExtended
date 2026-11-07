@@ -9,16 +9,19 @@
 # homeland states (owner, 2026-11-07): diaspora pops convert at the switch but do not
 # weigh on the gates.
 #
+# A part that has switched is not measured again (its pops are the result's now): the
+# census skips it, and the merge's gates count a joined, switched part as met.
+#
 # Locals are shared by every effect a call runs, so each helper keeps its own prefix
-# and resets what it reads: te_cm_cc_ (te_cm_census_culture), te_cm_cp_
-# (te_cm_census_part, te_cm_cp_note_holder), te_cm_sg_ (the SoL gap).
+# and resets what it reads: te_cm_cc_ (te_cm_census_culture, _joined), te_cm_cp_
+# (te_cm_census_part and its helpers), te_cm_sg_ (the SoL gap).
 # ============================================================================
 
-# Any scope. $CULTURE$ = a culture id.
+# Any scope. $CULTURE$ = a culture id; a part that has NOT joined a merge.
 # Sets the global te_cm_home_<c>: the total_size of the culture's pops living in its
-# homeland states. A culture with no owned homeland state (a merged culture before
-# its homelands are set) is counted in the world instead, visiting only the
-# countries that hold any of it.
+# homeland states, wherever those states are and whoever holds them. A culture with no
+# owned homeland state (a merged culture before its homelands are set) is counted in the
+# world instead, visiting only the countries that hold any of it.
 te_cm_census_culture = {
 	set_local_variable = { name = te_cm_cc_states value = 0 }
 	set_local_variable = { name = te_cm_cc_sum value = 0 }
@@ -45,39 +48,131 @@ te_cm_census_culture = {
 	set_global_variable = { name = te_cm_home_$CULTURE$ value = local_var:te_cm_cc_sum }
 }
 
+# Any scope. $CULTURE$ = a culture id; $RESULT$ = the result of the merge it has joined.
+# The same single walk as te_cm_census_culture for a part that has joined: it sets
+# te_cm_home_<c> (the part's pops that remain) and te_cm_home_r_<c> (the result's pops
+# in the same states, the world over). Task 6's dominance reads the two without walking
+# again, and te_cm_census_part's hold counts part + result on both sides. A culture
+# with no owned homeland state is counted in the world for both.
+te_cm_census_culture_joined = {
+	set_local_variable = { name = te_cm_cc_states value = 0 }
+	set_local_variable = { name = te_cm_cc_sum value = 0 }
+	set_local_variable = { name = te_cm_cc_res value = 0 }
+	cu:$CULTURE$ = {
+		every_scope_homeland_state = {
+			limit = { exists = owner }
+			change_local_variable = { name = te_cm_cc_states add = 1 }
+			every_scope_pop = {
+				limit = { culture = cu:$CULTURE$ }
+				change_local_variable = { name = te_cm_cc_sum add = total_size }
+			}
+			every_scope_pop = {
+				limit = { culture = cu:$RESULT$ }
+				change_local_variable = { name = te_cm_cc_res add = total_size }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_cm_cc_states = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					culture_percent_country = { target = cu:$CULTURE$ value > 0 }
+					culture_percent_country = { target = cu:$RESULT$ value > 0 }
+				}
+			}
+			every_scope_pop = {
+				limit = { culture = cu:$CULTURE$ }
+				change_local_variable = { name = te_cm_cc_sum add = total_size }
+			}
+			every_scope_pop = {
+				limit = { culture = cu:$RESULT$ }
+				change_local_variable = { name = te_cm_cc_res add = total_size }
+			}
+		}
+	}
+	set_global_variable = { name = te_cm_home_$CULTURE$ value = local_var:te_cm_cc_sum }
+	set_global_variable = { name = te_cm_home_r_$CULTURE$ value = local_var:te_cm_cc_res }
+}
+
+# State or country scope: adds the part's pops here to the census_part sums. $CULTURE$,
+# $RESULT$. Sets te_cm_cp_state_pops (the part's pops here) and te_cm_cp_state_res (the
+# result's, counted only for a part that has joined); adds both to te_cm_cp_pops (the
+# hold's numerator) and the part's alone to te_cm_cp_part_pops (the acceptance test's
+# holders). The standard of living is summed over both, weighted by size.
+te_cm_cp_sum_pops = {
+	set_local_variable = { name = te_cm_cp_state_pops value = 0 }
+	set_local_variable = { name = te_cm_cp_state_res value = 0 }
+	every_scope_pop = {
+		limit = { culture = cu:$CULTURE$ }
+		change_local_variable = { name = te_cm_cp_state_pops add = total_size }
+		change_local_variable = { name = te_cm_cp_solw add = { value = standard_of_living multiply = total_size } }
+	}
+	if = {
+		limit = { local_var:te_cm_cp_joined = 1 }
+		every_scope_pop = {
+			limit = { culture = cu:$RESULT$ }
+			change_local_variable = { name = te_cm_cp_state_res add = total_size }
+			change_local_variable = { name = te_cm_cp_solw add = { value = standard_of_living multiply = total_size } }
+		}
+	}
+	change_local_variable = { name = te_cm_cp_pops add = local_var:te_cm_cp_state_pops }
+	change_local_variable = { name = te_cm_cp_pops add = local_var:te_cm_cp_state_res }
+	change_local_variable = { name = te_cm_cp_part_pops add = local_var:te_cm_cp_state_pops }
+}
+
 # Country scope: a sphere country that holds some of the part. Adds
 # local_var:te_cm_cp_state_pops to the temporary te_cm_tmp_cnt, which
-# te_cm_census_part reads for the acceptance test and removes before it returns.
+# te_cm_census_part reads for the acceptance test and removes before it returns, and
+# keeps te_cm_cp_max_cnt, the largest holder's count so far (a running total only grows,
+# so the last one a country adds is its final count).
 te_cm_cp_note_holder = {
 	if = {
 		limit = { NOT = { has_variable = te_cm_tmp_cnt } }
 		set_variable = { name = te_cm_tmp_cnt value = 0 }
 	}
 	change_variable = { name = te_cm_tmp_cnt add = local_var:te_cm_cp_state_pops }
+	if = {
+		limit = { var:te_cm_tmp_cnt > local_var:te_cm_cp_max_cnt }
+		set_local_variable = { name = te_cm_cp_max_cnt value = var:te_cm_tmp_cnt }
+	}
 }
 
 # Country scope: the candidate country. Measures one part of one merge:
-#   $MERGE$ = a merge key, $CULTURE$ = a culture id of one of its slots,
-#   $TIER$ = the part's tier in script (1, 2 = tier 1b, 3 = tier 2).
+#   $MERGE$ = a merge key, $CULTURE$ = a culture id of one of its slots, $RESULT$ = the
+#   merge's result culture, $TIER$ = the part's tier in script (1, 2 = tier 1b, 3 = tier 2).
 # Sets, on the candidate:
-#   te_cm_held_<m>_<c>  the sphere's pops of the part in its homeland states over te_cm_home_<c>
-#   te_cm_sol_<m>_<c>   those pops' average standard of living
+#   te_cm_held_<m>_<c>  the hold: the sphere's pops of the part in its homeland states over
+#                       the world's. A part that has joined this merge counts part + result
+#                       pops on both sides (the sphere's part + result over te_cm_home_<c> +
+#                       te_cm_home_r_<c>, both set by te_cm_census_culture_joined), so a pop
+#                       that converts keeps counting; any other part counts its own pops over
+#                       te_cm_home_<c> alone.
+#   te_cm_sol_<m>_<c>   the average standard of living of the same pops (part + result when joined)
 #   te_cm_ok_<m>_<c>    1 while the part passes its gates, with hysteresis: it opens at
 #                       hold >= te_cm_hold_open and acceptance >= te_cm_accept_open, and closes
 #                       below te_cm_hold_close or when acceptance falls under te_cm_accept_close.
 #                       Tier 2 (the spec's 1b) uses the very high pair instead. Acceptance is
-#                       tested in every sphere country holding at least te_cm_meaningful_share
-#                       of the sphere's pops of the part.
+#                       tested on the part's own pops, in every sphere country holding at least
+#                       te_cm_meaningful_share of the sphere's pops of the part, and always in the
+#                       largest holder too, so a thin split can't pass it vacuously.
 #   te_cm_years_<m>_<c> tiers 2 and 3: a year more while the gate is on; it never goes down
 # The sphere is measured against the candidate, so it is saved as te_cm_starter first
-# (te_cm_in_sphere reads it). The caller has run te_cm_census_culture for $CULTURE$.
+# (te_cm_in_sphere reads it). The caller has run te_cm_census_culture (or _joined, when
+# the part has joined this merge) for $CULTURE$.
 te_cm_census_part = {
 	save_temporary_scope_as = te_cm_starter
 	set_local_variable = { name = te_cm_cp_tier value = $TIER$ }
 	set_local_variable = { name = te_cm_cp_states value = 0 }
 	set_local_variable = { name = te_cm_cp_pops value = 0 }
+	set_local_variable = { name = te_cm_cp_part_pops value = 0 }
 	set_local_variable = { name = te_cm_cp_solw value = 0 }
-	set_local_variable = { name = te_cm_cp_state_pops value = 0 }
+	set_local_variable = { name = te_cm_cp_max_cnt value = 0 }
+	set_local_variable = { name = te_cm_cp_joined value = 0 }
+	if = {
+		limit = { global_var:te_cm_joined_$MERGE$_$CULTURE$ ?= 1 }
+		set_local_variable = { name = te_cm_cp_joined value = 1 }
+	}
 	if = {
 		limit = { NOT = { has_variable = te_cm_ok_$MERGE$_$CULTURE$ } }
 		set_variable = { name = te_cm_ok_$MERGE$_$CULTURE$ value = 0 }
@@ -90,15 +185,9 @@ te_cm_census_part = {
 			change_local_variable = { name = te_cm_cp_states add = 1 }
 			if = {
 				limit = { owner = { te_cm_in_sphere = yes } }
-				set_local_variable = { name = te_cm_cp_state_pops value = 0 }
-				every_scope_pop = {
-					limit = { culture = cu:$CULTURE$ }
-					change_local_variable = { name = te_cm_cp_state_pops add = total_size }
-					change_local_variable = { name = te_cm_cp_solw add = { value = standard_of_living multiply = total_size } }
-				}
+				te_cm_cp_sum_pops = { CULTURE = $CULTURE$ RESULT = $RESULT$ }
 				if = {
 					limit = { local_var:te_cm_cp_state_pops > 0 }
-					change_local_variable = { name = te_cm_cp_pops add = local_var:te_cm_cp_state_pops }
 					owner = { te_cm_cp_note_holder = yes }
 				}
 			}
@@ -111,34 +200,43 @@ te_cm_census_part = {
 		every_country = {
 			limit = {
 				te_cm_in_sphere = yes
-				culture_percent_country = { target = cu:$CULTURE$ value > 0 }
+				OR = {
+					culture_percent_country = { target = cu:$CULTURE$ value > 0 }
+					AND = {
+						local_var:te_cm_cp_joined = 1
+						culture_percent_country = { target = cu:$RESULT$ value > 0 }
+					}
+				}
 			}
-			set_local_variable = { name = te_cm_cp_state_pops value = 0 }
-			every_scope_pop = {
-				limit = { culture = cu:$CULTURE$ }
-				change_local_variable = { name = te_cm_cp_state_pops add = total_size }
-				change_local_variable = { name = te_cm_cp_solw add = { value = standard_of_living multiply = total_size } }
-			}
+			te_cm_cp_sum_pops = { CULTURE = $CULTURE$ RESULT = $RESULT$ }
 			if = {
 				limit = { local_var:te_cm_cp_state_pops > 0 }
-				change_local_variable = { name = te_cm_cp_pops add = local_var:te_cm_cp_state_pops }
 				te_cm_cp_note_holder = yes
 			}
 		}
 	}
 
 	# ---- Hold and standard of living ----
-	set_variable = { name = te_cm_held_$MERGE$_$CULTURE$ value = 0 }
+	set_local_variable = { name = te_cm_cp_denom value = 0 }
+	if = {
+		limit = { has_global_variable = te_cm_home_$CULTURE$ }
+		set_local_variable = { name = te_cm_cp_denom value = global_var:te_cm_home_$CULTURE$ }
+	}
 	if = {
 		limit = {
-			has_global_variable = te_cm_home_$CULTURE$
-			global_var:te_cm_home_$CULTURE$ > 0
+			local_var:te_cm_cp_joined = 1
+			has_global_variable = te_cm_home_r_$CULTURE$
 		}
+		change_local_variable = { name = te_cm_cp_denom add = global_var:te_cm_home_r_$CULTURE$ }
+	}
+	set_variable = { name = te_cm_held_$MERGE$_$CULTURE$ value = 0 }
+	if = {
+		limit = { local_var:te_cm_cp_denom > 0 }
 		set_variable = {
 			name = te_cm_held_$MERGE$_$CULTURE$
 			value = {
 				value = local_var:te_cm_cp_pops
-				divide = global_var:te_cm_home_$CULTURE$
+				divide = local_var:te_cm_cp_denom
 				max = 1
 			}
 		}
@@ -157,8 +255,10 @@ te_cm_census_part = {
 
 	# ---- Acceptance, where the part lives ----
 	# Every sphere country holding at least the meaningful share of the sphere's pops of the
-	# part must accept it. Counted against all four thresholds, so the open/close and
-	# accepted/very-high choices below read bare named values.
+	# part must accept it, and so must the largest holder (the share is capped at the largest
+	# holding, so a part split thin across many countries still has its largest tested).
+	# Counted against all four thresholds, so the open/close and accepted/very-high choices
+	# below read bare named values.
 	set_local_variable = { name = te_cm_cp_fail_open value = 0 }
 	set_local_variable = { name = te_cm_cp_fail_close value = 0 }
 	set_local_variable = { name = te_cm_cp_fail_high_open value = 0 }
@@ -166,9 +266,13 @@ te_cm_census_part = {
 	set_local_variable = {
 		name = te_cm_cp_min_cnt
 		value = {
-			value = local_var:te_cm_cp_pops
+			value = local_var:te_cm_cp_part_pops
 			multiply = te_cm_meaningful_share
 		}
+	}
+	if = {
+		limit = { local_var:te_cm_cp_min_cnt > local_var:te_cm_cp_max_cnt }
+		set_local_variable = { name = te_cm_cp_min_cnt value = local_var:te_cm_cp_max_cnt }
 	}
 	every_country = {
 		limit = { has_variable = te_cm_tmp_cnt }
@@ -236,7 +340,7 @@ te_cm_census_part = {
 	}
 }
 
-# Country scope: folds one passing part into the SoL gap's running range. $MERGE$,
+# Country scope: folds one passing core part into the SoL gap's running range. $MERGE$,
 # $CULTURE$. The caller resets te_cm_sg_min (999), te_cm_sg_max (-1) and te_cm_sg_n (0)
 # and reads them back as the gap, largest minus smallest.
 te_cm_sol_track = {
@@ -248,5 +352,53 @@ te_cm_sol_track = {
 	if = {
 		limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_max }
 		set_local_variable = { name = te_cm_sg_max value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+	}
+}
+
+# Country scope: an optional part's own SoL gate, te_cm_sol_ok_<m>_<c>: the gap over the
+# core cultures that have a figure plus this part, closed above te_cm_sol_gap_close and
+# reopened below te_cm_sol_gap_open. $MERGE$, $CULTURE$. It reads the core range the caller
+# just built (te_cm_sg_min, te_cm_sg_max) and te_cm_sg_all (1 when every core slot is met),
+# so it can only open while the core is whole; with every core part already switched there
+# is no figure left to compare, and the gap is the part's own, zero. A part whose gates
+# aren't on has no figure of its own: its gate is closed.
+te_cm_sol_gate_part = {
+	if = {
+		limit = { NOT = { has_variable = te_cm_sol_ok_$MERGE$_$CULTURE$ } }
+		set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
+	}
+	if = {
+		limit = {
+			local_var:te_cm_sg_all = 1
+			var:te_cm_ok_$MERGE$_$CULTURE$ = 1
+		}
+		set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }
+		set_local_variable = { name = te_cm_sg_hi value = local_var:te_cm_sg_max }
+		if = {
+			limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }
+			set_local_variable = { name = te_cm_sg_lo value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+		}
+		if = {
+			limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }
+			set_local_variable = { name = te_cm_sg_hi value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+		}
+		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_hi }
+		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_lo }
+		if = {
+			limit = { var:te_cm_sol_ok_$MERGE$_$CULTURE$ = 1 }
+			if = {
+				limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close }
+				set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
+			}
+		}
+		else = {
+			if = {
+				limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open }
+				set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 }
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
 	}
 }

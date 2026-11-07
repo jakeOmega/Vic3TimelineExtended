@@ -7,10 +7,14 @@ on_yearly_pulse_country = {
 	on_actions = { te_cm_yearly_on_action }
 }
 
-# The first country whose pulse fires after the lock lapses runs the global census; the
-# others skip until it lapses again (the Cultural Hegemony leaderboard's lock: 330 days,
-# so each year's first pulse after it counts). A rule switched off mid-game pauses the
-# whole system: nothing is recomputed, and no variable is reset or removed, so every
+# The first country whose pulse fires runs the global census; the others skip. The census
+# runs once per calendar year: the year it last ran is stored (te_cm_census_year, read with
+# the same `value = year` the Grand Monuments founding year uses) and a pulse in a later
+# year runs it again. A lock alone can't give that: Cultural Hegemony's ch_ldr_lock is 180
+# days, and even a 330-day lock lets a census fall every 330 days, 1.1 a year, so the
+# counters that add one per census (te_cm_years_*) would run ahead of the calendar. The
+# 330-day lock is kept as a backstop beside the year. A rule switched off mid-game pauses
+# the whole system: nothing is recomputed, and no variable is reset or removed, so every
 # gate and counter keeps its last value until the rule is turned back on.
 te_cm_yearly_on_action = {
 	effect = {
@@ -19,8 +23,18 @@ te_cm_yearly_on_action = {
 				te_cm_system_enabled = yes
 				NOT = { has_global_variable = te_cm_census_lock }
 			}
-			set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
-			te_cmg_census_all = yes
+			set_local_variable = { name = te_cm_year value = year }
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_global_variable = te_cm_census_year }
+						global_var:te_cm_census_year < local_var:te_cm_year
+					}
+				}
+				set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
+				set_global_variable = { name = te_cm_census_year value = local_var:te_cm_year }
+				te_cmg_census_all = yes
+			}
 		}
 	}
 }

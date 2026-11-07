@@ -40,10 +40,13 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   ``common/scripted_effects/te_culture_merges_generated_effects.txt``: the yearly
   census and the per-part gates of **every** merge in the roster, absorb merges
   included (they too need their parts held and accepted). Per merge ``<m>``:
-  ``te_cmg_<m>_is_candidate``, ``_core_ok``, ``_census_wanted`` (triggers),
-  ``te_cmg_<m>_<c>_available`` and ``_can_join`` per slot culture, and
-  ``te_cmg_census_<m>`` / ``te_cmg_census_<m>_country`` (effects), plus the global
-  ``te_cmg_census_all``. The hand-written helpers they call are in
+  ``te_cmg_<m>_is_candidate``, ``_core_ok``, ``_census_wanted`` (triggers);
+  ``te_cmg_<m>_<c>_available``, ``_measured``, ``_years_met`` (tiers 2 and 3),
+  ``_switched_in`` and ``_can_join`` per slot culture; ``te_cmg_census_<m>`` /
+  ``te_cmg_census_<m>_country`` (effects), plus the global ``te_cmg_census_all``.
+  A part that has switched is skipped by the census and counts as met in
+  ``core_ok``; a part that has joined is walked with its merge's result.
+  The hand-written helpers they call are in
   ``common/scripted_effects/te_culture_merge_effects.txt``.
 
 Also carried: ``traditions`` is what every core part shares (usually nothing,
@@ -70,6 +73,7 @@ import argparse
 import json
 import re
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -497,19 +501,15 @@ class _Script:
     def line(self, text: str = "") -> None:
         self.lines.append("\t" * self.depth + text if text else "")
 
+    @contextmanager
     def block(self, header: str):
-        script = self
-
-        class _Block:
-            def __enter__(self_inner):
-                script.line(header + " = {")
-                script.depth += 1
-
-            def __exit__(self_inner, *exc):
-                script.depth -= 1
-                script.line("}")
-
-        return _Block()
+        self.line(header + " = {")
+        self.depth += 1
+        try:
+            yield
+        finally:
+            self.depth -= 1
+            self.line("}")
 
     def text(self) -> str:
         return "\n".join(self.lines) + "\n"
@@ -520,8 +520,13 @@ def slot_cultures(merge: cfg.Merge) -> list[str]:
     return [c for part in merge.core + merge.optional for c in part.cultures]
 
 
-def _core_cultures(merge: cfg.Merge) -> set[str]:
-    return {c for part in merge.core for c in part.cultures}
+def _core_cultures(merge: cfg.Merge) -> list[str]:
+    return [c for part in merge.core for c in part.cultures]
+
+
+def _is_absorb_result(merge: cfg.Merge, culture: str) -> bool:
+    """An absorb merge's result culture: held and acceptance-tested only, never joined or switched."""
+    return merge.new is None and culture == merge.result
 
 
 def _state_idle(key: str) -> str:
@@ -560,14 +565,27 @@ def _live_culture(culture: str) -> list[str]:
     ]
 
 
+def _years_clause(tier: int) -> str:
+    """The counter a tier-2 or tier-3 part must have reached: the 1b or the tier-2 years."""
+    return "te_cm_years_tier2" if tier == 2 else "te_cm_years_tier3"
+
+
 def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
-    """The per-merge scripted triggers: candidate, core_ok, census_wanted, and per slot culture available and can_join."""
+    """The per-merge scripted triggers.
+
+    Per merge: ``is_candidate``, ``core_ok``, ``census_wanted``. Per slot culture:
+    ``available``, ``measured`` (passing its gates now and not switched), ``years_met``
+    (tiers 2 and 3), ``switched_in`` (joined to this merge and switched: met for good)
+    and ``can_join``.
+    """
     merges = cfg.MERGES if merges is None else merges
     out = _Script()
     out.line(HEADER)
     for merge in merges:
         key = merge.key
         tier = start_tier(merge, vanilla, merges)
+        optional = {c for part in merge.optional for c in part.cultures}
+        tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
         out.line()
         out.line("# ---- %s (%s) ----" % (key, ", ".join("/".join(p.cultures) for p in merge.core)))
         out.line()
@@ -576,37 +594,65 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
         with out.block("te_cmg_%s_is_candidate" % key):
             out.line("te_cm_system_enabled = yes")
             with out.block("OR"):
-                for culture in sorted(_core_cultures(merge), key=lambda c: slot_cultures(merge).index(c)):
+                for culture in _core_cultures(merge):
                     out.line("country_has_primary_culture = cu:%s" % culture)
             out.line("te_cm_tier_tech = { TIER = %d }" % tier)
             out.line("NOT = { global_var:te_cm_state_%s ?= 2 }" % key)
             if merge.skip_if_dlc:
                 out.line("NOT = { has_dlc_feature = %s }" % merge.skip_if_dlc)
         out.line()
-        out.line("# Country scope. Every core slot has a passing, available alternative.")
+        out.line("# Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or")
+        out.line("# tier 2, has its years together), or one that joined this merge and has switched.")
         with out.block("te_cmg_%s_core_ok" % key):
             for part in merge.core:
-                tests = [
-                    ["var:te_cm_ok_%s_%s ?= 1" % (key, c), "te_cmg_%s_%s_available = yes" % (key, c)]
-                    for c in part.cultures
-                ]
-                if len(tests) == 1:
-                    for test in tests[0]:
-                        out.line(test)
+                routes = []
+                for c in part.cultures:
+                    route = ["te_cmg_%s_%s_measured = yes" % (key, c)]
+                    if tiers[c] > 1:
+                        route.append("te_cmg_%s_%s_years_met = yes" % (key, c))
+                    routes.append(route)
+                    if not _is_absorb_result(merge, c):
+                        routes.append(["te_cmg_%s_%s_switched_in = yes" % (key, c)])
+                if len(routes) == 1:
+                    for clause in routes[0]:
+                        out.line(clause)
                 else:
                     with out.block("OR"):
-                        for test in tests:
-                            with out.block("AND"):
-                                for clause in test:
-                                    out.line(clause)
+                        for route in routes:
+                            if len(route) == 1:
+                                out.line(route[0])
+                            else:
+                                with out.block("AND"):
+                                    for clause in route:
+                                        out.line(clause)
         for culture in slot_cultures(merge):
-            ctier = cfg.derive_tier(merge, culture, vanilla, merges)
+            ctier = tiers[culture]
             out.line()
             out.line("# Any scope. %s is free for the %s merge." % (culture, key))
             with out.block("te_cmg_%s_%s_available" % (key, culture)):
                 clauses = _available_clauses(merge, culture, merges)
                 for clause in clauses or ["always = yes"]:
                     out.line(clause)
+            out.line()
+            out.line("# Country scope. %s passes its gates for the %s merge now: held and accepted, free for it," % (culture, key))
+            out.line("# and not yet switched (a switched part has no pops left to measure).")
+            with out.block("te_cmg_%s_%s_measured" % (key, culture)):
+                out.line("var:te_cm_ok_%s_%s ?= 1" % (key, culture))
+                out.line("te_cmg_%s_%s_available = yes" % (key, culture))
+                out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+            if ctier > 1:
+                years = "te_cm_years_%s_%s" % (key, culture)
+                out.line()
+                out.line("# Country scope. %s (tier %s) has spent the years together its tier asks for." % (culture, ("1", "1b", "2")[ctier - 1]))
+                with out.block("te_cmg_%s_%s_years_met" % (key, culture)):
+                    out.line("has_variable = %s" % years)
+                    out.line("trigger_if = { limit = { has_variable = %s } var:%s >= %s }" % (years, years, _years_clause(ctier)))
+            if not _is_absorb_result(merge, culture):
+                out.line()
+                out.line("# Country scope. %s joined the %s merge and has switched into its result." % (culture, key))
+                with out.block("te_cmg_%s_%s_switched_in" % (key, culture)):
+                    out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
+                    out.line("has_global_variable = te_cm_switched_%s" % culture)
             out.line()
             out.line("# Country scope. %s (tier %s) passes its gates and can join the %s merge now." % (culture, ("1", "1b", "2")[ctier - 1], key))
             with out.block("te_cmg_%s_%s_can_join" % (key, culture)):
@@ -615,10 +661,9 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                 out.line("NOT = { global_var:te_cm_joined_%s_%s ?= 1 }" % (key, culture))
                 out.line("te_cm_tier_tech = { TIER = %d }" % ctier)
                 if ctier > 1:
-                    years = "te_cm_years_%s_%s" % (key, culture)
-                    needed = "te_cm_years_tier2" if ctier == 2 else "te_cm_years_tier3"
-                    out.line("has_variable = %s" % years)
-                    out.line("trigger_if = { limit = { has_variable = %s } var:%s >= %s }" % (years, years, needed))
+                    out.line("te_cmg_%s_%s_years_met = yes" % (key, culture))
+                if culture in optional:
+                    out.line("var:te_cm_sol_ok_%s_%s ?= 1" % (key, culture))
         out.line()
         out.line("# Any scope. Is the yearly census of the %s merge worth running? An idle merge with a" % key)
         out.line("# candidate; or a running or complete one whose starter is alive and which still has a")
@@ -636,7 +681,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("global_var:te_cm_starter_%s = { is_country_alive = yes }" % key)
                     with out.block("OR"):
                         for culture in slot_cultures(merge):
-                            if merge.new is None and culture == merge.result:
+                            if _is_absorb_result(merge, culture):
                                 continue
                             for line in _live_culture(culture):
                                 out.line(line)
@@ -651,28 +696,48 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
     for merge in merges:
         key = merge.key
         cultures = slot_cultures(merge)
-        core = _core_cultures(merge)
+        optional = [c for part in merge.optional for c in part.cultures]
         out.line()
         out.line("# ---- %s ----" % key)
         out.line()
-        out.line("# Country scope: one candidate (or the running merge's starter). Measures every part, then the")
-        out.line("# standard-of-living gap over the core parts and the joined ones that pass their gates, with")
-        out.line("# hysteresis: te_cm_sol_ok_%s closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open." % key)
+        out.line("# Country scope: one candidate (or the running merge's starter). Measures every part that hasn't")
+        out.line("# switched, then the standard-of-living gap over the core parts, te_cm_sol_ok_%s, with hysteresis:" % key)
+        out.line("# it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every")
+        out.line("# core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,")
+        out.line("# te_cm_sol_ok_%s_<culture>, over the core range plus that part." % key)
         with out.block("te_cmg_census_%s_country" % key):
             for culture in cultures:
                 tier = cfg.derive_tier(merge, culture, vanilla, merges)
-                out.line("te_cm_census_part = { MERGE = %s CULTURE = %s TIER = %d }" % (key, culture, tier))
+                with out.block("if"):
+                    out.line("limit = { NOT = { has_global_variable = te_cm_switched_%s } }" % culture)
+                    out.line(
+                        "te_cm_census_part = { MERGE = %s CULTURE = %s RESULT = %s TIER = %d }"
+                        % (key, culture, merge.result, tier)
+                    )
             out.line("set_local_variable = { name = te_cm_sg_min value = 999 }")
             out.line("set_local_variable = { name = te_cm_sg_max value = -1 }")
             out.line("set_local_variable = { name = te_cm_sg_n value = 0 }")
-            for culture in cultures:
+            out.line("set_local_variable = { name = te_cm_sg_slots value = 0 }")
+            out.line("set_local_variable = { name = te_cm_sg_all value = 0 }")
+            for part in merge.core:
+                for culture in part.cultures:
+                    with out.block("if"):
+                        out.line("limit = { te_cmg_%s_%s_measured = yes }" % (key, culture))
+                        out.line("te_cm_sol_track = { MERGE = %s CULTURE = %s }" % (key, culture))
+                met = ["te_cmg_%s_%s_measured = yes" % (key, c) for c in part.cultures]
+                met += ["te_cmg_%s_%s_switched_in = yes" % (key, c) for c in part.cultures if not _is_absorb_result(merge, c)]
                 with out.block("if"):
-                    with out.block("limit"):
-                        out.line("var:te_cm_ok_%s_%s ?= 1" % (key, culture))
-                        out.line("te_cmg_%s_%s_available = yes" % (key, culture))
-                        if culture not in core:
-                            out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
-                    out.line("te_cm_sol_track = { MERGE = %s CULTURE = %s }" % (key, culture))
+                    if len(met) == 1:
+                        out.line("limit = { %s }" % met[0])
+                    else:
+                        with out.block("limit"):
+                            with out.block("OR"):
+                                for clause in met:
+                                    out.line(clause)
+                    out.line("change_local_variable = { name = te_cm_sg_slots add = 1 }")
+            with out.block("if"):
+                out.line("limit = { local_var:te_cm_sg_slots = %d }" % len(merge.core))
+                out.line("set_local_variable = { name = te_cm_sg_all value = 1 }")
             with out.block("if"):
                 out.line("limit = { NOT = { has_variable = te_cm_sol_ok_%s } }" % key)
                 out.line("set_variable = { name = te_cm_sol_ok_%s value = 0 }" % key)
@@ -687,8 +752,14 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                         out.line("set_variable = { name = te_cm_sol_ok_%s value = 0 }" % key)
                 with out.block("else"):
                     with out.block("if"):
-                        out.line("limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open }")
+                        with out.block("limit"):
+                            out.line("local_var:te_cm_sg_gap < te_cm_sol_gap_open")
+                            out.line("local_var:te_cm_sg_all = 1")
                         out.line("set_variable = { name = te_cm_sol_ok_%s value = 1 }" % key)
+            for culture in optional:
+                with out.block("if"):
+                    out.line("limit = { NOT = { has_global_variable = te_cm_switched_%s } }" % culture)
+                    out.line("te_cm_sol_gate_part = { MERGE = %s CULTURE = %s }" % (key, culture))
         out.line()
         out.line("# Any scope. An idle merge: every country that can start it. A running or complete one: only its")
         out.line("# starter, so a part that comes up late can still join.")
@@ -704,26 +775,38 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                     out.line("te_cmg_census_%s_country = yes" % key)
 
     # ---- the global census ----
-    wanting: dict[str, list[str]] = {}
+    wanting: dict[str, list[cfg.Merge]] = {}
     for merge in merges:
         for culture in slot_cultures(merge):
-            wanting.setdefault(culture, []).append(merge.key)
+            wanting.setdefault(culture, []).append(merge)
     out.line()
     out.line("# ---- All merges ----")
     out.line()
     out.line("# Any scope. Measures every culture of a merge that is worth censusing, once, then runs each")
-    out.line("# merge's census. Called from te_cm_yearly_on_action behind the rule and the 330-day lock.")
+    out.line("# merge's census. A culture that has switched is skipped; one that has joined a merge is walked")
+    out.line("# together with that merge's result (te_cm_census_culture_joined), the others alone. Called from")
+    out.line("# te_cm_yearly_on_action behind the rule, the year and the 330-day lock.")
     with out.block("te_cmg_census_all"):
-        for culture, keys in wanting.items():
+        for culture, owners in wanting.items():
+            joinable = [m for m in owners if not _is_absorb_result(m, culture)]
             with out.block("if"):
-                if len(keys) == 1:
-                    out.line("limit = { te_cmg_%s_census_wanted = yes }" % keys[0])
-                else:
-                    with out.block("limit"):
+                with out.block("limit"):
+                    out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                    if len(owners) == 1:
+                        out.line("te_cmg_%s_census_wanted = yes" % owners[0].key)
+                    else:
                         with out.block("OR"):
-                            for key in keys:
-                                out.line("te_cmg_%s_census_wanted = yes" % key)
-                out.line("te_cm_census_culture = { CULTURE = %s }" % culture)
+                            for owner in owners:
+                                out.line("te_cmg_%s_census_wanted = yes" % owner.key)
+                for index, owner in enumerate(joinable):
+                    with out.block("if" if index == 0 else "else_if"):
+                        out.line("limit = { global_var:te_cm_joined_%s_%s ?= 1 }" % (owner.key, culture))
+                        out.line("te_cm_census_culture_joined = { CULTURE = %s RESULT = %s }" % (culture, owner.result))
+                if joinable:
+                    with out.block("else"):
+                        out.line("te_cm_census_culture = { CULTURE = %s }" % culture)
+                else:
+                    out.line("te_cm_census_culture = { CULTURE = %s }" % culture)
         for merge in merges:
             with out.block("if"):
                 out.line("limit = { te_cmg_%s_census_wanted = yes }" % merge.key)

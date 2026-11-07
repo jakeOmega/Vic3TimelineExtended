@@ -87,6 +87,10 @@ def tier_of(merge, culture):
     return cfg.derive_tier(merge, culture, vanilla(), cfg.MERGES)
 
 
+def _absorb_result(merge, culture):
+    return merge.new is None and culture == merge.result
+
+
 class FilesTest(unittest.TestCase):
     def test_one_bom_and_tabs(self):
         for path in SCRIPT_FILES:
@@ -124,6 +128,21 @@ class LockTest(unittest.TestCase):
         self.assertLess(guard, lock)
         self.assertLess(lock, census)
 
+    def test_census_runs_once_per_calendar_year(self):
+        # M1: a lock alone runs the census every 330 days (1.1 a year), so the counters that add one per
+        # census would run ahead. The year it last ran is stored and a later year runs it again.
+        flat = squash(block(self.text, "te_cm_yearly_on_action"))
+        self.assertIn("set_local_variable = { name = te_cm_year value = year }", flat)
+        self.assertIn(
+            "OR = { NOT = { has_global_variable = te_cm_census_year } global_var:te_cm_census_year < local_var:te_cm_year }",
+            flat,
+        )
+        self.assertIn("set_global_variable = { name = te_cm_census_year value = local_var:te_cm_year }", flat)
+        # The year is read and compared before the census runs, and stored by the same branch.
+        self.assertLess(flat.index("global_var:te_cm_census_year <"), flat.index("te_cmg_census_all = yes"))
+        self.assertLess(flat.index("name = te_cm_census_year"), flat.index("te_cmg_census_all = yes"))
+        self.assertNotIn("180 days", self.text)
+
     def test_the_whole_census_waits_for_the_rule(self):
         # R19: a rule switched off mid-game pauses the system. Nothing is recomputed,
         # and no variable is reset or removed.
@@ -132,10 +151,11 @@ class LockTest(unittest.TestCase):
         self.assertLess(gate, flat.index("has_global_variable = te_cm_census_lock"))
         self.assertLess(gate, flat.index("te_cmg_census_all = yes"))
         self.assertEqual(flat.count("te_cmg_census_all = yes"), 1)
-        # The limit holding the gate also holds the lock test, and the census sits in the same if.
-        m = re.search(r"if = \{ limit = \{ (.*?) \} set_global_variable", flat)
+        # The outermost if's limit holds the gate and the lock test, and the census sits inside that if.
+        m = re.match(r"effect = \{ if = \{ limit = \{ (.*?) \} set_local_variable", flat)
         self.assertIsNotNone(m)
         self.assertIn("te_cm_system_enabled = yes", m.group(1))
+        self.assertIn("NOT = { has_global_variable = te_cm_census_lock }", m.group(1))
         self.assertNotIn("remove_variable", flat)
         self.assertNotIn("remove_global_variable", flat)
 
@@ -214,15 +234,57 @@ class CensusRunsOnlyWhenNeededTest(unittest.TestCase):
         wanting = {}
         for merge in cfg.MERGES:
             for culture in slot_cultures(merge):
-                wanting.setdefault(culture, []).append(merge.key)
-        for culture, keys in wanting.items():
-            call = "te_cm_census_culture = { CULTURE = %s }" % culture
-            self.assertEqual(census_all.count(call), 1, culture)
-            conds = ["te_cmg_%s_census_wanted = yes" % k for k in keys]
-            limit = conds[0] if len(conds) == 1 else "OR = { %s }" % " ".join(conds)
-            self.assertIn("if = { limit = { %s } %s }" % (limit, call), census_all, culture)
+                wanting.setdefault(culture, []).append(merge)
+        for culture, merges in wanting.items():
+            plain = "te_cm_census_culture = { CULTURE = %s }" % culture
+            self.assertEqual(census_all.count(plain), 1, culture)
+            conds = ["te_cmg_%s_census_wanted = yes" % m.key for m in merges]
+            wanted = conds[0] if len(conds) == 1 else "OR = { %s }" % " ".join(conds)
+            # R21: a switched culture is not measured again.
+            head = "if = { limit = { NOT = { has_global_variable = te_cm_switched_%s } %s }" % (culture, wanted)
+            self.assertIn(head, census_all, culture)
         # Measured before any merge's census reads it.
         self.assertLess(census_all.rindex("te_cm_census_culture"), census_all.index("te_cmg_census_"))
+
+    def test_a_joined_part_is_walked_with_its_merges_result(self):
+        # R22: one walk per culture; a culture that joined a merge is walked together with that
+        # merge's result, so te_cm_home_r_<c> is there for the hold and for Task 6's dominance.
+        census_all = squash(block(self.effects, "te_cmg_census_all"))
+        for merge in cfg.MERGES:
+            for culture in slot_cultures(merge):
+                joined = (
+                    "limit = { global_var:te_cm_joined_%s_%s ?= 1 } "
+                    "te_cm_census_culture_joined = { CULTURE = %s RESULT = %s }" % (merge.key, culture, culture, merge.result)
+                )
+                if _absorb_result(merge, culture):
+                    self.assertNotIn("global_var:te_cm_joined_%s_%s" % (merge.key, culture), census_all)
+                else:
+                    self.assertEqual(census_all.count(joined), 1, "%s %s" % (merge.key, culture))
+        # Every culture has exactly one plain walk, as the last branch; the joined walks come before it.
+        for culture in {c for m in cfg.MERGES for c in slot_cultures(m)}:
+            plain = census_all.index("te_cm_census_culture = { CULTURE = %s }" % culture)
+            first_joined = census_all.find("te_cm_census_culture_joined = { CULTURE = %s " % culture)
+            if first_joined != -1:
+                self.assertLess(first_joined, plain, culture)
+        self.assertIn(
+            "if = { limit = { global_var:te_cm_joined_american_yankee ?= 1 } te_cm_census_culture_joined = { CULTURE = yankee RESULT = cm_american } } "
+            "else_if = { limit = { global_var:te_cm_joined_anglophone_yankee ?= 1 } te_cm_census_culture_joined = { CULTURE = yankee RESULT = cm_anglophone } } "
+            "else = { te_cm_census_culture = { CULTURE = yankee } }",
+            census_all,
+        )
+
+    def test_a_switched_part_is_not_censused(self):
+        # R21: its pops are the result's now, so held would read 0 and stall the merge for good.
+        for merge in cfg.MERGES:
+            body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
+            for culture in slot_cultures(merge):
+                call = "te_cm_census_part = { MERGE = %s CULTURE = %s RESULT = %s TIER = %d }" % (
+                    merge.key, culture, merge.result, tier_of(merge, culture)
+                )
+                self.assertIn(
+                    "if = { limit = { NOT = { has_global_variable = te_cm_switched_%s } } %s }" % (culture, call),
+                    body, call,
+                )
 
 
 class CensusHelpersTest(unittest.TestCase):
@@ -253,10 +315,62 @@ class CensusHelpersTest(unittest.TestCase):
         body = squash(block(self.text, "te_cm_census_part"))
         self.assertIn("every_scope_homeland_state", body)
         self.assertIn("owner = { te_cm_in_sphere = yes }", body)
-        self.assertIn("culture = cu:$CULTURE$", body)
         # The same fallback as the culture's total, so the share is over one pop set.
         self.assertIn("culture_percent_country = { target = cu:$CULTURE$ value > 0 }", body)
-        self.assertIn("value = standard_of_living multiply = total_size", body)
+        self.assertEqual(body.count("te_cm_cp_sum_pops = { CULTURE = $CULTURE$ RESULT = $RESULT$ }"), 2)
+        sums = squash(block(self.text, "te_cm_cp_sum_pops"))
+        self.assertIn("limit = { culture = cu:$CULTURE$ }", sums)
+        self.assertIn("value = standard_of_living multiply = total_size", sums)
+
+    def test_a_joined_part_holds_part_plus_result_on_both_sides(self):
+        # R22: the sphere's part + result over the world's part + result in the part's homeland states.
+        sums = squash(block(self.text, "te_cm_cp_sum_pops"))
+        self.assertIn("if = { limit = { local_var:te_cm_cp_joined = 1 } every_scope_pop = { limit = { culture = cu:$RESULT$ }", sums)
+        body = squash(block(self.text, "te_cm_census_part"))
+        self.assertIn(
+            "if = { limit = { global_var:te_cm_joined_$MERGE$_$CULTURE$ ?= 1 } set_local_variable = { name = te_cm_cp_joined value = 1 } }",
+            body,
+        )
+        self.assertIn("set_local_variable = { name = te_cm_cp_denom value = global_var:te_cm_home_$CULTURE$ }", body)
+        self.assertIn(
+            "local_var:te_cm_cp_joined = 1 has_global_variable = te_cm_home_r_$CULTURE$ } "
+            "change_local_variable = { name = te_cm_cp_denom add = global_var:te_cm_home_r_$CULTURE$ }",
+            body,
+        )
+        self.assertIn("value = local_var:te_cm_cp_pops divide = local_var:te_cm_cp_denom max = 1", body)
+        # The acceptance test counts holders by the part's own pops, and the hold by both.
+        self.assertIn("change_local_variable = { name = te_cm_cp_pops add = local_var:te_cm_cp_state_res }", sums)
+        self.assertIn("change_local_variable = { name = te_cm_cp_part_pops add = local_var:te_cm_cp_state_pops }", sums)
+        self.assertNotIn("state_res", squash(block(self.text, "te_cm_cp_note_holder")))
+
+    def test_the_joined_census_stores_the_results_pops_in_the_same_walk(self):
+        body = squash(block(self.text, "te_cm_census_culture_joined"))
+        self.assertEqual(body.count("every_scope_homeland_state"), 1)
+        self.assertIn("limit = { culture = cu:$RESULT$ } change_local_variable = { name = te_cm_cc_res add = total_size }", body)
+        self.assertIn("set_global_variable = { name = te_cm_home_$CULTURE$ value = local_var:te_cm_cc_sum }", body)
+        self.assertIn("set_global_variable = { name = te_cm_home_r_$CULTURE$ value = local_var:te_cm_cc_res }", body)
+        fallback = body[body.index("every_country"):]
+        self.assertLess(fallback.index("culture_percent_country"), fallback.index("every_scope_pop"))
+        # What the two homes mean is written where the next reader looks.
+        raw = EFFECTS.read_text(encoding="utf-8-sig")
+        self.assertIn("te_cm_home_r_<c>", raw)
+        self.assertIn("part + result", raw)
+        self.assertIn("pops that remain", raw)
+
+    def test_acceptance_tests_the_largest_holder_as_well_as_every_meaningful_one(self):
+        # M3: with the sphere's holdings split thin no country reaches the meaningful share, and the test
+        # would pass vacuously; the cut-off is capped at the largest holding.
+        body = squash(block(self.text, "te_cm_census_part"))
+        self.assertIn(
+            "value = local_var:te_cm_cp_part_pops multiply = te_cm_meaningful_share } } "
+            "if = { limit = { local_var:te_cm_cp_min_cnt > local_var:te_cm_cp_max_cnt } "
+            "set_local_variable = { name = te_cm_cp_min_cnt value = local_var:te_cm_cp_max_cnt } }",
+            body,
+        )
+        self.assertIn("var:te_cm_tmp_cnt >= local_var:te_cm_cp_min_cnt", body)
+        holder = squash(block(self.text, "te_cm_cp_note_holder"))
+        self.assertIn("limit = { var:te_cm_tmp_cnt > local_var:te_cm_cp_max_cnt } set_local_variable = { name = te_cm_cp_max_cnt value = var:te_cm_tmp_cnt }", holder)
+        self.assertIn("set_local_variable = { name = te_cm_cp_max_cnt value = 0 }", body)
 
     def test_gates_have_hysteresis_and_use_the_named_values(self):
         body = squash(block(self.text, "te_cm_census_part"))
@@ -265,23 +379,54 @@ class CensusHelpersTest(unittest.TestCase):
             "te_cm_accept_high_open", "te_cm_accept_high_close", "te_cm_meaningful_share",
         ):
             self.assertIn(name, body, name)
-        # Open when held >= open and nobody fails the open threshold; close below close.
-        self.assertIn("var:te_cm_held_$MERGE$_$CULTURE$ >= te_cm_hold_open", body)
-        self.assertIn("var:te_cm_held_$MERGE$_$CULTURE$ < te_cm_hold_close", body)
-        # Acceptance thresholds are bare named values, never a computed block or a local variable.
-        for m in re.finditer(r"country_average_culture_pop_acceptance = \{ culture = cu:\$CULTURE\$ value < (\S+) \}", body):
-            self.assertRegex(m.group(1), r"^te_cm_accept_(high_)?(open|close)$")
+        # The open branch pairs the open hold with the open failures, the close branch the close pair.
+        self.assertIn(
+            "if = { limit = { var:te_cm_ok_$MERGE$_$CULTURE$ = 1 } "
+            "if = { limit = { OR = { var:te_cm_held_$MERGE$_$CULTURE$ < te_cm_hold_close local_var:te_cm_cp_fail_close > 0 } } "
+            "set_variable = { name = te_cm_ok_$MERGE$_$CULTURE$ value = 0 } } } "
+            "else = { if = { limit = { var:te_cm_held_$MERGE$_$CULTURE$ >= te_cm_hold_open local_var:te_cm_cp_fail_open = 0 } "
+            "set_variable = { name = te_cm_ok_$MERGE$_$CULTURE$ value = 1 } } }",
+            body,
+        )
+        # Each counter counts the failures of its own threshold, nothing else.
+        pairs = {
+            "te_cm_cp_fail_open": "te_cm_accept_open",
+            "te_cm_cp_fail_close": "te_cm_accept_close",
+            "te_cm_cp_fail_high_open": "te_cm_accept_high_open",
+            "te_cm_cp_fail_high_close": "te_cm_accept_high_close",
+        }
+        for counter, threshold in pairs.items():
+            self.assertIn(
+                "if = { limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < %s } } "
+                "change_local_variable = { name = %s add = 1 } }" % (threshold, counter),
+                body, counter,
+            )
+        found = re.findall(r"country_average_culture_pop_acceptance = \{ culture = cu:\$CULTURE\$ value < (\S+) \}", body)
+        self.assertEqual(sorted(found), sorted(pairs.values()))
+        # Tier 2 (the spec's 1b) swaps in the very high pair, open for open and close for close.
+        self.assertIn(
+            "if = { limit = { local_var:te_cm_cp_tier = 2 } "
+            "set_local_variable = { name = te_cm_cp_fail_open value = local_var:te_cm_cp_fail_high_open } "
+            "set_local_variable = { name = te_cm_cp_fail_close value = local_var:te_cm_cp_fail_high_close } }",
+            body,
+        )
 
-    def test_tier_2_uses_the_very_high_thresholds_and_counts_years(self):
+    def test_tier_2_counts_years_and_nothing_else_touches_the_counter(self):
         body = squash(block(self.text, "te_cm_census_part"))
         self.assertIn("set_local_variable = { name = te_cm_cp_tier value = $TIER$ }", body)
         self.assertIn("local_var:te_cm_cp_tier = 2", body)
-        self.assertIn("te_cm_cp_fail_high_open", body)
-        self.assertIn("te_cm_cp_fail_high_close", body)
         years = body[body.index("local_var:te_cm_cp_tier > 1"):]
         self.assertIn("change_variable = { name = te_cm_years_$MERGE$_$CULTURE$ add = 1 }", years)
-        self.assertNotIn("te_cm_years_$MERGE$_$CULTURE$ value", years.replace("value = 0", ""))
-        self.assertNotIn("subtract", years)
+        # M6: every write to the counter in the whole helper: a first value of 0 only where it is unset,
+        # then an add of 1, and never a reset, a subtraction or a removal.
+        writes = re.findall(r"(\w+_variable) = \{ name = te_cm_years_\$MERGE\$_\$CULTURE\$ ([^}]*)\}", body)
+        self.assertEqual(sorted(writes), [("change_variable", "add = 1 "), ("set_variable", "value = 0 ")])
+        init = body.index("set_variable = { name = te_cm_years_$MERGE$_$CULTURE$ value = 0 }")
+        self.assertEqual(
+            body[init - len("limit = { NOT = { has_variable = te_cm_years_$MERGE$_$CULTURE$ } } "):init].strip(),
+            "limit = { NOT = { has_variable = te_cm_years_$MERGE$_$CULTURE$ } }",
+        )
+        self.assertNotIn("remove_variable = te_cm_years", body)
 
     def test_the_temporary_holder_variable_is_removed_in_the_same_call(self):
         body = squash(block(self.text, "te_cm_census_part"))
@@ -293,15 +438,18 @@ class CensusHelpersTest(unittest.TestCase):
 
     def test_division_is_guarded(self):
         body = squash(block(self.text, "te_cm_census_part"))
-        self.assertIn("has_global_variable = te_cm_home_$CULTURE$ global_var:te_cm_home_$CULTURE$ > 0", body)
-        self.assertIn("local_var:te_cm_cp_pops >= 1", body)
+        self.assertIn("limit = { local_var:te_cm_cp_denom > 0 }", body)
+        self.assertIn("limit = { local_var:te_cm_cp_pops >= 1 }", body)
 
     def test_dispatch_helpers_name_every_argument(self):
-        # Every helper that is called with MERGE/CULTURE/TIER names each one in its body.
+        # Every helper that is called with arguments names each one in its body.
         for name, args in (
             ("te_cm_census_culture", ("CULTURE",)),
-            ("te_cm_census_part", ("MERGE", "CULTURE", "TIER")),
+            ("te_cm_census_culture_joined", ("CULTURE", "RESULT")),
+            ("te_cm_census_part", ("MERGE", "CULTURE", "RESULT", "TIER")),
+            ("te_cm_cp_sum_pops", ("CULTURE", "RESULT")),
             ("te_cm_sol_track", ("MERGE", "CULTURE")),
+            ("te_cm_sol_gate_part", ("MERGE", "CULTURE")),
         ):
             body = block(self.text, name)
             self.assertIsNotNone(body, name)
@@ -313,6 +461,7 @@ class SolGateTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.effects = text_of(GEN_EFFECTS)
+        cls.helpers = text_of(EFFECTS)
 
     def test_sol_gate_has_hysteresis(self):
         for merge in cfg.MERGES:
@@ -320,34 +469,77 @@ class SolGateTest(unittest.TestCase):
             key = merge.key
             self.assertIn("te_cm_sol_gap_close", body, key)
             self.assertIn("te_cm_sol_gap_open", body, key)
-            # Once open, it closes only above the looser value; otherwise it opens only below the stricter.
+            # Once open, it closes only above the looser value; otherwise it opens only below the stricter,
+            # and only while every core slot is met (M2).
             self.assertIn(
                 "if = { limit = { var:te_cm_sol_ok_%s = 1 } if = { limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close } "
                 "set_variable = { name = te_cm_sol_ok_%s value = 0 } } }" % (key, key),
                 body, key,
             )
             self.assertIn(
-                "else = { if = { limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open } "
+                "else = { if = { limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open local_var:te_cm_sg_all = 1 } "
                 "set_variable = { name = te_cm_sol_ok_%s value = 1 } } }" % key,
                 body, key,
             )
 
-    def test_the_gap_is_over_core_cultures_and_joined_ones_that_pass_their_gates(self):
+    def test_the_merge_wide_gap_is_over_core_cultures_that_pass_their_gates(self):
+        # R23: the optional parts have gates of their own, so no optional part is in the merge-wide gap.
         for merge in cfg.MERGES:
             body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
-            core = {c for part in merge.core for c in part.cultures}
+            optional = {c for part in merge.optional for c in part.cultures}
             for culture in slot_cultures(merge):
                 track = "te_cm_sol_track = { MERGE = %s CULTURE = %s }" % (merge.key, culture)
+                if culture in optional:
+                    self.assertNotIn(track, body, culture)
+                    continue
                 self.assertEqual(body.count(track), 1, culture)
-                at = body.index(track)
-                start = body.rindex("if = { limit = {", 0, at)
-                clause = body[start:at]
-                self.assertIn("var:te_cm_ok_%s_%s ?= 1" % (merge.key, culture), clause)
-                self.assertIn("te_cmg_%s_%s_available = yes" % (merge.key, culture), clause)
-                if culture in core:
-                    self.assertNotIn("te_cm_joined", clause, culture)
-                else:
-                    self.assertIn("global_var:te_cm_joined_%s_%s ?= 1" % (merge.key, culture), clause)
+                self.assertIn("if = { limit = { te_cmg_%s_%s_measured = yes } %s }" % (merge.key, culture, track), body)
+            self.assertNotIn("te_cm_joined", body, merge.key)
+
+    def test_the_merge_wide_gate_opens_only_when_every_core_slot_is_met(self):
+        # M2: a slot is met when one of its alternatives has a figure, or joined and switched. The gate
+        # opens only if all of them are.
+        for merge in cfg.MERGES:
+            body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
+            self.assertIn("if = { limit = { local_var:te_cm_sg_slots = %d } set_local_variable = { name = te_cm_sg_all value = 1 } }" % len(merge.core), body)
+            self.assertEqual(body.count("change_local_variable = { name = te_cm_sg_slots add = 1 }"), len(merge.core))
+            for part in merge.core:
+                met = ["te_cmg_%s_%s_measured = yes" % (merge.key, c) for c in part.cultures]
+                met += ["te_cmg_%s_%s_switched_in = yes" % (merge.key, c) for c in part.cultures if not _absorb_result(merge, c)]
+                limit = met[0] if len(met) == 1 else "OR = { %s }" % " ".join(met)
+                self.assertIn(
+                    "if = { limit = { %s } change_local_variable = { name = te_cm_sg_slots add = 1 } }" % limit, body, merge.key
+                )
+
+    def test_each_optional_part_has_a_gate_of_its_own(self):
+        # R23: the gap over the core cultures plus this part, open below te_cm_sol_gap_open, closed above
+        # te_cm_sol_gap_close. Skipped once the part has switched.
+        for merge in cfg.MERGES:
+            body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
+            optional = [c for part in merge.optional for c in part.cultures]
+            for culture in optional:
+                self.assertIn(
+                    "if = { limit = { NOT = { has_global_variable = te_cm_switched_%s } } "
+                    "te_cm_sol_gate_part = { MERGE = %s CULTURE = %s } }" % (culture, merge.key, culture),
+                    body, culture,
+                )
+            self.assertEqual(body.count("te_cm_sol_gate_part"), len(optional), merge.key)
+            # After the merge-wide gate, which has built the core range they read.
+            if optional:
+                self.assertGreater(body.index("te_cm_sol_gate_part"), body.index("te_cm_sol_gap_open"))
+        gate = squash(block(self.helpers, "te_cm_sol_gate_part"))
+        self.assertIn("limit = { local_var:te_cm_sg_all = 1 var:te_cm_ok_$MERGE$_$CULTURE$ = 1 }", gate)
+        self.assertIn("set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }", gate)
+        self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }", gate)
+        self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }", gate)
+        self.assertIn(
+            "if = { limit = { var:te_cm_sol_ok_$MERGE$_$CULTURE$ = 1 } "
+            "if = { limit = { local_var:te_cm_sg_gap > te_cm_sol_gap_close } "
+            "set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 } } } "
+            "else = { if = { limit = { local_var:te_cm_sg_gap < te_cm_sol_gap_open } "
+            "set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 1 } } }",
+            gate,
+        )
 
     def test_no_slot_qualifying_leaves_the_gate_as_it_was(self):
         body = squash(block(self.effects, "te_cmg_census_german_country"))
@@ -357,7 +549,9 @@ class SolGateTest(unittest.TestCase):
         for merge in cfg.MERGES:
             body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
             for culture in slot_cultures(merge):
-                call = "te_cm_census_part = { MERGE = %s CULTURE = %s TIER = %d }" % (merge.key, culture, tier_of(merge, culture))
+                call = "te_cm_census_part = { MERGE = %s CULTURE = %s RESULT = %s TIER = %d }" % (
+                    merge.key, culture, merge.result, tier_of(merge, culture)
+                )
                 self.assertEqual(body.count(call), 1, call)
 
 
@@ -406,19 +600,55 @@ class TriggerShapeTest(unittest.TestCase):
         for m in re.finditer(r"(global_var|var):(te_cm_(?:state|ok|sol_ok|joined|in)\w*) *([<>=]+) ", text):
             self.assertEqual(m.group(3), "?=", m.group(0))
 
-    def test_core_ok_wants_an_available_passing_alternative_in_every_core_slot(self):
+    def test_core_ok_wants_every_core_slot_met_through_an_alternative(self):
+        # R21 + R24: a slot is met by an alternative that passes its gates now (and, at tier 1b or 2, has its
+        # years), or by one that joined this merge and has switched.
         for merge in cfg.MERGES:
             body = self.trig("te_cmg_%s_core_ok" % merge.key)
+            key = merge.key
             for part in merge.core:
-                alts = ["AND = { var:te_cm_ok_%s_%s ?= 1 te_cmg_%s_%s_available = yes }" % (merge.key, c, merge.key, c)
-                        for c in part.cultures]
-                if len(alts) == 1:
-                    self.assertIn(alts[0][len("AND = { "):-2], body, merge.key)
+                routes = []
+                for c in part.cultures:
+                    route = ["te_cmg_%s_%s_measured = yes" % (key, c)]
+                    if tier_of(merge, c) > 1:
+                        route.append("te_cmg_%s_%s_years_met = yes" % (key, c))
+                    routes.append(route)
+                    if not _absorb_result(merge, c):
+                        routes.append(["te_cmg_%s_%s_switched_in = yes" % (key, c)])
+                if len(routes) == 1:
+                    self.assertIn(" ".join(routes[0]), body, key)
                 else:
-                    self.assertIn("OR = { %s }" % " ".join(alts), body, merge.key)
+                    text = " ".join(r[0] if len(r) == 1 else "AND = { %s }" % " ".join(r) for r in routes)
+                    self.assertIn("OR = { %s }" % text, body, key)
             for part in merge.optional:
                 for c in part.cultures:
-                    self.assertNotIn("te_cm_ok_%s_%s" % (merge.key, c), body, "optional parts don't gate the start")
+                    self.assertNotIn("_%s_" % c, body.replace("te_cmg_%s_" % key, ""), "optional parts don't gate the start")
+
+    def test_a_switched_part_still_meets_its_slot(self):
+        # R21: once north_german has switched, nothing measures it, so the merge reads it as met for good.
+        self.assertIn("te_cmg_german_north_german_switched_in = yes", self.trig("te_cmg_german_core_ok"))
+        body = self.trig("te_cmg_german_north_german_switched_in")
+        self.assertEqual(body, "global_var:te_cm_joined_german_north_german ?= 1 has_global_variable = te_cm_switched_north_german")
+        self.assertEqual(
+            self.trig("te_cmg_german_north_german_measured"),
+            "var:te_cm_ok_german_north_german ?= 1 te_cmg_german_north_german_available = yes "
+            "NOT = { has_global_variable = te_cm_switched_north_german }",
+        )
+        # An absorb merge's result is never joined or switched, so it has no such route.
+        self.assertNotIn("te_cmg_hungarian_hungarian_switched_in", self.triggers)
+        self.assertNotIn("switched_in = yes", self.trig("te_cmg_hungarian_core_ok").split("szekely")[0])
+
+    def test_the_start_wants_the_years_of_a_tier_2_and_3_alternative(self):
+        # R24: core_ok asks for the counter can_join writes: 1b at te_cm_years_tier2, tier 2 at te_cm_years_tier3.
+        pan_slavic = self.trig("te_cmg_pan_slavic_core_ok")
+        for c in ("cm_east_slavic", "cm_czechoslovak", "cm_yugoslav"):
+            self.assertEqual(tier_of(cfg.merge_by_key("pan_slavic"), c), 3)
+            self.assertIn("AND = { te_cmg_pan_slavic_%s_measured = yes te_cmg_pan_slavic_%s_years_met = yes }" % (c, c), pan_slavic)
+            self.assertIn("var:te_cm_years_pan_slavic_%s >= te_cm_years_tier3" % c, self.trig("te_cmg_pan_slavic_%s_years_met" % c))
+        anglophone = self.trig("te_cmg_anglophone_core_ok")
+        self.assertIn("AND = { te_cmg_anglophone_british_measured = yes te_cmg_anglophone_british_years_met = yes }", anglophone)
+        self.assertIn("var:te_cm_years_anglophone_british >= te_cm_years_tier2", self.trig("te_cmg_anglophone_british_years_met"))
+        self.assertNotIn("years_met", self.trig("te_cmg_german_core_ok"))
 
     def test_availability(self):
         indexes = {m.key: merge_index(m) for m in cfg.MERGES}
@@ -440,6 +670,7 @@ class TriggerShapeTest(unittest.TestCase):
 
     def test_can_join_follows_the_part_tier(self):
         for merge in cfg.MERGES:
+            optional = {c for part in merge.optional for c in part.cultures}
             for culture in slot_cultures(merge):
                 tier = tier_of(merge, culture)
                 body = self.trig("te_cmg_%s_%s_can_join" % (merge.key, culture))
@@ -450,10 +681,20 @@ class TriggerShapeTest(unittest.TestCase):
                 years = "te_cm_years_%s_%s" % (merge.key, culture)
                 if tier == 1:
                     self.assertNotIn("te_cm_years", body)
+                    self.assertNotIn("years_met", body)
                 else:
                     needed = "te_cm_years_tier2" if tier == 2 else "te_cm_years_tier3"
-                    self.assertIn("has_variable = %s" % years, body)
-                    self.assertIn("trigger_if = { limit = { has_variable = %s } var:%s >= %s }" % (years, years, needed), body)
+                    self.assertIn("te_cmg_%s_%s_years_met = yes" % (merge.key, culture), body)
+                    self.assertEqual(
+                        self.trig("te_cmg_%s_%s_years_met" % (merge.key, culture)),
+                        "has_variable = %s trigger_if = { limit = { has_variable = %s } var:%s >= %s }" % (years, years, years, needed),
+                    )
+                # R23: an optional part also waits for its own standard-of-living gate.
+                gate = "var:te_cm_sol_ok_%s_%s ?= 1" % (merge.key, culture)
+                if culture in optional:
+                    self.assertIn(gate, body, culture)
+                else:
+                    self.assertNotIn("te_cm_sol_ok", body, culture)
 
     def test_a_part_joins_on_its_own_tier_even_below_the_merges(self):
         # R17: Afro-American is a tier-1b join to a tier-1 American merge.
@@ -461,10 +702,11 @@ class TriggerShapeTest(unittest.TestCase):
         self.assertEqual(tier_of(american, "afro_american"), 2)
         body = self.trig("te_cmg_american_afro_american_can_join")
         self.assertIn("te_cm_tier_tech = { TIER = 2 }", body)
-        self.assertIn("te_cm_years_tier2", body)
+        self.assertIn("te_cmg_american_afro_american_years_met = yes", body)
+        self.assertIn("te_cm_years_tier2", self.trig("te_cmg_american_afro_american_years_met"))
         self.assertIn("TIER = 1 }", self.trig("te_cmg_american_is_candidate"))
 
-    def test_the_count_of_generated_triggers(self):
+    def test_the_set_of_generated_triggers(self):
         names = set(re.findall(r"^(te_cmg_\w+) = \{", self.triggers, re.M))
         expected = set()
         for merge in cfg.MERGES:
@@ -472,9 +714,23 @@ class TriggerShapeTest(unittest.TestCase):
                 "te_cmg_%s_%s" % (merge.key, suffix) for suffix in ("is_candidate", "core_ok", "census_wanted")
             )
             for culture in slot_cultures(merge):
-                expected.add("te_cmg_%s_%s_available" % (merge.key, culture))
-                expected.add("te_cmg_%s_%s_can_join" % (merge.key, culture))
+                for suffix in ("available", "measured", "can_join"):
+                    expected.add("te_cmg_%s_%s_%s" % (merge.key, culture, suffix))
+                if tier_of(merge, culture) > 1:
+                    expected.add("te_cmg_%s_%s_years_met" % (merge.key, culture))
+                if not _absorb_result(merge, culture):
+                    expected.add("te_cmg_%s_%s_switched_in" % (merge.key, culture))
         self.assertEqual(names, expected)
+
+    def test_no_two_merges_name_the_same_variable(self):
+        # te_cm_sol_ok_<m> and te_cm_sol_ok_<m>_<c> share a prefix; a merge key that is another merge's key + _ +
+        # a culture would make one variable of two.
+        names = {}
+        for merge in cfg.MERGES:
+            names.setdefault("te_cm_sol_ok_%s" % merge.key, []).append(merge.key)
+            for culture in slot_cultures(merge):
+                names.setdefault("te_cm_sol_ok_%s_%s" % (merge.key, culture), []).append("%s/%s" % (merge.key, culture))
+        self.assertEqual({n: who for n, who in names.items() if len(who) > 1}, {})
 
 
 class StateIsVariablesTest(unittest.TestCase):
@@ -492,14 +748,19 @@ class StateIsVariablesTest(unittest.TestCase):
         self.assertGreaterEqual(seen, len(SCRIPT_FILES))
 
     def test_the_census_resets_nothing_on_a_rule_change(self):
-        # R19: counters and gates keep their last values while the rule is off.
-        for path in (EFFECTS, ON_ACTIONS, GEN_EFFECTS):
+        # R19: counters and gates keep their last values while the rule is off, so the census never takes a
+        # global variable away: the lock is set, never removed, and it is the only global it writes besides
+        # the home counts and the year.
+        for path in (EFFECTS, ON_ACTIONS, GEN_EFFECTS, GEN_TRIGGERS):
             text = text_of(path)
             self.assertNotIn("has_game_rule", text, path.name)
-            self.assertNotIn("remove_global_variable", text.replace("remove_global_variable = te_cm_", ""), path.name)
+            self.assertNotIn("remove_global_variable", text, path.name)
+            self.assertNotIn("clear_global_variable_list", text, path.name)
         # The one removal is the temporary holder variable, which never outlives its census call.
-        removed = set(re.findall(r"remove_variable = (\w+)", text_of(EFFECTS)))
+        removed = set(re.findall(r"remove_variable = (\w+)", text_of(EFFECTS) + text_of(GEN_EFFECTS)))
         self.assertEqual(removed, {"te_cm_tmp_cnt"})
+        written = set(re.findall(r"set_global_variable = \{ name = ([\w$]+)", text_of(EFFECTS) + text_of(ON_ACTIONS)))
+        self.assertEqual(written, {"te_cm_census_lock", "te_cm_census_year"} | {"te_cm_home_$CULTURE$", "te_cm_home_r_$CULTURE$"})
 
 
 class CallsMatchTheirHelpersTest(unittest.TestCase):
