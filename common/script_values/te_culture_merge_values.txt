@@ -66,6 +66,11 @@ te_cm_urban_weight = 0.6
 # A discriminated pop barely converts; one living outside the part's homeland
 # states converts faster (the homeland shares gate the merge, and diaspora pops
 # convert at the switch regardless).
+# "Discriminated" is per pop and exact: pop_acceptance below acceptance_status_4
+# (60). That is a cliff beside the country's gate, which has hysteresis: the gate
+# stays open down to te_cm_accept_close (55) once it has opened. A pop at 57
+# therefore converts at a tenth while its country keeps the merge running; the
+# factor is not softened to follow the gate.
 te_cm_discriminated_factor = 0.1
 te_cm_diaspora_factor = 2
 
@@ -82,7 +87,8 @@ te_cm_diaspora_factor = 2
 #                                                  total_urbanization / state_population * 1000, clamped to a
 #                                                  share, 0 to 1 (0.4 is a state 40% urban)
 #        * (1 + owner's country_culture_merge_speed_mult)
-#        * 0.1 if pop_acceptance < acceptance_status_4   (vanilla has no pop_is_discriminated)
+#        * 0.1 if pop_acceptance < acceptance_status_4   (vanilla has no pop_is_discriminated;
+#                                                         a per-pop cliff at 60, see te_cm_discriminated_factor)
 #        * 2   if the pop's state region is not a homeland of the part
 #        * 0.5 if its owner is not the starter
 te_cm_pop_rate = {

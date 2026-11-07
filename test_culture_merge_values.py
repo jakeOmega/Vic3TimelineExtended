@@ -94,6 +94,78 @@ def rate_text():
     raise AssertionError("te_cm_pop_rate never closes")
 
 
+def ordered(value):
+    """A parsed block as ordered (key, operator, value) triples, scalars as strings.
+
+    ParadoxFileParser.parse_object returns a block whose keys repeat (the rate's `multiply`
+    and `if` steps) as a list of single-key dicts in source order, and a block of unique keys
+    as a dict, which also keeps source order. Both become the same list here."""
+    if isinstance(value, dict):
+        value = [{key: pair} for key, pair in value.items()]
+    if not isinstance(value, list):
+        return value
+    out = []
+    for entry in value:
+        (key, (op, inner)), = entry.items()
+        out.append((key, op, ordered(inner)))
+    return out
+
+
+def rate_operations():
+    """The ordered top-level operations of te_cm_pop_rate with their operands."""
+    parser = ParadoxFileParser()
+    body = rate_text().split("=", 1)[1]
+    parsed, _ = parser.parse_object(parser.tokenize(body))
+    return ordered(parsed)
+
+
+# What te_cm_pop_rate must be, step by step: the mirror's formula, in the script's own terms.
+EXPECTED_RATE_OPERATIONS = [
+    ("value", "=", "te_cm_base_rate"),
+    # literacy factor: (literacy base + the pop's literacy_rate, 0-1)
+    ("multiply", "=", [
+        ("value", "=", "te_cm_literacy_base"),
+        ("add", "=", "literacy_rate"),
+    ]),
+    # urbanization factor: 1 + weight * state_urbanization_rate (a 0-1 share)
+    ("multiply", "=", [
+        ("value", "=", "1"),
+        ("add", "=", [
+            ("value", "=", "state.state_urbanization_rate"),
+            ("multiply", "=", "te_cm_urban_weight"),
+        ]),
+    ]),
+    # policy: 1 + the owner's speed modifier
+    ("multiply", "=", [
+        ("value", "=", "1"),
+        ("add", "=", "owner.modifier:country_culture_merge_speed_mult"),
+    ]),
+    # discriminated pop (vanilla has no pop_is_discriminated)
+    ("if", "=", [
+        ("limit", "=", [("pop_acceptance", "<", "acceptance_status_4")]),
+        ("multiply", "=", "te_cm_discriminated_factor"),
+    ]),
+    # outside the part's homeland states
+    ("if", "=", [
+        ("limit", "=", [
+            ("NOT", "=", [
+                ("state", "=", [
+                    ("state_region", "=", [("is_homeland", "=", "scope:te_cm_part")]),
+                ]),
+            ]),
+        ]),
+        ("multiply", "=", "te_cm_diaspora_factor"),
+    ]),
+    # a subject or bloc member of the starter, not the starter
+    ("if", "=", [
+        ("limit", "=", [("NOT", "=", [("owner", "=", "scope:te_cm_starter")])]),
+        ("multiply", "=", "te_cm_sphere_rate_factor"),
+    ]),
+    ("min", "=", "0"),
+    ("max", "=", "0.5"),
+]
+
+
 # ---------------------------------------------------------------------------
 # The mirror of te_cm_pop_rate and its sources.
 # ---------------------------------------------------------------------------
@@ -341,27 +413,21 @@ class TestPace(unittest.TestCase):
         self.assertEqual(pop_rate(v, literacy=0, urbanization=0, speed=-5), 0.0)
 
     def test_the_script_value_applies_the_mirrors_factors(self):
-        """Drift guard: the script value names each input the mirror reads."""
-        text = rate_text()
-        for needle in (
-            "te_cm_base_rate",
-            "te_cm_literacy_base",
-            "literacy_rate",
-            "te_cm_urban_weight",
-            "state.state_urbanization_rate",
-            "owner.modifier:" + SPEED,
-            "pop_acceptance < acceptance_status_4",
-            "te_cm_discriminated_factor",
-            "is_homeland = scope:te_cm_part",
-            "te_cm_diaspora_factor",
-            "owner = scope:te_cm_starter",
-            "te_cm_sphere_rate_factor",
-            "min = 0",
-            "max = 0.5",
-        ):
-            self.assertIn(needle, text)
-        # Each flat factor is a named value, not a literal in the rate.
-        self.assertNotRegex(text, r"multiply = (0\.1|2|0\.5)\s")
+        """Drift guard: te_cm_pop_rate is exactly the sequence of operations the mirror applies.
+
+        Compares the parsed, ordered operations and their operands, not the text. A needle
+        search would still pass if `multiply = { value = 1 add = owner.modifier:... }` became a
+        bare `add`; this does not."""
+        self.assertEqual(rate_operations(), EXPECTED_RATE_OPERATIONS)
+
+    def test_every_named_operand_is_a_defined_value(self):
+        """Every te_cm_ name the rate reads is a value in the file (saved scopes, scope:te_cm_part
+        and scope:te_cm_starter, are set by the caller and are not values)."""
+        v = values()
+        names = set(re.findall(r"(?<![\w:])te_cm_\w+", json.dumps(rate_operations())))
+        self.assertTrue(names)
+        for name in sorted(names):
+            self.assertIn(name, v)
 
     def test_factor_values(self):
         v = values()
