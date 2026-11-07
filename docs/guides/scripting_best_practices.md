@@ -2127,6 +2127,8 @@ Alternatively, use `PREV.state_population` when adding to a VARIABLE in a parent
 
 **Validation rule**: `/engine-docs/origin/<name>` — if `matches[].type == "triggers"` and not also `"script_values"`, the name is trigger-only and must be used as a bareword in script-value top-level fields, never as `value = <name>` inside a nested sub-block.
 
+**A share of urbanization is vanilla's `state_urbanization_rate`, not `total_urbanization`.** `total_urbanization` is an absolute amount (a state trigger, `total_urbanization > 5`). The 0-1 share is the named script value `state_urbanization_rate` (`common/script_values/building_values.txt:11`: `total_urbanization / state_population * 1000`, clamped to 0-1), and a pop reads it as `state.state_urbanization_rate` (vanilla's pop-support scripts do, `03_pan_national_movements.txt:180`). `country_urbanization_rate` is the country's. Culture Merges' `te_cm_pop_rate` weighs a pop's conversion by it (2026-11-07). Likewise, a pop has no `pop_is_discriminated`: write `pop_acceptance < acceptance_status_4`.
+
 ### Pick a Destination Once — Don't Call Destination-Picking Scripted Effects Inside `every_scope_pop`
 
 If a scripted effect picks a destination via `ordered_state` / `random_scope_state` and announces it through a notification, call it **once from state (or country) scope** — not from inside an `every_scope_pop` / `every_scope_state` iterator.
