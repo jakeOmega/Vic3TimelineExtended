@@ -3276,7 +3276,10 @@ nd_accident_site_home = {
 # damage and the politics fall there (nuclear_incident.31); nd_accident_abroad
 # tells .30's texts and options, and nd_system_reads_attack, so. Called only
 # when such a host exists. Country scope = the guest, saved as
-# scope:nd_accident_guest.
+# scope:nd_accident_guest. nd_accident_abroad is set only once a host is
+# saved, and with none the accident happens at home: on 2026-11-07 a French
+# accident was marked abroad with no host saved, though .30's own check had
+# found one, and its host branch read the unset scope (cause not found).
 nd_accident_site_abroad = {
 	random_country = {
 		limit = {
@@ -3289,7 +3292,26 @@ nd_accident_site_abroad = {
 			save_scope_as = nd_accident_state
 		}
 	}
-	set_variable = nd_accident_abroad
+	if = {
+		limit = { exists = scope:nd_accident_host }
+		set_variable = nd_accident_abroad
+	}
+	else = { nd_accident_site_home = yes }
+	# TE_SELF_CHECK: does this random_country find the host .30's any_country,
+	# with the same limit, found? OK once a game; BROKEN each time it doesn't,
+	# since each is an accident moved home with nothing else to show for it.
+	# The 2026-11-07 session's one attempt failed, and no .31 ever fired.
+	if = {
+		limit = { exists = scope:nd_accident_host }
+		if = {
+			limit = { NOT = { has_global_variable = nd_accident_host_pick_self_check_done } }
+			set_global_variable = nd_accident_host_pick_self_check_done
+			debug_log = "TE_SELF_CHECK OK nd_accident_host_pick: [THIS.GetCountry.GetNameNoFormatting]'s accident found the host nuclear_incident.30's check had found"
+		}
+	}
+	else = {
+		debug_log = "TE_SELF_CHECK BROKEN nd_accident_host_pick: [THIS.GetCountry.GetNameNoFormatting]'s accident found no host, though nuclear_incident.30's check had found one; it happened at home"
+	}
 }
 
 # A weapons accident: local contamination in the state the event picked

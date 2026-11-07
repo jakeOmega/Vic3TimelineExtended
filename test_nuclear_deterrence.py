@@ -3326,6 +3326,34 @@ class TestCustody(unittest.TestCase):
         self.assertIn("default_option = yes", option_body(self.ev, "nuclear_custody.1.a"))
         self.assertIn("nd_cw_roll_split = yes", block(self.ev, "nuclear_custody.1"))
 
+    def test_a_second_outbreak_rolls_its_own_split(self):
+        # Two uprisings in one tick open two of these events, which roll into
+        # the same variables, and the first answer clears them: the second
+        # "pull back" read nothing (Russian Republic, 2026-11-07). The roll
+        # names its rebels, and an answer whose roll is another's rolls again.
+        roll = block(self.ce, "nd_cw_roll_split")
+        self.assertIn("set_variable = { name = nd_cw_roll_rebel value = scope:nd_cw_rebel }", " ".join(roll.split()))
+        apply = " ".join(block(self.ce, "nd_cw_apply_split").split())
+        reroll = "if = { limit = { NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel } } nd_cw_roll_split = yes }"
+        # Behind a click-only marker, in a hidden_effect: the option's tooltip
+        # walk tests every limit and writes nothing, so unfenced it would read
+        # the roll it never set.
+        fenced = ("hidden_effect = { set_variable = nd_cw_roll_click if = { limit = { has_variable = nd_cw_roll_click }"
+                  " remove_variable = nd_cw_roll_click " + reroll + " } }")
+        self.assertIn(fenced, apply)
+        self.assertLess(apply.index(fenced), apply.index("var:nd_cw_$MODE$_seized >"))
+        # And the split's own reads test the variable first, for that walk.
+        for read in ("var:nd_cw_$MODE$_seized > nd_stockpile", "var:nd_cw_$MODE$_seized > 0"):
+            self.assertIn("has_variable = nd_cw_$MODE$_seized " + read, apply, read)
+        self.assertIn("remove_variable = nd_cw_roll_rebel", block(self.ce, "nd_cw_clear_roll"))
+        # The AI's weights read the roll only where it is set.
+        for option in ("nuclear_custody.1.a", "nuclear_custody.1.b"):
+            weights = block(option_body(self.ev, option), "ai_chance")
+            reads = re.findall(r"trigger = \{[^{}]*var:nd_cw_hold_taken[^{}]*\}", weights)
+            self.assertTrue(reads, option)
+            for read in reads:
+                self.assertIn("has_variable = nd_cw_hold_taken", read, option)
+
 
 class TestCustodyLosingAndWatching(unittest.TestCase):
     """Step 3's rest (spec docs/superpowers/archive/specs/2026-09-26-nuclear-loose-

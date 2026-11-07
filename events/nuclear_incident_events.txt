@@ -1396,7 +1396,12 @@ nuclear_incident.30 = {
 		# Where (rework spec §14.6): a sited accident, a bomber's or a silo's,
 		# can happen in a country that hosts our weapons, and with any host a
 		# third of them do. A lost warhead (kind 4) is off our own stockpile
-		# wherever it was: a host takes no custody risk.
+		# wherever it was: a host takes no custody risk. A flag left from an
+		# earlier accident would send this one's damage to a host never saved.
+		if = {
+			limit = { has_variable = nd_accident_abroad }
+			remove_variable = nd_accident_abroad
+		}
 		save_scope_as = nd_accident_guest
 		if = {
 			limit = {
@@ -1427,7 +1432,10 @@ nuclear_incident.30 = {
 		# The host hears of it, and decides what our weapons are still doing
 		# there. The kind is copied: ours goes when this event closes.
 		if = {
-			limit = { has_variable = nd_accident_abroad }
+			limit = {
+				has_variable = nd_accident_abroad
+				exists = scope:nd_accident_host
+			}
 			scope:nd_accident_host = {
 				set_variable = { name = nd_host_accident_kind value = scope:nd_accident_guest.var:nd_accident_kind }
 				trigger_event = { id = nuclear_incident.31 }

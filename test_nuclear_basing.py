@@ -127,6 +127,19 @@ class TestHostAccidents(unittest.TestCase):
                        "random_scope_state = { limit = { is_incorporated = yes } save_scope_as = nd_accident_state }",
                        "set_variable = nd_accident_abroad"):
             self.assertIn(needle, abroad)
+        # Abroad only once a host is saved, else at home (2026-11-07: a French
+        # accident marked abroad with no host saved read the unset scope).
+        self.assertIn("if = { limit = { exists = scope:nd_accident_host } set_variable = nd_accident_abroad }"
+                      " else = { nd_accident_site_home = yes }", abroad)
+        self.assertLess(abroad.index("save_scope_as = nd_accident_host"), abroad.index("set_variable = nd_accident_abroad"))
+        # The pick reports itself: OK once a game, BROKEN each time it fails.
+        self.assertIn("TE_SELF_CHECK OK nd_accident_host_pick", abroad)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_accident_host_pick", abroad)
+        self.assertIn("has_global_variable = nd_accident_host_pick_self_check_done", abroad)
+        # And no flag from an earlier accident survives into this one's siting.
+        clear = "if = { limit = { has_variable = nd_accident_abroad } remove_variable = nd_accident_abroad }"
+        self.assertIn(clear, self.immediate)
+        self.assertLess(self.immediate.index(clear), self.immediate.index("nd_accident_site_abroad = yes"))
         home = squash(block(self.effects, "nd_accident_site_home"))
         self.assertIn("random_scope_state = { limit = { is_incorporated = yes } save_scope_as = nd_accident_state }", home)
 
@@ -148,7 +161,8 @@ class TestHostAccidents(unittest.TestCase):
         self.assertIn("NOT = { has_variable = nd_accident_abroad }", system)
 
     def test_host_hears_of_it(self):
-        sent = self.immediate[self.immediate.index("limit = { has_variable = nd_accident_abroad } scope:nd_accident_host"):]
+        sent = self.immediate[self.immediate.index("limit = { has_variable = nd_accident_abroad exists = scope:nd_accident_host }"
+                                                   " scope:nd_accident_host"):]
         self.assertIn("set_variable = { name = nd_host_accident_kind value = scope:nd_accident_guest.var:nd_accident_kind }",
                       sent)
         self.assertIn("trigger_event = { id = nuclear_incident.31", sent)

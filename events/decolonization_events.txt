@@ -2622,11 +2622,13 @@ decolonization_events.19 = {
 			has_modifier = gp_economic_sanctions_modifier
 			has_variable = gp_accepted_nationalization
 		}
-		# A former colony has nationalized assets
+		# A former colony has nationalized assets. `?=`: a former overlord can
+		# be gone while its former colonies still name it, and a plain `=`
+		# logs every great power's check (62 lines in six minutes, 2026-11-07).
 		any_country = {
 			NOT = { this = root }
 			has_variable = former_overlord
-			var:former_overlord = root
+			var:former_overlord ?= root
 			is_subject = no
 			has_modifier = independence_nationalization_modifier
 		}
@@ -2637,7 +2639,7 @@ decolonization_events.19 = {
 			limit = {
 				NOT = { this = root }
 				has_variable = former_overlord
-				var:former_overlord = root
+				var:former_overlord ?= root
 				is_subject = no
 				has_modifier = independence_nationalization_modifier
 			}

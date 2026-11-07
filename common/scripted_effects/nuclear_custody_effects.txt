@@ -496,7 +496,9 @@ nd_custody_on_civil_war_start = {
 #   nd_cw_<MODE>_lost    of those, the ones nobody can account for
 #   nd_cw_<MODE>_taken   of those, the ones the rebels hold
 #   nd_cw_<MODE>_kept    what stays with us (the option tooltips print it)
+#   nd_cw_roll_rebel     the uprising the roll is for (nd_cw_apply_split)
 nd_cw_roll_split = {
+	set_variable = { name = nd_cw_roll_rebel value = scope:nd_cw_rebel }
 	set_variable = { name = nd_cw_hold_seized value = nd_cw_seizable_share }
 	set_variable = { name = nd_cw_pull_seized value = nd_cw_pullback_share }
 	nd_cw_roll_one = { MODE = hold }
@@ -541,11 +543,39 @@ nd_cw_roll_one = {
 # TT = the tooltip key that prints its numbers (a literal, so organize_loc sees
 # the key used; #451). The numbers are re-capped at the stockpile we hold now —
 # a launch may have spent some since the roll.
+#
+# Two uprisings in one tick send two of these events, and both roll into the
+# same variables: the second roll overwrites the first, and the first answer's
+# nd_cw_clear_roll removes it before the second answer applies (Russian
+# Republic, 2026-11-07: the second "pull back" read nothing set, and its rebels
+# got no share). So an answer whose roll is another uprising's, or gone, rolls
+# again for its own rebels first. The re-roll sits behind a click-only marker:
+# the option's tooltip walk tests every limit, inside hidden_effect too, and
+# writes nothing, so unfenced it would read the roll it never set, every frame
+# (scripting_best_practices.md, § An Option's Tooltip Walks Its Effects). The
+# reads below test has_variable for the same walk, which a second copy of the
+# event shows once the first answer has cleared the roll.
 nd_cw_apply_split = {
+	hidden_effect = {
+		set_variable = nd_cw_roll_click
+		if = {
+			limit = { has_variable = nd_cw_roll_click }
+			remove_variable = nd_cw_roll_click
+			if = {
+				limit = {
+					NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel }
+				}
+				nd_cw_roll_split = yes
+			}
+		}
+	}
 	custom_tooltip = {
 		text = $TT$
 		if = {
-			limit = { var:nd_cw_$MODE$_seized > nd_stockpile }
+			limit = {
+				has_variable = nd_cw_$MODE$_seized
+				var:nd_cw_$MODE$_seized > nd_stockpile
+			}
 			set_variable = { name = nd_cw_$MODE$_seized value = nd_stockpile }
 			if = {
 				limit = { var:nd_cw_$MODE$_lost > var:nd_cw_$MODE$_seized }
@@ -561,6 +591,7 @@ nd_cw_apply_split = {
 		}
 		if = {
 			limit = {
+				has_variable = nd_cw_$MODE$_seized
 				var:nd_cw_$MODE$_seized > 0
 				exists = scope:nd_cw_rebel
 				scope:nd_cw_rebel = { is_country_alive = yes }
@@ -603,6 +634,10 @@ nd_cw_apply_split = {
 }
 
 nd_cw_clear_roll = {
+	if = {
+		limit = { has_variable = nd_cw_roll_rebel }
+		remove_variable = nd_cw_roll_rebel
+	}
 	if = {
 		limit = { has_variable = nd_cw_hold_seized }
 		remove_variable = nd_cw_hold_seized
