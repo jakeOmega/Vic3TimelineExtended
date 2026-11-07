@@ -6909,7 +6909,8 @@ class MergeRecordTests(unittest.TestCase):
                                     "NOT = { has_variable = gm_premigration } NOT = { has_variable = gm_rebuilding } "
                                     "gm_state_orphan_in_region = no")
         stray = self.body(TRIGGERS, "gm_state_stray_building")
-        self.assertEqual(stray, "gm_state_unclaimed_building = yes OR = { gm_state_region_original_stands = yes "
+        self.assertEqual(stray, "gm_state_unclaimed_building = yes OR = { AND = { "
+                                "gm_state_region_original_stands = yes gm_state_region_shadow_unhoused = no } "
                                 "gm_state_stray_waited = yes }")
         refresh = self.body(EFFECTS, "gm_country_refresh")
         self.assertIn("if = { limit = { gm_state_stray_building = yes } trigger_event = { id = monument_events.29 } }",
@@ -6929,8 +6930,11 @@ class MergeRecordTests(unittest.TestCase):
         """2026-11-06: the Company annexed Jaipur, and Jantar Mantar's building
         stood in the Company's part of Rajputana two days before its shadow read
         as an orphan; the stray pass removed it and the monument was lost. A
-        copy needs the recorded part it copies standing; otherwise the building
-        waits a month, as neither a copy nor a first sight."""
+        copy needs the recorded part it copies standing and no monument of the
+        region missing its building; otherwise the building waits a month, as
+        neither a copy nor a first sight. The orphan, whose last owner holds no
+        part, then takes it (gm_sh_settle_one), and the monthly pass keeps the
+        shadow through the window."""
         original = self.body(TRIGGERS, "gm_state_region_original_stands")
         self.assertEqual(original, "save_temporary_scope_as = gm_tmp_stray_self state_region = { any_scope_state = { "
                                    "NOT = { this = scope:gm_tmp_stray_self } has_variable = gm_migrated "
@@ -6938,8 +6942,24 @@ class MergeRecordTests(unittest.TestCase):
         self.assertEqual(self.body(TRIGGERS, "gm_state_stray_waited"),
                          "has_variable = gm_stray_seen NOT = { has_variable = gm_stray_wait }")
         self.assertEqual(self.body(TRIGGERS, "gm_state_stray_waits"),
-                         "gm_state_unclaimed_building = yes gm_state_region_original_stands = no "
-                         "gm_state_stray_waited = no")
+                         "gm_state_unclaimed_building = yes gm_state_stray_waited = no OR = { "
+                         "gm_state_region_original_stands = no gm_state_region_shadow_unhoused = yes }")
+        # a monument of the region whose old state still resolves with no building: this one may be its building
+        unhoused = self.body(TRIGGERS, "gm_state_region_shadow_unhoused")
+        for needle in ("state_region = { save_temporary_scope_as = gm_tmp_unhoused_region }",
+                       "var:gm_tr_origin_region ?= scope:gm_tmp_unhoused_region", "exists = var:gm_tr_origin",
+                       "var:gm_tr_origin = { NOT = { has_building = building_grand_monument } }"):
+            self.assertIn(needle, unhoused)
+        # the orphan of an annexed owner takes the building the merge brought, before any part's monument beside
+        one = self.body(MON_EFFECTS, "gm_sh_settle_one")
+        unrecorded = one.index("random_scope_state = { limit = { gm_state_unrecorded = yes } "
+                               "save_scope_as = gm_sh_target }")
+        self.assertLess(one.index("owner = scope:gm_sh_was_owner"), unrecorded)
+        self.assertLess(unrecorded, one.index("order_by = state_population"))
+        # nor does the monthly pass drop its shadow as stale in the window
+        self.assertIn("AND = { NOT = { has_building = building_grand_monument } NOT = { state_region = { "
+                      "any_scope_state = { gm_state_unrecorded = yes } } } }",
+                      self.body(MON_EFFECTS, "gm_shadow_monthly"))
         refresh = self.body(EFFECTS, "gm_country_refresh")
         chain = refresh[refresh.index("if = { limit = { gm_state_merge_pending = yes }"):]
         stray = chain.index("else_if = { limit = { gm_state_stray_building = yes }")

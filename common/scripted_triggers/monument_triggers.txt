@@ -604,6 +604,20 @@ gm_state_region_original_stands = {
 	}
 }
 
+# State scope. A shadow of this state's region links a state that still
+# resolves but has no building: a monument whose building may be this one,
+# merged in before its old state is gone (2026-11-06).
+gm_state_region_shadow_unhoused = {
+	state_region = { save_temporary_scope_as = gm_tmp_unhoused_region }
+	has_global_variable_list = gm_shadows
+	any_in_global_list = {
+		variable = gm_shadows
+		var:gm_tr_origin_region ?= scope:gm_tmp_unhoused_region
+		exists = var:gm_tr_origin
+		var:gm_tr_origin = { NOT = { has_building = building_grand_monument } }
+	}
+}
+
 # State scope. The unclaimed building waited a month (gm_stray_wait, set by
 # gm_country_refresh while gm_state_stray_waits held) and no orphan came.
 gm_state_stray_waited = {
@@ -612,20 +626,24 @@ gm_state_stray_waited = {
 }
 
 # State scope. The engine's copy in a revolt's part of a monument's state: an
-# unclaimed building beside the recorded part it copies, or one that waited a
-# month for an orphan. The monument stays whole with the part that keeps its
-# records (owner, 2026-10-18; sites spec §3.7), so monument_events.29 removes
-# it.
+# unclaimed building beside the recorded part it copies, while no monument of
+# the region is missing its building, or one that waited a month for an
+# orphan. The monument stays whole with the part that keeps its records
+# (owner, 2026-10-18; sites spec §3.7), so monument_events.29 removes it.
 gm_state_stray_building = {
 	gm_state_unclaimed_building = yes
 	OR = {
-		gm_state_region_original_stands = yes
+		AND = {
+			gm_state_region_original_stands = yes
+			gm_state_region_shadow_unhoused = no
+		}
 		gm_state_stray_waited = yes
 	}
 }
 
 # State scope. An unclaimed building with no recorded part of its region
-# standing beside it: what a merge leaves before its orphan reads as one. On
+# standing beside it, or in a region where a monument's old state has no
+# building: what a merge leaves before its orphan reads as one. On
 # 2026-11-06 the British India Company annexed Jaipur; Jaipur's part of
 # Rajputana merged into the Company's, and Jantar Mantar's building stood in
 # the Company's part while the shadow's old state still resolved (its orphan
@@ -636,6 +654,9 @@ gm_state_stray_building = {
 # copy.
 gm_state_stray_waits = {
 	gm_state_unclaimed_building = yes
-	gm_state_region_original_stands = no
 	gm_state_stray_waited = no
+	OR = {
+		gm_state_region_original_stands = no
+		gm_state_region_shadow_unhoused = yes
+	}
 }
