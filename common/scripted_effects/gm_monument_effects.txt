@@ -568,6 +568,14 @@ gm_mon_order_choice = {
 # 2026-10-18 §3.3: the building is not rebuilt).
 gm_mon_tear_down_one = {
 	save_scope_as = gm_mon_down
+	# Logged, as gm_state_tear_down is (log triage 2026-11-06).
+	if = {
+		limit = { has_variable = gm_tr_landmark }
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: landmark [THIS.Var('gm_tr_landmark').GetFlagName] in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: a monument in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
 	set_variable = { name = gm_tr_g value = gm_mon_grandeur }
 	var:gm_tr_origin ?= {
 		owner = {

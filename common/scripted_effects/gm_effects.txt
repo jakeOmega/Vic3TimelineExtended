@@ -1495,6 +1495,16 @@ gm_state_record_teardown = {
 
 gm_state_tear_down = {
 	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+	# Logged (log triage 2026-11-06): a teardown was the one way a monument
+	# went with no line, so an observer run couldn't tell the AI's choice
+	# from a monument lost to a bug.
+	if = {
+		limit = { has_variable = gm_landmark }
+		debug_log = "TE_MONUMENTS: torn down: landmark [THIS.Var('gm_landmark').GetFlagName] in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], [SCOPE.ScriptValue('gm_state_primary_levels')|0] levels recorded"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: torn down: a monument in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], [SCOPE.ScriptValue('gm_state_primary_levels')|0] levels recorded"
+	}
 	gm_state_record_teardown = yes
 	owner = {
 		remove_list_variable = { name = gm_states target = prev }
