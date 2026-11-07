@@ -161,10 +161,16 @@ class CensusRunsOnlyWhenNeededTest(unittest.TestCase):
                 "if = { limit = { te_cmg_%s_census_wanted = yes } %s }" % (merge.key, call), census_all, merge.key
             )
 
-    def test_wanted_means_an_idle_merge_with_a_candidate_or_a_running_one_with_a_starter(self):
+    def test_census_runs_only_when_needed(self):
+        # Every te_cmg_census_<m> call sits under te_cmg_<m>_census_wanted, which is true only for an idle
+        # merge with a candidate or a running or complete one with its starter.
+        census_all = squash(block(self.effects, "te_cmg_census_all"))
         for merge in cfg.MERGES:
             body = squash(block(self.triggers, "te_cmg_%s_census_wanted" % merge.key))
             key = merge.key
+            self.assertIn(
+                "if = { limit = { te_cmg_%s_census_wanted = yes } te_cmg_census_%s = yes }" % (key, key), census_all, key
+            )
             idle = "NOR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 } " % (key, key)
             self.assertIn(idle + "any_country = { te_cmg_%s_is_candidate = yes }" % key, body, key)
             running = "OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 } " % (key, key)
