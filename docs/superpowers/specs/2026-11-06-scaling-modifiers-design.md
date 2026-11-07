@@ -144,12 +144,12 @@ variable in `immediate` that only their own trigger reads (`NOT = { has_variable
 - `cultural_hegemony` .8, .9 (`ch_milestone_significant`, `_dominant`)
 - `post_scarcity_events.3`, `surveillance_events.4` (the two AI debates)
 
-Each gets `fire_only_once = yes` and loses its `set_variable`. **The trigger's
-guard stays as a read until a removal date** (with the other old-save repairs,
-`project_old_save_repair_removals`): a save made before the change holds the
-variable but no engine record, and the guard keeps those events from firing a
-second time there. In a new game nothing sets the variable, so the guard is
-inert. Not converted: `ste_event_8_fired`, `_18_`, `_36_`, `_37_` and
+Each gets `fire_only_once = yes` and loses its `set_variable`. The trigger's
+guard first stayed as a read for saves made before the change, which hold the
+variable but no engine record. It went on 2026-11-06 (owner): 1.15 loads no
+older save, and in a new game nothing sets the variable, so the read was dead
+and logged one `is used but is never set` line per event at every load. Not
+converted: `ste_event_8_fired`, `_18_`, `_36_`, `_37_` and
 `wonder_asteroid_deflected` are read elsewhere (the on-action dispatcher reads
 .8 and .37); the World War, inheritance, UN charter and debug variables are
 removed again or read elsewhere.
@@ -159,8 +159,8 @@ survives a save and load, and whether a revolution's winner inherits it (it
 inherits variables). One event, `society_technology_events.1`, keeps setting its
 variable, and its guard is bypassed only in games started after the change (a
 global marker set once at game start): `OR = { has_global_variable = <marker>
-NOT = { has_variable = ste_event_1_fired } }`. Old saves keep the guard like the
-other 31, and new games rely on `fire_only_once` alone. Its `immediate` logs
+NOT = { has_variable = ste_event_1_fired } }`. New games rely on `fire_only_once`
+alone, like the other 31. Its `immediate` logs
 `TE_SELF_CHECK BROKEN fire_only_once_kept` when the marker is set and the
 country already holds the variable, which can only happen if the event fired
 twice for one nation. It is the right event to
@@ -733,8 +733,8 @@ with PR 1.
 7. **Grand Monuments' four `state_*` keys convert with the rest**; if
    `gm_education_reaches_states` reads BROKEN, those four go back to the
    country as plain `add_modifier`s.
-8. **Old saves keep their once-guards as reads** (§ 2) until a removal date,
-   since a save made before the change has the variables but no engine record.
+8. **The once-guards go** (§ 2): kept at first as reads for older saves, they
+   were removed on 2026-11-06, since 1.15 loads no older save.
 9. **The repair-deleting PRs don't wait for `scaling_inherited`** (§ 5): it
    is a self-check with a named fallback, like every in-game unknown.
 10. **A zero row, if one shows, is hidden in the GUI** (§ 5), not by keeping

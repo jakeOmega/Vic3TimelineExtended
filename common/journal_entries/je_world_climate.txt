@@ -47,11 +47,10 @@ je_world_climate = {
 
 	# Under the Global Warming rule only: with the rule off the temperature
 	# stays 0 (global_warming_events_on_action) and nothing here would apply.
+	# No disable_evaluation: a contextless entry has no per-country inactive
+	# record to prune, and 1.15 logs that the field does nothing here.
 	is_shown_when_inactive = {
 		has_game_rule = global_warming_enabled
-	}
-	disable_evaluation = {
-		NOT = { has_game_rule = global_warming_enabled }
 	}
 
 	# The threshold je_global_warming opens at. Once active the entry stays

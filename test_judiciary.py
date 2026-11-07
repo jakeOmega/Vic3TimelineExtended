@@ -828,13 +828,11 @@ class LandmarkCasesTest(unittest.TestCase):
         events = _read(EVENTS)
         for n, case in CASES.items():
             event = _block(events, "te_judiciary_events.%d" % n)
-            trigger = event[event.index("\ttrigger = {"):]
             with self.subTest(case=case):
-                # 1.15's fire_only_once (#1404); the variable is still read for
-                # saves from before it, until after 2026-12-31.
+                # 1.15's fire_only_once (#1404) alone: 1.15 loads no older save,
+                # so nothing reads the old te_jud_heard_ variable.
                 self.assertIn("\tfire_only_once = yes\n", event)
-                self.assertIn("NOT = { has_variable = te_jud_heard_%s }" % case, trigger)
-                self.assertNotIn("set_variable = te_jud_heard_%s" % case, event)
+                self.assertNotIn("te_jud_heard_%s" % case, event)
 
     def test_no_dates_or_tags(self):
         # The owner (spec Decisions): the alternate timeline may lack the

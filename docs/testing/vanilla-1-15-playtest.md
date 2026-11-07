@@ -79,7 +79,8 @@ game, in English.
   the canary `society_technology_events.1` (Women in the Workforce) logs `TE_SELF_CHECK BROKEN fire_only_once_kept` in
   `debug.log` if it fires twice for one nation in a game started after the change. It logs nothing while the record
   holds: read a game with saves, loads and a revolution won past the canary's ten-year modifier. Fallback if BROKEN:
-  each event sets its variable in `immediate` again (the triggers still read them).
+  each event sets its variable in `immediate` again and its trigger reads it again
+  (`NOT = { has_variable = <name> }`; the names are in `test_once_only_events.py`).
 - **C21**, contextless entries: `should_be_involved` re-checks, what `je:` and `JournalEntry.GetCountry` return for one,
   `effect_all_involved`. A contextless probe entry could show in a player's journal, so none was built.
 - **Power bloc mandates** (#1442). *Answered 2026-11-06* by the test console's Add and Remove options

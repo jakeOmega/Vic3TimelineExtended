@@ -3868,5 +3868,34 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         self.assertIn("set_variable = un_npt_built_outside", first)
 
 
+class TestCrisisWalkFences(unittest.TestCase):
+    """An option's tooltip walks nd_crisis_open and nd_crisis_close without running them. A scope saved on the
+    effect's first line is no fence: nd_crisis_close's let the walk of nuclear_crisis.2's Let It Go option log
+    6,725 error.log lines in two seconds (2026-11-06). A click-only variable marker holds."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_open_and_close_fenced_by_a_click_marker(self):
+        for name, marker in (("nd_crisis_open", "nd_crisis_open_click"), ("nd_crisis_close", "nd_crisis_close_click")):
+            body = block(self.crisis, name)
+            with self.subTest(effect=name):
+                self.assertRegex(body, rf"set_variable = {marker}\s*if = \{{\s*limit = \{{ has_variable = {marker} \}}"
+                                       rf"\s*remove_variable = {marker}\s")
+                self.assertEqual(body.count(f"set_variable = {marker}"), 1)
+                self.assertEqual(body.count(f"remove_variable = {marker}"), 1)
+
+    def test_close_marker_wraps_the_whole_body(self):
+        body = block(self.crisis, "nd_crisis_close")
+        start = body.index("remove_variable = nd_crisis_close_click")
+        for line in ("nd_log_crisis_acute_once = yes", "nd_crisis_flush_pending = yes",
+                     "set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }", "nd_world_crises_refresh = yes"):
+            self.assertGreater(body.index(line), start, line)
+
+    def test_no_saved_scope_fence_is_left(self):
+        for old in ("nd_crisis_opening", "nd_crisis_closing"):
+            self.assertNotIn(old, self.crisis)
+
+
 if __name__ == "__main__":
     unittest.main()

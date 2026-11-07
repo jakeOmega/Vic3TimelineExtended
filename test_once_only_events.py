@@ -1,10 +1,10 @@
 """Events that fire once per country through 1.15's `fire_only_once` (#1404, design § 2).
 
 Each of these 32 events used to set a variable in `immediate` that only its own trigger read. Now the engine
-remembers the firing. The trigger's read of the variable stays until after 2026-12-31: a save made before the
-change holds the variable but no fire record. One event, the canary, still sets its variable and logs when it
-fires twice in a game started after the change, which is how a lost fire record (on a save and load, or for a
-revolution's winner) would show.
+remembers the firing, and nothing reads the variable: 1.15 loads no older save, so no save holds the variable
+without a fire record (the reads kept for one were removed on 2026-11-06). One event, the canary, still sets its
+variable and logs when it fires twice in a game started after the change, which is how a lost fire record (on a
+save and load, or for a revolution's winner) would show.
 """
 from __future__ import annotations
 
@@ -71,9 +71,8 @@ class OnceOnlyEventsTest(unittest.TestCase):
             body = _event(event_id)
             with self.subTest(event=event_id):
                 self.assertRegex(_top_level(body), r"\bfire_only_once\s*=\s*yes\b")
-                self.assertIn(f"NOT = {{ has_variable = {guard} }}", _flat(field(body, "trigger")))
                 if event_id != CANARY_EVENT:
-                    self.assertNotRegex(body, rf"set_variable\s*=\s*{guard}\b")
+                    self.assertNotRegex(body, rf"\b{guard}\b")
 
     def test_guard_variables_have_no_other_reader(self):
         """The condition that made each safe to convert: nothing outside the event (no script, no GUI) reads its
