@@ -105,6 +105,24 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(self.lines[at + len(major)], "else_if = {")
         self.assertEqual(self.lines[at + len(major) + 1], "limit = { scope:number <= 1 }")
 
+    def test_unguarded_leader_reads_are_guarded(self):
+        """2026-11-06: vanilla's unguarded `leader = {` reads logged 1,286 lines in
+        four and a half minutes for two leaderless groups once restated here."""
+        line = "\t\t\t\tleader = {"
+        guarded = g.guard_leader_read(line)
+        self.assertEqual(guarded, "\t\t\t\tleader ?= { " + g.LEADER_GUARD_NOTE)
+        self.assertEqual(g.unguard_leader_read(guarded), line)
+        for other in ("\t\t\t\tleader ?= { has_ideology = x }", "\tparty_leader = {", "\tscope:leader = {",
+                      "\towner.leader = {", "\tleader = { # a comment"):
+            self.assertEqual(g.guard_leader_read(other), other)
+        # restate guards a vanilla line, and unrestate gives it back
+        vanilla = field_lines(VANILLA.replace('if = { limit = { is_powerful = yes }',
+                                              'if = { limit = { leader = { is_busy = yes } }'), "join_weight")
+        restated = g.restate(vanilla, "example_party", descs=())
+        self.assertTrue(any(line.endswith(g.LEADER_GUARD_NOTE) and "leader ?= {" in line for line in restated))
+        self.assertFalse(any(g._LEADER_READ.search(line) for line in restated))
+        self.assertEqual(g.unrestate(restated, "example_party"), vanilla)
+
     def test_unrestate_inverts_the_insertions(self):
         kept = field_lines(VANILLA, "join_weight")
         self.assertEqual(g.unrestate(g.restate(kept, "example_party", descs=()), "example_party"), kept)
@@ -181,6 +199,11 @@ class CommittedFileTest(unittest.TestCase):
             cls.raw = file.read()
         cls.text = cls.raw.decode("utf-8-sig")
         cls.parties = re.findall(r"^INJECT:(\w+) = \{", cls.text, flags=re.MULTILINE)
+
+    def test_no_unguarded_leader_read(self):
+        """Vanilla's unguarded reads come out guarded (g.LEADER_GUARD_NOTE)."""
+        self.assertEqual([line for line in self.text.splitlines() if g._LEADER_READ.search(line.split("#")[0])], [])
+        self.assertIn(g.LEADER_GUARD_NOTE, self.text)
 
     def test_one_bom(self):
         self.assertTrue(self.raw.startswith(b"\xef\xbb\xbf"))
