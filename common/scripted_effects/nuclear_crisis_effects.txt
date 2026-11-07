@@ -273,82 +273,88 @@ nd_crisis_preview = {
 # it, and it evaluates the limits and resolves the scopes inside hidden_effect
 # too (scripting_best_practices.md § Per-Entity State rule 6). Every read of a
 # crisis variable below would then hit a variable that does not exist yet. So
-# the body is fenced by a scope saved on the first line: save_scope_as is not
-# run by the preview, so scope:nd_crisis_opening only exists in the real run.
+# the body sits behind a click-only marker (scripting_best_practices.md § "An
+# Option's Tooltip Walks Its Effects"): the walk writes no variable, so
+# has_variable is false there and true in the real run. Until 2026-11-06 the
+# fence was a scope saved on the first line, which the doc found lets an
+# option's walk through (nd_crisis_close logged 6,725 lines that way).
 # What the world sees — the infamy and relations — is nd_crisis_preview's,
 # outside the fence, so the confirmation box shows it as a real effect.
 nd_crisis_open = {
 	nd_crisis_preview = { TARGET = $TARGET$ PUBLIC = $PUBLIC$ }
 	hidden_effect = {
-		save_scope_as = nd_crisis_opening
+		set_variable = nd_crisis_open_click
 		if = {
-			limit = {
-				exists = scope:nd_crisis_opening
-				exists = $TARGET$
-				nd_crisis_parties_free = { TARGET = $TARGET$ }
-			}
-			save_scope_as = nd_issuer
-			$TARGET$ = { save_scope_as = nd_target }
+			limit = { has_variable = nd_crisis_open_click }
+			remove_variable = nd_crisis_open_click
 			if = {
-				limit = { NOT = { has_global_variable = nd_crisis_counter } }
-				set_global_variable = { name = nd_crisis_counter value = 0 }
+				limit = {
+					exists = $TARGET$
+					nd_crisis_parties_free = { TARGET = $TARGET$ }
+				}
+				save_scope_as = nd_issuer
+				$TARGET$ = { save_scope_as = nd_target }
+				if = {
+					limit = { NOT = { has_global_variable = nd_crisis_counter } }
+					set_global_variable = { name = nd_crisis_counter value = 0 }
+				}
+				change_global_variable = { name = nd_crisis_counter add = 1 }
+				# ---- the issuer's record ----------------------------------------
+				set_variable = { name = nd_crisis_id value = global_var:nd_crisis_counter }
+				set_variable = { name = nd_crisis_opponent value = scope:nd_target }
+				set_variable = { name = nd_crisis_role value = 1 }
+				nd_crisis_classify_dispute = yes
+				set_variable = { name = nd_crisis_weeks value = 0 }
+				set_variable = { name = nd_crisis_pressure_weeks value = 0 }
+				set_variable = { name = nd_crisis_counter value = 0 }
+				set_variable = { name = nd_crisis_talks value = 0 }
+				set_variable = { name = nd_crisis_backed value = 0 }
+				set_variable = { name = nd_crisis_abandoned value = 0 }
+				set_variable = { name = nd_crisis_deadline_fired value = 0 }
+				# The clock waits while the threat is in transit to the target.
+				set_variable = { name = nd_crisis_transit_weeks value = nd_crisis_transit_weeks_value }
+				if = {
+					limit = { always = $PUBLIC$ }
+					set_variable = { name = nd_crisis_public value = 1 }
+					set_variable = { name = nd_crisis_stage value = 2 }
+					set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_public_weeks }
+				}
+				else = {
+					set_variable = { name = nd_crisis_public value = 0 }
+					set_variable = { name = nd_crisis_stage value = 1 }
+					set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_private_weeks }
+				}
+				# ---- the target's mirror ----------------------------------------
+				scope:nd_target = {
+					set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
+					set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
+					set_variable = { name = nd_crisis_role value = 2 }
+				}
+				# ---- a threat wears the nuclear taboo down, by our rank ---------
+				if = {
+					limit = { always = $PUBLIC$ }
+					nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
+				}
+				else = {
+					nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
+				}
+				# ---- the crisis's figures, before anyone weighs them ------------
+				nd_crisis_refresh_figures = yes
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				debug_log = "TE_NUCLEAR: type=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
+				# ---- both AIs reconsider their posture now ------------------------
+				scope:nd_issuer = { nd_crisis_ai_review = yes }
+				scope:nd_target = { nd_crisis_ai_review = yes }
+				# ---- the target's guarantors are asked whether they stand by it ----
+				nd_crisis_notify_guarantors = yes
+				# ---- every other nuclear power hears of it -------------------------
+				nd_crisis_notify_nuclear_powers = { PUBLIC = $PUBLIC$ }
+				# ---- the target answers, once the threat reaches it ---------------
+				nd_crisis_send_event_in_transit = { WHO = scope:nd_target EVENT = nuclear_crisis.1 }
+				# ---- the panel's list of the world's crises -----------------------
+				nd_world_crises_refresh = yes
 			}
-			change_global_variable = { name = nd_crisis_counter add = 1 }
-			# ---- the issuer's record ----------------------------------------
-			set_variable = { name = nd_crisis_id value = global_var:nd_crisis_counter }
-			set_variable = { name = nd_crisis_opponent value = scope:nd_target }
-			set_variable = { name = nd_crisis_role value = 1 }
-			nd_crisis_classify_dispute = yes
-			set_variable = { name = nd_crisis_weeks value = 0 }
-			set_variable = { name = nd_crisis_pressure_weeks value = 0 }
-			set_variable = { name = nd_crisis_counter value = 0 }
-			set_variable = { name = nd_crisis_talks value = 0 }
-			set_variable = { name = nd_crisis_backed value = 0 }
-			set_variable = { name = nd_crisis_abandoned value = 0 }
-			set_variable = { name = nd_crisis_deadline_fired value = 0 }
-			# The clock waits while the threat is in transit to the target.
-			set_variable = { name = nd_crisis_transit_weeks value = nd_crisis_transit_weeks_value }
-			if = {
-				limit = { always = $PUBLIC$ }
-				set_variable = { name = nd_crisis_public value = 1 }
-				set_variable = { name = nd_crisis_stage value = 2 }
-				set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_public_weeks }
-			}
-			else = {
-				set_variable = { name = nd_crisis_public value = 0 }
-				set_variable = { name = nd_crisis_stage value = 1 }
-				set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_private_weeks }
-			}
-			# ---- the target's mirror ----------------------------------------
-			scope:nd_target = {
-				set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
-				set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
-				set_variable = { name = nd_crisis_role value = 2 }
-			}
-			# ---- a threat wears the nuclear taboo down, by our rank ---------
-			if = {
-				limit = { always = $PUBLIC$ }
-				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
-			}
-			else = {
-				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
-			}
-			# ---- the crisis's figures, before anyone weighs them ------------
-			nd_crisis_refresh_figures = yes
-			nd_log_context = yes
-			debug_log = "TE_NUCLEAR: type=action; action=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-			debug_log = "TE_NUCLEAR: type=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
-			# ---- both AIs reconsider their posture now ------------------------
-			scope:nd_issuer = { nd_crisis_ai_review = yes }
-			scope:nd_target = { nd_crisis_ai_review = yes }
-			# ---- the target's guarantors are asked whether they stand by it ----
-			nd_crisis_notify_guarantors = yes
-			# ---- every other nuclear power hears of it -------------------------
-			nd_crisis_notify_nuclear_powers = { PUBLIC = $PUBLIC$ }
-			# ---- the target answers, once the threat reaches it ---------------
-			nd_crisis_send_event_in_transit = { WHO = scope:nd_target EVENT = nuclear_crisis.1 }
-			# ---- the panel's list of the world's crises -----------------------
-			nd_world_crises_refresh = yes
 		}
 	}
 }
@@ -1206,70 +1212,83 @@ nd_crisis_target_watchdog = {
 }
 
 # ----------------------------------------------------------------------------
-# CLOSING — scope:nd_issuer and scope:nd_target saved, any scope
+# CLOSING — scope:nd_issuer and scope:nd_target saved, a party's scope
 # ----------------------------------------------------------------------------
 # Records the outcome once, for each side's outcome notice to apply
 # (nd_crisis_record_pending; nuclear_crisis.6), and cleans both records.
-# OUTCOME is a literal. Fenced like nd_crisis_open: an option tooltip walks
-# this without running it, and the record reads the nd_crisis_outcome_now
-# written a line earlier, which a preview would find missing.
+# OUTCOME is a literal.
+#
+# TOOLTIP PASSES. An event option's tooltip walks this without running it,
+# hidden_effect and all, every frame the event is open, and the record reads
+# the nd_crisis_outcome_now written a line earlier, which the walk never
+# writes. So the body sits behind a click-only marker (scripting_best_practices
+# § "An Option's Tooltip Walks Its Effects"): the walk writes no variable, so
+# has_variable is false there and true in the real run. A saved scope is no
+# fence: this effect was fenced by save_scope_as + exists from #452 until
+# 2026-11-06, and while nuclear_crisis.2 sat open the walk of its Let It Go
+# option logged 6,725 error.log lines in two seconds from inside the fence.
+# Every caller is a pulse or inside a hidden_effect, so the marker hides no
+# tooltip line.
 nd_crisis_close = {
-	save_scope_as = nd_crisis_closing
-	# A crisis that turns Acute and ends before its next weekly tick still
-	# counts as an Acute crisis for the observer report.
-	scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
+	set_variable = nd_crisis_close_click
 	if = {
-		limit = {
-			exists = scope:nd_crisis_closing
-			exists = scope:nd_issuer
-			exists = scope:nd_target
-			scope:nd_issuer = { nd_is_crisis_owner = yes }
-		}
-		# An outcome notice still unanswered from an earlier crisis settles
-		# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
-		scope:nd_issuer = { nd_crisis_flush_pending = yes }
-		scope:nd_target = { nd_crisis_flush_pending = yes }
-		scope:nd_issuer = {
-			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
-		}
-		nd_log_crisis_end = yes
-		# Both sides stepping back strengthens the nuclear taboo.
+		limit = { has_variable = nd_crisis_close_click }
+		remove_variable = nd_crisis_close_click
+		# A crisis that turns Acute and ends before its next weekly tick still
+		# counts as an Acute crisis for the observer report.
+		scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
 		if = {
-			limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
-			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
-		}
-		# Each side's consequences wait on its outcome notice's option
-		# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
-		if = {
-			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_outcome_now = 9 } } }
-			nd_crisis_record_pending = yes
-		}
-		scope:nd_issuer = {
-			set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
-			set_variable = { name = nd_crisis_last_opponent value = scope:nd_target }
-			set_variable = { name = nd_crisis_last_role value = 1 }
-			set_variable = { name = nd_crisis_cooldown_target value = scope:nd_target }
-			set_variable = { name = nd_crisis_cooldown_months value = nd_crisis_cooldown_months_value }
-			nd_crisis_clear_vars = yes
-		}
-		scope:nd_target = {
+			limit = {
+				exists = scope:nd_issuer
+				exists = scope:nd_target
+				scope:nd_issuer = { nd_is_crisis_owner = yes }
+			}
+			# An outcome notice still unanswered from an earlier crisis settles
+			# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
+			scope:nd_issuer = { nd_crisis_flush_pending = yes }
+			scope:nd_target = { nd_crisis_flush_pending = yes }
+			scope:nd_issuer = {
+				set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
+			}
+			nd_log_crisis_end = yes
+			# Both sides stepping back strengthens the nuclear taboo.
 			if = {
-				limit = {
-					nd_is_crisis_target = yes
-					var:nd_crisis_opponent ?= scope:nd_issuer
-				}
+				limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
+			}
+			# Each side's consequences wait on its outcome notice's option
+			# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
+			if = {
+				limit = { scope:nd_issuer = { NOT = { var:nd_crisis_outcome_now = 9 } } }
+				nd_crisis_record_pending = yes
+			}
+			scope:nd_issuer = {
+				set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
+				set_variable = { name = nd_crisis_last_opponent value = scope:nd_target }
+				set_variable = { name = nd_crisis_last_role value = 1 }
+				set_variable = { name = nd_crisis_cooldown_target value = scope:nd_target }
+				set_variable = { name = nd_crisis_cooldown_months value = nd_crisis_cooldown_months_value }
 				nd_crisis_clear_vars = yes
 			}
-			set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
-			set_variable = { name = nd_crisis_last_opponent value = scope:nd_issuer }
-			set_variable = { name = nd_crisis_last_role value = 2 }
+			scope:nd_target = {
+				if = {
+					limit = {
+						nd_is_crisis_target = yes
+						var:nd_crisis_opponent ?= scope:nd_issuer
+					}
+					nd_crisis_clear_vars = yes
+				}
+				set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
+				set_variable = { name = nd_crisis_last_opponent value = scope:nd_issuer }
+				set_variable = { name = nd_crisis_last_role value = 2 }
+			}
+			if = {
+				limit = { scope:nd_issuer = { NOT = { var:nd_crisis_last_outcome = 9 } } }
+				scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
+				scope:nd_target = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
+			}
+			nd_world_crises_refresh = yes
 		}
-		if = {
-			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_last_outcome = 9 } } }
-			scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
-			scope:nd_target = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
-		}
-		nd_world_crises_refresh = yes
 	}
 }
 
