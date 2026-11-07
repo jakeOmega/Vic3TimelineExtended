@@ -2005,6 +2005,12 @@ te_demog_k_srb_base = { value = 105 }
 # workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
 te_demog_k_working_adult_base = { value = 0.25 }
 te_demog_k_wf_pop_floor = { value = -0.15 }
+te_demog_k_wf_lead_half = { value = 0.5 }
+te_demog_k_wf_lead_cap = { value = 0.2 }
+te_demog_k_wf_lead_cap_neg = { value = -0.2 }
+te_demog_k_wf_pop_ceiling = { value = 0.45 }
+te_demog_k_wf_pull_b_max = { value = 0.5 }
+te_demog_k_wf_pull_share_min = { value = 0.0001 }
 te_demog_k_pension_age_early = { value = 60 }
 te_demog_k_pension_age_raised = { value = 70 }
 te_demog_k_pension_link_offset = { value = 5 }

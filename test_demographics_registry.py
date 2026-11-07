@@ -501,9 +501,11 @@ class _Engine:
         # the self-check rate_below_measured (2026-10-20) reads globals and writes debug_log lines:
         # test_demographics_rate_floor runs it
         self.effects.update({"te_demog_rbm_selfcheck_flows": "", "te_demog_rbm_selfcheck_arm": ""})
-        # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
-        # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
-        self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
+        # phase 2 step 2's workforce self-checks (and W's lead's mark, 2026-11-07) write debug_log lines and read
+        # is_capital, which the interpreter doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs
+        # them gives them as effects
+        self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": "",
+                             "te_debug_demog_wf_pull_mark": ""})
         self.effects.update(SELF_CHECK_STUBS)
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,

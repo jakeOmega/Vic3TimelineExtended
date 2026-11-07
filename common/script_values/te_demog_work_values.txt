@@ -14,6 +14,41 @@ te_demog_wf_term_target = {
 	subtract = te_demog_k_working_adult_base
 }
 
+# W's lead (2026-11-07; demographics_params.WF_LEAD_HALF): the engine's pull toward the ratio a pop is set to is its
+# births. Its newborns join it at that ratio and its dead leave at its own, so its share moves b x (set - share) a year,
+# b the births per head. The census's births per 1,000 over its last step (te_dg_cbr), as a share a step, at most
+# te_demog_k_wf_pull_b_max (0 before a count).
+te_demog_wf_pull_b = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_cbr }
+		value = var:te_dg_cbr
+		multiply = 0.001
+		min = 0
+		max = te_demog_k_wf_pull_b_max
+	}
+}
+# The share of a gap the engine closes in one census step: 1 - e^-b, to fourth order (b x (1 - b/2 + b^2/6)).
+# demographics_model.workforce_pull_share.
+te_demog_wf_pull_share = {
+	value = te_demog_wf_pull_b
+	multiply = te_demog_wf_pull_b
+	multiply = 0.16667
+	subtract = { value = te_demog_wf_pull_b multiply = 0.5 }
+	add = 1
+	multiply = te_demog_wf_pull_b
+}
+# W's lead in force, as the hover, console option r and the self-checks show it: W less its target (the guard's raise
+# included), 0 without W.
+te_demog_wf_lead_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mw }
+		value = var:te_dg_mw
+		subtract = te_demog_wf_term_target
+	}
+}
+
 # W in force, read through has_modifier, so a state that lost its modifier (a change of owner, a revolution's winner,
 # which keeps variables only) adds nothing that isn't there. Inside the refresh's own effect has_modifier can't see its
 # add or remove, so the refresh reads this before it touches the pair.

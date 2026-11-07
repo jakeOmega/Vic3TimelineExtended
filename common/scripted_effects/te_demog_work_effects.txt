@@ -12,6 +12,9 @@
 #                       lines' pair (Rosen's androids, a line added later with no family, the console's probe)
 #   te_dg_wft_y0, te_dg_wft_w0  on a capital, until workforce_follows_target has run: the census year W landed and W
 #                       then (te_debug_demog_wf_term_checks)
+#   te_dg_wfp_y, _e0, _cbr, _set, _pred  on a capital, until workforce_pull_births has run: its last step's census year,
+#                       the walk's engine figure, the births per 1,000, the ratio the pops were set to and the move the
+#                       births predict for the year (te_debug_demog_wf_pull_mark)
 # Country variables:
 #   te_dg_pension_pos   the pension position under Old Age Pension (te_demog_k_pension_pos_*; absent = Standard), set
 #                       by its buttons (te_demog_sguis.txt) and the AI's pulse, under Full only
@@ -32,9 +35,12 @@
 # step of fast mode's clock), so the pair's multipliers resolve against the state. The one refresh site of
 # te_demog_census_workforce_* (te_demog_workforce_apply; te_demog_workforce_heal only re-applies a lost one). Under Full:
 #   target = te_demog_wf_term_target (the census's target less the define's 0.25)
-#   W      = the target after a census step, at least te_demog_k_wf_pop_floor - the lines on top
-# No ramp (owner, 2026-10-20): W lands on its target at each census step, and the engine's own pull toward a pop's ratio
-# phases the change in (demographics_params.WORKING_ADULT_BASE's comment). A seed doesn't move W (as M): it only lands W
+#   W      = the target plus its lead after a census step (te_demog_workforce_lead), at least
+#            te_demog_k_wf_pop_floor - the lines on top
+# No ramp (owner, 2026-10-20): W lands on its target at each census step. The engine's own pull toward a pop's ratio is
+# its births, a few percent of the gap a year, so since 2026-11-07 W also runs past its target by as much as closes
+# half the gap between the game's figure and the aim in a census year, at most 0.2 either way (the lead; shrinks to 0 as
+# the gap closes). A seed doesn't move W (as M): it only lands W
 # from its state region's copy (te_dg_mw_r: a state new to its owner, a conquest or a revolution's winner, is a new state
 # object with none of the old one's variables, and continues the term: "the winner continues the nation") and otherwise
 # leaves W as it is. from: W in force, else the region's copy, else the moved lines' pair (the self-check's landing mark,
@@ -90,11 +96,12 @@ te_demog_workforce_refresh = {
 				limit = { local_var:te_dg_wf_landing > 0 }
 				te_debug_demog_wf_term_landing = yes
 			}
-			# a census step lands W on its target; a seed lands the region's copy as it is
+			# a census step lands W on its target plus its lead; a seed lands the region's copy as it is
 			set_local_variable = { name = te_dg_wf_to value = local_var:te_dg_wf_from }
 			if = {
 				limit = { var:te_dg_stepped > 0 }
 				set_local_variable = { name = te_dg_wf_to value = te_demog_wf_term_target }
+				te_demog_workforce_lead = yes
 			}
 			set_variable = {
 				name = te_dg_mw
@@ -106,6 +113,8 @@ te_demog_workforce_refresh = {
 			set_variable = { name = te_dg_wf_rem value = local_var:te_dg_wf_rem }
 			te_demog_workforce_lines_clear = yes
 			te_demog_workforce_apply = yes
+			# the self-check workforce_pull_births: on a capital, what the game's figure should move by this year
+			te_debug_demog_wf_pull_mark = yes
 			# the state region's copy, which a state new to its owner lands from
 			set_local_variable = { name = te_dg_wf_rv value = var:te_dg_mw }
 			state_region = {
@@ -121,6 +130,61 @@ te_demog_workforce_refresh = {
 	}
 	else = {
 		te_demog_workforce_clear = yes
+	}
+}
+
+# THIS = ROOT = a state inside te_demog_workforce_refresh, at a census step, its local te_dg_wf_to W's target and
+# te_dg_wf_rem the lines on top: W's lead past the target (2026-11-07; demographics_params.WF_LEAD_HALF). The engine's
+# pull toward the ratio a pop is set to is its births (te_demog_wf_pull_b), so W runs past its target by as much as
+# makes the game's figure close te_demog_k_wf_lead_half of its gap to the aim in the census year to come:
+#   gap  = the pops' bases + the target + the lines on top (the aim on the engine's scale) - the walk's te_dg_wf_engine
+#   lead = gap x (te_demog_k_wf_lead_half / te_demog_wf_pull_share - 1), at most te_demog_k_wf_lead_cap either way
+# A lead up stops where the highest pop base + W + the lines on top reaches te_demog_k_wf_pop_ceiling's 0.95; the
+# target itself is never cut (late-game call 10). Before the walk has read the game's figure the lead is 0.
+# demographics_model.workforce_lead.
+te_demog_workforce_lead = {
+	if = {
+		limit = {
+			has_variable = te_dg_wf_engine
+			has_variable = te_dg_wbase
+			var:te_dg_wf_engine > 0.01
+		}
+		set_local_variable = {
+			name = te_dg_wf_gap
+			value = {
+				value = var:te_dg_wbase
+				add = local_var:te_dg_wf_to
+				add = local_var:te_dg_wf_rem
+				subtract = var:te_dg_wf_engine
+			}
+		}
+		set_local_variable = {
+			name = te_dg_wf_lead
+			value = {
+				value = te_demog_k_wf_lead_half
+				divide = { value = te_demog_wf_pull_share min = te_demog_k_wf_pull_share_min }
+				subtract = 1
+				multiply = local_var:te_dg_wf_gap
+				min = te_demog_k_wf_lead_cap_neg
+				max = te_demog_k_wf_lead_cap
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_wf_lead > 0 }
+			set_local_variable = {
+				name = te_dg_wf_lead
+				value = {
+					value = local_var:te_dg_wf_lead
+					max = {
+						value = te_demog_k_wf_pop_ceiling
+						subtract = local_var:te_dg_wf_rem
+						subtract = local_var:te_dg_wf_to
+						min = 0
+					}
+				}
+			}
+		}
+		change_local_variable = { name = te_dg_wf_to add = local_var:te_dg_wf_lead }
 	}
 }
 

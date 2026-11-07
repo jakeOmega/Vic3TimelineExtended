@@ -252,6 +252,22 @@ DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
 WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
 POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
+# W's lead (2026-11-07): the engine's pull is its births. A pop's newborns join it at the ratio it is set to and its
+# dead leave at its own, so its share moves b x (set - share) a year, b its births per head (the Paradox forum's account,
+# "Workforce ratio drift: how fast?", 2024-08-30; it fits the saves' 4-6% of a gap a year in 1836, and
+# workforce_follows_target's BROKEN of 2026-10-25). Left there, a state at 12 births per 1,000 takes about 58 years to
+# cover half a move, and one at 6 never does. So at each census step W runs past its target by as much as makes the
+# game's figure close WF_LEAD_HALF of its gap to the aim in the census year to come, at most WF_LEAD_CAP either way:
+# lead = gap x (WF_LEAD_HALF / (1 - e^-b) - 1). It shrinks as the gap closes, so the figure ends on the aim, the saves'
+# steady 0.01-0.03 off it included. The lead never takes the highest pop base (slaves' 0.5) + W + the lines on top past
+# WF_POP_RATIO_MAX, and never takes W's target itself (late-game call 10: no cap on it). The self-check
+# workforce_pull_births reads a capital's move a year on against the births' prediction.
+WF_LEAD_HALF = 0.5             # the share of the gap the game's figure is to close in one census year
+WF_LEAD_CAP = 0.20             # the lead's size either way, past the target
+WF_POP_RATIO_MAX = 0.95        # the lead's ceiling: no pop set past this by the lead
+POP_BASE_RATIO_MAX = max(max(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # slaves' 0.5
+WF_PULL_B_MAX = 0.5            # births per head a step at most, in the pull's share (a clamp on te_dg_cbr / 1000)
+WF_PULL_SHARE_MIN = 0.0001     # the pull's share at least this as a divisor (no births: the lead stands at its cap)
 # The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
 # The linked positions follow the country's people-weighted old-age threshold less PENSION_LINK_OFFSET, at least
 # PENSION_LINK_FLOOR, moving at most PENSION_LINK_STEP a year. Every position holds for PENSION_TERM_YEARS.
