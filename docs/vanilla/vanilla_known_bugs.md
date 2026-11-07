@@ -1995,7 +1995,7 @@ Adding trigger after PostInitAndValidate
 Adding effect after PostInitAndValidate
 ```
 
-Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05).
+Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05). It is not once a launch: a save load logs a burst within one second, 996 lines at 16:13:25 and 2,415 at 17:48:52 on 2026-11-06 (805 trigger lines and 1,610 effect lines, exactly two per trigger), and 2,604 a file in the 2026-10-11 observer run, with a few single lines at other times (filewatcher reloads while the deploy watcher syncs). The vanilla attribution is unchecked: no mod-off save load has been read for it, so a burst of this size could be mod content built at load. A mod-off load would settle it.
 
 ### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
 - source: `power_bloc_statue_hero_type.cpp:141`
