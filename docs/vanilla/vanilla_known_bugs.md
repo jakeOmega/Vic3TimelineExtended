@@ -951,6 +951,24 @@ Event target link 'market' returned an invalid object
 
 The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through the diplomatic strategies. `- stack: vanilla only` keeps those visible (#863). The diplomatic strategies' British secret-goal scores for Southern Africa (`dominate` and `conquer`, commented "Cleaning up Boers and Zulu") read `capital.region` for every subject and for the target (lines 724 and 778); on 2026-10-24 they logged a `capital` and a `region` line each, twice in one session, with no mod frame. Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
 
+### `common/journal_entries/05_grunderzeit.txt:19` and `common/scripted_triggers/00_ip3_victoria_scripted_triggers.txt:1656` — the Gründerzeit entry reads a stateless overlord's capital (1.15)
+- stack: vanilla only
+
+```
+Event target link 'capital' returned an invalid object
+```
+
+`je_grunderzeit`'s `should_show_when_not_involved` runs `top_overlord ?= { country_is_in_german_confederation = yes }`, and that trigger reads `capital = { … }` with no guard; the `?=` guards the overlord, not its capital, so an overlord with no states logs this line wherever the entry is weighed for showing. 11 lines in two minutes, 2026-11-06 observer game (about 1857). The mod overrides neither file.
+
+### `common/diplomatic_actions/38_subjects_increase_autonomy.txt:191` — a declined autonomy request adds liberty desire to a country that is no longer a subject (1.15)
+- stack: vanilla only
+
+```
+add_liberty_desire effect [ Subject Pact not found for Country:
+```
+
+The action's `decline_effect` runs `add_liberty_desire = 10` on the subject with no check that its subject pact still exists, so a request declined after the pact ended (Indore, about 1855, in the 2026-11-06 observer game) logs this once and adds nothing. The mod doesn't override the file.
+
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
 ```
