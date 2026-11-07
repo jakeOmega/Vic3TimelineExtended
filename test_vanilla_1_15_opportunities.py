@@ -145,7 +145,9 @@ class WorldClimateTest(unittest.TestCase):
         self.assertRegex(self.world, r"scaling_modifiers_while_active = \{\s*modifier = global_warming\s*"
                                      r"value = \{\s*value = temperature_anomaly_display\s*min = 0\s*\}\s*\}")
         self.assertRegex(self.world, r"possible = \{\s*temperature_anomaly_display >= 0\.1\s*\}")
-        self.assertRegex(self.world, r"disable_evaluation = \{\s*NOT = \{ has_game_rule = global_warming_enabled \}")
+        self.assertRegex(self.world, r"is_shown_when_inactive = \{\s*has_game_rule = global_warming_enabled\s*\}")
+        # A contextless entry ignores disable_evaluation, and 1.15 logs so at load (2026-11-06).
+        self.assertNotIn("disable_evaluation", self.world)
         self.assertIn("can_revolution_inherit = no", self.world)
 
     def test_the_country_entry_no_longer_does(self):

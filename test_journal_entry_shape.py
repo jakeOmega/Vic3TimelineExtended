@@ -130,9 +130,19 @@ def is_rule_test(node: Node, triggers: dict[str, Node]) -> bool:
     return _is_rule(node, triggers, ())
 
 
+def is_contextless(entry: Node) -> bool:
+    """`context = none`: one entry for the world, so no country holds an inactive record for a prune to remove."""
+    context = child(entry, "context")
+    return context is not None and context.value == "none"
+
+
 def prune_problems(entry: Node, triggers: dict[str, Node]) -> list[str]:
     conjuncts = gate_conjuncts(entry, triggers)
     prune = child(entry, "disable_evaluation")
+    if is_contextless(entry):
+        # 1.15 at load: "JE je_world_climate has a disable_evaluation trigger but is a contextless journal entry,
+        # this does nothing" (2026-11-06).
+        return [] if prune is None else ["disable_evaluation on a contextless entry does nothing"]
     if prune is None:
         if any(is_rule_test(c, triggers) for c in conjuncts):
             return ["rule-gated entry has no disable_evaluation"]
@@ -202,6 +212,13 @@ class PruneFixtureTest(unittest.TestCase):
     def test_always_yes_only_for_a_never_shown_entry(self):
         self.assertEqual(self.check("always = no", "always = yes"), [])
         self.assertEqual(len(self.check("has_variable = x", "always = yes")), 1)
+
+    def test_contextless_entry_takes_no_prune(self):
+        entry = "je_x = {\n\tcontext = none\n\tis_shown_when_inactive = { has_game_rule = r }\n%s}\n"
+        self.assertEqual(prune_problems(_entry(entry % ""), {}), [])
+        problems = prune_problems(_entry(entry % "\tdisable_evaluation = { NOT = { has_game_rule = r } }\n"), {})
+        self.assertEqual(len(problems), 1)
+        self.assertIn("contextless", problems[0])
 
     def test_not_with_two_children_is_flagged(self):
         self.assertEqual(len(self.check("has_game_rule = r has_game_rule = s",
