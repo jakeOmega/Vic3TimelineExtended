@@ -128,3 +128,29 @@ te_debug_demog.131 = {
 		}
 	}
 }
+
+# .130 and .131's week waits on the state's owner: a state event triggered with a delay never runs (te_debug_demog_events.txt,
+# "The verdicts' week waits on the owner"), so the owner's country event runs the Nexus state's verdict at once.
+te_debug_demog.330 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_um_chk_da }
+			trigger_event = { id = te_debug_demog.130 }
+		}
+	}
+}
+
+te_debug_demog.331 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_um_chk_st_tour }
+			trigger_event = { id = te_debug_demog.131 }
+		}
+	}
+}

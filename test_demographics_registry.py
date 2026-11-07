@@ -2224,10 +2224,13 @@ class TestWorkforceSelfChecks(unittest.TestCase):
                             ("te_demog_selfcheck_ig_done", "te_debug_demog.7")):
             self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", start)
             self.assertIn(f"set_global_variable = {{ name = {flag} value = yes }}", start)
-            self.assertIn(f"trigger_event = {{ id = {event} days = 7 }}", start)
+            # the week waits on the country (.206, .207): a delayed state event never runs
+            self.assertIn(f"trigger_event = {{ id = te_debug_demog.20{event[-1]} days = 7 }}", start)
+            self.assertIn(f"trigger_event = {{ id = {event} }}", _block(_text(DEBUG_EVENTS), f"te_debug_demog.20{event[-1]}"))
         self.assertIn("TE_SELF_CHECK OK pop_workforce_read", start)
         self.assertIn("TE_SELF_CHECK BROKEN pop_workforce_read", start)
-        self.assertIn("trigger_event = { id = te_debug_demog.8 days = 7 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.208 days = 7 }", start)
+        self.assertIn("trigger_event = { id = te_debug_demog.8 }", _block(_text(DEBUG_EVENTS), "te_debug_demog.208"))
         events = _text(DEBUG_EVENTS)
         net = _block(events, "te_debug_demog.8")
         for needle in ("TE_SELF_CHECK OK workforce_lines_net", "TE_SELF_CHECK BROKEN workforce_lines_net",
@@ -2296,7 +2299,7 @@ class TestPrimogenitureUnderFull(unittest.TestCase):
         for needle in ("NOT = { has_global_variable = te_inh_pr_selfcheck_done }",
                        "NOT = { has_local_variable = te_inh_pr_was }",
                        "value = modifier:state_demog_absorbed_birth_rate_mult",
-                       "trigger_event = { id = te_debug_demog.5 days = 7 }",
+                       "owner = { trigger_event = { id = te_debug_demog.205 days = 7 } }",
                        # the review's I1: near 0 or 1 an unsummed or unscaled line reads like the scaled one
                        "var:te_inh_agrarian_share > 0.1", "var:te_inh_agrarian_share < 0.9",
                        "TE_SELF_CHECK START primogeniture_scaled"):
@@ -6231,7 +6234,7 @@ class TestConsole(unittest.TestCase):
                          r"state_demog_absorbed_birth_rate_mult = 0\.1\b")
         start = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_probe_start")
         self.assertIn("add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }", start)
-        self.assertIn("trigger_event = { id = te_debug_demog.2 days = 7 }", start)
+        self.assertIn("owner = { trigger_event = { id = te_debug_demog.202 days = 7 } }", start)
         after = _block(console, "te_debug_demog.2")
         self.assertIn("remove_modifier = te_debug_demog_scaled_probe", after)
         values = _text(ROOT / "common" / "script_values" / "te_debug_demog_values.txt")
@@ -7962,7 +7965,7 @@ class TestConsequencesScript(unittest.TestCase):
                      "set_global_variable = { name = te_demog_selfcheck_consc_done value = yes }",
                      "NOT = { has_modifier = te_demog_census_conscription_up }",
                      "NOT = { has_modifier = te_demog_census_conscription_down }",
-                     "trigger_event = { id = te_debug_demog.30 days = 7 }"):
+                     "owner = { trigger_event = { id = te_debug_demog.230 days = 7 } }"):
             self.assertIn(line, start)
         unemp = debug["te_debug_demog_unemployment_selfcheck"]
         for line in ("te_demog_cohorts_run = yes", "NOT = { has_global_variable = te_demog_selfcheck_unemp_done }",

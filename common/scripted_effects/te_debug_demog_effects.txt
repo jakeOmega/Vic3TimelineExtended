@@ -559,7 +559,8 @@ te_debug_demog_probe_start = {
 	debug_log = "TE_DEMOG_PROBE before absorbed_b=[THIS.ScriptValue('te_debug_demog_line_absorbed_b')|5] date=[TimeKeeper.GetCurrentDate.GetString]"
 	debug_log_scopes = yes
 	add_modifier = { name = te_debug_demog_scaled_probe multiplier = 0.62 }
-	trigger_event = { id = te_debug_demog.2 days = 7 }
+	# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .202)
+	owner = { trigger_event = { id = te_debug_demog.202 days = 7 } }
 }
 
 # ---- q: the owner-change probe (the late-marriage plan, Stop B's I1; owner, 2026-10-12) --------
@@ -684,7 +685,8 @@ te_debug_demog_pr_selfcheck_start = {
 		debug_log = "TE_SELF_CHECK START primogeniture_scaled expected=[THIS.ScriptValue('te_debug_demog_pr_chk_expected')|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
 		set_variable = { name = te_inh_pr_chk_before value = modifier:state_demog_absorbed_birth_rate_mult }
-		trigger_event = { id = te_debug_demog.5 days = 7 }
+		# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .205)
+		owner = { trigger_event = { id = te_debug_demog.205 days = 7 } }
 	}
 }
 
@@ -711,9 +713,11 @@ te_debug_demog_wf_selfchecks = {
 		if = {
 			limit = { NOT = { has_global_variable = te_demog_selfcheck_net_done } }
 			set_global_variable = { name = te_demog_selfcheck_net_done value = yes }
-			capital = {
-				trigger_event = { id = te_debug_demog.8 days = 7 }
-			}
+			# the week waits on the country: a delayed state event never runs (te_debug_demog_events.txt, .208)
+			trigger_event = { id = te_debug_demog.208 days = 7 }
+			# delayed_state_event: the old path once a game, to see whether it ever runs (.199, its verdict .198)
+			capital = { trigger_event = { id = te_debug_demog.199 days = 7 } }
+			trigger_event = { id = te_debug_demog.198 days = 14 }
 		}
 		if = {
 			limit = {
@@ -721,9 +725,7 @@ te_debug_demog_wf_selfchecks = {
 				te_debug_demog_wf_amendment_held = yes
 			}
 			set_global_variable = { name = te_demog_selfcheck_amend_done value = yes }
-			capital = {
-				trigger_event = { id = te_debug_demog.6 days = 7 }
-			}
+			trigger_event = { id = te_debug_demog.206 days = 7 }
 		}
 		if = {
 			limit = {
@@ -731,9 +733,7 @@ te_debug_demog_wf_selfchecks = {
 				te_debug_demog_wf_ig_trait_plain = yes
 			}
 			set_global_variable = { name = te_demog_selfcheck_ig_done value = yes }
-			capital = {
-				trigger_event = { id = te_debug_demog.7 days = 7 }
-			}
+			trigger_event = { id = te_debug_demog.207 days = 7 }
 		}
 		if = {
 			limit = {
@@ -816,7 +816,8 @@ te_debug_demog_ms_selfcheck_start = {
 			set_variable = { name = te_dg_ms_chk_owner value = ROOT }
 			debug_log = "TE_SELF_CHECK START measure_country_types before=[THIS.Var('te_dg_ms_chk_before').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
-			trigger_event = { id = te_debug_demog.10 days = 7 }
+			# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .210)
+			owner = { trigger_event = { id = te_debug_demog.210 days = 7 } }
 		}
 	}
 }
@@ -1210,7 +1211,8 @@ te_debug_demog_conscription_selfcheck_start = {
 		set_variable = { name = te_dg_chk_consc_t value = var:te_dg_mc }
 		debug_log = "TE_SELF_CHECK START conscription_term_read term=[THIS.ScriptValue('te_debug_demog_consc_chk_t')|3] before=[THIS.ScriptValue('te_debug_demog_consc_chk_before')|3] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
-		trigger_event = { id = te_debug_demog.30 days = 7 }
+		# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .230)
+		owner = { trigger_event = { id = te_debug_demog.230 days = 7 } }
 	}
 }
 
@@ -1548,7 +1550,8 @@ te_debug_demog_fl_selfcheck_start = {
 			set_variable = { name = te_dg_fl_chk_owner value = ROOT }
 			debug_log = "TE_SELF_CHECK START family_limitation_scaled before=[THIS.Var('te_dg_fl_chk_before').GetValue|4] line=[THIS.Var('te_dg_fl_chk_line').GetValue|4] (the verdict follows in a week; none means the capital changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
-			trigger_event = { id = te_debug_demog.90 days = 7 }
+			# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .290)
+			owner = { trigger_event = { id = te_debug_demog.290 days = 7 } }
 		}
 	}
 }

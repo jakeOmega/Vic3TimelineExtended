@@ -292,7 +292,8 @@ te_debug_demog_wave_selfcheck_start = {
 			}
 			debug_log = "TE_SELF_CHECK START wave_timed_country_type code=[THIS.Var('te_dg_wv_chk_code').GetValue|0] before=[THIS.Var('te_dg_wv_chk_before').GetValue|4] line=[THIS.Var('te_dg_wv_chk_line').GetValue|4] (the verdict follows in a week; none means the state changed hands first) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
-			trigger_event = { id = te_debug_demog.81 days = 7 }
+			# the week waits on the owner: a delayed state event never runs (te_debug_demog_events.txt, .281)
+			owner = { trigger_event = { id = te_debug_demog.281 days = 7 } }
 		}
 	}
 }
