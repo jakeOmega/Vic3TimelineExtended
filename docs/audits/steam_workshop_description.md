@@ -1,8 +1,8 @@
 # Steam Workshop description
 
-The description as published on the Workshop (1.2.0, 2026-10-26). Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
+The description for the Workshop as of 1.3.0 (2026-11-06; 1.2.0's is in git history). Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
 
-- **Length.** Steam caps a description at 8,000 characters. This one is 7,789 characters (7,843 UTF-8 bytes, 7,882 counting each line break as two), so it fits however Steam counts. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
+- **Length.** Steam caps a description at 8,000 characters. This one is 7,848 characters (7,902 UTF-8 bytes, 7,941 counting each line break as two), so it fits however Steam counts. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
 - **Player guide link.** Point it at the release's tag (`/tree/<version>/docs/player_guide/README.md`), not `main`, so it shows the guide that shipped. See `docs/guides/release_checklist.md`.
 
 ## Images to add
@@ -19,15 +19,15 @@ When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these 
 ```bbcode
 [h1]Vic3TimelineExtended[/h1]
 
-[b]Updated for Victoria 3: 1.14.5.[/b]
+[b]Updated for Victoria 3: 1.15.0.[/b]
 
 [i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
-[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.2.0/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.0/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
 [h1]At a glance[/h1]
 [list]
-[*]Around 160 technologies across 7 new eras, from interwar industry to a speculative future
+[*]Around 190 technologies across 8 new eras, from interwar industry to a speculative future
 [*]New goods, production chains, company buildings, wonders, and megastructures
 [*]100+ new laws, plus new combat units, ship classes, treaty articles, decrees, and companies
 [*]Hundreds of events, concept tooltips, and mechanical breakdowns
@@ -42,7 +42,7 @@ When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these 
 
 [b]Banking and Monetary Policy[/b] — Navigate booms, bubbles, crashes, and contagion. Set interest rates, manage inflation and gold reserves, intervene in currency flows, or negotiate pegs and monetary unions. Delegate policy or take direct control.
 
-[b]Space Race[/b] — Compete from suborbital flight to solar-system colonies and an interstellar probe. Choose your approach, fund your programme, and estimate rivals' progress. Launch in real orbital windows, manage orbital debris, and earn lasting rewards. An optional rule adds colony fleets, settlers, and modules.
+[b]Space Race[/b] — Compete from suborbital flight to solar-system colonies and an interstellar probe. Choose your approach, fund your programme, and estimate rivals' progress. Launch in real orbital windows, manage orbital debris, and earn lasting rewards. Colony fleets carry settlers and modules from the Moon outward, and warships in space blockade, seize, or destroy colonies.
 
 [b]Global Warming[/b] — Track rising temperatures, the largest emitters, and your own emissions. Tax carbon, retire fossil capacity, and build renewables, carbon capture, and adaptation. Treaties can bind rivals to emissions cuts, and penalties grow as the climate degrades.
 
