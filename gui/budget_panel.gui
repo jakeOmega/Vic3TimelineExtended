@@ -226,6 +226,10 @@ types budget
 				### END MOD ###
 
 				# Always available; this is a budget view, independent of JEs.
+				# Not for an observer, though: its sections build every figure
+				# from GetPlayer (te_budget_expense_section and the income one),
+				# and an observer has none, so the button is hidden as Banking's
+				# and Tax Code's are (gui_modding_guide.md, the observer gotcha).
 				blockoverride "sixth_button" { text = "te_budget_chart_tab" }
 				blockoverride "sixth_button_selected" { text = "te_budget_chart_tab" }
 				blockoverride "sixth_button_tooltip" { tooltip = "te_budget_chart_tab_tt" }
@@ -233,10 +237,10 @@ types budget
 					onclick = "[InformationPanel.SelectTab('te_breakdown')]"
 				}
 				blockoverride "sixth_button_visibility" {
-					visible = "[InformationPanel.IsTabSelected('te_breakdown')]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), InformationPanel.IsTabSelected('te_breakdown') )]"
 				}
 				blockoverride "sixth_button_visibility_checked" {
-					visible = "[Not(InformationPanel.IsTabSelected('te_breakdown'))]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), Not(InformationPanel.IsTabSelected('te_breakdown')) )]"
 				}
 			}
 
