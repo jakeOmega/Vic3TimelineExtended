@@ -18,7 +18,28 @@ The two goods are cut by geography, as vanilla cuts them:
 
 **Passenger tiers.** The passenger-trains group (loc "Rolling Stock") and the ports' passenger-ships group (`pmg_water_personal_transport`, `most_productive`) are upgrades that make more transportation for more inputs. From double-decker carriages up, and in every water tier, the inputs cost about 40–45% of the output at base prices (the two early carriage tiers, unchanged, about 55%), so a tier on a state that's already supplied loses little.
 
-**Mine and plantation transport tiers** (`pmg_train_automation_*`, `extra_pm_groups.txt`; every mine, the co-product mines included, and ten plantations): Road Carts (vanilla's empty default, which the mod `INJECT`s with +2,000 laborers a level and −20 economy-of-scale cap), Partial Bulk Transport (no technology; 2 transportation, base staffing), Rail Transportation (Railways; the mod's `REPLACE`s of `pm_rail_transport_mine` and `pm_steam_rail_transport` cut vanilla's 5 transportation to 1, −1,000 laborers, 10 pollution) and Extensive Rail Transport (Transport principle IV and a modern pump; 16.5 transportation, −1,000 laborers and −500 machinists). Partial Bulk matters before Railways, when a state's transportation comes only from Urban Centers (2 a level) and ports' sailing ships (15). The conversion gave it 5 (the old 3 Bulk Transportation × 50/30), so one level drew what 2.5 Urban Center levels make. For a level-5 Picks and Shovels coal mine it beat Road Carts only above a wage of about £0.07 at base price, or £0.15 at the doubled price of a short state. At 2 (2026-11-07) it beats Road Carts from about £0.02 at base price and £0.05 at twice base, so the choice follows the state's transportation price. Rail Transportation dominates it once researched; its one edge then is that it makes no pollution. Rubber plantations, logging camps and oil rigs have no Partial Bulk step, though the Road Carts `INJECT` applies to them too.
+**Mine and plantation transport tiers** (`pmg_train_automation_*`, `extra_pm_groups.txt`; every mine, the co-product mines included, and ten plantations). Each tier buys more transportation and needs fewer workers than the one before (owner, 2026-11-07; `test_transport_goods.py` pins the order):
+
+| Tier | Unlock | Transportation a level | Staff a level |
+|---|---|---|---|
+| Road Carts | none | 0 | +2,000 laborers; −20 economy-of-scale cap |
+| Partial Bulk Transport | none | 5 | base |
+| Rail Transportation | Railways | 8.5 | −1,000 laborers; 10 pollution |
+| Extensive Rail Transport | Railways, Transport principle IV or V, a modern pump | 16.5 | −1,000 laborers, −500 machinists |
+
+Road Carts is vanilla's empty default `INJECT`ed. Rail Transportation is the mod's `REPLACE` of `pm_rail_transport_mine` (mines) and `pm_steam_rail_transport` (plantations, rubber too). For a level-5 Picks and Shovels coal mine at base prices, each tier beats the one before from a higher wage:
+
+- Partial Bulk beats Road Carts from about £0.07 a worker.
+- Rail beats Partial Bulk from about £0.11.
+- Extensive Rail beats Rail from about £0.33. It is for developed, high-wage countries (owner, 2026-11-07).
+
+Before Railways, a state's transportation comes only from Urban Centers (2 a level) and ports' sailing ships (15), so a state short of it stays on Road Carts. Rubber plantations, logging camps and oil rigs have no Partial Bulk step, though the Road Carts `INJECT` applies to them.
+
+**How Rail fell below Partial Bulk.** When the tiers were written (2024-08) they read 0, 5, 10 and 20 Transportation. The 1.9 update (`67ee009a`, 2025-06-26) moved them onto Merchant Marine, then the mod's freight good. Partial Bulk got 3 and Extensive 10, but both rail tiers got 0.50 for 5. The same 10 → 0.50 slip hit eight other methods, and 12 became 0.52 in Drone Delivery: apparently the update's 1 → 0.5 substitution also rewrote the "1" at the front of "10" and "12". #1050's ×50/30 carried 0.50 forward as 1, so Partial Bulk cost five times Rail until 2026-11-07. Cleanroom Fabs and AI-Managed Fab were set to 5 on 2026-01-31, and #1050 converted Drone Delivery to 9. Six methods from the slip still read 1, and whether they follow is the owner's call:
+
+- Iron-Frame Buildings (Construction Sectors).
+- Advanced Process Control, Distributed Control Systems and AI Managed Chemical Plant (chemical and synthetics plants).
+- AI Managed Power Plant and Power Integrated Smart Systems (power plants).
 
 **Vactrains** (era 12, the `vactrains` technology, era 13 spec § 7.9) end both railway ladders. `pm_vactrains` follows Maglev Trains in Rolling Stock: 160 transportation (Maglev 100) and +15 infrastructure a level (Bullet Trains 5, Maglev 10), on steel, electronic components, tech metals and electricity, about 44% of the output at base prices. `pm_vactrain_freight` follows Autonomous Trains in the base group: 170 transportation (Autonomous 133.5) and 60 infrastructure a level (every base method from the diesel variant on has 55), on electricity, electronic components, tech metals and digital assets. It is the base group's first method since Electric Trains with no oil or coal, so it carries no emissions line. Both take `required_input_goods = electricity`. Freight goes in the base group because the base methods are the freight ladder (Containerized Cargo, Automated Loading and Unloading), the evacuated-tube ventures of the 2010s turned to cargo, and every base method after Electric Trains burns oil.
 

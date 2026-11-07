@@ -141,25 +141,25 @@ class TestLiveFiles(unittest.TestCase):
                 self.assertNotIn("goods_output_merchant_marine_add", self.blocks[name])
                 self.assertIn("goods_output_transportation_add", self.blocks[name])
 
-    def test_partial_bulk_pays_against_road_carts(self):
-        # Partial Bulk Transport is the pre-railway step for mines and
-        # plantations: it buys transportation instead of Road Carts' extra
-        # laborers. At base price that transportation must cost less than those
-        # laborers at the economy sim's wage floor (GBP 0.05 a worker a week),
-        # or it pays only where wages are high and loses wherever a state is
-        # short of transportation, the usual case before railways. At 5 it cost
-        # GBP 150 against GBP 100 (transport_goods.md, "Mine and plantation
-        # transport tiers").
+    def test_mine_and_plantation_transport_tiers_ascend(self):
+        # Each tier buys more transportation and needs fewer workers than the
+        # one before it, so Partial Bulk Transport sits between Road Carts and
+        # Rail (owner, 2026-11-07). The 1.9 update wrote rail's 5 Merchant
+        # Marine as 0.50, which left Partial Bulk dearer than Rail for 17 months
+        # (transport_goods.md, "Mine and plantation transport tiers").
         def value(name, key):
-            m = re.search(r"\b" + key + r"\s*=\s*(-?[\d.]+)", re.sub(r"#[^\n]*", "", self.blocks[name]))
-            return float(m.group(1)) if m else 0.0
+            body = re.sub(r"#[^\n]*", "", self.blocks[name])
+            return sum(float(v) for v in re.findall(r"\b" + key + r"\s*=\s*(-?[\d.]+)", body))
 
-        transportation_price, wage_floor = 30, 0.05
-        carters = value("pm_road_carts", "building_employment_laborers_add")
-        bought = value("pm_partial_bulk_transport", "goods_input_transportation_add")
-        self.assertGreater(carters, 0)
-        self.assertGreater(bought, 0)
-        self.assertLess(bought * transportation_price, carters * wage_floor)
+        for rail in ("pm_rail_transport_mine", "pm_steam_rail_transport"):
+            tiers = ["pm_road_carts", "pm_partial_bulk_transport", rail]
+            if rail == "pm_rail_transport_mine":
+                tiers.append("pm_rail_transport_mine_infrastructure_4")
+            bought = [value(t, "goods_input_transportation_add") for t in tiers]
+            staff = [value(t, r"building_employment_\w+_add") for t in tiers]
+            with self.subTest(tiers=tiers):
+                self.assertEqual(bought, sorted(set(bought)), "transportation must rise tier by tier")
+                self.assertEqual(staff, sorted(set(staff), reverse=True), "staff must fall tier by tier")
 
 
 if __name__ == "__main__":
