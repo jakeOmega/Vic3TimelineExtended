@@ -865,6 +865,8 @@ types te_grid_widget_types
 				blockoverride "text" {
 					text = "te_grid_tab_header"
 				}
+				### Show the grids on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_grid_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_power_grids')]"

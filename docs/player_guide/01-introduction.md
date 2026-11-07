@@ -28,11 +28,22 @@ Escape or click outside the page to close it.
 The Map Room is a page of world maps with a button for each: Turmoil,
 Devastation, Urban People, GDP per Capita, Gini Coefficient, Dynastic Wealth,
 Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal; a map for
-each of eight systems, Emissions, Nuclear Weapons, Agent Networks, United
-Nations, Political Models, Ocean Basins, Grandeur and Colonies; and, from the
-census, Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death
-Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance and
-Net Migration. Hover a state for its figure. The two comfort maps show what a
+each of nine systems, Emissions, Nuclear Weapons, Agent Networks, United
+Nations, Political Models, Ocean Basins, Grandeur, Colonies and Power Grids;
+and, from the census, Life Expectancy, Infant Mortality, Leading Cause, Birth
+Rate, Death Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex
+Balance and Net Migration. Hover a state for its figure.
+
+A map of figures shows how states differ now, not how the world has moved: its
+colors run from the fifth lowest state in the world to the fifth highest, the
+few beyond each end at its colors' limits, and the button's tooltip gives that
+range. The range is measured when you pick a map and again each month. A map
+with a meaningful middle keeps it: Fertility is cream at replacement, Natural
+Change and Net Migration at none, Sex Balance at even and the comfort maps at
+no penalty, and each side's colors run to the world's extreme on that side.
+Where every state is on one side, the colors run over the states there, cream
+at the one nearest the middle. Agent Networks keeps its fixed scale, 0 to 100.
+The two comfort maps show what a
 state's Local Climate does to its migration attraction: Base Comfort before any
 technology eases it, Current Comfort after its owner's, in the same colors so
 you can compare them. Crowding Penalty is the cut Migration Crowding makes, and
@@ -42,7 +53,8 @@ share of the world's emissions last year. Nuclear Weapons shows the world's
 nuclear powers as the world sees them, the countries that host your weapons or
 shelter under your umbrella, and, while the world believes you armed, those
 whose independence you guarantee; Agent Networks shades each country by your
-network there.
+network there. Power Grids colors each grid, bordering grids apart, with its
+hub striped white and a station on no grid gray.
 Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
 of Death chart, full where that cause took 90% of the deaths and paler as its
@@ -51,9 +63,9 @@ that cause took at least half as many deaths as the leader. Leading Cause,
 Birth Rate, Death Rate, Natural Change and Net Migration need a state's first
 full census year, so they start gray.
 
-Those eight systems' tabs, and Demographics', have a map button left of the
-"?" that opens the Map Room on their map. Seven of the eight (all but Ocean
-Basins) also draw the same map in their own journal entry while its page is
+Those nine systems' tabs, and Demographics', have a map button left of the
+"?" that opens the Map Room on their map. Seven of the nine (all but Ocean
+Basins and Power Grids) also draw the same map in their own journal entry while its page is
 open. Banking's button opens its journal entry,
 which colors every country by the phase of its banking cycle. A journal
 entry's map shows only while its page is open, so the crossed-out eye at the

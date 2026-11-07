@@ -14,9 +14,9 @@
 ### te_jmap_pick_row is the Map Room's picks: scripted GUIs, since the engine locks a contextless entry's own scripted
 ### buttons for a country not involved in it. It sits on the Map Room's page (te_map_room_widget.gui). The map takes a
 ### new pick at the next tick, and at once when the page reopens (check 4), so each pick has te_jmap_repainter (below,
-### a scripted widget) close the page a twentieth of a second after the click, for the scripted GUI's effect to land
-### (a quarter second worked, sixth session; the twentieth is the fifth pass's test), and open it again a twentieth of
-### a second later (a tenth worked).
+### a scripted widget) close the page a tenth of a second after the click, for the scripted GUI's effect to land
+### (a quarter second worked, sixth session), and open it again a fifth of a second later (a tenth worked; the fifth
+### pass's twentieth for each sometimes left the page closed, 2026-11-07).
 ###
 ### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map. The
 ### flag outlives a pick's reopen, so a faded Map Room stays faded from map to map.
@@ -207,6 +207,23 @@ types te_map_widgets
 			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
 			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	type te_jmap_grid_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		### The Power Grids tab (te_grid_tab_body). The Map Room only: power grids have no journal entry.
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
+			tooltip = "te_jmap_grid_button_tt"
+			onclick = "[GetVariableSystem.Clear('te_je_see_through')]"
+			onclick = "[GetScriptedGui('te_jmap_note_viewer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 		}
 	}
@@ -439,7 +456,7 @@ types te_map_widgets
 			}
 		}
 
-		# the monuments and the empires.
+		# the monuments, the empires and the power grids.
 		flowcontainer = {
 			direction = horizontal
 			parentanchor = hcenter
@@ -461,6 +478,15 @@ types te_map_widgets
 				visible = "[GetScriptedGui('te_jmap_pick_colonies_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_colonies_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_colonies_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_power_grids"
+				tooltip = "te_jmap_pick_power_grids_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_power_grids_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 			}
 		}
@@ -603,7 +629,7 @@ types te_map_widgets
 ### state, ClosePanel then OpenJournalEntryPanelDontToggle: the page closed and stayed closed, with nothing in the
 ### logs (fifth session). Either the button went with the page before the second line ran, or the close landed after
 ### the open had found the page still open. This widget outlives the page, and the open is a state of its own, a
-### twentieth of a second after the close. It is the plain open, the one the Demographics and Banking buttons use from outside
+### fifth of a second after the close. It is the plain open, the one the Demographics and Banking buttons use from outside
 ### the page; with the page closed its toggle opens it. The entry is this widget's own datacontext.
 ### The reopen logs TE_JMAP reopen first (te_jmap_reopen_log_sgui), so a page that stays closed says which half failed.
 ### Zero size: it draws nothing. Visible whenever a player can click a pick, as the launcher (te_systems_window.gui).
@@ -613,20 +639,21 @@ widget = {
 	visible = "[And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) )]"
 	datacontext = "[GetPlayerJournalEntry('je_te_map_room')]"
 
-	### 0.05 s (fifth pass, a test): 0.25 worked (sixth session). Too short for the pick to land and the page reopens
-	### on the old map (play-test check 1).
+	### 0.1 s (2026-11-07): 0.25 worked (sixth session), and the fifth pass's 0.05 sometimes left the page closed (the
+	### owner, 2026-11-07). Too short for the pick to land and the page reopens on the old map (play-test check 1).
 	state = {
 		name = te_jmap_repaint
 		next = te_jmap_repaint_open
-		duration = 0.05
+		duration = 0.1
 		on_finish = "[InformationPanelBar.ClosePanel]"
 	}
 
-	### 0.05 s (fifth pass, a test): 0.1 worked (sixth session). Too short for the close to land and the toggle finds
-	### the page still open, so it closes for good (play-test check 1).
+	### 0.2 s (2026-11-07): 0.1 worked (sixth session); at the fifth pass's 0.05 the page sometimes failed to reopen
+	### (the owner, 2026-11-07), the toggle finding it still open and closing it for good (play-test check 1). Twice
+	### the tenth that worked, for a slow frame.
 	state = {
 		name = te_jmap_repaint_open
-		duration = 0.05
+		duration = 0.2
 		on_finish = "[GetScriptedGui('te_jmap_reopen_log_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 		on_finish = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 	}

@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Seventh pass, 2026-11-06 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Eighth pass, 2026-11-07 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -11,6 +11,8 @@ Wealth and eight more census maps, and dropped Literacy, which vanilla's own lit
 map for eight of the mod's systems, each on its own entry and in the Map Room (below), a map button in each of their
 tabs and a Map Room button in the Timeline Extended window, and fades the see-through page to 20%. The seventh adds
 five maps to the Map Room alone: Tourism Appeal, Base and Current Comfort, GDP per Capita and the Crowding Penalty.
+The eighth (2026-11-07) fits nearly every map's colors to the world's range as it stands, adds a Power Grids map, and
+lengthens the repaint's two waits.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -49,12 +51,36 @@ too.
 **Cheap reads only.** Every value runs once per state, as the game runs, so
 the maps read stored variables and engine figures, never walk pops. A figure behind a long `state_region` chain is
 stored by the refresh that already computes it: tourism's Base Appeal (some 700 branches) and Local Climate's
-penalties (eight chains of 680). Each map's color comes from a factor, 0–1, on a
-fixed curve (life expectancy 25–80), so a color means the same thing in 1850 and 1950. Colors are named in
-`common/named_colors/te_journal_map_colors.txt`, one family per map.
+penalties (eight chains of 680). Each map's color comes from a factor, 0–1, on a curve fitted to the world as it
+stands (below). Colors are named in `common/named_colors/te_journal_map_colors.txt`, one family per map.
+
+**Fitted to the world** (eighth pass, 2026-11-07, the owner: "people are not going to it to see that the world GDP/c
+average has gone up, they want to see the regional differences"). Until then each curve was fixed and historical (life
+expectancy 25–80), so a color meant the same in 1850 and 1950, and a 1950 world sat in one corner of the palette. Now
+every map but two runs its colors from the world's low to its high: the fifth lowest and fifth highest of the states it
+paints (`TRIM` = 4 left out at each end, so one outlier doesn't flatten the rest; the extremes where fewer have a
+figure), which `te_jmap_range_<map>` measures with `ordered_state` into `te_jmap_rng_<map>_lo` / `_hi`
+(`common/scripted_effects/te_journal_map_ranges_generated.txt`). A pick measures its map before the page reopens
+(`te_jmap_set_selector` calls `te_jmap_refresh_range`), and the global monthly pulse measures the pick's map again
+and the two the systems' entries draw (Emissions, Grandeur: `te_jmap_refresh_entry_ranges`;
+`te_journal_map_on_actions.txt`), so an observer's game measures too. Before the first measure a map paints on the
+old fixed curve's ends. Each curve keeps its shape on the new span, its knots now fractions of it (turmoil still half
+its color in the first fifth), and no span is narrower than the map's `min_span` (turmoil 10 points, life expectancy 10
+years), so a world where every state stands alike doesn't paint noise as contrast. A map whose midpoint means
+something (replacement fertility 2.1, no natural change, no net migration, even sexes, no comfort penalty, Dynastic
+Wealth's 50) keeps it: below it the colors run from the world's low to it, above it to the world's high, each side on
+its own span (at least `min_half`), and where the whole world is on one side, that side runs over the world's span from
+the neutral color at its end nearest the midpoint. Life expectancy, infant mortality and median age split at their
+range's middle. GDP per capita keeps a doubling scale, from the world's low (at least £0.01) to its high (at least four
+times it). Each fitted pick's tooltip prints its range now (`GetPlayer.MakeScope.ScriptValue('te_jmap_<map>_lo')`).
+Comfort's two maps share Base Comfort's range (`range_of`), so they still compare. Two stay fixed: Agent Networks
+(0–100, its tiers at 50 and 75 are what it shows) and the leading cause's paleness (a share on a categorical map).
+Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
-`common/script_values/te_journal_map_scales_generated.txt`, `te_jmap_<map>_factor`). A script value takes no arguments
+`common/script_values/te_journal_map_scales_generated.txt`, `te_jmap_<map>_factor`, and the range effects above). A
+fitted map's row names its selector, the states it paints (`where`, which `test_journal_map_scales.py` compares with
+the Map Room's branch) and its shape: `rel`, `rel_mid` or `rel_doubling` over one of the fixed shapes. A script value takes no arguments
 and a paint runs no effect, so one shared curve can't be fed each map's figure (`te_sqrt`'s input is a variable an
 effect sets); the generator writes each map's tree from a table row instead, using one of four shapes: linear, a soft
 cap (straight to a soft bound, then `SLOPE_RATIO`, 4, times shallower to a hard one, so the common values get most of
@@ -94,11 +120,14 @@ entry, in no country's journal.
   Every map that reads a stored figure shows grey (`te_jmap_no_data`) for a state without one, through one `OR` branch
   that lists them all; the hover has two, "No census figures yet" for the census and walk maps and "No figure yet" for
   tourism and the two comfort maps, whose refreshes run within a month (Local Climate's first application keys on
-  `te_climate_base_penalty`, so an older save fills Base Comfort within a month too). Each curve is fixed and historical. Soft caps: turmoil and devastation half the color by 20%,
-  all at 100%; deaths per 1,000 70% of it from 5 to 40, all at 100. Diverging: infant mortality 0–50–300 (soft) to
-  500, natural change −40 to −15 (soft), 0, +30 (soft) to +45, net migration ±20 (soft) to ±60, sex balance 80–100–130
-  from the census's own effect thresholds, Dynastic Wealth 0–50–100. Linear: births 8–50, 65 and over 2–30%, Gini
-  0.30–0.80. Each pick's tooltip says where its bends are, since the map has no legend. The leading cause is categorical, in the Causes of Death
+  `te_climate_base_penalty`, so an older save fills Base Comfort within a month too). Each curve is fitted to the
+  world (above), on the shape of the fixed curve it had until 2026-11-07, whose ends are its range before the first
+  measure. Soft caps: turmoil and devastation half the color in the first fifth of the range; deaths per 1,000 70% of
+  it in the first 37%; emissions half in the first fifth, grandeur two-thirds in the first third, crowding two-thirds
+  in the first 31%. Around a midpoint: natural change and net migration soft on each side, comfort soft above none, sex
+  balance, fertility and Dynastic Wealth straight. Linear: births, 65 and over, Gini, urban people, tourism, and life
+  expectancy, infant mortality and median age split at the range's middle. Each pick's tooltip gives the range now,
+  since the map has no legend. The leading cause is categorical, in the Causes of Death
   pie's colors (`gen_ch_model_pie_textures.py`; the old code 6 draws as war, as the panel's icon does), each faded to
   a pale end of its own hue (`te_jmap_cause_<cause>_pale`) by the cause's share of last year's deaths
   (`te_jmap_cause_factor` on `te_demog_dc_lead_share`, linear from 30% to 90%; states ran 31–97% in 1838, 1940 and
@@ -124,13 +153,14 @@ entry, in no country's journal.
 - **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then fires
   `te_jmap_repaint` with `PdxGuiTriggerAllAnimations`. That state sits on `te_jmap_repainter`, a zero-size scripted
   widget outside the page (`gui/te_map_widgets.gui`, registered in `gui/scripted_widgets/te_systems_window.txt`), which
-  carries the Map Room as its own `datacontext`. A twentieth of a second after the click it closes the page
+  carries the Map Room as its own `datacontext`. A tenth of a second after the click it closes the page
   (`InformationPanelBar.ClosePanel`), for the scripted GUI's effect to land, and its next state,
-  `te_jmap_repaint_open`, opens the page again a twentieth of a second later with the plain `OpenJournalEntryPanel`: the
+  `te_jmap_repaint_open`, opens the page again a fifth of a second later with the plain `OpenJournalEntryPanel`: the
   page is closed by then, so the toggle opens it. Reopening repainted a paused map (2026-11-05). The third pass ran both
   calls from a state on the pick button itself, `ClosePanel` then `OpenJournalEntryPanelDontToggle`: the page closed
   and stayed closed, with no log line (fifth session). The reopen logs `TE_JMAP reopen` first. It worked with a quarter
-  second's close and a tenth's reopen (sixth session); a twentieth each is the fifth pass's test (check 1).
+  second's close and a tenth's reopen (sixth session); the fifth pass's twentieth each sometimes left the page closed
+  (the owner, 2026-11-07), so the close now waits a tenth and the reopen a fifth (check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
 
 ### Why not a country entry added by a button
@@ -158,8 +188,8 @@ works (the owner saw the page fade, 2026-11-06).
 
 ## The Systems' Maps
 
-Eight of the mod's systems have a map (sixth pass, owner's ask, 2026-11-06), selectors 18-25. Each but the Seabed's is
-drawn twice: by the system's own entry, whenever its page is open, and by the Map Room, on a pick. Both ask the same
+Eight of the mod's systems have a map (sixth pass, owner's ask, 2026-11-06), selectors 18-25, and the Power Grids a
+ninth (31, 2026-11-07). Each but the Seabed's and the Power Grids' is drawn twice: by the system's own entry, whenever its page is open, and by the Map Room, on a pick. Both ask the same
 state-scope triggers in the same order (`common/scripted_triggers/te_journal_map_triggers.txt`, one per color band), so
 the two pages paint alike; `test_journal_map_modes.py`'s parity test compares the entry's ladder with the Map Room's
 branches for its selector. Each map ends in a branch that takes every state left, so none needs the "no data" `OR`.
@@ -175,6 +205,7 @@ Each pick shows while its system's rule is on.
 | 23 | Ocean Basins | none | The state's `te_seabed_basin`, set for every coastal state in the first month and again each January for states made since (until 2026-11-06 only once a country had Abyssal Plain Mining); a coastal state still without one hovers as not yet recorded (`te_jmap_seabed_unrecorded`) |
 | 24 | Grandeur | `je_grand_monuments` | `gm_state_grandeur`, straight to 75 (the panel's top frame), then soft to 225 |
 | 25 | Colonies | `je_colonial_empire` | Each colony (`te_jmap_ce_colony`, below) and each colonial subject's state by its empire's band (`colonial_empire_tier`, the monthly snapshot of the band ladder); an empire's other states taupe |
+| 31 | Power Grids | none | Each station's state on a grid this month (`te_grid_hub`) in its grid's color, one of twelve (`te_grid_map_color`, `te_jmap_grid_<n>`), the hub striped white (`te_grid_rec_supply`, the record only a hub holds; the Map Room's second `map_color_second` branch); a station on no grid grey (`te_grid_flow` without a hub); the hover names the hub and the grid's stations (`te_grid_region_size_disp`). No game rule, as the Power Grids tab has none (owner's ask, 2026-11-07) |
 
 **The viewer.** A paint can't reach the player (`is_player` drew nothing under `owner`, 2026-11-05), so the maps of
 "your" country (19, 20) are drawn for `global_var:te_jmap_viewer`: every pick and map button sets it to the player's
@@ -192,6 +223,14 @@ computed it:
 - Colonial Empire: `colonial_empire_refresh_display` marks each colony with its owner (`te_jmap_ce_colony`, 62 days,
   so the marks go when the entry stops refreshing them) and counts `colonial_empire_colony_count` from the marks: one
   colony test per state, as before.
+- Power Grids: `te_grid_map_color_effect` (`power_grid_effects.txt`, last in `te_grid_balance_region_effect`, after the
+  record) colors each grid as the monthly run balances it, a greedy coloring: the hub's color from last month unless a
+  state bordering a member, on another grid, holds it (`te_grid_map_color_taken`), else the first of the twelve none
+  does; every member stores it as `te_grid_map_color`, which `te_grid_idle_station_effect` and
+  `te_grid_clear_state_effect` remove. A grid keeps its color while its hub does; one whose hub moves takes the new
+  hub's last color, usually the same grid's. A neighbour not yet balanced this run is read at last month's color, and
+  grids joined only by cable aren't neighbours. Twelve colors run out only around a grid with twelve differently
+  colored neighbours, which then keeps its own.
 
 ## The Banking Map
 
@@ -212,8 +251,8 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 - `te_jmap_demog_map_button`, in the Demographics tab's header (`te_demog_window_body`, so the Population panel's tab and
   the Timeline Extended window's), left of the "?": one click picks life expectancy and opens the Map Room.
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
-- `te_jmap_<system>_map_button` (gw, nuclear, covert, un, ch, seabed, gm, ce), in each of the eight systems' tab
-  headers: one click picks the system's map and opens the Map Room, as the Demographics button does. The Map Room, not
+- `te_jmap_<system>_map_button` (gw, nuclear, covert, un, ch, seabed, gm, ce, grid), in each system's tab
+  headers (the Power Grids tab's since 2026-11-07): one click picks the system's map and opens the Map Room, as the Demographics button does. The Map Room, not
   the system's entry: several entries are held by only some countries or not yet (the nuclear program before its
   technology, covert warfare before its slots, a monument's owner, an empire with colonies), and a button on an entry
   nobody holds has nothing to open. The entry paints the same map when it is opened from the journal.
@@ -224,8 +263,8 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 Every map button clears the see-through flag before it opens a page.
 - `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three (Turmoil, Devastation,
   Urban People), wealth (GDP per Capita, Gini, Dynastic Wealth), migration attraction (Base Comfort, Current Comfort,
-  Crowding Penalty) and Tourism Appeal alone, the systems' eight in rows of three, three and two, then the census's
-  eleven three to a row.
+  Crowding Penalty) and Tourism Appeal alone, the systems' nine in rows of three (Grandeur, Colonies and Power Grids
+  last), then the census's eleven three to a row.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
@@ -235,7 +274,10 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
 1. Add `map_color` (and `map_color_second`, `map_tooltip`) to the system's entry, branching on `owner ?= { … }` for a
    per-country map or on the state's own variables for a per-state one. Name the colors in
    `te_journal_map_colors.txt`; give each `lerp` its factor as a row in `gen_journal_map_scales.py`'s `SCALES` and
-   re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks).
+   re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks). Fit it
+   to the world unless its numbers mean something fixed (a row with `sel`, `where` and a `rel*` shape: the range
+   effect, the dispatcher's branch and the trees come with it), give its pick's tooltip the range
+   (`te_jmap_<map>_lo` / `_hi`), and mark it `entry` if a system's own entry draws it.
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
    pick scripted GUI and its `te_jmap_pick_button` in `te_jmap_pick_row`, and loc for both. A map that reads a stored
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A

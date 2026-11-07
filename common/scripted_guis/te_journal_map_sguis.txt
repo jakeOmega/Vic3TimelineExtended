@@ -112,6 +112,18 @@ te_jmap_pick_crowding_sgui = {
 	}
 }
 
+# Power Grids: each grid in a color of its own (power_grid_effects.txt's te_grid_map_color_effect). No game rule, as
+# the Power Grids tab has none.
+te_jmap_pick_power_grids_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 31 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 31 }
+	}
+}
+
 # The census maps read each state's figures from the last census; births, deaths, migrants and the causes of death
 # only once a state has stepped a full year (te_journal_maps.txt).
 te_jmap_pick_life_expectancy_sgui = {
@@ -380,6 +392,6 @@ te_jmap_reopen_log_sgui = {
 	scope = country
 	ai_is_valid = { always = no }
 	effect = {
-		debug_log = "TE_JMAP reopen date=[TimeKeeper.GetCurrentDate.GetString] (the repainter's reopen ran, a twentieth of a second after its close)"
+		debug_log = "TE_JMAP reopen date=[TimeKeeper.GetCurrentDate.GetString] (the repainter's reopen ran, a fifth of a second after its close)"
 	}
 }

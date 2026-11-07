@@ -62,6 +62,9 @@
 #   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
 #                    stations, its supply-to-demand ratio without them and its
 #                    hub (largest producer, a state), for the state panel tile
+#   te_grid_map_color  the grid's color on the Map Room's Power Grids map, 1-12
+#                    (te_grid_map_color_effect), kept from run to run while the
+#                    station is on a grid
 #   te_grid_region_demand  the grid's demand without its stations (the ratio's
 #                    denominator: 0, and the ratio 0, on a grid nothing uses
 #                    power on), for the building panel's Supply row
@@ -852,8 +855,61 @@ te_grid_balance_region_effect = {
 		te_grid_set_station_flow_effect = yes
 	}
 
-	# Once the orders are set, the grid's record for the Power Grids tab.
+	# Once the orders are set, the grid's record for the Power Grids tab, and its
+	# color on the Map Room's Power Grids map.
 	te_grid_record_effect = yes
+	te_grid_map_color_effect = yes
+}
+
+# Country scope, from te_grid_balance_region_effect once the grid's record is
+# written: te_grid_region holds the grid, scope:te_grid_hub_state its hub. The
+# grid's color on the Map Room's Power Grids map (selector 31,
+# te_journal_maps.txt; 2026-11-07), 1 to 12 (te_jmap_grid_<n>), on every member
+# as te_grid_map_color. It outlives the run, so a grid keeps its color while its
+# hub does: the hub's color from last month, unless a neighbouring grid holds it
+# (te_grid_map_color_taken, which reads local te_grid_color), else the first of
+# the twelve none does. A neighbour already balanced this run holds this run's
+# color, one not yet last month's; a station off any grid holds none
+# (te_grid_idle_station_effect), so it neither counts nor is counted. Only
+# around a grid with twelve differently colored neighbours do the colors run
+# out, and it keeps its own, or 1.
+te_grid_map_color_effect = {
+	set_local_variable = { name = te_grid_color value = 0 }
+	scope:te_grid_hub_state = {
+		if = {
+			limit = { has_variable = te_grid_map_color }
+			set_local_variable = { name = te_grid_color value = var:te_grid_map_color }
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				local_var:te_grid_color < 1
+				te_grid_map_color_taken = yes
+			}
+		}
+		set_local_variable = { name = te_grid_color_kept value = local_var:te_grid_color }
+		set_local_variable = { name = te_grid_color value = 1 }
+		while = {
+			limit = {
+				local_var:te_grid_color <= 12
+				te_grid_map_color_taken = yes
+			}
+			change_local_variable = { name = te_grid_color add = 1 }
+		}
+		if = {
+			limit = { local_var:te_grid_color > 12 }
+			set_local_variable = { name = te_grid_color value = local_var:te_grid_color_kept }
+			if = {
+				limit = { local_var:te_grid_color < 1 }
+				set_local_variable = { name = te_grid_color value = 1 }
+			}
+		}
+	}
+	every_in_global_list = {
+		variable = te_grid_region
+		set_variable = { name = te_grid_map_color value = local_var:te_grid_color }
+	}
 }
 
 # Country scope, from te_grid_balance_region_effect once a grid's orders are
@@ -1208,6 +1264,10 @@ te_grid_idle_station_effect = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
 	}
+	if = {
+		limit = { has_variable = te_grid_map_color }
+		remove_variable = te_grid_map_color
+	}
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
 	set_local_variable = { name = te_grid_upload_power_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
@@ -1389,6 +1449,10 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
+	}
+	if = {
+		limit = { has_variable = te_grid_map_color }
+		remove_variable = te_grid_map_color
 	}
 	if = {
 		limit = { has_variable = te_grid_import_command }

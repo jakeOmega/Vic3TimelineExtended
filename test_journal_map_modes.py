@@ -30,8 +30,8 @@ EFFECTS = "common/scripted_effects/te_journal_map_effects.txt"
 SGUIS = "common/scripted_guis/te_journal_map_sguis.txt"
 ROOM_WIDGET = "gui/journal_entry_widgets/te_map_room_widget.gui"
 BANKING = "common/journal_entries/je_banking.txt"
-# The systems' maps: (selector, entry file, entry key, Map Room pick, tab button, tab file, rule gate). The Seabed has
-# no entry, so the Map Room alone draws it.
+# The systems' maps: (selector, entry file, entry key, Map Room pick, tab button, tab file, rule gate). The Seabed and
+# the Power Grids have no entry, so the Map Room alone draws them.
 SYSTEM_MAPS = (
     (18, "common/journal_entries/je_global_warming.txt", "je_global_warming", "emissions", "gw",
      "gui/journal_entry_widgets/global_warming_widget.gui", "has_game_rule = global_warming_enabled"),
@@ -48,6 +48,8 @@ SYSTEM_MAPS = (
      "gui/journal_entry_widgets/grand_monuments_widget.gui", "gm_system_enabled = yes"),
     (25, "common/journal_entries/je_colonial_empire.txt", "je_colonial_empire", "colonies", "ce",
      "gui/journal_entry_widgets/colonial_empire_widget.gui", "has_game_rule = decolonization_enabled"),
+    # Power Grids have no entry and no game rule, as their tab has none.
+    (31, None, None, "power_grids", "grid", "gui/te_grid_widgets.gui", "is_player = yes"),
 )
 SYSTEM_ENTRIES = tuple((rel, key) for _sel, rel, key, *_ in SYSTEM_MAPS if rel)
 MAP_ENTRIES = (HOST, BANKING) + tuple(rel for rel, _key in SYSTEM_ENTRIES)
@@ -245,7 +247,11 @@ class CauseColorsTest(unittest.TestCase):
             self.assertRegex(stripes, gate + r'value = "te_jmap_cause_' + short + r'"', short)
             self.assertRegex(hover, gate + r"custom_tooltip_no_bullet = te_jmap_tt_cause_second_" + short + r"\b",
                              short)
-        self.assertEqual(len(re.findall(r"\bvalue = ", stripes)), len(self.CAUSES), "a stripe that isn't a cause's")
+        cause_stripes = [body for limit, body in branches_of(stripes) if re.search(r"te_jmap_selector = 11\b", limit)]
+        self.assertEqual(len(cause_stripes), len(self.CAUSES), "a stripe that isn't a cause's")
+        # the only other stripes: Power Grids' hubs
+        others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
+        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -280,7 +286,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 31)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 32)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -604,6 +610,39 @@ class ScriptChangesTest(unittest.TestCase):
         trig = code(TRIGGERS)
         for name in ("te_jmap_gw_no_data", "te_jmap_gw_removal"):
             self.assertNotRegex(block(trig, name), r"\b(?:var|global_var):", name)
+
+
+class PowerGridMapTest(unittest.TestCase):
+    """The Power Grids map (31): each grid's color is chosen by the monthly balancing, kept on its members."""
+
+    GRID_EFFECTS = "common/scripted_effects/power_grid_effects.txt"
+    GRID_TRIGGERS = "common/scripted_triggers/power_grid_triggers.txt"
+
+    def test_each_grid_is_colored_after_its_record(self):
+        balance = block(code(self.GRID_EFFECTS), "te_grid_balance_region_effect")
+        self.assertLess(balance.index("te_grid_record_effect = yes"), balance.index("te_grid_map_color_effect = yes"))
+
+    def test_the_color_is_one_of_the_twelve_and_avoids_neighbours(self):
+        body = block(code(self.GRID_EFFECTS), "te_grid_map_color_effect")
+        self.assertIn("te_grid_map_color_taken = yes", body)
+        self.assertIn("local_var:te_grid_color <= 12", body)
+        self.assertIn("set_variable = { name = te_grid_map_color value = local_var:te_grid_color }", body)
+        taken = block(code(self.GRID_TRIGGERS), "te_grid_map_color_taken")
+        self.assertIn("any_neighbouring_state", taken)
+        self.assertIn("var:te_grid_map_color = local_var:te_grid_color", taken)
+        self.assertIn("NOT = { is_target_in_global_variable_list = { name = te_grid_region target = this } }", taken)
+
+    def test_a_station_off_its_grid_drops_its_color(self):
+        effects = code(self.GRID_EFFECTS)
+        for name in ("te_grid_idle_station_effect", "te_grid_clear_state_effect"):
+            self.assertIn("remove_variable = te_grid_map_color", block(effects, name), name)
+
+    def test_every_grid_color_is_painted(self):
+        room = entry(HOST, "je_te_map_room")
+        colors = block(room, "map_color")
+        for n in range(1, 13):
+            self.assertRegex(colors, r"te_jmap_grid_color = \{ COLOR = " + str(n) + r" \}\s*\}\s*value = \"te_jmap_grid_"
+                             + str(n) + '"')
 
 
 class WindowButtonTest(unittest.TestCase):
