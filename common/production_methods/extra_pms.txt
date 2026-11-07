@@ -14148,18 +14148,18 @@ pm_cleanroom_fabs = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (22.79%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (17.09%)
-			goods_input_transportation_add = 8.5                 # Price:   30, Total cost:   255.0 (14.53%)
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (45.58%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (22.22%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (16.67%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (16.67%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (44.44%)
 			# Output goods
-			# Total input cost: 1755.0
+			# Total input cost: 1800.0
 			# Total output cost: 0
-			# Profit: -1755.0
+			# Profit: -1800.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -2500
-			# Wage breakeven: 0.70
+			# Wage breakeven: 0.72
 		}
 
 		level_scaled = {
@@ -14191,19 +14191,19 @@ pm_ai_managed_fab = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_robotics_add = 4                         # Price:   80, Total cost:   320.0 (6.56%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (6.15%)
-			goods_input_transportation_add = 8.5                 # Price:   30, Total cost:   255.0 (5.23%)
-			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (32.82%)
-			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (49.23%)
+			goods_input_robotics_add = 4                         # Price:   80, Total cost:   320.0 (6.50%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (6.10%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (6.10%)
+			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (32.52%)
+			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (48.78%)
 			# Output goods
-			# Total input cost: 4875.0
+			# Total input cost: 4920.0
 			# Total output cost: 0
-			# Profit: -4875.0
+			# Profit: -4920.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -4500
-			# Wage breakeven: 1.08
+			# Wage breakeven: 1.09
 		}
 
 		# Flat-staff prototype (docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md):
@@ -19520,95 +19520,24 @@ pm_partial_bulk_transport = {
 	texture = "gfx/interface/icons/production_method_icons/pm_partial_bulk_transport.dds"
 
 	# Sits between Road Carts (no transportation, +2,000 laborers a level, no
-	# economy of scale) and Rail Transportation (10 transportation, -1,000
-	# laborers): it buys the state's carts and boats instead of hiring carters.
-	# For a level-5 Picks and Shovels coal mine at base prices it beats Road Carts
-	# from a wage of about GBP 0.07, and Rail beats it from about GBP 0.16
-	# (transport_goods.md, "Mine and plantation transport tiers").
+	# economy of scale) and Rail Transportation, vanilla's pm_rail_transport_mine
+	# and pm_steam_rail_transport (5 transportation, -1,000 laborers), which the
+	# mod doesn't override: it buys the state's carts and boats instead of hiring
+	# carters. For a level-5 Picks and Shovels coal mine at base prices it beats
+	# Road Carts from a wage of about GBP 0.03, and Rail beats it from about
+	# GBP 0.08 (transport_goods.md, "Mine and plantation transport tiers").
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
+			goods_input_transportation_add = 2.5                 # Price:   30, Total cost:    75.0 (100.00%)
 			# Output goods
-			# Total input cost: 150.0
+			# Total input cost: 75.0
 			# Total output cost: 0
-			# Profit: -150.0
+			# Profit: -75.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
 			# Wage breakeven: 0.00
-		}
-	}
-}
-
-# Plantations' rail tier (rubber plantations too), at the same 10 as mines'
-# pm_rail_transport_mine below: the value the tiers were written with (2024-08).
-# The 1.9 update wrote 0.50 Merchant Marine for 5 here and in nine other
-# methods, and #1050 carried that forward as 1; all are back at their original
-# 10 (transport_goods.md, "The 1.9 slip"), which puts Partial Bulk Transport
-# below Rail again. Vanilla's rail tiers buy 5.
-REPLACE:pm_steam_rail_transport = {
-	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
-	}
-
-	unlocking_technologies = {
-		railways
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
-			# Output goods
-			# Total input cost: 300.0
-			# Total output cost: 0
-			# Profit: -300.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: -1000
-			# Wage breakeven: 0.30
-		}
-
-		level_scaled = {
-			building_employment_laborers_add = -1000
-		}
-	}
-}
-
-# Mines' rail tier: see pm_steam_rail_transport above for the 10.
-REPLACE:pm_rail_transport_mine = {
-	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
-	}
-
-	unlocking_technologies = {
-		railways
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
-			# Output goods
-			# Total input cost: 300.0
-			# Total output cost: 0
-			# Profit: -300.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: -1000
-			# Wage breakeven: 0.30
-		}
-
-		level_scaled = {
-			building_employment_laborers_add = -1000
 		}
 	}
 }
@@ -19765,15 +19694,15 @@ pm_rail_transport_mine_infrastructure_4 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 16.5                # Price:   30, Total cost:   495.0 (100.00%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			# Total input cost: 495.0
+			# Total input cost: 300.0
 			# Total output cost: 0
-			# Profit: -495.0
+			# Profit: -300.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -1500
-			# Wage breakeven: 0.33
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {
