@@ -969,6 +969,15 @@ add_liberty_desire effect [ Subject Pact not found for Country:
 
 The action's `decline_effect` runs `add_liberty_desire = 10` on the subject with no check that its subject pact still exists, so a request declined after the pact ended (Indore, about 1855, in the 2026-11-06 observer game) logs this once and adds nothing. The mod doesn't override the file.
 
+### `events/hawaii_events.txt:352` — the annexation option creates an incident against the Hawaii it just annexed (1.15)
+- stack: vanilla only
+
+```
+create_incident effect [ Trying to create a diplomatic incident targeted to an invalid country.
+```
+
+`hawaii_events.4.b` runs `annex = c:HAW` and then `create_incident = { country = c:HAW value = 10 }`; once annexed, Hawaii no longer exists, so the incident goes nowhere and logs this. Once, for Great Britain, about 1866, in the 2026-11-06 observer game. The mod doesn't override the file.
+
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 
 ```
