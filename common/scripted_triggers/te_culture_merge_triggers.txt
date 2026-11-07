@@ -1,0 +1,46 @@
+﻿# Culture Merges: the rule gate, the technology that opens each tier, and the
+# sphere test (docs/superpowers/specs/2026-11-07-culture-merges-design.md).
+
+# The system runs unless the rule is switched off. Written as a negation on
+# purpose: the rule defaults to enabled, so a save that stored no value for it
+# (a campaign begun before the rule existed) gets the system, as intended. (The
+# tax code's gates are positive because that rule defaults to off.) Callable
+# from any scope.
+te_cm_system_enabled = {
+	NOT = { has_game_rule = culture_merges_disabled }
+}
+
+# The technology that opens a tier of merge. Country scope.
+# $TIER$ = 1 (Pan-Nationalism), 2 (Mass Media, the tier-1b merges) or
+# 3 (Television, the tier-2 merges). A dispatcher: the technologies share no
+# name pattern, so each tier has its own trigger.
+te_cm_tier_tech = {
+	te_cm_tier_tech_$TIER$ = yes
+}
+
+te_cm_tier_tech_1 = {
+	has_technology_researched = pan-nationalism
+}
+
+te_cm_tier_tech_2 = {
+	has_technology_researched = mass_media
+}
+
+te_cm_tier_tech_3 = {
+	has_technology_researched = television
+}
+
+# Country scope, against scope:te_cm_starter (the caller sets it): the starter
+# itself, a subject of it at any depth, or a member of the power bloc it leads
+# (the bloc's members include its leader). A member of a bloc the starter only
+# belongs to is not in its sphere.
+te_cm_in_sphere = {
+	OR = {
+		this = scope:te_cm_starter
+		is_subject_of = scope:te_cm_starter
+		AND = {
+			scope:te_cm_starter = { is_power_bloc_leader = yes }
+			is_in_same_power_bloc = scope:te_cm_starter
+		}
+	}
+}

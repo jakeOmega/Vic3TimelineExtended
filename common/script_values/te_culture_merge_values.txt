@@ -1,0 +1,133 @@
+﻿# Culture Merges: every number the system reads, and the per-pop conversion rate
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md; plan Task 3).
+# Mirrored in test_culture_merge_values.py, which reads this file for its coefficients.
+#
+# One hysteresis convention: a gate first opens, and reopens, at its spec value,
+# and closes only past a looser one.
+
+# ---- Holding most of each part (spec 4.2) ----
+# The sphere's share of a part's homeland-state pops: opens at 60%, closes below 50%.
+te_cm_hold_open = 0.60
+te_cm_hold_close = 0.50
+
+# ---- Accepted, and very high acceptance ----
+# Vanilla's acceptance_status_4 is 60 ("accepted"), _5 is 80. A part is accepted
+# in a sphere country at 60 and stops being accepted below 55; very high is 80,
+# lost below 75.
+te_cm_accept_open = {
+	value = acceptance_status_4
+}
+te_cm_accept_close = 55
+te_cm_accept_high_open = {
+	value = acceptance_status_5
+}
+te_cm_accept_high_close = 75
+
+# ---- The standard-of-living gap between a part and the sphere ----
+# The gate opens below a gap of 3 and closes above 4.
+te_cm_sol_gap_close = 4
+te_cm_sol_gap_open = 3
+
+# ---- Shares ----
+# A meaningful share: a sphere that holds this much of a part's homeland pops
+# counts it. The switch: once the result holds this share of result + part pops
+# in a part's homeland states, every remaining pop of the part switches (2/3).
+te_cm_meaningful_share = 0.10
+te_cm_switch_share = 0.667
+
+# ---- Waiting and counters, in years ----
+# Tiers 1b and 2 count years of holding the parts together before a merge may
+# start; a merge that qualifies while waiting for a vanilla entry waits at most
+# te_cm_wait_cap_years.
+te_cm_years_tier2 = 30
+te_cm_years_tier3 = 50
+te_cm_wait_cap_years = 20
+
+# A subject or bloc member converts at half the starter's rate.
+te_cm_sphere_rate_factor = 0.5
+
+# ---- The conversion rate's coefficients (tuned against the pace targets) ----
+# te_cm_pop_rate is a fraction of one pop that converts each year. With the
+# remaining share (1 - f) ** n, the switch comes at n = ln(1 - 0.667) / ln(1 - f).
+# Owner's targets: about 20 years for a developed country, about 40 for a slow one.
+#   developed: literacy 0.8, urbanization 0.4, Public Schools + Ministry of Culture
+#              level 3 + Radio + Film (speed +80%): f = 5.4%, n = 19.6 years
+#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.7%, n = 40.4 years
+# The speed modifier already puts the developed profile at 1.8 times the slow
+# one, which is most of the 2 times the targets ask for, so the literacy and
+# urbanization factors are mild: te_cm_literacy_base is large, te_cm_urban_weight small.
+te_cm_base_rate = 0.0042
+te_cm_literacy_base = 6
+te_cm_urban_weight = 0.15
+
+# A discriminated pop barely converts; one living outside the part's homeland
+# states converts faster (the homeland shares gate the merge, and diaspora pops
+# convert at the switch regardless).
+te_cm_discriminated_factor = 0.1
+te_cm_diaspora_factor = 2
+
+# ---- The rate ----
+# Pop scope. Reads the saved scopes scope:te_cm_part (the part's culture) and
+# scope:te_cm_starter (the starting country); the caller sets both. Returns this
+# year's converted fraction of the pop, 0 to 0.5. The clamp is also the guard for
+# a caller that forgot a scope: a missing scope can't make the rate negative or
+# above 0.5.
+#
+#   rate = base
+#        * (literacy base + literacy_rate)         literacy_rate is the pop's, 0 to 1
+#        * (1 + urban weight * urbanization)       state.state_urbanization_rate (vanilla, building_values.txt):
+#                                                  total_urbanization / state_population * 1000, clamped to a
+#                                                  share, 0 to 1 (0.4 is a state 40% urban)
+#        * (1 + owner's country_culture_merge_speed_mult)
+#        * 0.1 if pop_acceptance < acceptance_status_4   (vanilla has no pop_is_discriminated)
+#        * 2   if the pop's state region is not a homeland of the part
+#        * 0.5 if its owner is not the starter
+te_cm_pop_rate = {
+	value = te_cm_base_rate
+
+	multiply = {
+		value = te_cm_literacy_base
+		add = literacy_rate
+	}
+
+	multiply = {
+		value = 1
+		add = {
+			value = state.state_urbanization_rate
+			multiply = te_cm_urban_weight
+		}
+	}
+
+	multiply = {
+		value = 1
+		add = owner.modifier:country_culture_merge_speed_mult
+	}
+
+	if = {
+		limit = {
+			pop_acceptance < acceptance_status_4
+		}
+		multiply = te_cm_discriminated_factor
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				state = {
+					state_region = { is_homeland = scope:te_cm_part }
+				}
+			}
+		}
+		multiply = te_cm_diaspora_factor
+	}
+
+	if = {
+		limit = {
+			NOT = { owner = scope:te_cm_starter }
+		}
+		multiply = te_cm_sphere_rate_factor
+	}
+
+	min = 0
+	max = 0.5
+}

@@ -531,3 +531,21 @@ global_commons_rule = {
 		flag = disable_pm_automated_ocean_mine
 	}
 }
+
+# Culture Merges (docs/superpowers/specs/2026-11-07-culture-merges-design.md):
+# related cultures (North and South German) merge into one national culture
+# over a few decades, and once it dominates, every remaining pop of the parts
+# switches. Disabled, no merge starts or runs. Checked as
+# NOT = { has_game_rule = culture_merges_disabled } (te_cm_system_enabled), so a
+# save that stored no value for the rule gets the system, which is the default.
+culture_merges_rule = {
+	default = culture_merges_enabled
+
+	culture_merges_enabled = {
+		flag = culture_merges_enabled
+	}
+
+	culture_merges_disabled = {
+		flag = culture_merges_disabled
+	}
+}
