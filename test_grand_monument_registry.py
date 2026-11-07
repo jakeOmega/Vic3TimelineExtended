@@ -6927,7 +6927,7 @@ class MergeRecordTests(unittest.TestCase):
                                                               "gm_state_tr_take_records_from_moving"))
 
     def test_a_merge_waits_for_its_orphan(self):
-        """2026-11-06: the Company annexed Jaipur, and Jantar Mantar's building
+        """2026-11-06: the East India Company annexed Dhundhar, and Jantar Mantar's building
         stood in the Company's part of Rajputana two days before its shadow read
         as an orphan; the stray pass removed it and the monument was lost. A
         copy needs the recorded part it copies standing and no monument of the

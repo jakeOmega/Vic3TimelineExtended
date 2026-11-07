@@ -644,7 +644,7 @@ gm_state_stray_building = {
 # State scope. An unclaimed building with no recorded part of its region
 # standing beside it, or in a region where a monument's old state has no
 # building: what a merge leaves before its orphan reads as one. On
-# 2026-11-06 the British India Company annexed Jaipur; Jaipur's part of
+# 2026-11-06 the East India Company annexed Dhundhar (JAI); Dhundhar's part of
 # Rajputana merged into the Company's, and Jantar Mantar's building stood in
 # the Company's part while the shadow's old state still resolved (its orphan
 # read as one two days later). The stray pass had removed the building by then

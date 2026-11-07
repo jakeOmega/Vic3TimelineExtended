@@ -1529,7 +1529,7 @@ gm_sh_settle_one = {
 			}
 			# Its last owner holds no part, but the merge brought its building
 			# into another's (an annexation: 2026-11-06, Jantar Mantar in the
-			# British India Company's part of Rajputana): the part with a
+			# East India Company's part of Rajputana): the part with a
 			# finished building no record describes takes it as its own.
 			if = {
 				limit = { NOT = { exists = scope:gm_sh_target } }
