@@ -35,11 +35,18 @@ Road Carts is vanilla's empty default `INJECT`ed. Rail Transportation is the mod
 
 Before Railways, a state's transportation comes only from Urban Centers (2 a level) and ports' sailing ships (15), so a state short of it stays on Road Carts. Rubber plantations, logging camps and oil rigs have no Partial Bulk step, though the Road Carts `INJECT` applies to them.
 
-**How Rail fell below Partial Bulk.** When the tiers were written (2024-08) they read 0, 5, 10 and 20 Transportation. The 1.9 update (`67ee009a`, 2025-06-26) moved them onto Merchant Marine, then the mod's freight good. Partial Bulk got 3 and Extensive 10, but both rail tiers got 0.50 for 5. The same 10 → 0.50 slip hit eight other methods, and 12 became 0.52 in Drone Delivery: apparently the update's 1 → 0.5 substitution also rewrote the "1" at the front of "10" and "12". #1050's ×50/30 carried 0.50 forward as 1, so Partial Bulk cost five times Rail until 2026-11-07. Cleanroom Fabs and AI-Managed Fab were set to 5 on 2026-01-31, and #1050 converted Drone Delivery to 9. Six methods from the slip still read 1, and whether they follow is the owner's call:
+**The 1.9 slip.** When the tiers were written (2024-08) they read 0, 5, 10 and 20 Transportation. The 1.9 update (`67ee009a`, 2025-06-26) moved industry's transportation inputs onto Merchant Marine, then the mod's freight good, at roughly half (5 → 3, 10 → 5, 20 → 10). It wrote 0.50 for 5 in ten methods, and 0.52 in Drone Delivery, whose 12 the same rule makes 6. Apparently its 1 → 0.5 substitution also rewrote the "1" at the front of "10" and "12". #1050's ×50/30 carried 0.50 forward as 1, so Partial Bulk cost five times Rail.
 
-- Iron-Frame Buildings (Construction Sectors).
-- Advanced Process Control, Distributed Control Systems and AI Managed Chemical Plant (chemical and synthetics plants).
-- AI Managed Power Plant and Power Integrated Smart Systems (power plants).
+Cleanroom Fabs and AI-Managed Fab were set to 5 Merchant Marine on 2026-01-31, so 8.5 after #1050. Everything else the slip hit was set to the same 8.5 on 2026-11-07, copies made from the slipped methods since included:
+
+- Both rail tiers.
+- Iron-Frame Buildings and its Construction Site twin. At 1 it cost less a construction point than Steel-Frame, the next tier.
+- The chemical plants' Advanced Process Control, Distributed Control Systems and AI Managed Chemical Plant, with their Explosives Factory copies.
+- The power plants' Power Integrated Smart Systems and AI Managed Power Plant, with its reactor, aneutronic and hydro copies.
+
+Drone Delivery went to 18: the 6 at 50/30 makes 10, plus the 8 of passenger transport it already bought. That puts it between E-Commerce (14.5) and Robotic Service Providers (26.5); at 9 it bought less than E-Commerce. `test_transport_goods.py` checks that each of these ladders buys no less transportation at a later tier. A bulk conversion of a good's quantities is engine-silent, so compare each changed value's old/new ratio afterwards: these were the only ratios near 0.05.
+
+**Why 8.5 and not the original 10.** 8.5 is what the pipeline gives without the slip. The 1.9 update's own rule took 10 to 5 Merchant Marine, as the owner's fab correction did, and #1050's ×50/30, rounded to the half, takes 5 to 8.5. Siblings that converted cleanly took the same path: Extensive Rail and Steel-Frame went 20 → 10 → 16.5. So 8.5 keeps each ladder's proportions as written. 10 would put the slipped tiers about 18% above their converted siblings.
 
 **Vactrains** (era 12, the `vactrains` technology, era 13 spec § 7.9) end both railway ladders. `pm_vactrains` follows Maglev Trains in Rolling Stock: 160 transportation (Maglev 100) and +15 infrastructure a level (Bullet Trains 5, Maglev 10), on steel, electronic components, tech metals and electricity, about 44% of the output at base prices. `pm_vactrain_freight` follows Autonomous Trains in the base group: 170 transportation (Autonomous 133.5) and 60 infrastructure a level (every base method from the diesel variant on has 55), on electricity, electronic components, tech metals and digital assets. It is the base group's first method since Electric Trains with no oil or coal, so it carries no emissions line. Both take `required_input_goods = electricity`. Freight goes in the base group because the base methods are the freight ladder (Containerized Cargo, Automated Loading and Unloading), the evacuated-tube ventures of the 2010s turned to cargo, and every base method after Electric Trains burns oil.
 

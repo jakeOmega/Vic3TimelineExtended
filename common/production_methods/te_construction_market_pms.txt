@@ -124,7 +124,7 @@ pm_te_direct_construction_iron_frame = {
 			goods_input_fabric_add = 8
 			goods_input_iron_add = 20
 			goods_input_tools_add = 4
-			goods_input_transportation_add = 1
+			goods_input_transportation_add = 8.5
 		}
 
 		level_scaled = {
