@@ -681,6 +681,7 @@ cm_east_slavic = {
 	ethnicities = {
 		1 = slavic
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_russian.dds"
 }
 
 # Yugoslav: serb, croat, bosniak (optional: slovene, bulgarian)
@@ -1542,6 +1543,7 @@ cm_arab = {
 	ethnicities = {
 		1 = arab
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_middle_east.dds"
 }
 
 # Oghuz Turkic: turkish, azerbaijani (optional: turkmen)
@@ -1595,6 +1597,7 @@ cm_oghuz_turkic = {
 		1 = [('=', 'arab'), ('=', 'slavic')]
 		2 = north_caucasian
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_ottoman.dds"
 }
 
 # Dravidian: tamil, kannada, malayalam (optional: telegu)
@@ -1603,6 +1606,7 @@ cm_dravidian = {
 	religion = hindu
 	heritage = heritage_carnatic
 	language = language_tamil_tulu
+	name_format = last_first
 	obsessions = {
 		sugar
 	}
@@ -1673,6 +1677,7 @@ cm_indonesian = {
 	ethnicities = {
 		1 = asian
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_southeast_asian.dds"
 }
 
 # Greater Nguni: nguni, zulu, xhosa
@@ -1708,6 +1713,7 @@ cm_nguni = {
 	ethnicities = {
 		1 = african
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_african.dds"
 }
 
 # Latin: french, cm_italian, spanish, portuguese (optional: romanian, platinean, argentine, uruguayan, chilean)
@@ -2004,6 +2010,7 @@ cm_latin = {
 	ethnicities = {
 		1 = caucasian
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_french.dds"
 }
 
 # Pan-Slavic: cm_east_slavic, cm_czechoslovak, cm_yugoslav (optional: polish, slovene, bulgarian)
@@ -2544,6 +2551,7 @@ cm_pan_slavic = {
 	ethnicities = {
 		1 = slavic
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_russian.dds"
 }
 
 # Pan-Turkic: cm_oghuz_turkic, uzbek, kazak, tatar, kirgiz (optional: bashkir, crimean_tatar, caucasian_turk, uighur)
@@ -2640,6 +2648,7 @@ cm_pan_turkic = {
 		1 = [('=', 'arab'), ('=', 'slavic')]
 		2 = north_caucasian
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_ottoman.dds"
 }
 
 # Pan-Malay: cm_indonesian, filipino
@@ -2697,6 +2706,7 @@ cm_pan_malay = {
 	ethnicities = {
 		1 = asian
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_southeast_asian.dds"
 }
 
 # East African: swahili, nyamwezi, sukuma (optional: yao, makua, lacustrine_bantu, kikuyu)
@@ -2804,4 +2814,5 @@ cm_east_african = {
 	ethnicities = {
 		1 = [('=', 'african'), ('=', 'east_african')]
 	}
+	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_middle_east.dds"
 }

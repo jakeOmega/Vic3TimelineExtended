@@ -33,8 +33,11 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   ``organize_loc.CULTURE_MERGE_RESULT_KEYS`` lists) so that a run of
   ``organize_loc.py`` leaves it intact.
 
-Not carried over from the first core part: ``traditions`` (written empty),
-``name_format`` and ``seal_and_signature_texture`` (the engine defaults apply).
+Also carried: ``traditions`` is what every core part shares (usually nothing,
+so ``{ }``), and ``name_format``, ``seal_and_signature_texture`` and the other
+optional fields a vanilla culture may carry (``taboos``, ``assimilation_rate``)
+come from the first core part when it has them. ``CARRIED_FIELDS`` names every
+field the generator knows; a test fails if a vanilla patch adds one it doesn't.
 
 Vanilla comes from the committed ``vanilla_parsed/`` snapshot, never from the
 live ModState: that one also holds the ``cm_`` cultures this script writes, so
@@ -97,6 +100,17 @@ FEMALE_SURNAMES = {
     "female_noble_last_names": "noble_last_names",
     "female_regal_last_names": "regal_last_names",
 }
+# Single-valued fields copied from the first core part when it has them; written
+# before ("name_format") or after the name lists, in vanilla's order.
+OPTIONAL_SCALARS = ("name_format", "seal_and_signature_texture", "assimilation_rate")
+# Every field a vanilla culture may carry that the generator handles: "color" is
+# the roster's, "traditions" the core parts' common ground, the rest the first
+# core part's (name lists: merged).
+CARRIED_FIELDS = frozenset(
+    ("color", "religion", "heritage", "language", "graphics", "ethnicities", "obsessions", "taboos", "traditions")
+    + OPTIONAL_SCALARS
+    + NAME_LISTS
+)
 # Lines of a name list wrap at this many characters after the indent.
 WRAP = 96
 
@@ -175,6 +189,15 @@ def _ethnicities(fields: dict) -> dict[str, str]:
     if not isinstance(value, dict):
         return {}
     return {k: _unwrap(value[k]) for k in sorted(value, key=lambda k: (not k.isdigit(), int(k) if k.isdigit() else 0, k))}
+
+
+def shared_traditions(core_fields: list[dict]) -> list[str]:
+    """The traditions every core part has, in the first core part's order."""
+    shared = _list(core_fields[0], "traditions")
+    for fields in core_fields[1:]:
+        have = _list(fields, "traditions")
+        shared = [t for t in shared if t in have]
+    return shared
 
 
 def merged_names(ids, list_name: str, cultures: dict) -> list[str]:
@@ -270,7 +293,13 @@ def build_plan(cultures: dict, merges: tuple[cfg.Merge, ...] | None = None) -> l
             "graphics": _single(first, "graphics", who),
             "ethnicities": _ethnicities(first),
             "obsessions": _list(first, "obsessions"),
+            "taboos": _list(first, "taboos"),
+            "traditions": shared_traditions([_fields(pool[p.cultures[0]]) for p in merge.core]),
         }
+        for name in OPTIONAL_SCALARS:
+            value = _unwrap(first.get(name))
+            if isinstance(value, str):
+                fields[name] = value
         if not fields["ethnicities"]:
             raise ValueError(f"{who} has no ethnicities")
         for trait in traits:
@@ -347,12 +376,18 @@ def render_culture(entry: Built) -> str:
         f"\theritage = {fields['heritage']}\n",
         f"\tlanguage = {fields['language']}\n",
     ]
-    if fields["obsessions"]:
-        out.append("\tobsessions = {\n" + "".join(f"\t\t{_token(o)}\n" for o in fields["obsessions"]) + "\t}\n")
-    out.append("\ttraditions = { }\n")
+    if "name_format" in fields:
+        out.append(f"\tname_format = {fields['name_format']}\n")
+    for list_name in ("obsessions", "taboos"):
+        if fields[list_name]:
+            out.append(f"\t{list_name} = {{\n" + "".join(f"\t\t{_token(o)}\n" for o in fields[list_name]) + "\t}\n")
+    out.append("\ttraditions = { " + "".join(f"{_token(t)} " for t in fields["traditions"]) + "}\n")
     out.extend(render_name_list(name, fields.get(name, [])) for name in NAME_LISTS)
     out.append(f"\tgraphics = {fields['graphics']}\n")
     out.append("\tethnicities = {\n" + "".join(f"\t\t{k} = {v}\n" for k, v in fields["ethnicities"].items()) + "\t}\n")
+    for name in OPTIONAL_SCALARS[1:]:
+        if name in fields:
+            out.append(f"\t{name} = {fields[name]}\n")
     out.append("}\n")
     return "".join(out)
 

@@ -56,6 +56,11 @@ def vanilla():
     return _VANILLA
 
 
+def _vanilla_fields(body):
+    fields = unwrap(body)
+    return fields if isinstance(fields, dict) else ()
+
+
 def start_tier(merge):
     return max(cfg.derive_tier(merge, part.cultures[0], vanilla()) for part in merge.core)
 
@@ -164,6 +169,24 @@ class CultureTest(unittest.TestCase):
                 self.assertIn(name, female, culture)
         for name in self.vanilla_names("russian", "female_common_last_names"):
             self.assertIn(name, female)
+
+    def test_name_format_and_seal_follow_the_first_core_part(self):
+        # Dravidian's first core part, Tamil, writes surnames first; German's North German does not.
+        self.assertEqual(field(unwrap(self.vanilla["tamil"]), "name_format"), "last_first")
+        self.assertEqual(field(self.cultures["cm_dravidian"], "name_format"), "last_first")
+        self.assertNotIn("name_format", self.cultures["cm_german"])
+        # Latin's first core part is French, which has its own treaty seal.
+        seal = field(unwrap(self.vanilla["french"]), "seal_and_signature_texture")
+        self.assertEqual(field(self.cultures["cm_latin"], "seal_and_signature_texture"), seal)
+        for result, body in self.cultures.items():
+            first = cfg.merge_by_key(result.removeprefix("cm_")).core[0].cultures[0]
+            first_body = unwrap(self.vanilla[first]) if first in self.vanilla else self.cultures[first]
+            self.assertEqual("name_format" in body, "name_format" in first_body, result)
+            self.assertEqual("seal_and_signature_texture" in body, "seal_and_signature_texture" in first_body, result)
+
+    def test_every_field_a_vanilla_culture_has_is_carried(self):
+        used = {name for key, body in self.vanilla.items() if key != cfg.TRAITS_KEY for name in _vanilla_fields(body)}
+        self.assertEqual(used - gen.CARRIED_FIELDS, set(), "a vanilla patch added a culture field gen_culture_merges does not know")
 
     def test_every_result_has_the_required_name_lists(self):
         for result, body in self.cultures.items():
@@ -288,6 +311,63 @@ class OrganizeLocTest(unittest.TestCase):
     def test_the_category_is_registered(self):
         self.assertIn("CULTURE_MERGES_GENERATED", organize_loc.CATEGORIES)
         self.assertIn("gen_culture_merges.py", organize_loc.GENERATED_CATEGORIES["CULTURE_MERGES_GENERATED"])
+
+
+class TraditionsTest(unittest.TestCase):
+    """A result keeps the traditions every core part has."""
+
+    GERMAN = (cfg.merge_by_key("german"),)
+    SCANDINAVIAN = (cfg.merge_by_key("scandinavian"),)
+
+    def plan(self, merges, traditions):
+        cultures = dict(vanilla())
+        for culture, names in traditions.items():
+            body = dict(unwrap(cultures[culture]))
+            body["traditions"] = ("=", list(names))
+            cultures[culture] = ("=", body)
+        return {entry.merge.result: entry for entry in gen.build_plan(cultures, merges)}
+
+    def test_a_tradition_every_core_part_has_is_kept(self):
+        plan = self.plan(self.GERMAN, {"north_german": ["tradition_y", "tradition_x"], "south_german": ["tradition_x"]})
+        self.assertEqual(plan["cm_german"].fields["traditions"], ["tradition_x"])
+        self.assertIn("\ttraditions = { tradition_x }\n", gen.render_culture(plan["cm_german"]))
+
+    def test_the_order_is_the_first_core_parts(self):
+        both = ["tradition_a", "tradition_b"]
+        plan = self.plan(self.GERMAN, {"north_german": both, "south_german": list(reversed(both))})
+        self.assertEqual(plan["cm_german"].fields["traditions"], both)
+
+    def test_a_tradition_one_core_part_lacks_is_dropped(self):
+        plan = self.plan(self.GERMAN, {"north_german": ["tradition_x"]})
+        self.assertEqual(plan["cm_german"].fields["traditions"], [])
+        self.assertIn("\ttraditions = { }\n", gen.render_culture(plan["cm_german"]))
+        plan = self.plan(self.GERMAN, {"south_german": ["tradition_x"]})
+        self.assertEqual(plan["cm_german"].fields["traditions"], [])
+
+    def test_every_core_part_counts(self):
+        three = {"swedish": ["tradition_x"], "danish": ["tradition_x"], "norwegian": ["tradition_x"]}
+        self.assertEqual(self.plan(self.SCANDINAVIAN, three)["cm_scandinavian"].fields["traditions"], ["tradition_x"])
+        del three["norwegian"]
+        self.assertEqual(self.plan(self.SCANDINAVIAN, three)["cm_scandinavian"].fields["traditions"], [])
+
+    def test_an_optional_part_does_not_count(self):
+        # Alemannic and East German are optional German parts: their traditions add nothing,
+        # and a tradition they lack takes nothing away.
+        plan = self.plan(self.GERMAN, {"north_german": ["tradition_x"], "south_german": ["tradition_x"]})
+        self.assertEqual(unwrap(unwrap(vanilla()["alemannic"]).get("traditions")), ["tradition_helvetic"])
+        self.assertEqual(plan["cm_german"].fields["traditions"], ["tradition_x"])
+
+    def test_the_committed_cultures_carry_only_shared_traditions(self):
+        cultures = parse(CULTURES)
+        for merge in cfg.MERGES:
+            if merge.new is None:
+                continue
+            core = [unwrap(vanilla()[p.cultures[0]]) if p.cultures[0] in vanilla() else None for p in merge.core]
+            if None in core:
+                continue  # a core part that is itself a result: covered by the build
+            shared = set.intersection(*(set(unwrap(c.get("traditions")) or []) for c in core))
+            written = unwrap(cultures[merge.result].get("traditions")) or []
+            self.assertEqual(set(written if isinstance(written, list) else []), shared, merge.key)
 
 
 class MechanicsTest(unittest.TestCase):

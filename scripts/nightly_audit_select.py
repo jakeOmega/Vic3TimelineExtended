@@ -119,7 +119,6 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/power_bloc_names/te_capital_power_bloc_names_generated.txt",
     "common/cultures/te_merged_cultures.txt",
     "common/discrimination_traits/te_merged_culture_traits.txt",
-    "localization/english/te_culture_merges_generated_l_english.yml",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",
     "common/scripted_effects/te_tax_generated_effects.txt",
