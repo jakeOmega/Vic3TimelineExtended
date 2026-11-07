@@ -1,0 +1,26 @@
+﻿# ============================================================================
+# CULTURE MERGES: the yearly pulse
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md; plan Task 4)
+# ============================================================================
+
+on_yearly_pulse_country = {
+	on_actions = { te_cm_yearly_on_action }
+}
+
+# The first country whose pulse fires after the lock lapses runs the global census; the
+# others skip until it lapses again (the Cultural Hegemony leaderboard's lock: 330 days,
+# so each year's first pulse after it counts). A rule switched off mid-game pauses the
+# whole system: nothing is recomputed, and no variable is reset or removed, so every
+# gate and counter keeps its last value until the rule is turned back on.
+te_cm_yearly_on_action = {
+	effect = {
+		if = {
+			limit = {
+				te_cm_system_enabled = yes
+				NOT = { has_global_variable = te_cm_census_lock }
+			}
+			set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
+			te_cmg_census_all = yes
+		}
+	}
+}
