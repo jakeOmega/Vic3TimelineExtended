@@ -766,17 +766,38 @@ gm_country_refresh = {
 		# monument that stood there wait to be adopted here (issue #936): the
 		# hidden event adopts them first, and nothing reads this building as a
 		# copy, a first sight or new levels until it has.
+		# A merge's wait (gm_state_stray_waits, below) is over once its orphan
+		# reads as one or adopted it: a later merge here waits afresh.
+		if = {
+			limit = {
+				has_variable = gm_stray_seen
+				gm_state_unclaimed_building = no
+			}
+			remove_variable = gm_stray_seen
+		}
 		if = {
 			limit = { gm_state_merge_pending = yes }
 			trigger_event = { id = monument_events.29 }
 		}
 		# A revolt's part of a monument's state: the engine's copy of its
-		# building, which nothing records and no orphan claims. The monument
-		# stays whole with the part that keeps its records (owner, 2026-10-18;
-		# sites spec §3.7): the hidden event removes it.
+		# building, which nothing records and no orphan claims, beside the part
+		# it copies. The monument stays whole with the part that keeps its
+		# records (owner, 2026-10-18; sites spec §3.7): the hidden event removes
+		# it.
 		else_if = {
 			limit = { gm_state_stray_building = yes }
 			trigger_event = { id = monument_events.29 }
+		}
+		# A merge's building before its orphan reads as one (2026-11-06,
+		# Jantar Mantar): not a copy and not a first sight. It waits up to a
+		# month for gm_state_merge_pending, then counts as a copy.
+		else_if = {
+			limit = { gm_state_stray_waits = yes }
+			if = {
+				limit = { NOT = { has_variable = gm_stray_seen } }
+				set_variable = gm_stray_seen
+				set_variable = { name = gm_stray_wait days = 30 }
+			}
 		}
 		else = {
 			gm_state_first_sight = yes
@@ -1312,6 +1333,7 @@ gm_state_changed_hands = {
 			# copy, which the refresh this sends removes.
 			gm_state_merge_pending = no
 			gm_state_stray_building = no
+			gm_state_stray_waits = no
 		}
 		set_variable = gm_seen
 		if = {
