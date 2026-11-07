@@ -95,7 +95,8 @@ while you hold at least that many warheads. Losing the rank that qualified you z
 
 Program funding is a stepper in The Program. Each step costs 100 weekly
 innovation, taken out of your research, and you can add a step only while your
-innovation is above 100. A warhead needs 100 progress.
+innovation is above 100. A warhead needs 100 progress, and a program finishes
+at most three warheads in a week.
 
 | Stage | Progress per funding step | Example |
 |---|---|---|
@@ -1181,7 +1182,7 @@ bomb as ordinary the AI builds more, threatens more and strikes first more
 readily, and in one that holds it in horror it trims and gives up its arsenal.
 It retaliates at any taboo.
 
-- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
+- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. A war and a rival that seems bigger can carry it past that target, but never past twice it (at most 50 warheads): there it stops funding and builds nothing until its arsenal falls below. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.

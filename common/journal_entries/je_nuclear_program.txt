@@ -372,6 +372,11 @@ je_nuclear_program = {
 			# already under a posture.
 			nd_weekly_update = yes
 
+			# ==== THE ARSENAL WATCH ==========================================
+			# A TE_NUCLEAR line at 50 warheads and each doubling, whatever
+			# brought the arsenal there (nuclear_weapon_effects.txt).
+			nd_log_arsenal_watch = yes
+
 			# ==== CUSTODY ====================================================
 			# The arsenal ledger: what the settlement hands on if this country
 			# ends (nuclear_custody_effects.txt). Last, so it records this

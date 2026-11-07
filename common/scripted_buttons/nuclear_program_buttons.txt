@@ -97,6 +97,13 @@ increase_funding_nuclear_program = {
 			limit = { nd_taboo_ai_restrains_programme = yes }
 			multiply = nd_taboo_ai_programme_restraint_factor
 		}
+		# The AI's arsenal cap (nuclear_ai_stockpile_cap, twice what it wants):
+		# the race terms above carry it past its wish, never past this
+		# (2026-11-07). nuclear_program_weekly_progress unfunds it there too.
+		if = {
+			limit = { nuclear_program_ai_at_stockpile_cap = yes }
+			multiply = 0
+		}
 	}
 
 	possible = {

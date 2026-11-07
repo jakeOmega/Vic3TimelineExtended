@@ -112,6 +112,18 @@ nuclear_program_possible_decrease_funding = {
 	}
 }
 
+# Country scope: is this an AI country whose arsenal has reached the most the
+# AI builds to (nuclear_ai_stockpile_cap, twice its desired stockpile)? Its
+# programme then finishes no warhead and is unfunded each week
+# (nuclear_program_weekly_progress), and its increase button is worth nothing
+# to it. A player is never held. Guarded: the stockpile exists only once the
+# entry has activated.
+nuclear_program_ai_at_stockpile_cap = {
+	is_ai = yes
+	has_variable = nuclear_weapon_stockpile
+	var:nuclear_weapon_stockpile >= nuclear_ai_stockpile_cap
+}
+
 # Country scope: is this country's nuclear weapons programme funded and
 # running? A nuclear power building its stockpile qualifies too. The gate on
 # covert_nuclear_sabotage_action (covert slice 6), whose modifier slows exactly
