@@ -892,13 +892,13 @@ Could not get datacontext of type PopListItem from model
 
 The ownership icon's `#local workforce` branch (vanilla line 4725) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4723). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic.
 
-### `gui/politics_panel_types.gui:2080` — the trend chart's single line drawn from a one-point trend
+### `gui/politics_panel_types.gui:2080, 2294` — the trend chart's single line drawn from a one-point trend
 
 ```
 Line must have atleast 2 points
 ```
 
-Vanilla's generic trend chart (`v3_plotline`, the `singleitem` block's `plotline`) draws its line from whatever trend it is given, and a trend with one recorded point (a new country's or interest group's) is too short for the line renderer. The mod doesn't override the file. 2026-10-24: four lines at once while the politics panel was open; cosmetic.
+Vanilla's generic trend chart (`v3_plotline`, the `singleitem` block's `plotline`) draws its line from whatever trend it is given, and a trend with one recorded point (a new country's or interest group's) is too short for the line renderer. The mod doesn't override the file. 2026-10-24: four lines at once while the politics panel was open; cosmetic. 1.15 moved the line to 2294 (2026-11-06, four lines in gui.log).
 
 ### `common/character_roles/01_appointment_roles.txt:22` — an interest-group leader's career ends after the group is gone
 
@@ -1932,6 +1932,26 @@ data system function 'skie'
 ```
 
 New in 1.13.9: the shipping-lane/sea-node tooltip (vanilla `interfaces_l_english.yml`, "Ports connected via this Sea Node") builds a `ConcatIfNeitherEmpty('title …', 'tooltippable_name …')` data-function call with localized state names inlined into the single-quoted argument. A name containing an apostrophe (observed: dynamic "Russo-American Kuril'skie Ostrova") terminates the string early — "Expected ','" (`:43`), plus companion "Failed to convert statement" (`:1112`/`:1092`) and "Could not find data system function 'skie'" (`:1466`). Vanilla tooltip code + vanilla dynamic name; fires only while that tooltip renders. Cosmetic (tooltip truncates).
+
+### `pdx_data_factory.cpp:1112` — a goods price tooltip quotes its own price range
+- source: `pdx_data_factory.cpp:1339`
+- source: `pdx_data_factory.cpp:1112`
+- source: `pdx_data_factory.cpp:1092`
+
+```
+MIN_AFTER_PRICE_ICON -
+```
+
+New in 1.15: vanilla's state price tooltip, SINGLE_GOODS_STATE_PRICE_TOOLTIP in interfaces_l_english.yml, passes its market price line into `ConcatIfNeitherEmpty('\n', '$GOODS_MARKET_PRICE|q$')`, and that line is a formatted price range (`@money!` values, the arrow, the after-price macros) that the data system then fails to parse as a statement. Four lines per range: these three, the next entry's `:1155` and a `Data error in loc string 'SINGLE_GOODS_STATE_PRICE_TOOLTIP'` that the generic data-error entries already tag. The mod defines none of these keys. 2026-11-06: 252 of each in two seconds while a goods price was hovered; the tooltip loses its market line. The signature is the after-price macro the range ends in. The messages carry the `@money!` formatting bytes (`\x15`, `\x16`) between their words, so a signature must be a run of plain text between them: `money!v;` never matches.
+
+### `pdx_data_factory.cpp:1155` — the same price range, read as a value
+- source: `pdx_data_factory.cpp:1155`
+
+```
+COIN_STACK_TOOLTIP
+```
+
+The first of the four lines of the entry above, `Could not find converter for '<the range>'`, which holds only the two prices, so it is pinned on the money format's coin tooltip. A mod string with a money value in a quoted `ConcatIfNeitherEmpty` argument (the replace file's building tooltip passes `$PRODUCTIVITY|q$` that way) would also log here, but its `:1112` and `:1092` lines don't hold the after-price macro and still show.
 
 ### `pdx_data_statementparser.cpp:43` — government options break on an apostrophe in a party name
 - source: `pdx_data_statementparser.cpp:43`
