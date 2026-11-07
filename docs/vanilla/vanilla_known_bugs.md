@@ -346,6 +346,24 @@ Event target link 'leader' returned an unset scope
 
 Vanilla's exile event reads `leader` on every interest group of the country without checking it has one. On 2026-10-25 (1915) it fired for India, whose groups' leaders had been deleted (the Indian-revolution entry, `00_code_on_actions.txt:5440`): five unset `leader` lines and one `Could not get leader` line a group. The mod doesn't override the file.
 
+### `events/agitators_events/exiles_events_02.txt:1169, 1173` — an exile freed by the melodrama event is made a group leader before joining a group
+- stack: vanilla only
+
+```
+set_as_interest_group_leader effect [ Character has no valid Interest Group ]
+```
+
+`exiles_more_events.6`'s first outcome moves the villain to the country (`transfer_character = ROOT`), frees the character from exile and then runs `set_as_interest_group_leader = yes`, once in the effect and once inside its `custom_tooltip`. A character freed from exile has no interest group yet, so both lines error and the character leads nothing. Once each, 2026-11-06 observer game (about 1850). The mod neither overrides the file nor calls `free_from_exile_effect`.
+
+### `events/russo_chinese_events.txt:372` — Vladivostok's option adds loyalists in a state scope
+- stack: vanilla only
+
+```
+add_loyalists effect [ Wrong scope for effect: state, expected country ]
+```
+
+`russo_chinese.3.b` runs `add_loyalists = { value = large_radicals strata = upper }` inside `scope:vladivostok_scope`, a state; the effect takes a country, so no loyalists are added. The port and `modifier_vladivostok_civilian` in the same block still apply. Once, 2026-11-06 observer game (about 1850). The mod doesn't override the file.
+
 ### `events/neighbor_events.txt:627, 628` — `neighbor_neighbor_state` unset
 - stack: vanilla only
 
