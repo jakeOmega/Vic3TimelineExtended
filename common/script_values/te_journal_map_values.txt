@@ -10,7 +10,8 @@
 # share, 16 Gini coefficient, 17 Dynastic Wealth; the systems' (each also on its own entry): 18 emissions, 19 nuclear
 # weapons, 20 covert networks, 21 the United Nations, 22 political models, 23 ocean basins, 24 grandeur, 25 colonies;
 # the Map Room's own again: 26 tourism's Base Appeal, 27 Base Comfort (Local Climate before any technology), 28 Current
-# Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 0 none. 2 was literacy, retired because
+# Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 31 power grids (the Power Grids tab's map,
+# 2026-11-07); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.

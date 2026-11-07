@@ -976,6 +976,112 @@ je_te_map_room = {
 			}
 			value = "te_jmap_none"
 		}
+		# 31. Power Grids: each state on a grid in its grid's color (te_grid_map_color, power_grid_effects.txt: bordering
+		# grids differ), a station on no grid this month grey; the hub stripes white (map_color_second).
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 1 }
+			}
+			value = "te_jmap_grid_1"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 2 }
+			}
+			value = "te_jmap_grid_2"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 3 }
+			}
+			value = "te_jmap_grid_3"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 4 }
+			}
+			value = "te_jmap_grid_4"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 5 }
+			}
+			value = "te_jmap_grid_5"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 6 }
+			}
+			value = "te_jmap_grid_6"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 7 }
+			}
+			value = "te_jmap_grid_7"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 8 }
+			}
+			value = "te_jmap_grid_8"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 9 }
+			}
+			value = "te_jmap_grid_9"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 10 }
+			}
+			value = "te_jmap_grid_10"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 11 }
+			}
+			value = "te_jmap_grid_11"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 12 }
+			}
+			value = "te_jmap_grid_12"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_on = yes
+			}
+			value = "te_jmap_grid_1"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_off = yes
+			}
+			value = "te_jmap_grid_offline"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+			}
+			value = "te_jmap_none"
+		}
 		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
 		# the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
 		# (test_journal_map_modes.py).
@@ -1006,10 +1112,17 @@ je_te_map_room = {
 	}
 
 	# Stripes. 11, the leading cause of death: the runner-up's color (te_dg_dc_second, the pie's) where it took at least
-	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). No other map stripes, and a state no
-	# branch takes has none.
+	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). 31, Power Grids: white on each grid's
+	# hub. No other map stripes, and a state no branch takes has none.
 	map_color_second = {
 		if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_hub = yes
+			}
+			value = "te_jmap_grid_hub"
+		}
+		else_if = {
 			limit = {
 				te_jmap_selector = 11
 				has_variable = te_dg_stepped
@@ -1623,6 +1736,34 @@ je_te_map_room = {
 				te_jmap_selector = 25
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_ce_none
+		}
+		# 31. Power Grids: the grid's hub and size, the hub itself, a station off any grid, or none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_hub = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_hub
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_on = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_off = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_off
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_none
 		}
 		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's).
 		else_if = {

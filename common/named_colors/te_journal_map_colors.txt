@@ -191,4 +191,21 @@ colors = {
 	te_jmap_ce_stable = hsv360 { 95 50 66 }
 	te_jmap_ce_solidified = hsv360 { 135 62 48 }
 	te_jmap_ce_metropole = hsv360 { 30 22 66 }
+
+	# Power Grids: a grid's color (te_grid_map_color, 1-12, chosen so that bordering grids differ), a station off any
+	# grid grey, and the hub's stripes.
+	te_jmap_grid_1 = hsv360 { 4 70 82 }
+	te_jmap_grid_2 = hsv360 { 212 70 80 }
+	te_jmap_grid_3 = hsv360 { 122 55 60 }
+	te_jmap_grid_4 = hsv360 { 44 85 92 }
+	te_jmap_grid_5 = hsv360 { 282 48 72 }
+	te_jmap_grid_6 = hsv360 { 182 70 68 }
+	te_jmap_grid_7 = hsv360 { 24 78 66 }
+	te_jmap_grid_8 = hsv360 { 330 52 86 }
+	te_jmap_grid_9 = hsv360 { 78 62 68 }
+	te_jmap_grid_10 = hsv360 { 238 38 58 }
+	te_jmap_grid_11 = hsv360 { 158 42 86 }
+	te_jmap_grid_12 = hsv360 { 56 42 98 }
+	te_jmap_grid_offline = hsv360 { 0 0 52 }
+	te_jmap_grid_hub = hsv360 { 0 0 98 }
 }

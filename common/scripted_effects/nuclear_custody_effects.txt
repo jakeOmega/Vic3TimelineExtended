@@ -303,13 +303,22 @@ nd_custody_settle_record = {
 			}
 			change_variable = { name = nd_custody_received add = scope:nd_settle_record.var:nd_ar_moving }
 			change_variable = { name = nd_custody_lost add = scope:nd_settle_record.var:nd_ar_lost }
+			# Every warhead ever taken into custody, for the arsenal watch's
+			# TE_NUCLEAR arsenal_milestone line (nd_log_arsenal_watch).
+			if = {
+				limit = { NOT = { has_variable = nd_log_custody_total } }
+				set_variable = { name = nd_log_custody_total value = 0 }
+			}
+			change_variable = { name = nd_log_custody_total add = scope:nd_settle_record.var:nd_ar_moving }
 			if = {
 				limit = { NOT = { has_variable = nd_custody_arrival_pending } }
 				set_variable = { name = nd_custody_arrival_pending value = 1 }
 				trigger_event = { id = nuclear_custody.2 }
 			}
 		}
-		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetNameNoFormatting]"
+		set_global_variable = { name = nd_log_custody_moving_now value = var:nd_ar_moving }
+		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetNameNoFormatting]; warheads=[SCOPE.ScriptValue('nd_log_custody_moving')|0]"
+		remove_global_variable = nd_log_custody_moving_now
 		# ---- the old owner's pledges and defiance records lapse -----------
 		# Best effort: only while the dead owner still resolves.
 		var:nd_ar_owner ?= {
@@ -571,6 +580,11 @@ nd_cw_apply_split = {
 				}
 				change_variable = { name = nd_custody_received add = ROOT.var:nd_cw_$MODE$_taken }
 				change_variable = { name = nd_custody_lost add = ROOT.var:nd_cw_$MODE$_lost }
+				if = {
+					limit = { NOT = { has_variable = nd_log_custody_total } }
+					set_variable = { name = nd_log_custody_total value = 0 }
+				}
+				change_variable = { name = nd_log_custody_total add = ROOT.var:nd_cw_$MODE$_taken }
 				if = {
 					limit = { NOT = { has_variable = nd_custody_arrival_pending } }
 					set_variable = { name = nd_custody_arrival_pending value = 1 }

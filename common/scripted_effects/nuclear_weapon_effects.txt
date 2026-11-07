@@ -72,8 +72,40 @@ nuclear_program_weekly_progress = {
 			}
 		}
 	}
+	# An AI at its arsenal cap (nuclear_ai_stockpile_cap, twice what it wants)
+	# builds nothing and pays nothing (2026-11-07): France reached some 1,200
+	# warheads in an observer game, the funding buttons' race terms outweighing
+	# the decrease at any size. Its progress is kept, up to one warhead's
+	# worth, for when it falls below the cap. Logged once a hold.
+	if = {
+		limit = { nuclear_program_ai_at_stockpile_cap = yes }
+		if = {
+			limit = { NOT = { has_variable = nd_ai_cap_held } }
+			set_variable = nd_ai_cap_held
+			debug_log = "TE_NUCLEAR: type=ai_stockpile_cap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; cap=[THIS.ScriptValue('nuclear_ai_stockpile_cap')|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; innovation=[THIS.ScriptValue('nd_log_innovation')|0]; at_war=[THIS.ScriptValue('nd_log_at_war')|0] (an AI arsenal reached its cap: its programme builds nothing and is unfunded until the arsenal falls below it)"
+		}
+		if = {
+			limit = { var:nuclear_weapons_program_funding > 0 }
+			set_variable = {
+				name = nuclear_weapons_program_funding
+				value = 0
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = nd_ai_cap_held }
+		remove_variable = nd_ai_cap_held
+	}
+	# The week's warheads, at most nuclear_weapon_program_max_per_week: the loop
+	# otherwise runs until the engine's 1,000-pass limit stops it.
+	set_local_variable = { name = nd_built_this_week value = 0 }
 	while = {
-		limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+		limit = {
+			var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value
+			local_var:nd_built_this_week < nuclear_weapon_program_max_per_week
+			NOT = { nuclear_program_ai_at_stockpile_cap = yes }
+		}
+		change_local_variable = { name = nd_built_this_week add = 1 }
 		change_variable = {
 			name = nuclear_weapon_program_progress
 			subtract = nuclear_weapon_program_goal_value
@@ -132,6 +164,27 @@ nuclear_program_weekly_progress = {
 			}
 		}
 	}
+	# More than one warhead in a week is rare (a warhead a week needs funding
+	# times 1 + the progress modifiers of 40), so the week says what drove it.
+	if = {
+		limit = { local_var:nd_built_this_week >= 2 }
+		set_variable = { name = nd_log_built value = local_var:nd_built_this_week }
+		debug_log = "TE_NUCLEAR: type=build_burst; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; built=[THIS.Var('nd_log_built').GetValue|0]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress=[THIS.Var('nuclear_weapon_program_progress').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]"
+		remove_variable = nd_log_built
+	}
+	# Progress the week's cap left over is dropped to one warhead's worth, so
+	# a figure gone wrong can't bank a backlog; the held AI's too.
+	if = {
+		limit = { var:nuclear_weapon_program_progress > nuclear_weapon_program_goal_value }
+		if = {
+			limit = { local_var:nd_built_this_week >= nuclear_weapon_program_max_per_week }
+			debug_log = "TE_NUCLEAR: type=build_cap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; progress=[THIS.Var('nuclear_weapon_program_progress').GetValue|0]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; ai=[THIS.ScriptValue('nd_log_is_ai')|0] (a week's progress held more warheads than the weekly cap; the rest was dropped)"
+		}
+		set_variable = {
+			name = nuclear_weapon_program_progress
+			value = nuclear_weapon_program_goal_value
+		}
+	}
 
 	# ---- Development events (only during first nuke, with active funding) ----
 	if = {
@@ -182,6 +235,41 @@ nuclear_program_weekly_progress = {
 		}
 		# ...and the proliferator learns that the world has noticed.
 		trigger_event = { id = nuclear_weapon_events.23 days = 7 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The arsenal watch (2026-11-07): a TE_NUCLEAR line each time an arsenal first
+# reaches 50 warheads, then 100, 200 and each doubling, whatever brought it
+# there (the programme, a custody transfer, a console), with what the funding
+# buttons weigh. France reached some 1,200 in an observer game and nothing in
+# the log said how. Each country logs a milestone once: nd_log_next_milestone
+# holds the next, and falls back to the first below which the arsenal drops
+# under a quarter of it. ROOT is the country (je_nuclear_program's weekly
+# pulse, before the ledger).
+# ----------------------------------------------------------------------------
+nd_log_arsenal_watch = {
+	if = {
+		limit = { has_variable = nuclear_weapon_stockpile }
+		if = {
+			limit = { NOT = { has_variable = nd_log_next_milestone } }
+			set_variable = { name = nd_log_next_milestone value = 50 }
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile >= var:nd_log_next_milestone }
+			debug_log = "TE_NUCLEAR: type=arsenal_milestone; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; milestone=[THIS.Var('nd_log_next_milestone').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]; ai_cap=[THIS.ScriptValue('nuclear_ai_stockpile_cap')|0]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]; innovation=[THIS.ScriptValue('nd_log_innovation')|0]; at_war=[THIS.ScriptValue('nd_log_at_war')|0]; rival_bigger=[THIS.ScriptValue('nd_log_rival_bigger')|0]; custody_total=[THIS.ScriptValue('nd_log_custody_total_value')|0]"
+			while = {
+				limit = { var:nuclear_weapon_stockpile >= var:nd_log_next_milestone }
+				change_variable = { name = nd_log_next_milestone multiply = 2 }
+			}
+		}
+		else_if = {
+			limit = {
+				var:nd_log_next_milestone > 50
+				var:nuclear_weapon_stockpile < nd_log_milestone_reset_line
+			}
+			set_variable = { name = nd_log_next_milestone value = 50 }
+		}
 	}
 }
 

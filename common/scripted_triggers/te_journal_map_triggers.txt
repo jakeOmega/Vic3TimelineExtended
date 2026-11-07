@@ -232,3 +232,29 @@ te_jmap_ce_metropole = {
 		te_jmap_ce_tier_known = yes
 	}
 }
+
+# Power Grids (the Map Room's 31): the state's station is on a grid this month (te_grid_hub, which a station off any
+# grid doesn't hold) and the grid's color is $COLOR$ (te_grid_map_color, power_grid_effects.txt).
+te_jmap_grid_color = {
+	has_variable = te_grid_hub
+	has_variable = te_grid_map_color
+	var:te_grid_map_color = $COLOR$
+}
+
+# A station on a grid this month.
+te_jmap_grid_on = {
+	has_variable = te_grid_hub
+}
+
+# The state is its grid's hub: the record (te_grid_rec_*) sits on the hub, and the next run clears it first.
+te_jmap_grid_hub = {
+	has_variable = te_grid_hub
+	has_variable = te_grid_rec_supply
+}
+
+# A station that has run but is on no grid this month (offline, disrupted, or alone without a link): te_grid_flow is
+# every station's figure, kept at 0 while idle.
+te_jmap_grid_off = {
+	has_variable = te_grid_flow
+	NOT = { has_variable = te_grid_hub }
+}

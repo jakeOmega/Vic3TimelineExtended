@@ -240,3 +240,18 @@ te_grid_tab_unlocked = {
 		}
 	}
 }
+
+# Country scope, in te_grid_map_color_effect with te_grid_region holding the
+# grid being balanced: does a state bordering one of its members, on another
+# grid, hold the color the effect is trying (local te_grid_color)? The Map
+# Room's Power Grids map then shows two grids apart.
+te_grid_map_color_taken = {
+	any_in_global_list = {
+		variable = te_grid_region
+		any_neighbouring_state = {
+			has_variable = te_grid_map_color
+			var:te_grid_map_color = local_var:te_grid_color
+			NOT = { is_target_in_global_variable_list = { name = te_grid_region target = this } }
+		}
+	}
+}

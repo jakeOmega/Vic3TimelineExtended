@@ -6,8 +6,11 @@
 # player in a multiplayer game shares it.
 te_jmap_set_selector = {
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
+	# The picked map's colors run over the world as it stands now (te_journal_map_ranges_generated.txt), measured
+	# here so the reopened page paints on them; the monthly pulse measures them again.
+	te_jmap_refresh_range = yes
 	te_jmap_note_viewer = yes
-	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; a pick on the page closes it a twentieth of a second later and reopens it a twentieth after that, which repaints the map: TE_JMAP reopen)"
+	debug_log = "TE_JMAP pick $SEL$ date=[TimeKeeper.GetCurrentDate.GetString] (a Map Room pick ran; a pick on the page closes it a tenth of a second later and reopens it a fifth after that, which repaints the map: TE_JMAP reopen)"
 }
 
 # The maps' viewer: the country a map of "your" deterrent or "your" networks is drawn for (te_jmap_viewer_*,

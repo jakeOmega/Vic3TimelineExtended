@@ -427,6 +427,13 @@ nuclear_weapon_program_monthly_progress = {
 }
 nuclear_weapon_program_funding_step = 100
 nuclear_weapon_program_goal_value = 100
+# The most warheads a programme finishes in one week (2026-11-07). The weekly
+# step finishes one for every goal its progress holds, in a while loop the
+# engine stops only at 1,000 passes, so a progress figure gone wrong could arm
+# a country in a week. Well above what funding buys: a warhead a week needs
+# funding times (1 + its progress modifiers) of 40. Progress past the cap is
+# dropped to one warhead's worth, and the week logs TE_NUCLEAR type=build_cap.
+nuclear_weapon_program_max_per_week = 3
 
 nuclear_weapons_program_current_cost = {
 	value = var:nuclear_weapons_program_funding
@@ -546,6 +553,19 @@ nuclear_ai_desired_stockpile = {
 	min = 1
 	max = 25
 	round = yes
+}
+
+# The most an AI arsenal is built to (2026-11-07): twice what it wants, so at
+# most 50. The funding buttons' race terms (a rival believed to hold more than
+# us, a war) can carry an AI past its wish, which is their purpose, but nothing
+# stopped them: at war with a rival believed bigger, the increase outweighs
+# the decrease however large the arsenal, and France built some 1,200 warheads
+# in an observer game. At the cap the AI's programme stops building and its
+# funding goes to 0 (nuclear_program_weekly_progress), and the increase button
+# is worth nothing to it. A player has no cap. Country scope.
+nuclear_ai_stockpile_cap = {
+	value = nuclear_ai_desired_stockpile
+	multiply = 2
 }
 
 # How keen the AI is to demand a Nuclear Program Freeze from

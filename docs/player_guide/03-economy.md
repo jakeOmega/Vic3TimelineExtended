@@ -530,7 +530,9 @@ of the countries on it. The Stations table lists each of your stations with its
 mode, flow, grid and staffing, those on no grid last. Most figures are the
 last monthly balancing's, so a new station joins them on the 1st. A station's
 building panel shows its own grid in brief,
-with a button to the tab, and National Info shows another country's tab.
+with a button to the tab, and National Info shows another country's tab. The
+map button in the tab's header opens the Map Room on Power Grids, which colors
+every grid in the world in a color of its own, with its hub striped white.
 
 A station is worth building where power plants make more than the state uses,
 and where Electricity is dear. A state with no power uses none, because its
