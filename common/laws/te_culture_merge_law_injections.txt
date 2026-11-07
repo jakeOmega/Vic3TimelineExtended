@@ -5,6 +5,6 @@
 
 INJECT:law_public_schools = {
 	modifier = {
-		country_culture_merge_speed_mult = 0.25
+		country_culture_merge_speed_mult = 0.10
 	}
 }

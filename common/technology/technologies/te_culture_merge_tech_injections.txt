@@ -6,18 +6,18 @@
 
 INJECT:radio = {
 	modifier = {
-		country_culture_merge_speed_mult = 0.15
+		country_culture_merge_speed_mult = 0.10
 	}
 }
 
 INJECT:film = {
 	modifier = {
-		country_culture_merge_speed_mult = 0.10
+		country_culture_merge_speed_mult = 0.05
 	}
 }
 
 INJECT:mass_propaganda = {
 	modifier = {
-		country_culture_merge_speed_mult = 0.15
+		country_culture_merge_speed_mult = 0.10
 	}
 }

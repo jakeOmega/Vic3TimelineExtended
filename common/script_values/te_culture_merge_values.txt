@@ -49,16 +49,19 @@ te_cm_sphere_rate_factor = 0.5
 # ---- The conversion rate's coefficients (tuned against the pace targets) ----
 # te_cm_pop_rate is a fraction of one pop that converts each year. With the
 # remaining share (1 - f) ** n, the switch comes at n = ln(1 - 0.667) / ln(1 - f).
-# Owner's targets: about 20 years for a developed country, about 40 for a slow one.
+# Owner's targets: about 20 years for a developed country, about 40 for a slow one,
+# the spread coming about half from the pop's circumstances (literacy, urbanization)
+# and half from policy (the speed modifier).
 #   developed: literacy 0.8, urbanization 0.4, Public Schools + Ministry of Culture
-#              level 3 + Radio + Film (speed +80%): f = 5.4%, n = 19.6 years
-#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.7%, n = 40.4 years
-# The speed modifier already puts the developed profile at 1.8 times the slow
-# one, which is most of the 2 times the targets ask for, so the literacy and
-# urbanization factors are mild: te_cm_literacy_base is large, te_cm_urban_weight small.
-te_cm_base_rate = 0.0042
-te_cm_literacy_base = 6
-te_cm_urban_weight = 0.15
+#              level 3 + Radio + Film (speed +40%): f = 5.6%, n = 19.1 years
+#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.7%, n = 40.6 years
+# Between those profiles literacy alone multiplies the rate by 1.28, urbanization
+# alone by 1.17 and policy by 1.4 (test_culture_merge_values.py pins each). The
+# speed sources are 0.10 Public Schools, 0.05 per Ministry level, 0.10 Radio,
+# 0.05 Film, 0.10 Mass Propaganda.
+te_cm_base_rate = 0.014
+te_cm_literacy_base = 1.5
+te_cm_urban_weight = 0.6
 
 # A discriminated pop barely converts; one living outside the part's homeland
 # states converts faster (the homeland shares gate the merge, and diaspora pops

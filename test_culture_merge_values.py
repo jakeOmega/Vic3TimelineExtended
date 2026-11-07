@@ -131,13 +131,18 @@ def modifier_lines(path, entity):
     return {k: float(unwrap(x)) for k, x in unwrap(body["modifier"]).items()}
 
 
+def ministry_per_level():
+    """The Ministry of Culture's speed per institution level (the engine multiplies by the level)."""
+    ministry = unwrap(parse(INSTITUTIONS)["institution_ministry_of_culture"]["modifier"])
+    return float(unwrap(ministry[SPEED]))
+
+
 def speed_from_files(*, public_schools, ministry_level, techs):
     """The speed modifier a country has, summed from the files that grant it."""
     total = 0.0
     if public_schools:
         total += modifier_lines(LAW_INJECT, "law_public_schools")[SPEED]
-    ministry = unwrap(parse(INSTITUTIONS)["institution_ministry_of_culture"]["modifier"])
-    total += ministry_level * float(unwrap(ministry[SPEED]))
+    total += ministry_level * ministry_per_level()
     for tech in techs:
         total += modifier_lines(TECH_INJECT, tech)[SPEED]
     return total
@@ -245,16 +250,17 @@ class TestSpeedModifier(unittest.TestCase):
         self.assertEqual(unwrap(body["decimals"]), "0")
 
     def test_sources(self):
-        self.assertEqual(modifier_lines(LAW_INJECT, "law_public_schools"), {SPEED: 0.25})
-        self.assertEqual(modifier_lines(TECH_INJECT, "radio"), {SPEED: 0.15})
-        self.assertEqual(modifier_lines(TECH_INJECT, "film"), {SPEED: 0.10})
-        self.assertEqual(modifier_lines(TECH_INJECT, "mass_propaganda"), {SPEED: 0.15})
-        ministry = unwrap(parse(INSTITUTIONS)["institution_ministry_of_culture"]["modifier"])
-        self.assertEqual(float(unwrap(ministry[SPEED])), 0.10)
+        self.assertEqual(modifier_lines(LAW_INJECT, "law_public_schools"), {SPEED: 0.10})
+        self.assertEqual(modifier_lines(TECH_INJECT, "radio"), {SPEED: 0.10})
+        self.assertEqual(modifier_lines(TECH_INJECT, "film"), {SPEED: 0.05})
+        self.assertEqual(modifier_lines(TECH_INJECT, "mass_propaganda"), {SPEED: 0.10})
+        self.assertEqual(ministry_per_level(), 0.05)
 
     def test_every_speed_value_shows_as_a_whole_percent(self):
         # decimals = 0 with percent = yes: a source that is not a multiple of 0.01 would round away.
-        for value in (0.25, 0.10, 0.15):
+        sources = [ministry_per_level(), modifier_lines(LAW_INJECT, "law_public_schools")[SPEED]]
+        sources += [modifier_lines(TECH_INJECT, tech)[SPEED] for tech in ("radio", "film", "mass_propaganda")]
+        for value in sources:
             self.assertAlmostEqual(value * 100, round(value * 100), places=9)
 
     def test_loc(self):
@@ -278,9 +284,10 @@ class TestPace(unittest.TestCase):
         args.update(kw)
         return pop_rate(values(), **args)
 
-    def test_developed_speed_sums_to_0_8(self):
+    def test_developed_speed_sums_to_0_4(self):
+        # Public Schools 0.10 + Ministry level 3 (3 x 0.05) + Radio 0.10 + Film 0.05; no Mass Propaganda.
         speed = speed_from_files(public_schools=True, ministry_level=3, techs=("radio", "film"))
-        self.assertAlmostEqual(speed, 0.80, places=9)
+        self.assertAlmostEqual(speed, 0.40, places=9)
 
     def test_pace_targets(self):
         v = values()
@@ -288,6 +295,24 @@ class TestPace(unittest.TestCase):
         slow = years_to_switch(v, self.slow())
         self.assertTrue(17 <= developed <= 23, developed)
         self.assertTrue(35 <= slow <= 45, slow)
+
+    def test_pop_circumstances_matter_as_much_as_policy(self):
+        """Owner: literacy and urbanization are levers beside public education and the Ministry.
+        Between the slow and the developed profile the spread is about half the pop's
+        circumstances and half policy. Each factor alone must multiply the rate by at
+        least the minimum below, so a retune can't flatten them without failing here."""
+        v = values()
+        speed = speed_from_files(public_schools=True, ministry_level=3, techs=("radio", "film"))
+        base = dict(literacy=0.3, urbanization=0.1, speed=0.0)
+        literacy = pop_rate(v, **dict(base, literacy=0.8)) / pop_rate(v, **base)
+        urbanization = pop_rate(v, **dict(base, urbanization=0.4)) / pop_rate(v, **base)
+        policy = pop_rate(v, **dict(base, speed=speed)) / pop_rate(v, **base)
+        self.assertGreaterEqual(literacy, 1.25, literacy)
+        self.assertGreaterEqual(urbanization, 1.15, urbanization)
+        self.assertAlmostEqual(policy, 1.40, places=9)
+        circumstances = math.log(literacy) + math.log(urbanization)
+        share = circumstances / (circumstances + math.log(policy))
+        self.assertTrue(0.4 <= share <= 0.6, share)
 
     def test_bloc_member_takes_about_twice_as_long(self):
         v = values()
