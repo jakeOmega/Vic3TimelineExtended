@@ -47,6 +47,18 @@ class TestFormerOverlordReads(unittest.TestCase):
                 bad.append(self.events[:m.start()].count("\n") + 1)
         self.assertEqual(bad, [], "read var:former_overlord directly behind is_country_alive")
 
+    def test_no_bare_comparison_with_the_former_overlord(self):
+        # A plain `var:former_overlord = root` logs the same line whenever the
+        # overlord is gone: decolonization_events.19's trigger, checked for
+        # every great power, logged 62 in six minutes (2026-11-07). Compare
+        # with `?=`, which is false for a country that no longer exists.
+        bad = []
+        for rel in ("events/decolonization_events.txt", "common/on_actions/extra_on_actions.txt"):
+            text = _strip((ROOT / rel).read_text(encoding="utf-8-sig"))
+            for m in re.finditer(r"var:former_overlord\s*=\s*(?!\{)\S", text):
+                bad.append(f"{rel}:{text[:m.start()].count(chr(10)) + 1}")
+        self.assertEqual(bad, [], "compare var:former_overlord with ?=")
+
     def test_event_7_saves_a_living_former_overlord(self):
         immediate = _event(self.events, "decolonization_events.7")
         immediate = immediate[immediate.index("immediate"):]
