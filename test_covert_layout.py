@@ -1292,8 +1292,10 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual(m.group(1), "covert_warfare_unlock_tt")
         # A verbatim copy of the entry's `possible`, which is left as it is.
         self.assertEqual(m.group(2), _words(_braced(_read(JE), r"^\tpossible = \{")))
+        # The line names each source of the gate (test_covert_warfare_gate.py holds the gate to the sources).
         line = _loc()["covert_warfare_unlock_tt"]
-        for part in ("concept_operation_slots", "concept_great_power", "concept_major_power", "4", "3", "2"):
+        for part in ("concept_operation_slots", "$mainframe_computers$", "$computer_networks$", "$cyber_warfare$",
+                     "$quantum_computing$", "$law_ministry_of_intelligence_and_security$"):
             self.assertIn(part, line)
 
     def test_one_visible_per_widget(self):

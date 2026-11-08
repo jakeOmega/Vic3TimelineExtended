@@ -52,23 +52,22 @@ je_covert_warfare = {
 		has_game_rule = covert_warfare_enabled
 	}
 
-	# Activate only when slots exceed the base (1) + rank bonus (GP +2, Major +1):
-	# tech / law / institution has granted at least one extra slot beyond what
-	# every country of this rank gets for free.
+	# Activate once a source beyond the base slot and the rank bonus grants a
+	# slot: a technology, or the Ministry of Intelligence and Security's law.
+	# Each source is named, not counted. Until 2026-11-08 the test was the slot
+	# count against the rank's (4 for a great power, 3 major, 2 otherwise), and
+	# Two Sicilies opened the entry in 1836 (Workshop report): most likely a
+	# drop in rank read before the old rank's slot bonus lapsed, and an entry
+	# never closes. test_covert_warfare_gate.py fails when a slot source is
+	# added or removed and this list doesn't follow. Copied verbatim in
+	# covert_warfare_entry_unlocked (covert_warfare_triggers.txt).
 	possible = {
 		OR = {
-			AND = {
-				country_rank >= rank_value:great_power
-				covert_operation_max_slots >= 4
-			}
-			AND = {
-				country_rank = rank_value:major_power
-				covert_operation_max_slots >= 3
-			}
-			AND = {
-				NOT = { country_rank >= rank_value:major_power }
-				covert_operation_max_slots >= 2
-			}
+			has_technology_researched = mainframe_computers
+			has_technology_researched = computer_networks
+			has_technology_researched = cyber_warfare
+			has_technology_researched = quantum_computing
+			has_law = law_type:law_ministry_of_intelligence_and_security
 		}
 	}
 
