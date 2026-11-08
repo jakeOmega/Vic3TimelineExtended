@@ -60,11 +60,11 @@ A country's **sphere** is the country itself, its subjects at any depth (`every_
 
 ## Review Focus
 
-1. **The starter disappears mid-merge** (annexed, revolution won by the other side, released into a subject). The merge should go back to idle and keep its joined parts, dominance and counters, so another qualifying country can pick it up. A tag change through formation keeps the same country, so it is not a disappearance. Test: `test_starter_loss_returns_merge_to_idle` (Task 5).
+1. **The starter disappears mid-merge** (annexed, or released into a subject). The merge should go back to idle and keep its joined parts, dominance and counters, so another qualifying country can pick it up. A civil war's winner continues the nation: it inherits the starter's `te_cm_started_<m>` variable and takes over the merge (R30). A tag change through formation keeps the same country, so it is not a disappearance. Test: `test_starter_loss_returns_merge_to_idle` (Task 5).
 2. **A culture in two merges** (Yankee in American and Anglophone; Slovene in Yugoslav and Pan-Slavic). It should join only one running merge. A merge's result can't be a part elsewhere until that merge is complete. Test: `test_overlapping_parts_are_exclusive` (Task 4).
 3. **Empty homeland states.** A part whose homeland states hold no result or part pops makes the dominance denominator 0. Expected: no division by zero, and the part is not dominant unless it has no pops anywhere, in which case it switches. Test: `test_dominance_value_guards_zero` (Task 6).
 4. **A country formed or released after a switch** from a definition that lists only parts (Bavaria released from Germany). It should get the result as primary the same day (`on_country_formed`) or within a month. Test: `test_primary_refresh_is_wired` (Task 6).
-5. **The rule turned off in a running game.** Every pulse stops, and every merge entry concludes through its hidden invalid outcome. Test: `test_every_entry_point_checks_the_rule` (Task 5).
+5. **The rule turned off in a running game** (game rules can be changed mid-game, owner 2026-11-07). Every pulse stops and every merge variable keeps its value. Turning the rule back on resumes where each merge stood, and a yearly net re-adds a missing entry (R19, R20, R27). No entry concludes because the rule is off. Test: `test_every_entry_point_checks_the_rule` (Task 5).
 
 ---
 
