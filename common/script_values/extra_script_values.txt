@@ -2989,6 +2989,49 @@ population_transfer_number = {
 	}
 }
 
+# Building levels a country's government owns outside its government-funded
+# buildings (administration, barracks and the like): the state-owned enterprises
+# the enforce_privatization article would put up for sale. Country scope.
+enforce_privatization_state_owned_levels = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_government_funded = no
+			country_ownership_fraction > 0
+		}
+		add = {
+			value = level
+			multiply = country_ownership_fraction
+		}
+	}
+}
+
+# The fewest state-owned levels (enforce_privatization_state_owned_levels) a
+# country must have before the AI demands that it privatize them. Players are
+# not bound by it.
+enforce_privatization_ai_min_levels = 10
+
+# How keen the AI is to demand enforce_privatization of scope:source_country,
+# the country that would privatize: the article's proposal_weight (asking for it
+# in a treaty) and wargoal_score_multiplier (pressing it as an enforce war goal).
+# Root is the demander. 0 unless root runs a market economy and the source has
+# enough state-owned enterprise to sell; 1 otherwise.
+enforce_privatization_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_laissez_faire
+				has_law = law_type:law_interventionism
+			}
+			scope:source_country = {
+				enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels
+			}
+		}
+		value = 1
+	}
+}
+
 # Number of claims the target country has on the source country's states
 # Evaluated in country scope with scope:source_country and scope:target_country available
 population_transfer_claims_on_source = {

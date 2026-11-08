@@ -154,3 +154,9 @@
  # title, the Population panel's button and the one at the foot of another country's Politics tab; vanilla's
  # adjective for another country is kept ("French National Info").
  POP_BROWSER:0 "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]National Info"
+ # An enforce war goal's tooltip lists the article's source modifiers, then its target modifiers. Vanilla heads the
+ # first with the war goal's holder and the second with its target, but the side an enforced article binds is the
+ # target, the article's source (vanilla's treaty port: China cedes in the Opium War). Swapped here, so Britain's
+ # goal on Tahiti read "British modifiers: Force Privatization" (2026-11-08). Play-test: docs/testing/treaty-war-goal-playtest.md.
+ ARTICLE_DRAFT_WAR_GOAL_SOURCE_MODIFIERS_TITLE:0 "#title [WarGoal.GetTarget.GetAdjective] modifiers:#!"
+ ARTICLE_DRAFT_WAR_GOAL_TARGET_MODIFIERS_TITLE:0 "#title [WarGoal.GetHolder.GetAdjective] modifiers:#!"

@@ -29,6 +29,14 @@ Key gotchas:
 - **Authority and politics:** the article's `source_modifier` carries `country_authority_cost_add = -750`, the sum of the five forced policies that cost authority (emission standards 200, reforestation 100, public transit 150, fossil-fuel divestment 200, green building codes 100). The source cannot repeal them, and charging for them could push it under its authority limit (bureaucracy falls, which can start a bankruptcy cycle) for a choice it no longer has. Climate adaptation costs authority but is not forced, so it keeps its cost. The treaty's own former +300 authority cost is replaced by `interest_group_ig_industrialists_approval_add = -2`. `test_gw_treaty_authority_waiver.py` fails if the waiver and the policy costs drift apart. The article also needs the source to hold `je_global_warming` (the waiver assumes there is something to waive). Market members of a bound leader are not bound: they hold the market-wide policies (emission standards costs 200) but have no variable, no waiver, and cannot repeal.
 - **Button lock integration:** Remove-button `possible`/`visible` checks in `common/scripted_buttons/global_warming_buttons.txt` now block rollback when `has_emissions_reduction_treaty` is present (for emissions-reduction policies only).
 
+### Privatization
+
+- **Article key:** `enforce_privatization` in `common/treaty_articles/105_enforce_privatization.txt`, shown as Privatization so that its war goal reads Enforce Privatization (vanilla's `war_goal_enforce_treaty_article` prefixes "Enforce"; until 2026-11-08 it read Enforce Enforce Privatization).
+- **Effect:** the source, the conceding country, gets `country_force_privatization_bool` and a +200 authority cost; the demanding target gets +5% prestige.
+- **Gates:** the source needs Cooperative Ownership, Agrarianism or Traditionalism and the target Laissez-Faire or Interventionism, both in `possible`, since a war goal checks `possible` and not `can_ratify` (the target's test sat only in `can_ratify` until 2026-11-08).
+- **AI:** `proposal_weight` and `wargoal_score_multiplier` are `enforce_privatization_ai_demand_weight`: 0 unless the demander is capitalist and the source's government owns at least `enforce_privatization_ai_min_levels` (10) levels outside the buildings it funds (`enforce_privatization_state_owned_levels`). Before that Britain pressed it on Tahiti, which has nothing to privatize, in a war with France.
+- **Tooltip:** vanilla headed the source's modifiers with the war goal holder's name; the mod swaps the two headings for every enforce goal. Play-test: `docs/testing/treaty-war-goal-playtest.md`.
+
 ## Dynamic Treaty Names
 
 - **Purpose:** Gives thematic names to treaties containing mod-specific treaty articles (instead of generic "Treaty of [City]").

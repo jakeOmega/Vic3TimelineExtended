@@ -83,7 +83,7 @@ economy.
 |---|---|---|---|
 | Seize Company | Always available | Yes | The conceding country hands one of its companies to the other, unless the receiver already has a company of that type. |
 | Disband Company | Always available | Yes | The conceding country dissolves one of its companies. |
-| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. The demanding country needs Laissez-Faire or Interventionism, and the conceding country Cooperative Ownership, Agrarianism or Traditionalism. |
+| Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. The demanding country needs Laissez-Faire or Interventionism, in a war goal too, and the conceding country Cooperative Ownership, Agrarianism or Traditionalism. The AI demands it only where the government owns at least 10 levels of enterprise, not counting the buildings it funds. |
 | Free Port Concession | International Trade | Yes | The chosen state drops its tariffs (within a year) and gets +50% trade capacity, +25% trade advantage and more migration pull, but collects half the tax and assimilates more slowly. Blocked by Isolationism on either side. |
 
 The humanitarian and cultural articles move people, faiths and cultures.
