@@ -23,8 +23,9 @@ OVERRIDE = os.path.join(LOC, "replace", "timeline_extended_override_l_english.ym
 VALUES = os.path.join(ROOT, "common", "script_values", "extra_script_values.txt")
 
 # Articles still named "Enforce ...": each needs a rename (and its concept, guide
-# and translations with it). Remove an entry once it is renamed.
-STILL_DOUBLED = {"enforce_emissions_reduction"}
+# and translations with it). Remove an entry once it is renamed. Emissions
+# Reduction, the last, was renamed on 2026-11-08.
+STILL_DOUBLED: set[str] = set()
 
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
 
@@ -67,6 +68,14 @@ class EnforceWarGoalNameTest(unittest.TestCase):
         self.assertEqual(doubled - STILL_DOUBLED, set(),
                          "the war goal would read 'Enforce Enforce ...': name the article with a noun")
         self.assertEqual(STILL_DOUBLED - doubled, set(), "renamed: drop it from STILL_DOUBLED")
+
+    def test_emissions_reduction_concept_follows_the_article(self):
+        files = [os.path.join(LOC, f) for f in sorted(os.listdir(LOC)) if f.endswith(".yml")]
+        loc = english_loc(files)
+        self.assertEqual(loc["concept_emissions_reduction_treaty"], loc["enforce_emissions_reduction"])
+        old_links = sorted(k for k, v in loc.items()
+                           if re.search(r"Concept\('concept_emissions_reduction_treaty',\s*'[^']*Enforce", v))
+        self.assertEqual(old_links, [], "a concept link still shows the old name, Enforce Emissions Reduction")
 
     def test_headings_name_the_conceding_target_over_the_source_modifiers(self):
         loc = english_loc([OVERRIDE])

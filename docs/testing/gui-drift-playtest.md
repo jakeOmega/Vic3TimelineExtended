@@ -34,7 +34,7 @@ The cause, and the two cures, are `gui_modding_guide.md` gotchas #43 and #44.
 | **Grand Monuments, a level's worth.** The Grand Monuments tab with no construction site, then the journal entry. | Under the Monument Policy line, one centred line: "A level built now adds 5.000 Grandeur (5 in 1836)" in 1836, a smaller figure later; its hover explains the rate. Once a site stands, Awaiting Dedication opens on its row. | Two lines, or cut short: the textbox under `gm_je_ov_policy` in `te_gm_overview_panel`. |
 | **Tax Code bill footer.** Budget > Tax Code with a bill under debate, while its support rises past the passage share. | Pass, Force Through and Withdraw centred; once support holds, Pass and Withdraw centred. | The two rows' `visible` (`te_tax_show_pass_support_sgui`). |
 | **Passed bills' goods.** A passed bill that taxes or exempts a whole row of goods. | 13 icons to a row beside the label, inside the column. | `LABELLED_GOODS_ICONS_PER_ROW` in `gen_tax_code.py`. |
-| **Global Warming row 2.** Join or leave an Enforce Emissions Reduction treaty, and switch the Market panel's Climate tab to another market. | The market cell under the tier cell, the treaty cell beside it when it shows. | |
+| **Global Warming row 2.** Join or leave an Emissions Reduction treaty, and switch the Market panel's Climate tab to another market. | The market cell under the tier cell, the treaty cell beside it when it shows. | |
 | **Cultural Hegemony row 2.** A new game, the panel open across the first monthly recount. | The leaders' label and three slots from the start, filled at the recount; the row doesn't move. | |
 
 ## Older panels (the sweep of 2026-10-28)

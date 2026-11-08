@@ -5580,8 +5580,8 @@
   "es": "La nación ha exigido que los responsables de los crímenes de guerra enemigos rindan cuentas ante la justicia, lo que le da autoridad moral."
  },
  "enforce_emissions_reduction": {
-  "en": "Enforce Emissions Reduction",
-  "es": "Imponer la reducción de emisiones"
+  "en": "Emissions Reduction",
+  "es": "Reducción de emisiones"
  },
  "enforce_emissions_reduction_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will enforce market-wide emissions reduction policies (#v [SOURCE_COUNTRY.MakeScope.ScriptValue('gw_market_emis_display')|K]#! annual market emissions)",
@@ -6456,8 +6456,8 @@
   "es": "Cada mes, cada país lleva el modificador de Calentamiento climático, con cada valor multiplicado por la anomalía: a 2 °C cada línea vale el doble que a 1 °C. Pasa el cursor sobre Penalización por calentamiento en la vista general para ver cada línea y el multiplicador en vigor."
  },
  "gw_pol_treaty": {
-  "en": "Bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')]: national mitigation policies can't be repealed.",
-  "es": "Sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')]: las políticas nacionales de mitigación no se pueden derogar."
+  "en": "Bound by an [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')]: national mitigation policies can't be repealed.",
+  "es": "Sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Reducción de emisiones»')]: las políticas nacionales de mitigación no se pueden derogar."
  },
  "gw_pol_waiting": {
   "en": "Policies can be adopted once warming reaches #v 0.5 °C#!, Fossil-Fuel Divestment and Aerosol Injection at #v 1.0 °C#!.",

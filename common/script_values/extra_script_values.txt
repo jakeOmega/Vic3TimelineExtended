@@ -3016,7 +3016,7 @@ enforce_privatization_ai_min_levels = 10
 # GDP figure): 1 for the ten largest, 0.4 for the next ten, 0.1 for the rest,
 # since prying open, disarming or cleaning up a small economy is worth little
 # to a great power (owner, 2026-11-08). Read by the AI demand weights of
-# Privatization, Forced Disarmament, Free Port Concession and Enforce Emissions
+# Privatization, Forced Disarmament, Free Port Concession and Emissions
 # Reduction once their gates pass.
 treaty_ai_demand_economy_factor = {
 	value = 0.1

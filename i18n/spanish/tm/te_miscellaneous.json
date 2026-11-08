@@ -7880,8 +7880,8 @@
   "es": "Derechos digitales"
  },
  "concept_emissions_reduction_treaty": {
-  "en": "Enforce Emissions Reduction",
-  "es": "Imponer la reducción de emisiones"
+  "en": "Emissions Reduction",
+  "es": "Reducción de emisiones"
  },
  "concept_export_credit_facility": {
   "en": "Export Credit Facility",
@@ -16168,8 +16168,8 @@
   "es": "Todas las políticas necesitan 0,5 °C de calentamiento, la Desinversión en combustibles fósiles 1,0 °C y la Inyección de aerosoles 1,0 °C bajo cualquier bruma. Una política que depende de algo que debes poder construir necesita además su tecnología: [GetTechnology('clean_energy_technologies').GetName] para Inversión renovable y Códigos de construcción ecológica, [GetTechnology('pollution_control').GetName] para Normas de emisiones, [GetTechnology('modern_urban_planning').GetName] para Tránsito público, [GetTechnology('carbon_capture_and_storage').GetName] para Apoyo a la eliminación de carbono y [GetTechnology('geoengineering').GetName] para Inyección de aerosoles. La mayoría cuesta [concept_authority|l] mientras esté en vigor, y la Inversión renovable además medio por ciento del PIB al año, la Inyección de aerosoles el uno por ciento. Una política nacional en vigor calma al Movimiento ecologista, como muestra su información emergente, y cada una que podrías adoptar y no has adoptado lo agita en #v 10%#!. La información emergente de un control atenuado enumera cada condición con una marca de verificación o una cruz, y después lo que haría el control."
  },
  "gw_how_policies_3": {
-  "en": "One country can bind another to cut its emissions with an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction')] treaty article, whether or not the bound country leads its market.",
-  "es": "Un país puede obligar a otro a recortar sus emisiones mediante un artículo de tratado [Concept('concept_emissions_reduction_treaty','Imponer la reducción de emisiones')], lidere o no el país obligado su mercado."
+  "en": "One country can bind another to cut its emissions with an [Concept('concept_emissions_reduction_treaty','Emissions Reduction')] treaty article, whether or not the bound country leads its market.",
+  "es": "Un país puede obligar a otro a recortar sus emisiones mediante un artículo de tratado [Concept('concept_emissions_reduction_treaty','Reducción de emisiones')], lidere o no el país obligado su mercado."
  },
  "gw_how_sub_aerosols": {
   "en": "Geoengineering",
@@ -16300,12 +16300,12 @@
   "es": "Derogaciones bloqueadas"
  },
  "gw_ov_treaty_tt_ours": {
-  "en": "We are bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')].",
-  "es": "Estamos sujetos a un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')]."
+  "en": "We are bound by an [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')].",
+  "es": "Estamos sujetos a un [Concept('concept_emissions_reduction_treaty','tratado «Reducción de emisiones»')]."
  },
  "gw_ov_treaty_tt_theirs": {
-  "en": "[Country.GetName] is bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')].",
-  "es": "[Country.GetName] está sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')]."
+  "en": "[Country.GetName] is bound by an [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')].",
+  "es": "[Country.GetName] está sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Reducción de emisiones»')]."
  },
  "gw_ov_treaty_word": {
   "en": "#R Bound#!",
@@ -16388,12 +16388,12 @@
   "es": "[State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/año"
  },
  "gw_te_row_tt": {
-  "en": "#b [State.GetCountry.GetNameNoFormatting]#!\\nNational emissions last year: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/yr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! of the world's\\nNational cumulative emissions: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nIndustrial emissions cut: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore An [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')] can bind this country whether or not it leads its market. Figures update each January; the ranking monthly.#!",
-  "es": "#b [State.GetCountry.GetNameNoFormatting]#!\\nEmisiones nacionales del año pasado: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/año#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! de las mundiales\\nEmisiones nacionales acumuladas: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nRecorte de emisiones industriales: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore Un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')] puede obligar a este país, lidere o no su mercado. Las cifras se actualizan cada enero; la clasificación, cada mes.#!"
+  "en": "#b [State.GetCountry.GetNameNoFormatting]#!\\nNational emissions last year: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/yr#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! of the world's\\nNational cumulative emissions: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nIndustrial emissions cut: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore An [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')] can bind this country whether or not it leads its market. Figures update each January; the ranking monthly.#!",
+  "es": "#b [State.GetCountry.GetNameNoFormatting]#!\\nEmisiones nacionales del año pasado: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_emis')|K]/año#!, #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_share_pct')|0]%#! de las mundiales\\nEmisiones nacionales acumuladas: #v [State.GetCountry.MakeScope.ScriptValue('gw_disp_own_cum')|K]#!\\nRecorte de emisiones industriales: #v [State.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]%#!\\n\\n[GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )]\\n\\n#lore Un [Concept('concept_emissions_reduction_treaty','tratado «Reducción de emisiones»')] puede obligar a este país, lidere o no su mercado. Las cifras se actualizan cada enero; la clasificación, cada mes.#!"
  },
  "gw_te_treaty_tt": {
-  "en": "[State.GetCountry.GetName] is bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')].",
-  "es": "[State.GetCountry.GetName] está sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Imponer la reducción de emisiones»')]."
+  "en": "[State.GetCountry.GetName] is bound by an [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')].",
+  "es": "[State.GetCountry.GetName] está sujeto a un [Concept('concept_emissions_reduction_treaty','tratado «Reducción de emisiones»')]."
  },
  "gw_termination_shock_modifier": {
   "en": "Termination Shock",
