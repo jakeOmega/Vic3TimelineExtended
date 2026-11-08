@@ -66,9 +66,12 @@ class StaticModifierTypesTest(unittest.TestCase):
         # The check rests on the snapshot listing the per-culture types; if a rebuild dropped them, every merged
         # culture's would look as known as vanilla's do, or vanilla's own static modifiers would fail here.
         known = known_types()
-        for name in ("state_scottish_standard_of_living_add", "country_scottish_cultural_acceptance_add",
-                     "country_fervor_target_scottish_add"):
-            self.assertIn(name, known)
+        cultures = json.loads((ROOT / "vanilla_parsed/common/cultures.json").read_text(encoding="utf-8"))
+        self.assertTrue(cultures)
+        for culture in cultures:
+            for name in (f"state_{culture}_standard_of_living_add", f"country_{culture}_cultural_acceptance_add",
+                         f"country_fervor_target_{culture}_add"):
+                self.assertIn(name, known)
 
 
 if __name__ == "__main__":

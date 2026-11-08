@@ -1845,15 +1845,17 @@ monument_events.33 = {
 # walks every state that asked, takes its mark off, then runs its event at
 # once (.30, gm_state_run_mon_orders's orders left over; .31,
 # gm_state_adopt_orphans's wait for a rebuild in the region). The events'
-# own triggers still apply.
+# own triggers still apply. A Rededicate left over waits on the ceremony the
+# first one opened, so it asks every day until the ceremony is answered (at
+# most 30 days, players only: the AI never rededicates).
 monument_events.34 = {
 	type = country_event
 	hidden = yes
 
 	immediate = {
 		if = {
-			limit = { has_global_variable = gm_mon_orders_relay_queued }
-			remove_global_variable = gm_mon_orders_relay_queued
+			limit = { has_variable = gm_mon_orders_relay_queued }
+			remove_variable = gm_mon_orders_relay_queued
 		}
 		every_state = {
 			limit = { has_variable = gm_mon_orders_tomorrow }
@@ -1869,8 +1871,8 @@ monument_events.35 = {
 
 	immediate = {
 		if = {
-			limit = { has_global_variable = gm_adopt_orphans_relay_queued }
-			remove_global_variable = gm_adopt_orphans_relay_queued
+			limit = { has_variable = gm_adopt_orphans_relay_queued }
+			remove_variable = gm_adopt_orphans_relay_queued
 		}
 		every_state = {
 			limit = { has_variable = gm_adopt_orphans_tomorrow }

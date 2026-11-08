@@ -1420,15 +1420,18 @@ gm_state_drop_shadow = {
 # event undelayed, which runs it at once. MARK names the states that asked;
 # the relay walks every state, so one that changed hands in the day keeps its
 # pass, and takes the mark off before it runs, so a state asked again while it
-# runs waits for the next relay. QUEUED keeps one relay of a kind on its way:
-# the relay removes it first, and both expire in two days, should the owner be
-# gone before its relay runs.
+# runs waits for the next relay. QUEUED, on the owner, keeps one relay of a kind
+# on its way to each country: the relay removes it first, and the mark expires
+# in two days, should the owner be gone before its relay runs. Another country's
+# relay that day finds the marks already taken off, and runs nothing.
 gm_state_tomorrow = {
 	set_variable = { name = $MARK$ days = 2 }
-	if = {
-		limit = { NOT = { has_global_variable = $QUEUED$ } }
-		set_global_variable = { name = $QUEUED$ days = 2 }
-		owner = { trigger_event = { id = $EVENT$ days = 1 } }
+	owner = {
+		if = {
+			limit = { NOT = { has_variable = $QUEUED$ } }
+			set_variable = { name = $QUEUED$ days = 2 }
+			trigger_event = { id = $EVENT$ days = 1 }
+		}
 	}
 }
 

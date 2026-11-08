@@ -79,15 +79,40 @@ def _enclosing_top_level(text, pos):
     return name
 
 
-def _helper_arguments(helper, argument):
-    """[(file, value)] for each call of ``helper`` that passes ``argument``."""
+def _helper_call_sites(helper):
+    """[(file, text, position, {argument: value})] for each call of ``helper`` (an indented ``helper = { ... }``, so
+    not its definition)."""
     out = []
     for path in _script_files():
         text = _strip_comments(path.read_text(encoding="utf-8-sig"))
-        for m in re.finditer(rf"\b{helper}\s*=\s*\{{", text):
-            value = re.search(rf"\b{argument}\s*=\s*([\w.]+)", _block_at(text, m.end() - 1))
-            if value:
-                out.append((path.relative_to(ROOT).as_posix(), value.group(1)))
+        for m in re.finditer(rf"(?m)^[ \t]+{helper}\s*=\s*\{{", text):
+            body = _block_at(text, m.end() - 1)
+            args = dict(re.findall(r"\b([A-Z_]+)\s*=\s*(\S+)", body))
+            out.append((path.relative_to(ROOT).as_posix(), text, m.start(), args))
+    return out
+
+
+def _helper_calls(helper):
+    """[(file, {argument: value})] for each call of ``helper``."""
+    return [(path, args) for path, _text, _pos, args in _helper_call_sites(helper)]
+
+
+def _helper_arguments(helper, argument, seen=()):
+    """[(file, value)] for each literal ``argument`` a call of ``helper`` passes. A value that is itself a parameter
+    (``EVENT = $EVENT$``, a helper calling a helper, as un_docket_send_offer does) is followed through the outer
+    helper's own calls."""
+    out = []
+    for path, text, pos, args in _helper_call_sites(helper):
+        value = args.get(argument)
+        if value is None:
+            continue
+        param = re.fullmatch(r"\$(\w+)\$", value)
+        if param:
+            outer = _enclosing_top_level(text, pos)
+            if outer and (outer, param.group(1)) not in seen:
+                out.extend(_helper_arguments(outer, param.group(1), seen + ((helper, argument),)))
+            continue
+        out.append((path, value))
     return out
 
 
@@ -141,6 +166,13 @@ class TestDelayedStateEvents(unittest.TestCase):
         calls = _delayed_calls()
         self.assertIn(("common/scripted_effects/gm_monument_effects.txt", "monument_events.34"), calls)
         self.assertIn(("common/scripted_effects/gm_monument_effects.txt", "monument_events.35"), calls)
+        # and through a helper that passes its own $EVENT$ on: un_docket_send_offer's one direct call passes
+        # un_events.2, and the rest of the docket's offers reach it through un_docket_offer_topic_next
+        direct = {args["EVENT"] for _path, args in _helper_calls("un_docket_send_offer")
+                  if re.fullmatch(r"[\w.]+", args.get("EVENT", "$"))}
+        docket = {ident for path, ident in calls if path.endswith("un_docket_effects.txt")}
+        self.assertTrue(direct)
+        self.assertGreater(docket, direct)
 
     def test_each_relay_runs_its_verdict(self):
         events = _strip_comments((ROOT / "events" / "te_debug_demog_events.txt").read_text(encoding="utf-8-sig"))
@@ -188,6 +220,19 @@ class TestDelayedStateEvents(unittest.TestCase):
                 if mark:
                     # the mark comes off before the event runs, so a state the event asks again waits a relay
                     self.assertLess(body.index(f"remove_variable = {mark}"), body.index(f"id = {event}"))
+
+    def test_each_tomorrow_call_marks_what_its_relay_reads(self):
+        # A call whose MARK or QUEUED isn't the relay's own would pass the checks above and never run.
+        monuments = _strip_comments((ROOT / "events" / "monument_events.txt").read_text(encoding="utf-8-sig"))
+        calls = _helper_calls("gm_state_tomorrow")
+        self.assertEqual(len(calls), 3)
+        for path, args in calls:
+            with self.subTest(call=args):
+                relay = args["EVENT"]
+                body = _block_at(monuments, monuments.index(f"{relay} = {{") + len(relay))
+                self.assertIn(f"has_variable = {args['MARK']}", body)
+                self.assertIn(f"remove_variable = {args['MARK']}", body)
+                self.assertIn(f"remove_variable = {args['QUEUED']}", body)
 
     def test_the_probe_has_both_verdicts(self):
         events = _strip_comments((ROOT / "events" / "te_debug_demog_events.txt").read_text(encoding="utf-8-sig"))

@@ -345,7 +345,8 @@ class ModifierTypeTest(unittest.TestCase):
         news = [merge.result for merge in cfg.MERGES if merge.new is not None]
         self.assertEqual(set(self.types), {name for culture in news for name in gen.culture_modifier_types(culture)})
         for culture in news:
-            for vanilla_name, name in zip(gen.culture_modifier_types("scottish"), gen.culture_modifier_types(culture)):
+            template = next(iter(self.vanilla_cultures))   # any vanilla culture: all 322 have the same three
+            for vanilla_name, name in zip(gen.culture_modifier_types(template), gen.culture_modifier_types(culture)):
                 self.assertEqual(deep(self.vanilla_types[vanilla_name]), deep(self.types[name]), name)
 
     def test_every_static_modifier_field_is_a_generated_type(self):
