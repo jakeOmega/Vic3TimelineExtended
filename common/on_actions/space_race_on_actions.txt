@@ -37,6 +37,27 @@ space_race_on_action = {
 			limit = { has_modifier = sr_orbital_superiority }
 			remove_modifier = sr_orbital_superiority
 		}
+		# So are Space Command's fleet upkeep and pause marker: a country that
+		# stops being a fleet power with the building standing (the rule
+		# switched off mid-game, or set below Full Colonies; 2026-11-08) would
+		# keep paying its fleets' upkeep on it for good.
+		if = {
+			limit = {
+				NOT = { sr_fleet_power = yes }
+				any_scope_building = {
+					is_building_type = building_space_command
+					OR = {
+						has_modifier = sr_fleet_upkeep_goods
+						has_modifier = sr_space_command_paused
+					}
+				}
+			}
+			every_scope_building = {
+				limit = { is_building_type = building_space_command }
+				remove_modifier_if_exists_effect = { MODIFIER = sr_fleet_upkeep_goods }
+				remove_modifier_if_exists_effect = { MODIFIER = sr_space_command_paused }
+			}
+		}
 		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
 		# its Earth is blockaded, or its launch site lost and back; and of each
 		# hostile fleet bound for Earth (the Earth alert, UI pass design § 9,

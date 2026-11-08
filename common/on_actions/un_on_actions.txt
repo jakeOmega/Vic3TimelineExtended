@@ -45,8 +45,19 @@ on_monthly_pulse = {
 
 un_global_authority_on_action = {
 	effect = {
+		# The rule switched off mid-game, from the screen that changes country
+		# (2026-11-08): the organisation ends, quietly (un_stop_for_rule), and
+		# nothing below runs, so neither the ladder's decline nor a founding
+		# conference can act on a UN the rule has done away with.
 		if = {
-			limit = { has_global_variable = un_founded }
+			limit = { NOT = { has_game_rule = united_nations_enabled } }
+			un_stop_for_rule = yes
+		}
+		if = {
+			limit = {
+				has_game_rule = united_nations_enabled
+				has_global_variable = un_founded
+			}
 
 			# One-time legacy-save migration: pre-refactor saves stored un_authority
 			# per-country and have no global. Seed a neutral 50 and strip the stale
@@ -128,14 +139,17 @@ un_global_authority_on_action = {
 
 		# Founded or not (un_ladder_effects.txt): power blocs fill the vacuum
 		# while the UN is Moribund or dissolved, and a founding conference for a
-		# new UN ages toward its founding.
-		un_ladder_bloc_vacuum_update = yes
-		un_conference_monthly_update = yes
+		# new UN ages toward its founding. Only with the rule.
+		if = {
+			limit = { has_game_rule = united_nations_enabled }
+			un_ladder_bloc_vacuum_update = yes
+			un_conference_monthly_update = yes
 
-		# The overview's Security Council flags (un_overview_display_effects.txt),
-		# last: after un_seat_monthly_update has filled or emptied this month's
-		# seats.
-		un_p5_display_refresh = yes
+			# The overview's Security Council flags (un_overview_display_effects.txt),
+			# last: after un_seat_monthly_update has filled or emptied this month's
+			# seats.
+			un_p5_display_refresh = yes
+		}
 	}
 }
 

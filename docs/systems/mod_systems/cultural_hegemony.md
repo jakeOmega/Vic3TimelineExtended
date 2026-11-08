@@ -8,6 +8,8 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 **Activation:** `cultural_hegemony_enabled` game rule; the JE activates once any country has researched `mass_media` and the country itself has `romanticism`. Scores are computed from game start by the on-actions, so they are already stable when the JE first appears.
 
+**Switched off mid-game** (2026-11-08). A game rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only inactive records, so the entry ran on after its rule was switched off. Its hidden invalid outcome on the rule ends it and takes the nine declared modifiers along; the effect shuts the programs down (`ch_shut_down_programmes`, also what losing the Ministry of Culture runs) and takes the hegemon's model pressure off our movements (`ch_remove_hegemon_model_pressure`, the yearly refresh's first half), whose 13-month copy would outlast the stopped refresh. The on_actions already stop on the rule, and every outside reader of the entry's figures asks `has_journal_entry`. Grand Monuments' two pull values ask their own rule. Switched back on, the entry doesn't return. Play-test: `docs/testing/rules-off-midgame-playtest.md`.
+
 **Architecture:** Share-based. Every country computes a "raw" cultural pull score, then each country's final score is `(raw / global_sum_of_raw) × 100` — a percentage of global cultural influence. This scales naturally as populations grow 5× and GDP grows 1000×+ over a 200-year game.
 
 **Raw Cultural Pull Components:**

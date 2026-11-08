@@ -436,10 +436,15 @@ cultural_pull_from_monuments = {
 # gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent until a
 # country's first refresh. Spec
 # docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md §2.4.
+# The rule first: switched off mid-game, the refresh stops and the variable
+# would credit its last figure for good.
 cultural_pull_from_grand_monuments = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_s_culture }
+		limit = {
+			gm_system_enabled = yes
+			has_variable = gm_s_culture
+		}
 		value = var:gm_s_culture
 		multiply = gm_step_culture
 	}
@@ -451,11 +456,14 @@ cultural_pull_from_grand_monuments = {
 # 1/n curve with a first step of 5, +1 each, with no ceiling (owner,
 # 2026-10-19: its monuments are a fixed list, so it cannot be farmed; the +3
 # cap went). gm_s_sig_antiquity is set by gm_country_refresh
-# (gm_signature_effects.txt).
+# (gm_signature_effects.txt). The rule first, as above.
 cultural_pull_from_antiquity = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_s_sig_antiquity }
+		limit = {
+			gm_system_enabled = yes
+			has_variable = gm_s_sig_antiquity
+		}
 		value = var:gm_s_sig_antiquity
 		multiply = gm_step_sig_antiquity
 	}

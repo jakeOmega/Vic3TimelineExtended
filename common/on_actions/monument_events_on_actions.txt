@@ -132,6 +132,24 @@ monument_events_on_action = {
 on_monthly_pulse_state = {
 	on_actions = {
 		gm_state_on_action
+		gm_state_rule_off_on_action
+	}
+}
+
+# The rule switched off mid-game, from the screen that changes country
+# (2026-11-08). gm_state_on_action stops, so the local modifiers it refreshes
+# each month would stay on the state at their last strength for the rest of
+# the game. This takes them off once: gm_local_tourism is added beside every
+# other local modifier (gm_state_monthly's building branch), so its absence
+# ends the pass. gm_upkeep stays (gm_remove_local_effect_modifiers). Switched
+# back on, gm_state_monthly adds them all again the next month.
+gm_state_rule_off_on_action = {
+	trigger = {
+		gm_system_enabled = no
+		has_modifier = gm_local_tourism
+	}
+	effect = {
+		gm_remove_local_effect_modifiers = yes
 	}
 }
 

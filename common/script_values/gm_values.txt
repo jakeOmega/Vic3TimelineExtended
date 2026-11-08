@@ -263,6 +263,12 @@ gm_status_code = {
 		limit = { gm_state_is_contested = yes }
 		value = 4
 	}
+	# The rule switched off mid-game: no card in the state panel, and no
+	# controls on it.
+	if = {
+		limit = { gm_system_enabled = no }
+		value = 0
+	}
 }
 
 # ---- Names (v2 §3), for the name patterns' years -----------------------------
@@ -1946,8 +1952,12 @@ gm_state_disp_listed = {
 # it still being built (Dedicate waits for them).
 gm_state_disp_site = {
 	value = 0
+	# Not with the rule switched off mid-game: the card carries Dedicate.
 	if = {
-		limit = { gm_state_has_site = yes }
+		limit = {
+			gm_system_enabled = yes
+			gm_state_has_site = yes
+		}
 		value = 1
 	}
 }

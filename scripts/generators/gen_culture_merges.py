@@ -546,8 +546,9 @@ class _Script:
         self.lines.append("\t" * self.depth + text if text else "")
 
     @contextmanager
-    def block(self, header: str):
-        self.line(header + " = {")
+    def block(self, header: str, comment: str = ""):
+        """``header = {``, its body, ``}``; ``comment`` trails the opening line (a REVIEWED tag reads there)."""
+        self.line(header + " = {" + (" # " + comment if comment else ""))
         self.depth += 1
         try:
             yield
@@ -2015,7 +2016,10 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
                 out.line("always = yes")
             out.line()
             out.line("# With the rule off, drop other countries' inactive records for good; the census re-adds one.")
-            with out.block("disable_evaluation"):
+            out.line("# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands")
+            out.line("# and resumes when the rule is switched back on (R19), and converted pops keep their culture.")
+            with out.block("disable_evaluation", "REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge "
+                           "resumes where it stood"):
                 out.line("NOT = { te_cm_system_enabled = yes }")
             with out.block("is_shown_when_inactive"):
                 out.line("te_cm_system_enabled = yes")

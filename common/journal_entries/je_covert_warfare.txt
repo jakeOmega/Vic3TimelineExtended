@@ -42,7 +42,9 @@ je_covert_warfare = {
 		container = "custom_widget_container_2"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good.
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { has_game_rule = covert_warfare_enabled }
 	}
@@ -290,6 +292,23 @@ je_covert_warfare = {
 				}
 				covert_ops_roll_detection_all = yes
 			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends this entry, so its declared modifiers, its
+	# pulse and every operation ran on. It ends on its next update and takes the
+	# modifiers along; covert_stop_for_rule ends the operations and the agent
+	# networks, which other systems read (Space Race intelligence, loose
+	# material, the map).
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_covert_warfare_invalid_conclusion_desc
+		trigger = {
+			NOT = { has_game_rule = covert_warfare_enabled }
+		}
+		effect = {
+			covert_stop_for_rule = yes
 		}
 	}
 

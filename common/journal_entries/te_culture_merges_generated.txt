@@ -16,7 +16,9 @@ je_te_cm_german = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -246,7 +248,9 @@ je_te_cm_italian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -484,7 +488,9 @@ je_te_cm_scandinavian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -758,7 +764,9 @@ je_te_cm_east_slavic = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -1054,7 +1062,9 @@ je_te_cm_yugoslav = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -1336,7 +1346,9 @@ je_te_cm_czechoslovak = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -1574,7 +1586,9 @@ je_te_cm_hungarian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -1795,7 +1809,9 @@ je_te_cm_dutch = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -2016,7 +2032,9 @@ je_te_cm_finnish = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -2237,7 +2255,9 @@ je_te_cm_french = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -2510,7 +2530,9 @@ je_te_cm_british = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -2744,7 +2766,9 @@ je_te_cm_american = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -2994,7 +3018,9 @@ je_te_cm_anglophone = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -3371,7 +3397,9 @@ je_te_cm_brazilian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -3724,7 +3752,9 @@ je_te_cm_platine = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -4055,7 +4085,9 @@ je_te_cm_andean = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -4373,7 +4405,9 @@ je_te_cm_gran_colombian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -4647,7 +4681,9 @@ je_te_cm_chinese = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -4956,7 +4992,9 @@ je_te_cm_japanese = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -5177,7 +5215,9 @@ je_te_cm_arab = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -5539,7 +5579,9 @@ je_te_cm_persian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -5760,7 +5802,9 @@ je_te_cm_oghuz_turkic = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -5998,7 +6042,9 @@ je_te_cm_hindustani = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -6351,7 +6397,9 @@ je_te_cm_dravidian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -6625,7 +6673,9 @@ je_te_cm_indonesian = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -6951,7 +7001,9 @@ je_te_cm_filipino = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -7268,7 +7320,9 @@ je_te_cm_nguni = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -7542,7 +7596,9 @@ je_te_cm_latin = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -7988,7 +8044,9 @@ je_te_cm_pan_slavic = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -8370,7 +8428,9 @@ je_te_cm_pan_turkic = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -8898,7 +8958,9 @@ je_te_cm_pan_malay = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {
@@ -9200,7 +9262,9 @@ je_te_cm_east_african = {
 	}
 
 	# With the rule off, drop other countries' inactive records for good; the census re-adds one.
-	disable_evaluation = {
+	# An active merge outlives the rule (no invalid outcome on it): it pauses where it stands
+	# and resumes when the rule is switched back on (R19), and converted pops keep their culture.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): R19, a paused merge resumes where it stood
 		NOT = { te_cm_system_enabled = yes }
 	}
 	is_shown_when_inactive = {

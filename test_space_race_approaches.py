@@ -70,7 +70,8 @@ class NoDriftTest(unittest.TestCase):
     def test_every_running_milestone_moves_and_rolls(self):
         pulse = _block(_read(EFFECTS), "sr_monthly_progress_update_effect")
         self.assertNotIn("has_variable = sr_safe_$MILESTONE$", pulse)
-        self.assertRegex(pulse, r"limit = \{ sr_ai_should_participate = yes \}\s*"
+        # The rule first (2026-11-08): switched off mid-game, nothing rolls before the entry's invalid outcome.
+        self.assertRegex(pulse, r"limit = \{\s*sr_space_race_on = yes\s*sr_ai_should_participate = yes\s*\}\s*"
                                 r"change_variable = \{ name = sr_progress_\$MILESTONE\$ add = sr_progress \}")
         self.assertIn("chance = sr_risk_pct_$MILESTONE$", pulse)
         solar = _block(_read(JE), "je_space_race_solar_colonization")

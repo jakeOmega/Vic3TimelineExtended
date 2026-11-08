@@ -1588,6 +1588,27 @@ ch_apply_hegemon_movement_pressure = {
 # lapses between rebuilds; the event-driven pressure (ch_hegemon_ideological_pressure)
 # uses different modifier names and stacks on top as a temporary spike.
 ch_refresh_baseline_model_pressure = {
+	ch_remove_hegemon_model_pressure = yes
+	if = {
+		limit = {
+			exists = scope:cultural_hegemon
+			NOT = { this = scope:cultural_hegemon }
+			has_journal_entry = je_cultural_hegemony
+			ch_trails_hegemon = yes
+			# A trigger needs the variable on the LEFT; the threshold is the
+			# same script value ch_model_pressure_mult tests.
+			has_global_variable = ch_rank_1_ideology_share
+			global_var:ch_rank_1_ideology_share >= ch_model_pressure_min_share
+		}
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_model_pressure FALLBACK_MODIFIER = ch_hegemon_model_pressure_weak MONTHS = 13 DECAYING = no MULT = ch_model_pressure_mult }
+	}
+}
+
+# Country scope. The hegemon's model pressure off this country's movements: the
+# refresh's first half, and, with the rule switched off mid-game, the whole of
+# it (je_cultural_hegemony's invalid outcome), since the 13-month copy would
+# otherwise outlast the stopped refresh.
+ch_remove_hegemon_model_pressure = {
 	every_political_movement = {
 		limit = {
 			OR = {
@@ -1604,19 +1625,19 @@ ch_refresh_baseline_model_pressure = {
 			remove_modifier = ch_hegemon_model_pressure_weak
 		}
 	}
-	if = {
-		limit = {
-			exists = scope:cultural_hegemon
-			NOT = { this = scope:cultural_hegemon }
-			has_journal_entry = je_cultural_hegemony
-			ch_trails_hegemon = yes
-			# A trigger needs the variable on the LEFT; the threshold is the
-			# same script value ch_model_pressure_mult tests.
-			has_global_variable = ch_rank_1_ideology_share
-			global_var:ch_rank_1_ideology_share >= ch_model_pressure_min_share
-		}
-		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_model_pressure FALLBACK_MODIFIER = ch_hegemon_model_pressure_weak MONTHS = 13 DECAYING = no MULT = ch_model_pressure_mult }
-	}
+}
+
+# Country scope. Every cultural programme shut down: funding to 0 (which takes
+# the funding pair to 0 too) and the four programmes' variables gone, so their
+# declared modifiers, and the outreach's cost, come off. On losing the Ministry
+# of Culture (the entry's monthly pulse) and with the rule switched off
+# mid-game (its invalid outcome), so a re-added entry starts no paid programme.
+ch_shut_down_programmes = {
+	set_variable = { name = ch_program_funding_level value = 0 }
+	remove_variable = ch_world_exposition_on
+	remove_variable = ch_cultural_institutes_on
+	remove_variable = ch_global_media_campaign_on
+	remove_variable = ch_cultural_protectionism_on
 }
 
 # ---- MODEL-CHANGE EVENTS ----

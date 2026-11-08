@@ -319,6 +319,20 @@ un_dissolve = {
 		}
 	}
 
+	# 4–9. The organisation's business, members, headquarters, agencies and
+	#      state: what a rule switched off mid-game ends too
+	#      (un_dissolve_quiet, below).
+	un_dissolve_quiet = yes
+}
+
+# The quiet half of a dissolution: everything after the record, the world
+# moment and the power blocs' vacuum (un_dissolve's steps 1–3). From
+# un_dissolve, and from un_stop_for_rule when the United Nations rule is
+# switched off mid-game, which ends the organisation without a dissolution.
+# Mandates are voided as the rule-off sweep voids them (un_mandate_close
+# tells the holder).
+# Scope: any
+un_dissolve_quiet = {
 	# 4. The business before the Assembly lapses. un_resolution_archive frees
 	#    the lock when the open resolution held it; the flags below cover a
 	#    reservation and any orphan.
@@ -468,6 +482,40 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_pillar_order }
 	un_dissolve_remove_global = { NAME = un_pillar_delivery }
 	un_dissolve_remove_global = { NAME = un_pillar_policy }
+}
+
+# The United Nations rule switched off mid-game, from the screen that changes
+# country (2026-11-08): from un_global_authority_on_action every month the rule
+# is off, and from je_united_nations' invalid outcome, so the organisation ends
+# the day the first entry does. The UN ends as if it had never been founded:
+# un_dissolve_quiet strips every country (un_dissolve_strip_country: the
+# mirrors other systems read, International Oversight's licence and the
+# sanctions among them), demolishes the headquarters, and lifts the agencies
+# and the organisation's globals, with no dissolution record, no refounding
+# cooldown, no world-moment event and no power-bloc vacuum. A founding
+# conference breaks up, and a vacuum modifier from an earlier dissolution
+# comes off, since un_ladder_bloc_vacuum_update stops with the rule. Timed
+# penalties and costs run out as after a dissolution. Idempotent: a month with
+# nothing left does nothing.
+# Scope: any
+un_stop_for_rule = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		un_dissolve_quiet = yes
+	}
+	if = {
+		limit = { has_global_variable = un_founding_conference }
+		un_conference_clear = yes
+	}
+	every_country = {
+		limit = { is_power_bloc_leader = yes }
+		power_bloc ?= {
+			if = {
+				limit = { has_modifier = un_bloc_vacuum_modifier }
+				remove_modifier = un_bloc_vacuum_modifier
+			}
+		}
+	}
 }
 
 # Remove a global variable if it is set.

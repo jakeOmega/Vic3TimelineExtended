@@ -183,8 +183,9 @@ taking its declared modifiers and every tool modifier (all on the entry) along. 
 three cycle variables (`te_banking_cycle_stop_for_rule`), since harvest conditions, the construction market's AI and
 sites and monuments read them directly. Switched back on, the net adds the entry again (no record is left to refuse
 it) and `immediate` starts a fresh cycle once `te_banking_cycle_unlocked` holds. The monetary layer re-homes its own
-modifiers when the entry goes (`te_monetary_settle_modifier_home`). The other 56 rule-gated entries still run on when
-their rule is switched off. Play-test: `docs/testing/banking-playtest.md`, "The rule switched off mid-game".
+modifiers when the entry goes (`te_monetary_settle_modifier_home`). Every other rule-gated entry ends on its rule the
+same way (`scripting_best_practices.md`, the `disable_evaluation` bullet). Play-test: `docs/testing/banking-playtest.md`,
+"The rule switched off mid-game".
 
 ### Banking Law Modifiers
 Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) to tune the banking cycle:

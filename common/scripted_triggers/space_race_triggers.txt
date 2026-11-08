@@ -228,6 +228,9 @@ sr_possible_fund_down = {
 # with the race over and a lunar world free, nothing runs without that choice
 # (sr_colonization_by_choice).
 sr_solar_colonization_running = {
+	# The rule first: switched off mid-game, everything that reads this stops at
+	# once, before the entry's invalid outcome ends it.
+	sr_space_race_on = yes
 	has_variable = sr_active_solar_colonization
 	modifier:country_sr_solar_colonization_program_bool = yes
 	OR = {

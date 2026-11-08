@@ -237,6 +237,7 @@ on_monthly_pulse_country = {
 	on_actions = {
 		te_tax_watchdog_on_action
 		te_tax_light_entry_net
+		te_tax_rule_off_net
 	}
 }
 
@@ -338,6 +339,38 @@ te_tax_light_entry_net = {
 			}
 			add_journal_entry = { type = je_tax_code }
 			debug_log = "TE_TAX light_entry_net the safety net added je_tax_code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope. The rule switched to Disabled mid-game, from the screen that
+# changes country (2026-11-08). je_tax_code ends through its invalid outcome and
+# takes the light code's relief and reactions along, but what the code put on
+# the country stays: the carrier law under the full code, the interest groups'
+# view bands, the relief modifiers and the light code's marker.
+# te_tax_leave_code_for_rule takes them off, once: it clears both markers.
+# This is the one negated rule check (te_tax_triggers.txt says why the others
+# are positive): a save from before the rule reads as Disabled here, and is
+# safe only because the check asks for a marker no such save has.
+te_tax_rule_off_net = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { te_tax_code_on = yes }
+				OR = {
+					has_law = law_type:law_te_tax_code
+					AND = {
+						has_variable = te_tax_migrated
+						var:te_tax_migrated >= 1
+					}
+					AND = {
+						has_variable = te_tax_light_on
+						var:te_tax_light_on >= 1
+					}
+				}
+			}
+			te_tax_leave_code_for_rule = yes
+			debug_log = "TE_TAX rule_off left the code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }

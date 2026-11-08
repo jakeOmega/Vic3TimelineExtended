@@ -21,8 +21,13 @@
 #                 sr_safe_/sr_ambitious_/sr_progress_/sr_failed_ variable
 #                 namespace and the sr_risk_pct_/sr_base_risk_ script values.
 sr_monthly_progress_update_effect = {
+	# Not with the rule switched off mid-game: the entry ends on its next update
+	# (its invalid outcome), and until then no roll or setback.
 	if = {
-		limit = { sr_ai_should_participate = yes }
+		limit = {
+			sr_space_race_on = yes
+			sr_ai_should_participate = yes
+		}
 		change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
 		random = {
 			chance = sr_risk_pct_$MILESTONE$
@@ -391,6 +396,26 @@ sr_cleanup_milestone_variables_effect = {
 	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
 	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
 	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+	sr_refresh_milestone_statuses = yes
+}
+
+# Country scope. The Space Race rule switched off mid-game, from the screen that
+# changes country (2026-11-08): je_space_race_<m>'s invalid outcome. The
+# milestone's running variables go, as sr_cleanup_milestone_variables_effect
+# takes them, with its setback flag and any re-entry wait, but without the loss
+# mark (sr_closed_by_loss_<m>), which the re-entry self-checks read as a
+# programme lost, and without sr_report_program_loss's notice. Completion
+# records and rewards stay. sr_reentry_monthly adds the milestone back once the
+# rule is switched on again.
+sr_stop_for_rule_base = {
+	if = { limit = { has_variable = sr_reentry_added_$MILESTONE$ } remove_variable = sr_reentry_added_$MILESTONE$ }
+	if = { limit = { has_variable = sr_reentry_waiting_$MILESTONE$ } remove_variable = sr_reentry_waiting_$MILESTONE$ }
+	if = { limit = { has_variable = sr_active_$MILESTONE$ } remove_variable = sr_active_$MILESTONE$ }
+	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
+	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
+	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
+	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+	if = { limit = { has_variable = sr_failed_$MILESTONE$ } remove_variable = sr_failed_$MILESTONE$ }
 	sr_refresh_milestone_statuses = yes
 }
 

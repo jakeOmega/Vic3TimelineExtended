@@ -257,7 +257,9 @@ class HookTests(unittest.TestCase):
         self.assertIn("un_charter_on_carried = yes", _read(VOTE_EVENTS))
         self.assertIn("add = un_lean_charter_interests", _block(_read(DOSSIER), "un_lean_interests"))
         self.assertIn("un_charter_monthly_update = yes", _read(ON_ACTIONS))
-        self.assertIn("un_charter_on_dissolve = yes", _block(_read(LADDER), "un_dissolve"))
+        # In the dissolution's quiet half, which the rule switched off mid-game runs too (2026-11-08).
+        self.assertIn("un_dissolve_quiet = yes", _block(_read(LADDER), "un_dissolve"))
+        self.assertIn("un_charter_on_dissolve = yes", _block(_read(LADDER), "un_dissolve_quiet"))
 
 
 class ButtonTests(unittest.TestCase):

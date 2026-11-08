@@ -63,7 +63,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `decolonization_events_on_action` — decolonization narrative
 - `movement_events_te_on_action` — political movement events
 - `society_technology_events_on_action` — society tech events
-- `world_war_events_on_action` — world war events
+- `world_war_events_on_action` — clears the world war's variables after its rule is switched off mid-game (the events fire from `je_world_war`)
 - `overbuild_protection_on_action` — prevents wonder overbuilding
 - `aptitude_traits_cleanup_on_action` — strips aptitude traits from characters the game rules don't allow them on
 

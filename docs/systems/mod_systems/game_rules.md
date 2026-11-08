@@ -47,10 +47,30 @@ Both read only a game rule, so they work from any scope — country, journal ent
 article, power-bloc principle, GUI.
 
 **Gating pattern:** Each rule sets a flag checked via `has_game_rule = <flag>`:
-- **Journal entries:** `is_shown_when_inactive = { has_game_rule = X_enabled }`
+- **Journal entries:** `is_shown_when_inactive = { has_game_rule = X_enabled }`, `disable_evaluation = { NOT = { has_game_rule = X_enabled } }`, and an invalid outcome on the rule off (below)
 - **On-actions:** Early `return = yes` if `NOT = { has_game_rule = X_enabled }`
 - **Diplomatic actions:** `potential = { has_game_rule = X_enabled ... }`
 - **Trait assignment (aptitude):** `limit = { te_aptitude_traits_enabled = yes  OR = { has_game_rule = universal_aptitude_traits_enabled  has_role_of_type = ruler  has_role_of_type = heir } }`
+
+**Switched off mid-game** (2026-11-08). `disable_evaluation` prunes only inactive records, so every rule-pruned entry also ends on its rule, through its one hidden invalid outcome (the rule folded in with `OR` where it had one) or, for the Nuclear Program, by deactivating; each system clears what it left outside the entry. Inventory and in-game checks: `docs/testing/rules-off-midgame-playtest.md`; the rule: `scripting_best_practices.md`, the `disable_evaluation` bullet.
+
+| System | What else goes | Back when switched on |
+|---|---|---|
+| Banking | the cycle's three variables (`te_banking_cycle_stop_for_rule`) | yes (`te_banking_entry_net`) |
+| Social movements (6) | Civil Rights' path modifiers (`cr_je_cleanup_effect`) | no |
+| Heir Education | counters and focus modifiers (`heir_education_cleanup_effect`) | no |
+| Custom Religion | nothing (the builder's counters are its own) | no |
+| Grand Monuments | the states' local modifiers, not the upkeep exemption (`gm_state_rule_off_on_action`); the two cultural-pull values and the state cards read the rule | yes (`gm_country_refresh`) |
+| Cultural Hegemony | programs shut down, the hegemon's pressure off our movements | no |
+| World War | its variables and latches on every country (`ww_stop_for_rule`, `world_war_events_on_action`) | no |
+| Colonial Empire | `colonial_empire_je_cleanup_effect`; a stance lies dormant (`decol_stance_*_counts` read the rule) | yes (`ce_reentry_monthly`) |
+| Covert Warfare | funding to 0 (every operation's pact breaks), the networks (`covert_stop_for_rule`) | no |
+| Nuclear Program | deactivates; `nuclear_power`, the taboo marker and an open crisis go (`nd_country_monthly_cleanup`); `nd_is_armed` and `nd_believed_armed` read the rule | no |
+| Space Race (7 milestones) | running variables, no loss mark (`sr_stop_for_rule_base`); debris and Space Command modifiers | yes (`sr_reentry_monthly`) |
+| Interstellar results | outlives the rule: the transit pauses | stays |
+| United Nations | the organisation, quietly (`un_stop_for_rule`: no dissolution record or event) | no |
+| Legislated Tax Code | the carrier gives way to the equivalent vanilla law; bands, relief, markers (`te_tax_rule_off_net`) | the code migrates again; the light code's entry net re-adds it |
+| Culture merges (32) | outlive the rule: they pause (R19) | stay |
 
 **Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc` — 7 for `banking_system_rule`, which adds `setting_banking_system_simplified` and its `_desc`, and for `demographics_rule`, whose three settings are `setting_demographics_full`, `_display_only` and `_disabled` with their `_desc`, and 11 for `free_market_construction_rule`, which adds `setting_free_market_construction_no_ai_retooling`, `_no_retooling` and `_no_maintenance` with their `_desc`.
 

@@ -158,6 +158,17 @@ ordinary effects. With the Banking System off, for example, the financial
 regulation laws still change Urban Center output, investment, innovation and
 government dividends; only their effects on the banking cycle go.
 
+Switched off in a campaign already under way, a system's journal entry closes
+within a few days, with no reward and no penalty, and what the system was doing
+goes with it: its bonuses and costs, covert operations, nuclear status, the
+United Nations itself. A legislated tax code gives way to the base-game taxation
+law closest to it. What you finished stays: completed space milestones,
+monuments already built, a religion already founded. Culture merges and a probe
+already on its way to another star pause instead, and carry on when the rule is
+turned back on. Turned back on, the Banking Cycle, Monuments, Colonial Empire
+and space race entries come back within a month or two; the others don't return
+in that campaign.
+
 The mod is balanced with its default systems on, and switching one off removes
 its costs along with its benefits. A choice whose drawback lives in a disabled
 system loses that drawback: a financial regulation law that trades faster growth

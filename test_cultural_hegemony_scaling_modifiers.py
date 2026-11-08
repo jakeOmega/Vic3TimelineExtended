@@ -174,14 +174,19 @@ class ProgrammeVariableTests(unittest.TestCase):
         pulse = _pulse()
         strip = pulse[pulse.index("limit = { NOT = { has_law = law_type:law_ministry_of_culture } }"):]
         strip = strip[: strip.index("\n\t\t\t}\n")]
-        self.assertIn("set_variable = { name = ch_program_funding_level value = 0 }", strip)
-        self.assertEqual(sorted(self.REMOVE.findall(strip)), sorted(v for _, v, _ in PROGRAMMES.values()))
+        # Through ch_shut_down_programmes, which the rule switched off mid-game runs too (the invalid outcome).
+        self.assertIn("ch_shut_down_programmes = yes", strip)
+        shut = _top_level_block(_text(EFFECTS), "ch_shut_down_programmes = {")
+        self.assertIn("set_variable = { name = ch_program_funding_level value = 0 }", shut)
+        self.assertEqual(sorted(self.REMOVE.findall(shut)), sorted(v for _, v, _ in PROGRAMMES.values()))
+        self.assertEqual(_text(JE).count("ch_shut_down_programmes = yes"), 2, "the pulse and the invalid outcome")
 
     def test_nothing_else_writes_them(self):
         variables = {v for _, v, _ in PROGRAMMES.values()}
         effects = _text(EFFECTS)
         allowed = {_top_level_block(effects, f"ch_effect_{p} = {{") for p in PROGRAMMES}
         allowed |= {_top_level_block(effects, f"ch_effect_disable_{p} = {{") for p in PROGRAMMES}
+        allowed.add(_top_level_block(effects, "ch_shut_down_programmes = {"))
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 rel = path.relative_to(ROOT).as_posix()

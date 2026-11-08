@@ -146,7 +146,8 @@ class DeclarationTests(unittest.TestCase):
         for _modifier, (_value, level) in PROGRAMMES.items():
             self.assertIn("remove_variable = " + level, cleanup)
         je = _strip_comments(_text(JE))
-        self.assertEqual(je.count("colonial_empire_je_cleanup_effect = yes"), 2)
+        # Success, failure, and the invalid outcome on the rule switched off mid-game (2026-11-08).
+        self.assertEqual(je.count("colonial_empire_je_cleanup_effect = yes"), 3)
 
     def test_the_bands_stay_on_the_pulse(self):
         # Not converted: Solidified is also the endings' permanent country

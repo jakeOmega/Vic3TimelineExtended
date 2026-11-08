@@ -157,9 +157,10 @@ class DispatchTest(unittest.TestCase):
         self.assertIn(f'debug_log = "TE_TAX dispatch {DATE}"', body)
 
     def test_watchdog_hangs_off_the_country_pulse_and_is_gated(self):
-        # Beside it, the light code's entry net (test_tax_code_scaling_modifiers.py).
+        # Beside it, the light code's entry net (test_tax_code_scaling_modifiers.py) and the rule-off net
+        # (test_rule_off_teardown.py).
         self.assertEqual(self.parsed["on_monthly_pulse_country"]["on_actions"],
-                         ["te_tax_watchdog_on_action", "te_tax_light_entry_net"])
+                         ["te_tax_watchdog_on_action", "te_tax_light_entry_net", "te_tax_rule_off_net"])
         gate = self.parsed["te_tax_watchdog_on_action"]["effect"]["if"]
         self.assertEqual(gate["trigger_event"], {"id": "te_tax.2"})
         limit = block(read(ON_ACTIONS), "te_tax_watchdog_on_action")
