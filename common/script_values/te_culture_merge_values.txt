@@ -32,9 +32,12 @@ te_cm_sol_gap_open = 3
 # ---- Shares ----
 # A meaningful share: a sphere that holds this much of a part's homeland pops
 # counts it. The switch: once the result holds this share of result + part pops
-# in a part's homeland states, every remaining pop of the part switches (2/3).
+# in a part's homeland states, every remaining pop of the part switches. It
+# equals te_cm_hold_open (owner, 2026-11-07: "drop it to 60%"), so a sphere that
+# holds a part's homeland at 60% can only finish by converting all of it, and one
+# that holds more finishes sooner: gaining more of the homeland is the lever.
 te_cm_meaningful_share = 0.10
-te_cm_switch_share = 0.667
+te_cm_switch_share = 0.60
 
 # ---- Waiting and counters, in years ----
 # Tiers 1b and 2 count years of holding the parts together before a merge may
@@ -49,18 +52,20 @@ te_cm_sphere_rate_factor = 0.5
 
 # ---- The conversion rate's coefficients (tuned against the pace targets) ----
 # te_cm_pop_rate is a fraction of one pop that converts each year. With the
-# remaining share (1 - f) ** n, the switch comes at n = ln(1 - 0.667) / ln(1 - f).
+# remaining share (1 - f) ** n, the switch comes at n = ln(1 - 0.60) / ln(1 - f)
+# for a sphere that holds the part's whole homeland, and at ln(1 - 0.60 / h) / ln(1 - f)
+# for one that holds a share h of it (developed: 19 years at h = 1, 28 at 0.8, 40 at 0.7).
 # Owner's targets: about 20 years for a developed country, about 40 for a slow one,
 # the spread coming about half from the pop's circumstances (literacy, urbanization)
 # and half from policy (the speed modifier).
 #   developed: literacy 0.8, urbanization 0.4, Public Schools + Ministry of Culture
-#              level 3 + Radio + Film (speed +40%): f = 5.6%, n = 19.1 years
-#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.7%, n = 40.6 years
+#              level 3 + Radio + Film (speed +40%): f = 4.8%, n = 18.7 years
+#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.3%, n = 39.6 years
 # Between those profiles literacy alone multiplies the rate by 1.28, urbanization
 # alone by 1.17 and policy by 1.4 (test_culture_merge_values.py pins each). The
 # speed sources are 0.10 Public Schools, 0.05 per Ministry level, 0.10 Radio,
 # 0.05 Film, 0.10 Mass Propaganda.
-te_cm_base_rate = 0.014
+te_cm_base_rate = 0.012
 te_cm_literacy_base = 1.5
 te_cm_urban_weight = 0.6
 

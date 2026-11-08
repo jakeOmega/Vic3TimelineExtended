@@ -315,7 +315,10 @@ stalled and why). Follow `docs/guides/gui_style_guide.md`.
 When the result culture is **sufficiently dominant** (owner) over a joined
 part, that part switches. *(Designer's call, revised while planning:)* dominance
 is measured **per part, in that part's homeland states**: the result's share of
-result plus part pops living there, starting value two thirds. A world total
+result plus part pops living there, at 60%, the hold that opens a merge (owner,
+2026-11-07, replacing the designer's starting value of two thirds, which left a
+sphere holding 60–66% of a part unable to finish; gaining more of the homeland
+is the lever). A world total
 of result plus parts doesn't work for absorb merges, whose result already
 exists: French alone outnumbers Occitan and Walloon three to one, so a merge
 measured that way would switch the day it started. Measured in the part's

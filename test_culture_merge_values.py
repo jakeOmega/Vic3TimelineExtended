@@ -235,7 +235,7 @@ class TestThresholds(unittest.TestCase):
     def test_values_match_the_spec(self):
         v = values()
         self.assertEqual(v["te_cm_hold_open"], 0.60)
-        self.assertEqual(v["te_cm_switch_share"], 0.667)
+        self.assertEqual(v["te_cm_switch_share"], 0.60)
         self.assertEqual(v["te_cm_sphere_rate_factor"], 0.5)
         self.assertEqual(v["te_cm_wait_cap_years"], 20)
 

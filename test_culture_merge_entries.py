@@ -1225,7 +1225,7 @@ class LocTest(unittest.TestCase):
     def test_the_number_in_the_bar_text_is_the_switch_share(self):
         self.assertIn("ScriptValue('te_cm_switch_share')|%0]", self.loc["te_cm_bar_desc"])
         values = text_of(HAND_VALUES)
-        self.assertIn("te_cm_switch_share = 0.667", values)
+        self.assertIn("te_cm_switch_share = 0.60", values)
 
     def test_the_tech_lines_name_the_tier_technologies(self):
         for tier, tech in ((1, "pan-nationalism"), (2, "mass_media"), (3, "television")):
@@ -1367,8 +1367,8 @@ class ProgressTest(unittest.TestCase):
         world = joined_world(german, 1, ["north_german", "south_german"], [])
         world.globals.update({"te_cm_dom_german_north_german": 0.5, "te_cm_dom_german_south_german": 0.2})
         self.assertAlmostEqual(value_of("te_cmg_german_lowest_dom", world), 0.2)
-        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.2 / 0.667)
-        self.assertAlmostEqual(value_of("te_cmg_german_bar_pct", world), 100 * 0.2 / 0.667)
+        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.2 / 0.60)
+        self.assertAlmostEqual(value_of("te_cmg_german_bar_pct", world), 100 * 0.2 / 0.60)
         # A joined part the census has not measured yet counts as nothing.
         del world.globals["te_cm_dom_german_south_german"]
         self.assertEqual(value_of("te_cmg_german_lowest_dom", world), 0)
@@ -1389,7 +1389,7 @@ class ProgressTest(unittest.TestCase):
         world.globals["te_cm_dom_german_alemannic"] = 0.3
         self.assertEqual(value_of("te_cmg_german_lowest_dom", world), 1)
         self.assertAlmostEqual(value_of("te_cmg_german_lowest_dom_all", world), 0.3)
-        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.3 / 0.667)
+        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.3 / 0.60)
         # While it still runs (state 1), the core decides.
         world.globals["te_cm_state_german"] = 1
         self.assertEqual(value_of("te_cmg_german_progress", world), 1)

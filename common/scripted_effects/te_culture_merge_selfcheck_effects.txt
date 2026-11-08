@@ -232,7 +232,7 @@ te_cm_chk_conversion = {
 					global_var:te_cm_chk_rate > 0
 					global_var:te_cm_chk_rate <= 0.5
 				}
-				debug_log = "TE_SELF_CHECK OK cm_rate_inputs part=$CULTURE$ literacy=[GetGlobalVariable('te_cm_chk_literacy').GetValue|2] urbanization=[GetGlobalVariable('te_cm_chk_urban').GetValue|2] speed=[GetGlobalVariable('te_cm_chk_speed').GetValue|2] rate=[GetGlobalVariable('te_cm_chk_rate').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString] (the starter's base-case pop converts a share a year between 0 and the 0.5 cap; the pace target assumes a developed state reads about 0.4 urbanization and a rate near 0.056)"
+				debug_log = "TE_SELF_CHECK OK cm_rate_inputs part=$CULTURE$ literacy=[GetGlobalVariable('te_cm_chk_literacy').GetValue|2] urbanization=[GetGlobalVariable('te_cm_chk_urban').GetValue|2] speed=[GetGlobalVariable('te_cm_chk_speed').GetValue|2] rate=[GetGlobalVariable('te_cm_chk_rate').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString] (the starter's base-case pop converts a share a year between 0 and the 0.5 cap; the pace target assumes a developed state reads about 0.4 urbanization and a rate near 0.048)"
 			}
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN cm_rate_inputs part=$CULTURE$ literacy=[GetGlobalVariable('te_cm_chk_literacy').GetValue|2] urbanization=[GetGlobalVariable('te_cm_chk_urban').GetValue|2] speed=[GetGlobalVariable('te_cm_chk_speed').GetValue|2] rate=[GetGlobalVariable('te_cm_chk_rate').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString] (rate 0: a saved scope or one of the reads did not resolve in the pop's scope, so nothing converts; a rate at 0.5 is the value's cap, which an urbanization or literacy read on the wrong scale would hit; take the fallback in docs/testing/culture-merges-playtest.md)"

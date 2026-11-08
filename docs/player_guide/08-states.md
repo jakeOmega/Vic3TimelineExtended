@@ -291,9 +291,8 @@ Closely related cultures can merge into one national culture over a few
 decades: North and South German pops become German, Yankee and Dixie pops
 American, and Wallonian and Occitan pops French. A merge starts in a country
 that holds most of its parts and treats them as equals. Each year a share of
-the parts' pops converts, and once the merged culture holds two thirds of a
-part's homeland, every remaining pop of that part in the world switches at
-once. One culture where there were several clears homeland thresholds more
+the parts' pops converts, and once the merged culture holds 60% of a part's
+homeland, every remaining pop of that part in the world switches at once. One culture where there were several clears homeland thresholds more
 easily, and leaves the game fewer pops to simulate.
 
 The Culture Merges game rule controls the system and is on by default. If you
@@ -386,10 +385,12 @@ have already converted still count toward a part's hold.
 A part switches in about 20 years in a country that holds all of the part's
 homeland and has 80% literacy, 40% urbanization, Public Schools, a level 3
 Ministry of Culture, Radio and Film, and in about 40 in one with 30% literacy,
-10% urbanization and none of those. Only your sphere's pops convert, so a
-sphere that holds less than two thirds of a part's homeland converts its own
-pops but can't switch the part, unless enough of the merged culture already
-lives there. Culture Merge Speed raises the pace:
+10% urbanization and none of those. Only your sphere's pops convert, so the
+less of a part's homeland your sphere holds, the longer the switch takes:
+about 28 years at 80% and 40 at 70% in the first country. A sphere that holds
+just 60% converts its own pops but can't switch the part until it holds more
+of the homeland, unless enough of the merged culture already lives there.
+Culture Merge Speed raises the pace:
 
 | Source | Culture Merge Speed |
 |---|---|
@@ -416,9 +417,9 @@ sphere carries on. Nothing converted is lost while a merge stalls.
 ### When a part switches
 
 Each part switches on its own, at the yearly count, once the merged culture
-holds two thirds of the merged-plus-part pops in that part's homeland states.
+holds 60% of the merged-plus-part pops in that part's homeland states.
 The Merge Progress bar shows how close the least converted part is to
-switching; it is full when the merged culture holds two thirds. The entry's
+switching; it is full when the merged culture holds 60%. The entry's
 status line gives the share itself. At the switch:
 
 - every pop of the part in the world converts, whoever owns it;
