@@ -2994,14 +2994,20 @@ population_transfer_number = {
 # the enforce_privatization article would put up for sale. Country scope.
 enforce_privatization_state_owned_levels = {
 	value = 0
+	# A building still under its first construction (level 0) has no ownership to read: country_ownership_fraction
+	# logs "ownership_fraction requires the building to be built" (164 lines in two hours, 2026-11-08). Vanilla's
+	# Portugal entry guards the same read with level > 0.
 	every_scope_building = {
 		limit = {
 			is_government_funded = no
-			country_ownership_fraction > 0
+			level > 0
 		}
-		add = {
-			value = level
-			multiply = country_ownership_fraction
+		if = {
+			limit = { country_ownership_fraction > 0 }
+			add = {
+				value = level
+				multiply = country_ownership_fraction
+			}
 		}
 	}
 }
