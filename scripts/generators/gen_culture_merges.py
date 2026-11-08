@@ -921,7 +921,7 @@ def _result_exists(merge: cfg.Merge) -> str:
     begun before the culture was added has none: ``cu:<result>`` is empty there, and starting the merge would add that
     empty culture as a primary culture and convert pops into it (a 1883 save from before #1509, 2026-11-08: every
     vanilla trigger that walks a primary culture logged ``Culture (-1)``, about 8,700 lines in two hours). Such a game
-    never starts the merge."""
+    never starts the merge. Vanilla guards a culture the same way (``exists = cu:venezuelan``, 00_major_formables.txt)."""
     return "exists = cu:%s" % merge.result
 
 
