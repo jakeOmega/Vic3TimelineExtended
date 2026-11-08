@@ -173,6 +173,19 @@ the six rank multipliers, laissez-faire, the five finance techs — §16.1) are 
 game rule can switch off, so the passive rate stack runs under all three settings. Switching it
 off as well would leave every country borrowing at 0%.
 
+**Switched off mid-game** (Workshop report, 2026-11-08). A game rule can be changed mid-game, from the screen that
+changes country, and with banking set to Disabled the entry, its modifiers and its events ran on: nothing ended an
+active entry, and every reader of the cycle asked `te_banking_cycle_running`, which didn't read the rule. Three pieces
+now stop it. `te_banking_cycle_running` asks `te_banking_system_on` first, so the pulses, events, tools and crash
+checks stop at once (and the monthly pulse's start branch asks the rule too, or it would announce a start every month
+until the entry ended). The entry's one outcome, hidden and invalid, ends it on its next update when the rule is off,
+taking its declared modifiers and every tool modifier (all on the entry) along. `te_banking_entry_net` clears the
+three cycle variables (`te_banking_cycle_stop_for_rule`), since harvest conditions, the construction market's AI and
+sites and monuments read them directly. Switched back on, the net adds the entry again (no record is left to refuse
+it) and `immediate` starts a fresh cycle once `te_banking_cycle_unlocked` holds. The monetary layer re-homes its own
+modifiers when the entry goes (`te_monetary_settle_modifier_home`). The other 56 rule-gated entries still run on when
+their rule is switched off. Play-test: `docs/testing/banking-playtest.md`, "The rule switched off mid-game".
+
 ### Banking Law Modifiers
 Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) to tune the banking cycle:
 

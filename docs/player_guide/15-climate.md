@@ -448,7 +448,7 @@ stays closed. Leaving Managed Fossil Phaseout stops every program.
 
 ### Readiness and emissions
 
-Closing mines and rigs cuts supply. Coal and oil get dearer, buildings that burn
+Closing mines and rigs cuts supply. Coal and oil get more expensive, buildings that burn
 them earn less and switch to cleaner methods where they can, and anything still
 short is imported or goes without. Under Replacement Readiness the section shows
 what could take their place:

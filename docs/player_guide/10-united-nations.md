@@ -650,7 +650,7 @@ whose case strength is 40 or more and that is not your ally, overlord or
 subject. If it carries, the target has a UN Arms
 Embargo for ten years: −30% trade advantage in small arms, ammunition,
 artillery, tanks, aeroplanes, man-o'-wars and ironclads, for imports and
-exports alike, and military goods 5% dearer, all × enforcement. It loses 6
+exports alike, and military goods 5% costlier, all × enforcement. It loses 6
 standing. A vetoed embargo, or one the target voted for itself, or both, is a Voluntary
 UN Arms Embargo at half strength for five years and costs 3 standing. A country
 under an embargo cannot propose one.

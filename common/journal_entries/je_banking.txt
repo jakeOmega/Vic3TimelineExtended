@@ -8,7 +8,10 @@
 		always = yes
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be
+	# changed mid-game, from the screen that changes country; an active entry is
+	# ended by the invalid outcome below, and te_banking_entry_net adds the entry
+	# back if the rule is switched on again.
 	disable_evaluation = {
 		NOT = { te_banking_system_on = yes }
 	}
@@ -175,6 +178,20 @@
 
 
 	possible = { always = yes }
+
+	# THE RULE SWITCHED OFF MID-GAME (Workshop report, 2026-11-08). The entry
+	# otherwise never ends, so its declared modifiers, its tools' modifiers (all
+	# on the entry) and its pulses outlived the rule. te_banking_cycle_running
+	# reads the rule, so the cycle stops at once; this ends the entry on its next
+	# update, taking every modifier on it along; te_banking_entry_net clears the
+	# cycle's variables, which other systems read directly.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_banking_cycle_invalid_conclusion_desc
+		trigger = {
+			NOT = { te_banking_system_on = yes }
+		}
+	}
 
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit      = yes
@@ -779,8 +796,14 @@
 		effect = {
 			if = {
 				limit = { te_banking_cycle_running = no }
+				# Not with the rule off: te_banking_cycle_running says no then,
+				# and until the invalid outcome ends the entry this would
+				# announce a start every month.
 				if = {
-					limit = { te_banking_cycle_unlocked = yes }
+					limit = {
+						te_banking_system_on = yes
+						te_banking_cycle_unlocked = yes
+					}
 					banking_cycle_start = yes
 					if = {
 						limit = { is_ai = no }

@@ -1,0 +1,45 @@
+﻿# VANILLA FIX: Caesaropapism counts as State Religion for the church and
+# secular production methods (docs/vanilla/vanilla_known_bugs.md, "Vanilla bugs
+# the mod fixes"). Remove this file once vanilla lists law_caesaropapism here
+# itself: test_vanilla_caesaropapism_fix.py fails then, and when vanilla
+# changes one of these lists.
+#
+# Vanilla names only law_state_religion in these lists, and the engine doesn't
+# read a variant law as its parent there: a Workshop player's Caesaropapist
+# Russia (2026-11-08) was locked out of the state-church Urban Center method,
+# kept on Free Churches, and offered the secular methods in its government
+# buildings. Each list restates vanilla's whole list with law_caesaropapism
+# added, which is right whether an INJECT replaces a list or adds to it.
+# Vanilla's two other State Religion variants, the Millet System and People of
+# the Book, are left as vanilla has them: tolerant variants, perhaps meant to
+# allow these.
+
+INJECT:pm_state_urban_clergy = {
+	unlocking_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+	}
+}
+
+INJECT:pm_free_urban_clergy = {
+	disallowing_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+		law_state_atheism
+	}
+}
+
+INJECT:pm_secular_bureaucrats = {
+	disallowing_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+		law_communal_administration
+	}
+}
+
+INJECT:pm_secular_academia = {
+	disallowing_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+	}
+}

@@ -18,16 +18,27 @@ TOOLS = ('restrict_inflows', 'sterilize_inflows', 'foreign_borrowing_limits',
          'fx_surrender', 'emergency_import_financing')
 
 
+OPERATORS = {'=', '?=', '<', '>', '<=', '>=', '!='}
+
+
 def parse_body(source):
-    tokens = iter(ParadoxFileParser().tokenize(source))
+    tokens = ParadoxFileParser().tokenize(source)
+    pos = 0
 
     def body():
+        nonlocal pos
         result = []
-        for key in tokens:
+        while pos < len(tokens):
+            key = tokens[pos]
+            pos += 1
             if key == '}':
                 return result
-            op = next(tokens)
-            value = next(tokens)
+            if pos >= len(tokens) or tokens[pos] not in OPERATORS:
+                # A bare list item, as in an outcome's `flags = { hidden invalid_outcome }`.
+                result.append((key, None, None))
+                continue
+            op, value = tokens[pos], tokens[pos + 1]
+            pos += 2
             result.append((key, op, body() if value == '{' else value.strip('"')))
         return result
     return body()

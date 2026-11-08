@@ -67,7 +67,15 @@ te_banking_entry_expected = {
 # THE ENTRY IS NOT THE SYSTEM. je_banking_cycle is held by every country under
 # the rule, dormant until te_banking_cycle_unlocked; ask this, never
 # has_journal_entry, for "does this country have a banking cycle".
+#
+# The rule comes first. A game rule can be changed mid-game (from the screen
+# that changes country), and a player who switched banking off saw the cycle's
+# events, bubble pressure and modifiers carry on (Workshop report, 2026-11-08):
+# nothing ended the entry, and the variables stayed. Now the cycle stops here at
+# once, the entry ends through its invalid outcome on its next update, and
+# te_banking_entry_net clears the variables (te_banking_cycle_stop_for_rule).
 te_banking_cycle_running = {
+	te_banking_system_on = yes
 	has_journal_entry = je_banking_cycle
 	has_variable = finance_cycle_value
 }

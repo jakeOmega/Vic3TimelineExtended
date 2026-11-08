@@ -223,13 +223,14 @@ campaigns, and drop protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is where you run your intelligence agency. It
-becomes active when you hold one more covert operation slot than your rank
-grants for free (every country gets one, major powers two, great powers three).
-The first extra slots come from the Ministry of Intelligence and Security
-Established law (unlocked by Mass Surveillance), whose institution adds a slot
-per level, and from the era 7 technology Mainframe Computers. Once active, the
-entry stays open even if you later lose that extra slot. It never completes.
+The Covert Warfare journal entry is where you run your intelligence agency.
+Every country holds covert operation slots from the start (one, major powers
+two, great powers three), but the entry becomes active only once you gain a
+slot beyond those: from the era 7 technology Mainframe Computers, or from the
+Ministry of Intelligence and Security Established law (unlocked by Mass
+Surveillance), whose institution adds a slot per level. Computer Networks,
+Cyber Warfare and Quantum Computing add a slot each and open it too. Once
+active, the entry stays open. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name, which is also its name on your rows.

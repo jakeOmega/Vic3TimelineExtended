@@ -283,3 +283,18 @@ Started).
    the pool grant (Weekly Investment Pool Change) and not the treasury one, and the pool grows by the grant each week.
    Under laws with no investment pool, or with the Banking System rule Disabled, it still reads "into our treasury".
 3. **Nothing else wakes.** The dormant entry still shows no phase, bars or tools, and no banking events fire.
+
+## The rule switched off mid-game (2026-11-08)
+
+A Workshop player set the Banking System rule to Disabled and found the entry, its bonuses and its bubble-pressure
+events still running. Start a game with banking Enabled, play until a country's cycle runs (Stock Exchange and a
+level 5 Urban Center), use a tool, then set the rule to Disabled from the screen that changes country.
+
+1. **The entry closes.** Within a week the Banking Cycle entry leaves the journal, and the modifier list shows no
+   phase, bubble-inertia, stance-band or tool modifier.
+2. **Nothing wakes.** No banking event fires, no "banking cycle started" notification arrives, and the Budget panel's
+   Banking tab shows no running cycle.
+3. **Switched back on.** Set the rule to Enabled again: within a month the entry is back, and a country that meets the
+   start test begins a fresh cycle at 50 (Stable). If the entry never returns, `add_journal_entry` doesn't re-add a
+   type the country concluded: give `te_banking_entry_net` a different route back, or say in the rule's text that
+   switching it off is for good.

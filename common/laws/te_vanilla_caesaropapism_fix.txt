@@ -1,0 +1,29 @@
+﻿# VANILLA FIX: Caesaropapism disallows Public and Private Schools, as State
+# Religion does (docs/vanilla/vanilla_known_bugs.md, "Vanilla bugs the mod
+# fixes"; the production methods' half is
+# common/production_methods/te_vanilla_caesaropapism_fix.txt). Remove this file
+# once vanilla lists law_caesaropapism here itself:
+# test_vanilla_caesaropapism_fix.py fails then, and when vanilla changes one of
+# these lists.
+#
+# Vanilla names only law_state_religion, and the engine doesn't read a variant
+# law as its parent here: a Workshop player's Caesaropapist Russia ran Public
+# Schools (2026-11-08). Each list restates vanilla's with law_caesaropapism
+# added. gen_law_consistency.py reads these lists, so a country already holding
+# either school law under Caesaropapism is moved off it by
+# te_fix_inconsistent_laws.
+
+INJECT:law_private_schools = {
+	disallowing_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+	}
+}
+
+INJECT:law_public_schools = {
+	disallowing_laws = {
+		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+		law_caesaropapism
+		law_serfdom # REVIEWED 2026-11-08 (law_variant_parity): vanilla's entry restated as it is; Manorialism is one of vanilla's gaps this file leaves alone (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
+	}
+}

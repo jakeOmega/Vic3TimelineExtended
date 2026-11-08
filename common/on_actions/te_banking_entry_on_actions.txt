@@ -28,6 +28,9 @@
 #                              out, and on a yearly net those countries waited
 #                              up to a year for their cycle (the self-check
 #                              row's fallback).
+#                              With the rule switched off mid-game it also
+#                              clears the stopped cycle's variables
+#                              (te_banking_cycle_stop_for_rule).
 #   te_banking_entry_selfcheck the first yearly pulse of a game (an old save's
 #                              first after this change) arms
 #                              te_debug_banking.1 for 30 days on, which logs
@@ -82,6 +85,16 @@ te_banking_entry_net = {
 				set_global_variable = { name = te_banking_entry_net_added value = 0 }
 			}
 			change_global_variable = { name = te_banking_entry_net_added add = 1 }
+		}
+		# The rule switched off mid-game: the cycle has stopped
+		# (te_banking_cycle_running) and the entry ends through its invalid
+		# outcome, but its variables would stay for the rest of the game.
+		if = {
+			limit = {
+				NOT = { te_banking_system_on = yes }
+				has_variable = finance_cycle_value
+			}
+			te_banking_cycle_stop_for_rule = yes
 		}
 	}
 }

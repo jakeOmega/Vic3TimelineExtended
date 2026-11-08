@@ -253,6 +253,10 @@ After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_onl
 
 Code that repairs saves from an older mod version carries a marker, `# OLD-SAVE REPAIR (#N): remove after YYYY-MM-DD or at vanilla X.Y, whichever comes first.`, mostly in `common/on_actions/te_old_save_repairs.txt`. Once `vanilla_parsed/` is rebuilt for version X.Y, `test_old_save_repairs.py` fails, naming each one. Delete the repair's block, and the file once it is empty. Old-save cleanup without a marker (a strip, migration or kept reader registered in `docs/audits/mod_known_noise.md`) is the same kind of code: check whether it can go too. A vanilla version that loads no save from the one before retires all of it at once: 1.15 loads no 1.14 save, so #1407 removed the old-save paths the log registries (L24, L25) and the dated repairs tracked, and #1429 lists the rest.
 
+## 6c. Vanilla bugs the mod fixes
+
+The mod patches a few vanilla bugs: `docs/vanilla/vanilla_known_bugs.md` § "Vanilla bugs the mod fixes" lists them, and each file carries `# VANILLA FIX:` (`git grep -l "VANILLA FIX:" common/ events/ gui/`). With `vanilla_parsed/` rebuilt for the new version, run the suite: each fix's test fails once vanilla has fixed its bug, or has changed what the fix restates. Remove a fix vanilla has made redundant (its files, test and row) and restate one whose vanilla text moved. A row without a test needs reading against the new vanilla by hand; give it a test while you're there.
+
 ## 6b. Vanilla constants the mod mirrors (silent-drift check)
 
 A separate class from step 6's breakages: values the mod **copies or cancels** rather than references. Vanilla changing one produces **no error, no log line and no validator finding** — the mod keeps loading and quietly computes the wrong number. Re-read each row against the new vanilla on every bump.

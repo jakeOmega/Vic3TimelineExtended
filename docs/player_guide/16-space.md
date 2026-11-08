@@ -807,7 +807,7 @@ adds 3 points a month a level of its own, with or without a fabrication method. 
 in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
 top. Up to 500 points wait in stock while nothing is queued, enough for the
-dearest module.
+most expensive module.
 
 A finished module waits at Earth for its site's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your
@@ -1075,7 +1075,7 @@ fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
 method or cutting levels doesn't lower it. If annexed or formed land brings a
 second Space Command, the smaller of the two is dismantled, whichever it is (on
 a tie, the one outside your capital), and you are told. A large fleet
-makes Space Command dearer to run; it builds as fast while those goods can be
+makes Space Command costlier to run; it builds as fast while those goods can be
 bought.
 Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
 raise your fleets' fire by a quarter.
