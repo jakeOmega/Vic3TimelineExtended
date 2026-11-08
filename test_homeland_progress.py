@@ -4,6 +4,7 @@ A deliberately small interpreter handles only the vocabulary these scripts use.
 Unknown statements fail so a new mechanic cannot silently skip test coverage.
 """
 import operator
+import re
 import unittest
 from decimal import Decimal
 from pathlib import Path
@@ -37,13 +38,16 @@ _GENERATED = {}
 
 
 def culture_merge_script():
-    """The two generated blocks Dynamic Homeland Progress calls: the trigger that keeps a switched part's
-    homeland beside its successor's, and the effect that takes it away with the successor's. Parsed once."""
+    """The generated blocks Dynamic Homeland Progress calls: the trigger that keeps a switched part's
+    homeland beside its successor's, and the effect that takes it away with the successor's, down the chain of
+    parts that are themselves results (te_cmg_remove_parts_of_<culture>). Parsed once."""
     if not _GENERATED:
+        effects_path = "common/scripted_effects/te_culture_merges_generated_effects.txt"
+        text = (ROOT / effects_path).read_text(encoding="utf-8-sig")
+        chain = re.findall(r"^(te_cmg_remove_parts_of_\w+) = \{", text, re.M)
         _GENERATED["triggers"] = generated(
             "common/scripted_triggers/te_culture_merges_generated_triggers.txt", ("te_cmg_switched_part_kept",))
-        _GENERATED["effects"] = generated(
-            "common/scripted_effects/te_culture_merges_generated_effects.txt", ("te_cmg_remove_switched_part_homelands",))
+        _GENERATED["effects"] = generated(effects_path, ("te_cmg_remove_switched_part_homelands", *chain))
     return _GENERATED
 
 

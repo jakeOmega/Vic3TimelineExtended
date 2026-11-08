@@ -508,9 +508,11 @@ te_cm_release_starter = {
 #    its pops of the part in the part's homeland states, at least te_cm_meaningful_share of what the
 #    census last found there (te_cm_home_<c>). A sliver neither pauses nor is paused; a culture with
 #    no homeland state has no such holder and never pauses. Progress is kept while paused.
-# 3. Otherwise the result is made a primary culture here (guarded, so a formation that dropped it
-#    gets it back at the next pass), te_cm_converted_<m> marks the country for the formation hook,
-#    and every pop of the part converts by the rate te_cm_pop_rate gives it.
+# 3. Otherwise te_cm_converted_<m> marks the country for the formation hook, every pop of the part
+#    converts by the rate te_cm_pop_rate gives it, and the result is made a primary culture here, but
+#    only where the part being converted is a primary culture here (R34) or this is the starter:
+#    a bloc member holding a sliver of a part that is not its own converts those pops without
+#    gaining a primary culture. Guarded, so a formation that dropped it gives it back at the next pass.
 te_cm_convert_part = {
 	cu:$CULTURE$ = { save_temporary_scope_as = te_cm_part }
 	global_var:te_cm_starter_$MERGE$ = { save_temporary_scope_as = te_cm_starter }
@@ -581,7 +583,13 @@ te_cm_convert_part = {
 			limit = { local_var:te_cm_cv_fail = 0 }
 			set_variable = { name = te_cm_converted_$MERGE$ value = 1 }
 			if = {
-				limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } }
+				limit = {
+					NOT = { country_has_primary_culture = cu:$RESULT$ }
+					OR = {
+						this = scope:te_cm_starter
+						country_has_primary_culture = cu:$CULTURE$
+					}
+				}
 				add_primary_culture = cu:$RESULT$
 			}
 			every_scope_pop = {
@@ -600,9 +608,9 @@ te_cm_convert_part = {
 # the walks. te_cm_home_r_<c> first exists at the census after the part joined, so it is read
 # guarded; a figure that doesn't exist counts as nothing.
 # - A part that is nowhere in the world any more is dominated by the result, 1: nothing is left to convert.
-# - With result + part both 0 in the homeland states (and the part still somewhere) there is nothing
-#   to divide, and the result holds none of the part's homeland: 0. The denominator is tested before
-#   the division.
+# - With result + part both 0 in the homeland states there is nothing to divide and nothing in the homeland to
+#   win: 1 too (M4), so a joined part whose homeland holds neither culture switches and its diaspora, which
+#   the switch converts wherever it lives, follows. The denominator is tested before the division.
 te_cm_census_dominance = {
 	set_local_variable = { name = te_cm_dm_part value = 0 }
 	set_local_variable = { name = te_cm_dm_res value = 0 }
@@ -633,15 +641,16 @@ te_cm_census_dominance = {
 		}
 	}
 	else = {
-		set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$ value = 0 }
+		set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$ value = 1 }
 	}
 }
 
 # Any scope. A joined part switches into the merge's result: $MERGE$ = a merge key, $CULTURE$ = the
 # part, $RESULT$ = the merge's result. Fires once te_cm_dom_<m>_<c> reaches te_cm_switch_share and the
 # part has not switched. Never a rule check: te_cmg_dominance_all, its only caller, runs behind the rule.
-# 1. Every pop of the part, in every country that has any, converts whole (value = 1): the diaspora
-#    stops seeing itself as from Bavaria.
+# 1. Every pop of the part, in every country, converts whole (value = 1): the diaspora stops seeing itself
+#    as from Bavaria. No culture_percent_country prefilter on this one-off walk (M3): values are kept in
+#    units of 1e-5, so a few hundred pops in a huge country can read 0 and would be left behind.
 # 2. Every homeland state of the part becomes a homeland of the result as well, where it isn't one
 #    yet, whoever holds the state. The part's own homeland is kept (a part with no pops costs nothing,
 #    and formables that count states by their cultures' homelands keep finding them); Dynamic Homeland
@@ -659,7 +668,6 @@ te_cm_switch_part = {
 		}
 		cu:$RESULT$ = { save_temporary_scope_as = te_cm_result }
 		every_country = {
-			limit = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } }
 			every_scope_pop = {
 				limit = { culture = cu:$CULTURE$ }
 				change_pop_culture = { target = cu:$RESULT$ value = 1 }

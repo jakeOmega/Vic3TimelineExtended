@@ -32,8 +32,9 @@ sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
 import culture_merges_config as cfg  # noqa: E402
 import gen_culture_merges as gen  # noqa: E402
+from je_multiplier_scope_audit import parse_text  # noqa: E402
 from test_culture_merge_census import block, slot_cultures, squash, text_of, tier_of  # noqa: E402
-from test_culture_merge_entries import World, definitions, holds  # noqa: E402
+from test_culture_merge_entries import World, child, definitions, holds  # noqa: E402
 from test_homeland_progress import Script, obj  # noqa: E402
 
 EFFECTS = ROOT / "common/scripted_effects/te_culture_merge_effects.txt"
@@ -153,8 +154,12 @@ class ConversionTest(unittest.TestCase):
         self.assertEqual(self.body.count("culture_percent_country"), 1)
 
     def test_first_conversion_adds_primary(self):
+        # R34: under a NOT-already-primary limit, and only where the part being converted is primary here or this
+        # is the starter: a sliver holder converts its pops without gaining a primary culture.
         self.assertIn(
-            "if = { limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } } add_primary_culture = cu:$RESULT$ }",
+            "if = { limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } "
+            "OR = { this = scope:te_cm_starter country_has_primary_culture = cu:$CULTURE$ } } "
+            "add_primary_culture = cu:$RESULT$ }",
             self.body,
         )
         # Guarded every pass rather than once: a formation that dropped the primary gets it back.
@@ -337,12 +342,29 @@ class YearlyConversionTest(unittest.TestCase):
                 )
 
     def test_a_part_that_has_not_joined_or_has_switched_is_not_converted(self):
-        for merge in cfg.MERGES:
-            for culture in joinable(merge):
-                sec = section(self.body, merge.key)
-                head = sec[sec.index("CULTURE = %s RESULT" % culture) - 400:sec.index("CULTURE = %s RESULT" % culture)]
-                self.assertIn("global_var:te_cm_joined_%s_%s ?= 1" % (merge.key, culture), head)
-                self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % culture, head)
+        # Parsed, not windowed: every te_cm_convert_part call sits in an `if` whose own limit holds `joined` and a
+        # `NOT switched` for that very culture, and reads its gates on the starter.
+        nodes, _ = parse_text(GEN_EFFECTS.read_text(encoding="utf-8-sig"), GEN_EFFECTS.name)
+        yearly = next(n for n in nodes if n.key == "te_cmg_yearly_country")
+        seen = set()
+        for merge_if in (c for c in yearly.children if c.key == "if"):
+            states = [c.key for c in child(merge_if, "limit").children[0].children]
+            key = states[0].split("te_cm_state_")[1]
+            inner = next(c for c in merge_if.children if c.key == "if")
+            for part_if in (c for c in inner.children if c.key == "if"):
+                call = child(part_if, "te_cm_convert_part")
+                self.assertIsNotNone(call, key)
+                culture = child(call, "CULTURE").value
+                self.assertEqual(child(call, "MERGE").value, key)
+                keys = [c.key for c in child(part_if, "limit").children]
+                self.assertIn("global_var:te_cm_joined_%s_%s" % (key, culture), keys)
+                not_ = child(child(part_if, "limit"), "NOT")
+                self.assertEqual([(c.key, c.value) for c in not_.children], [("has_global_variable", "te_cm_switched_%s" % culture)])
+                starter = child(child(part_if, "limit"), "scope:te_cm_starter")
+                self.assertIn("var:te_cm_ok_%s_%s" % (key, culture), [c.key for c in starter.children])
+                seen.add((key, culture))
+        expected = {(m.key, c) for m in cfg.MERGES for c in joinable(m)}
+        self.assertEqual(seen, expected)
 
     def test_the_tier_passed_is_the_parts_own(self):
         # Pan-Turkic mixes tiers (Kazak tier 1, Tatar tier 1b, the others tier 2): the pause pair follows the part.
@@ -376,13 +398,15 @@ class DominanceTest(unittest.TestCase):
         cls.effects = text_of(GEN_EFFECTS)
 
     def test_dominance_value_guards_zero(self):
-        # The denominator is tested before the division, and a zero one gives 0 (the part still exists
-        # somewhere) or 1 (it is gone from the world).
+        # The denominator is tested before the division. A zero one gives 1 whether the part is gone from the world or
+        # only absent from its homeland states (M4): a joined part whose homeland holds neither culture switches, and
+        # its diaspora converts with it. It never gives 0, which would keep the part from switching for good.
         divide = self.body.index("divide = local_var:te_cm_dm_total")
         guard = self.body.index("limit = { local_var:te_cm_dm_total > 0 }")
         self.assertLess(guard, divide)
         self.assertEqual(self.body.count("divide"), 1)
-        self.assertRegex(self.body, r"else = \{ set_global_variable = \{ name = te_cm_dom_\$MERGE\$_\$CULTURE\$ value = 0 \} \}$")
+        self.assertRegex(self.body, r"else = \{ set_global_variable = \{ name = te_cm_dom_\$MERGE\$_\$CULTURE\$ value = 1 \} \}$")
+        self.assertNotIn("value = 0 }", self.body[self.body.index("else_if"):])
         self.assertIn(
             "NOT = { any_country = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } } } } "
             "set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$ value = 1 }",
@@ -460,12 +484,17 @@ class SwitchTest(unittest.TestCase):
         )
 
     def test_every_pop_of_the_part_converts_whole_wherever_it_lives(self):
+        # M3: no culture_percent_country prefilter on this one-off walk. Values are stored in units of 1e-5, so a few
+        # hundred pops in a huge country can read 0 and would be left behind.
         self.assertIn(
-            "every_country = { limit = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } } "
-            "every_scope_pop = { limit = { culture = cu:$CULTURE$ } "
+            "every_country = { every_scope_pop = { limit = { culture = cu:$CULTURE$ } "
             "change_pop_culture = { target = cu:$RESULT$ value = 1 } } }",
             self.body,
         )
+        self.assertNotIn("culture_percent_country", self.body)
+        # The monthly sweep of a switched part that reappears keeps its prefilter: it runs for every country every month.
+        monthly = squash(block(text_of(EFFECTS), "te_cm_monthly_switched_culture"))
+        self.assertIn("culture_percent_country = { target = cu:$CULTURE$ value > 0 }", monthly)
 
     def test_the_steps_run_in_order_and_only_at_the_threshold_and_once(self):
         order = [
@@ -609,9 +638,15 @@ class PrimaryUpkeepTest(unittest.TestCase):
         for merge in cfg.MERGES:
             key = merge.key
             sec = section(body, key)
+            # R34: the starter always; any other country only where a part that joined is primary, as convert_part gives it.
+            parts = " ".join(
+                "AND = { global_var:te_cm_joined_%s_%s ?= 1 country_has_primary_culture = cu:%s }" % (key, c, c)
+                for c in joinable(merge)
+            )
             self.assertIn(
-                "exists = global_var:te_cm_starter_%s OR = { has_variable = te_cm_converted_%s has_variable = te_cm_started_%s } "
-                "NOT = { country_has_primary_culture = cu:%s } }" % (key, key, key, merge.result),
+                "exists = global_var:te_cm_starter_%s OR = { has_variable = te_cm_started_%s "
+                "AND = { has_variable = te_cm_converted_%s OR = { %s } } } "
+                "NOT = { country_has_primary_culture = cu:%s } }" % (key, key, key, parts, merge.result),
                 sec, key,
             )
             self.assertIn(
@@ -678,13 +713,43 @@ class HomelandTieTest(unittest.TestCase):
 
     def test_the_removal_takes_every_part_that_switched_into_the_removed_culture(self):
         body = squash(block(self.effects, "te_cmg_remove_switched_part_homelands"))
+        below = gen.switched_into(cfg.MERGES)
         for culture in switchable():
+            # M1: a part that is itself a result takes the parts that switched into it, through its own helper.
+            follow = " te_cmg_remove_parts_of_%s = yes" % culture if culture in below else ""
             self.assertIn(
                 "if = { limit = { global_var:te_cm_switched_%s ?= scope:te_cm_removed_culture is_homeland = cu:%s } "
-                "remove_homeland = cu:%s }" % (culture, culture, culture),
+                "remove_homeland = cu:%s%s }" % (culture, culture, culture, follow),
                 body, culture,
             )
         self.assertEqual(body.count("remove_homeland"), len(switchable()))
+
+    def test_the_removal_follows_the_chain_down_the_roster(self):
+        below = gen.switched_into(cfg.MERGES)
+        # The example from the review: cm_latin takes cm_italian, which takes Corsican.
+        self.assertIn("cm_italian", below["cm_latin"])
+        self.assertIn("corsican", below["cm_italian"])
+        helpers = set(re.findall(r"^te_cmg_remove_parts_of_(\w+) = \{", self.effects, re.M))
+        self.assertEqual(helpers, {r for r in below if r in switchable()})
+        for result in helpers:
+            body = squash(block(self.effects, "te_cmg_remove_parts_of_%s" % result))
+            for part in below[result]:
+                follow = " te_cmg_remove_parts_of_%s = yes" % part if part in below else ""
+                self.assertIn(
+                    "if = { limit = { global_var:te_cm_switched_%s ?= cu:%s is_homeland = cu:%s } remove_homeland = cu:%s%s }"
+                    % (part, result, part, part, follow),
+                    body, "%s/%s" % (result, part),
+                )
+            self.assertEqual(body.count("remove_homeland"), len(below[result]), result)
+
+    def test_the_roster_nests_results_one_way_only(self):
+        # The chain is generated, not looped: a roster that nested a result inside itself fails generation.
+        loop = (
+            cfg.Merge("a", "x", None, core=(cfg.Part(("p",)), cfg.Part(("y",)))),
+            cfg.Merge("b", "y", None, core=(cfg.Part(("q",)), cfg.Part(("x",)))),
+        )
+        with self.assertRaises(ValueError):
+            gen.switched_into(loop)
 
     def test_a_project_in_flight_for_a_part_that_has_since_switched_is_dropped(self):
         body = squash(block(self.home_effects, "te_homeland_removal_monthly_effect"))
@@ -754,6 +819,33 @@ class HomelandTieTest(unittest.TestCase):
         self.months(other, 120)
         self.assertEqual(other.root["state_region"]["homelands"], {"a", "north_german"})
 
+    def test_removing_the_top_of_a_chain_removes_every_part_below_it(self):
+        # M1: cm_italian switched into cm_latin and Corsican into cm_italian; removing cm_latin's homeland takes
+        # cm_italian's with it, and then Corsican's. Each is kept by the exemption while its successor stands.
+        owner = obj("country", primary={"a"}, legitimacy=50, modifiers={"country_homelands_can_change_bool": True})
+        cultures = [obj("culture", name=n) for n in ("a", "cm_latin", "cm_italian", "corsican")]
+        state = obj("state", owner=owner, turmoil=Decimal(0),
+                    shares={"a": Decimal(".85"), "cm_latin": Decimal(".05"), "cm_italian": Decimal(".05"), "corsican": Decimal(".05")},
+                    cultures=cultures,
+                    modifiers={"state_homeland_creation_threshold_add": Decimal(".6"),
+                               "state_homeland_removal_threshold_add": Decimal(".1"),
+                               "state_homeland_change_speed_mult": Decimal(0)})
+        state["state_region"] = obj("region", states=[state], homelands={"cm_latin", "cm_italian", "corsican"})
+        sim = Script(state)
+        sim.globals["te_cm_switched_cm_italian"] = cultures[1]
+        sim.globals["te_cm_switched_corsican"] = cultures[2]
+        self.months(sim, 5)
+        self.assertEqual({p["variables"]["te_homeland_culture"]["name"] for p in sim.projects("removal")}, {"cm_latin"})
+        self.months(sim, 114)
+        self.assertEqual(sim.root["state_region"]["homelands"], {"cm_latin", "cm_italian", "corsican"})
+        sim.month()
+        self.assertEqual(sim.root["state_region"]["homelands"], {"a"})
+        # Taking cm_italian's homeland away alone (cm_latin's still there) takes Corsican's but not cm_latin's.
+        state["state_region"]["homelands"] = {"cm_latin", "cm_italian", "corsican"}
+        sim.scopes["te_cm_removed_culture"] = cultures[2]
+        sim.run(sim.effects["te_cmg_remove_switched_part_homelands"], state["state_region"])
+        self.assertEqual(state["state_region"]["homelands"], {"cm_latin", "cm_italian"})
+
     def test_a_removal_project_begun_before_the_switch_is_dropped_by_it(self):
         sim = self.make(switched=False)
         self.months(sim, 60)
@@ -766,6 +858,352 @@ class HomelandTieTest(unittest.TestCase):
         self.assertEqual(sim.root["state_region"]["homelands"], {"a"})
         # ... and only because the successor's homeland went; the part was never removed on its own.
         self.assertEqual(sim.notifications.count("homeland_removed"), 1)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# A small interpreter for the generated triggers and effects, so a scenario can ask what they do to a world instead
+# of what their text looks like. It handles the forms they use and knows no operator (the parsed tree drops them),
+# so `var:x ?= 1` and `local_var:x = 0` are equalities and the rest is stubbed by name. A helper it doesn't
+# execute (te_cm_convert_part, te_cm_census_dominance, te_cm_switch_part) is recorded in `calls`.
+# ---------------------------------------------------------------------------------------------------------------
+
+RECORDED = ("te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part")
+
+
+class Sim:
+    def __init__(self, globals=None, cvars=None, alive=None, primary=None, pops=None, stubs=None, techs=(), locals_=None):
+        self.globals = dict(globals or {})
+        self.cvars = {c: dict(v) for c, v in (cvars or {}).items()}
+        self.alive = dict(alive or {})
+        self.primary = {c: set(v) for c, v in (primary or {}).items()}
+        self.pops = {c: set(v) for c, v in (pops or {}).items()}
+        self.stubs = dict(stubs or {})
+        self.techs = set(techs)
+        self.locals = dict(locals_ or {})
+        self.scopes = {}
+        self.calls = []
+        self.this = None
+
+    # ---- triggers ----
+    def holds(self, nodes, this=None):
+        saved = self.this
+        if this is not None:
+            self.this = this
+        try:
+            return all(self.holds_one(n) for n in nodes)
+        finally:
+            self.this = saved
+
+    def countries(self):
+        return sorted(c for c in self.alive if self.alive[c])
+
+    def holds_one(self, n):
+        k, v = n.key, n.value
+        if k == "AND":
+            return all(self.holds_one(c) for c in n.children)
+        if k == "OR":
+            return any(self.holds_one(c) for c in n.children)
+        if k == "NOR":
+            return not any(self.holds_one(c) for c in n.children)
+        if k == "NOT":
+            return not all(self.holds_one(c) for c in n.children)
+        if k == "always":
+            return v == "yes"
+        if k == "custom_tooltip":
+            return all(self.holds_one(c) for c in n.children if c.key != "text")
+        if k == "limit":
+            return all(self.holds_one(c) for c in n.children)
+        if k.startswith("global_var:"):
+            name = k.split(":", 1)[1]
+            if n.children:
+                return self.holds(n.children, this=self.globals[name])
+            return str(self.globals.get(name)) == v
+        if k.startswith("scope:") and n.children:
+            return self.holds(n.children, this=self.scopes[k.split(":", 1)[1]])
+        if k == "has_global_variable":
+            return v in self.globals
+        if k == "has_variable":
+            return v in self.cvars.get(self.this, {})
+        if k.startswith("var:"):
+            return str(self.cvars.get(self.this, {}).get(k.split(":", 1)[1])) == v
+        if k.startswith("local_var:"):
+            return str(self.locals.get(k.split(":", 1)[1])) == v
+        if k == "exists":
+            return v.split(":", 1)[1] in self.globals
+        if k == "this":
+            kind, name = v.split(":", 1)
+            return self.this == (self.globals.get(name) if kind == "global_var" else self.scopes.get(name))
+        if k == "is_country_alive":
+            return self.alive.get(self.this, True) == (v == "yes")
+        if k == "country_has_primary_culture":
+            return v.split(":", 1)[1] in self.primary.get(self.this, set())
+        if k == "any_country":
+            return any(self.holds(n.children, this=c) for c in self.countries())
+        if k == "culture_percent_country":
+            return child(n, "target").value.split(":", 1)[1] in self.pops.get(self.this, set())
+        if k == "te_cm_tier_tech":
+            return int(child(n, "TIER").value) in self.techs
+        if k in self.stubs:
+            return self.stubs[k] == (v == "yes")
+        for path in (GEN_TRIGGERS,):
+            if k in definitions(path) and v == "yes":
+                return self.holds(definitions(path)[k].children)
+        raise KeyError("the scenario interpreter does not know %s" % k)
+
+    # ---- effects ----
+    def run(self, nodes):
+        for n in nodes:
+            k = n.key
+            if k == "limit":
+                continue
+            if k == "if":
+                if self.holds(child(n, "limit").children):
+                    self.run([c for c in n.children if c.key != "limit"])
+            elif k == "save_temporary_scope_as":
+                self.scopes[n.value] = self.this
+            elif k.startswith("global_var:") and n.children:
+                saved = self.this
+                self.this = self.globals[k.split(":", 1)[1]]
+                try:
+                    self.run(n.children)
+                finally:
+                    self.this = saved
+            elif k == "te_cm_join_part":
+                args = {c.key: c.value for c in n.children}
+                self.globals["te_cm_joined_%s_%s" % (args["MERGE"], args["CULTURE"])] = 1
+                self.globals["te_cm_in_%s" % args["CULTURE"]] = int(args["INDEX"])
+            elif k in RECORDED:
+                self.calls.append((k, {c.key: c.value for c in n.children}))
+            elif k.endswith("_join_ready") and n.value == "yes":
+                self.run(definitions(GEN_EFFECTS)[k].children)
+            else:
+                raise KeyError("the scenario interpreter does not know %s" % k)
+
+
+def merge_section_node(effect_name, key):
+    """The `if` of one merge in a per-merge-ordered generated effect (te_cmg_yearly_country, te_cmg_dominance_all)."""
+    for node in definitions(GEN_EFFECTS)[effect_name].children:
+        if node.key == "if" and any(g.key == "global_var:te_cm_state_%s" % key for g in child(node, "limit").children[0].children):
+            return node
+    raise KeyError(key)
+
+
+def french_world(**over):
+    """French complete: Wallonian and Occitan joined and switched into French; Catalan neither joined nor switched.
+    FRA starts and holds the merge, SUB is a subject of FRA, LAT starts the Latin merge."""
+    g = {
+        "te_cm_state_french": 2, "te_cm_starter_french": "FRA",
+        "te_cm_joined_french_wallonian": 1, "te_cm_joined_french_occitan": 1,
+        "te_cm_switched_wallonian": "french", "te_cm_switched_occitan": "french",
+    }
+    g.update(over.pop("globals", {}))
+    return Sim(
+        globals=g,
+        cvars={"FRA": {"te_cm_started_french": 1, "te_cm_ok_french_catalan": 1, "te_cm_sol_ok_french_catalan": 1,
+                       "te_cm_ok_french_wallonian": 1, "te_cm_ok_french_occitan": 1}},
+        alive={"FRA": True, "SUB": True, "LAT": True},
+        primary={"FRA": {"french"}},
+        pops={"FRA": {"french", "catalan"}, "SUB": {"catalan"}},
+        stubs={"te_cm_system_enabled": True, "te_cm_in_sphere": True, "te_cmg_french_catalan_years_met": True,
+               "te_cmg_french_catalan_waiting": False},
+        techs={1, 2, 3}, **over,
+    )
+
+
+class ChainTest(unittest.TestCase):
+    """R33: merges chain only after the lower one is finished (French, then Latin switching french, with Catalan)."""
+
+    def trig(self, sim, name, this=None):
+        node = definitions(GEN_TRIGGERS)[name]
+        return sim.holds(node.children, this=this)
+
+    # ---- (i) availability of another merge's result ----
+    def test_a_result_is_free_only_when_its_merge_is_finished(self):
+        for case, over, expected in (
+            ("complete, every joined part switched, Catalan never joined", {}, True),
+            ("complete but Catalan joined and still converting", {"globals": {"te_cm_joined_french_catalan": 1}}, False),
+            ("complete and Catalan has switched too",
+             {"globals": {"te_cm_joined_french_catalan": 1, "te_cm_switched_catalan": "french"}}, True),
+            ("still running, a part joined", {"globals": {"te_cm_state_french": 1}}, False),
+            ("running with every joined part switched is still not complete", {"globals": {"te_cm_state_french": 1}}, False),
+        ):
+            sim = french_world(**{k: dict(v) for k, v in over.items()})
+            self.assertEqual(self.trig(sim, "te_cmg_latin_french_available", "LAT"), expected, case)
+        # A merge nobody started has no joined part: its result is free.
+        idle = french_world()
+        for name in [k for k in idle.globals if k.startswith(("te_cm_joined_french", "te_cm_switched_", "te_cm_state_french"))]:
+            del idle.globals[name]
+        self.assertTrue(self.trig(idle, "te_cmg_latin_french_available", "LAT"))
+        # ... until a part joins: a released merge keeps its parts, and its result stays taken.
+        idle.globals["te_cm_joined_french_occitan"] = 1
+        self.assertFalse(self.trig(idle, "te_cmg_latin_french_available", "LAT"))
+
+    def test_the_same_holds_for_a_cm_result_and_for_british(self):
+        for lower, higher, result_part, joined in (
+            ("italian", "latin", "cm_italian", ["north_italian", "south_italian", "corsican"]),
+            ("british", "anglophone", "british", ["scottish"]),
+            ("yugoslav", "pan_slavic", "cm_yugoslav", ["serb", "croat", "bosniak", "slovene", "bulgarian"]),
+        ):
+            name = "te_cmg_%s_%s_available" % (higher, result_part)
+            g = {"te_cm_state_%s" % lower: 2}
+            for c in joined:
+                g["te_cm_joined_%s_%s" % (lower, c)] = 1
+            sim = Sim(globals=dict(g))
+            self.assertFalse(self.trig(sim, name), "%s: parts joined, none switched" % lower)
+            for c in joined:
+                sim.globals["te_cm_switched_%s" % c] = "x"
+            self.assertTrue(self.trig(sim, name), "%s: finished" % lower)
+
+    # ---- (ii) a merge whose result has switched does nothing more ----
+    def switched_world(self, **kw):
+        sim = french_world(**kw)
+        sim.globals["te_cm_switched_french"] = "cm_latin"
+        return sim
+
+    def test_catalan_cannot_join_french_after_latin_took_french(self):
+        before, after = french_world(), self.switched_world()
+        for sim in (before, after):
+            sim.scopes["te_cm_starter"] = "FRA"
+        self.assertTrue(self.trig(before, "te_cmg_french_catalan_can_join", "FRA"))
+        self.assertFalse(self.trig(after, "te_cmg_french_catalan_can_join", "FRA"))
+        # ... nor does the start's join pass: nothing is joined.
+        for sim, joins in ((before, True), (after, False)):
+            sim.this = "FRA"
+            sim.run(definitions(GEN_EFFECTS)["te_cmg_french_join_ready"].children)
+            self.assertEqual("te_cm_joined_french_catalan" in sim.globals, joins)
+
+    def test_a_culture_that_has_itself_switched_is_not_joinable_even_if_the_merge_lives(self):
+        # R32's first clause.
+        sim = french_world(globals={"te_cm_switched_catalan": "french"})
+        self.assertFalse(self.trig(sim, "te_cmg_french_catalan_can_join", "FRA"))
+
+    def test_no_conversion_and_no_switch_in_a_merge_whose_result_has_switched(self):
+        # A late Catalan, joined after French completed and before Latin took french, is exactly the part that never switched.
+        for effect, recorded in (("te_cmg_yearly_country", {"te_cm_convert_part"}),
+                                 ("te_cmg_dominance_all", {"te_cm_census_dominance", "te_cm_switch_part"})):
+            for switched, expect in ((False, True), (True, False)):
+                sim = self.switched_world() if switched else french_world()
+                sim.globals["te_cm_joined_french_catalan"] = 1
+                sim.this = "FRA"
+                sim.run([merge_section_node(effect, "french")])
+                culture_calls = {(k, a["CULTURE"]) for k, a in sim.calls if k in recorded}
+                self.assertEqual(("catalan" in {c for _, c in culture_calls}), expect, "%s switched=%s" % (effect, switched))
+                if not switched:
+                    self.assertEqual({k for k, _ in culture_calls}, recorded)
+
+    def test_a_merge_whose_result_has_switched_is_no_candidate_and_wants_no_census(self):
+        before, after = french_world(), self.switched_world()
+        # FRA is French-primary. The merge is complete here, so is_candidate would already fail; use an idle one.
+        for sim in (before, after):
+            sim.globals.update({"te_cm_state_french": 0})
+        self.assertTrue(self.trig(before, "te_cmg_french_is_candidate", "FRA"))
+        self.assertFalse(self.trig(after, "te_cmg_french_is_candidate", "FRA"))
+        # A complete merge keeps its census for late parts (Catalan is still in the world); not once the result switched.
+        for sim, expect in ((french_world(), True), (self.switched_world(), False)):
+            self.assertEqual(self.trig(sim, "te_cmg_french_census_wanted"), expect)
+
+    def test_the_other_merges_stop_the_same_way(self):
+        # Every merge's gates carry its own result: spot-check the shape for all 32.
+        triggers = text_of(GEN_TRIGGERS)
+        effects = text_of(GEN_EFFECTS)
+        yearly = squash(block(effects, "te_cmg_yearly_country"))
+        dominance = squash(block(effects, "te_cmg_dominance_all"))
+        for merge in cfg.MERGES:
+            switched = "NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
+            key = merge.key
+            self.assertIn(switched, squash(block(triggers, "te_cmg_%s_is_candidate" % key)), key)
+            self.assertIn(switched, squash(block(triggers, "te_cmg_%s_census_wanted" % key)), key)
+            self.assertIn("exists = global_var:te_cm_starter_%s %s" % (key, switched), section(yearly, key), key)
+            self.assertIn("NOT = { te_cmg_%s_starter_gone = yes } %s" % (key, switched), section(dominance, key), key)
+            join_ready = squash(block(effects, "te_cmg_%s_join_ready" % key))
+            self.assertTrue(join_ready.startswith("if = { limit = { %s } " % switched), key)
+            for culture in slot_cultures(merge):
+                can_join = squash(block(triggers, "te_cmg_%s_%s_can_join" % (key, culture)))
+                self.assertIn(switched, can_join, "%s/%s" % (key, culture))
+
+
+class PrimaryScenarioTest(unittest.TestCase):
+    """R34: the result becomes a primary culture only where a part it converts is primary (the starter always)."""
+
+    @classmethod
+    def setUpClass(cls):
+        body = block(text_of(EFFECTS), "te_cm_convert_part").replace("$CULTURE$", "south_german").replace("$RESULT$", "cm_german")
+        nodes, _ = parse_text("x = { %s }" % body, "convert")
+
+        def find(node):
+            if node.key == "if" and any(c.key == "add_primary_culture" for c in node.children):
+                return node
+            for c in node.children:
+                found = find(c)
+                if found:
+                    return found
+            return None
+
+        cls.add_if = find(nodes[0])
+
+    def adds(self, this, primary):
+        sim = Sim(primary={"STARTER": {"cm_german", "north_german"}, **primary})
+        sim.scopes["te_cm_starter"] = "STARTER"
+        return sim.holds(child(self.add_if, "limit").children, this=this)
+
+    def test_the_starter_and_a_holder_whose_part_is_primary_gain_the_result(self):
+        # The starter that lost it to a formation gets it back.
+        self.assertTrue(self.adds("STARTER", {"STARTER": {"north_german"}}))
+        self.assertTrue(self.adds("SUB", {"SUB": {"south_german"}}))
+
+    def test_a_sliver_holder_converts_without_gaining_a_primary_culture(self):
+        self.assertFalse(self.adds("SUB", {"SUB": {"swedish"}}))
+        # Only the part being converted counts, not any other German culture (its own call will).
+        self.assertFalse(self.adds("SUB", {"SUB": {"north_german"}}))
+
+    def test_nothing_is_added_where_the_result_is_already_primary(self):
+        self.assertFalse(self.adds("SUB", {"SUB": {"south_german", "cm_german"}}))
+
+    def test_the_formation_hook_restores_it_by_the_same_rule(self):
+        node = definitions(GEN_EFFECTS)["te_cmg_formed_country"]
+        german = next(n for n in node.children if n.key == "if" and any("te_cm_state_german" in g.key for g in child(n, "limit").children[0].children))
+        limit = child(german, "limit").children
+        running = {"te_cm_state_german": 1, "te_cm_starter_german": "STARTER", "te_cm_joined_german_south_german": 1}
+        cases = (
+            ("converted, a joined part is primary", {"FORMED": {"te_cm_converted_german": 1}}, {"FORMED": {"south_german"}}, True),
+            ("converted, but only a sliver of a part", {"FORMED": {"te_cm_converted_german": 1}}, {"FORMED": {"swedish"}}, False),
+            ("converted, an unjoined part is primary", {"FORMED": {"te_cm_converted_german": 1}}, {"FORMED": {"alemannic"}}, False),
+            ("never converted, a part is primary", {"FORMED": {}}, {"FORMED": {"south_german"}}, False),
+            ("the starter", {"FORMED": {"te_cm_started_german": 1}}, {"FORMED": {"swedish"}}, True),
+            ("already has the result", {"FORMED": {"te_cm_converted_german": 1}}, {"FORMED": {"south_german", "cm_german"}}, False),
+        )
+        for case, cvars, primary, expected in cases:
+            sim = Sim(globals=dict(running), cvars=cvars, primary=primary)
+            self.assertEqual(sim.holds(limit, this="FORMED"), expected, case)
+
+
+class SolWalkScenarioTest(unittest.TestCase):
+    """I2: the result walk behind an optional part's gate runs while any optional part has not switched, joined or not."""
+
+    @classmethod
+    def setUpClass(cls):
+        node = definitions(GEN_EFFECTS)["te_cmg_census_german_country"]
+        cls.walk_if = next(n for n in node.children if n.key == "if" and any(c.key == "te_cmg_german_result_sol" for c in n.children))
+
+    def runs(self, joined=(), switched=(), n=0, allcore=1):
+        g = {"te_cm_joined_german_%s" % c: 1 for c in joined}
+        g.update({"te_cm_switched_%s" % c: "cm_german" for c in switched})
+        sim = Sim(globals=g, locals_={"te_cm_sg_n": n, "te_cm_sg_all": allcore})
+        return sim.holds(child(self.walk_if, "limit").children, this="FRA")
+
+    def test_it_runs_while_an_optional_part_has_joined_and_not_switched(self):
+        self.assertTrue(self.runs())
+        self.assertTrue(self.runs(joined=["alemannic"]))
+        # The case that froze the gate: every optional part has joined (and none has switched).
+        self.assertTrue(self.runs(joined=["alemannic", "east_german"]))
+        self.assertTrue(self.runs(joined=["alemannic", "east_german"], switched=["alemannic"]))
+
+    def test_it_stops_once_every_optional_part_has_switched(self):
+        self.assertFalse(self.runs(joined=["alemannic", "east_german"], switched=["alemannic", "east_german"]))
+
+    def test_it_waits_for_the_core_to_have_no_figure_and_every_core_slot_met(self):
+        self.assertFalse(self.runs(joined=["alemannic"], n=1))
+        self.assertFalse(self.runs(joined=["alemannic"], allcore=0))
 
 
 if __name__ == "__main__":

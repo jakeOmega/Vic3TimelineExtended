@@ -494,9 +494,9 @@ class SolGateTest(unittest.TestCase):
                     continue
                 self.assertEqual(body.count(track), 1, culture)
                 self.assertIn("if = { limit = { te_cmg_%s_%s_measured = yes } %s }" % (merge.key, culture, track), body)
-            # A joined part isn't a condition of the merge-wide gap; the only reads of `joined` are the
-            # result walk's "needed" limit, one per optional part.
-            self.assertEqual(body.count("te_cm_joined"), len(optional), merge.key)
+            # A joined part isn't a condition of the merge-wide gap, and (I2) not of the result walk's "needed"
+            # limit either: that one asks only whether an optional part has switched, joined or not.
+            self.assertEqual(body.count("te_cm_joined"), 0, merge.key)
 
     def test_the_merge_wide_gate_opens_only_when_every_core_slot_is_met(self):
         # M2: a slot is met when one of its alternatives has a figure, or joined and switched. The gate
@@ -578,10 +578,9 @@ class SolGateTest(unittest.TestCase):
                 self.assertIsNone(block(self.effects, "te_cmg_%s_result_sol" % merge.key), merge.key)
                 continue
             self.assertEqual(body.count(call), 1, merge.key)
-            needed = " ".join(
-                "AND = { NOT = { global_var:te_cm_joined_%s_%s ?= 1 } NOT = { has_global_variable = te_cm_switched_%s } }"
-                % (merge.key, c, c) for c in optional
-            )
+            # I2: while any optional part has not switched, joined or not. A part that has joined keeps
+            # following the result, or one dip in the hold would freeze its gate at 0 for good.
+            needed = " ".join("NOT = { has_global_variable = te_cm_switched_%s }" % c for c in optional)
             self.assertIn(
                 "set_local_variable = { name = te_cm_sg_ref value = 0 } "
                 "if = { limit = { local_var:te_cm_sg_n = 0 local_var:te_cm_sg_all = 1 OR = { %s } } %s }" % (needed, call),
@@ -641,7 +640,8 @@ class TriggerShapeTest(unittest.TestCase):
             "te_cm_system_enabled = yes "
             "OR = { country_has_primary_culture = cu:north_german country_has_primary_culture = cu:south_german } "
             "te_cm_tier_tech = { TIER = 1 } "
-            "NOT = { global_var:te_cm_state_german ?= 2 }",
+            "NOT = { global_var:te_cm_state_german ?= 2 } "
+            "NOT = { has_global_variable = te_cm_switched_cm_german }",
         )
 
     def test_candidate_needs_the_tech_of_the_highest_core_tier(self):
@@ -724,7 +724,7 @@ class TriggerShapeTest(unittest.TestCase):
 
     def test_availability(self):
         indexes = {m.key: merge_index(m) for m in cfg.MERGES}
-        results = {m.result: m for m in cfg.MERGES if m.new is not None}
+        results = {m.result: m for m in cfg.MERGES}
         for merge in cfg.MERGES:
             for culture in slot_cultures(merge):
                 body = self.trig("te_cmg_%s_%s_available" % (merge.key, culture))
@@ -732,13 +732,29 @@ class TriggerShapeTest(unittest.TestCase):
                 for other in others:
                     self.assertIn("NOT = { global_var:te_cm_in_%s ?= %d }" % (culture, indexes[other.key]), body)
                 self.assertNotIn("?= %d }" % indexes[merge.key], body.replace("te_cm_state", ""))
-                if culture in results:
-                    self.assertIn("global_var:te_cm_state_%s ?= 2" % results[culture].key, body)
-                if not others and culture not in results:
+                # R33: the result of another merge (an absorb result such as french, or a cm_ id) is free only
+                # once that merge is finished: complete with every joined part switched, or nothing joined.
+                lower = results.get(culture)
+                if lower is not None and lower is not merge:
+                    joined = " ".join(
+                        "global_var:te_cm_joined_%s_%s ?= 1" % (lower.key, c)
+                        for c in slot_cultures(lower) if not _absorb_result(lower, c)
+                    )
+                    self.assertIn(
+                        "OR = { AND = { global_var:te_cm_state_%s ?= 2 te_cmg_%s_all_switched = yes } NOR = { %s } }"
+                        % (lower.key, lower.key, joined),
+                        body, "%s/%s" % (merge.key, culture),
+                    )
+                else:
+                    self.assertNotIn("all_switched", body, "%s/%s" % (merge.key, culture))
+                if not others and (lower is None or lower is merge):
                     self.assertEqual(body, "always = yes", culture)
         self.assertIn("NOT = { global_var:te_cm_in_yankee ?= %d }" % indexes["american"],
                       self.trig("te_cmg_anglophone_yankee_available"))
         self.assertIn("global_var:te_cm_state_american ?= 2", self.trig("te_cmg_anglophone_cm_american_available"))
+        # An absorb result is the same: Latin takes french, Anglophone takes british, only after those merges.
+        self.assertIn("te_cmg_french_all_switched = yes", self.trig("te_cmg_latin_french_available"))
+        self.assertIn("te_cmg_british_all_switched = yes", self.trig("te_cmg_anglophone_british_available"))
 
     def test_can_join_follows_the_part_tier(self):
         for merge in cfg.MERGES:
@@ -749,6 +765,9 @@ class TriggerShapeTest(unittest.TestCase):
                 self.assertIn("var:te_cm_ok_%s_%s ?= 1" % (merge.key, culture), body)
                 self.assertIn("te_cmg_%s_%s_available = yes" % (merge.key, culture), body)
                 self.assertIn("NOT = { global_var:te_cm_joined_%s_%s ?= 1 }" % (merge.key, culture), body)
+                # R32/R33: a culture that has switched joins nothing, and nothing joins a merge whose result has.
+                self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % culture, body)
+                self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % merge.result, body)
                 self.assertIn("te_cm_tier_tech = { TIER = %d }" % tier, body)
                 years = "te_cm_years_%s_%s" % (merge.key, culture)
                 if tier == 1:

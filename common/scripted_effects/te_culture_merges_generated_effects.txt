@@ -43,7 +43,8 @@ te_cmg_german_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_german_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_german_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_german } }
@@ -127,14 +128,8 @@ te_cmg_census_german_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_german_alemannic ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_alemannic }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_german_east_german ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_east_german }
-				}
+				NOT = { has_global_variable = te_cm_switched_alemannic }
+				NOT = { has_global_variable = te_cm_switched_east_german }
 			}
 		}
 		te_cmg_german_result_sol = yes
@@ -151,31 +146,35 @@ te_cmg_census_german_country = {
 }
 
 # Country scope. Joins every part of the german merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_german_join_ready = {
 	if = {
-		limit = {
-			te_cmg_german_north_german_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_german } }
+		if = {
+			limit = {
+				te_cmg_german_north_german_can_join = yes
+			}
+			te_cm_join_part = { MERGE = german CULTURE = north_german INDEX = 1 }
 		}
-		te_cm_join_part = { MERGE = german CULTURE = north_german INDEX = 1 }
-	}
-	if = {
-		limit = {
-			te_cmg_german_south_german_can_join = yes
+		if = {
+			limit = {
+				te_cmg_german_south_german_can_join = yes
+			}
+			te_cm_join_part = { MERGE = german CULTURE = south_german INDEX = 1 }
 		}
-		te_cm_join_part = { MERGE = german CULTURE = south_german INDEX = 1 }
-	}
-	if = {
-		limit = {
-			te_cmg_german_alemannic_can_join = yes
+		if = {
+			limit = {
+				te_cmg_german_alemannic_can_join = yes
+			}
+			te_cm_join_part = { MERGE = german CULTURE = alemannic INDEX = 1 }
 		}
-		te_cm_join_part = { MERGE = german CULTURE = alemannic INDEX = 1 }
-	}
-	if = {
-		limit = {
-			te_cmg_german_east_german_can_join = yes
+		if = {
+			limit = {
+				te_cmg_german_east_german_can_join = yes
+			}
+			te_cm_join_part = { MERGE = german CULTURE = east_german INDEX = 1 }
 		}
-		te_cm_join_part = { MERGE = german CULTURE = east_german INDEX = 1 }
 	}
 }
 
@@ -280,7 +279,8 @@ te_cmg_italian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_italian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_italian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_italian } }
@@ -360,10 +360,7 @@ te_cmg_census_italian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_italian_corsican ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_corsican }
-				}
+				NOT = { has_global_variable = te_cm_switched_corsican }
 			}
 		}
 		te_cmg_italian_result_sol = yes
@@ -376,25 +373,29 @@ te_cmg_census_italian_country = {
 }
 
 # Country scope. Joins every part of the italian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_italian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_italian_north_italian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_italian } }
+		if = {
+			limit = {
+				te_cmg_italian_north_italian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = italian CULTURE = north_italian INDEX = 2 }
 		}
-		te_cm_join_part = { MERGE = italian CULTURE = north_italian INDEX = 2 }
-	}
-	if = {
-		limit = {
-			te_cmg_italian_south_italian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_italian_south_italian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = italian CULTURE = south_italian INDEX = 2 }
 		}
-		te_cm_join_part = { MERGE = italian CULTURE = south_italian INDEX = 2 }
-	}
-	if = {
-		limit = {
-			te_cmg_italian_corsican_can_join = yes
+		if = {
+			limit = {
+				te_cmg_italian_corsican_can_join = yes
+			}
+			te_cm_join_part = { MERGE = italian CULTURE = corsican INDEX = 2 }
 		}
-		te_cm_join_part = { MERGE = italian CULTURE = corsican INDEX = 2 }
 	}
 }
 
@@ -500,7 +501,8 @@ te_cmg_scandinavian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_scandinavian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_scandinavian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swedish } }
@@ -597,10 +599,7 @@ te_cmg_census_scandinavian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_scandinavian_icelandic ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_icelandic }
-				}
+				NOT = { has_global_variable = te_cm_switched_icelandic }
 			}
 		}
 		te_cmg_scandinavian_result_sol = yes
@@ -613,31 +612,35 @@ te_cmg_census_scandinavian_country = {
 }
 
 # Country scope. Joins every part of the scandinavian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_scandinavian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_scandinavian_swedish_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_scandinavian } }
+		if = {
+			limit = {
+				te_cmg_scandinavian_swedish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = scandinavian CULTURE = swedish INDEX = 3 }
 		}
-		te_cm_join_part = { MERGE = scandinavian CULTURE = swedish INDEX = 3 }
-	}
-	if = {
-		limit = {
-			te_cmg_scandinavian_danish_can_join = yes
+		if = {
+			limit = {
+				te_cmg_scandinavian_danish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = scandinavian CULTURE = danish INDEX = 3 }
 		}
-		te_cm_join_part = { MERGE = scandinavian CULTURE = danish INDEX = 3 }
-	}
-	if = {
-		limit = {
-			te_cmg_scandinavian_norwegian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_scandinavian_norwegian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = scandinavian CULTURE = norwegian INDEX = 3 }
 		}
-		te_cm_join_part = { MERGE = scandinavian CULTURE = norwegian INDEX = 3 }
-	}
-	if = {
-		limit = {
-			te_cmg_scandinavian_icelandic_can_join = yes
+		if = {
+			limit = {
+				te_cmg_scandinavian_icelandic_can_join = yes
+			}
+			te_cm_join_part = { MERGE = scandinavian CULTURE = icelandic INDEX = 3 }
 		}
-		te_cm_join_part = { MERGE = scandinavian CULTURE = icelandic INDEX = 3 }
 	}
 }
 
@@ -706,7 +709,8 @@ te_cmg_census_scandinavian = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_east_slavic_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_east_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_russian } }
@@ -797,27 +801,31 @@ te_cmg_census_east_slavic_country = {
 }
 
 # Country scope. Joins every part of the east_slavic merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_east_slavic_join_ready = {
 	if = {
-		limit = {
-			te_cmg_east_slavic_russian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_east_slavic } }
+		if = {
+			limit = {
+				te_cmg_east_slavic_russian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_slavic CULTURE = russian INDEX = 4 }
 		}
-		te_cm_join_part = { MERGE = east_slavic CULTURE = russian INDEX = 4 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_slavic_ukrainian_can_join = yes
-			NOT = { te_cmg_east_slavic_ukrainian_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_east_slavic_ukrainian_can_join = yes
+				NOT = { te_cmg_east_slavic_ukrainian_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = east_slavic CULTURE = ukrainian INDEX = 4 }
 		}
-		te_cm_join_part = { MERGE = east_slavic CULTURE = ukrainian INDEX = 4 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_slavic_byelorussian_can_join = yes
-			NOT = { te_cmg_east_slavic_byelorussian_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_east_slavic_byelorussian_can_join = yes
+				NOT = { te_cmg_east_slavic_byelorussian_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = east_slavic CULTURE = byelorussian INDEX = 4 }
 		}
-		te_cm_join_part = { MERGE = east_slavic CULTURE = byelorussian INDEX = 4 }
 	}
 }
 
@@ -940,7 +948,8 @@ te_cmg_yugoslav_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_yugoslav_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_yugoslav_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_serb } }
@@ -1041,14 +1050,8 @@ te_cmg_census_yugoslav_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_yugoslav_slovene ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_slovene }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_yugoslav_bulgarian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_bulgarian }
-				}
+				NOT = { has_global_variable = te_cm_switched_slovene }
+				NOT = { has_global_variable = te_cm_switched_bulgarian }
 			}
 		}
 		te_cmg_yugoslav_result_sol = yes
@@ -1065,37 +1068,41 @@ te_cmg_census_yugoslav_country = {
 }
 
 # Country scope. Joins every part of the yugoslav merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_yugoslav_join_ready = {
 	if = {
-		limit = {
-			te_cmg_yugoslav_serb_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_yugoslav } }
+		if = {
+			limit = {
+				te_cmg_yugoslav_serb_can_join = yes
+			}
+			te_cm_join_part = { MERGE = yugoslav CULTURE = serb INDEX = 5 }
 		}
-		te_cm_join_part = { MERGE = yugoslav CULTURE = serb INDEX = 5 }
-	}
-	if = {
-		limit = {
-			te_cmg_yugoslav_croat_can_join = yes
+		if = {
+			limit = {
+				te_cmg_yugoslav_croat_can_join = yes
+			}
+			te_cm_join_part = { MERGE = yugoslav CULTURE = croat INDEX = 5 }
 		}
-		te_cm_join_part = { MERGE = yugoslav CULTURE = croat INDEX = 5 }
-	}
-	if = {
-		limit = {
-			te_cmg_yugoslav_bosniak_can_join = yes
+		if = {
+			limit = {
+				te_cmg_yugoslav_bosniak_can_join = yes
+			}
+			te_cm_join_part = { MERGE = yugoslav CULTURE = bosniak INDEX = 5 }
 		}
-		te_cm_join_part = { MERGE = yugoslav CULTURE = bosniak INDEX = 5 }
-	}
-	if = {
-		limit = {
-			te_cmg_yugoslav_slovene_can_join = yes
+		if = {
+			limit = {
+				te_cmg_yugoslav_slovene_can_join = yes
+			}
+			te_cm_join_part = { MERGE = yugoslav CULTURE = slovene INDEX = 5 }
 		}
-		te_cm_join_part = { MERGE = yugoslav CULTURE = slovene INDEX = 5 }
-	}
-	if = {
-		limit = {
-			te_cmg_yugoslav_bulgarian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_yugoslav_bulgarian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = yugoslav CULTURE = bulgarian INDEX = 5 }
 		}
-		te_cm_join_part = { MERGE = yugoslav CULTURE = bulgarian INDEX = 5 }
 	}
 }
 
@@ -1200,7 +1207,8 @@ te_cmg_czechoslovak_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_czechoslovak_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_czechoslovak_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_czech } }
@@ -1280,10 +1288,7 @@ te_cmg_census_czechoslovak_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_czechoslovak_sorb ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_sorb }
-				}
+				NOT = { has_global_variable = te_cm_switched_sorb }
 			}
 		}
 		te_cmg_czechoslovak_result_sol = yes
@@ -1296,25 +1301,29 @@ te_cmg_census_czechoslovak_country = {
 }
 
 # Country scope. Joins every part of the czechoslovak merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_czechoslovak_join_ready = {
 	if = {
-		limit = {
-			te_cmg_czechoslovak_czech_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_czechoslovak } }
+		if = {
+			limit = {
+				te_cmg_czechoslovak_czech_can_join = yes
+			}
+			te_cm_join_part = { MERGE = czechoslovak CULTURE = czech INDEX = 6 }
 		}
-		te_cm_join_part = { MERGE = czechoslovak CULTURE = czech INDEX = 6 }
-	}
-	if = {
-		limit = {
-			te_cmg_czechoslovak_slovak_can_join = yes
+		if = {
+			limit = {
+				te_cmg_czechoslovak_slovak_can_join = yes
+			}
+			te_cm_join_part = { MERGE = czechoslovak CULTURE = slovak INDEX = 6 }
 		}
-		te_cm_join_part = { MERGE = czechoslovak CULTURE = slovak INDEX = 6 }
-	}
-	if = {
-		limit = {
-			te_cmg_czechoslovak_sorb_can_join = yes
+		if = {
+			limit = {
+				te_cmg_czechoslovak_sorb_can_join = yes
+			}
+			te_cm_join_part = { MERGE = czechoslovak CULTURE = sorb INDEX = 6 }
 		}
-		te_cm_join_part = { MERGE = czechoslovak CULTURE = sorb INDEX = 6 }
 	}
 }
 
@@ -1383,7 +1392,8 @@ te_cmg_census_czechoslovak = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_hungarian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_hungarian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hungarian } }
@@ -1452,13 +1462,17 @@ te_cmg_census_hungarian_country = {
 }
 
 # Country scope. Joins every part of the hungarian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_hungarian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_hungarian_szekely_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_hungarian } }
+		if = {
+			limit = {
+				te_cmg_hungarian_szekely_can_join = yes
+			}
+			te_cm_join_part = { MERGE = hungarian CULTURE = szekely INDEX = 7 }
 		}
-		te_cm_join_part = { MERGE = hungarian CULTURE = szekely INDEX = 7 }
 	}
 }
 
@@ -1527,7 +1541,8 @@ te_cmg_census_hungarian = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_dutch_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_dutch_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_dutch } }
@@ -1596,13 +1611,17 @@ te_cmg_census_dutch_country = {
 }
 
 # Country scope. Joins every part of the dutch merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_dutch_join_ready = {
 	if = {
-		limit = {
-			te_cmg_dutch_flemish_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_dutch } }
+		if = {
+			limit = {
+				te_cmg_dutch_flemish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = dutch CULTURE = flemish INDEX = 8 }
 		}
-		te_cm_join_part = { MERGE = dutch CULTURE = flemish INDEX = 8 }
 	}
 }
 
@@ -1671,7 +1690,8 @@ te_cmg_census_dutch = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_finnish_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_finnish_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_finnish } }
@@ -1740,13 +1760,17 @@ te_cmg_census_finnish_country = {
 }
 
 # Country scope. Joins every part of the finnish merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_finnish_join_ready = {
 	if = {
-		limit = {
-			te_cmg_finnish_karelian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_finnish } }
+		if = {
+			limit = {
+				te_cmg_finnish_karelian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = finnish CULTURE = karelian INDEX = 9 }
 		}
-		te_cm_join_part = { MERGE = finnish CULTURE = karelian INDEX = 9 }
 	}
 }
 
@@ -1852,7 +1876,8 @@ te_cmg_french_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_french_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_french_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -1944,10 +1969,7 @@ te_cmg_census_french_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_french_catalan ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_catalan }
-				}
+				NOT = { has_global_variable = te_cm_switched_catalan }
 			}
 		}
 		te_cmg_french_result_sol = yes
@@ -1960,25 +1982,29 @@ te_cmg_census_french_country = {
 }
 
 # Country scope. Joins every part of the french merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_french_join_ready = {
 	if = {
-		limit = {
-			te_cmg_french_wallonian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_french } }
+		if = {
+			limit = {
+				te_cmg_french_wallonian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
 		}
-		te_cm_join_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
-	}
-	if = {
-		limit = {
-			te_cmg_french_occitan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_french_occitan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = french CULTURE = occitan INDEX = 10 }
 		}
-		te_cm_join_part = { MERGE = french CULTURE = occitan INDEX = 10 }
-	}
-	if = {
-		limit = {
-			te_cmg_french_catalan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_french_catalan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = french CULTURE = catalan INDEX = 10 }
 		}
-		te_cm_join_part = { MERGE = french CULTURE = catalan INDEX = 10 }
 	}
 }
 
@@ -2047,7 +2073,8 @@ te_cmg_census_french = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_british_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_british_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -2116,13 +2143,17 @@ te_cmg_census_british_country = {
 }
 
 # Country scope. Joins every part of the british merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_british_join_ready = {
 	if = {
-		limit = {
-			te_cmg_british_scottish_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_british } }
+		if = {
+			limit = {
+				te_cmg_british_scottish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = british CULTURE = scottish INDEX = 11 }
 		}
-		te_cm_join_part = { MERGE = british CULTURE = scottish INDEX = 11 }
 	}
 }
 
@@ -2227,7 +2258,8 @@ te_cmg_american_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_american_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_american_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_yankee } }
@@ -2307,10 +2339,7 @@ te_cmg_census_american_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_american_afro_american ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_afro_american }
-				}
+				NOT = { has_global_variable = te_cm_switched_afro_american }
 			}
 		}
 		te_cmg_american_result_sol = yes
@@ -2323,27 +2352,31 @@ te_cmg_census_american_country = {
 }
 
 # Country scope. Joins every part of the american merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_american_join_ready = {
 	if = {
-		limit = {
-			te_cmg_american_yankee_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_american } }
+		if = {
+			limit = {
+				te_cmg_american_yankee_can_join = yes
+			}
+			te_cm_join_part = { MERGE = american CULTURE = yankee INDEX = 12 }
 		}
-		te_cm_join_part = { MERGE = american CULTURE = yankee INDEX = 12 }
-	}
-	if = {
-		limit = {
-			te_cmg_american_dixie_can_join = yes
-			NOT = { te_cmg_american_dixie_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_american_dixie_can_join = yes
+				NOT = { te_cmg_american_dixie_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = american CULTURE = dixie INDEX = 12 }
 		}
-		te_cm_join_part = { MERGE = american CULTURE = dixie INDEX = 12 }
-	}
-	if = {
-		limit = {
-			te_cmg_american_afro_american_can_join = yes
-			NOT = { te_cmg_american_afro_american_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_american_afro_american_can_join = yes
+				NOT = { te_cmg_american_afro_american_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = american CULTURE = afro_american INDEX = 12 }
 		}
-		te_cm_join_part = { MERGE = american CULTURE = afro_american INDEX = 12 }
 	}
 }
 
@@ -2465,7 +2498,8 @@ te_cmg_anglophone_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_anglophone_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_anglophone_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -2571,26 +2605,11 @@ te_cmg_census_anglophone_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_anglophone_anglo_canadian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_anglo_canadian }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_anglophone_australian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_australian }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_anglophone_scottish ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_scottish }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_anglophone_dixie ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_dixie }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_anglophone_afro_american ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_afro_american }
-				}
+				NOT = { has_global_variable = te_cm_switched_anglo_canadian }
+				NOT = { has_global_variable = te_cm_switched_australian }
+				NOT = { has_global_variable = te_cm_switched_scottish }
+				NOT = { has_global_variable = te_cm_switched_dixie }
+				NOT = { has_global_variable = te_cm_switched_afro_american }
 			}
 		}
 		te_cmg_anglophone_result_sol = yes
@@ -2619,57 +2638,61 @@ te_cmg_census_anglophone_country = {
 }
 
 # Country scope. Joins every part of the anglophone merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_anglophone_join_ready = {
 	if = {
-		limit = {
-			te_cmg_anglophone_british_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_anglophone } }
+		if = {
+			limit = {
+				te_cmg_anglophone_british_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = british INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = british INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_yankee_can_join = yes
+		if = {
+			limit = {
+				te_cmg_anglophone_yankee_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = yankee INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = yankee INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_cm_american_can_join = yes
+		if = {
+			limit = {
+				te_cmg_anglophone_cm_american_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = cm_american INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = cm_american INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_anglo_canadian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_anglophone_anglo_canadian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = anglo_canadian INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = anglo_canadian INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_australian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_anglophone_australian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = australian INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = australian INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_scottish_can_join = yes
+		if = {
+			limit = {
+				te_cmg_anglophone_scottish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = scottish INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = scottish INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_dixie_can_join = yes
-			NOT = { te_cmg_anglophone_dixie_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_anglophone_dixie_can_join = yes
+				NOT = { te_cmg_anglophone_dixie_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = dixie INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = dixie INDEX = 13 }
-	}
-	if = {
-		limit = {
-			te_cmg_anglophone_afro_american_can_join = yes
-			NOT = { te_cmg_anglophone_afro_american_waiting = yes }
+		if = {
+			limit = {
+				te_cmg_anglophone_afro_american_can_join = yes
+				NOT = { te_cmg_anglophone_afro_american_waiting = yes }
+			}
+			te_cm_join_part = { MERGE = anglophone CULTURE = afro_american INDEX = 13 }
 		}
-		te_cm_join_part = { MERGE = anglophone CULTURE = afro_american INDEX = 13 }
 	}
 }
 
@@ -2777,7 +2800,8 @@ te_cmg_brazilian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_brazilian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_brazilian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_brazilian } }
@@ -2903,10 +2927,7 @@ te_cmg_census_brazilian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_brazilian_afro_brazilian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_afro_brazilian }
-				}
+				NOT = { has_global_variable = te_cm_switched_afro_brazilian }
 			}
 		}
 		te_cmg_brazilian_result_sol = yes
@@ -2919,37 +2940,41 @@ te_cmg_census_brazilian_country = {
 }
 
 # Country scope. Joins every part of the brazilian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_brazilian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_brazilian_nordestino_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_brazilian } }
+		if = {
+			limit = {
+				te_cmg_brazilian_nordestino_can_join = yes
+			}
+			te_cm_join_part = { MERGE = brazilian CULTURE = nordestino INDEX = 14 }
 		}
-		te_cm_join_part = { MERGE = brazilian CULTURE = nordestino INDEX = 14 }
-	}
-	if = {
-		limit = {
-			te_cmg_brazilian_paulista_can_join = yes
+		if = {
+			limit = {
+				te_cmg_brazilian_paulista_can_join = yes
+			}
+			te_cm_join_part = { MERGE = brazilian CULTURE = paulista INDEX = 14 }
 		}
-		te_cm_join_part = { MERGE = brazilian CULTURE = paulista INDEX = 14 }
-	}
-	if = {
-		limit = {
-			te_cmg_brazilian_amazonic_can_join = yes
+		if = {
+			limit = {
+				te_cmg_brazilian_amazonic_can_join = yes
+			}
+			te_cm_join_part = { MERGE = brazilian CULTURE = amazonic INDEX = 14 }
 		}
-		te_cm_join_part = { MERGE = brazilian CULTURE = amazonic INDEX = 14 }
-	}
-	if = {
-		limit = {
-			te_cmg_brazilian_sulista_can_join = yes
+		if = {
+			limit = {
+				te_cmg_brazilian_sulista_can_join = yes
+			}
+			te_cm_join_part = { MERGE = brazilian CULTURE = sulista INDEX = 14 }
 		}
-		te_cm_join_part = { MERGE = brazilian CULTURE = sulista INDEX = 14 }
-	}
-	if = {
-		limit = {
-			te_cmg_brazilian_afro_brazilian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_brazilian_afro_brazilian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = brazilian CULTURE = afro_brazilian INDEX = 14 }
 		}
-		te_cm_join_part = { MERGE = brazilian CULTURE = afro_brazilian INDEX = 14 }
 	}
 }
 
@@ -3018,7 +3043,8 @@ te_cmg_census_brazilian = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_platine_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_platine_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_platinean } }
@@ -3126,31 +3152,35 @@ te_cmg_census_platine_country = {
 }
 
 # Country scope. Joins every part of the platine merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_platine_join_ready = {
 	if = {
-		limit = {
-			te_cmg_platine_platinean_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_platine } }
+		if = {
+			limit = {
+				te_cmg_platine_platinean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = platine CULTURE = platinean INDEX = 15 }
 		}
-		te_cm_join_part = { MERGE = platine CULTURE = platinean INDEX = 15 }
-	}
-	if = {
-		limit = {
-			te_cmg_platine_argentine_can_join = yes
+		if = {
+			limit = {
+				te_cmg_platine_argentine_can_join = yes
+			}
+			te_cm_join_part = { MERGE = platine CULTURE = argentine INDEX = 15 }
 		}
-		te_cm_join_part = { MERGE = platine CULTURE = argentine INDEX = 15 }
-	}
-	if = {
-		limit = {
-			te_cmg_platine_uruguayan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_platine_uruguayan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = platine CULTURE = uruguayan INDEX = 15 }
 		}
-		te_cm_join_part = { MERGE = platine CULTURE = uruguayan INDEX = 15 }
-	}
-	if = {
-		limit = {
-			te_cmg_platine_paraguayan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_platine_paraguayan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = platine CULTURE = paraguayan INDEX = 15 }
 		}
-		te_cm_join_part = { MERGE = platine CULTURE = paraguayan INDEX = 15 }
 	}
 }
 
@@ -3219,7 +3249,8 @@ te_cmg_census_platine = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_andean_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_andean_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_andean } }
@@ -3327,31 +3358,35 @@ te_cmg_census_andean_country = {
 }
 
 # Country scope. Joins every part of the andean merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_andean_join_ready = {
 	if = {
-		limit = {
-			te_cmg_andean_north_andean_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_andean } }
+		if = {
+			limit = {
+				te_cmg_andean_north_andean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = andean CULTURE = north_andean INDEX = 16 }
 		}
-		te_cm_join_part = { MERGE = andean CULTURE = north_andean INDEX = 16 }
-	}
-	if = {
-		limit = {
-			te_cmg_andean_south_andean_can_join = yes
+		if = {
+			limit = {
+				te_cmg_andean_south_andean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = andean CULTURE = south_andean INDEX = 16 }
 		}
-		te_cm_join_part = { MERGE = andean CULTURE = south_andean INDEX = 16 }
-	}
-	if = {
-		limit = {
-			te_cmg_andean_peruvian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_andean_peruvian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = andean CULTURE = peruvian INDEX = 16 }
 		}
-		te_cm_join_part = { MERGE = andean CULTURE = peruvian INDEX = 16 }
-	}
-	if = {
-		limit = {
-			te_cmg_andean_bolivian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_andean_bolivian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = andean CULTURE = bolivian INDEX = 16 }
 		}
-		te_cm_join_part = { MERGE = andean CULTURE = bolivian INDEX = 16 }
 	}
 }
 
@@ -3420,7 +3455,8 @@ te_cmg_census_andean = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_gran_colombian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_gran_colombian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_colombian } }
@@ -3511,25 +3547,29 @@ te_cmg_census_gran_colombian_country = {
 }
 
 # Country scope. Joins every part of the gran_colombian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_gran_colombian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_gran_colombian_colombian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_gran_colombian } }
+		if = {
+			limit = {
+				te_cmg_gran_colombian_colombian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = gran_colombian CULTURE = colombian INDEX = 17 }
 		}
-		te_cm_join_part = { MERGE = gran_colombian CULTURE = colombian INDEX = 17 }
-	}
-	if = {
-		limit = {
-			te_cmg_gran_colombian_venezuelan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_gran_colombian_venezuelan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = gran_colombian CULTURE = venezuelan INDEX = 17 }
 		}
-		te_cm_join_part = { MERGE = gran_colombian CULTURE = venezuelan INDEX = 17 }
-	}
-	if = {
-		limit = {
-			te_cmg_gran_colombian_ecuadorian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_gran_colombian_ecuadorian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = gran_colombian CULTURE = ecuadorian INDEX = 17 }
 		}
-		te_cm_join_part = { MERGE = gran_colombian CULTURE = ecuadorian INDEX = 17 }
 	}
 }
 
@@ -3598,7 +3638,8 @@ te_cmg_census_gran_colombian = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_chinese_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_chinese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_han } }
@@ -3701,25 +3742,29 @@ te_cmg_census_chinese_country = {
 }
 
 # Country scope. Joins every part of the chinese merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_chinese_join_ready = {
 	if = {
-		limit = {
-			te_cmg_chinese_yue_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_han } }
+		if = {
+			limit = {
+				te_cmg_chinese_yue_can_join = yes
+			}
+			te_cm_join_part = { MERGE = chinese CULTURE = yue INDEX = 18 }
 		}
-		te_cm_join_part = { MERGE = chinese CULTURE = yue INDEX = 18 }
-	}
-	if = {
-		limit = {
-			te_cmg_chinese_min_can_join = yes
+		if = {
+			limit = {
+				te_cmg_chinese_min_can_join = yes
+			}
+			te_cm_join_part = { MERGE = chinese CULTURE = min INDEX = 18 }
 		}
-		te_cm_join_part = { MERGE = chinese CULTURE = min INDEX = 18 }
-	}
-	if = {
-		limit = {
-			te_cmg_chinese_hakka_can_join = yes
+		if = {
+			limit = {
+				te_cmg_chinese_hakka_can_join = yes
+			}
+			te_cm_join_part = { MERGE = chinese CULTURE = hakka INDEX = 18 }
 		}
-		te_cm_join_part = { MERGE = chinese CULTURE = hakka INDEX = 18 }
 	}
 }
 
@@ -3788,7 +3833,8 @@ te_cmg_census_chinese = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_japanese_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_japanese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_japanese } }
@@ -3857,13 +3903,17 @@ te_cmg_census_japanese_country = {
 }
 
 # Country scope. Joins every part of the japanese merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_japanese_join_ready = {
 	if = {
-		limit = {
-			te_cmg_japanese_ryukyuan_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_japanese } }
+		if = {
+			limit = {
+				te_cmg_japanese_ryukyuan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = japanese CULTURE = ryukyuan INDEX = 19 }
 		}
-		te_cm_join_part = { MERGE = japanese CULTURE = ryukyuan INDEX = 19 }
 	}
 }
 
@@ -3971,7 +4021,8 @@ te_cmg_arab_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_arab_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_arab_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_maghrebi } }
@@ -4110,18 +4161,9 @@ te_cmg_census_arab_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_arab_sudanese ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_sudanese }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_arab_haratin ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_haratin }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_arab_bidan ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_bidan }
-				}
+				NOT = { has_global_variable = te_cm_switched_sudanese }
+				NOT = { has_global_variable = te_cm_switched_haratin }
+				NOT = { has_global_variable = te_cm_switched_bidan }
 			}
 		}
 		te_cmg_arab_result_sol = yes
@@ -4142,55 +4184,59 @@ te_cmg_census_arab_country = {
 }
 
 # Country scope. Joins every part of the arab merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_arab_join_ready = {
 	if = {
-		limit = {
-			te_cmg_arab_maghrebi_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_arab } }
+		if = {
+			limit = {
+				te_cmg_arab_maghrebi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = maghrebi INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = maghrebi INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_misri_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_misri_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = misri INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = misri INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_mashriqi_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_mashriqi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = mashriqi INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = mashriqi INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_bedouin_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_bedouin_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = bedouin INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = bedouin INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_yemenite_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_yemenite_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = yemenite INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = yemenite INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_sudanese_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_sudanese_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = sudanese INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = sudanese INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_haratin_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_haratin_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = haratin INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = haratin INDEX = 20 }
-	}
-	if = {
-		limit = {
-			te_cmg_arab_bidan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_arab_bidan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = arab CULTURE = bidan INDEX = 20 }
 		}
-		te_cm_join_part = { MERGE = arab CULTURE = bidan INDEX = 20 }
 	}
 }
 
@@ -4295,7 +4341,8 @@ te_cmg_persian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_persian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_persian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_persian } }
@@ -4374,14 +4421,8 @@ te_cmg_census_persian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_persian_tajik ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_tajik }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_persian_hazara ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_hazara }
-				}
+				NOT = { has_global_variable = te_cm_switched_tajik }
+				NOT = { has_global_variable = te_cm_switched_hazara }
 			}
 		}
 		te_cmg_persian_result_sol = yes
@@ -4398,25 +4439,29 @@ te_cmg_census_persian_country = {
 }
 
 # Country scope. Joins every part of the persian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_persian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_persian_luri_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_persian } }
+		if = {
+			limit = {
+				te_cmg_persian_luri_can_join = yes
+			}
+			te_cm_join_part = { MERGE = persian CULTURE = luri INDEX = 21 }
 		}
-		te_cm_join_part = { MERGE = persian CULTURE = luri INDEX = 21 }
-	}
-	if = {
-		limit = {
-			te_cmg_persian_tajik_can_join = yes
+		if = {
+			limit = {
+				te_cmg_persian_tajik_can_join = yes
+			}
+			te_cm_join_part = { MERGE = persian CULTURE = tajik INDEX = 21 }
 		}
-		te_cm_join_part = { MERGE = persian CULTURE = tajik INDEX = 21 }
-	}
-	if = {
-		limit = {
-			te_cmg_persian_hazara_can_join = yes
+		if = {
+			limit = {
+				te_cmg_persian_hazara_can_join = yes
+			}
+			te_cm_join_part = { MERGE = persian CULTURE = hazara INDEX = 21 }
 		}
-		te_cm_join_part = { MERGE = persian CULTURE = hazara INDEX = 21 }
 	}
 }
 
@@ -4521,7 +4566,8 @@ te_cmg_oghuz_turkic_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_oghuz_turkic_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_oghuz_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_turkish } }
@@ -4601,10 +4647,7 @@ te_cmg_census_oghuz_turkic_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_turkmen }
-				}
+				NOT = { has_global_variable = te_cm_switched_turkmen }
 			}
 		}
 		te_cmg_oghuz_turkic_result_sol = yes
@@ -4617,25 +4660,29 @@ te_cmg_census_oghuz_turkic_country = {
 }
 
 # Country scope. Joins every part of the oghuz_turkic merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_oghuz_turkic_join_ready = {
 	if = {
-		limit = {
-			te_cmg_oghuz_turkic_turkish_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic } }
+		if = {
+			limit = {
+				te_cmg_oghuz_turkic_turkish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkish INDEX = 22 }
 		}
-		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkish INDEX = 22 }
-	}
-	if = {
-		limit = {
-			te_cmg_oghuz_turkic_azerbaijani_can_join = yes
+		if = {
+			limit = {
+				te_cmg_oghuz_turkic_azerbaijani_can_join = yes
+			}
+			te_cm_join_part = { MERGE = oghuz_turkic CULTURE = azerbaijani INDEX = 22 }
 		}
-		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = azerbaijani INDEX = 22 }
-	}
-	if = {
-		limit = {
-			te_cmg_oghuz_turkic_turkmen_can_join = yes
+		if = {
+			limit = {
+				te_cmg_oghuz_turkic_turkmen_can_join = yes
+			}
+			te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkmen INDEX = 22 }
 		}
-		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkmen INDEX = 22 }
 	}
 }
 
@@ -4704,7 +4751,8 @@ te_cmg_census_oghuz_turkic = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_hindustani_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_hindustani_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hindustani } }
@@ -4824,31 +4872,35 @@ te_cmg_census_hindustani_country = {
 }
 
 # Country scope. Joins every part of the hindustani merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_hindustani_join_ready = {
 	if = {
-		limit = {
-			te_cmg_hindustani_avadhi_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_hindustani } }
+		if = {
+			limit = {
+				te_cmg_hindustani_avadhi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = hindustani CULTURE = avadhi INDEX = 23 }
 		}
-		te_cm_join_part = { MERGE = hindustani CULTURE = avadhi INDEX = 23 }
-	}
-	if = {
-		limit = {
-			te_cmg_hindustani_bundeli_can_join = yes
+		if = {
+			limit = {
+				te_cmg_hindustani_bundeli_can_join = yes
+			}
+			te_cm_join_part = { MERGE = hindustani CULTURE = bundeli INDEX = 23 }
 		}
-		te_cm_join_part = { MERGE = hindustani CULTURE = bundeli INDEX = 23 }
-	}
-	if = {
-		limit = {
-			te_cmg_hindustani_chhattisgarhi_can_join = yes
+		if = {
+			limit = {
+				te_cmg_hindustani_chhattisgarhi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = hindustani CULTURE = chhattisgarhi INDEX = 23 }
 		}
-		te_cm_join_part = { MERGE = hindustani CULTURE = chhattisgarhi INDEX = 23 }
-	}
-	if = {
-		limit = {
-			te_cmg_hindustani_bageli_can_join = yes
+		if = {
+			limit = {
+				te_cmg_hindustani_bageli_can_join = yes
+			}
+			te_cm_join_part = { MERGE = hindustani CULTURE = bageli INDEX = 23 }
 		}
-		te_cm_join_part = { MERGE = hindustani CULTURE = bageli INDEX = 23 }
 	}
 }
 
@@ -4954,7 +5006,8 @@ te_cmg_dravidian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_dravidian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_dravidian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_tamil } }
@@ -5051,10 +5104,7 @@ te_cmg_census_dravidian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_dravidian_telegu ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_telegu }
-				}
+				NOT = { has_global_variable = te_cm_switched_telegu }
 			}
 		}
 		te_cmg_dravidian_result_sol = yes
@@ -5067,31 +5117,35 @@ te_cmg_census_dravidian_country = {
 }
 
 # Country scope. Joins every part of the dravidian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_dravidian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_dravidian_tamil_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_dravidian } }
+		if = {
+			limit = {
+				te_cmg_dravidian_tamil_can_join = yes
+			}
+			te_cm_join_part = { MERGE = dravidian CULTURE = tamil INDEX = 24 }
 		}
-		te_cm_join_part = { MERGE = dravidian CULTURE = tamil INDEX = 24 }
-	}
-	if = {
-		limit = {
-			te_cmg_dravidian_kannada_can_join = yes
+		if = {
+			limit = {
+				te_cmg_dravidian_kannada_can_join = yes
+			}
+			te_cm_join_part = { MERGE = dravidian CULTURE = kannada INDEX = 24 }
 		}
-		te_cm_join_part = { MERGE = dravidian CULTURE = kannada INDEX = 24 }
-	}
-	if = {
-		limit = {
-			te_cmg_dravidian_malayalam_can_join = yes
+		if = {
+			limit = {
+				te_cmg_dravidian_malayalam_can_join = yes
+			}
+			te_cm_join_part = { MERGE = dravidian CULTURE = malayalam INDEX = 24 }
 		}
-		te_cm_join_part = { MERGE = dravidian CULTURE = malayalam INDEX = 24 }
-	}
-	if = {
-		limit = {
-			te_cmg_dravidian_telegu_can_join = yes
+		if = {
+			limit = {
+				te_cmg_dravidian_telegu_can_join = yes
+			}
+			te_cm_join_part = { MERGE = dravidian CULTURE = telegu INDEX = 24 }
 		}
-		te_cm_join_part = { MERGE = dravidian CULTURE = telegu INDEX = 24 }
 	}
 }
 
@@ -5198,7 +5252,8 @@ te_cmg_indonesian_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_indonesian_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_indonesian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_javan } }
@@ -5312,10 +5367,7 @@ te_cmg_census_indonesian_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_indonesian_balinese ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_balinese }
-				}
+				NOT = { has_global_variable = te_cm_switched_balinese }
 			}
 		}
 		te_cmg_indonesian_result_sol = yes
@@ -5328,37 +5380,41 @@ te_cmg_census_indonesian_country = {
 }
 
 # Country scope. Joins every part of the indonesian merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_indonesian_join_ready = {
 	if = {
-		limit = {
-			te_cmg_indonesian_javan_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_indonesian } }
+		if = {
+			limit = {
+				te_cmg_indonesian_javan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = indonesian CULTURE = javan INDEX = 25 }
 		}
-		te_cm_join_part = { MERGE = indonesian CULTURE = javan INDEX = 25 }
-	}
-	if = {
-		limit = {
-			te_cmg_indonesian_malay_can_join = yes
+		if = {
+			limit = {
+				te_cmg_indonesian_malay_can_join = yes
+			}
+			te_cm_join_part = { MERGE = indonesian CULTURE = malay INDEX = 25 }
 		}
-		te_cm_join_part = { MERGE = indonesian CULTURE = malay INDEX = 25 }
-	}
-	if = {
-		limit = {
-			te_cmg_indonesian_sumatran_can_join = yes
+		if = {
+			limit = {
+				te_cmg_indonesian_sumatran_can_join = yes
+			}
+			te_cm_join_part = { MERGE = indonesian CULTURE = sumatran INDEX = 25 }
 		}
-		te_cm_join_part = { MERGE = indonesian CULTURE = sumatran INDEX = 25 }
-	}
-	if = {
-		limit = {
-			te_cmg_indonesian_bornean_can_join = yes
+		if = {
+			limit = {
+				te_cmg_indonesian_bornean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = indonesian CULTURE = bornean INDEX = 25 }
 		}
-		te_cm_join_part = { MERGE = indonesian CULTURE = bornean INDEX = 25 }
-	}
-	if = {
-		limit = {
-			te_cmg_indonesian_balinese_can_join = yes
+		if = {
+			limit = {
+				te_cmg_indonesian_balinese_can_join = yes
+			}
+			te_cm_join_part = { MERGE = indonesian CULTURE = balinese INDEX = 25 }
 		}
-		te_cm_join_part = { MERGE = indonesian CULTURE = balinese INDEX = 25 }
 	}
 }
 
@@ -5427,7 +5483,8 @@ te_cmg_census_indonesian = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_filipino_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_filipino_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_filipino } }
@@ -5530,25 +5587,29 @@ te_cmg_census_filipino_country = {
 }
 
 # Country scope. Joins every part of the filipino merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_filipino_join_ready = {
 	if = {
-		limit = {
-			te_cmg_filipino_visayan_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_filipino } }
+		if = {
+			limit = {
+				te_cmg_filipino_visayan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = filipino CULTURE = visayan INDEX = 26 }
 		}
-		te_cm_join_part = { MERGE = filipino CULTURE = visayan INDEX = 26 }
-	}
-	if = {
-		limit = {
-			te_cmg_filipino_tagalog_can_join = yes
+		if = {
+			limit = {
+				te_cmg_filipino_tagalog_can_join = yes
+			}
+			te_cm_join_part = { MERGE = filipino CULTURE = tagalog INDEX = 26 }
 		}
-		te_cm_join_part = { MERGE = filipino CULTURE = tagalog INDEX = 26 }
-	}
-	if = {
-		limit = {
-			te_cmg_filipino_ilocano_can_join = yes
+		if = {
+			limit = {
+				te_cmg_filipino_ilocano_can_join = yes
+			}
+			te_cm_join_part = { MERGE = filipino CULTURE = ilocano INDEX = 26 }
 		}
-		te_cm_join_part = { MERGE = filipino CULTURE = ilocano INDEX = 26 }
 	}
 }
 
@@ -5617,7 +5678,8 @@ te_cmg_census_filipino = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_nguni_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_nguni_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_nguni } }
@@ -5708,25 +5770,29 @@ te_cmg_census_nguni_country = {
 }
 
 # Country scope. Joins every part of the nguni merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_nguni_join_ready = {
 	if = {
-		limit = {
-			te_cmg_nguni_nguni_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_nguni } }
+		if = {
+			limit = {
+				te_cmg_nguni_nguni_can_join = yes
+			}
+			te_cm_join_part = { MERGE = nguni CULTURE = nguni INDEX = 27 }
 		}
-		te_cm_join_part = { MERGE = nguni CULTURE = nguni INDEX = 27 }
-	}
-	if = {
-		limit = {
-			te_cmg_nguni_zulu_can_join = yes
+		if = {
+			limit = {
+				te_cmg_nguni_zulu_can_join = yes
+			}
+			te_cm_join_part = { MERGE = nguni CULTURE = zulu INDEX = 27 }
 		}
-		te_cm_join_part = { MERGE = nguni CULTURE = zulu INDEX = 27 }
-	}
-	if = {
-		limit = {
-			te_cmg_nguni_xhosa_can_join = yes
+		if = {
+			limit = {
+				te_cmg_nguni_xhosa_can_join = yes
+			}
+			te_cm_join_part = { MERGE = nguni CULTURE = xhosa INDEX = 27 }
 		}
-		te_cm_join_part = { MERGE = nguni CULTURE = xhosa INDEX = 27 }
 	}
 }
 
@@ -5833,7 +5899,8 @@ te_cmg_latin_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_latin_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_latin_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -5963,26 +6030,11 @@ te_cmg_census_latin_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_latin_romanian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_romanian }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_latin_platinean ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_platinean }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_latin_argentine ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_argentine }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_latin_uruguayan ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_uruguayan }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_latin_chilean ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_chilean }
-				}
+				NOT = { has_global_variable = te_cm_switched_romanian }
+				NOT = { has_global_variable = te_cm_switched_platinean }
+				NOT = { has_global_variable = te_cm_switched_argentine }
+				NOT = { has_global_variable = te_cm_switched_uruguayan }
+				NOT = { has_global_variable = te_cm_switched_chilean }
 			}
 		}
 		te_cmg_latin_result_sol = yes
@@ -6011,61 +6063,65 @@ te_cmg_census_latin_country = {
 }
 
 # Country scope. Joins every part of the latin merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_latin_join_ready = {
 	if = {
-		limit = {
-			te_cmg_latin_french_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_latin } }
+		if = {
+			limit = {
+				te_cmg_latin_french_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = french INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = french INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_cm_italian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_cm_italian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = cm_italian INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = cm_italian INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_spanish_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_spanish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = spanish INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = spanish INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_portuguese_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_portuguese_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = portuguese INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = portuguese INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_romanian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_romanian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = romanian INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = romanian INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_platinean_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_platinean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = platinean INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = platinean INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_argentine_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_argentine_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = argentine INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = argentine INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_uruguayan_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_uruguayan_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = uruguayan INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = uruguayan INDEX = 28 }
-	}
-	if = {
-		limit = {
-			te_cmg_latin_chilean_can_join = yes
+		if = {
+			limit = {
+				te_cmg_latin_chilean_can_join = yes
+			}
+			te_cm_join_part = { MERGE = latin CULTURE = chilean INDEX = 28 }
 		}
-		te_cm_join_part = { MERGE = latin CULTURE = chilean INDEX = 28 }
 	}
 }
 
@@ -6171,7 +6227,8 @@ te_cmg_pan_slavic_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_pan_slavic_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_pan_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_east_slavic } }
@@ -6276,18 +6333,9 @@ te_cmg_census_pan_slavic_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_slavic_polish ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_polish }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_slavic_slovene ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_slovene }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_slavic_bulgarian ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_bulgarian }
-				}
+				NOT = { has_global_variable = te_cm_switched_polish }
+				NOT = { has_global_variable = te_cm_switched_slovene }
+				NOT = { has_global_variable = te_cm_switched_bulgarian }
 			}
 		}
 		te_cmg_pan_slavic_result_sol = yes
@@ -6308,43 +6356,47 @@ te_cmg_census_pan_slavic_country = {
 }
 
 # Country scope. Joins every part of the pan_slavic merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_pan_slavic_join_ready = {
 	if = {
-		limit = {
-			te_cmg_pan_slavic_cm_east_slavic_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_pan_slavic } }
+		if = {
+			limit = {
+				te_cmg_pan_slavic_cm_east_slavic_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_east_slavic INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_east_slavic INDEX = 29 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_slavic_cm_czechoslovak_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_slavic_cm_czechoslovak_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_czechoslovak INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_czechoslovak INDEX = 29 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_slavic_cm_yugoslav_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_slavic_cm_yugoslav_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_yugoslav INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_yugoslav INDEX = 29 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_slavic_polish_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_slavic_polish_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = polish INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = polish INDEX = 29 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_slavic_slovene_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_slavic_slovene_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = slovene INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = slovene INDEX = 29 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_slavic_bulgarian_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_slavic_bulgarian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_slavic CULTURE = bulgarian INDEX = 29 }
 		}
-		te_cm_join_part = { MERGE = pan_slavic CULTURE = bulgarian INDEX = 29 }
 	}
 }
 
@@ -6452,7 +6504,8 @@ te_cmg_pan_turkic_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_pan_turkic_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_pan_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic } }
@@ -6595,22 +6648,10 @@ te_cmg_census_pan_turkic_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_turkic_bashkir ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_bashkir }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_crimean_tatar }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_caucasian_turk }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_pan_turkic_uighur ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_uighur }
-				}
+				NOT = { has_global_variable = te_cm_switched_bashkir }
+				NOT = { has_global_variable = te_cm_switched_crimean_tatar }
+				NOT = { has_global_variable = te_cm_switched_caucasian_turk }
+				NOT = { has_global_variable = te_cm_switched_uighur }
 			}
 		}
 		te_cmg_pan_turkic_result_sol = yes
@@ -6635,61 +6676,65 @@ te_cmg_census_pan_turkic_country = {
 }
 
 # Country scope. Joins every part of the pan_turkic merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_pan_turkic_join_ready = {
 	if = {
-		limit = {
-			te_cmg_pan_turkic_cm_oghuz_turkic_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_pan_turkic } }
+		if = {
+			limit = {
+				te_cmg_pan_turkic_cm_oghuz_turkic_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = cm_oghuz_turkic INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = cm_oghuz_turkic INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_uzbek_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_uzbek_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = uzbek INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = uzbek INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_kazak_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_kazak_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = kazak INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = kazak INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_tatar_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_tatar_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = tatar INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = tatar INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_kirgiz_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_kirgiz_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = kirgiz INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = kirgiz INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_bashkir_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_bashkir_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = bashkir INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = bashkir INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_crimean_tatar_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_crimean_tatar_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = crimean_tatar INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = crimean_tatar INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_caucasian_turk_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_caucasian_turk_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = caucasian_turk INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = caucasian_turk INDEX = 30 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_turkic_uighur_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_turkic_uighur_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_turkic CULTURE = uighur INDEX = 30 }
 		}
-		te_cm_join_part = { MERGE = pan_turkic CULTURE = uighur INDEX = 30 }
 	}
 }
 
@@ -6758,7 +6803,8 @@ te_cmg_census_pan_turkic = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_pan_malay_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_pan_malay_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_indonesian } }
@@ -6832,19 +6878,23 @@ te_cmg_census_pan_malay_country = {
 }
 
 # Country scope. Joins every part of the pan_malay merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_pan_malay_join_ready = {
 	if = {
-		limit = {
-			te_cmg_pan_malay_cm_indonesian_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_pan_malay } }
+		if = {
+			limit = {
+				te_cmg_pan_malay_cm_indonesian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_malay CULTURE = cm_indonesian INDEX = 31 }
 		}
-		te_cm_join_part = { MERGE = pan_malay CULTURE = cm_indonesian INDEX = 31 }
-	}
-	if = {
-		limit = {
-			te_cmg_pan_malay_filipino_can_join = yes
+		if = {
+			limit = {
+				te_cmg_pan_malay_filipino_can_join = yes
+			}
+			te_cm_join_part = { MERGE = pan_malay CULTURE = filipino INDEX = 31 }
 		}
-		te_cm_join_part = { MERGE = pan_malay CULTURE = filipino INDEX = 31 }
 	}
 }
 
@@ -6950,7 +7000,8 @@ te_cmg_east_african_result_sol = {
 # it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every
 # core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,
 # te_cm_sol_ok_east_african_<culture>, over the core range plus that part; with no core figure left, against the
-# result's (walked only then, and only while an optional part is neither joined nor switched).
+# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part
+# that has joined must keep following the result, or one dip would freeze it for good).
 te_cmg_census_east_african_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swahili } }
@@ -7059,22 +7110,10 @@ te_cmg_census_east_african_country = {
 			local_var:te_cm_sg_n = 0
 			local_var:te_cm_sg_all = 1
 			OR = {
-				AND = {
-					NOT = { global_var:te_cm_joined_east_african_yao ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_yao }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_east_african_makua ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_makua }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
-				}
-				AND = {
-					NOT = { global_var:te_cm_joined_east_african_kikuyu ?= 1 }
-					NOT = { has_global_variable = te_cm_switched_kikuyu }
-				}
+				NOT = { has_global_variable = te_cm_switched_yao }
+				NOT = { has_global_variable = te_cm_switched_makua }
+				NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
+				NOT = { has_global_variable = te_cm_switched_kikuyu }
 			}
 		}
 		te_cmg_east_african_result_sol = yes
@@ -7099,49 +7138,53 @@ te_cmg_census_east_african_country = {
 }
 
 # Country scope. Joins every part of the east_african merge that can join now and isn't waiting on a
-# vanilla entry: when the merge starts, and each census while its starter holds it.
+# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
+# merge's own result has switched into a higher merge's (R33).
 te_cmg_east_african_join_ready = {
 	if = {
-		limit = {
-			te_cmg_east_african_swahili_can_join = yes
+		limit = { NOT = { has_global_variable = te_cm_switched_cm_east_african } }
+		if = {
+			limit = {
+				te_cmg_east_african_swahili_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = swahili INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = swahili INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_nyamwezi_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_nyamwezi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = nyamwezi INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = nyamwezi INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_sukuma_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_sukuma_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = sukuma INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = sukuma INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_yao_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_yao_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = yao INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = yao INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_makua_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_makua_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = makua INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = makua INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_lacustrine_bantu_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_lacustrine_bantu_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = lacustrine_bantu INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = lacustrine_bantu INDEX = 32 }
-	}
-	if = {
-		limit = {
-			te_cmg_east_african_kikuyu_can_join = yes
+		if = {
+			limit = {
+				te_cmg_east_african_kikuyu_can_join = yes
+			}
+			te_cm_join_part = { MERGE = east_african CULTURE = kikuyu INDEX = 32 }
 		}
-		te_cm_join_part = { MERGE = east_african CULTURE = kikuyu INDEX = 32 }
 	}
 }
 
@@ -9836,6 +9879,7 @@ te_cmg_census_all = {
 # test reads it: a scope left over from the census in the same on_action may hold another country.
 # - While the merge runs (state 1), the whole merge stalls when its starter fails te_cmg_<m>_core_ok or
 #   te_cm_sol_ok_<m>: both cover the core cultures only. A complete merge has no core part left to stall it.
+# - Nothing converts once the merge's own result has switched into a higher merge's (R33).
 # - One part stalls on its own gates, read on the starter: te_cm_ok_<m>_<c> (the hold alone, once joined: R29) and,
 #   for an optional part, its own standard-of-living gate te_cm_sol_ok_<m>_<c> (R23). Progress is kept while stalled.
 te_cmg_yearly_country = {
@@ -9846,6 +9890,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_german ?= 2
 			}
 			exists = global_var:te_cm_starter_german
+			NOT = { has_global_variable = te_cm_switched_cm_german }
 		}
 		global_var:te_cm_starter_german = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -9911,6 +9956,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_italian ?= 2
 			}
 			exists = global_var:te_cm_starter_italian
+			NOT = { has_global_variable = te_cm_switched_cm_italian }
 		}
 		global_var:te_cm_starter_italian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -9965,6 +10011,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_scandinavian ?= 2
 			}
 			exists = global_var:te_cm_starter_scandinavian
+			NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
 		}
 		global_var:te_cm_starter_scandinavian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10029,6 +10076,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_east_slavic ?= 2
 			}
 			exists = global_var:te_cm_starter_east_slavic
+			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
 		}
 		global_var:te_cm_starter_east_slavic = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10082,6 +10130,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_yugoslav ?= 2
 			}
 			exists = global_var:te_cm_starter_yugoslav
+			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
 		}
 		global_var:te_cm_starter_yugoslav = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10157,6 +10206,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_czechoslovak ?= 2
 			}
 			exists = global_var:te_cm_starter_czechoslovak
+			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
 		}
 		global_var:te_cm_starter_czechoslovak = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10211,6 +10261,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_hungarian ?= 2
 			}
 			exists = global_var:te_cm_starter_hungarian
+			NOT = { has_global_variable = te_cm_switched_hungarian }
 		}
 		global_var:te_cm_starter_hungarian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10244,6 +10295,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_dutch ?= 2
 			}
 			exists = global_var:te_cm_starter_dutch
+			NOT = { has_global_variable = te_cm_switched_dutch }
 		}
 		global_var:te_cm_starter_dutch = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10277,6 +10329,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_finnish ?= 2
 			}
 			exists = global_var:te_cm_starter_finnish
+			NOT = { has_global_variable = te_cm_switched_finnish }
 		}
 		global_var:te_cm_starter_finnish = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10310,6 +10363,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_french ?= 2
 			}
 			exists = global_var:te_cm_starter_french
+			NOT = { has_global_variable = te_cm_switched_french }
 		}
 		global_var:te_cm_starter_french = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10364,6 +10418,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_british ?= 2
 			}
 			exists = global_var:te_cm_starter_british
+			NOT = { has_global_variable = te_cm_switched_british }
 		}
 		global_var:te_cm_starter_british = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10397,6 +10452,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_american ?= 2
 			}
 			exists = global_var:te_cm_starter_american
+			NOT = { has_global_variable = te_cm_switched_cm_american }
 		}
 		global_var:te_cm_starter_american = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10451,6 +10507,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_anglophone ?= 2
 			}
 			exists = global_var:te_cm_starter_anglophone
+			NOT = { has_global_variable = te_cm_switched_cm_anglophone }
 		}
 		global_var:te_cm_starter_anglophone = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10559,6 +10616,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_brazilian ?= 2
 			}
 			exists = global_var:te_cm_starter_brazilian
+			NOT = { has_global_variable = te_cm_switched_brazilian }
 		}
 		global_var:te_cm_starter_brazilian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10633,6 +10691,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_platine ?= 2
 			}
 			exists = global_var:te_cm_starter_platine
+			NOT = { has_global_variable = te_cm_switched_cm_platine }
 		}
 		global_var:te_cm_starter_platine = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10696,6 +10755,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_andean ?= 2
 			}
 			exists = global_var:te_cm_starter_andean
+			NOT = { has_global_variable = te_cm_switched_cm_andean }
 		}
 		global_var:te_cm_starter_andean = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10759,6 +10819,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_gran_colombian ?= 2
 			}
 			exists = global_var:te_cm_starter_gran_colombian
+			NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
 		}
 		global_var:te_cm_starter_gran_colombian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10812,6 +10873,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_chinese ?= 2
 			}
 			exists = global_var:te_cm_starter_chinese
+			NOT = { has_global_variable = te_cm_switched_han }
 		}
 		global_var:te_cm_starter_chinese = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10865,6 +10927,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_japanese ?= 2
 			}
 			exists = global_var:te_cm_starter_japanese
+			NOT = { has_global_variable = te_cm_switched_japanese }
 		}
 		global_var:te_cm_starter_japanese = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -10898,6 +10961,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_arab ?= 2
 			}
 			exists = global_var:te_cm_starter_arab
+			NOT = { has_global_variable = te_cm_switched_cm_arab }
 		}
 		global_var:te_cm_starter_arab = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11004,6 +11068,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_persian ?= 2
 			}
 			exists = global_var:te_cm_starter_persian
+			NOT = { has_global_variable = te_cm_switched_persian }
 		}
 		global_var:te_cm_starter_persian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11059,6 +11124,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_oghuz_turkic ?= 2
 			}
 			exists = global_var:te_cm_starter_oghuz_turkic
+			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
 		}
 		global_var:te_cm_starter_oghuz_turkic = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11113,6 +11179,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_hindustani ?= 2
 			}
 			exists = global_var:te_cm_starter_hindustani
+			NOT = { has_global_variable = te_cm_switched_hindustani }
 		}
 		global_var:te_cm_starter_hindustani = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11176,6 +11243,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_dravidian ?= 2
 			}
 			exists = global_var:te_cm_starter_dravidian
+			NOT = { has_global_variable = te_cm_switched_cm_dravidian }
 		}
 		global_var:te_cm_starter_dravidian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11240,6 +11308,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_indonesian ?= 2
 			}
 			exists = global_var:te_cm_starter_indonesian
+			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
 		}
 		global_var:te_cm_starter_indonesian = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11314,6 +11383,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_filipino ?= 2
 			}
 			exists = global_var:te_cm_starter_filipino
+			NOT = { has_global_variable = te_cm_switched_filipino }
 		}
 		global_var:te_cm_starter_filipino = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11367,6 +11437,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_nguni ?= 2
 			}
 			exists = global_var:te_cm_starter_nguni
+			NOT = { has_global_variable = te_cm_switched_cm_nguni }
 		}
 		global_var:te_cm_starter_nguni = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11420,6 +11491,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_latin ?= 2
 			}
 			exists = global_var:te_cm_starter_latin
+			NOT = { has_global_variable = te_cm_switched_cm_latin }
 		}
 		global_var:te_cm_starter_latin = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11538,6 +11610,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_pan_slavic ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_slavic
+			NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
 		}
 		global_var:te_cm_starter_pan_slavic = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11624,6 +11697,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_pan_turkic ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_turkic
+			NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
 		}
 		global_var:te_cm_starter_pan_turkic = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11741,6 +11815,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_pan_malay ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_malay
+			NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
 		}
 		global_var:te_cm_starter_pan_malay = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11784,6 +11859,7 @@ te_cmg_yearly_country = {
 				global_var:te_cm_state_east_african ?= 2
 			}
 			exists = global_var:te_cm_starter_east_african
+			NOT = { has_global_variable = te_cm_switched_cm_east_african }
 		}
 		global_var:te_cm_starter_east_african = { save_temporary_scope_as = te_cm_starter }
 		if = {
@@ -11879,7 +11955,8 @@ te_cmg_yearly_country = {
 # Any scope. Run by te_cm_yearly_on_action at the end of the census, behind the rule, the year and the lock: the
 # dominance of every part that joined a running or complete merge and has not switched (te_cm_census_dominance reads
 # the census's figures, no walk of its own), then the switch of each part at or over te_cm_switch_share. Only for a
-# merge whose starter is alive: a dead one's census wasn't taken. Debug targets call it on its own.
+# merge whose starter is alive (a dead one's census wasn't taken) and whose own result has not switched into a higher
+# merge's (R33). Debug targets call it on its own.
 te_cmg_dominance_all = {
 	if = {
 		limit = {
@@ -11888,6 +11965,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_german ?= 2
 			}
 			NOT = { te_cmg_german_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_german }
 		}
 		if = {
 			limit = {
@@ -11929,6 +12007,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_italian ?= 2
 			}
 			NOT = { te_cmg_italian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_italian }
 		}
 		if = {
 			limit = {
@@ -11962,6 +12041,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_scandinavian ?= 2
 			}
 			NOT = { te_cmg_scandinavian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
 		}
 		if = {
 			limit = {
@@ -12003,6 +12083,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_east_slavic ?= 2
 			}
 			NOT = { te_cmg_east_slavic_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
 		}
 		if = {
 			limit = {
@@ -12036,6 +12117,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_yugoslav ?= 2
 			}
 			NOT = { te_cmg_yugoslav_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
 		}
 		if = {
 			limit = {
@@ -12085,6 +12167,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_czechoslovak ?= 2
 			}
 			NOT = { te_cmg_czechoslovak_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
 		}
 		if = {
 			limit = {
@@ -12118,6 +12201,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_hungarian ?= 2
 			}
 			NOT = { te_cmg_hungarian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_hungarian }
 		}
 		if = {
 			limit = {
@@ -12135,6 +12219,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_dutch ?= 2
 			}
 			NOT = { te_cmg_dutch_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_dutch }
 		}
 		if = {
 			limit = {
@@ -12152,6 +12237,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_finnish ?= 2
 			}
 			NOT = { te_cmg_finnish_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_finnish }
 		}
 		if = {
 			limit = {
@@ -12169,6 +12255,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_french ?= 2
 			}
 			NOT = { te_cmg_french_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_french }
 		}
 		if = {
 			limit = {
@@ -12202,6 +12289,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_british ?= 2
 			}
 			NOT = { te_cmg_british_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_british }
 		}
 		if = {
 			limit = {
@@ -12219,6 +12307,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_american ?= 2
 			}
 			NOT = { te_cmg_american_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_american }
 		}
 		if = {
 			limit = {
@@ -12252,6 +12341,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_anglophone ?= 2
 			}
 			NOT = { te_cmg_anglophone_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_anglophone }
 		}
 		if = {
 			limit = {
@@ -12325,6 +12415,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_brazilian ?= 2
 			}
 			NOT = { te_cmg_brazilian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_brazilian }
 		}
 		if = {
 			limit = {
@@ -12374,6 +12465,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_platine ?= 2
 			}
 			NOT = { te_cmg_platine_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_platine }
 		}
 		if = {
 			limit = {
@@ -12415,6 +12507,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_andean ?= 2
 			}
 			NOT = { te_cmg_andean_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_andean }
 		}
 		if = {
 			limit = {
@@ -12456,6 +12549,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_gran_colombian ?= 2
 			}
 			NOT = { te_cmg_gran_colombian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
 		}
 		if = {
 			limit = {
@@ -12489,6 +12583,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_chinese ?= 2
 			}
 			NOT = { te_cmg_chinese_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_han }
 		}
 		if = {
 			limit = {
@@ -12522,6 +12617,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_japanese ?= 2
 			}
 			NOT = { te_cmg_japanese_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_japanese }
 		}
 		if = {
 			limit = {
@@ -12539,6 +12635,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_arab ?= 2
 			}
 			NOT = { te_cmg_arab_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_arab }
 		}
 		if = {
 			limit = {
@@ -12612,6 +12709,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_persian ?= 2
 			}
 			NOT = { te_cmg_persian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_persian }
 		}
 		if = {
 			limit = {
@@ -12645,6 +12743,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_oghuz_turkic ?= 2
 			}
 			NOT = { te_cmg_oghuz_turkic_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
 		}
 		if = {
 			limit = {
@@ -12678,6 +12777,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_hindustani ?= 2
 			}
 			NOT = { te_cmg_hindustani_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_hindustani }
 		}
 		if = {
 			limit = {
@@ -12719,6 +12819,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_dravidian ?= 2
 			}
 			NOT = { te_cmg_dravidian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_dravidian }
 		}
 		if = {
 			limit = {
@@ -12760,6 +12861,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_indonesian ?= 2
 			}
 			NOT = { te_cmg_indonesian_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
 		}
 		if = {
 			limit = {
@@ -12809,6 +12911,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_filipino ?= 2
 			}
 			NOT = { te_cmg_filipino_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_filipino }
 		}
 		if = {
 			limit = {
@@ -12842,6 +12945,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_nguni ?= 2
 			}
 			NOT = { te_cmg_nguni_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_nguni }
 		}
 		if = {
 			limit = {
@@ -12875,6 +12979,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_latin ?= 2
 			}
 			NOT = { te_cmg_latin_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_latin }
 		}
 		if = {
 			limit = {
@@ -12956,6 +13061,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_pan_slavic ?= 2
 			}
 			NOT = { te_cmg_pan_slavic_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
 		}
 		if = {
 			limit = {
@@ -13013,6 +13119,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_pan_turkic ?= 2
 			}
 			NOT = { te_cmg_pan_turkic_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
 		}
 		if = {
 			limit = {
@@ -13094,6 +13201,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_pan_malay ?= 2
 			}
 			NOT = { te_cmg_pan_malay_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
 		}
 		if = {
 			limit = {
@@ -13119,6 +13227,7 @@ te_cmg_dominance_all = {
 				global_var:te_cm_state_east_african ?= 2
 			}
 			NOT = { te_cmg_east_african_starter_gone = yes }
+			NOT = { has_global_variable = te_cm_switched_cm_east_african }
 		}
 		if = {
 			limit = {
@@ -13656,7 +13765,8 @@ te_cmg_monthly_country = {
 # Country scope = the newly formed country (on_country_formed, behind the rule). The monthly upkeep first, so a country
 # formed from a definition that lists only parts gets the result at once. Then, for every running or complete merge whose
 # starter has this country in its sphere and which has already converted here (te_cm_converted_<m>, set by
-# te_cm_convert_part; the starter carries te_cm_started_<m>), the result as a primary culture if the formation dropped it.
+# te_cm_convert_part), the result as a primary culture if the formation dropped it, but only where a part that joined is
+# primary here, as te_cm_convert_part gives it (R34); the starter, which carries te_cm_started_<m>, always qualifies.
 te_cmg_formed_country = {
 	te_cmg_monthly_country = yes
 	if = {
@@ -13667,8 +13777,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_german
 			OR = {
-				has_variable = te_cm_converted_german
 				has_variable = te_cm_started_german
+				AND = {
+					has_variable = te_cm_converted_german
+					OR = {
+						AND = {
+							global_var:te_cm_joined_german_north_german ?= 1
+							country_has_primary_culture = cu:north_german
+						}
+						AND = {
+							global_var:te_cm_joined_german_south_german ?= 1
+							country_has_primary_culture = cu:south_german
+						}
+						AND = {
+							global_var:te_cm_joined_german_alemannic ?= 1
+							country_has_primary_culture = cu:alemannic
+						}
+						AND = {
+							global_var:te_cm_joined_german_east_german ?= 1
+							country_has_primary_culture = cu:east_german
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_german }
 		}
@@ -13686,8 +13816,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_italian
 			OR = {
-				has_variable = te_cm_converted_italian
 				has_variable = te_cm_started_italian
+				AND = {
+					has_variable = te_cm_converted_italian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_italian_north_italian ?= 1
+							country_has_primary_culture = cu:north_italian
+						}
+						AND = {
+							global_var:te_cm_joined_italian_south_italian ?= 1
+							country_has_primary_culture = cu:south_italian
+						}
+						AND = {
+							global_var:te_cm_joined_italian_corsican ?= 1
+							country_has_primary_culture = cu:corsican
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_italian }
 		}
@@ -13705,8 +13851,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_scandinavian
 			OR = {
-				has_variable = te_cm_converted_scandinavian
 				has_variable = te_cm_started_scandinavian
+				AND = {
+					has_variable = te_cm_converted_scandinavian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_scandinavian_swedish ?= 1
+							country_has_primary_culture = cu:swedish
+						}
+						AND = {
+							global_var:te_cm_joined_scandinavian_danish ?= 1
+							country_has_primary_culture = cu:danish
+						}
+						AND = {
+							global_var:te_cm_joined_scandinavian_norwegian ?= 1
+							country_has_primary_culture = cu:norwegian
+						}
+						AND = {
+							global_var:te_cm_joined_scandinavian_icelandic ?= 1
+							country_has_primary_culture = cu:icelandic
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_scandinavian }
 		}
@@ -13724,8 +13890,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_east_slavic
 			OR = {
-				has_variable = te_cm_converted_east_slavic
 				has_variable = te_cm_started_east_slavic
+				AND = {
+					has_variable = te_cm_converted_east_slavic
+					OR = {
+						AND = {
+							global_var:te_cm_joined_east_slavic_russian ?= 1
+							country_has_primary_culture = cu:russian
+						}
+						AND = {
+							global_var:te_cm_joined_east_slavic_ukrainian ?= 1
+							country_has_primary_culture = cu:ukrainian
+						}
+						AND = {
+							global_var:te_cm_joined_east_slavic_byelorussian ?= 1
+							country_has_primary_culture = cu:byelorussian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_east_slavic }
 		}
@@ -13743,8 +13925,32 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_yugoslav
 			OR = {
-				has_variable = te_cm_converted_yugoslav
 				has_variable = te_cm_started_yugoslav
+				AND = {
+					has_variable = te_cm_converted_yugoslav
+					OR = {
+						AND = {
+							global_var:te_cm_joined_yugoslav_serb ?= 1
+							country_has_primary_culture = cu:serb
+						}
+						AND = {
+							global_var:te_cm_joined_yugoslav_croat ?= 1
+							country_has_primary_culture = cu:croat
+						}
+						AND = {
+							global_var:te_cm_joined_yugoslav_bosniak ?= 1
+							country_has_primary_culture = cu:bosniak
+						}
+						AND = {
+							global_var:te_cm_joined_yugoslav_slovene ?= 1
+							country_has_primary_culture = cu:slovene
+						}
+						AND = {
+							global_var:te_cm_joined_yugoslav_bulgarian ?= 1
+							country_has_primary_culture = cu:bulgarian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_yugoslav }
 		}
@@ -13762,8 +13968,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_czechoslovak
 			OR = {
-				has_variable = te_cm_converted_czechoslovak
 				has_variable = te_cm_started_czechoslovak
+				AND = {
+					has_variable = te_cm_converted_czechoslovak
+					OR = {
+						AND = {
+							global_var:te_cm_joined_czechoslovak_czech ?= 1
+							country_has_primary_culture = cu:czech
+						}
+						AND = {
+							global_var:te_cm_joined_czechoslovak_slovak ?= 1
+							country_has_primary_culture = cu:slovak
+						}
+						AND = {
+							global_var:te_cm_joined_czechoslovak_sorb ?= 1
+							country_has_primary_culture = cu:sorb
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_czechoslovak }
 		}
@@ -13781,8 +14003,16 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_hungarian
 			OR = {
-				has_variable = te_cm_converted_hungarian
 				has_variable = te_cm_started_hungarian
+				AND = {
+					has_variable = te_cm_converted_hungarian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_hungarian_szekely ?= 1
+							country_has_primary_culture = cu:szekely
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:hungarian }
 		}
@@ -13800,8 +14030,16 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_dutch
 			OR = {
-				has_variable = te_cm_converted_dutch
 				has_variable = te_cm_started_dutch
+				AND = {
+					has_variable = te_cm_converted_dutch
+					OR = {
+						AND = {
+							global_var:te_cm_joined_dutch_flemish ?= 1
+							country_has_primary_culture = cu:flemish
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:dutch }
 		}
@@ -13819,8 +14057,16 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_finnish
 			OR = {
-				has_variable = te_cm_converted_finnish
 				has_variable = te_cm_started_finnish
+				AND = {
+					has_variable = te_cm_converted_finnish
+					OR = {
+						AND = {
+							global_var:te_cm_joined_finnish_karelian ?= 1
+							country_has_primary_culture = cu:karelian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:finnish }
 		}
@@ -13838,8 +14084,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_french
 			OR = {
-				has_variable = te_cm_converted_french
 				has_variable = te_cm_started_french
+				AND = {
+					has_variable = te_cm_converted_french
+					OR = {
+						AND = {
+							global_var:te_cm_joined_french_wallonian ?= 1
+							country_has_primary_culture = cu:wallonian
+						}
+						AND = {
+							global_var:te_cm_joined_french_occitan ?= 1
+							country_has_primary_culture = cu:occitan
+						}
+						AND = {
+							global_var:te_cm_joined_french_catalan ?= 1
+							country_has_primary_culture = cu:catalan
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:french }
 		}
@@ -13857,8 +14119,16 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_british
 			OR = {
-				has_variable = te_cm_converted_british
 				has_variable = te_cm_started_british
+				AND = {
+					has_variable = te_cm_converted_british
+					OR = {
+						AND = {
+							global_var:te_cm_joined_british_scottish ?= 1
+							country_has_primary_culture = cu:scottish
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:british }
 		}
@@ -13876,8 +14146,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_american
 			OR = {
-				has_variable = te_cm_converted_american
 				has_variable = te_cm_started_american
+				AND = {
+					has_variable = te_cm_converted_american
+					OR = {
+						AND = {
+							global_var:te_cm_joined_american_yankee ?= 1
+							country_has_primary_culture = cu:yankee
+						}
+						AND = {
+							global_var:te_cm_joined_american_dixie ?= 1
+							country_has_primary_culture = cu:dixie
+						}
+						AND = {
+							global_var:te_cm_joined_american_afro_american ?= 1
+							country_has_primary_culture = cu:afro_american
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_american }
 		}
@@ -13895,8 +14181,44 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_anglophone
 			OR = {
-				has_variable = te_cm_converted_anglophone
 				has_variable = te_cm_started_anglophone
+				AND = {
+					has_variable = te_cm_converted_anglophone
+					OR = {
+						AND = {
+							global_var:te_cm_joined_anglophone_british ?= 1
+							country_has_primary_culture = cu:british
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_yankee ?= 1
+							country_has_primary_culture = cu:yankee
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_cm_american ?= 1
+							country_has_primary_culture = cu:cm_american
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_anglo_canadian ?= 1
+							country_has_primary_culture = cu:anglo_canadian
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_australian ?= 1
+							country_has_primary_culture = cu:australian
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_scottish ?= 1
+							country_has_primary_culture = cu:scottish
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_dixie ?= 1
+							country_has_primary_culture = cu:dixie
+						}
+						AND = {
+							global_var:te_cm_joined_anglophone_afro_american ?= 1
+							country_has_primary_culture = cu:afro_american
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_anglophone }
 		}
@@ -13914,8 +14236,32 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_brazilian
 			OR = {
-				has_variable = te_cm_converted_brazilian
 				has_variable = te_cm_started_brazilian
+				AND = {
+					has_variable = te_cm_converted_brazilian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_brazilian_nordestino ?= 1
+							country_has_primary_culture = cu:nordestino
+						}
+						AND = {
+							global_var:te_cm_joined_brazilian_paulista ?= 1
+							country_has_primary_culture = cu:paulista
+						}
+						AND = {
+							global_var:te_cm_joined_brazilian_amazonic ?= 1
+							country_has_primary_culture = cu:amazonic
+						}
+						AND = {
+							global_var:te_cm_joined_brazilian_sulista ?= 1
+							country_has_primary_culture = cu:sulista
+						}
+						AND = {
+							global_var:te_cm_joined_brazilian_afro_brazilian ?= 1
+							country_has_primary_culture = cu:afro_brazilian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:brazilian }
 		}
@@ -13933,8 +14279,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_platine
 			OR = {
-				has_variable = te_cm_converted_platine
 				has_variable = te_cm_started_platine
+				AND = {
+					has_variable = te_cm_converted_platine
+					OR = {
+						AND = {
+							global_var:te_cm_joined_platine_platinean ?= 1
+							country_has_primary_culture = cu:platinean
+						}
+						AND = {
+							global_var:te_cm_joined_platine_argentine ?= 1
+							country_has_primary_culture = cu:argentine
+						}
+						AND = {
+							global_var:te_cm_joined_platine_uruguayan ?= 1
+							country_has_primary_culture = cu:uruguayan
+						}
+						AND = {
+							global_var:te_cm_joined_platine_paraguayan ?= 1
+							country_has_primary_culture = cu:paraguayan
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_platine }
 		}
@@ -13952,8 +14318,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_andean
 			OR = {
-				has_variable = te_cm_converted_andean
 				has_variable = te_cm_started_andean
+				AND = {
+					has_variable = te_cm_converted_andean
+					OR = {
+						AND = {
+							global_var:te_cm_joined_andean_north_andean ?= 1
+							country_has_primary_culture = cu:north_andean
+						}
+						AND = {
+							global_var:te_cm_joined_andean_south_andean ?= 1
+							country_has_primary_culture = cu:south_andean
+						}
+						AND = {
+							global_var:te_cm_joined_andean_peruvian ?= 1
+							country_has_primary_culture = cu:peruvian
+						}
+						AND = {
+							global_var:te_cm_joined_andean_bolivian ?= 1
+							country_has_primary_culture = cu:bolivian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_andean }
 		}
@@ -13971,8 +14357,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_gran_colombian
 			OR = {
-				has_variable = te_cm_converted_gran_colombian
 				has_variable = te_cm_started_gran_colombian
+				AND = {
+					has_variable = te_cm_converted_gran_colombian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_gran_colombian_colombian ?= 1
+							country_has_primary_culture = cu:colombian
+						}
+						AND = {
+							global_var:te_cm_joined_gran_colombian_venezuelan ?= 1
+							country_has_primary_culture = cu:venezuelan
+						}
+						AND = {
+							global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
+							country_has_primary_culture = cu:ecuadorian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_gran_colombian }
 		}
@@ -13990,8 +14392,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_chinese
 			OR = {
-				has_variable = te_cm_converted_chinese
 				has_variable = te_cm_started_chinese
+				AND = {
+					has_variable = te_cm_converted_chinese
+					OR = {
+						AND = {
+							global_var:te_cm_joined_chinese_yue ?= 1
+							country_has_primary_culture = cu:yue
+						}
+						AND = {
+							global_var:te_cm_joined_chinese_min ?= 1
+							country_has_primary_culture = cu:min
+						}
+						AND = {
+							global_var:te_cm_joined_chinese_hakka ?= 1
+							country_has_primary_culture = cu:hakka
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:han }
 		}
@@ -14009,8 +14427,16 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_japanese
 			OR = {
-				has_variable = te_cm_converted_japanese
 				has_variable = te_cm_started_japanese
+				AND = {
+					has_variable = te_cm_converted_japanese
+					OR = {
+						AND = {
+							global_var:te_cm_joined_japanese_ryukyuan ?= 1
+							country_has_primary_culture = cu:ryukyuan
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:japanese }
 		}
@@ -14028,8 +14454,44 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_arab
 			OR = {
-				has_variable = te_cm_converted_arab
 				has_variable = te_cm_started_arab
+				AND = {
+					has_variable = te_cm_converted_arab
+					OR = {
+						AND = {
+							global_var:te_cm_joined_arab_maghrebi ?= 1
+							country_has_primary_culture = cu:maghrebi
+						}
+						AND = {
+							global_var:te_cm_joined_arab_misri ?= 1
+							country_has_primary_culture = cu:misri
+						}
+						AND = {
+							global_var:te_cm_joined_arab_mashriqi ?= 1
+							country_has_primary_culture = cu:mashriqi
+						}
+						AND = {
+							global_var:te_cm_joined_arab_bedouin ?= 1
+							country_has_primary_culture = cu:bedouin
+						}
+						AND = {
+							global_var:te_cm_joined_arab_yemenite ?= 1
+							country_has_primary_culture = cu:yemenite
+						}
+						AND = {
+							global_var:te_cm_joined_arab_sudanese ?= 1
+							country_has_primary_culture = cu:sudanese
+						}
+						AND = {
+							global_var:te_cm_joined_arab_haratin ?= 1
+							country_has_primary_culture = cu:haratin
+						}
+						AND = {
+							global_var:te_cm_joined_arab_bidan ?= 1
+							country_has_primary_culture = cu:bidan
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_arab }
 		}
@@ -14047,8 +14509,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_persian
 			OR = {
-				has_variable = te_cm_converted_persian
 				has_variable = te_cm_started_persian
+				AND = {
+					has_variable = te_cm_converted_persian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_persian_luri ?= 1
+							country_has_primary_culture = cu:luri
+						}
+						AND = {
+							global_var:te_cm_joined_persian_tajik ?= 1
+							country_has_primary_culture = cu:tajik
+						}
+						AND = {
+							global_var:te_cm_joined_persian_hazara ?= 1
+							country_has_primary_culture = cu:hazara
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:persian }
 		}
@@ -14066,8 +14544,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_oghuz_turkic
 			OR = {
-				has_variable = te_cm_converted_oghuz_turkic
 				has_variable = te_cm_started_oghuz_turkic
+				AND = {
+					has_variable = te_cm_converted_oghuz_turkic
+					OR = {
+						AND = {
+							global_var:te_cm_joined_oghuz_turkic_turkish ?= 1
+							country_has_primary_culture = cu:turkish
+						}
+						AND = {
+							global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
+							country_has_primary_culture = cu:azerbaijani
+						}
+						AND = {
+							global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1
+							country_has_primary_culture = cu:turkmen
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_oghuz_turkic }
 		}
@@ -14085,8 +14579,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_hindustani
 			OR = {
-				has_variable = te_cm_converted_hindustani
 				has_variable = te_cm_started_hindustani
+				AND = {
+					has_variable = te_cm_converted_hindustani
+					OR = {
+						AND = {
+							global_var:te_cm_joined_hindustani_avadhi ?= 1
+							country_has_primary_culture = cu:avadhi
+						}
+						AND = {
+							global_var:te_cm_joined_hindustani_bundeli ?= 1
+							country_has_primary_culture = cu:bundeli
+						}
+						AND = {
+							global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1
+							country_has_primary_culture = cu:chhattisgarhi
+						}
+						AND = {
+							global_var:te_cm_joined_hindustani_bageli ?= 1
+							country_has_primary_culture = cu:bageli
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:hindustani }
 		}
@@ -14104,8 +14618,28 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_dravidian
 			OR = {
-				has_variable = te_cm_converted_dravidian
 				has_variable = te_cm_started_dravidian
+				AND = {
+					has_variable = te_cm_converted_dravidian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_dravidian_tamil ?= 1
+							country_has_primary_culture = cu:tamil
+						}
+						AND = {
+							global_var:te_cm_joined_dravidian_kannada ?= 1
+							country_has_primary_culture = cu:kannada
+						}
+						AND = {
+							global_var:te_cm_joined_dravidian_malayalam ?= 1
+							country_has_primary_culture = cu:malayalam
+						}
+						AND = {
+							global_var:te_cm_joined_dravidian_telegu ?= 1
+							country_has_primary_culture = cu:telegu
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_dravidian }
 		}
@@ -14123,8 +14657,32 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_indonesian
 			OR = {
-				has_variable = te_cm_converted_indonesian
 				has_variable = te_cm_started_indonesian
+				AND = {
+					has_variable = te_cm_converted_indonesian
+					OR = {
+						AND = {
+							global_var:te_cm_joined_indonesian_javan ?= 1
+							country_has_primary_culture = cu:javan
+						}
+						AND = {
+							global_var:te_cm_joined_indonesian_malay ?= 1
+							country_has_primary_culture = cu:malay
+						}
+						AND = {
+							global_var:te_cm_joined_indonesian_sumatran ?= 1
+							country_has_primary_culture = cu:sumatran
+						}
+						AND = {
+							global_var:te_cm_joined_indonesian_bornean ?= 1
+							country_has_primary_culture = cu:bornean
+						}
+						AND = {
+							global_var:te_cm_joined_indonesian_balinese ?= 1
+							country_has_primary_culture = cu:balinese
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_indonesian }
 		}
@@ -14142,8 +14700,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_filipino
 			OR = {
-				has_variable = te_cm_converted_filipino
 				has_variable = te_cm_started_filipino
+				AND = {
+					has_variable = te_cm_converted_filipino
+					OR = {
+						AND = {
+							global_var:te_cm_joined_filipino_visayan ?= 1
+							country_has_primary_culture = cu:visayan
+						}
+						AND = {
+							global_var:te_cm_joined_filipino_tagalog ?= 1
+							country_has_primary_culture = cu:tagalog
+						}
+						AND = {
+							global_var:te_cm_joined_filipino_ilocano ?= 1
+							country_has_primary_culture = cu:ilocano
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:filipino }
 		}
@@ -14161,8 +14735,24 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_nguni
 			OR = {
-				has_variable = te_cm_converted_nguni
 				has_variable = te_cm_started_nguni
+				AND = {
+					has_variable = te_cm_converted_nguni
+					OR = {
+						AND = {
+							global_var:te_cm_joined_nguni_nguni ?= 1
+							country_has_primary_culture = cu:nguni
+						}
+						AND = {
+							global_var:te_cm_joined_nguni_zulu ?= 1
+							country_has_primary_culture = cu:zulu
+						}
+						AND = {
+							global_var:te_cm_joined_nguni_xhosa ?= 1
+							country_has_primary_culture = cu:xhosa
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_nguni }
 		}
@@ -14180,8 +14770,48 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_latin
 			OR = {
-				has_variable = te_cm_converted_latin
 				has_variable = te_cm_started_latin
+				AND = {
+					has_variable = te_cm_converted_latin
+					OR = {
+						AND = {
+							global_var:te_cm_joined_latin_french ?= 1
+							country_has_primary_culture = cu:french
+						}
+						AND = {
+							global_var:te_cm_joined_latin_cm_italian ?= 1
+							country_has_primary_culture = cu:cm_italian
+						}
+						AND = {
+							global_var:te_cm_joined_latin_spanish ?= 1
+							country_has_primary_culture = cu:spanish
+						}
+						AND = {
+							global_var:te_cm_joined_latin_portuguese ?= 1
+							country_has_primary_culture = cu:portuguese
+						}
+						AND = {
+							global_var:te_cm_joined_latin_romanian ?= 1
+							country_has_primary_culture = cu:romanian
+						}
+						AND = {
+							global_var:te_cm_joined_latin_platinean ?= 1
+							country_has_primary_culture = cu:platinean
+						}
+						AND = {
+							global_var:te_cm_joined_latin_argentine ?= 1
+							country_has_primary_culture = cu:argentine
+						}
+						AND = {
+							global_var:te_cm_joined_latin_uruguayan ?= 1
+							country_has_primary_culture = cu:uruguayan
+						}
+						AND = {
+							global_var:te_cm_joined_latin_chilean ?= 1
+							country_has_primary_culture = cu:chilean
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_latin }
 		}
@@ -14199,8 +14829,36 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_pan_slavic
 			OR = {
-				has_variable = te_cm_converted_pan_slavic
 				has_variable = te_cm_started_pan_slavic
+				AND = {
+					has_variable = te_cm_converted_pan_slavic
+					OR = {
+						AND = {
+							global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1
+							country_has_primary_culture = cu:cm_east_slavic
+						}
+						AND = {
+							global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1
+							country_has_primary_culture = cu:cm_czechoslovak
+						}
+						AND = {
+							global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
+							country_has_primary_culture = cu:cm_yugoslav
+						}
+						AND = {
+							global_var:te_cm_joined_pan_slavic_polish ?= 1
+							country_has_primary_culture = cu:polish
+						}
+						AND = {
+							global_var:te_cm_joined_pan_slavic_slovene ?= 1
+							country_has_primary_culture = cu:slovene
+						}
+						AND = {
+							global_var:te_cm_joined_pan_slavic_bulgarian ?= 1
+							country_has_primary_culture = cu:bulgarian
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_pan_slavic }
 		}
@@ -14218,8 +14876,48 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_pan_turkic
 			OR = {
-				has_variable = te_cm_converted_pan_turkic
 				has_variable = te_cm_started_pan_turkic
+				AND = {
+					has_variable = te_cm_converted_pan_turkic
+					OR = {
+						AND = {
+							global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1
+							country_has_primary_culture = cu:cm_oghuz_turkic
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_uzbek ?= 1
+							country_has_primary_culture = cu:uzbek
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_kazak ?= 1
+							country_has_primary_culture = cu:kazak
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_tatar ?= 1
+							country_has_primary_culture = cu:tatar
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_kirgiz ?= 1
+							country_has_primary_culture = cu:kirgiz
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_bashkir ?= 1
+							country_has_primary_culture = cu:bashkir
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1
+							country_has_primary_culture = cu:crimean_tatar
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1
+							country_has_primary_culture = cu:caucasian_turk
+						}
+						AND = {
+							global_var:te_cm_joined_pan_turkic_uighur ?= 1
+							country_has_primary_culture = cu:uighur
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_pan_turkic }
 		}
@@ -14237,8 +14935,20 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_pan_malay
 			OR = {
-				has_variable = te_cm_converted_pan_malay
 				has_variable = te_cm_started_pan_malay
+				AND = {
+					has_variable = te_cm_converted_pan_malay
+					OR = {
+						AND = {
+							global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
+							country_has_primary_culture = cu:cm_indonesian
+						}
+						AND = {
+							global_var:te_cm_joined_pan_malay_filipino ?= 1
+							country_has_primary_culture = cu:filipino
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_pan_malay }
 		}
@@ -14256,8 +14966,40 @@ te_cmg_formed_country = {
 			}
 			exists = global_var:te_cm_starter_east_african
 			OR = {
-				has_variable = te_cm_converted_east_african
 				has_variable = te_cm_started_east_african
+				AND = {
+					has_variable = te_cm_converted_east_african
+					OR = {
+						AND = {
+							global_var:te_cm_joined_east_african_swahili ?= 1
+							country_has_primary_culture = cu:swahili
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_nyamwezi ?= 1
+							country_has_primary_culture = cu:nyamwezi
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_sukuma ?= 1
+							country_has_primary_culture = cu:sukuma
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_yao ?= 1
+							country_has_primary_culture = cu:yao
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_makua ?= 1
+							country_has_primary_culture = cu:makua
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1
+							country_has_primary_culture = cu:lacustrine_bantu
+						}
+						AND = {
+							global_var:te_cm_joined_east_african_kikuyu ?= 1
+							country_has_primary_culture = cu:kikuyu
+						}
+					}
+				}
 			}
 			NOT = { country_has_primary_culture = cu:cm_east_african }
 		}
@@ -14271,7 +15013,9 @@ te_cmg_formed_country = {
 
 # State region scope. Dynamic Homeland Progress has just removed the homeland of scope:te_cm_removed_culture here
 # (te_homeland_removal_monthly_effect): the homeland of every part that switched into that culture goes with it, so an old
-# homeland never outlives its successor. Not behind the rule: it is about map state.
+# homeland never outlives its successor. It follows the chain: a part that is itself a result (cm_italian into cm_latin,
+# Corsican into cm_italian) takes the parts that switched into it with it, through te_cmg_remove_parts_of_<culture>.
+# Not behind the rule: it is about map state.
 te_cmg_remove_switched_part_homelands = {
 	if = {
 		limit = {
@@ -14503,6 +15247,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:british
 		}
 		remove_homeland = cu:british
+		te_cmg_remove_parts_of_british = yes
 	}
 	if = {
 		limit = {
@@ -14510,6 +15255,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_american
 		}
 		remove_homeland = cu:cm_american
+		te_cmg_remove_parts_of_cm_american = yes
 	}
 	if = {
 		limit = {
@@ -14902,6 +15648,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:french
 		}
 		remove_homeland = cu:french
+		te_cmg_remove_parts_of_french = yes
 	}
 	if = {
 		limit = {
@@ -14909,6 +15656,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_italian
 		}
 		remove_homeland = cu:cm_italian
+		te_cmg_remove_parts_of_cm_italian = yes
 	}
 	if = {
 		limit = {
@@ -14944,6 +15692,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_east_slavic
 		}
 		remove_homeland = cu:cm_east_slavic
+		te_cmg_remove_parts_of_cm_east_slavic = yes
 	}
 	if = {
 		limit = {
@@ -14951,6 +15700,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_czechoslovak
 		}
 		remove_homeland = cu:cm_czechoslovak
+		te_cmg_remove_parts_of_cm_czechoslovak = yes
 	}
 	if = {
 		limit = {
@@ -14958,6 +15708,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_yugoslav
 		}
 		remove_homeland = cu:cm_yugoslav
+		te_cmg_remove_parts_of_cm_yugoslav = yes
 	}
 	if = {
 		limit = {
@@ -14972,6 +15723,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_oghuz_turkic
 		}
 		remove_homeland = cu:cm_oghuz_turkic
+		te_cmg_remove_parts_of_cm_oghuz_turkic = yes
 	}
 	if = {
 		limit = {
@@ -15035,6 +15787,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:cm_indonesian
 		}
 		remove_homeland = cu:cm_indonesian
+		te_cmg_remove_parts_of_cm_indonesian = yes
 	}
 	if = {
 		limit = {
@@ -15042,6 +15795,7 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:filipino
 		}
 		remove_homeland = cu:filipino
+		te_cmg_remove_parts_of_filipino = yes
 	}
 	if = {
 		limit = {
@@ -15091,5 +15845,279 @@ te_cmg_remove_switched_part_homelands = {
 			is_homeland = cu:kikuyu
 		}
 		remove_homeland = cu:kikuyu
+	}
+}
+
+# State region scope. The homeland of cm_italian has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_italian = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_north_italian ?= cu:cm_italian
+			is_homeland = cu:north_italian
+		}
+		remove_homeland = cu:north_italian
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_south_italian ?= cu:cm_italian
+			is_homeland = cu:south_italian
+		}
+		remove_homeland = cu:south_italian
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_corsican ?= cu:cm_italian
+			is_homeland = cu:corsican
+		}
+		remove_homeland = cu:corsican
+	}
+}
+
+# State region scope. The homeland of cm_east_slavic has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_east_slavic = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_russian ?= cu:cm_east_slavic
+			is_homeland = cu:russian
+		}
+		remove_homeland = cu:russian
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_ukrainian ?= cu:cm_east_slavic
+			is_homeland = cu:ukrainian
+		}
+		remove_homeland = cu:ukrainian
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_byelorussian ?= cu:cm_east_slavic
+			is_homeland = cu:byelorussian
+		}
+		remove_homeland = cu:byelorussian
+	}
+}
+
+# State region scope. The homeland of cm_yugoslav has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_yugoslav = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_serb ?= cu:cm_yugoslav
+			is_homeland = cu:serb
+		}
+		remove_homeland = cu:serb
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_croat ?= cu:cm_yugoslav
+			is_homeland = cu:croat
+		}
+		remove_homeland = cu:croat
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_bosniak ?= cu:cm_yugoslav
+			is_homeland = cu:bosniak
+		}
+		remove_homeland = cu:bosniak
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_slovene ?= cu:cm_yugoslav
+			is_homeland = cu:slovene
+		}
+		remove_homeland = cu:slovene
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_bulgarian ?= cu:cm_yugoslav
+			is_homeland = cu:bulgarian
+		}
+		remove_homeland = cu:bulgarian
+	}
+}
+
+# State region scope. The homeland of cm_czechoslovak has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_czechoslovak = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_czech ?= cu:cm_czechoslovak
+			is_homeland = cu:czech
+		}
+		remove_homeland = cu:czech
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_slovak ?= cu:cm_czechoslovak
+			is_homeland = cu:slovak
+		}
+		remove_homeland = cu:slovak
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_sorb ?= cu:cm_czechoslovak
+			is_homeland = cu:sorb
+		}
+		remove_homeland = cu:sorb
+	}
+}
+
+# State region scope. The homeland of french has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_french = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_wallonian ?= cu:french
+			is_homeland = cu:wallonian
+		}
+		remove_homeland = cu:wallonian
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_occitan ?= cu:french
+			is_homeland = cu:occitan
+		}
+		remove_homeland = cu:occitan
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_catalan ?= cu:french
+			is_homeland = cu:catalan
+		}
+		remove_homeland = cu:catalan
+	}
+}
+
+# State region scope. The homeland of british has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_british = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_scottish ?= cu:british
+			is_homeland = cu:scottish
+		}
+		remove_homeland = cu:scottish
+	}
+}
+
+# State region scope. The homeland of cm_american has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_american = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_yankee ?= cu:cm_american
+			is_homeland = cu:yankee
+		}
+		remove_homeland = cu:yankee
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_dixie ?= cu:cm_american
+			is_homeland = cu:dixie
+		}
+		remove_homeland = cu:dixie
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_afro_american ?= cu:cm_american
+			is_homeland = cu:afro_american
+		}
+		remove_homeland = cu:afro_american
+	}
+}
+
+# State region scope. The homeland of cm_oghuz_turkic has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_oghuz_turkic = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_turkish ?= cu:cm_oghuz_turkic
+			is_homeland = cu:turkish
+		}
+		remove_homeland = cu:turkish
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_azerbaijani ?= cu:cm_oghuz_turkic
+			is_homeland = cu:azerbaijani
+		}
+		remove_homeland = cu:azerbaijani
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_turkmen ?= cu:cm_oghuz_turkic
+			is_homeland = cu:turkmen
+		}
+		remove_homeland = cu:turkmen
+	}
+}
+
+# State region scope. The homeland of cm_indonesian has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_cm_indonesian = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_javan ?= cu:cm_indonesian
+			is_homeland = cu:javan
+		}
+		remove_homeland = cu:javan
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_malay ?= cu:cm_indonesian
+			is_homeland = cu:malay
+		}
+		remove_homeland = cu:malay
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_sumatran ?= cu:cm_indonesian
+			is_homeland = cu:sumatran
+		}
+		remove_homeland = cu:sumatran
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_bornean ?= cu:cm_indonesian
+			is_homeland = cu:bornean
+		}
+		remove_homeland = cu:bornean
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_balinese ?= cu:cm_indonesian
+			is_homeland = cu:balinese
+		}
+		remove_homeland = cu:balinese
+	}
+}
+
+# State region scope. The homeland of filipino has just been removed here: so is that of each part that switched into it,
+# and, down the chain, of the parts that switched into those.
+te_cmg_remove_parts_of_filipino = {
+	if = {
+		limit = {
+			global_var:te_cm_switched_visayan ?= cu:filipino
+			is_homeland = cu:visayan
+		}
+		remove_homeland = cu:visayan
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_tagalog ?= cu:filipino
+			is_homeland = cu:tagalog
+		}
+		remove_homeland = cu:tagalog
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_ilocano ?= cu:filipino
+			is_homeland = cu:ilocano
+		}
+		remove_homeland = cu:ilocano
 	}
 }
