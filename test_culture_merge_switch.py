@@ -646,10 +646,12 @@ class PrimaryUpkeepTest(unittest.TestCase):
                 "AND = { global_var:te_cm_joined_%s_%s ?= 1 country_has_primary_culture = cu:%s }" % (key, c, c)
                 for c in joinable(merge)
             )
+            # R38 M4: and not once the merge's own result has switched into a higher merge's (R33).
             self.assertIn(
                 "exists = global_var:te_cm_starter_%s OR = { has_variable = te_cm_started_%s "
                 "AND = { has_variable = te_cm_converted_%s OR = { %s } } } "
-                "NOT = { country_has_primary_culture = cu:%s } }" % (key, key, key, parts, merge.result),
+                "NOT = { country_has_primary_culture = cu:%s } NOT = { te_cmg_%s_result_switched = yes } }"
+                % (key, key, key, parts, merge.result, key),
                 sec, key,
             )
             self.assertIn(
@@ -1106,14 +1108,17 @@ class ChainTest(unittest.TestCase):
             self.assertEqual(self.trig(sim, "te_cmg_french_census_wanted"), expect)
 
     def test_the_other_merges_stop_the_same_way(self):
-        # Every merge's gates carry its own result: spot-check the shape for all 32.
+        # Every merge's gates carry its own result: spot-check the shape for all 32. M6: one generated trigger,
+        # te_cmg_<m>_result_switched, is the only place the result's switch is tested.
         triggers = text_of(GEN_TRIGGERS)
         effects = text_of(GEN_EFFECTS)
         yearly = squash(block(effects, "te_cmg_yearly_country"))
         dominance = squash(block(effects, "te_cmg_dominance_all"))
         for merge in cfg.MERGES:
-            switched = "NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
+            switched = "NOT = { te_cmg_%s_result_switched = yes }" % merge.key
             key = merge.key
+            self.assertEqual(squash(block(triggers, "te_cmg_%s_result_switched" % key)),
+                             "has_global_variable = te_cm_switched_%s" % merge.result, key)
             # Only a result that can switch carries the test in is_candidate (and then in can_start: R36).
             candidate = squash(block(triggers, "te_cmg_%s_is_candidate" % key))
             self.assertEqual(switched in candidate, gen.result_can_switch(merge, cfg.MERGES), key)
@@ -1121,10 +1126,95 @@ class ChainTest(unittest.TestCase):
             self.assertIn("exists = global_var:te_cm_starter_%s %s" % (key, switched), section(yearly, key), key)
             self.assertIn("NOT = { te_cmg_%s_starter_gone = yes } %s" % (key, switched), section(dominance, key), key)
             join_ready = squash(block(effects, "te_cmg_%s_join_ready" % key))
-            self.assertTrue(join_ready.startswith("if = { limit = { %s } " % switched), key)
+            # R38 I1: a merge whose result can switch also takes nothing once a higher merge has joined that result.
+            joined_higher = "NOT = { has_global_variable = te_cm_in_%s }" % merge.result
+            if gen.result_can_switch(merge, cfg.MERGES):
+                self.assertTrue(join_ready.startswith("if = { limit = { %s %s } " % (switched, joined_higher)), key)
+            else:
+                self.assertTrue(join_ready.startswith("if = { limit = { %s } " % switched), key)
             for culture in slot_cultures(merge):
                 can_join = squash(block(triggers, "te_cmg_%s_%s_can_join" % (key, culture)))
                 self.assertIn(switched, can_join, "%s/%s" % (key, culture))
+                self.assertEqual(joined_higher in can_join, gen.result_can_switch(merge, cfg.MERGES), "%s/%s" % (key, culture))
+
+    def test_the_result_switched_test_is_written_in_one_place(self):
+        # M6: a merge's own gates read te_cmg_<m>_result_switched and never spell the variable out. (A slot culture
+        # that is a result, including an absorb merge's own, is still tested as a part in its slot's triggers and
+        # status rows; those are not this rule.)
+        triggers, effects = text_of(GEN_TRIGGERS), text_of(GEN_EFFECTS)
+        entries = entry_nodes()
+        for merge in cfg.MERGES:
+            key, spelled = merge.key, "has_global_variable = te_cm_switched_%s" % merge.result
+            gates = [block(triggers, "te_cmg_%s_is_candidate" % key), block(triggers, "te_cmg_%s_census_wanted" % key),
+                     block(effects, "te_cmg_%s_join_ready" % key), block(effects, "te_cmg_start_%s" % key)]
+            gates += [text_of_entry_trigger(entries["je_te_cm_%s" % key], i) for i in (0, 1)]
+            gates += [block(triggers, "te_cmg_%s_%s_can_join" % (key, c)) for c in slot_cultures(merge) if c != merge.result]
+            for text in gates:
+                self.assertNotIn(spelled + "\n", squash(text) + "\n", key)
+                self.assertNotIn(spelled + " ", squash(text) + " ", key)
+
+    # ---- R38 I1: a lower merge takes no new part once a higher merge has joined its result ----
+    def window(self, lower, higher, result, late, cvars_lower, primary=None, pops=None, stubs=None):
+        """The higher merge running with the lower merge's result joined and not yet switched; the lower merge complete,
+        every part that joined switched, and ``late`` qualifying to join it late."""
+        index = 1 + [m.key for m in cfg.MERGES].index(higher)
+        merge = cfg.merge_by_key(lower)
+        g = {"te_cm_state_%s" % lower: 2, "te_cm_starter_%s" % lower: "LOW",
+             "te_cm_state_%s" % higher: 1, "te_cm_starter_%s" % higher: "HIGH",
+             "te_cm_joined_%s_%s" % (higher, result): 1, "te_cm_in_%s" % result: index}
+        for c in joinable(merge):
+            if c != late:
+                g["te_cm_joined_%s_%s" % (lower, c)] = 1
+                g["te_cm_switched_%s" % c] = merge.result
+        base_stubs = {"te_cm_system_enabled": True, "te_cm_in_sphere": True,
+                      "te_cmg_%s_%s_years_met" % (lower, late): True, "te_cmg_%s_%s_waiting" % (lower, late): False}
+        base_stubs.update(stubs or {})
+        sim = Sim(globals=g, cvars={"LOW": dict(cvars_lower)}, alive={"LOW": True, "HIGH": True},
+                  primary=primary or {}, pops=pops or {}, stubs=base_stubs, techs={1, 2, 3})
+        sim.scopes["te_cm_starter"] = "LOW"
+        return sim
+
+    def assert_no_late_join(self, sim, lower, higher, result, late, higher_slots):
+        def trig(name, this=None):
+            return self.trig(sim, name, this)
+
+        before = {name: trig(name, "HIGH") for name in higher_slots}
+        self.assertTrue(all(before.values()), before)
+        self.assertFalse(trig("te_cmg_%s_%s_can_join" % (lower, late), "LOW"))
+        sim.this = "LOW"
+        sim.run(definitions(GEN_EFFECTS)["te_cmg_%s_join_ready" % lower].children)
+        self.assertNotIn("te_cm_joined_%s_%s" % (lower, late), sim.globals)
+        # The higher merge's slots stay as they were: its run is not stalled.
+        self.assertEqual({name: trig(name, "HIGH") for name in higher_slots}, before)
+        # Without the higher merge's join the late part would have come in (the window the test closes).
+        del sim.globals["te_cm_in_%s" % result]
+        self.assertTrue(trig("te_cmg_%s_%s_can_join" % (lower, late), "LOW"))
+
+    def test_catalan_does_not_join_french_while_latin_holds_french(self):
+        sim = self.window("french", "latin", "french", "catalan",
+                          {"te_cm_ok_french_catalan": 1, "te_cm_sol_ok_french_catalan": 1})
+        self.assert_no_late_join(sim, "french", "latin", "french", "catalan", ["te_cmg_latin_french_available"])
+
+    def test_slovene_does_not_join_yugoslav_while_pan_slavic_holds_cm_yugoslav(self):
+        sim = self.window("yugoslav", "pan_slavic", "cm_yugoslav", "slovene",
+                          {"te_cm_ok_yugoslav_slovene": 1, "te_cm_sol_ok_yugoslav_slovene": 1})
+        self.assert_no_late_join(sim, "yugoslav", "pan_slavic", "cm_yugoslav", "slovene",
+                                 ["te_cmg_pan_slavic_cm_yugoslav_available", "te_cmg_pan_slavic_slovene_available"])
+
+    def test_afro_american_does_not_join_american_while_anglophone_holds_cm_american(self):
+        sim = self.window("american", "anglophone", "cm_american", "afro_american",
+                          {"te_cm_ok_american_afro_american": 1, "te_cm_sol_ok_american_afro_american": 1})
+        self.assert_no_late_join(sim, "american", "anglophone", "cm_american", "afro_american",
+                                 ["te_cmg_anglophone_cm_american_available", "te_cmg_anglophone_afro_american_available"])
+
+    def test_catalan_still_joins_french_before_any_higher_merge_has_french(self):
+        sim = self.window("french", "latin", "french", "catalan",
+                          {"te_cm_ok_french_catalan": 1, "te_cm_sol_ok_french_catalan": 1})
+        for name in ("te_cm_in_french", "te_cm_joined_latin_french", "te_cm_state_latin"):
+            del sim.globals[name]
+        sim.this = "LOW"
+        sim.run(definitions(GEN_EFFECTS)["te_cmg_french_join_ready"].children)
+        self.assertEqual(sim.globals["te_cm_joined_french_catalan"], 1)
 
 
 class PrimaryScenarioTest(unittest.TestCase):
@@ -1181,19 +1271,31 @@ class PrimaryScenarioTest(unittest.TestCase):
             sim = Sim(globals=dict(running), cvars=cvars, primary=primary)
             self.assertEqual(sim.holds(limit, this="FORMED"), expected, case)
 
+    def test_the_formation_hook_gives_no_result_that_has_switched_into_a_higher_one(self):
+        # R38 M4: a formed country carrying te_cm_started_italian, after cm_italian went into Latin, gets no cm_italian.
+        node = definitions(GEN_EFFECTS)["te_cmg_formed_country"]
+        italian = next(n for n in node.children if n.key == "if" and any("te_cm_state_italian" in g.key for g in child(n, "limit").children[0].children))
+        limit = child(italian, "limit").children
+        complete = {"te_cm_state_italian": 2, "te_cm_starter_italian": "ITA"}
+        self.assertTrue(Sim(globals=dict(complete), cvars={"ITA": {"te_cm_started_italian": 1}}).holds(limit, this="ITA"))
+        complete["te_cm_switched_cm_italian"] = "cm_latin"
+        self.assertFalse(Sim(globals=complete, cvars={"ITA": {"te_cm_started_italian": 1}}).holds(limit, this="ITA"))
+
 
 class SolWalkScenarioTest(unittest.TestCase):
-    """I2: the result walk behind an optional part's gate runs while any optional part has not switched, joined or not."""
+    """I2: the result walk behind an optional part's gate runs while any optional part has not switched, joined or not.
+    R38 M1: only for a part whose own gates are on, since te_cm_sol_gate_part reads the figure for no other."""
 
     @classmethod
     def setUpClass(cls):
         node = definitions(GEN_EFFECTS)["te_cmg_census_german_country"]
         cls.walk_if = next(n for n in node.children if n.key == "if" and any(c.key == "te_cmg_german_result_sol" for c in n.children))
 
-    def runs(self, joined=(), switched=(), n=0, allcore=1):
+    def runs(self, joined=(), switched=(), n=0, allcore=1, ok=("alemannic", "east_german")):
         g = {"te_cm_joined_german_%s" % c: 1 for c in joined}
         g.update({"te_cm_switched_%s" % c: "cm_german" for c in switched})
-        sim = Sim(globals=g, locals_={"te_cm_sg_n": n, "te_cm_sg_all": allcore})
+        cvars = {"FRA": {"te_cm_ok_german_%s" % c: 1 for c in ok}}
+        sim = Sim(globals=g, cvars=cvars, locals_={"te_cm_sg_n": n, "te_cm_sg_all": allcore})
         return sim.holds(child(self.walk_if, "limit").children, this="FRA")
 
     def test_it_runs_while_an_optional_part_has_joined_and_not_switched(self):
@@ -1209,6 +1311,12 @@ class SolWalkScenarioTest(unittest.TestCase):
     def test_it_waits_for_the_core_to_have_no_figure_and_every_core_slot_met(self):
         self.assertFalse(self.runs(joined=["alemannic"], n=1))
         self.assertFalse(self.runs(joined=["alemannic"], allcore=0))
+
+    def test_it_skips_a_finished_merge_whose_unswitched_optional_parts_do_not_qualify(self):
+        # A complete German merge with Alemannic in Switzerland, unheld: nothing would read the figure.
+        self.assertFalse(self.runs(ok=()))
+        self.assertFalse(self.runs(switched=["east_german"], ok=("east_german",)))
+        self.assertTrue(self.runs(switched=["east_german"], ok=("alemannic",)))
 
 
 class StartGuardTest(unittest.TestCase):
@@ -1229,7 +1337,7 @@ class StartGuardTest(unittest.TestCase):
         self.assertEqual(
             sorted(m.key for m in self.switchable_results),
             sorted(["italian", "east_slavic", "czechoslovak", "yugoslav", "oghuz_turkic", "indonesian", "american",
-                    "french", "british", "filipino"]),
+                    "french", "british", "filipino", "platine"]),
         )
         for merge in cfg.MERGES:
             listed = any(merge.result in slot_cultures(other) for other in cfg.MERGES if other is not merge)
@@ -1238,21 +1346,21 @@ class StartGuardTest(unittest.TestCase):
     def test_can_start_the_invalid_outcome_and_the_start_effect_all_read_the_switched_result(self):
         for merge in cfg.MERGES:
             key = merge.key
-            switched = "NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
+            switched = "NOT = { te_cmg_%s_result_switched = yes }" % key
             can_start = self.can_start_text(key)
             start = squash(block(self.effects, "te_cmg_start_%s" % key))
             invalid = squash(text_of_entry_trigger(self.entries["je_te_cm_%s" % key], 1))
             if merge in self.switchable_results:
                 self.assertIn("custom_tooltip = { text = te_cm_tt_result_not_merged_on %s }" % switched, can_start, key)
                 self.assertIn(switched, start, key)
-                self.assertIn("has_global_variable = te_cm_switched_%s" % merge.result, invalid, key)
+                self.assertIn("te_cmg_%s_result_switched = yes" % key, invalid, key)
                 # The starter keeps the entry (the complete outcome comes first); a candidate does not.
                 self.assertIn("NOT = { te_cmg_%s_is_starter = yes }" % key, invalid, key)
             else:
-                self.assertNotIn("te_cm_switched_", can_start, key)
+                self.assertNotIn("result_switched", can_start, key)
                 self.assertNotIn("te_cm_tt_result_not_merged_on", can_start, key)
-                self.assertNotIn("te_cm_switched_", start, key)
-                self.assertNotIn("te_cm_switched_", invalid, key)
+                self.assertNotIn("result_switched", start, key)
+                self.assertNotIn("result_switched", invalid, key)
 
     def test_the_tooltips_have_text(self):
         keys = all_english_loc_keys()
@@ -1264,9 +1372,11 @@ class StartGuardTest(unittest.TestCase):
     def test_every_condition_of_is_candidate_is_in_can_start(self):
         # R36's drift test: is_candidate and can_start are written apart, and a condition the first has and the second
         # lacks lets a country that is no candidate press the button. Every statement of is_candidate must appear in
-        # can_start (through start_basics) or be one of the two that hold another way: the rule, which the button's
-        # possible leads with and the entry's disable_evaluation gates, and the merge not being complete, which the
-        # idle test (neither running nor complete) covers.
+        # can_start (through start_basics) or be one of the three that hold another way: the rule, which the button's
+        # possible leads with and the entry's disable_evaluation gates; the merge not being complete, which the
+        # idle test (neither running nor complete) covers; and te_cmg_<m>_core_left (R38 M2), which every core slot's
+        # routes in can_start imply: an alternative is met through _measured, which needs it unswitched, or through
+        # _switched_in, which needs it joined here.
         for merge in cfg.MERGES:
             key = merge.key
             can_start = self.can_start_text(key)
@@ -1279,15 +1389,50 @@ class StartGuardTest(unittest.TestCase):
                     self.assertIn(
                         "NOR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 }" % (key, key), can_start, key)
                     continue
+                if stmt == "te_cmg_%s_core_left = yes" % key:
+                    self.assert_core_left_is_implied(merge, can_start)
+                    continue
                 self.assertIn(stmt, can_start, "%s: is_candidate has %s, can_start has not" % (key, stmt))
+
+    def assert_core_left_is_implied(self, merge, can_start):
+        key = merge.key
+        triggers = self.triggers
+        for part in gen.core_left_slots(merge, cfg.MERGES):
+            for culture in part.cultures:
+                self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % culture,
+                              squash(block(triggers, "te_cmg_%s_%s_measured" % (key, culture))), culture)
+                self.assertIn("te_cmg_%s_%s_measured = yes" % (key, culture), can_start, culture)
+                if not _absorb_result(merge, culture):
+                    self.assertIn("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture),
+                                  squash(block(triggers, "te_cmg_%s_%s_switched_in" % (key, culture))), culture)
+                    self.assertIn("te_cmg_%s_%s_switched_in = yes" % (key, culture), can_start, culture)
+
+    def test_a_core_part_a_higher_merge_switched_ends_the_lower_merges_candidacy(self):
+        # R38 M2: Anglophone joined Yankee while American was idle, and Yankee has switched into cm_anglophone.
+        world = dict(globals={"te_cm_joined_anglophone_yankee": 1, "te_cm_switched_yankee": "cm_anglophone"},
+                     alive={"USA": True}, primary={"USA": {"yankee"}}, techs={1}, stubs={"te_cm_system_enabled": True})
+        candidate = definitions(GEN_TRIGGERS)["te_cmg_american_is_candidate"].children
+        self.assertFalse(Sim(**world).holds(candidate, this="USA"))
+        # Before the switch (still converting in Anglophone) the merge is a candidate, and its entry shows the busy row.
+        before = dict(world, globals={"te_cm_joined_anglophone_yankee": 1})
+        self.assertTrue(Sim(**before).holds(candidate, this="USA"))
+        # Switched into American itself, it still counts (American's own run).
+        own = dict(world, globals={"te_cm_joined_american_yankee": 1, "te_cm_switched_yankee": "cm_american"})
+        self.assertTrue(Sim(**own).holds(candidate, this="USA"))
+        # A candidate's entry that is already open ends silently; the starter's does not.
+        invalid = child(children(self.entries["je_te_cm_american"], "outcome")[1], "trigger").children
+        self.assertTrue(Sim(**world).holds(invalid, this="USA"))
+        self.assertFalse(Sim(**before).holds(invalid, this="USA"))
+        starter = dict(world, globals=dict(world["globals"], te_cm_state_american=1, te_cm_starter_american="USA"))
+        self.assertFalse(Sim(**starter).holds(invalid, this="USA"))
 
     def test_the_drift_test_would_notice(self):
         # Without the R36 tooltips the drift test fails for the merges with a result that can switch and for Brazil.
         stripped = self.can_start_text("italian").replace(
-            "custom_tooltip = { text = te_cm_tt_result_not_merged_on NOT = { has_global_variable = te_cm_switched_cm_italian } }", "")
+            "custom_tooltip = { text = te_cm_tt_result_not_merged_on NOT = { te_cmg_italian_result_switched = yes } }", "")
         candidate = top_level_statements(block(self.triggers, "te_cmg_italian_is_candidate"))
-        self.assertIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", candidate)
-        self.assertNotIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", stripped)
+        self.assertIn("NOT = { te_cmg_italian_result_switched = yes }", candidate)
+        self.assertNotIn("NOT = { te_cmg_italian_result_switched = yes }", stripped)
         brazil = top_level_statements(block(self.triggers, "te_cmg_brazilian_is_candidate"))
         self.assertIn("NOT = { has_dlc_feature = rp1_content }", brazil)
         self.assertIn("NOT = { has_dlc_feature = rp1_content }", self.can_start_text("brazilian"))

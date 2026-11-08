@@ -63,12 +63,21 @@ def squash(text):
 
 
 _VANILLA = None
+_SNAPSHOT = None
+
+
+def snapshot_data():
+    """The committed vanilla snapshot's entity data, loaded once."""
+    global _SNAPSHOT
+    if _SNAPSHOT is None:
+        _SNAPSHOT = vanilla_parsed.load(str(ROOT / "vanilla_parsed")).data
+    return _SNAPSHOT
 
 
 def vanilla():
     global _VANILLA
     if _VANILLA is None:
-        data = vanilla_parsed.load(str(ROOT / "vanilla_parsed")).data
+        data = snapshot_data()
         cultures = dict(data["Cultures"])
         cultures["__traits__"] = dict(data["Discrimination Traits"])
         _VANILLA = cultures
@@ -579,8 +588,12 @@ class SolGateTest(unittest.TestCase):
                 continue
             self.assertEqual(body.count(call), 1, merge.key)
             # I2: while any optional part has not switched, joined or not. A part that has joined keeps
-            # following the result, or one dip in the hold would freeze its gate at 0 for good.
-            needed = " ".join("NOT = { has_global_variable = te_cm_switched_%s }" % c for c in optional)
+            # following the result, or one dip in the hold would freeze its gate at 0 for good. R38 M1: and only
+            # for a part whose own gates are on, the only case te_cm_sol_gate_part reads the figure.
+            needed = " ".join(
+                "AND = { NOT = { has_global_variable = te_cm_switched_%s } var:te_cm_ok_%s_%s ?= 1 }" % (c, merge.key, c)
+                for c in optional
+            )
             self.assertIn(
                 "set_local_variable = { name = te_cm_sg_ref value = 0 } "
                 "if = { limit = { local_var:te_cm_sg_n = 0 local_var:te_cm_sg_all = 1 OR = { %s } } %s }" % (needed, call),
@@ -642,10 +655,20 @@ class TriggerShapeTest(unittest.TestCase):
             "te_cm_tier_tech = { TIER = 1 } "
             "NOT = { global_var:te_cm_state_german ?= 2 }",
         )
-        # A result that is a part of another merge also asks that it has not switched into it (R33, R36).
-        self.assertIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", self.trig("te_cmg_italian_is_candidate"))
-        self.assertIn("NOT = { has_global_variable = te_cm_switched_french }", self.trig("te_cmg_french_is_candidate"))
-        self.assertNotIn("te_cm_switched", self.trig("te_cmg_hungarian_is_candidate"))
+        # A result that is a part of another merge also asks that it has not switched into it (R33, R36), through the
+        # one generated trigger that says so (M6).
+        self.assertIn("NOT = { te_cmg_italian_result_switched = yes }", self.trig("te_cmg_italian_is_candidate"))
+        self.assertIn("NOT = { te_cmg_french_result_switched = yes }", self.trig("te_cmg_french_is_candidate"))
+        self.assertEqual(self.trig("te_cmg_italian_result_switched"), "has_global_variable = te_cm_switched_cm_italian")
+        self.assertNotIn("result_switched", self.trig("te_cmg_hungarian_is_candidate"))
+        # R38 M2: a merge whose core part another merge can take asks that it has not switched there.
+        self.assertIn("te_cmg_american_core_left = yes", self.trig("te_cmg_american_is_candidate"))
+        self.assertEqual(
+            self.trig("te_cmg_american_core_left"),
+            "OR = { NOT = { has_global_variable = te_cm_switched_yankee } global_var:te_cm_joined_american_yankee ?= 1 } "
+            "OR = { NOT = { has_global_variable = te_cm_switched_dixie } global_var:te_cm_joined_american_dixie ?= 1 }",
+        )
+        self.assertNotIn("core_left", self.trig("te_cmg_german_is_candidate"))
 
     def test_candidate_needs_the_tech_of_the_highest_core_tier(self):
         for merge in cfg.MERGES:
@@ -768,9 +791,12 @@ class TriggerShapeTest(unittest.TestCase):
                 self.assertIn("var:te_cm_ok_%s_%s ?= 1" % (merge.key, culture), body)
                 self.assertIn("te_cmg_%s_%s_available = yes" % (merge.key, culture), body)
                 self.assertIn("NOT = { global_var:te_cm_joined_%s_%s ?= 1 }" % (merge.key, culture), body)
-                # R32/R33: a culture that has switched joins nothing, and nothing joins a merge whose result has.
+                # R32/R33: a culture that has switched joins nothing, and nothing joins a merge whose result has
+                # (M6: one generated trigger says so). R38: nor one whose result a higher merge has joined.
                 self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % culture, body)
-                self.assertIn("NOT = { has_global_variable = te_cm_switched_%s }" % merge.result, body)
+                self.assertIn("NOT = { te_cmg_%s_result_switched = yes }" % merge.key, body)
+                joined_higher = "NOT = { has_global_variable = te_cm_in_%s }" % merge.result
+                self.assertEqual(joined_higher in body, gen.result_can_switch(merge, cfg.MERGES), (merge.key, culture))
                 self.assertIn("te_cm_tier_tech = { TIER = %d }" % tier, body)
                 years = "te_cm_years_%s_%s" % (merge.key, culture)
                 if tier == 1:
@@ -808,11 +834,13 @@ class TriggerShapeTest(unittest.TestCase):
                 "te_cmg_%s_%s" % (merge.key, suffix)
                 for suffix in (
                     "is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start",
-                    "starter_gone", "all_switched", "core_switched",
+                    "starter_gone", "all_switched", "core_switched", "result_switched",
                 )
             )
             if any(part.wait_for for part in merge.core):
                 expected.add("te_cmg_%s_start_basics" % merge.key)
+            if gen.core_left_slots(merge, cfg.MERGES):
+                expected.add("te_cmg_%s_core_left" % merge.key)
             for culture in slot_cultures(merge):
                 for suffix in ("available", "measured", "can_join"):
                     expected.add("te_cmg_%s_%s_%s" % (merge.key, culture, suffix))
@@ -856,12 +884,12 @@ class StateIsVariablesTest(unittest.TestCase):
         # R19: counters and gates keep their last values while the rule is off, so the census never takes a
         # global variable away: the lock is set, never removed, and it is the only global it writes besides
         # the home counts and the year.
-        # The three helpers that start, join and release a merge (Task 5) and the four that convert, measure
-        # dominance, switch and keep the primary cultures (Task 6) sit in the same file but are not the census:
-        # the release and the switch are the places a global variable is removed, and test_culture_merge_entries
-        # and test_culture_merge_switch pin what each of them writes.
+        # The four helpers that start, join, unjoin and release a merge (Task 5, R38) and the four that convert,
+        # measure dominance, switch and keep the primary cultures (Task 6) sit in the same file but are not the
+        # census: the release, the unjoin and the switch are the places a global variable is removed, and
+        # test_culture_merge_entries and test_culture_merge_switch pin what each of them writes.
         helpers = (
-            "te_cm_start_merge", "te_cm_join_part", "te_cm_release_starter",
+            "te_cm_start_merge", "te_cm_join_part", "te_cm_unjoin_part", "te_cm_release_starter",
             "te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part", "te_cm_monthly_switched_culture",
         )
 
@@ -883,6 +911,249 @@ class StateIsVariablesTest(unittest.TestCase):
         self.assertEqual(removed, {"te_cm_tmp_cnt"})
         written = set(re.findall(r"set_global_variable = \{ name = ([\w$]+)", census_only(EFFECTS) + census_only(ON_ACTIONS)))
         self.assertEqual(written, {"te_cm_census_lock", "te_cm_census_year"} | {"te_cm_home_$CULTURE$", "te_cm_home_r_$CULTURE$"})
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# The gate, run. A small interpreter for te_cm_census_part's acceptance count and its hysteresis gate, so a test can
+# ask what the gate does over a run of years. It keeps the comparison operators, which the other test files' parsed
+# trees drop, and reads the thresholds from the values file, with vanilla's acceptance_status_<n> from the committed
+# snapshot (no game install needed).
+# ---------------------------------------------------------------------------------------------------------------
+
+HAND_VALUES = ROOT / "common/script_values/te_culture_merge_values.txt"
+_OP_TOKEN = re.compile(
+    r"(?P<close>\})|(?P<key>[\w.:|@$-]+)\s*(?P<op>\?=|[!<>=]=|[=<>])\s*(?:(?P<open>\{)|(?P<value>[^\s{}]+))"
+)
+
+
+class OpNode:
+    def __init__(self, key, op, value):
+        self.key, self.op, self.value, self.children = key, op, value, []
+
+
+def parse_ops(text):
+    root = []
+    stack = [root]
+    for m in _OP_TOKEN.finditer(text):
+        if m.group("close"):
+            if len(stack) > 1:
+                stack.pop()
+            continue
+        node = OpNode(m.group("key"), m.group("op"), m.group("value"))
+        stack[-1].append(node)
+        if m.group("open"):
+            stack.append(node.children)
+    return root
+
+
+def _op_child(node, key):
+    return next((c for c in node.children if c.key == key), None)
+
+
+class GateSim:
+    """Countries with variables and an average acceptance of the part, the locals, `this`; named values resolved."""
+
+    def __init__(self, cvars, acceptance, locals_, this="CAND", values=None):
+        self.cvars = {c: dict(v) for c, v in cvars.items()}
+        self.acceptance = dict(acceptance)
+        self.locals = dict(locals_)
+        self.this = this
+        self.values = gate_values() if values is None else values
+
+    def num(self, token):
+        if token.startswith("local_var:"):
+            return self.locals[token.split(":", 1)[1]]
+        if token.startswith("var:"):
+            return self.cvars[self.this][token.split(":", 1)[1]]
+        if token in self.values:
+            return self.values[token]
+        return float(token)
+
+    def value_of(self, node):
+        if node.value is not None:
+            return self.num(node.value)
+        total = 0.0
+        for c in node.children:
+            v = self.value_of(c)
+            total = {"value": lambda: v, "multiply": lambda: total * v, "divide": lambda: total / v,
+                     "add": lambda: total + v, "max": lambda: min(total, v), "min": lambda: max(total, v)}[c.key]()
+        return total
+
+    @staticmethod
+    def compare(a, op, b):
+        return {"<": a < b, "<=": a <= b, ">": a > b, ">=": a >= b, "=": a == b, "?=": a == b, "==": a == b}[op]
+
+    def holds(self, nodes):
+        return all(self.holds_one(n) for n in nodes)
+
+    def holds_one(self, n):
+        if n.key == "AND":
+            return self.holds(n.children)
+        if n.key == "OR":
+            return any(self.holds_one(c) for c in n.children)
+        if n.key == "NOT":
+            return not self.holds(n.children)
+        if n.key == "has_variable":
+            return n.value in self.cvars.get(self.this, {})
+        if n.key == "country_average_culture_pop_acceptance":
+            value = _op_child(n, "value")
+            return self.compare(self.acceptance[self.this], value.op, self.num(value.value))
+        if n.key.startswith(("var:", "local_var:")):
+            name = n.key.split(":", 1)[1]
+            scope = self.locals if n.key.startswith("local_var:") else self.cvars.get(self.this, {})
+            if name not in scope:
+                if n.op == "?=":
+                    return False
+                raise KeyError("read of the unset %s" % n.key)
+            return self.compare(scope[name], n.op, self.num(n.value))
+        raise KeyError("the gate interpreter does not know %s" % n.key)
+
+    def run(self, nodes):
+        last = None
+        for n in nodes:
+            k = n.key
+            if k == "limit":
+                continue
+            if k == "if":
+                last = self.holds(_op_child(n, "limit").children)
+                if last:
+                    self.run(n.children)
+            elif k == "else":
+                if not last:
+                    self.run(n.children)
+            elif k in ("set_local_variable", "change_local_variable", "set_variable", "change_variable"):
+                store = self.locals if "local" in k else self.cvars.setdefault(self.this, {})
+                name = _op_child(n, "name").value
+                if k.startswith("set_"):
+                    store[name] = self.value_of(_op_child(n, "value"))
+                elif _op_child(n, "add") is not None:
+                    store[name] += self.value_of(_op_child(n, "add"))
+                else:
+                    store[name] -= self.value_of(_op_child(n, "subtract"))
+            elif k == "remove_variable":
+                self.cvars.get(self.this, {}).pop(n.value, None)
+            elif k == "every_country":
+                saved = self.this
+                for country in sorted(self.cvars):
+                    self.this = country
+                    if self.holds(_op_child(n, "limit").children):
+                        self.run(n.children)
+                self.this = saved
+            else:
+                raise KeyError("the gate interpreter does not know %s" % k)
+
+
+_GATE_VALUES = None
+
+
+def gate_values():
+    """The values file's named numbers (te_cm_accept_open = { value = acceptance_status_5 } resolved), and vanilla's
+    acceptance statuses from the snapshot."""
+    global _GATE_VALUES
+    if _GATE_VALUES is None:
+        snapshot = snapshot_data()["Script Values"]
+        values = {k: float(cfg.unwrap(v)) for k, v in snapshot.items() if re.fullmatch(r"acceptance_status_\d", k)}
+        sim = GateSim({}, {}, {}, values=values)
+        for node in parse_ops(text_of(HAND_VALUES)):
+            try:
+                values[node.key] = sim.value_of(node)
+            except (KeyError, ValueError):
+                pass  # the per-pop rate and the Russification share read game state, not numbers
+        _GATE_VALUES = values
+    return _GATE_VALUES
+
+
+class GateScenarioTest(unittest.TestCase):
+    """te_cm_census_part's gate over a run of years: it opens at the open values, holds inside the band, closes only
+    past the close values, and reopens only at the open values again (the one hysteresis convention)."""
+
+    @classmethod
+    def setUpClass(cls):
+        body = block(text_of(EFFECTS), "te_cm_census_part").replace("$MERGE$", "german").replace("$CULTURE$", "north_german")
+        nodes = parse_ops(body)
+        start = next(i for i, n in enumerate(nodes) if n.key == "set_local_variable"
+                     and _op_child(n, "name").value == "te_cm_cp_fail_open")
+        cls.gate = nodes[start:]
+
+    def year(self, sim, held, acceptance, holders=None, tier=1, joined=0):
+        """One census of the part on CAND: CAND holds every pop unless `holders` ({country: count}) says otherwise."""
+        holders = holders or {"CAND": 1000}
+        for country in sim.cvars:
+            sim.cvars[country].pop("te_cm_tmp_cnt", None)
+        for country, count in holders.items():
+            sim.cvars.setdefault(country, {})["te_cm_tmp_cnt"] = float(count)
+        sim.acceptance.update(acceptance if isinstance(acceptance, dict) else {"CAND": acceptance})
+        sim.cvars["CAND"]["te_cm_held_german_north_german"] = held
+        sim.locals.update({"te_cm_cp_part_pops": float(sum(holders.values())), "te_cm_cp_max_cnt": float(max(holders.values())),
+                           "te_cm_cp_joined": float(joined), "te_cm_cp_tier": float(tier)})
+        sim.this = "CAND"
+        sim.run(self.gate)
+        return int(sim.cvars["CAND"]["te_cm_ok_german_north_german"])
+
+    def walk(self, steps, tier=1, joined=0):
+        sim = GateSim({"CAND": {"te_cm_ok_german_north_german": 0}}, {}, {})
+        return [self.year(sim, held, acc, tier=tier, joined=joined) for held, acc, _ in steps], [want for _, _, want in steps]
+
+    def test_the_values_are_the_ones_the_rows_and_the_guide_state(self):
+        values = gate_values()
+        self.assertEqual((values["acceptance_status_4"], values["acceptance_status_5"]), (60, 80))
+        self.assertEqual((values["te_cm_hold_open"], values["te_cm_hold_close"]), (0.60, 0.50))
+        self.assertEqual((values["te_cm_accept_open"], values["te_cm_accept_close"]), (60, 55))
+        self.assertEqual((values["te_cm_accept_high_open"], values["te_cm_accept_high_close"]), (80, 75))
+
+    def test_a_tier_1_part_opens_closes_and_reopens_at_its_values(self):
+        got, want = self.walk([
+            (0.59, 70, 0),  # held short of the open value
+            (0.60, 59, 0),  # accepted short of it
+            (0.60, 60, 1),  # both at the open values: opens
+            (0.51, 56, 1),  # inside both bands: stays open
+            (0.49, 70, 0),  # held below the close value: closes
+            (0.55, 70, 0),  # back above the close value but short of the open one: stays closed
+            (0.60, 70, 1),  # reopens only at the open value
+            (0.70, 54, 0),  # acceptance below its close value: closes
+            (0.70, 59, 0),  # stays closed below the open value
+            (0.70, 60, 1),  # reopens
+        ])
+        self.assertEqual(got, want)
+
+    def test_a_tier_1b_part_uses_the_very_high_pair(self):
+        got, want = self.walk([
+            (0.60, 79, 0),
+            (0.60, 80, 1),
+            (0.60, 76, 1),
+            (0.60, 74, 0),
+            (0.60, 79, 0),
+            (0.60, 80, 1),
+        ], tier=2)
+        self.assertEqual(got, want)
+
+    def test_a_joined_part_is_held_to_the_hold_alone(self):
+        # R29: once joined, acceptance pauses conversion per country instead.
+        got, want = self.walk([(0.60, 10, 1), (0.51, 10, 1), (0.49, 10, 0), (0.60, 10, 1)], joined=1)
+        self.assertEqual(got, want)
+
+    def test_acceptance_counts_where_many_live_and_in_the_largest_holder(self):
+        sim = GateSim({"CAND": {"te_cm_ok_german_north_german": 0}, "MEM": {}}, {}, {})
+        # A member holding a twentieth of the sphere's pops doesn't count; the starter holding most does.
+        self.assertEqual(self.year(sim, 0.9, {"CAND": 70, "MEM": 0}, holders={"CAND": 950, "MEM": 50}), 1)
+        # Holding a fifth, it does, and it fails the close value: the gate closes.
+        self.assertEqual(self.year(sim, 0.9, {"CAND": 70, "MEM": 0}, holders={"CAND": 800, "MEM": 200}), 0)
+        # A part split thin, no country holding a tenth: the largest holders are tested all the same, so the gate
+        # can't pass with nobody tested.
+        thin = {"C%02d" % i: 10 for i in range(20)}
+        thin["CAND"] = 5
+        for refuser, expected in ((None, 1), ("C00", 0)):
+            sim = GateSim({c: {} for c in thin}, {c: 70 for c in thin}, {})
+            sim.cvars["CAND"]["te_cm_ok_german_north_german"] = 0
+            if refuser:
+                sim.acceptance[refuser] = 0
+            self.assertEqual(self.year(sim, 0.9, {}, holders=thin), expected, refuser)
+
+    def test_the_years_together_count_while_the_gate_is_open(self):
+        sim = GateSim({"CAND": {"te_cm_ok_german_north_german": 0}}, {}, {})
+        for held, acc in ((0.60, 80), (0.60, 80), (0.49, 80), (0.60, 80)):
+            self.year(sim, held, acc, tier=2)
+        self.assertEqual(sim.cvars["CAND"]["te_cm_years_german_north_german"], 3)
 
 
 class CallsMatchTheirHelpersTest(unittest.TestCase):

@@ -9,6 +9,14 @@ Conventions
 * A **part** is a slot of one or more alternative culture ids. Usually one id.
   Anglophone's second core slot holds ``("yankee", "cm_american")``: Yankee until
   the American merge finishes, its result afterwards.
+* **A merged part is represented by its result** (spec section 3). Two merges that
+  share a slot culture are a lower and a higher one, and the lower one's result is
+  a slot culture of the higher one, so that once the lower merge has switched the
+  shared parts the higher one still takes them. A shared core part takes that result
+  as an alternative in its own slot (Anglophone's Yankee); an optional one is covered
+  once the result is anywhere in the merge (Latin's Platinean slot takes
+  ``cm_platine``, which stands for Argentine and Uruguayan too, since one culture
+  fills one slot). ``test_culture_merges_config`` lists every shared pair.
 * **Core** parts define the merge; **optional** parts join where the starter
   holds most of them. Core parts are ordered **largest first** (1836 pops), since
   the first core part supplies a new culture's heritage, language, religion and
@@ -218,7 +226,11 @@ MERGES: tuple[Merge, ...] = (
     Merge(
         "latin", "cm_latin", _new("Latin", 170, 110, 200),
         core=(_p("french"), _p("cm_italian"), _p("spanish"), _p("portuguese")),
-        optional=(_p("romanian"), _p("platinean"), _p("argentine"), _p("uruguayan"), _p("chilean")),
+        # cm_platine stands for Platinean, Argentine and Uruguayan once the Platine merge has switched them
+        # (spec section 3); a culture fills one slot, so it sits in the first of the three.
+        optional=(
+            _p("romanian"), _p("platinean", "cm_platine"), _p("argentine"), _p("uruguayan"), _p("chilean"),
+        ),
         components=("french", "italian"),
     ),
     Merge(

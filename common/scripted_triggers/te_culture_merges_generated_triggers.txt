@@ -2,9 +2,16 @@
 
 # ---- german (north_german, south_german) ----
 
+# Any scope. The german merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_german_result_switched = {
+	has_global_variable = te_cm_switched_cm_german
+}
+
 # Country scope. Can this country start the german merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_german_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -54,7 +61,7 @@ te_cmg_german_north_german_can_join = {
 	te_cmg_german_north_german_available = yes
 	NOT = { global_var:te_cm_joined_german_north_german ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_north_german }
-	NOT = { has_global_variable = te_cm_switched_cm_german }
+	NOT = { te_cmg_german_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -98,7 +105,7 @@ te_cmg_german_south_german_can_join = {
 	te_cmg_german_south_german_available = yes
 	NOT = { global_var:te_cm_joined_german_south_german ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_south_german }
-	NOT = { has_global_variable = te_cm_switched_cm_german }
+	NOT = { te_cmg_german_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -142,7 +149,7 @@ te_cmg_german_alemannic_can_join = {
 	te_cmg_german_alemannic_available = yes
 	NOT = { global_var:te_cm_joined_german_alemannic ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_alemannic }
-	NOT = { has_global_variable = te_cm_switched_cm_german }
+	NOT = { te_cmg_german_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_german_alemannic ?= 1
 }
@@ -173,7 +180,7 @@ te_cmg_german_east_german_can_join = {
 	te_cmg_german_east_german_available = yes
 	NOT = { global_var:te_cm_joined_german_east_german ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_east_german }
-	NOT = { has_global_variable = te_cm_switched_cm_german }
+	NOT = { te_cmg_german_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_german_east_german ?= 1
 }
@@ -196,7 +203,7 @@ te_cmg_german_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_german
 			global_var:te_cm_starter_german = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_german }
+			NOT = { te_cmg_german_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_north_german }
@@ -374,9 +381,16 @@ te_cmg_german_can_start = {
 
 # ---- italian (north_italian, south_italian) ----
 
+# Any scope. The italian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_italian_result_switched = {
+	has_global_variable = te_cm_switched_cm_italian
+}
+
 # Country scope. Can this country start the italian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_italian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -385,7 +399,7 @@ te_cmg_italian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_italian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_italian }
+	NOT = { te_cmg_italian_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -421,13 +435,15 @@ te_cmg_italian_north_italian_switched_in = {
 }
 
 # Country scope. north_italian (tier 1) passes its gates and can join the italian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_italian_north_italian_can_join = {
 	var:te_cm_ok_italian_north_italian ?= 1
 	te_cmg_italian_north_italian_available = yes
 	NOT = { global_var:te_cm_joined_italian_north_italian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_north_italian }
-	NOT = { has_global_variable = te_cm_switched_cm_italian }
+	NOT = { te_cmg_italian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_italian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -451,13 +467,15 @@ te_cmg_italian_south_italian_switched_in = {
 }
 
 # Country scope. south_italian (tier 1) passes its gates and can join the italian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_italian_south_italian_can_join = {
 	var:te_cm_ok_italian_south_italian ?= 1
 	te_cmg_italian_south_italian_available = yes
 	NOT = { global_var:te_cm_joined_italian_south_italian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_south_italian }
-	NOT = { has_global_variable = te_cm_switched_cm_italian }
+	NOT = { te_cmg_italian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_italian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -481,13 +499,15 @@ te_cmg_italian_corsican_switched_in = {
 }
 
 # Country scope. corsican (tier 1) passes its gates and can join the italian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_italian_corsican_can_join = {
 	var:te_cm_ok_italian_corsican ?= 1
 	te_cmg_italian_corsican_available = yes
 	NOT = { global_var:te_cm_joined_italian_corsican ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_corsican }
-	NOT = { has_global_variable = te_cm_switched_cm_italian }
+	NOT = { te_cmg_italian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_italian }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_italian_corsican ?= 1
 }
@@ -510,7 +530,7 @@ te_cmg_italian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_italian
 			global_var:te_cm_starter_italian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_italian }
+			NOT = { te_cmg_italian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_north_italian }
@@ -629,7 +649,7 @@ te_cmg_italian_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_italian }
+		NOT = { te_cmg_italian_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_italian_primary_tt
@@ -664,9 +684,16 @@ te_cmg_italian_can_start = {
 
 # ---- scandinavian (swedish, danish, norwegian) ----
 
+# Any scope. The scandinavian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_scandinavian_result_switched = {
+	has_global_variable = te_cm_switched_cm_scandinavian
+}
+
 # Country scope. Can this country start the scandinavian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_scandinavian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -721,7 +748,7 @@ te_cmg_scandinavian_swedish_can_join = {
 	te_cmg_scandinavian_swedish_available = yes
 	NOT = { global_var:te_cm_joined_scandinavian_swedish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_swedish }
-	NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
+	NOT = { te_cmg_scandinavian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -751,7 +778,7 @@ te_cmg_scandinavian_danish_can_join = {
 	te_cmg_scandinavian_danish_available = yes
 	NOT = { global_var:te_cm_joined_scandinavian_danish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_danish }
-	NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
+	NOT = { te_cmg_scandinavian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -781,7 +808,7 @@ te_cmg_scandinavian_norwegian_can_join = {
 	te_cmg_scandinavian_norwegian_available = yes
 	NOT = { global_var:te_cm_joined_scandinavian_norwegian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_norwegian }
-	NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
+	NOT = { te_cmg_scandinavian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -811,7 +838,7 @@ te_cmg_scandinavian_icelandic_can_join = {
 	te_cmg_scandinavian_icelandic_available = yes
 	NOT = { global_var:te_cm_joined_scandinavian_icelandic ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_icelandic }
-	NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
+	NOT = { te_cmg_scandinavian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_scandinavian_icelandic ?= 1
 }
@@ -834,7 +861,7 @@ te_cmg_scandinavian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_scandinavian
 			global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
+			NOT = { te_cmg_scandinavian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_swedish }
@@ -1008,9 +1035,16 @@ te_cmg_scandinavian_can_start = {
 
 # ---- east_slavic (russian, ukrainian, byelorussian) ----
 
+# Any scope. The east_slavic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_east_slavic_result_switched = {
+	has_global_variable = te_cm_switched_cm_east_slavic
+}
+
 # Country scope. Can this country start the east_slavic merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_east_slavic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1020,7 +1054,7 @@ te_cmg_east_slavic_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_east_slavic ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+	NOT = { te_cmg_east_slavic_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -1060,13 +1094,15 @@ te_cmg_east_slavic_russian_switched_in = {
 }
 
 # Country scope. russian (tier 1) passes its gates and can join the east_slavic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_east_slavic_russian_can_join = {
 	var:te_cm_ok_east_slavic_russian ?= 1
 	te_cmg_east_slavic_russian_available = yes
 	NOT = { global_var:te_cm_joined_east_slavic_russian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_russian }
-	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+	NOT = { te_cmg_east_slavic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_east_slavic }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1090,13 +1126,15 @@ te_cmg_east_slavic_ukrainian_switched_in = {
 }
 
 # Country scope. ukrainian (tier 1) passes its gates and can join the east_slavic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_east_slavic_ukrainian_can_join = {
 	var:te_cm_ok_east_slavic_ukrainian ?= 1
 	te_cmg_east_slavic_ukrainian_available = yes
 	NOT = { global_var:te_cm_joined_east_slavic_ukrainian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_ukrainian }
-	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+	NOT = { te_cmg_east_slavic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_east_slavic }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1134,13 +1172,15 @@ te_cmg_east_slavic_byelorussian_switched_in = {
 }
 
 # Country scope. byelorussian (tier 1) passes its gates and can join the east_slavic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_east_slavic_byelorussian_can_join = {
 	var:te_cm_ok_east_slavic_byelorussian ?= 1
 	te_cmg_east_slavic_byelorussian_available = yes
 	NOT = { global_var:te_cm_joined_east_slavic_byelorussian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_byelorussian }
-	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+	NOT = { te_cmg_east_slavic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_east_slavic }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1176,7 +1216,7 @@ te_cmg_east_slavic_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_east_slavic
 			global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+			NOT = { te_cmg_east_slavic_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_russian }
@@ -1301,7 +1341,7 @@ te_cmg_east_slavic_start_basics = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+		NOT = { te_cmg_east_slavic_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_east_slavic_primary_tt
@@ -1380,9 +1420,16 @@ te_cmg_east_slavic_can_start = {
 
 # ---- yugoslav (serb, croat, bosniak) ----
 
+# Any scope. The yugoslav merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_yugoslav_result_switched = {
+	has_global_variable = te_cm_switched_cm_yugoslav
+}
+
 # Country scope. Can this country start the yugoslav merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_yugoslav_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1392,7 +1439,7 @@ te_cmg_yugoslav_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_yugoslav ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -1432,13 +1479,15 @@ te_cmg_yugoslav_serb_switched_in = {
 }
 
 # Country scope. serb (tier 1) passes its gates and can join the yugoslav merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_yugoslav_serb_can_join = {
 	var:te_cm_ok_yugoslav_serb ?= 1
 	te_cmg_yugoslav_serb_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_serb ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_serb }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1476,13 +1525,15 @@ te_cmg_yugoslav_croat_switched_in = {
 }
 
 # Country scope. croat (tier 1) passes its gates and can join the yugoslav merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_yugoslav_croat_can_join = {
 	var:te_cm_ok_yugoslav_croat ?= 1
 	te_cmg_yugoslav_croat_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_croat ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_croat }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1506,13 +1557,15 @@ te_cmg_yugoslav_bosniak_switched_in = {
 }
 
 # Country scope. bosniak (tier 1) passes its gates and can join the yugoslav merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_yugoslav_bosniak_can_join = {
 	var:te_cm_ok_yugoslav_bosniak ?= 1
 	te_cmg_yugoslav_bosniak_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_bosniak ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bosniak }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1542,13 +1595,15 @@ te_cmg_yugoslav_slovene_switched_in = {
 }
 
 # Country scope. slovene (tier 2) passes its gates and can join the yugoslav merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_yugoslav_slovene_can_join = {
 	var:te_cm_ok_yugoslav_slovene ?= 1
 	te_cmg_yugoslav_slovene_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_slovene ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_slovene }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_yugoslav_slovene_years_met = yes
 	var:te_cm_sol_ok_yugoslav_slovene ?= 1
@@ -1580,13 +1635,15 @@ te_cmg_yugoslav_bulgarian_switched_in = {
 }
 
 # Country scope. bulgarian (tier 2) passes its gates and can join the yugoslav merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_yugoslav_bulgarian_can_join = {
 	var:te_cm_ok_yugoslav_bulgarian ?= 1
 	te_cmg_yugoslav_bulgarian_available = yes
 	NOT = { global_var:te_cm_joined_yugoslav_bulgarian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bulgarian }
-	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	NOT = { te_cmg_yugoslav_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_yugoslav_bulgarian_years_met = yes
 	var:te_cm_sol_ok_yugoslav_bulgarian ?= 1
@@ -1624,7 +1681,7 @@ te_cmg_yugoslav_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_yugoslav
 			global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+			NOT = { te_cmg_yugoslav_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_serb }
@@ -1765,7 +1822,7 @@ te_cmg_yugoslav_start_basics = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+		NOT = { te_cmg_yugoslav_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_yugoslav_primary_tt
@@ -1830,9 +1887,16 @@ te_cmg_yugoslav_can_start = {
 
 # ---- czechoslovak (czech, slovak) ----
 
+# Any scope. The czechoslovak merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_czechoslovak_result_switched = {
+	has_global_variable = te_cm_switched_cm_czechoslovak
+}
+
 # Country scope. Can this country start the czechoslovak merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_czechoslovak_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1841,7 +1905,7 @@ te_cmg_czechoslovak_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_czechoslovak ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+	NOT = { te_cmg_czechoslovak_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -1877,13 +1941,15 @@ te_cmg_czechoslovak_czech_switched_in = {
 }
 
 # Country scope. czech (tier 1) passes its gates and can join the czechoslovak merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_czechoslovak_czech_can_join = {
 	var:te_cm_ok_czechoslovak_czech ?= 1
 	te_cmg_czechoslovak_czech_available = yes
 	NOT = { global_var:te_cm_joined_czechoslovak_czech ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_czech }
-	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+	NOT = { te_cmg_czechoslovak_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_czechoslovak }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1907,13 +1973,15 @@ te_cmg_czechoslovak_slovak_switched_in = {
 }
 
 # Country scope. slovak (tier 1) passes its gates and can join the czechoslovak merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_czechoslovak_slovak_can_join = {
 	var:te_cm_ok_czechoslovak_slovak ?= 1
 	te_cmg_czechoslovak_slovak_available = yes
 	NOT = { global_var:te_cm_joined_czechoslovak_slovak ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_slovak }
-	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+	NOT = { te_cmg_czechoslovak_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_czechoslovak }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -1937,13 +2005,15 @@ te_cmg_czechoslovak_sorb_switched_in = {
 }
 
 # Country scope. sorb (tier 1) passes its gates and can join the czechoslovak merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_czechoslovak_sorb_can_join = {
 	var:te_cm_ok_czechoslovak_sorb ?= 1
 	te_cmg_czechoslovak_sorb_available = yes
 	NOT = { global_var:te_cm_joined_czechoslovak_sorb ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_sorb }
-	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+	NOT = { te_cmg_czechoslovak_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_czechoslovak }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_czechoslovak_sorb ?= 1
 }
@@ -1966,7 +2036,7 @@ te_cmg_czechoslovak_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_czechoslovak
 			global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+			NOT = { te_cmg_czechoslovak_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_czech }
@@ -2085,7 +2155,7 @@ te_cmg_czechoslovak_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+		NOT = { te_cmg_czechoslovak_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_czechoslovak_primary_tt
@@ -2120,9 +2190,16 @@ te_cmg_czechoslovak_can_start = {
 
 # ---- hungarian (hungarian, szekely) ----
 
+# Any scope. The hungarian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_hungarian_result_switched = {
+	has_global_variable = te_cm_switched_hungarian
+}
+
 # Country scope. Can this country start the hungarian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_hungarian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2163,7 +2240,7 @@ te_cmg_hungarian_hungarian_can_join = {
 	te_cmg_hungarian_hungarian_available = yes
 	NOT = { global_var:te_cm_joined_hungarian_hungarian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_hungarian }
-	NOT = { has_global_variable = te_cm_switched_hungarian }
+	NOT = { te_cmg_hungarian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2193,7 +2270,7 @@ te_cmg_hungarian_szekely_can_join = {
 	te_cmg_hungarian_szekely_available = yes
 	NOT = { global_var:te_cm_joined_hungarian_szekely ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_szekely }
-	NOT = { has_global_variable = te_cm_switched_hungarian }
+	NOT = { te_cmg_hungarian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2215,7 +2292,7 @@ te_cmg_hungarian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_hungarian
 			global_var:te_cm_starter_hungarian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_hungarian }
+			NOT = { te_cmg_hungarian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_szekely }
@@ -2338,9 +2415,16 @@ te_cmg_hungarian_can_start = {
 
 # ---- dutch (dutch, flemish) ----
 
+# Any scope. The dutch merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_dutch_result_switched = {
+	has_global_variable = te_cm_switched_dutch
+}
+
 # Country scope. Can this country start the dutch merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_dutch_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2381,7 +2465,7 @@ te_cmg_dutch_dutch_can_join = {
 	te_cmg_dutch_dutch_available = yes
 	NOT = { global_var:te_cm_joined_dutch_dutch ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_dutch }
-	NOT = { has_global_variable = te_cm_switched_dutch }
+	NOT = { te_cmg_dutch_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2411,7 +2495,7 @@ te_cmg_dutch_flemish_can_join = {
 	te_cmg_dutch_flemish_available = yes
 	NOT = { global_var:te_cm_joined_dutch_flemish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_flemish }
-	NOT = { has_global_variable = te_cm_switched_dutch }
+	NOT = { te_cmg_dutch_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2433,7 +2517,7 @@ te_cmg_dutch_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_dutch
 			global_var:te_cm_starter_dutch = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_dutch }
+			NOT = { te_cmg_dutch_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_flemish }
@@ -2556,9 +2640,16 @@ te_cmg_dutch_can_start = {
 
 # ---- finnish (finnish, karelian) ----
 
+# Any scope. The finnish merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_finnish_result_switched = {
+	has_global_variable = te_cm_switched_finnish
+}
+
 # Country scope. Can this country start the finnish merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_finnish_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2599,7 +2690,7 @@ te_cmg_finnish_finnish_can_join = {
 	te_cmg_finnish_finnish_available = yes
 	NOT = { global_var:te_cm_joined_finnish_finnish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_finnish }
-	NOT = { has_global_variable = te_cm_switched_finnish }
+	NOT = { te_cmg_finnish_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2629,7 +2720,7 @@ te_cmg_finnish_karelian_can_join = {
 	te_cmg_finnish_karelian_available = yes
 	NOT = { global_var:te_cm_joined_finnish_karelian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_karelian }
-	NOT = { has_global_variable = te_cm_switched_finnish }
+	NOT = { te_cmg_finnish_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2651,7 +2742,7 @@ te_cmg_finnish_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_finnish
 			global_var:te_cm_starter_finnish = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_finnish }
+			NOT = { te_cmg_finnish_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_karelian }
@@ -2774,9 +2865,16 @@ te_cmg_finnish_can_start = {
 
 # ---- french (french, wallonian, occitan) ----
 
+# Any scope. The french merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_french_result_switched = {
+	has_global_variable = te_cm_switched_french
+}
+
 # Country scope. Can this country start the french merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_french_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2786,7 +2884,7 @@ te_cmg_french_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_french ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_french }
+	NOT = { te_cmg_french_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -2817,13 +2915,15 @@ te_cmg_french_french_measured = {
 }
 
 # Country scope. french (tier 1) passes its gates and can join the french merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_french_french_can_join = {
 	var:te_cm_ok_french_french ?= 1
 	te_cmg_french_french_available = yes
 	NOT = { global_var:te_cm_joined_french_french ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_french }
-	NOT = { has_global_variable = te_cm_switched_french }
+	NOT = { te_cmg_french_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2847,13 +2947,15 @@ te_cmg_french_wallonian_switched_in = {
 }
 
 # Country scope. wallonian (tier 1) passes its gates and can join the french merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_french_wallonian_can_join = {
 	var:te_cm_ok_french_wallonian ?= 1
 	te_cmg_french_wallonian_available = yes
 	NOT = { global_var:te_cm_joined_french_wallonian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_wallonian }
-	NOT = { has_global_variable = te_cm_switched_french }
+	NOT = { te_cmg_french_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2877,13 +2979,15 @@ te_cmg_french_occitan_switched_in = {
 }
 
 # Country scope. occitan (tier 1) passes its gates and can join the french merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_french_occitan_can_join = {
 	var:te_cm_ok_french_occitan ?= 1
 	te_cmg_french_occitan_available = yes
 	NOT = { global_var:te_cm_joined_french_occitan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_occitan }
-	NOT = { has_global_variable = te_cm_switched_french }
+	NOT = { te_cmg_french_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -2913,13 +3017,15 @@ te_cmg_french_catalan_switched_in = {
 }
 
 # Country scope. catalan (tier 2) passes its gates and can join the french merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_french_catalan_can_join = {
 	var:te_cm_ok_french_catalan ?= 1
 	te_cmg_french_catalan_available = yes
 	NOT = { global_var:te_cm_joined_french_catalan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_catalan }
-	NOT = { has_global_variable = te_cm_switched_french }
+	NOT = { te_cmg_french_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_french_catalan_years_met = yes
 	var:te_cm_sol_ok_french_catalan ?= 1
@@ -2943,7 +3049,7 @@ te_cmg_french_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_french
 			global_var:te_cm_starter_french = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_french }
+			NOT = { te_cmg_french_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_wallonian }
@@ -3062,7 +3168,7 @@ te_cmg_french_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_french }
+		NOT = { te_cmg_french_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_french_primary_tt
@@ -3102,9 +3208,26 @@ te_cmg_french_can_start = {
 
 # ---- british (british, scottish) ----
 
+# Any scope. The british merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_british_result_switched = {
+	has_global_variable = te_cm_switched_british
+}
+
+# Any scope. Every core slot of the british merge that another merge can take still has an alternative that has not
+# switched there: unswitched, or joined to this merge (and so switched here). Once a higher merge has switched
+# a core part, the british merge can never start: it is no candidate, and a candidate's entry ends.
+te_cmg_british_core_left = {
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_scottish }
+		global_var:te_cm_joined_british_scottish ?= 1
+	}
+}
+
 # Country scope. Can this country start the british merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_british_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3113,7 +3236,8 @@ te_cmg_british_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_british ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_british }
+	NOT = { te_cmg_british_result_switched = yes }
+	te_cmg_british_core_left = yes
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -3140,13 +3264,15 @@ te_cmg_british_british_measured = {
 }
 
 # Country scope. british (tier 1) passes its gates and can join the british merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_british_british_can_join = {
 	var:te_cm_ok_british_british ?= 1
 	te_cmg_british_british_available = yes
 	NOT = { global_var:te_cm_joined_british_british ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_british }
-	NOT = { has_global_variable = te_cm_switched_british }
+	NOT = { te_cmg_british_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_british }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -3170,13 +3296,15 @@ te_cmg_british_scottish_switched_in = {
 }
 
 # Country scope. scottish (tier 1) passes its gates and can join the british merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_british_scottish_can_join = {
 	var:te_cm_ok_british_scottish ?= 1
 	te_cmg_british_scottish_available = yes
 	NOT = { global_var:te_cm_joined_british_scottish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_scottish }
-	NOT = { has_global_variable = te_cm_switched_british }
+	NOT = { te_cmg_british_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_british }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -3198,7 +3326,7 @@ te_cmg_british_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_british
 			global_var:te_cm_starter_british = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_british }
+			NOT = { te_cmg_british_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_scottish }
@@ -3293,7 +3421,7 @@ te_cmg_british_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_british }
+		NOT = { te_cmg_british_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_british_primary_tt
@@ -3325,9 +3453,30 @@ te_cmg_british_can_start = {
 
 # ---- american (yankee, dixie) ----
 
+# Any scope. The american merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_american_result_switched = {
+	has_global_variable = te_cm_switched_cm_american
+}
+
+# Any scope. Every core slot of the american merge that another merge can take still has an alternative that has not
+# switched there: unswitched, or joined to this merge (and so switched here). Once a higher merge has switched
+# a core part, the american merge can never start: it is no candidate, and a candidate's entry ends.
+te_cmg_american_core_left = {
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_yankee }
+		global_var:te_cm_joined_american_yankee ?= 1
+	}
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_dixie }
+		global_var:te_cm_joined_american_dixie ?= 1
+	}
+}
+
 # Country scope. Can this country start the american merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_american_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3336,7 +3485,8 @@ te_cmg_american_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_american ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_american }
+	NOT = { te_cmg_american_result_switched = yes }
+	te_cmg_american_core_left = yes
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -3372,13 +3522,15 @@ te_cmg_american_yankee_switched_in = {
 }
 
 # Country scope. yankee (tier 1) passes its gates and can join the american merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_american_yankee_can_join = {
 	var:te_cm_ok_american_yankee ?= 1
 	te_cmg_american_yankee_available = yes
 	NOT = { global_var:te_cm_joined_american_yankee ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_yankee }
-	NOT = { has_global_variable = te_cm_switched_cm_american }
+	NOT = { te_cmg_american_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_american }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -3402,13 +3554,15 @@ te_cmg_american_dixie_switched_in = {
 }
 
 # Country scope. dixie (tier 1) passes its gates and can join the american merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_american_dixie_can_join = {
 	var:te_cm_ok_american_dixie ?= 1
 	te_cmg_american_dixie_available = yes
 	NOT = { global_var:te_cm_joined_american_dixie ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_dixie }
-	NOT = { has_global_variable = te_cm_switched_cm_american }
+	NOT = { te_cmg_american_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_american }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -3452,13 +3606,15 @@ te_cmg_american_afro_american_switched_in = {
 }
 
 # Country scope. afro_american (tier 1b) passes its gates and can join the american merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_american_afro_american_can_join = {
 	var:te_cm_ok_american_afro_american ?= 1
 	te_cmg_american_afro_american_available = yes
 	NOT = { global_var:te_cm_joined_american_afro_american ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_afro_american }
-	NOT = { has_global_variable = te_cm_switched_cm_american }
+	NOT = { te_cmg_american_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_american }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_american_afro_american_years_met = yes
 	var:te_cm_sol_ok_american_afro_american ?= 1
@@ -3496,7 +3652,7 @@ te_cmg_american_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_american
 			global_var:te_cm_starter_american = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_american }
+			NOT = { te_cmg_american_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_yankee }
@@ -3613,7 +3769,7 @@ te_cmg_american_start_basics = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_american }
+		NOT = { te_cmg_american_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_american_primary_tt
@@ -3670,9 +3826,16 @@ te_cmg_american_can_start = {
 
 # ---- anglophone (british, yankee/cm_american) ----
 
+# Any scope. The anglophone merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_anglophone_result_switched = {
+	has_global_variable = te_cm_switched_cm_anglophone
+}
+
 # Country scope. Can this country start the anglophone merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_anglophone_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3749,7 +3912,7 @@ te_cmg_anglophone_british_can_join = {
 	te_cmg_anglophone_british_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_british ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_british }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_anglophone_british_years_met = yes
 }
@@ -3786,7 +3949,7 @@ te_cmg_anglophone_yankee_can_join = {
 	te_cmg_anglophone_yankee_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_yankee ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_yankee }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_anglophone_yankee_years_met = yes
 }
@@ -3833,7 +3996,7 @@ te_cmg_anglophone_cm_american_can_join = {
 	te_cmg_anglophone_cm_american_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_cm_american ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_american }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_anglophone_cm_american_years_met = yes
 }
@@ -3864,7 +4027,7 @@ te_cmg_anglophone_anglo_canadian_can_join = {
 	te_cmg_anglophone_anglo_canadian_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_anglo_canadian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_anglo_canadian }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_anglophone_anglo_canadian ?= 1
 }
@@ -3895,7 +4058,7 @@ te_cmg_anglophone_australian_can_join = {
 	te_cmg_anglophone_australian_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_australian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_australian }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_anglophone_australian ?= 1
 }
@@ -3926,7 +4089,7 @@ te_cmg_anglophone_scottish_can_join = {
 	te_cmg_anglophone_scottish_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_scottish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_scottish }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_anglophone_scottish ?= 1
 }
@@ -3957,7 +4120,7 @@ te_cmg_anglophone_dixie_can_join = {
 	te_cmg_anglophone_dixie_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_dixie ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_dixie }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_anglophone_dixie ?= 1
 }
@@ -4008,7 +4171,7 @@ te_cmg_anglophone_afro_american_can_join = {
 	te_cmg_anglophone_afro_american_available = yes
 	NOT = { global_var:te_cm_joined_anglophone_afro_american ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_afro_american }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+	NOT = { te_cmg_anglophone_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_anglophone_afro_american_years_met = yes
 	var:te_cm_sol_ok_anglophone_afro_american ?= 1
@@ -4046,7 +4209,7 @@ te_cmg_anglophone_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_anglophone
 			global_var:te_cm_starter_anglophone = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_anglophone }
+			NOT = { te_cmg_anglophone_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_british }
@@ -4256,9 +4419,16 @@ te_cmg_anglophone_can_start = {
 
 # ---- brazilian (brazilian, nordestino, paulista, amazonic, sulista) ----
 
+# Any scope. The brazilian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_brazilian_result_switched = {
+	has_global_variable = te_cm_switched_brazilian
+}
+
 # Country scope. Can this country start the brazilian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_brazilian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -4315,7 +4485,7 @@ te_cmg_brazilian_brazilian_can_join = {
 	te_cmg_brazilian_brazilian_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_brazilian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_brazilian }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4345,7 +4515,7 @@ te_cmg_brazilian_nordestino_can_join = {
 	te_cmg_brazilian_nordestino_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_nordestino ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_nordestino }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4375,7 +4545,7 @@ te_cmg_brazilian_paulista_can_join = {
 	te_cmg_brazilian_paulista_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_paulista ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_paulista }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4405,7 +4575,7 @@ te_cmg_brazilian_amazonic_can_join = {
 	te_cmg_brazilian_amazonic_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_amazonic ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_amazonic }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4435,7 +4605,7 @@ te_cmg_brazilian_sulista_can_join = {
 	te_cmg_brazilian_sulista_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_sulista ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_sulista }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4471,7 +4641,7 @@ te_cmg_brazilian_afro_brazilian_can_join = {
 	te_cmg_brazilian_afro_brazilian_available = yes
 	NOT = { global_var:te_cm_joined_brazilian_afro_brazilian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_afro_brazilian }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
+	NOT = { te_cmg_brazilian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_brazilian_afro_brazilian_years_met = yes
 	var:te_cm_sol_ok_brazilian_afro_brazilian ?= 1
@@ -4495,7 +4665,7 @@ te_cmg_brazilian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_brazilian
 			global_var:te_cm_starter_brazilian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_brazilian }
+			NOT = { te_cmg_brazilian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_nordestino }
@@ -4702,9 +4872,34 @@ te_cmg_brazilian_can_start = {
 
 # ---- platine (platinean, argentine, uruguayan, paraguayan) ----
 
+# Any scope. The platine merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_platine_result_switched = {
+	has_global_variable = te_cm_switched_cm_platine
+}
+
+# Any scope. Every core slot of the platine merge that another merge can take still has an alternative that has not
+# switched there: unswitched, or joined to this merge (and so switched here). Once a higher merge has switched
+# a core part, the platine merge can never start: it is no candidate, and a candidate's entry ends.
+te_cmg_platine_core_left = {
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_platinean }
+		global_var:te_cm_joined_platine_platinean ?= 1
+	}
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_argentine }
+		global_var:te_cm_joined_platine_argentine ?= 1
+	}
+	OR = {
+		NOT = { has_global_variable = te_cm_switched_uruguayan }
+		global_var:te_cm_joined_platine_uruguayan ?= 1
+	}
+}
+
 # Country scope. Can this country start the platine merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_platine_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -4715,6 +4910,8 @@ te_cmg_platine_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_platine ?= 2 }
+	NOT = { te_cmg_platine_result_switched = yes }
+	te_cmg_platine_core_left = yes
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -4758,13 +4955,15 @@ te_cmg_platine_platinean_switched_in = {
 }
 
 # Country scope. platinean (tier 1) passes its gates and can join the platine merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_platine_platinean_can_join = {
 	var:te_cm_ok_platine_platinean ?= 1
 	te_cmg_platine_platinean_available = yes
 	NOT = { global_var:te_cm_joined_platine_platinean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_platinean }
-	NOT = { has_global_variable = te_cm_switched_cm_platine }
+	NOT = { te_cmg_platine_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_platine }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4788,13 +4987,15 @@ te_cmg_platine_argentine_switched_in = {
 }
 
 # Country scope. argentine (tier 1) passes its gates and can join the platine merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_platine_argentine_can_join = {
 	var:te_cm_ok_platine_argentine ?= 1
 	te_cmg_platine_argentine_available = yes
 	NOT = { global_var:te_cm_joined_platine_argentine ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_argentine }
-	NOT = { has_global_variable = te_cm_switched_cm_platine }
+	NOT = { te_cmg_platine_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_platine }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4818,13 +5019,15 @@ te_cmg_platine_uruguayan_switched_in = {
 }
 
 # Country scope. uruguayan (tier 1) passes its gates and can join the platine merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_platine_uruguayan_can_join = {
 	var:te_cm_ok_platine_uruguayan ?= 1
 	te_cmg_platine_uruguayan_available = yes
 	NOT = { global_var:te_cm_joined_platine_uruguayan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_uruguayan }
-	NOT = { has_global_variable = te_cm_switched_cm_platine }
+	NOT = { te_cmg_platine_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_platine }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4848,13 +5051,15 @@ te_cmg_platine_paraguayan_switched_in = {
 }
 
 # Country scope. paraguayan (tier 1) passes its gates and can join the platine merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_platine_paraguayan_can_join = {
 	var:te_cm_ok_platine_paraguayan ?= 1
 	te_cmg_platine_paraguayan_available = yes
 	NOT = { global_var:te_cm_joined_platine_paraguayan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_paraguayan }
-	NOT = { has_global_variable = te_cm_switched_cm_platine }
+	NOT = { te_cmg_platine_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_platine }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -4876,7 +5081,7 @@ te_cmg_platine_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_platine
 			global_var:te_cm_starter_platine = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_platine }
+			NOT = { te_cmg_platine_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_platinean }
@@ -5018,6 +5223,10 @@ te_cmg_platine_can_start = {
 		NOR = { global_var:te_cm_state_platine ?= 1 global_var:te_cm_state_platine ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { te_cmg_platine_result_switched = yes }
+	}
+	custom_tooltip = {
 		text = te_cmg_platine_primary_tt
 		OR = {
 			country_has_primary_culture = cu:platinean
@@ -5066,9 +5275,16 @@ te_cmg_platine_can_start = {
 
 # ---- andean (north_andean, south_andean, peruvian, bolivian) ----
 
+# Any scope. The andean merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_andean_result_switched = {
+	has_global_variable = te_cm_switched_cm_andean
+}
+
 # Country scope. Can this country start the andean merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_andean_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5128,7 +5344,7 @@ te_cmg_andean_north_andean_can_join = {
 	te_cmg_andean_north_andean_available = yes
 	NOT = { global_var:te_cm_joined_andean_north_andean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_north_andean }
-	NOT = { has_global_variable = te_cm_switched_cm_andean }
+	NOT = { te_cmg_andean_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5158,7 +5374,7 @@ te_cmg_andean_south_andean_can_join = {
 	te_cmg_andean_south_andean_available = yes
 	NOT = { global_var:te_cm_joined_andean_south_andean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_south_andean }
-	NOT = { has_global_variable = te_cm_switched_cm_andean }
+	NOT = { te_cmg_andean_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5188,7 +5404,7 @@ te_cmg_andean_peruvian_can_join = {
 	te_cmg_andean_peruvian_available = yes
 	NOT = { global_var:te_cm_joined_andean_peruvian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_peruvian }
-	NOT = { has_global_variable = te_cm_switched_cm_andean }
+	NOT = { te_cmg_andean_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5218,7 +5434,7 @@ te_cmg_andean_bolivian_can_join = {
 	te_cmg_andean_bolivian_available = yes
 	NOT = { global_var:te_cm_joined_andean_bolivian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bolivian }
-	NOT = { has_global_variable = te_cm_switched_cm_andean }
+	NOT = { te_cmg_andean_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5240,7 +5456,7 @@ te_cmg_andean_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_andean
 			global_var:te_cm_starter_andean = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_andean }
+			NOT = { te_cmg_andean_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_north_andean }
@@ -5430,9 +5646,16 @@ te_cmg_andean_can_start = {
 
 # ---- gran_colombian (colombian, venezuelan, ecuadorian) ----
 
+# Any scope. The gran_colombian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_gran_colombian_result_switched = {
+	has_global_variable = te_cm_switched_cm_gran_colombian
+}
+
 # Country scope. Can this country start the gran_colombian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_gran_colombian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5487,7 +5710,7 @@ te_cmg_gran_colombian_colombian_can_join = {
 	te_cmg_gran_colombian_colombian_available = yes
 	NOT = { global_var:te_cm_joined_gran_colombian_colombian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_colombian }
-	NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
+	NOT = { te_cmg_gran_colombian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5517,7 +5740,7 @@ te_cmg_gran_colombian_venezuelan_can_join = {
 	te_cmg_gran_colombian_venezuelan_available = yes
 	NOT = { global_var:te_cm_joined_gran_colombian_venezuelan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_venezuelan }
-	NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
+	NOT = { te_cmg_gran_colombian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5547,7 +5770,7 @@ te_cmg_gran_colombian_ecuadorian_can_join = {
 	te_cmg_gran_colombian_ecuadorian_available = yes
 	NOT = { global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_ecuadorian }
-	NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
+	NOT = { te_cmg_gran_colombian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5569,7 +5792,7 @@ te_cmg_gran_colombian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_gran_colombian
 			global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
+			NOT = { te_cmg_gran_colombian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_colombian }
@@ -5735,9 +5958,16 @@ te_cmg_gran_colombian_can_start = {
 
 # ---- chinese (han, yue, min, hakka) ----
 
+# Any scope. The chinese merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_chinese_result_switched = {
+	has_global_variable = te_cm_switched_han
+}
+
 # Country scope. Can this country start the chinese merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_chinese_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5788,7 +6018,7 @@ te_cmg_chinese_han_can_join = {
 	te_cmg_chinese_han_available = yes
 	NOT = { global_var:te_cm_joined_chinese_han ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_han }
-	NOT = { has_global_variable = te_cm_switched_han }
+	NOT = { te_cmg_chinese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5818,7 +6048,7 @@ te_cmg_chinese_yue_can_join = {
 	te_cmg_chinese_yue_available = yes
 	NOT = { global_var:te_cm_joined_chinese_yue ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_yue }
-	NOT = { has_global_variable = te_cm_switched_han }
+	NOT = { te_cmg_chinese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5848,7 +6078,7 @@ te_cmg_chinese_min_can_join = {
 	te_cmg_chinese_min_available = yes
 	NOT = { global_var:te_cm_joined_chinese_min ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_min }
-	NOT = { has_global_variable = te_cm_switched_han }
+	NOT = { te_cmg_chinese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5878,7 +6108,7 @@ te_cmg_chinese_hakka_can_join = {
 	te_cmg_chinese_hakka_available = yes
 	NOT = { global_var:te_cm_joined_chinese_hakka ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_hakka }
-	NOT = { has_global_variable = te_cm_switched_han }
+	NOT = { te_cmg_chinese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -5900,7 +6130,7 @@ te_cmg_chinese_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_chinese
 			global_var:te_cm_starter_chinese = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_han }
+			NOT = { te_cmg_chinese_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_yue }
@@ -6071,9 +6301,16 @@ te_cmg_chinese_can_start = {
 
 # ---- japanese (japanese, ryukyuan) ----
 
+# Any scope. The japanese merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_japanese_result_switched = {
+	has_global_variable = te_cm_switched_japanese
+}
+
 # Country scope. Can this country start the japanese merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_japanese_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -6114,7 +6351,7 @@ te_cmg_japanese_japanese_can_join = {
 	te_cmg_japanese_japanese_available = yes
 	NOT = { global_var:te_cm_joined_japanese_japanese ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_japanese }
-	NOT = { has_global_variable = te_cm_switched_japanese }
+	NOT = { te_cmg_japanese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6144,7 +6381,7 @@ te_cmg_japanese_ryukyuan_can_join = {
 	te_cmg_japanese_ryukyuan_available = yes
 	NOT = { global_var:te_cm_joined_japanese_ryukyuan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_ryukyuan }
-	NOT = { has_global_variable = te_cm_switched_japanese }
+	NOT = { te_cmg_japanese_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6166,7 +6403,7 @@ te_cmg_japanese_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_japanese
 			global_var:te_cm_starter_japanese = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_japanese }
+			NOT = { te_cmg_japanese_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_ryukyuan }
@@ -6289,9 +6526,16 @@ te_cmg_japanese_can_start = {
 
 # ---- arab (maghrebi, misri, mashriqi, bedouin, yemenite) ----
 
+# Any scope. The arab merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_arab_result_switched = {
+	has_global_variable = te_cm_switched_cm_arab
+}
+
 # Country scope. Can this country start the arab merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_arab_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -6356,7 +6600,7 @@ te_cmg_arab_maghrebi_can_join = {
 	te_cmg_arab_maghrebi_available = yes
 	NOT = { global_var:te_cm_joined_arab_maghrebi ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_maghrebi }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6386,7 +6630,7 @@ te_cmg_arab_misri_can_join = {
 	te_cmg_arab_misri_available = yes
 	NOT = { global_var:te_cm_joined_arab_misri ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_misri }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6416,7 +6660,7 @@ te_cmg_arab_mashriqi_can_join = {
 	te_cmg_arab_mashriqi_available = yes
 	NOT = { global_var:te_cm_joined_arab_mashriqi ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_mashriqi }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6446,7 +6690,7 @@ te_cmg_arab_bedouin_can_join = {
 	te_cmg_arab_bedouin_available = yes
 	NOT = { global_var:te_cm_joined_arab_bedouin ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bedouin }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6476,7 +6720,7 @@ te_cmg_arab_yemenite_can_join = {
 	te_cmg_arab_yemenite_available = yes
 	NOT = { global_var:te_cm_joined_arab_yemenite ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_yemenite }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6512,7 +6756,7 @@ te_cmg_arab_sudanese_can_join = {
 	te_cmg_arab_sudanese_available = yes
 	NOT = { global_var:te_cm_joined_arab_sudanese ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_sudanese }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_arab_sudanese_years_met = yes
 	var:te_cm_sol_ok_arab_sudanese ?= 1
@@ -6550,7 +6794,7 @@ te_cmg_arab_haratin_can_join = {
 	te_cmg_arab_haratin_available = yes
 	NOT = { global_var:te_cm_joined_arab_haratin ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_haratin }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_arab_haratin_years_met = yes
 	var:te_cm_sol_ok_arab_haratin ?= 1
@@ -6588,7 +6832,7 @@ te_cmg_arab_bidan_can_join = {
 	te_cmg_arab_bidan_available = yes
 	NOT = { global_var:te_cm_joined_arab_bidan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bidan }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
+	NOT = { te_cmg_arab_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_arab_bidan_years_met = yes
 	var:te_cm_sol_ok_arab_bidan ?= 1
@@ -6612,7 +6856,7 @@ te_cmg_arab_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_arab
 			global_var:te_cm_starter_arab = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_arab }
+			NOT = { te_cmg_arab_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_maghrebi }
@@ -6850,9 +7094,16 @@ te_cmg_arab_can_start = {
 
 # ---- persian (persian, luri) ----
 
+# Any scope. The persian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_persian_result_switched = {
+	has_global_variable = te_cm_switched_persian
+}
+
 # Country scope. Can this country start the persian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_persian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -6893,7 +7144,7 @@ te_cmg_persian_persian_can_join = {
 	te_cmg_persian_persian_available = yes
 	NOT = { global_var:te_cm_joined_persian_persian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_persian }
-	NOT = { has_global_variable = te_cm_switched_persian }
+	NOT = { te_cmg_persian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6923,7 +7174,7 @@ te_cmg_persian_luri_can_join = {
 	te_cmg_persian_luri_available = yes
 	NOT = { global_var:te_cm_joined_persian_luri ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_luri }
-	NOT = { has_global_variable = te_cm_switched_persian }
+	NOT = { te_cmg_persian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -6953,7 +7204,7 @@ te_cmg_persian_tajik_can_join = {
 	te_cmg_persian_tajik_available = yes
 	NOT = { global_var:te_cm_joined_persian_tajik ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_tajik }
-	NOT = { has_global_variable = te_cm_switched_persian }
+	NOT = { te_cmg_persian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_persian_tajik ?= 1
 }
@@ -6990,7 +7241,7 @@ te_cmg_persian_hazara_can_join = {
 	te_cmg_persian_hazara_available = yes
 	NOT = { global_var:te_cm_joined_persian_hazara ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_hazara }
-	NOT = { has_global_variable = te_cm_switched_persian }
+	NOT = { te_cmg_persian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_persian_hazara_years_met = yes
 	var:te_cm_sol_ok_persian_hazara ?= 1
@@ -7014,7 +7265,7 @@ te_cmg_persian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_persian
 			global_var:te_cm_starter_persian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_persian }
+			NOT = { te_cmg_persian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_luri }
@@ -7153,9 +7404,16 @@ te_cmg_persian_can_start = {
 
 # ---- oghuz_turkic (turkish, azerbaijani) ----
 
+# Any scope. The oghuz_turkic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_oghuz_turkic_result_switched = {
+	has_global_variable = te_cm_switched_cm_oghuz_turkic
+}
+
 # Country scope. Can this country start the oghuz_turkic merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_oghuz_turkic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7164,7 +7422,7 @@ te_cmg_oghuz_turkic_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_oghuz_turkic ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+	NOT = { te_cmg_oghuz_turkic_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -7200,13 +7458,15 @@ te_cmg_oghuz_turkic_turkish_switched_in = {
 }
 
 # Country scope. turkish (tier 1) passes its gates and can join the oghuz_turkic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_oghuz_turkic_turkish_can_join = {
 	var:te_cm_ok_oghuz_turkic_turkish ?= 1
 	te_cmg_oghuz_turkic_turkish_available = yes
 	NOT = { global_var:te_cm_joined_oghuz_turkic_turkish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_turkish }
-	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+	NOT = { te_cmg_oghuz_turkic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_oghuz_turkic }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7230,13 +7490,15 @@ te_cmg_oghuz_turkic_azerbaijani_switched_in = {
 }
 
 # Country scope. azerbaijani (tier 1) passes its gates and can join the oghuz_turkic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_oghuz_turkic_azerbaijani_can_join = {
 	var:te_cm_ok_oghuz_turkic_azerbaijani ?= 1
 	te_cmg_oghuz_turkic_azerbaijani_available = yes
 	NOT = { global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_azerbaijani }
-	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+	NOT = { te_cmg_oghuz_turkic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_oghuz_turkic }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7266,13 +7528,15 @@ te_cmg_oghuz_turkic_turkmen_switched_in = {
 }
 
 # Country scope. turkmen (tier 1b) passes its gates and can join the oghuz_turkic merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_oghuz_turkic_turkmen_can_join = {
 	var:te_cm_ok_oghuz_turkic_turkmen ?= 1
 	te_cmg_oghuz_turkic_turkmen_available = yes
 	NOT = { global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_turkmen }
-	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+	NOT = { te_cmg_oghuz_turkic_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_oghuz_turkic }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_oghuz_turkic_turkmen_years_met = yes
 	var:te_cm_sol_ok_oghuz_turkic_turkmen ?= 1
@@ -7296,7 +7560,7 @@ te_cmg_oghuz_turkic_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_oghuz_turkic
 			global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+			NOT = { te_cmg_oghuz_turkic_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_turkish }
@@ -7415,7 +7679,7 @@ te_cmg_oghuz_turkic_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+		NOT = { te_cmg_oghuz_turkic_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_oghuz_turkic_primary_tt
@@ -7450,9 +7714,16 @@ te_cmg_oghuz_turkic_can_start = {
 
 # ---- hindustani (hindustani, avadhi, bundeli, chhattisgarhi, bageli) ----
 
+# Any scope. The hindustani merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_hindustani_result_switched = {
+	has_global_variable = te_cm_switched_hindustani
+}
+
 # Country scope. Can this country start the hindustani merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_hindustani_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7508,7 +7779,7 @@ te_cmg_hindustani_hindustani_can_join = {
 	te_cmg_hindustani_hindustani_available = yes
 	NOT = { global_var:te_cm_joined_hindustani_hindustani ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_hindustani }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
+	NOT = { te_cmg_hindustani_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7538,7 +7809,7 @@ te_cmg_hindustani_avadhi_can_join = {
 	te_cmg_hindustani_avadhi_available = yes
 	NOT = { global_var:te_cm_joined_hindustani_avadhi ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_avadhi }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
+	NOT = { te_cmg_hindustani_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7568,7 +7839,7 @@ te_cmg_hindustani_bundeli_can_join = {
 	te_cmg_hindustani_bundeli_available = yes
 	NOT = { global_var:te_cm_joined_hindustani_bundeli ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bundeli }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
+	NOT = { te_cmg_hindustani_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7598,7 +7869,7 @@ te_cmg_hindustani_chhattisgarhi_can_join = {
 	te_cmg_hindustani_chhattisgarhi_available = yes
 	NOT = { global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_chhattisgarhi }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
+	NOT = { te_cmg_hindustani_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7628,7 +7899,7 @@ te_cmg_hindustani_bageli_can_join = {
 	te_cmg_hindustani_bageli_available = yes
 	NOT = { global_var:te_cm_joined_hindustani_bageli ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bageli }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
+	NOT = { te_cmg_hindustani_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7650,7 +7921,7 @@ te_cmg_hindustani_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_hindustani
 			global_var:te_cm_starter_hindustani = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_hindustani }
+			NOT = { te_cmg_hindustani_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_avadhi }
@@ -7845,9 +8116,16 @@ te_cmg_hindustani_can_start = {
 
 # ---- dravidian (tamil, kannada, malayalam) ----
 
+# Any scope. The dravidian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_dravidian_result_switched = {
+	has_global_variable = te_cm_switched_cm_dravidian
+}
+
 # Country scope. Can this country start the dravidian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_dravidian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7902,7 +8180,7 @@ te_cmg_dravidian_tamil_can_join = {
 	te_cmg_dravidian_tamil_available = yes
 	NOT = { global_var:te_cm_joined_dravidian_tamil ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_tamil }
-	NOT = { has_global_variable = te_cm_switched_cm_dravidian }
+	NOT = { te_cmg_dravidian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7932,7 +8210,7 @@ te_cmg_dravidian_kannada_can_join = {
 	te_cmg_dravidian_kannada_available = yes
 	NOT = { global_var:te_cm_joined_dravidian_kannada ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_kannada }
-	NOT = { has_global_variable = te_cm_switched_cm_dravidian }
+	NOT = { te_cmg_dravidian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7962,7 +8240,7 @@ te_cmg_dravidian_malayalam_can_join = {
 	te_cmg_dravidian_malayalam_available = yes
 	NOT = { global_var:te_cm_joined_dravidian_malayalam ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_malayalam }
-	NOT = { has_global_variable = te_cm_switched_cm_dravidian }
+	NOT = { te_cmg_dravidian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -7998,7 +8276,7 @@ te_cmg_dravidian_telegu_can_join = {
 	te_cmg_dravidian_telegu_available = yes
 	NOT = { global_var:te_cm_joined_dravidian_telegu ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_telegu }
-	NOT = { has_global_variable = te_cm_switched_cm_dravidian }
+	NOT = { te_cmg_dravidian_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_dravidian_telegu_years_met = yes
 	var:te_cm_sol_ok_dravidian_telegu ?= 1
@@ -8022,7 +8300,7 @@ te_cmg_dravidian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_dravidian
 			global_var:te_cm_starter_dravidian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_dravidian }
+			NOT = { te_cmg_dravidian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_tamil }
@@ -8196,9 +8474,16 @@ te_cmg_dravidian_can_start = {
 
 # ---- indonesian (javan, malay, sumatran, bornean) ----
 
+# Any scope. The indonesian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_indonesian_result_switched = {
+	has_global_variable = te_cm_switched_cm_indonesian
+}
+
 # Country scope. Can this country start the indonesian merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_indonesian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -8209,7 +8494,7 @@ te_cmg_indonesian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_indonesian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -8253,13 +8538,15 @@ te_cmg_indonesian_javan_switched_in = {
 }
 
 # Country scope. javan (tier 1) passes its gates and can join the indonesian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_indonesian_javan_can_join = {
 	var:te_cm_ok_indonesian_javan ?= 1
 	te_cmg_indonesian_javan_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_javan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_javan }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_indonesian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8283,13 +8570,15 @@ te_cmg_indonesian_malay_switched_in = {
 }
 
 # Country scope. malay (tier 1) passes its gates and can join the indonesian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_indonesian_malay_can_join = {
 	var:te_cm_ok_indonesian_malay ?= 1
 	te_cmg_indonesian_malay_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_malay ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_malay }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_indonesian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8313,13 +8602,15 @@ te_cmg_indonesian_sumatran_switched_in = {
 }
 
 # Country scope. sumatran (tier 1) passes its gates and can join the indonesian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_indonesian_sumatran_can_join = {
 	var:te_cm_ok_indonesian_sumatran ?= 1
 	te_cmg_indonesian_sumatran_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_sumatran ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_sumatran }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_indonesian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8343,13 +8634,15 @@ te_cmg_indonesian_bornean_switched_in = {
 }
 
 # Country scope. bornean (tier 1) passes its gates and can join the indonesian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_indonesian_bornean_can_join = {
 	var:te_cm_ok_indonesian_bornean ?= 1
 	te_cmg_indonesian_bornean_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_bornean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bornean }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_indonesian }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8373,13 +8666,15 @@ te_cmg_indonesian_balinese_switched_in = {
 }
 
 # Country scope. balinese (tier 1) passes its gates and can join the indonesian merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_indonesian_balinese_can_join = {
 	var:te_cm_ok_indonesian_balinese ?= 1
 	te_cmg_indonesian_balinese_available = yes
 	NOT = { global_var:te_cm_joined_indonesian_balinese ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_balinese }
-	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	NOT = { te_cmg_indonesian_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_cm_indonesian }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_indonesian_balinese ?= 1
 }
@@ -8402,7 +8697,7 @@ te_cmg_indonesian_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_indonesian
 			global_var:te_cm_starter_indonesian = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+			NOT = { te_cmg_indonesian_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_javan }
@@ -8553,7 +8848,7 @@ te_cmg_indonesian_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+		NOT = { te_cmg_indonesian_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_indonesian_primary_tt
@@ -8604,9 +8899,16 @@ te_cmg_indonesian_can_start = {
 
 # ---- filipino (filipino, visayan, tagalog, ilocano) ----
 
+# Any scope. The filipino merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_filipino_result_switched = {
+	has_global_variable = te_cm_switched_filipino
+}
+
 # Country scope. Can this country start the filipino merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_filipino_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -8617,7 +8919,7 @@ te_cmg_filipino_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_filipino ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_filipino }
+	NOT = { te_cmg_filipino_result_switched = yes }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -8652,13 +8954,15 @@ te_cmg_filipino_filipino_measured = {
 }
 
 # Country scope. filipino (tier 1) passes its gates and can join the filipino merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_filipino_filipino_can_join = {
 	var:te_cm_ok_filipino_filipino ?= 1
 	te_cmg_filipino_filipino_available = yes
 	NOT = { global_var:te_cm_joined_filipino_filipino ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_filipino }
-	NOT = { has_global_variable = te_cm_switched_filipino }
+	NOT = { te_cmg_filipino_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_filipino }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8682,13 +8986,15 @@ te_cmg_filipino_visayan_switched_in = {
 }
 
 # Country scope. visayan (tier 1) passes its gates and can join the filipino merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_filipino_visayan_can_join = {
 	var:te_cm_ok_filipino_visayan ?= 1
 	te_cmg_filipino_visayan_available = yes
 	NOT = { global_var:te_cm_joined_filipino_visayan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_visayan }
-	NOT = { has_global_variable = te_cm_switched_filipino }
+	NOT = { te_cmg_filipino_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_filipino }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8712,13 +9018,15 @@ te_cmg_filipino_tagalog_switched_in = {
 }
 
 # Country scope. tagalog (tier 1) passes its gates and can join the filipino merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_filipino_tagalog_can_join = {
 	var:te_cm_ok_filipino_tagalog ?= 1
 	te_cmg_filipino_tagalog_available = yes
 	NOT = { global_var:te_cm_joined_filipino_tagalog ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_tagalog }
-	NOT = { has_global_variable = te_cm_switched_filipino }
+	NOT = { te_cmg_filipino_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_filipino }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8742,13 +9050,15 @@ te_cmg_filipino_ilocano_switched_in = {
 }
 
 # Country scope. ilocano (tier 1) passes its gates and can join the filipino merge now: it has not switched
-# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
 te_cmg_filipino_ilocano_can_join = {
 	var:te_cm_ok_filipino_ilocano ?= 1
 	te_cmg_filipino_ilocano_available = yes
 	NOT = { global_var:te_cm_joined_filipino_ilocano ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_ilocano }
-	NOT = { has_global_variable = te_cm_switched_filipino }
+	NOT = { te_cmg_filipino_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_filipino }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -8770,7 +9080,7 @@ te_cmg_filipino_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_filipino
 			global_var:te_cm_starter_filipino = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_filipino }
+			NOT = { te_cmg_filipino_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_visayan }
@@ -8897,7 +9207,7 @@ te_cmg_filipino_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cm_tt_result_not_merged_on
-		NOT = { has_global_variable = te_cm_switched_filipino }
+		NOT = { te_cmg_filipino_result_switched = yes }
 	}
 	custom_tooltip = {
 		text = te_cmg_filipino_primary_tt
@@ -8945,9 +9255,16 @@ te_cmg_filipino_can_start = {
 
 # ---- nguni (nguni, zulu, xhosa) ----
 
+# Any scope. The nguni merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_nguni_result_switched = {
+	has_global_variable = te_cm_switched_cm_nguni
+}
+
 # Country scope. Can this country start the nguni merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_nguni_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -9002,7 +9319,7 @@ te_cmg_nguni_nguni_can_join = {
 	te_cmg_nguni_nguni_available = yes
 	NOT = { global_var:te_cm_joined_nguni_nguni ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_nguni }
-	NOT = { has_global_variable = te_cm_switched_cm_nguni }
+	NOT = { te_cmg_nguni_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -9032,7 +9349,7 @@ te_cmg_nguni_zulu_can_join = {
 	te_cmg_nguni_zulu_available = yes
 	NOT = { global_var:te_cm_joined_nguni_zulu ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_zulu }
-	NOT = { has_global_variable = te_cm_switched_cm_nguni }
+	NOT = { te_cmg_nguni_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -9062,7 +9379,7 @@ te_cmg_nguni_xhosa_can_join = {
 	te_cmg_nguni_xhosa_available = yes
 	NOT = { global_var:te_cm_joined_nguni_xhosa ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_xhosa }
-	NOT = { has_global_variable = te_cm_switched_cm_nguni }
+	NOT = { te_cmg_nguni_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -9084,7 +9401,7 @@ te_cmg_nguni_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_nguni
 			global_var:te_cm_starter_nguni = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_nguni }
+			NOT = { te_cmg_nguni_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_nguni }
@@ -9250,9 +9567,16 @@ te_cmg_nguni_can_start = {
 
 # ---- latin (french, cm_italian, spanish, portuguese) ----
 
+# Any scope. The latin merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_latin_result_switched = {
+	has_global_variable = te_cm_switched_cm_latin
+}
+
 # Country scope. Can this country start the latin merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_latin_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -9341,7 +9665,7 @@ te_cmg_latin_french_can_join = {
 	te_cmg_latin_french_available = yes
 	NOT = { global_var:te_cm_joined_latin_french ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_french }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_latin_french_years_met = yes
 }
@@ -9388,7 +9712,7 @@ te_cmg_latin_cm_italian_can_join = {
 	te_cmg_latin_cm_italian_available = yes
 	NOT = { global_var:te_cm_joined_latin_cm_italian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_italian }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_latin_cm_italian_years_met = yes
 }
@@ -9425,7 +9749,7 @@ te_cmg_latin_spanish_can_join = {
 	te_cmg_latin_spanish_available = yes
 	NOT = { global_var:te_cm_joined_latin_spanish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_spanish }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_latin_spanish_years_met = yes
 }
@@ -9462,7 +9786,7 @@ te_cmg_latin_portuguese_can_join = {
 	te_cmg_latin_portuguese_available = yes
 	NOT = { global_var:te_cm_joined_latin_portuguese ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_portuguese }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_latin_portuguese_years_met = yes
 }
@@ -9499,7 +9823,7 @@ te_cmg_latin_romanian_can_join = {
 	te_cmg_latin_romanian_available = yes
 	NOT = { global_var:te_cm_joined_latin_romanian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_romanian }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_latin_romanian_years_met = yes
 	var:te_cm_sol_ok_latin_romanian ?= 1
@@ -9537,10 +9861,59 @@ te_cmg_latin_platinean_can_join = {
 	te_cmg_latin_platinean_available = yes
 	NOT = { global_var:te_cm_joined_latin_platinean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_platinean }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_latin_platinean_years_met = yes
 	var:te_cm_sol_ok_latin_platinean ?= 1
+}
+
+# Any scope. cm_platine is free for the latin merge.
+te_cmg_latin_cm_platine_available = {
+	OR = {
+		AND = {
+			global_var:te_cm_state_platine ?= 2
+			te_cmg_platine_all_switched = yes
+		}
+		NOR = {
+			global_var:te_cm_joined_platine_platinean ?= 1
+			global_var:te_cm_joined_platine_argentine ?= 1
+			global_var:te_cm_joined_platine_uruguayan ?= 1
+			global_var:te_cm_joined_platine_paraguayan ?= 1
+		}
+	}
+}
+
+# Country scope. cm_platine passes its gates for the latin merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_latin_cm_platine_measured = {
+	var:te_cm_ok_latin_cm_platine ?= 1
+	te_cmg_latin_cm_platine_available = yes
+	NOT = { has_global_variable = te_cm_switched_cm_platine }
+}
+
+# Country scope. cm_platine (tier 1b) has spent the years together its tier asks for.
+te_cmg_latin_cm_platine_years_met = {
+	has_variable = te_cm_years_latin_cm_platine
+	trigger_if = { limit = { has_variable = te_cm_years_latin_cm_platine } var:te_cm_years_latin_cm_platine >= te_cm_years_tier2 }
+}
+
+# Country scope. cm_platine joined the latin merge and has switched into its result.
+te_cmg_latin_cm_platine_switched_in = {
+	global_var:te_cm_joined_latin_cm_platine ?= 1
+	has_global_variable = te_cm_switched_cm_platine
+}
+
+# Country scope. cm_platine (tier 1b) passes its gates and can join the latin merge now: it has not switched
+# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+te_cmg_latin_cm_platine_can_join = {
+	var:te_cm_ok_latin_cm_platine ?= 1
+	te_cmg_latin_cm_platine_available = yes
+	NOT = { global_var:te_cm_joined_latin_cm_platine ?= 1 }
+	NOT = { has_global_variable = te_cm_switched_cm_platine }
+	NOT = { te_cmg_latin_result_switched = yes }
+	te_cm_tier_tech = { TIER = 2 }
+	te_cmg_latin_cm_platine_years_met = yes
+	var:te_cm_sol_ok_latin_cm_platine ?= 1
 }
 
 # Any scope. argentine is free for the latin merge.
@@ -9575,7 +9948,7 @@ te_cmg_latin_argentine_can_join = {
 	te_cmg_latin_argentine_available = yes
 	NOT = { global_var:te_cm_joined_latin_argentine ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_argentine }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_latin_argentine_years_met = yes
 	var:te_cm_sol_ok_latin_argentine ?= 1
@@ -9613,7 +9986,7 @@ te_cmg_latin_uruguayan_can_join = {
 	te_cmg_latin_uruguayan_available = yes
 	NOT = { global_var:te_cm_joined_latin_uruguayan ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_uruguayan }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_latin_uruguayan_years_met = yes
 	var:te_cm_sol_ok_latin_uruguayan ?= 1
@@ -9651,7 +10024,7 @@ te_cmg_latin_chilean_can_join = {
 	te_cmg_latin_chilean_available = yes
 	NOT = { global_var:te_cm_joined_latin_chilean ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_chilean }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
+	NOT = { te_cmg_latin_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_latin_chilean_years_met = yes
 	var:te_cm_sol_ok_latin_chilean ?= 1
@@ -9675,7 +10048,7 @@ te_cmg_latin_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_latin
 			global_var:te_cm_starter_latin = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_latin }
+			NOT = { te_cmg_latin_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_french }
@@ -9700,6 +10073,10 @@ te_cmg_latin_census_wanted = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_platinean }
 					any_country = { culture_percent_country = { target = cu:platinean value > 0 } }
+				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_cm_platine }
+					any_country = { culture_percent_country = { target = cu:cm_platine value > 0 } }
 				}
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_argentine }
@@ -9789,6 +10166,10 @@ te_cmg_latin_all_switched = {
 		AND = {
 			global_var:te_cm_joined_latin_platinean ?= 1
 			NOT = { has_global_variable = te_cm_switched_platinean }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_cm_platine ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_platine }
 		}
 		AND = {
 			global_var:te_cm_joined_latin_argentine ?= 1
@@ -9925,9 +10306,16 @@ te_cmg_latin_can_start = {
 
 # ---- pan_slavic (cm_east_slavic, cm_czechoslovak, cm_yugoslav) ----
 
+# Any scope. The pan_slavic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_pan_slavic_result_switched = {
+	has_global_variable = te_cm_switched_cm_pan_slavic
+}
+
 # Country scope. Can this country start the pan_slavic merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_slavic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -10007,7 +10395,7 @@ te_cmg_pan_slavic_cm_east_slavic_can_join = {
 	te_cmg_pan_slavic_cm_east_slavic_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_slavic_cm_east_slavic_years_met = yes
 }
@@ -10054,7 +10442,7 @@ te_cmg_pan_slavic_cm_czechoslovak_can_join = {
 	te_cmg_pan_slavic_cm_czechoslovak_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_slavic_cm_czechoslovak_years_met = yes
 }
@@ -10103,7 +10491,7 @@ te_cmg_pan_slavic_cm_yugoslav_can_join = {
 	te_cmg_pan_slavic_cm_yugoslav_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_slavic_cm_yugoslav_years_met = yes
 }
@@ -10134,7 +10522,7 @@ te_cmg_pan_slavic_polish_can_join = {
 	te_cmg_pan_slavic_polish_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_polish ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_polish }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_pan_slavic_polish ?= 1
 }
@@ -10171,7 +10559,7 @@ te_cmg_pan_slavic_slovene_can_join = {
 	te_cmg_pan_slavic_slovene_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_slovene ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_slovene }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_slavic_slovene_years_met = yes
 	var:te_cm_sol_ok_pan_slavic_slovene ?= 1
@@ -10209,7 +10597,7 @@ te_cmg_pan_slavic_bulgarian_can_join = {
 	te_cmg_pan_slavic_bulgarian_available = yes
 	NOT = { global_var:te_cm_joined_pan_slavic_bulgarian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bulgarian }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+	NOT = { te_cmg_pan_slavic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_slavic_bulgarian_years_met = yes
 	var:te_cm_sol_ok_pan_slavic_bulgarian ?= 1
@@ -10233,7 +10621,7 @@ te_cmg_pan_slavic_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_pan_slavic
 			global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
+			NOT = { te_cmg_pan_slavic_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
@@ -10444,9 +10832,16 @@ te_cmg_pan_slavic_can_start = {
 
 # ---- pan_turkic (cm_oghuz_turkic, uzbek, kazak, tatar, kirgiz) ----
 
+# Any scope. The pan_turkic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_pan_turkic_result_switched = {
+	has_global_variable = te_cm_switched_cm_pan_turkic
+}
+
 # Country scope. Can this country start the pan_turkic merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_turkic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -10543,7 +10938,7 @@ te_cmg_pan_turkic_cm_oghuz_turkic_can_join = {
 	te_cmg_pan_turkic_cm_oghuz_turkic_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_turkic_cm_oghuz_turkic_years_met = yes
 }
@@ -10580,7 +10975,7 @@ te_cmg_pan_turkic_uzbek_can_join = {
 	te_cmg_pan_turkic_uzbek_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_uzbek ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_uzbek }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_turkic_uzbek_years_met = yes
 }
@@ -10611,7 +11006,7 @@ te_cmg_pan_turkic_kazak_can_join = {
 	te_cmg_pan_turkic_kazak_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_kazak ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_kazak }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -10647,7 +11042,7 @@ te_cmg_pan_turkic_tatar_can_join = {
 	te_cmg_pan_turkic_tatar_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_tatar ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_tatar }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_pan_turkic_tatar_years_met = yes
 }
@@ -10678,7 +11073,7 @@ te_cmg_pan_turkic_kirgiz_can_join = {
 	te_cmg_pan_turkic_kirgiz_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_kirgiz ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_kirgiz }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 }
 
@@ -10708,7 +11103,7 @@ te_cmg_pan_turkic_bashkir_can_join = {
 	te_cmg_pan_turkic_bashkir_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_bashkir ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_bashkir }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_pan_turkic_bashkir ?= 1
 }
@@ -10739,7 +11134,7 @@ te_cmg_pan_turkic_crimean_tatar_can_join = {
 	te_cmg_pan_turkic_crimean_tatar_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_crimean_tatar }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 1 }
 	var:te_cm_sol_ok_pan_turkic_crimean_tatar ?= 1
 }
@@ -10776,7 +11171,7 @@ te_cmg_pan_turkic_caucasian_turk_can_join = {
 	te_cmg_pan_turkic_caucasian_turk_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_caucasian_turk }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_pan_turkic_caucasian_turk_years_met = yes
 	var:te_cm_sol_ok_pan_turkic_caucasian_turk ?= 1
@@ -10814,7 +11209,7 @@ te_cmg_pan_turkic_uighur_can_join = {
 	te_cmg_pan_turkic_uighur_available = yes
 	NOT = { global_var:te_cm_joined_pan_turkic_uighur ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_uighur }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+	NOT = { te_cmg_pan_turkic_result_switched = yes }
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_pan_turkic_uighur_years_met = yes
 	var:te_cm_sol_ok_pan_turkic_uighur ?= 1
@@ -10838,7 +11233,7 @@ te_cmg_pan_turkic_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_pan_turkic
 			global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
+			NOT = { te_cmg_pan_turkic_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
@@ -11104,9 +11499,16 @@ te_cmg_pan_turkic_can_start = {
 
 # ---- pan_malay (cm_indonesian, filipino) ----
 
+# Any scope. The pan_malay merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_pan_malay_result_switched = {
+	has_global_variable = te_cm_switched_cm_pan_malay
+}
+
 # Country scope. Can this country start the pan_malay merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_malay_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -11180,7 +11582,7 @@ te_cmg_pan_malay_cm_indonesian_can_join = {
 	te_cmg_pan_malay_cm_indonesian_available = yes
 	NOT = { global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_cm_indonesian }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
+	NOT = { te_cmg_pan_malay_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_malay_cm_indonesian_years_met = yes
 }
@@ -11228,7 +11630,7 @@ te_cmg_pan_malay_filipino_can_join = {
 	te_cmg_pan_malay_filipino_available = yes
 	NOT = { global_var:te_cm_joined_pan_malay_filipino ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_filipino }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
+	NOT = { te_cmg_pan_malay_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_pan_malay_filipino_years_met = yes
 }
@@ -11251,7 +11653,7 @@ te_cmg_pan_malay_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_pan_malay
 			global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
+			NOT = { te_cmg_pan_malay_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_cm_indonesian }
@@ -11407,9 +11809,16 @@ te_cmg_pan_malay_can_start = {
 
 # ---- east_african (swahili, nyamwezi, sukuma) ----
 
+# Any scope. The east_african merge's result has switched into a higher merge's (R33): the merge then joins, converts,
+# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
+te_cmg_east_african_result_switched = {
+	has_global_variable = te_cm_switched_cm_east_african
+}
+
 # Country scope. Can this country start the east_african merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
-# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
+# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_east_african_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -11479,7 +11888,7 @@ te_cmg_east_african_swahili_can_join = {
 	te_cmg_east_african_swahili_available = yes
 	NOT = { global_var:te_cm_joined_east_african_swahili ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_swahili }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_swahili_years_met = yes
 }
@@ -11516,7 +11925,7 @@ te_cmg_east_african_nyamwezi_can_join = {
 	te_cmg_east_african_nyamwezi_available = yes
 	NOT = { global_var:te_cm_joined_east_african_nyamwezi ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_nyamwezi }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_nyamwezi_years_met = yes
 }
@@ -11553,7 +11962,7 @@ te_cmg_east_african_sukuma_can_join = {
 	te_cmg_east_african_sukuma_available = yes
 	NOT = { global_var:te_cm_joined_east_african_sukuma ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_sukuma }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_sukuma_years_met = yes
 }
@@ -11590,7 +11999,7 @@ te_cmg_east_african_yao_can_join = {
 	te_cmg_east_african_yao_available = yes
 	NOT = { global_var:te_cm_joined_east_african_yao ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_yao }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_yao_years_met = yes
 	var:te_cm_sol_ok_east_african_yao ?= 1
@@ -11628,7 +12037,7 @@ te_cmg_east_african_makua_can_join = {
 	te_cmg_east_african_makua_available = yes
 	NOT = { global_var:te_cm_joined_east_african_makua ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_makua }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_makua_years_met = yes
 	var:te_cm_sol_ok_east_african_makua ?= 1
@@ -11666,7 +12075,7 @@ te_cmg_east_african_lacustrine_bantu_can_join = {
 	te_cmg_east_african_lacustrine_bantu_available = yes
 	NOT = { global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_lacustrine_bantu_years_met = yes
 	var:te_cm_sol_ok_east_african_lacustrine_bantu ?= 1
@@ -11704,7 +12113,7 @@ te_cmg_east_african_kikuyu_can_join = {
 	te_cmg_east_african_kikuyu_available = yes
 	NOT = { global_var:te_cm_joined_east_african_kikuyu ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_kikuyu }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
+	NOT = { te_cmg_east_african_result_switched = yes }
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_east_african_kikuyu_years_met = yes
 	var:te_cm_sol_ok_east_african_kikuyu ?= 1
@@ -11728,7 +12137,7 @@ te_cmg_east_african_census_wanted = {
 			}
 			exists = global_var:te_cm_starter_east_african
 			global_var:te_cm_starter_east_african = { is_country_alive = yes }
-			NOT = { has_global_variable = te_cm_switched_cm_east_african }
+			NOT = { te_cmg_east_african_result_switched = yes }
 			OR = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_swahili }
@@ -11935,7 +12344,7 @@ te_cmg_east_african_can_start = {
 
 # ---- Switched parts ----
 
-# Culture scope. This culture is one of the 117 that can switch into a merge's result, and it has.
+# Culture scope. This culture is one of the 118 that can switch into a merge's result, and it has.
 # A test for the flavor patches of spec 7 (party names, formable names ...); nothing reads it yet.
 te_cmg_is_switched_part = {
 	OR = {
@@ -12316,6 +12725,10 @@ te_cmg_is_switched_part = {
 			this = cu:romanian
 		}
 		AND = {
+			has_global_variable = te_cm_switched_cm_platine
+			this = cu:cm_platine
+		}
+		AND = {
 			has_global_variable = te_cm_switched_chilean
 			this = cu:chilean
 		}
@@ -12414,7 +12827,7 @@ te_cmg_is_switched_part = {
 # culture's homeland in ROOT alone: it is a part that has switched, and the culture it switched into is
 # a homeland of the state too (owner, 2026-11-07). The part's homeland follows its successor's: once that is removed
 # (te_cmg_remove_switched_part_homelands) the part's goes with it. Not behind the rule: it is about map state.
-# has_global_variable comes first in every clause, so a game with nothing switched prunes all 117 at once.
+# has_global_variable comes first in every clause, so a game with nothing switched prunes all 118 at once.
 te_cmg_switched_part_kept = {
 	OR = {
 		AND = {
@@ -12886,6 +13299,11 @@ te_cmg_switched_part_kept = {
 			has_global_variable = te_cm_switched_romanian
 			this = cu:romanian
 			ROOT.state_region = { is_homeland = global_var:te_cm_switched_romanian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_platine
+			this = cu:cm_platine
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_platine }
 		}
 		AND = {
 			has_global_variable = te_cm_switched_chilean

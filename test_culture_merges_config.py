@@ -368,9 +368,10 @@ class RosterTest(unittest.TestCase):
         )
         latin = cfg.merge_by_key("latin")
         self.assertEqual(cultures(latin.core), [("french",), ("cm_italian",), ("spanish",), ("portuguese",)])
+        # R38 M3: cm_platine stands for the three Platine parts once that merge has switched them.
         self.assertEqual(
             cultures(latin.optional),
-            [("romanian",), ("platinean",), ("argentine",), ("uruguayan",), ("chilean",)],
+            [("romanian",), ("platinean", "cm_platine"), ("argentine",), ("uruguayan",), ("chilean",)],
         )
         # Filipino drops the cross-family Hispanophone and Mestizo cultures.
         filipino = cfg.merge_by_key("filipino")
@@ -391,6 +392,69 @@ class RosterTest(unittest.TestCase):
         self.assertEqual(part.wait_for, ())
         with self.assertRaises(KeyError):
             cfg.merge_by_key("no_such_merge")
+
+
+class RepresentationTest(unittest.TestCase):
+    """R38 M3, spec section 3: a merged part is represented by its result. Once a lower merge has switched the parts
+    it shares with a higher merge, those pops are its result's, so the higher merge must list that result: as an
+    alternative in the same slot for a core part (or the higher merge's core can never be met again), anywhere in the
+    merge for an optional one (an optional slot need not be met, and one culture fills one slot)."""
+
+    def shared(self, merges=None):
+        """(higher, lower) -> the slot cultures the two share, for every pair of merges that shares any."""
+        merges = cfg.MERGES if merges is None else merges
+        cases = {}
+        for i, a in enumerate(merges):
+            for b in merges[i + 1:]:
+                common = set(part_cultures(a)) & set(part_cultures(b))
+                if not common:
+                    continue
+                a_in_b, b_in_a = a.result in part_cultures(b), b.result in part_cultures(a)
+                # One of the two lists the other's result: never neither (a part would be lost), never both (a cycle).
+                self.assertNotEqual(a_in_b, b_in_a, (a.key, b.key, sorted(common)))
+                higher, lower = (b, a) if a_in_b else (a, b)
+                cases[(higher.key, lower.key)] = sorted(common)
+        return cases
+
+    def test_every_pair_of_merges_that_shares_a_part_is_a_higher_and_a_lower_one(self):
+        self.assertEqual(self.shared(), {
+            ("anglophone", "british"): ["british", "scottish"],
+            ("latin", "french"): ["french"],
+            ("anglophone", "american"): ["afro_american", "dixie", "yankee"],
+            ("pan_slavic", "yugoslav"): ["bulgarian", "slovene"],
+            ("latin", "platine"): ["argentine", "platinean", "uruguayan"],
+            ("pan_malay", "filipino"): ["filipino"],
+        })
+
+    def test_a_shared_core_part_takes_the_lower_result_in_its_own_slot(self):
+        checked = []
+        for (higher_key, lower_key), common in self.shared().items():
+            higher, lower = cfg.merge_by_key(higher_key), cfg.merge_by_key(lower_key)
+            for culture in common:
+                if culture == lower.result:
+                    continue  # the lower merge's result itself (french in Latin): it is the representative
+                for part in higher.core:
+                    if culture in part.cultures:
+                        self.assertIn(lower.result, part.cultures, (higher_key, culture))
+                        checked.append((higher_key, part.cultures))
+        self.assertEqual(checked, [("anglophone", ("yankee", "cm_american"))])
+
+    def test_the_slots_that_take_a_result_for_shared_optional_parts(self):
+        # Latin's Platinean slot takes cm_platine for Platinean, Argentine and Uruguayan alike; Pan-Slavic and
+        # Anglophone already list cm_yugoslav and cm_american as core parts, which cover Slovene, Bulgarian, Dixie
+        # and Afro-American.
+        latin = cfg.merge_by_key("latin")
+        self.assertIn(("platinean", "cm_platine"), [p.cultures for p in latin.optional])
+        for higher, result in (("pan_slavic", "cm_yugoslav"), ("anglophone", "cm_american")):
+            self.assertIn(result, [c for p in cfg.merge_by_key(higher).core for c in p.cultures], higher)
+
+    def test_the_rule_would_notice_a_missing_result(self):
+        latin = cfg.merge_by_key("latin")
+        stripped = tuple(cfg.Part(tuple(c for c in p.cultures if c != "cm_platine"), p.tier, p.wait_for) for p in latin.optional)
+        broken = tuple(m if m.key != "latin" else cfg.Merge(m.key, m.result, m.new, m.core, stripped, m.components)
+                       for m in cfg.MERGES)
+        with self.assertRaises(AssertionError):
+            self.shared(broken)
 
 
 class PartsAndSuccessorsTest(unittest.TestCase):

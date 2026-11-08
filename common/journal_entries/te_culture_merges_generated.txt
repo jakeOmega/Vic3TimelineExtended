@@ -454,7 +454,7 @@ je_te_cm_italian = {
 			OR = {
 				te_cmg_italian_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_italian
+					te_cmg_italian_result_switched = yes
 					NOT = { te_cmg_italian_is_starter = yes }
 				}
 			}
@@ -1024,7 +1024,7 @@ je_te_cm_east_slavic = {
 			OR = {
 				te_cmg_east_slavic_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_east_slavic
+					te_cmg_east_slavic_result_switched = yes
 					NOT = { te_cmg_east_slavic_is_starter = yes }
 				}
 			}
@@ -1313,7 +1313,7 @@ je_te_cm_yugoslav = {
 			OR = {
 				te_cmg_yugoslav_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_yugoslav
+					te_cmg_yugoslav_result_switched = yes
 					NOT = { te_cmg_yugoslav_is_starter = yes }
 				}
 			}
@@ -1551,7 +1551,7 @@ je_te_cm_czechoslovak = {
 			OR = {
 				te_cmg_czechoslovak_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_czechoslovak
+					te_cmg_czechoslovak_result_switched = yes
 					NOT = { te_cmg_czechoslovak_is_starter = yes }
 				}
 			}
@@ -2487,7 +2487,7 @@ je_te_cm_french = {
 			OR = {
 				te_cmg_french_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_french
+					te_cmg_french_result_switched = yes
 					NOT = { te_cmg_french_is_starter = yes }
 				}
 			}
@@ -2709,6 +2709,7 @@ je_te_cm_british = {
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
 	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
 	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
+	# And a candidate's entry once a higher merge has switched one of its core parts (R38): it can never start.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
@@ -2716,7 +2717,11 @@ je_te_cm_british = {
 			OR = {
 				te_cmg_british_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_british
+					te_cmg_british_result_switched = yes
+					NOT = { te_cmg_british_is_starter = yes }
+				}
+				AND = {
+					NOT = { te_cmg_british_core_left = yes }
 					NOT = { te_cmg_british_is_starter = yes }
 				}
 			}
@@ -2954,6 +2959,7 @@ je_te_cm_american = {
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
 	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
 	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
+	# And a candidate's entry once a higher merge has switched one of its core parts (R38): it can never start.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
@@ -2961,7 +2967,11 @@ je_te_cm_american = {
 			OR = {
 				te_cmg_american_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_american
+					te_cmg_american_result_switched = yes
+					NOT = { te_cmg_american_is_starter = yes }
+				}
+				AND = {
+					NOT = { te_cmg_american_core_left = yes }
 					NOT = { te_cmg_american_is_starter = yes }
 				}
 			}
@@ -4008,11 +4018,24 @@ je_te_cm_platine = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
+	# And a candidate's entry once a higher merge has switched one of its core parts (R38): it can never start.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_platine_has_other_starter = yes
+			OR = {
+				te_cmg_platine_has_other_starter = yes
+				AND = {
+					te_cmg_platine_result_switched = yes
+					NOT = { te_cmg_platine_is_starter = yes }
+				}
+				AND = {
+					NOT = { te_cmg_platine_core_left = yes }
+					NOT = { te_cmg_platine_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -5952,7 +5975,7 @@ je_te_cm_oghuz_turkic = {
 			OR = {
 				te_cmg_oghuz_turkic_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_oghuz_turkic
+					te_cmg_oghuz_turkic_result_switched = yes
 					NOT = { te_cmg_oghuz_turkic_is_starter = yes }
 				}
 			}
@@ -6905,7 +6928,7 @@ je_te_cm_indonesian = {
 			OR = {
 				te_cmg_indonesian_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_cm_indonesian
+					te_cmg_indonesian_result_switched = yes
 					NOT = { te_cmg_indonesian_is_starter = yes }
 				}
 			}
@@ -7222,7 +7245,7 @@ je_te_cm_filipino = {
 			OR = {
 				te_cmg_filipino_has_other_starter = yes
 				AND = {
-					has_global_variable = te_cm_switched_filipino
+					te_cmg_filipino_result_switched = yes
 					NOT = { te_cmg_filipino_is_starter = yes }
 				}
 			}

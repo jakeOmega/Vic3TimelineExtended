@@ -3742,6 +3742,7 @@ te_cmg_latin_lowest_dom_all = {
 				global_var:te_cm_joined_latin_portuguese ?= 1
 				global_var:te_cm_joined_latin_romanian ?= 1
 				global_var:te_cm_joined_latin_platinean ?= 1
+				global_var:te_cm_joined_latin_cm_platine ?= 1
 				global_var:te_cm_joined_latin_argentine ?= 1
 				global_var:te_cm_joined_latin_uruguayan ?= 1
 				global_var:te_cm_joined_latin_chilean ?= 1
@@ -3821,6 +3822,19 @@ te_cmg_latin_lowest_dom_all = {
 			if = {
 				limit = { has_global_variable = te_cm_dom_latin_platinean }
 				max = global_var:te_cm_dom_latin_platinean
+			}
+			else = {
+				max = 0
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_latin_cm_platine ?= 1
+				NOT = { has_global_variable = te_cm_switched_cm_platine }
+			}
+			if = {
+				limit = { has_global_variable = te_cm_dom_latin_cm_platine }
+				max = global_var:te_cm_dom_latin_cm_platine
 			}
 			else = {
 				max = 0

@@ -1718,7 +1718,7 @@ cm_nguni = {
 	seal_and_signature_texture = "gfx/interface/diplomatic_treaties/seal_and_signature_cultures/diplomatic_treaties_seal_and_signature_african.dds"
 }
 
-# Latin: french, cm_italian, spanish, portuguese (optional: romanian, platinean, argentine, uruguayan, chilean)
+# Latin: french, cm_italian, spanish, portuguese (optional: romanian, platinean/cm_platine, argentine, uruguayan, chilean)
 cm_latin = {
 	color = rgb{ 170 110 200 }
 	religion = catholic
@@ -1775,10 +1775,11 @@ cm_latin = {
 		Ergasto Eliseo Enrique Fulvio Gregorio Horatio HE_ctor Hilario Jacinto Laureano Lucio MelitO_n
 		Marcos Marcelino Narcisco Oseas Rufino Rudecindo Rafael Sixto Salustiano Tertuliano Tiburcio
 		Toribio Tomas TristA_n Wenceslao Angel CE_sar Conrado Duvimioso Eustaquio Florentino Fermin
-		Gervasio Ismael Javier Mauricio Valentin AnI_bal Arturo Abraham Alonso Anacleto AbdO_n Belisario
-		Crescente Camilo Cristobal_2 Domingo_JosE_ ElI_as Eulogio Eliodoro German_2 Humberto HermO_genes
-		Isidoro JosE__Joaquin Leoncio Liborio Martin_2 Maximiano Nemesio Osvaldo Rolando Raymundo
-		Silvestre Zorobabel
+		Gervasio Ismael Javier Mauricio Valentin Adolfo Abelardo Benigno Eusebio Eligio Eladio Euclides
+		Fulgencio Gualberto Gorgonio Higinio Horacio Jaun_Bautista Liberato Paulino Silvano Telmo
+		AnI_bal Arturo Abraham Alonso Anacleto AbdO_n Belisario Crescente Camilo Cristobal_2
+		Domingo_JosE_ ElI_as Eulogio Eliodoro German_2 Humberto HermO_genes Isidoro JosE__Joaquin
+		Leoncio Liborio Martin_2 Maximiano Nemesio Osvaldo Rolando Raymundo Silvestre Zorobabel
 	}
 	female_common_first_names = {
 		Adelaide_2 Adele_2 Alexandrine Amelie_2 Angelique Anne Antoinette Athenais Augustine Beatrice
@@ -1802,8 +1803,9 @@ cm_latin = {
 		Adela Constanta Dora Ecaterina Elisabeta Eugenia Glicheria Iulia Iuliana Lucretia Maritica
 		Agustina Catalina Constancia Carmen Encarnacion Eva Isidora Juana Magdalena Petrona Ramona Sara
 		Tomasa Alcira Aurelia Claudia Felicia Mauricia NE_lida PlA_cida Paula Vicenta Anastasia Amelia
-		Amanda Clemencia Javiera JoaquI_na Julia Matilde PrA_xedes Candelaria Eulogia Ester Florencia
-		Gertrudis Garmendia Graciela Leonor Marta Nicolasa Trinidad TrA_nsito
+		Amanda Clemencia Javiera JoaquI_na Julia Matilde PrA_xedes Andrea Candelaria Deolinda Elvira
+		EscolA_stica EstefanI_a Ercilia Felipa Graciela Hilda Hortensia Melchora Rosaura Susana Eulogia
+		Ester Florencia Gertrudis Garmendia Leonor Marta Nicolasa Trinidad TrA_nsito
 	}
 	noble_last_names = {
 		d_Aumont Baraguey_d_Hilliers Bergeret de_Beauharnais de_Bussiere de_Broglie de_Boisdeffre
@@ -1981,19 +1983,23 @@ cm_latin = {
 		EstE_vez GirO_ Gomensoro Gorlero Idiarte Lavalleja Lamas LaviN_a Larrosa Lara Morales Miranda
 		Navarro Nunez Obes Pachedo PlA_ Piriz Pineiro PeN_alva Pedragosa Paiva Requena Regules Rivas
 		Suarez Soumastre Serrato Soca Sagastume Saez Terra Torres Urioste Villalba Villegas Viera
-		Vidal_Silva Arteaga ArO_stegui Astorga AlegrI_a Abarca Alurralde Aldunate Astaburuaga
-		de_Dios_Arlegui Araoz Albano Alessandri Altamirano BascuN_A_n Benavides Bezanilla Bulnes
-		Ballesteros Baquedano Benavente Blest_Gana BorgoN_o Campillo Concha Correa del_Campo_YA_var
-		Cotapos Cuevas Calderon Campino Castillo Cifuentes Cuadra Codesido Dolarea Donoso Eyzaguirre
-		ErrA_zuriz Eitel Echaurren EncheN_ique Echevers Elizondo Fontecilla Fabres FariN_as Freire
-		Frutos Figueroa Gandarillas Gimpert Gormaz Guerrero Henriquez Hurtado Isirarri Jaraquemada
-		Jorquera LarraI_n Ledesma Lastarria Lazcano Lira Lecaros Luco MarA_n Montes Medina Mascayano
-		Montt Martinez Matta Mattes Meneses Mena Mendiburi Novoa Ossa Ovalle Ochagavia OrtU_zar Palma
-		Portales Prieto Puga Reyes Riquelme del_RI_o Rencoret Recabarren Rengifo Rozas Riesco
-		Santa_Maria Solar Salinas Salas Subercaseaux Sanchez de_la_Sierra_Mercado Sotomayor Sanfuentes
-		Santelices Silva de_Toro_Herrera Tagle Tocornal Trujillo Urmeneta Usaveaga Urrutia Vasquez
-		de_ValdE_s Velscaco Vergara Vivanco Valderrama Valenzuela Varas Valledor Vargas Vial YA_N_ez
-		YrarrA_zaval Zorrilla ZaN_artu ZumelzU_
+		Vidal_Silva Aceval ArgU_ello Alfaro Aquino AlE_n Alvarenga Bobadilla Burgos Barboza Barrios
+		Bruguez Carvallo Campos Chirife CenturiO_n Dominguez DuplA_n Diez Decoud Domecq Duarte Escurra
+		Estigarribia Escalada Frutos Gill Gaona Gondra GimE_nez Insaurralde IrrazA_bal Jara Montiel
+		MachaI_n Miltos Mirando Morinigo Montero Mendoza Navero Oviedo PeN_a ParE_s Riart ResquI_n
+		Robles Ramos Sisa Uriate Velazquez Vera Arteaga ArO_stegui Astorga AlegrI_a Abarca Alurralde
+		Aldunate Astaburuaga de_Dios_Arlegui Araoz Albano Alessandri Altamirano BascuN_A_n Benavides
+		Bezanilla Bulnes Ballesteros Baquedano Benavente Blest_Gana BorgoN_o Campillo Concha Correa
+		del_Campo_YA_var Cotapos Cuevas Calderon Campino Castillo Cifuentes Cuadra Codesido Dolarea
+		Donoso Eyzaguirre ErrA_zuriz Eitel Echaurren EncheN_ique Echevers Elizondo Fontecilla Fabres
+		FariN_as Freire Figueroa Gandarillas Gimpert Gormaz Guerrero Henriquez Hurtado Isirarri
+		Jaraquemada Jorquera LarraI_n Ledesma Lastarria Lazcano Lira Lecaros Luco MarA_n Montes Medina
+		Mascayano Montt Martinez Matta Mattes Meneses Mena Mendiburi Novoa Ossa Ovalle Ochagavia
+		OrtU_zar Palma Portales Prieto Puga Reyes Riquelme del_RI_o Rencoret Recabarren Rengifo Rozas
+		Riesco Santa_Maria Solar Salinas Salas Subercaseaux Sanchez de_la_Sierra_Mercado Sotomayor
+		Sanfuentes Santelices Silva de_Toro_Herrera Tagle Tocornal Trujillo Urmeneta Usaveaga Urrutia
+		Vasquez de_ValdE_s Velscaco Vergara Vivanco Valderrama Valenzuela Varas Valledor Vargas Vial
+		YA_N_ez YrarrA_zaval Zorrilla ZaN_artu ZumelzU_
 	}
 	male_regal_first_names = {
 		Antoine Charles Ferdinand-Philippe Francois Henri Jean Louis Napoleon Alfonso Amadeo Carlos

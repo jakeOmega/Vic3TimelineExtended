@@ -474,6 +474,26 @@ te_cm_join_part = {
 	set_global_variable = { name = te_cm_in_$CULTURE$ value = $INDEX$ }
 }
 
+# Any scope. The reverse of te_cm_join_part, for a part of a complete merge whose starter is gone with no
+# country to take it over (te_cmg_release_lost_starters, R38): nobody would convert or switch the part again,
+# and while it stayed joined the merge would never be finished, so no higher merge could take its result
+# (R33). $MERGE$, $CULTURE$ and $INDEX$ as te_cm_join_part takes them. Only a part that joined $MERGE$ and has
+# not switched lets go; te_cm_in_<c> goes only while it names this merge. The part's pops that converted stay
+# converted, and the part is free for any merge that lists it.
+te_cm_unjoin_part = {
+	if = {
+		limit = {
+			global_var:te_cm_joined_$MERGE$_$CULTURE$ ?= 1
+			NOT = { has_global_variable = te_cm_switched_$CULTURE$ }
+		}
+		remove_global_variable = te_cm_joined_$MERGE$_$CULTURE$
+		if = {
+			limit = { global_var:te_cm_in_$CULTURE$ ?= $INDEX$ }
+			remove_global_variable = te_cm_in_$CULTURE$
+		}
+	}
+}
+
 # Any scope. A running merge whose starter is gone goes back to idle, so another country can
 # start it. $MERGE$ = a merge key. The parts that joined, their dominance and every counter
 # stay: the next starter picks the merge up where it stood. The started flag goes from any

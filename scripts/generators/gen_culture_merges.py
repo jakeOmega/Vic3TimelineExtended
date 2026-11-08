@@ -73,8 +73,11 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   homeland was just removed, and down the chain through ``te_cmg_remove_parts_of_<culture>`` for a part that is
   itself a result). Merges chain only after the lower one is finished (R33): another merge's result is available
   only once that merge is complete with every joined part switched, or has no part joined, and a merge whose
-  result has switched into a higher merge's joins, converts, measures and switches nothing more and is no
-  candidate. The hand-written helpers are in the same ``te_culture_merge_effects.txt``.
+  result has switched into a higher merge's (``te_cmg_<m>_result_switched``, the one place that test is written)
+  joins, converts, measures and switches nothing more and is no candidate. A lower merge takes no new part once a
+  higher one has joined its result (R38), a complete merge whose starter is gone for good lets go of its joined,
+  unswitched parts (R38), and a merge whose core slot a higher merge has switched is no candidate
+  (``te_cmg_<m>_core_left``, R38). The hand-written helpers are in the same ``te_culture_merge_effects.txt``.
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -655,8 +658,62 @@ def result_can_switch(merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> bool:
 
 
 def _result_switched(merge: cfg.Merge) -> str:
-    """The merge's result has switched into a higher merge's result (R33): the merge does nothing more."""
-    return "has_global_variable = te_cm_switched_%s" % merge.result
+    """The merge's result has switched into a higher merge's result (R33): the merge does nothing more.
+
+    A call of the generated ``te_cmg_<m>_result_switched``, the one place the rule is written (M6): is_candidate,
+    can_start, can_join, join_ready, the start effect, census_wanted, the yearly conversion, dominance, the
+    formation hook and the entry's invalid outcome all read it."""
+    return "te_cmg_%s_result_switched = yes" % merge.key
+
+
+def _result_joined_higher(merge: cfg.Merge) -> str:
+    """A higher merge has joined this merge's result and not yet switched it (te_cm_in_<r>, R38 I1). The lower merge
+    then takes no new part: a late part would make its result unavailable to the higher merge again (R33), and
+    once the result switched, the late part would be stranded joined and unswitched."""
+    return "has_global_variable = te_cm_in_%s" % merge.result
+
+
+def _write_result_switched(out: "_Script", merge: cfg.Merge) -> None:
+    """``te_cmg_<m>_result_switched``, any scope (R33, M6)."""
+    out.line()
+    out.line("# Any scope. The %s merge's result has switched into a higher merge's (R33): the merge then joins, converts," % merge.key)
+    out.line("# measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.")
+    with out.block("te_cmg_%s_result_switched" % merge.key):
+        out.line("has_global_variable = te_cm_switched_%s" % merge.result)
+
+
+def _joinable_elsewhere(merge: cfg.Merge, culture: str, merges: tuple[cfg.Merge, ...]) -> bool:
+    """Another merge can join and switch ``culture`` (it is a slot culture there and not that merge's own absorb result)."""
+    return any(other is not merge and culture in _joinable_slot_cultures(other) for other in merges)
+
+
+def core_left_slots(merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> list[cfg.Part]:
+    """The core slots another merge can empty (R38 M2): every alternative is a culture some other merge can join and
+    switch. A slot with an alternative only this merge can switch is never empty, since that culture switches only
+    after joining here; a slot that is only this merge's absorb result is the result-switched test's."""
+    slots = []
+    for part in merge.core:
+        if all(_joinable_elsewhere(merge, c, merges) for c in part.cultures) and not all(
+            _is_absorb_result(merge, c) for c in part.cultures
+        ):
+            slots.append(part)
+    return slots
+
+
+def _write_core_left(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> None:
+    """``te_cmg_<m>_core_left``, any scope, for a merge with core slots another merge can empty (R38 M2)."""
+    key = merge.key
+    out.line()
+    out.line("# Any scope. Every core slot of the %s merge that another merge can take still has an alternative that has not" % key)
+    out.line("# switched there: unswitched, or joined to this merge (and so switched here). Once a higher merge has switched")
+    out.line("# a core part, the %s merge can never start: it is no candidate, and a candidate's entry ends." % key)
+    with out.block("te_cmg_%s_core_left" % key):
+        for part in core_left_slots(merge, merges):
+            with out.block("OR"):
+                for culture in part.cultures:
+                    out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                    if not _is_absorb_result(merge, culture):
+                        out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
 
 
 def _live_culture(culture: str) -> list[str]:
@@ -808,7 +865,8 @@ def _write_wait_items(out: "_Script", merge: cfg.Merge) -> None:
 def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
     """The per-merge scripted triggers.
 
-    Per merge: ``is_candidate``, ``core_ok``, ``census_wanted``, ``is_starter``,
+    Per merge: ``result_switched``, ``core_left`` (where another merge can take a core part),
+    ``is_candidate``, ``core_ok``, ``census_wanted``, ``is_starter``,
     ``has_other_starter``, ``can_start`` (and ``start_basics`` where a core part waits on a
     vanilla entry). Per slot culture: ``available``, ``measured`` (passing its gates now and
     not switched), ``years_met`` (tiers 2 and 3), ``switched_in`` (joined to this merge and
@@ -823,12 +881,17 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
         tier = start_tier(merge, vanilla, merges)
         optional = {c for part in merge.optional for c in part.cultures}
         tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
+        core_left = bool(core_left_slots(merge, merges))
         out.line()
         out.line("# ---- %s (%s) ----" % (key, ", ".join("/".join(p.cultures) for p in merge.core)))
+        _write_result_switched(out, merge)
+        if core_left:
+            _write_core_left(out, merge, merges)
         out.line()
         out.line("# Country scope. Can this country start the %s merge? The system is on, a core culture is" % key)
         out.line("# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a")
-        out.line("# part of another merge, that result has not switched into it (R33: then the merge does nothing more).")
+        out.line("# part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where")
+        out.line("# another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).")
         with out.block("te_cmg_%s_is_candidate" % key):
             out.line("te_cm_system_enabled = yes")
             with out.block("OR"):
@@ -838,6 +901,8 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             out.line("NOT = { global_var:te_cm_state_%s ?= 2 }" % key)
             if result_can_switch(merge, merges):
                 out.line("NOT = { %s }" % _result_switched(merge))
+            if core_left:
+                out.line("te_cmg_%s_core_left = yes" % key)
             if merge.skip_if_dlc:
                 out.line("NOT = { has_dlc_feature = %s }" % merge.skip_if_dlc)
         out.line()
@@ -876,13 +941,19 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("has_global_variable = te_cm_switched_%s" % culture)
             out.line()
             out.line("# Country scope. %s (tier %s) passes its gates and can join the %s merge now: it has not switched" % (culture, ("1", "1b", "2")[ctier - 1], key))
-            out.line("# (R32), the merge's own result has not (R33), and the rest of its gates hold.")
+            if result_can_switch(merge, merges):
+                out.line("# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest")
+                out.line("# of its gates hold.")
+            else:
+                out.line("# (R32), the merge's own result has not (R33), and the rest of its gates hold.")
             with out.block("te_cmg_%s_%s_can_join" % (key, culture)):
                 out.line("var:te_cm_ok_%s_%s ?= 1" % (key, culture))
                 out.line("te_cmg_%s_%s_available = yes" % (key, culture))
                 out.line("NOT = { global_var:te_cm_joined_%s_%s ?= 1 }" % (key, culture))
                 out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
                 out.line("NOT = { %s }" % _result_switched(merge))
+                if result_can_switch(merge, merges):
+                    out.line("NOT = { %s }" % _result_joined_higher(merge))
                 out.line("te_cm_tier_tech = { TIER = %d }" % ctier)
                 if ctier > 1:
                     out.line("te_cmg_%s_%s_years_met = yes" % (key, culture))
@@ -1038,10 +1109,18 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
     out.line()
     out.line("# Country scope. Joins every part of the %s merge that can join now and isn't waiting on a" % key)
     out.line("# vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the")
-    out.line("# merge's own result has switched into a higher merge's (R33).")
+    if result_can_switch(merge, merges):
+        out.line("# merge's own result has switched into a higher merge's (R33), nor once a higher merge has joined it (R38).")
+    else:
+        out.line("# merge's own result has switched into a higher merge's (R33).")
     with out.block("te_cmg_%s_join_ready" % key):
         with out.block("if"):
-            out.line("limit = { NOT = { %s } }" % _result_switched(merge))
+            if result_can_switch(merge, merges):
+                with out.block("limit"):
+                    out.line("NOT = { %s }" % _result_switched(merge))
+                    out.line("NOT = { %s }" % _result_joined_higher(merge))
+            else:
+                out.line("limit = { NOT = { %s } }" % _result_switched(merge))
             for culture in slot_cultures(merge):
                 if _is_absorb_result(merge, culture):
                     continue
@@ -1153,8 +1232,8 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
         out.line("# it closes above te_cm_sol_gap_close and reopens below te_cm_sol_gap_open, and opens only while every")
         out.line("# core slot is met (has a figure, or joined and switched). Each optional part then gets its own gate,")
         out.line("# te_cm_sol_ok_%s_<culture>, over the core range plus that part; with no core figure left, against the" % key)
-        out.line("# result's (walked only then, and only while an optional part has not switched, joined or not: the gate of a part")
-        out.line("# that has joined must keep following the result, or one dip would freeze it for good).")
+        out.line("# result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or")
+        out.line("# not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).")
         with out.block("te_cmg_census_%s_country" % key):
             for culture in cultures:
                 tier = cfg.derive_tier(merge, culture, vanilla, merges)
@@ -1207,6 +1286,8 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                             out.line("local_var:te_cm_sg_all = 1")
                         out.line("set_variable = { name = te_cm_sol_ok_%s value = 1 }" % key)
             if optional:
+                # The walk only feeds te_cm_sol_gate_part, which reads its figure only for a part whose own gates are on
+                # (R38 M1): no walk for a finished merge whose optional parts don't qualify.
                 out.line("set_local_variable = { name = te_cm_sg_ref value = 0 }")
                 with out.block("if"):
                     with out.block("limit"):
@@ -1214,7 +1295,9 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                         out.line("local_var:te_cm_sg_all = 1")
                         with out.block("OR"):
                             for culture in optional:
-                                out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                                with out.block("AND"):
+                                    out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                                    out.line("var:te_cm_ok_%s_%s ?= 1" % (key, culture))
                     out.line("te_cmg_%s_result_sol = yes" % key)
             for culture in optional:
                 with out.block("if"):
@@ -1243,9 +1326,11 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
     out.line("# Any scope. A merge whose starter no longer exists, or is no longer a living country, is picked up by the")
     out.line("# country that carries te_cm_started_<m> (a civil war's winner inherits the loser's variables and continues the")
     out.line("# nation): the first such living country becomes the starter. Only a running merge with no such country goes")
-    out.line("# back to idle (te_cm_release_starter), so another country can start it. Run first by te_cm_yearly_on_action.")
+    out.line("# back to idle (te_cm_release_starter), so another country can start it. A complete merge with no such country")
+    out.line("# lets go of every part that joined and has not switched (te_cm_unjoin_part, R38), so it is finished and a higher")
+    out.line("# merge can take its result (R33). Run first by te_cm_yearly_on_action.")
     with out.block("te_cmg_release_lost_starters"):
-        for merge in merges:
+        for index, merge in enumerate(merges, start=1):
             key = merge.key
             with out.block("if"):
                 with out.block("limit"):
@@ -1265,6 +1350,12 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                     out.line("global_var:te_cm_state_%s ?= 1" % key)
                     out.line("te_cmg_%s_starter_gone = yes" % key)
                 out.line("te_cm_release_starter = { MERGE = %s }" % key)
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line("global_var:te_cm_state_%s ?= 2" % key)
+                    out.line("te_cmg_%s_starter_gone = yes" % key)
+                for culture in _joinable_slot_cultures(merge):
+                    out.line("te_cm_unjoin_part = { MERGE = %s CULTURE = %s INDEX = %d }" % (key, culture, index))
 
     # ---- the global census ----
     wanting: dict[str, list[cfg.Merge]] = {}
@@ -1425,6 +1516,8 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
     out.line("# starter has this country in its sphere and which has already converted here (te_cm_converted_<m>, set by")
     out.line("# te_cm_convert_part), the result as a primary culture if the formation dropped it, but only where a part that joined is")
     out.line("# primary here, as te_cm_convert_part gives it (R34); the starter, which carries te_cm_started_<m>, always qualifies.")
+    out.line("# Not once the merge's result has switched into a higher merge's (R33): that culture has no pops left, and the")
+    out.line("# monthly upkeep above already gives the higher result.")
     with out.block("te_cmg_formed_country"):
         out.line("te_cmg_monthly_country = yes")
         for merge in merges:
@@ -1444,6 +1537,7 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                                         out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
                                         out.line("country_has_primary_culture = cu:%s" % culture)
                     out.line("NOT = { country_has_primary_culture = cu:%s }" % merge.result)
+                    out.line("NOT = { %s }" % _result_switched(merge))
                 out.line("global_var:te_cm_starter_%s = { save_temporary_scope_as = te_cm_starter }" % key)
                 with out.block("if"):
                     out.line("limit = { te_cm_in_sphere = yes }")
@@ -1846,19 +1940,28 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
                     out.line("te_cmg_%s_all_switched = yes" % key)
             out.line()
             out.line("# Another country started this merge first (or it is complete under one): the entry ends silently.")
-            if result_can_switch(merge, merges):
+            switches = result_can_switch(merge, merges)
+            core_left = bool(core_left_slots(merge, merges))
+            if switches:
                 out.line("# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no")
                 out.line("# longer start, and only the starter (who has the complete outcome above) keeps the entry.")
+            if core_left:
+                out.line("# And a candidate's entry once a higher merge has switched one of its core parts (R38): it can never start.")
             with out.block("outcome"):
                 out.line("flags = { hidden invalid_outcome }")
                 out.line("conclusion_desc = te_cm_je_invalid_conclusion_desc")
                 with out.block("trigger"):
-                    if result_can_switch(merge, merges):
+                    if switches or core_left:
                         with out.block("OR"):
                             out.line("te_cmg_%s_has_other_starter = yes" % key)
-                            with out.block("AND"):
-                                out.line(_result_switched(merge))
-                                out.line("NOT = { te_cmg_%s_is_starter = yes }" % key)
+                            if switches:
+                                with out.block("AND"):
+                                    out.line(_result_switched(merge))
+                                    out.line("NOT = { te_cmg_%s_is_starter = yes }" % key)
+                            if core_left:
+                                with out.block("AND"):
+                                    out.line("NOT = { te_cmg_%s_core_left = yes }" % key)
+                                    out.line("NOT = { te_cmg_%s_is_starter = yes }" % key)
                     else:
                         out.line("te_cmg_%s_has_other_starter = yes" % key)
             out.line()

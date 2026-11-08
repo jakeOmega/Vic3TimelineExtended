@@ -241,8 +241,10 @@ def run_effects(nodes, world, this):
                 world.globals.pop(n.value, None)
             elif k == "remove_variable":
                 world.vars.setdefault(this, set()).discard(n.value)
-            elif k == "te_cm_release_starter":
-                helper = block(text_of(EFFECTS), "te_cm_release_starter").replace("$MERGE$", child(n, "MERGE").value)
+            elif k in ("te_cm_release_starter", "te_cm_unjoin_part"):
+                helper = block(text_of(EFFECTS), k)
+                for arg in n.children:
+                    helper = helper.replace("$%s$" % arg.key, arg.value)
                 body, _ = parse_text(helper, "helper")
                 run_effects(body, world, this)
             else:
@@ -393,12 +395,19 @@ class EntryShapeTest(unittest.TestCase):
             raw = je_text(key)
             self.assertIn("flags = { hidden invalid_outcome }", raw)
             # R27: no outcome ends the entry for a rule switched off. Off is a pause.
-            if gen.result_can_switch(merge, cfg.MERGES):
-                # R36: also a candidate's stranded entry once the merge's result has switched into a wider culture.
+            switches = gen.result_can_switch(merge, cfg.MERGES)
+            core_left = bool(gen.core_left_slots(merge, cfg.MERGES))
+            if switches or core_left:
+                # R36: also a candidate's stranded entry once the merge's result has switched into a wider culture;
+                # R38: or once a higher merge has switched one of its core parts.
+                stranded = ""
+                if switches:
+                    stranded += " AND = { te_cmg_%s_result_switched = yes NOT = { te_cmg_%s_is_starter = yes } }" % (key, key)
+                if core_left:
+                    stranded += " AND = { NOT = { te_cmg_%s_core_left = yes } NOT = { te_cmg_%s_is_starter = yes } }" % (key, key)
                 self.assertEqual(
                     squash(child_text(invalid, "trigger")),
-                    "OR = { te_cmg_%s_has_other_starter = yes AND = { has_global_variable = te_cm_switched_%s "
-                    "NOT = { te_cmg_%s_is_starter = yes } } }" % (key, merge.result, key),
+                    "OR = { te_cmg_%s_has_other_starter = yes%s }" % (key, stranded),
                 )
             else:
                 self.assertEqual(squash(child_text(invalid, "trigger")), "te_cmg_%s_has_other_starter = yes" % key)
@@ -1010,7 +1019,7 @@ class CensusTailTest(unittest.TestCase):
             # R36: a merge whose result can switch into a wider culture is not started once it has.
             guard = idle(key)
             if gen.result_can_switch(merge, cfg.MERGES):
-                guard += " NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
+                guard += " NOT = { te_cmg_%s_result_switched = yes }" % key
             self.assertEqual(
                 squash(block(self.effects, "te_cmg_start_%s" % key)),
                 "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s } te_cmg_%s_join_ready = yes }"
@@ -1482,6 +1491,81 @@ class StarterFlagTest(unittest.TestCase):
         self.release_pass(world)
         self.assertEqual(world.globals["te_cm_starter_german"], "A")
         self.assertEqual(world.globals["te_cm_state_german"], 1)
+
+    # ---- R38 I2: a complete merge nobody can take over lets go of its unswitched parts ----
+    def release_merge(self, world, key):
+        for node in definitions(GEN_EFFECTS)["te_cmg_release_lost_starters"].children:
+            if "te_cmg_%s_starter_gone" % key in text_of_node(node):
+                run_effects([node], world, None)
+
+    def lost_french(self, flagged=(), starter_alive=False):
+        """French complete under A: Wallonian and Occitan joined and switched, Catalan joined late and still converting."""
+        world = joined_world(cfg.merge_by_key("french"), 2, ["wallonian", "occitan", "catalan"], ["wallonian", "occitan"],
+                             this=None, flagged=flagged)
+        world.globals["te_cm_in_catalan"] = merge_index(cfg.merge_by_key("french"))
+        world.alive["A"] = starter_alive
+        return world
+
+    def trig(self, world, name):
+        return holds(definitions(GEN_TRIGGERS)[name].children, world)
+
+    def test_a_complete_merge_with_no_one_to_take_it_over_lets_go_of_its_late_parts(self):
+        world = self.lost_french()
+        # Before: Catalan is stranded, so French is never finished and Latin can never take french (R33).
+        self.assertFalse(self.trig(world, "te_cmg_french_all_switched"))
+        self.assertFalse(self.trig(world, "te_cmg_latin_french_available"))
+        self.release_merge(world, "french")
+        self.assertNotIn("te_cm_joined_french_catalan", world.globals)
+        self.assertNotIn("te_cm_in_catalan", world.globals)
+        # The parts that switched keep their record, and the merge stays complete.
+        self.assertEqual(world.globals["te_cm_joined_french_wallonian"], 1)
+        self.assertEqual(world.globals["te_cm_switched_occitan"], "cu")
+        self.assertEqual(world.globals["te_cm_state_french"], 2)
+        self.assertTrue(self.trig(world, "te_cmg_french_all_switched"))
+        self.assertTrue(self.trig(world, "te_cmg_latin_french_available"))
+
+    def test_a_complete_merge_with_a_country_to_take_it_over_keeps_its_parts(self):
+        world = self.lost_french(flagged=("B",))
+        self.release_merge(world, "french")
+        self.assertEqual(world.globals["te_cm_starter_french"], "B")
+        self.assertEqual(world.globals["te_cm_joined_french_catalan"], 1)
+        self.assertEqual(world.globals["te_cm_in_catalan"], merge_index(cfg.merge_by_key("french")))
+        world = self.lost_french(starter_alive=True)
+        self.release_merge(world, "french")
+        self.assertEqual(world.globals["te_cm_joined_french_catalan"], 1)
+
+    def test_the_unjoin_leaves_another_merges_index_alone(self):
+        world = self.lost_french()
+        world.globals["te_cm_in_catalan"] = 99
+        self.release_merge(world, "french")
+        self.assertNotIn("te_cm_joined_french_catalan", world.globals)
+        self.assertEqual(world.globals["te_cm_in_catalan"], 99)
+
+    def test_a_lost_yugoslav_merge_frees_slovene_and_its_result_for_pan_slavic(self):
+        yugoslav = cfg.merge_by_key("yugoslav")
+        core = ["serb", "croat", "bosniak"]
+        world = joined_world(yugoslav, 2, core + ["slovene"], core, this=None)
+        world.globals["te_cm_in_slovene"] = merge_index(yugoslav)
+        world.alive["A"] = False
+        self.assertFalse(self.trig(world, "te_cmg_pan_slavic_slovene_available"))
+        self.assertFalse(self.trig(world, "te_cmg_pan_slavic_cm_yugoslav_available"))
+        self.release_merge(world, "yugoslav")
+        self.assertTrue(self.trig(world, "te_cmg_pan_slavic_slovene_available"))
+        self.assertTrue(self.trig(world, "te_cmg_pan_slavic_cm_yugoslav_available"))
+
+    def test_every_merge_lets_go_of_every_part_it_can_join(self):
+        for index, merge in enumerate(cfg.MERGES, start=1):
+            key = merge.key
+            node = next(n for n in definitions(GEN_EFFECTS)["te_cmg_release_lost_starters"].children
+                        if n.key == "if" and squash(text_of_node(child(n, "limit"))) ==
+                        "global_var:te_cm_state_%s = 2 te_cmg_%s_starter_gone = yes" % (key, key))
+            calls = [(c.key, {a.key: a.value for a in c.children}) for c in node.children if c.key != "limit"]
+            self.assertEqual(
+                calls,
+                [("te_cm_unjoin_part", {"MERGE": key, "CULTURE": c, "INDEX": str(index)})
+                 for c in slot_cultures(merge) if not absorb_result(merge, c)],
+                key,
+            )
 
     def test_a_release_takes_the_flag_from_a_living_holder(self):
         world = self.world("A", flagged=("A", "B"))
