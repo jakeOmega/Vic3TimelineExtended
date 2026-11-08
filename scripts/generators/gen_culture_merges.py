@@ -49,6 +49,16 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   ``core_ok``; a part that has joined is walked with its merge's result.
   The hand-written helpers they call are in
   ``common/scripted_effects/te_culture_merge_effects.txt``.
+* ``common/journal_entries/te_culture_merges_generated.txt``,
+  ``common/scripted_buttons/te_culture_merges_generated_buttons.txt``,
+  ``common/scripted_progress_bars/te_culture_merges_generated_bars.txt`` and
+  ``common/script_values/te_culture_merges_generated_values.txt``: starting a merge. A
+  journal entry ``je_te_cm_<m>``, a start button ``te_cmg_start_<m>_button`` and a bar
+  ``te_cmg_<m>_bar`` per merge, the progress values the bar shows, and the entry's loc
+  (``entry_loc``) in the generated loc file above. The triggers and effects above gain
+  ``te_cmg_<m>_can_start`` (each condition its own custom_tooltip), ``_is_starter``,
+  ``_has_other_starter``, ``te_cmg_<m>_join_ready`` / ``_settle`` / ``te_cmg_start_<m>`` and
+  ``te_cmg_release_lost_starters``.
 
 Also carried: ``traditions`` is what every core part shares (usually nothing,
 so ``{ }``), and ``name_format``, ``seal_and_signature_texture`` and the other
@@ -63,9 +73,8 @@ would depend on which vanilla version the machine has installed.
 
 Run ``python3 scripts/generators/gen_culture_merges.py [--dry-run | --check]``.
 No game install or running server is needed. Full server reloads call
-``regenerate`` (mod_state_server.POST_LOAD_REGENERATORS). Later outputs (the
-journal entries and buttons) are added to ``plan_outputs``, one ``render_*``
-function each.
+``regenerate`` (mod_state_server.POST_LOAD_REGENERATORS). Every output is in
+``plan_outputs``, one ``render_*`` function each.
 """
 
 from __future__ import annotations
@@ -93,6 +102,10 @@ TRAITS_OUT = Path("common/discrimination_traits/te_merged_culture_traits.txt")
 LOC_OUT = Path("localization/english/te_culture_merges_generated_l_english.yml")
 TRIGGERS_GEN_OUT = Path("common/scripted_triggers/te_culture_merges_generated_triggers.txt")
 EFFECTS_GEN_OUT = Path("common/scripted_effects/te_culture_merges_generated_effects.txt")
+JE_OUT = Path("common/journal_entries/te_culture_merges_generated.txt")
+BUTTONS_OUT = Path("common/scripted_buttons/te_culture_merges_generated_buttons.txt")
+BARS_OUT = Path("common/scripted_progress_bars/te_culture_merges_generated_bars.txt")
+VALUES_OUT = Path("common/script_values/te_culture_merges_generated_values.txt")
 LOC_CATEGORY = "CULTURE_MERGES_GENERATED"
 
 SNAPSHOT_DIR = "vanilla_parsed"
@@ -475,7 +488,8 @@ def render_traits(plan: list[Built]) -> str:
     return HEADER + "\n\n" + "\n".join(blocks)
 
 
-def render_loc(plan: list[Built]) -> str:
+def render_loc(plan: list[Built], extra: dict[str, str] | None = None) -> str:
+    """The generated loc file: each result and trait name, then ``extra`` (the entries' keys, key -> text)."""
     entries = {}
     for entry in plan:
         name = entry.merge.new.name
@@ -484,6 +498,10 @@ def render_loc(plan: list[Built]) -> str:
         entries[entry.merge.result] = f'0 "{name}"'
         for trait in entry.traits:
             entries[trait.key] = f'0 "{trait.name}"'
+    for key, text in (extra or {}).items():
+        if key in entries:
+            raise ValueError(f"{key} is defined twice")
+        entries[key] = f'0 "{text}"'
     return _render_loc_file([(section_label(LOC_CATEGORY), entries)]).decode("utf-8-sig")
 
 
@@ -519,6 +537,13 @@ class _Script:
 def slot_cultures(merge: cfg.Merge) -> list[str]:
     """Every culture in the merge's slots, core first, in roster order."""
     return [c for part in merge.core + merge.optional for c in part.cultures]
+
+
+def _part_of(merge: cfg.Merge, culture: str) -> cfg.Part:
+    for part in merge.core + merge.optional:
+        if culture in part.cultures:
+            return part
+    raise ValueError("%s is not a part of the %s merge" % (culture, merge.key))
 
 
 def _core_cultures(merge: cfg.Merge) -> list[str]:
@@ -571,13 +596,119 @@ def _years_clause(tier: int) -> str:
     return "te_cm_years_tier2" if tier == 2 else "te_cm_years_tier3"
 
 
+def _slot_routes(merge: cfg.Merge, part: cfg.Part, tiers: dict[str, int]) -> list[list[str]]:
+    """The ways one core slot is met, each a list of clauses all of which must hold.
+
+    An alternative is met when it passes its gates now (and, in tier 1b or tier 2, has its years
+    together), or when it joined this merge and has switched. ``core_ok``, ``can_start`` and the
+    status line all read the same routes.
+    """
+    key = merge.key
+    routes = []
+    for c in part.cultures:
+        route = ["te_cmg_%s_%s_measured = yes" % (key, c)]
+        if tiers[c] > 1:
+            route.append("te_cmg_%s_%s_years_met = yes" % (key, c))
+        routes.append(route)
+        if not _is_absorb_result(merge, c):
+            routes.append(["te_cmg_%s_%s_switched_in = yes" % (key, c)])
+    return routes
+
+
+def _write_routes(out: "_Script", routes: list[list[str]]) -> None:
+    if len(routes) == 1:
+        for clause in routes[0]:
+            out.line(clause)
+        return
+    with out.block("OR"):
+        for route in routes:
+            if len(route) == 1:
+                out.line(route[0])
+            else:
+                with out.block("AND"):
+                    for clause in route:
+                        out.line(clause)
+
+
+def core_waits(merge: cfg.Merge) -> list[cfg.Part]:
+    """The core parts that wait on a vanilla journal entry."""
+    return [part for part in merge.core if part.wait_for]
+
+
+def _wait_cap_reached(out: "_Script", key: str) -> None:
+    """The merge's wait years have reached te_cm_wait_cap_years (false while the counter is unset)."""
+    counter = "te_cm_wait_years_%s" % key
+    with out.block("AND"):
+        out.line("has_variable = %s" % counter)
+        out.line("trigger_if = { limit = { has_variable = %s } var:%s >= te_cm_wait_cap_years }" % (counter, counter))
+
+
+def _wait_entry_open(out: "_Script", entries: tuple[str, ...]) -> None:
+    """A vanilla entry the part waits on is open in this country."""
+    if len(entries) == 1:
+        out.line("has_journal_entry = %s" % entries[0])
+        return
+    with out.block("OR"):
+        for entry in entries:
+            out.line("has_journal_entry = %s" % entry)
+
+
+def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[str, int]) -> None:
+    """The conditions that let a country start the merge, except its waits, each in its own
+    custom_tooltip so the button lists the one that fails. They restate ``is_candidate``'s
+    primary culture and technology, the merge being idle, ``core_ok``'s slots (the same routes),
+    the standard-of-living gate and the component merges."""
+    key = merge.key
+    with out.block("custom_tooltip"):
+        out.line("text = te_cm_tt_idle")
+        out.line(_state_idle(key))
+    with out.block("custom_tooltip"):
+        out.line("text = te_cmg_%s_primary_tt" % key)
+        with out.block("OR"):
+            for culture in _core_cultures(merge):
+                out.line("country_has_primary_culture = cu:%s" % culture)
+    with out.block("custom_tooltip"):
+        out.line("text = te_cm_tt_tech_%d" % tier)
+        out.line("te_cm_tier_tech = { TIER = %d }" % tier)
+    for index, part in enumerate(merge.core, start=1):
+        with out.block("custom_tooltip"):
+            out.line("text = te_cmg_%s_core_%d_tt" % (key, index))
+            _write_routes(out, _slot_routes(merge, part, tiers))
+    with out.block("custom_tooltip"):
+        out.line("text = te_cm_tt_sol")
+        out.line("var:te_cm_sol_ok_%s ?= 1" % key)
+    for component in merge.components:
+        with out.block("custom_tooltip"):
+            out.line("text = te_cmg_%s_comp_%s_tt" % (key, component))
+            out.line("global_var:te_cm_state_%s ?= 2" % component)
+
+
+def _write_wait_items(out: "_Script", merge: cfg.Merge) -> None:
+    """One custom_tooltip per core part that waits: its vanilla entries are closed here, or the
+    merge has waited long enough."""
+    key = merge.key
+    for part in core_waits(merge):
+        with out.block("custom_tooltip"):
+            out.line("text = te_cmg_%s_wait_%s_tt" % (key, part.cultures[0]))
+            with out.block("OR"):
+                if len(part.wait_for) == 1:
+                    out.line("NOT = { has_journal_entry = %s }" % part.wait_for[0])
+                else:
+                    with out.block("NOR"):
+                        for entry in part.wait_for:
+                            out.line("has_journal_entry = %s" % entry)
+                _wait_cap_reached(out, key)
+
+
 def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
     """The per-merge scripted triggers.
 
-    Per merge: ``is_candidate``, ``core_ok``, ``census_wanted``. Per slot culture:
-    ``available``, ``measured`` (passing its gates now and not switched), ``years_met``
-    (tiers 2 and 3), ``switched_in`` (joined to this merge and switched: met for good)
-    and ``can_join``.
+    Per merge: ``is_candidate``, ``core_ok``, ``census_wanted``, ``is_starter``,
+    ``has_other_starter``, ``can_start`` (and ``start_basics`` where a core part waits on a
+    vanilla entry). Per slot culture: ``available``, ``measured`` (passing its gates now and
+    not switched), ``years_met`` (tiers 2 and 3), ``switched_in`` (joined to this merge and
+    switched: met for good), ``can_join`` and, where its part waits on a vanilla entry,
+    ``waiting``.
     """
     merges = cfg.MERGES if merges is None else merges
     out = _Script()
@@ -606,26 +737,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
         out.line("# tier 2, has its years together), or one that joined this merge and has switched.")
         with out.block("te_cmg_%s_core_ok" % key):
             for part in merge.core:
-                routes = []
-                for c in part.cultures:
-                    route = ["te_cmg_%s_%s_measured = yes" % (key, c)]
-                    if tiers[c] > 1:
-                        route.append("te_cmg_%s_%s_years_met = yes" % (key, c))
-                    routes.append(route)
-                    if not _is_absorb_result(merge, c):
-                        routes.append(["te_cmg_%s_%s_switched_in = yes" % (key, c)])
-                if len(routes) == 1:
-                    for clause in routes[0]:
-                        out.line(clause)
-                else:
-                    with out.block("OR"):
-                        for route in routes:
-                            if len(route) == 1:
-                                out.line(route[0])
-                            else:
-                                with out.block("AND"):
-                                    for clause in route:
-                                        out.line(clause)
+                _write_routes(out, _slot_routes(merge, part, tiers))
         for culture in slot_cultures(merge):
             ctier = tiers[culture]
             out.line()
@@ -665,6 +777,15 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("te_cmg_%s_%s_years_met = yes" % (key, culture))
                 if culture in optional:
                     out.line("var:te_cm_sol_ok_%s_%s ?= 1" % (key, culture))
+            wait_for = _part_of(merge, culture).wait_for
+            if wait_for and not _is_absorb_result(merge, culture):
+                out.line()
+                out.line("# Country scope. %s waits on a vanilla journal entry of this country (%s) and the merge" % (culture, ", ".join(wait_for)))
+                out.line("# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.")
+                with out.block("te_cmg_%s_%s_waiting" % (key, culture)):
+                    _wait_entry_open(out, wait_for)
+                    with out.block("NOT"):
+                        _wait_cap_reached(out, key)
         out.line()
         out.line("# Any scope. Is the yearly census of the %s merge worth running? An idle merge with a" % key)
         out.line("# candidate; or a running or complete one whose starter is alive and which still has a")
@@ -686,7 +807,111 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                                 continue
                             for line in _live_culture(culture):
                                 out.line(line)
+        out.line()
+        out.line("# Country scope. This country started the %s merge, which is running or complete." % key)
+        with out.block("te_cmg_%s_is_starter" % key):
+            for line in _state_running_or_complete(key):
+                out.line(line)
+            out.line("exists = global_var:te_cm_starter_%s" % key)
+            out.line("this = global_var:te_cm_starter_%s" % key)
+        out.line()
+        out.line("# Country scope. The %s merge is running or complete under another country." % key)
+        with out.block("te_cmg_%s_has_other_starter" % key):
+            for line in _state_running_or_complete(key):
+                out.line(line)
+            out.line("exists = global_var:te_cm_starter_%s" % key)
+            out.line("NOT = { this = global_var:te_cm_starter_%s }" % key)
+        waits = core_waits(merge)
+        out.line()
+        if waits:
+            out.line("# Country scope. Everything the %s merge needs to start except its waits on vanilla entries" % key)
+            out.line("# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.")
+            with out.block("te_cmg_%s_start_basics" % key):
+                _write_start_items(out, merge, tier, tiers)
+            out.line()
+        out.line("# Country scope. Can this country start the %s merge now? The merge is idle, a core culture is" % key)
+        out.line("# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the" )
+        out.line("# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course)." )
+        out.line("# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.")
+        with out.block("te_cmg_%s_can_start" % key):
+            if waits:
+                out.line("te_cmg_%s_start_basics = yes" % key)
+            else:
+                _write_start_items(out, merge, tier, tiers)
+            _write_wait_items(out, merge)
     return out.text()
+
+
+def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> None:
+    """``join_ready``, ``settle`` and ``start`` of one merge.
+
+    ``join_ready`` (country scope): joins every slot culture, except an absorb merge's result, that
+    passes ``can_join`` and isn't waiting on a vanilla entry. The start button and the yearly
+    census (for a running or complete merge's starter, so a part that comes up late still joins) run it.
+    ``settle`` (country scope) is the tail of the per-country census: a wait year, the journal entry's
+    net, the late joins. ``start`` is the button's effect.
+    """
+    key = merge.key
+    index = 1 + merges.index(merge)
+    entry = "je_te_cm_%s" % key
+    out.line()
+    out.line("# Country scope. Joins every part of the %s merge that can join now and isn't waiting on a" % key)
+    out.line("# vanilla entry: when the merge starts, and each census while its starter holds it.")
+    with out.block("te_cmg_%s_join_ready" % key):
+        for culture in slot_cultures(merge):
+            if _is_absorb_result(merge, culture):
+                continue
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line("te_cmg_%s_%s_can_join = yes" % (key, culture))
+                    if _part_of(merge, culture).wait_for:
+                        out.line("NOT = { te_cmg_%s_%s_waiting = yes }" % (key, culture))
+                out.line("te_cm_join_part = { MERGE = %s CULTURE = %s INDEX = %d }" % (key, culture, index))
+    out.line()
+    out.line("# Country scope: the button's effect. The country starts the %s merge and brings in the parts it" % key)
+    out.line("# holds that qualify now.")
+    with out.block("te_cmg_start_%s" % key):
+        out.line("te_cm_start_merge = { MERGE = %s RESULT = %s }" % (key, merge.result))
+        out.line("te_cmg_%s_join_ready = yes" % key)
+    out.line()
+    out.line("# Country scope: the tail of te_cmg_census_%s_country, run after the part gates are fresh." % key)
+    out.line("# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,")
+    out.line("#    up to te_cm_wait_cap_years).")
+    out.line("# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,")
+    out.line("#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on")
+    out.line("#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for")
+    out.line("#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.")
+    out.line("# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.")
+    with out.block("te_cmg_%s_settle" % key):
+        waits = core_waits(merge)
+        if waits:
+            counter = "te_cm_wait_years_%s" % key
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line("te_cmg_%s_start_basics = yes" % key)
+                    with out.block("OR"):
+                        for part in waits:
+                            _wait_entry_open(out, part.wait_for)
+                with out.block("if"):
+                    out.line("limit = { NOT = { has_variable = %s } }" % counter)
+                    out.line("set_variable = { name = %s value = 0 }" % counter)
+                with out.block("if"):
+                    out.line("limit = { var:%s < te_cm_wait_cap_years }" % counter)
+                    out.line("change_variable = { name = %s add = 1 }" % counter)
+        with out.block("if"):
+            with out.block("limit"):
+                out.line("te_cm_system_enabled = yes")
+                out.line("NOT = { has_journal_entry = %s }" % entry)
+                out.line("NOT = { has_inactive_journal_entry = %s }" % entry)
+                with out.block("OR"):
+                    out.line("te_cmg_%s_can_start = yes" % key)
+                    with out.block("AND"):
+                        out.line("global_var:te_cm_state_%s ?= 1" % key)
+                        out.line("te_cmg_%s_is_starter = yes" % key)
+            out.line("add_journal_entry = { type = %s }" % entry)
+        with out.block("if"):
+            out.line("limit = { te_cmg_%s_is_starter = yes }" % key)
+            out.line("te_cmg_%s_join_ready = yes" % key)
 
 
 def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
@@ -802,6 +1027,8 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                 with out.block("if"):
                     out.line("limit = { NOT = { has_global_variable = te_cm_switched_%s } }" % culture)
                     out.line("te_cm_sol_gate_part = { MERGE = %s CULTURE = %s }" % (key, culture))
+            out.line("te_cmg_%s_settle = yes" % key)
+        _write_start_effects(out, merge, merges)
         out.line()
         out.line("# Any scope. An idle merge: every country that can start it. A running or complete one: only its")
         out.line("# starter, so a part that comes up late can still join.")
@@ -816,13 +1043,30 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                 with out.block("global_var:te_cm_starter_%s" % key):
                     out.line("te_cmg_census_%s_country = yes" % key)
 
+    # ---- a running merge whose starter is gone ----
+    out.line()
+    out.line("# ---- All merges ----")
+    out.line()
+    out.line("# Any scope. A running merge whose starter no longer exists, or is no longer a living country, goes back")
+    out.line("# to idle (te_cm_release_starter), so another country can start it. Run first by te_cm_yearly_on_action.")
+    with out.block("te_cmg_release_lost_starters"):
+        for merge in merges:
+            key = merge.key
+            with out.block("if"):
+                with out.block("limit"):
+                    out.line("global_var:te_cm_state_%s ?= 1" % key)
+                    with out.block("OR"):
+                        out.line("NOT = { exists = global_var:te_cm_starter_%s }" % key)
+                        with out.block("AND"):
+                            out.line("exists = global_var:te_cm_starter_%s" % key)
+                            out.line("global_var:te_cm_starter_%s = { is_country_alive = no }" % key)
+                out.line("te_cm_release_starter = { MERGE = %s }" % key)
+
     # ---- the global census ----
     wanting: dict[str, list[cfg.Merge]] = {}
     for merge in merges:
         for culture in slot_cultures(merge):
             wanting.setdefault(culture, []).append(merge)
-    out.line()
-    out.line("# ---- All merges ----")
     out.line()
     out.line("# Any scope. Measures every culture of a merge that is worth censusing, once, then runs each")
     out.line("# merge's census. A culture that has switched is skipped; one that has joined a merge is walked")
@@ -856,6 +1100,423 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
     return out.text()
 
 
+# ---------------------------------------------------------------------------
+# Starting a merge: values, bars, buttons, journal entries and their loc
+# ---------------------------------------------------------------------------
+
+# Vanilla's waving flag, the icon Russification and the cultural renaissances use.
+JE_ICON = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+
+def _lines(write) -> list[str]:
+    """The lines a writer function produces, relative to a block's indentation."""
+    sub = _Script()
+    write(sub)
+    return sub.lines
+
+
+def _names(cultures) -> str:
+    """Loc splices read as a list: ``$a$``, ``$a$ and $b$``, ``$a$, $b$ and $c$``."""
+    names = ["$%s$" % c for c in cultures]
+    if len(names) <= 1:
+        return "".join(names)
+    return ", ".join(names[:-1]) + " and " + names[-1]
+
+
+def _either(cultures) -> str:
+    """Loc splices as alternatives: ``$a$``, ``$a$ or $b$``, ``$a$, $b$ or $c$``."""
+    names = ["$%s$" % c for c in cultures]
+    if len(names) <= 1:
+        return "".join(names)
+    return ", ".join(names[:-1]) + " or " + names[-1]
+
+
+def _joinable_core(merge: cfg.Merge) -> list[str]:
+    """The core cultures a starter can bring in: every one except an absorb merge's result."""
+    return [c for c in _core_cultures(merge) if not _is_absorb_result(merge, c)]
+
+
+def render_values(merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """Per merge, the progress the entry's bar shows (country scope, the starter).
+
+    ``lowest_dom``: the smallest result share (te_cm_dom_<m>_<c>, Task 6's) among the core parts
+    that joined and haven't switched; a joined part with no figure yet counts as 0. 1 when there is
+    none. ``progress`` is that over te_cm_switch_share, capped at 1, and 0 until a core part has
+    joined; ``bar_pct`` is the bar's 0 to 100.
+    """
+    merges = cfg.MERGES if merges is None else merges
+    out = _Script()
+    out.line(HEADER)
+    for merge in merges:
+        key = merge.key
+        core = _joinable_core(merge)
+        out.line()
+        out.line("# ---- %s ----" % key)
+        out.line()
+        out.line("# Country scope (the starter). The smallest result share among the core parts of the %s merge that joined and" % key)
+        out.line("# haven't switched: 1 with none left, 0 for a joined part Task 6's census hasn't measured yet.")
+        with out.block("te_cmg_%s_lowest_dom" % key):
+            out.line("value = 1")
+            for culture in core:
+                with out.block("if"):
+                    with out.block("limit"):
+                        out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
+                        out.line("NOT = { has_global_variable = te_cm_switched_%s }" % culture)
+                    with out.block("if"):
+                        out.line("limit = { has_global_variable = te_cm_dom_%s_%s }" % (key, culture))
+                        out.line("max = global_var:te_cm_dom_%s_%s" % (key, culture))
+                    with out.block("else"):
+                        out.line("max = 0")
+        out.line()
+        out.line("# Country scope. How far the %s merge is from its switch, 0 to 1: the lowest result share over the share at" % key)
+        out.line("# which the rest of a part switches. 0 until a core part has joined.")
+        with out.block("te_cmg_%s_progress" % key):
+            out.line("value = 0")
+            with out.block("if"):
+                with out.block("limit"):
+                    with out.block("OR"):
+                        for culture in core:
+                            out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
+                out.line("value = te_cmg_%s_lowest_dom" % key)
+                out.line("divide = te_cm_switch_share")
+                out.line("max = 1")
+        out.line()
+        out.line("# Country scope. The same, 0 to 100, for the bar.")
+        with out.block("te_cmg_%s_bar_pct" % key):
+            out.line("value = te_cmg_%s_progress" % key)
+            out.line("multiply = 100")
+    return out.text()
+
+
+def render_bars(merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """One scripted progress bar per merge, 0 to 100. The entry's monthly pulse sets it."""
+    merges = cfg.MERGES if merges is None else merges
+    out = _Script()
+    out.line(HEADER)
+    for merge in merges:
+        out.line()
+        with out.block("te_cmg_%s_bar" % merge.key):
+            out.line('name = "te_cm_bar_name"')
+            out.line('desc = "te_cm_bar_desc"')
+            out.line("default_green = yes")
+            out.line("start_value = 0")
+            out.line("min_value = 0")
+            out.line("max_value = 100")
+    return out.text()
+
+
+def render_buttons(merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """One start button per merge. Visible while the merge is idle; possible when the country can start
+    it (each condition its own custom_tooltip, in te_cmg_<m>_can_start); the AI presses it at once."""
+    merges = cfg.MERGES if merges is None else merges
+    out = _Script()
+    out.line(HEADER)
+    out.line()
+    out.line("# The AI starts a merge as soon as it qualifies (spec section 4: the merge has no direct cost, so there is")
+    out.line("# nothing to weigh). A human sees the same button on the merge's journal entry.")
+    for merge in merges:
+        key = merge.key
+        out.line()
+        with out.block("te_cmg_start_%s_button" % key):
+            out.line('name = "te_cmg_start_%s_button"' % key)
+            out.line('desc = "te_cmg_start_%s_button_desc"' % key)
+            with out.block("visible"):
+                out.line(_state_idle(key))
+            out.line("ai_chance = { value = 100 }")
+            with out.block("possible"):
+                with out.block("custom_tooltip"):
+                    out.line("text = te_cm_tt_rule_on")
+                    out.line("te_cm_system_enabled = yes")
+                out.line("te_cmg_%s_can_start = yes" % key)
+            with out.block("effect"):
+                with out.block("custom_tooltip"):
+                    out.line("text = te_cmg_start_%s_effect_tt" % key)
+                    out.line("te_cmg_start_%s = yes" % key)
+    return out.text()
+
+
+@dataclass
+class Row:
+    """One line of an entry's status text: the loc key, the lines of its trigger, and its text.
+
+    ``text`` is None for a shared phrase (a hand-written ``te_cm_*`` key)."""
+
+    key: str
+    lines: list[str]
+    text: str | None = None
+
+
+def _negated(lines: list[str]) -> list[str]:
+    return ["NOT = {"] + ["\t" + line for line in lines] + ["}"]
+
+
+def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) -> list[Row]:
+    """The rows of the status text in order; the first whose trigger holds is shown.
+
+    Complete, running, running under another country, then an idle merge's first failing condition: no
+    longer a candidate, not yet measured, each core slot (busy in another merge, not held, not accepted,
+    not together long enough), the standard-of-living gap, a component merge, a vanilla wait, and last
+    that the button is ready.
+    """
+    key = merge.key
+    base = "je_te_cm_%s_status_" % key
+    result = "$%s$" % merge.result
+    tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
+    sv = "[ROOT.GetCountry.MakeScope.ScriptValue('{}')|{}]"
+    rows = [
+        Row(
+            base + "complete",
+            ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key],
+            "The merge is complete: %s is the national culture across the sphere. Parts that qualify later can still join." % result,
+        ),
+        Row(
+            base + "running",
+            ["te_cmg_%s_is_starter = yes" % key],
+            "The merge is running. In the least converted part's homeland, %s holds %s of the pops; at %s the rest of that part "
+            "switches. Culture merge speed: +%s."
+            % (result, sv.format("te_cmg_%s_lowest_dom" % key, "%0"), sv.format("te_cm_switch_share", "%0"),
+               sv.format("te_cm_speed_display", "%0")),
+        ),
+        Row("te_cm_status_elsewhere", ["te_cmg_%s_has_other_starter = yes" % key]),
+        Row("te_cm_status_not_candidate", _negated(["te_cmg_%s_is_candidate = yes" % key])),
+        Row("te_cm_status_unmeasured", _negated(["has_variable = te_cm_ok_%s_%s" % (key, _core_cultures(merge)[0])])),
+    ]
+    for index, part in enumerate(merge.core, start=1):
+        unmet = _negated(_lines(lambda s, part=part: _write_routes(s, _slot_routes(merge, part, tiers))))
+        rows.append(
+            Row(
+                base + "busy_%d" % index,
+                unmet + ["NOR = {"] + ["\tte_cmg_%s_%s_available = yes" % (key, c) for c in part.cultures] + ["}"],
+                "%s pops are already part of another merge, which has to finish with them first." % _either(part.cultures),
+            )
+        )
+        for culture in part.cultures:
+            tier = tiers[culture]
+            free = ["te_cmg_%s_%s_available = yes" % (key, culture), "NOT = { has_global_variable = te_cm_switched_%s }" % culture]
+            held = "te_cm_held_%s_%s" % (key, culture)
+            ok = "te_cm_ok_%s_%s" % (key, culture)
+            rows.append(
+                Row(
+                    base + "hold_%s" % culture,
+                    unmet + free + ["has_variable = %s" % held, "var:%s < te_cm_hold_open" % held],
+                    "$%s$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('%s').GetValue|%%0] of them "
+                    "in their homeland, and %s is needed." % (culture, held, sv.format("te_cm_hold_open", "%0")),
+                )
+            )
+            accept = "te_cm_accept_high_open" if tier == 2 else "te_cm_accept_open"
+            rows.append(
+                Row(
+                    base + "accept_%s" % culture,
+                    unmet + free + ["has_variable = %s" % ok, "var:%s = 0" % ok],
+                    "$%s$ pops are second-class where many of them live: their acceptance in our sphere is below %s."
+                    % (culture, sv.format(accept, "0")),
+                )
+            )
+            if tier > 1:
+                years = "te_cm_years_%s_%s" % (key, culture)
+                needed = "te_cm_years_tier2" if tier == 2 else "te_cm_years_tier3"
+                rows.append(
+                    Row(
+                        base + "years_%s" % culture,
+                        unmet + free + ["var:%s ?= 1" % ok, "has_variable = %s" % years,
+                                        "NOT = { te_cmg_%s_%s_years_met = yes }" % (key, culture)],
+                        "$%s$ pops have not been with us long enough: [ROOT.GetCountry.MakeScope.Var('%s').GetValue|0] of %s years."
+                        % (culture, years, sv.format(needed, "0")),
+                    )
+                )
+    rows.append(Row("te_cm_status_sol", _negated(["var:te_cm_sol_ok_%s ?= 1" % key])))
+    for component in merge.components:
+        rows.append(
+            Row(
+                base + "component_%s" % component,
+                _negated(["global_var:te_cm_state_%s ?= 2" % component]),
+                "The %s merge has to finish first." % _names([merge_by_key(component).result]),
+            )
+        )
+    for part in core_waits(merge):
+        culture = part.cultures[0]
+        rows.append(
+            Row(
+                base + "wait_%s" % culture,
+                ["te_cmg_%s_start_basics = yes" % key, "te_cmg_%s_%s_waiting = yes" % (key, culture)],
+                "The merge waits for %s to end here. It goes ahead after %s years at most."
+                % (_names(part.wait_for), sv.format("te_cm_wait_cap_years", "0")),
+            )
+        )
+    rows.append(Row("te_cm_status_ready", ["te_cmg_%s_can_start = yes" % key]))
+    return rows
+
+
+def merge_by_key(key: str) -> cfg.Merge:
+    return cfg.merge_by_key(key)
+
+
+def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """One journal entry per merge, modelled on je_colonial_empire.
+
+    Inactive (listed for a candidate) until the country can start the merge, then active with the start
+    button and the progress bar; it stays (`can_deactivate = no`). The status text says the first thing
+    in the way, or the progress of the run. It concludes when the merge is complete, and silently when
+    another country starts the merge first. A rule switched off pauses everything: `disable_evaluation`
+    only prunes other countries' inactive records, and the yearly census re-adds one that is missing.
+    """
+    merges = cfg.MERGES if merges is None else merges
+    out = _Script()
+    out.line(HEADER)
+    out.line()
+    out.line("# Each entry is added two ways: the engine activates a candidate's inactive record once both")
+    out.line("# is_shown_when_inactive and possible hold, and the yearly census (te_cmg_<m>_settle) adds one to a country")
+    out.line("# that holds no record, behind the entry's own gate and a skip of any inactive copy")
+    out.line("# (test_add_journal_entry_guard.py). Merge mechanics never key on the entry.")
+    for merge in merges:
+        key = merge.key
+        entry = "je_te_cm_%s" % key
+        out.line()
+        out.line("# ---- %s (%s) ----" % (key, ", ".join("/".join(p.cultures) for p in merge.core)))
+        with out.block(entry):
+            out.line('icon = "%s"' % JE_ICON)
+            out.line("group = je_group_internal_affairs")
+            out.line()
+            out.line("# 1.15 asks every entry for this; always = yes is vanilla's own default.")
+            with out.block("activation_description"):
+                out.line("always = yes")
+            out.line()
+            out.line("# With the rule off, drop other countries' inactive records for good; the census re-adds one.")
+            with out.block("disable_evaluation"):
+                out.line("NOT = { te_cm_system_enabled = yes }")
+            with out.block("is_shown_when_inactive"):
+                out.line("te_cm_system_enabled = yes")
+                out.line("te_cmg_%s_is_candidate = yes" % key)
+            with out.block("possible"):
+                with out.block("OR"):
+                    out.line("te_cmg_%s_can_start = yes" % key)
+                    out.line("te_cmg_%s_is_starter = yes" % key)
+            out.line()
+            out.line("should_be_pinned_by_default_uninvolved_or_context = yes")
+            out.line("scripted_button = te_cmg_start_%s_button" % key)
+            out.line("scripted_progress_bar = te_cmg_%s_bar" % key)
+            out.line("progressbar = no")
+            out.line()
+            out.line("# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.")
+            with out.block("status_desc"):
+                with out.block("first_valid"):
+                    for row in status_rows(merge, vanilla, merges):
+                        with out.block("triggered_desc"):
+                            out.line("desc = %s" % row.key)
+                            with out.block("trigger"):
+                                for line in row.lines:
+                                    out.line(line)
+                    out.line("desc = te_cm_status_pending")
+            out.line()
+            with out.block("outcome"):
+                out.line("header = je_standard_completion_header")
+                out.line("effect_header = je_standard_on_completion_header")
+                out.line('color = "gold_positive"')
+                out.line("conclusion_desc = %s_complete_conclusion_desc" % entry)
+                with out.block("trigger"):
+                    out.line("te_cmg_%s_is_starter = yes" % key)
+                    out.line("global_var:te_cm_state_%s ?= 2" % key)
+            out.line()
+            out.line("# Another country started this merge first (or it is complete under one): the entry ends silently.")
+            with out.block("outcome"):
+                out.line("flags = { hidden invalid_outcome }")
+                out.line("conclusion_desc = te_cm_je_invalid_conclusion_desc")
+                with out.block("trigger"):
+                    out.line("te_cmg_%s_has_other_starter = yes" % key)
+            out.line()
+            out.line("# The bar follows Task 6's dominance figures. Each month the country's variable takes the script")
+            out.line("# value and the entry's bar takes the variable (the heir education entry's pattern). A paused system")
+            out.line("# leaves the bar where it stood.")
+            with out.block("on_monthly_pulse"):
+                with out.block("effect"):
+                    with out.block("if"):
+                        out.line("limit = { te_cm_system_enabled = yes }")
+                        out.line("set_variable = { name = te_cm_bar_%s value = te_cmg_%s_bar_pct }" % (key, key))
+                        with out.block("scope:journal_entry"):
+                            out.line("set_bar_progress = { name = te_cmg_%s_bar value = root.var:te_cm_bar_%s }" % (key, key))
+            out.line()
+            out.line("can_revolution_inherit = yes")
+            out.line("can_deactivate = no")
+    return out.text()
+
+
+def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dict[str, str]:
+    """Every loc key the entries, buttons and their tooltips use, key -> text (without quotes).
+
+    The shared phrases (``te_cm_*``) are hand-written in te_miscellaneous_l_english.yml. Culture and
+    vanilla entry names are spliced (``$german$``), never spelled.
+    """
+    merges = cfg.MERGES if merges is None else merges
+    sv = "[GetPlayer.MakeScope.ScriptValue('{}')|{}]"
+    out: dict[str, str] = {}
+    for merge in merges:
+        key = merge.key
+        entry = "je_te_cm_%s" % key
+        result = "$%s$" % merge.result
+        tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
+        core = [c for part in merge.core for c in part.cultures[:1]]
+        optional = [c for part in merge.optional for c in part.cultures[:1]]
+        out[entry] = "Cultural Merge: %s" % result
+        if merge.new is not None:
+            reason = (
+                "Closely related peoples can come to see themselves as one nation. The core of this merge is %s. Over the "
+                "decades their pops become %s, and once it holds most of a part's homeland, every remaining pop of that "
+                "part follows." % (_names(core), result)
+            )
+        else:
+            reason = (
+                "Closely related peoples can come to see themselves as one nation. Here %s pops would become part of the existing "
+                "%s culture: over the decades their pops assimilate into it, and once it holds most of a part's homeland, every "
+                "remaining pop of that part follows." % (_names([c for c in core if c != merge.result]), result)
+            )
+        if optional:
+            reason += " %s can join once they qualify as well." % _names(optional)
+        out[entry + "_reason"] = reason
+        out[entry + "_complete_conclusion_desc"] = (
+            "The merge is complete. %s is the national culture across the sphere, and the parts it brought in are one people." % result
+        )
+        for row in status_rows(merge, vanilla, merges):
+            if row.text is not None:
+                out[row.key] = row.text
+        button = "te_cmg_start_%s_button" % key
+        out[button] = "Begin the %s Merge" % result
+        out[button + "_desc"] = (
+            "Starts the merge of %s. %s becomes a primary culture here%s, and every part we hold begins to assimilate into it: "
+            "a slice of its pops each year, those in subjects and bloc members more slowly. Once %s holds %s of a part's "
+            "homeland, every remaining pop of that part switches at once."
+            % (_names(core), result, "" if merge.new is not None else " if it isn't one already", result,
+               sv.format("te_cm_switch_share", "%0"))
+        )
+        out["te_cmg_start_%s_effect_tt" % key] = (
+            "%s becomes a primary culture here%s and the merge begins. Each part we hold that qualifies starts to assimilate into it."
+            % (result, "" if merge.new is not None else " if it isn't one already")
+        )
+        out["te_cmg_%s_primary_tt" % key] = "A core culture of the merge is a primary culture here: %s." % _either(_core_cultures(merge))
+        for index, part in enumerate(merge.core, start=1):
+            tier = tiers[part.cultures[0]]
+            head = "%s pops are" % _either(part.cultures)
+            if tier == 1:
+                tail = "held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live accept them."
+            elif tier == 2:
+                tail = ("held and very highly accepted for decades: our sphere holds most of their homeland pops, and the countries "
+                        "where many of them live accept them far above the usual mark.")
+            else:
+                tail = ("held and accepted for generations: our sphere holds most of their homeland pops, and the countries "
+                        "where many of them live have accepted them for half a century.")
+            out["te_cmg_%s_core_%d_tt" % (key, index)] = "%s %s" % (head, tail)
+        for component in merge.components:
+            out["te_cmg_%s_comp_%s_tt" % (key, component)] = "The %s merge is complete." % _names([merge_by_key(component).result])
+        for part in core_waits(merge):
+            out["te_cmg_%s_wait_%s_tt" % (key, part.cultures[0])] = (
+                "%s is not open here, or the merge has already waited %s years for it to end."
+                % (_names(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
+            )
+    for text_key, text in out.items():
+        if '"' in text or "\n" in text:
+            raise ValueError("%s: a loc text can't hold a quote mark or a newline" % text_key)
+    return out
+
+
 def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
     """Relative output path -> its text (without the BOM). Later tasks add outputs here."""
     vanilla = load_vanilla(root)
@@ -863,9 +1524,13 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
     return {
         CULTURES_OUT: render_cultures(plan),
         TRAITS_OUT: render_traits(plan),
-        LOC_OUT: render_loc(plan),
+        LOC_OUT: render_loc(plan, entry_loc(vanilla)),
         TRIGGERS_GEN_OUT: render_triggers(vanilla),
         EFFECTS_GEN_OUT: render_effects(vanilla),
+        JE_OUT: render_journal_entries(vanilla),
+        BUTTONS_OUT: render_buttons(),
+        BARS_OUT: render_bars(),
+        VALUES_OUT: render_values(),
     }
 
 

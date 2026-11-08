@@ -780,11 +780,17 @@ class TriggerShapeTest(unittest.TestCase):
         expected = set()
         for merge in cfg.MERGES:
             expected.update(
-                "te_cmg_%s_%s" % (merge.key, suffix) for suffix in ("is_candidate", "core_ok", "census_wanted")
+                "te_cmg_%s_%s" % (merge.key, suffix)
+                for suffix in ("is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start")
             )
+            if any(part.wait_for for part in merge.core):
+                expected.add("te_cmg_%s_start_basics" % merge.key)
             for culture in slot_cultures(merge):
                 for suffix in ("available", "measured", "can_join"):
                     expected.add("te_cmg_%s_%s_%s" % (merge.key, culture, suffix))
+                part = next(p for p in merge.core + merge.optional if culture in p.cultures)
+                if part.wait_for and not _absorb_result(merge, culture):
+                    expected.add("te_cmg_%s_%s_waiting" % (merge.key, culture))
                 if tier_of(merge, culture) > 1:
                     expected.add("te_cmg_%s_%s_years_met" % (merge.key, culture))
                 if not _absorb_result(merge, culture):
@@ -820,15 +826,28 @@ class StateIsVariablesTest(unittest.TestCase):
         # R19: counters and gates keep their last values while the rule is off, so the census never takes a
         # global variable away: the lock is set, never removed, and it is the only global it writes besides
         # the home counts and the year.
-        for path in (EFFECTS, ON_ACTIONS, GEN_EFFECTS, GEN_TRIGGERS):
+        # The three helpers that start, join and release a merge (Task 5) sit in the same file but are not the
+        # census: the release is the one place a global variable is removed, and test_culture_merge_entries
+        # pins what each of them writes.
+        helpers = ("te_cm_start_merge", "te_cm_join_part", "te_cm_release_starter")
+
+        def census_only(path):
             text = text_of(path)
+            for name in helpers:
+                body = block(text, name)
+                if body is not None:
+                    text = text.replace("%s = {\n%s}" % (name, body), "")
+            return text
+
+        for path in (EFFECTS, ON_ACTIONS, GEN_EFFECTS, GEN_TRIGGERS):
+            text = census_only(path)
             self.assertNotIn("has_game_rule", text, path.name)
             self.assertNotIn("remove_global_variable", text, path.name)
             self.assertNotIn("clear_global_variable_list", text, path.name)
         # The one removal is the temporary holder variable, which never outlives its census call.
-        removed = set(re.findall(r"remove_variable = (\w+)", text_of(EFFECTS) + text_of(GEN_EFFECTS)))
+        removed = set(re.findall(r"remove_variable = (\w+)", census_only(EFFECTS) + census_only(GEN_EFFECTS)))
         self.assertEqual(removed, {"te_cm_tmp_cnt"})
-        written = set(re.findall(r"set_global_variable = \{ name = ([\w$]+)", text_of(EFFECTS) + text_of(ON_ACTIONS)))
+        written = set(re.findall(r"set_global_variable = \{ name = ([\w$]+)", census_only(EFFECTS) + census_only(ON_ACTIONS)))
         self.assertEqual(written, {"te_cm_census_lock", "te_cm_census_year"} | {"te_cm_home_$CULTURE$", "te_cm_home_r_$CULTURE$"})
 
 

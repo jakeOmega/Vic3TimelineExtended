@@ -176,6 +176,66 @@ te_cmg_german_census_wanted = {
 	}
 }
 
+# Country scope. This country started the german merge, which is running or complete.
+te_cmg_german_is_starter = {
+	OR = {
+		global_var:te_cm_state_german ?= 1
+		global_var:te_cm_state_german ?= 2
+	}
+	exists = global_var:te_cm_starter_german
+	this = global_var:te_cm_starter_german
+}
+
+# Country scope. The german merge is running or complete under another country.
+te_cmg_german_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_german ?= 1
+		global_var:te_cm_state_german ?= 2
+	}
+	exists = global_var:te_cm_starter_german
+	NOT = { this = global_var:te_cm_starter_german }
+}
+
+# Country scope. Can this country start the german merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_german_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_german ?= 1 global_var:te_cm_state_german ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_german_primary_tt
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:south_german
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_german_core_1_tt
+		OR = {
+			te_cmg_german_north_german_measured = yes
+			te_cmg_german_north_german_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_german_core_2_tt
+		OR = {
+			te_cmg_german_south_german_measured = yes
+			te_cmg_german_south_german_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_german ?= 1
+	}
+}
+
 # ---- italian (north_italian, south_italian) ----
 
 # Country scope. Can this country start the italian merge? The system is on, a core culture is
@@ -317,6 +377,66 @@ te_cmg_italian_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the italian merge, which is running or complete.
+te_cmg_italian_is_starter = {
+	OR = {
+		global_var:te_cm_state_italian ?= 1
+		global_var:te_cm_state_italian ?= 2
+	}
+	exists = global_var:te_cm_starter_italian
+	this = global_var:te_cm_starter_italian
+}
+
+# Country scope. The italian merge is running or complete under another country.
+te_cmg_italian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_italian ?= 1
+		global_var:te_cm_state_italian ?= 2
+	}
+	exists = global_var:te_cm_starter_italian
+	NOT = { this = global_var:te_cm_starter_italian }
+}
+
+# Country scope. Can this country start the italian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_italian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_italian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:north_italian
+			country_has_primary_culture = cu:south_italian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_italian_core_1_tt
+		OR = {
+			te_cmg_italian_north_italian_measured = yes
+			te_cmg_italian_north_italian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_italian_core_2_tt
+		OR = {
+			te_cmg_italian_south_italian_measured = yes
+			te_cmg_italian_south_italian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_italian ?= 1
 	}
 }
 
@@ -500,6 +620,74 @@ te_cmg_scandinavian_census_wanted = {
 	}
 }
 
+# Country scope. This country started the scandinavian merge, which is running or complete.
+te_cmg_scandinavian_is_starter = {
+	OR = {
+		global_var:te_cm_state_scandinavian ?= 1
+		global_var:te_cm_state_scandinavian ?= 2
+	}
+	exists = global_var:te_cm_starter_scandinavian
+	this = global_var:te_cm_starter_scandinavian
+}
+
+# Country scope. The scandinavian merge is running or complete under another country.
+te_cmg_scandinavian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_scandinavian ?= 1
+		global_var:te_cm_state_scandinavian ?= 2
+	}
+	exists = global_var:te_cm_starter_scandinavian
+	NOT = { this = global_var:te_cm_starter_scandinavian }
+}
+
+# Country scope. Can this country start the scandinavian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_scandinavian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_scandinavian ?= 1 global_var:te_cm_state_scandinavian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_scandinavian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:swedish
+			country_has_primary_culture = cu:danish
+			country_has_primary_culture = cu:norwegian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_scandinavian_core_1_tt
+		OR = {
+			te_cmg_scandinavian_swedish_measured = yes
+			te_cmg_scandinavian_swedish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_scandinavian_core_2_tt
+		OR = {
+			te_cmg_scandinavian_danish_measured = yes
+			te_cmg_scandinavian_danish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_scandinavian_core_3_tt
+		OR = {
+			te_cmg_scandinavian_norwegian_measured = yes
+			te_cmg_scandinavian_norwegian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_scandinavian ?= 1
+	}
+}
+
 # ---- east_slavic (russian, ukrainian, byelorussian) ----
 
 # Country scope. Can this country start the east_slavic merge? The system is on, a core culture is
@@ -586,6 +774,18 @@ te_cmg_east_slavic_ukrainian_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
+# Country scope. ukrainian waits on a vanilla journal entry of this country (je_ukraine_cultural_renaissance) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_east_slavic_ukrainian_waiting = {
+	has_journal_entry = je_ukraine_cultural_renaissance
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_east_slavic
+			trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. byelorussian is free for the east_slavic merge.
 te_cmg_east_slavic_byelorussian_available = {
 	always = yes
@@ -611,6 +811,18 @@ te_cmg_east_slavic_byelorussian_can_join = {
 	te_cmg_east_slavic_byelorussian_available = yes
 	NOT = { global_var:te_cm_joined_east_slavic_byelorussian ?= 1 }
 	te_cm_tier_tech = { TIER = 1 }
+}
+
+# Country scope. byelorussian waits on a vanilla journal entry of this country (je_belarus_cultural_renaissance) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_east_slavic_byelorussian_waiting = {
+	has_journal_entry = je_belarus_cultural_renaissance
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_east_slavic
+			trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
+		}
+	}
 }
 
 # Any scope. Is the yearly census of the east_slavic merge worth running? An idle merge with a
@@ -643,6 +855,100 @@ te_cmg_east_slavic_census_wanted = {
 					NOT = { has_global_variable = te_cm_switched_byelorussian }
 					any_country = { culture_percent_country = { target = cu:byelorussian value > 0 } }
 				}
+			}
+		}
+	}
+}
+
+# Country scope. This country started the east_slavic merge, which is running or complete.
+te_cmg_east_slavic_is_starter = {
+	OR = {
+		global_var:te_cm_state_east_slavic ?= 1
+		global_var:te_cm_state_east_slavic ?= 2
+	}
+	exists = global_var:te_cm_starter_east_slavic
+	this = global_var:te_cm_starter_east_slavic
+}
+
+# Country scope. The east_slavic merge is running or complete under another country.
+te_cmg_east_slavic_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_east_slavic ?= 1
+		global_var:te_cm_state_east_slavic ?= 2
+	}
+	exists = global_var:te_cm_starter_east_slavic
+	NOT = { this = global_var:te_cm_starter_east_slavic }
+}
+
+# Country scope. Everything the east_slavic merge needs to start except its waits on vanilla entries
+# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
+te_cmg_east_slavic_start_basics = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_east_slavic_primary_tt
+		OR = {
+			country_has_primary_culture = cu:russian
+			country_has_primary_culture = cu:ukrainian
+			country_has_primary_culture = cu:byelorussian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_east_slavic_core_1_tt
+		OR = {
+			te_cmg_east_slavic_russian_measured = yes
+			te_cmg_east_slavic_russian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_east_slavic_core_2_tt
+		OR = {
+			te_cmg_east_slavic_ukrainian_measured = yes
+			te_cmg_east_slavic_ukrainian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_east_slavic_core_3_tt
+		OR = {
+			te_cmg_east_slavic_byelorussian_measured = yes
+			te_cmg_east_slavic_byelorussian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_east_slavic ?= 1
+	}
+}
+
+# Country scope. Can this country start the east_slavic merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_east_slavic_can_start = {
+	te_cmg_east_slavic_start_basics = yes
+	custom_tooltip = {
+		text = te_cmg_east_slavic_wait_ukrainian_tt
+		OR = {
+			NOT = { has_journal_entry = je_ukraine_cultural_renaissance }
+			AND = {
+				has_variable = te_cm_wait_years_east_slavic
+				trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
+			}
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_east_slavic_wait_byelorussian_tt
+		OR = {
+			NOT = { has_journal_entry = je_belarus_cultural_renaissance }
+			AND = {
+				has_variable = te_cm_wait_years_east_slavic
+				trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
 			}
 		}
 	}
@@ -874,6 +1180,74 @@ te_cmg_yugoslav_census_wanted = {
 	}
 }
 
+# Country scope. This country started the yugoslav merge, which is running or complete.
+te_cmg_yugoslav_is_starter = {
+	OR = {
+		global_var:te_cm_state_yugoslav ?= 1
+		global_var:te_cm_state_yugoslav ?= 2
+	}
+	exists = global_var:te_cm_starter_yugoslav
+	this = global_var:te_cm_starter_yugoslav
+}
+
+# Country scope. The yugoslav merge is running or complete under another country.
+te_cmg_yugoslav_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_yugoslav ?= 1
+		global_var:te_cm_state_yugoslav ?= 2
+	}
+	exists = global_var:te_cm_starter_yugoslav
+	NOT = { this = global_var:te_cm_starter_yugoslav }
+}
+
+# Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_yugoslav_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_yugoslav_primary_tt
+		OR = {
+			country_has_primary_culture = cu:serb
+			country_has_primary_culture = cu:croat
+			country_has_primary_culture = cu:bosniak
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_yugoslav_core_1_tt
+		OR = {
+			te_cmg_yugoslav_serb_measured = yes
+			te_cmg_yugoslav_serb_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_yugoslav_core_2_tt
+		OR = {
+			te_cmg_yugoslav_croat_measured = yes
+			te_cmg_yugoslav_croat_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_yugoslav_core_3_tt
+		OR = {
+			te_cmg_yugoslav_bosniak_measured = yes
+			te_cmg_yugoslav_bosniak_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_yugoslav ?= 1
+	}
+}
+
 # ---- czechoslovak (czech, slovak) ----
 
 # Country scope. Can this country start the czechoslovak merge? The system is on, a core culture is
@@ -1018,6 +1392,66 @@ te_cmg_czechoslovak_census_wanted = {
 	}
 }
 
+# Country scope. This country started the czechoslovak merge, which is running or complete.
+te_cmg_czechoslovak_is_starter = {
+	OR = {
+		global_var:te_cm_state_czechoslovak ?= 1
+		global_var:te_cm_state_czechoslovak ?= 2
+	}
+	exists = global_var:te_cm_starter_czechoslovak
+	this = global_var:te_cm_starter_czechoslovak
+}
+
+# Country scope. The czechoslovak merge is running or complete under another country.
+te_cmg_czechoslovak_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_czechoslovak ?= 1
+		global_var:te_cm_state_czechoslovak ?= 2
+	}
+	exists = global_var:te_cm_starter_czechoslovak
+	NOT = { this = global_var:te_cm_starter_czechoslovak }
+}
+
+# Country scope. Can this country start the czechoslovak merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_czechoslovak_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_czechoslovak_primary_tt
+		OR = {
+			country_has_primary_culture = cu:czech
+			country_has_primary_culture = cu:slovak
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_czechoslovak_core_1_tt
+		OR = {
+			te_cmg_czechoslovak_czech_measured = yes
+			te_cmg_czechoslovak_czech_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_czechoslovak_core_2_tt
+		OR = {
+			te_cmg_czechoslovak_slovak_measured = yes
+			te_cmg_czechoslovak_slovak_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_czechoslovak ?= 1
+	}
+}
+
 # ---- hungarian (hungarian, szekely) ----
 
 # Country scope. Can this country start the hungarian merge? The system is on, a core culture is
@@ -1114,6 +1548,63 @@ te_cmg_hungarian_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the hungarian merge, which is running or complete.
+te_cmg_hungarian_is_starter = {
+	OR = {
+		global_var:te_cm_state_hungarian ?= 1
+		global_var:te_cm_state_hungarian ?= 2
+	}
+	exists = global_var:te_cm_starter_hungarian
+	this = global_var:te_cm_starter_hungarian
+}
+
+# Country scope. The hungarian merge is running or complete under another country.
+te_cmg_hungarian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_hungarian ?= 1
+		global_var:te_cm_state_hungarian ?= 2
+	}
+	exists = global_var:te_cm_starter_hungarian
+	NOT = { this = global_var:te_cm_starter_hungarian }
+}
+
+# Country scope. Can this country start the hungarian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_hungarian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_hungarian ?= 1 global_var:te_cm_state_hungarian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_hungarian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:hungarian
+			country_has_primary_culture = cu:szekely
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_hungarian_core_1_tt
+		te_cmg_hungarian_hungarian_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_hungarian_core_2_tt
+		OR = {
+			te_cmg_hungarian_szekely_measured = yes
+			te_cmg_hungarian_szekely_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_hungarian ?= 1
 	}
 }
 
@@ -1216,6 +1707,63 @@ te_cmg_dutch_census_wanted = {
 	}
 }
 
+# Country scope. This country started the dutch merge, which is running or complete.
+te_cmg_dutch_is_starter = {
+	OR = {
+		global_var:te_cm_state_dutch ?= 1
+		global_var:te_cm_state_dutch ?= 2
+	}
+	exists = global_var:te_cm_starter_dutch
+	this = global_var:te_cm_starter_dutch
+}
+
+# Country scope. The dutch merge is running or complete under another country.
+te_cmg_dutch_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_dutch ?= 1
+		global_var:te_cm_state_dutch ?= 2
+	}
+	exists = global_var:te_cm_starter_dutch
+	NOT = { this = global_var:te_cm_starter_dutch }
+}
+
+# Country scope. Can this country start the dutch merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_dutch_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_dutch ?= 1 global_var:te_cm_state_dutch ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_dutch_primary_tt
+		OR = {
+			country_has_primary_culture = cu:dutch
+			country_has_primary_culture = cu:flemish
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_dutch_core_1_tt
+		te_cmg_dutch_dutch_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_dutch_core_2_tt
+		OR = {
+			te_cmg_dutch_flemish_measured = yes
+			te_cmg_dutch_flemish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_dutch ?= 1
+	}
+}
+
 # ---- finnish (finnish, karelian) ----
 
 # Country scope. Can this country start the finnish merge? The system is on, a core culture is
@@ -1312,6 +1860,63 @@ te_cmg_finnish_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the finnish merge, which is running or complete.
+te_cmg_finnish_is_starter = {
+	OR = {
+		global_var:te_cm_state_finnish ?= 1
+		global_var:te_cm_state_finnish ?= 2
+	}
+	exists = global_var:te_cm_starter_finnish
+	this = global_var:te_cm_starter_finnish
+}
+
+# Country scope. The finnish merge is running or complete under another country.
+te_cmg_finnish_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_finnish ?= 1
+		global_var:te_cm_state_finnish ?= 2
+	}
+	exists = global_var:te_cm_starter_finnish
+	NOT = { this = global_var:te_cm_starter_finnish }
+}
+
+# Country scope. Can this country start the finnish merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_finnish_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_finnish ?= 1 global_var:te_cm_state_finnish ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_finnish_primary_tt
+		OR = {
+			country_has_primary_culture = cu:finnish
+			country_has_primary_culture = cu:karelian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_finnish_core_1_tt
+		te_cmg_finnish_finnish_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_finnish_core_2_tt
+		OR = {
+			te_cmg_finnish_karelian_measured = yes
+			te_cmg_finnish_karelian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_finnish ?= 1
 	}
 }
 
@@ -1489,6 +2094,71 @@ te_cmg_french_census_wanted = {
 	}
 }
 
+# Country scope. This country started the french merge, which is running or complete.
+te_cmg_french_is_starter = {
+	OR = {
+		global_var:te_cm_state_french ?= 1
+		global_var:te_cm_state_french ?= 2
+	}
+	exists = global_var:te_cm_starter_french
+	this = global_var:te_cm_starter_french
+}
+
+# Country scope. The french merge is running or complete under another country.
+te_cmg_french_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_french ?= 1
+		global_var:te_cm_state_french ?= 2
+	}
+	exists = global_var:te_cm_starter_french
+	NOT = { this = global_var:te_cm_starter_french }
+}
+
+# Country scope. Can this country start the french merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_french_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_french_primary_tt
+		OR = {
+			country_has_primary_culture = cu:french
+			country_has_primary_culture = cu:wallonian
+			country_has_primary_culture = cu:occitan
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_french_core_1_tt
+		te_cmg_french_french_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_french_core_2_tt
+		OR = {
+			te_cmg_french_wallonian_measured = yes
+			te_cmg_french_wallonian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_french_core_3_tt
+		OR = {
+			te_cmg_french_occitan_measured = yes
+			te_cmg_french_occitan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_french ?= 1
+	}
+}
+
 # ---- british (british, scottish) ----
 
 # Country scope. Can this country start the british merge? The system is on, a core culture is
@@ -1588,6 +2258,63 @@ te_cmg_british_census_wanted = {
 	}
 }
 
+# Country scope. This country started the british merge, which is running or complete.
+te_cmg_british_is_starter = {
+	OR = {
+		global_var:te_cm_state_british ?= 1
+		global_var:te_cm_state_british ?= 2
+	}
+	exists = global_var:te_cm_starter_british
+	this = global_var:te_cm_starter_british
+}
+
+# Country scope. The british merge is running or complete under another country.
+te_cmg_british_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_british ?= 1
+		global_var:te_cm_state_british ?= 2
+	}
+	exists = global_var:te_cm_starter_british
+	NOT = { this = global_var:te_cm_starter_british }
+}
+
+# Country scope. Can this country start the british merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_british_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_british_primary_tt
+		OR = {
+			country_has_primary_culture = cu:british
+			country_has_primary_culture = cu:scottish
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_british_core_1_tt
+		te_cmg_british_british_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_british_core_2_tt
+		OR = {
+			te_cmg_british_scottish_measured = yes
+			te_cmg_british_scottish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_british ?= 1
+	}
+}
+
 # ---- american (yankee, dixie) ----
 
 # Country scope. Can this country start the american merge? The system is on, a core culture is
@@ -1669,6 +2396,18 @@ te_cmg_american_dixie_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
+# Country scope. dixie waits on a vanilla journal entry of this country (je_acw_reincorporate) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_american_dixie_waiting = {
+	has_journal_entry = je_acw_reincorporate
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_american
+			trigger_if = { limit = { has_variable = te_cm_wait_years_american } var:te_cm_wait_years_american >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. afro_american is free for the american merge.
 te_cmg_american_afro_american_available = {
 	NOT = { global_var:te_cm_in_afro_american ?= 13 }
@@ -1704,6 +2443,18 @@ te_cmg_american_afro_american_can_join = {
 	var:te_cm_sol_ok_american_afro_american ?= 1
 }
 
+# Country scope. afro_american waits on a vanilla journal entry of this country (je_acw_equality) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_american_afro_american_waiting = {
+	has_journal_entry = je_acw_equality
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_american
+			trigger_if = { limit = { has_variable = te_cm_wait_years_american } var:te_cm_wait_years_american >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. Is the yearly census of the american merge worth running? An idle merge with a
 # candidate; or a running or complete one whose starter is alive and which still has a
 # part that has neither switched nor left the world (a complete merge keeps its census so
@@ -1734,6 +2485,82 @@ te_cmg_american_census_wanted = {
 					NOT = { has_global_variable = te_cm_switched_afro_american }
 					any_country = { culture_percent_country = { target = cu:afro_american value > 0 } }
 				}
+			}
+		}
+	}
+}
+
+# Country scope. This country started the american merge, which is running or complete.
+te_cmg_american_is_starter = {
+	OR = {
+		global_var:te_cm_state_american ?= 1
+		global_var:te_cm_state_american ?= 2
+	}
+	exists = global_var:te_cm_starter_american
+	this = global_var:te_cm_starter_american
+}
+
+# Country scope. The american merge is running or complete under another country.
+te_cmg_american_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_american ?= 1
+		global_var:te_cm_state_american ?= 2
+	}
+	exists = global_var:te_cm_starter_american
+	NOT = { this = global_var:te_cm_starter_american }
+}
+
+# Country scope. Everything the american merge needs to start except its waits on vanilla entries
+# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
+te_cmg_american_start_basics = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_american_primary_tt
+		OR = {
+			country_has_primary_culture = cu:yankee
+			country_has_primary_culture = cu:dixie
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_american_core_1_tt
+		OR = {
+			te_cmg_american_yankee_measured = yes
+			te_cmg_american_yankee_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_american_core_2_tt
+		OR = {
+			te_cmg_american_dixie_measured = yes
+			te_cmg_american_dixie_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_american ?= 1
+	}
+}
+
+# Country scope. Can this country start the american merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_american_can_start = {
+	te_cmg_american_start_basics = yes
+	custom_tooltip = {
+		text = te_cmg_american_wait_dixie_tt
+		OR = {
+			NOT = { has_journal_entry = je_acw_reincorporate }
+			AND = {
+				has_variable = te_cm_wait_years_american
+				trigger_if = { limit = { has_variable = te_cm_wait_years_american } var:te_cm_wait_years_american >= te_cm_wait_cap_years }
 			}
 		}
 	}
@@ -1992,6 +2819,18 @@ te_cmg_anglophone_dixie_can_join = {
 	var:te_cm_sol_ok_anglophone_dixie ?= 1
 }
 
+# Country scope. dixie waits on a vanilla journal entry of this country (je_acw_reincorporate) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_anglophone_dixie_waiting = {
+	has_journal_entry = je_acw_reincorporate
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_anglophone
+			trigger_if = { limit = { has_variable = te_cm_wait_years_anglophone } var:te_cm_wait_years_anglophone >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. afro_american is free for the anglophone merge.
 te_cmg_anglophone_afro_american_available = {
 	NOT = { global_var:te_cm_in_afro_american ?= 12 }
@@ -2025,6 +2864,18 @@ te_cmg_anglophone_afro_american_can_join = {
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_anglophone_afro_american_years_met = yes
 	var:te_cm_sol_ok_anglophone_afro_american ?= 1
+}
+
+# Country scope. afro_american waits on a vanilla journal entry of this country (je_acw_equality) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_anglophone_afro_american_waiting = {
+	has_journal_entry = je_acw_equality
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_anglophone
+			trigger_if = { limit = { has_variable = te_cm_wait_years_anglophone } var:te_cm_wait_years_anglophone >= te_cm_wait_cap_years }
+		}
+	}
 }
 
 # Any scope. Is the yearly census of the anglophone merge worth running? An idle merge with a
@@ -2079,6 +2930,78 @@ te_cmg_anglophone_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the anglophone merge, which is running or complete.
+te_cmg_anglophone_is_starter = {
+	OR = {
+		global_var:te_cm_state_anglophone ?= 1
+		global_var:te_cm_state_anglophone ?= 2
+	}
+	exists = global_var:te_cm_starter_anglophone
+	this = global_var:te_cm_starter_anglophone
+}
+
+# Country scope. The anglophone merge is running or complete under another country.
+te_cmg_anglophone_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_anglophone ?= 1
+		global_var:te_cm_state_anglophone ?= 2
+	}
+	exists = global_var:te_cm_starter_anglophone
+	NOT = { this = global_var:te_cm_starter_anglophone }
+}
+
+# Country scope. Can this country start the anglophone merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_anglophone_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_anglophone ?= 1 global_var:te_cm_state_anglophone ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_anglophone_primary_tt
+		OR = {
+			country_has_primary_culture = cu:british
+			country_has_primary_culture = cu:yankee
+			country_has_primary_culture = cu:cm_american
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_2
+		te_cm_tier_tech = { TIER = 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_anglophone_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_anglophone_british_measured = yes
+				te_cmg_anglophone_british_years_met = yes
+			}
+			te_cmg_anglophone_british_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_anglophone_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_anglophone_yankee_measured = yes
+				te_cmg_anglophone_yankee_years_met = yes
+			}
+			te_cmg_anglophone_yankee_switched_in = yes
+			AND = {
+				te_cmg_anglophone_cm_american_measured = yes
+				te_cmg_anglophone_cm_american_years_met = yes
+			}
+			te_cmg_anglophone_cm_american_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_anglophone ?= 1
 	}
 }
 
@@ -2329,6 +3252,87 @@ te_cmg_brazilian_census_wanted = {
 	}
 }
 
+# Country scope. This country started the brazilian merge, which is running or complete.
+te_cmg_brazilian_is_starter = {
+	OR = {
+		global_var:te_cm_state_brazilian ?= 1
+		global_var:te_cm_state_brazilian ?= 2
+	}
+	exists = global_var:te_cm_starter_brazilian
+	this = global_var:te_cm_starter_brazilian
+}
+
+# Country scope. The brazilian merge is running or complete under another country.
+te_cmg_brazilian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_brazilian ?= 1
+		global_var:te_cm_state_brazilian ?= 2
+	}
+	exists = global_var:te_cm_starter_brazilian
+	NOT = { this = global_var:te_cm_starter_brazilian }
+}
+
+# Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_brazilian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_brazilian ?= 1 global_var:te_cm_state_brazilian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:brazilian
+			country_has_primary_culture = cu:nordestino
+			country_has_primary_culture = cu:paulista
+			country_has_primary_culture = cu:amazonic
+			country_has_primary_culture = cu:sulista
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_core_1_tt
+		te_cmg_brazilian_brazilian_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_core_2_tt
+		OR = {
+			te_cmg_brazilian_nordestino_measured = yes
+			te_cmg_brazilian_nordestino_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_core_3_tt
+		OR = {
+			te_cmg_brazilian_paulista_measured = yes
+			te_cmg_brazilian_paulista_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_core_4_tt
+		OR = {
+			te_cmg_brazilian_amazonic_measured = yes
+			te_cmg_brazilian_amazonic_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_brazilian_core_5_tt
+		OR = {
+			te_cmg_brazilian_sulista_measured = yes
+			te_cmg_brazilian_sulista_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_brazilian ?= 1
+	}
+}
+
 # ---- platine (platinean, argentine, uruguayan, paraguayan) ----
 
 # Country scope. Can this country start the platine merge? The system is on, a core culture is
@@ -2510,6 +3514,82 @@ te_cmg_platine_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the platine merge, which is running or complete.
+te_cmg_platine_is_starter = {
+	OR = {
+		global_var:te_cm_state_platine ?= 1
+		global_var:te_cm_state_platine ?= 2
+	}
+	exists = global_var:te_cm_starter_platine
+	this = global_var:te_cm_starter_platine
+}
+
+# Country scope. The platine merge is running or complete under another country.
+te_cmg_platine_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_platine ?= 1
+		global_var:te_cm_state_platine ?= 2
+	}
+	exists = global_var:te_cm_starter_platine
+	NOT = { this = global_var:te_cm_starter_platine }
+}
+
+# Country scope. Can this country start the platine merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_platine_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_platine ?= 1 global_var:te_cm_state_platine ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_platine_primary_tt
+		OR = {
+			country_has_primary_culture = cu:platinean
+			country_has_primary_culture = cu:argentine
+			country_has_primary_culture = cu:uruguayan
+			country_has_primary_culture = cu:paraguayan
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_platine_core_1_tt
+		OR = {
+			te_cmg_platine_platinean_measured = yes
+			te_cmg_platine_platinean_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_platine_core_2_tt
+		OR = {
+			te_cmg_platine_argentine_measured = yes
+			te_cmg_platine_argentine_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_platine_core_3_tt
+		OR = {
+			te_cmg_platine_uruguayan_measured = yes
+			te_cmg_platine_uruguayan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_platine_core_4_tt
+		OR = {
+			te_cmg_platine_paraguayan_measured = yes
+			te_cmg_platine_paraguayan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_platine ?= 1
 	}
 }
 
@@ -2697,6 +3777,82 @@ te_cmg_andean_census_wanted = {
 	}
 }
 
+# Country scope. This country started the andean merge, which is running or complete.
+te_cmg_andean_is_starter = {
+	OR = {
+		global_var:te_cm_state_andean ?= 1
+		global_var:te_cm_state_andean ?= 2
+	}
+	exists = global_var:te_cm_starter_andean
+	this = global_var:te_cm_starter_andean
+}
+
+# Country scope. The andean merge is running or complete under another country.
+te_cmg_andean_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_andean ?= 1
+		global_var:te_cm_state_andean ?= 2
+	}
+	exists = global_var:te_cm_starter_andean
+	NOT = { this = global_var:te_cm_starter_andean }
+}
+
+# Country scope. Can this country start the andean merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_andean_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_andean ?= 1 global_var:te_cm_state_andean ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_andean_primary_tt
+		OR = {
+			country_has_primary_culture = cu:north_andean
+			country_has_primary_culture = cu:south_andean
+			country_has_primary_culture = cu:peruvian
+			country_has_primary_culture = cu:bolivian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_andean_core_1_tt
+		OR = {
+			te_cmg_andean_north_andean_measured = yes
+			te_cmg_andean_north_andean_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_andean_core_2_tt
+		OR = {
+			te_cmg_andean_south_andean_measured = yes
+			te_cmg_andean_south_andean_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_andean_core_3_tt
+		OR = {
+			te_cmg_andean_peruvian_measured = yes
+			te_cmg_andean_peruvian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_andean_core_4_tt
+		OR = {
+			te_cmg_andean_bolivian_measured = yes
+			te_cmg_andean_bolivian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_andean ?= 1
+	}
+}
+
 # ---- gran_colombian (colombian, venezuelan, ecuadorian) ----
 
 # Country scope. Can this country start the gran_colombian merge? The system is on, a core culture is
@@ -2842,6 +3998,74 @@ te_cmg_gran_colombian_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the gran_colombian merge, which is running or complete.
+te_cmg_gran_colombian_is_starter = {
+	OR = {
+		global_var:te_cm_state_gran_colombian ?= 1
+		global_var:te_cm_state_gran_colombian ?= 2
+	}
+	exists = global_var:te_cm_starter_gran_colombian
+	this = global_var:te_cm_starter_gran_colombian
+}
+
+# Country scope. The gran_colombian merge is running or complete under another country.
+te_cmg_gran_colombian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_gran_colombian ?= 1
+		global_var:te_cm_state_gran_colombian ?= 2
+	}
+	exists = global_var:te_cm_starter_gran_colombian
+	NOT = { this = global_var:te_cm_starter_gran_colombian }
+}
+
+# Country scope. Can this country start the gran_colombian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_gran_colombian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_gran_colombian ?= 1 global_var:te_cm_state_gran_colombian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_gran_colombian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:colombian
+			country_has_primary_culture = cu:venezuelan
+			country_has_primary_culture = cu:ecuadorian
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_gran_colombian_core_1_tt
+		OR = {
+			te_cmg_gran_colombian_colombian_measured = yes
+			te_cmg_gran_colombian_colombian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_gran_colombian_core_2_tt
+		OR = {
+			te_cmg_gran_colombian_venezuelan_measured = yes
+			te_cmg_gran_colombian_venezuelan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_gran_colombian_core_3_tt
+		OR = {
+			te_cmg_gran_colombian_ecuadorian_measured = yes
+			te_cmg_gran_colombian_ecuadorian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_gran_colombian ?= 1
 	}
 }
 
@@ -3016,6 +4240,79 @@ te_cmg_chinese_census_wanted = {
 	}
 }
 
+# Country scope. This country started the chinese merge, which is running or complete.
+te_cmg_chinese_is_starter = {
+	OR = {
+		global_var:te_cm_state_chinese ?= 1
+		global_var:te_cm_state_chinese ?= 2
+	}
+	exists = global_var:te_cm_starter_chinese
+	this = global_var:te_cm_starter_chinese
+}
+
+# Country scope. The chinese merge is running or complete under another country.
+te_cmg_chinese_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_chinese ?= 1
+		global_var:te_cm_state_chinese ?= 2
+	}
+	exists = global_var:te_cm_starter_chinese
+	NOT = { this = global_var:te_cm_starter_chinese }
+}
+
+# Country scope. Can this country start the chinese merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_chinese_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_chinese ?= 1 global_var:te_cm_state_chinese ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_chinese_primary_tt
+		OR = {
+			country_has_primary_culture = cu:han
+			country_has_primary_culture = cu:yue
+			country_has_primary_culture = cu:min
+			country_has_primary_culture = cu:hakka
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_chinese_core_1_tt
+		te_cmg_chinese_han_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_chinese_core_2_tt
+		OR = {
+			te_cmg_chinese_yue_measured = yes
+			te_cmg_chinese_yue_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_chinese_core_3_tt
+		OR = {
+			te_cmg_chinese_min_measured = yes
+			te_cmg_chinese_min_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_chinese_core_4_tt
+		OR = {
+			te_cmg_chinese_hakka_measured = yes
+			te_cmg_chinese_hakka_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_chinese ?= 1
+	}
+}
+
 # ---- japanese (japanese, ryukyuan) ----
 
 # Country scope. Can this country start the japanese merge? The system is on, a core culture is
@@ -3112,6 +4409,63 @@ te_cmg_japanese_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the japanese merge, which is running or complete.
+te_cmg_japanese_is_starter = {
+	OR = {
+		global_var:te_cm_state_japanese ?= 1
+		global_var:te_cm_state_japanese ?= 2
+	}
+	exists = global_var:te_cm_starter_japanese
+	this = global_var:te_cm_starter_japanese
+}
+
+# Country scope. The japanese merge is running or complete under another country.
+te_cmg_japanese_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_japanese ?= 1
+		global_var:te_cm_state_japanese ?= 2
+	}
+	exists = global_var:te_cm_starter_japanese
+	NOT = { this = global_var:te_cm_starter_japanese }
+}
+
+# Country scope. Can this country start the japanese merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_japanese_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_japanese ?= 1 global_var:te_cm_state_japanese ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_japanese_primary_tt
+		OR = {
+			country_has_primary_culture = cu:japanese
+			country_has_primary_culture = cu:ryukyuan
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_japanese_core_1_tt
+		te_cmg_japanese_japanese_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_japanese_core_2_tt
+		OR = {
+			te_cmg_japanese_ryukyuan_measured = yes
+			te_cmg_japanese_ryukyuan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_japanese ?= 1
 	}
 }
 
@@ -3452,6 +4806,90 @@ te_cmg_arab_census_wanted = {
 	}
 }
 
+# Country scope. This country started the arab merge, which is running or complete.
+te_cmg_arab_is_starter = {
+	OR = {
+		global_var:te_cm_state_arab ?= 1
+		global_var:te_cm_state_arab ?= 2
+	}
+	exists = global_var:te_cm_starter_arab
+	this = global_var:te_cm_starter_arab
+}
+
+# Country scope. The arab merge is running or complete under another country.
+te_cmg_arab_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_arab ?= 1
+		global_var:te_cm_state_arab ?= 2
+	}
+	exists = global_var:te_cm_starter_arab
+	NOT = { this = global_var:te_cm_starter_arab }
+}
+
+# Country scope. Can this country start the arab merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_arab_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_arab ?= 1 global_var:te_cm_state_arab ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_primary_tt
+		OR = {
+			country_has_primary_culture = cu:maghrebi
+			country_has_primary_culture = cu:misri
+			country_has_primary_culture = cu:mashriqi
+			country_has_primary_culture = cu:bedouin
+			country_has_primary_culture = cu:yemenite
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_core_1_tt
+		OR = {
+			te_cmg_arab_maghrebi_measured = yes
+			te_cmg_arab_maghrebi_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_core_2_tt
+		OR = {
+			te_cmg_arab_misri_measured = yes
+			te_cmg_arab_misri_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_core_3_tt
+		OR = {
+			te_cmg_arab_mashriqi_measured = yes
+			te_cmg_arab_mashriqi_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_core_4_tt
+		OR = {
+			te_cmg_arab_bedouin_measured = yes
+			te_cmg_arab_bedouin_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_core_5_tt
+		OR = {
+			te_cmg_arab_yemenite_measured = yes
+			te_cmg_arab_yemenite_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_arab ?= 1
+	}
+}
+
 # ---- persian (persian, luri) ----
 
 # Country scope. Can this country start the persian merge? The system is on, a core culture is
@@ -3622,6 +5060,63 @@ te_cmg_persian_census_wanted = {
 	}
 }
 
+# Country scope. This country started the persian merge, which is running or complete.
+te_cmg_persian_is_starter = {
+	OR = {
+		global_var:te_cm_state_persian ?= 1
+		global_var:te_cm_state_persian ?= 2
+	}
+	exists = global_var:te_cm_starter_persian
+	this = global_var:te_cm_starter_persian
+}
+
+# Country scope. The persian merge is running or complete under another country.
+te_cmg_persian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_persian ?= 1
+		global_var:te_cm_state_persian ?= 2
+	}
+	exists = global_var:te_cm_starter_persian
+	NOT = { this = global_var:te_cm_starter_persian }
+}
+
+# Country scope. Can this country start the persian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_persian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_persian ?= 1 global_var:te_cm_state_persian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_persian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:persian
+			country_has_primary_culture = cu:luri
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_persian_core_1_tt
+		te_cmg_persian_persian_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_persian_core_2_tt
+		OR = {
+			te_cmg_persian_luri_measured = yes
+			te_cmg_persian_luri_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_persian ?= 1
+	}
+}
+
 # ---- oghuz_turkic (turkish, azerbaijani) ----
 
 # Country scope. Can this country start the oghuz_turkic merge? The system is on, a core culture is
@@ -3770,6 +5265,66 @@ te_cmg_oghuz_turkic_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the oghuz_turkic merge, which is running or complete.
+te_cmg_oghuz_turkic_is_starter = {
+	OR = {
+		global_var:te_cm_state_oghuz_turkic ?= 1
+		global_var:te_cm_state_oghuz_turkic ?= 2
+	}
+	exists = global_var:te_cm_starter_oghuz_turkic
+	this = global_var:te_cm_starter_oghuz_turkic
+}
+
+# Country scope. The oghuz_turkic merge is running or complete under another country.
+te_cmg_oghuz_turkic_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_oghuz_turkic ?= 1
+		global_var:te_cm_state_oghuz_turkic ?= 2
+	}
+	exists = global_var:te_cm_starter_oghuz_turkic
+	NOT = { this = global_var:te_cm_starter_oghuz_turkic }
+}
+
+# Country scope. Can this country start the oghuz_turkic merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_oghuz_turkic_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_oghuz_turkic_primary_tt
+		OR = {
+			country_has_primary_culture = cu:turkish
+			country_has_primary_culture = cu:azerbaijani
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_oghuz_turkic_core_1_tt
+		OR = {
+			te_cmg_oghuz_turkic_turkish_measured = yes
+			te_cmg_oghuz_turkic_turkish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_oghuz_turkic_core_2_tt
+		OR = {
+			te_cmg_oghuz_turkic_azerbaijani_measured = yes
+			te_cmg_oghuz_turkic_azerbaijani_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_oghuz_turkic ?= 1
 	}
 }
 
@@ -3980,6 +5535,87 @@ te_cmg_hindustani_census_wanted = {
 	}
 }
 
+# Country scope. This country started the hindustani merge, which is running or complete.
+te_cmg_hindustani_is_starter = {
+	OR = {
+		global_var:te_cm_state_hindustani ?= 1
+		global_var:te_cm_state_hindustani ?= 2
+	}
+	exists = global_var:te_cm_starter_hindustani
+	this = global_var:te_cm_starter_hindustani
+}
+
+# Country scope. The hindustani merge is running or complete under another country.
+te_cmg_hindustani_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_hindustani ?= 1
+		global_var:te_cm_state_hindustani ?= 2
+	}
+	exists = global_var:te_cm_starter_hindustani
+	NOT = { this = global_var:te_cm_starter_hindustani }
+}
+
+# Country scope. Can this country start the hindustani merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_hindustani_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_hindustani ?= 1 global_var:te_cm_state_hindustani ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_primary_tt
+		OR = {
+			country_has_primary_culture = cu:hindustani
+			country_has_primary_culture = cu:avadhi
+			country_has_primary_culture = cu:bundeli
+			country_has_primary_culture = cu:chhattisgarhi
+			country_has_primary_culture = cu:bageli
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_core_1_tt
+		te_cmg_hindustani_hindustani_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_core_2_tt
+		OR = {
+			te_cmg_hindustani_avadhi_measured = yes
+			te_cmg_hindustani_avadhi_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_core_3_tt
+		OR = {
+			te_cmg_hindustani_bundeli_measured = yes
+			te_cmg_hindustani_bundeli_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_core_4_tt
+		OR = {
+			te_cmg_hindustani_chhattisgarhi_measured = yes
+			te_cmg_hindustani_chhattisgarhi_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_hindustani_core_5_tt
+		OR = {
+			te_cmg_hindustani_bageli_measured = yes
+			te_cmg_hindustani_bageli_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_hindustani ?= 1
+	}
+}
+
 # ---- dravidian (tamil, kannada, malayalam) ----
 
 # Country scope. Can this country start the dravidian merge? The system is on, a core culture is
@@ -4164,6 +5800,74 @@ te_cmg_dravidian_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the dravidian merge, which is running or complete.
+te_cmg_dravidian_is_starter = {
+	OR = {
+		global_var:te_cm_state_dravidian ?= 1
+		global_var:te_cm_state_dravidian ?= 2
+	}
+	exists = global_var:te_cm_starter_dravidian
+	this = global_var:te_cm_starter_dravidian
+}
+
+# Country scope. The dravidian merge is running or complete under another country.
+te_cmg_dravidian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_dravidian ?= 1
+		global_var:te_cm_state_dravidian ?= 2
+	}
+	exists = global_var:te_cm_starter_dravidian
+	NOT = { this = global_var:te_cm_starter_dravidian }
+}
+
+# Country scope. Can this country start the dravidian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_dravidian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_dravidian ?= 1 global_var:te_cm_state_dravidian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_dravidian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:tamil
+			country_has_primary_culture = cu:kannada
+			country_has_primary_culture = cu:malayalam
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_dravidian_core_1_tt
+		OR = {
+			te_cmg_dravidian_tamil_measured = yes
+			te_cmg_dravidian_tamil_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_dravidian_core_2_tt
+		OR = {
+			te_cmg_dravidian_kannada_measured = yes
+			te_cmg_dravidian_kannada_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_dravidian_core_3_tt
+		OR = {
+			te_cmg_dravidian_malayalam_measured = yes
+			te_cmg_dravidian_malayalam_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_dravidian ?= 1
 	}
 }
 
@@ -4383,6 +6087,82 @@ te_cmg_indonesian_census_wanted = {
 	}
 }
 
+# Country scope. This country started the indonesian merge, which is running or complete.
+te_cmg_indonesian_is_starter = {
+	OR = {
+		global_var:te_cm_state_indonesian ?= 1
+		global_var:te_cm_state_indonesian ?= 2
+	}
+	exists = global_var:te_cm_starter_indonesian
+	this = global_var:te_cm_starter_indonesian
+}
+
+# Country scope. The indonesian merge is running or complete under another country.
+te_cmg_indonesian_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_indonesian ?= 1
+		global_var:te_cm_state_indonesian ?= 2
+	}
+	exists = global_var:te_cm_starter_indonesian
+	NOT = { this = global_var:te_cm_starter_indonesian }
+}
+
+# Country scope. Can this country start the indonesian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_indonesian_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_indonesian_primary_tt
+		OR = {
+			country_has_primary_culture = cu:javan
+			country_has_primary_culture = cu:malay
+			country_has_primary_culture = cu:sumatran
+			country_has_primary_culture = cu:bornean
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_indonesian_core_1_tt
+		OR = {
+			te_cmg_indonesian_javan_measured = yes
+			te_cmg_indonesian_javan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_indonesian_core_2_tt
+		OR = {
+			te_cmg_indonesian_malay_measured = yes
+			te_cmg_indonesian_malay_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_indonesian_core_3_tt
+		OR = {
+			te_cmg_indonesian_sumatran_measured = yes
+			te_cmg_indonesian_sumatran_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_indonesian_core_4_tt
+		OR = {
+			te_cmg_indonesian_bornean_measured = yes
+			te_cmg_indonesian_bornean_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_indonesian ?= 1
+	}
+}
+
 # ---- filipino (filipino, visayan, tagalog, ilocano) ----
 
 # Country scope. Can this country start the filipino merge? The system is on, a core culture is
@@ -4554,6 +6334,79 @@ te_cmg_filipino_census_wanted = {
 	}
 }
 
+# Country scope. This country started the filipino merge, which is running or complete.
+te_cmg_filipino_is_starter = {
+	OR = {
+		global_var:te_cm_state_filipino ?= 1
+		global_var:te_cm_state_filipino ?= 2
+	}
+	exists = global_var:te_cm_starter_filipino
+	this = global_var:te_cm_starter_filipino
+}
+
+# Country scope. The filipino merge is running or complete under another country.
+te_cmg_filipino_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_filipino ?= 1
+		global_var:te_cm_state_filipino ?= 2
+	}
+	exists = global_var:te_cm_starter_filipino
+	NOT = { this = global_var:te_cm_starter_filipino }
+}
+
+# Country scope. Can this country start the filipino merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_filipino_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_primary_tt
+		OR = {
+			country_has_primary_culture = cu:filipino
+			country_has_primary_culture = cu:visayan
+			country_has_primary_culture = cu:tagalog
+			country_has_primary_culture = cu:ilocano
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_core_1_tt
+		te_cmg_filipino_filipino_measured = yes
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_core_2_tt
+		OR = {
+			te_cmg_filipino_visayan_measured = yes
+			te_cmg_filipino_visayan_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_core_3_tt
+		OR = {
+			te_cmg_filipino_tagalog_measured = yes
+			te_cmg_filipino_tagalog_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_core_4_tt
+		OR = {
+			te_cmg_filipino_ilocano_measured = yes
+			te_cmg_filipino_ilocano_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_filipino ?= 1
+	}
+}
+
 # ---- nguni (nguni, zulu, xhosa) ----
 
 # Country scope. Can this country start the nguni merge? The system is on, a core culture is
@@ -4699,6 +6552,74 @@ te_cmg_nguni_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the nguni merge, which is running or complete.
+te_cmg_nguni_is_starter = {
+	OR = {
+		global_var:te_cm_state_nguni ?= 1
+		global_var:te_cm_state_nguni ?= 2
+	}
+	exists = global_var:te_cm_starter_nguni
+	this = global_var:te_cm_starter_nguni
+}
+
+# Country scope. The nguni merge is running or complete under another country.
+te_cmg_nguni_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_nguni ?= 1
+		global_var:te_cm_state_nguni ?= 2
+	}
+	exists = global_var:te_cm_starter_nguni
+	NOT = { this = global_var:te_cm_starter_nguni }
+}
+
+# Country scope. Can this country start the nguni merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_nguni_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_nguni ?= 1 global_var:te_cm_state_nguni ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_nguni_primary_tt
+		OR = {
+			country_has_primary_culture = cu:nguni
+			country_has_primary_culture = cu:zulu
+			country_has_primary_culture = cu:xhosa
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_1
+		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_nguni_core_1_tt
+		OR = {
+			te_cmg_nguni_nguni_measured = yes
+			te_cmg_nguni_nguni_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_nguni_core_2_tt
+		OR = {
+			te_cmg_nguni_zulu_measured = yes
+			te_cmg_nguni_zulu_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_nguni_core_3_tt
+		OR = {
+			te_cmg_nguni_xhosa_measured = yes
+			te_cmg_nguni_xhosa_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_nguni ?= 1
 	}
 }
 
@@ -5121,6 +7042,102 @@ te_cmg_latin_census_wanted = {
 	}
 }
 
+# Country scope. This country started the latin merge, which is running or complete.
+te_cmg_latin_is_starter = {
+	OR = {
+		global_var:te_cm_state_latin ?= 1
+		global_var:te_cm_state_latin ?= 2
+	}
+	exists = global_var:te_cm_starter_latin
+	this = global_var:te_cm_starter_latin
+}
+
+# Country scope. The latin merge is running or complete under another country.
+te_cmg_latin_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_latin ?= 1
+		global_var:te_cm_state_latin ?= 2
+	}
+	exists = global_var:te_cm_starter_latin
+	NOT = { this = global_var:te_cm_starter_latin }
+}
+
+# Country scope. Can this country start the latin merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_latin_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_latin ?= 1 global_var:te_cm_state_latin ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_primary_tt
+		OR = {
+			country_has_primary_culture = cu:french
+			country_has_primary_culture = cu:cm_italian
+			country_has_primary_culture = cu:spanish
+			country_has_primary_culture = cu:portuguese
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_3
+		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_latin_french_measured = yes
+				te_cmg_latin_french_years_met = yes
+			}
+			te_cmg_latin_french_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_latin_cm_italian_measured = yes
+				te_cmg_latin_cm_italian_years_met = yes
+			}
+			te_cmg_latin_cm_italian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_core_3_tt
+		OR = {
+			AND = {
+				te_cmg_latin_spanish_measured = yes
+				te_cmg_latin_spanish_years_met = yes
+			}
+			te_cmg_latin_spanish_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_core_4_tt
+		OR = {
+			AND = {
+				te_cmg_latin_portuguese_measured = yes
+				te_cmg_latin_portuguese_years_met = yes
+			}
+			te_cmg_latin_portuguese_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_latin ?= 1
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_comp_french_tt
+		global_var:te_cm_state_french ?= 2
+	}
+	custom_tooltip = {
+		text = te_cmg_latin_comp_italian_tt
+		global_var:te_cm_state_italian ?= 2
+	}
+}
+
 # ---- pan_slavic (cm_east_slavic, cm_czechoslovak, cm_yugoslav) ----
 
 # Country scope. Can this country start the pan_slavic merge? The system is on, a core culture is
@@ -5406,6 +7423,95 @@ te_cmg_pan_slavic_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the pan_slavic merge, which is running or complete.
+te_cmg_pan_slavic_is_starter = {
+	OR = {
+		global_var:te_cm_state_pan_slavic ?= 1
+		global_var:te_cm_state_pan_slavic ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_slavic
+	this = global_var:te_cm_starter_pan_slavic
+}
+
+# Country scope. The pan_slavic merge is running or complete under another country.
+te_cmg_pan_slavic_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_pan_slavic ?= 1
+		global_var:te_cm_state_pan_slavic ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_slavic
+	NOT = { this = global_var:te_cm_starter_pan_slavic }
+}
+
+# Country scope. Can this country start the pan_slavic merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_pan_slavic_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_pan_slavic ?= 1 global_var:te_cm_state_pan_slavic ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_primary_tt
+		OR = {
+			country_has_primary_culture = cu:cm_east_slavic
+			country_has_primary_culture = cu:cm_czechoslovak
+			country_has_primary_culture = cu:cm_yugoslav
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_3
+		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_pan_slavic_cm_east_slavic_measured = yes
+				te_cmg_pan_slavic_cm_east_slavic_years_met = yes
+			}
+			te_cmg_pan_slavic_cm_east_slavic_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_pan_slavic_cm_czechoslovak_measured = yes
+				te_cmg_pan_slavic_cm_czechoslovak_years_met = yes
+			}
+			te_cmg_pan_slavic_cm_czechoslovak_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_core_3_tt
+		OR = {
+			AND = {
+				te_cmg_pan_slavic_cm_yugoslav_measured = yes
+				te_cmg_pan_slavic_cm_yugoslav_years_met = yes
+			}
+			te_cmg_pan_slavic_cm_yugoslav_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_pan_slavic ?= 1
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_comp_east_slavic_tt
+		global_var:te_cm_state_east_slavic ?= 2
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_comp_czechoslovak_tt
+		global_var:te_cm_state_czechoslovak ?= 2
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_slavic_comp_yugoslav_tt
+		global_var:te_cm_state_yugoslav ?= 2
 	}
 }
 
@@ -5801,6 +7907,103 @@ te_cmg_pan_turkic_census_wanted = {
 	}
 }
 
+# Country scope. This country started the pan_turkic merge, which is running or complete.
+te_cmg_pan_turkic_is_starter = {
+	OR = {
+		global_var:te_cm_state_pan_turkic ?= 1
+		global_var:te_cm_state_pan_turkic ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_turkic
+	this = global_var:te_cm_starter_pan_turkic
+}
+
+# Country scope. The pan_turkic merge is running or complete under another country.
+te_cmg_pan_turkic_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_pan_turkic ?= 1
+		global_var:te_cm_state_pan_turkic ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_turkic
+	NOT = { this = global_var:te_cm_starter_pan_turkic }
+}
+
+# Country scope. Can this country start the pan_turkic merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_pan_turkic_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_pan_turkic ?= 1 global_var:te_cm_state_pan_turkic ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_primary_tt
+		OR = {
+			country_has_primary_culture = cu:cm_oghuz_turkic
+			country_has_primary_culture = cu:uzbek
+			country_has_primary_culture = cu:kazak
+			country_has_primary_culture = cu:tatar
+			country_has_primary_culture = cu:kirgiz
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_3
+		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_pan_turkic_cm_oghuz_turkic_measured = yes
+				te_cmg_pan_turkic_cm_oghuz_turkic_years_met = yes
+			}
+			te_cmg_pan_turkic_cm_oghuz_turkic_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_pan_turkic_uzbek_measured = yes
+				te_cmg_pan_turkic_uzbek_years_met = yes
+			}
+			te_cmg_pan_turkic_uzbek_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_core_3_tt
+		OR = {
+			te_cmg_pan_turkic_kazak_measured = yes
+			te_cmg_pan_turkic_kazak_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_core_4_tt
+		OR = {
+			AND = {
+				te_cmg_pan_turkic_tatar_measured = yes
+				te_cmg_pan_turkic_tatar_years_met = yes
+			}
+			te_cmg_pan_turkic_tatar_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_core_5_tt
+		OR = {
+			te_cmg_pan_turkic_kirgiz_measured = yes
+			te_cmg_pan_turkic_kirgiz_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_pan_turkic ?= 1
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_turkic_comp_oghuz_turkic_tt
+		global_var:te_cm_state_oghuz_turkic ?= 2
+	}
+}
+
 # ---- pan_malay (cm_indonesian, filipino) ----
 
 # Country scope. Can this country start the pan_malay merge? The system is on, a core culture is
@@ -5930,6 +8133,80 @@ te_cmg_pan_malay_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the pan_malay merge, which is running or complete.
+te_cmg_pan_malay_is_starter = {
+	OR = {
+		global_var:te_cm_state_pan_malay ?= 1
+		global_var:te_cm_state_pan_malay ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_malay
+	this = global_var:te_cm_starter_pan_malay
+}
+
+# Country scope. The pan_malay merge is running or complete under another country.
+te_cmg_pan_malay_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_pan_malay ?= 1
+		global_var:te_cm_state_pan_malay ?= 2
+	}
+	exists = global_var:te_cm_starter_pan_malay
+	NOT = { this = global_var:te_cm_starter_pan_malay }
+}
+
+# Country scope. Can this country start the pan_malay merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_pan_malay_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_pan_malay ?= 1 global_var:te_cm_state_pan_malay ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_malay_primary_tt
+		OR = {
+			country_has_primary_culture = cu:cm_indonesian
+			country_has_primary_culture = cu:filipino
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_3
+		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_malay_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_pan_malay_cm_indonesian_measured = yes
+				te_cmg_pan_malay_cm_indonesian_years_met = yes
+			}
+			te_cmg_pan_malay_cm_indonesian_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_malay_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_pan_malay_filipino_measured = yes
+				te_cmg_pan_malay_filipino_years_met = yes
+			}
+			te_cmg_pan_malay_filipino_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_pan_malay ?= 1
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_malay_comp_indonesian_tt
+		global_var:te_cm_state_indonesian ?= 2
+	}
+	custom_tooltip = {
+		text = te_cmg_pan_malay_comp_filipino_tt
+		global_var:te_cm_state_filipino ?= 2
 	}
 }
 
@@ -6264,5 +8541,82 @@ te_cmg_east_african_census_wanted = {
 				}
 			}
 		}
+	}
+}
+
+# Country scope. This country started the east_african merge, which is running or complete.
+te_cmg_east_african_is_starter = {
+	OR = {
+		global_var:te_cm_state_east_african ?= 1
+		global_var:te_cm_state_east_african ?= 2
+	}
+	exists = global_var:te_cm_starter_east_african
+	this = global_var:te_cm_starter_east_african
+}
+
+# Country scope. The east_african merge is running or complete under another country.
+te_cmg_east_african_has_other_starter = {
+	OR = {
+		global_var:te_cm_state_east_african ?= 1
+		global_var:te_cm_state_east_african ?= 2
+	}
+	exists = global_var:te_cm_starter_east_african
+	NOT = { this = global_var:te_cm_starter_east_african }
+}
+
+# Country scope. Can this country start the east_african merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_east_african_can_start = {
+	custom_tooltip = {
+		text = te_cm_tt_idle
+		NOR = { global_var:te_cm_state_east_african ?= 1 global_var:te_cm_state_east_african ?= 2 }
+	}
+	custom_tooltip = {
+		text = te_cmg_east_african_primary_tt
+		OR = {
+			country_has_primary_culture = cu:swahili
+			country_has_primary_culture = cu:nyamwezi
+			country_has_primary_culture = cu:sukuma
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_tech_3
+		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_east_african_core_1_tt
+		OR = {
+			AND = {
+				te_cmg_east_african_swahili_measured = yes
+				te_cmg_east_african_swahili_years_met = yes
+			}
+			te_cmg_east_african_swahili_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_east_african_core_2_tt
+		OR = {
+			AND = {
+				te_cmg_east_african_nyamwezi_measured = yes
+				te_cmg_east_african_nyamwezi_years_met = yes
+			}
+			te_cmg_east_african_nyamwezi_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cmg_east_african_core_3_tt
+		OR = {
+			AND = {
+				te_cmg_east_african_sukuma_measured = yes
+				te_cmg_east_african_sukuma_years_met = yes
+			}
+			te_cmg_east_african_sukuma_switched_in = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_cm_tt_sol
+		var:te_cm_sol_ok_east_african ?= 1
 	}
 }

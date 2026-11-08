@@ -305,8 +305,9 @@ class LocTest(unittest.TestCase):
         for key in parse(TRAITS):
             self.assertIn(key, self.loc)
 
-    def test_the_file_holds_exactly_the_result_keys(self):
-        self.assertEqual(set(self.loc), gen.result_loc_keys())
+    def test_the_file_holds_the_result_keys_and_the_entries_keys(self):
+        self.assertEqual(set(self.loc), gen.result_loc_keys() | set(gen.entry_loc(vanilla())))
+        self.assertFalse(gen.result_loc_keys() & set(gen.entry_loc(vanilla())))
 
     def test_loc_is_a_generated_section(self):
         text = LOC.read_text(encoding="utf-8-sig")
@@ -388,6 +389,8 @@ class EthnicitiesTest(unittest.TestCase):
         for relative in gen.plan_outputs():
             for number, line in enumerate((ROOT / relative).read_text(encoding="utf-8-sig").splitlines(), 1):
                 self.assertNotIn("[(", line, f"{relative}:{number}")
+                # A loc data function names its key in quotes (ScriptValue('te_cm_hold_open')); a tuple repr doesn't.
+                line = re.sub(r"\w+\('[\w.\-]+'\)", "", line)
                 self.assertNotIn("('", line, f"{relative}:{number}")
 
     def test_every_ethnicity_line_is_a_weight_and_a_name(self):

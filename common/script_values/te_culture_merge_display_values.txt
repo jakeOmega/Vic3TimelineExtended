@@ -1,0 +1,11 @@
+﻿# Culture Merges: values the entries' status text reads
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md; plan Task 5). The numbers the system runs
+# on are in te_culture_merge_values.txt; the per-merge progress values are generated
+# (te_culture_merges_generated_values.txt).
+
+# Country scope. The country's Culture Merge Speed in full (0.4 is +40%): the starter's total, the lever
+# the player pulls, which a running merge's status line shows beside the least converted part's share.
+# The per-pop rate (te_cm_pop_rate) varies by pop and has no country figure.
+te_cm_speed_display = {
+	value = modifier:country_culture_merge_speed_mult
+}

@@ -3787,6 +3787,8 @@ Each `custom_tooltip { text = ... <triggers> }` block fails as a unit — if the
 
 **Repo example:** `common/scripted_buttons/cultural_hegemony_buttons.txt` — the 5 enable buttons (increase funding, world expo, cultural institutes, global media, protectionism) keep their `has_law` and `has_technology_researched` gates in `possible` with `CH_REQUIRES_MINISTRY_TT` / `CH_REQUIRES_MASS_MEDIA_TT` tooltips. They stay visible-but-greyed when the player lacks the law or tech, so the JE always shows the player what's available rather than a blank panel.
 
+**When the button's gate is also an entry's `possible`, the census's net and a status line, put the `custom_tooltip`s in a scripted trigger** and call it from each (`te_cmg_<m>_can_start`, the culture merges' 32 start buttons): one definition, and every surface that reads it lists the same reasons. `button_reason_audit` follows a `possible` into the scripted triggers it calls, so a bare `var:` test in the trigger's body is flagged unless a `custom_tooltip` holds it. Not yet read in game: that the button's tooltip prints a nested trigger's `custom_tooltip`s the way it prints the ones written in `possible` itself (the play-test list asks).
+
 ## `ai_chance` Flavour Terms on a Base of 0 Are Not Flavour — Gate Them on a Core Reason
 
 A scripted button's `ai_chance` is usually written as a sum: *core* terms for the game state the

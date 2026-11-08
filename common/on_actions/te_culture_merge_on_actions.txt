@@ -33,6 +33,9 @@ te_cm_yearly_on_action = {
 				}
 				set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
 				set_global_variable = { name = te_cm_census_year value = local_var:te_cm_year }
+				# A running merge whose starter is gone returns to idle first, so the census below
+				# treats it as one a country can start again.
+				te_cmg_release_lost_starters = yes
 				te_cmg_census_all = yes
 			}
 		}

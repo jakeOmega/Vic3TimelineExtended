@@ -192,13 +192,18 @@ class RegistryTests(unittest.TestCase):
         The Map Room (te_journal_maps.txt) borrows vanilla's event_map.dds while it is under test
         (docs/testing/journal-map-modes-playtest.md); its page is opened only by buttons. The World Climate
         entry (je_world_climate.txt, #1448) shares Global Warming's icon, as the same climate seen from the world.
+        The culture merge entries (te_culture_merges_generated.txt, one per merge) all use vanilla's waving flag, the
+        icon of Russification and the cultural renaissances; one picture for thirty-two entries is a placeholder the
+        owner can replace.
         REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
         import re
         defined = set()
         for path in Path(MOD_ROOT, "common", "journal_entries").glob("*.txt"):
             defined |= set(re.findall(r"^([A-Za-z0-9_]+)\s*=\s*\{", path.read_text(encoding="utf-8-sig"), re.M))
         registered = set(ip.ICONS["journal_entry"]) | set(ip.ICONS["journal_entry_space"])
-        self.assertEqual(defined - registered, {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
+        merges = {name for name in defined if name.startswith("je_te_cm_")}
+        self.assertGreaterEqual(len(merges), 32)
+        self.assertEqual(defined - registered - merges, {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
         self.assertEqual(registered - defined, set())
 
 

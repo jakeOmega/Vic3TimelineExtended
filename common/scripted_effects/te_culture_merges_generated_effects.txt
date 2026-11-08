@@ -147,6 +147,73 @@ te_cmg_census_german_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_east_german } }
 		te_cm_sol_gate_part = { MERGE = german CULTURE = east_german }
 	}
+	te_cmg_german_settle = yes
+}
+
+# Country scope. Joins every part of the german merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_german_join_ready = {
+	if = {
+		limit = {
+			te_cmg_german_north_german_can_join = yes
+		}
+		te_cm_join_part = { MERGE = german CULTURE = north_german INDEX = 1 }
+	}
+	if = {
+		limit = {
+			te_cmg_german_south_german_can_join = yes
+		}
+		te_cm_join_part = { MERGE = german CULTURE = south_german INDEX = 1 }
+	}
+	if = {
+		limit = {
+			te_cmg_german_alemannic_can_join = yes
+		}
+		te_cm_join_part = { MERGE = german CULTURE = alemannic INDEX = 1 }
+	}
+	if = {
+		limit = {
+			te_cmg_german_east_german_can_join = yes
+		}
+		te_cm_join_part = { MERGE = german CULTURE = east_german INDEX = 1 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the german merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_german = {
+	te_cm_start_merge = { MERGE = german RESULT = cm_german }
+	te_cmg_german_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_german_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_german_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_german }
+			NOT = { has_inactive_journal_entry = je_te_cm_german }
+			OR = {
+				te_cmg_german_can_start = yes
+				AND = {
+					global_var:te_cm_state_german ?= 1
+					te_cmg_german_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_german }
+	}
+	if = {
+		limit = { te_cmg_german_is_starter = yes }
+		te_cmg_german_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -301,6 +368,67 @@ te_cmg_census_italian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_corsican } }
 		te_cm_sol_gate_part = { MERGE = italian CULTURE = corsican }
+	}
+	te_cmg_italian_settle = yes
+}
+
+# Country scope. Joins every part of the italian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_italian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_italian_north_italian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = italian CULTURE = north_italian INDEX = 2 }
+	}
+	if = {
+		limit = {
+			te_cmg_italian_south_italian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = italian CULTURE = south_italian INDEX = 2 }
+	}
+	if = {
+		limit = {
+			te_cmg_italian_corsican_can_join = yes
+		}
+		te_cm_join_part = { MERGE = italian CULTURE = corsican INDEX = 2 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the italian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_italian = {
+	te_cm_start_merge = { MERGE = italian RESULT = cm_italian }
+	te_cmg_italian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_italian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_italian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_italian }
+			NOT = { has_inactive_journal_entry = je_te_cm_italian }
+			OR = {
+				te_cmg_italian_can_start = yes
+				AND = {
+					global_var:te_cm_state_italian ?= 1
+					te_cmg_italian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_italian }
+	}
+	if = {
+		limit = { te_cmg_italian_is_starter = yes }
+		te_cmg_italian_join_ready = yes
 	}
 }
 
@@ -475,6 +603,73 @@ te_cmg_census_scandinavian_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_icelandic } }
 		te_cm_sol_gate_part = { MERGE = scandinavian CULTURE = icelandic }
 	}
+	te_cmg_scandinavian_settle = yes
+}
+
+# Country scope. Joins every part of the scandinavian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_scandinavian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_scandinavian_swedish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = scandinavian CULTURE = swedish INDEX = 3 }
+	}
+	if = {
+		limit = {
+			te_cmg_scandinavian_danish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = scandinavian CULTURE = danish INDEX = 3 }
+	}
+	if = {
+		limit = {
+			te_cmg_scandinavian_norwegian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = scandinavian CULTURE = norwegian INDEX = 3 }
+	}
+	if = {
+		limit = {
+			te_cmg_scandinavian_icelandic_can_join = yes
+		}
+		te_cm_join_part = { MERGE = scandinavian CULTURE = icelandic INDEX = 3 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the scandinavian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_scandinavian = {
+	te_cm_start_merge = { MERGE = scandinavian RESULT = cm_scandinavian }
+	te_cmg_scandinavian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_scandinavian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_scandinavian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_scandinavian }
+			NOT = { has_inactive_journal_entry = je_te_cm_scandinavian }
+			OR = {
+				te_cmg_scandinavian_can_start = yes
+				AND = {
+					global_var:te_cm_state_scandinavian ?= 1
+					te_cmg_scandinavian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_scandinavian }
+	}
+	if = {
+		limit = { te_cmg_scandinavian_is_starter = yes }
+		te_cmg_scandinavian_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -588,6 +783,86 @@ te_cmg_census_east_slavic_country = {
 				set_variable = { name = te_cm_sol_ok_east_slavic value = 1 }
 			}
 		}
+	}
+	te_cmg_east_slavic_settle = yes
+}
+
+# Country scope. Joins every part of the east_slavic merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_east_slavic_join_ready = {
+	if = {
+		limit = {
+			te_cmg_east_slavic_russian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_slavic CULTURE = russian INDEX = 4 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_slavic_ukrainian_can_join = yes
+			NOT = { te_cmg_east_slavic_ukrainian_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = east_slavic CULTURE = ukrainian INDEX = 4 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_slavic_byelorussian_can_join = yes
+			NOT = { te_cmg_east_slavic_byelorussian_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = east_slavic CULTURE = byelorussian INDEX = 4 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the east_slavic merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_east_slavic = {
+	te_cm_start_merge = { MERGE = east_slavic RESULT = cm_east_slavic }
+	te_cmg_east_slavic_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_east_slavic_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_east_slavic_settle = {
+	if = {
+		limit = {
+			te_cmg_east_slavic_start_basics = yes
+			OR = {
+				has_journal_entry = je_ukraine_cultural_renaissance
+				has_journal_entry = je_belarus_cultural_renaissance
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_cm_wait_years_east_slavic } }
+			set_variable = { name = te_cm_wait_years_east_slavic value = 0 }
+		}
+		if = {
+			limit = { var:te_cm_wait_years_east_slavic < te_cm_wait_cap_years }
+			change_variable = { name = te_cm_wait_years_east_slavic add = 1 }
+		}
+	}
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_east_slavic }
+			NOT = { has_inactive_journal_entry = je_te_cm_east_slavic }
+			OR = {
+				te_cmg_east_slavic_can_start = yes
+				AND = {
+					global_var:te_cm_state_east_slavic ?= 1
+					te_cmg_east_slavic_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_east_slavic }
+	}
+	if = {
+		limit = { te_cmg_east_slavic_is_starter = yes }
+		te_cmg_east_slavic_join_ready = yes
 	}
 }
 
@@ -774,6 +1049,79 @@ te_cmg_census_yugoslav_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_bulgarian } }
 		te_cm_sol_gate_part = { MERGE = yugoslav CULTURE = bulgarian }
 	}
+	te_cmg_yugoslav_settle = yes
+}
+
+# Country scope. Joins every part of the yugoslav merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_yugoslav_join_ready = {
+	if = {
+		limit = {
+			te_cmg_yugoslav_serb_can_join = yes
+		}
+		te_cm_join_part = { MERGE = yugoslav CULTURE = serb INDEX = 5 }
+	}
+	if = {
+		limit = {
+			te_cmg_yugoslav_croat_can_join = yes
+		}
+		te_cm_join_part = { MERGE = yugoslav CULTURE = croat INDEX = 5 }
+	}
+	if = {
+		limit = {
+			te_cmg_yugoslav_bosniak_can_join = yes
+		}
+		te_cm_join_part = { MERGE = yugoslav CULTURE = bosniak INDEX = 5 }
+	}
+	if = {
+		limit = {
+			te_cmg_yugoslav_slovene_can_join = yes
+		}
+		te_cm_join_part = { MERGE = yugoslav CULTURE = slovene INDEX = 5 }
+	}
+	if = {
+		limit = {
+			te_cmg_yugoslav_bulgarian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = yugoslav CULTURE = bulgarian INDEX = 5 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the yugoslav merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_yugoslav = {
+	te_cm_start_merge = { MERGE = yugoslav RESULT = cm_yugoslav }
+	te_cmg_yugoslav_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_yugoslav_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_yugoslav_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_yugoslav }
+			NOT = { has_inactive_journal_entry = je_te_cm_yugoslav }
+			OR = {
+				te_cmg_yugoslav_can_start = yes
+				AND = {
+					global_var:te_cm_state_yugoslav ?= 1
+					te_cmg_yugoslav_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_yugoslav }
+	}
+	if = {
+		limit = { te_cmg_yugoslav_is_starter = yes }
+		te_cmg_yugoslav_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -929,6 +1277,67 @@ te_cmg_census_czechoslovak_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_sorb } }
 		te_cm_sol_gate_part = { MERGE = czechoslovak CULTURE = sorb }
 	}
+	te_cmg_czechoslovak_settle = yes
+}
+
+# Country scope. Joins every part of the czechoslovak merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_czechoslovak_join_ready = {
+	if = {
+		limit = {
+			te_cmg_czechoslovak_czech_can_join = yes
+		}
+		te_cm_join_part = { MERGE = czechoslovak CULTURE = czech INDEX = 6 }
+	}
+	if = {
+		limit = {
+			te_cmg_czechoslovak_slovak_can_join = yes
+		}
+		te_cm_join_part = { MERGE = czechoslovak CULTURE = slovak INDEX = 6 }
+	}
+	if = {
+		limit = {
+			te_cmg_czechoslovak_sorb_can_join = yes
+		}
+		te_cm_join_part = { MERGE = czechoslovak CULTURE = sorb INDEX = 6 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the czechoslovak merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_czechoslovak = {
+	te_cm_start_merge = { MERGE = czechoslovak RESULT = cm_czechoslovak }
+	te_cmg_czechoslovak_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_czechoslovak_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_czechoslovak_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_czechoslovak }
+			NOT = { has_inactive_journal_entry = je_te_cm_czechoslovak }
+			OR = {
+				te_cmg_czechoslovak_can_start = yes
+				AND = {
+					global_var:te_cm_state_czechoslovak ?= 1
+					te_cmg_czechoslovak_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_czechoslovak }
+	}
+	if = {
+		limit = { te_cmg_czechoslovak_is_starter = yes }
+		te_cmg_czechoslovak_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -1020,6 +1429,55 @@ te_cmg_census_hungarian_country = {
 				set_variable = { name = te_cm_sol_ok_hungarian value = 1 }
 			}
 		}
+	}
+	te_cmg_hungarian_settle = yes
+}
+
+# Country scope. Joins every part of the hungarian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_hungarian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_hungarian_szekely_can_join = yes
+		}
+		te_cm_join_part = { MERGE = hungarian CULTURE = szekely INDEX = 7 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the hungarian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_hungarian = {
+	te_cm_start_merge = { MERGE = hungarian RESULT = hungarian }
+	te_cmg_hungarian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_hungarian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_hungarian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_hungarian }
+			NOT = { has_inactive_journal_entry = je_te_cm_hungarian }
+			OR = {
+				te_cmg_hungarian_can_start = yes
+				AND = {
+					global_var:te_cm_state_hungarian ?= 1
+					te_cmg_hungarian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_hungarian }
+	}
+	if = {
+		limit = { te_cmg_hungarian_is_starter = yes }
+		te_cmg_hungarian_join_ready = yes
 	}
 }
 
@@ -1113,6 +1571,55 @@ te_cmg_census_dutch_country = {
 			}
 		}
 	}
+	te_cmg_dutch_settle = yes
+}
+
+# Country scope. Joins every part of the dutch merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_dutch_join_ready = {
+	if = {
+		limit = {
+			te_cmg_dutch_flemish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = dutch CULTURE = flemish INDEX = 8 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the dutch merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_dutch = {
+	te_cm_start_merge = { MERGE = dutch RESULT = dutch }
+	te_cmg_dutch_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_dutch_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_dutch_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_dutch }
+			NOT = { has_inactive_journal_entry = je_te_cm_dutch }
+			OR = {
+				te_cmg_dutch_can_start = yes
+				AND = {
+					global_var:te_cm_state_dutch ?= 1
+					te_cmg_dutch_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_dutch }
+	}
+	if = {
+		limit = { te_cmg_dutch_is_starter = yes }
+		te_cmg_dutch_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -1204,6 +1711,55 @@ te_cmg_census_finnish_country = {
 				set_variable = { name = te_cm_sol_ok_finnish value = 1 }
 			}
 		}
+	}
+	te_cmg_finnish_settle = yes
+}
+
+# Country scope. Joins every part of the finnish merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_finnish_join_ready = {
+	if = {
+		limit = {
+			te_cmg_finnish_karelian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = finnish CULTURE = karelian INDEX = 9 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the finnish merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_finnish = {
+	te_cm_start_merge = { MERGE = finnish RESULT = finnish }
+	te_cmg_finnish_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_finnish_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_finnish_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_finnish }
+			NOT = { has_inactive_journal_entry = je_te_cm_finnish }
+			OR = {
+				te_cmg_finnish_can_start = yes
+				AND = {
+					global_var:te_cm_state_finnish ?= 1
+					te_cmg_finnish_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_finnish }
+	}
+	if = {
+		limit = { te_cmg_finnish_is_starter = yes }
+		te_cmg_finnish_join_ready = yes
 	}
 }
 
@@ -1373,6 +1929,67 @@ te_cmg_census_french_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_catalan } }
 		te_cm_sol_gate_part = { MERGE = french CULTURE = catalan }
 	}
+	te_cmg_french_settle = yes
+}
+
+# Country scope. Joins every part of the french merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_french_join_ready = {
+	if = {
+		limit = {
+			te_cmg_french_wallonian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
+	}
+	if = {
+		limit = {
+			te_cmg_french_occitan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = french CULTURE = occitan INDEX = 10 }
+	}
+	if = {
+		limit = {
+			te_cmg_french_catalan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = french CULTURE = catalan INDEX = 10 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the french merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_french = {
+	te_cm_start_merge = { MERGE = french RESULT = french }
+	te_cmg_french_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_french_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_french_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_french }
+			NOT = { has_inactive_journal_entry = je_te_cm_french }
+			OR = {
+				te_cmg_french_can_start = yes
+				AND = {
+					global_var:te_cm_state_french ?= 1
+					te_cmg_french_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_french }
+	}
+	if = {
+		limit = { te_cmg_french_is_starter = yes }
+		te_cmg_french_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -1464,6 +2081,55 @@ te_cmg_census_british_country = {
 				set_variable = { name = te_cm_sol_ok_british value = 1 }
 			}
 		}
+	}
+	te_cmg_british_settle = yes
+}
+
+# Country scope. Joins every part of the british merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_british_join_ready = {
+	if = {
+		limit = {
+			te_cmg_british_scottish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = british CULTURE = scottish INDEX = 11 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the british merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_british = {
+	te_cm_start_merge = { MERGE = british RESULT = british }
+	te_cmg_british_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_british_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_british_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_british }
+			NOT = { has_inactive_journal_entry = je_te_cm_british }
+			OR = {
+				te_cmg_british_can_start = yes
+				AND = {
+					global_var:te_cm_state_british ?= 1
+					te_cmg_british_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_british }
+	}
+	if = {
+		limit = { te_cmg_british_is_starter = yes }
+		te_cmg_british_join_ready = yes
 	}
 }
 
@@ -1619,6 +2285,85 @@ te_cmg_census_american_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_afro_american } }
 		te_cm_sol_gate_part = { MERGE = american CULTURE = afro_american }
+	}
+	te_cmg_american_settle = yes
+}
+
+# Country scope. Joins every part of the american merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_american_join_ready = {
+	if = {
+		limit = {
+			te_cmg_american_yankee_can_join = yes
+		}
+		te_cm_join_part = { MERGE = american CULTURE = yankee INDEX = 12 }
+	}
+	if = {
+		limit = {
+			te_cmg_american_dixie_can_join = yes
+			NOT = { te_cmg_american_dixie_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = american CULTURE = dixie INDEX = 12 }
+	}
+	if = {
+		limit = {
+			te_cmg_american_afro_american_can_join = yes
+			NOT = { te_cmg_american_afro_american_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = american CULTURE = afro_american INDEX = 12 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the american merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_american = {
+	te_cm_start_merge = { MERGE = american RESULT = cm_american }
+	te_cmg_american_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_american_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_american_settle = {
+	if = {
+		limit = {
+			te_cmg_american_start_basics = yes
+			OR = {
+				has_journal_entry = je_acw_reincorporate
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_cm_wait_years_american } }
+			set_variable = { name = te_cm_wait_years_american value = 0 }
+		}
+		if = {
+			limit = { var:te_cm_wait_years_american < te_cm_wait_cap_years }
+			change_variable = { name = te_cm_wait_years_american add = 1 }
+		}
+	}
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_american }
+			NOT = { has_inactive_journal_entry = je_te_cm_american }
+			OR = {
+				te_cmg_american_can_start = yes
+				AND = {
+					global_var:te_cm_state_american ?= 1
+					te_cmg_american_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_american }
+	}
+	if = {
+		limit = { te_cmg_american_is_starter = yes }
+		te_cmg_american_join_ready = yes
 	}
 }
 
@@ -1834,6 +2579,99 @@ te_cmg_census_anglophone_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_afro_american } }
 		te_cm_sol_gate_part = { MERGE = anglophone CULTURE = afro_american }
 	}
+	te_cmg_anglophone_settle = yes
+}
+
+# Country scope. Joins every part of the anglophone merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_anglophone_join_ready = {
+	if = {
+		limit = {
+			te_cmg_anglophone_british_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = british INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_yankee_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = yankee INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_cm_american_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = cm_american INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_anglo_canadian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = anglo_canadian INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_australian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = australian INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_scottish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = scottish INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_dixie_can_join = yes
+			NOT = { te_cmg_anglophone_dixie_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = dixie INDEX = 13 }
+	}
+	if = {
+		limit = {
+			te_cmg_anglophone_afro_american_can_join = yes
+			NOT = { te_cmg_anglophone_afro_american_waiting = yes }
+		}
+		te_cm_join_part = { MERGE = anglophone CULTURE = afro_american INDEX = 13 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the anglophone merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_anglophone = {
+	te_cm_start_merge = { MERGE = anglophone RESULT = cm_anglophone }
+	te_cmg_anglophone_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_anglophone_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_anglophone_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_anglophone }
+			NOT = { has_inactive_journal_entry = je_te_cm_anglophone }
+			OR = {
+				te_cmg_anglophone_can_start = yes
+				AND = {
+					global_var:te_cm_state_anglophone ?= 1
+					te_cmg_anglophone_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_anglophone }
+	}
+	if = {
+		limit = { te_cmg_anglophone_is_starter = yes }
+		te_cmg_anglophone_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -2038,6 +2876,79 @@ te_cmg_census_brazilian_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_afro_brazilian } }
 		te_cm_sol_gate_part = { MERGE = brazilian CULTURE = afro_brazilian }
 	}
+	te_cmg_brazilian_settle = yes
+}
+
+# Country scope. Joins every part of the brazilian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_brazilian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_brazilian_nordestino_can_join = yes
+		}
+		te_cm_join_part = { MERGE = brazilian CULTURE = nordestino INDEX = 14 }
+	}
+	if = {
+		limit = {
+			te_cmg_brazilian_paulista_can_join = yes
+		}
+		te_cm_join_part = { MERGE = brazilian CULTURE = paulista INDEX = 14 }
+	}
+	if = {
+		limit = {
+			te_cmg_brazilian_amazonic_can_join = yes
+		}
+		te_cm_join_part = { MERGE = brazilian CULTURE = amazonic INDEX = 14 }
+	}
+	if = {
+		limit = {
+			te_cmg_brazilian_sulista_can_join = yes
+		}
+		te_cm_join_part = { MERGE = brazilian CULTURE = sulista INDEX = 14 }
+	}
+	if = {
+		limit = {
+			te_cmg_brazilian_afro_brazilian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = brazilian CULTURE = afro_brazilian INDEX = 14 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the brazilian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_brazilian = {
+	te_cm_start_merge = { MERGE = brazilian RESULT = brazilian }
+	te_cmg_brazilian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_brazilian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_brazilian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_brazilian }
+			NOT = { has_inactive_journal_entry = je_te_cm_brazilian }
+			OR = {
+				te_cmg_brazilian_can_start = yes
+				AND = {
+					global_var:te_cm_state_brazilian ?= 1
+					te_cmg_brazilian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_brazilian }
+	}
+	if = {
+		limit = { te_cmg_brazilian_is_starter = yes }
+		te_cmg_brazilian_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -2168,6 +3079,73 @@ te_cmg_census_platine_country = {
 				set_variable = { name = te_cm_sol_ok_platine value = 1 }
 			}
 		}
+	}
+	te_cmg_platine_settle = yes
+}
+
+# Country scope. Joins every part of the platine merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_platine_join_ready = {
+	if = {
+		limit = {
+			te_cmg_platine_platinean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = platine CULTURE = platinean INDEX = 15 }
+	}
+	if = {
+		limit = {
+			te_cmg_platine_argentine_can_join = yes
+		}
+		te_cm_join_part = { MERGE = platine CULTURE = argentine INDEX = 15 }
+	}
+	if = {
+		limit = {
+			te_cmg_platine_uruguayan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = platine CULTURE = uruguayan INDEX = 15 }
+	}
+	if = {
+		limit = {
+			te_cmg_platine_paraguayan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = platine CULTURE = paraguayan INDEX = 15 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the platine merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_platine = {
+	te_cm_start_merge = { MERGE = platine RESULT = cm_platine }
+	te_cmg_platine_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_platine_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_platine_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_platine }
+			NOT = { has_inactive_journal_entry = je_te_cm_platine }
+			OR = {
+				te_cmg_platine_can_start = yes
+				AND = {
+					global_var:te_cm_state_platine ?= 1
+					te_cmg_platine_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_platine }
+	}
+	if = {
+		limit = { te_cmg_platine_is_starter = yes }
+		te_cmg_platine_join_ready = yes
 	}
 }
 
@@ -2300,6 +3278,73 @@ te_cmg_census_andean_country = {
 			}
 		}
 	}
+	te_cmg_andean_settle = yes
+}
+
+# Country scope. Joins every part of the andean merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_andean_join_ready = {
+	if = {
+		limit = {
+			te_cmg_andean_north_andean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = andean CULTURE = north_andean INDEX = 16 }
+	}
+	if = {
+		limit = {
+			te_cmg_andean_south_andean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = andean CULTURE = south_andean INDEX = 16 }
+	}
+	if = {
+		limit = {
+			te_cmg_andean_peruvian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = andean CULTURE = peruvian INDEX = 16 }
+	}
+	if = {
+		limit = {
+			te_cmg_andean_bolivian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = andean CULTURE = bolivian INDEX = 16 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the andean merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_andean = {
+	te_cm_start_merge = { MERGE = andean RESULT = cm_andean }
+	te_cmg_andean_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_andean_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_andean_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_andean }
+			NOT = { has_inactive_journal_entry = je_te_cm_andean }
+			OR = {
+				te_cmg_andean_can_start = yes
+				AND = {
+					global_var:te_cm_state_andean ?= 1
+					te_cmg_andean_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_andean }
+	}
+	if = {
+		limit = { te_cmg_andean_is_starter = yes }
+		te_cmg_andean_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -2413,6 +3458,67 @@ te_cmg_census_gran_colombian_country = {
 				set_variable = { name = te_cm_sol_ok_gran_colombian value = 1 }
 			}
 		}
+	}
+	te_cmg_gran_colombian_settle = yes
+}
+
+# Country scope. Joins every part of the gran_colombian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_gran_colombian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_gran_colombian_colombian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = gran_colombian CULTURE = colombian INDEX = 17 }
+	}
+	if = {
+		limit = {
+			te_cmg_gran_colombian_venezuelan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = gran_colombian CULTURE = venezuelan INDEX = 17 }
+	}
+	if = {
+		limit = {
+			te_cmg_gran_colombian_ecuadorian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = gran_colombian CULTURE = ecuadorian INDEX = 17 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the gran_colombian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_gran_colombian = {
+	te_cm_start_merge = { MERGE = gran_colombian RESULT = cm_gran_colombian }
+	te_cmg_gran_colombian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_gran_colombian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_gran_colombian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_gran_colombian }
+			NOT = { has_inactive_journal_entry = je_te_cm_gran_colombian }
+			OR = {
+				te_cmg_gran_colombian_can_start = yes
+				AND = {
+					global_var:te_cm_state_gran_colombian ?= 1
+					te_cmg_gran_colombian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_gran_colombian }
+	}
+	if = {
+		limit = { te_cmg_gran_colombian_is_starter = yes }
+		te_cmg_gran_colombian_join_ready = yes
 	}
 }
 
@@ -2540,6 +3646,67 @@ te_cmg_census_chinese_country = {
 			}
 		}
 	}
+	te_cmg_chinese_settle = yes
+}
+
+# Country scope. Joins every part of the chinese merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_chinese_join_ready = {
+	if = {
+		limit = {
+			te_cmg_chinese_yue_can_join = yes
+		}
+		te_cm_join_part = { MERGE = chinese CULTURE = yue INDEX = 18 }
+	}
+	if = {
+		limit = {
+			te_cmg_chinese_min_can_join = yes
+		}
+		te_cm_join_part = { MERGE = chinese CULTURE = min INDEX = 18 }
+	}
+	if = {
+		limit = {
+			te_cmg_chinese_hakka_can_join = yes
+		}
+		te_cm_join_part = { MERGE = chinese CULTURE = hakka INDEX = 18 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the chinese merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_chinese = {
+	te_cm_start_merge = { MERGE = chinese RESULT = han }
+	te_cmg_chinese_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_chinese_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_chinese_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_chinese }
+			NOT = { has_inactive_journal_entry = je_te_cm_chinese }
+			OR = {
+				te_cmg_chinese_can_start = yes
+				AND = {
+					global_var:te_cm_state_chinese ?= 1
+					te_cmg_chinese_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_chinese }
+	}
+	if = {
+		limit = { te_cmg_chinese_is_starter = yes }
+		te_cmg_chinese_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -2631,6 +3798,55 @@ te_cmg_census_japanese_country = {
 				set_variable = { name = te_cm_sol_ok_japanese value = 1 }
 			}
 		}
+	}
+	te_cmg_japanese_settle = yes
+}
+
+# Country scope. Joins every part of the japanese merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_japanese_join_ready = {
+	if = {
+		limit = {
+			te_cmg_japanese_ryukyuan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = japanese CULTURE = ryukyuan INDEX = 19 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the japanese merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_japanese = {
+	te_cm_start_merge = { MERGE = japanese RESULT = japanese }
+	te_cmg_japanese_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_japanese_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_japanese_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_japanese }
+			NOT = { has_inactive_journal_entry = je_te_cm_japanese }
+			OR = {
+				te_cmg_japanese_can_start = yes
+				AND = {
+					global_var:te_cm_state_japanese ?= 1
+					te_cmg_japanese_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_japanese }
+	}
+	if = {
+		limit = { te_cmg_japanese_is_starter = yes }
+		te_cmg_japanese_join_ready = yes
 	}
 }
 
@@ -2865,6 +4081,97 @@ te_cmg_census_arab_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_bidan } }
 		te_cm_sol_gate_part = { MERGE = arab CULTURE = bidan }
 	}
+	te_cmg_arab_settle = yes
+}
+
+# Country scope. Joins every part of the arab merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_arab_join_ready = {
+	if = {
+		limit = {
+			te_cmg_arab_maghrebi_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = maghrebi INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_misri_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = misri INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_mashriqi_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = mashriqi INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_bedouin_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = bedouin INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_yemenite_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = yemenite INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_sudanese_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = sudanese INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_haratin_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = haratin INDEX = 20 }
+	}
+	if = {
+		limit = {
+			te_cmg_arab_bidan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = arab CULTURE = bidan INDEX = 20 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the arab merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_arab = {
+	te_cm_start_merge = { MERGE = arab RESULT = cm_arab }
+	te_cmg_arab_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_arab_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_arab_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_arab }
+			NOT = { has_inactive_journal_entry = je_te_cm_arab }
+			OR = {
+				te_cmg_arab_can_start = yes
+				AND = {
+					global_var:te_cm_state_arab ?= 1
+					te_cmg_arab_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_arab }
+	}
+	if = {
+		limit = { te_cmg_arab_is_starter = yes }
+		te_cmg_arab_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -3027,6 +4334,67 @@ te_cmg_census_persian_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hazara } }
 		te_cm_sol_gate_part = { MERGE = persian CULTURE = hazara }
 	}
+	te_cmg_persian_settle = yes
+}
+
+# Country scope. Joins every part of the persian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_persian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_persian_luri_can_join = yes
+		}
+		te_cm_join_part = { MERGE = persian CULTURE = luri INDEX = 21 }
+	}
+	if = {
+		limit = {
+			te_cmg_persian_tajik_can_join = yes
+		}
+		te_cm_join_part = { MERGE = persian CULTURE = tajik INDEX = 21 }
+	}
+	if = {
+		limit = {
+			te_cmg_persian_hazara_can_join = yes
+		}
+		te_cm_join_part = { MERGE = persian CULTURE = hazara INDEX = 21 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the persian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_persian = {
+	te_cm_start_merge = { MERGE = persian RESULT = persian }
+	te_cmg_persian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_persian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_persian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_persian }
+			NOT = { has_inactive_journal_entry = je_te_cm_persian }
+			OR = {
+				te_cmg_persian_can_start = yes
+				AND = {
+					global_var:te_cm_state_persian ?= 1
+					te_cmg_persian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_persian }
+	}
+	if = {
+		limit = { te_cmg_persian_is_starter = yes }
+		te_cmg_persian_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -3182,6 +4550,67 @@ te_cmg_census_oghuz_turkic_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_turkmen } }
 		te_cm_sol_gate_part = { MERGE = oghuz_turkic CULTURE = turkmen }
 	}
+	te_cmg_oghuz_turkic_settle = yes
+}
+
+# Country scope. Joins every part of the oghuz_turkic merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_oghuz_turkic_join_ready = {
+	if = {
+		limit = {
+			te_cmg_oghuz_turkic_turkish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkish INDEX = 22 }
+	}
+	if = {
+		limit = {
+			te_cmg_oghuz_turkic_azerbaijani_can_join = yes
+		}
+		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = azerbaijani INDEX = 22 }
+	}
+	if = {
+		limit = {
+			te_cmg_oghuz_turkic_turkmen_can_join = yes
+		}
+		te_cm_join_part = { MERGE = oghuz_turkic CULTURE = turkmen INDEX = 22 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the oghuz_turkic merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_oghuz_turkic = {
+	te_cm_start_merge = { MERGE = oghuz_turkic RESULT = cm_oghuz_turkic }
+	te_cmg_oghuz_turkic_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_oghuz_turkic_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_oghuz_turkic_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_oghuz_turkic }
+			NOT = { has_inactive_journal_entry = je_te_cm_oghuz_turkic }
+			OR = {
+				te_cmg_oghuz_turkic_can_start = yes
+				AND = {
+					global_var:te_cm_state_oghuz_turkic ?= 1
+					te_cmg_oghuz_turkic_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_oghuz_turkic }
+	}
+	if = {
+		limit = { te_cmg_oghuz_turkic_is_starter = yes }
+		te_cmg_oghuz_turkic_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -3324,6 +4753,73 @@ te_cmg_census_hindustani_country = {
 				set_variable = { name = te_cm_sol_ok_hindustani value = 1 }
 			}
 		}
+	}
+	te_cmg_hindustani_settle = yes
+}
+
+# Country scope. Joins every part of the hindustani merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_hindustani_join_ready = {
+	if = {
+		limit = {
+			te_cmg_hindustani_avadhi_can_join = yes
+		}
+		te_cm_join_part = { MERGE = hindustani CULTURE = avadhi INDEX = 23 }
+	}
+	if = {
+		limit = {
+			te_cmg_hindustani_bundeli_can_join = yes
+		}
+		te_cm_join_part = { MERGE = hindustani CULTURE = bundeli INDEX = 23 }
+	}
+	if = {
+		limit = {
+			te_cmg_hindustani_chhattisgarhi_can_join = yes
+		}
+		te_cm_join_part = { MERGE = hindustani CULTURE = chhattisgarhi INDEX = 23 }
+	}
+	if = {
+		limit = {
+			te_cmg_hindustani_bageli_can_join = yes
+		}
+		te_cm_join_part = { MERGE = hindustani CULTURE = bageli INDEX = 23 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the hindustani merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_hindustani = {
+	te_cm_start_merge = { MERGE = hindustani RESULT = hindustani }
+	te_cmg_hindustani_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_hindustani_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_hindustani_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_hindustani }
+			NOT = { has_inactive_journal_entry = je_te_cm_hindustani }
+			OR = {
+				te_cmg_hindustani_can_start = yes
+				AND = {
+					global_var:te_cm_state_hindustani ?= 1
+					te_cmg_hindustani_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_hindustani }
+	}
+	if = {
+		limit = { te_cmg_hindustani_is_starter = yes }
+		te_cmg_hindustani_join_ready = yes
 	}
 }
 
@@ -3497,6 +4993,73 @@ te_cmg_census_dravidian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_telegu } }
 		te_cm_sol_gate_part = { MERGE = dravidian CULTURE = telegu }
+	}
+	te_cmg_dravidian_settle = yes
+}
+
+# Country scope. Joins every part of the dravidian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_dravidian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_dravidian_tamil_can_join = yes
+		}
+		te_cm_join_part = { MERGE = dravidian CULTURE = tamil INDEX = 24 }
+	}
+	if = {
+		limit = {
+			te_cmg_dravidian_kannada_can_join = yes
+		}
+		te_cm_join_part = { MERGE = dravidian CULTURE = kannada INDEX = 24 }
+	}
+	if = {
+		limit = {
+			te_cmg_dravidian_malayalam_can_join = yes
+		}
+		te_cm_join_part = { MERGE = dravidian CULTURE = malayalam INDEX = 24 }
+	}
+	if = {
+		limit = {
+			te_cmg_dravidian_telegu_can_join = yes
+		}
+		te_cm_join_part = { MERGE = dravidian CULTURE = telegu INDEX = 24 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the dravidian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_dravidian = {
+	te_cm_start_merge = { MERGE = dravidian RESULT = cm_dravidian }
+	te_cmg_dravidian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_dravidian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_dravidian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_dravidian }
+			NOT = { has_inactive_journal_entry = je_te_cm_dravidian }
+			OR = {
+				te_cmg_dravidian_can_start = yes
+				AND = {
+					global_var:te_cm_state_dravidian ?= 1
+					te_cmg_dravidian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_dravidian }
+	}
+	if = {
+		limit = { te_cmg_dravidian_is_starter = yes }
+		te_cmg_dravidian_join_ready = yes
 	}
 }
 
@@ -3689,6 +5252,79 @@ te_cmg_census_indonesian_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_balinese } }
 		te_cm_sol_gate_part = { MERGE = indonesian CULTURE = balinese }
 	}
+	te_cmg_indonesian_settle = yes
+}
+
+# Country scope. Joins every part of the indonesian merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_indonesian_join_ready = {
+	if = {
+		limit = {
+			te_cmg_indonesian_javan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = indonesian CULTURE = javan INDEX = 25 }
+	}
+	if = {
+		limit = {
+			te_cmg_indonesian_malay_can_join = yes
+		}
+		te_cm_join_part = { MERGE = indonesian CULTURE = malay INDEX = 25 }
+	}
+	if = {
+		limit = {
+			te_cmg_indonesian_sumatran_can_join = yes
+		}
+		te_cm_join_part = { MERGE = indonesian CULTURE = sumatran INDEX = 25 }
+	}
+	if = {
+		limit = {
+			te_cmg_indonesian_bornean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = indonesian CULTURE = bornean INDEX = 25 }
+	}
+	if = {
+		limit = {
+			te_cmg_indonesian_balinese_can_join = yes
+		}
+		te_cm_join_part = { MERGE = indonesian CULTURE = balinese INDEX = 25 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the indonesian merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_indonesian = {
+	te_cm_start_merge = { MERGE = indonesian RESULT = cm_indonesian }
+	te_cmg_indonesian_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_indonesian_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_indonesian_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_indonesian }
+			NOT = { has_inactive_journal_entry = je_te_cm_indonesian }
+			OR = {
+				te_cmg_indonesian_can_start = yes
+				AND = {
+					global_var:te_cm_state_indonesian ?= 1
+					te_cmg_indonesian_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_indonesian }
+	}
+	if = {
+		limit = { te_cmg_indonesian_is_starter = yes }
+		te_cmg_indonesian_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -3815,6 +5451,67 @@ te_cmg_census_filipino_country = {
 			}
 		}
 	}
+	te_cmg_filipino_settle = yes
+}
+
+# Country scope. Joins every part of the filipino merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_filipino_join_ready = {
+	if = {
+		limit = {
+			te_cmg_filipino_visayan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = filipino CULTURE = visayan INDEX = 26 }
+	}
+	if = {
+		limit = {
+			te_cmg_filipino_tagalog_can_join = yes
+		}
+		te_cm_join_part = { MERGE = filipino CULTURE = tagalog INDEX = 26 }
+	}
+	if = {
+		limit = {
+			te_cmg_filipino_ilocano_can_join = yes
+		}
+		te_cm_join_part = { MERGE = filipino CULTURE = ilocano INDEX = 26 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the filipino merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_filipino = {
+	te_cm_start_merge = { MERGE = filipino RESULT = filipino }
+	te_cmg_filipino_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_filipino_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_filipino_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_filipino }
+			NOT = { has_inactive_journal_entry = je_te_cm_filipino }
+			OR = {
+				te_cmg_filipino_can_start = yes
+				AND = {
+					global_var:te_cm_state_filipino ?= 1
+					te_cmg_filipino_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_filipino }
+	}
+	if = {
+		limit = { te_cmg_filipino_is_starter = yes }
+		te_cmg_filipino_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -3928,6 +5625,67 @@ te_cmg_census_nguni_country = {
 				set_variable = { name = te_cm_sol_ok_nguni value = 1 }
 			}
 		}
+	}
+	te_cmg_nguni_settle = yes
+}
+
+# Country scope. Joins every part of the nguni merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_nguni_join_ready = {
+	if = {
+		limit = {
+			te_cmg_nguni_nguni_can_join = yes
+		}
+		te_cm_join_part = { MERGE = nguni CULTURE = nguni INDEX = 27 }
+	}
+	if = {
+		limit = {
+			te_cmg_nguni_zulu_can_join = yes
+		}
+		te_cm_join_part = { MERGE = nguni CULTURE = zulu INDEX = 27 }
+	}
+	if = {
+		limit = {
+			te_cmg_nguni_xhosa_can_join = yes
+		}
+		te_cm_join_part = { MERGE = nguni CULTURE = xhosa INDEX = 27 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the nguni merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_nguni = {
+	te_cm_start_merge = { MERGE = nguni RESULT = cm_nguni }
+	te_cmg_nguni_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_nguni_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_nguni_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_nguni }
+			NOT = { has_inactive_journal_entry = je_te_cm_nguni }
+			OR = {
+				te_cmg_nguni_can_start = yes
+				AND = {
+					global_var:te_cm_state_nguni ?= 1
+					te_cmg_nguni_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_nguni }
+	}
+	if = {
+		limit = { te_cmg_nguni_is_starter = yes }
+		te_cmg_nguni_join_ready = yes
 	}
 }
 
@@ -4168,6 +5926,103 @@ te_cmg_census_latin_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_chilean } }
 		te_cm_sol_gate_part = { MERGE = latin CULTURE = chilean }
 	}
+	te_cmg_latin_settle = yes
+}
+
+# Country scope. Joins every part of the latin merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_latin_join_ready = {
+	if = {
+		limit = {
+			te_cmg_latin_french_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = french INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_cm_italian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = cm_italian INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_spanish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = spanish INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_portuguese_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = portuguese INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_romanian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = romanian INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_platinean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = platinean INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_argentine_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = argentine INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_uruguayan_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = uruguayan INDEX = 28 }
+	}
+	if = {
+		limit = {
+			te_cmg_latin_chilean_can_join = yes
+		}
+		te_cm_join_part = { MERGE = latin CULTURE = chilean INDEX = 28 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the latin merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_latin = {
+	te_cm_start_merge = { MERGE = latin RESULT = cm_latin }
+	te_cmg_latin_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_latin_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_latin_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_latin }
+			NOT = { has_inactive_journal_entry = je_te_cm_latin }
+			OR = {
+				te_cmg_latin_can_start = yes
+				AND = {
+					global_var:te_cm_state_latin ?= 1
+					te_cmg_latin_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_latin }
+	}
+	if = {
+		limit = { te_cmg_latin_is_starter = yes }
+		te_cmg_latin_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -4364,6 +6219,85 @@ te_cmg_census_pan_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_bulgarian } }
 		te_cm_sol_gate_part = { MERGE = pan_slavic CULTURE = bulgarian }
+	}
+	te_cmg_pan_slavic_settle = yes
+}
+
+# Country scope. Joins every part of the pan_slavic merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_pan_slavic_join_ready = {
+	if = {
+		limit = {
+			te_cmg_pan_slavic_cm_east_slavic_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_east_slavic INDEX = 29 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_slavic_cm_czechoslovak_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_czechoslovak INDEX = 29 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_slavic_cm_yugoslav_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = cm_yugoslav INDEX = 29 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_slavic_polish_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = polish INDEX = 29 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_slavic_slovene_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = slovene INDEX = 29 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_slavic_bulgarian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_slavic CULTURE = bulgarian INDEX = 29 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the pan_slavic merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_pan_slavic = {
+	te_cm_start_merge = { MERGE = pan_slavic RESULT = cm_pan_slavic }
+	te_cmg_pan_slavic_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_pan_slavic_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_pan_slavic_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_pan_slavic }
+			NOT = { has_inactive_journal_entry = je_te_cm_pan_slavic }
+			OR = {
+				te_cmg_pan_slavic_can_start = yes
+				AND = {
+					global_var:te_cm_state_pan_slavic ?= 1
+					te_cmg_pan_slavic_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_pan_slavic }
+	}
+	if = {
+		limit = { te_cmg_pan_slavic_is_starter = yes }
+		te_cmg_pan_slavic_join_ready = yes
 	}
 }
 
@@ -4610,6 +6544,103 @@ te_cmg_census_pan_turkic_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_uighur } }
 		te_cm_sol_gate_part = { MERGE = pan_turkic CULTURE = uighur }
 	}
+	te_cmg_pan_turkic_settle = yes
+}
+
+# Country scope. Joins every part of the pan_turkic merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_pan_turkic_join_ready = {
+	if = {
+		limit = {
+			te_cmg_pan_turkic_cm_oghuz_turkic_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = cm_oghuz_turkic INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_uzbek_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = uzbek INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_kazak_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = kazak INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_tatar_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = tatar INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_kirgiz_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = kirgiz INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_bashkir_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = bashkir INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_crimean_tatar_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = crimean_tatar INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_caucasian_turk_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = caucasian_turk INDEX = 30 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_turkic_uighur_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_turkic CULTURE = uighur INDEX = 30 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the pan_turkic merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_pan_turkic = {
+	te_cm_start_merge = { MERGE = pan_turkic RESULT = cm_pan_turkic }
+	te_cmg_pan_turkic_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_pan_turkic_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_pan_turkic_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_pan_turkic }
+			NOT = { has_inactive_journal_entry = je_te_cm_pan_turkic }
+			OR = {
+				te_cmg_pan_turkic_can_start = yes
+				AND = {
+					global_var:te_cm_state_pan_turkic ?= 1
+					te_cmg_pan_turkic_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_pan_turkic }
+	}
+	if = {
+		limit = { te_cmg_pan_turkic_is_starter = yes }
+		te_cmg_pan_turkic_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -4706,6 +6737,61 @@ te_cmg_census_pan_malay_country = {
 				set_variable = { name = te_cm_sol_ok_pan_malay value = 1 }
 			}
 		}
+	}
+	te_cmg_pan_malay_settle = yes
+}
+
+# Country scope. Joins every part of the pan_malay merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_pan_malay_join_ready = {
+	if = {
+		limit = {
+			te_cmg_pan_malay_cm_indonesian_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_malay CULTURE = cm_indonesian INDEX = 31 }
+	}
+	if = {
+		limit = {
+			te_cmg_pan_malay_filipino_can_join = yes
+		}
+		te_cm_join_part = { MERGE = pan_malay CULTURE = filipino INDEX = 31 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the pan_malay merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_pan_malay = {
+	te_cm_start_merge = { MERGE = pan_malay RESULT = cm_pan_malay }
+	te_cmg_pan_malay_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_pan_malay_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_pan_malay_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_pan_malay }
+			NOT = { has_inactive_journal_entry = je_te_cm_pan_malay }
+			OR = {
+				te_cmg_pan_malay_can_start = yes
+				AND = {
+					global_var:te_cm_state_pan_malay ?= 1
+					te_cmg_pan_malay_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_pan_malay }
+	}
+	if = {
+		limit = { te_cmg_pan_malay_is_starter = yes }
+		te_cmg_pan_malay_join_ready = yes
 	}
 }
 
@@ -4916,6 +7002,91 @@ te_cmg_census_east_african_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_kikuyu } }
 		te_cm_sol_gate_part = { MERGE = east_african CULTURE = kikuyu }
 	}
+	te_cmg_east_african_settle = yes
+}
+
+# Country scope. Joins every part of the east_african merge that can join now and isn't waiting on a
+# vanilla entry: when the merge starts, and each census while its starter holds it.
+te_cmg_east_african_join_ready = {
+	if = {
+		limit = {
+			te_cmg_east_african_swahili_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = swahili INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_nyamwezi_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = nyamwezi INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_sukuma_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = sukuma INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_yao_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = yao INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_makua_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = makua INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_lacustrine_bantu_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = lacustrine_bantu INDEX = 32 }
+	}
+	if = {
+		limit = {
+			te_cmg_east_african_kikuyu_can_join = yes
+		}
+		te_cm_join_part = { MERGE = east_african CULTURE = kikuyu INDEX = 32 }
+	}
+}
+
+# Country scope: the button's effect. The country starts the east_african merge and brings in the parts it
+# holds that qualify now.
+te_cmg_start_east_african = {
+	te_cm_start_merge = { MERGE = east_african RESULT = cm_east_african }
+	te_cmg_east_african_join_ready = yes
+}
+
+# Country scope: the tail of te_cmg_census_east_african_country, run after the part gates are fresh.
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+#    up to te_cm_wait_cap_years).
+# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
+#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
+#    prunes the inactive ones; a concluded entry is gone). It reads the entry's own gate and never adds one for
+#    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
+# 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
+te_cmg_east_african_settle = {
+	if = {
+		limit = {
+			te_cm_system_enabled = yes
+			NOT = { has_journal_entry = je_te_cm_east_african }
+			NOT = { has_inactive_journal_entry = je_te_cm_east_african }
+			OR = {
+				te_cmg_east_african_can_start = yes
+				AND = {
+					global_var:te_cm_state_east_african ?= 1
+					te_cmg_east_african_is_starter = yes
+				}
+			}
+		}
+		add_journal_entry = { type = je_te_cm_east_african }
+	}
+	if = {
+		limit = { te_cmg_east_african_is_starter = yes }
+		te_cmg_east_african_join_ready = yes
+	}
 }
 
 # Any scope. An idle merge: every country that can start it. A running or complete one: only its
@@ -4937,6 +7108,427 @@ te_cmg_census_east_african = {
 }
 
 # ---- All merges ----
+
+# Any scope. A running merge whose starter no longer exists, or is no longer a living country, goes back
+# to idle (te_cm_release_starter), so another country can start it. Run first by te_cm_yearly_on_action.
+te_cmg_release_lost_starters = {
+	if = {
+		limit = {
+			global_var:te_cm_state_german ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_german }
+				AND = {
+					exists = global_var:te_cm_starter_german
+					global_var:te_cm_starter_german = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = german }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_italian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_italian }
+				AND = {
+					exists = global_var:te_cm_starter_italian
+					global_var:te_cm_starter_italian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = italian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_scandinavian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_scandinavian }
+				AND = {
+					exists = global_var:te_cm_starter_scandinavian
+					global_var:te_cm_starter_scandinavian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = scandinavian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_east_slavic ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_east_slavic }
+				AND = {
+					exists = global_var:te_cm_starter_east_slavic
+					global_var:te_cm_starter_east_slavic = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = east_slavic }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_yugoslav ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_yugoslav }
+				AND = {
+					exists = global_var:te_cm_starter_yugoslav
+					global_var:te_cm_starter_yugoslav = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = yugoslav }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_czechoslovak ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_czechoslovak }
+				AND = {
+					exists = global_var:te_cm_starter_czechoslovak
+					global_var:te_cm_starter_czechoslovak = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = czechoslovak }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_hungarian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_hungarian }
+				AND = {
+					exists = global_var:te_cm_starter_hungarian
+					global_var:te_cm_starter_hungarian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = hungarian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_dutch ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_dutch }
+				AND = {
+					exists = global_var:te_cm_starter_dutch
+					global_var:te_cm_starter_dutch = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = dutch }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_finnish ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_finnish }
+				AND = {
+					exists = global_var:te_cm_starter_finnish
+					global_var:te_cm_starter_finnish = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = finnish }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_french ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_french }
+				AND = {
+					exists = global_var:te_cm_starter_french
+					global_var:te_cm_starter_french = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = french }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_british ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_british }
+				AND = {
+					exists = global_var:te_cm_starter_british
+					global_var:te_cm_starter_british = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = british }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_american ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_american }
+				AND = {
+					exists = global_var:te_cm_starter_american
+					global_var:te_cm_starter_american = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = american }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_anglophone ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_anglophone }
+				AND = {
+					exists = global_var:te_cm_starter_anglophone
+					global_var:te_cm_starter_anglophone = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = anglophone }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_brazilian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_brazilian }
+				AND = {
+					exists = global_var:te_cm_starter_brazilian
+					global_var:te_cm_starter_brazilian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = brazilian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_platine ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_platine }
+				AND = {
+					exists = global_var:te_cm_starter_platine
+					global_var:te_cm_starter_platine = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = platine }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_andean ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_andean }
+				AND = {
+					exists = global_var:te_cm_starter_andean
+					global_var:te_cm_starter_andean = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = andean }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_gran_colombian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_gran_colombian }
+				AND = {
+					exists = global_var:te_cm_starter_gran_colombian
+					global_var:te_cm_starter_gran_colombian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = gran_colombian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_chinese ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_chinese }
+				AND = {
+					exists = global_var:te_cm_starter_chinese
+					global_var:te_cm_starter_chinese = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = chinese }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_japanese ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_japanese }
+				AND = {
+					exists = global_var:te_cm_starter_japanese
+					global_var:te_cm_starter_japanese = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = japanese }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_arab ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_arab }
+				AND = {
+					exists = global_var:te_cm_starter_arab
+					global_var:te_cm_starter_arab = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = arab }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_persian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_persian }
+				AND = {
+					exists = global_var:te_cm_starter_persian
+					global_var:te_cm_starter_persian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = persian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_oghuz_turkic ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_oghuz_turkic }
+				AND = {
+					exists = global_var:te_cm_starter_oghuz_turkic
+					global_var:te_cm_starter_oghuz_turkic = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = oghuz_turkic }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_hindustani ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_hindustani }
+				AND = {
+					exists = global_var:te_cm_starter_hindustani
+					global_var:te_cm_starter_hindustani = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = hindustani }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_dravidian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_dravidian }
+				AND = {
+					exists = global_var:te_cm_starter_dravidian
+					global_var:te_cm_starter_dravidian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = dravidian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_indonesian ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_indonesian }
+				AND = {
+					exists = global_var:te_cm_starter_indonesian
+					global_var:te_cm_starter_indonesian = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = indonesian }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_filipino ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_filipino }
+				AND = {
+					exists = global_var:te_cm_starter_filipino
+					global_var:te_cm_starter_filipino = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = filipino }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_nguni ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_nguni }
+				AND = {
+					exists = global_var:te_cm_starter_nguni
+					global_var:te_cm_starter_nguni = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = nguni }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_latin ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_latin }
+				AND = {
+					exists = global_var:te_cm_starter_latin
+					global_var:te_cm_starter_latin = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = latin }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_slavic ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_pan_slavic }
+				AND = {
+					exists = global_var:te_cm_starter_pan_slavic
+					global_var:te_cm_starter_pan_slavic = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = pan_slavic }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_turkic ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_pan_turkic }
+				AND = {
+					exists = global_var:te_cm_starter_pan_turkic
+					global_var:te_cm_starter_pan_turkic = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = pan_turkic }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_malay ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_pan_malay }
+				AND = {
+					exists = global_var:te_cm_starter_pan_malay
+					global_var:te_cm_starter_pan_malay = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = pan_malay }
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_east_african ?= 1
+			OR = {
+				NOT = { exists = global_var:te_cm_starter_east_african }
+				AND = {
+					exists = global_var:te_cm_starter_east_african
+					global_var:te_cm_starter_east_african = { is_country_alive = no }
+				}
+			}
+		}
+		te_cm_release_starter = { MERGE = east_african }
+	}
+}
 
 # Any scope. Measures every culture of a merge that is worth censusing, once, then runs each
 # merge's census. A culture that has switched is skipped; one that has joined a merge is walked

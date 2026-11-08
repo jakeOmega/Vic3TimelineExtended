@@ -427,3 +427,42 @@ te_cm_sol_gate_part = {
 		set_variable = { name = te_cm_sol_ok_$MERGE$_$CULTURE$ value = 0 }
 	}
 }
+
+# ============================================================================
+# STARTING, JOINING AND RELEASING (plan Task 5)
+# The generated entries, buttons and census call these
+# (scripts/generators/gen_culture_merges.py). State is global variables, so a
+# civil war's winner and a rule switched off and on again keep it.
+# ============================================================================
+
+# Country scope: the country that starts a merge. $MERGE$ = a merge key, $RESULT$ = the
+# merge's result culture. The merge is running (state 1), this country is its starter, and
+# the result is a primary culture here from the first day, so Dynamic Homeland Progress
+# can form its homelands while the run goes on.
+te_cm_start_merge = {
+	set_global_variable = { name = te_cm_state_$MERGE$ value = 1 }
+	set_global_variable = { name = te_cm_starter_$MERGE$ value = this }
+	if = {
+		limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } }
+		add_primary_culture = cu:$RESULT$
+	}
+}
+
+# Any scope. A part joins a running merge: $MERGE$ = a merge key, $CULTURE$ = a culture id,
+# $INDEX$ = the merge's 1-based position in the roster. From here the part is converted,
+# measured against the result's share, and switched; no other merge may take it.
+te_cm_join_part = {
+	set_global_variable = { name = te_cm_joined_$MERGE$_$CULTURE$ value = 1 }
+	set_global_variable = { name = te_cm_in_$CULTURE$ value = $INDEX$ }
+}
+
+# Any scope. A running merge whose starter is gone goes back to idle, so another country can
+# start it. $MERGE$ = a merge key. The parts that joined, their dominance and every counter
+# stay: the next starter picks the merge up where it stood.
+te_cm_release_starter = {
+	set_global_variable = { name = te_cm_state_$MERGE$ value = 0 }
+	if = {
+		limit = { has_global_variable = te_cm_starter_$MERGE$ }
+		remove_global_variable = te_cm_starter_$MERGE$
+	}
+}
