@@ -49,6 +49,13 @@ WEIGHTS = {
     "debt_receivership": "debt_receivership_ai_demand_weight",
 }
 
+# Weights whose prize is the conceder's economy as a whole: past their gates they
+# are worth treaty_ai_demand_economy_factor, by the conceder's GDP rank, not 1
+# (owner, 2026-11-08: a small economy is a small prize).
+ECONOMY_SCALED = {"enforce_privatization", "forced_disarmament", "free_port_concession",
+                  "enforce_emissions_reduction"}
+FACTOR = "treaty_ai_demand_economy_factor"
+
 # Articles that name an input: the weight reads the chosen one and, when none is
 # bound yet, walks every one the source could name, through the trigger.
 INPUT_WEIGHTS = {
@@ -176,12 +183,26 @@ class NamedWeightTest(unittest.TestCase):
                 self.assertTrue(f"{field} = {{ value = {weight} }}" in ai, f"{article} {field}")
 
     def test_a_weight_is_zero_unless_its_gates_pass(self):
-        for weight in WEIGHTS.values():
+        for article, weight in WEIGHTS.items():
             body = block(self.values, weight)
             self.assertTrue(body.strip().startswith("value = 0"), weight)
             self.assertNotRegex(body, r"\belse = \{", weight)
-            self.assertIn("value = 1", body, weight)
             self.assertIn("scope:source_country", body, weight)
+            if article in ECONOMY_SCALED:
+                # Every passing branch is scaled, none left at a flat 1.
+                self.assertIn(f"value = {FACTOR}", body, weight)
+                self.assertNotRegex(body, r"\bvalue = 1\b", weight)
+            else:
+                self.assertIn("value = 1", body, weight)
+
+    def test_the_economy_factor_ranks_by_gdp(self):
+        factor = " ".join(block(self.values, FACTOR).split())
+        self.assertTrue(factor.startswith("value = 0.1 "), factor)
+        self.assertIn("scope:source_country = { gdp_ranking > 0 gdp_ranking <= 10 } } value = 1 }", factor)
+        self.assertIn("scope:source_country = { gdp_ranking > 0 gdp_ranking <= 20 } } value = 0.4 }", factor)
+        # The list above is exactly the weights that read it.
+        readers = {a for a, w in WEIGHTS.items() if FACTOR in block(self.values, w)}
+        self.assertEqual(readers, ECONOMY_SCALED)
 
     def test_an_input_article_reads_the_chosen_input(self):
         for article, (link, walk, trigger) in INPUT_WEIGHTS.items():

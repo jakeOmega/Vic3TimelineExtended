@@ -107,9 +107,13 @@ class PrivatizationTest(unittest.TestCase):
         self.assertIn("enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels", weight)
         self.assertIn("law_laissez_faire", weight)
         # Small unless a major economy (owner, 2026-11-08): full weight only for a
-        # top-ten GDP, and the floor stays small.
-        self.assertIn("value = 0.1", weight)
-        self.assertIn("gdp_ranking <= 10", weight)
+        # top-ten GDP, and the floor stays small. The tiers are shared with the
+        # other demands whose prize is an economy (test_treaty_ai_demand_weights).
+        self.assertIn("value = treaty_ai_demand_economy_factor", weight)
+        factor = values[values.index("\ntreaty_ai_demand_economy_factor = {"):]
+        factor = factor[:factor.index("\n}\n")]
+        self.assertIn("value = 0.1", factor)
+        self.assertIn("gdp_ranking <= 10", factor)
 
 
 if __name__ == "__main__":
