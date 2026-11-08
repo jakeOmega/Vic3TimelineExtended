@@ -212,6 +212,12 @@ debt_receivership = {
 			multiply = 0.25
 		}
 
+		# Per-partner gate (evaluation_chance has root only): a receivership is asked
+		# for in a treaty, or pressed as a war goal, only of a debtor not already
+		# under one or a lender-of-last-resort guarantee, which can_ratify alone checks.
+		proposal_weight = { value = debt_receivership_ai_demand_weight }
+		wargoal_score_multiplier = { value = debt_receivership_ai_demand_weight }
+
 		inherent_accept_score = {
 			value = 0
 

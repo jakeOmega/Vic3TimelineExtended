@@ -148,7 +148,7 @@ the mod.
 
 ### Game rules
 
-The mod adds nineteen game rules to the game setup screen. Each one turns a
+The mod adds twenty-one game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -170,7 +170,7 @@ turn a default system off.
 | Rule | Default | Settings and what they control | Chapter |
 |---|---|---|---|
 | Banking System | Enabled | *Enabled*: the banking cycle with the full monetary-policy layer (policy rate, inflation, exchange rate, currency pegs and shared currencies). *Simplified*: the banking cycle only; you still borrow at your own interest rate but can't set it. *Disabled*: no banking cycle. | [Banking and monetary policy](04-banking.md) |
-| Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
+| Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without AI Retooling Costs*: as Enabled, but AI countries' buildings don't retool; players' still do. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](15-climate.md) |
 | United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](10-united-nations.md) |
 | Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](14-nuclear.md) |
@@ -182,6 +182,9 @@ turn a default system off.
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
+| Culture Merges | Enabled | Closely related cultures merging into one national culture. Turned off mid-game, every merge pauses where it stands and carries on when the rule is turned back on. | [States and population](08-states.md#culture-merges) |
+| Global Commons | Enabled | *Enabled*: seabed licenses that cap the Deep-Sea Mine, the Law of the Sea's seabed terms at the UN, Antarctic research stations and the Antarctic Treaty. *Disabled*: the Deep-Sea Mine has no cap. | [The extended timeline](02-timeline.md#seabed-licenses) |
+| Power Bloc Principle Slots | Up to Eight | *Up to Eight*: four technologies the bloc leader researches each add a principle slot, up to eight. *Four (Base Game)*: the base game's slots only. | [Diplomacy](09-diplomacy.md#principle-slots) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
@@ -292,7 +295,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Taxation (experimental)](05-tax-code.md) | The Legislated Tax Code rule: the Light Tax Code's rates within your taxation law; drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
 | [Government, laws and characters](06-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
 | [Social movements](07-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
-| [States and population](08-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |
+| [States and population](08-states.md) | Migration crowding, dynamic homelands, cultural acceptance, culture merges, tourism, world city rankings and internal resettlement. |
 | [Diplomacy](09-diplomacy.md) | New treaty articles, diplomatic play escalation, irredentism and reunification, power blocs and formable countries. |
 | [The United Nations](10-united-nations.md) | Founding the UN, its authority, the Security Council, votes, resolutions, conventions and missions. |
 | [Cultural hegemony and covert warfare](11-influence.md) | Soft power and intelligence operations. |
@@ -304,7 +307,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Quick reference](17-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
 | [Appendix: social movement details](18-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
 | [Appendix: events](19-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
-| [Appendix: reference lists](20-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, combat units, ships, ship modifications, mobilization options and military base production methods. |
+| [Appendix: reference lists](20-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, culture merges, combat units, ships, ship modifications, mobilization options and military base production methods. |
 
 ## Reporting problems
 

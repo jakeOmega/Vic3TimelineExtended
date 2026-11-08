@@ -16,13 +16,13 @@ technocratic_party = {
 			triggered_desc = {
 				desc = party_en_marche
 				trigger = {
-					country_has_primary_culture = cu:french
+					country_has_primary_culture = cu:french # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or Italy would take the French name
 				}
 			}
 			triggered_desc = {
 				desc = party_ciudadanos
 				trigger = {
-					country_has_primary_culture = cu:spanish
+					country_has_primary_culture = cu:spanish # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin France, Portugal or Italy would take the Spanish name
 				}
 			}
 			triggered_desc = {

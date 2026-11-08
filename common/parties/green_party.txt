@@ -12,19 +12,20 @@ green_party = {
 					OR = {
 						country_has_primary_culture = cu:north_german
 						country_has_primary_culture = cu:south_german
+						country_has_primary_culture = cu:cm_german
 					}
 				}
 			}
 			triggered_desc = {
 				desc = party_les_verts
 				trigger = {
-					country_has_primary_culture = cu:french
+					country_has_primary_culture = cu:french # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or Italy would take the French name
 				}
 			}
 			triggered_desc = {
 				desc = party_miljoepartiet
 				trigger = {
-					country_has_primary_culture = cu:swedish
+					country_has_primary_culture = cu:swedish # REVIEWED 2026-11-07 (culture_merge_ref): cm_scandinavian left out: Miljoepartiet is the Swedish party, and Denmark and Norway would take its name
 				}
 			}
 			triggered_desc = {
@@ -43,9 +44,10 @@ green_party = {
 			triggered_desc = {
 				desc = party_verdi
 				trigger = {
-					OR = {
+					OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or France would take the Italian name
 						country_has_primary_culture = cu:north_italian
 						country_has_primary_culture = cu:south_italian
+						country_has_primary_culture = cu:cm_italian
 					}
 					NOR = {
 						c:AUS ?= this
@@ -57,7 +59,7 @@ green_party = {
 			triggered_desc = {
 				desc = party_the_greens
 				trigger = {
-					OR = {
+					OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_anglophone left out: Britain and America hold it, and their Green parties are the plain Green Party
 						country_has_primary_culture = cu:australian
 						country_has_primary_culture = cu:anglo_canadian
 					}

@@ -29,6 +29,39 @@ Key gotchas:
 - **Authority and politics:** the article's `source_modifier` carries `country_authority_cost_add = -750`, the sum of the five forced policies that cost authority (emission standards 200, reforestation 100, public transit 150, fossil-fuel divestment 200, green building codes 100). The source cannot repeal them, and charging for them could push it under its authority limit (bureaucracy falls, which can start a bankruptcy cycle) for a choice it no longer has. Climate adaptation costs authority but is not forced, so it keeps its cost. The treaty's own former +300 authority cost is replaced by `interest_group_ig_industrialists_approval_add = -2`. `test_gw_treaty_authority_waiver.py` fails if the waiver and the policy costs drift apart. The article also needs the source to hold `je_global_warming` (the waiver assumes there is something to waive). Market members of a bound leader are not bound: they hold the market-wide policies (emission standards costs 200) but have no variable, no waiver, and cannot repeal.
 - **Button lock integration:** Remove-button `possible`/`visible` checks in `common/scripted_buttons/global_warming_buttons.txt` now block rollback when `has_emissions_reduction_treaty` is present (for emissions-reduction policies only).
 
+### Privatization
+
+- **Article key:** `enforce_privatization` in `common/treaty_articles/105_enforce_privatization.txt`, shown as Privatization so that its war goal reads Enforce Privatization (vanilla's `war_goal_enforce_treaty_article` prefixes "Enforce"; until 2026-11-08 it read Enforce Enforce Privatization).
+- **Effect:** the source, the conceding country, gets `country_force_privatization_bool` and a +200 authority cost; the demanding target gets +5% prestige.
+- **Gates:** the source needs Cooperative Ownership, Agrarianism or Traditionalism and the target Laissez-Faire or Interventionism, both in `possible`, since a war goal checks `possible` and not `can_ratify` (the target's test sat only in `can_ratify` until 2026-11-08).
+- **AI:** `proposal_weight` and `wargoal_score_multiplier` are `enforce_privatization_ai_demand_weight`: 0 unless the demander is capitalist and the source's government owns at least `enforce_privatization_ai_min_levels` (10) levels outside the buildings it funds (`enforce_privatization_state_owned_levels`). Past that gate it scales with the source's `gdp_ranking`: 1 for the top ten, 0.4 for 11th to 20th, 0.1 below (owner, 2026-11-08: a small economy is a small prize). Before that Britain pressed it on Tahiti, which has nothing to privatize, in a war with France.
+- **Tooltip:** vanilla headed the source's modifiers with the war goal holder's name; the mod swaps the two headings for every enforce goal. Play-test: `docs/testing/treaty-war-goal-playtest.md`.
+
+### AI demand weights
+
+Every `can_be_enforced` article tells the AI where a demand buys nothing, through `proposal_weight` (asking for it in a treaty) and `wargoal_score_multiplier` (pressing it as an enforce war goal), or says in its `ai` block why it needs neither: `# REVIEWED YYYY-MM-DD (ai_demand_weight): rationale`. `test_treaty_ai_demand_weights.py` fails on an enforceable article with neither, on one with only one of the two, and on a stale tag. The rule and the scopes: `docs/guides/scripting_best_practices.md`, "proposal_weight and wargoal_score_multiplier". The named weights are in `common/script_values/extra_script_values.txt` ("AI demand weights for enforceable treaty articles") and the input halves in `common/scripted_triggers/te_treaty_ai_demand_triggers.txt`. An article that names an input asks the test of the chosen one (`scope:article.input_company` / `.input_state`, as vanilla's `treaty_port` reads its state) and, with none bound yet, of every input the source could name. Each is 0 or 1; players are not bound.
+
+| Article | The AI demands it only where |
+|---|---|
+| Seize Company | the company owns at least `company_article_ai_min_levels` (5) levels and the receiver has no company of its type |
+| Disband Company | the company owns at least 5 levels |
+| Minority Protection | a people or faith of the protector is discriminated in the state (culture at least 5% below acceptance 80, or faith at least 10% below medium acceptance) |
+| Free Port Concession | the two are in different markets and the state is a port with a yearly GDP of at least `free_port_concession_ai_min_state_gdp` (500,000) |
+| Privatization | see above |
+| Religious Mission Rights | at least a tenth of the state is of another faith than the missionary power's |
+| Demilitarized Zone | the state holds a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center or Military Base, or borders the demander |
+| Forced Disarmament | the source has `forced_disarmament_ai_min_units` (10) battalions or flotillas, or an Arms Industry, Artillery Foundry or Munition Plant |
+| Enforce Emissions Reduction | the source emits at least `enforce_emissions_reduction_ai_min_share_pct` (1%) of the world's yearly total and doesn't already run all seven forced policies |
+| Imposed Currency Peg | the source isn't already pegged (`te_mon_is_anchored`) |
+| Debt Receivership | the source isn't already under a receivership or a lender-of-last-resort guarantee |
+| Nuclear Program Freeze, Nuclear Disarmament | `docs/systems/mod_systems/nuclear.md` |
+| Population Transfer | it would move at least 100,000 people (`docs/systems/mod_systems/pops_and_migration.md`) |
+| Lease Seabed Claims, Cede Colony | the source has claims to lease, or a colony |
+
+Reviewed exemptions: Money Transfer (vanilla's, which has neither field; money is worth having from anyone), Corporate Concessions (hidden while WIP, and the demander's gain is the same whoever concedes), and Return Cultural Property, Surrender a Monument and Excavation Concession, whose `possible` already makes the demand impossible where it would buy nothing.
+
+The weight holds the zero cases that sit in `can_ratify` and can't move to `possible`: a test that needs the input (Seize's receiver already has the type), or one that `possible`, which can't tell the treaty being renegotiated from another, would trip on renegotiation (one peg at a time, one receivership at a time). A test of who may demand an article does belong in `possible`, read one way round: since 2026-11-08 Minority Protection's protector bloc, Religious Mission Rights' missionary bloc and Excavation Concession's sponsor technology are there as well as in `can_ratify`. Seize Company's receiver test also sits in `company_valid_trigger`, which a war goal's input picker reads, so a war goal can't seize a company whose type the holder already has (the source would lose it and the holder gain nothing).
+
 ## Dynamic Treaty Names
 
 - **Purpose:** Gives thematic names to treaties containing mod-specific treaty articles (instead of generic "Treaty of [City]").

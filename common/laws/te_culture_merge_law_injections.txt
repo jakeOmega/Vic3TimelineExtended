@@ -1,0 +1,10 @@
+﻿# Culture Merges (docs/superpowers/specs/2026-11-07-culture-merges-design.md): the
+# schools that teach a shared national language and history speed the merge of
+# the cultures a country holds. Injected modifier blocks sum with vanilla's and
+# with the other mod files' (scripting_best_practices.md, "an INJECT block sums").
+
+INJECT:law_public_schools = {
+	modifier = {
+		country_culture_merge_speed_mult = 0.10
+	}
+}

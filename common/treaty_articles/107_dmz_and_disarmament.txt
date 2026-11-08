@@ -107,6 +107,12 @@ demilitarized_zone = {  # REVIEWED 2026-11-03 (involvement): an imposed restrict
 			}
 		}
 
+		# Per-partner gate (evaluation_chance has root only): a zone is asked for in
+		# a treaty, or pressed as a war goal, only for a state that holds a military
+		# building or borders the demander.
+		proposal_weight = { value = demilitarized_zone_ai_demand_weight }
+		wargoal_score_multiplier = { value = demilitarized_zone_ai_demand_weight }
+
 		inherent_accept_score = {
 			value = 0
 
@@ -385,6 +391,12 @@ forced_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restrict
 				add = 0.1
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): disarmament is asked
+		# for in a treaty, or pressed as a war goal, only of a country with an army,
+		# a navy or military industry to lose.
+		proposal_weight = { value = forced_disarmament_ai_demand_weight }
+		wargoal_score_multiplier = { value = forced_disarmament_ai_demand_weight }
 
 		inherent_accept_score = {
 			value = 0

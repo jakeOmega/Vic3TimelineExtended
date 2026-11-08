@@ -5596,8 +5596,8 @@
   "de": "• Zwingt das Ausgangsland, alle wichtigen Treibhausgas-Minderungspolitiken zu aktivieren.\\n• Das Ausgangsland muss [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] und [GetTechnology('modern_urban_planning').GetName] erforscht haben, die diese Politiken benötigen.\\n• Blockiert eine Rücknahme dieser Politik, solange der Vertrag in Kraft ist.\\n• Erlässt die Kosten an [concept_authority] für die von ihm erzwungenen Maßnahmen, die das Ausgangsland nicht widerrufen kann, verärgert aber die Industriellen.\\n• Verhängt zusätzliche Strafen für den Ausbau fossiler Brennstoffe und veralteter Energieerzeugung.\\n• Kann im Krieg erzwungen oder als Verhandlungszugeständnis angeboten werden."
  },
  "enforce_privatization": {
-  "en": "Enforce Privatization",
-  "de": "Privatisierung erzwingen"
+  "en": "Privatization",
+  "de": "Privatisierung"
  },
  "enforce_privatization_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will [concept_privatize] state enterprises",

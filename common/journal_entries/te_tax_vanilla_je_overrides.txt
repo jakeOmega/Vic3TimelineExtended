@@ -119,7 +119,7 @@ REPLACE:je_imperialism_of_promise = {
 	}
 
 	possible = {
-		country_has_primary_culture = cu:british
+		country_has_primary_culture = cu:british # REVIEWED 2026-11-07 (culture_merge_ref): vanilla's own condition for the British India chartered company; Britain keeps british as a primary culture, and cm_anglophone would let any Anglophone country run it
 		custom_tooltip ={
 			text = utilitarian_character_trigger
 			any_scope_character = {
@@ -240,7 +240,7 @@ REPLACE:je_imperialism_of_promise = {
 					exists = c:BIC
 				}
 				NOT = {
-					country_has_primary_culture = cu:british
+					country_has_primary_culture = cu:british # REVIEWED 2026-11-07 (culture_merge_ref): vanilla's own condition, the pair of the one above
 				}
 			}
 		}
