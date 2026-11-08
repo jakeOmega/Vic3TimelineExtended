@@ -40,7 +40,7 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Market Leader | we lead our market | a wooden crate of goods with a gold crown on it | `role_leader.dds` |
 | Market Member | we don't | the same crate, grey, no crown | `role_member.dds` |
 | Penalty | always | a tile of cracked, parched earth under a red down arrow | `penalty.dds` |
-| Treaty-Bound | an Enforce Emissions Reduction treaty binds us | the treaty article's own icon (vanilla mark, kept) | `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds` |
+| Treaty-Bound | an Emissions Reduction treaty binds us | the treaty article's own icon (vanilla mark, kept) | `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds` |
 
 ## Mitigation Policies: one icon per row
 
@@ -76,7 +76,7 @@ The same 20 px check as the policy rows shows while a programme runs.
 
 ## Top Emitters: the row marks
 
-No new art. Each row starts with the country's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the country; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own country's row says "Our country" in words.
+No new art. Each row starts with the country's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Emissions Reduction treaty binds the country; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own country's row says "Our country" in words.
 
 ## Overview: the temperature bar
 

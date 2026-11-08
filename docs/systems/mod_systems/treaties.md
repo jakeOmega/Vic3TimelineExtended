@@ -16,9 +16,9 @@ Key gotchas:
 - **One-off articles** (#1407): an article whose work is done at entry into force, with nothing to revert, carries `is_one_time` and not `can_be_renegotiated`, as vanilla's transfers do: `disband_company`, `seize_company`, `return_cultural_property`, `surrender_monument`, `te_cede_colony`, `population_transfer`. The AI withdraws from a treaty of mostly one-offs once its binding period ends, so it stops paying their upkeep, and a renegotiation keeps them locked and doesn't re-run them. `test_treaty_one_time_articles.py` holds the list. The money transfer (vanilla's weekly payment, despite its involvement tag) and the seabed leases stay renegotiable.
 - Always guard `scope:article.input_company` with `exists = scope:article.input_company`.
 
-### Enforce Emissions Reduction Treaty
+### Emissions Reduction Treaty
 
-- **Article key:** `enforce_emissions_reduction` in `common/treaty_articles/109_enforce_emissions_reduction.txt`.
+- **Article key:** `enforce_emissions_reduction` in `common/treaty_articles/109_enforce_emissions_reduction.txt`, shown as Emissions Reduction so that its war goal reads Enforce Emissions Reduction (until 2026-11-08 the article and its concept, `concept_emissions_reduction_treaty`, were named Enforce Emissions Reduction and the war goal read Enforce Enforce Emissions Reduction). The key stays: script, saves and the `has_emissions_reduction_treaty` variable rest on it.
 - **Purpose:** Forces its source country, market leader or member, to maintain seven national greenhouse-gas mitigation policies while the treaty is active.
 - **Visibility and targeting:** Only visible once warming is active (`temperature_anomaly_display > 0.1`); signable from 0.5 °C against a source holding the climate journal entry.
 - **Technology gate:** the source must have researched every technology the forced policies need (`gw_has_emissions_treaty_technologies`: `clean_energy_technologies`, `pollution_control`, `modern_urban_planning`), checked in `possible` (ROOT is the source) and again in `can_ratify` through `scope:source_country`. The treaty overrides the policies' warming thresholds (it forces Fossil-Fuel Divestment below 1.0 °C) but not their technology gates, so it never installs, say, Renewable Investment in a country that cannot build renewable plants. `test_gw_policy_tech_gates.py` keeps the list equal to the gates of the policies `non_fulfillment` names.
@@ -51,7 +51,7 @@ Every `can_be_enforced` article tells the AI where a demand buys nothing, throug
 | Religious Mission Rights | at least a tenth of the state is of another faith than the missionary power's |
 | Demilitarized Zone | the state holds a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center or Military Base, or borders the demander |
 | Forced Disarmament | the source has `forced_disarmament_ai_min_units` (10) battalions or flotillas, or an Arms Industry, Artillery Foundry or Munition Plant |
-| Enforce Emissions Reduction | the source emits at least `enforce_emissions_reduction_ai_min_share_pct` (1%) of the world's yearly total and doesn't already run all seven forced policies |
+| Emissions Reduction | the source emits at least `enforce_emissions_reduction_ai_min_share_pct` (1%) of the world's yearly total and doesn't already run all seven forced policies |
 | Imposed Currency Peg | the source isn't already pegged (`te_mon_is_anchored`) |
 | Debt Receivership | the source isn't already under a receivership or a lender-of-last-resort guarantee |
 | Nuclear Program Freeze, Nuclear Disarmament | `docs/systems/mod_systems/nuclear.md` |
