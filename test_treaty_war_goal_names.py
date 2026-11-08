@@ -23,8 +23,9 @@ OVERRIDE = os.path.join(LOC, "replace", "timeline_extended_override_l_english.ym
 VALUES = os.path.join(ROOT, "common", "script_values", "extra_script_values.txt")
 
 # Articles still named "Enforce ...": each needs a rename (and its concept, guide
-# and translations with it). Remove an entry once it is renamed.
-STILL_DOUBLED = {"enforce_emissions_reduction"}
+# and translations with it). Remove an entry once it is renamed. Emissions
+# Reduction, the last, was renamed on 2026-11-08.
+STILL_DOUBLED: set[str] = set()
 
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
 
@@ -68,6 +69,14 @@ class EnforceWarGoalNameTest(unittest.TestCase):
                          "the war goal would read 'Enforce Enforce ...': name the article with a noun")
         self.assertEqual(STILL_DOUBLED - doubled, set(), "renamed: drop it from STILL_DOUBLED")
 
+    def test_emissions_reduction_concept_follows_the_article(self):
+        files = [os.path.join(LOC, f) for f in sorted(os.listdir(LOC)) if f.endswith(".yml")]
+        loc = english_loc(files)
+        self.assertEqual(loc["concept_emissions_reduction_treaty"], loc["enforce_emissions_reduction"])
+        old_links = sorted(k for k, v in loc.items()
+                           if re.search(r"Concept\('concept_emissions_reduction_treaty',\s*'[^']*Enforce", v))
+        self.assertEqual(old_links, [], "a concept link still shows the old name, Enforce Emissions Reduction")
+
     def test_headings_name_the_conceding_target_over_the_source_modifiers(self):
         loc = english_loc([OVERRIDE])
         self.assertIn("WarGoal.GetTarget.GetAdjective",
@@ -98,9 +107,13 @@ class PrivatizationTest(unittest.TestCase):
         self.assertIn("enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels", weight)
         self.assertIn("law_laissez_faire", weight)
         # Small unless a major economy (owner, 2026-11-08): full weight only for a
-        # top-ten GDP, and the floor stays small.
-        self.assertIn("value = 0.1", weight)
-        self.assertIn("gdp_ranking <= 10", weight)
+        # top-ten GDP, and the floor stays small. The tiers are shared with the
+        # other demands whose prize is an economy (test_treaty_ai_demand_weights).
+        self.assertIn("value = treaty_ai_demand_economy_factor", weight)
+        factor = values[values.index("\ntreaty_ai_demand_economy_factor = {"):]
+        factor = factor[:factor.index("\n}\n")]
+        self.assertIn("value = 0.1", factor)
+        self.assertIn("gdp_ranking <= 10", factor)
 
 
 if __name__ == "__main__":

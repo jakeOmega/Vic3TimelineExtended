@@ -145,13 +145,13 @@ it for what is still missing. The tab ends with an Open Journal Entry button.
 The tab is on the Market panel for every market. On your own market, whether
 you lead it or joined it, it is the journal entry. On another market, a line
 names the market's leader, and the parts about the market show that market: in
-the overview, the leader's role and any Enforce Emissions Reduction treaty that
+the overview, the leader's role and any Emissions Reduction treaty that
 binds it, the market's emissions and carbon captured, and its share and
 emissions-cut pies; below, the leader's Mitigation Policies, with every Adopt and
 Repeal grayed, since only that leader can change them. The temperature, Top
 Emitters, the history charts and the Help page stay your own view.
-Use it to check what a market you want to bind with Enforce Emissions Reduction
-emits and which policies it already runs.
+Use it to check what a market you want to bind with an Emissions Reduction
+treaty emits and which policies it already runs.
 
 The anomaly sets the warming tier, which the entry shows as a thermometer icon
 with the tier's name beneath it:
@@ -207,8 +207,8 @@ The overview opens with boxes, two to a row: Warming, the tier and where the
 next one begins (hover it for what the tier means); Warming Penalty, today's
 standard of living and mortality lines of the Climate Warming modifier; and
 Market, Leader or Member, which says whether you set fossil-fuel tariffs. A
-Treaty box, Bound with repeals locked, joins them while an Enforce Emissions
-Reduction treaty binds you.
+Treaty box, Bound with repeals locked, joins them while an Emissions Reduction
+treaty binds you.
 
 Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
 "1.61 → 1.81 °C (+0.02/yr)": the anomaly now, the anomaly in ten years if every
@@ -478,17 +478,17 @@ is not deep in debt, stops one when the fuel or electricity runs short, and
 returns to Unrestricted Extraction when its market is short of coal, oil or
 electricity.
 
-## Enforce Emissions Reduction
+## The Emissions Reduction treaty article
 
-Enforce Emissions Reduction forces its source country to maintain seven
+Emissions Reduction forces its source country to maintain seven
 national policies: Carbon Tax, Renewable Investment, Emission Standards,
 Reforestation, Public Transit, Fossil-Fuel Divestment and Green Building Codes.
 It appears past 0.1 °C and can be signed from 0.5 °C with Intergovernmental
 Organizations, including against a market member. The source must have
 researched the technologies those policies need: Clean Energy Technologies,
 Pollution Control and Modern Urban Planning. Below 1.0 °C it still forces
-Fossil-Fuel Divestment. It can be a war goal or a requested or offered treaty
-article. Climate Adaptation, Carbon Removal Support
+Fossil-Fuel Divestment. It can be a war goal, Enforce Emissions Reduction, or a
+requested or offered treaty article. Climate Adaptation, Carbon Removal Support
 and Fossil-Fuel Tariffs are not forced; the first and last remain freely
 revocable, while the existing treaty lock also bars repealing removal support
 if the bound country chooses to adopt it.
