@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Eighth pass, 2026-11-07 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Ninth pass, 2026-11-08 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -12,7 +12,9 @@ map for eight of the mod's systems, each on its own entry and in the Map Room (b
 tabs and a Map Room button in the Timeline Extended window, and fades the see-through page to 20%. The seventh adds
 five maps to the Map Room alone: Tourism Appeal, Base and Current Comfort, GDP per Capita and the Crowding Penalty.
 The eighth (2026-11-07) fits nearly every map's colors to the world's range as it stands, adds a Power Grids map, and
-lengthens the repaint's two waits.
+lengthens the repaint's two waits. The ninth (2026-11-08, the owner's ask) adds nine: City Rank, Company HQs (with
+stripes for regional headquarters), Armed Forces and War Dead, then Ownership, Population Growth, Family Planning,
+Health Care and Fighting-Age Men.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -49,7 +51,8 @@ journal page has a see-through eye (below) to look past it. An inactive entry's 
 too.
 
 **Cheap reads only.** Every value runs once per state, as the game runs, so
-the maps read stored variables and engine figures, never walk pops. A figure behind a long `state_region` chain is
+the maps read stored variables and engine figures, never walk pops. Company HQs walks a state's buildings, but only
+where `has_building = building_company_headquarter` holds (a few dozen states), so every other state costs one check. A figure behind a long `state_region` chain is
 stored by the refresh that already computes it: tourism's Base Appeal (some 700 branches) and Local Climate's
 penalties (eight chains of 680). Each map's color comes from a factor, 0–1, on a curve fitted to the world as it
 stands (below). Colors are named in `common/named_colors/te_journal_map_colors.txt`, one family per map.
@@ -73,8 +76,11 @@ its own span (at least `min_half`), and where the whole world is on one side, th
 the neutral color at its end nearest the midpoint. Life expectancy, infant mortality and median age split at their
 range's middle. GDP per capita keeps a doubling scale, from the world's low (at least £0.01) to its high (at least four
 times it). Each fitted pick's tooltip prints its range now (`GetPlayer.MakeScope.ScriptValue('te_jmap_<map>_lo')`).
-Comfort's two maps share Base Comfort's range (`range_of`), so they still compare. Two stay fixed: Agent Networks
-(0–100, its tiers at 50 and 75 are what it shows) and the leading cause's paleness (a share on a categorical map).
+Comfort's two maps share Base Comfort's range (`range_of`), so they still compare. Four stay fixed: Agent Networks
+(0–100, its tiers at 50 and 75 are what it shows), the paleness of the leading cause and of Ownership's leading holder
+(a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
+Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs
+and War Dead take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
@@ -143,6 +149,43 @@ entry, in no country's journal.
   lavender). 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
   the unpainted map and "Pick a map" until the next pick. 18-25 are the systems' maps, each also on its own entry
   (below).
+- **The ninth pass's four** (2026-11-08, the owner's ask). 32 **City Rank**, tourism's ranking of the world's cities
+  (`var:state_city_size_rank`, which `city_rank_on_action` sets on the 501 largest by `city_size` each month): the 20
+  whose cities earn tourism's Cities bonus by that bonus (`tourism_bonus_from_urban_centers`, +5% at 20th to +100% at
+  1st), amber to crimson, the rest steel blue paling a doubling of the rank at a time (`te_jmap_city_rest_factor`), and
+  a state the ranking misses pale (`te_jmap_none`). The ranking now clears every rank before it ranks, so a state that
+  falls past 501st has none instead of keeping its last for good (it did until this pass; only the map and
+  Demographics' Largest Urban States read past 20th). 33 **Armed Forces**, the yearly walk's Soldiers and Officers
+  (`te_dg_soldiers`, whatever the Demographics rule), and 35 **War Dead**, the census's war and devastation deaths last
+  year (`te_dg_dc_war`, once stepped, as the Causes of Death row): each a doubling at a time, a zero pale and no figure
+  grey, on one row of the page because the census shares a country's war dead out to its states by their soldiers
+  (`te_demog_share_war_dead`), so the dead show where the soldiers came from, not where they fell. 34 **Company HQs**:
+  a state without a `building_company_headquarter` grey (`te_jmap_no_data`, the owner's spec), one with any by their
+  weekly profit summed (`te_jmap_hq_profit`), a doubling at a time, red at a loss or none. Script can't read a company's
+  profit (`te_company_effects.txt`), and no link leads from a state or a building to a company, but each company has its
+  own headquarters building (its production method follows the company's category), and an ownership building's profit
+  is what the levels it owns pay it less its wages: the company's earnings coming home. That reading is unverified, so
+  `te_jmap_hq_selfcheck` (once a game, from the global monthly pulse, once three states hold a headquarters) logs
+  `TE_SELF_CHECK OK|BROKEN hq_profit`: BROKEN when every headquarters reads exactly 0 (play-test check 24 names the
+  fallback). A state with a `building_company_regional_headquarter` is striped gold over its color (grey where it holds
+  no headquarters of its own), the Map Room's third `map_color_second` branch, and its hover adds a line counting them
+  (`te_jmap_rhq_count`).
+- **The ninth pass's second round** (2026-11-08, the owner's pick from the eighth's suggestions). 36 **Ownership**: who
+  holds the state's capital, the yearly walk's building levels (`te_dg_lv_priv`, `_self`, `_ctry`: ownership buildings,
+  subsistence farms and government buildings left out), whatever the rule. The leading holder's color (private gold,
+  their own workers green, the state red; `te_jmap_own_lead`, a tie to the first) fades to a pale end of its hue by its
+  share (`te_jmap_own_factor`, fixed, 40% to 100%), as Leading Cause does; under one level of capital
+  (`te_demog_wc_capital_levels`, Dynastic Wealth's own test) pale. No stripes. 37 **Population Growth**: the people at
+  one yearly walk against the last (`te_jmap_pop_growth`, per 1,000, from `te_dg_walk_pop_prev`, kept every game),
+  diverging at none; it counts land too, so a state that took or gave up provinces jumps. The census's three, gated on
+  it: 38 **Family Planning**, its means to plan a family (`te_dg_means`: traditional methods and technology's
+  contraception, as far as literacy spreads them, plus Family Limitation's line), the hover adding the older ways
+  (Late Marriage's age at marriage, `te_demog_marriage_age`, and Birth Spacing's share): those erode as the means
+  spread, so the means are the transition's map; 39 **Health Care**, health-care access (`te_dg_acc`), the hover adding
+  where it is heading (`te_demog_access_target`) and the mothers who die in childbirth (`te_dg_m_mat`); 40
+  **Fighting-Age Men**, the conscription pool (`te_dg_fam`, men of calendar age 20 or more and biological age 39 or
+  less) over the people (`te_demog_fam_share`, what the conscription term reads), the hover adding its share of the
+  men.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
@@ -263,8 +306,10 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
 Every map button clears the see-through flag before it opens a page.
 - `te_jmap_pick_row`: the Map Room's picks on its page: the world's maps in a row of three (Turmoil, Devastation,
   Urban People), wealth (GDP per Capita, Gini, Dynastic Wealth), migration attraction (Base Comfort, Current Comfort,
-  Crowding Penalty) and Tourism Appeal alone, the systems' nine in rows of three (Grandeur, Colonies and Power Grids
-  last), then the census's eleven three to a row.
+  Crowding Penalty), the cities (Tourism Appeal, City Rank), ownership (Ownership, Company HQs) and the armies (Armed
+  Forces, and Fighting-Age Men and War Dead while the census runs), the systems' nine in rows of three (Grandeur,
+  Colonies and Power Grids last), then the census's maps three to a row, Population Growth (the walk's) beside Net
+  Migration and a last row of Health Care and Family Planning.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).

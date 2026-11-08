@@ -51,7 +51,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `ministry_of_thought_control_on_action` — monthly loyalists from `state_monthly_loyalists_add`, per incorporated state
 
 **`on_monthly_pulse`** (Root = global):
-- `city_rank_on_action` — city tier updates
+- `city_rank_on_action` — the monthly world city ranking (`state_city_size_rank` on the 501 largest; clears every rank first, so a state past 501st keeps none)
 - `global_warming_events_on_action` — GW threshold & recurring events
 
 **`on_monthly_pulse_country`** (Root = Country):

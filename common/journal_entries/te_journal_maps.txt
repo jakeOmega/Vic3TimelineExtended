@@ -208,6 +208,156 @@ je_te_map_room = {
 				factor = te_jmap_crowding_factor
 			}
 		}
+		# 32. City Rank: tourism's ranking of the world's cities (var:state_city_size_rank, city_rank_on_action, monthly).
+		# The first 20 by the Cities bonus tourism gives them, 20th amber to 1st crimson; below 20th a doubling of the
+		# rank at a time, steel blue fading; a state the ranking doesn't reach (past 501st) pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_top_low"
+				max_color = "te_jmap_city_top_high"
+				factor = te_jmap_city_top_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_rest_low"
+				max_color = "te_jmap_city_rest_high"
+				factor = te_jmap_city_rest_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			value = "te_jmap_none"
+		}
+		# 33. Armed Forces: the state's Soldiers and Officers (the yearly walk's, whatever the Demographics rule), a
+		# doubling at a time; a state with none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_soldiers_low"
+				max_color = "te_jmap_soldiers_high"
+				factor = te_jmap_soldiers_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			value = "te_jmap_none"
+		}
+		# 34. Company Headquarters: a state with one or more by their weekly profit summed (te_jmap_hq_profit), a doubling
+		# at a time, red at a loss; a state with none grey (the owner's ask, 2026-11-08).
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+				te_jmap_hq_profit > 0
+			}
+			lerp = {
+				min_color = "te_jmap_hq_low"
+				max_color = "te_jmap_hq_high"
+				factor = te_jmap_hq_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+			}
+			value = "te_jmap_hq_loss"
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			value = "te_jmap_no_data"
+		}
+		# 36. Ownership: the leading holder of the state's capital levels (the yearly walk's, whatever the Demographics rule),
+		# private owners gold, their own workers green, the state red, each from pale at 40% of the levels to full at all
+		# of them (te_jmap_own_factor); a state with under one level of capital pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 1
+			}
+			lerp = {
+				min_color = "te_jmap_own_priv_pale"
+				max_color = "te_jmap_own_priv"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 2
+			}
+			lerp = {
+				min_color = "te_jmap_own_self_pale"
+				max_color = "te_jmap_own_self"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 3
+			}
+			lerp = {
+				min_color = "te_jmap_own_ctry_pale"
+				max_color = "te_jmap_own_ctry"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+			}
+			value = "te_jmap_none"
+		}
+		# 37. Population Growth: the change in people from one yearly walk to the next, per 1,000 (te_jmap_pop_growth, the
+		# walk's, whatever the Demographics rule), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+				te_jmap_growth_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_growth_low"
+				max_color = "te_jmap_growth_mid"
+				factor = te_jmap_growth_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+			}
+			lerp = {
+				min_color = "te_jmap_growth_mid"
+				max_color = "te_jmap_growth_high"
+				factor = te_jmap_growth_factor_upper
+			}
+		}
 		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
 		else_if = {
 			limit = {
@@ -558,6 +708,69 @@ je_te_map_room = {
 				min_color = "te_jmap_mig_mid"
 				max_color = "te_jmap_mig_high"
 				factor = te_jmap_mig_factor_upper
+			}
+		}
+		# 35. War Dead (Demographics, once stepped): last year's deaths to war and devastation (te_dg_dc_war, the state's
+		# share of its owner's war dead by its soldiers, and under Full the civilians), a doubling at a time; a state
+		# that lost none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			lerp = {
+				min_color = "te_jmap_war_dead_low"
+				max_color = "te_jmap_war_dead_high"
+				factor = te_jmap_war_dead_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			value = "te_jmap_none"
+		}
+		# 38. Family Planning (Demographics): the census's means to plan a family (te_dg_means).
+		else_if = {
+			limit = {
+				te_jmap_selector = 38
+				has_variable = te_dg_means
+			}
+			lerp = {
+				min_color = "te_jmap_means_low"
+				max_color = "te_jmap_means_high"
+				factor = te_jmap_means_factor
+			}
+		}
+		# 39. Health Care (Demographics): the census's health-care access (te_dg_acc), the share medicine reaches.
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+			}
+			lerp = {
+				min_color = "te_jmap_health_low"
+				max_color = "te_jmap_health_high"
+				factor = te_jmap_health_factor
+			}
+		}
+		# 40. Fighting-Age Men (Demographics): men aged 20 to 39, the conscription pool (te_dg_fam), over the people.
+		else_if = {
+			limit = {
+				te_jmap_selector = 40
+				has_variable = te_dg_fam
+				has_variable = te_dg_people
+			}
+			lerp = {
+				min_color = "te_jmap_fam_low"
+				max_color = "te_jmap_fam_high"
+				factor = te_jmap_fam_factor
 			}
 		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
@@ -1083,7 +1296,7 @@ je_te_map_room = {
 			value = "te_jmap_none"
 		}
 		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
-		# the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
+		# no yearly walk yet, the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
 		# (test_journal_map_modes.py).
 		else_if = {
 			limit = {
@@ -1105,6 +1318,13 @@ je_te_map_room = {
 					te_jmap_selector = 26
 					te_jmap_selector = 27
 					te_jmap_selector = 28
+					te_jmap_selector = 33
+					te_jmap_selector = 35
+					te_jmap_selector = 36
+					te_jmap_selector = 37
+					te_jmap_selector = 38
+					te_jmap_selector = 39
+					te_jmap_selector = 40
 				}
 			}
 			value = "te_jmap_no_data"
@@ -1113,7 +1333,8 @@ je_te_map_room = {
 
 	# Stripes. 11, the leading cause of death: the runner-up's color (te_dg_dc_second, the pie's) where it took at least
 	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). 31, Power Grids: white on each grid's
-	# hub. No other map stripes, and a state no branch takes has none.
+	# hub. 34, Company Headquarters: gold where a company keeps a regional headquarters (owner, 2026-11-08), over the
+	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none.
 	map_color_second = {
 		if = {
 			limit = {
@@ -1121,6 +1342,13 @@ je_te_map_room = {
 				te_jmap_grid_hub = yes
 			}
 			value = "te_jmap_grid_hub"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_regional_headquarter
+			}
+			value = "te_jmap_hq_regional"
 		}
 		else_if = {
 			limit = {
@@ -1292,6 +1520,82 @@ je_te_map_room = {
 		else_if = {
 			limit = { te_jmap_selector = 30 }
 			custom_tooltip_no_bullet = te_jmap_tt_crowding_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_top
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_ranked
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			custom_tooltip_no_bullet = te_jmap_tt_city_unranked
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+				te_jmap_hq_profit > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq_loss
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			custom_tooltip_no_bullet = te_jmap_tt_hq_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_own
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_own_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_growth
 		}
 		# Over 10,000 years: the late game's immortals.
 		else_if = {
@@ -1472,6 +1776,57 @@ je_te_map_room = {
 				has_variable = te_dg_mig_rate
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_net_migration
+		}
+		# 35. War Dead (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead_none
+		}
+		# 38-40. Family Planning, Health Care and Fighting-Age Men (Demographics).
+		else_if = {
+			limit = {
+				te_jmap_selector = 38
+				has_variable = te_dg_means
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_means
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+				has_variable = te_dg_m_mat
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_health
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_health_only
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 40
+				has_variable = te_dg_fam
+				has_variable = te_dg_people
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_fam
 		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
@@ -1793,6 +2148,13 @@ je_te_map_room = {
 					te_jmap_selector = 15
 					te_jmap_selector = 16
 					te_jmap_selector = 17
+					te_jmap_selector = 33
+					te_jmap_selector = 35
+					te_jmap_selector = 36
+					te_jmap_selector = 37
+					te_jmap_selector = 38
+					te_jmap_selector = 39
+					te_jmap_selector = 40
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census
@@ -1800,8 +2162,15 @@ je_te_map_room = {
 		else = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_pick
 		}
-		# 11's stripes, a line under the leader's: the runner-up, where the map stripes it.
+		# The stripes, a line under the map's own: 11's runner-up, where the map stripes it, and 34's regional headquarters.
 		if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_regional_headquarter
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq_regional
+		}
+		else_if = {
 			limit = {
 				te_jmap_selector = 11
 				has_variable = te_dg_stepped

@@ -1890,8 +1890,16 @@ tourism_on_action = {
 	}
 }
 
+# The world's 501 largest cities by city_size, ranked 1 to 501 each month (state_city_size_rank): tourism's Cities
+# bonus reads the first 20, Demographics' Largest Urban States and the Map Room's City Rank map all of them. The ranks
+# are cleared first, so a state that falls past 501st has no rank instead of keeping its last one (until 2026-11-08 it
+# kept it for good, a stale rank the City Rank map would have painted).
 city_rank_on_action = {
 	effect = {
+		every_state = {
+			limit = { has_variable = state_city_size_rank }
+			remove_variable = state_city_size_rank
+		}
 		set_global_variable = {
 			name = city_size_rank
 			value = 1

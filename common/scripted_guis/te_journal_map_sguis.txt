@@ -112,6 +112,116 @@ te_jmap_pick_crowding_sgui = {
 	}
 }
 
+# City Rank reads tourism's monthly ranking of the world's cities; Armed Forces the yearly walk's Soldiers and Officers
+# (whatever the Demographics rule); Company Headquarters the buildings themselves. None depends on a game rule.
+te_jmap_pick_city_rank_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 32 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 32 }
+	}
+}
+
+te_jmap_pick_armed_forces_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 33 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 33 }
+	}
+}
+
+te_jmap_pick_company_hqs_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 34 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 34 }
+	}
+}
+
+# Ownership and Population Growth are the yearly walk's, which runs whatever the Demographics rule.
+te_jmap_pick_ownership_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 36 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 36 }
+	}
+}
+
+te_jmap_pick_population_growth_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 37 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 37 }
+	}
+}
+
+# Family Planning, Health Care and Fighting-Age Men are the census's (its means to plan a family, health-care access
+# and conscription pool), so they wait for it as the census maps below do.
+te_jmap_pick_family_planning_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 38 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 38 }
+	}
+}
+
+te_jmap_pick_health_care_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 39 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 39 }
+	}
+}
+
+te_jmap_pick_fighting_age_men_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 40 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 40 }
+	}
+}
+
+# War Dead is the census's, last year's (te_dg_dc_war, once a state has stepped), so it waits for the census as the
+# census maps below do; on the page it sits beside Armed Forces, since the census shares a country's war dead out to
+# its states by their soldiers.
+te_jmap_pick_war_dead_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 35 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 35 }
+	}
+}
+
 # Power Grids: each grid in a color of its own (power_grid_effects.txt's te_grid_map_color_effect). No game rule, as
 # the Power Grids tab has none.
 te_jmap_pick_power_grids_sgui = {

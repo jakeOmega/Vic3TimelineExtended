@@ -21,3 +21,44 @@ te_jmap_set_selector = {
 te_jmap_note_viewer = {
 	set_global_variable = { name = te_jmap_viewer value = root }
 }
+
+# TE_SELF_CHECK hq_profit (docs/testing/journal-map-modes-playtest.md, check 24). The Company Headquarters map (34)
+# colors a state by its headquarters' weekly_profit (te_jmap_hq_profit), on the unverified fact that an ownership
+# building books what the levels it owns pay it, as the building panel's profit. Once a game, the first month at least
+# three states hold a headquarters (fewer and an all-zero read proves nothing): OK when any reads a profit other than
+# 0, BROKEN when every one reads exactly 0, and the map paints every headquarters as a loss. Global monthly pulse
+# (te_journal_map_on_actions.txt): no root, so the counts are globals. The fallback, if BROKEN: color by the company's
+# prosperity or its owned levels instead (a company is reached from its country, every_company).
+te_jmap_hq_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_hq_selfcheck_done }
+			any_state = {
+				count >= 3
+				has_building = building_company_headquarter
+			}
+		}
+		set_global_variable = te_jmap_hq_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_hq_states value = 0 }
+		set_global_variable = { name = te_jmap_sc_hq_nonzero value = 0 }
+		every_state = {
+			limit = { has_building = building_company_headquarter }
+			change_global_variable = { name = te_jmap_sc_hq_states add = 1 }
+			if = {
+				limit = {
+					NOT = { te_jmap_hq_profit = 0 }
+				}
+				change_global_variable = { name = te_jmap_sc_hq_nonzero add = 1 }
+			}
+		}
+		if = {
+			limit = { global_var:te_jmap_sc_hq_nonzero > 0 }
+			debug_log = "TE_SELF_CHECK OK hq_profit states=[GetGlobalVariable('te_jmap_sc_hq_states').GetValue|0] nonzero=[GetGlobalVariable('te_jmap_sc_hq_nonzero').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN hq_profit states=[GetGlobalVariable('te_jmap_sc_hq_states').GetValue|0] nonzero=0 (every company headquarters reads a weekly_profit of 0: an ownership building doesn't book its dividends as profit, so the Company Headquarters map paints every one as a loss; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_hq_states
+		remove_global_variable = te_jmap_sc_hq_nonzero
+	}
+}

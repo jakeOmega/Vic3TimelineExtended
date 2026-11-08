@@ -112,6 +112,49 @@ colors = {
 	# je_te_map_room: Migration Crowding's cut to migration attraction, none to 145% (cream to deep purple).
 	te_jmap_crowding_low = hsv360 { 45 8 92 }
 	te_jmap_crowding_high = hsv360 { 285 68 40 }
+	# je_te_map_room: City Rank. The world's 20 largest cities by tourism's Cities bonus, 20th amber to 1st crimson;
+	# 21st and below a doubling of the rank at a time, steel blue fading toward pale (_low is the larger city: the
+	# lerp's own order). A state the ranking doesn't reach is te_jmap_none.
+	te_jmap_city_top_low = hsv360 { 40 62 94 }
+	te_jmap_city_top_high = hsv360 { 350 88 60 }
+	te_jmap_city_rest_low = hsv360 { 212 62 62 }
+	te_jmap_city_rest_high = hsv360 { 205 14 88 }
+	# je_te_map_room: Armed Forces, Soldiers and Officers, a doubling at a time (pale khaki to deep olive); a state
+	# with none is te_jmap_none.
+	te_jmap_soldiers_low = hsv360 { 70 22 90 }
+	te_jmap_soldiers_high = hsv360 { 95 72 30 }
+	# je_te_map_room: Company Headquarters, their weekly profit a doubling at a time (ice to navy), and a loss; a state
+	# with no headquarters is te_jmap_no_data.
+	te_jmap_hq_low = hsv360 { 200 16 95 }
+	te_jmap_hq_high = hsv360 { 228 86 42 }
+	te_jmap_hq_loss = hsv360 { 4 72 74 }
+	# Company Headquarters' stripes: a foreign company's regional headquarters.
+	te_jmap_hq_regional = hsv360 { 45 90 96 }
+	# je_te_map_room: Ownership, the leading holder of a state's capital, each faded to a pale end of its own hue by its
+	# share (te_jmap_own_factor, 40% to 100%): private gold, their own workers green, the state red.
+	te_jmap_own_priv = hsv360 { 42 82 86 }
+	te_jmap_own_priv_pale = hsv360 { 42 24 96 }
+	te_jmap_own_self = hsv360 { 138 62 50 }
+	te_jmap_own_self_pale = hsv360 { 138 20 92 }
+	te_jmap_own_ctry = hsv360 { 355 72 66 }
+	te_jmap_own_ctry_pale = hsv360 { 355 18 95 }
+	# je_te_map_room: Population Growth per 1,000, diverging at none: shrinking magenta, cream at none, growing teal.
+	te_jmap_growth_low = hsv360 { 305 45 52 }
+	te_jmap_growth_mid = hsv360 { 50 6 92 }
+	te_jmap_growth_high = hsv360 { 172 72 44 }
+	# je_te_map_room, Demographics: War Dead last year, a doubling at a time (pale rose to dried blood); a state with
+	# none is te_jmap_none.
+	te_jmap_war_dead_low = hsv360 { 8 28 94 }
+	te_jmap_war_dead_high = hsv360 { 352 90 34 }
+	# je_te_map_room, Demographics: Family Planning, the means to plan a family (pale sand to violet).
+	te_jmap_means_low = hsv360 { 32 16 94 }
+	te_jmap_means_high = hsv360 { 268 62 42 }
+	# je_te_map_room, Demographics: Health Care, the share medicine reaches (pale sand to deep green).
+	te_jmap_health_low = hsv360 { 36 20 92 }
+	te_jmap_health_high = hsv360 { 158 78 38 }
+	# je_te_map_room, Demographics: Fighting-Age Men, men aged 20 to 39 over the people (pale straw to slate blue).
+	te_jmap_fam_low = hsv360 { 58 20 93 }
+	te_jmap_fam_high = hsv360 { 218 62 44 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

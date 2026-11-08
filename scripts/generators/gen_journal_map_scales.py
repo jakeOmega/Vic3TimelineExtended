@@ -27,11 +27,12 @@ fixed curve's ends. Shapes:
   Where the whole world is on one side, that side runs over the world's span alone, from the neutral color at the end
   nearest mid, so the differences still show.
 - rel_doubling(min_ratio, floor): the same share of the color per doubling from the world's low to its high (GDP per
-  capita), the low at least floor and the high at least min_ratio times it. A doubling's position is read in straight
-  pieces between powers of two.
+  capita, Armed Forces, Company Headquarters, War Dead), the low at least floor and the high at least min_ratio times
+  it. A doubling's position is read in straight pieces between powers of two.
 
-Two maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers) and the leading
-cause of death's paleness (a share of the deaths on a categorical map). The fixed shapes:
+Four maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers), the paleness of
+the leading cause of death and of Ownership's leading holder (a share on a categorical map) and City Rank (a rank is
+already a place in the world; its first 20 are tourism's Cities bonus). The fixed shapes:
 
 - linear(lo, hi): straight from lo to hi.
 - soft_cap(lo, soft, hard): straight from lo to soft, then SLOPE_RATIO times shallower from soft to hard, so the
@@ -230,6 +231,56 @@ SCALES = [
          world=rel(soft_cap(0, 0.45, 1.45)), min_span=0.1,
          note="Migration Crowding's cut to migration attraction, 0-1 and past it, as the state panel's tile shows "
               "it: two-thirds of the color by 31% of the world's range"),
+    # City Rank (2026-11-08): tourism's city ranking (var:state_city_size_rank, city_rank_on_action: the world's 501
+    # largest by city_size, monthly), in two families. Fixed: a rank is already the state's place in the world, and
+    # the first 20 are tourism's Cities bonus.
+    dict(name="city_top", input="tourism_bonus_from_urban_centers", guards=[], three=False, knots=linear(0.05, 1),
+         note="City Rank, the world's 20 largest cities, by the Cities bonus tourism gives them "
+              "(tourism_bonus_from_urban_centers): +5% at 20th to +100% at 1st. Fixed: the bonus is what it shows"),
+    dict(name="city_rest", input="city_size_rank", guards=[], three=False, knots=doubling(20, 640),
+         note="City Rank past 20th: the same share of the color for each doubling of the rank from 20th (the ranking "
+              "stops at 501st). Fixed: a rank is already the state's place in the world"),
+    # Armed Forces, Company Headquarters and War Dead (2026-11-08): counts and money that run over orders of
+    # magnitude, so a doubling at a time, as GDP per capita.
+    dict(name="soldiers", input="var:te_dg_soldiers", guards=["te_dg_soldiers"], three=False, sel=33,
+         where=["has_variable = te_dg_soldiers", "var:te_dg_soldiers > 0"],
+         world=rel_doubling(500, 64000, 4, 100), min_span=4,
+         note="Armed Forces, the state's Soldiers and Officers (the yearly walk's): the same share of the color for "
+              "each doubling from the world's low (at least 100 people) to its high"),
+    dict(name="hq", input="te_jmap_hq_profit", guards=[], three=False, sel=34,
+         where=["has_building = building_company_headquarter", "te_jmap_hq_profit > 0"],
+         world=rel_doubling(100, 25600, 4, 1), min_span=4,
+         note="Company Headquarters, their weekly profit summed: the same share of the color for each doubling from "
+              "the world's low (at least 1) to its high; a loss is red, apart from the scale"),
+    dict(name="war_dead", input="var:te_dg_dc_war", guards=["te_dg_dc_war"], three=False, sel=35,
+         where=["has_variable = te_dg_stepped", "var:te_dg_stepped > 0", "has_variable = te_dg_dc_war",
+                "var:te_dg_dc_war > 0"],
+         world=rel_doubling(100, 102400, 4, 10), min_span=4,
+         note="War Dead, the census's deaths to war and devastation last year: the same share of the color for each "
+              "doubling from the world's low (at least 10 people) to its high"),
+    # Ownership, Population Growth, Family Planning, Health Care and Fighting-Age Men (2026-11-08, second round).
+    dict(name="own", input="te_jmap_own_lead_share", guards=[], three=False, knots=linear(0.4, 1),
+         note="Ownership, the leading holder's share of the state's capital levels (private, their own workers', the "
+              "state's), its color pale at 40% and full at 100%. Fixed: the map is categorical, and this only fades "
+              "each holder's color, as the leading cause's"),
+    dict(name="growth", input="te_jmap_pop_growth", guards=[], three=True, sel=37,
+         where=["has_variable = te_dg_walk_pop", "has_variable = te_dg_walk_pop_prev",
+                "var:te_dg_walk_pop_prev > 0"],
+         world=rel_mid(diverging((-20, -80), 0, (40, 100)), 0, 5), min_span=5,
+         note="Population Growth, the change in people from one yearly walk to the next per 1,000, split at none; "
+              "war, famine and land changing hands run far out"),
+    dict(name="means", input="var:te_dg_means", guards=["te_dg_means"], three=False, sel=38,
+         where=["has_variable = te_dg_means"], world=rel(linear(0, 1)), min_span=0.1,
+         note="Family Planning, the census's means to plan a family, 0-1: the share of the gap to the family size "
+              "people want that they can close"),
+    dict(name="health", input="var:te_dg_acc", guards=["te_dg_acc"], three=False, sel=39,
+         where=["has_variable = te_dg_acc"], world=rel(linear(0.4, 1)), min_span=0.1,
+         note="Health Care, the census's health-care access, the share of the people medicine reaches (0.4 from "
+              "markets and charity everywhere, to 1)"),
+    dict(name="fam", input="te_demog_fam_share", guards=[], three=False, sel=40,
+         where=["has_variable = te_dg_fam", "has_variable = te_dg_people"], world=rel(linear(0.08, 0.2)),
+         min_span=0.02,
+         note="Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people"),
 ]
 
 

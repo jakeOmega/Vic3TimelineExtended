@@ -1737,3 +1737,959 @@ te_jmap_crowding_factor = {
 	min = 0
 	max = 1
 }
+
+# City Rank, the world's 20 largest cities, by the Cities bonus tourism gives them (tourism_bonus_from_urban_centers): +5% at 20th to +100% at 1st. Fixed: the bonus is what it shows.
+# Fixed. Knots: 0.05 -> 0, 1 -> 1.
+te_jmap_city_top_factor = {
+	value = tourism_bonus_from_urban_centers subtract = 0.05 divide = 0.95
+	min = 0
+	max = 1
+}
+
+# City Rank past 20th: the same share of the color for each doubling of the rank from 20th (the ranking stops at 501st). Fixed: a rank is already the state's place in the world.
+# Fixed. Knots: 20 -> 0, 40 -> 0.2, 80 -> 0.4, 160 -> 0.6, 320 -> 0.8, 640 -> 1.
+te_jmap_city_rest_factor = {
+	if = {
+		limit = { city_size_rank < 40 }
+		value = city_size_rank subtract = 20 divide = 100
+	}
+	else_if = {
+		limit = { city_size_rank < 80 }
+		value = city_size_rank subtract = 40 divide = 200 add = 0.2
+	}
+	else_if = {
+		limit = { city_size_rank < 160 }
+		value = city_size_rank subtract = 80 divide = 400 add = 0.4
+	}
+	else_if = {
+		limit = { city_size_rank < 320 }
+		value = city_size_rank subtract = 160 divide = 800 add = 0.6
+	}
+	else = {
+		value = city_size_rank subtract = 320 divide = 1600 add = 0.8
+	}
+	min = 0
+	max = 1
+}
+
+# Armed Forces, the state's Soldiers and Officers (the yearly walk's): the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 500 to 64000.
+te_jmap_soldiers_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_soldiers }
+		value = var:te_dg_soldiers
+	}
+}
+te_jmap_soldiers_input_neg = {
+	value = te_jmap_soldiers_input
+	multiply = -1
+}
+te_jmap_soldiers_lo = {
+	value = 500
+	if = {
+		limit = { has_global_variable = te_jmap_rng_soldiers_lo }
+		value = global_var:te_jmap_rng_soldiers_lo
+	}
+	min = 100
+}
+te_jmap_soldiers_hi = {
+	value = 64000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_soldiers_hi }
+		value = global_var:te_jmap_rng_soldiers_hi
+	}
+	min = te_jmap_soldiers_hi_floor
+}
+te_jmap_soldiers_hi_floor = {
+	value = te_jmap_soldiers_lo
+	multiply = 4
+}
+te_jmap_soldiers_ratio = {
+	value = var:te_dg_soldiers
+	divide = te_jmap_soldiers_lo
+}
+te_jmap_soldiers_log = {
+	if = {
+		limit = { te_jmap_soldiers_ratio < 2 }
+		value = te_jmap_soldiers_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 4 }
+		value = te_jmap_soldiers_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 8 }
+		value = te_jmap_soldiers_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 16 }
+		value = te_jmap_soldiers_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 32 }
+		value = te_jmap_soldiers_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 64 }
+		value = te_jmap_soldiers_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 128 }
+		value = te_jmap_soldiers_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 256 }
+		value = te_jmap_soldiers_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 512 }
+		value = te_jmap_soldiers_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 1024 }
+		value = te_jmap_soldiers_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 2048 }
+		value = te_jmap_soldiers_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 4096 }
+		value = te_jmap_soldiers_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 8192 }
+		value = te_jmap_soldiers_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 16384 }
+		value = te_jmap_soldiers_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 32768 }
+		value = te_jmap_soldiers_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 65536 }
+		value = te_jmap_soldiers_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 131072 }
+		value = te_jmap_soldiers_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 262144 }
+		value = te_jmap_soldiers_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 524288 }
+		value = te_jmap_soldiers_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_ratio < 1048576 }
+		value = te_jmap_soldiers_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_soldiers_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_soldiers_span_ratio = {
+	value = te_jmap_soldiers_hi
+	divide = te_jmap_soldiers_lo
+}
+te_jmap_soldiers_log_span = {
+	if = {
+		limit = { te_jmap_soldiers_span_ratio < 2 }
+		value = te_jmap_soldiers_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 4 }
+		value = te_jmap_soldiers_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 8 }
+		value = te_jmap_soldiers_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 16 }
+		value = te_jmap_soldiers_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 32 }
+		value = te_jmap_soldiers_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 64 }
+		value = te_jmap_soldiers_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 128 }
+		value = te_jmap_soldiers_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 256 }
+		value = te_jmap_soldiers_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 512 }
+		value = te_jmap_soldiers_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 1024 }
+		value = te_jmap_soldiers_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 2048 }
+		value = te_jmap_soldiers_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 4096 }
+		value = te_jmap_soldiers_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 8192 }
+		value = te_jmap_soldiers_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 16384 }
+		value = te_jmap_soldiers_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 32768 }
+		value = te_jmap_soldiers_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 65536 }
+		value = te_jmap_soldiers_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 131072 }
+		value = te_jmap_soldiers_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 262144 }
+		value = te_jmap_soldiers_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 524288 }
+		value = te_jmap_soldiers_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_soldiers_span_ratio < 1048576 }
+		value = te_jmap_soldiers_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_soldiers_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_soldiers_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_soldiers }
+		value = te_jmap_soldiers_log
+		divide = te_jmap_soldiers_log_span
+	}
+	min = 0
+	max = 1
+}
+
+# Company Headquarters, their weekly profit summed: the same share of the color for each doubling from the world's low (at least 1) to its high; a loss is red, apart from the scale.
+# A doubling at a time, fitted to the world; before the first measure, 100 to 25600.
+te_jmap_hq_input = {
+	value = te_jmap_hq_profit
+}
+te_jmap_hq_input_neg = {
+	value = te_jmap_hq_input
+	multiply = -1
+}
+te_jmap_hq_lo = {
+	value = 100
+	if = {
+		limit = { has_global_variable = te_jmap_rng_hq_lo }
+		value = global_var:te_jmap_rng_hq_lo
+	}
+	min = 1
+}
+te_jmap_hq_hi = {
+	value = 25600
+	if = {
+		limit = { has_global_variable = te_jmap_rng_hq_hi }
+		value = global_var:te_jmap_rng_hq_hi
+	}
+	min = te_jmap_hq_hi_floor
+}
+te_jmap_hq_hi_floor = {
+	value = te_jmap_hq_lo
+	multiply = 4
+}
+te_jmap_hq_ratio = {
+	value = te_jmap_hq_profit
+	divide = te_jmap_hq_lo
+}
+te_jmap_hq_log = {
+	if = {
+		limit = { te_jmap_hq_ratio < 2 }
+		value = te_jmap_hq_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 4 }
+		value = te_jmap_hq_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 8 }
+		value = te_jmap_hq_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 16 }
+		value = te_jmap_hq_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 32 }
+		value = te_jmap_hq_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 64 }
+		value = te_jmap_hq_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 128 }
+		value = te_jmap_hq_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 256 }
+		value = te_jmap_hq_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 512 }
+		value = te_jmap_hq_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 1024 }
+		value = te_jmap_hq_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 2048 }
+		value = te_jmap_hq_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 4096 }
+		value = te_jmap_hq_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 8192 }
+		value = te_jmap_hq_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 16384 }
+		value = te_jmap_hq_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 32768 }
+		value = te_jmap_hq_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 65536 }
+		value = te_jmap_hq_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 131072 }
+		value = te_jmap_hq_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 262144 }
+		value = te_jmap_hq_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 524288 }
+		value = te_jmap_hq_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_hq_ratio < 1048576 }
+		value = te_jmap_hq_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_hq_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_hq_span_ratio = {
+	value = te_jmap_hq_hi
+	divide = te_jmap_hq_lo
+}
+te_jmap_hq_log_span = {
+	if = {
+		limit = { te_jmap_hq_span_ratio < 2 }
+		value = te_jmap_hq_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 4 }
+		value = te_jmap_hq_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 8 }
+		value = te_jmap_hq_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 16 }
+		value = te_jmap_hq_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 32 }
+		value = te_jmap_hq_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 64 }
+		value = te_jmap_hq_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 128 }
+		value = te_jmap_hq_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 256 }
+		value = te_jmap_hq_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 512 }
+		value = te_jmap_hq_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 1024 }
+		value = te_jmap_hq_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 2048 }
+		value = te_jmap_hq_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 4096 }
+		value = te_jmap_hq_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 8192 }
+		value = te_jmap_hq_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 16384 }
+		value = te_jmap_hq_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 32768 }
+		value = te_jmap_hq_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 65536 }
+		value = te_jmap_hq_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 131072 }
+		value = te_jmap_hq_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 262144 }
+		value = te_jmap_hq_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 524288 }
+		value = te_jmap_hq_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_hq_span_ratio < 1048576 }
+		value = te_jmap_hq_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_hq_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_hq_factor = {
+	value = te_jmap_hq_log
+	divide = te_jmap_hq_log_span
+	min = 0
+	max = 1
+}
+
+# War Dead, the census's deaths to war and devastation last year: the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 100 to 102400.
+te_jmap_war_dead_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_war }
+		value = var:te_dg_dc_war
+	}
+}
+te_jmap_war_dead_input_neg = {
+	value = te_jmap_war_dead_input
+	multiply = -1
+}
+te_jmap_war_dead_lo = {
+	value = 100
+	if = {
+		limit = { has_global_variable = te_jmap_rng_war_dead_lo }
+		value = global_var:te_jmap_rng_war_dead_lo
+	}
+	min = 10
+}
+te_jmap_war_dead_hi = {
+	value = 102400
+	if = {
+		limit = { has_global_variable = te_jmap_rng_war_dead_hi }
+		value = global_var:te_jmap_rng_war_dead_hi
+	}
+	min = te_jmap_war_dead_hi_floor
+}
+te_jmap_war_dead_hi_floor = {
+	value = te_jmap_war_dead_lo
+	multiply = 4
+}
+te_jmap_war_dead_ratio = {
+	value = var:te_dg_dc_war
+	divide = te_jmap_war_dead_lo
+}
+te_jmap_war_dead_log = {
+	if = {
+		limit = { te_jmap_war_dead_ratio < 2 }
+		value = te_jmap_war_dead_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 4 }
+		value = te_jmap_war_dead_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 8 }
+		value = te_jmap_war_dead_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 16 }
+		value = te_jmap_war_dead_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 32 }
+		value = te_jmap_war_dead_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 64 }
+		value = te_jmap_war_dead_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 128 }
+		value = te_jmap_war_dead_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 256 }
+		value = te_jmap_war_dead_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 512 }
+		value = te_jmap_war_dead_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 1024 }
+		value = te_jmap_war_dead_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 2048 }
+		value = te_jmap_war_dead_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 4096 }
+		value = te_jmap_war_dead_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 8192 }
+		value = te_jmap_war_dead_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 16384 }
+		value = te_jmap_war_dead_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 32768 }
+		value = te_jmap_war_dead_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 65536 }
+		value = te_jmap_war_dead_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 131072 }
+		value = te_jmap_war_dead_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 262144 }
+		value = te_jmap_war_dead_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 524288 }
+		value = te_jmap_war_dead_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_ratio < 1048576 }
+		value = te_jmap_war_dead_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_war_dead_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_war_dead_span_ratio = {
+	value = te_jmap_war_dead_hi
+	divide = te_jmap_war_dead_lo
+}
+te_jmap_war_dead_log_span = {
+	if = {
+		limit = { te_jmap_war_dead_span_ratio < 2 }
+		value = te_jmap_war_dead_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 4 }
+		value = te_jmap_war_dead_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 8 }
+		value = te_jmap_war_dead_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 16 }
+		value = te_jmap_war_dead_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 32 }
+		value = te_jmap_war_dead_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 64 }
+		value = te_jmap_war_dead_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 128 }
+		value = te_jmap_war_dead_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 256 }
+		value = te_jmap_war_dead_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 512 }
+		value = te_jmap_war_dead_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 1024 }
+		value = te_jmap_war_dead_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 2048 }
+		value = te_jmap_war_dead_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 4096 }
+		value = te_jmap_war_dead_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 8192 }
+		value = te_jmap_war_dead_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 16384 }
+		value = te_jmap_war_dead_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 32768 }
+		value = te_jmap_war_dead_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 65536 }
+		value = te_jmap_war_dead_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 131072 }
+		value = te_jmap_war_dead_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 262144 }
+		value = te_jmap_war_dead_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 524288 }
+		value = te_jmap_war_dead_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_war_dead_span_ratio < 1048576 }
+		value = te_jmap_war_dead_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_war_dead_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_war_dead_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_war }
+		value = te_jmap_war_dead_log
+		divide = te_jmap_war_dead_log_span
+	}
+	min = 0
+	max = 1
+}
+
+# Ownership, the leading holder's share of the state's capital levels (private, their own workers', the state's), its color pale at 40% and full at 100%. Fixed: the map is categorical, and this only fades each holder's color, as the leading cause's.
+# Fixed. Knots: 0.4 -> 0, 1 -> 1.
+te_jmap_own_factor = {
+	value = te_jmap_own_lead_share subtract = 0.4 divide = 0.6
+	min = 0
+	max = 1
+}
+
+# Population Growth, the change in people from one yearly walk to the next per 1,000, split at none; war, famine and land changing hands run far out.
+# Fitted to the world on each side of 0; before the first measure, -80 to 100.
+te_jmap_growth_input = {
+	value = te_jmap_pop_growth
+}
+te_jmap_growth_input_neg = {
+	value = te_jmap_growth_input
+	multiply = -1
+}
+te_jmap_growth_lo = {
+	value = -80
+	if = {
+		limit = { has_global_variable = te_jmap_rng_growth_lo }
+		value = global_var:te_jmap_rng_growth_lo
+	}
+}
+te_jmap_growth_hi = {
+	value = 100
+	if = {
+		limit = { has_global_variable = te_jmap_rng_growth_hi }
+		value = global_var:te_jmap_rng_growth_hi
+	}
+	min = te_jmap_growth_hi_floor
+}
+te_jmap_growth_hi_floor = {
+	value = te_jmap_growth_lo
+	add = 5
+}
+te_jmap_growth_b = {
+	value = te_jmap_growth_hi
+	max = 0
+}
+te_jmap_growth_a = {
+	value = te_jmap_growth_lo
+	min = 0
+}
+te_jmap_growth_span_low = {
+	value = te_jmap_growth_b
+	subtract = te_jmap_growth_lo
+	min = 5
+}
+te_jmap_growth_span_up = {
+	value = te_jmap_growth_hi
+	subtract = te_jmap_growth_a
+	min = 5
+}
+te_jmap_growth_l_k1 = {
+	value = te_jmap_growth_span_low
+	multiply = -0.25
+	add = te_jmap_growth_b
+}
+te_jmap_growth_l_d0 = {
+	value = te_jmap_growth_span_low
+	multiply = 0.875
+}
+te_jmap_growth_l_d1 = {
+	value = te_jmap_growth_span_low
+	multiply = 3.5
+}
+te_jmap_growth_u_k1 = {
+	value = te_jmap_growth_span_up
+	multiply = 0.4
+	add = te_jmap_growth_a
+}
+te_jmap_growth_u_d0 = {
+	value = te_jmap_growth_span_up
+	multiply = 1.1
+}
+te_jmap_growth_u_d1 = {
+	value = te_jmap_growth_span_up
+	multiply = 4.4
+}
+te_jmap_growth_factor = {
+	if = {
+		limit = { te_jmap_pop_growth < 0 }
+		if = {
+			limit = { te_jmap_pop_growth > te_jmap_growth_l_k1 }
+			value = te_jmap_pop_growth subtract = te_jmap_growth_b divide = te_jmap_growth_l_d0 add = 0.5
+		}
+		else = {
+			value = te_jmap_pop_growth subtract = te_jmap_growth_l_k1 divide = te_jmap_growth_l_d1 add = 0.21429
+		}
+		max = 0.5
+	}
+	else = {
+		if = {
+			limit = { te_jmap_pop_growth < te_jmap_growth_u_k1 }
+			value = te_jmap_pop_growth subtract = te_jmap_growth_a divide = te_jmap_growth_u_d0 add = 0.5
+		}
+		else = {
+			value = te_jmap_pop_growth subtract = te_jmap_growth_u_k1 divide = te_jmap_growth_u_d1 add = 0.86364
+		}
+		min = 0.5
+	}
+	min = 0
+	max = 1
+}
+te_jmap_growth_factor_lower = {
+	value = te_jmap_growth_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_growth_factor_upper = {
+	value = te_jmap_growth_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# Family Planning, the census's means to plan a family, 0-1: the share of the gap to the family size people want that they can close.
+# Fitted to the world; before the first measure, 0 to 1.
+te_jmap_means_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_means }
+		value = var:te_dg_means
+	}
+}
+te_jmap_means_input_neg = {
+	value = te_jmap_means_input
+	multiply = -1
+}
+te_jmap_means_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_means_lo }
+		value = global_var:te_jmap_rng_means_lo
+	}
+}
+te_jmap_means_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_means_hi }
+		value = global_var:te_jmap_rng_means_hi
+	}
+	min = te_jmap_means_hi_floor
+}
+te_jmap_means_hi_floor = {
+	value = te_jmap_means_lo
+	add = 0.1
+}
+te_jmap_means_span = {
+	value = te_jmap_means_hi
+	subtract = te_jmap_means_lo
+}
+te_jmap_means_d0 = {
+	value = te_jmap_means_span
+	multiply = 1
+}
+te_jmap_means_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_means }
+		value = var:te_dg_means subtract = te_jmap_means_lo divide = te_jmap_means_d0
+	}
+	min = 0
+	max = 1
+}
+
+# Health Care, the census's health-care access, the share of the people medicine reaches (0.4 from markets and charity everywhere, to 1).
+# Fitted to the world; before the first measure, 0.4 to 1.
+te_jmap_health_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_acc }
+		value = var:te_dg_acc
+	}
+}
+te_jmap_health_input_neg = {
+	value = te_jmap_health_input
+	multiply = -1
+}
+te_jmap_health_lo = {
+	value = 0.4
+	if = {
+		limit = { has_global_variable = te_jmap_rng_health_lo }
+		value = global_var:te_jmap_rng_health_lo
+	}
+}
+te_jmap_health_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_health_hi }
+		value = global_var:te_jmap_rng_health_hi
+	}
+	min = te_jmap_health_hi_floor
+}
+te_jmap_health_hi_floor = {
+	value = te_jmap_health_lo
+	add = 0.1
+}
+te_jmap_health_span = {
+	value = te_jmap_health_hi
+	subtract = te_jmap_health_lo
+}
+te_jmap_health_d0 = {
+	value = te_jmap_health_span
+	multiply = 1
+}
+te_jmap_health_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_acc }
+		value = var:te_dg_acc subtract = te_jmap_health_lo divide = te_jmap_health_d0
+	}
+	min = 0
+	max = 1
+}
+
+# Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people.
+# Fitted to the world; before the first measure, 0.08 to 0.2.
+te_jmap_fam_input = {
+	value = te_demog_fam_share
+}
+te_jmap_fam_input_neg = {
+	value = te_jmap_fam_input
+	multiply = -1
+}
+te_jmap_fam_lo = {
+	value = 0.08
+	if = {
+		limit = { has_global_variable = te_jmap_rng_fam_lo }
+		value = global_var:te_jmap_rng_fam_lo
+	}
+}
+te_jmap_fam_hi = {
+	value = 0.2
+	if = {
+		limit = { has_global_variable = te_jmap_rng_fam_hi }
+		value = global_var:te_jmap_rng_fam_hi
+	}
+	min = te_jmap_fam_hi_floor
+}
+te_jmap_fam_hi_floor = {
+	value = te_jmap_fam_lo
+	add = 0.02
+}
+te_jmap_fam_span = {
+	value = te_jmap_fam_hi
+	subtract = te_jmap_fam_lo
+}
+te_jmap_fam_d0 = {
+	value = te_jmap_fam_span
+	multiply = 1
+}
+te_jmap_fam_factor = {
+	value = te_demog_fam_share subtract = te_jmap_fam_lo divide = te_jmap_fam_d0
+	min = 0
+	max = 1
+}
