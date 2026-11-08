@@ -387,8 +387,11 @@ class EntryShapeTest(unittest.TestCase):
             # Complete first: when two are true on the same update the first declared wins.
             self.assertEqual(
                 squash(text_of_node(child(complete, "trigger"))),
-                # (the parsed tree keeps no operator: `?= 2` reads `= 2`). R5 in full: state 2 AND no joined part left unswitched.
-                "te_cmg_%s_is_starter = yes global_var:te_cm_state_%s = 2 te_cmg_%s_all_switched = yes" % (key, key, key),
+                # (the parsed tree keeps no operator: `?= 2` reads `= 2`). R5 in full: state 2 AND no joined part left unswitched,
+                # each in a custom_tooltip so the panel's "Will complete if" list reads as text, not as the triggers' variables.
+                "custom_tooltip = { text = te_cm_tt_done_starter te_cmg_%s_is_starter = yes } "
+                "custom_tooltip = { text = te_cmg_%s_done_core_tt global_var:te_cm_state_%s = 2 } "
+                "custom_tooltip = { text = te_cm_tt_done_all te_cmg_%s_all_switched = yes }" % (key, key, key, key),
             )
             self.assertEqual(child(complete, "conclusion_desc").value, "je_te_cm_%s_complete_conclusion_desc" % key)
             self.assertIsNone(child(complete, "flags"))
@@ -547,6 +550,13 @@ class StatusTextTest(unittest.TestCase):
             late = self.loc["je_te_cm_%s_status_late" % merge.key]
             self.assertIn("ScriptValue('te_cmg_%s_lowest_dom_all')|%%0]" % merge.key, late)
             self.assertIn("$country_culture_merge_speed_mult$", late)
+            # The figure hovers to its breakdown by source, in vanilla's tagged form (it reads data).
+            for row in (text, late):
+                self.assertIn("#tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +"
+                              "[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!", row)
+        self.assertIn("GetValueWithBreakdownFor('country_culture_merge_speed_mult')", self.loc["te_cm_speed_tt"])
+        for source in ("law_public_schools", "institution_ministry_of_culture", "radio", "film", "mass_propaganda"):
+            self.assertIn("$%s$" % source, self.loc["te_cm_speed_tt"])
         values = text_of(DISPLAY_VALUES)
         self.assertEqual(squash(block(values, "te_cm_speed_display")), "value = modifier:country_culture_merge_speed_mult")
 
@@ -1176,6 +1186,7 @@ class LocTest(unittest.TestCase):
         used.update(re.findall(r"\bdesc = (\w+)", je))
         used.update(re.findall(r"conclusion_desc = (\w+)", je))
         used.update(re.findall(r"\b(?:header|effect_header) = (\w+)", je))
+        used.update(re.findall(r"\btext = (\w+)", je))
         buttons = BUTTONS.read_text(encoding="utf-8-sig")
         used.update(re.findall(r'(?:name|desc) = "(\w+)"', buttons))
         used.update(re.findall(r"text = (\w+)", buttons))
@@ -1231,8 +1242,19 @@ class LocTest(unittest.TestCase):
     def test_text_is_american_and_uses_the_house_markup(self):
         for key, text in {**self.generated, **{k: v for k, v in self.loc.items() if k.startswith("te_cm_")}}.items():
             self.assertNotIn("[b]", text, key)
-            self.assertNotIn("\\n", text, key)
+            if key != "te_cm_speed_tt":  # a hover's body, laid out like vanilla's: header, breakdown, divider, prose
+                self.assertNotIn("\\n", text, key)
             self.assertNotRegex(text, r"\b(?:colour|favour|organis|recognis|neighbour|centre|defence|labour)", key)
+
+    def test_player_text_says_culture_not_part(self):
+        # "Part" is the roster's word for a slot culture; players read "constituent culture", "core culture" or just
+        # "culture" (owner, 2026-11-08). "Part of" in its plain sense ("part of another merge") is fine.
+        texts = {**self.generated, **{k: v for k, v in self.loc.items() if k.startswith("te_cm_")}}
+        rules = loc_of(ROOT / "localization/english/te_game_rules_l_english.yml")
+        texts.update({k: v for k, v in rules.items() if k.startswith("setting_culture_merges")})
+        self.assertIn("setting_culture_merges_enabled_desc", texts)
+        for key, text in texts.items():
+            self.assertNotRegex(text, r"(?i)\bparts\b|\bpart's\b|\bpart\b(?! of\b)", key)
 
     def test_the_number_in_the_bar_text_is_the_switch_share(self):
         self.assertIn("ScriptValue('te_cm_switch_share')|%0]", self.loc["te_cm_bar_desc"])
@@ -1698,9 +1720,9 @@ class WordingTest(unittest.TestCase):
     def test_the_button_does_not_promise_that_every_part_joins(self):
         for merge in cfg.MERGES:
             text = self.generated["te_cmg_start_%s_button_desc" % merge.key]
-            self.assertNotIn("every part we hold", text, merge.key)
-            self.assertIn("Each part we hold that qualifies", text, merge.key)
-            self.assertIn("A part that qualifies later joins then", text, merge.key)
+            self.assertNotIn("every constituent culture we hold", text, merge.key)
+            self.assertIn("Each constituent culture we hold that qualifies", text, merge.key)
+            self.assertIn("A culture that qualifies later joins then", text, merge.key)
 
     def test_a_rule_row_says_the_system_is_paused(self):
         self.assertIn("paused", self.misc["te_cm_status_rule_off"])
