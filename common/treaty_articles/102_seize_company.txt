@@ -96,9 +96,19 @@ seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, li
 	# Only the source's own companies (ROOT is the source in valid triggers).
 	# Without this an AI could pick a company the source doesn't own: removal
 	# would silently fail, and Seize would still hand the target a copy.
+	# And none whose type the receiver (scope:other_country, the target) already
+	# has: can_ratify's SEIZE_COMPANY_ALREADY_HAS, which a war goal enforcing
+	# the article doesn't check, so the source would lose the company and the
+	# receiver gain nothing. Written to pass if scope:other_country is unbound,
+	# so a pass without a partner still lists the source's companies.
 	company_valid_trigger = {
 		scope:input = {
 			owner = root
+		}
+		NOT = {
+			scope:other_country ?= {
+				has_company = scope:input.type
+			}
 		}
 	}
 
@@ -118,6 +128,12 @@ seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, li
 				add = 0.04
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): the AI asks for a
+		# company in a treaty, or presses for it as a war goal, only where it
+		# owns enough to matter and the receiver has none of its type.
+		proposal_weight = { value = seize_company_ai_demand_weight }
+		wargoal_score_multiplier = { value = seize_company_ai_demand_weight }
 
 		# AI decision-making on whether to ACCEPT the article.
 		inherent_accept_score = {

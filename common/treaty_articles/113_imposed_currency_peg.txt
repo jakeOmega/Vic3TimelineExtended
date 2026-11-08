@@ -207,6 +207,12 @@ imposed_currency_peg = {
 			multiply = 0.25
 		}
 
+		# Per-partner gate (evaluation_chance has root only): a peg is asked for in a
+		# treaty, or pressed as a war goal, only of a country not already pegged,
+		# which can_ratify alone checks.
+		proposal_weight = { value = imposed_currency_peg_ai_demand_weight }
+		wargoal_score_multiplier = { value = imposed_currency_peg_ai_demand_weight }
+
 		inherent_accept_score = {
 			value = 0
 

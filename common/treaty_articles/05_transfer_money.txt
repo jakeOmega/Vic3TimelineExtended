@@ -110,6 +110,7 @@
 	}
 
 	ai = {
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier, as in vanilla, whose article this overrides. Money is worth having from any country; quantity_input_value sets how much.
 
 		treaty_categories = {
 			none

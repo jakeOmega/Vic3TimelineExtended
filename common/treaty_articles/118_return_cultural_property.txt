@@ -90,6 +90,8 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 			}
 		}
 
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier. possible already holds the demand's worth: the holder (ROOT) must have a trophy from the claimant's lands, so the article can't be demanded where it would return nothing.
+
 		inherent_accept_score = {
 			value = 0
 
