@@ -147,8 +147,9 @@ The 32 merges from [Culture merges](08-states.md#culture-merges). Tier is the
 tier a merge starts on; a part marked with another tier joins on that tier's
 conditions. A merge marked existing folds its parts into a culture the game
 already has. A part in the last column doesn't join while any country has that
-journal entry open. A core part's wait also holds the merge's start, for at
-most 20 years.
+journal entry open, except that Bulgarian in Yugoslav and Afro-American in
+American join once the start has waited its 20 years. A core part's wait also
+holds the merge's start, for at most 20 years.
 
 | Merge | Core parts | Optional parts | Tier | Waits and requirements |
 |---|---|---|---|---|
@@ -179,7 +180,7 @@ most 20 years.
 | Indonesian | Javan, Malay, Sumatran, Bornean | Balinese | 1 | none |
 | Pilipino (existing) | Pilipino, Visayan, Tagalog, Ilocano | none | 1 | none |
 | Greater Nguni | Nguni, Zulu, Xhosa | none | 1 | none |
-| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 | The French and Italian merges complete |
+| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 | The French and Italian merges complete |
 | Pan-Slavic | East Slavic, Czechoslovak, Yugoslav | Polish (tier 1), Slovene, Bulgarian | 2 | The East Slavic, Czechoslovak and Yugoslav merges complete |
 | Pan-Turkic | Oghuz Turkic, Uzbek, Kazakh (tier 1), Tatar (tier 1b), Kyrgyz (tier 1) | Bashkir (tier 1), Crimean Tatar (tier 1), Caucasian Turk (tier 1b), Uighur (tier 1b) | 2 | The Oghuz Turkic merge complete |
 | Pan-Malay | Indonesian, Pilipino | none | 2 | The Indonesian and Pilipino merges complete |

@@ -40,7 +40,7 @@
  setting_culture_merges_disabled:0 "Culture Merges Disabled"
  setting_culture_merges_disabled_desc:0 "Related cultures stay separate and no merge starts. Turned off mid-game, a running merge pauses where it stands: pops that have converted keep their new culture, and the merge resumes if the rule is turned back on. The laws, technologies and institutions that speed merges keep their other effects."
  setting_culture_merges_enabled:0 "Culture Merges Enabled"
- setting_culture_merges_enabled_desc:0 "Related cultures can merge into one national culture. A country that holds most of a set of closely related cultures, such as North and South German, treats them as equals and has the right technology can start a merge. Over a few decades the parts assimilate into the merged culture, and once it dominates their homelands every remaining pop of the parts switches at once, wherever it lives."
+ setting_culture_merges_enabled_desc:0 "Related cultures can merge into one national culture. A country that holds most of a set of closely related cultures, such as $north_german$ and $south_german$, treats them as equals and has the right technology can start a merge. Over a few decades the parts assimilate into the merged culture, and once it dominates a part's homeland every remaining pop of that part switches at once, wherever it lives."
  setting_custom_religions_allowed:0 "Custom Religions Allowed"
  setting_custom_religions_allowed_desc:0 "Custom religions are allowed in this game. You will receive a [concept_journal_entry] allowing you to select the ideology and name of your religion."
  setting_custom_religions_not_allowed:0 "Custom Religions Not Allowed"

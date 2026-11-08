@@ -318,7 +318,7 @@ with another tier joins on that tier's conditions.
 | French (existing) | French, Wallonian, Occitan | Catalan (tier 2) | 1 |
 | American | Yankee, Dixie | Afro-American (tier 1b) | 1 |
 | Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b |
-| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 |
+| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 |
 
 Every merge is in the [Culture merge list](20-appendix-reference-lists.md#culture-merge-list).
 
@@ -338,24 +338,26 @@ if you lead a power bloc, its members. For every core part:
 - your sphere holds at least 60% of the part's pops that live in its homeland
   states (pops elsewhere don't count);
 - every country of your sphere that holds a tenth or more of the sphere's share
-  of those pops, and the one that holds the most, accepts the part: its average
-  acceptance is at least 60, or 80 for a tier 1b part;
-- the core parts' average standards of living across the sphere are within 3
-  of each other.
+  of those pops, and the one that holds the most, accepts the part fully: its
+  average acceptance is at least 80, Full Acceptance (Provisional Acceptance
+  isn't enough), or 90 for a tier 1b part;
+- the core parts' average standards of living across the sphere are less than
+  3 apart.
 
 Each part has a tier, set by how close it is to the others:
 
 | Tier | The part shares with the others | Technology | Also needed |
 |---|---|---|---|
 | 1 | A language and a heritage | Pan-nationalism | Nothing more |
-| 1b | A language, across heritages | Mass Media | Acceptance of 80, and 30 years held and accepted together |
+| 1b | A language, across heritages | Mass Media | Acceptance of 90, and 30 years held and accepted together |
 | 2 | A language family | Television | 50 years held and accepted together, and the merges it builds on complete (French and Italian for Latin) |
 
 A merge starts on its core parts' tiers, and each optional part joins on its
-own. The years count only while a part is held and accepted, and keep what they
-have when it isn't. The mod sets some tiers by hand where history differs from
-the game's traits: Occitan and Wallonian join French at tier 1, Catalan at
-tier 2.
+own. The years count from when you have the technology for the merge's tier and
+one of its core parts as a primary culture, and only while the part is held and
+accepted; they keep what they have when it isn't. The mod sets some tiers by
+hand where history differs from the game's traits: Occitan and Wallonian join
+French at tier 1, Catalan at tier 2.
 
 A few parts wait while any country has a base-game journal entry open that
 works on them. A merge doesn't start while a core part waits: German for German
@@ -366,6 +368,7 @@ stays out until the entry closes, or in Yugoslav and American until the start
 has waited its 20 years: Bulgarian in Yugoslav, Afro-American (Equality for
 All) in American and Anglophone, and Dixie (Readmit the Secessionist States) in
 Anglophone.
+
 German National Identity completes on North and South German fervor, which a
 switch would stop growing. Forming Germany needs Pan-nationalism or that
 entry's completion, so a merge doesn't keep a country with Pan-nationalism from
@@ -375,14 +378,18 @@ forming it.
 
 When you start a merge, its culture becomes one of your primary cultures. Each
 year a share of every joined part's pops in your sphere converts to it.
-Subjects and bloc members convert at half your pace, and gain the merged culture
-as a primary culture where the part they convert is one of theirs. Pops that
+Subjects and bloc members convert at half the pace their own literacy,
+urbanization and Culture Merge Speed give, and gain the merged culture as a
+primary culture where the part they convert is one of theirs. Pops that
 have already converted still count toward a part's hold.
 
-A part switches in about 20 years in a country with 80% literacy, 40%
-urbanization, Public Schools, a level 3 Ministry of Culture, Radio and
-Film, and in about 40 in one with 30% literacy, 10% urbanization and none of
-those. Culture Merge Speed raises the pace:
+A part switches in about 20 years in a country that holds all of the part's
+homeland and has 80% literacy, 40% urbanization, Public Schools, a level 3
+Ministry of Culture, Radio and Film, and in about 40 in one with 30% literacy,
+10% urbanization and none of those. Only your sphere's pops convert, so a
+sphere that holds less than two thirds of a part's homeland converts its own
+pops but can't switch the part, unless enough of the merged culture already
+lives there. Culture Merge Speed raises the pace:
 
 | Source | Culture Merge Speed |
 |---|---|
@@ -400,8 +407,8 @@ pace.
 If a core part's hold falls below 50%, or the core parts' standards of living
 drift more than 4 apart, the whole merge stalls until the hold is back at 60%
 and the gap under 3. An optional part stalls on its own conditions. A country of
-your sphere whose acceptance of a part falls below 55 (75 for a tier 1b part)
-stops converting that part until it is back at 60 (80), and the rest of the
+your sphere whose acceptance of a part falls below 75 (85 for a tier 1b part)
+stops converting that part until it is back at 80 (90), and the rest of the
 sphere carries on. Nothing converted is lost while a merge stalls.
 
 <!-- screenshot: a running Cultural Merge journal entry, its status line and Merge Progress bar in view -->
@@ -410,8 +417,9 @@ sphere carries on. Nothing converted is lost while a merge stalls.
 
 Each part switches on its own, at the yearly count, once the merged culture
 holds two thirds of the merged-plus-part pops in that part's homeland states.
-The Merge Progress bar shows the merged culture's share in the least converted
-part's homeland. At the switch:
+The Merge Progress bar shows how close the least converted part is to
+switching; it is full when the merged culture holds two thirds. The entry's
+status line gives the share itself. At the switch:
 
 - every pop of the part in the world converts, whoever owns it;
 - every homeland state of the part becomes a homeland of the merged culture too;
@@ -428,14 +436,16 @@ The merge is complete once every core part has switched, and its journal entry
 completes once every part that joined has. A part that qualifies later still
 joins and switches the same way. A merge that builds on another, such as Latin
 on French, takes the other's culture only once that merge is complete with
-every joined part switched. A part that never joined the smaller merge stays
-separate afterwards: Corsicans who never joined the Italian merge stay
-Corsican once Italian has become Latin.
+every joined part switched, or before any part has joined it, and from then on
+the smaller merge takes no more parts. A part that never joined the smaller
+merge stays separate afterwards: Corsicans who never joined the Italian merge
+stay Corsican once Italian has become Latin.
 
 If a revolution topples the country running a merge, the winner carries it on.
 If the country is annexed, the merge goes idle with its progress kept, and any
 country that qualifies can start it again from where it stood. A complete merge
-whose country is annexed takes no more parts.
+whose country is annexed takes no more parts, and lets go of the parts still
+converting, which other merges can then take.
 
 ### Merges and base-game content
 

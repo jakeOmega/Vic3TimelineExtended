@@ -123,8 +123,8 @@ MERGES: tuple[Merge, ...] = (
     ),
     Merge(
         "yugoslav", "cm_yugoslav", _new("Yugoslav", 28, 84, 150),
-        # je_the_balkan_league can only be activated while Serb or Bulgarian fervor is above 75
-        # (05_balkan_wars.txt), so Serb and Bulgarian wait for it to end in every country (R37).
+        # je_the_balkan_league can only be activated while Serb, Bulgarian or Greek fervor is above 75
+        # (05_balkan_wars.txt:58-62), so Serb and Bulgarian wait for it to end in every country (R37).
         core=(_p("serb", wait_for=("je_the_balkan_league",)), _p("croat"), _p("bosniak")),
         optional=(_p("slovene"), _p("bulgarian", wait_for=("je_the_balkan_league",))),
     ),

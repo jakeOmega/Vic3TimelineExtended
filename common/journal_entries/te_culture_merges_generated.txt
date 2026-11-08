@@ -39,6 +39,14 @@ je_te_cm_german = {
 	status_desc = {
 		first_valid = {
 			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_german_status_complete
 				trigger = {
 					te_cmg_german_is_starter = yes
@@ -185,14 +193,6 @@ je_te_cm_german = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_german_can_start = yes
@@ -275,6 +275,14 @@ je_te_cm_italian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_italian_status_complete
 				trigger = {
@@ -415,14 +423,6 @@ je_te_cm_italian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_italian_can_start = yes
@@ -513,6 +513,14 @@ je_te_cm_scandinavian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_scandinavian_status_complete
 				trigger = {
@@ -697,14 +705,6 @@ je_te_cm_scandinavian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_scandinavian_can_start = yes
@@ -787,6 +787,14 @@ je_te_cm_east_slavic = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_east_slavic_status_complete
 				trigger = {
@@ -985,14 +993,6 @@ je_te_cm_east_slavic = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_east_slavic_can_start = yes
@@ -1083,6 +1083,14 @@ je_te_cm_yugoslav = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_yugoslav_status_complete
 				trigger = {
@@ -1274,14 +1282,6 @@ je_te_cm_yugoslav = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_yugoslav_can_start = yes
@@ -1372,6 +1372,14 @@ je_te_cm_czechoslovak = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_czechoslovak_status_complete
 				trigger = {
@@ -1512,14 +1520,6 @@ je_te_cm_czechoslovak = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_czechoslovak_can_start = yes
@@ -1610,6 +1610,14 @@ je_te_cm_hungarian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_hungarian_status_complete
 				trigger = {
@@ -1741,14 +1749,6 @@ je_te_cm_hungarian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_hungarian_can_start = yes
@@ -1831,6 +1831,14 @@ je_te_cm_dutch = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_dutch_status_complete
 				trigger = {
@@ -1962,14 +1970,6 @@ je_te_cm_dutch = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_dutch_can_start = yes
@@ -2052,6 +2052,14 @@ je_te_cm_finnish = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_finnish_status_complete
 				trigger = {
@@ -2183,14 +2191,6 @@ je_te_cm_finnish = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_finnish_can_start = yes
@@ -2273,6 +2273,14 @@ je_te_cm_french = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_french_status_complete
 				trigger = {
@@ -2448,14 +2456,6 @@ je_te_cm_french = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_french_can_start = yes
@@ -2546,6 +2546,14 @@ je_te_cm_british = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_british_status_complete
 				trigger = {
@@ -2677,14 +2685,6 @@ je_te_cm_british = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_british_can_start = yes
@@ -2780,6 +2780,14 @@ je_te_cm_american = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_american_status_complete
 				trigger = {
@@ -2927,14 +2935,6 @@ je_te_cm_american = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_american_can_start = yes
@@ -3030,6 +3030,14 @@ je_te_cm_anglophone = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_anglophone_status_complete
 				trigger = {
@@ -3317,14 +3325,6 @@ je_te_cm_anglophone = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_anglophone_can_start = yes
@@ -3407,6 +3407,14 @@ je_te_cm_brazilian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_brazilian_status_complete
 				trigger = {
@@ -3670,14 +3678,6 @@ je_te_cm_brazilian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_brazilian_can_start = yes
@@ -3760,6 +3760,14 @@ je_te_cm_platine = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_platine_status_complete
 				trigger = {
@@ -3988,14 +3996,6 @@ je_te_cm_platine = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_platine_can_start = yes
@@ -4091,6 +4091,14 @@ je_te_cm_andean = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_andean_status_complete
 				trigger = {
@@ -4319,14 +4327,6 @@ je_te_cm_andean = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_andean_can_start = yes
@@ -4409,6 +4409,14 @@ je_te_cm_gran_colombian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_gran_colombian_status_complete
 				trigger = {
@@ -4593,14 +4601,6 @@ je_te_cm_gran_colombian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_gran_colombian_can_start = yes
@@ -4683,6 +4683,14 @@ je_te_cm_chinese = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_chinese_status_complete
 				trigger = {
@@ -4902,14 +4910,6 @@ je_te_cm_chinese = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_chinese_can_start = yes
@@ -4992,6 +4992,14 @@ je_te_cm_japanese = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_japanese_status_complete
 				trigger = {
@@ -5123,14 +5131,6 @@ je_te_cm_japanese = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_japanese_can_start = yes
@@ -5213,6 +5213,14 @@ je_te_cm_arab = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_arab_status_complete
 				trigger = {
@@ -5485,14 +5493,6 @@ je_te_cm_arab = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_arab_can_start = yes
@@ -5575,6 +5575,14 @@ je_te_cm_persian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_persian_status_complete
 				trigger = {
@@ -5706,14 +5714,6 @@ je_te_cm_persian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_persian_can_start = yes
@@ -5796,6 +5796,14 @@ je_te_cm_oghuz_turkic = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_oghuz_turkic_status_complete
 				trigger = {
@@ -5936,14 +5944,6 @@ je_te_cm_oghuz_turkic = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_oghuz_turkic_can_start = yes
@@ -6034,6 +6034,14 @@ je_te_cm_hindustani = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_hindustani_status_complete
 				trigger = {
@@ -6297,14 +6305,6 @@ je_te_cm_hindustani = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_hindustani_can_start = yes
@@ -6387,6 +6387,14 @@ je_te_cm_dravidian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_dravidian_status_complete
 				trigger = {
@@ -6571,14 +6579,6 @@ je_te_cm_dravidian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_dravidian_can_start = yes
@@ -6661,6 +6661,14 @@ je_te_cm_indonesian = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_indonesian_status_complete
 				trigger = {
@@ -6889,14 +6897,6 @@ je_te_cm_indonesian = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_indonesian_can_start = yes
@@ -6987,6 +6987,14 @@ je_te_cm_filipino = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_filipino_status_complete
 				trigger = {
@@ -7206,14 +7214,6 @@ je_te_cm_filipino = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_filipino_can_start = yes
@@ -7304,6 +7304,14 @@ je_te_cm_nguni = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_nguni_status_complete
 				trigger = {
@@ -7488,14 +7496,6 @@ je_te_cm_nguni = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_nguni_can_start = yes
@@ -7578,6 +7578,14 @@ je_te_cm_latin = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_latin_status_complete
 				trigger = {
@@ -7934,14 +7942,6 @@ je_te_cm_latin = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_latin_can_start = yes
@@ -8024,6 +8024,14 @@ je_te_cm_pan_slavic = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_pan_slavic_status_complete
 				trigger = {
@@ -8316,14 +8324,6 @@ je_te_cm_pan_slavic = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_pan_slavic_can_start = yes
@@ -8406,6 +8406,14 @@ je_te_cm_pan_turkic = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_pan_turkic_status_complete
 				trigger = {
@@ -8844,14 +8852,6 @@ je_te_cm_pan_turkic = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_pan_turkic_can_start = yes
@@ -8934,6 +8934,14 @@ je_te_cm_pan_malay = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_pan_malay_status_complete
 				trigger = {
@@ -9146,14 +9154,6 @@ je_te_cm_pan_malay = {
 				}
 			}
 			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
-					}
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_pan_malay_can_start = yes
@@ -9236,6 +9236,14 @@ je_te_cm_east_african = {
 	# The first row whose trigger holds. Rows after the run's are an idle merge's first failing condition.
 	status_desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = te_cm_status_rule_off
+				trigger = {
+					NOT = {
+						te_cm_system_enabled = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_te_cm_east_african_status_complete
 				trigger = {
@@ -9500,14 +9508,6 @@ je_te_cm_east_african = {
 				trigger = {
 					NOT = {
 						var:te_cm_sol_ok_east_african ?= 1
-					}
-				}
-			}
-			triggered_desc = {
-				desc = te_cm_status_rule_off
-				trigger = {
-					NOT = {
-						te_cm_system_enabled = yes
 					}
 				}
 			}

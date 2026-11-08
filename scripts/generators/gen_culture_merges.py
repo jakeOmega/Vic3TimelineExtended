@@ -1602,6 +1602,22 @@ def _names(cultures) -> str:
     return ", ".join(names[:-1]) + " and " + names[-1]
 
 
+def _part_label(part: cfg.Part) -> str:
+    """A slot named in a list of parts: its first culture, then any alternatives, ``$yankee$ (or $cm_american$)``."""
+    first = "$%s$" % part.cultures[0]
+    if len(part.cultures) == 1:
+        return first
+    return "%s (or %s)" % (first, _either(part.cultures[1:]))
+
+
+def _part_labels(parts) -> str:
+    """Slots read as a list, each with its alternatives: ``$british$ and $yankee$ (or $cm_american$)``."""
+    labels = [_part_label(part) for part in parts]
+    if len(labels) <= 1:
+        return "".join(labels)
+    return ", ".join(labels[:-1]) + " and " + labels[-1]
+
+
 def _either(cultures) -> str:
     """Loc splices as alternatives: ``$a$``, ``$a$ or $b$``, ``$a$, $b$ or $c$``."""
     names = ["$%s$" % c for c in cultures]
@@ -1757,7 +1773,9 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     converting, running, running under another country, then an idle merge's first failing condition: no
     longer a candidate, not yet measured, a component merge, each core slot (busy in another merge, not
     held, not accepted, not together long enough, a technology of its own tier missing), the
-    standard-of-living gap, a vanilla wait, the rule being off, and last that the button is ready.
+    standard-of-living gap, a vanilla wait, and last that the button is ready. The rule being off comes
+    before all of them: is_candidate needs the rule, so a later row would never show, and a starter's
+    merge pauses with it (review B, M1).
     """
     key = merge.key
     base = "je_te_cm_%s_status_" % key
@@ -1767,6 +1785,7 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     start = max(tiers[p.cultures[0]] for p in merge.core)
     speed = "$country_culture_merge_speed_mult$: +%s" % sv.format("te_cm_speed_display", "%0")
     rows = [
+        Row("te_cm_status_rule_off", _negated(["te_cm_system_enabled = yes"])),
         Row(
             base + "complete",
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key, "te_cmg_%s_all_switched = yes" % key],
@@ -1801,11 +1820,16 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
         )
     for index, part in enumerate(merge.core, start=1):
         unmet = _negated(_lines(lambda s, part=part: _write_routes(s, _slot_routes(merge, part, tiers))))
+        # A slot that only another merge's result fills is waiting for that merge, not taken by it (review B, M8).
+        if all(any(o is not merge and o.result == c for o in merges) for c in part.cultures):
+            busy_text = "%s is still forming in its own merge, which has to finish first." % _either(part.cultures)
+        else:
+            busy_text = "%s pops are already part of another merge, which has to finish with them first." % _either(part.cultures)
         rows.append(
             Row(
                 base + "busy_%d" % index,
                 unmet + ["NOR = {"] + ["\tte_cmg_%s_%s_available = yes" % (key, c) for c in part.cultures] + ["}"],
-                "%s pops are already part of another merge, which has to finish with them first." % _either(part.cultures),
+                busy_text,
             )
         )
         for culture in part.cultures:
@@ -1872,8 +1896,6 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
                 % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0")),
             )
         )
-    # The rule isn't part of can_start (the button tests it on its own), so "ready" must not show while it is off.
-    rows.append(Row("te_cm_status_rule_off", _negated(["te_cm_system_enabled = yes"])))
     rows.append(Row("te_cm_status_ready", ["te_cmg_%s_can_start = yes" % key]))
     return rows
 
@@ -2005,23 +2027,24 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
         entry = "je_te_cm_%s" % key
         result = "$%s$" % merge.result
         tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
-        core = [c for part in merge.core for c in part.cultures[:1]]
-        optional = [c for part in merge.optional for c in part.cultures[:1]]
+        core = _part_labels(merge.core)
+        optional = _part_labels(merge.optional)
         out[entry] = "Cultural Merge: %s" % result
         if merge.new is not None:
             reason = (
                 "Closely related peoples can come to see themselves as one nation. The core of this merge is %s. Over the "
                 "decades their pops become %s, and once it holds most of a part's homeland, every remaining pop of that "
-                "part follows." % (_names(core), result)
+                "part follows." % (core, result)
             )
         else:
             reason = (
                 "Closely related peoples can come to see themselves as one nation. Here %s pops would become part of the existing "
                 "%s culture: over the decades they assimilate into it, and once it holds most of a part's homeland, every "
-                "remaining pop of that part follows." % (_names([c for c in core if c != merge.result]), result)
+                "remaining pop of that part follows."
+                % (_part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
             )
         if optional:
-            reason += " %s pops can join once they qualify as well." % _names(optional)
+            reason += " %s pops can join once they qualify as well." % optional
         out[entry + "_reason"] = reason
         out[entry + "_complete_conclusion_desc"] = (
             "The merge is complete. %s is the national culture across the sphere, and the parts it brought in are one people." % result
@@ -2035,7 +2058,7 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             "Starts the merge of %s. %s becomes a primary culture here%s. Each part we hold that qualifies begins to assimilate "
             "into it: a slice of its pops each year, those in subjects and bloc members more slowly. A part that qualifies later "
             "joins then. Once %s holds %s of a part's homeland, every remaining pop of that part switches at once."
-            % (_names(core), result, "" if merge.new is not None else " if it isn't one already", result,
+            % (core, result, "" if merge.new is not None else " if it isn't one already", result,
                sv.format("te_cm_switch_share", "%0"))
         )
         out["te_cmg_start_%s_effect_tt" % key] = (

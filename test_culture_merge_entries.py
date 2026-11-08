@@ -503,13 +503,16 @@ class StatusTextTest(unittest.TestCase):
             key = merge.key
             first_valid, rows = self.rows(key)
             descs = [d for d, _ in rows]
-            self.assertEqual(descs[0], "je_te_cm_%s_status_complete" % key)
-            self.assertEqual(descs[1], "je_te_cm_%s_status_late" % key)
-            self.assertEqual(descs[2], "je_te_cm_%s_status_running" % key)
-            self.assertEqual(descs[3], "te_cm_status_elsewhere")
-            self.assertEqual(descs[4:6], ["te_cm_status_not_candidate", "te_cm_status_unmeasured"])
-            # The rule being off is told before "ready" (can_start doesn't test the rule), which closes the list.
-            self.assertEqual(descs[-2:], ["te_cm_status_rule_off", "te_cm_status_ready"])
+            # The rule being off comes first: is_candidate needs the rule, so any later row would never show with it
+            # off, and a starter's running merge pauses (review B, M1). "Ready" closes the list.
+            self.assertEqual(descs[0], "te_cm_status_rule_off")
+            self.assertEqual(descs[1], "je_te_cm_%s_status_complete" % key)
+            self.assertEqual(descs[2], "je_te_cm_%s_status_late" % key)
+            self.assertEqual(descs[3], "je_te_cm_%s_status_running" % key)
+            self.assertEqual(descs[4], "te_cm_status_elsewhere")
+            self.assertEqual(descs[5:7], ["te_cm_status_not_candidate", "te_cm_status_unmeasured"])
+            self.assertEqual(descs[-1], "te_cm_status_ready")
+            self.assertEqual(descs.count("te_cm_status_rule_off"), 1)
             # The unconditional fallback, after the last row (the only `desc` that no triggered_desc holds).
             self.assertEqual(squash(inner(je_text(key), "first_valid")).split(" desc = ")[-1], "te_cm_status_pending")
             self.assertTrue(first_valid)
@@ -1687,7 +1690,7 @@ class WordingTest(unittest.TestCase):
             self.assertIn("Each part we hold that qualifies", text, merge.key)
             self.assertIn("A part that qualifies later joins then", text, merge.key)
 
-    def test_a_rule_row_comes_before_ready_and_says_the_system_is_paused(self):
+    def test_a_rule_row_says_the_system_is_paused(self):
         self.assertIn("paused", self.misc["te_cm_status_rule_off"])
         self.assertIn("Nothing stands in the way", self.misc["te_cm_status_ready"])
 
@@ -1698,6 +1701,17 @@ class WordingTest(unittest.TestCase):
             if merge.optional:
                 text = self.generated["je_te_cm_%s_reason" % merge.key]
                 self.assertIn(" pops can join once they qualify as well.", text, merge.key)
+
+    def test_a_slot_shows_its_alternatives_in_the_reason_and_the_button(self):
+        # Review B, M7: the status rows already said "$yankee$ or $cm_american$"; the summary texts said "$yankee$".
+        for key in ("je_te_cm_anglophone_reason", "te_cmg_start_anglophone_button_desc"):
+            self.assertIn("$british$ and $yankee$ (or $cm_american$)", self.generated[key], key)
+        self.assertIn("$platinean$ (or $cm_platine$)", self.generated["je_te_cm_latin_reason"])
+
+    def test_a_slot_only_another_merge_fills_is_still_forming_not_busy(self):
+        # Review B, M8: Latin's French slot waits for the French merge; its pops are not "part of another merge".
+        self.assertIn("$french$ is still forming in its own merge", self.generated["je_te_cm_latin_status_busy_1"])
+        self.assertIn("already part of another merge", self.generated["je_te_cm_anglophone_status_busy_2"])
 
     def test_a_component_row_says_the_other_merge_must_finish_not_that_it_is_busy(self):
         # Before: "$cm_italian$ pops are already part of another merge" for a merge that had not started.

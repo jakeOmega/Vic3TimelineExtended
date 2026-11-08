@@ -62,7 +62,7 @@
  country_cultural_pull_mult:0 "[concept_cultural_pull]"
  country_cultural_pull_mult_desc:0 "A percentage bonus or penalty to the nation's [concept_cultural_pull] raw score, applied after all [concept_cultural_pull_components] are summed."
  country_culture_merge_speed_mult:0 "Culture Merge Speed"
- country_culture_merge_speed_mult_desc:0 "How much faster the pops of a running culture merge become the merged culture in this country. $law_public_schools$, the $institution_ministry_of_culture$ (per level), $radio$, $film$ and $mass_propaganda$ add to it. A subject or bloc member of the country that started the merge converts at half the starter's pace."
+ country_culture_merge_speed_mult_desc:0 "How much faster the pops of a running culture merge become the merged culture in this country. $law_public_schools$, the $institution_ministry_of_culture$ (per level), $radio$, $film$ and $mass_propaganda$ add to it. A subject or bloc member of the country that started the merge converts at half the pace its own literacy, urbanization and $country_culture_merge_speed_mult$ give."
  country_defender_diplomatic_play_escalation_weekly_add:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You"
  country_defender_diplomatic_play_escalation_weekly_add_desc:0 "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is the target of. Floored at 0; combine with the matching #V _mult#! to scale."
  country_defender_diplomatic_play_escalation_weekly_mult:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You"
