@@ -12,19 +12,21 @@ with the commit that fixed it.
   (Britain holds Singapore as a three-province state in Malaya); Siak holds the Sumatran shore of Malacca as part of
   North Sumatra. Open a play against the owner and look for Seize Strait among the goals.
 - **Logs.** Read `debug.log`, not `error.log`. Each enforcement writes one `TE_SELF_CHECK OK|BROKEN te_seize_strait`
-  line with `holder_pop=before->after target_pop=before->after` for the strait's state region and `ai=0|1`.
+  line with `shores=before->after` (the shore provinces the holder owns in the strait's state region),
+  `holder_pop=before->after target_pop=before->after` for that region and `ai=0|1`. A goal whose state changed hands
+  first (an annexation ran before it) writes `TE_SEIZE_STRAIT skipped` instead.
 
 ## Self-checks
 
 | Line | OK means | If BROKEN |
 |---|---|---|
-| `TE_SELF_CHECK OK\|BROKEN te_seize_strait` | The holder owns land in the strait's state region after the transfer. | `set_owner_of_provinces` didn't run or found no province: check `debug.log` for a script error on `te_seize_strait_shores`, and whether the state still held the shore when the peace was signed. |
+| `TE_SELF_CHECK OK\|BROKEN te_seize_strait` | The holder owns more of the strait's shore than before the transfer. Owning land in the region isn't enough: Spain at Gibraltar and Johore or Siam at Singapore already do. | If the map shows the shore moved, `set_owner_of_provinces` takes effect after the effect block: move the after-reading to a day later. If nothing moved, `debug.log` has a script error on `te_seize_strait_shores`, or a `this = p:xHEX.state` test is false for a province the state holds. |
 
 ## First release (2026-11-07)
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Offered.** In a play against a country holding a shore state, open the war goal list. | Seize Strait is listed for that state, not for its other states, and not for a canal zone whose canal isn't built. | Not listed at all: the custom kind with `target_type = state` isn't built into the list; try `skip_build_list` off/on and compare with Take Treaty Port. Listed on an unbuilt canal: `te_*_canal_built` reads a canal under construction as built. |
+| **Offered.** In a play against a country holding a shore state, open the war goal list. | Seize Strait is listed for that state, not for its other states, and not for a canal zone whose canal isn't built. | Not listed at all: first look in `debug.log` for a `Wrong scope` line on `te_seize_strait_shore_provinces` (the shore test is `this = p:xHEX.state`, as in the base game's Macao decision; the province iterators don't run from a state). If there is none, the custom kind with `target_type = state` isn't built into the list: compare with Take Treaty Port. Listed on an unbuilt canal: `te_*_canal_built` reads a canal under construction as built. |
 | **Price.** Compare its infamy with Conquer State on the same state. | A quarter of it for a whole state (Zealand, Malaya), a third for Britain's Singapore, all of it for Britain's Gibraltar. The breakdown shows a "Share of the State taken" line. | The share line missing or 1 everywhere: the scope switch inside the `multiply` block isn't read; inline the province counts. |
 | **Opening a play.** Start a play with Seize Strait as its goal. | The play opens; the AI target can back down or fight like any other play. | The play type isn't offered: compare `dp_te_seize_strait` with `dp_take_treaty_port`. |
 | **Transfer.** Win the war (or have the target capitulate). | Only the shore provinces change hands; the rest of the state stays with its owner. On the Panama, Suez or Kiel canal both canal provinces move. The holder becomes a controller of the strait (the strait's tooltip on the map). | Nothing moves: the BROKEN line above. The whole state moves: the target state was only the shore (expected), or the engine merged it. |

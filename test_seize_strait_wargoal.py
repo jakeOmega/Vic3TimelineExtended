@@ -3,11 +3,11 @@
 
 The goal takes only a state's strait shore. Strait scope has no link to its
 shore provinces, so the 24 provinces are written out twice in script: in the
-trigger that offers the goal (te_is_seizable_strait_shore) and in the effect
+count that offers the goal (te_seize_strait_shore_provinces) and in the effect
 that transfers them (te_seize_strait_shores). The engine says nothing when a
 province key names the wrong state region or one list drifts from the other,
-so both are pinned here against SHORES, and SHORES against the base game's
-strait definitions and state regions when a game install is present
+so both are pinned here against SHORES, and SHORES against the mod's state
+regions and, with a game install, the base game's strait definitions
 (docs/systems/mod_systems/war.md § Seize Strait War Goal).
 """
 
@@ -88,54 +88,78 @@ TRIGGERS = _strip(_raw("common", "scripted_triggers", "te_seize_strait_triggers.
 EFFECTS = _strip(_raw("common", "scripted_effects", "te_seize_strait_effects.txt"))
 VALUES = _strip(_raw("common", "script_values", "te_seize_strait_values.txt"))
 
+HOLDS = r"this\s*=\s*p:(x[0-9A-Fa-f]{6})\.state"
+CALL = (r"limit\s*=\s*\{([^{}]*)\}\s*s:(STATE_\w+)\s*=\s*\{\s*set_owner_of_provinces\s*=\s*\{\s*"
+        r"country\s*=\s*root\s*provinces\s*=\s*\{([^}]*)\}")
+
+
+def _ifs(body):
+    """The top-level ``if = { ... }`` blocks of a script body, without their braces."""
+    out, depth, i = [], 0, 0
+    while i < len(body):
+        ch = body[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif depth == 0:
+            m = re.compile(r"if\s*=\s*\{").match(body, i)
+            if m and (i == 0 or not (body[i - 1].isalnum() or body[i - 1] == "_")):
+                close = _close(body, m.end() - 1)
+                out.append(body[m.end():close])
+                i = close + 1
+                continue
+        i += 1
+    return out
+
 
 class ShoreListTests(unittest.TestCase):
-    def test_trigger_names_every_shore_once(self):
-        body = _def(TRIGGERS, "te_is_seizable_strait_shore")
-        named = re.findall(r"this\s*=\s*p:(x[0-9A-Fa-f]{6})", body)
+    def test_the_count_names_every_shore_once(self):
+        named = re.findall(HOLDS, _def(VALUES, "te_seize_strait_shore_provinces"))
         self.assertEqual(len(named), len(set(named)), "a province is listed twice")
         self.assertEqual(set(named), ALL_PROVINCES)
 
+    def test_the_offer_reads_the_count(self):
+        self.assertRegex(_def(TRIGGERS, "te_state_has_seizable_strait_shore"),
+                         r"^\s*te_seize_strait_shore_provinces\s*>\s*0\s*$")
+
     def test_canal_shores_wait_for_the_canal(self):
-        body = _def(TRIGGERS, "te_is_seizable_strait_shore")
-        canal_provinces = set()
+        blocks = _ifs(_def(VALUES, "te_seize_strait_shore_provinces"))
+        gated = {}
+        bare = set()
+        for block in blocks:
+            gate = re.match(r"\s*limit\s*=\s*\{\s*(te_\w+_canal_built)\s*=\s*yes\s*\}", block)
+            provinces = set(re.findall(HOLDS, block))
+            if gate:
+                gated[gate.group(1)] = provinces
+            else:
+                bare |= provinces
         for strait, (trigger, building, region) in CANALS.items():
-            ands = [m.end() for m in re.finditer(r"\bAND\s*=\s*\{", body)]
-            found = False
-            for start in ands:
-                inner = body[start:_close(body, start - 1)]
-                if trigger in inner:
-                    provinces = set(re.findall(r"p:(x[0-9A-Fa-f]{6})", inner))
-                    self.assertEqual(provinces, {p for p, _ in SHORES[strait]}, strait)
-                    found = True
-            self.assertTrue(found, f"{strait}'s shores aren't gated on {trigger}")
-            canal_provinces |= {p for p, _ in SHORES[strait]}
+            self.assertEqual(gated.get(trigger), {p for p, _ in SHORES[strait]}, strait)
             gate = _def(TRIGGERS, trigger)
             self.assertIn(f"s:{region}", gate)
             self.assertIn(f"is_building_type = {building}", gate)
             self.assertRegex(gate, r"level\s*>=\s*1", f"{trigger} counts a canal under construction")
-        # Outside the AND blocks, only natural straits are listed bare.
-        bare = re.sub(r"\bAND\s*=\s*\{.*?\n\t\t\}", "", body, flags=re.S)
-        self.assertFalse(canal_provinces & set(re.findall(r"p:(x[0-9A-Fa-f]{6})", bare)),
-                         "a canal province is offered without its canal")
+        canal_provinces = {p for strait in CANALS for p, _ in SHORES[strait]}
+        self.assertFalse(canal_provinces & bare, "a canal province is counted without its canal")
+        self.assertEqual(bare, ALL_PROVINCES - canal_provinces)
 
-    def test_effect_transfers_each_shore_in_its_own_region(self):
+    def test_each_transfer_moves_the_provinces_its_guard_tested(self):
         body = _def(EFFECTS, "te_seize_strait_shores")
-        calls = re.findall(
-            r"s:(STATE_\w+)\s*=\s*\{\s*set_owner_of_provinces\s*=\s*\{\s*country\s*=\s*root\s*"
-            r"provinces\s*=\s*\{([^}]*)\}",
-            body,
-        )
         transferred = set()
-        for region, provinces in calls:
-            for p in provinces.split():
+        calls = list(re.finditer(CALL, body))
+        self.assertTrue(calls)
+        for m in calls:
+            limit, region, provinces = m.group(1), m.group(2), set(m.group(3).split())
+            # The guard just before the call tests exactly the provinces it hands over...
+            self.assertEqual(set(re.findall(HOLDS, limit)), provinces, f"{region}: {provinces}")
+            # ...in the region the branch is guarded on, which is the call's own.
+            guards = re.findall(r"state_region\s*=\s*s:(STATE_\w+)", body[:m.end()])
+            self.assertEqual(guards[-1], region, f"{provinces} handed over under {guards[-1]}'s guard")
+            for p in provinces:
                 self.assertEqual(REGION_OF.get(p), region, f"{p} is transferred in {region}")
-                transferred.add(p)
+            transferred |= provinces
         self.assertEqual(transferred, ALL_PROVINCES)
-        # Each region branch is guarded by that region, so a province is never
-        # handed over from a state in another region.
-        for region in {r for r in REGION_OF.values()}:
-            self.assertRegex(body, r"state_region\s*=\s*s:" + region + r"\b", region)
 
     def test_paired_regions_hand_both_shores_over_in_one_call(self):
         body = _def(EFFECTS, "te_seize_strait_shores")
@@ -152,13 +176,33 @@ class ShoreListTests(unittest.TestCase):
                 regions.setdefault(region, set()).add(strait)
         self.assertFalse({r: s for r, s in regions.items() if len(s) > 1})
 
-    def test_matches_the_game_files(self):
+    def test_no_province_iterator_runs_from_a_state(self):
+        # The engine registers the province iterators from a province: from a
+        # state they log "Wrong scope" and do nothing (scripting_best_practices.md,
+        # 2026-10-16). Only a script value's every_province reads a state's provinces.
+        for name, text in (("triggers", TRIGGERS), ("effects", EFFECTS), ("war goal", GOAL)):
+            self.assertNotRegex(text, r"\b(any|every|random|ordered)_province\s*=", name)
+
+    def test_regions_match_the_mods_state_regions(self):
+        # The mod ships every state_regions file, so the engine reads these.
+        region_of = {}
+        for path in Path(REPO, "map_data", "state_regions").glob("*.txt"):
+            regions = _strip(path.read_text(encoding="utf-8-sig"))
+            for name in re.findall(r"(?m)^(STATE_\w+)\s*=\s*\{", regions):
+                provinces = re.search(r"provinces\s*=\s*\{([^}]*)\}", _def(regions, name))
+                for p in re.findall(r"x[0-9A-Fa-f]{6}", provinces.group(1) if provinces else ""):
+                    region_of[p.upper()] = name
+        self.assertTrue(region_of, "no state regions read")
+        for p, region in REGION_OF.items():
+            self.assertEqual(region_of.get(p.upper()), region, p)
+
+    def test_matches_the_game_strait_definitions(self):
+        # strait_definitions is not in vanilla_parsed/, so this half needs a game install.
         try:
             from path_constants import base_game_path
-            game = Path(base_game_path) / "game"
+            defs = Path(base_game_path) / "game/common/strait_definitions/strait_definitions.txt"
         except Exception:
-            game = None
-        defs = game / "common/strait_definitions/strait_definitions.txt" if game else None
+            defs = None
         if defs is None or not defs.is_file():
             self.skipTest("no Victoria 3 install")
         text = _strip(defs.read_text(encoding="utf-8-sig"))
@@ -168,15 +212,6 @@ class ShoreListTests(unittest.TestCase):
             vanilla[name] = [re.search(key + r"\s*=\s*(x[0-9A-Fa-f]{6})", body).group(1)
                              for key in ("first_land_endpoint", "second_land_endpoint")]
         self.assertEqual({k: [p for p, _ in v] for k, v in SHORES.items()}, vanilla)
-        region_of = {}
-        for path in (game / "map_data/state_regions").glob("*.txt"):
-            regions = _strip(path.read_text(encoding="utf-8-sig"))
-            for name in re.findall(r"(?m)^(STATE_\w+)\s*=\s*\{", regions):
-                provinces = re.search(r"provinces\s*=\s*\{([^}]*)\}", _def(regions, name))
-                for p in re.findall(r"x[0-9A-Fa-f]{6}", provinces.group(1) if provinces else ""):
-                    region_of[p.upper()] = name
-        for p, region in REGION_OF.items():
-            self.assertEqual(region_of.get(p.upper()), region, p)
 
 
 class GoalShapeTests(unittest.TestCase):
@@ -202,12 +237,19 @@ class GoalShapeTests(unittest.TestCase):
         goal = _def(GOAL, "te_seize_strait")
         self.assertIn("te_state_has_seizable_strait_shore = yes", _block(goal, "valid"))
         enforced = _block(goal, "on_enforced")
-        self.assertIn("te_seize_strait_shores = yes", _block(enforced, "scope:target_state",
-                                                              enforced.index("te_seize_strait_selfcheck_before")))
-        self.assertLess(enforced.index("te_seize_strait_selfcheck_before"),
-                        enforced.index("te_seize_strait_shores"))
-        self.assertLess(enforced.index("te_seize_strait_shores"),
-                        enforced.index("te_seize_strait_selfcheck_after"))
+        guarded = _block(enforced, "if")
+        self.assertRegex(_block(guarded, "limit"), r"scope:target_state\s*\?=\s*\{\s*owner\s*=\s*scope:target_country\s*\}")
+        self.assertIn("te_seize_strait_shores = yes",
+                      _block(guarded, "scope:target_state", guarded.index("te_seize_strait_selfcheck_before")))
+        self.assertLess(guarded.index("te_seize_strait_selfcheck_before"), guarded.index("te_seize_strait_shores"))
+        self.assertLess(guarded.index("te_seize_strait_shores"), guarded.index("te_seize_strait_selfcheck_after"))
+
+    def test_self_check_passes_only_on_more_shore(self):
+        # Owning land in the region proves nothing: the holder usually does already.
+        after = _def(EFFECTS, "te_seize_strait_selfcheck_after")
+        self.assertRegex(_block(after, "limit"),
+                         r"global_var:te_ss_chk_shores_after\s*>\s*global_var:te_ss_chk_shores_before")
+        self.assertIn("value = te_ss_holder_region_shores", _def(EFFECTS, "te_seize_strait_selfcheck_before"))
 
     def test_infamy_share_is_floored_at_a_quarter(self):
         share = _def(VALUES, "te_seize_strait_infamy_share")

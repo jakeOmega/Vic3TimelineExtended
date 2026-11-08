@@ -20,8 +20,10 @@
 #      build it (common/buildings/10_canals.txt).
 #   3. kind = custom: no engine effect, the whole transfer is
 #      te_seize_strait_shores in on_enforced. The province list lives in
-#      te_seize_strait_triggers.txt and te_seize_strait_effects.txt and is
+#      te_seize_strait_values.txt and te_seize_strait_effects.txt and is
 #      pinned against vanilla's strait definitions by test_seize_strait_wargoal.py.
+#      Neither reads a state's provinces with any_province: the province
+#      iterators don't run from a state (scripting_best_practices.md).
 #   4. Conflicts like take_treaty_port: `conflicts_with_annex_state` and
 #      `validate_conflicts_conquer_state` keep it off a state another goal in
 #      the play already conquers. No `annexes_entire_state`. Like
@@ -145,22 +147,31 @@ te_seize_strait = {
 			}
 		}
 
-		min = define:NDiplomacy|WAR_GOAL_INFAMY_MINIMUM
 	}
 
 	on_enforced = {
 		# scopes: root = holder (the country that receives the shore),
-		# creator_country, target_country, target_state.
-		scope:target_state = {
-			state_region = {
-				save_scope_as = te_ss_region
+		# creator_country, target_country, target_state. A goal that ran
+		# first (an annexation, priority 80) may have moved the state: take
+		# the shore only while the target still holds it.
+		if = {
+			limit = {
+				scope:target_state ?= { owner = scope:target_country }
 			}
+			scope:target_state = {
+				state_region = {
+					save_scope_as = te_ss_region
+				}
+			}
+			te_seize_strait_selfcheck_before = yes
+			scope:target_state = {
+				te_seize_strait_shores = yes
+			}
+			te_seize_strait_selfcheck_after = yes
 		}
-		te_seize_strait_selfcheck_before = yes
-		scope:target_state = {
-			te_seize_strait_shores = yes
+		else = {
+			debug_log = "TE_SEIZE_STRAIT skipped: the target state changed hands before this goal was enforced holder=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
-		te_seize_strait_selfcheck_after = yes
 	}
 
 	ai = {

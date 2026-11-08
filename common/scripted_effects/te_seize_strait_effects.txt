@@ -2,13 +2,15 @@
 # SEIZE STRAIT — the transfer, and its self-check
 #
 # War goal: common/war_goal_types/te_seize_strait.txt. Province list:
-# te_is_seizable_strait_shore (te_seize_strait_triggers.txt); the two must
+# te_seize_strait_shore_provinces (te_seize_strait_values.txt); the two must
 # name the same provinces (test_seize_strait_wargoal.py).
 # ============================================================================
 
 # State scope: the war goal's target state. ROOT receives the shore provinces
 # the state holds, through the base game's `set_owner_of_provinces`, which
-# takes literal province keys in the province's state region. Where one region
+# takes literal province keys in the province's state region. "The state holds
+# province X" is the base game's `this = p:xHEX.state` (goa_macao_decisions.txt):
+# the province iterators don't run from a state. Where one region
 # holds both of a strait's shores (Panama, Suez, Kiel, Lombok) a state holding
 # both hands them over in one call, so the state is never read again after it
 # may have ceased to exist. No region holds the shores of two straits, so the
@@ -18,17 +20,17 @@ te_seize_strait_shores = {
 		limit = { state_region = s:STATE_PANAMA }
 		if = {
 			limit = {
-				any_province = { this = p:xD0EF40 }
-				any_province = { this = p:x910E14 }
+				this = p:xD0EF40.state
+				this = p:x910E14.state
 			}
 			s:STATE_PANAMA = { set_owner_of_provinces = { country = root provinces = { xD0EF40 x910E14 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:xD0EF40 } }
+			limit = { this = p:xD0EF40.state }
 			s:STATE_PANAMA = { set_owner_of_provinces = { country = root provinces = { xD0EF40 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:x910E14 } }
+			limit = { this = p:x910E14.state }
 			s:STATE_PANAMA = { set_owner_of_provinces = { country = root provinces = { x910E14 } } }
 		}
 	}
@@ -36,17 +38,17 @@ te_seize_strait_shores = {
 		limit = { state_region = s:STATE_SINAI }
 		if = {
 			limit = {
-				any_province = { this = p:xC01060 }
-				any_province = { this = p:x8ED45E }
+				this = p:xC01060.state
+				this = p:x8ED45E.state
 			}
 			s:STATE_SINAI = { set_owner_of_provinces = { country = root provinces = { xC01060 x8ED45E } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:xC01060 } }
+			limit = { this = p:xC01060.state }
 			s:STATE_SINAI = { set_owner_of_provinces = { country = root provinces = { xC01060 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:x8ED45E } }
+			limit = { this = p:x8ED45E.state }
 			s:STATE_SINAI = { set_owner_of_provinces = { country = root provinces = { x8ED45E } } }
 		}
 	}
@@ -54,17 +56,17 @@ te_seize_strait_shores = {
 		limit = { state_region = s:STATE_SCHLESWIG_HOLSTEIN }
 		if = {
 			limit = {
-				any_province = { this = p:x804160 }
-				any_province = { this = p:xBFCC21 }
+				this = p:x804160.state
+				this = p:xBFCC21.state
 			}
 			s:STATE_SCHLESWIG_HOLSTEIN = { set_owner_of_provinces = { country = root provinces = { x804160 xBFCC21 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:x804160 } }
+			limit = { this = p:x804160.state }
 			s:STATE_SCHLESWIG_HOLSTEIN = { set_owner_of_provinces = { country = root provinces = { x804160 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:xBFCC21 } }
+			limit = { this = p:xBFCC21.state }
 			s:STATE_SCHLESWIG_HOLSTEIN = { set_owner_of_provinces = { country = root provinces = { xBFCC21 } } }
 		}
 	}
@@ -72,115 +74,119 @@ te_seize_strait_shores = {
 		limit = { state_region = s:STATE_SUNDA_ISLANDS }
 		if = {
 			limit = {
-				any_province = { this = p:x5ABA94 }
-				any_province = { this = p:x100090 }
+				this = p:x5ABA94.state
+				this = p:x100090.state
 			}
 			s:STATE_SUNDA_ISLANDS = { set_owner_of_provinces = { country = root provinces = { x5ABA94 x100090 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:x5ABA94 } }
+			limit = { this = p:x5ABA94.state }
 			s:STATE_SUNDA_ISLANDS = { set_owner_of_provinces = { country = root provinces = { x5ABA94 } } }
 		}
 		else_if = {
-			limit = { any_province = { this = p:x100090 } }
+			limit = { this = p:x100090.state }
 			s:STATE_SUNDA_ISLANDS = { set_owner_of_provinces = { country = root provinces = { x100090 } } }
 		}
 	}
 	else_if = {
-		limit = { state_region = s:STATE_UPPER_ANDALUSIA any_province = { this = p:xBC6ED3 } }
+		limit = { state_region = s:STATE_UPPER_ANDALUSIA this = p:xBC6ED3.state }
 		s:STATE_UPPER_ANDALUSIA = { set_owner_of_provinces = { country = root provinces = { xBC6ED3 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_AL_RIF any_province = { this = p:xA0B0C0 } }
+		limit = { state_region = s:STATE_AL_RIF this = p:xA0B0C0.state }
 		s:STATE_AL_RIF = { set_owner_of_provinces = { country = root provinces = { xA0B0C0 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_EASTERN_THRACE any_province = { this = p:xF0A020 } }
+		limit = { state_region = s:STATE_EASTERN_THRACE this = p:xF0A020.state }
 		s:STATE_EASTERN_THRACE = { set_owner_of_provinces = { country = root provinces = { xF0A020 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_HUDAVENDIGAR any_province = { this = p:x30A060 } }
+		limit = { state_region = s:STATE_HUDAVENDIGAR this = p:x30A060.state }
 		s:STATE_HUDAVENDIGAR = { set_owner_of_provinces = { country = root provinces = { x30A060 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_YEMEN any_province = { this = p:x319060 } }
+		limit = { state_region = s:STATE_YEMEN this = p:x319060.state }
 		s:STATE_YEMEN = { set_owner_of_provinces = { country = root provinces = { x319060 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_ERITREA any_province = { this = p:x9E8FDD } }
+		limit = { state_region = s:STATE_ERITREA this = p:x9E8FDD.state }
 		s:STATE_ERITREA = { set_owner_of_provinces = { country = root provinces = { x9E8FDD } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_SCANIA any_province = { this = p:xC04161 } }
+		limit = { state_region = s:STATE_SCANIA this = p:xC04161.state }
 		s:STATE_SCANIA = { set_owner_of_provinces = { country = root provinces = { xC04161 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_ZEALAND any_province = { this = p:x7F0BF0 } }
+		limit = { state_region = s:STATE_ZEALAND this = p:x7F0BF0.state }
 		s:STATE_ZEALAND = { set_owner_of_provinces = { country = root provinces = { x7F0BF0 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_MALAYA any_province = { this = p:xC00130 } }
+		limit = { state_region = s:STATE_MALAYA this = p:xC00130.state }
 		s:STATE_MALAYA = { set_owner_of_provinces = { country = root provinces = { xC00130 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_NORTH_SUMATRA any_province = { this = p:x48428B } }
+		limit = { state_region = s:STATE_NORTH_SUMATRA this = p:x48428B.state }
 		s:STATE_NORTH_SUMATRA = { set_owner_of_provinces = { country = root provinces = { x48428B } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_TOHOKU any_province = { this = p:xE0D080 } }
+		limit = { state_region = s:STATE_TOHOKU this = p:xE0D080.state }
 		s:STATE_TOHOKU = { set_owner_of_provinces = { country = root provinces = { xE0D080 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_HOKKAIDO any_province = { this = p:xA090C0 } }
+		limit = { state_region = s:STATE_HOKKAIDO this = p:xA090C0.state }
 		s:STATE_HOKKAIDO = { set_owner_of_provinces = { country = root provinces = { xA090C0 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_SOUTH_SUMATRA any_province = { this = p:xDBE794 } }
+		limit = { state_region = s:STATE_SOUTH_SUMATRA this = p:xDBE794.state }
 		s:STATE_SOUTH_SUMATRA = { set_owner_of_provinces = { country = root provinces = { xDBE794 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_WEST_JAVA any_province = { this = p:x6345B2 } }
+		limit = { state_region = s:STATE_WEST_JAVA this = p:x6345B2.state }
 		s:STATE_WEST_JAVA = { set_owner_of_provinces = { country = root provinces = { x6345B2 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_LARISTAN any_province = { this = p:x0170A0 } }
+		limit = { state_region = s:STATE_LARISTAN this = p:x0170A0.state }
 		s:STATE_LARISTAN = { set_owner_of_provinces = { country = root provinces = { x0170A0 } } }
 	}
 	else_if = {
-		limit = { state_region = s:STATE_ABU_DHABI any_province = { this = p:x0DC972 } }
+		limit = { state_region = s:STATE_ABU_DHABI this = p:x0DC972.state }
 		s:STATE_ABU_DHABI = { set_owner_of_provinces = { country = root provinces = { x0DC972 } } }
 	}
 }
 
 # Self-check, around te_seize_strait_shores in the goal's on_enforced
-# (root = holder; scope:target_country, scope:te_ss_region set). Nothing in
-# the base game settles how `set_owner_of_provinces` splits a state's people,
-# so each enforcement logs the population both sides hold in the region before
-# and after: OK when the holder now owns land there, BROKEN when the transfer
-# left it nothing. The figures go through global variables because a saved
-# scope doesn't print reliably in debug_log (scripting_best_practices.md
+# (root = holder; scope:target_country, scope:te_ss_region set). OK when the
+# shore provinces the holder owns in the region went up, BROKEN when they
+# didn't; the holder usually owned part of the region already (Spain beside
+# Gibraltar, Johore and Siam beside Singapore), so owning land there proves
+# nothing. Nothing in the base game settles how `set_owner_of_provinces` splits
+# a state's people, so the line also logs the population each side holds in
+# the region before and after. The figures go through global variables because
+# a saved scope doesn't print reliably in debug_log (scripting_best_practices.md
 # § Runtime Debugging with debug_log). docs/testing/strait-wargoal-playtest.md.
 te_seize_strait_selfcheck_before = {
 	set_global_variable = { name = te_ss_chk_holder_before value = te_ss_holder_region_pop }
 	set_global_variable = { name = te_ss_chk_target_before value = te_ss_target_region_pop }
+	set_global_variable = { name = te_ss_chk_shores_before value = te_ss_holder_region_shores }
 }
 
 te_seize_strait_selfcheck_after = {
 	set_global_variable = { name = te_ss_chk_holder_after value = te_ss_holder_region_pop }
 	set_global_variable = { name = te_ss_chk_target_after value = te_ss_target_region_pop }
+	set_global_variable = { name = te_ss_chk_shores_after value = te_ss_holder_region_shores }
 	if = {
 		limit = {
-			scope:te_ss_region = {
-				any_scope_state = { owner = root }
-			}
+			global_var:te_ss_chk_shores_after > global_var:te_ss_chk_shores_before
 		}
-		debug_log = "TE_SELF_CHECK OK te_seize_strait holder=[THIS.GetCountry.GetNameNoFormatting] ai=[SCOPE.ScriptValue('te_ss_chk_holder_is_ai')|0] holder_pop=[SCOPE.ScriptValue('te_ss_chk_holder_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_holder_after_g')|0] target_pop=[SCOPE.ScriptValue('te_ss_chk_target_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_target_after_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the holder owns land in the strait's state region after the transfer; the populations show how the engine split the state's people)"
+		debug_log = "TE_SELF_CHECK OK te_seize_strait holder=[THIS.GetCountry.GetNameNoFormatting] ai=[SCOPE.ScriptValue('te_ss_chk_holder_is_ai')|0] shores=[SCOPE.ScriptValue('te_ss_chk_shores_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_shores_after_g')|0] holder_pop=[SCOPE.ScriptValue('te_ss_chk_holder_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_holder_after_g')|0] target_pop=[SCOPE.ScriptValue('te_ss_chk_target_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_target_after_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the holder owns more of the strait's shore after the transfer; the populations show how the engine split the state's people)"
 	}
 	else = {
-		debug_log = "TE_SELF_CHECK BROKEN te_seize_strait holder=[THIS.GetCountry.GetNameNoFormatting] ai=[SCOPE.ScriptValue('te_ss_chk_holder_is_ai')|0] holder_pop=[SCOPE.ScriptValue('te_ss_chk_holder_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_holder_after_g')|0] target_pop=[SCOPE.ScriptValue('te_ss_chk_target_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_target_after_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the holder owns nothing in the strait's state region after the transfer: set_owner_of_provinces did not run, or ran on a province the state no longer held; see docs/testing/strait-wargoal-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN te_seize_strait holder=[THIS.GetCountry.GetNameNoFormatting] ai=[SCOPE.ScriptValue('te_ss_chk_holder_is_ai')|0] shores=[SCOPE.ScriptValue('te_ss_chk_shores_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_shores_after_g')|0] holder_pop=[SCOPE.ScriptValue('te_ss_chk_holder_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_holder_after_g')|0] target_pop=[SCOPE.ScriptValue('te_ss_chk_target_before_g')|0]->[SCOPE.ScriptValue('te_ss_chk_target_after_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the holder owns no more of the strait's shore after the transfer: set_owner_of_provinces did not run, found no province, or takes effect later in the day; see docs/testing/strait-wargoal-playtest.md)"
 	}
 	remove_global_variable = te_ss_chk_holder_before
 	remove_global_variable = te_ss_chk_target_before
+	remove_global_variable = te_ss_chk_shores_before
 	remove_global_variable = te_ss_chk_holder_after
 	remove_global_variable = te_ss_chk_target_after
+	remove_global_variable = te_ss_chk_shores_after
 }
