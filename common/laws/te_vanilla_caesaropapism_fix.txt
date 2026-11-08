@@ -1,29 +1,27 @@
-﻿# VANILLA FIX: Caesaropapism disallows Public and Private Schools, as State
-# Religion does (docs/vanilla/vanilla_known_bugs.md, "Vanilla bugs the mod
-# fixes"; the production methods' half is
+﻿# VANILLA FIX: Caesaropapism disallows Private Schools, as State Religion does
+# (docs/vanilla/vanilla_known_bugs.md, "Vanilla bugs the mod fixes"; the
+# production methods' half is
 # common/production_methods/te_vanilla_caesaropapism_fix.txt). Remove this file
 # once vanilla lists law_caesaropapism here itself:
-# test_vanilla_caesaropapism_fix.py fails then, and when vanilla changes one of
-# these lists.
+# test_vanilla_caesaropapism_fix.py fails then, and when vanilla changes this
+# list.
 #
 # Vanilla names only law_state_religion, and the engine doesn't read a variant
 # law as its parent here: a Workshop player's Caesaropapist Russia ran Public
-# Schools (2026-11-08). Each list restates vanilla's with law_caesaropapism
-# added. gen_law_consistency.py reads these lists, so a country already holding
-# either school law under Caesaropapism is moved off it by
-# te_fix_inconsistent_laws.
+# Schools (2026-11-08). The list restates vanilla's with law_caesaropapism
+# added. gen_law_consistency.py reads it, so a country already holding Private
+# Schools under Caesaropapism is moved off it by te_fix_inconsistent_laws.
+#
+# Public Schools stays allowed under Caesaropapism, by design (owner,
+# 2026-11-08, after a second Workshop comment): the state that runs the church
+# runs the schools too, as Nicholas I's ministry ran the gymnasia while it
+# curbed private schooling, and vanilla's Caesaropapism already moves strength
+# from the Devout to the Bureaucrats. So law_public_schools is not injected,
+# and test_vanilla_caesaropapism_fix.py fails if vanilla starts disallowing it.
 
 INJECT:law_private_schools = {
 	disallowing_laws = {
 		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
 		law_caesaropapism
-	}
-}
-
-INJECT:law_public_schools = {
-	disallowing_laws = {
-		law_state_religion # REVIEWED 2026-11-08 (law_variant_parity): the Millet System and People of the Book stay as vanilla lists them, tolerant variants (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
-		law_caesaropapism
-		law_serfdom # REVIEWED 2026-11-08 (law_variant_parity): vanilla's entry restated as it is; Manorialism is one of vanilla's gaps this file leaves alone (vanilla_known_bugs.md, "Vanilla bugs the mod fixes")
 	}
 }
