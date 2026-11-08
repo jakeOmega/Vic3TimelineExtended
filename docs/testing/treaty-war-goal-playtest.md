@@ -34,3 +34,15 @@ Laissez-Faire or Interventionism can no longer add the goal (`possible`).
 | **No empty demands.** Watch AI plays and wars for a while (observer, or a save where great powers fight). | Enforce Privatization appears only against countries with real state-owned industry, never against an unrecognized minor or a tiny subject. | The engine ignores `wargoal_score_multiplier` for goals added to a running play: gate the demander's `inherent_accept_score` with the same weight (a large negative term when it is 0), since the war-goal score is built on it. |
 | **Still demanded where it matters.** A Laissez-Faire or Interventionist AI at war with an Agrarian or Cooperative country that owns state industry. | The AI sometimes adds the goal. | `scope:source_country` isn't bound where the engine reads the weight, so it is 0 for everyone. Drop `proposal_weight` and `wargoal_score_multiplier` (the old behavior) and keep the `possible` test. The nuclear articles read the same scope, so check them too. |
 | **Non-capitalist demander.** As a country with Agrarianism or Command Economy, open a play against a Traditionalist country. | Enforce Privatization isn't offered. | `possible` isn't read for war goals here; the `can_ratify` test still stops a treaty. |
+
+## Emissions Reduction (2026-11-08)
+
+The article was named Enforce Emissions Reduction, so its war goal read Enforce Enforce Emissions Reduction. It is
+renamed Emissions Reduction, and so is its concept (`concept_emissions_reduction_treaty`), with the Global Warming
+panel's links to it; the key `enforce_emissions_reduction` is unchanged. German and Spanish carry the same rename
+(*Emissionsreduktion*, *Reducción de emisiones*).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The war goal's name.** Past 0.5 °C, with Intergovernmental Organizations, open a play against a country the article can bind (it holds Global Warming and has Clean Energy Technologies, Pollution Control and Modern Urban Planning) and add the goal. | The goal reads Enforce Emissions Reduction, and the treaty designer lists the article as Emissions Reduction. | Enforce Enforce Emissions Reduction: another loc file still defines `enforce_emissions_reduction` with the old text, and the later file wins (CLAUDE.md, "Editing conventions"). |
+| **German and Spanish.** The same, with the game in German, then Spanish. | Vanilla's enforce wording around *Emissionsreduktion* or *Reducción de emisiones* reads as a sentence. | Vanilla's wording wants a verb or an article: change the two name records (`enforce_emissions_reduction`, `concept_emissions_reduction_treaty`) in `i18n/<language>/tm/`. |

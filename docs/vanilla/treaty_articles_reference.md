@@ -689,7 +689,7 @@ state_valid_trigger = {
 
 ## Article 9: Climate Accords
 
-> **Unbuilt design.** The mutual Climate Accords article below was never implemented (checked against `common/treaty_articles/` on 2026-09-26). The climate treaty that shipped is a different article, `enforce_emissions_reduction` (`common/treaty_articles/109_enforce_emissions_reduction.txt`): a directed article that holds a market leader to its major mitigation policies (see `docs/systems/mod_systems/treaties.md` § Enforce Emissions Reduction Treaty).
+> **Unbuilt design.** The mutual Climate Accords article below was never implemented (checked against `common/treaty_articles/` on 2026-09-26). The climate treaty that shipped is a different article, `enforce_emissions_reduction` (`common/treaty_articles/109_enforce_emissions_reduction.txt`): a directed article that holds a market leader to its major mitigation policies (see `docs/systems/mod_systems/treaties.md` § Emissions Reduction Treaty).
 
 > **Design uncertainty:** This article may not be mechanically interesting enough to justify implementation. The existing Global Warming journal entry system already handles climate policy via scripted buttons. A treaty article would need to add something meaningfully different from what the JE provides. Consider whether this should be kept or folded into the JE system.
 

@@ -145,7 +145,7 @@ The remaining articles belong to systems with chapters of their own.
 | Currency Peg, Imposed Currency Peg, Swap Line, Lender of Last Resort, Debt Receivership | Banking System set to Enabled | [Banking and monetary policy](04-banking.md) |
 | Nuclear Disarmament, Nuclear Program Freeze, Nuclear Program Aid, Nuclear Guarantee, Nuclear Security Assistance, Nuclear Arms Limitation | Nuclear Weapons | [Nuclear weapons](14-nuclear.md) |
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
-| Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
+| Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
 | Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
 | Cede Colony | Space Race set to Simple Colonies or Full Colonies | [The space race](16-space.md#ceding-a-colony) |
 | Grid Interconnection Agreement | None | [Economy and construction](03-economy.md#power-grids) |

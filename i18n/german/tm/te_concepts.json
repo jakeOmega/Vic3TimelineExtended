@@ -5580,8 +5580,8 @@
   "de": "Die Nation hat gefordert, dass die Verantwortlichen für feindliche Kriegsverbrechen zur Rechenschaft gezogen werden, was moralische Autorität einbringt."
  },
  "enforce_emissions_reduction": {
-  "en": "Enforce Emissions Reduction",
-  "de": "Emissionsreduktion erzwingen"
+  "en": "Emissions Reduction",
+  "de": "Emissionsreduktion"
  },
  "enforce_emissions_reduction_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will enforce market-wide emissions reduction policies (#v [SOURCE_COUNTRY.MakeScope.ScriptValue('gw_market_emis_display')|K]#! annual market emissions)",
@@ -6456,8 +6456,8 @@
   "de": "Jeden Monat trägt jedes Land den Modifikator Klimaerwärmung, wobei jeder Wert mit der Anomalie multipliziert wird: Bei 2 °C ist jede Zeile doppelt so hoch wie ihr Wert bei 1 °C. „Erwärmungsstrafe“ in der Übersicht mit dem Mauszeiger anfahren, um jede Zeile und den geltenden Multiplikator zu sehen."
  },
  "gw_pol_treaty": {
-  "en": "Bound by an [Concept('concept_emissions_reduction_treaty','Enforce Emissions Reduction treaty')]: national mitigation policies can't be repealed.",
-  "de": "Gebunden an einen Vertrag mit [Concept('concept_emissions_reduction_treaty','Emissionsreduktion erzwingen')]: Nationale Minderungspolitiken können nicht aufgehoben werden."
+  "en": "Bound by an [Concept('concept_emissions_reduction_treaty','Emissions Reduction treaty')]: national mitigation policies can't be repealed.",
+  "de": "Gebunden an einen Vertrag „[Concept('concept_emissions_reduction_treaty','Emissionsreduktion')]“: Nationale Minderungspolitiken können nicht aufgehoben werden."
  },
  "gw_pol_waiting": {
   "en": "Policies can be adopted once warming reaches #v 0.5 °C#!, Fossil-Fuel Divestment and Aerosol Injection at #v 1.0 °C#!.",
