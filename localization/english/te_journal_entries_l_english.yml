@@ -11,6 +11,7 @@
  je_banking_cycle:0 "[GetPlayer.GetCustom('te_banking_cycle_title')]"
  je_banking_cycle_command_economy:0 "Logistics & Allocation Gauge"
  je_banking_cycle_cooperative_ownership:0 "Cooperative Finance Dashboard"
+ je_banking_cycle_invalid_conclusion_desc:0 "The $concept_journal_entry$ ended when the Banking System game rule was switched off"
  je_banking_cycle_reason:0 "[ROOT.GetCountry.GetCustom('te_banking_cycle_reason')]"
  je_banking_cycle_reason_command_economy:0 "In a Command Economy the [concept_banking_cycle] is a logistics gauge: [concept_banking_momentum] and [concept_bubble_pressure] track how well supply chains keep in step and how strained the administration is, not investor confidence."
  je_banking_cycle_reason_cooperative_ownership:0 "Under Cooperative Ownership the [concept_banking_cycle] weighs what is paid out to workers against what is reinvested: high [concept_bubble_pressure] means too much paid out and too little put back."

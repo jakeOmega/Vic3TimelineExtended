@@ -167,7 +167,7 @@
  hypersonic_weapons:0 "Hypersonic Weapons"
  hypersonic_weapons_desc:0 "Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems."
  in_situ_resource_utilization:0 "In-Situ Resource Utilization"
- in_situ_resource_utilization_desc:0 "Every kilogram lifted from Earth is dear. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there."
+ in_situ_resource_utilization_desc:0 "Every kilogram lifted from Earth is expensive. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there."
  inertial_navigation_systems:0 "Inertial Navigation Systems"
  inertial_navigation_systems_desc:0 "Using gyroscopes and accelerometers, these systems can guide vehicles with incredible accuracy. They're especially useful for planes and ships, helping them to stay on course."
  infrared_night_vision:0 "Infrared Night Vision"

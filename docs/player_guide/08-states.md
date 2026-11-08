@@ -257,6 +257,11 @@ source. Under Ancestral Citizenship alone, a primary culture needs 40% of a
 state to start a homeland, a minority's homeland goes once it falls below 10%,
 and each change takes under seven years.
 
+The base game's Ukrainian and Byelorussian Cultural Renaissances involve the
+countries that hold the culture's homelands. Once a culture has lost every
+homeland, its renaissance closes within weeks of opening, with no awakening or
+independence event, and it doesn't open again.
+
 ## Cultural acceptance and minorities
 
 When a new cultural community appears in a state, the base game gives it a

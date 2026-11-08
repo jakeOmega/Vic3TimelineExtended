@@ -13,7 +13,7 @@ chapter, *Simplified* keeps the cycle and drops the monetary layer, and
 Under every setting the mod replaces the base game's flat interest rate on
 government debt. You borrow at a rate built from a world reference rate, your
 country's credit standing and a risk premium, so a banking panic makes your
-loans dearer and a sound currency makes them cheaper.
+loans more expensive and a sound currency makes them cheaper.
 
 ## The Banking Cycle journal entry
 
@@ -697,7 +697,7 @@ momentum and +1.5 bubble pressure a month, so loosening much further adds
 nothing to the cycle. On the tight side it goes to about −0.5 momentum and −3
 bubble pressure a month.
 
-Six months on the tight side bring Dear Money Politics (Landowners and Petite
+Six months on the tight side bring Tight Money Politics (Landowners and Petite
 Bourgeoisie approve; Industrialists, Rural Folk and Trade Unions disapprove),
 and six months on the loose side bring Cheap Money Politics, the reverse. Both
 fade after a return to Neutral.
@@ -726,7 +726,7 @@ rates are measured against it.
 
 Inflation shows what prices did over the last year, and Expected Inflation what
 lenders and workers assume they will do. A loose stance, a boom, deficits, money
-printing, dearer goods and imports, and inflowing gold push it up, as do the
+printing, costlier goods and imports, and inflowing gold push it up, as do the
 Wage Pressure of your labor and welfare laws and any other standing Inflationary
 Pressure, such as a devaluation. A deficit adds at most 1.5 points of pressure
 (3 at war), and none in default or once dollarized, when nobody lends to cover
@@ -810,7 +810,7 @@ treasury. Each point your rate sits above the World Rate draws in gold worth
 0.2% of GDP a month, and each point below sends as much out. Gold drawn in is
 Borrowed Gold. It costs your budget nothing, but it leaves first, at double
 speed, once your rate is no longer above the world's. What the high rate costs
-you is a tighter Policy Stance and dearer borrowing for your government.
+you is a tighter Policy Stance and costlier borrowing for your government.
 Recapitalize the Bank moves a tenth of the reserve's limit from treasury to
 vault, in cash, for good.
 

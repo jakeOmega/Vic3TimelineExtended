@@ -231,7 +231,7 @@ anything in it.
 
 ## Construction costs in rich countries
 
-Two mechanics make construction dearer as a country grows rich, and both work in
+Two mechanics make construction more expensive as a country grows rich, and both work in
 every setting of the Free Market Construction rule.
 
 ### Construction Cost Scaling
@@ -408,7 +408,7 @@ spends it on port connections for overseas states and on convoys.
 
 Railways and ports add infrastructure for every level, whether or not the
 level is staffed. The AI doesn't subsidize either: a state that needs more of
-them has dear Transportation, and they pay their way there.
+them has expensive Transportation, and they pay their way there.
 
 Because Transportation can't be imported from another state, a state that buys
 a lot of it needs railways or highways of its own. The largest buyer is
@@ -423,7 +423,7 @@ game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
 state to a power grid so that states can share it.
 
 A grid starts as your stations in one market area. Once a month it moves
-Electricity from states where it is cheap to states where it is dear, until it
+Electricity from states where it is cheap to states where it is expensive, until it
 sells at one price in the states that send it and at that price over their
 transmission efficiency (below) in the states that receive it. A sending
 state's station buys its spare power and sends it, and a receiving state's
@@ -536,7 +536,7 @@ map button in the tab's header opens the Map Room on Power Grids, which colors
 every grid in the world in a color of its own, with its hub striped white.
 
 A station is worth building where power plants make more than the state uses,
-and where Electricity is dear. A state with no power uses none, because its
+and where Electricity is expensive. A state with no power uses none, because its
 buildings can't run the methods that need it; a station lets it receive power
 once a building there switches to one. The AI builds stations in every market
 area where it makes Electricity: it starts in a state with power plants and

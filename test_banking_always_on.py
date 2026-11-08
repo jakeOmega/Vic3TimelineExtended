@@ -134,7 +134,8 @@ class EntryTest(unittest.TestCase):
 
     def test_running_is_the_entry_and_the_latch(self):
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_cycle_running")),
-                         "{ has_journal_entry = je_banking_cycle has_variable = finance_cycle_value }")
+                         "{ te_banking_system_on = yes has_journal_entry = je_banking_cycle "
+                         "has_variable = finance_cycle_value }")
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_controls_open")),
                          "{ te_banking_cycle_running = yes }")
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_cycle_started_tt")),
@@ -160,7 +161,10 @@ class EntryTest(unittest.TestCase):
         effect = _key_block(_key_block(self.je, "on_monthly_pulse"), "effect")
         first_if = _key_block(effect, "if")
         self.assertIn("limit = { te_banking_cycle_running = no }", _norm(first_if))
-        self.assertIn(_norm("if = { limit = { te_banking_cycle_unlocked = yes } banking_cycle_start = yes "
+        # The rule too: with it off the cycle doesn't run, and until the
+        # invalid outcome ends the entry this would announce a start monthly.
+        self.assertIn(_norm("if = { limit = { te_banking_system_on = yes te_banking_cycle_unlocked = yes } "
+                            "banking_cycle_start = yes "
                             "if = { limit = { is_ai = no } post_notification = banking_cycle_started_notice } }"),
                       _norm(first_if))
         running = _key_block(effect[effect.index(first_if) + len(first_if):], "else")
@@ -446,6 +450,41 @@ class SafetyNetTest(unittest.TestCase):
         for record in ("inactive", "none"):
             self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] "
                           f"record={record}", event)
+
+
+class RuleSwitchedOffTest(unittest.TestCase):
+    """A game rule can change mid-game, from the screen that changes country.
+    With banking switched off the cycle stops, the entry ends and the cycle's
+    variables go (Workshop report, 2026-11-08: the entry, its bonuses and its
+    bubble-pressure events ran on with the rule off)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.je = _strip_comments(_read(JE))
+        cls.effects = _strip_comments(_read(CYCLE_EFFECTS))
+        cls.net = _norm(_top_block(_strip_comments(_read(NET)), "te_banking_entry_net"))
+
+    def test_the_entry_ends_on_the_rule(self):
+        outcomes = [_block_from(self.je, m.end() - 1)
+                    for m in re.finditer(r"\boutcome = \{", self.je)]
+        self.assertEqual(len(outcomes), 1, "the entry's only ending is the rule's")
+        outcome = _norm(outcomes[0])
+        self.assertIn("flags = { hidden invalid_outcome }", outcome)
+        self.assertIn("trigger = { NOT = { te_banking_system_on = yes } }", outcome)
+        self.assertIn("conclusion_desc = je_banking_cycle_invalid_conclusion_desc", outcome)
+        self.assertIn("je_banking_cycle_invalid_conclusion_desc", _loc())
+        # The same test as the prune of the inactive record.
+        self.assertEqual(_norm(_key_block(self.je, "disable_evaluation")),
+                         "{ NOT = { te_banking_system_on = yes } }")
+
+    def test_the_net_clears_a_stopped_cycle(self):
+        self.assertIn("if = { limit = { NOT = { te_banking_system_on = yes } "
+                      "has_variable = finance_cycle_value } te_banking_cycle_stop_for_rule = yes }", self.net)
+
+    def test_the_stop_takes_every_variable_the_start_seeds(self):
+        stop = _norm(_top_block(self.effects, "te_banking_cycle_stop_for_rule"))
+        for var in CYCLE_VARS:
+            self.assertIn(f"if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}", stop)
 
 
 if __name__ == "__main__":

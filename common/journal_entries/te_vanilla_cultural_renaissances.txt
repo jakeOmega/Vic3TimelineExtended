@@ -1,0 +1,47 @@
+﻿# The Ukrainian and Byelorussian Cultural Renaissances close when their culture
+# has no homeland left (Workshop report, 2026-11-08: the Byelorussian
+# Renaissance opened and progressed after the dynamic homelands had removed every
+# Byelorussian homeland).
+#
+# Vanilla opens each entry on the culture's fervor (15 for Ukrainian, 20 for
+# Byelorussian) or, for Belarus, Poland's red victory, and involves the owners
+# of the culture's homeland states (should_be_involved). The dynamic homelands
+# (homeland_effects.txt) can remove every one, and the entry then ran to its
+# national awakening and independence event with no country taking part. An
+# INJECT can't add to its is_shown_when_inactive or possible (a second trigger
+# section is rejected, scripting_best_practices.md), so a hidden invalid outcome
+# ends it instead, as the mod's own entries end. A concluded entry never comes
+# back, so a culture that regains a homeland later gets no renaissance.
+#
+# The effect sets te_renaissance_homeless_fired, which the self-check
+# renaissance_homeless_outcome reads (te_renaissance_selfcheck_on_actions.txt):
+# that the engine concludes a vanilla entry through an INJECTed invalid outcome
+# is unverified. Fallback: REPLACE the two entries with te_homeland_none_left in
+# is_shown_when_inactive and as an outcome. A vanilla patch that gives either
+# entry an invalid outcome of its own makes this a second one (an entry may have
+# one): test_cultural_renaissance_homelands.py fails then.
+INJECT:je_ukraine_cultural_renaissance = {
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = te_renaissance_no_homeland_conclusion_desc
+		trigger = {
+			te_homeland_none_left = { CULTURE = ukrainian }
+		}
+		effect = {
+			set_global_variable = te_renaissance_homeless_fired
+		}
+	}
+}
+
+INJECT:je_belarus_cultural_renaissance = {
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = te_renaissance_no_homeland_conclusion_desc
+		trigger = {
+			te_homeland_none_left = { CULTURE = byelorussian }
+		}
+		effect = {
+			set_global_variable = te_renaissance_homeless_fired
+		}
+	}
+}

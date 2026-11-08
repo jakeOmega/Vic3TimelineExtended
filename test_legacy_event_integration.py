@@ -65,9 +65,11 @@ class LegacyIntegrationTests(unittest.TestCase):
         for key, op, value in entries(block):
             if key in ('AND', 'OR', 'NOT', 'NOR'):
                 answer = self.evaluate(value, current, donor, key)
-            elif key in self.triggers or key.startswith('banking_cycle_is_') or key == 'te_banking_cycle_running':
+            elif (key in self.triggers or key.startswith('banking_cycle_is_')
+                  or key in ('te_banking_cycle_running', 'te_banking_system_on')):
                 source = (self.triggers if key in self.triggers else
-                          self.policy if key == 'te_banking_cycle_running' else self.market)
+                          self.policy if key in ('te_banking_cycle_running', 'te_banking_system_on')
+                          else self.market)
                 answer = self.evaluate(body(source, key), current, donor)
                 if value == 'no':
                     answer = not answer
@@ -117,6 +119,7 @@ class LegacyIntegrationTests(unittest.TestCase):
 
     def country(self, cycle=50, **fields):
         result = dict(journals={'je_banking_cycle'}, techs={'keynesian_economics'},
+                      rules={'banking_system_enabled'},
                       vars={'finance_cycle_value': cycle}, trade=100, gdp=100,
                       name='country', reliance=0.1)
         result.update(fields)
@@ -250,6 +253,9 @@ class LegacyIntegrationTests(unittest.TestCase):
         for active in (True, False):
             country = self.country(journals={'je_banking_cycle'} if active else set())
             self.assertEqual(self.evaluate(gate, country, country), active)
+        # The rule switched off mid-game, the entry not yet ended (te_banking_cycle_running reads the rule).
+        country = self.country(rules={'banking_system_disabled'})
+        self.assertFalse(self.evaluate(gate, country, country))
         for number in (2, 38):
             immediate = body(body(self.laws, f'extra_law_events.{number}'), 'immediate')
             self.assertEqual(body(immediate, 'banking_enactment_run_shock'), 'yes')
