@@ -65,13 +65,15 @@ te_demog_is_capital_building = {
 	}
 }
 
-# Building scope: where great fortunes are held (§4.2's weights).
+# Building scope: where great fortunes are held (§4.2's weights). Company headquarters by building group: the engine
+# makes a building type per company type (building_company_basic_fabrics ...), so a test on the two template types
+# matched none, and until 2026-11-08 their levels counted as self-owned capital.
 te_demog_is_ownership_building = {
 	OR = {
 		is_building_type = building_manor_house
 		is_building_type = building_financial_district
-		is_building_type = building_company_headquarter
-		is_building_type = building_company_regional_headquarter
+		is_building_group = bg_company_headquarter
+		is_building_group = bg_company_regional_headquarter
 	}
 }
 
