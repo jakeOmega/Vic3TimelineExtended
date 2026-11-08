@@ -675,10 +675,13 @@ class TriggerShapeTest(unittest.TestCase):
         for merge in cfg.MERGES:
             body = self.trig("te_cmg_%s_core_ok" % merge.key)
             key = merge.key
+            start = max(tier_of(merge, p.cultures[0]) for p in merge.core)
             for part in merge.core:
                 routes = []
                 for c in part.cultures:
                     route = ["te_cmg_%s_%s_measured = yes" % (key, c)]
+                    if tier_of(merge, c) != start:  # R31: a part of another tier than the start takes its own technology
+                        route.append("te_cm_tier_tech = { TIER = %d }" % tier_of(merge, c))
                     if tier_of(merge, c) > 1:
                         route.append("te_cmg_%s_%s_years_met = yes" % (key, c))
                     routes.append(route)
@@ -781,7 +784,10 @@ class TriggerShapeTest(unittest.TestCase):
         for merge in cfg.MERGES:
             expected.update(
                 "te_cmg_%s_%s" % (merge.key, suffix)
-                for suffix in ("is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start")
+                for suffix in (
+                    "is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start",
+                    "starter_gone", "all_switched",
+                )
             )
             if any(part.wait_for for part in merge.core):
                 expected.add("te_cmg_%s_start_basics" % merge.key)

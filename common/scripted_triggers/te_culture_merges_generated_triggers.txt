@@ -176,24 +176,71 @@ te_cmg_german_census_wanted = {
 	}
 }
 
-# Country scope. This country started the german merge, which is running or complete.
+# Any scope. The german merge's starter is missing, or is no longer a living country.
+te_cmg_german_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_german }
+		AND = {
+			exists = global_var:te_cm_starter_german
+			global_var:te_cm_starter_german = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the german merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_german (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_german_is_starter = {
 	OR = {
 		global_var:te_cm_state_german ?= 1
 		global_var:te_cm_state_german ?= 2
 	}
-	exists = global_var:te_cm_starter_german
-	this = global_var:te_cm_starter_german
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_german
+			this = global_var:te_cm_starter_german
+		}
+		AND = {
+			has_variable = te_cm_started_german
+			te_cmg_german_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The german merge is running or complete under another country.
+# Country scope. The german merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_german.
 te_cmg_german_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_german ?= 1
 		global_var:te_cm_state_german ?= 2
 	}
 	exists = global_var:te_cm_starter_german
+	global_var:te_cm_starter_german = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_german }
+	NOT = { has_variable = te_cm_started_german }
+}
+
+# Any scope. No part of the german merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_german_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_german_north_german ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_german }
+		}
+		AND = {
+			global_var:te_cm_joined_german_south_german ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_german }
+		}
+		AND = {
+			global_var:te_cm_joined_german_alemannic ?= 1
+			NOT = { has_global_variable = te_cm_switched_alemannic }
+		}
+		AND = {
+			global_var:te_cm_joined_german_east_german ?= 1
+			NOT = { has_global_variable = te_cm_switched_east_german }
+		}
+	}
 }
 
 # Country scope. Can this country start the german merge now? The merge is idle, a core culture is
@@ -380,24 +427,67 @@ te_cmg_italian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the italian merge, which is running or complete.
+# Any scope. The italian merge's starter is missing, or is no longer a living country.
+te_cmg_italian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_italian }
+		AND = {
+			exists = global_var:te_cm_starter_italian
+			global_var:te_cm_starter_italian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the italian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_italian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_italian_is_starter = {
 	OR = {
 		global_var:te_cm_state_italian ?= 1
 		global_var:te_cm_state_italian ?= 2
 	}
-	exists = global_var:te_cm_starter_italian
-	this = global_var:te_cm_starter_italian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_italian
+			this = global_var:te_cm_starter_italian
+		}
+		AND = {
+			has_variable = te_cm_started_italian
+			te_cmg_italian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The italian merge is running or complete under another country.
+# Country scope. The italian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_italian.
 te_cmg_italian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_italian ?= 1
 		global_var:te_cm_state_italian ?= 2
 	}
 	exists = global_var:te_cm_starter_italian
+	global_var:te_cm_starter_italian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_italian }
+	NOT = { has_variable = te_cm_started_italian }
+}
+
+# Any scope. No part of the italian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_italian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_italian_north_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_italian }
+		}
+		AND = {
+			global_var:te_cm_joined_italian_south_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_italian }
+		}
+		AND = {
+			global_var:te_cm_joined_italian_corsican ?= 1
+			NOT = { has_global_variable = te_cm_switched_corsican }
+		}
+	}
 }
 
 # Country scope. Can this country start the italian merge now? The merge is idle, a core culture is
@@ -620,24 +710,71 @@ te_cmg_scandinavian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the scandinavian merge, which is running or complete.
+# Any scope. The scandinavian merge's starter is missing, or is no longer a living country.
+te_cmg_scandinavian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_scandinavian }
+		AND = {
+			exists = global_var:te_cm_starter_scandinavian
+			global_var:te_cm_starter_scandinavian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the scandinavian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_scandinavian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_scandinavian_is_starter = {
 	OR = {
 		global_var:te_cm_state_scandinavian ?= 1
 		global_var:te_cm_state_scandinavian ?= 2
 	}
-	exists = global_var:te_cm_starter_scandinavian
-	this = global_var:te_cm_starter_scandinavian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_scandinavian
+			this = global_var:te_cm_starter_scandinavian
+		}
+		AND = {
+			has_variable = te_cm_started_scandinavian
+			te_cmg_scandinavian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The scandinavian merge is running or complete under another country.
+# Country scope. The scandinavian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_scandinavian.
 te_cmg_scandinavian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_scandinavian ?= 1
 		global_var:te_cm_state_scandinavian ?= 2
 	}
 	exists = global_var:te_cm_starter_scandinavian
+	global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_scandinavian }
+	NOT = { has_variable = te_cm_started_scandinavian }
+}
+
+# Any scope. No part of the scandinavian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_scandinavian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_scandinavian_swedish ?= 1
+			NOT = { has_global_variable = te_cm_switched_swedish }
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_danish ?= 1
+			NOT = { has_global_variable = te_cm_switched_danish }
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_norwegian ?= 1
+			NOT = { has_global_variable = te_cm_switched_norwegian }
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_icelandic ?= 1
+			NOT = { has_global_variable = te_cm_switched_icelandic }
+		}
+	}
 }
 
 # Country scope. Can this country start the scandinavian merge now? The merge is idle, a core culture is
@@ -860,24 +997,67 @@ te_cmg_east_slavic_census_wanted = {
 	}
 }
 
-# Country scope. This country started the east_slavic merge, which is running or complete.
+# Any scope. The east_slavic merge's starter is missing, or is no longer a living country.
+te_cmg_east_slavic_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_east_slavic }
+		AND = {
+			exists = global_var:te_cm_starter_east_slavic
+			global_var:te_cm_starter_east_slavic = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the east_slavic merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_east_slavic (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_east_slavic_is_starter = {
 	OR = {
 		global_var:te_cm_state_east_slavic ?= 1
 		global_var:te_cm_state_east_slavic ?= 2
 	}
-	exists = global_var:te_cm_starter_east_slavic
-	this = global_var:te_cm_starter_east_slavic
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_east_slavic
+			this = global_var:te_cm_starter_east_slavic
+		}
+		AND = {
+			has_variable = te_cm_started_east_slavic
+			te_cmg_east_slavic_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The east_slavic merge is running or complete under another country.
+# Country scope. The east_slavic merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_east_slavic.
 te_cmg_east_slavic_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_east_slavic ?= 1
 		global_var:te_cm_state_east_slavic ?= 2
 	}
 	exists = global_var:te_cm_starter_east_slavic
+	global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_east_slavic }
+	NOT = { has_variable = te_cm_started_east_slavic }
+}
+
+# Any scope. No part of the east_slavic merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_east_slavic_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_east_slavic_russian ?= 1
+			NOT = { has_global_variable = te_cm_switched_russian }
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_ukrainian ?= 1
+			NOT = { has_global_variable = te_cm_switched_ukrainian }
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_byelorussian ?= 1
+			NOT = { has_global_variable = te_cm_switched_byelorussian }
+		}
+	}
 }
 
 # Country scope. Everything the east_slavic merge needs to start except its waits on vanilla entries
@@ -1180,24 +1360,75 @@ te_cmg_yugoslav_census_wanted = {
 	}
 }
 
-# Country scope. This country started the yugoslav merge, which is running or complete.
+# Any scope. The yugoslav merge's starter is missing, or is no longer a living country.
+te_cmg_yugoslav_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_yugoslav }
+		AND = {
+			exists = global_var:te_cm_starter_yugoslav
+			global_var:te_cm_starter_yugoslav = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the yugoslav merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_yugoslav (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_yugoslav_is_starter = {
 	OR = {
 		global_var:te_cm_state_yugoslav ?= 1
 		global_var:te_cm_state_yugoslav ?= 2
 	}
-	exists = global_var:te_cm_starter_yugoslav
-	this = global_var:te_cm_starter_yugoslav
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_yugoslav
+			this = global_var:te_cm_starter_yugoslav
+		}
+		AND = {
+			has_variable = te_cm_started_yugoslav
+			te_cmg_yugoslav_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The yugoslav merge is running or complete under another country.
+# Country scope. The yugoslav merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_yugoslav.
 te_cmg_yugoslav_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_yugoslav ?= 1
 		global_var:te_cm_state_yugoslav ?= 2
 	}
 	exists = global_var:te_cm_starter_yugoslav
+	global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_yugoslav }
+	NOT = { has_variable = te_cm_started_yugoslav }
+}
+
+# Any scope. No part of the yugoslav merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_yugoslav_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_yugoslav_serb ?= 1
+			NOT = { has_global_variable = te_cm_switched_serb }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_croat ?= 1
+			NOT = { has_global_variable = te_cm_switched_croat }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_bosniak ?= 1
+			NOT = { has_global_variable = te_cm_switched_bosniak }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_slovene ?= 1
+			NOT = { has_global_variable = te_cm_switched_slovene }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_bulgarian ?= 1
+			NOT = { has_global_variable = te_cm_switched_bulgarian }
+		}
+	}
 }
 
 # Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
@@ -1392,24 +1623,67 @@ te_cmg_czechoslovak_census_wanted = {
 	}
 }
 
-# Country scope. This country started the czechoslovak merge, which is running or complete.
+# Any scope. The czechoslovak merge's starter is missing, or is no longer a living country.
+te_cmg_czechoslovak_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_czechoslovak }
+		AND = {
+			exists = global_var:te_cm_starter_czechoslovak
+			global_var:te_cm_starter_czechoslovak = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the czechoslovak merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_czechoslovak (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_czechoslovak_is_starter = {
 	OR = {
 		global_var:te_cm_state_czechoslovak ?= 1
 		global_var:te_cm_state_czechoslovak ?= 2
 	}
-	exists = global_var:te_cm_starter_czechoslovak
-	this = global_var:te_cm_starter_czechoslovak
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_czechoslovak
+			this = global_var:te_cm_starter_czechoslovak
+		}
+		AND = {
+			has_variable = te_cm_started_czechoslovak
+			te_cmg_czechoslovak_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The czechoslovak merge is running or complete under another country.
+# Country scope. The czechoslovak merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_czechoslovak.
 te_cmg_czechoslovak_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_czechoslovak ?= 1
 		global_var:te_cm_state_czechoslovak ?= 2
 	}
 	exists = global_var:te_cm_starter_czechoslovak
+	global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_czechoslovak }
+	NOT = { has_variable = te_cm_started_czechoslovak }
+}
+
+# Any scope. No part of the czechoslovak merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_czechoslovak_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_czechoslovak_czech ?= 1
+			NOT = { has_global_variable = te_cm_switched_czech }
+		}
+		AND = {
+			global_var:te_cm_joined_czechoslovak_slovak ?= 1
+			NOT = { has_global_variable = te_cm_switched_slovak }
+		}
+		AND = {
+			global_var:te_cm_joined_czechoslovak_sorb ?= 1
+			NOT = { has_global_variable = te_cm_switched_sorb }
+		}
+	}
 }
 
 # Country scope. Can this country start the czechoslovak merge now? The merge is idle, a core culture is
@@ -1551,24 +1825,59 @@ te_cmg_hungarian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the hungarian merge, which is running or complete.
+# Any scope. The hungarian merge's starter is missing, or is no longer a living country.
+te_cmg_hungarian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_hungarian }
+		AND = {
+			exists = global_var:te_cm_starter_hungarian
+			global_var:te_cm_starter_hungarian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the hungarian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_hungarian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_hungarian_is_starter = {
 	OR = {
 		global_var:te_cm_state_hungarian ?= 1
 		global_var:te_cm_state_hungarian ?= 2
 	}
-	exists = global_var:te_cm_starter_hungarian
-	this = global_var:te_cm_starter_hungarian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_hungarian
+			this = global_var:te_cm_starter_hungarian
+		}
+		AND = {
+			has_variable = te_cm_started_hungarian
+			te_cmg_hungarian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The hungarian merge is running or complete under another country.
+# Country scope. The hungarian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_hungarian.
 te_cmg_hungarian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_hungarian ?= 1
 		global_var:te_cm_state_hungarian ?= 2
 	}
 	exists = global_var:te_cm_starter_hungarian
+	global_var:te_cm_starter_hungarian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_hungarian }
+	NOT = { has_variable = te_cm_started_hungarian }
+}
+
+# Any scope. No part of the hungarian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_hungarian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_hungarian_szekely ?= 1
+			NOT = { has_global_variable = te_cm_switched_szekely }
+		}
+	}
 }
 
 # Country scope. Can this country start the hungarian merge now? The merge is idle, a core culture is
@@ -1707,24 +2016,59 @@ te_cmg_dutch_census_wanted = {
 	}
 }
 
-# Country scope. This country started the dutch merge, which is running or complete.
+# Any scope. The dutch merge's starter is missing, or is no longer a living country.
+te_cmg_dutch_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_dutch }
+		AND = {
+			exists = global_var:te_cm_starter_dutch
+			global_var:te_cm_starter_dutch = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the dutch merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_dutch (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_dutch_is_starter = {
 	OR = {
 		global_var:te_cm_state_dutch ?= 1
 		global_var:te_cm_state_dutch ?= 2
 	}
-	exists = global_var:te_cm_starter_dutch
-	this = global_var:te_cm_starter_dutch
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_dutch
+			this = global_var:te_cm_starter_dutch
+		}
+		AND = {
+			has_variable = te_cm_started_dutch
+			te_cmg_dutch_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The dutch merge is running or complete under another country.
+# Country scope. The dutch merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_dutch.
 te_cmg_dutch_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_dutch ?= 1
 		global_var:te_cm_state_dutch ?= 2
 	}
 	exists = global_var:te_cm_starter_dutch
+	global_var:te_cm_starter_dutch = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_dutch }
+	NOT = { has_variable = te_cm_started_dutch }
+}
+
+# Any scope. No part of the dutch merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_dutch_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_dutch_flemish ?= 1
+			NOT = { has_global_variable = te_cm_switched_flemish }
+		}
+	}
 }
 
 # Country scope. Can this country start the dutch merge now? The merge is idle, a core culture is
@@ -1863,24 +2207,59 @@ te_cmg_finnish_census_wanted = {
 	}
 }
 
-# Country scope. This country started the finnish merge, which is running or complete.
+# Any scope. The finnish merge's starter is missing, or is no longer a living country.
+te_cmg_finnish_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_finnish }
+		AND = {
+			exists = global_var:te_cm_starter_finnish
+			global_var:te_cm_starter_finnish = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the finnish merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_finnish (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_finnish_is_starter = {
 	OR = {
 		global_var:te_cm_state_finnish ?= 1
 		global_var:te_cm_state_finnish ?= 2
 	}
-	exists = global_var:te_cm_starter_finnish
-	this = global_var:te_cm_starter_finnish
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_finnish
+			this = global_var:te_cm_starter_finnish
+		}
+		AND = {
+			has_variable = te_cm_started_finnish
+			te_cmg_finnish_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The finnish merge is running or complete under another country.
+# Country scope. The finnish merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_finnish.
 te_cmg_finnish_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_finnish ?= 1
 		global_var:te_cm_state_finnish ?= 2
 	}
 	exists = global_var:te_cm_starter_finnish
+	global_var:te_cm_starter_finnish = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_finnish }
+	NOT = { has_variable = te_cm_started_finnish }
+}
+
+# Any scope. No part of the finnish merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_finnish_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_finnish_karelian ?= 1
+			NOT = { has_global_variable = te_cm_switched_karelian }
+		}
+	}
 }
 
 # Country scope. Can this country start the finnish merge now? The merge is idle, a core culture is
@@ -2094,24 +2473,67 @@ te_cmg_french_census_wanted = {
 	}
 }
 
-# Country scope. This country started the french merge, which is running or complete.
+# Any scope. The french merge's starter is missing, or is no longer a living country.
+te_cmg_french_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_french }
+		AND = {
+			exists = global_var:te_cm_starter_french
+			global_var:te_cm_starter_french = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the french merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_french (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_french_is_starter = {
 	OR = {
 		global_var:te_cm_state_french ?= 1
 		global_var:te_cm_state_french ?= 2
 	}
-	exists = global_var:te_cm_starter_french
-	this = global_var:te_cm_starter_french
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_french
+			this = global_var:te_cm_starter_french
+		}
+		AND = {
+			has_variable = te_cm_started_french
+			te_cmg_french_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The french merge is running or complete under another country.
+# Country scope. The french merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_french.
 te_cmg_french_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_french ?= 1
 		global_var:te_cm_state_french ?= 2
 	}
 	exists = global_var:te_cm_starter_french
+	global_var:te_cm_starter_french = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_french }
+	NOT = { has_variable = te_cm_started_french }
+}
+
+# Any scope. No part of the french merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_french_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_french_wallonian ?= 1
+			NOT = { has_global_variable = te_cm_switched_wallonian }
+		}
+		AND = {
+			global_var:te_cm_joined_french_occitan ?= 1
+			NOT = { has_global_variable = te_cm_switched_occitan }
+		}
+		AND = {
+			global_var:te_cm_joined_french_catalan ?= 1
+			NOT = { has_global_variable = te_cm_switched_catalan }
+		}
+	}
 }
 
 # Country scope. Can this country start the french merge now? The merge is idle, a core culture is
@@ -2258,24 +2680,59 @@ te_cmg_british_census_wanted = {
 	}
 }
 
-# Country scope. This country started the british merge, which is running or complete.
+# Any scope. The british merge's starter is missing, or is no longer a living country.
+te_cmg_british_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_british }
+		AND = {
+			exists = global_var:te_cm_starter_british
+			global_var:te_cm_starter_british = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the british merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_british (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_british_is_starter = {
 	OR = {
 		global_var:te_cm_state_british ?= 1
 		global_var:te_cm_state_british ?= 2
 	}
-	exists = global_var:te_cm_starter_british
-	this = global_var:te_cm_starter_british
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_british
+			this = global_var:te_cm_starter_british
+		}
+		AND = {
+			has_variable = te_cm_started_british
+			te_cmg_british_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The british merge is running or complete under another country.
+# Country scope. The british merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_british.
 te_cmg_british_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_british ?= 1
 		global_var:te_cm_state_british ?= 2
 	}
 	exists = global_var:te_cm_starter_british
+	global_var:te_cm_starter_british = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_british }
+	NOT = { has_variable = te_cm_started_british }
+}
+
+# Any scope. No part of the british merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_british_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_british_scottish ?= 1
+			NOT = { has_global_variable = te_cm_switched_scottish }
+		}
+	}
 }
 
 # Country scope. Can this country start the british merge now? The merge is idle, a core culture is
@@ -2490,24 +2947,67 @@ te_cmg_american_census_wanted = {
 	}
 }
 
-# Country scope. This country started the american merge, which is running or complete.
+# Any scope. The american merge's starter is missing, or is no longer a living country.
+te_cmg_american_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_american }
+		AND = {
+			exists = global_var:te_cm_starter_american
+			global_var:te_cm_starter_american = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the american merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_american (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_american_is_starter = {
 	OR = {
 		global_var:te_cm_state_american ?= 1
 		global_var:te_cm_state_american ?= 2
 	}
-	exists = global_var:te_cm_starter_american
-	this = global_var:te_cm_starter_american
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_american
+			this = global_var:te_cm_starter_american
+		}
+		AND = {
+			has_variable = te_cm_started_american
+			te_cmg_american_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The american merge is running or complete under another country.
+# Country scope. The american merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_american.
 te_cmg_american_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_american ?= 1
 		global_var:te_cm_state_american ?= 2
 	}
 	exists = global_var:te_cm_starter_american
+	global_var:te_cm_starter_american = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_american }
+	NOT = { has_variable = te_cm_started_american }
+}
+
+# Any scope. No part of the american merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_american_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_american_yankee ?= 1
+			NOT = { has_global_variable = te_cm_switched_yankee }
+		}
+		AND = {
+			global_var:te_cm_joined_american_dixie ?= 1
+			NOT = { has_global_variable = te_cm_switched_dixie }
+		}
+		AND = {
+			global_var:te_cm_joined_american_afro_american ?= 1
+			NOT = { has_global_variable = te_cm_switched_afro_american }
+		}
+	}
 }
 
 # Country scope. Everything the american merge needs to start except its waits on vanilla entries
@@ -2933,24 +3433,87 @@ te_cmg_anglophone_census_wanted = {
 	}
 }
 
-# Country scope. This country started the anglophone merge, which is running or complete.
+# Any scope. The anglophone merge's starter is missing, or is no longer a living country.
+te_cmg_anglophone_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_anglophone }
+		AND = {
+			exists = global_var:te_cm_starter_anglophone
+			global_var:te_cm_starter_anglophone = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the anglophone merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_anglophone (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_anglophone_is_starter = {
 	OR = {
 		global_var:te_cm_state_anglophone ?= 1
 		global_var:te_cm_state_anglophone ?= 2
 	}
-	exists = global_var:te_cm_starter_anglophone
-	this = global_var:te_cm_starter_anglophone
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_anglophone
+			this = global_var:te_cm_starter_anglophone
+		}
+		AND = {
+			has_variable = te_cm_started_anglophone
+			te_cmg_anglophone_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The anglophone merge is running or complete under another country.
+# Country scope. The anglophone merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_anglophone.
 te_cmg_anglophone_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_anglophone ?= 1
 		global_var:te_cm_state_anglophone ?= 2
 	}
 	exists = global_var:te_cm_starter_anglophone
+	global_var:te_cm_starter_anglophone = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_anglophone }
+	NOT = { has_variable = te_cm_started_anglophone }
+}
+
+# Any scope. No part of the anglophone merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_anglophone_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_anglophone_british ?= 1
+			NOT = { has_global_variable = te_cm_switched_british }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_yankee ?= 1
+			NOT = { has_global_variable = te_cm_switched_yankee }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_cm_american ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_american }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_anglo_canadian ?= 1
+			NOT = { has_global_variable = te_cm_switched_anglo_canadian }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_australian ?= 1
+			NOT = { has_global_variable = te_cm_switched_australian }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_scottish ?= 1
+			NOT = { has_global_variable = te_cm_switched_scottish }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_dixie ?= 1
+			NOT = { has_global_variable = te_cm_switched_dixie }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_afro_american ?= 1
+			NOT = { has_global_variable = te_cm_switched_afro_american }
+		}
+	}
 }
 
 # Country scope. Can this country start the anglophone merge now? The merge is idle, a core culture is
@@ -3252,24 +3815,75 @@ te_cmg_brazilian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the brazilian merge, which is running or complete.
+# Any scope. The brazilian merge's starter is missing, or is no longer a living country.
+te_cmg_brazilian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_brazilian }
+		AND = {
+			exists = global_var:te_cm_starter_brazilian
+			global_var:te_cm_starter_brazilian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the brazilian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_brazilian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_brazilian_is_starter = {
 	OR = {
 		global_var:te_cm_state_brazilian ?= 1
 		global_var:te_cm_state_brazilian ?= 2
 	}
-	exists = global_var:te_cm_starter_brazilian
-	this = global_var:te_cm_starter_brazilian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_brazilian
+			this = global_var:te_cm_starter_brazilian
+		}
+		AND = {
+			has_variable = te_cm_started_brazilian
+			te_cmg_brazilian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The brazilian merge is running or complete under another country.
+# Country scope. The brazilian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_brazilian.
 te_cmg_brazilian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_brazilian ?= 1
 		global_var:te_cm_state_brazilian ?= 2
 	}
 	exists = global_var:te_cm_starter_brazilian
+	global_var:te_cm_starter_brazilian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_brazilian }
+	NOT = { has_variable = te_cm_started_brazilian }
+}
+
+# Any scope. No part of the brazilian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_brazilian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_brazilian_nordestino ?= 1
+			NOT = { has_global_variable = te_cm_switched_nordestino }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_paulista ?= 1
+			NOT = { has_global_variable = te_cm_switched_paulista }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_amazonic ?= 1
+			NOT = { has_global_variable = te_cm_switched_amazonic }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_sulista ?= 1
+			NOT = { has_global_variable = te_cm_switched_sulista }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_afro_brazilian ?= 1
+			NOT = { has_global_variable = te_cm_switched_afro_brazilian }
+		}
+	}
 }
 
 # Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
@@ -3517,24 +4131,71 @@ te_cmg_platine_census_wanted = {
 	}
 }
 
-# Country scope. This country started the platine merge, which is running or complete.
+# Any scope. The platine merge's starter is missing, or is no longer a living country.
+te_cmg_platine_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_platine }
+		AND = {
+			exists = global_var:te_cm_starter_platine
+			global_var:te_cm_starter_platine = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the platine merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_platine (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_platine_is_starter = {
 	OR = {
 		global_var:te_cm_state_platine ?= 1
 		global_var:te_cm_state_platine ?= 2
 	}
-	exists = global_var:te_cm_starter_platine
-	this = global_var:te_cm_starter_platine
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_platine
+			this = global_var:te_cm_starter_platine
+		}
+		AND = {
+			has_variable = te_cm_started_platine
+			te_cmg_platine_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The platine merge is running or complete under another country.
+# Country scope. The platine merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_platine.
 te_cmg_platine_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_platine ?= 1
 		global_var:te_cm_state_platine ?= 2
 	}
 	exists = global_var:te_cm_starter_platine
+	global_var:te_cm_starter_platine = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_platine }
+	NOT = { has_variable = te_cm_started_platine }
+}
+
+# Any scope. No part of the platine merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_platine_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_platine_platinean ?= 1
+			NOT = { has_global_variable = te_cm_switched_platinean }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_argentine ?= 1
+			NOT = { has_global_variable = te_cm_switched_argentine }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_uruguayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_uruguayan }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_paraguayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_paraguayan }
+		}
+	}
 }
 
 # Country scope. Can this country start the platine merge now? The merge is idle, a core culture is
@@ -3777,24 +4438,71 @@ te_cmg_andean_census_wanted = {
 	}
 }
 
-# Country scope. This country started the andean merge, which is running or complete.
+# Any scope. The andean merge's starter is missing, or is no longer a living country.
+te_cmg_andean_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_andean }
+		AND = {
+			exists = global_var:te_cm_starter_andean
+			global_var:te_cm_starter_andean = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the andean merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_andean (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_andean_is_starter = {
 	OR = {
 		global_var:te_cm_state_andean ?= 1
 		global_var:te_cm_state_andean ?= 2
 	}
-	exists = global_var:te_cm_starter_andean
-	this = global_var:te_cm_starter_andean
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_andean
+			this = global_var:te_cm_starter_andean
+		}
+		AND = {
+			has_variable = te_cm_started_andean
+			te_cmg_andean_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The andean merge is running or complete under another country.
+# Country scope. The andean merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_andean.
 te_cmg_andean_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_andean ?= 1
 		global_var:te_cm_state_andean ?= 2
 	}
 	exists = global_var:te_cm_starter_andean
+	global_var:te_cm_starter_andean = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_andean }
+	NOT = { has_variable = te_cm_started_andean }
+}
+
+# Any scope. No part of the andean merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_andean_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_andean_north_andean ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_andean }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_south_andean ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_andean }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_peruvian ?= 1
+			NOT = { has_global_variable = te_cm_switched_peruvian }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_bolivian ?= 1
+			NOT = { has_global_variable = te_cm_switched_bolivian }
+		}
+	}
 }
 
 # Country scope. Can this country start the andean merge now? The merge is idle, a core culture is
@@ -4001,24 +4709,67 @@ te_cmg_gran_colombian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the gran_colombian merge, which is running or complete.
+# Any scope. The gran_colombian merge's starter is missing, or is no longer a living country.
+te_cmg_gran_colombian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_gran_colombian }
+		AND = {
+			exists = global_var:te_cm_starter_gran_colombian
+			global_var:te_cm_starter_gran_colombian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the gran_colombian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_gran_colombian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_gran_colombian_is_starter = {
 	OR = {
 		global_var:te_cm_state_gran_colombian ?= 1
 		global_var:te_cm_state_gran_colombian ?= 2
 	}
-	exists = global_var:te_cm_starter_gran_colombian
-	this = global_var:te_cm_starter_gran_colombian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_gran_colombian
+			this = global_var:te_cm_starter_gran_colombian
+		}
+		AND = {
+			has_variable = te_cm_started_gran_colombian
+			te_cmg_gran_colombian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The gran_colombian merge is running or complete under another country.
+# Country scope. The gran_colombian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_gran_colombian.
 te_cmg_gran_colombian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_gran_colombian ?= 1
 		global_var:te_cm_state_gran_colombian ?= 2
 	}
 	exists = global_var:te_cm_starter_gran_colombian
+	global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_gran_colombian }
+	NOT = { has_variable = te_cm_started_gran_colombian }
+}
+
+# Any scope. No part of the gran_colombian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_gran_colombian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_gran_colombian_colombian ?= 1
+			NOT = { has_global_variable = te_cm_switched_colombian }
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_venezuelan ?= 1
+			NOT = { has_global_variable = te_cm_switched_venezuelan }
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
+			NOT = { has_global_variable = te_cm_switched_ecuadorian }
+		}
+	}
 }
 
 # Country scope. Can this country start the gran_colombian merge now? The merge is idle, a core culture is
@@ -4240,24 +4991,67 @@ te_cmg_chinese_census_wanted = {
 	}
 }
 
-# Country scope. This country started the chinese merge, which is running or complete.
+# Any scope. The chinese merge's starter is missing, or is no longer a living country.
+te_cmg_chinese_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_chinese }
+		AND = {
+			exists = global_var:te_cm_starter_chinese
+			global_var:te_cm_starter_chinese = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the chinese merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_chinese (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_chinese_is_starter = {
 	OR = {
 		global_var:te_cm_state_chinese ?= 1
 		global_var:te_cm_state_chinese ?= 2
 	}
-	exists = global_var:te_cm_starter_chinese
-	this = global_var:te_cm_starter_chinese
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_chinese
+			this = global_var:te_cm_starter_chinese
+		}
+		AND = {
+			has_variable = te_cm_started_chinese
+			te_cmg_chinese_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The chinese merge is running or complete under another country.
+# Country scope. The chinese merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_chinese.
 te_cmg_chinese_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_chinese ?= 1
 		global_var:te_cm_state_chinese ?= 2
 	}
 	exists = global_var:te_cm_starter_chinese
+	global_var:te_cm_starter_chinese = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_chinese }
+	NOT = { has_variable = te_cm_started_chinese }
+}
+
+# Any scope. No part of the chinese merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_chinese_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_chinese_yue ?= 1
+			NOT = { has_global_variable = te_cm_switched_yue }
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_min ?= 1
+			NOT = { has_global_variable = te_cm_switched_min }
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_hakka ?= 1
+			NOT = { has_global_variable = te_cm_switched_hakka }
+		}
+	}
 }
 
 # Country scope. Can this country start the chinese merge now? The merge is idle, a core culture is
@@ -4412,24 +5206,59 @@ te_cmg_japanese_census_wanted = {
 	}
 }
 
-# Country scope. This country started the japanese merge, which is running or complete.
+# Any scope. The japanese merge's starter is missing, or is no longer a living country.
+te_cmg_japanese_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_japanese }
+		AND = {
+			exists = global_var:te_cm_starter_japanese
+			global_var:te_cm_starter_japanese = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the japanese merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_japanese (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_japanese_is_starter = {
 	OR = {
 		global_var:te_cm_state_japanese ?= 1
 		global_var:te_cm_state_japanese ?= 2
 	}
-	exists = global_var:te_cm_starter_japanese
-	this = global_var:te_cm_starter_japanese
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_japanese
+			this = global_var:te_cm_starter_japanese
+		}
+		AND = {
+			has_variable = te_cm_started_japanese
+			te_cmg_japanese_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The japanese merge is running or complete under another country.
+# Country scope. The japanese merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_japanese.
 te_cmg_japanese_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_japanese ?= 1
 		global_var:te_cm_state_japanese ?= 2
 	}
 	exists = global_var:te_cm_starter_japanese
+	global_var:te_cm_starter_japanese = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_japanese }
+	NOT = { has_variable = te_cm_started_japanese }
+}
+
+# Any scope. No part of the japanese merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_japanese_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_japanese_ryukyuan ?= 1
+			NOT = { has_global_variable = te_cm_switched_ryukyuan }
+		}
+	}
 }
 
 # Country scope. Can this country start the japanese merge now? The merge is idle, a core culture is
@@ -4806,24 +5635,87 @@ te_cmg_arab_census_wanted = {
 	}
 }
 
-# Country scope. This country started the arab merge, which is running or complete.
+# Any scope. The arab merge's starter is missing, or is no longer a living country.
+te_cmg_arab_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_arab }
+		AND = {
+			exists = global_var:te_cm_starter_arab
+			global_var:te_cm_starter_arab = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the arab merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_arab (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_arab_is_starter = {
 	OR = {
 		global_var:te_cm_state_arab ?= 1
 		global_var:te_cm_state_arab ?= 2
 	}
-	exists = global_var:te_cm_starter_arab
-	this = global_var:te_cm_starter_arab
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_arab
+			this = global_var:te_cm_starter_arab
+		}
+		AND = {
+			has_variable = te_cm_started_arab
+			te_cmg_arab_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The arab merge is running or complete under another country.
+# Country scope. The arab merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_arab.
 te_cmg_arab_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_arab ?= 1
 		global_var:te_cm_state_arab ?= 2
 	}
 	exists = global_var:te_cm_starter_arab
+	global_var:te_cm_starter_arab = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_arab }
+	NOT = { has_variable = te_cm_started_arab }
+}
+
+# Any scope. No part of the arab merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_arab_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_arab_maghrebi ?= 1
+			NOT = { has_global_variable = te_cm_switched_maghrebi }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_misri ?= 1
+			NOT = { has_global_variable = te_cm_switched_misri }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_mashriqi ?= 1
+			NOT = { has_global_variable = te_cm_switched_mashriqi }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_bedouin ?= 1
+			NOT = { has_global_variable = te_cm_switched_bedouin }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_yemenite ?= 1
+			NOT = { has_global_variable = te_cm_switched_yemenite }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_sudanese ?= 1
+			NOT = { has_global_variable = te_cm_switched_sudanese }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_haratin ?= 1
+			NOT = { has_global_variable = te_cm_switched_haratin }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_bidan ?= 1
+			NOT = { has_global_variable = te_cm_switched_bidan }
+		}
+	}
 }
 
 # Country scope. Can this country start the arab merge now? The merge is idle, a core culture is
@@ -5060,24 +5952,67 @@ te_cmg_persian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the persian merge, which is running or complete.
+# Any scope. The persian merge's starter is missing, or is no longer a living country.
+te_cmg_persian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_persian }
+		AND = {
+			exists = global_var:te_cm_starter_persian
+			global_var:te_cm_starter_persian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the persian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_persian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_persian_is_starter = {
 	OR = {
 		global_var:te_cm_state_persian ?= 1
 		global_var:te_cm_state_persian ?= 2
 	}
-	exists = global_var:te_cm_starter_persian
-	this = global_var:te_cm_starter_persian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_persian
+			this = global_var:te_cm_starter_persian
+		}
+		AND = {
+			has_variable = te_cm_started_persian
+			te_cmg_persian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The persian merge is running or complete under another country.
+# Country scope. The persian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_persian.
 te_cmg_persian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_persian ?= 1
 		global_var:te_cm_state_persian ?= 2
 	}
 	exists = global_var:te_cm_starter_persian
+	global_var:te_cm_starter_persian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_persian }
+	NOT = { has_variable = te_cm_started_persian }
+}
+
+# Any scope. No part of the persian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_persian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_persian_luri ?= 1
+			NOT = { has_global_variable = te_cm_switched_luri }
+		}
+		AND = {
+			global_var:te_cm_joined_persian_tajik ?= 1
+			NOT = { has_global_variable = te_cm_switched_tajik }
+		}
+		AND = {
+			global_var:te_cm_joined_persian_hazara ?= 1
+			NOT = { has_global_variable = te_cm_switched_hazara }
+		}
+	}
 }
 
 # Country scope. Can this country start the persian merge now? The merge is idle, a core culture is
@@ -5268,24 +6203,67 @@ te_cmg_oghuz_turkic_census_wanted = {
 	}
 }
 
-# Country scope. This country started the oghuz_turkic merge, which is running or complete.
+# Any scope. The oghuz_turkic merge's starter is missing, or is no longer a living country.
+te_cmg_oghuz_turkic_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_oghuz_turkic }
+		AND = {
+			exists = global_var:te_cm_starter_oghuz_turkic
+			global_var:te_cm_starter_oghuz_turkic = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the oghuz_turkic merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_oghuz_turkic (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_oghuz_turkic_is_starter = {
 	OR = {
 		global_var:te_cm_state_oghuz_turkic ?= 1
 		global_var:te_cm_state_oghuz_turkic ?= 2
 	}
-	exists = global_var:te_cm_starter_oghuz_turkic
-	this = global_var:te_cm_starter_oghuz_turkic
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_oghuz_turkic
+			this = global_var:te_cm_starter_oghuz_turkic
+		}
+		AND = {
+			has_variable = te_cm_started_oghuz_turkic
+			te_cmg_oghuz_turkic_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The oghuz_turkic merge is running or complete under another country.
+# Country scope. The oghuz_turkic merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_oghuz_turkic.
 te_cmg_oghuz_turkic_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_oghuz_turkic ?= 1
 		global_var:te_cm_state_oghuz_turkic ?= 2
 	}
 	exists = global_var:te_cm_starter_oghuz_turkic
+	global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_oghuz_turkic }
+	NOT = { has_variable = te_cm_started_oghuz_turkic }
+}
+
+# Any scope. No part of the oghuz_turkic merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_oghuz_turkic_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_turkish ?= 1
+			NOT = { has_global_variable = te_cm_switched_turkish }
+		}
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
+			NOT = { has_global_variable = te_cm_switched_azerbaijani }
+		}
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1
+			NOT = { has_global_variable = te_cm_switched_turkmen }
+		}
+	}
 }
 
 # Country scope. Can this country start the oghuz_turkic merge now? The merge is idle, a core culture is
@@ -5535,24 +6513,71 @@ te_cmg_hindustani_census_wanted = {
 	}
 }
 
-# Country scope. This country started the hindustani merge, which is running or complete.
+# Any scope. The hindustani merge's starter is missing, or is no longer a living country.
+te_cmg_hindustani_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_hindustani }
+		AND = {
+			exists = global_var:te_cm_starter_hindustani
+			global_var:te_cm_starter_hindustani = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the hindustani merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_hindustani (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_hindustani_is_starter = {
 	OR = {
 		global_var:te_cm_state_hindustani ?= 1
 		global_var:te_cm_state_hindustani ?= 2
 	}
-	exists = global_var:te_cm_starter_hindustani
-	this = global_var:te_cm_starter_hindustani
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_hindustani
+			this = global_var:te_cm_starter_hindustani
+		}
+		AND = {
+			has_variable = te_cm_started_hindustani
+			te_cmg_hindustani_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The hindustani merge is running or complete under another country.
+# Country scope. The hindustani merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_hindustani.
 te_cmg_hindustani_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_hindustani ?= 1
 		global_var:te_cm_state_hindustani ?= 2
 	}
 	exists = global_var:te_cm_starter_hindustani
+	global_var:te_cm_starter_hindustani = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_hindustani }
+	NOT = { has_variable = te_cm_started_hindustani }
+}
+
+# Any scope. No part of the hindustani merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_hindustani_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_hindustani_avadhi ?= 1
+			NOT = { has_global_variable = te_cm_switched_avadhi }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bundeli ?= 1
+			NOT = { has_global_variable = te_cm_switched_bundeli }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1
+			NOT = { has_global_variable = te_cm_switched_chhattisgarhi }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bageli ?= 1
+			NOT = { has_global_variable = te_cm_switched_bageli }
+		}
+	}
 }
 
 # Country scope. Can this country start the hindustani merge now? The merge is idle, a core culture is
@@ -5803,24 +6828,71 @@ te_cmg_dravidian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the dravidian merge, which is running or complete.
+# Any scope. The dravidian merge's starter is missing, or is no longer a living country.
+te_cmg_dravidian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_dravidian }
+		AND = {
+			exists = global_var:te_cm_starter_dravidian
+			global_var:te_cm_starter_dravidian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the dravidian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_dravidian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_dravidian_is_starter = {
 	OR = {
 		global_var:te_cm_state_dravidian ?= 1
 		global_var:te_cm_state_dravidian ?= 2
 	}
-	exists = global_var:te_cm_starter_dravidian
-	this = global_var:te_cm_starter_dravidian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_dravidian
+			this = global_var:te_cm_starter_dravidian
+		}
+		AND = {
+			has_variable = te_cm_started_dravidian
+			te_cmg_dravidian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The dravidian merge is running or complete under another country.
+# Country scope. The dravidian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_dravidian.
 te_cmg_dravidian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_dravidian ?= 1
 		global_var:te_cm_state_dravidian ?= 2
 	}
 	exists = global_var:te_cm_starter_dravidian
+	global_var:te_cm_starter_dravidian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_dravidian }
+	NOT = { has_variable = te_cm_started_dravidian }
+}
+
+# Any scope. No part of the dravidian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_dravidian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_dravidian_tamil ?= 1
+			NOT = { has_global_variable = te_cm_switched_tamil }
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_kannada ?= 1
+			NOT = { has_global_variable = te_cm_switched_kannada }
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_malayalam ?= 1
+			NOT = { has_global_variable = te_cm_switched_malayalam }
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_telegu ?= 1
+			NOT = { has_global_variable = te_cm_switched_telegu }
+		}
+	}
 }
 
 # Country scope. Can this country start the dravidian merge now? The merge is idle, a core culture is
@@ -6087,24 +7159,75 @@ te_cmg_indonesian_census_wanted = {
 	}
 }
 
-# Country scope. This country started the indonesian merge, which is running or complete.
+# Any scope. The indonesian merge's starter is missing, or is no longer a living country.
+te_cmg_indonesian_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_indonesian }
+		AND = {
+			exists = global_var:te_cm_starter_indonesian
+			global_var:te_cm_starter_indonesian = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the indonesian merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_indonesian (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_indonesian_is_starter = {
 	OR = {
 		global_var:te_cm_state_indonesian ?= 1
 		global_var:te_cm_state_indonesian ?= 2
 	}
-	exists = global_var:te_cm_starter_indonesian
-	this = global_var:te_cm_starter_indonesian
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_indonesian
+			this = global_var:te_cm_starter_indonesian
+		}
+		AND = {
+			has_variable = te_cm_started_indonesian
+			te_cmg_indonesian_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The indonesian merge is running or complete under another country.
+# Country scope. The indonesian merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_indonesian.
 te_cmg_indonesian_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_indonesian ?= 1
 		global_var:te_cm_state_indonesian ?= 2
 	}
 	exists = global_var:te_cm_starter_indonesian
+	global_var:te_cm_starter_indonesian = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_indonesian }
+	NOT = { has_variable = te_cm_started_indonesian }
+}
+
+# Any scope. No part of the indonesian merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_indonesian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_indonesian_javan ?= 1
+			NOT = { has_global_variable = te_cm_switched_javan }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_malay ?= 1
+			NOT = { has_global_variable = te_cm_switched_malay }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_sumatran ?= 1
+			NOT = { has_global_variable = te_cm_switched_sumatran }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_bornean ?= 1
+			NOT = { has_global_variable = te_cm_switched_bornean }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_balinese ?= 1
+			NOT = { has_global_variable = te_cm_switched_balinese }
+		}
+	}
 }
 
 # Country scope. Can this country start the indonesian merge now? The merge is idle, a core culture is
@@ -6334,24 +7457,67 @@ te_cmg_filipino_census_wanted = {
 	}
 }
 
-# Country scope. This country started the filipino merge, which is running or complete.
+# Any scope. The filipino merge's starter is missing, or is no longer a living country.
+te_cmg_filipino_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_filipino }
+		AND = {
+			exists = global_var:te_cm_starter_filipino
+			global_var:te_cm_starter_filipino = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the filipino merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_filipino (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_filipino_is_starter = {
 	OR = {
 		global_var:te_cm_state_filipino ?= 1
 		global_var:te_cm_state_filipino ?= 2
 	}
-	exists = global_var:te_cm_starter_filipino
-	this = global_var:te_cm_starter_filipino
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_filipino
+			this = global_var:te_cm_starter_filipino
+		}
+		AND = {
+			has_variable = te_cm_started_filipino
+			te_cmg_filipino_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The filipino merge is running or complete under another country.
+# Country scope. The filipino merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_filipino.
 te_cmg_filipino_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_filipino ?= 1
 		global_var:te_cm_state_filipino ?= 2
 	}
 	exists = global_var:te_cm_starter_filipino
+	global_var:te_cm_starter_filipino = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_filipino }
+	NOT = { has_variable = te_cm_started_filipino }
+}
+
+# Any scope. No part of the filipino merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_filipino_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_filipino_visayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_visayan }
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_tagalog ?= 1
+			NOT = { has_global_variable = te_cm_switched_tagalog }
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_ilocano ?= 1
+			NOT = { has_global_variable = te_cm_switched_ilocano }
+		}
+	}
 }
 
 # Country scope. Can this country start the filipino merge now? The merge is idle, a core culture is
@@ -6555,24 +7721,67 @@ te_cmg_nguni_census_wanted = {
 	}
 }
 
-# Country scope. This country started the nguni merge, which is running or complete.
+# Any scope. The nguni merge's starter is missing, or is no longer a living country.
+te_cmg_nguni_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_nguni }
+		AND = {
+			exists = global_var:te_cm_starter_nguni
+			global_var:te_cm_starter_nguni = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the nguni merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_nguni (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_nguni_is_starter = {
 	OR = {
 		global_var:te_cm_state_nguni ?= 1
 		global_var:te_cm_state_nguni ?= 2
 	}
-	exists = global_var:te_cm_starter_nguni
-	this = global_var:te_cm_starter_nguni
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_nguni
+			this = global_var:te_cm_starter_nguni
+		}
+		AND = {
+			has_variable = te_cm_started_nguni
+			te_cmg_nguni_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The nguni merge is running or complete under another country.
+# Country scope. The nguni merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_nguni.
 te_cmg_nguni_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_nguni ?= 1
 		global_var:te_cm_state_nguni ?= 2
 	}
 	exists = global_var:te_cm_starter_nguni
+	global_var:te_cm_starter_nguni = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_nguni }
+	NOT = { has_variable = te_cm_started_nguni }
+}
+
+# Any scope. No part of the nguni merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_nguni_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_nguni_nguni ?= 1
+			NOT = { has_global_variable = te_cm_switched_nguni }
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_zulu ?= 1
+			NOT = { has_global_variable = te_cm_switched_zulu }
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_xhosa ?= 1
+			NOT = { has_global_variable = te_cm_switched_xhosa }
+		}
+	}
 }
 
 # Country scope. Can this country start the nguni merge now? The merge is idle, a core culture is
@@ -7042,24 +8251,91 @@ te_cmg_latin_census_wanted = {
 	}
 }
 
-# Country scope. This country started the latin merge, which is running or complete.
+# Any scope. The latin merge's starter is missing, or is no longer a living country.
+te_cmg_latin_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_latin }
+		AND = {
+			exists = global_var:te_cm_starter_latin
+			global_var:te_cm_starter_latin = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the latin merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_latin (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_latin_is_starter = {
 	OR = {
 		global_var:te_cm_state_latin ?= 1
 		global_var:te_cm_state_latin ?= 2
 	}
-	exists = global_var:te_cm_starter_latin
-	this = global_var:te_cm_starter_latin
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_latin
+			this = global_var:te_cm_starter_latin
+		}
+		AND = {
+			has_variable = te_cm_started_latin
+			te_cmg_latin_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The latin merge is running or complete under another country.
+# Country scope. The latin merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_latin.
 te_cmg_latin_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_latin ?= 1
 		global_var:te_cm_state_latin ?= 2
 	}
 	exists = global_var:te_cm_starter_latin
+	global_var:te_cm_starter_latin = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_latin }
+	NOT = { has_variable = te_cm_started_latin }
+}
+
+# Any scope. No part of the latin merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_latin_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_latin_french ?= 1
+			NOT = { has_global_variable = te_cm_switched_french }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_cm_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_italian }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_spanish ?= 1
+			NOT = { has_global_variable = te_cm_switched_spanish }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_portuguese ?= 1
+			NOT = { has_global_variable = te_cm_switched_portuguese }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_romanian ?= 1
+			NOT = { has_global_variable = te_cm_switched_romanian }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_platinean ?= 1
+			NOT = { has_global_variable = te_cm_switched_platinean }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_argentine ?= 1
+			NOT = { has_global_variable = te_cm_switched_argentine }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_uruguayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_uruguayan }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_chilean ?= 1
+			NOT = { has_global_variable = te_cm_switched_chilean }
+		}
+	}
 }
 
 # Country scope. Can this country start the latin merge now? The merge is idle, a core culture is
@@ -7426,24 +8702,79 @@ te_cmg_pan_slavic_census_wanted = {
 	}
 }
 
-# Country scope. This country started the pan_slavic merge, which is running or complete.
+# Any scope. The pan_slavic merge's starter is missing, or is no longer a living country.
+te_cmg_pan_slavic_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_pan_slavic }
+		AND = {
+			exists = global_var:te_cm_starter_pan_slavic
+			global_var:te_cm_starter_pan_slavic = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the pan_slavic merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_pan_slavic (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_pan_slavic_is_starter = {
 	OR = {
 		global_var:te_cm_state_pan_slavic ?= 1
 		global_var:te_cm_state_pan_slavic ?= 2
 	}
-	exists = global_var:te_cm_starter_pan_slavic
-	this = global_var:te_cm_starter_pan_slavic
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_pan_slavic
+			this = global_var:te_cm_starter_pan_slavic
+		}
+		AND = {
+			has_variable = te_cm_started_pan_slavic
+			te_cmg_pan_slavic_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The pan_slavic merge is running or complete under another country.
+# Country scope. The pan_slavic merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_pan_slavic.
 te_cmg_pan_slavic_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_pan_slavic ?= 1
 		global_var:te_cm_state_pan_slavic ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_slavic
+	global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_pan_slavic }
+	NOT = { has_variable = te_cm_started_pan_slavic }
+}
+
+# Any scope. No part of the pan_slavic merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_pan_slavic_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_polish ?= 1
+			NOT = { has_global_variable = te_cm_switched_polish }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_slovene ?= 1
+			NOT = { has_global_variable = te_cm_switched_slovene }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_bulgarian ?= 1
+			NOT = { has_global_variable = te_cm_switched_bulgarian }
+		}
+	}
 }
 
 # Country scope. Can this country start the pan_slavic merge now? The merge is idle, a core culture is
@@ -7550,18 +8881,25 @@ te_cmg_pan_turkic_core_ok = {
 		te_cmg_pan_turkic_uzbek_switched_in = yes
 	}
 	OR = {
-		te_cmg_pan_turkic_kazak_measured = yes
+		AND = {
+			te_cmg_pan_turkic_kazak_measured = yes
+			te_cm_tier_tech = { TIER = 1 }
+		}
 		te_cmg_pan_turkic_kazak_switched_in = yes
 	}
 	OR = {
 		AND = {
 			te_cmg_pan_turkic_tatar_measured = yes
+			te_cm_tier_tech = { TIER = 2 }
 			te_cmg_pan_turkic_tatar_years_met = yes
 		}
 		te_cmg_pan_turkic_tatar_switched_in = yes
 	}
 	OR = {
-		te_cmg_pan_turkic_kirgiz_measured = yes
+		AND = {
+			te_cmg_pan_turkic_kirgiz_measured = yes
+			te_cm_tier_tech = { TIER = 1 }
+		}
 		te_cmg_pan_turkic_kirgiz_switched_in = yes
 	}
 }
@@ -7907,24 +9245,91 @@ te_cmg_pan_turkic_census_wanted = {
 	}
 }
 
-# Country scope. This country started the pan_turkic merge, which is running or complete.
+# Any scope. The pan_turkic merge's starter is missing, or is no longer a living country.
+te_cmg_pan_turkic_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_pan_turkic }
+		AND = {
+			exists = global_var:te_cm_starter_pan_turkic
+			global_var:te_cm_starter_pan_turkic = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the pan_turkic merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_pan_turkic (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_pan_turkic_is_starter = {
 	OR = {
 		global_var:te_cm_state_pan_turkic ?= 1
 		global_var:te_cm_state_pan_turkic ?= 2
 	}
-	exists = global_var:te_cm_starter_pan_turkic
-	this = global_var:te_cm_starter_pan_turkic
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_pan_turkic
+			this = global_var:te_cm_starter_pan_turkic
+		}
+		AND = {
+			has_variable = te_cm_started_pan_turkic
+			te_cmg_pan_turkic_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The pan_turkic merge is running or complete under another country.
+# Country scope. The pan_turkic merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_pan_turkic.
 te_cmg_pan_turkic_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_pan_turkic ?= 1
 		global_var:te_cm_state_pan_turkic ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_turkic
+	global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_pan_turkic }
+	NOT = { has_variable = te_cm_started_pan_turkic }
+}
+
+# Any scope. No part of the pan_turkic merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_pan_turkic_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_uzbek ?= 1
+			NOT = { has_global_variable = te_cm_switched_uzbek }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kazak ?= 1
+			NOT = { has_global_variable = te_cm_switched_kazak }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_tatar ?= 1
+			NOT = { has_global_variable = te_cm_switched_tatar }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kirgiz ?= 1
+			NOT = { has_global_variable = te_cm_switched_kirgiz }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_bashkir ?= 1
+			NOT = { has_global_variable = te_cm_switched_bashkir }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_crimean_tatar ?= 1
+			NOT = { has_global_variable = te_cm_switched_crimean_tatar }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_caucasian_turk ?= 1
+			NOT = { has_global_variable = te_cm_switched_caucasian_turk }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_uighur ?= 1
+			NOT = { has_global_variable = te_cm_switched_uighur }
+		}
+	}
 }
 
 # Country scope. Can this country start the pan_turkic merge now? The merge is idle, a core culture is
@@ -7973,7 +9378,10 @@ te_cmg_pan_turkic_can_start = {
 	custom_tooltip = {
 		text = te_cmg_pan_turkic_core_3_tt
 		OR = {
-			te_cmg_pan_turkic_kazak_measured = yes
+			AND = {
+				te_cmg_pan_turkic_kazak_measured = yes
+				te_cm_tier_tech = { TIER = 1 }
+			}
 			te_cmg_pan_turkic_kazak_switched_in = yes
 		}
 	}
@@ -7982,6 +9390,7 @@ te_cmg_pan_turkic_can_start = {
 		OR = {
 			AND = {
 				te_cmg_pan_turkic_tatar_measured = yes
+				te_cm_tier_tech = { TIER = 2 }
 				te_cmg_pan_turkic_tatar_years_met = yes
 			}
 			te_cmg_pan_turkic_tatar_switched_in = yes
@@ -7990,7 +9399,10 @@ te_cmg_pan_turkic_can_start = {
 	custom_tooltip = {
 		text = te_cmg_pan_turkic_core_5_tt
 		OR = {
-			te_cmg_pan_turkic_kirgiz_measured = yes
+			AND = {
+				te_cmg_pan_turkic_kirgiz_measured = yes
+				te_cm_tier_tech = { TIER = 1 }
+			}
 			te_cmg_pan_turkic_kirgiz_switched_in = yes
 		}
 	}
@@ -8136,24 +9548,63 @@ te_cmg_pan_malay_census_wanted = {
 	}
 }
 
-# Country scope. This country started the pan_malay merge, which is running or complete.
+# Any scope. The pan_malay merge's starter is missing, or is no longer a living country.
+te_cmg_pan_malay_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_pan_malay }
+		AND = {
+			exists = global_var:te_cm_starter_pan_malay
+			global_var:te_cm_starter_pan_malay = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the pan_malay merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_pan_malay (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_pan_malay_is_starter = {
 	OR = {
 		global_var:te_cm_state_pan_malay ?= 1
 		global_var:te_cm_state_pan_malay ?= 2
 	}
-	exists = global_var:te_cm_starter_pan_malay
-	this = global_var:te_cm_starter_pan_malay
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_pan_malay
+			this = global_var:te_cm_starter_pan_malay
+		}
+		AND = {
+			has_variable = te_cm_started_pan_malay
+			te_cmg_pan_malay_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The pan_malay merge is running or complete under another country.
+# Country scope. The pan_malay merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_pan_malay.
 te_cmg_pan_malay_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_pan_malay ?= 1
 		global_var:te_cm_state_pan_malay ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_malay
+	global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_pan_malay }
+	NOT = { has_variable = te_cm_started_pan_malay }
+}
+
+# Any scope. No part of the pan_malay merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_pan_malay_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_malay_filipino ?= 1
+			NOT = { has_global_variable = te_cm_switched_filipino }
+		}
+	}
 }
 
 # Country scope. Can this country start the pan_malay merge now? The merge is idle, a core culture is
@@ -8544,24 +9995,83 @@ te_cmg_east_african_census_wanted = {
 	}
 }
 
-# Country scope. This country started the east_african merge, which is running or complete.
+# Any scope. The east_african merge's starter is missing, or is no longer a living country.
+te_cmg_east_african_starter_gone = {
+	OR = {
+		NOT = { exists = global_var:te_cm_starter_east_african }
+		AND = {
+			exists = global_var:te_cm_starter_east_african
+			global_var:te_cm_starter_east_african = { is_country_alive = no }
+		}
+	}
+}
+
+# Country scope. This country started the east_african merge, which is running or complete: it is the global starter,
+# or it carries te_cm_started_east_african (set by te_cm_start_merge, inherited by a civil war's winner, which
+# continues the nation) while the global starter is missing or dead.
 te_cmg_east_african_is_starter = {
 	OR = {
 		global_var:te_cm_state_east_african ?= 1
 		global_var:te_cm_state_east_african ?= 2
 	}
-	exists = global_var:te_cm_starter_east_african
-	this = global_var:te_cm_starter_east_african
+	OR = {
+		AND = {
+			exists = global_var:te_cm_starter_east_african
+			this = global_var:te_cm_starter_east_african
+		}
+		AND = {
+			has_variable = te_cm_started_east_african
+			te_cmg_east_african_starter_gone = yes
+		}
+	}
 }
 
-# Country scope. The east_african merge is running or complete under another country.
+# Country scope. The east_african merge is running or complete under another living country: this one is not its
+# global starter and carries no te_cm_started_east_african.
 te_cmg_east_african_has_other_starter = {
 	OR = {
 		global_var:te_cm_state_east_african ?= 1
 		global_var:te_cm_state_east_african ?= 2
 	}
 	exists = global_var:te_cm_starter_east_african
+	global_var:te_cm_starter_east_african = { is_country_alive = yes }
 	NOT = { this = global_var:te_cm_starter_east_african }
+	NOT = { has_variable = te_cm_started_east_african }
+}
+
+# Any scope. No part of the east_african merge that joined is still unswitched: a part that joins late, after the
+# core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
+te_cmg_east_african_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_east_african_swahili ?= 1
+			NOT = { has_global_variable = te_cm_switched_swahili }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_nyamwezi ?= 1
+			NOT = { has_global_variable = te_cm_switched_nyamwezi }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_sukuma ?= 1
+			NOT = { has_global_variable = te_cm_switched_sukuma }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_yao ?= 1
+			NOT = { has_global_variable = te_cm_switched_yao }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_makua ?= 1
+			NOT = { has_global_variable = te_cm_switched_makua }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_lacustrine_bantu ?= 1
+			NOT = { has_global_variable = te_cm_switched_lacustrine_bantu }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_kikuyu ?= 1
+			NOT = { has_global_variable = te_cm_switched_kikuyu }
+		}
+	}
 }
 
 # Country scope. Can this country start the east_african merge now? The merge is idle, a core culture is

@@ -180,10 +180,13 @@ te_cmg_german_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the german merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_german = {
-	te_cm_start_merge = { MERGE = german RESULT = cm_german }
-	te_cmg_german_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_german ?= 1 global_var:te_cm_state_german ?= 2 } }
+		te_cm_start_merge = { MERGE = german RESULT = cm_german }
+		te_cmg_german_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_german_country, run after the part gates are fresh.
@@ -396,10 +399,13 @@ te_cmg_italian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the italian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_italian = {
-	te_cm_start_merge = { MERGE = italian RESULT = cm_italian }
-	te_cmg_italian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 } }
+		te_cm_start_merge = { MERGE = italian RESULT = cm_italian }
+		te_cmg_italian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_italian_country, run after the part gates are fresh.
@@ -636,10 +642,13 @@ te_cmg_scandinavian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the scandinavian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_scandinavian = {
-	te_cm_start_merge = { MERGE = scandinavian RESULT = cm_scandinavian }
-	te_cmg_scandinavian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_scandinavian ?= 1 global_var:te_cm_state_scandinavian ?= 2 } }
+		te_cm_start_merge = { MERGE = scandinavian RESULT = cm_scandinavian }
+		te_cmg_scandinavian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_scandinavian_country, run after the part gates are fresh.
@@ -813,10 +822,13 @@ te_cmg_east_slavic_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the east_slavic merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_east_slavic = {
-	te_cm_start_merge = { MERGE = east_slavic RESULT = cm_east_slavic }
-	te_cmg_east_slavic_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 } }
+		te_cm_start_merge = { MERGE = east_slavic RESULT = cm_east_slavic }
+		te_cmg_east_slavic_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_east_slavic_country, run after the part gates are fresh.
@@ -1088,10 +1100,13 @@ te_cmg_yugoslav_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the yugoslav merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_yugoslav = {
-	te_cm_start_merge = { MERGE = yugoslav RESULT = cm_yugoslav }
-	te_cmg_yugoslav_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 } }
+		te_cm_start_merge = { MERGE = yugoslav RESULT = cm_yugoslav }
+		te_cmg_yugoslav_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_yugoslav_country, run after the part gates are fresh.
@@ -1304,10 +1319,13 @@ te_cmg_czechoslovak_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the czechoslovak merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_czechoslovak = {
-	te_cm_start_merge = { MERGE = czechoslovak RESULT = cm_czechoslovak }
-	te_cmg_czechoslovak_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 } }
+		te_cm_start_merge = { MERGE = czechoslovak RESULT = cm_czechoslovak }
+		te_cmg_czechoslovak_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_czechoslovak_country, run after the part gates are fresh.
@@ -1445,10 +1463,13 @@ te_cmg_hungarian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the hungarian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_hungarian = {
-	te_cm_start_merge = { MERGE = hungarian RESULT = hungarian }
-	te_cmg_hungarian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_hungarian ?= 1 global_var:te_cm_state_hungarian ?= 2 } }
+		te_cm_start_merge = { MERGE = hungarian RESULT = hungarian }
+		te_cmg_hungarian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_hungarian_country, run after the part gates are fresh.
@@ -1586,10 +1607,13 @@ te_cmg_dutch_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the dutch merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_dutch = {
-	te_cm_start_merge = { MERGE = dutch RESULT = dutch }
-	te_cmg_dutch_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_dutch ?= 1 global_var:te_cm_state_dutch ?= 2 } }
+		te_cm_start_merge = { MERGE = dutch RESULT = dutch }
+		te_cmg_dutch_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_dutch_country, run after the part gates are fresh.
@@ -1727,10 +1751,13 @@ te_cmg_finnish_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the finnish merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_finnish = {
-	te_cm_start_merge = { MERGE = finnish RESULT = finnish }
-	te_cmg_finnish_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_finnish ?= 1 global_var:te_cm_state_finnish ?= 2 } }
+		te_cm_start_merge = { MERGE = finnish RESULT = finnish }
+		te_cmg_finnish_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_finnish_country, run after the part gates are fresh.
@@ -1956,10 +1983,13 @@ te_cmg_french_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the french merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_french = {
-	te_cm_start_merge = { MERGE = french RESULT = french }
-	te_cmg_french_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 } }
+		te_cm_start_merge = { MERGE = french RESULT = french }
+		te_cmg_french_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_french_country, run after the part gates are fresh.
@@ -2097,10 +2127,13 @@ te_cmg_british_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the british merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_british = {
-	te_cm_start_merge = { MERGE = british RESULT = british }
-	te_cmg_british_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 } }
+		te_cm_start_merge = { MERGE = british RESULT = british }
+		te_cmg_british_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_british_country, run after the part gates are fresh.
@@ -2315,10 +2348,13 @@ te_cmg_american_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the american merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_american = {
-	te_cm_start_merge = { MERGE = american RESULT = cm_american }
-	te_cmg_american_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 } }
+		te_cm_start_merge = { MERGE = american RESULT = cm_american }
+		te_cmg_american_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_american_country, run after the part gates are fresh.
@@ -2638,10 +2674,13 @@ te_cmg_anglophone_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the anglophone merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_anglophone = {
-	te_cm_start_merge = { MERGE = anglophone RESULT = cm_anglophone }
-	te_cmg_anglophone_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_anglophone ?= 1 global_var:te_cm_state_anglophone ?= 2 } }
+		te_cm_start_merge = { MERGE = anglophone RESULT = cm_anglophone }
+		te_cmg_anglophone_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_anglophone_country, run after the part gates are fresh.
@@ -2915,10 +2954,13 @@ te_cmg_brazilian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the brazilian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_brazilian = {
-	te_cm_start_merge = { MERGE = brazilian RESULT = brazilian }
-	te_cmg_brazilian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_brazilian ?= 1 global_var:te_cm_state_brazilian ?= 2 } }
+		te_cm_start_merge = { MERGE = brazilian RESULT = brazilian }
+		te_cmg_brazilian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_brazilian_country, run after the part gates are fresh.
@@ -3113,10 +3155,13 @@ te_cmg_platine_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the platine merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_platine = {
-	te_cm_start_merge = { MERGE = platine RESULT = cm_platine }
-	te_cmg_platine_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_platine ?= 1 global_var:te_cm_state_platine ?= 2 } }
+		te_cm_start_merge = { MERGE = platine RESULT = cm_platine }
+		te_cmg_platine_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_platine_country, run after the part gates are fresh.
@@ -3311,10 +3356,13 @@ te_cmg_andean_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the andean merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_andean = {
-	te_cm_start_merge = { MERGE = andean RESULT = cm_andean }
-	te_cmg_andean_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_andean ?= 1 global_var:te_cm_state_andean ?= 2 } }
+		te_cm_start_merge = { MERGE = andean RESULT = cm_andean }
+		te_cmg_andean_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_andean_country, run after the part gates are fresh.
@@ -3486,10 +3534,13 @@ te_cmg_gran_colombian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the gran_colombian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_gran_colombian = {
-	te_cm_start_merge = { MERGE = gran_colombian RESULT = cm_gran_colombian }
-	te_cmg_gran_colombian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_gran_colombian ?= 1 global_var:te_cm_state_gran_colombian ?= 2 } }
+		te_cm_start_merge = { MERGE = gran_colombian RESULT = cm_gran_colombian }
+		te_cmg_gran_colombian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_gran_colombian_country, run after the part gates are fresh.
@@ -3673,10 +3724,13 @@ te_cmg_chinese_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the chinese merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_chinese = {
-	te_cm_start_merge = { MERGE = chinese RESULT = han }
-	te_cmg_chinese_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_chinese ?= 1 global_var:te_cm_state_chinese ?= 2 } }
+		te_cm_start_merge = { MERGE = chinese RESULT = han }
+		te_cmg_chinese_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_chinese_country, run after the part gates are fresh.
@@ -3814,10 +3868,13 @@ te_cmg_japanese_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the japanese merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_japanese = {
-	te_cm_start_merge = { MERGE = japanese RESULT = japanese }
-	te_cmg_japanese_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_japanese ?= 1 global_var:te_cm_state_japanese ?= 2 } }
+		te_cm_start_merge = { MERGE = japanese RESULT = japanese }
+		te_cmg_japanese_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_japanese_country, run after the part gates are fresh.
@@ -4138,10 +4195,13 @@ te_cmg_arab_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the arab merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_arab = {
-	te_cm_start_merge = { MERGE = arab RESULT = cm_arab }
-	te_cmg_arab_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_arab ?= 1 global_var:te_cm_state_arab ?= 2 } }
+		te_cm_start_merge = { MERGE = arab RESULT = cm_arab }
+		te_cmg_arab_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_arab_country, run after the part gates are fresh.
@@ -4361,10 +4421,13 @@ te_cmg_persian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the persian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_persian = {
-	te_cm_start_merge = { MERGE = persian RESULT = persian }
-	te_cmg_persian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_persian ?= 1 global_var:te_cm_state_persian ?= 2 } }
+		te_cm_start_merge = { MERGE = persian RESULT = persian }
+		te_cmg_persian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_persian_country, run after the part gates are fresh.
@@ -4577,10 +4640,13 @@ te_cmg_oghuz_turkic_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the oghuz_turkic merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_oghuz_turkic = {
-	te_cm_start_merge = { MERGE = oghuz_turkic RESULT = cm_oghuz_turkic }
-	te_cmg_oghuz_turkic_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 } }
+		te_cm_start_merge = { MERGE = oghuz_turkic RESULT = cm_oghuz_turkic }
+		te_cmg_oghuz_turkic_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_oghuz_turkic_country, run after the part gates are fresh.
@@ -4787,10 +4853,13 @@ te_cmg_hindustani_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the hindustani merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_hindustani = {
-	te_cm_start_merge = { MERGE = hindustani RESULT = hindustani }
-	te_cmg_hindustani_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_hindustani ?= 1 global_var:te_cm_state_hindustani ?= 2 } }
+		te_cm_start_merge = { MERGE = hindustani RESULT = hindustani }
+		te_cmg_hindustani_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_hindustani_country, run after the part gates are fresh.
@@ -5027,10 +5096,13 @@ te_cmg_dravidian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the dravidian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_dravidian = {
-	te_cm_start_merge = { MERGE = dravidian RESULT = cm_dravidian }
-	te_cmg_dravidian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_dravidian ?= 1 global_var:te_cm_state_dravidian ?= 2 } }
+		te_cm_start_merge = { MERGE = dravidian RESULT = cm_dravidian }
+		te_cmg_dravidian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_dravidian_country, run after the part gates are fresh.
@@ -5291,10 +5363,13 @@ te_cmg_indonesian_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the indonesian merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_indonesian = {
-	te_cm_start_merge = { MERGE = indonesian RESULT = cm_indonesian }
-	te_cmg_indonesian_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 } }
+		te_cm_start_merge = { MERGE = indonesian RESULT = cm_indonesian }
+		te_cmg_indonesian_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_indonesian_country, run after the part gates are fresh.
@@ -5478,10 +5553,13 @@ te_cmg_filipino_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the filipino merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_filipino = {
-	te_cm_start_merge = { MERGE = filipino RESULT = filipino }
-	te_cmg_filipino_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 } }
+		te_cm_start_merge = { MERGE = filipino RESULT = filipino }
+		te_cmg_filipino_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_filipino_country, run after the part gates are fresh.
@@ -5653,10 +5731,13 @@ te_cmg_nguni_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the nguni merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_nguni = {
-	te_cm_start_merge = { MERGE = nguni RESULT = cm_nguni }
-	te_cmg_nguni_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_nguni ?= 1 global_var:te_cm_state_nguni ?= 2 } }
+		te_cm_start_merge = { MERGE = nguni RESULT = cm_nguni }
+		te_cmg_nguni_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_nguni_country, run after the part gates are fresh.
@@ -5989,10 +6070,13 @@ te_cmg_latin_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the latin merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_latin = {
-	te_cm_start_merge = { MERGE = latin RESULT = cm_latin }
-	te_cmg_latin_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_latin ?= 1 global_var:te_cm_state_latin ?= 2 } }
+		te_cm_start_merge = { MERGE = latin RESULT = cm_latin }
+		te_cmg_latin_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_latin_country, run after the part gates are fresh.
@@ -6265,10 +6349,13 @@ te_cmg_pan_slavic_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the pan_slavic merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_pan_slavic = {
-	te_cm_start_merge = { MERGE = pan_slavic RESULT = cm_pan_slavic }
-	te_cmg_pan_slavic_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_pan_slavic ?= 1 global_var:te_cm_state_pan_slavic ?= 2 } }
+		te_cm_start_merge = { MERGE = pan_slavic RESULT = cm_pan_slavic }
+		te_cmg_pan_slavic_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_pan_slavic_country, run after the part gates are fresh.
@@ -6607,10 +6694,13 @@ te_cmg_pan_turkic_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the pan_turkic merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_pan_turkic = {
-	te_cm_start_merge = { MERGE = pan_turkic RESULT = cm_pan_turkic }
-	te_cmg_pan_turkic_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_pan_turkic ?= 1 global_var:te_cm_state_pan_turkic ?= 2 } }
+		te_cm_start_merge = { MERGE = pan_turkic RESULT = cm_pan_turkic }
+		te_cmg_pan_turkic_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_pan_turkic_country, run after the part gates are fresh.
@@ -6759,10 +6849,13 @@ te_cmg_pan_malay_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the pan_malay merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_pan_malay = {
-	te_cm_start_merge = { MERGE = pan_malay RESULT = cm_pan_malay }
-	te_cmg_pan_malay_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_pan_malay ?= 1 global_var:te_cm_state_pan_malay ?= 2 } }
+		te_cm_start_merge = { MERGE = pan_malay RESULT = cm_pan_malay }
+		te_cmg_pan_malay_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_pan_malay_country, run after the part gates are fresh.
@@ -7053,10 +7146,13 @@ te_cmg_east_african_join_ready = {
 }
 
 # Country scope: the button's effect. The country starts the east_african merge and brings in the parts it
-# holds that qualify now.
+# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
 te_cmg_start_east_african = {
-	te_cm_start_merge = { MERGE = east_african RESULT = cm_east_african }
-	te_cmg_east_african_join_ready = yes
+	if = {
+		limit = { NOR = { global_var:te_cm_state_east_african ?= 1 global_var:te_cm_state_east_african ?= 2 } }
+		te_cm_start_merge = { MERGE = east_african RESULT = cm_east_african }
+		te_cmg_east_african_join_ready = yes
+	}
 }
 
 # Country scope: the tail of te_cmg_census_east_african_country, run after the part gates are fresh.
@@ -7109,422 +7205,840 @@ te_cmg_census_east_african = {
 
 # ---- All merges ----
 
-# Any scope. A running merge whose starter no longer exists, or is no longer a living country, goes back
-# to idle (te_cm_release_starter), so another country can start it. Run first by te_cm_yearly_on_action.
+# Any scope. A merge whose starter no longer exists, or is no longer a living country, is picked up by the
+# country that carries te_cm_started_<m> (a civil war's winner inherits the loser's variables and continues the
+# nation): the first such living country becomes the starter. Only a running merge with no such country goes
+# back to idle (te_cm_release_starter), so another country can start it. Run first by te_cm_yearly_on_action.
 te_cmg_release_lost_starters = {
 	if = {
 		limit = {
-			global_var:te_cm_state_german ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_german }
-				AND = {
-					exists = global_var:te_cm_starter_german
-					global_var:te_cm_starter_german = { is_country_alive = no }
-				}
+				global_var:te_cm_state_german ?= 1
+				global_var:te_cm_state_german ?= 2
 			}
+			te_cmg_german_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_german
+			}
+			if = {
+				limit = { te_cmg_german_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_german value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_german ?= 1
+			te_cmg_german_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = german }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_italian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_italian }
-				AND = {
-					exists = global_var:te_cm_starter_italian
-					global_var:te_cm_starter_italian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_italian ?= 1
+				global_var:te_cm_state_italian ?= 2
 			}
+			te_cmg_italian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_italian
+			}
+			if = {
+				limit = { te_cmg_italian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_italian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_italian ?= 1
+			te_cmg_italian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = italian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_scandinavian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_scandinavian }
-				AND = {
-					exists = global_var:te_cm_starter_scandinavian
-					global_var:te_cm_starter_scandinavian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_scandinavian ?= 1
+				global_var:te_cm_state_scandinavian ?= 2
 			}
+			te_cmg_scandinavian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_scandinavian
+			}
+			if = {
+				limit = { te_cmg_scandinavian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_scandinavian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_scandinavian ?= 1
+			te_cmg_scandinavian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = scandinavian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_east_slavic ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_east_slavic }
-				AND = {
-					exists = global_var:te_cm_starter_east_slavic
-					global_var:te_cm_starter_east_slavic = { is_country_alive = no }
-				}
+				global_var:te_cm_state_east_slavic ?= 1
+				global_var:te_cm_state_east_slavic ?= 2
 			}
+			te_cmg_east_slavic_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_east_slavic
+			}
+			if = {
+				limit = { te_cmg_east_slavic_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_east_slavic value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_east_slavic ?= 1
+			te_cmg_east_slavic_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = east_slavic }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_yugoslav ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_yugoslav }
-				AND = {
-					exists = global_var:te_cm_starter_yugoslav
-					global_var:te_cm_starter_yugoslav = { is_country_alive = no }
-				}
+				global_var:te_cm_state_yugoslav ?= 1
+				global_var:te_cm_state_yugoslav ?= 2
 			}
+			te_cmg_yugoslav_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_yugoslav
+			}
+			if = {
+				limit = { te_cmg_yugoslav_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_yugoslav value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_yugoslav ?= 1
+			te_cmg_yugoslav_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = yugoslav }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_czechoslovak ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_czechoslovak }
-				AND = {
-					exists = global_var:te_cm_starter_czechoslovak
-					global_var:te_cm_starter_czechoslovak = { is_country_alive = no }
-				}
+				global_var:te_cm_state_czechoslovak ?= 1
+				global_var:te_cm_state_czechoslovak ?= 2
 			}
+			te_cmg_czechoslovak_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_czechoslovak
+			}
+			if = {
+				limit = { te_cmg_czechoslovak_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_czechoslovak value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_czechoslovak ?= 1
+			te_cmg_czechoslovak_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = czechoslovak }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_hungarian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_hungarian }
-				AND = {
-					exists = global_var:te_cm_starter_hungarian
-					global_var:te_cm_starter_hungarian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_hungarian ?= 1
+				global_var:te_cm_state_hungarian ?= 2
 			}
+			te_cmg_hungarian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_hungarian
+			}
+			if = {
+				limit = { te_cmg_hungarian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_hungarian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_hungarian ?= 1
+			te_cmg_hungarian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = hungarian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_dutch ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_dutch }
-				AND = {
-					exists = global_var:te_cm_starter_dutch
-					global_var:te_cm_starter_dutch = { is_country_alive = no }
-				}
+				global_var:te_cm_state_dutch ?= 1
+				global_var:te_cm_state_dutch ?= 2
 			}
+			te_cmg_dutch_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_dutch
+			}
+			if = {
+				limit = { te_cmg_dutch_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_dutch value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_dutch ?= 1
+			te_cmg_dutch_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = dutch }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_finnish ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_finnish }
-				AND = {
-					exists = global_var:te_cm_starter_finnish
-					global_var:te_cm_starter_finnish = { is_country_alive = no }
-				}
+				global_var:te_cm_state_finnish ?= 1
+				global_var:te_cm_state_finnish ?= 2
 			}
+			te_cmg_finnish_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_finnish
+			}
+			if = {
+				limit = { te_cmg_finnish_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_finnish value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_finnish ?= 1
+			te_cmg_finnish_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = finnish }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_french ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_french }
-				AND = {
-					exists = global_var:te_cm_starter_french
-					global_var:te_cm_starter_french = { is_country_alive = no }
-				}
+				global_var:te_cm_state_french ?= 1
+				global_var:te_cm_state_french ?= 2
 			}
+			te_cmg_french_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_french
+			}
+			if = {
+				limit = { te_cmg_french_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_french value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_french ?= 1
+			te_cmg_french_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = french }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_british ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_british }
-				AND = {
-					exists = global_var:te_cm_starter_british
-					global_var:te_cm_starter_british = { is_country_alive = no }
-				}
+				global_var:te_cm_state_british ?= 1
+				global_var:te_cm_state_british ?= 2
 			}
+			te_cmg_british_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_british
+			}
+			if = {
+				limit = { te_cmg_british_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_british value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_british ?= 1
+			te_cmg_british_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = british }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_american ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_american }
-				AND = {
-					exists = global_var:te_cm_starter_american
-					global_var:te_cm_starter_american = { is_country_alive = no }
-				}
+				global_var:te_cm_state_american ?= 1
+				global_var:te_cm_state_american ?= 2
 			}
+			te_cmg_american_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_american
+			}
+			if = {
+				limit = { te_cmg_american_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_american value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_american ?= 1
+			te_cmg_american_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = american }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_anglophone ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_anglophone }
-				AND = {
-					exists = global_var:te_cm_starter_anglophone
-					global_var:te_cm_starter_anglophone = { is_country_alive = no }
-				}
+				global_var:te_cm_state_anglophone ?= 1
+				global_var:te_cm_state_anglophone ?= 2
 			}
+			te_cmg_anglophone_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_anglophone
+			}
+			if = {
+				limit = { te_cmg_anglophone_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_anglophone value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_anglophone ?= 1
+			te_cmg_anglophone_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = anglophone }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_brazilian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_brazilian }
-				AND = {
-					exists = global_var:te_cm_starter_brazilian
-					global_var:te_cm_starter_brazilian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_brazilian ?= 1
+				global_var:te_cm_state_brazilian ?= 2
 			}
+			te_cmg_brazilian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_brazilian
+			}
+			if = {
+				limit = { te_cmg_brazilian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_brazilian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_brazilian ?= 1
+			te_cmg_brazilian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = brazilian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_platine ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_platine }
-				AND = {
-					exists = global_var:te_cm_starter_platine
-					global_var:te_cm_starter_platine = { is_country_alive = no }
-				}
+				global_var:te_cm_state_platine ?= 1
+				global_var:te_cm_state_platine ?= 2
 			}
+			te_cmg_platine_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_platine
+			}
+			if = {
+				limit = { te_cmg_platine_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_platine value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_platine ?= 1
+			te_cmg_platine_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = platine }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_andean ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_andean }
-				AND = {
-					exists = global_var:te_cm_starter_andean
-					global_var:te_cm_starter_andean = { is_country_alive = no }
-				}
+				global_var:te_cm_state_andean ?= 1
+				global_var:te_cm_state_andean ?= 2
 			}
+			te_cmg_andean_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_andean
+			}
+			if = {
+				limit = { te_cmg_andean_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_andean value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_andean ?= 1
+			te_cmg_andean_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = andean }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_gran_colombian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_gran_colombian }
-				AND = {
-					exists = global_var:te_cm_starter_gran_colombian
-					global_var:te_cm_starter_gran_colombian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_gran_colombian ?= 1
+				global_var:te_cm_state_gran_colombian ?= 2
 			}
+			te_cmg_gran_colombian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_gran_colombian
+			}
+			if = {
+				limit = { te_cmg_gran_colombian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_gran_colombian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_gran_colombian ?= 1
+			te_cmg_gran_colombian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = gran_colombian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_chinese ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_chinese }
-				AND = {
-					exists = global_var:te_cm_starter_chinese
-					global_var:te_cm_starter_chinese = { is_country_alive = no }
-				}
+				global_var:te_cm_state_chinese ?= 1
+				global_var:te_cm_state_chinese ?= 2
 			}
+			te_cmg_chinese_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_chinese
+			}
+			if = {
+				limit = { te_cmg_chinese_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_chinese value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_chinese ?= 1
+			te_cmg_chinese_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = chinese }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_japanese ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_japanese }
-				AND = {
-					exists = global_var:te_cm_starter_japanese
-					global_var:te_cm_starter_japanese = { is_country_alive = no }
-				}
+				global_var:te_cm_state_japanese ?= 1
+				global_var:te_cm_state_japanese ?= 2
 			}
+			te_cmg_japanese_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_japanese
+			}
+			if = {
+				limit = { te_cmg_japanese_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_japanese value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_japanese ?= 1
+			te_cmg_japanese_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = japanese }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_arab ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_arab }
-				AND = {
-					exists = global_var:te_cm_starter_arab
-					global_var:te_cm_starter_arab = { is_country_alive = no }
-				}
+				global_var:te_cm_state_arab ?= 1
+				global_var:te_cm_state_arab ?= 2
 			}
+			te_cmg_arab_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_arab
+			}
+			if = {
+				limit = { te_cmg_arab_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_arab value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_arab ?= 1
+			te_cmg_arab_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = arab }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_persian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_persian }
-				AND = {
-					exists = global_var:te_cm_starter_persian
-					global_var:te_cm_starter_persian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_persian ?= 1
+				global_var:te_cm_state_persian ?= 2
 			}
+			te_cmg_persian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_persian
+			}
+			if = {
+				limit = { te_cmg_persian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_persian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_persian ?= 1
+			te_cmg_persian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = persian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_oghuz_turkic ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_oghuz_turkic }
-				AND = {
-					exists = global_var:te_cm_starter_oghuz_turkic
-					global_var:te_cm_starter_oghuz_turkic = { is_country_alive = no }
-				}
+				global_var:te_cm_state_oghuz_turkic ?= 1
+				global_var:te_cm_state_oghuz_turkic ?= 2
 			}
+			te_cmg_oghuz_turkic_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_oghuz_turkic
+			}
+			if = {
+				limit = { te_cmg_oghuz_turkic_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_oghuz_turkic value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_oghuz_turkic ?= 1
+			te_cmg_oghuz_turkic_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = oghuz_turkic }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_hindustani ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_hindustani }
-				AND = {
-					exists = global_var:te_cm_starter_hindustani
-					global_var:te_cm_starter_hindustani = { is_country_alive = no }
-				}
+				global_var:te_cm_state_hindustani ?= 1
+				global_var:te_cm_state_hindustani ?= 2
 			}
+			te_cmg_hindustani_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_hindustani
+			}
+			if = {
+				limit = { te_cmg_hindustani_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_hindustani value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_hindustani ?= 1
+			te_cmg_hindustani_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = hindustani }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_dravidian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_dravidian }
-				AND = {
-					exists = global_var:te_cm_starter_dravidian
-					global_var:te_cm_starter_dravidian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_dravidian ?= 1
+				global_var:te_cm_state_dravidian ?= 2
 			}
+			te_cmg_dravidian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_dravidian
+			}
+			if = {
+				limit = { te_cmg_dravidian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_dravidian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_dravidian ?= 1
+			te_cmg_dravidian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = dravidian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_indonesian ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_indonesian }
-				AND = {
-					exists = global_var:te_cm_starter_indonesian
-					global_var:te_cm_starter_indonesian = { is_country_alive = no }
-				}
+				global_var:te_cm_state_indonesian ?= 1
+				global_var:te_cm_state_indonesian ?= 2
 			}
+			te_cmg_indonesian_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_indonesian
+			}
+			if = {
+				limit = { te_cmg_indonesian_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_indonesian value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_indonesian ?= 1
+			te_cmg_indonesian_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = indonesian }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_filipino ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_filipino }
-				AND = {
-					exists = global_var:te_cm_starter_filipino
-					global_var:te_cm_starter_filipino = { is_country_alive = no }
-				}
+				global_var:te_cm_state_filipino ?= 1
+				global_var:te_cm_state_filipino ?= 2
 			}
+			te_cmg_filipino_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_filipino
+			}
+			if = {
+				limit = { te_cmg_filipino_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_filipino value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_filipino ?= 1
+			te_cmg_filipino_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = filipino }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_nguni ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_nguni }
-				AND = {
-					exists = global_var:te_cm_starter_nguni
-					global_var:te_cm_starter_nguni = { is_country_alive = no }
-				}
+				global_var:te_cm_state_nguni ?= 1
+				global_var:te_cm_state_nguni ?= 2
 			}
+			te_cmg_nguni_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_nguni
+			}
+			if = {
+				limit = { te_cmg_nguni_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_nguni value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_nguni ?= 1
+			te_cmg_nguni_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = nguni }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_latin ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_latin }
-				AND = {
-					exists = global_var:te_cm_starter_latin
-					global_var:te_cm_starter_latin = { is_country_alive = no }
-				}
+				global_var:te_cm_state_latin ?= 1
+				global_var:te_cm_state_latin ?= 2
 			}
+			te_cmg_latin_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_latin
+			}
+			if = {
+				limit = { te_cmg_latin_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_latin value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_latin ?= 1
+			te_cmg_latin_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = latin }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_pan_slavic ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_pan_slavic }
-				AND = {
-					exists = global_var:te_cm_starter_pan_slavic
-					global_var:te_cm_starter_pan_slavic = { is_country_alive = no }
-				}
+				global_var:te_cm_state_pan_slavic ?= 1
+				global_var:te_cm_state_pan_slavic ?= 2
 			}
+			te_cmg_pan_slavic_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_pan_slavic
+			}
+			if = {
+				limit = { te_cmg_pan_slavic_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_pan_slavic value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_slavic ?= 1
+			te_cmg_pan_slavic_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = pan_slavic }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_pan_turkic ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_pan_turkic }
-				AND = {
-					exists = global_var:te_cm_starter_pan_turkic
-					global_var:te_cm_starter_pan_turkic = { is_country_alive = no }
-				}
+				global_var:te_cm_state_pan_turkic ?= 1
+				global_var:te_cm_state_pan_turkic ?= 2
 			}
+			te_cmg_pan_turkic_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_pan_turkic
+			}
+			if = {
+				limit = { te_cmg_pan_turkic_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_pan_turkic value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_turkic ?= 1
+			te_cmg_pan_turkic_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = pan_turkic }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_pan_malay ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_pan_malay }
-				AND = {
-					exists = global_var:te_cm_starter_pan_malay
-					global_var:te_cm_starter_pan_malay = { is_country_alive = no }
-				}
+				global_var:te_cm_state_pan_malay ?= 1
+				global_var:te_cm_state_pan_malay ?= 2
 			}
+			te_cmg_pan_malay_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_pan_malay
+			}
+			if = {
+				limit = { te_cmg_pan_malay_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_pan_malay value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_pan_malay ?= 1
+			te_cmg_pan_malay_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = pan_malay }
 	}
 	if = {
 		limit = {
-			global_var:te_cm_state_east_african ?= 1
 			OR = {
-				NOT = { exists = global_var:te_cm_starter_east_african }
-				AND = {
-					exists = global_var:te_cm_starter_east_african
-					global_var:te_cm_starter_east_african = { is_country_alive = no }
-				}
+				global_var:te_cm_state_east_african ?= 1
+				global_var:te_cm_state_east_african ?= 2
 			}
+			te_cmg_east_african_starter_gone = yes
+		}
+		every_country = {
+			limit = {
+				is_country_alive = yes
+				has_variable = te_cm_started_east_african
+			}
+			if = {
+				limit = { te_cmg_east_african_starter_gone = yes }
+				set_global_variable = { name = te_cm_starter_east_african value = this }
+			}
+		}
+	}
+	if = {
+		limit = {
+			global_var:te_cm_state_east_african ?= 1
+			te_cmg_east_african_starter_gone = yes
 		}
 		te_cm_release_starter = { MERGE = east_african }
 	}

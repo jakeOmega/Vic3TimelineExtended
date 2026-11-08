@@ -85,6 +85,19 @@ def defined_loc():
     return {**loc_of(GEN_LOC), **loc_of(MISC_LOC)}
 
 
+_ALL_LOC = None
+
+
+def all_english_loc_keys():
+    """Every English loc key the mod defines (all files, replace/ included), for resolving a splice."""
+    global _ALL_LOC
+    if _ALL_LOC is None:
+        _ALL_LOC = set()
+        for path in (ROOT / "localization" / "english").rglob("*.yml"):
+            _ALL_LOC.update(re.findall(r"^ (\S+?):\d* ", path.read_text(encoding="utf-8-sig"), re.M))
+    return _ALL_LOC
+
+
 def entry_nodes():
     nodes, _ = parse_text(JE_FILE.read_text(encoding="utf-8-sig"), "te_culture_merges_generated.txt")
     return {n.key: n for n in nodes if n.children}
@@ -113,6 +126,174 @@ def child(node, key):
 
 def children(node, key):
     return [c for c in node.children if c.key == key]
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# A small interpreter for the subset of script the generated triggers, effects and values use, so a test can ask
+# what a trigger says about a world instead of what its text looks like. It keeps no operator (the parsed tree
+# has none), so it is only used on forms that need none: `global_var:x ?= N`, has_*, exists, this, the logic
+# blocks, and the script values' value / divide / max / if / else.
+# ---------------------------------------------------------------------------------------------------------------
+
+
+class World:
+    """Global variables, which countries live and carry which variables, the technologies known, who is `this`."""
+
+    def __init__(self, globals=None, alive=None, country_vars=None, techs=(), named=None, primary=()):
+        self.globals = dict(globals or {})
+        self.alive = dict(alive or {})
+        self.vars = {c: set(v) for c, v in (country_vars or {}).items()}
+        self.techs = set(techs)
+        self.named = dict(named or {})
+        self.primary = set(primary)
+        self.this = None
+
+
+_DEFS = {}
+
+
+def definitions(path):
+    if path not in _DEFS:
+        nodes, _ = parse_text(path.read_text(encoding="utf-8-sig"), path.name)
+        _DEFS[path] = {n.key: n for n in nodes if n.children}
+    return _DEFS[path]
+
+
+def holds(nodes, world):
+    return all(_holds_one(n, world) for n in nodes)
+
+
+def _in_scope(world, country, fn):
+    saved = world.this
+    world.this = country
+    try:
+        return fn()
+    finally:
+        world.this = saved
+
+
+def _holds_one(n, world):
+    k, v = n.key, n.value
+    if k == "AND":
+        return holds(n.children, world)
+    if k == "OR":
+        return any(_holds_one(c, world) for c in n.children)
+    if k in ("NOR",):
+        return not any(_holds_one(c, world) for c in n.children)
+    if k == "NOT":
+        return not holds(n.children, world)
+    if k == "always":
+        return v == "yes"
+    if k == "custom_tooltip":
+        return holds([c for c in n.children if c.key != "text"], world)
+    if k.startswith("global_var:"):
+        name = k.split(":", 1)[1]
+        if n.children:  # global_var:x = { is_country_alive = no }
+            if name not in world.globals:
+                raise AssertionError("scoped into the unset global %s" % name)
+            return _in_scope(world, world.globals[name], lambda: holds(n.children, world))
+        return str(world.globals.get(name)) == v
+    if k == "has_global_variable":
+        return v in world.globals
+    if k == "has_variable":
+        return v in world.vars.get(world.this, set())
+    if k == "exists":
+        return v.split(":", 1)[1] in world.globals
+    if k == "this":
+        return world.this == world.globals.get(v.split(":", 1)[1])
+    if k == "is_country_alive":
+        return world.alive.get(world.this, True) == (v == "yes")
+    if k == "country_has_primary_culture":
+        return v.split(":", 1)[1] in world.primary
+    if k == "te_cm_tier_tech":
+        return int(child(n, "TIER").value) in world.techs
+    if k in world.named:
+        return world.named[k] == (v == "yes")
+    for path in (GEN_TRIGGERS, ROOT / "common/scripted_triggers/te_culture_merge_triggers.txt"):
+        if k in definitions(path) and v == "yes":
+            return holds(definitions(path)[k].children, world)
+    raise KeyError("the test interpreter does not know %s" % k)
+
+
+def run_effects(nodes, world, this):
+    """Run if / every_country / set_global_variable / the release helper over a world."""
+    for n in nodes:
+        k = n.key
+        saved = world.this
+        world.this = this
+        try:
+            if k == "if":
+                limit = child(n, "limit")
+                if holds(limit.children, world):
+                    run_effects([c for c in n.children if c.key != "limit"], world, this)
+            elif k == "every_country":
+                limit = child(n, "limit")
+                body = [c for c in n.children if c.key != "limit"]
+                for country in sorted(world.alive):
+                    world.this = country
+                    if holds(limit.children, world):
+                        run_effects(body, world, country)
+            elif k == "set_global_variable":
+                name = child(n, "name").value
+                value = child(n, "value").value
+                world.globals[name] = this if value == "this" else int(value) if value.isdigit() else value
+            elif k == "remove_global_variable":
+                world.globals.pop(n.value, None)
+            elif k == "remove_variable":
+                world.vars.setdefault(this, set()).discard(n.value)
+            elif k == "te_cm_release_starter":
+                helper = block(text_of(EFFECTS), "te_cm_release_starter").replace("$MERGE$", child(n, "MERGE").value)
+                body, _ = parse_text(helper, "helper")
+                run_effects(body, world, this)
+            else:
+                raise KeyError("the test interpreter does not know %s" % k)
+        finally:
+            world.this = saved
+
+
+def value_of(name, world):
+    """A generated script value over a world: value / divide / multiply / max / min / if / else, each statement
+    acting on the running total, inside an if too."""
+    values = definitions(VALUES)
+    constants = dict(re.findall(r"^(te_cm_\w+) = ([\d.]+)$", text_of(HAND_VALUES), re.M))
+
+    def number(token):
+        if token.startswith("global_var:"):
+            return float(world.globals[token.split(":", 1)[1]])
+        if token in values:
+            return run(values[token].children, 0.0)
+        if token in constants:
+            return float(constants[token])
+        return float(token)
+
+    def run(nodes, total):
+        last_if = None
+        for n in nodes:
+            k = n.key
+            if k == "limit":
+                continue
+            if k == "value":
+                total = number(n.value)
+            elif k == "divide":
+                total /= number(n.value)
+            elif k == "multiply":
+                total *= number(n.value)
+            elif k == "max":
+                total = min(total, number(n.value))
+            elif k == "min":
+                total = max(total, number(n.value))
+            elif k == "if":
+                last_if = holds(child(n, "limit").children, world)
+                if last_if:
+                    total = run(n.children, total)
+            elif k == "else":
+                if not last_if:
+                    total = run(n.children, total)
+            else:
+                raise KeyError("the test interpreter does not know %s" % k)
+        return total
+
+    return run(values[name].children, 0.0)
 
 
 class FilesTest(unittest.TestCase):
@@ -204,8 +385,8 @@ class EntryShapeTest(unittest.TestCase):
             # Complete first: when two are true on the same update the first declared wins.
             self.assertEqual(
                 squash(text_of_node(child(complete, "trigger"))),
-                # (the parsed tree keeps no operator: `?= 2` reads `= 2`)
-                "te_cmg_%s_is_starter = yes global_var:te_cm_state_%s = 2" % (key, key),
+                # (the parsed tree keeps no operator: `?= 2` reads `= 2`). R5 in full: state 2 AND no joined part left unswitched.
+                "te_cmg_%s_is_starter = yes global_var:te_cm_state_%s = 2 te_cmg_%s_all_switched = yes" % (key, key, key),
             )
             self.assertEqual(child(complete, "conclusion_desc").value, "je_te_cm_%s_complete_conclusion_desc" % key)
             self.assertIsNone(child(complete, "flags"))
@@ -215,18 +396,27 @@ class EntryShapeTest(unittest.TestCase):
             self.assertEqual(squash(child_text(invalid, "trigger")), "te_cmg_%s_has_other_starter = yes" % key)
             self.assertNotIn("te_cm_system_enabled", text_of_node(invalid))
 
-    def test_the_other_starter_triggers(self):
+    def test_the_starter_triggers(self):
+        # R30: a civil war's winner inherits te_cm_started_<m> and continues the nation, while the global starter
+        # still names the dead tag.
         triggers = text_of(GEN_TRIGGERS)
         for merge in cfg.MERGES:
             key = merge.key
             running = "OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 }" % (key, key)
             self.assertEqual(
+                squash(block(triggers, "te_cmg_%s_starter_gone" % key)),
+                "OR = { NOT = { exists = global_var:te_cm_starter_%s } AND = { exists = global_var:te_cm_starter_%s "
+                "global_var:te_cm_starter_%s = { is_country_alive = no } } }" % (key, key, key),
+            )
+            self.assertEqual(
                 squash(block(triggers, "te_cmg_%s_is_starter" % key)),
-                running + " exists = global_var:te_cm_starter_%s this = global_var:te_cm_starter_%s" % (key, key),
+                running + " OR = { AND = { exists = global_var:te_cm_starter_%s this = global_var:te_cm_starter_%s } "
+                "AND = { has_variable = te_cm_started_%s te_cmg_%s_starter_gone = yes } }" % (key, key, key, key),
             )
             self.assertEqual(
                 squash(block(triggers, "te_cmg_%s_has_other_starter" % key)),
-                running + " exists = global_var:te_cm_starter_%s NOT = { this = global_var:te_cm_starter_%s }" % (key, key),
+                running + " exists = global_var:te_cm_starter_%s global_var:te_cm_starter_%s = { is_country_alive = yes } "
+                "NOT = { this = global_var:te_cm_starter_%s } NOT = { has_variable = te_cm_started_%s }" % (key, key, key, key),
             )
 
     def test_the_bar_follows_the_progress_each_month_and_pauses_with_the_rule(self):
@@ -297,20 +487,32 @@ class StatusTextTest(unittest.TestCase):
             first_valid, rows = self.rows(key)
             descs = [d for d, _ in rows]
             self.assertEqual(descs[0], "je_te_cm_%s_status_complete" % key)
-            self.assertEqual(descs[1], "je_te_cm_%s_status_running" % key)
-            self.assertEqual(descs[2], "te_cm_status_elsewhere")
-            self.assertEqual(descs[3:5], ["te_cm_status_not_candidate", "te_cm_status_unmeasured"])
-            self.assertEqual(descs[-1], "te_cm_status_ready")
+            self.assertEqual(descs[1], "je_te_cm_%s_status_late" % key)
+            self.assertEqual(descs[2], "je_te_cm_%s_status_running" % key)
+            self.assertEqual(descs[3], "te_cm_status_elsewhere")
+            self.assertEqual(descs[4:6], ["te_cm_status_not_candidate", "te_cm_status_unmeasured"])
+            # The rule being off is told before "ready" (can_start doesn't test the rule), which closes the list.
+            self.assertEqual(descs[-2:], ["te_cm_status_rule_off", "te_cm_status_ready"])
             # The unconditional fallback, after the last row (the only `desc` that no triggered_desc holds).
             self.assertEqual(squash(inner(je_text(key), "first_valid")).split(" desc = ")[-1], "te_cm_status_pending")
             self.assertTrue(first_valid)
             self.assertEqual(len(descs), len(set(descs)), key)
-            # The standard-of-living row sits after every core slot and before the component and wait rows.
+            # A component merge that hasn't finished comes before any slot (its result is not a part to hold until it
+            # has); the standard-of-living row sits after every slot and before the waits.
             sol = descs.index("te_cm_status_sol")
             for index, part in enumerate(merge.core, start=1):
-                self.assertLess(descs.index("je_te_cm_%s_status_busy_%d" % (key, index)), sol)
-            for component in merge.components:
-                self.assertGreater(descs.index("je_te_cm_%s_status_component_%s" % (key, component)), sol)
+                busy = descs.index("je_te_cm_%s_status_busy_%d" % (key, index))
+                self.assertLess(busy, sol)
+                for component in merge.components:
+                    self.assertLess(descs.index("je_te_cm_%s_status_component_%s" % (key, component)), busy, key)
+            for part in merge.core:
+                if part.wait_for:
+                    self.assertGreater(descs.index("je_te_cm_%s_status_wait_%s" % (key, part.cultures[0])), sol)
+            # The complete row needs every joined part switched; the late row is the core's completion with one left.
+            rows = dict(self.rows(key)[1])
+            self.assertIn("te_cmg_%s_all_switched = yes" % key, rows["je_te_cm_%s_status_complete" % key])
+            self.assertNotIn("all_switched", rows["je_te_cm_%s_status_late" % key])
+            self.assertIn("global_var:te_cm_state_%s ?= 2" % key, rows["je_te_cm_%s_status_late" % key])
 
     def test_running_shows_the_lowest_share_and_the_starters_speed(self):
         # R28: the starter's Culture Merge Speed total, beside the lowest core dominance.
@@ -319,6 +521,13 @@ class StatusTextTest(unittest.TestCase):
             self.assertIn("ScriptValue('te_cmg_%s_lowest_dom')|%%0]" % merge.key, text)
             self.assertIn("ScriptValue('te_cm_speed_display')", text)
             self.assertIn("ScriptValue('te_cm_switch_share')", text)
+            # The modifier's name is spliced, never spelled.
+            self.assertIn("$country_culture_merge_speed_mult$", text)
+            self.assertNotIn("Culture merge speed", text)
+            # Once the merge is complete, the late part's share: the lowest over every part that joined.
+            late = self.loc["je_te_cm_%s_status_late" % merge.key]
+            self.assertIn("ScriptValue('te_cmg_%s_lowest_dom_all')|%%0]" % merge.key, late)
+            self.assertIn("$country_culture_merge_speed_mult$", late)
         values = text_of(DISPLAY_VALUES)
         self.assertEqual(squash(block(values, "te_cm_speed_display")), "value = modifier:country_culture_merge_speed_mult")
 
@@ -340,8 +549,17 @@ class StatusTextTest(unittest.TestCase):
                     years = "je_te_cm_%s_status_years_%s" % (key, culture)
                     if tier_of(merge, culture) > 1:
                         self.assertIn("NOT = { te_cmg_%s_%s_years_met = yes }" % (key, culture), by_desc[years])
+                        # The counter is of years held and accepted together, also for the country's own primary culture.
+                        self.assertIn("held and accepted together", self.loc[years])
                     else:
                         self.assertNotIn(years, by_desc)
+                    start = max(tier_of(merge, p.cultures[0]) for p in merge.core)
+                    tech = "je_te_cm_%s_status_tech_%s" % (key, culture)
+                    if tier_of(merge, culture) != start:
+                        self.assertIn("NOT = { te_cm_tier_tech = { TIER = %d } }" % tier_of(merge, culture), by_desc[tech])
+                        self.assertIn("$%s$" % gen.TIER_TECH[tier_of(merge, culture)], self.loc[tech])
+                    else:
+                        self.assertNotIn(tech, by_desc)
                     # Each row applies only while the slot is unmet, so an earlier slot's failure shows first.
                     self.assertTrue(hold.startswith("NOT = { "), key)
                     descs = [d for d, _ in rows]
@@ -570,6 +788,7 @@ class HelpersTest(unittest.TestCase):
             body,
             "set_global_variable = { name = te_cm_state_$MERGE$ value = 1 } "
             "set_global_variable = { name = te_cm_starter_$MERGE$ value = this } "
+            "set_variable = { name = te_cm_started_$MERGE$ value = 1 } "
             "if = { limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } } add_primary_culture = cu:$RESULT$ }",
         )
 
@@ -586,10 +805,12 @@ class HelpersTest(unittest.TestCase):
         self.assertEqual(
             body,
             "set_global_variable = { name = te_cm_state_$MERGE$ value = 0 } "
-            "if = { limit = { has_global_variable = te_cm_starter_$MERGE$ } remove_global_variable = te_cm_starter_$MERGE$ }",
+            "if = { limit = { has_global_variable = te_cm_starter_$MERGE$ } remove_global_variable = te_cm_starter_$MERGE$ } "
+            "every_country = { limit = { has_variable = te_cm_started_$MERGE$ } remove_variable = te_cm_started_$MERGE$ }",
         )
-        # Joined parts, dominance and counters stay: nothing but the starter is removed or unset.
+        # Joined parts, dominance and counters stay: nothing but the starter and its flag is removed or unset.
         self.assertEqual(body.count("remove_global_variable"), 1)
+        self.assertEqual(body.count("remove_variable"), 1)
         for kept in ("te_cm_joined_", "te_cm_in_", "te_cm_dom_", "te_cm_years_", "te_cm_wait_years_", "te_cm_home_"):
             self.assertNotIn(kept, body)
 
@@ -639,24 +860,43 @@ class StarterLossTest(unittest.TestCase):
         for merge in cfg.MERGES:
             key = merge.key
             self.assertEqual(body.count("te_cm_release_starter = { MERGE = %s }" % key), 1, key)
+            # Only a running merge, and only while the starter is gone (re-evaluated after the re-point above it).
             self.assertIn(
-                "if = { limit = { global_var:te_cm_state_%s ?= 1 OR = { NOT = { exists = global_var:te_cm_starter_%s } "
-                "AND = { exists = global_var:te_cm_starter_%s global_var:te_cm_starter_%s = { is_country_alive = no } } } } "
-                "te_cm_release_starter = { MERGE = %s } }" % (key, key, key, key, key),
+                "if = { limit = { global_var:te_cm_state_%s ?= 1 te_cmg_%s_starter_gone = yes } "
+                "te_cm_release_starter = { MERGE = %s } }" % (key, key, key),
                 body,
                 key,
             )
 
     def test_a_dead_starter_is_released_as_well_as_a_missing_one(self):
         # The task 4 review: a country that lost every state still resolves, so its absence can't be the only test.
+        triggers = text_of(GEN_TRIGGERS)
+        for merge in cfg.MERGES:
+            gone = squash(block(triggers, "te_cmg_%s_starter_gone" % merge.key))
+            self.assertIn("NOT = { exists = global_var:te_cm_starter_%s }" % merge.key, gone)
+            self.assertIn("global_var:te_cm_starter_%s = { is_country_alive = no }" % merge.key, gone)
+
+    def test_a_flag_holder_takes_the_merge_over_before_it_is_released(self):
+        # R30: the re-point comes first, in the same pass, and the release only follows if it found nobody.
         body = squash(block(self.effects, "te_cmg_release_lost_starters"))
-        self.assertEqual(body.count("is_country_alive = no"), len(cfg.MERGES))
-        self.assertEqual(body.count("NOT = { exists = global_var:te_cm_starter_"), len(cfg.MERGES))
+        for merge in cfg.MERGES:
+            key = merge.key
+            repoint = (
+                "if = { limit = { OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 } "
+                "te_cmg_%s_starter_gone = yes } every_country = { limit = { is_country_alive = yes has_variable = te_cm_started_%s } "
+                "if = { limit = { te_cmg_%s_starter_gone = yes } set_global_variable = { name = te_cm_starter_%s value = this } } } }"
+                % (key, key, key, key, key, key)
+            )
+            self.assertEqual(body.count(repoint), 1, key)
+            self.assertLess(body.index(repoint), body.index("te_cm_release_starter = { MERGE = %s }" % key), key)
+            self.assertEqual(body.count("name = te_cm_starter_%s value = this" % key), 1, key)
 
     def test_only_a_running_merge_is_released(self):
         # A complete merge keeps its state with its starter gone; releasing it would let the merge start twice.
         body = squash(block(self.effects, "te_cmg_release_lost_starters"))
-        self.assertNotIn("?= 2", body)
+        for merge in cfg.MERGES:
+            key = merge.key
+            self.assertEqual(body.count("global_var:te_cm_state_%s ?= 1 te_cmg_%s_starter_gone = yes } te_cm_release_starter" % (key, key)), 1)
 
     def test_losing_the_result_as_primary_is_not_a_release(self):
         body = squash(block(self.effects, "te_cmg_release_lost_starters"))
@@ -716,12 +956,14 @@ class CensusTailTest(unittest.TestCase):
         self.assertIn("te_cm_in_yankee ?= %d" % index, triggers)
         self.assertIn("INDEX = %d" % index, squash(block(self.effects, "te_cmg_american_join_ready")))
 
-    def test_the_button_starts_then_joins(self):
+    def test_the_button_starts_then_joins_and_only_an_idle_merge(self):
+        # A second click on the same day, or the AI's, finds the merge already running.
         for merge in cfg.MERGES:
             key = merge.key
             self.assertEqual(
                 squash(block(self.effects, "te_cmg_start_%s" % key)),
-                "te_cm_start_merge = { MERGE = %s RESULT = %s } te_cmg_%s_join_ready = yes" % (key, merge.result, key),
+                "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s } te_cmg_%s_join_ready = yes }"
+                % (idle(key), key, merge.result, key),
             )
 
     def test_a_wait_year_counts_once_a_census_while_the_merge_could_start_and_an_entry_is_open(self):
@@ -800,33 +1042,42 @@ class ValuesAndBarsTest(unittest.TestCase):
         cls.bars = text_of(BARS)
 
     def test_progress_is_the_lowest_share_over_the_switch_share_capped_at_one(self):
+        # While the merge runs the core's lowest share; once it is complete (state 2) the lowest over every part that
+        # joined, which are the late ones.
         for merge in cfg.MERGES:
             key = merge.key
-            core = [c for p in merge.core for c in p.cultures if not absorb_result(merge, c)]
             progress = squash(block(self.values, "te_cmg_%s_progress" % key))
-            joined = " ".join("global_var:te_cm_joined_%s_%s ?= 1" % (key, c) for c in core)
             self.assertEqual(
                 progress,
-                "value = 0 if = { limit = { OR = { %s } } value = te_cmg_%s_lowest_dom divide = te_cm_switch_share max = 1 }" % (joined, key),
+                "value = 0 if = { limit = { global_var:te_cm_state_%s ?= 2 } value = te_cmg_%s_lowest_dom_all "
+                "divide = te_cm_switch_share max = 1 } else = { value = te_cmg_%s_lowest_dom divide = te_cm_switch_share max = 1 }"
+                % (key, key, key),
             )
             self.assertEqual(squash(block(self.values, "te_cmg_%s_bar_pct" % key)), "value = te_cmg_%s_progress multiply = 100" % key)
 
     def test_lowest_share_skips_switched_parts_and_counts_an_unmeasured_one_as_zero(self):
         for merge in cfg.MERGES:
             key = merge.key
-            body = squash(block(self.values, "te_cmg_%s_lowest_dom" % key))
-            self.assertTrue(body.startswith("value = 1 "), key)
-            for culture in [c for p in merge.core for c in p.cultures if not absorb_result(merge, c)]:
-                self.assertIn(
-                    "if = { limit = { global_var:te_cm_joined_%s_%s ?= 1 NOT = { has_global_variable = te_cm_switched_%s } } "
-                    "if = { limit = { has_global_variable = te_cm_dom_%s_%s } max = global_var:te_cm_dom_%s_%s } else = { max = 0 } }"
-                    % (key, culture, culture, key, culture, key, culture),
-                    body,
-                    "%s %s" % (key, culture),
-                )
-            # Only core parts, and never an absorb merge's result (it is never joined).
+            for name, cultures in (
+                ("te_cmg_%s_lowest_dom" % key, [c for p in merge.core for c in p.cultures if not absorb_result(merge, c)]),
+                ("te_cmg_%s_lowest_dom_all" % key, [c for c in slot_cultures(merge) if not absorb_result(merge, c)]),
+            ):
+                body = squash(block(self.values, name))
+                joined = " ".join("global_var:te_cm_joined_%s_%s ?= 1" % (key, c) for c in cultures)
+                # 0 until a part has joined; 1, from which each unswitched joined part takes its share, once one has.
+                self.assertTrue(body.startswith("value = 0 if = { limit = { OR = { %s } } value = 1 " % joined), name)
+                for culture in cultures:
+                    self.assertIn(
+                        "if = { limit = { global_var:te_cm_joined_%s_%s ?= 1 NOT = { has_global_variable = te_cm_switched_%s } } "
+                        "if = { limit = { has_global_variable = te_cm_dom_%s_%s } max = global_var:te_cm_dom_%s_%s } else = { max = 0 } }"
+                        % (key, culture, culture, key, culture, key, culture),
+                        body,
+                        "%s %s" % (name, culture),
+                    )
+            # The core's figure leaves optional parts out; the other one has them.
             for part in merge.optional:
-                self.assertNotIn("te_cm_joined_%s_%s " % (key, part.cultures[0]), body, key)
+                self.assertNotIn("te_cm_joined_%s_%s " % (key, part.cultures[0]), squash(block(self.values, "te_cmg_%s_lowest_dom" % key)))
+                self.assertIn("te_cm_joined_%s_%s " % (key, part.cultures[0]), squash(block(self.values, "te_cmg_%s_lowest_dom_all" % key)))
 
     def test_one_bar_per_merge_from_zero_to_a_hundred(self):
         for merge in cfg.MERGES:
@@ -870,7 +1121,7 @@ class LocTest(unittest.TestCase):
             self.assertEqual(self.generated["je_te_cm_%s" % merge.key], "Cultural Merge: $%s$" % merge.result)
 
     def test_every_splice_resolves_and_names_are_spliced_not_spelled(self):
-        known = set(self.loc) | set(self.vanilla)
+        known = all_english_loc_keys() | set(self.vanilla)
         for key, text in self.generated.items():
             for splice in re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", text):
                 self.assertIn(splice, known, "%s splices %s" % (key, splice))
@@ -947,6 +1198,383 @@ class ThePlanTest(unittest.TestCase):
         broken = (cfg.Merge("x", "cm_x", cfg.NewCulture('X"', (1, 2, 3)), core=(cfg.Part(("north_german",)), cfg.Part(("south_german",)))),)
         with self.assertRaises(ValueError):
             gen.render_loc(gen.build_plan(vanilla(), broken))
+
+
+def complete_trigger(key):
+    """The conditions of a merge entry's complete outcome, parsed."""
+    entry = entry_nodes()["je_te_cm_%s" % key]
+    complete, _ = children(entry, "outcome")
+    return child(complete, "trigger").children
+
+
+def joined_world(merge, state, joined, switched, this="A", starter="A", flagged=()):
+    """A world where ``this`` is looking at a merge in ``state``, with the named cultures joined and switched."""
+    key = merge.key
+    globals_ = {"te_cm_state_%s" % key: state, "te_cm_starter_%s" % key: starter}
+    globals_.update({"te_cm_joined_%s_%s" % (key, c): 1 for c in joined})
+    globals_.update({"te_cm_switched_%s" % c: "cu" for c in switched})
+    world = World(globals_, alive={"A": True, "B": True, "C": True}, country_vars={c: {"te_cm_started_%s" % key} for c in flagged})
+    world.this = this
+    return world
+
+
+class CompleteTest(unittest.TestCase):
+    """R5 in full: complete when the state is 2 and no joined part is left unswitched."""
+
+    def test_all_switched_is_a_nor_over_every_slot_culture_that_can_join(self):
+        triggers = text_of(GEN_TRIGGERS)
+        for merge in cfg.MERGES:
+            key = merge.key
+            cultures = [c for c in slot_cultures(merge) if not absorb_result(merge, c)]
+            self.assertEqual(
+                squash(block(triggers, "te_cmg_%s_all_switched" % key)),
+                "NOR = { %s }" % " ".join(
+                    "AND = { global_var:te_cm_joined_%s_%s ?= 1 NOT = { has_global_variable = te_cm_switched_%s } }" % (key, c, c)
+                    for c in cultures
+                ),
+                key,
+            )
+
+    def test_a_merge_whose_only_remaining_joined_part_is_optional_is_not_complete(self):
+        german = cfg.merge_by_key("german")
+        core = ["north_german", "south_german"]
+        # Task 6 set the state to 2 when both core parts switched; Alemannic joined and is still converting.
+        world = joined_world(german, 2, core + ["alemannic"], core)
+        self.assertFalse(holds(definitions(GEN_TRIGGERS)["te_cmg_german_all_switched"].children, world))
+        self.assertFalse(holds(complete_trigger("german"), world))
+        # It switches, and the entry may conclude.
+        world = joined_world(german, 2, core + ["alemannic"], core + ["alemannic"])
+        self.assertTrue(holds(complete_trigger("german"), world))
+        # A part that never joined doesn't hold it back.
+        world = joined_world(german, 2, core, core)
+        self.assertTrue(holds(complete_trigger("german"), world))
+
+    def test_every_merge_waits_for_its_last_late_part(self):
+        for merge in cfg.MERGES:
+            key = merge.key
+            joinable = [c for c in slot_cultures(merge) if not absorb_result(merge, c)]
+            core = [c for p in merge.core for c in p.cultures if not absorb_result(merge, c)]
+            for late in joinable:
+                world = joined_world(merge, 2, core + [late], core)
+                if late in core:
+                    continue
+                self.assertFalse(holds(complete_trigger(key), world), "%s: %s still converting" % (key, late))
+                world = joined_world(merge, 2, core + [late], core + [late])
+                self.assertTrue(holds(complete_trigger(key), world), key)
+
+    def test_complete_needs_the_state_and_the_starter(self):
+        german = cfg.merge_by_key("german")
+        core = ["north_german", "south_german"]
+        self.assertFalse(holds(complete_trigger("german"), joined_world(german, 1, core, core)))
+        self.assertFalse(holds(complete_trigger("german"), joined_world(german, 2, core, core, this="C")))
+        self.assertTrue(holds(complete_trigger("german"), joined_world(german, 2, core, core)))
+
+    def test_an_absorb_merges_result_is_never_waited_for(self):
+        hungarian = cfg.merge_by_key("hungarian")
+        world = joined_world(hungarian, 2, ["szekely"], ["szekely"])
+        self.assertTrue(holds(complete_trigger("hungarian"), world))
+        self.assertNotIn("hungarian_hungarian", block(text_of(GEN_TRIGGERS), "te_cmg_hungarian_all_switched"))
+
+    def test_the_status_text_tells_a_late_part_from_a_finished_merge(self):
+        # state 2 with a late part still converting is its own row, ahead of "running", showing the lowest share over
+        # every part that joined; a finished merge is the complete row.
+        entries = entry_nodes()
+        for merge in cfg.MERGES:
+            raw = je_text(merge.key)
+            body = inner(raw, "first_valid")
+            self.assertLess(body.index("_status_complete"), body.index("_status_late"))
+            self.assertLess(body.index("_status_late"), body.index("_status_running"))
+            self.assertIn("je_te_cm_%s" % merge.key, entries)
+
+
+class ProgressTest(unittest.TestCase):
+    """The bar's figure, evaluated over a world."""
+
+    def test_a_running_merge_with_nothing_joined_shows_no_progress_not_a_full_bar(self):
+        for merge in cfg.MERGES:
+            world = joined_world(merge, 1, [], [])
+            key = merge.key
+            self.assertEqual(value_of("te_cmg_%s_lowest_dom" % key, world), 0, key)
+            self.assertEqual(value_of("te_cmg_%s_lowest_dom_all" % key, world), 0, key)
+            self.assertEqual(value_of("te_cmg_%s_progress" % key, world), 0, key)
+            self.assertEqual(value_of("te_cmg_%s_bar_pct" % key, world), 0, key)
+
+    def test_the_core_part_that_lags_sets_the_pace(self):
+        german = cfg.merge_by_key("german")
+        world = joined_world(german, 1, ["north_german", "south_german"], [])
+        world.globals.update({"te_cm_dom_german_north_german": 0.5, "te_cm_dom_german_south_german": 0.2})
+        self.assertAlmostEqual(value_of("te_cmg_german_lowest_dom", world), 0.2)
+        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.2 / 0.667)
+        self.assertAlmostEqual(value_of("te_cmg_german_bar_pct", world), 100 * 0.2 / 0.667)
+        # A joined part the census has not measured yet counts as nothing.
+        del world.globals["te_cm_dom_german_south_german"]
+        self.assertEqual(value_of("te_cmg_german_lowest_dom", world), 0)
+
+    def test_a_switched_part_leaves_the_minimum_and_the_bar_caps_at_one(self):
+        german = cfg.merge_by_key("german")
+        world = joined_world(german, 1, ["north_german", "south_german"], ["south_german"])
+        world.globals["te_cm_dom_german_north_german"] = 0.9
+        self.assertEqual(value_of("te_cmg_german_progress", world), 1)
+        world = joined_world(german, 2, ["north_german", "south_german"], ["north_german", "south_german"])
+        self.assertEqual(value_of("te_cmg_german_progress", world), 1)
+
+    def test_once_complete_the_figure_is_the_late_parts_not_the_cores(self):
+        # Core parts all switched: the core's lowest reads 100%, which is not what is left to wait for.
+        german = cfg.merge_by_key("german")
+        core = ["north_german", "south_german"]
+        world = joined_world(german, 2, core + ["alemannic"], core)
+        world.globals["te_cm_dom_german_alemannic"] = 0.3
+        self.assertEqual(value_of("te_cmg_german_lowest_dom", world), 1)
+        self.assertAlmostEqual(value_of("te_cmg_german_lowest_dom_all", world), 0.3)
+        self.assertAlmostEqual(value_of("te_cmg_german_progress", world), 0.3 / 0.667)
+        # While it still runs (state 1), the core decides.
+        world.globals["te_cm_state_german"] = 1
+        self.assertEqual(value_of("te_cmg_german_progress", world), 1)
+
+
+class StarterFlagTest(unittest.TestCase):
+    """R30: the winner continues the nation. A civil war's winner inherits the loser's variables, but the global
+    te_cm_starter_<m> still names the dead tag."""
+
+    def starter(self, world):
+        return holds(definitions(GEN_TRIGGERS)["te_cmg_german_is_starter"].children, world)
+
+    def other(self, world):
+        return holds(definitions(GEN_TRIGGERS)["te_cmg_german_has_other_starter"].children, world)
+
+    def world(self, this, state=1, starter="A", a_alive=True, flagged=("A",)):
+        world = joined_world(cfg.merge_by_key("german"), state, [], [], this=this, starter=starter, flagged=flagged)
+        world.alive["A"] = a_alive
+        if starter is None:
+            del world.globals["te_cm_starter_german"]
+        return world
+
+    def test_the_flag_is_set_at_the_start(self):
+        body = squash(block(text_of(EFFECTS), "te_cm_start_merge"))
+        self.assertIn("set_variable = { name = te_cm_started_$MERGE$ value = 1 }", body)
+
+    def test_the_global_starter_is_the_starter(self):
+        self.assertTrue(self.starter(self.world("A")))
+        self.assertFalse(self.other(self.world("A")))
+
+    def test_a_flag_holder_is_the_starter_only_while_the_global_starter_is_dead_or_missing(self):
+        # B inherited the flag from A, which is dead: B is the starter.
+        self.assertTrue(self.starter(self.world("B", a_alive=False, flagged=("A", "B"))))
+        self.assertTrue(self.starter(self.world("B", starter=None, flagged=("B",))))
+        # A still lives (the old tag survived): B holds the flag and isn't the starter.
+        self.assertFalse(self.starter(self.world("B", flagged=("A", "B"))))
+        # No flag, no claim, whatever has happened to the starter.
+        self.assertFalse(self.starter(self.world("C", a_alive=False, flagged=("A",))))
+        self.assertFalse(self.starter(self.world("C", starter=None, flagged=("A",))))
+
+    def test_nobody_is_the_starter_of_an_idle_merge(self):
+        for this in ("A", "B"):
+            self.assertFalse(self.starter(self.world(this, state=0, a_alive=False, flagged=("A", "B"))))
+
+    def test_another_country_is_an_other_starter_only_while_the_starter_lives_and_it_has_no_flag(self):
+        self.assertTrue(self.other(self.world("C")))
+        self.assertFalse(self.other(self.world("A")))
+        self.assertFalse(self.other(self.world("B", flagged=("A", "B"))))  # holds the flag
+        self.assertFalse(self.other(self.world("C", a_alive=False)))  # the starter is dead: nobody else has it
+        self.assertFalse(self.other(self.world("C", starter=None)))
+        self.assertFalse(self.other(self.world("C", state=0)))
+
+    def test_the_winners_entry_does_not_end_as_invalid_while_it_is_the_starter(self):
+        # The invalid outcome is has_other_starter, which the flag holder is not.
+        entry = entry_nodes()["je_te_cm_german"]
+        _, invalid = children(entry, "outcome")
+        trigger = child(invalid, "trigger").children
+        self.assertFalse(holds(trigger, self.world("B", a_alive=False, flagged=("A", "B"))))
+        self.assertTrue(holds(trigger, self.world("C")))
+
+    def release_pass(self, world):
+        release = definitions(GEN_EFFECTS)["te_cmg_release_lost_starters"]
+        for node in release.children:
+            if "te_cmg_german_starter_gone" in text_of_node(node):
+                run_effects([node], world, None)
+
+    def test_the_yearly_pass_hands_a_running_merge_to_the_flag_holder(self):
+        world = self.world("A", a_alive=False, flagged=("A", "B"))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_state_german"], 1)
+        self.assertEqual(world.globals["te_cm_starter_german"], "B")
+        self.assertIn("te_cm_started_german", world.vars["B"])
+
+    def test_the_first_flag_holder_takes_it(self):
+        world = self.world("A", a_alive=False, flagged=("A", "B", "C"))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_starter_german"], "B")  # sorted: B before C
+
+    def test_a_missing_starter_is_replaced_too(self):
+        world = self.world("A", starter=None, flagged=("C",))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_starter_german"], "C")
+        self.assertEqual(world.globals["te_cm_state_german"], 1)
+
+    def test_a_complete_merge_is_handed_over_and_never_released(self):
+        world = self.world("A", state=2, a_alive=False, flagged=("A", "B"))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_starter_german"], "B")
+        self.assertEqual(world.globals["te_cm_state_german"], 2)
+        world = self.world("A", state=2, a_alive=False, flagged=("A",))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_state_german"], 2)  # nobody to hand it to, and no release
+
+    def test_the_merge_is_released_only_when_no_living_country_carries_the_flag(self):
+        world = self.world("A", a_alive=False, flagged=("A",))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_state_german"], 0)
+        self.assertNotIn("te_cm_starter_german", world.globals)
+
+    def test_a_living_starter_is_left_alone(self):
+        world = self.world("A", flagged=("A", "B"))
+        self.release_pass(world)
+        self.assertEqual(world.globals["te_cm_starter_german"], "A")
+        self.assertEqual(world.globals["te_cm_state_german"], 1)
+
+    def test_a_release_takes_the_flag_from_a_living_holder(self):
+        world = self.world("A", flagged=("A", "B"))
+        run_effects(definitions_effect_call("german"), world, "A")
+        self.assertEqual(world.globals["te_cm_state_german"], 0)
+        self.assertEqual(world.vars["A"], set())
+        self.assertEqual(world.vars["B"], set())
+        self.assertNotIn("te_cm_starter_german", world.globals)
+
+
+def definitions_effect_call(key):
+    nodes, _ = parse_text("te_cm_release_starter = { MERGE = %s }" % key, "call")
+    return nodes
+
+
+class MixedTiersTest(unittest.TestCase):
+    """R31: a core part of a tier other than the one the merge starts at takes its own technology."""
+
+    def slot_items(self, merge):
+        key = merge.key
+        defs = definitions(GEN_TRIGGERS)
+        nodes = list(defs["te_cmg_%s_can_start" % key].children)
+        if "te_cmg_%s_start_basics" % key in defs:
+            nodes += defs["te_cmg_%s_start_basics" % key].children
+        out = {}
+        for node in nodes:
+            if node.key == "custom_tooltip":
+                text = child(node, "text").value
+                m = re.fullmatch(r"te_cmg_%s_core_(\d+)_tt" % key, text)
+                if m:
+                    out[int(m.group(1))] = node
+        return out
+
+    def test_a_slot_holds_exactly_when_an_alternative_passes_its_own_technology(self):
+        # With everything else true and the start tier's technology known (can_start asks for it on its own), a
+        # slot holds for a set of technologies exactly when one of its alternatives would pass can_join's test.
+        import itertools
+
+        for merge in cfg.MERGES:
+            start = max(tier_of(merge, p.cultures[0]) for p in merge.core)
+            named = {}
+            for c in slot_cultures(merge):
+                named["te_cmg_%s_%s_measured" % (merge.key, c)] = True
+                named["te_cmg_%s_%s_years_met" % (merge.key, c)] = True
+                named["te_cmg_%s_%s_switched_in" % (merge.key, c)] = False
+            items = self.slot_items(merge)
+            self.assertEqual(sorted(items), list(range(1, len(merge.core) + 1)), merge.key)
+            for extra in itertools.chain.from_iterable(itertools.combinations({1, 2, 3} - {start}, n) for n in range(3)):
+                techs = {start} | set(extra)
+                world = World(named=named, techs=techs)
+                for index, part in enumerate(merge.core, start=1):
+                    want = any(tier_of(merge, c) in techs for c in part.cultures)
+                    got = holds([c for c in items[index].children if c.key != "text"], world)
+                    self.assertEqual(got, want, "%s slot %d with %s" % (merge.key, index, sorted(techs)))
+
+    def test_pan_turkic_cannot_start_without_kazak_kirgiz_and_tatar_technologies(self):
+        merge = cfg.merge_by_key("pan_turkic")
+        self.assertEqual({c: tier_of(merge, c) for c in ("kazak", "kirgiz", "tatar", "uzbek")},
+                         {"kazak": 1, "kirgiz": 1, "tatar": 2, "uzbek": 3})
+        named = {"te_cmg_pan_turkic_%s_%s" % (c, s): s != "switched_in" for c in slot_cultures(merge)
+                 for s in ("measured", "years_met", "switched_in")}
+        items = self.slot_items(merge)
+        by_name = {c.cultures[0]: items[i] for i, c in enumerate(merge.core, start=1)}
+        for culture, tier in (("kazak", 1), ("kirgiz", 1), ("tatar", 2)):
+            node = by_name[culture]
+            body = [c for c in node.children if c.key != "text"]
+            self.assertFalse(holds(body, World(named=named, techs={3})), culture)
+            self.assertFalse(holds(body, World(named=named, techs={3} | ({1, 2} - {tier}))), culture)
+            self.assertTrue(holds(body, World(named=named, techs={3, tier})), culture)
+
+    def test_a_single_tier_merge_adds_nothing(self):
+        triggers = text_of(GEN_TRIGGERS)
+        for merge in cfg.MERGES:
+            if merge.key == "pan_turkic":
+                continue
+            self.assertNotIn("te_cm_tier_tech", block(triggers, "te_cmg_%s_core_ok" % merge.key), merge.key)
+
+    def test_the_slot_tooltip_names_the_extra_technology(self):
+        loc = loc_of(GEN_LOC)
+        self.assertIn("$pan-nationalism$", loc["te_cmg_pan_turkic_core_3_tt"])
+        self.assertIn("$mass_media$", loc["te_cmg_pan_turkic_core_4_tt"])
+        self.assertNotIn("also need", loc["te_cmg_pan_turkic_core_1_tt"])
+
+
+class WordingTest(unittest.TestCase):
+    """R31 wording and splices."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = loc_of(GEN_LOC)
+        cls.misc = loc_of(MISC_LOC)
+
+    def test_names_of_things_are_spliced_not_spelled(self):
+        for merge in cfg.MERGES:
+            for suffix in ("running", "late"):
+                text = self.generated["je_te_cm_%s_status_%s" % (merge.key, suffix)]
+                self.assertIn("$country_culture_merge_speed_mult$", text)
+        self.assertIn("$rule_culture_merges_rule$", self.misc["te_cm_tt_rule_on"])
+        self.assertIn("$rule_culture_merges_rule$", self.misc["te_cm_status_rule_off"])
+        for loc in (self.generated, self.misc):
+            for key, text in loc.items():
+                if key.startswith(("te_cm", "je_te_cm", "te_cmg")):
+                    self.assertNotIn("Culture Merges game rule", text, key)
+                    self.assertNotIn("half a century", text, key)
+                    self.assertNotIn("for decades", text, key)
+        # The years a tier asks for come from the script values.
+        self.assertIn("ScriptValue('te_cm_years_tier2')", self.generated["te_cmg_pan_turkic_core_4_tt"])
+        self.assertIn("ScriptValue('te_cm_years_tier3')", self.generated["te_cmg_pan_slavic_core_1_tt"])
+
+    def test_the_names_the_text_splices_exist(self):
+        known = all_english_loc_keys()
+        for needed in ("country_culture_merge_speed_mult", "rule_culture_merges_rule"):
+            self.assertIn(needed, known)
+
+    def test_the_button_does_not_promise_that_every_part_joins(self):
+        for merge in cfg.MERGES:
+            text = self.generated["te_cmg_start_%s_button_desc" % merge.key]
+            self.assertNotIn("every part we hold", text, merge.key)
+            self.assertIn("Each part we hold that qualifies", text, merge.key)
+            self.assertIn("A part that qualifies later joins then", text, merge.key)
+
+    def test_a_rule_row_comes_before_ready_and_says_the_system_is_paused(self):
+        self.assertIn("paused", self.misc["te_cm_status_rule_off"])
+        self.assertIn("Nothing stands in the way", self.misc["te_cm_status_ready"])
+
+    def test_optional_parts_are_named_as_pops(self):
+        text = self.generated["je_te_cm_french_reason"]
+        self.assertIn("$catalan$ pops can join once they qualify as well.", text)
+        for merge in cfg.MERGES:
+            if merge.optional:
+                text = self.generated["je_te_cm_%s_reason" % merge.key]
+                self.assertIn(" pops can join once they qualify as well.", text, merge.key)
+
+    def test_a_component_row_says_the_other_merge_must_finish_not_that_it_is_busy(self):
+        # Before: "$cm_italian$ pops are already part of another merge" for a merge that had not started.
+        for merge in cfg.MERGES:
+            for component in merge.components:
+                self.assertIn("has to finish first", self.generated["je_te_cm_%s_status_component_%s" % (merge.key, component)])
+
+
+class IconExemptionTest(unittest.TestCase):
+    def test_the_icon_pipeline_excepts_exactly_the_merge_entries(self):
+        text = (ROOT / "test_icon_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('{"je_te_cm_%s" % m.key for m in cfg.MERGES}', text)
 
 
 if __name__ == "__main__":

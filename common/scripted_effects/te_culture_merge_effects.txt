@@ -438,10 +438,15 @@ te_cm_sol_gate_part = {
 # Country scope: the country that starts a merge. $MERGE$ = a merge key, $RESULT$ = the
 # merge's result culture. The merge is running (state 1), this country is its starter, and
 # the result is a primary culture here from the first day, so Dynamic Homeland Progress
-# can form its homelands while the run goes on.
+# can form its homelands while the run goes on. The starter also carries the country
+# variable te_cm_started_<m>: a revolution's winner inherits the loser's variables and
+# continues the nation, but the global te_cm_starter_<m> still names the loser, so the flag
+# is what lets the winner take the merge over (te_cmg_<m>_is_starter, and the yearly
+# re-point in te_cmg_release_lost_starters).
 te_cm_start_merge = {
 	set_global_variable = { name = te_cm_state_$MERGE$ value = 1 }
 	set_global_variable = { name = te_cm_starter_$MERGE$ value = this }
+	set_variable = { name = te_cm_started_$MERGE$ value = 1 }
 	if = {
 		limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } }
 		add_primary_culture = cu:$RESULT$
@@ -458,11 +463,16 @@ te_cm_join_part = {
 
 # Any scope. A running merge whose starter is gone goes back to idle, so another country can
 # start it. $MERGE$ = a merge key. The parts that joined, their dominance and every counter
-# stay: the next starter picks the merge up where it stood.
+# stay: the next starter picks the merge up where it stood. The started flag goes from any
+# living country that still carries it, so it can't pass for a starter of the next run.
 te_cm_release_starter = {
 	set_global_variable = { name = te_cm_state_$MERGE$ value = 0 }
 	if = {
 		limit = { has_global_variable = te_cm_starter_$MERGE$ }
 		remove_global_variable = te_cm_starter_$MERGE$
+	}
+	every_country = {
+		limit = { has_variable = te_cm_started_$MERGE$ }
+		remove_variable = te_cm_started_$MERGE$
 	}
 }
