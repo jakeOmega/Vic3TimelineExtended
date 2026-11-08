@@ -369,7 +369,8 @@ types te_map_widgets
 			}
 		}
 
-		# What draws visitors: tourism's Base Appeal.
+		# The world's cities: what draws visitors (tourism's Base Appeal), how large each is (tourism's city ranking) and
+		# where the companies keep their headquarters.
 		flowcontainer = {
 			direction = horizontal
 			parentanchor = hcenter
@@ -382,6 +383,51 @@ types te_map_widgets
 				visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_city_rank"
+				tooltip = "te_jmap_pick_city_rank_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_city_rank_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_company_hqs"
+				tooltip = "te_jmap_pick_company_hqs_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+		}
+
+		# The armies: where the soldiers are (the yearly walk's) and the war dead the census counted last year, which it
+		# shares out to a country's states by their soldiers (War Dead hides while the census doesn't run).
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_armed_forces"
+				tooltip = "te_jmap_pick_armed_forces_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+			}
+
+			te_jmap_pick_button = {
+				text = "te_jmap_pick_war_dead"
+				tooltip = "te_jmap_pick_war_dead_desc"
+				visible = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				down = "[Not( GetScriptedGui('te_jmap_pick_war_dead_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				onclick = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 			}
 		}

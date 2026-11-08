@@ -16,6 +16,8 @@ te_jmap_monthly_ranges = {
 	effect = {
 		te_jmap_refresh_range = yes
 		te_jmap_refresh_entry_ranges = yes
+		# Once a game: whether the Company Headquarters map's profit read is live (te_journal_map_effects.txt).
+		te_jmap_hq_selfcheck = yes
 	}
 }
 

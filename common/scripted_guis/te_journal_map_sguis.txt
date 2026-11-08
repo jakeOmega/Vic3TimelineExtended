@@ -112,6 +112,54 @@ te_jmap_pick_crowding_sgui = {
 	}
 }
 
+# City Rank reads tourism's monthly ranking of the world's cities; Armed Forces the yearly walk's Soldiers and Officers
+# (whatever the Demographics rule); Company Headquarters the buildings themselves. None depends on a game rule.
+te_jmap_pick_city_rank_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 32 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 32 }
+	}
+}
+
+te_jmap_pick_armed_forces_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 33 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 33 }
+	}
+}
+
+te_jmap_pick_company_hqs_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 34 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 34 }
+	}
+}
+
+# War Dead is the census's, last year's (te_dg_dc_war, once a state has stepped), so it waits for the census as the
+# census maps below do; on the page it sits beside Armed Forces, since the census shares a country's war dead out to
+# its states by their soldiers.
+te_jmap_pick_war_dead_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_demog_cohorts_run = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 35 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 35 }
+	}
+}
+
 # Power Grids: each grid in a color of its own (power_grid_effects.txt's te_grid_map_color_effect). No game rule, as
 # the Power Grids tab has none.
 te_jmap_pick_power_grids_sgui = {

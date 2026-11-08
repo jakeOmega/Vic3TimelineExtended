@@ -27,11 +27,12 @@ fixed curve's ends. Shapes:
   Where the whole world is on one side, that side runs over the world's span alone, from the neutral color at the end
   nearest mid, so the differences still show.
 - rel_doubling(min_ratio, floor): the same share of the color per doubling from the world's low to its high (GDP per
-  capita), the low at least floor and the high at least min_ratio times it. A doubling's position is read in straight
-  pieces between powers of two.
+  capita, Armed Forces, Company Headquarters, War Dead), the low at least floor and the high at least min_ratio times
+  it. A doubling's position is read in straight pieces between powers of two.
 
-Two maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers) and the leading
-cause of death's paleness (a share of the deaths on a categorical map). The fixed shapes:
+Three maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers), the leading
+cause of death's paleness (a share of the deaths on a categorical map) and City Rank (a rank is already a place in
+the world; its first 20 are tourism's Cities bonus). The fixed shapes:
 
 - linear(lo, hi): straight from lo to hi.
 - soft_cap(lo, soft, hard): straight from lo to soft, then SLOPE_RATIO times shallower from soft to hard, so the
@@ -230,6 +231,33 @@ SCALES = [
          world=rel(soft_cap(0, 0.45, 1.45)), min_span=0.1,
          note="Migration Crowding's cut to migration attraction, 0-1 and past it, as the state panel's tile shows "
               "it: two-thirds of the color by 31% of the world's range"),
+    # City Rank (2026-11-08): tourism's city ranking (var:state_city_size_rank, city_rank_on_action: the world's 501
+    # largest by city_size, monthly), in two families. Fixed: a rank is already the state's place in the world, and
+    # the first 20 are tourism's Cities bonus.
+    dict(name="city_top", input="tourism_bonus_from_urban_centers", guards=[], three=False, knots=linear(0.05, 1),
+         note="City Rank, the world's 20 largest cities, by the Cities bonus tourism gives them "
+              "(tourism_bonus_from_urban_centers): +5% at 20th to +100% at 1st. Fixed: the bonus is what it shows"),
+    dict(name="city_rest", input="city_size_rank", guards=[], three=False, knots=doubling(20, 640),
+         note="City Rank past 20th: the same share of the color for each doubling of the rank from 20th (the ranking "
+              "stops at 501st). Fixed: a rank is already the state's place in the world"),
+    # Armed Forces, Company Headquarters and War Dead (2026-11-08): counts and money that run over orders of
+    # magnitude, so a doubling at a time, as GDP per capita.
+    dict(name="soldiers", input="var:te_dg_soldiers", guards=["te_dg_soldiers"], three=False, sel=33,
+         where=["has_variable = te_dg_soldiers", "var:te_dg_soldiers > 0"],
+         world=rel_doubling(500, 64000, 4, 100), min_span=4,
+         note="Armed Forces, the state's Soldiers and Officers (the yearly walk's): the same share of the color for "
+              "each doubling from the world's low (at least 100 people) to its high"),
+    dict(name="hq", input="te_jmap_hq_profit", guards=[], three=False, sel=34,
+         where=["has_building = building_company_headquarter", "te_jmap_hq_profit > 0"],
+         world=rel_doubling(100, 25600, 4, 1), min_span=4,
+         note="Company Headquarters, their weekly profit summed: the same share of the color for each doubling from "
+              "the world's low (at least 1) to its high; a loss is red, apart from the scale"),
+    dict(name="war_dead", input="var:te_dg_dc_war", guards=["te_dg_dc_war"], three=False, sel=35,
+         where=["has_variable = te_dg_stepped", "var:te_dg_stepped > 0", "has_variable = te_dg_dc_war",
+                "var:te_dg_dc_war > 0"],
+         world=rel_doubling(100, 102400, 4, 10), min_span=4,
+         note="War Dead, the census's deaths to war and devastation last year: the same share of the color for each "
+              "doubling from the world's low (at least 10 people) to its high"),
 ]
 
 

@@ -11,7 +11,8 @@
 # weapons, 20 covert networks, 21 the United Nations, 22 political models, 23 ocean basins, 24 grandeur, 25 colonies;
 # the Map Room's own again: 26 tourism's Base Appeal, 27 Base Comfort (Local Climate before any technology), 28 Current
 # Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 31 power grids (the Power Grids tab's map,
-# 2026-11-07); 0 none. 2 was literacy, retired because
+# 2026-11-07); 32 city rank (tourism's), 33 armed forces (Soldiers and Officers, the yearly walk's), 34 company
+# headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -120,6 +121,57 @@ te_jmap_net_strength = {
 	}
 	min = 0
 	max = 100
+}
+
+# ---------------------------------------------------------------------------
+# The Map Room's own figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# Company Headquarters (34): the weekly profit of the state's company headquarters, summed. Script can't read a
+# company's profit (te_company_effects.txt), but each company has one headquarters building
+# (building_company_headquarter: its production method follows the company's category), and an ownership building's
+# profit is what the levels it owns pay it, less its own wages: the company's earnings coming home. Whether it books
+# them so is TE_SELF_CHECK hq_profit (te_jmap_hq_selfcheck). Only a state with a headquarters walks its buildings,
+# so the paint's other states read one has_building.
+te_jmap_hq_profit = {
+	value = 0
+	if = {
+		limit = { has_building = building_company_headquarter }
+		every_scope_building = {
+			limit = { is_building_type = building_company_headquarter }
+			add = weekly_profit
+		}
+	}
+}
+
+# The state's company headquarters, one a company (the hover's count).
+te_jmap_hq_count = {
+	value = 0
+	if = {
+		limit = { has_building = building_company_headquarter }
+		every_scope_building = {
+			limit = { is_building_type = building_company_headquarter }
+			add = 1
+		}
+	}
+}
+
+# Armed Forces (33): Soldiers and Officers over the state's people, 0-1, both the yearly walk's (te_dg_soldiers,
+# te_dg_walk_pop), for the hover.
+te_jmap_soldiers_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_soldiers
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_soldiers
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
 }
 
 # ---------------------------------------------------------------------------

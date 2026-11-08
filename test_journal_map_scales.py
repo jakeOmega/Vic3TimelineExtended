@@ -186,9 +186,10 @@ class ScalesTest(unittest.TestCase):
             self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"), path)
 
     def test_nearly_every_map_is_fitted_to_the_world(self):
-        # owner, 2026-11-07: the regional differences, not the world's level. Only the agent networks (their tiers)
-        # and the leading cause's paleness (a share on a categorical map) keep fixed curves.
-        self.assertEqual({s["name"] for s in FIXED}, {"net", "cause"})
+        # owner, 2026-11-07: the regional differences, not the world's level. Only the agent networks (their tiers),
+        # the leading cause's paleness (a share on a categorical map) and City Rank (a rank is already a place in the
+        # world, and its first 20 are tourism's Cities bonus) keep fixed curves.
+        self.assertEqual({s["name"] for s in FIXED}, {"net", "cause", "city_top", "city_rest"})
 
     def test_each_fixed_tree_follows_its_knots(self):
         for scale in FIXED:
@@ -284,14 +285,16 @@ class ScalesTest(unittest.TestCase):
 
     def test_a_doubling_scale_gives_each_doubling_the_same_color(self):
         doubled = [s for s in FITTED if s["world"]["kind"] == "doubling"]
-        self.assertEqual([s["name"] for s in doubled], ["gdppc"])
-        scale = doubled[0]
-        for lo, hi in ((0.5, 64), (2, 40)):
-            L, H = gen.world_bounds(scale, lo, hi)
-            steps = gen.log2_pieces(H / L)
-            ys = [gen.world_factor(scale, lo, hi, L * 2 ** k) for k in range(int(steps) + 1)]
-            for a, b in zip(ys, ys[1:]):
-                self.assertAlmostEqual(b - a, 1 / steps)
+        self.assertEqual([s["name"] for s in doubled], ["gdppc", "soldiers", "hq", "war_dead"])
+        for scale in doubled:
+            floor = scale["world"]["floor"]
+            for lo, hi in ((floor * 50, floor * 6400), (floor * 200, floor * 4000)):
+                L, H = gen.world_bounds(scale, lo, hi)
+                steps = gen.log2_pieces(H / L)
+                ys = [gen.world_factor(scale, lo, hi, L * 2 ** k) for k in range(int(steps) + 1)]
+                with self.subTest(map=scale["name"], range=(lo, hi)):
+                    for a, b in zip(ys, ys[1:]):
+                        self.assertAlmostEqual(b - a, 1 / steps)
         with self.assertRaises(ValueError):
             gen.doubling(0.25, 100)
 
@@ -332,7 +335,8 @@ class RangesTest(unittest.TestCase):
         # the range's states are the map's: the Map Room's branch conditions for the selector, without the selector and
         # the three-color split. Emissions paints through shared triggers (te_jmap_gw_no_data, te_jmap_gw_removal:
         # a removal is green, apart from the scale), and GDP per capita leaves out a state with none (a doubling has
-        # no zero).
+        # no zero). Armed Forces, Company Headquarters and War Dead paint a zero (or a loss) apart from the scale too,
+        # in branches of their own, so their lerp's conditions are still their range's.
         room = _read(ROOM)
         mc = room[room.index("map_color = {"):room.index("map_color_second = {")]
         for scale in FITTED:

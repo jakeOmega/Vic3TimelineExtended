@@ -286,7 +286,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 32)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 36)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -328,13 +328,15 @@ class MapRoomTest(unittest.TestCase):
                 gated.add(sel)
         self.assertIn(3, gated)
         self.assertTrue({26, 27, 28} <= gated, "tourism and the two climate maps read stored figures")
+        self.assertTrue({33, 35} <= gated, "Armed Forces (the walk's) and War Dead (the census's) read stored figures")
+        self.assertFalse({32, 34} & gated, "City Rank and Company Headquarters paint every state")
         self.assertEqual(self.no_data("map_color"), gated, "map_color's 'no data' OR")
         self.assertEqual(self.no_data("map_tooltip"), gated, "map_tooltip's 'no data' OR")
 
     def test_a_years_figures_wait_for_a_step(self):
         # a seed writes births, deaths and migration as 0, and no causes of death (te_demog_state_stepped_sgui): those
         # maps show grey until the state's first full year
-        for sel in (7, 8, 9, 11, 13):
+        for sel in (7, 8, 9, 11, 13, 35):
             for key in ("map_color", "map_tooltip"):
                 for body in self.branches(key, sel):
                     self.assertRegex(body, r"var:te_dg_stepped\s*>\s*0", f"{key}, selector {sel}")
@@ -643,6 +645,99 @@ class PowerGridMapTest(unittest.TestCase):
         for n in range(1, 13):
             self.assertRegex(colors, r"te_jmap_grid_color = \{ COLOR = " + str(n) + r" \}\s*\}\s*value = \"te_jmap_grid_"
                              + str(n) + '"')
+
+
+class NinthPassMapsTest(unittest.TestCase):
+    """City Rank, Armed Forces, Company Headquarters and War Dead (selectors 32-35; owner's ask, 2026-11-08)."""
+
+    def setUp(self):
+        self.room = entry(HOST, "je_te_map_room")
+        self.colors = branches_of(block(self.room, "map_color"))
+        self.hover = branches_of(block(self.room, "map_tooltip"))
+
+    def of(self, part, sel):
+        return [(limit, body) for limit, body in part if re.search(r"(^| )te_jmap_selector = " + str(sel) + r"( |$)",
+                                                                   limit) and "OR = {" not in limit]
+
+    def test_city_rank_is_tourism_s(self):
+        # the first 20 by the Cities bonus tourism gives them, the rest by rank, a state the ranking misses pale
+        colors = self.of(self.colors, 32)
+        self.assertEqual([limit for limit, _ in colors],
+                         ["te_jmap_selector = 32 tourism_bonus_from_urban_centers > 0",
+                          "te_jmap_selector = 32 city_size_rank > 0", "te_jmap_selector = 32"])
+        self.assertIn("factor = te_jmap_city_top_factor", colors[0][1])
+        self.assertIn("factor = te_jmap_city_rest_factor", colors[1][1])
+        self.assertEqual(colors[2][1], 'value = "te_jmap_none"')
+        self.assertEqual([limit for limit, _ in self.of(self.hover, 32)], [limit for limit, _ in colors])
+        tourism = code("common/script_values/tourism.txt")
+        self.assertIn("value = var:state_city_size_rank", block(tourism, "city_size_rank"))
+        self.assertIn("subtract = city_size_rank", block(tourism, "tourism_bonus_from_urban_centers"))
+
+    def test_the_ranking_keeps_no_stale_rank(self):
+        # the ranking reaches 501 states; a state that falls past them loses its rank instead of keeping its last
+        body = block(code("common/on_actions/extra_on_actions.txt"), "city_rank_on_action")
+        clear = body.index("remove_variable = state_city_size_rank")
+        self.assertLess(clear, body.index("ordered_state"))
+        self.assertIn("has_variable = state_city_size_rank", enclosing(body, clear))
+
+    def test_armed_forces_reads_the_walk_s_soldiers(self):
+        colors = self.of(self.colors, 33)
+        self.assertEqual([limit for limit, _ in colors],
+                         ["te_jmap_selector = 33 has_variable = te_dg_soldiers var:te_dg_soldiers > 0",
+                          "te_jmap_selector = 33 has_variable = te_dg_soldiers"])
+        self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a state with no soldiers is pale, not 'no data'")
+        walk = code("common/scripted_effects/te_demog_effects.txt")
+        self.assertIn("set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }", walk)
+        # whatever the Demographics rule, as the walk runs
+        self.assertEqual(block(block(code(SGUIS), "te_jmap_pick_armed_forces_sgui"), "is_shown").split(),
+                         ["is_player", "=", "yes"])
+
+    def test_company_hqs_grey_without_one(self):
+        # owner, 2026-11-08: a state without a headquarters is grey; one with any, by their profit summed
+        colors = self.of(self.colors, 34)
+        self.assertEqual([limit for limit, _ in colors],
+                         ["te_jmap_selector = 34 has_building = building_company_headquarter te_jmap_hq_profit > 0",
+                          "te_jmap_selector = 34 has_building = building_company_headquarter",
+                          "te_jmap_selector = 34"])
+        self.assertIn("factor = te_jmap_hq_factor", colors[0][1])
+        self.assertEqual(colors[1][1], 'value = "te_jmap_hq_loss"')
+        self.assertEqual(colors[2][1], 'value = "te_jmap_no_data"')
+        self.assertEqual([limit for limit, _ in self.of(self.hover, 34)], [limit for limit, _ in colors])
+
+    def test_the_hq_profit_sums_the_headquarters_only_where_one_stands(self):
+        values = code(VALUES)
+        for name, add in (("te_jmap_hq_profit", "add = weekly_profit"), ("te_jmap_hq_count", "add = 1")):
+            body = block(values, name)
+            guard = block(body, "if")
+            self.assertIn("has_building = building_company_headquarter", block(guard, "limit"), name)
+            walk = block(guard, "every_scope_building")
+            self.assertIn("is_building_type = building_company_headquarter", walk, name)
+            self.assertIn(add, walk, name)
+
+    def test_the_hq_profit_read_is_self_checked(self):
+        # TE_SELF_CHECK hq_profit: once a game, only with three headquarters or more to read, from the monthly pulse
+        body = block(code(EFFECTS), "te_jmap_hq_selfcheck")
+        limit = block(body, "limit")
+        self.assertIn("NOT = { has_global_variable = te_jmap_hq_selfcheck_done }", " ".join(limit.split()))
+        self.assertRegex(limit, r"count\s*>=\s*3")
+        self.assertIn("TE_SELF_CHECK OK hq_profit", body)
+        self.assertIn("TE_SELF_CHECK BROKEN hq_profit", body)
+        self.assertIn("te_jmap_hq_selfcheck = yes", block(code(ON_ACTIONS), "te_jmap_monthly_ranges"))
+        self.assertIn("hq_profit", read(PLAYTEST))
+
+    def test_war_dead_is_the_census_s(self):
+        colors = self.of(self.colors, 35)
+        self.assertEqual(len(colors), 2)
+        self.assertIn("var:te_dg_dc_war > 0", colors[0][0])
+        self.assertIn("factor = te_jmap_war_dead_factor", colors[0][1])
+        self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a state that lost none is pale")
+        self.assertIn("te_demog_cohorts_run = yes", block(block(code(SGUIS), "te_jmap_pick_war_dead_sgui"), "is_shown"))
+
+    def test_armed_forces_and_war_dead_share_a_row(self):
+        # the census shares a country's war dead out to its states by their soldiers: the two read together
+        row = block(code(WIDGETS), "te_jmap_pick_row")
+        at = row.index('text = "te_jmap_pick_armed_forces"')
+        self.assertIn('text = "te_jmap_pick_war_dead"', enclosing(row, enclosing_span(row, at)[0] - 1))
 
 
 class WindowButtonTest(unittest.TestCase):

@@ -208,6 +208,81 @@ je_te_map_room = {
 				factor = te_jmap_crowding_factor
 			}
 		}
+		# 32. City Rank: tourism's ranking of the world's cities (var:state_city_size_rank, city_rank_on_action, monthly).
+		# The first 20 by the Cities bonus tourism gives them, 20th amber to 1st crimson; below 20th a doubling of the
+		# rank at a time, steel blue fading; a state the ranking doesn't reach (past 501st) pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_top_low"
+				max_color = "te_jmap_city_top_high"
+				factor = te_jmap_city_top_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_rest_low"
+				max_color = "te_jmap_city_rest_high"
+				factor = te_jmap_city_rest_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			value = "te_jmap_none"
+		}
+		# 33. Armed Forces: the state's Soldiers and Officers (the yearly walk's, whatever the Demographics rule), a
+		# doubling at a time; a state with none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_soldiers_low"
+				max_color = "te_jmap_soldiers_high"
+				factor = te_jmap_soldiers_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			value = "te_jmap_none"
+		}
+		# 34. Company Headquarters: a state with one or more by their weekly profit summed (te_jmap_hq_profit), a doubling
+		# at a time, red at a loss; a state with none grey (the owner's ask, 2026-11-08).
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+				te_jmap_hq_profit > 0
+			}
+			lerp = {
+				min_color = "te_jmap_hq_low"
+				max_color = "te_jmap_hq_high"
+				factor = te_jmap_hq_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+			}
+			value = "te_jmap_hq_loss"
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			value = "te_jmap_no_data"
+		}
 		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
 		else_if = {
 			limit = {
@@ -559,6 +634,32 @@ je_te_map_room = {
 				max_color = "te_jmap_mig_high"
 				factor = te_jmap_mig_factor_upper
 			}
+		}
+		# 35. War Dead (Demographics, once stepped): last year's deaths to war and devastation (te_dg_dc_war, the state's
+		# share of its owner's war dead by its soldiers, and under Full the civilians), a doubling at a time; a state
+		# that lost none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			lerp = {
+				min_color = "te_jmap_war_dead_low"
+				max_color = "te_jmap_war_dead_high"
+				factor = te_jmap_war_dead_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			value = "te_jmap_none"
 		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
@@ -1083,7 +1184,7 @@ je_te_map_room = {
 			value = "te_jmap_none"
 		}
 		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
-		# the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
+		# no yearly walk yet, the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
 		# (test_journal_map_modes.py).
 		else_if = {
 			limit = {
@@ -1105,6 +1206,8 @@ je_te_map_room = {
 					te_jmap_selector = 26
 					te_jmap_selector = 27
 					te_jmap_selector = 28
+					te_jmap_selector = 33
+					te_jmap_selector = 35
 				}
 			}
 			value = "te_jmap_no_data"
@@ -1293,6 +1396,58 @@ je_te_map_room = {
 			limit = { te_jmap_selector = 30 }
 			custom_tooltip_no_bullet = te_jmap_tt_crowding_none
 		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_top
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_ranked
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			custom_tooltip_no_bullet = te_jmap_tt_city_unranked
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+				te_jmap_hq_profit > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_building = building_company_headquarter
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq_loss
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			custom_tooltip_no_bullet = te_jmap_tt_hq_none
+		}
 		# Over 10,000 years: the late game's immortals.
 		else_if = {
 			limit = {
@@ -1472,6 +1627,26 @@ je_te_map_room = {
 				has_variable = te_dg_mig_rate
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_net_migration
+		}
+		# 35. War Dead (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead_none
 		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
@@ -1793,6 +1968,8 @@ je_te_map_room = {
 					te_jmap_selector = 15
 					te_jmap_selector = 16
 					te_jmap_selector = 17
+					te_jmap_selector = 33
+					te_jmap_selector = 35
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census

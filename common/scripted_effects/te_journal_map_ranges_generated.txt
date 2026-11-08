@@ -918,6 +918,138 @@ te_jmap_range_crowding = {
 	}
 }
 
+# Armed Forces, the state's Soldiers and Officers (the yearly walk's): the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+te_jmap_range_soldiers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_soldiers_lo }
+		remove_global_variable = te_jmap_rng_soldiers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_soldiers_hi }
+		remove_global_variable = te_jmap_rng_soldiers_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_soldiers var:te_dg_soldiers > 0 }
+		order_by = te_jmap_soldiers_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_soldiers_hi value = te_jmap_soldiers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_soldiers var:te_dg_soldiers > 0 }
+		order_by = te_jmap_soldiers_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_soldiers_lo value = te_jmap_soldiers_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_soldiers_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_soldiers var:te_dg_soldiers > 0 }
+			order_by = te_jmap_soldiers_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_soldiers_hi value = te_jmap_soldiers_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_soldiers var:te_dg_soldiers > 0 }
+			order_by = te_jmap_soldiers_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_soldiers_lo value = te_jmap_soldiers_input }
+		}
+	}
+}
+
+# Company Headquarters, their weekly profit summed: the same share of the color for each doubling from the world's low (at least 1) to its high; a loss is red, apart from the scale.
+te_jmap_range_hq = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_hq_lo }
+		remove_global_variable = te_jmap_rng_hq_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_hq_hi }
+		remove_global_variable = te_jmap_rng_hq_hi
+	}
+	ordered_state = {
+		limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+		order_by = te_jmap_hq_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_hq_hi value = te_jmap_hq_input }
+	}
+	ordered_state = {
+		limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+		order_by = te_jmap_hq_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_hq_lo value = te_jmap_hq_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_hq_hi } }
+		ordered_state = {
+			limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+			order_by = te_jmap_hq_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_hq_hi value = te_jmap_hq_input }
+		}
+		ordered_state = {
+			limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+			order_by = te_jmap_hq_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_hq_lo value = te_jmap_hq_input }
+		}
+	}
+}
+
+# War Dead, the census's deaths to war and devastation last year: the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_range_war_dead = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_war_dead_lo }
+		remove_global_variable = te_jmap_rng_war_dead_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_war_dead_hi }
+		remove_global_variable = te_jmap_rng_war_dead_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_stepped var:te_dg_stepped > 0 has_variable = te_dg_dc_war var:te_dg_dc_war > 0 }
+		order_by = te_jmap_war_dead_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_war_dead_hi value = te_jmap_war_dead_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_stepped var:te_dg_stepped > 0 has_variable = te_dg_dc_war var:te_dg_dc_war > 0 }
+		order_by = te_jmap_war_dead_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_war_dead_lo value = te_jmap_war_dead_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_war_dead_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_stepped var:te_dg_stepped > 0 has_variable = te_dg_dc_war var:te_dg_dc_war > 0 }
+			order_by = te_jmap_war_dead_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_war_dead_hi value = te_jmap_war_dead_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_stepped var:te_dg_stepped > 0 has_variable = te_dg_dc_war var:te_dg_dc_war > 0 }
+			order_by = te_jmap_war_dead_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_war_dead_lo value = te_jmap_war_dead_input }
+		}
+	}
+}
+
 # The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt).
 te_jmap_refresh_range = {
 	if = {
@@ -1007,6 +1139,18 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 30 }
 		te_jmap_range_crowding = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 33 }
+		te_jmap_range_soldiers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 34 }
+		te_jmap_range_hq = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 35 }
+		te_jmap_range_war_dead = yes
 	}
 }
 

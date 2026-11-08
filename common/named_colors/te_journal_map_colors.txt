@@ -112,6 +112,26 @@ colors = {
 	# je_te_map_room: Migration Crowding's cut to migration attraction, none to 145% (cream to deep purple).
 	te_jmap_crowding_low = hsv360 { 45 8 92 }
 	te_jmap_crowding_high = hsv360 { 285 68 40 }
+	# je_te_map_room: City Rank. The world's 20 largest cities by tourism's Cities bonus, 20th amber to 1st crimson;
+	# 21st and below a doubling of the rank at a time, steel blue fading toward pale (_low is the larger city: the
+	# lerp's own order). A state the ranking doesn't reach is te_jmap_none.
+	te_jmap_city_top_low = hsv360 { 40 62 94 }
+	te_jmap_city_top_high = hsv360 { 350 88 60 }
+	te_jmap_city_rest_low = hsv360 { 212 62 62 }
+	te_jmap_city_rest_high = hsv360 { 205 14 88 }
+	# je_te_map_room: Armed Forces, Soldiers and Officers, a doubling at a time (pale khaki to deep olive); a state
+	# with none is te_jmap_none.
+	te_jmap_soldiers_low = hsv360 { 70 22 90 }
+	te_jmap_soldiers_high = hsv360 { 95 72 30 }
+	# je_te_map_room: Company Headquarters, their weekly profit a doubling at a time (ice to navy), and a loss; a state
+	# with no headquarters is te_jmap_no_data.
+	te_jmap_hq_low = hsv360 { 200 16 95 }
+	te_jmap_hq_high = hsv360 { 228 86 42 }
+	te_jmap_hq_loss = hsv360 { 4 72 74 }
+	# je_te_map_room, Demographics: War Dead last year, a doubling at a time (pale rose to dried blood); a state with
+	# none is te_jmap_none.
+	te_jmap_war_dead_low = hsv360 { 8 28 94 }
+	te_jmap_war_dead_high = hsv360 { 352 90 34 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

@@ -27,7 +27,8 @@ Escape or click outside the page to close it.
 
 The Map Room is a page of world maps with a button for each: Turmoil,
 Devastation, Urban People, GDP per Capita, Gini Coefficient, Dynastic Wealth,
-Base Comfort, Current Comfort, Crowding Penalty and Tourism Appeal; a map for
+Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank,
+Company HQs, Armed Forces and War Dead; a map for
 each of nine systems, Emissions, Nuclear Weapons, Agent Networks, United
 Nations, Political Models, Ocean Basins, Grandeur, Colonies and Power Grids;
 and, from the census, Life Expectancy, Infant Mortality, Leading Cause, Birth
@@ -42,13 +43,20 @@ with a meaningful middle keeps it: Fertility is cream at replacement, Natural
 Change and Net Migration at none, Sex Balance at even and the comfort maps at
 no penalty, and each side's colors run to the world's extreme on that side.
 Where every state is on one side, the colors run over the states there, cream
-at the one nearest the middle. Agent Networks keeps its fixed scale, 0 to 100.
+at the one nearest the middle. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
 The two comfort maps show what a
 state's Local Climate does to its migration attraction: Base Comfort before any
 technology eases it, Current Comfort after its owner's, in the same colors so
 you can compare them. Crowding Penalty is the cut Migration Crowding makes, and
 Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
-game's first month. Emissions colors a state by its
+game's first month. City Rank shows the world's city ranking that tourism's
+Cities bonus reads: the 20 largest cities amber to crimson, the rest in blue
+that pales as the rank falls. Company HQs colors each state that holds a
+company's headquarters by their weekly profit, red at a loss, and leaves every
+other state gray. Armed Forces counts each state's Soldiers and Officers, and
+War Dead its deaths to war and devastation in the last census year. The census
+shares a country's war dead out by where its soldiers are, so War Dead shows
+where the dead came from, not where they fell. Emissions colors a state by its
 share of the world's emissions last year. Nuclear Weapons shows the world's
 nuclear powers as the world sees them, the countries that host your weapons or
 shelter under your umbrella, and, while the world believes you armed, those
@@ -60,8 +68,8 @@ colors a state by what killed most of its people, in the colors of the Causes
 of Death chart, full where that cause took 90% of the deaths and paler as its
 share falls toward 30%. Stripes in a second cause's color mark a state where
 that cause took at least half as many deaths as the leader. Leading Cause,
-Birth Rate, Death Rate, Natural Change and Net Migration need a state's first
-full census year, so they start gray.
+Birth Rate, Death Rate, Natural Change, Net Migration and War Dead need a
+state's first full census year, so they start gray.
 
 Those nine systems' tabs, and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the nine (all but Ocean
