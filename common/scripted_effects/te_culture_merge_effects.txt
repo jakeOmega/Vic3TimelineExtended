@@ -155,7 +155,9 @@ te_cm_cp_note_holder = {
 #                       Tier 2 (the spec's 1b) uses the very high pair instead. Acceptance is
 #                       tested on the part's own pops, in every sphere country holding at least
 #                       te_cm_meaningful_share of the sphere's pops of the part, and always in the
-#                       largest holder too, so a thin split can't pass it vacuously.
+#                       largest holder too, so a thin split can't pass it vacuously. A part that
+#                       has joined this merge is held to the hold alone (R29): acceptance then
+#                       pauses conversion per country, in te_cm_convert_part.
 #   te_cm_years_<m>_<c> tiers 2 and 3: a year more while the gate is on; it never goes down
 # The sphere is measured against the candidate, so it is saved as te_cm_starter first
 # (te_cm_in_sphere reads it). The caller has run te_cm_census_culture (or _joined, when
@@ -259,6 +261,10 @@ te_cm_census_part = {
 	# holding, so a part split thin across many countries still has its largest tested).
 	# Counted against all four thresholds, so the open/close and accepted/very-high choices
 	# below read bare named values.
+	# Only a part that has not joined is tested here (R29). Once it has joined, acceptance works
+	# per converting country: a country that fails pauses its own conversion
+	# (te_cm_convert_part, te_cm_paused_<m>_<c>) and the part's gate tests the hold alone, so
+	# one bloc member that discriminates can't stall the part in every other country.
 	set_local_variable = { name = te_cm_cp_fail_open value = 0 }
 	set_local_variable = { name = te_cm_cp_fail_close value = 0 }
 	set_local_variable = { name = te_cm_cp_fail_high_open value = 0 }
@@ -277,7 +283,10 @@ te_cm_census_part = {
 	every_country = {
 		limit = { has_variable = te_cm_tmp_cnt }
 		if = {
-			limit = { var:te_cm_tmp_cnt >= local_var:te_cm_cp_min_cnt }
+			limit = {
+				local_var:te_cm_cp_joined = 0
+				var:te_cm_tmp_cnt >= local_var:te_cm_cp_min_cnt
+			}
 			if = {
 				limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < te_cm_accept_open } }
 				change_local_variable = { name = te_cm_cp_fail_open add = 1 }
@@ -474,5 +483,229 @@ te_cm_release_starter = {
 	every_country = {
 		limit = { has_variable = te_cm_started_$MERGE$ }
 		remove_variable = te_cm_started_$MERGE$
+	}
+}
+
+# ============================================================================
+# CONVERSION, THE SWITCH AND THE PRIMARY CULTURES (plan Task 6)
+# The generated calls (te_cmg_yearly_country, te_cmg_dominance_all, te_cmg_monthly_country,
+# te_cmg_formed_country in scripts/generators/gen_culture_merges.py) run these. Every share is
+# taken in the part's homeland states (owner, 2026-11-07); the switch converts the diaspora.
+# ============================================================================
+
+# Country scope: a converting country, that is the starter, a subject of it or a member of the
+# bloc it leads (the caller has checked te_cm_in_sphere against the starter and the stalls).
+#   $MERGE$ = a merge key, $CULTURE$ = a joined part, $RESULT$ = the merge's result culture,
+#   $TIER$ = the part's tier in script (1, 2 = tier 1b, 3 = tier 2), as te_cm_census_part takes it.
+# Saves scope:te_cm_part (the part, a culture) and scope:te_cm_starter (the merge's starter), which
+# te_cm_pop_rate reads. Runs on the country's own yearly pulse, never under the census's year guard.
+# 1. A country with no pops of the part is skipped.
+# 2. The pause, per country (R29, spec 4.3: after a part has joined, a converting country that
+#    fails pauses conversion inside its own borders only). te_cm_paused_<m>_<c> is set when this
+#    country's average acceptance of the part falls under the close value of the part's own tier
+#    (te_cm_accept_close, or te_cm_accept_high_close for script tier 2, the spec's 1b) and cleared
+#    once it is back at the open value. It only counts where the country holds a meaningful share:
+#    its pops of the part in the part's homeland states, at least te_cm_meaningful_share of what the
+#    census last found there (te_cm_home_<c>). A sliver neither pauses nor is paused; a culture with
+#    no homeland state has no such holder and never pauses. Progress is kept while paused.
+# 3. Otherwise the result is made a primary culture here (guarded, so a formation that dropped it
+#    gets it back at the next pass), te_cm_converted_<m> marks the country for the formation hook,
+#    and every pop of the part converts by the rate te_cm_pop_rate gives it.
+te_cm_convert_part = {
+	cu:$CULTURE$ = { save_temporary_scope_as = te_cm_part }
+	global_var:te_cm_starter_$MERGE$ = { save_temporary_scope_as = te_cm_starter }
+	set_local_variable = { name = te_cm_cv_tier value = $TIER$ }
+	if = {
+		limit = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } }
+		set_local_variable = { name = te_cm_cv_fail value = 0 }
+		if = {
+			limit = { local_var:te_cm_cv_tier = 2 }
+			if = {
+				limit = { var:te_cm_paused_$MERGE$_$CULTURE$ ?= 1 }
+				if = {
+					limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < te_cm_accept_high_open } }
+					set_local_variable = { name = te_cm_cv_fail value = 1 }
+				}
+			}
+			else = {
+				if = {
+					limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < te_cm_accept_high_close } }
+					set_local_variable = { name = te_cm_cv_fail value = 1 }
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { var:te_cm_paused_$MERGE$_$CULTURE$ ?= 1 }
+				if = {
+					limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < te_cm_accept_open } }
+					set_local_variable = { name = te_cm_cv_fail value = 1 }
+				}
+			}
+			else = {
+				if = {
+					limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value < te_cm_accept_close } }
+					set_local_variable = { name = te_cm_cv_fail value = 1 }
+				}
+			}
+		}
+		# A country that fails the test but holds only a sliver of the part is not paused.
+		if = {
+			limit = { local_var:te_cm_cv_fail = 1 }
+			set_local_variable = { name = te_cm_cv_cnt value = 0 }
+			every_scope_state = {
+				limit = { state_region = { is_homeland = cu:$CULTURE$ } }
+				every_scope_pop = {
+					limit = { culture = cu:$CULTURE$ }
+					change_local_variable = { name = te_cm_cv_cnt add = total_size }
+				}
+			}
+			set_local_variable = { name = te_cm_cv_floor value = 0 }
+			if = {
+				limit = { has_global_variable = te_cm_home_$CULTURE$ }
+				set_local_variable = {
+					name = te_cm_cv_floor
+					value = {
+						value = global_var:te_cm_home_$CULTURE$
+						multiply = te_cm_meaningful_share
+					}
+				}
+			}
+			if = {
+				limit = { local_var:te_cm_cv_cnt < local_var:te_cm_cv_floor }
+				set_local_variable = { name = te_cm_cv_fail value = 0 }
+			}
+		}
+		set_variable = { name = te_cm_paused_$MERGE$_$CULTURE$ value = local_var:te_cm_cv_fail }
+		if = {
+			limit = { local_var:te_cm_cv_fail = 0 }
+			set_variable = { name = te_cm_converted_$MERGE$ value = 1 }
+			if = {
+				limit = { NOT = { country_has_primary_culture = cu:$RESULT$ } }
+				add_primary_culture = cu:$RESULT$
+			}
+			every_scope_pop = {
+				limit = { culture = cu:$CULTURE$ }
+				change_pop_culture = { target = cu:$RESULT$ value = te_cm_pop_rate }
+			}
+		}
+	}
+}
+
+# Any scope. Sets the global te_cm_dom_<m>_<c>, the result's share of the result's and the part's
+# pops living in the part's homeland states: the numbers te_cm_census_culture_joined stored at the
+# census, te_cm_home_<c> (the part's pops that remain) and te_cm_home_r_<c> (the result's pops in
+# the same states, the world over), so no second walk is made (R22). $MERGE$ = a merge key,
+# $CULTURE$ = a joined part. Run by te_cmg_dominance_all at the end of the census, which is after
+# the walks. te_cm_home_r_<c> first exists at the census after the part joined, so it is read
+# guarded; a figure that doesn't exist counts as nothing.
+# - A part that is nowhere in the world any more is dominated by the result, 1: nothing is left to convert.
+# - With result + part both 0 in the homeland states (and the part still somewhere) there is nothing
+#   to divide, and the result holds none of the part's homeland: 0. The denominator is tested before
+#   the division.
+te_cm_census_dominance = {
+	set_local_variable = { name = te_cm_dm_part value = 0 }
+	set_local_variable = { name = te_cm_dm_res value = 0 }
+	if = {
+		limit = { has_global_variable = te_cm_home_$CULTURE$ }
+		set_local_variable = { name = te_cm_dm_part value = global_var:te_cm_home_$CULTURE$ }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_home_r_$CULTURE$ }
+		set_local_variable = { name = te_cm_dm_res value = global_var:te_cm_home_r_$CULTURE$ }
+	}
+	set_local_variable = { name = te_cm_dm_total value = local_var:te_cm_dm_part }
+	change_local_variable = { name = te_cm_dm_total add = local_var:te_cm_dm_res }
+	if = {
+		limit = {
+			NOT = { any_country = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } } }
+		}
+		set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$ value = 1 }
+	}
+	else_if = {
+		limit = { local_var:te_cm_dm_total > 0 }
+		set_global_variable = {
+			name = te_cm_dom_$MERGE$_$CULTURE$
+			value = {
+				value = local_var:te_cm_dm_res
+				divide = local_var:te_cm_dm_total
+			}
+		}
+	}
+	else = {
+		set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$ value = 0 }
+	}
+}
+
+# Any scope. A joined part switches into the merge's result: $MERGE$ = a merge key, $CULTURE$ = the
+# part, $RESULT$ = the merge's result. Fires once te_cm_dom_<m>_<c> reaches te_cm_switch_share and the
+# part has not switched. Never a rule check: te_cmg_dominance_all, its only caller, runs behind the rule.
+# 1. Every pop of the part, in every country that has any, converts whole (value = 1): the diaspora
+#    stops seeing itself as from Bavaria.
+# 2. Every homeland state of the part becomes a homeland of the result as well, where it isn't one
+#    yet, whoever holds the state. The part's own homeland is kept (a part with no pops costs nothing,
+#    and formables that count states by their cultures' homelands keep finding them); Dynamic Homeland
+#    Progress leaves it alone while the result's homeland is there too (te_cmg_switched_part_kept) and
+#    takes it with the result's (te_cmg_remove_switched_part_homelands).
+# 3. te_cm_switched_<c> names the result (a culture scope), and the part leaves te_cm_in_<c>, the index
+#    of the merge it was converting in.
+# 4. The merge is complete (state 2) once no core part that joined is left unswitched, and at least one
+#    has switched (te_cmg_<m>_core_switched). A late part still converts, and still switches, after that.
+te_cm_switch_part = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_switched_$CULTURE$ }
+			global_var:te_cm_dom_$MERGE$_$CULTURE$ >= te_cm_switch_share
+		}
+		cu:$RESULT$ = { save_temporary_scope_as = te_cm_result }
+		every_country = {
+			limit = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } }
+			every_scope_pop = {
+				limit = { culture = cu:$CULTURE$ }
+				change_pop_culture = { target = cu:$RESULT$ value = 1 }
+			}
+		}
+		cu:$CULTURE$ = {
+			every_scope_homeland_state = {
+				limit = { NOT = { state_region = { is_homeland = cu:$RESULT$ } } }
+				state_region = { add_homeland = cu:$RESULT$ }
+			}
+		}
+		set_global_variable = { name = te_cm_switched_$CULTURE$ value = scope:te_cm_result }
+		if = {
+			limit = { has_global_variable = te_cm_in_$CULTURE$ }
+			remove_global_variable = te_cm_in_$CULTURE$
+		}
+		if = {
+			limit = {
+				global_var:te_cm_state_$MERGE$ ?= 1
+				te_cmg_$MERGE$_core_switched = yes
+			}
+			set_global_variable = { name = te_cm_state_$MERGE$ value = 2 }
+		}
+	}
+}
+
+# Country scope. The monthly upkeep of a part that has switched: $CULTURE$ = the part. The parts stay
+# primary cultures of every country that had them (spec 7), so a country that has the part as a
+# primary culture and the result not gets the result as well: Austria at the switch, a country
+# released or formed from a definition that lists only the parts. Pops of the part that reappear
+# (a vanilla event converting into it, an emigrant) convert whole, behind the culture_percent_country
+# prefilter so a country without any costs one check.
+te_cm_monthly_switched_culture = {
+	global_var:te_cm_switched_$CULTURE$ = { save_temporary_scope_as = te_cm_switched_result }
+	if = {
+		limit = {
+			country_has_primary_culture = cu:$CULTURE$
+			NOT = { country_has_primary_culture = scope:te_cm_switched_result }
+		}
+		add_primary_culture = scope:te_cm_switched_result
+	}
+	if = {
+		limit = { culture_percent_country = { target = cu:$CULTURE$ value > 0 } }
+		every_scope_pop = {
+			limit = { culture = cu:$CULTURE$ }
+			change_pop_culture = { target = scope:te_cm_switched_result value = 1 }
+		}
 	}
 }

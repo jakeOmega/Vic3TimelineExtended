@@ -243,6 +243,32 @@ te_cmg_german_all_switched = {
 	}
 }
 
+# Any scope. The german merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_german_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_german_north_german ?= 1
+			has_global_variable = te_cm_switched_north_german
+		}
+		AND = {
+			global_var:te_cm_joined_german_south_german ?= 1
+			has_global_variable = te_cm_switched_south_german
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_german_north_german ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_german }
+		}
+		AND = {
+			global_var:te_cm_joined_german_south_german ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_german }
+		}
+	}
+}
+
 # Country scope. Can this country start the german merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -486,6 +512,32 @@ te_cmg_italian_all_switched = {
 		AND = {
 			global_var:te_cm_joined_italian_corsican ?= 1
 			NOT = { has_global_variable = te_cm_switched_corsican }
+		}
+	}
+}
+
+# Any scope. The italian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_italian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_italian_north_italian ?= 1
+			has_global_variable = te_cm_switched_north_italian
+		}
+		AND = {
+			global_var:te_cm_joined_italian_south_italian ?= 1
+			has_global_variable = te_cm_switched_south_italian
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_italian_north_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_italian }
+		}
+		AND = {
+			global_var:te_cm_joined_italian_south_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_italian }
 		}
 	}
 }
@@ -777,6 +829,40 @@ te_cmg_scandinavian_all_switched = {
 	}
 }
 
+# Any scope. The scandinavian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_scandinavian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_scandinavian_swedish ?= 1
+			has_global_variable = te_cm_switched_swedish
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_danish ?= 1
+			has_global_variable = te_cm_switched_danish
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_norwegian ?= 1
+			has_global_variable = te_cm_switched_norwegian
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_scandinavian_swedish ?= 1
+			NOT = { has_global_variable = te_cm_switched_swedish }
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_danish ?= 1
+			NOT = { has_global_variable = te_cm_switched_danish }
+		}
+		AND = {
+			global_var:te_cm_joined_scandinavian_norwegian ?= 1
+			NOT = { has_global_variable = te_cm_switched_norwegian }
+		}
+	}
+}
+
 # Country scope. Can this country start the scandinavian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -1044,6 +1130,40 @@ te_cmg_east_slavic_has_other_starter = {
 # Any scope. No part of the east_slavic merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_east_slavic_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_east_slavic_russian ?= 1
+			NOT = { has_global_variable = te_cm_switched_russian }
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_ukrainian ?= 1
+			NOT = { has_global_variable = te_cm_switched_ukrainian }
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_byelorussian ?= 1
+			NOT = { has_global_variable = te_cm_switched_byelorussian }
+		}
+	}
+}
+
+# Any scope. The east_slavic merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_east_slavic_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_east_slavic_russian ?= 1
+			has_global_variable = te_cm_switched_russian
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_ukrainian ?= 1
+			has_global_variable = te_cm_switched_ukrainian
+		}
+		AND = {
+			global_var:te_cm_joined_east_slavic_byelorussian ?= 1
+			has_global_variable = te_cm_switched_byelorussian
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_east_slavic_russian ?= 1
@@ -1431,6 +1551,40 @@ te_cmg_yugoslav_all_switched = {
 	}
 }
 
+# Any scope. The yugoslav merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_yugoslav_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_yugoslav_serb ?= 1
+			has_global_variable = te_cm_switched_serb
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_croat ?= 1
+			has_global_variable = te_cm_switched_croat
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_bosniak ?= 1
+			has_global_variable = te_cm_switched_bosniak
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_yugoslav_serb ?= 1
+			NOT = { has_global_variable = te_cm_switched_serb }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_croat ?= 1
+			NOT = { has_global_variable = te_cm_switched_croat }
+		}
+		AND = {
+			global_var:te_cm_joined_yugoslav_bosniak ?= 1
+			NOT = { has_global_variable = te_cm_switched_bosniak }
+		}
+	}
+}
+
 # Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -1686,6 +1840,32 @@ te_cmg_czechoslovak_all_switched = {
 	}
 }
 
+# Any scope. The czechoslovak merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_czechoslovak_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_czechoslovak_czech ?= 1
+			has_global_variable = te_cm_switched_czech
+		}
+		AND = {
+			global_var:te_cm_joined_czechoslovak_slovak ?= 1
+			has_global_variable = te_cm_switched_slovak
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_czechoslovak_czech ?= 1
+			NOT = { has_global_variable = te_cm_switched_czech }
+		}
+		AND = {
+			global_var:te_cm_joined_czechoslovak_slovak ?= 1
+			NOT = { has_global_variable = te_cm_switched_slovak }
+		}
+	}
+}
+
 # Country scope. Can this country start the czechoslovak merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -1872,6 +2052,24 @@ te_cmg_hungarian_has_other_starter = {
 # Any scope. No part of the hungarian merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_hungarian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_hungarian_szekely ?= 1
+			NOT = { has_global_variable = te_cm_switched_szekely }
+		}
+	}
+}
+
+# Any scope. The hungarian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_hungarian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_hungarian_szekely ?= 1
+			has_global_variable = te_cm_switched_szekely
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_hungarian_szekely ?= 1
@@ -2071,6 +2269,24 @@ te_cmg_dutch_all_switched = {
 	}
 }
 
+# Any scope. The dutch merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_dutch_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_dutch_flemish ?= 1
+			has_global_variable = te_cm_switched_flemish
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_dutch_flemish ?= 1
+			NOT = { has_global_variable = te_cm_switched_flemish }
+		}
+	}
+}
+
 # Country scope. Can this country start the dutch merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -2254,6 +2470,24 @@ te_cmg_finnish_has_other_starter = {
 # Any scope. No part of the finnish merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_finnish_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_finnish_karelian ?= 1
+			NOT = { has_global_variable = te_cm_switched_karelian }
+		}
+	}
+}
+
+# Any scope. The finnish merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_finnish_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_finnish_karelian ?= 1
+			has_global_variable = te_cm_switched_karelian
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_finnish_karelian ?= 1
@@ -2536,6 +2770,32 @@ te_cmg_french_all_switched = {
 	}
 }
 
+# Any scope. The french merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_french_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_french_wallonian ?= 1
+			has_global_variable = te_cm_switched_wallonian
+		}
+		AND = {
+			global_var:te_cm_joined_french_occitan ?= 1
+			has_global_variable = te_cm_switched_occitan
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_french_wallonian ?= 1
+			NOT = { has_global_variable = te_cm_switched_wallonian }
+		}
+		AND = {
+			global_var:te_cm_joined_french_occitan ?= 1
+			NOT = { has_global_variable = te_cm_switched_occitan }
+		}
+	}
+}
+
 # Country scope. Can this country start the french merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -2727,6 +2987,24 @@ te_cmg_british_has_other_starter = {
 # Any scope. No part of the british merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_british_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_british_scottish ?= 1
+			NOT = { has_global_variable = te_cm_switched_scottish }
+		}
+	}
+}
+
+# Any scope. The british merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_british_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_british_scottish ?= 1
+			has_global_variable = te_cm_switched_scottish
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_british_scottish ?= 1
@@ -3006,6 +3284,32 @@ te_cmg_american_all_switched = {
 		AND = {
 			global_var:te_cm_joined_american_afro_american ?= 1
 			NOT = { has_global_variable = te_cm_switched_afro_american }
+		}
+	}
+}
+
+# Any scope. The american merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_american_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_american_yankee ?= 1
+			has_global_variable = te_cm_switched_yankee
+		}
+		AND = {
+			global_var:te_cm_joined_american_dixie ?= 1
+			has_global_variable = te_cm_switched_dixie
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_american_yankee ?= 1
+			NOT = { has_global_variable = te_cm_switched_yankee }
+		}
+		AND = {
+			global_var:te_cm_joined_american_dixie ?= 1
+			NOT = { has_global_variable = te_cm_switched_dixie }
 		}
 	}
 }
@@ -3516,6 +3820,40 @@ te_cmg_anglophone_all_switched = {
 	}
 }
 
+# Any scope. The anglophone merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_anglophone_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_anglophone_british ?= 1
+			has_global_variable = te_cm_switched_british
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_yankee ?= 1
+			has_global_variable = te_cm_switched_yankee
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_cm_american ?= 1
+			has_global_variable = te_cm_switched_cm_american
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_anglophone_british ?= 1
+			NOT = { has_global_variable = te_cm_switched_british }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_yankee ?= 1
+			NOT = { has_global_variable = te_cm_switched_yankee }
+		}
+		AND = {
+			global_var:te_cm_joined_anglophone_cm_american ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_american }
+		}
+	}
+}
+
 # Country scope. Can this country start the anglophone merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -3886,6 +4224,48 @@ te_cmg_brazilian_all_switched = {
 	}
 }
 
+# Any scope. The brazilian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_brazilian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_brazilian_nordestino ?= 1
+			has_global_variable = te_cm_switched_nordestino
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_paulista ?= 1
+			has_global_variable = te_cm_switched_paulista
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_amazonic ?= 1
+			has_global_variable = te_cm_switched_amazonic
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_sulista ?= 1
+			has_global_variable = te_cm_switched_sulista
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_brazilian_nordestino ?= 1
+			NOT = { has_global_variable = te_cm_switched_nordestino }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_paulista ?= 1
+			NOT = { has_global_variable = te_cm_switched_paulista }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_amazonic ?= 1
+			NOT = { has_global_variable = te_cm_switched_amazonic }
+		}
+		AND = {
+			global_var:te_cm_joined_brazilian_sulista ?= 1
+			NOT = { has_global_variable = te_cm_switched_sulista }
+		}
+	}
+}
+
 # Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -4178,6 +4558,48 @@ te_cmg_platine_has_other_starter = {
 # Any scope. No part of the platine merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_platine_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_platine_platinean ?= 1
+			NOT = { has_global_variable = te_cm_switched_platinean }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_argentine ?= 1
+			NOT = { has_global_variable = te_cm_switched_argentine }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_uruguayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_uruguayan }
+		}
+		AND = {
+			global_var:te_cm_joined_platine_paraguayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_paraguayan }
+		}
+	}
+}
+
+# Any scope. The platine merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_platine_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_platine_platinean ?= 1
+			has_global_variable = te_cm_switched_platinean
+		}
+		AND = {
+			global_var:te_cm_joined_platine_argentine ?= 1
+			has_global_variable = te_cm_switched_argentine
+		}
+		AND = {
+			global_var:te_cm_joined_platine_uruguayan ?= 1
+			has_global_variable = te_cm_switched_uruguayan
+		}
+		AND = {
+			global_var:te_cm_joined_platine_paraguayan ?= 1
+			has_global_variable = te_cm_switched_paraguayan
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_platine_platinean ?= 1
@@ -4505,6 +4927,48 @@ te_cmg_andean_all_switched = {
 	}
 }
 
+# Any scope. The andean merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_andean_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_andean_north_andean ?= 1
+			has_global_variable = te_cm_switched_north_andean
+		}
+		AND = {
+			global_var:te_cm_joined_andean_south_andean ?= 1
+			has_global_variable = te_cm_switched_south_andean
+		}
+		AND = {
+			global_var:te_cm_joined_andean_peruvian ?= 1
+			has_global_variable = te_cm_switched_peruvian
+		}
+		AND = {
+			global_var:te_cm_joined_andean_bolivian ?= 1
+			has_global_variable = te_cm_switched_bolivian
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_andean_north_andean ?= 1
+			NOT = { has_global_variable = te_cm_switched_north_andean }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_south_andean ?= 1
+			NOT = { has_global_variable = te_cm_switched_south_andean }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_peruvian ?= 1
+			NOT = { has_global_variable = te_cm_switched_peruvian }
+		}
+		AND = {
+			global_var:te_cm_joined_andean_bolivian ?= 1
+			NOT = { has_global_variable = te_cm_switched_bolivian }
+		}
+	}
+}
+
 # Country scope. Can this country start the andean merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -4756,6 +5220,40 @@ te_cmg_gran_colombian_has_other_starter = {
 # Any scope. No part of the gran_colombian merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_gran_colombian_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_gran_colombian_colombian ?= 1
+			NOT = { has_global_variable = te_cm_switched_colombian }
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_venezuelan ?= 1
+			NOT = { has_global_variable = te_cm_switched_venezuelan }
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
+			NOT = { has_global_variable = te_cm_switched_ecuadorian }
+		}
+	}
+}
+
+# Any scope. The gran_colombian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_gran_colombian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_gran_colombian_colombian ?= 1
+			has_global_variable = te_cm_switched_colombian
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_venezuelan ?= 1
+			has_global_variable = te_cm_switched_venezuelan
+		}
+		AND = {
+			global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
+			has_global_variable = te_cm_switched_ecuadorian
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_gran_colombian_colombian ?= 1
@@ -5054,6 +5552,40 @@ te_cmg_chinese_all_switched = {
 	}
 }
 
+# Any scope. The chinese merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_chinese_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_chinese_yue ?= 1
+			has_global_variable = te_cm_switched_yue
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_min ?= 1
+			has_global_variable = te_cm_switched_min
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_hakka ?= 1
+			has_global_variable = te_cm_switched_hakka
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_chinese_yue ?= 1
+			NOT = { has_global_variable = te_cm_switched_yue }
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_min ?= 1
+			NOT = { has_global_variable = te_cm_switched_min }
+		}
+		AND = {
+			global_var:te_cm_joined_chinese_hakka ?= 1
+			NOT = { has_global_variable = te_cm_switched_hakka }
+		}
+	}
+}
+
 # Country scope. Can this country start the chinese merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -5253,6 +5785,24 @@ te_cmg_japanese_has_other_starter = {
 # Any scope. No part of the japanese merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_japanese_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_japanese_ryukyuan ?= 1
+			NOT = { has_global_variable = te_cm_switched_ryukyuan }
+		}
+	}
+}
+
+# Any scope. The japanese merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_japanese_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_japanese_ryukyuan ?= 1
+			has_global_variable = te_cm_switched_ryukyuan
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_japanese_ryukyuan ?= 1
@@ -5718,6 +6268,56 @@ te_cmg_arab_all_switched = {
 	}
 }
 
+# Any scope. The arab merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_arab_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_arab_maghrebi ?= 1
+			has_global_variable = te_cm_switched_maghrebi
+		}
+		AND = {
+			global_var:te_cm_joined_arab_misri ?= 1
+			has_global_variable = te_cm_switched_misri
+		}
+		AND = {
+			global_var:te_cm_joined_arab_mashriqi ?= 1
+			has_global_variable = te_cm_switched_mashriqi
+		}
+		AND = {
+			global_var:te_cm_joined_arab_bedouin ?= 1
+			has_global_variable = te_cm_switched_bedouin
+		}
+		AND = {
+			global_var:te_cm_joined_arab_yemenite ?= 1
+			has_global_variable = te_cm_switched_yemenite
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_arab_maghrebi ?= 1
+			NOT = { has_global_variable = te_cm_switched_maghrebi }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_misri ?= 1
+			NOT = { has_global_variable = te_cm_switched_misri }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_mashriqi ?= 1
+			NOT = { has_global_variable = te_cm_switched_mashriqi }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_bedouin ?= 1
+			NOT = { has_global_variable = te_cm_switched_bedouin }
+		}
+		AND = {
+			global_var:te_cm_joined_arab_yemenite ?= 1
+			NOT = { has_global_variable = te_cm_switched_yemenite }
+		}
+	}
+}
+
 # Country scope. Can this country start the arab merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -6015,6 +6615,24 @@ te_cmg_persian_all_switched = {
 	}
 }
 
+# Any scope. The persian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_persian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_persian_luri ?= 1
+			has_global_variable = te_cm_switched_luri
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_persian_luri ?= 1
+			NOT = { has_global_variable = te_cm_switched_luri }
+		}
+	}
+}
+
 # Country scope. Can this country start the persian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -6262,6 +6880,32 @@ te_cmg_oghuz_turkic_all_switched = {
 		AND = {
 			global_var:te_cm_joined_oghuz_turkic_turkmen ?= 1
 			NOT = { has_global_variable = te_cm_switched_turkmen }
+		}
+	}
+}
+
+# Any scope. The oghuz_turkic merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_oghuz_turkic_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_turkish ?= 1
+			has_global_variable = te_cm_switched_turkish
+		}
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
+			has_global_variable = te_cm_switched_azerbaijani
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_turkish ?= 1
+			NOT = { has_global_variable = te_cm_switched_turkish }
+		}
+		AND = {
+			global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
+			NOT = { has_global_variable = te_cm_switched_azerbaijani }
 		}
 	}
 }
@@ -6560,6 +7204,48 @@ te_cmg_hindustani_has_other_starter = {
 # Any scope. No part of the hindustani merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_hindustani_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_hindustani_avadhi ?= 1
+			NOT = { has_global_variable = te_cm_switched_avadhi }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bundeli ?= 1
+			NOT = { has_global_variable = te_cm_switched_bundeli }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1
+			NOT = { has_global_variable = te_cm_switched_chhattisgarhi }
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bageli ?= 1
+			NOT = { has_global_variable = te_cm_switched_bageli }
+		}
+	}
+}
+
+# Any scope. The hindustani merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_hindustani_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_hindustani_avadhi ?= 1
+			has_global_variable = te_cm_switched_avadhi
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bundeli ?= 1
+			has_global_variable = te_cm_switched_bundeli
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_chhattisgarhi ?= 1
+			has_global_variable = te_cm_switched_chhattisgarhi
+		}
+		AND = {
+			global_var:te_cm_joined_hindustani_bageli ?= 1
+			has_global_variable = te_cm_switched_bageli
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_hindustani_avadhi ?= 1
@@ -6891,6 +7577,40 @@ te_cmg_dravidian_all_switched = {
 		AND = {
 			global_var:te_cm_joined_dravidian_telegu ?= 1
 			NOT = { has_global_variable = te_cm_switched_telegu }
+		}
+	}
+}
+
+# Any scope. The dravidian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_dravidian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_dravidian_tamil ?= 1
+			has_global_variable = te_cm_switched_tamil
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_kannada ?= 1
+			has_global_variable = te_cm_switched_kannada
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_malayalam ?= 1
+			has_global_variable = te_cm_switched_malayalam
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_dravidian_tamil ?= 1
+			NOT = { has_global_variable = te_cm_switched_tamil }
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_kannada ?= 1
+			NOT = { has_global_variable = te_cm_switched_kannada }
+		}
+		AND = {
+			global_var:te_cm_joined_dravidian_malayalam ?= 1
+			NOT = { has_global_variable = te_cm_switched_malayalam }
 		}
 	}
 }
@@ -7230,6 +7950,48 @@ te_cmg_indonesian_all_switched = {
 	}
 }
 
+# Any scope. The indonesian merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_indonesian_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_indonesian_javan ?= 1
+			has_global_variable = te_cm_switched_javan
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_malay ?= 1
+			has_global_variable = te_cm_switched_malay
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_sumatran ?= 1
+			has_global_variable = te_cm_switched_sumatran
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_bornean ?= 1
+			has_global_variable = te_cm_switched_bornean
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_indonesian_javan ?= 1
+			NOT = { has_global_variable = te_cm_switched_javan }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_malay ?= 1
+			NOT = { has_global_variable = te_cm_switched_malay }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_sumatran ?= 1
+			NOT = { has_global_variable = te_cm_switched_sumatran }
+		}
+		AND = {
+			global_var:te_cm_joined_indonesian_bornean ?= 1
+			NOT = { has_global_variable = te_cm_switched_bornean }
+		}
+	}
+}
+
 # Country scope. Can this country start the indonesian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -7520,6 +8282,40 @@ te_cmg_filipino_all_switched = {
 	}
 }
 
+# Any scope. The filipino merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_filipino_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_filipino_visayan ?= 1
+			has_global_variable = te_cm_switched_visayan
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_tagalog ?= 1
+			has_global_variable = te_cm_switched_tagalog
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_ilocano ?= 1
+			has_global_variable = te_cm_switched_ilocano
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_filipino_visayan ?= 1
+			NOT = { has_global_variable = te_cm_switched_visayan }
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_tagalog ?= 1
+			NOT = { has_global_variable = te_cm_switched_tagalog }
+		}
+		AND = {
+			global_var:te_cm_joined_filipino_ilocano ?= 1
+			NOT = { has_global_variable = te_cm_switched_ilocano }
+		}
+	}
+}
+
 # Country scope. Can this country start the filipino merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -7768,6 +8564,40 @@ te_cmg_nguni_has_other_starter = {
 # Any scope. No part of the nguni merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_nguni_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_nguni_nguni ?= 1
+			NOT = { has_global_variable = te_cm_switched_nguni }
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_zulu ?= 1
+			NOT = { has_global_variable = te_cm_switched_zulu }
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_xhosa ?= 1
+			NOT = { has_global_variable = te_cm_switched_xhosa }
+		}
+	}
+}
+
+# Any scope. The nguni merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_nguni_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_nguni_nguni ?= 1
+			has_global_variable = te_cm_switched_nguni
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_zulu ?= 1
+			has_global_variable = te_cm_switched_zulu
+		}
+		AND = {
+			global_var:te_cm_joined_nguni_xhosa ?= 1
+			has_global_variable = te_cm_switched_xhosa
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_nguni_nguni ?= 1
@@ -8338,6 +9168,48 @@ te_cmg_latin_all_switched = {
 	}
 }
 
+# Any scope. The latin merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_latin_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_latin_french ?= 1
+			has_global_variable = te_cm_switched_french
+		}
+		AND = {
+			global_var:te_cm_joined_latin_cm_italian ?= 1
+			has_global_variable = te_cm_switched_cm_italian
+		}
+		AND = {
+			global_var:te_cm_joined_latin_spanish ?= 1
+			has_global_variable = te_cm_switched_spanish
+		}
+		AND = {
+			global_var:te_cm_joined_latin_portuguese ?= 1
+			has_global_variable = te_cm_switched_portuguese
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_latin_french ?= 1
+			NOT = { has_global_variable = te_cm_switched_french }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_cm_italian ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_italian }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_spanish ?= 1
+			NOT = { has_global_variable = te_cm_switched_spanish }
+		}
+		AND = {
+			global_var:te_cm_joined_latin_portuguese ?= 1
+			NOT = { has_global_variable = te_cm_switched_portuguese }
+		}
+	}
+}
+
 # Country scope. Can this country start the latin merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -8773,6 +9645,40 @@ te_cmg_pan_slavic_all_switched = {
 		AND = {
 			global_var:te_cm_joined_pan_slavic_bulgarian ?= 1
 			NOT = { has_global_variable = te_cm_switched_bulgarian }
+		}
+	}
+}
+
+# Any scope. The pan_slavic merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_pan_slavic_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1
+			has_global_variable = te_cm_switched_cm_east_slavic
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1
+			has_global_variable = te_cm_switched_cm_czechoslovak
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
+			has_global_variable = te_cm_switched_cm_yugoslav
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_east_slavic ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_czechoslovak ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
 		}
 	}
 }
@@ -9332,6 +10238,56 @@ te_cmg_pan_turkic_all_switched = {
 	}
 }
 
+# Any scope. The pan_turkic merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_pan_turkic_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1
+			has_global_variable = te_cm_switched_cm_oghuz_turkic
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_uzbek ?= 1
+			has_global_variable = te_cm_switched_uzbek
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kazak ?= 1
+			has_global_variable = te_cm_switched_kazak
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_tatar ?= 1
+			has_global_variable = te_cm_switched_tatar
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kirgiz ?= 1
+			has_global_variable = te_cm_switched_kirgiz
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_turkic_cm_oghuz_turkic ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_uzbek ?= 1
+			NOT = { has_global_variable = te_cm_switched_uzbek }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kazak ?= 1
+			NOT = { has_global_variable = te_cm_switched_kazak }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_tatar ?= 1
+			NOT = { has_global_variable = te_cm_switched_tatar }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_turkic_kirgiz ?= 1
+			NOT = { has_global_variable = te_cm_switched_kirgiz }
+		}
+	}
+}
+
 # Country scope. Can this country start the pan_turkic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -9595,6 +10551,32 @@ te_cmg_pan_malay_has_other_starter = {
 # Any scope. No part of the pan_malay merge that joined is still unswitched: a part that joins late, after the
 # core has switched and the merge is complete, keeps the merge from concluding until it has switched too.
 te_cmg_pan_malay_all_switched = {
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
+			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+		}
+		AND = {
+			global_var:te_cm_joined_pan_malay_filipino ?= 1
+			NOT = { has_global_variable = te_cm_switched_filipino }
+		}
+	}
+}
+
+# Any scope. The pan_malay merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_pan_malay_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
+			has_global_variable = te_cm_switched_cm_indonesian
+		}
+		AND = {
+			global_var:te_cm_joined_pan_malay_filipino ?= 1
+			has_global_variable = te_cm_switched_filipino
+		}
+	}
 	NOR = {
 		AND = {
 			global_var:te_cm_joined_pan_malay_cm_indonesian ?= 1
@@ -10074,6 +11056,40 @@ te_cmg_east_african_all_switched = {
 	}
 }
 
+# Any scope. The east_african merge's core is switched: no core part that joined is left unswitched, and at least one
+# has switched. The second clause keeps an optional part that switches first from completing a merge whose core
+# has not begun. te_cm_switch_part sets the merge's state to 2 on this.
+te_cmg_east_african_core_switched = {
+	OR = {
+		AND = {
+			global_var:te_cm_joined_east_african_swahili ?= 1
+			has_global_variable = te_cm_switched_swahili
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_nyamwezi ?= 1
+			has_global_variable = te_cm_switched_nyamwezi
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_sukuma ?= 1
+			has_global_variable = te_cm_switched_sukuma
+		}
+	}
+	NOR = {
+		AND = {
+			global_var:te_cm_joined_east_african_swahili ?= 1
+			NOT = { has_global_variable = te_cm_switched_swahili }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_nyamwezi ?= 1
+			NOT = { has_global_variable = te_cm_switched_nyamwezi }
+		}
+		AND = {
+			global_var:te_cm_joined_east_african_sukuma ?= 1
+			NOT = { has_global_variable = te_cm_switched_sukuma }
+		}
+	}
+}
+
 # Country scope. Can this country start the east_african merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
@@ -10128,5 +11144,1077 @@ te_cmg_east_african_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_sol
 		var:te_cm_sol_ok_east_african ?= 1
+	}
+}
+
+# ---- Switched parts ----
+
+# Culture scope. This culture is one of the 117 that can switch into a merge's result, and it has.
+# A test for the flavor patches of spec 7 (party names, formable names ...); nothing reads it yet.
+te_cmg_is_switched_part = {
+	OR = {
+		AND = {
+			has_global_variable = te_cm_switched_north_german
+			this = cu:north_german
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_german
+			this = cu:south_german
+		}
+		AND = {
+			has_global_variable = te_cm_switched_alemannic
+			this = cu:alemannic
+		}
+		AND = {
+			has_global_variable = te_cm_switched_east_german
+			this = cu:east_german
+		}
+		AND = {
+			has_global_variable = te_cm_switched_north_italian
+			this = cu:north_italian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_italian
+			this = cu:south_italian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_corsican
+			this = cu:corsican
+		}
+		AND = {
+			has_global_variable = te_cm_switched_swedish
+			this = cu:swedish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_danish
+			this = cu:danish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_norwegian
+			this = cu:norwegian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_icelandic
+			this = cu:icelandic
+		}
+		AND = {
+			has_global_variable = te_cm_switched_russian
+			this = cu:russian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ukrainian
+			this = cu:ukrainian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_byelorussian
+			this = cu:byelorussian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_serb
+			this = cu:serb
+		}
+		AND = {
+			has_global_variable = te_cm_switched_croat
+			this = cu:croat
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bosniak
+			this = cu:bosniak
+		}
+		AND = {
+			has_global_variable = te_cm_switched_slovene
+			this = cu:slovene
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bulgarian
+			this = cu:bulgarian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_czech
+			this = cu:czech
+		}
+		AND = {
+			has_global_variable = te_cm_switched_slovak
+			this = cu:slovak
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sorb
+			this = cu:sorb
+		}
+		AND = {
+			has_global_variable = te_cm_switched_szekely
+			this = cu:szekely
+		}
+		AND = {
+			has_global_variable = te_cm_switched_flemish
+			this = cu:flemish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_karelian
+			this = cu:karelian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_wallonian
+			this = cu:wallonian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_occitan
+			this = cu:occitan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_catalan
+			this = cu:catalan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_scottish
+			this = cu:scottish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yankee
+			this = cu:yankee
+		}
+		AND = {
+			has_global_variable = te_cm_switched_dixie
+			this = cu:dixie
+		}
+		AND = {
+			has_global_variable = te_cm_switched_afro_american
+			this = cu:afro_american
+		}
+		AND = {
+			has_global_variable = te_cm_switched_british
+			this = cu:british
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_american
+			this = cu:cm_american
+		}
+		AND = {
+			has_global_variable = te_cm_switched_anglo_canadian
+			this = cu:anglo_canadian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_australian
+			this = cu:australian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nordestino
+			this = cu:nordestino
+		}
+		AND = {
+			has_global_variable = te_cm_switched_paulista
+			this = cu:paulista
+		}
+		AND = {
+			has_global_variable = te_cm_switched_amazonic
+			this = cu:amazonic
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sulista
+			this = cu:sulista
+		}
+		AND = {
+			has_global_variable = te_cm_switched_afro_brazilian
+			this = cu:afro_brazilian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_platinean
+			this = cu:platinean
+		}
+		AND = {
+			has_global_variable = te_cm_switched_argentine
+			this = cu:argentine
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uruguayan
+			this = cu:uruguayan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_paraguayan
+			this = cu:paraguayan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_north_andean
+			this = cu:north_andean
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_andean
+			this = cu:south_andean
+		}
+		AND = {
+			has_global_variable = te_cm_switched_peruvian
+			this = cu:peruvian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bolivian
+			this = cu:bolivian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_colombian
+			this = cu:colombian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_venezuelan
+			this = cu:venezuelan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ecuadorian
+			this = cu:ecuadorian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yue
+			this = cu:yue
+		}
+		AND = {
+			has_global_variable = te_cm_switched_min
+			this = cu:min
+		}
+		AND = {
+			has_global_variable = te_cm_switched_hakka
+			this = cu:hakka
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ryukyuan
+			this = cu:ryukyuan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_maghrebi
+			this = cu:maghrebi
+		}
+		AND = {
+			has_global_variable = te_cm_switched_misri
+			this = cu:misri
+		}
+		AND = {
+			has_global_variable = te_cm_switched_mashriqi
+			this = cu:mashriqi
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bedouin
+			this = cu:bedouin
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yemenite
+			this = cu:yemenite
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sudanese
+			this = cu:sudanese
+		}
+		AND = {
+			has_global_variable = te_cm_switched_haratin
+			this = cu:haratin
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bidan
+			this = cu:bidan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_luri
+			this = cu:luri
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tajik
+			this = cu:tajik
+		}
+		AND = {
+			has_global_variable = te_cm_switched_hazara
+			this = cu:hazara
+		}
+		AND = {
+			has_global_variable = te_cm_switched_turkish
+			this = cu:turkish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_azerbaijani
+			this = cu:azerbaijani
+		}
+		AND = {
+			has_global_variable = te_cm_switched_turkmen
+			this = cu:turkmen
+		}
+		AND = {
+			has_global_variable = te_cm_switched_avadhi
+			this = cu:avadhi
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bundeli
+			this = cu:bundeli
+		}
+		AND = {
+			has_global_variable = te_cm_switched_chhattisgarhi
+			this = cu:chhattisgarhi
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bageli
+			this = cu:bageli
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tamil
+			this = cu:tamil
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kannada
+			this = cu:kannada
+		}
+		AND = {
+			has_global_variable = te_cm_switched_malayalam
+			this = cu:malayalam
+		}
+		AND = {
+			has_global_variable = te_cm_switched_telegu
+			this = cu:telegu
+		}
+		AND = {
+			has_global_variable = te_cm_switched_javan
+			this = cu:javan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_malay
+			this = cu:malay
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sumatran
+			this = cu:sumatran
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bornean
+			this = cu:bornean
+		}
+		AND = {
+			has_global_variable = te_cm_switched_balinese
+			this = cu:balinese
+		}
+		AND = {
+			has_global_variable = te_cm_switched_visayan
+			this = cu:visayan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tagalog
+			this = cu:tagalog
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ilocano
+			this = cu:ilocano
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nguni
+			this = cu:nguni
+		}
+		AND = {
+			has_global_variable = te_cm_switched_zulu
+			this = cu:zulu
+		}
+		AND = {
+			has_global_variable = te_cm_switched_xhosa
+			this = cu:xhosa
+		}
+		AND = {
+			has_global_variable = te_cm_switched_french
+			this = cu:french
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_italian
+			this = cu:cm_italian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_spanish
+			this = cu:spanish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_portuguese
+			this = cu:portuguese
+		}
+		AND = {
+			has_global_variable = te_cm_switched_romanian
+			this = cu:romanian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_chilean
+			this = cu:chilean
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_east_slavic
+			this = cu:cm_east_slavic
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_czechoslovak
+			this = cu:cm_czechoslovak
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_yugoslav
+			this = cu:cm_yugoslav
+		}
+		AND = {
+			has_global_variable = te_cm_switched_polish
+			this = cu:polish
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_oghuz_turkic
+			this = cu:cm_oghuz_turkic
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uzbek
+			this = cu:uzbek
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kazak
+			this = cu:kazak
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tatar
+			this = cu:tatar
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kirgiz
+			this = cu:kirgiz
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bashkir
+			this = cu:bashkir
+		}
+		AND = {
+			has_global_variable = te_cm_switched_crimean_tatar
+			this = cu:crimean_tatar
+		}
+		AND = {
+			has_global_variable = te_cm_switched_caucasian_turk
+			this = cu:caucasian_turk
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uighur
+			this = cu:uighur
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_indonesian
+			this = cu:cm_indonesian
+		}
+		AND = {
+			has_global_variable = te_cm_switched_filipino
+			this = cu:filipino
+		}
+		AND = {
+			has_global_variable = te_cm_switched_swahili
+			this = cu:swahili
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nyamwezi
+			this = cu:nyamwezi
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sukuma
+			this = cu:sukuma
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yao
+			this = cu:yao
+		}
+		AND = {
+			has_global_variable = te_cm_switched_makua
+			this = cu:makua
+		}
+		AND = {
+			has_global_variable = te_cm_switched_lacustrine_bantu
+			this = cu:lacustrine_bantu
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kikuyu
+			this = cu:kikuyu
+		}
+	}
+}
+
+# Culture scope; ROOT = the state, as in te_homeland_removal_candidate. Dynamic Homeland Progress leaves this
+# culture's homeland in ROOT alone: it is a part that has switched, and the culture it switched into is
+# a homeland of the state too (owner, 2026-11-07). The part's homeland follows its successor's: once that is removed
+# (te_cmg_remove_switched_part_homelands) the part's goes with it. Not behind the rule: it is about map state.
+# has_global_variable comes first in every clause, so a game with nothing switched prunes all 117 at once.
+te_cmg_switched_part_kept = {
+	OR = {
+		AND = {
+			has_global_variable = te_cm_switched_north_german
+			this = cu:north_german
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_north_german }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_german
+			this = cu:south_german
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_south_german }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_alemannic
+			this = cu:alemannic
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_alemannic }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_east_german
+			this = cu:east_german
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_east_german }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_north_italian
+			this = cu:north_italian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_north_italian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_italian
+			this = cu:south_italian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_south_italian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_corsican
+			this = cu:corsican
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_corsican }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_swedish
+			this = cu:swedish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_swedish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_danish
+			this = cu:danish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_danish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_norwegian
+			this = cu:norwegian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_norwegian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_icelandic
+			this = cu:icelandic
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_icelandic }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_russian
+			this = cu:russian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_russian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ukrainian
+			this = cu:ukrainian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_ukrainian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_byelorussian
+			this = cu:byelorussian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_byelorussian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_serb
+			this = cu:serb
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_serb }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_croat
+			this = cu:croat
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_croat }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bosniak
+			this = cu:bosniak
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bosniak }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_slovene
+			this = cu:slovene
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_slovene }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bulgarian
+			this = cu:bulgarian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bulgarian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_czech
+			this = cu:czech
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_czech }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_slovak
+			this = cu:slovak
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_slovak }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sorb
+			this = cu:sorb
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_sorb }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_szekely
+			this = cu:szekely
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_szekely }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_flemish
+			this = cu:flemish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_flemish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_karelian
+			this = cu:karelian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_karelian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_wallonian
+			this = cu:wallonian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_wallonian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_occitan
+			this = cu:occitan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_occitan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_catalan
+			this = cu:catalan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_catalan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_scottish
+			this = cu:scottish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_scottish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yankee
+			this = cu:yankee
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_yankee }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_dixie
+			this = cu:dixie
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_dixie }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_afro_american
+			this = cu:afro_american
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_afro_american }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_british
+			this = cu:british
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_british }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_american
+			this = cu:cm_american
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_american }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_anglo_canadian
+			this = cu:anglo_canadian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_anglo_canadian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_australian
+			this = cu:australian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_australian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nordestino
+			this = cu:nordestino
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_nordestino }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_paulista
+			this = cu:paulista
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_paulista }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_amazonic
+			this = cu:amazonic
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_amazonic }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sulista
+			this = cu:sulista
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_sulista }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_afro_brazilian
+			this = cu:afro_brazilian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_afro_brazilian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_platinean
+			this = cu:platinean
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_platinean }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_argentine
+			this = cu:argentine
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_argentine }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uruguayan
+			this = cu:uruguayan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_uruguayan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_paraguayan
+			this = cu:paraguayan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_paraguayan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_north_andean
+			this = cu:north_andean
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_north_andean }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_south_andean
+			this = cu:south_andean
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_south_andean }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_peruvian
+			this = cu:peruvian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_peruvian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bolivian
+			this = cu:bolivian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bolivian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_colombian
+			this = cu:colombian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_colombian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_venezuelan
+			this = cu:venezuelan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_venezuelan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ecuadorian
+			this = cu:ecuadorian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_ecuadorian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yue
+			this = cu:yue
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_yue }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_min
+			this = cu:min
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_min }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_hakka
+			this = cu:hakka
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_hakka }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ryukyuan
+			this = cu:ryukyuan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_ryukyuan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_maghrebi
+			this = cu:maghrebi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_maghrebi }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_misri
+			this = cu:misri
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_misri }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_mashriqi
+			this = cu:mashriqi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_mashriqi }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bedouin
+			this = cu:bedouin
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bedouin }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yemenite
+			this = cu:yemenite
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_yemenite }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sudanese
+			this = cu:sudanese
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_sudanese }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_haratin
+			this = cu:haratin
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_haratin }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bidan
+			this = cu:bidan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bidan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_luri
+			this = cu:luri
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_luri }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tajik
+			this = cu:tajik
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_tajik }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_hazara
+			this = cu:hazara
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_hazara }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_turkish
+			this = cu:turkish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_turkish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_azerbaijani
+			this = cu:azerbaijani
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_azerbaijani }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_turkmen
+			this = cu:turkmen
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_turkmen }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_avadhi
+			this = cu:avadhi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_avadhi }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bundeli
+			this = cu:bundeli
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bundeli }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_chhattisgarhi
+			this = cu:chhattisgarhi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_chhattisgarhi }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bageli
+			this = cu:bageli
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bageli }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tamil
+			this = cu:tamil
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_tamil }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kannada
+			this = cu:kannada
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_kannada }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_malayalam
+			this = cu:malayalam
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_malayalam }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_telegu
+			this = cu:telegu
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_telegu }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_javan
+			this = cu:javan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_javan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_malay
+			this = cu:malay
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_malay }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sumatran
+			this = cu:sumatran
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_sumatran }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bornean
+			this = cu:bornean
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bornean }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_balinese
+			this = cu:balinese
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_balinese }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_visayan
+			this = cu:visayan
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_visayan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tagalog
+			this = cu:tagalog
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_tagalog }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_ilocano
+			this = cu:ilocano
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_ilocano }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nguni
+			this = cu:nguni
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_nguni }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_zulu
+			this = cu:zulu
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_zulu }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_xhosa
+			this = cu:xhosa
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_xhosa }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_french
+			this = cu:french
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_french }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_italian
+			this = cu:cm_italian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_italian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_spanish
+			this = cu:spanish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_spanish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_portuguese
+			this = cu:portuguese
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_portuguese }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_romanian
+			this = cu:romanian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_romanian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_chilean
+			this = cu:chilean
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_chilean }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_east_slavic
+			this = cu:cm_east_slavic
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_east_slavic }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_czechoslovak
+			this = cu:cm_czechoslovak
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_czechoslovak }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_yugoslav
+			this = cu:cm_yugoslav
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_yugoslav }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_polish
+			this = cu:polish
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_polish }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_oghuz_turkic
+			this = cu:cm_oghuz_turkic
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_oghuz_turkic }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uzbek
+			this = cu:uzbek
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_uzbek }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kazak
+			this = cu:kazak
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_kazak }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_tatar
+			this = cu:tatar
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_tatar }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kirgiz
+			this = cu:kirgiz
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_kirgiz }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_bashkir
+			this = cu:bashkir
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_bashkir }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_crimean_tatar
+			this = cu:crimean_tatar
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_crimean_tatar }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_caucasian_turk
+			this = cu:caucasian_turk
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_caucasian_turk }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_uighur
+			this = cu:uighur
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_uighur }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_cm_indonesian
+			this = cu:cm_indonesian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_cm_indonesian }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_filipino
+			this = cu:filipino
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_filipino }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_swahili
+			this = cu:swahili
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_swahili }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_nyamwezi
+			this = cu:nyamwezi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_nyamwezi }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_sukuma
+			this = cu:sukuma
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_sukuma }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_yao
+			this = cu:yao
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_yao }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_makua
+			this = cu:makua
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_makua }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_lacustrine_bantu
+			this = cu:lacustrine_bantu
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_lacustrine_bantu }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_kikuyu
+			this = cu:kikuyu
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_kikuyu }
+		}
 	}
 }

@@ -14,8 +14,41 @@ ROOT = Path(__file__).resolve().parent
 
 
 def parse(path):
-    tokens = ParadoxFileParser().tokenize(
-        (ROOT / path).read_text(encoding="utf-8-sig"))
+    return parse_text((ROOT / path).read_text(encoding="utf-8-sig"))
+
+
+def generated(path, names):
+    """Only the named top-level blocks of a generated file (the culture merges' triggers and effects), parsed."""
+    text = (ROOT / path).read_text(encoding="utf-8-sig")
+    wanted = []
+    for name in names:
+        start = text.index("\n" + name + " = {") + 1
+        depth, i = 0, text.index("{", start)
+        while True:
+            depth += (text[i] == "{") - (text[i] == "}")
+            i += 1
+            if not depth:
+                break
+        wanted.append(text[start:i])
+    return parse_text("\n".join(wanted))
+
+
+_GENERATED = {}
+
+
+def culture_merge_script():
+    """The two generated blocks Dynamic Homeland Progress calls: the trigger that keeps a switched part's
+    homeland beside its successor's, and the effect that takes it away with the successor's. Parsed once."""
+    if not _GENERATED:
+        _GENERATED["triggers"] = generated(
+            "common/scripted_triggers/te_culture_merges_generated_triggers.txt", ("te_cmg_switched_part_kept",))
+        _GENERATED["effects"] = generated(
+            "common/scripted_effects/te_culture_merges_generated_effects.txt", ("te_cmg_remove_switched_part_homelands",))
+    return _GENERATED
+
+
+def parse_text(text):
+    tokens = ParadoxFileParser().tokenize(text)
     index = 0
     def block():
         nonlocal index
@@ -57,8 +90,13 @@ class Script:
         self.scopes = {}
         self.temporary = {}
         self.notifications = []
+        # The culture merges' globals: te_cm_switched_<culture> holds the culture a part switched into. None are
+        # set unless a test sets them, so the generated trigger reads false and the effect does nothing.
+        self.globals = {}
         self.triggers = parse("common/scripted_triggers/homeland_triggers.txt")
+        self.triggers.update(culture_merge_script()["triggers"])
         self.effects = parse("common/scripted_effects/homeland_effects.txt")
+        self.effects.update(culture_merge_script()["effects"])
         self.values = parse("common/script_values/homeland_values.txt")
         self.values.update(parse("common/script_values/extra_script_values.txt"))
         self.pulse = parse("common/on_actions/extra_on_actions.txt")["te_homeland_monthly"]
@@ -81,6 +119,12 @@ class Script:
             return self.root
         if text == "PREV":
             return previous
+        if text == "this":
+            return current
+        if text.startswith("cu:"):
+            return next((c for c in self.root["cultures"] if c["name"] == text[3:]), None)
+        if text.startswith("global_var:"):
+            return self.globals.get(text[11:])
         if text.startswith("scope:"):
             return self.scopes.get(text[6:])
         if text.startswith("var:"):
@@ -106,6 +150,11 @@ class Script:
                 answer = any(self.condition(value, item, current) for item in candidates)
             elif key == "has_variable_list":
                 answer = bool(current["lists"].get(value))
+            elif key == "has_global_variable":
+                answer = value in self.globals
+            elif key == "is_homeland":
+                culture = self.ref(value, current, previous)
+                answer = culture is not None and culture["name"] in current["homelands"]
             elif key == "has_tag":
                 answer = value in current["tags"]
             elif key == "exists":
@@ -130,8 +179,8 @@ class Script:
 
     @staticmethod
     def compare(op, a, b):
-        if isinstance(a, dict) or isinstance(b, dict):
-            if op != "=":
+        if isinstance(a, dict) or isinstance(b, dict) or a is None or b is None:
+            if op not in ("=", "?="):
                 raise AssertionError(op)
             return a is b
         return {"=": operator.eq, ">=": operator.ge, "<": operator.lt,

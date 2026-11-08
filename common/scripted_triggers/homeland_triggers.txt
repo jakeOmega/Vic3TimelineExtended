@@ -55,12 +55,17 @@ te_homeland_creation_project_valid = {
 }
 
 # Culture scope; ROOT = state.
+# A culture merge's switched part is not a candidate while the state is also a homeland of the culture it
+# switched into (te_cmg_switched_part_kept, generated; owner, 2026-11-07): the part keeps its homeland beside
+# its successor's, and loses it with the successor's (te_cmg_remove_switched_part_homelands, called where
+# te_homeland_removal_monthly_effect removes a homeland). Last, so the cheap tests prune first.
 te_homeland_removal_candidate = {
 	NOT = { is_primary_culture_of = ROOT.owner }
 	has_homeland = ROOT
 	ROOT = {
 		culture_percent_state = { target = PREV value < homeland_culture_disappear_threshold }
 	}
+	NOT = { te_cmg_switched_part_kept = yes }
 }
 te_homeland_removal_has_candidate = {
 	any_scope_culture = { te_homeland_removal_candidate = yes }

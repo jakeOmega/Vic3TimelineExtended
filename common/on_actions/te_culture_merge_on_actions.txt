@@ -37,7 +37,47 @@ te_cm_yearly_on_action = {
 				# treats it as one a country can start again.
 				te_cmg_release_lost_starters = yes
 				te_cmg_census_all = yes
+				# The switch comes last, after the walks: it reads what the census just stored (R22).
+				te_cmg_dominance_all = yes
 			}
+		}
+		# The conversion is every country's own, on its own yearly pulse: not under the census's calendar-year
+		# guard or its lock, which let one country a year through. It pauses with the rule like the rest.
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			te_cmg_yearly_country = yes
+		}
+	}
+}
+
+# Country scope, the monthly pulse. The parts that have switched stay primary cultures for good (spec 7), so
+# a country that has one as primary gets the result too, and pops of a switched part that reappear are
+# converted. Paused with the rule, resumed with it.
+on_monthly_pulse_country = {
+	on_actions = { te_cm_monthly_on_action }
+}
+
+te_cm_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			te_cmg_monthly_country = yes
+		}
+	}
+}
+
+# Country scope: the newly formed country. A formation may reset primary cultures (unverified, spec 10), so a
+# country formed or released from a definition that lists only the parts gets the result at once, not within a
+# month, and a sphere country that was already converting gets the result back.
+on_country_formed = {
+	on_actions = { te_cm_formed_on_action }
+}
+
+te_cm_formed_on_action = {
+	effect = {
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			te_cmg_formed_country = yes
 		}
 	}
 }

@@ -786,7 +786,7 @@ class TriggerShapeTest(unittest.TestCase):
                 "te_cmg_%s_%s" % (merge.key, suffix)
                 for suffix in (
                     "is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start",
-                    "starter_gone", "all_switched",
+                    "starter_gone", "all_switched", "core_switched",
                 )
             )
             if any(part.wait_for for part in merge.core):
@@ -801,6 +801,8 @@ class TriggerShapeTest(unittest.TestCase):
                     expected.add("te_cmg_%s_%s_years_met" % (merge.key, culture))
                 if not _absorb_result(merge, culture):
                     expected.add("te_cmg_%s_%s_switched_in" % (merge.key, culture))
+        # Task 6: the two culture-scope triggers over every culture that can switch, one each.
+        expected.update(("te_cmg_is_switched_part", "te_cmg_switched_part_kept"))
         self.assertEqual(names, expected)
 
     def test_no_two_merges_name_the_same_variable(self):
@@ -832,10 +834,14 @@ class StateIsVariablesTest(unittest.TestCase):
         # R19: counters and gates keep their last values while the rule is off, so the census never takes a
         # global variable away: the lock is set, never removed, and it is the only global it writes besides
         # the home counts and the year.
-        # The three helpers that start, join and release a merge (Task 5) sit in the same file but are not the
-        # census: the release is the one place a global variable is removed, and test_culture_merge_entries
-        # pins what each of them writes.
-        helpers = ("te_cm_start_merge", "te_cm_join_part", "te_cm_release_starter")
+        # The three helpers that start, join and release a merge (Task 5) and the four that convert, measure
+        # dominance, switch and keep the primary cultures (Task 6) sit in the same file but are not the census:
+        # the release and the switch are the places a global variable is removed, and test_culture_merge_entries
+        # and test_culture_merge_switch pin what each of them writes.
+        helpers = (
+            "te_cm_start_merge", "te_cm_join_part", "te_cm_release_starter",
+            "te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part", "te_cm_monthly_switched_culture",
+        )
 
         def census_only(path):
             text = text_of(path)
