@@ -95,6 +95,8 @@ surrender_monument = {  # REVIEWED 2026-11-03 (involvement): a one-off concessio
 			}
 		}
 
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier. possible already holds the demand's worth: the source must own a monument it could surrender (gm_tr_country_has_takeable), and state_valid_trigger offers only those states.
+
 		inherent_accept_score = {
 			value = 0
 

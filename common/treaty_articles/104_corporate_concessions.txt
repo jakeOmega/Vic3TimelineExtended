@@ -94,6 +94,7 @@ corporate_concessions = {
 	}
 
 	ai = {
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier. The article is hidden (visible is always = no while it is WIP), and the demander's gain (prestige, company construction efficiency) is the same whoever concedes.
 		treaty_categories = { other }
 		article_ai_usage = { request }
 

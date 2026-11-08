@@ -3054,6 +3054,273 @@ enforce_privatization_ai_demand_weight = {
 	}
 }
 
+# ============================================================================
+# AI DEMAND WEIGHTS FOR ENFORCEABLE TREATY ARTICLES
+# ============================================================================
+# How keen the AI is to demand an article of scope:source_country, the country
+# that concedes. Each weight is read by its article's proposal_weight (asking
+# for it in a treaty) and wargoal_score_multiplier (pressing it as an enforce
+# war goal in a play), and is 0 where the demand would buy nothing, 1
+# otherwise. Both fields bind scope:source_country, scope:target_country (the
+# side that gains: the war goal's holder) and scope:article; vanilla's
+# treaty_port and law_commitment read the chosen input there as
+# scope:article.input_<kind>. evaluation_chance has root only, so these checks
+# can't sit there. An article that names an input asks it of that input when
+# one is bound, and otherwise of every input the source could name (the input
+# halves are in te_treaty_ai_demand_triggers.txt). Players are not bound by
+# them. Enforceable articles without a weight carry a reviewed exemption in
+# their ai block, and test_treaty_ai_demand_weights.py fails on any with
+# neither. Play-test: docs/testing/treaty-war-goal-playtest.md.
+
+# The fewest building levels a company must own before the AI demands that it
+# be seized or disbanded (te_treaty_ai_company_worth_demanding).
+company_article_ai_min_levels = 5
+
+seize_company_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_company } }
+		# can_ratify's SEIZE_COMPANY_ALREADY_HAS: a receiver that already has the
+		# type gains nothing (add_company does nothing), so the seizure would
+		# only disband it.
+		if = {
+			limit = {
+				scope:article.input_company = { te_treaty_ai_company_worth_demanding = yes }
+				scope:target_country = {
+					NOT = { has_company = scope:article.input_company.type }
+				}
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+disband_company_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_company } }
+		if = {
+			limit = {
+				scope:article.input_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# Only for a state where a people or faith of the protector is discriminated
+# (te_minority_protection_state_worth).
+minority_protection_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_minority_protection_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = { te_minority_protection_state_worth = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# The smallest yearly GDP a state must have before the AI demands that it be
+# opened as a free port (te_free_port_state_worth). Vanilla's
+# foreign_investment_rights stops pressing its war goal on a whole country
+# below this figure.
+free_port_concession_ai_min_state_gdp = 500000
+
+# Only between two markets, since tariffs don't apply inside one, and for a
+# port with an economy (te_free_port_state_worth).
+free_port_concession_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country ?= { exists = market }
+			scope:target_country ?= { exists = market }
+			scope:source_country = {
+				NOT = { market = scope:target_country.market }
+			}
+		}
+		if = {
+			limit = { scope:article ?= { exists = input_state } }
+			if = {
+				limit = {
+					scope:article.input_state = { te_free_port_state_worth = yes }
+				}
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				scope:source_country = {
+					any_scope_state = { te_free_port_state_worth = yes }
+				}
+			}
+			value = 1
+		}
+	}
+}
+
+# Only for a state with people of another faith to convert
+# (te_religious_mission_state_worth).
+religious_mission_rights_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_religious_mission_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = { te_religious_mission_state_worth = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# Only for a state that holds a military building or borders the demander
+# (te_demilitarized_zone_state_worth). The capital can't be named
+# (state_valid_trigger), so the walk skips it too.
+demilitarized_zone_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_demilitarized_zone_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = {
+					is_capital = no
+					te_demilitarized_zone_state_worth = yes
+				}
+			}
+		}
+		value = 1
+	}
+}
+
+# The fewest battalions (army_size) or flotillas (navy_size) a country must
+# have before the AI demands its disarmament, unless it has military industry.
+forced_disarmament_ai_min_units = 10
+
+# Only of a country with an army, a navy or military industry to lose.
+forced_disarmament_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				OR = {
+					army_size >= forced_disarmament_ai_min_units
+					navy_size >= forced_disarmament_ai_min_units
+					any_scope_state = {
+						OR = {
+							has_building = building_arms_industry
+							has_building = building_artillery_foundry
+							has_building = building_munition_plant
+						}
+					}
+				}
+			}
+		}
+		value = 1
+	}
+}
+
+# The smallest share of the world's yearly emissions, in percent
+# (gw_disp_own_share_pct), a country must emit before the AI demands that it
+# cut them.
+enforce_emissions_reduction_ai_min_share_pct = 1
+
+# Only of a country that emits enough to matter and doesn't already run all
+# seven policies the article forces (on_entry_into_force). Without a yearly
+# figure yet, the share reads 0.
+enforce_emissions_reduction_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				gw_disp_own_share_pct >= enforce_emissions_reduction_ai_min_share_pct
+				OR = {
+					gw_policy_carbon_tax_active = no
+					gw_policy_renewable_investment_active = no
+					gw_policy_emission_standards_active = no
+					gw_policy_reforestation_active = no
+					gw_policy_public_transit_active = no
+					gw_policy_fossil_fuel_divestment_active = no
+					gw_policy_green_building_codes_active = no
+				}
+			}
+		}
+		value = 1
+	}
+}
+
+# Only of a country not already pegged. possible holds the pretext (default);
+# the one-peg-at-a-time rule is in can_ratify, which a war goal doesn't check,
+# and can't move to possible, which can't tell the treaty being renegotiated
+# from another.
+imposed_currency_peg_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = { te_mon_is_anchored = no }
+		}
+		value = 1
+	}
+}
+
+# Only of a debtor not already under a receivership or a lender-of-last-resort
+# guarantee: can_ratify's te_lolr_already_guaranteed_tt, for the same reason as
+# the peg above.
+debt_receivership_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				te_mon_is_under_receivership = no
+				te_mon_is_lolr_ward = no
+			}
+		}
+		value = 1
+	}
+}
+
 # Number of claims the target country has on the source country's states
 # Evaluated in country scope with scope:source_country and scope:target_country available
 population_transfer_claims_on_source = {
