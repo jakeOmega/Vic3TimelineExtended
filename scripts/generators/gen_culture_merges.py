@@ -75,6 +75,9 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   only once that merge is complete with every joined part switched, or has no part joined, and a merge whose
   result has switched into a higher merge's joins, converts, measures and switches nothing more and is no
   candidate. The hand-written helpers are in the same ``te_culture_merge_effects.txt``.
+* The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
+  complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
+  starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
 
 Also carried: ``traditions`` is what every core part shares (usually nothing,
 so ``{ }``), and ``name_format``, ``seal_and_signature_texture`` and the other
@@ -1288,7 +1291,31 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                 out.line("limit = { te_cmg_%s_census_wanted = yes }" % merge.key)
                 out.line("te_cmg_census_%s = yes" % merge.key)
     _write_conversion_effects(out, vanilla, merges)
+    _write_debug_dump(out, merges)
     return out.text()
+
+
+def _write_debug_dump(out: "_Script", merges: tuple[cfg.Merge, ...]) -> None:
+    """``te_cmg_debug_dump`` (plan Task 8): the console menu's option D. Country scope. For each merge that is running or
+    complete, or that this country is a candidate for, ``te_cm_debug_dump_merge`` and, per joinable slot culture,
+    ``te_cm_debug_dump_part`` (te_debug_cm_effects.txt), which log every te_cm_ variable the merge keeps. The names embed
+    the merge key and the culture, so the list is generated from the roster."""
+    out.line()
+    out.line("# ---- The console menu's dump (events/te_debug_cm_events.txt, option D) ----")
+    out.line()
+    out.line("# Country scope. Logs (TE_CM_DEBUG) every te_cm_ variable of each merge that is running or complete, or that this country")
+    out.line("# is a candidate for: te_cm_debug_dump_merge, then te_cm_debug_dump_part per slot culture a starter can bring in.")
+    with out.block("te_cmg_debug_dump"):
+        for merge in merges:
+            key = merge.key
+            with out.block("if"):
+                out.line(
+                    "limit = { OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 te_cmg_%s_is_candidate = yes } }"
+                    % (key, key, key)
+                )
+                out.line("te_cm_debug_dump_merge = { MERGE = %s }" % key)
+                for culture in _joinable_slot_cultures(merge):
+                    out.line("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s }" % (key, culture))
 
 
 def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.Merge, ...]) -> None:

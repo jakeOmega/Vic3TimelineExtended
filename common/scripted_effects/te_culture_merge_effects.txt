@@ -255,6 +255,10 @@ te_cm_census_part = {
 		}
 	}
 
+	# TEMPORARY self-checks cm_census_sane and cm_acceptance_scale (te_culture_merge_selfcheck_effects.txt; delete after the
+	# 1.3.x play-test). Reads te_cm_cp_pops and te_cm_cp_max_cnt, so it sits here, before the scan removes te_cm_tmp_cnt.
+	te_cm_chk_census = { MERGE = $MERGE$ CULTURE = $CULTURE$ }
+
 	# ---- Acceptance, where the part lives ----
 	# Every sphere country holding at least the meaningful share of the sphere's pops of the
 	# part must accept it, and so must the largest holder (the share is capped at the largest
@@ -592,6 +596,9 @@ te_cm_convert_part = {
 				}
 				add_primary_culture = cu:$RESULT$
 			}
+			# TEMPORARY self-checks cm_rate_inputs, cm_conversion_merges_pops and the flag of cm_formation_keeps_primary
+			# (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test). Before the pops convert.
+			te_cm_chk_conversion = { CULTURE = $CULTURE$ RESULT = $RESULT$ }
 			every_scope_pop = {
 				limit = { culture = cu:$CULTURE$ }
 				change_pop_culture = { target = cu:$RESULT$ value = te_cm_pop_rate }
@@ -667,6 +674,9 @@ te_cm_switch_part = {
 			global_var:te_cm_dom_$MERGE$_$CULTURE$ >= te_cm_switch_share
 		}
 		cu:$RESULT$ = { save_temporary_scope_as = te_cm_result }
+		# TEMPORARY self-check cm_switch_homeland (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+		# Counts the part's homeland states before any is touched.
+		te_cm_chk_switch = { CULTURE = $CULTURE$ }
 		every_country = {
 			every_scope_pop = {
 				limit = { culture = cu:$CULTURE$ }

@@ -33,6 +33,8 @@ te_cm_yearly_on_action = {
 				}
 				set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
 				set_global_variable = { name = te_cm_census_year value = local_var:te_cm_year }
+				# TEMPORARY self-check cm_census_yearly (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+				te_cm_chk_census_year = yes
 				# A running merge whose starter is gone returns to idle first, so the census below
 				# treats it as one a country can start again.
 				te_cmg_release_lost_starters = yes
@@ -77,6 +79,9 @@ te_cm_formed_on_action = {
 	effect = {
 		if = {
 			limit = { te_cm_system_enabled = yes }
+			# TEMPORARY self-check cm_formation_keeps_primary (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x
+			# play-test). First, so it reads the primary cultures before the refresh below puts a result back.
+			te_cm_chk_formation = yes
 			te_cmg_formed_country = yes
 		}
 	}

@@ -1,0 +1,560 @@
+﻿# ============================================================================
+# CULTURE MERGES: the TEMPORARY self-checks (delete after the 1.3.x play-test)
+# (docs/testing/culture-merges-playtest.md, "Self-checks"; the on_actions file of the same name
+# lists the hooks and the rows)
+# ============================================================================
+# Eight engine facts the culture merges rest on that nobody has verified. Each check logs
+# `TE_SELF_CHECK OK|BROKEN <name>` with its numbers, once a game, behind a latch global
+# (te_cm_chk_<name without cm_>_done), and leaves out inputs that would make OK a false pass.
+# Every value it prints is copied into a te_cm_chk_* global first and read back with
+# GetGlobalVariable (a $X$ inside a [..] accessor is unproven), then removed.
+# Checks 1-7 read merge state and wait for the rule (te_cm_system_enabled), so none fires in a game with no merges;
+# cm_russification_outcome reads the INJECTed outcome of a vanilla entry, which has no rule gate, and no merge variable.
+#
+#   cm_census_sane                te_cm_chk_census           the first candidate's census of a part it holds
+#   cm_acceptance_scale           te_cm_chk_census           the first candidate with a primary core culture
+#   cm_census_yearly              te_cm_chk_census_year      START at the first census, the verdict at the second
+#   cm_rate_inputs                te_cm_chk_conversion       the starter's first accepted homeland pop of a part
+#   cm_conversion_merges_pops     te_cm_chk_conversion       a sample state over two conversion passes, read on the
+#                                 te_cm_chk_conversion_monthly   monthly pulse after each (35 days on)
+#   cm_switch_homeland            te_cm_chk_switch           the first switch, read on the next monthly pulse
+#                                 te_cm_chk_switch_monthly
+#   cm_formation_keeps_primary    te_cm_chk_conversion       flags a country with the result as primary,
+#                                 te_cm_chk_formation_monthly   a monthly pulse later arms it,
+#                                 te_cm_chk_formation        and on_country_formed reads it before the refresh
+#   cm_russification_outcome      te_cm_chk_russification_monthly
+#
+# No verdict is delayed with a state event (a delayed state event never runs): a check that needs settled state
+# stores what it saw, sets a timed global, and the monthly pulse reads the rest once the global has run out.
+
+# Any scope. Removes a global if it is set (a bare remove of an unset one is not safe to assume). $NAME$ = the global.
+te_cm_chk_remove_global = {
+	if = {
+		limit = { has_global_variable = $NAME$ }
+		remove_global_variable = $NAME$
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_census_sane and cm_acceptance_scale: the first census of a part
+# ----------------------------------------------------------------------------
+
+# Country scope: the candidate, at the end of te_cm_census_part's hold. $MERGE$ = a merge key, $CULTURE$ = a slot
+# culture. The caller's locals are alive: te_cm_cp_pops (the sphere's pops of the part in its homeland states),
+# te_cm_cp_max_cnt (the largest holder's count, written from inside owner = { te_cm_cp_note_holder }) and te_cm_cp_joined.
+#
+# cm_census_sane: the sphere holds some of a part that has not joined, so
+#   OK      the world's pops of the part in its homeland states (home) are above 0, the hold is above 0 and at most 1, the
+#           sphere's pops do not exceed the world's, and the largest holder's count is above 0: a local written inside
+#           owner = { } reached the census, and the globals it divides by were read back.
+#   BROKEN  home 0 (te_cm_census_culture's sum did not reach the global), held 0 or the sphere above the world (the
+#           division read a wrong denominator), or the largest holder 0 with pops above 0 (the owner-scoped write did not
+#           reach the outer local: the acceptance test's cut-off would be 0 and test every country).
+# cm_acceptance_scale: a candidate whose primary culture this part is, with a tenth of its pops or more:
+#   OK      its average acceptance of that culture reads at or above te_cm_accept_open (acceptance_status_4): the scale
+#           the gates assume (0-100, a primary culture near the top).
+#   BROKEN  below it: the gates would never open.
+te_cm_chk_census = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_census_sane_done }
+			te_cm_system_enabled = yes
+			local_var:te_cm_cp_joined = 0
+			local_var:te_cm_cp_pops > 0
+		}
+		set_global_variable = { name = te_cm_chk_census_sane_done value = yes }
+		set_global_variable = { name = te_cm_chk_home value = 0 }
+		if = {
+			limit = { has_global_variable = te_cm_home_$CULTURE$ }
+			set_global_variable = { name = te_cm_chk_home value = global_var:te_cm_home_$CULTURE$ }
+		}
+		set_global_variable = { name = te_cm_chk_pops value = local_var:te_cm_cp_pops }
+		set_global_variable = { name = te_cm_chk_holder value = local_var:te_cm_cp_max_cnt }
+		set_global_variable = { name = te_cm_chk_held value = var:te_cm_held_$MERGE$_$CULTURE$ }
+		if = {
+			limit = {
+				global_var:te_cm_chk_home > 0
+				global_var:te_cm_chk_held > 0
+				global_var:te_cm_chk_held <= 1
+				NOT = { global_var:te_cm_chk_pops > global_var:te_cm_chk_home }
+				global_var:te_cm_chk_holder > 0
+			}
+			debug_log = "TE_SELF_CHECK OK cm_census_sane merge=$MERGE$ part=$CULTURE$ home=[GetGlobalVariable('te_cm_chk_home').GetValue|0] sphere_pops=[GetGlobalVariable('te_cm_chk_pops').GetValue|0] held=[GetGlobalVariable('te_cm_chk_held').GetValue|3] largest_holder=[GetGlobalVariable('te_cm_chk_holder').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the census read back what it wrote: the world's homeland pops, the hold between 0 and 1, and a count written inside owner = { })"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_census_sane merge=$MERGE$ part=$CULTURE$ home=[GetGlobalVariable('te_cm_chk_home').GetValue|0] sphere_pops=[GetGlobalVariable('te_cm_chk_pops').GetValue|0] held=[GetGlobalVariable('te_cm_chk_held').GetValue|3] largest_holder=[GetGlobalVariable('te_cm_chk_holder').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (home 0: the world sum never reached its global; held 0 or sphere_pops above home: the hold divides by the wrong figure; largest_holder 0 with sphere_pops above 0: a local written inside owner = { } did not reach te_cm_census_part, so its acceptance scan tests every country; take the fallback in docs/testing/culture-merges-playtest.md)"
+		}
+		te_cm_chk_remove_global = { NAME = te_cm_chk_home }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_pops }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_holder }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_held }
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_acceptance_scale_done }
+			te_cm_system_enabled = yes
+			country_has_primary_culture = cu:$CULTURE$
+			culture_percent_country = { target = cu:$CULTURE$ value >= 0.1 }
+		}
+		set_global_variable = { name = te_cm_chk_acceptance_scale_done value = yes }
+		set_global_variable = { name = te_cm_chk_accept value = 0 }
+		if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= 100 } }
+			set_global_variable = { name = te_cm_chk_accept value = 100 }
+		}
+		else_if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= 80 } }
+			set_global_variable = { name = te_cm_chk_accept value = 80 }
+		}
+		else_if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= 60 } }
+			set_global_variable = { name = te_cm_chk_accept value = 60 }
+		}
+		else_if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= 40 } }
+			set_global_variable = { name = te_cm_chk_accept value = 40 }
+		}
+		else_if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= 20 } }
+			set_global_variable = { name = te_cm_chk_accept value = 20 }
+		}
+		set_global_variable = { name = te_cm_chk_accept_need value = te_cm_accept_open }
+		if = {
+			limit = { country_average_culture_pop_acceptance = { culture = cu:$CULTURE$ value >= te_cm_accept_open } }
+			debug_log = "TE_SELF_CHECK OK cm_acceptance_scale merge=$MERGE$ part=$CULTURE$ acceptance_at_least=[GetGlobalVariable('te_cm_chk_accept').GetValue|0] need=[GetGlobalVariable('te_cm_chk_accept_need').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the candidate's average acceptance of its own primary culture reaches the value the gates open at: the 0-100 scale holds)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_acceptance_scale merge=$MERGE$ part=$CULTURE$ acceptance_at_least=[GetGlobalVariable('te_cm_chk_accept').GetValue|0] need=[GetGlobalVariable('te_cm_chk_accept_need').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (a candidate's average acceptance of its own primary culture is below the value the gates open at, so no part would ever pass its acceptance test: read what country_average_culture_pop_acceptance returns for a primary culture and rescale te_cm_accept_open and its three siblings; take the fallback in docs/testing/culture-merges-playtest.md)"
+		}
+		te_cm_chk_remove_global = { NAME = te_cm_chk_accept }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_accept_need }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_census_yearly: the calendar-year guard
+# ----------------------------------------------------------------------------
+
+# Country scope: the census branch of te_cm_yearly_on_action, after it has stored te_cm_census_year. The guard compares
+# global_var:te_cm_census_year < local_var:te_cm_year, a form nobody has read in game.
+#   START   the first census (the line carries its year), the second follows a year on.
+#   OK      the second census came exactly one year after the first.
+#   BROKEN  any other gap: 0 means the guard let a second census through in the same year (the years-together counters
+#           would add several a year), 2 or more means a calendar year went by with no census. A rule switched off for a
+#           year in between also reads 2 or more; that is not the guard.
+# A START with no verdict a year later is the third case: the guard never lets a second census through.
+te_cm_chk_census_year = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_census_yearly_done }
+			te_cm_system_enabled = yes
+			has_global_variable = te_cm_census_year
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_cm_chk_census_first } }
+			set_global_variable = { name = te_cm_chk_census_first value = global_var:te_cm_census_year }
+			debug_log = "TE_SELF_CHECK START cm_census_yearly year=[GetGlobalVariable('te_cm_census_year').GetValue|0] (the verdict follows at the next census, a year on; a START with no verdict after that means the calendar-year guard never lets a second census through)"
+		}
+		else = {
+			set_global_variable = { name = te_cm_chk_census_yearly_done value = yes }
+			set_global_variable = { name = te_cm_chk_census_gap value = global_var:te_cm_census_year }
+			change_global_variable = { name = te_cm_chk_census_gap subtract = global_var:te_cm_chk_census_first }
+			if = {
+				limit = { global_var:te_cm_chk_census_gap = 1 }
+				debug_log = "TE_SELF_CHECK OK cm_census_yearly first=[GetGlobalVariable('te_cm_chk_census_first').GetValue|0] now=[GetGlobalVariable('te_cm_census_year').GetValue|0] gap=[GetGlobalVariable('te_cm_chk_census_gap').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second census came one calendar year after the first: the year guard works)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cm_census_yearly first=[GetGlobalVariable('te_cm_chk_census_first').GetValue|0] now=[GetGlobalVariable('te_cm_census_year').GetValue|0] gap=[GetGlobalVariable('te_cm_chk_census_gap').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (gap 0: a second census ran in the same year; gap 2 or more: a year had no census, or the rule was off for one, which is not the guard; take the fallback in docs/testing/culture-merges-playtest.md)"
+			}
+			te_cm_chk_remove_global = { NAME = te_cm_chk_census_first }
+			te_cm_chk_remove_global = { NAME = te_cm_chk_census_gap }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The conversion pass: cm_rate_inputs, the primary flag of cm_formation_keeps_primary, cm_conversion_merges_pops
+# ----------------------------------------------------------------------------
+
+# Country scope: a converting country, in te_cm_convert_part after the pause test has cleared it and the primary culture is
+# in place, before its pops convert. $CULTURE$ = the part, $RESULT$ = the merge's result. scope:te_cm_part and
+# scope:te_cm_starter are saved by the caller.
+#
+# cm_rate_inputs: the starter's first accepted pop of the part in a homeland state, the base case the pace was tuned on
+# (no discrimination, no diaspora, no bloc halving): its literacy, its state's urbanization, the owner's speed modifier
+# and the pop rate they give.
+#   OK      the rate is above 0 and at most 0.5 (the value's own cap).
+#   BROKEN  a rate of 0 (a scope or a read did not resolve) or above the cap, which cannot be told from the cap itself.
+# The pace target of about 20 years assumes a developed state reads about 0.4 urbanization; the OK line prints the figure.
+#
+# cm_formation_keeps_primary: flags the country with the result as a culture it holds as primary
+# (te_cm_chk_primary_of), once. te_cm_chk_formation_monthly arms it a monthly pulse later, and te_cm_chk_formation reads it.
+#
+# cm_conversion_merges_pops: stage 0 picks one state of this country that has pops of the part and counts its pops of
+# the result (te_cm_chk_conv_before), then waits 35 days (stage 1). Stage 2, a later pass by the same country for the same
+# part, waits 35 days again (stage 3). The monthly pulse reads the state after each wait.
+te_cm_chk_conversion = {
+	# ---- cm_rate_inputs ----
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_rate_inputs_done }
+			te_cm_system_enabled = yes
+			this = scope:te_cm_starter
+		}
+		random_scope_state = {
+			limit = {
+				state_region = { is_homeland = scope:te_cm_part }
+				any_scope_pop = {
+					culture = scope:te_cm_part
+					pop_acceptance >= acceptance_status_4
+				}
+			}
+			random_scope_pop = {
+				limit = {
+					culture = scope:te_cm_part
+					pop_acceptance >= acceptance_status_4
+				}
+				set_global_variable = { name = te_cm_chk_literacy value = literacy_rate }
+				set_global_variable = { name = te_cm_chk_urban value = state.state_urbanization_rate }
+				set_global_variable = { name = te_cm_chk_speed value = owner.modifier:country_culture_merge_speed_mult }
+				set_global_variable = { name = te_cm_chk_rate value = te_cm_pop_rate }
+			}
+		}
+		if = {
+			limit = { has_global_variable = te_cm_chk_rate }
+			set_global_variable = { name = te_cm_chk_rate_inputs_done value = yes }
+			if = {
+				limit = {
+					global_var:te_cm_chk_rate > 0
+					global_var:te_cm_chk_rate <= 0.5
+				}
+				debug_log = "TE_SELF_CHECK OK cm_rate_inputs part=$CULTURE$ literacy=[GetGlobalVariable('te_cm_chk_literacy').GetValue|2] urbanization=[GetGlobalVariable('te_cm_chk_urban').GetValue|2] speed=[GetGlobalVariable('te_cm_chk_speed').GetValue|2] rate=[GetGlobalVariable('te_cm_chk_rate').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString] (the starter's base-case pop converts a share a year between 0 and the 0.5 cap; the pace target assumes a developed state reads about 0.4 urbanization and a rate near 0.056)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cm_rate_inputs part=$CULTURE$ literacy=[GetGlobalVariable('te_cm_chk_literacy').GetValue|2] urbanization=[GetGlobalVariable('te_cm_chk_urban').GetValue|2] speed=[GetGlobalVariable('te_cm_chk_speed').GetValue|2] rate=[GetGlobalVariable('te_cm_chk_rate').GetValue|4] date=[TimeKeeper.GetCurrentDate.GetString] (rate 0: a saved scope or one of the reads did not resolve in the pop's scope, so nothing converts; a rate at 0.5 is the value's cap, which an urbanization or literacy read on the wrong scale would hit; take the fallback in docs/testing/culture-merges-playtest.md)"
+			}
+			te_cm_chk_remove_global = { NAME = te_cm_chk_literacy }
+			te_cm_chk_remove_global = { NAME = te_cm_chk_urban }
+			te_cm_chk_remove_global = { NAME = te_cm_chk_speed }
+			te_cm_chk_remove_global = { NAME = te_cm_chk_rate }
+		}
+	}
+
+	# ---- the primary flag of cm_formation_keeps_primary ----
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_formation_keeps_primary_done }
+			te_cm_system_enabled = yes
+			NOT = { has_variable = te_cm_chk_primary_of }
+			country_has_primary_culture = cu:$RESULT$
+		}
+		cu:$RESULT$ = { save_temporary_scope_as = te_cm_chk_primary_s }
+		set_variable = { name = te_cm_chk_primary_of value = scope:te_cm_chk_primary_s }
+	}
+
+	# ---- cm_conversion_merges_pops: stage 0, a state to watch ----
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_conversion_merges_pops_done }
+			te_cm_system_enabled = yes
+			NOT = { has_global_variable = te_cm_chk_conv_stage }
+		}
+		random_scope_state = {
+			limit = { any_scope_pop = { culture = cu:$CULTURE$ } }
+			set_global_variable = { name = te_cm_chk_conv_state value = this }
+			set_local_variable = { name = te_cm_chk_n value = 0 }
+			every_scope_pop = {
+				limit = { culture = cu:$RESULT$ }
+				change_local_variable = { name = te_cm_chk_n add = 1 }
+			}
+			set_global_variable = { name = te_cm_chk_conv_before value = local_var:te_cm_chk_n }
+			set_global_variable = { name = te_cm_chk_conv_stage value = 1 }
+			set_global_variable = { name = te_cm_chk_conv_wait value = yes days = 35 }
+		}
+		if = {
+			limit = { has_global_variable = te_cm_chk_conv_stage }
+			cu:$CULTURE$ = { save_temporary_scope_as = te_cm_chk_part_s }
+			cu:$RESULT$ = { save_temporary_scope_as = te_cm_chk_result_s }
+			set_global_variable = { name = te_cm_chk_conv_part value = scope:te_cm_chk_part_s }
+			set_global_variable = { name = te_cm_chk_conv_result value = scope:te_cm_chk_result_s }
+		}
+	}
+
+	# ---- stage 2 to 3: the same country converts the same part again ----
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_conversion_merges_pops_done }
+			te_cm_system_enabled = yes
+			has_global_variable = te_cm_chk_conv_stage
+			global_var:te_cm_chk_conv_stage = 2
+			global_var:te_cm_chk_conv_part ?= scope:te_cm_part
+		}
+		save_temporary_scope_as = te_cm_chk_conv_country
+		if = {
+			limit = { global_var:te_cm_chk_conv_state = { owner = scope:te_cm_chk_conv_country } }
+			set_global_variable = { name = te_cm_chk_conv_stage value = 3 }
+			set_global_variable = { name = te_cm_chk_conv_wait value = yes days = 35 }
+		}
+	}
+}
+
+# Any scope. Forgets a conversion sample, so the next pass picks another state.
+te_cm_chk_conversion_clear = {
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_state }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_before }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_stage }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_wait }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_part }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_result }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_now }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_mid }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_inc1 }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_inc2 }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_half }
+}
+
+# Any scope, the monthly pulse. cm_conversion_merges_pops: the pops of the result in the sample state, 35 days after a pass.
+# Stage 1 (after the first pass): the first pass made inc1 result pops. A split with nothing to merge into makes one per
+# building, profession and religion of the part; inc1 below 1 means nothing was made here, so the sample starts over from
+# another state at the next pass. Stage 3 (after the second pass): inc2 more.
+#   OK      inc2 is below half of inc1: the second pass merged what it converted into the result pops the first made.
+#   BROKEN  inc2 is half of inc1 or more: every pass splits off a new pop beside the old one, so the pops multiply for
+#           as long as the merge runs.
+te_cm_chk_conversion_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_conversion_merges_pops_done }
+			te_cm_system_enabled = yes
+			has_global_variable = te_cm_chk_conv_stage
+			NOT = { has_global_variable = te_cm_chk_conv_wait }
+			NOT = { global_var:te_cm_chk_conv_stage = 2 }
+		}
+		global_var:te_cm_chk_conv_result = { save_temporary_scope_as = te_cm_chk_conv_res }
+		global_var:te_cm_chk_conv_state = {
+			set_local_variable = { name = te_cm_chk_n value = 0 }
+			every_scope_pop = {
+				limit = { culture = scope:te_cm_chk_conv_res }
+				change_local_variable = { name = te_cm_chk_n add = 1 }
+			}
+			set_global_variable = { name = te_cm_chk_conv_now value = local_var:te_cm_chk_n }
+		}
+		if = {
+			limit = { global_var:te_cm_chk_conv_stage = 1 }
+			set_global_variable = { name = te_cm_chk_conv_inc1 value = global_var:te_cm_chk_conv_now }
+			change_global_variable = { name = te_cm_chk_conv_inc1 subtract = global_var:te_cm_chk_conv_before }
+			if = {
+				limit = { global_var:te_cm_chk_conv_inc1 >= 1 }
+				set_global_variable = { name = te_cm_chk_conv_mid value = global_var:te_cm_chk_conv_now }
+				set_global_variable = { name = te_cm_chk_conv_stage value = 2 }
+			}
+			else = {
+				te_cm_chk_conversion_clear = yes
+			}
+		}
+		else = {
+			set_global_variable = { name = te_cm_chk_conversion_merges_pops_done value = yes }
+			set_global_variable = { name = te_cm_chk_conv_inc2 value = global_var:te_cm_chk_conv_now }
+			change_global_variable = { name = te_cm_chk_conv_inc2 subtract = global_var:te_cm_chk_conv_mid }
+			set_global_variable = { name = te_cm_chk_conv_half value = { value = global_var:te_cm_chk_conv_inc1 divide = 2 } }
+			if = {
+				limit = { global_var:te_cm_chk_conv_inc2 < global_var:te_cm_chk_conv_half }
+				debug_log = "TE_SELF_CHECK OK cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass merged what it converted into the result pops the first pass made: the pop count does not climb with every pass)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass split off about as many new result pops as the first: change_pop_culture does not merge into an existing pop of the result, so every yearly pass adds pops until the switch; take the fallback in docs/testing/culture-merges-playtest.md)"
+			}
+			te_cm_chk_conversion_clear = yes
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_switch_homeland
+# ----------------------------------------------------------------------------
+
+# Any scope: te_cm_switch_part, once the result is saved as scope:te_cm_result and before any pop converts or any homeland
+# is added. $CULTURE$ = the part. Counts the part's homeland states and stores the part and the result; the monthly
+# pulse reads them 35 days on, when the homelands have settled.
+te_cm_chk_switch = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_switch_homeland_done }
+			te_cm_system_enabled = yes
+			NOT = { has_global_variable = te_cm_chk_sw_part }
+		}
+		set_local_variable = { name = te_cm_chk_n value = 0 }
+		cu:$CULTURE$ = {
+			every_scope_homeland_state = {
+				change_local_variable = { name = te_cm_chk_n add = 1 }
+			}
+		}
+		if = {
+			limit = { local_var:te_cm_chk_n > 0 }
+			set_global_variable = { name = te_cm_chk_sw_before value = local_var:te_cm_chk_n }
+			cu:$CULTURE$ = { save_temporary_scope_as = te_cm_chk_sw_part_s }
+			set_global_variable = { name = te_cm_chk_sw_part value = scope:te_cm_chk_sw_part_s }
+			set_global_variable = { name = te_cm_chk_sw_result value = scope:te_cm_result }
+			set_global_variable = { name = te_cm_chk_sw_wait value = yes days = 35 }
+		}
+	}
+}
+
+# Any scope, the monthly pulse: the first switch, 35 days on. Walks the part's homeland states.
+#   OK      the part still has as many homeland states as before (after), and every one is a homeland of the result,
+#           read both through a saved scope (by_scope) and through is_homeland = global_var:X (by_global).
+#   BROKEN  after below before: the add replaced the part's homeland; by_scope below after: add_homeland missed a state
+#           (a state region split between owners?); by_scope right and by_global below: is_homeland = global_var:X
+#           does not read a culture-valued global, which also blinds te_cmg_switched_part_kept.
+te_cm_chk_switch_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_switch_homeland_done }
+			te_cm_system_enabled = yes
+			has_global_variable = te_cm_chk_sw_part
+			NOT = { has_global_variable = te_cm_chk_sw_wait }
+		}
+		set_global_variable = { name = te_cm_chk_switch_homeland_done value = yes }
+		global_var:te_cm_chk_sw_result = { save_temporary_scope_as = te_cm_chk_sw_res }
+		set_local_variable = { name = te_cm_chk_n value = 0 }
+		set_local_variable = { name = te_cm_chk_by_scope value = 0 }
+		set_local_variable = { name = te_cm_chk_by_global value = 0 }
+		global_var:te_cm_chk_sw_part = {
+			every_scope_homeland_state = {
+				change_local_variable = { name = te_cm_chk_n add = 1 }
+				if = {
+					limit = { state_region = { is_homeland = scope:te_cm_chk_sw_res } }
+					change_local_variable = { name = te_cm_chk_by_scope add = 1 }
+				}
+				if = {
+					limit = { state_region = { is_homeland = global_var:te_cm_chk_sw_result } }
+					change_local_variable = { name = te_cm_chk_by_global add = 1 }
+				}
+			}
+		}
+		set_global_variable = { name = te_cm_chk_sw_after value = local_var:te_cm_chk_n }
+		set_global_variable = { name = te_cm_chk_sw_by_scope value = local_var:te_cm_chk_by_scope }
+		set_global_variable = { name = te_cm_chk_sw_by_global value = local_var:te_cm_chk_by_global }
+		if = {
+			limit = {
+				global_var:te_cm_chk_sw_after = global_var:te_cm_chk_sw_before
+				global_var:te_cm_chk_sw_by_scope = global_var:te_cm_chk_sw_after
+				global_var:te_cm_chk_sw_by_global = global_var:te_cm_chk_sw_after
+			}
+			debug_log = "TE_SELF_CHECK OK cm_switch_homeland before=[GetGlobalVariable('te_cm_chk_sw_before').GetValue|0] after=[GetGlobalVariable('te_cm_chk_sw_after').GetValue|0] by_scope=[GetGlobalVariable('te_cm_chk_sw_by_scope').GetValue|0] by_global=[GetGlobalVariable('te_cm_chk_sw_by_global').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the result's homeland is on every state that held the part's, the part's is still there, and is_homeland = global_var:X reads the culture-valued global)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_switch_homeland before=[GetGlobalVariable('te_cm_chk_sw_before').GetValue|0] after=[GetGlobalVariable('te_cm_chk_sw_after').GetValue|0] by_scope=[GetGlobalVariable('te_cm_chk_sw_by_scope').GetValue|0] by_global=[GetGlobalVariable('te_cm_chk_sw_by_global').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (after below before: add_homeland replaced the part's homeland; by_scope below after: it missed a state; by_scope right and by_global below: is_homeland = global_var:X does not read a culture-valued global, which blinds te_cmg_switched_part_kept as well; take the fallback in docs/testing/culture-merges-playtest.md)"
+		}
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_part }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_result }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_before }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_after }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_by_scope }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_by_global }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_sw_wait }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_formation_keeps_primary
+# ----------------------------------------------------------------------------
+
+# Country scope, the monthly pulse: a country flagged by te_cm_chk_conversion with a result as its primary culture, and
+# still holding it a pulse later, is armed. The flag and the pulse in between are the "flagged a month earlier".
+te_cm_chk_formation_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_formation_keeps_primary_done }
+			te_cm_system_enabled = yes
+			has_variable = te_cm_chk_primary_of
+			NOT = { has_variable = te_cm_chk_primary_armed }
+		}
+		var:te_cm_chk_primary_of = { save_temporary_scope_as = te_cm_chk_primary_s }
+		if = {
+			limit = { country_has_primary_culture = scope:te_cm_chk_primary_s }
+			set_variable = { name = te_cm_chk_primary_armed value = 1 }
+		}
+	}
+}
+
+# Country scope = the newly formed country, first in te_cm_formed_on_action, before te_cmg_formed_country puts a result back.
+#   OK      an armed country (it held a result as primary a pulse before) still has it: formation keeps the primaries.
+#   BROKEN  it does not: formation replaces them; the monthly refresh and te_cmg_formed_country are the fallback, already in
+#           place. If formation creates a fresh country that keeps none of the old one's variables, no armed country ever
+#           reaches this line, and the formation hook's own te_cm_converted_<m> test is blind the same way.
+te_cm_chk_formation = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_formation_keeps_primary_done }
+			te_cm_system_enabled = yes
+			has_variable = te_cm_chk_primary_armed
+		}
+		set_global_variable = { name = te_cm_chk_formation_keeps_primary_done value = yes }
+		var:te_cm_chk_primary_of = { save_temporary_scope_as = te_cm_chk_primary_s }
+		if = {
+			limit = { country_has_primary_culture = scope:te_cm_chk_primary_s }
+			debug_log = "TE_SELF_CHECK OK cm_formation_keeps_primary country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a country that held a merge's result as primary a pulse before still holds it when on_country_formed runs, before the refresh)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_formation_keeps_primary country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (formation replaced the country's primary cultures and dropped the merge's result; the monthly refresh and te_cmg_formed_country put it back, so nothing to change: take the fallback in docs/testing/culture-merges-playtest.md)"
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_russification_outcome
+# ----------------------------------------------------------------------------
+
+# Country scope, the monthly pulse. Russification's INJECTed second outcome (te_vanilla_russification_merge.txt) sets
+# te_cm_russification_injected_fired when it concludes the entry.
+#   OK      the marker is set: the engine took the INJECTed outcome as a second one and concluded through it.
+#   BROKEN  te_cm_russification_complete has held for two pulses while je_russification stays active: the second outcome
+#           does not conclude the entry. Fallback: add je_russification to East Slavic's wait_for in the config.
+#   INFO    (not a verdict) the entry ended with no marker after the trigger held: vanilla's own outcome, declared first,
+#           concluded it, which says nothing about the injected one; the check stays silent for the game.
+# No rule gate: the INJECT has none (Task 7), and the check reads no merge variable.
+te_cm_chk_russification_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_russification_outcome_done }
+			OR = {
+				has_global_variable = te_cm_russification_injected_fired
+				has_journal_entry = je_russification
+				has_variable = te_cm_chk_rus_n
+			}
+		}
+		if = {
+			limit = { has_global_variable = te_cm_russification_injected_fired }
+			set_global_variable = { name = te_cm_chk_russification_outcome_done value = yes }
+			debug_log = "TE_SELF_CHECK OK cm_russification_outcome date=[TimeKeeper.GetCurrentDate.GetString] (Russification concluded through the INJECTed outcome: the engine takes a second success outcome from an INJECT and concludes through it)"
+		}
+		else_if = {
+			limit = { has_journal_entry = je_russification }
+			if = {
+				limit = { te_cm_russification_complete = yes }
+				if = {
+					limit = { NOT = { has_variable = te_cm_chk_rus_n } }
+					set_variable = { name = te_cm_chk_rus_n value = 0 }
+				}
+				change_variable = { name = te_cm_chk_rus_n add = 1 }
+				if = {
+					limit = { var:te_cm_chk_rus_n >= 2 }
+					set_global_variable = { name = te_cm_chk_russification_outcome_done value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN cm_russification_outcome country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (te_cm_russification_complete has held for two monthly checks while je_russification stays active: the INJECTed outcome does not conclude the entry; add je_russification to East Slavic's wait_for in the config, see docs/testing/culture-merges-playtest.md)"
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_cm_chk_rus_n }
+				set_variable = { name = te_cm_chk_rus_n value = 0 }
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = te_cm_chk_rus_n
+				var:te_cm_chk_rus_n > 0
+			}
+			set_global_variable = { name = te_cm_chk_russification_outcome_done value = yes }
+			debug_log = "TE_SELF_CHECK INFO cm_russification_outcome date=[TimeKeeper.GetCurrentDate.GetString] (the entry ended with the completion trigger true and no marker: vanilla's own outcome, declared first, concluded it, so the INJECTed one was not seen to fire; no verdict this game)"
+		}
+	}
+}

@@ -599,8 +599,11 @@ class PrimaryUpkeepTest(unittest.TestCase):
     def test_the_monthly_and_formation_hooks_pause_with_the_rule(self):
         # Ruling (e), R19: off pauses them and resets nothing.
         for name, call in (("te_cm_monthly_on_action", "te_cmg_monthly_country"), ("te_cm_formed_on_action", "te_cmg_formed_country")):
+            # The TEMPORARY formation self-check (test_culture_merge_selfchecks.py) is one call line inside the rule; the
+            # shape holds with or without it, so deleting the self-checks needs no edit here.
+            flat = squash(block(self.on_actions, name)).replace("te_cm_chk_formation = yes ", "")
             self.assertEqual(
-                squash(block(self.on_actions, name)),
+                flat,
                 "effect = { if = { limit = { te_cm_system_enabled = yes } %s = yes } }" % call, name,
             )
 

@@ -16171,3 +16171,264 @@ te_cmg_remove_parts_of_filipino = {
 		remove_homeland = cu:ilocano
 	}
 }
+
+# ---- The console menu's dump (events/te_debug_cm_events.txt, option D) ----
+
+# Country scope. Logs (TE_CM_DEBUG) every te_cm_ variable of each merge that is running or complete, or that this country
+# is a candidate for: te_cm_debug_dump_merge, then te_cm_debug_dump_part per slot culture a starter can bring in.
+te_cmg_debug_dump = {
+	if = {
+		limit = { OR = { global_var:te_cm_state_german ?= 1 global_var:te_cm_state_german ?= 2 te_cmg_german_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = german }
+		te_cm_debug_dump_part = { MERGE = german CULTURE = north_german }
+		te_cm_debug_dump_part = { MERGE = german CULTURE = south_german }
+		te_cm_debug_dump_part = { MERGE = german CULTURE = alemannic }
+		te_cm_debug_dump_part = { MERGE = german CULTURE = east_german }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 te_cmg_italian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = italian }
+		te_cm_debug_dump_part = { MERGE = italian CULTURE = north_italian }
+		te_cm_debug_dump_part = { MERGE = italian CULTURE = south_italian }
+		te_cm_debug_dump_part = { MERGE = italian CULTURE = corsican }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_scandinavian ?= 1 global_var:te_cm_state_scandinavian ?= 2 te_cmg_scandinavian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = scandinavian }
+		te_cm_debug_dump_part = { MERGE = scandinavian CULTURE = swedish }
+		te_cm_debug_dump_part = { MERGE = scandinavian CULTURE = danish }
+		te_cm_debug_dump_part = { MERGE = scandinavian CULTURE = norwegian }
+		te_cm_debug_dump_part = { MERGE = scandinavian CULTURE = icelandic }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 te_cmg_east_slavic_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = east_slavic }
+		te_cm_debug_dump_part = { MERGE = east_slavic CULTURE = russian }
+		te_cm_debug_dump_part = { MERGE = east_slavic CULTURE = ukrainian }
+		te_cm_debug_dump_part = { MERGE = east_slavic CULTURE = byelorussian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 te_cmg_yugoslav_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = yugoslav }
+		te_cm_debug_dump_part = { MERGE = yugoslav CULTURE = serb }
+		te_cm_debug_dump_part = { MERGE = yugoslav CULTURE = croat }
+		te_cm_debug_dump_part = { MERGE = yugoslav CULTURE = bosniak }
+		te_cm_debug_dump_part = { MERGE = yugoslav CULTURE = slovene }
+		te_cm_debug_dump_part = { MERGE = yugoslav CULTURE = bulgarian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 te_cmg_czechoslovak_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = czechoslovak }
+		te_cm_debug_dump_part = { MERGE = czechoslovak CULTURE = czech }
+		te_cm_debug_dump_part = { MERGE = czechoslovak CULTURE = slovak }
+		te_cm_debug_dump_part = { MERGE = czechoslovak CULTURE = sorb }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_hungarian ?= 1 global_var:te_cm_state_hungarian ?= 2 te_cmg_hungarian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = hungarian }
+		te_cm_debug_dump_part = { MERGE = hungarian CULTURE = szekely }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_dutch ?= 1 global_var:te_cm_state_dutch ?= 2 te_cmg_dutch_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = dutch }
+		te_cm_debug_dump_part = { MERGE = dutch CULTURE = flemish }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_finnish ?= 1 global_var:te_cm_state_finnish ?= 2 te_cmg_finnish_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = finnish }
+		te_cm_debug_dump_part = { MERGE = finnish CULTURE = karelian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 te_cmg_french_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = french }
+		te_cm_debug_dump_part = { MERGE = french CULTURE = wallonian }
+		te_cm_debug_dump_part = { MERGE = french CULTURE = occitan }
+		te_cm_debug_dump_part = { MERGE = french CULTURE = catalan }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 te_cmg_british_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = british }
+		te_cm_debug_dump_part = { MERGE = british CULTURE = scottish }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 te_cmg_american_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = american }
+		te_cm_debug_dump_part = { MERGE = american CULTURE = yankee }
+		te_cm_debug_dump_part = { MERGE = american CULTURE = dixie }
+		te_cm_debug_dump_part = { MERGE = american CULTURE = afro_american }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_anglophone ?= 1 global_var:te_cm_state_anglophone ?= 2 te_cmg_anglophone_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = anglophone }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = british }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = yankee }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = cm_american }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = anglo_canadian }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = australian }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = scottish }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = dixie }
+		te_cm_debug_dump_part = { MERGE = anglophone CULTURE = afro_american }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_brazilian ?= 1 global_var:te_cm_state_brazilian ?= 2 te_cmg_brazilian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = brazilian }
+		te_cm_debug_dump_part = { MERGE = brazilian CULTURE = nordestino }
+		te_cm_debug_dump_part = { MERGE = brazilian CULTURE = paulista }
+		te_cm_debug_dump_part = { MERGE = brazilian CULTURE = amazonic }
+		te_cm_debug_dump_part = { MERGE = brazilian CULTURE = sulista }
+		te_cm_debug_dump_part = { MERGE = brazilian CULTURE = afro_brazilian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_platine ?= 1 global_var:te_cm_state_platine ?= 2 te_cmg_platine_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = platine }
+		te_cm_debug_dump_part = { MERGE = platine CULTURE = platinean }
+		te_cm_debug_dump_part = { MERGE = platine CULTURE = argentine }
+		te_cm_debug_dump_part = { MERGE = platine CULTURE = uruguayan }
+		te_cm_debug_dump_part = { MERGE = platine CULTURE = paraguayan }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_andean ?= 1 global_var:te_cm_state_andean ?= 2 te_cmg_andean_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = andean }
+		te_cm_debug_dump_part = { MERGE = andean CULTURE = north_andean }
+		te_cm_debug_dump_part = { MERGE = andean CULTURE = south_andean }
+		te_cm_debug_dump_part = { MERGE = andean CULTURE = peruvian }
+		te_cm_debug_dump_part = { MERGE = andean CULTURE = bolivian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_gran_colombian ?= 1 global_var:te_cm_state_gran_colombian ?= 2 te_cmg_gran_colombian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = gran_colombian }
+		te_cm_debug_dump_part = { MERGE = gran_colombian CULTURE = colombian }
+		te_cm_debug_dump_part = { MERGE = gran_colombian CULTURE = venezuelan }
+		te_cm_debug_dump_part = { MERGE = gran_colombian CULTURE = ecuadorian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_chinese ?= 1 global_var:te_cm_state_chinese ?= 2 te_cmg_chinese_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = chinese }
+		te_cm_debug_dump_part = { MERGE = chinese CULTURE = yue }
+		te_cm_debug_dump_part = { MERGE = chinese CULTURE = min }
+		te_cm_debug_dump_part = { MERGE = chinese CULTURE = hakka }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_japanese ?= 1 global_var:te_cm_state_japanese ?= 2 te_cmg_japanese_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = japanese }
+		te_cm_debug_dump_part = { MERGE = japanese CULTURE = ryukyuan }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_arab ?= 1 global_var:te_cm_state_arab ?= 2 te_cmg_arab_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = arab }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = maghrebi }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = misri }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = mashriqi }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = bedouin }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = yemenite }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = sudanese }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = haratin }
+		te_cm_debug_dump_part = { MERGE = arab CULTURE = bidan }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_persian ?= 1 global_var:te_cm_state_persian ?= 2 te_cmg_persian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = persian }
+		te_cm_debug_dump_part = { MERGE = persian CULTURE = luri }
+		te_cm_debug_dump_part = { MERGE = persian CULTURE = tajik }
+		te_cm_debug_dump_part = { MERGE = persian CULTURE = hazara }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 te_cmg_oghuz_turkic_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = oghuz_turkic }
+		te_cm_debug_dump_part = { MERGE = oghuz_turkic CULTURE = turkish }
+		te_cm_debug_dump_part = { MERGE = oghuz_turkic CULTURE = azerbaijani }
+		te_cm_debug_dump_part = { MERGE = oghuz_turkic CULTURE = turkmen }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_hindustani ?= 1 global_var:te_cm_state_hindustani ?= 2 te_cmg_hindustani_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = hindustani }
+		te_cm_debug_dump_part = { MERGE = hindustani CULTURE = avadhi }
+		te_cm_debug_dump_part = { MERGE = hindustani CULTURE = bundeli }
+		te_cm_debug_dump_part = { MERGE = hindustani CULTURE = chhattisgarhi }
+		te_cm_debug_dump_part = { MERGE = hindustani CULTURE = bageli }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_dravidian ?= 1 global_var:te_cm_state_dravidian ?= 2 te_cmg_dravidian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = dravidian }
+		te_cm_debug_dump_part = { MERGE = dravidian CULTURE = tamil }
+		te_cm_debug_dump_part = { MERGE = dravidian CULTURE = kannada }
+		te_cm_debug_dump_part = { MERGE = dravidian CULTURE = malayalam }
+		te_cm_debug_dump_part = { MERGE = dravidian CULTURE = telegu }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 te_cmg_indonesian_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = indonesian }
+		te_cm_debug_dump_part = { MERGE = indonesian CULTURE = javan }
+		te_cm_debug_dump_part = { MERGE = indonesian CULTURE = malay }
+		te_cm_debug_dump_part = { MERGE = indonesian CULTURE = sumatran }
+		te_cm_debug_dump_part = { MERGE = indonesian CULTURE = bornean }
+		te_cm_debug_dump_part = { MERGE = indonesian CULTURE = balinese }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 te_cmg_filipino_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = filipino }
+		te_cm_debug_dump_part = { MERGE = filipino CULTURE = visayan }
+		te_cm_debug_dump_part = { MERGE = filipino CULTURE = tagalog }
+		te_cm_debug_dump_part = { MERGE = filipino CULTURE = ilocano }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_nguni ?= 1 global_var:te_cm_state_nguni ?= 2 te_cmg_nguni_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = nguni }
+		te_cm_debug_dump_part = { MERGE = nguni CULTURE = nguni }
+		te_cm_debug_dump_part = { MERGE = nguni CULTURE = zulu }
+		te_cm_debug_dump_part = { MERGE = nguni CULTURE = xhosa }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_latin ?= 1 global_var:te_cm_state_latin ?= 2 te_cmg_latin_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = latin }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = french }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = cm_italian }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = spanish }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = portuguese }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = romanian }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = platinean }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = argentine }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = uruguayan }
+		te_cm_debug_dump_part = { MERGE = latin CULTURE = chilean }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_pan_slavic ?= 1 global_var:te_cm_state_pan_slavic ?= 2 te_cmg_pan_slavic_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = pan_slavic }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = cm_east_slavic }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = cm_czechoslovak }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = cm_yugoslav }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = polish }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = slovene }
+		te_cm_debug_dump_part = { MERGE = pan_slavic CULTURE = bulgarian }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_pan_turkic ?= 1 global_var:te_cm_state_pan_turkic ?= 2 te_cmg_pan_turkic_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = pan_turkic }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = cm_oghuz_turkic }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = uzbek }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = kazak }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = tatar }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = kirgiz }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = bashkir }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = crimean_tatar }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = caucasian_turk }
+		te_cm_debug_dump_part = { MERGE = pan_turkic CULTURE = uighur }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_pan_malay ?= 1 global_var:te_cm_state_pan_malay ?= 2 te_cmg_pan_malay_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = pan_malay }
+		te_cm_debug_dump_part = { MERGE = pan_malay CULTURE = cm_indonesian }
+		te_cm_debug_dump_part = { MERGE = pan_malay CULTURE = filipino }
+	}
+	if = {
+		limit = { OR = { global_var:te_cm_state_east_african ?= 1 global_var:te_cm_state_east_african ?= 2 te_cmg_east_african_is_candidate = yes } }
+		te_cm_debug_dump_merge = { MERGE = east_african }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = swahili }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = nyamwezi }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = sukuma }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = yao }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = makua }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = lacustrine_bantu }
+		te_cm_debug_dump_part = { MERGE = east_african CULTURE = kikuyu }
+	}
+}
