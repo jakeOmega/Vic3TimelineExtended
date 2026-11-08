@@ -184,7 +184,7 @@ class RosterTest(unittest.TestCase):
         # docs/player_guide/20-appendix-reference-lists.md, the culture merge table, in roster order: a row names a wait
         # exactly when one of the merge's parts has one (R41 dropped German's and Yugoslav's and left the rows stale).
         text = open(os.path.join(REPO, "docs/player_guide/20-appendix-reference-lists.md"), encoding="utf-8").read()
-        table = text[text.index("| Merge | Core parts | Optional parts | Tier | Waits and requirements |"):]
+        table = text[text.index("| Merge | Core cultures | Optional cultures | Tier | Waits and requirements |"):]
         rows = [line for line in table.split("\n")[2:] if line.startswith("|")][: len(cfg.MERGES)]
         self.assertEqual(len(rows), len(cfg.MERGES))
         for row, merge in zip(rows, cfg.MERGES):

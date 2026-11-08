@@ -144,14 +144,15 @@ groups](06-politics.md#new-laws-in-base-game-law-groups).
 ## Culture merge list
 
 The 32 merges from [Culture merges](08-states.md#culture-merges). Tier is the
-tier a merge starts on; a part marked with another tier joins on that tier's
-conditions. A merge marked existing folds its parts into a culture the game
-already has. A part in the last column doesn't join while any country has that
+tier a merge starts on; a culture marked with another tier joins on that
+tier's conditions. A merge marked existing folds its constituent cultures into a
+culture the game already has. A culture in the last column doesn't join while
+any country has that
 journal entry open, except that Afro-American in American joins once the start
-has waited its 20 years. A core part's wait also
+has waited its 20 years. A core culture's wait also
 holds the merge's start, for at most 20 years.
 
-| Merge | Core parts | Optional parts | Tier | Waits and requirements |
+| Merge | Core cultures | Optional cultures | Tier | Waits and requirements |
 |---|---|---|---|---|
 | German | North German, South German | Alemannic, Eastern German | 1 | none |
 | Italian | North Italian, South Italian | Corsican | 1 | none |

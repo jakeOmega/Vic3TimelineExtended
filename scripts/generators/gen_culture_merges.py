@@ -1951,26 +1951,28 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
     sv = "[ROOT.GetCountry.MakeScope.ScriptValue('{}')|{}]"
     start = max(tiers[p.cultures[0]] for p in merge.core)
-    speed = "$country_culture_merge_speed_mult$: +%s" % sv.format("te_cm_speed_display", "%0")
+    # The figure alone read as arbitrary (2026-11-08): hovering it gives the modifier's breakdown by source and what raises it.
+    speed = "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +%s#!" % sv.format(
+        "te_cm_speed_display", "%0")
     rows = [
         Row("te_cm_status_rule_off", _negated(["te_cm_system_enabled = yes"])),
         Row(
             base + "complete",
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key, "te_cmg_%s_all_switched = yes" % key],
-            "The merge is complete: %s is the national culture across the sphere. Parts that qualify later can still join." % result,
+            "The merge is complete: %s is the national culture across the sphere. Cultures that qualify later can still join." % result,
         ),
         Row(
             base + "late",
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key],
-            "The merge is complete for its core parts, and %s is their national culture. A part that joined later is still converting: "
-            "in its homeland %s holds %s of the pops, and at %s the rest of that part switches. %s."
+            "The merge is complete for its core cultures, and %s is their national culture. A culture that joined later is still "
+            "converting: in its homeland %s holds %s of the pops, and at %s every remaining pop of that culture switches. %s."
             % (result, result, sv.format("te_cmg_%s_lowest_dom_all" % key, "%0"), sv.format("te_cm_switch_share", "%0"), speed),
         ),
         Row(
             base + "running",
             ["te_cmg_%s_is_starter = yes" % key],
-            "The merge is running. In the least converted part's homeland, %s holds %s of the pops; at %s the rest of that part "
-            "switches. %s."
+            "The merge is running. In the homeland of the least converted constituent culture, %s holds %s of the pops; at %s "
+            "every remaining pop of that culture switches. %s."
             % (result, sv.format("te_cmg_%s_lowest_dom" % key, "%0"), sv.format("te_cm_switch_share", "%0"), speed),
         ),
         Row("te_cm_status_elsewhere", ["te_cmg_%s_has_other_starter = yes" % key]),
@@ -2018,7 +2020,7 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
             if tier == 2:
                 accept_text = (
                     "$%s$ pops are not accepted highly enough where many of them live: their acceptance in our sphere is "
-                    "below %s, beyond the $full_acceptance$ a closer part needs." % (culture, sv.format("te_cm_accept_high_open", "0"))
+                    "below %s, beyond the $full_acceptance$ a more closely related culture needs." % (culture, sv.format("te_cm_accept_high_open", "0"))
                 )
             else:
                 accept_text = (
@@ -2137,10 +2139,17 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
                 out.line("effect_header = je_standard_on_completion_header")
                 out.line('color = "gold_positive"')
                 out.line("conclusion_desc = %s_complete_conclusion_desc" % entry)
+                # Each condition in its own custom_tooltip: the panel's "Will complete if" list would otherwise
+                # spell out the scripted triggers, nested ORs of "has the variable in question" (2026-11-08).
                 with out.block("trigger"):
-                    out.line("te_cmg_%s_is_starter = yes" % key)
-                    out.line("global_var:te_cm_state_%s ?= 2" % key)
-                    out.line("te_cmg_%s_all_switched = yes" % key)
+                    for text, condition in (
+                        ("te_cm_tt_done_starter", "te_cmg_%s_is_starter = yes" % key),
+                        ("te_cmg_%s_done_core_tt" % key, "global_var:te_cm_state_%s ?= 2" % key),
+                        ("te_cm_tt_done_all", "te_cmg_%s_all_switched = yes" % key),
+                    ):
+                        with out.block("custom_tooltip"):
+                            out.line("text = %s" % text)
+                            out.line(condition)
             out.line()
             out.line("# Another country started this merge first (or it is complete under one): the entry ends silently.")
             switches = result_can_switch(merge, merges)
@@ -2204,21 +2213,25 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
         if merge.new is not None:
             reason = (
                 "Closely related peoples can come to see themselves as one nation. The core of this merge is %s. Over the "
-                "decades their pops become %s, and once it holds most of a part's homeland, every remaining pop of that "
-                "part follows." % (core, result)
+                "decades their pops become %s, and once it holds most of a constituent culture's homeland, every remaining pop "
+                "of that culture follows." % (core, result)
             )
         else:
             reason = (
                 "Closely related peoples can come to see themselves as one nation. Here %s pops would become part of the existing "
-                "%s culture: over the decades they assimilate into it, and once it holds most of a part's homeland, every "
-                "remaining pop of that part follows."
+                "%s culture: over the decades they assimilate into it, and once it holds most of a constituent culture's "
+                "homeland, every remaining pop of that culture follows."
                 % (_part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
             )
         if optional:
             reason += " %s pops can join once they qualify as well." % optional
         out[entry + "_reason"] = reason
+        # The complete outcome's middle condition: the merge's state is 2 once every core slot has switched. An absorb
+        # merge's result is one of its core cultures, and it doesn't switch into itself.
+        out["te_cmg_%s_done_core_tt" % key] = "%s pops have all switched to %s." % (
+            _part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
         out[entry + "_complete_conclusion_desc"] = (
-            "The merge is complete. %s is the national culture across the sphere, and the parts it brought in are one people." % result
+            "The merge is complete. %s is the national culture across the sphere, and the cultures it brought in are one people." % result
         )
         for row in status_rows(merge, vanilla, merges):
             if row.text is not None:
@@ -2226,14 +2239,16 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
         button = "te_cmg_start_%s_button" % key
         out[button] = "Begin the %s Merge" % result
         out[button + "_desc"] = (
-            "Starts the merge of %s. %s becomes a primary culture here%s. Each part we hold that qualifies begins to assimilate "
-            "into it: a slice of its pops each year, those in subjects and bloc members more slowly. A part that qualifies later "
-            "joins then. Once %s holds %s of a part's homeland, every remaining pop of that part switches at once."
+            "Starts the merge of %s. %s becomes a primary culture here%s. Each constituent culture we hold that qualifies begins "
+            "to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture "
+            "that qualifies later joins then. Once %s holds %s of a culture's homeland, every remaining pop of that culture "
+            "switches at once."
             % (core, result, "" if merge.new is not None else " if it isn't one already", result,
                sv.format("te_cm_switch_share", "%0"))
         )
         out["te_cmg_start_%s_effect_tt" % key] = (
-            "%s becomes a primary culture here%s and the merge begins. Each part we hold that qualifies starts to assimilate into it."
+            "%s becomes a primary culture here%s and the merge begins. Each constituent culture we hold that qualifies starts to "
+            "assimilate into it."
             % (result, "" if merge.new is not None else " if it isn't one already")
         )
         out["te_cmg_%s_primary_tt" % key] = "A core culture of the merge is a primary culture here: %s." % _either(_core_cultures(merge))
