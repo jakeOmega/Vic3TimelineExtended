@@ -33,6 +33,9 @@
 # Event 32      - an older save's monument migrated to records and a level-1
 #                 building, or made a construction site (hidden, sites spec
 #                 2026-10-18 §3.5).
+# Event 33      - Clear Away: the least grand of six cleared (hidden).
+# Events 34-35  - tomorrow's pass of .30 and .31, through the owner: a delayed
+#                 state event never runs (hidden, log triage 2026-11-08).
 #
 # POPUPS (owner, 2026-10-19): the dedication's own chain -- the ceremony (2),
 # the style (11), the form (24), the namesake (25) and the seized
@@ -1830,6 +1833,50 @@ monument_events.33 = {
 
 	immediate = {
 		gm_state_run_clear = yes
+	}
+}
+
+# ============================================================================
+# Events 34-35: tomorrow's pass, through a country (log triage 2026-11-08)
+# ============================================================================
+# Hidden plumbing, country events from gm_state_tomorrow, sent to the asking
+# state's owner a day on: a state event triggered with a delay never runs
+# (delayed_state_event), so these run the states' events undelayed. Each
+# walks every state that asked, takes its mark off, then runs its event at
+# once (.30, gm_state_run_mon_orders's orders left over; .31,
+# gm_state_adopt_orphans's wait for a rebuild in the region). The events'
+# own triggers still apply.
+monument_events.34 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_global_variable = gm_mon_orders_relay_queued }
+			remove_global_variable = gm_mon_orders_relay_queued
+		}
+		every_state = {
+			limit = { has_variable = gm_mon_orders_tomorrow }
+			remove_variable = gm_mon_orders_tomorrow
+			trigger_event = { id = monument_events.30 }
+		}
+	}
+}
+
+monument_events.35 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_global_variable = gm_adopt_orphans_relay_queued }
+			remove_global_variable = gm_adopt_orphans_relay_queued
+		}
+		every_state = {
+			limit = { has_variable = gm_adopt_orphans_tomorrow }
+			remove_variable = gm_adopt_orphans_tomorrow
+			trigger_event = { id = monument_events.31 }
+		}
 	}
 }
 

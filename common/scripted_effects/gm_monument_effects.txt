@@ -670,7 +670,7 @@ gm_state_run_mon_orders = {
 					has_variable = gm_mon_order
 				}
 			}
-			trigger_event = { id = monument_events.30 days = 1 }
+			gm_state_tomorrow = { MARK = gm_mon_orders_tomorrow QUEUED = gm_mon_orders_relay_queued EVENT = monument_events.34 }
 		}
 		owner = { trigger_event = { id = monument_events.20 } }
 	}
@@ -1411,6 +1411,27 @@ gm_state_drop_shadow = {
 	}
 }
 
+# State scope. This state's event again tomorrow: gm_state_run_mon_orders's
+# orders left over (monument_events.30) and gm_state_adopt_orphans's wait for a
+# rebuild in the region (.31). A state event triggered with a delay never runs
+# (the delayed_state_event self-check, BROKEN in the 2026-11-08 new game; the
+# 1.14.5 and 1.15 saves showed it first), so the day waits on a country event,
+# the relay (.34 for .30, .35 for .31), sent to the owner: it runs the state's
+# event undelayed, which runs it at once. MARK names the states that asked;
+# the relay walks every state, so one that changed hands in the day keeps its
+# pass, and takes the mark off before it runs, so a state asked again while it
+# runs waits for the next relay. QUEUED keeps one relay of a kind on its way:
+# the relay removes it first, and both expire in two days, should the owner be
+# gone before its relay runs.
+gm_state_tomorrow = {
+	set_variable = { name = $MARK$ days = 2 }
+	if = {
+		limit = { NOT = { has_global_variable = $QUEUED$ } }
+		set_global_variable = { name = $QUEUED$ days = 2 }
+		owner = { trigger_event = { id = $EVENT$ days = 1 } }
+	}
+}
+
 # State scope, real execution only: monument_events.1, .29 and .31, and
 # gm_state_changed_hands. Adopt every orphan of this state's region. With a
 # building in the region made or removed today (it may not read back yet), it
@@ -1422,7 +1443,7 @@ gm_state_adopt_orphans = {
 		limit = {
 			scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
 		}
-		trigger_event = { id = monument_events.31 days = 1 }
+		gm_state_tomorrow = { MARK = gm_adopt_orphans_tomorrow QUEUED = gm_adopt_orphans_relay_queued EVENT = monument_events.35 }
 	}
 	else = {
 		# The monuments that stood beside it come first: the lists must name
@@ -1455,7 +1476,7 @@ gm_state_adopt_orphans = {
 				limit = {
 					scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
 				}
-				trigger_event = { id = monument_events.31 days = 1 }
+				gm_state_tomorrow = { MARK = gm_adopt_orphans_tomorrow QUEUED = gm_adopt_orphans_relay_queued EVENT = monument_events.35 }
 			}
 			else = {
 				gm_sh_settle_region = yes

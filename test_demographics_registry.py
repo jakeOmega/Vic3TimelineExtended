@@ -1922,9 +1922,10 @@ class TestLinesScript(unittest.TestCase):
                  "on_game_started_after_lobby": "te_demog_lines_world_on_action"}
         for hook, name in hooks.items():
             self.assertRegex(on_actions, rf"\n{hook} = \{{\s*on_actions = \{{[^}}]*\b{name}\b", hook)
-        # the review of step 1 (Minor 3): again a day later, in case the engine hasn't re-summed the families that day
-        dispatch = (r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*(#[^\n]*\s*)*"
-                    r"trigger_event = \{ id = te_demog_events\.4 days = 1 \}\s*\}")
+        # the review of step 1 (Minor 3): again a day later, in case the engine hasn't re-summed the families that day,
+        # through the country: a state event triggered with a delay never runs (delayed_state_event, 2026-11-08)
+        dispatch = (r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}\s*(#[^\n]*\s*)*"
+                    r"trigger_event = \{ id = te_demog_events\.5 days = 1 \}")
         # review I1: on_law_activated's ROOT is the law, so its states are the owner's; on_acquired_technology's
         # ROOT is the country. Both wait for the game to start: history's laws and techs are the world hook's.
         law = _block(on_actions, "te_demog_lines_law_on_action")
@@ -1936,6 +1937,9 @@ class TestLinesScript(unittest.TestCase):
         event = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.4")
         self.assertIn("type = state_event", event)
         self.assertIn("te_demog_lines_refresh = yes", event)
+        relay = _block(_text(ROOT / "events" / "te_demog_events.txt"), "te_demog_events.5")
+        self.assertIn("type = country_event", relay)
+        self.assertRegex(relay, r"every_scope_state = \{\s*trigger_event = \{ id = te_demog_events\.4 \}\s*\}")
         callers = sorted(p.name for p in [*ROOT.glob("common/**/*.txt"), *ROOT.glob("events/*.txt")]
                          if "te_demog_lines_refresh = yes" in _text(p) and "generated" not in p.name)
         self.assertEqual(callers, ["te_demog_events.txt", "te_demog_on_actions.txt"])
