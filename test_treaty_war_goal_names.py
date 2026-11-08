@@ -97,6 +97,10 @@ class PrivatizationTest(unittest.TestCase):
         weight = weight[:weight.index("\n}\n")]
         self.assertIn("enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels", weight)
         self.assertIn("law_laissez_faire", weight)
+        # Small unless a major economy (owner, 2026-11-08): full weight only for a
+        # top-ten GDP, and the floor stays small.
+        self.assertIn("value = 0.1", weight)
+        self.assertIn("gdp_ranking <= 10", weight)
 
 
 if __name__ == "__main__":
