@@ -714,8 +714,17 @@ def _write_routes(out: "_Script", routes: list[list[str]]) -> None:
 
 
 def core_waits(merge: cfg.Merge) -> list[cfg.Part]:
-    """The core parts that wait on a vanilla journal entry."""
-    return [part for part in merge.core if part.wait_for]
+    """The core parts that wait on a vanilla journal entry, one per distinct set of entries.
+
+    Two parts that wait on the same entry (German's North and South, both on the unification idea)
+    share a start condition, a status row and a tooltip, named for the first of them, so the entry
+    lists the wait once.
+    """
+    waits: list[cfg.Part] = []
+    for part in merge.core:
+        if part.wait_for and all(set(w.wait_for) != set(part.wait_for) for w in waits):
+            waits.append(part)
+    return waits
 
 
 def _wait_cap_reached(out: "_Script", key: str) -> None:
@@ -727,13 +736,19 @@ def _wait_cap_reached(out: "_Script", key: str) -> None:
 
 
 def _wait_entry_open(out: "_Script", entries: tuple[str, ...]) -> None:
-    """A vanilla entry the part waits on is open in this country."""
-    if len(entries) == 1:
-        out.line("has_journal_entry = %s" % entries[0])
-        return
-    with out.block("OR"):
-        for entry in entries:
-            out.line("has_journal_entry = %s" % entry)
+    """A vanilla entry the part waits on is open in any country (R37).
+
+    Not only the candidate's: a switch turns the part's pops into the result in every country, and
+    the entry's fervor or share reads, in every country that holds it, break with them. ``any_country``
+    takes no ``limit``, so the entries sit in one ``OR`` inside it.
+    """
+    with out.block("any_country"):
+        if len(entries) == 1:
+            out.line("has_journal_entry = %s" % entries[0])
+            return
+        with out.block("OR"):
+            for entry in entries:
+                out.line("has_journal_entry = %s" % entry)
 
 
 def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[str, int], merges: tuple[cfg.Merge, ...]) -> None:
@@ -778,19 +793,15 @@ def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[
 
 
 def _write_wait_items(out: "_Script", merge: cfg.Merge) -> None:
-    """One custom_tooltip per core part that waits: its vanilla entries are closed here, or the
+    """One custom_tooltip per wait: its vanilla entries are closed in every country, or the
     merge has waited long enough."""
     key = merge.key
     for part in core_waits(merge):
         with out.block("custom_tooltip"):
             out.line("text = te_cmg_%s_wait_%s_tt" % (key, part.cultures[0]))
             with out.block("OR"):
-                if len(part.wait_for) == 1:
-                    out.line("NOT = { has_journal_entry = %s }" % part.wait_for[0])
-                else:
-                    with out.block("NOR"):
-                        for entry in part.wait_for:
-                            out.line("has_journal_entry = %s" % entry)
+                with out.block("NOT"):
+                    _wait_entry_open(out, part.wait_for)
                 _wait_cap_reached(out, key)
 
 
@@ -880,7 +891,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             wait_for = _part_of(merge, culture).wait_for
             if wait_for and not _is_absorb_result(merge, culture):
                 out.line()
-                out.line("# Country scope. %s waits on a vanilla journal entry of this country (%s) and the merge" % (culture, ", ".join(wait_for)))
+                out.line("# Country scope. %s waits on a vanilla journal entry that some country holds (%s, R37) and the merge" % (culture, ", ".join(wait_for)))
                 out.line("# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.")
                 with out.block("te_cmg_%s_%s_waiting" % (key, culture)):
                     _wait_entry_open(out, wait_for)
@@ -976,7 +987,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             out.line()
         out.line("# Country scope. Can this country start the %s merge now? The merge is idle, a core culture is" % key)
         out.line("# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the" )
-        out.line("# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course)." )
+        out.line("# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course)." )
         out.line("# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.")
         with out.block("te_cmg_%s_can_start" % key):
             if waits:
@@ -1058,7 +1069,7 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
             out.line("te_cmg_%s_join_ready = yes" % key)
     out.line()
     out.line("# Country scope: the tail of te_cmg_census_%s_country, run after the part gates are fresh." % key)
-    out.line("# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,")
+    out.line("# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,")
     out.line("#    up to te_cm_wait_cap_years).")
     out.line("# 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,")
     out.line("#    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on")
@@ -1753,8 +1764,8 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
             Row(
                 base + "wait_%s" % culture,
                 ["te_cmg_%s_start_basics = yes" % key, "te_cmg_%s_%s_waiting = yes" % (key, culture)],
-                "The merge waits for %s to end here. It goes ahead after %s years at most."
-                % (_names(part.wait_for), sv.format("te_cm_wait_cap_years", "0")),
+                "The merge waits while a country still has %s open. It goes ahead after %s years at most."
+                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0")),
             )
         )
     # The rule isn't part of can_start (the button tests it on its own), so "ready" must not show while it is off.
@@ -1938,8 +1949,8 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             out["te_cmg_%s_comp_%s_tt" % (key, component)] = "The %s merge is complete." % _names([merge_by_key(component).result])
         for part in core_waits(merge):
             out["te_cmg_%s_wait_%s_tt" % (key, part.cultures[0])] = (
-                "%s is not open here, or the merge has already waited %s years for it to end."
-                % (_names(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
+                "No country has %s open, or the merge has already waited %s years for it to end."
+                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
             )
     for text_key, text in out.items():
         if '"' in text or "\n" in text:

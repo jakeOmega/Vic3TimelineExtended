@@ -154,12 +154,14 @@ te_cmg_german_join_ready = {
 		if = {
 			limit = {
 				te_cmg_german_north_german_can_join = yes
+				NOT = { te_cmg_german_north_german_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = german CULTURE = north_german INDEX = 1 }
 		}
 		if = {
 			limit = {
 				te_cmg_german_south_german_can_join = yes
+				NOT = { te_cmg_german_south_german_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = german CULTURE = south_german INDEX = 1 }
 		}
@@ -189,7 +191,7 @@ te_cmg_start_german = {
 }
 
 # Country scope: the tail of te_cmg_census_german_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -197,6 +199,24 @@ te_cmg_start_german = {
 #    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
 # 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
 te_cmg_german_settle = {
+	if = {
+		limit = {
+			te_cmg_german_start_basics = yes
+			OR = {
+				any_country = {
+					has_journal_entry = je_german_unification_idea
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_cm_wait_years_german } }
+			set_variable = { name = te_cm_wait_years_german value = 0 }
+		}
+		if = {
+			limit = { var:te_cm_wait_years_german < te_cm_wait_cap_years }
+			change_variable = { name = te_cm_wait_years_german add = 1 }
+		}
+	}
 	if = {
 		limit = {
 			te_cm_system_enabled = yes
@@ -415,7 +435,7 @@ te_cmg_start_italian = {
 }
 
 # Country scope: the tail of te_cmg_census_italian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -660,7 +680,7 @@ te_cmg_start_scandinavian = {
 }
 
 # Country scope: the tail of te_cmg_census_scandinavian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -850,7 +870,7 @@ te_cmg_start_east_slavic = {
 }
 
 # Country scope: the tail of te_cmg_census_east_slavic_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -862,8 +882,12 @@ te_cmg_east_slavic_settle = {
 		limit = {
 			te_cmg_east_slavic_start_basics = yes
 			OR = {
-				has_journal_entry = je_ukraine_cultural_renaissance
-				has_journal_entry = je_belarus_cultural_renaissance
+				any_country = {
+					has_journal_entry = je_ukraine_cultural_renaissance
+				}
+				any_country = {
+					has_journal_entry = je_belarus_cultural_renaissance
+				}
 			}
 		}
 		if = {
@@ -1086,6 +1110,7 @@ te_cmg_yugoslav_join_ready = {
 		if = {
 			limit = {
 				te_cmg_yugoslav_serb_can_join = yes
+				NOT = { te_cmg_yugoslav_serb_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = yugoslav CULTURE = serb INDEX = 5 }
 		}
@@ -1110,6 +1135,7 @@ te_cmg_yugoslav_join_ready = {
 		if = {
 			limit = {
 				te_cmg_yugoslav_bulgarian_can_join = yes
+				NOT = { te_cmg_yugoslav_bulgarian_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = yugoslav CULTURE = bulgarian INDEX = 5 }
 		}
@@ -1132,7 +1158,7 @@ te_cmg_start_yugoslav = {
 }
 
 # Country scope: the tail of te_cmg_census_yugoslav_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -1140,6 +1166,24 @@ te_cmg_start_yugoslav = {
 #    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
 # 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
 te_cmg_yugoslav_settle = {
+	if = {
+		limit = {
+			te_cmg_yugoslav_start_basics = yes
+			OR = {
+				any_country = {
+					has_journal_entry = je_the_balkan_league
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_cm_wait_years_yugoslav } }
+			set_variable = { name = te_cm_wait_years_yugoslav value = 0 }
+		}
+		if = {
+			limit = { var:te_cm_wait_years_yugoslav < te_cm_wait_cap_years }
+			change_variable = { name = te_cm_wait_years_yugoslav add = 1 }
+		}
+	}
 	if = {
 		limit = {
 			te_cm_system_enabled = yes
@@ -1358,7 +1402,7 @@ te_cmg_start_czechoslovak = {
 }
 
 # Country scope: the tail of te_cmg_census_czechoslovak_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -1507,7 +1551,7 @@ te_cmg_start_hungarian = {
 }
 
 # Country scope: the tail of te_cmg_census_hungarian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -1656,7 +1700,7 @@ te_cmg_start_dutch = {
 }
 
 # Country scope: the tail of te_cmg_census_dutch_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -1805,7 +1849,7 @@ te_cmg_start_finnish = {
 }
 
 # Country scope: the tail of te_cmg_census_finnish_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -2044,7 +2088,7 @@ te_cmg_start_french = {
 }
 
 # Country scope: the tail of te_cmg_census_french_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -2198,7 +2242,7 @@ te_cmg_start_british = {
 }
 
 # Country scope: the tail of te_cmg_census_british_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -2426,7 +2470,7 @@ te_cmg_start_american = {
 }
 
 # Country scope: the tail of te_cmg_census_american_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -2438,7 +2482,9 @@ te_cmg_american_settle = {
 		limit = {
 			te_cmg_american_start_basics = yes
 			OR = {
-				has_journal_entry = je_acw_reincorporate
+				any_country = {
+					has_journal_entry = je_acw_reincorporate
+				}
 			}
 		}
 		if = {
@@ -2742,7 +2788,7 @@ te_cmg_start_anglophone = {
 }
 
 # Country scope: the tail of te_cmg_census_anglophone_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3024,7 +3070,7 @@ te_cmg_start_brazilian = {
 }
 
 # Country scope: the tail of te_cmg_census_brazilian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3230,7 +3276,7 @@ te_cmg_start_platine = {
 }
 
 # Country scope: the tail of te_cmg_census_platine_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3436,7 +3482,7 @@ te_cmg_start_andean = {
 }
 
 # Country scope: the tail of te_cmg_census_andean_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3619,7 +3665,7 @@ te_cmg_start_gran_colombian = {
 }
 
 # Country scope: the tail of te_cmg_census_gran_colombian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3814,7 +3860,7 @@ te_cmg_start_chinese = {
 }
 
 # Country scope: the tail of te_cmg_census_chinese_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -3963,7 +4009,7 @@ te_cmg_start_japanese = {
 }
 
 # Country scope: the tail of te_cmg_census_japanese_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -4286,7 +4332,7 @@ te_cmg_start_arab = {
 }
 
 # Country scope: the tail of te_cmg_census_arab_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -4511,7 +4557,7 @@ te_cmg_start_persian = {
 }
 
 # Country scope: the tail of te_cmg_census_persian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -4737,7 +4783,7 @@ te_cmg_start_oghuz_turkic = {
 }
 
 # Country scope: the tail of te_cmg_census_oghuz_turkic_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -4955,7 +5001,7 @@ te_cmg_start_hindustani = {
 }
 
 # Country scope: the tail of te_cmg_census_hindustani_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -5200,7 +5246,7 @@ te_cmg_start_dravidian = {
 }
 
 # Country scope: the tail of te_cmg_census_dravidian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -5474,7 +5520,7 @@ te_cmg_start_indonesian = {
 }
 
 # Country scope: the tail of te_cmg_census_indonesian_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -5674,7 +5720,7 @@ te_cmg_start_filipino = {
 }
 
 # Country scope: the tail of te_cmg_census_filipino_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -5857,7 +5903,7 @@ te_cmg_start_nguni = {
 }
 
 # Country scope: the tail of te_cmg_census_nguni_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -6186,7 +6232,7 @@ te_cmg_start_latin = {
 }
 
 # Country scope: the tail of te_cmg_census_latin_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -6461,7 +6507,7 @@ te_cmg_start_pan_slavic = {
 }
 
 # Country scope: the tail of te_cmg_census_pan_slavic_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -6799,7 +6845,7 @@ te_cmg_start_pan_turkic = {
 }
 
 # Country scope: the tail of te_cmg_census_pan_turkic_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -6959,7 +7005,7 @@ te_cmg_start_pan_malay = {
 }
 
 # Country scope: the tail of te_cmg_census_pan_malay_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on
@@ -7249,7 +7295,7 @@ te_cmg_start_east_african = {
 }
 
 # Country scope: the tail of te_cmg_census_east_african_country, run after the part gates are fresh.
-# 1. A wait year, while the merge could start but a vanilla entry on a core part is open (once a census,
+# 1. A wait year, while the merge could start but a vanilla entry on a core part is open in any country (once a census,
 #    up to te_cm_wait_cap_years).
 # 2. The journal entry's net: an idle merge's candidate that can start, or a running merge's starter,
 #    gets the entry back if it holds neither the active nor the inactive record (a rule switched off and on

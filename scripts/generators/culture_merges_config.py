@@ -20,6 +20,12 @@ Conventions
   mods that define ``german``, since a duplicate culture key is dropped.
 * ``components`` names the tier-1 merges a tier-3 merge waits on: the merges
   whose results are among its core parts (Latin: French, Italian).
+* A part's ``wait_for`` names vanilla journal entries that work on its culture (a renaissance, the
+  Civil War entries, German unification). The merge neither starts on a core part, nor joins a part,
+  while **any** country has one of them active (R37: a switch turns the part's pops into the result
+  in every country, and the entry reads their fervor or share there), until it has waited
+  ``te_cm_wait_cap_years`` (20) years. Two core parts that wait on the same entry share one start
+  condition and one status row.
 * **Tiers** are numbers: 1 = same language and heritage, 2 = same language
   across heritages (the spec's "1b"), 3 = same language family only (the spec's
   "tier 2"). A part's tier is **derived** from vanilla's traits (``derive_tier``)
@@ -78,7 +84,15 @@ def _new(name: str, r: int, g: int, b: int) -> NewCulture:
 MERGES: tuple[Merge, ...] = (
     Merge(
         "german", "cm_german", _new("German", 118, 120, 128),
-        core=(_p("north_german"), _p("south_german")),
+        # Vanilla's GER formation needs Pan-Nationalism or the variable je_german_unification_idea sets
+        # when it completes (common/country_formation/00_major_formables.txt), and the entry completes
+        # on North German fervor 40 and South German fervor 30. A part that switched first would leave
+        # a would-be unifier without the technology unable to form Germany, so both core parts wait
+        # for the entry to end in every country (R37).
+        core=(
+            _p("north_german", wait_for=("je_german_unification_idea",)),
+            _p("south_german", wait_for=("je_german_unification_idea",)),
+        ),
         optional=(_p("alemannic"), _p("east_german")),
     ),
     Merge(
@@ -101,8 +115,10 @@ MERGES: tuple[Merge, ...] = (
     ),
     Merge(
         "yugoslav", "cm_yugoslav", _new("Yugoslav", 28, 84, 150),
-        core=(_p("serb"), _p("croat"), _p("bosniak")),
-        optional=(_p("slovene"), _p("bulgarian")),
+        # je_the_balkan_league can only be activated while Serb or Bulgarian fervor is above 75
+        # (05_balkan_wars.txt), so Serb and Bulgarian wait for it to end in every country (R37).
+        core=(_p("serb", wait_for=("je_the_balkan_league",)), _p("croat"), _p("bosniak")),
+        optional=(_p("slovene"), _p("bulgarian", wait_for=("je_the_balkan_league",))),
     ),
     Merge(
         "czechoslovak", "cm_czechoslovak", _new("Czechoslovak", 205, 90, 130),

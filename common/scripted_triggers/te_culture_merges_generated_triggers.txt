@@ -58,6 +58,20 @@ te_cmg_german_north_german_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
+# Country scope. north_german waits on a vanilla journal entry that some country holds (je_german_unification_idea, R37) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_german_north_german_waiting = {
+	any_country = {
+		has_journal_entry = je_german_unification_idea
+	}
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_german
+			trigger_if = { limit = { has_variable = te_cm_wait_years_german } var:te_cm_wait_years_german >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. south_german is free for the german merge.
 te_cmg_german_south_german_available = {
 	always = yes
@@ -86,6 +100,20 @@ te_cmg_german_south_german_can_join = {
 	NOT = { has_global_variable = te_cm_switched_south_german }
 	NOT = { has_global_variable = te_cm_switched_cm_german }
 	te_cm_tier_tech = { TIER = 1 }
+}
+
+# Country scope. south_german waits on a vanilla journal entry that some country holds (je_german_unification_idea, R37) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_german_south_german_waiting = {
+	any_country = {
+		has_journal_entry = je_german_unification_idea
+	}
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_german
+			trigger_if = { limit = { has_variable = te_cm_wait_years_german } var:te_cm_wait_years_german >= te_cm_wait_cap_years }
+		}
+	}
 }
 
 # Any scope. alemannic is free for the german merge.
@@ -284,11 +312,9 @@ te_cmg_german_core_switched = {
 	}
 }
 
-# Country scope. Can this country start the german merge now? The merge is idle, a core culture is
-# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
-# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
-te_cmg_german_can_start = {
+# Country scope. Everything the german merge needs to start except its waits on vanilla entries
+# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
+te_cmg_german_start_basics = {
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_german ?= 1 global_var:te_cm_state_german ?= 2 }
@@ -321,6 +347,28 @@ te_cmg_german_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_sol
 		var:te_cm_sol_ok_german ?= 1
+	}
+}
+
+# Country scope. Can this country start the german merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_german_can_start = {
+	te_cmg_german_start_basics = yes
+	custom_tooltip = {
+		text = te_cmg_german_wait_north_german_tt
+		OR = {
+			NOT = {
+				any_country = {
+					has_journal_entry = je_german_unification_idea
+				}
+			}
+			AND = {
+				has_variable = te_cm_wait_years_german
+				trigger_if = { limit = { has_variable = te_cm_wait_years_german } var:te_cm_wait_years_german >= te_cm_wait_cap_years }
+			}
+		}
 	}
 }
 
@@ -572,7 +620,7 @@ te_cmg_italian_core_switched = {
 
 # Country scope. Can this country start the italian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_italian_can_start = {
 	custom_tooltip = {
@@ -912,7 +960,7 @@ te_cmg_scandinavian_core_switched = {
 
 # Country scope. Can this country start the scandinavian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_scandinavian_can_start = {
 	custom_tooltip = {
@@ -1052,10 +1100,12 @@ te_cmg_east_slavic_ukrainian_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
-# Country scope. ukrainian waits on a vanilla journal entry of this country (je_ukraine_cultural_renaissance) and the merge
+# Country scope. ukrainian waits on a vanilla journal entry that some country holds (je_ukraine_cultural_renaissance, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_east_slavic_ukrainian_waiting = {
-	has_journal_entry = je_ukraine_cultural_renaissance
+	any_country = {
+		has_journal_entry = je_ukraine_cultural_renaissance
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_east_slavic
@@ -1094,10 +1144,12 @@ te_cmg_east_slavic_byelorussian_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
-# Country scope. byelorussian waits on a vanilla journal entry of this country (je_belarus_cultural_renaissance) and the merge
+# Country scope. byelorussian waits on a vanilla journal entry that some country holds (je_belarus_cultural_renaissance, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_east_slavic_byelorussian_waiting = {
-	has_journal_entry = je_belarus_cultural_renaissance
+	any_country = {
+		has_journal_entry = je_belarus_cultural_renaissance
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_east_slavic
@@ -1292,14 +1344,18 @@ te_cmg_east_slavic_start_basics = {
 
 # Country scope. Can this country start the east_slavic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_east_slavic_can_start = {
 	te_cmg_east_slavic_start_basics = yes
 	custom_tooltip = {
 		text = te_cmg_east_slavic_wait_ukrainian_tt
 		OR = {
-			NOT = { has_journal_entry = je_ukraine_cultural_renaissance }
+			NOT = {
+				any_country = {
+					has_journal_entry = je_ukraine_cultural_renaissance
+				}
+			}
 			AND = {
 				has_variable = te_cm_wait_years_east_slavic
 				trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
@@ -1309,7 +1365,11 @@ te_cmg_east_slavic_can_start = {
 	custom_tooltip = {
 		text = te_cmg_east_slavic_wait_byelorussian_tt
 		OR = {
-			NOT = { has_journal_entry = je_belarus_cultural_renaissance }
+			NOT = {
+				any_country = {
+					has_journal_entry = je_belarus_cultural_renaissance
+				}
+			}
 			AND = {
 				has_variable = te_cm_wait_years_east_slavic
 				trigger_if = { limit = { has_variable = te_cm_wait_years_east_slavic } var:te_cm_wait_years_east_slavic >= te_cm_wait_cap_years }
@@ -1380,6 +1440,20 @@ te_cmg_yugoslav_serb_can_join = {
 	NOT = { has_global_variable = te_cm_switched_serb }
 	NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
 	te_cm_tier_tech = { TIER = 1 }
+}
+
+# Country scope. serb waits on a vanilla journal entry that some country holds (je_the_balkan_league, R37) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_yugoslav_serb_waiting = {
+	any_country = {
+		has_journal_entry = je_the_balkan_league
+	}
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_yugoslav
+			trigger_if = { limit = { has_variable = te_cm_wait_years_yugoslav } var:te_cm_wait_years_yugoslav >= te_cm_wait_cap_years }
+		}
+	}
 }
 
 # Any scope. croat is free for the yugoslav merge.
@@ -1516,6 +1590,20 @@ te_cmg_yugoslav_bulgarian_can_join = {
 	te_cm_tier_tech = { TIER = 3 }
 	te_cmg_yugoslav_bulgarian_years_met = yes
 	var:te_cm_sol_ok_yugoslav_bulgarian ?= 1
+}
+
+# Country scope. bulgarian waits on a vanilla journal entry that some country holds (je_the_balkan_league, R37) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_yugoslav_bulgarian_waiting = {
+	any_country = {
+		has_journal_entry = je_the_balkan_league
+	}
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_yugoslav
+			trigger_if = { limit = { has_variable = te_cm_wait_years_yugoslav } var:te_cm_wait_years_yugoslav >= te_cm_wait_cap_years }
+		}
+	}
 }
 
 # Any scope. Is the yearly census of the yugoslav merge worth running? An idle merge with a
@@ -1668,11 +1756,9 @@ te_cmg_yugoslav_core_switched = {
 	}
 }
 
-# Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
-# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
-# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
-te_cmg_yugoslav_can_start = {
+# Country scope. Everything the yugoslav merge needs to start except its waits on vanilla entries
+# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
+te_cmg_yugoslav_start_basics = {
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 }
@@ -1717,6 +1803,28 @@ te_cmg_yugoslav_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_sol
 		var:te_cm_sol_ok_yugoslav ?= 1
+	}
+}
+
+# Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_yugoslav_can_start = {
+	te_cmg_yugoslav_start_basics = yes
+	custom_tooltip = {
+		text = te_cmg_yugoslav_wait_serb_tt
+		OR = {
+			NOT = {
+				any_country = {
+					has_journal_entry = je_the_balkan_league
+				}
+			}
+			AND = {
+				has_variable = te_cm_wait_years_yugoslav
+				trigger_if = { limit = { has_variable = te_cm_wait_years_yugoslav } var:te_cm_wait_years_yugoslav >= te_cm_wait_cap_years }
+			}
+		}
 	}
 }
 
@@ -1968,7 +2076,7 @@ te_cmg_czechoslovak_core_switched = {
 
 # Country scope. Can this country start the czechoslovak merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_czechoslovak_can_start = {
 	custom_tooltip = {
@@ -2193,7 +2301,7 @@ te_cmg_hungarian_core_switched = {
 
 # Country scope. Can this country start the hungarian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_hungarian_can_start = {
 	custom_tooltip = {
@@ -2411,7 +2519,7 @@ te_cmg_dutch_core_switched = {
 
 # Country scope. Can this country start the dutch merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_dutch_can_start = {
 	custom_tooltip = {
@@ -2629,7 +2737,7 @@ te_cmg_finnish_core_switched = {
 
 # Country scope. Can this country start the finnish merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_finnish_can_start = {
 	custom_tooltip = {
@@ -2945,7 +3053,7 @@ te_cmg_french_core_switched = {
 
 # Country scope. Can this country start the french merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_french_can_start = {
 	custom_tooltip = {
@@ -3176,7 +3284,7 @@ te_cmg_british_core_switched = {
 
 # Country scope. Can this country start the british merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_british_can_start = {
 	custom_tooltip = {
@@ -3304,10 +3412,12 @@ te_cmg_american_dixie_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
-# Country scope. dixie waits on a vanilla journal entry of this country (je_acw_reincorporate) and the merge
+# Country scope. dixie waits on a vanilla journal entry that some country holds (je_acw_reincorporate, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_american_dixie_waiting = {
-	has_journal_entry = je_acw_reincorporate
+	any_country = {
+		has_journal_entry = je_acw_reincorporate
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_american
@@ -3354,10 +3464,12 @@ te_cmg_american_afro_american_can_join = {
 	var:te_cm_sol_ok_american_afro_american ?= 1
 }
 
-# Country scope. afro_american waits on a vanilla journal entry of this country (je_acw_equality) and the merge
+# Country scope. afro_american waits on a vanilla journal entry that some country holds (je_acw_equality, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_american_afro_american_waiting = {
-	has_journal_entry = je_acw_equality
+	any_country = {
+		has_journal_entry = je_acw_equality
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_american
@@ -3536,14 +3648,18 @@ te_cmg_american_start_basics = {
 
 # Country scope. Can this country start the american merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_american_can_start = {
 	te_cmg_american_start_basics = yes
 	custom_tooltip = {
 		text = te_cmg_american_wait_dixie_tt
 		OR = {
-			NOT = { has_journal_entry = je_acw_reincorporate }
+			NOT = {
+				any_country = {
+					has_journal_entry = je_acw_reincorporate
+				}
+			}
 			AND = {
 				has_variable = te_cm_wait_years_american
 				trigger_if = { limit = { has_variable = te_cm_wait_years_american } var:te_cm_wait_years_american >= te_cm_wait_cap_years }
@@ -3846,10 +3962,12 @@ te_cmg_anglophone_dixie_can_join = {
 	var:te_cm_sol_ok_anglophone_dixie ?= 1
 }
 
-# Country scope. dixie waits on a vanilla journal entry of this country (je_acw_reincorporate) and the merge
+# Country scope. dixie waits on a vanilla journal entry that some country holds (je_acw_reincorporate, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_anglophone_dixie_waiting = {
-	has_journal_entry = je_acw_reincorporate
+	any_country = {
+		has_journal_entry = je_acw_reincorporate
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_anglophone
@@ -3896,10 +4014,12 @@ te_cmg_anglophone_afro_american_can_join = {
 	var:te_cm_sol_ok_anglophone_afro_american ?= 1
 }
 
-# Country scope. afro_american waits on a vanilla journal entry of this country (je_acw_equality) and the merge
+# Country scope. afro_american waits on a vanilla journal entry that some country holds (je_acw_equality, R37) and the merge
 # has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
 te_cmg_anglophone_afro_american_waiting = {
-	has_journal_entry = je_acw_equality
+	any_country = {
+		has_journal_entry = je_acw_equality
+	}
 	NOT = {
 		AND = {
 			has_variable = te_cm_wait_years_anglophone
@@ -4084,7 +4204,7 @@ te_cmg_anglophone_core_switched = {
 
 # Country scope. Can this country start the anglophone merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_anglophone_can_start = {
 	custom_tooltip = {
@@ -4517,7 +4637,7 @@ te_cmg_brazilian_core_switched = {
 
 # Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_brazilian_can_start = {
 	custom_tooltip = {
@@ -4890,7 +5010,7 @@ te_cmg_platine_core_switched = {
 
 # Country scope. Can this country start the platine merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_platine_can_start = {
 	custom_tooltip = {
@@ -5254,7 +5374,7 @@ te_cmg_andean_core_switched = {
 
 # Country scope. Can this country start the andean merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_andean_can_start = {
 	custom_tooltip = {
@@ -5567,7 +5687,7 @@ te_cmg_gran_colombian_core_switched = {
 
 # Country scope. Can this country start the gran_colombian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_gran_colombian_can_start = {
 	custom_tooltip = {
@@ -5898,7 +6018,7 @@ te_cmg_chinese_core_switched = {
 
 # Country scope. Can this country start the chinese merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_chinese_can_start = {
 	custom_tooltip = {
@@ -6132,7 +6252,7 @@ te_cmg_japanese_core_switched = {
 
 # Country scope. Can this country start the japanese merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_japanese_can_start = {
 	custom_tooltip = {
@@ -6666,7 +6786,7 @@ te_cmg_arab_core_switched = {
 
 # Country scope. Can this country start the arab merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_arab_can_start = {
 	custom_tooltip = {
@@ -6996,7 +7116,7 @@ te_cmg_persian_core_switched = {
 
 # Country scope. Can this country start the persian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_persian_can_start = {
 	custom_tooltip = {
@@ -7286,7 +7406,7 @@ te_cmg_oghuz_turkic_core_switched = {
 
 # Country scope. Can this country start the oghuz_turkic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_oghuz_turkic_can_start = {
 	custom_tooltip = {
@@ -7664,7 +7784,7 @@ te_cmg_hindustani_core_switched = {
 
 # Country scope. Can this country start the hindustani merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_hindustani_can_start = {
 	custom_tooltip = {
@@ -8028,7 +8148,7 @@ te_cmg_dravidian_core_switched = {
 
 # Country scope. Can this country start the dravidian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_dravidian_can_start = {
 	custom_tooltip = {
@@ -8424,7 +8544,7 @@ te_cmg_indonesian_core_switched = {
 
 # Country scope. Can this country start the indonesian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_indonesian_can_start = {
 	custom_tooltip = {
@@ -8768,7 +8888,7 @@ te_cmg_filipino_core_switched = {
 
 # Country scope. Can this country start the filipino merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_filipino_can_start = {
 	custom_tooltip = {
@@ -9082,7 +9202,7 @@ te_cmg_nguni_core_switched = {
 
 # Country scope. Can this country start the nguni merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_nguni_can_start = {
 	custom_tooltip = {
@@ -9729,7 +9849,7 @@ te_cmg_latin_core_switched = {
 
 # Country scope. Can this country start the latin merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_latin_can_start = {
 	custom_tooltip = {
@@ -10255,7 +10375,7 @@ te_cmg_pan_slavic_core_switched = {
 
 # Country scope. Can this country start the pan_slavic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_slavic_can_start = {
 	custom_tooltip = {
@@ -10900,7 +11020,7 @@ te_cmg_pan_turkic_core_switched = {
 
 # Country scope. Can this country start the pan_turkic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_turkic_can_start = {
 	custom_tooltip = {
@@ -11233,7 +11353,7 @@ te_cmg_pan_malay_core_switched = {
 
 # Country scope. Can this country start the pan_malay merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_malay_can_start = {
 	custom_tooltip = {
@@ -11758,7 +11878,7 @@ te_cmg_east_african_core_switched = {
 
 # Country scope. Can this country start the east_african merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open (or the wait ran its course).
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_east_african_can_start = {
 	custom_tooltip = {

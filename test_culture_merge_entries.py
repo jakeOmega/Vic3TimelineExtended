@@ -513,9 +513,8 @@ class StatusTextTest(unittest.TestCase):
                 self.assertLess(busy, sol)
                 for component in merge.components:
                     self.assertLess(descs.index("je_te_cm_%s_status_component_%s" % (key, component)), busy, key)
-            for part in merge.core:
-                if part.wait_for:
-                    self.assertGreater(descs.index("je_te_cm_%s_status_wait_%s" % (key, part.cultures[0])), sol)
+            for part in gen.core_waits(merge):
+                self.assertGreater(descs.index("je_te_cm_%s_status_wait_%s" % (key, part.cultures[0])), sol)
             # The complete row needs every joined part switched; the late row is the core's completion with one left.
             rows = dict(self.rows(key)[1])
             self.assertIn("te_cmg_%s_all_switched = yes" % key, rows["je_te_cm_%s_status_complete" % key])
@@ -589,8 +588,14 @@ class StatusTextTest(unittest.TestCase):
                     self.assertIn("ScriptValue('%s')" % want, text, "%s %s" % (merge.key, culture))
 
     def test_a_vanilla_wait_has_a_row_and_a_tooltip(self):
-        waits = [(m, p) for m in cfg.MERGES for p in m.core if p.wait_for]
-        self.assertEqual([(m.key, p.cultures[0]) for m, p in waits], [("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("american", "dixie")])
+        # One per distinct entry: German's North and South share the unification idea, so South German has none (R37).
+        waits = [(m, p) for m in cfg.MERGES for p in gen.core_waits(m)]
+        self.assertEqual(
+            [(m.key, p.cultures[0]) for m, p in waits],
+            [("german", "north_german"), ("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("yugoslav", "serb"), ("american", "dixie")],
+        )
+        self.assertNotIn("je_te_cm_german_status_wait_south_german", self.loc)
+        self.assertNotIn("te_cmg_german_wait_south_german_tt", self.loc)
         for merge, part in waits:
             key, culture = merge.key, part.cultures[0]
             self.assertIn("je_te_cm_%s_status_wait_%s" % (key, culture), self.loc)
@@ -714,7 +719,7 @@ class CanStartTest(unittest.TestCase):
                 key,
             )
             tail = texts[len(head) + len(merge.core):]
-            waits = ["te_cmg_%s_wait_%s_tt" % (key, p.cultures[0]) for p in merge.core if p.wait_for]
+            waits = ["te_cmg_%s_wait_%s_tt" % (key, p.cultures[0]) for p in gen.core_waits(merge)]
             self.assertEqual(
                 tail,
                 ["te_cm_tt_sol"] + ["te_cmg_%s_comp_%s_tt" % (key, c) for c in merge.components] + waits,
@@ -740,7 +745,8 @@ class CanStartTest(unittest.TestCase):
             self.assertEqual(slots, core_ok, key)
 
     def test_waits_are_capped(self):
-        # Each wait-listed vanilla entry on a core part is in can_start, OR'd with the cap.
+        # Each wait-listed vanilla entry on a core part is in can_start, OR'd with the cap, and read in any
+        # country (R37), not only the candidate's.
         for merge in cfg.MERGES:
             key = merge.key
             body = squash(block(self.triggers, "te_cmg_%s_can_start" % key))
@@ -748,20 +754,44 @@ class CanStartTest(unittest.TestCase):
             for part in merge.core:
                 for entry in part.wait_for:
                     self.assertIn("has_journal_entry = %s" % entry, body, key)
-                if part.wait_for:
-                    self.assertIn(
-                        "text = te_cmg_%s_wait_%s_tt OR = { NOT = { has_journal_entry = %s } AND = { has_variable = %s "
-                        "trigger_if = { limit = { has_variable = %s } var:%s >= te_cm_wait_cap_years } } }"
-                        % (key, part.cultures[0], part.wait_for[0], counter, counter, counter),
-                        body,
-                        key,
-                    )
+            for part in gen.core_waits(merge):
+                self.assertIn(
+                    "text = te_cmg_%s_wait_%s_tt OR = { NOT = { any_country = { has_journal_entry = %s } } AND = { has_variable = %s "
+                    "trigger_if = { limit = { has_variable = %s } var:%s >= te_cm_wait_cap_years } } }"
+                    % (key, part.cultures[0], part.wait_for[0], counter, counter, counter),
+                    body,
+                    key,
+                )
             if not any(p.wait_for for p in merge.core):
                 self.assertNotIn("te_cm_wait_cap_years", body, key)
                 self.assertIsNone(block(self.triggers, "te_cmg_%s_start_basics" % key), key)
         # An optional part's wait never gates the start (American's Afro-American, Anglophone's two).
         self.assertNotIn("je_acw_equality", block(self.triggers, "te_cmg_american_can_start"))
         self.assertNotIn("je_acw_reincorporate", block(self.triggers, "te_cmg_anglophone_can_start"))
+
+    def test_every_wait_reads_any_country(self):
+        # R37: a switch turns the part's pops into the result in every country, and the entry reads their fervor
+        # or share there, so a wait holds while ANY country has the entry active. A bare `has_journal_entry` of a
+        # wait-listed entry in the generated triggers and effects would be the candidate's alone.
+        text = squash(text_of(GEN_TRIGGERS)) + " " + squash(text_of(GEN_EFFECTS))
+        entries = {e for m in cfg.MERGES for p in m.core + m.optional for e in p.wait_for}
+        self.assertIn("je_german_unification_idea", entries)
+        self.assertIn("je_the_balkan_league", entries)
+        unwrapped = re.sub(r"any_country = \{ (?:OR = \{ )?(?:has_journal_entry = \w+ )+\}(?: \})?", "", text)
+        for entry in sorted(entries):
+            self.assertIn("any_country = { has_journal_entry = %s }" % entry, text, entry)
+            self.assertNotIn("has_journal_entry = %s" % entry, unwrapped, "%s is read for one country" % entry)
+
+    def test_two_core_parts_on_one_entry_share_a_wait_but_each_has_a_join_gate(self):
+        german = [t for t, _ in self.items("german") if "_wait_" in t]
+        self.assertEqual(german, ["te_cmg_german_wait_north_german_tt"])
+        for culture in ("north_german", "south_german"):
+            self.assertIsNotNone(block(self.triggers, "te_cmg_german_%s_waiting" % culture), culture)
+        self.assertEqual([p.cultures[0] for p in gen.core_waits(cfg.merge_by_key("german"))], ["north_german"])
+        # Distinct entries keep a wait each.
+        self.assertEqual(
+            [p.cultures[0] for p in gen.core_waits(cfg.merge_by_key("east_slavic"))], ["ukrainian", "byelorussian"]
+        )
 
     def test_a_waiting_part_is_waiting_only_until_the_cap(self):
         for merge in cfg.MERGES:
@@ -773,7 +803,9 @@ class CanStartTest(unittest.TestCase):
                     continue
                 flat = squash(waiting)
                 counter = "te_cm_wait_years_%s" % merge.key
-                self.assertTrue(flat.startswith("has_journal_entry = %s NOT = { AND = { has_variable = %s" % (wait_for[0], counter)), flat)
+                self.assertTrue(
+                    flat.startswith("any_country = { has_journal_entry = %s } NOT = { AND = { has_variable = %s" % (wait_for[0], counter)), flat
+                )
                 self.assertIn("var:%s >= te_cm_wait_cap_years" % counter, flat)
 
     def test_colonial_holders_cannot_start(self):
@@ -990,11 +1022,11 @@ class CensusTailTest(unittest.TestCase):
             key = merge.key
             body = self.settle(key)
             counter = "te_cm_wait_years_%s" % key
-            waits = [p for p in merge.core if p.wait_for]
+            waits = gen.core_waits(merge)
             if not waits:
                 self.assertNotIn(counter, body, key)
                 continue
-            opened = "OR = { %s }" % " ".join("has_journal_entry = %s" % p.wait_for[0] for p in waits)
+            opened = "OR = { %s }" % " ".join("any_country = { has_journal_entry = %s }" % p.wait_for[0] for p in waits)
             self.assertTrue(all(len(p.wait_for) == 1 for p in waits), "a part with two entries nests an OR; extend the test")
             self.assertTrue(
                 body.startswith(
