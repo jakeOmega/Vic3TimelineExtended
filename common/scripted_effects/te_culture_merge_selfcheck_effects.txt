@@ -3,13 +3,14 @@
 # (docs/testing/culture-merges-playtest.md, "Self-checks"; the on_actions file of the same name
 # lists the hooks and the rows)
 # ============================================================================
-# Eight engine facts the culture merges rest on that nobody has verified. Each check logs
+# Nine engine facts the culture merges rest on that nobody has verified. Each check logs
 # `TE_SELF_CHECK OK|BROKEN <name>` with its numbers, once a game, behind a latch global
 # (te_cm_chk_<name without cm_>_done), and leaves out inputs that would make OK a false pass.
 # Every value it prints is copied into a te_cm_chk_* global first and read back with
 # GetGlobalVariable (a $X$ inside a [..] accessor is unproven), then removed.
 # Checks 1-7 read merge state and wait for the rule (te_cm_system_enabled), so none fires in a game with no merges;
-# cm_russification_outcome reads the INJECTed outcome of a vanilla entry, which has no rule gate, and no merge variable.
+# cm_russification_outcome reads the INJECTed outcome of a vanilla entry, which has no rule gate, and no merge variable;
+# cm_fervor_copy rides the fervor copy, which has no rule gate either.
 #
 #   cm_census_sane                te_cm_chk_census           the first candidate's census of a part it holds
 #   cm_acceptance_scale           te_cm_chk_census           the first candidate with a primary core culture
@@ -23,6 +24,8 @@
 #                                 te_cm_chk_formation_monthly   a monthly pulse later arms it,
 #                                 te_cm_chk_formation        and on_country_formed reads it before the refresh
 #   cm_russification_outcome      te_cm_chk_russification_monthly
+#   cm_fervor_copy                te_cm_chk_fervor           the first copy whose source has fervor 5 or more, read
+#                                 te_cm_chk_fervor_monthly   before the next month's copy
 #
 # No verdict is delayed with a state event (a delayed state event never runs): a check that needs settled state
 # stores what it saw, sets a timed global, and the monthly pulse reads the rest once the global has run out.
@@ -557,5 +560,76 @@ te_cm_chk_russification_monthly = {
 			set_global_variable = { name = te_cm_chk_russification_outcome_done value = yes }
 			debug_log = "TE_SELF_CHECK INFO cm_russification_outcome date=[TimeKeeper.GetCurrentDate.GetString] (the entry ended with the completion trigger true and no marker: vanilla's own outcome, declared first, concluded it, so the INJECTed one was not seen to fire; no verdict this game)"
 		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# cm_fervor_copy: set_fervor takes a named value, and the culture keeps it
+# ----------------------------------------------------------------------------
+
+# Any scope: te_cm_copy_fervor, once scope:te_cm_fervor_source (the culture $CULTURE$ switched into) is saved and before
+# the copy. $CULTURE$ = the switched culture. The first time the source's fervor is 5 or more, sets the culture to 0 with
+# a literal (vanilla's documented form, set_fervor = 3.0), then to the named value, and stores what each step read. The
+# zero makes the test real (a set that did nothing can't pass), and leaves a culture whose named set fails where its
+# fervor drifts anyway, never above a vanilla threshold. The monthly pass reads it again a copy later.
+te_cm_chk_fervor = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_fervor_copy_done }
+			NOT = { has_global_variable = te_cm_chk_fv_part }
+			scope:te_cm_fervor_source = { culture_current_fervor >= 5 }
+		}
+		set_global_variable = { name = te_cm_chk_fv_before value = cu:$CULTURE$.culture_current_fervor }
+		set_global_variable = { name = te_cm_chk_fv_target value = te_cm_fervor_of_source }
+		cu:$CULTURE$ = { set_fervor = 0 }
+		set_global_variable = { name = te_cm_chk_fv_literal value = cu:$CULTURE$.culture_current_fervor }
+		cu:$CULTURE$ = { set_fervor = te_cm_fervor_of_source }
+		set_global_variable = { name = te_cm_chk_fv_named value = cu:$CULTURE$.culture_current_fervor }
+		cu:$CULTURE$ = { save_temporary_scope_as = te_cm_chk_fv_part_s }
+		set_global_variable = { name = te_cm_chk_fv_part value = scope:te_cm_chk_fv_part_s }
+		set_global_variable = { name = te_cm_chk_fv_wait value = yes days = 20 }
+	}
+}
+
+# Any scope, te_cm_monthly_on_action inside the fervor lock, before that month's copy: the culture the check set, a copy
+# later. No rule gate, like the copy.
+#   OK      its fervor now (later) is within 2 of the value the named set gave (target): set_fervor took
+#           te_cm_fervor_of_source and the culture kept it (a month's drift toward a target of 0 is at most 1).
+#   BROKEN  otherwise. named and later near 0, with literal 0: set_fervor did not read the named value, so every copy
+#           leaves the culture's fervor where it was. named at the target and later far from it: the set held for a
+#           moment and something reset it. literal not 0: set_fervor applies later than the read, so read later alone.
+te_cm_chk_fervor_monthly = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_chk_fervor_copy_done }
+			has_global_variable = te_cm_chk_fv_part
+			NOT = { has_global_variable = te_cm_chk_fv_wait }
+		}
+		set_global_variable = { name = te_cm_chk_fervor_copy_done value = yes }
+		global_var:te_cm_chk_fv_part = { save_temporary_scope_as = te_cm_chk_fv_part_s }
+		set_global_variable = { name = te_cm_chk_fv_later value = scope:te_cm_chk_fv_part_s.culture_current_fervor }
+		set_global_variable = { name = te_cm_chk_fv_low value = global_var:te_cm_chk_fv_target }
+		change_global_variable = { name = te_cm_chk_fv_low add = -2 }
+		set_global_variable = { name = te_cm_chk_fv_high value = global_var:te_cm_chk_fv_target }
+		change_global_variable = { name = te_cm_chk_fv_high add = 2 }
+		if = {
+			limit = {
+				global_var:te_cm_chk_fv_later >= global_var:te_cm_chk_fv_low
+				global_var:te_cm_chk_fv_later <= global_var:te_cm_chk_fv_high
+			}
+			debug_log = "TE_SELF_CHECK OK cm_fervor_copy before=[GetGlobalVariable('te_cm_chk_fv_before').GetValue|2] target=[GetGlobalVariable('te_cm_chk_fv_target').GetValue|2] literal=[GetGlobalVariable('te_cm_chk_fv_literal').GetValue|2] named=[GetGlobalVariable('te_cm_chk_fv_named').GetValue|2] later=[GetGlobalVariable('te_cm_chk_fv_later').GetValue|2] date=[TimeKeeper.GetCurrentDate.GetString] (set_fervor took the named value te_cm_fervor_of_source and the switched culture kept it for a month, so vanilla's reads of its fervor read the merged culture's)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_fervor_copy before=[GetGlobalVariable('te_cm_chk_fv_before').GetValue|2] target=[GetGlobalVariable('te_cm_chk_fv_target').GetValue|2] literal=[GetGlobalVariable('te_cm_chk_fv_literal').GetValue|2] named=[GetGlobalVariable('te_cm_chk_fv_named').GetValue|2] later=[GetGlobalVariable('te_cm_chk_fv_later').GetValue|2] date=[TimeKeeper.GetCurrentDate.GetString] (the switched culture's fervor a month after the copy is not the merged culture's: named near 0 means set_fervor ignores a named value; take the fallback in docs/testing/culture-merges-playtest.md)"
+		}
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_part }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_before }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_target }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_literal }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_named }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_later }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_low }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_high }
+		te_cm_chk_remove_global = { NAME = te_cm_chk_fv_wait }
 	}
 }

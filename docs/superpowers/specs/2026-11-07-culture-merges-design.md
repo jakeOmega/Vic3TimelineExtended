@@ -437,6 +437,17 @@ so ship it with a self-check and fall back to the 20-year wait if it doesn't
 apply. With it, East Slavic doesn't wait for Russification at all; it still
 waits for the Ukrainian and Belarusian renaissances, which time out.
 
+**Fervor follows the merged culture** (owner, 2026-11-07, after review, in
+place of the build's waits on German National Identity and the Balkan League).
+Vanilla reads parts' fervor in journal entries (German National Identity's
+completion, the Balkan League's start condition) and in the German, Italian and
+Yugoslav pan-national movements, and a switched part, with no pops, drifts
+toward 0. Once a month every switched culture's fervor is set to that of the
+culture it switched into, and at the switch the result takes the part's fervor
+where its own is lower. An INJECT couldn't widen the Balkan League, whose test
+sits in its start condition; this writes a culture's state, not vanilla
+content, so the rule above holds.
+
 **A switched part that reappears** (a vanilla event converting pops into it
 after its switch) is converted on the next monthly pass *(designer's call)*;
 the builder lists vanilla's `change_pop_culture` targets among the parts.

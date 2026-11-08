@@ -67,6 +67,8 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   in the sphere of: ``te_cm_convert_part`` at the part's own tier), ``te_cmg_dominance_all`` (the dominance of
   each such part, then its switch: ``te_cm_census_dominance`` and ``te_cm_switch_part``),
   ``te_cmg_monthly_country`` (``te_cm_monthly_switched_culture`` for each switched culture),
+  ``te_cmg_copy_fervor_all`` (``te_cm_copy_fervor`` for each switched culture, a culture after the one it switched
+  into: ``fervor_copy_order``; owner, 2026-11-07, in place of the German unification and Balkan League waits),
   ``te_cmg_formed_country`` (the same on ``on_country_formed``, then the result back as a primary culture in a
   sphere country that had begun converting, where a part that joined is primary: R34) and
   ``te_cmg_remove_switched_part_homelands`` (the homeland of every part that switched into the culture whose
@@ -649,6 +651,25 @@ def switched_into(merges: tuple[cfg.Merge, ...]) -> dict[str, list[str]]:
     for result in below:
         walk(result, ())
     return below
+
+
+def fervor_copy_order(merges: tuple[cfg.Merge, ...]) -> list[str]:
+    """Every culture that can switch, ordered so the fervor copy settles a chain in one pass: a culture copies from the
+    one it switched into, so that one is copied first. A culture's height is how many switches lie above it (cm_italian
+    switches into cm_latin: 1; North Italian into cm_italian: 2), taken over every merge it could switch in (overlapping
+    merges); lower heights first, roster order within a height."""
+    above: dict[str, list[str]] = {}
+    for merge in merges:
+        for culture in _joinable_slot_cultures(merge):
+            if merge.result not in above.setdefault(culture, []):
+                above[culture].append(merge.result)
+    switched_into(merges)  # raises on a roster that nests a culture inside itself, which would loop below
+
+    def height(culture: str) -> int:
+        return max((1 + height(result) for result in above.get(culture, ())), default=0)
+
+    cultures = switchable_cultures(merges)
+    return sorted(cultures, key=lambda c: (height(c), cultures.index(c)))
 
 
 def result_can_switch(merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> bool:
@@ -1421,9 +1442,9 @@ def _write_debug_dump(out: "_Script", merges: tuple[cfg.Merge, ...]) -> None:
 
 
 def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.Merge, ...]) -> None:
-    """The yearly conversion, the switch, the monthly upkeep of the primary cultures and the homeland tie-in
-    (plan Task 6): ``te_cmg_yearly_country``, ``te_cmg_dominance_all``, ``te_cmg_monthly_country``,
-    ``te_cmg_formed_country`` and ``te_cmg_remove_switched_part_homelands``."""
+    """The yearly conversion, the switch, the monthly upkeep of the primary cultures, the fervor copy and the homeland
+    tie-in (plan Task 6): ``te_cmg_yearly_country``, ``te_cmg_dominance_all``, ``te_cmg_monthly_country``,
+    ``te_cmg_copy_fervor_all``, ``te_cmg_formed_country`` and ``te_cmg_remove_switched_part_homelands``."""
     cultures = switchable_cultures(merges)
 
     # ---- the yearly conversion ----
@@ -1508,6 +1529,19 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
             with out.block("if"):
                 out.line("limit = { has_global_variable = te_cm_switched_%s }" % culture)
                 out.line("te_cm_monthly_switched_culture = { CULTURE = %s }" % culture)
+
+    # ---- the fervor copy ----
+    out.line()
+    out.line("# Any scope. Once a month, with no rule gate (te_cm_monthly_on_action, behind te_cm_fervor_lock): every culture that has")
+    out.line("# switched takes the fervor of the culture it switched into (te_cm_copy_fervor), so vanilla's reads of its fervor read")
+    out.line("# the merged culture's. A culture is copied after the one it switched into (fervor_copy_order): cm_italian, which")
+    out.line("# switches into cm_latin, before North Italian, so a chain settles in one pass. One variable check per culture while")
+    out.line("# nothing has switched.")
+    with out.block("te_cmg_copy_fervor_all"):
+        for culture in fervor_copy_order(merges):
+            with out.block("if"):
+                out.line("limit = { has_global_variable = te_cm_switched_%s }" % culture)
+                out.line("te_cm_copy_fervor = { CULTURE = %s }" % culture)
 
     # ---- the formation hook ----
     out.line()

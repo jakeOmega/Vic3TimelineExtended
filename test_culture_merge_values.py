@@ -38,7 +38,7 @@ SPEED = "country_culture_merge_speed_mult"
 RATE_BLOCK = "te_cm_pop_rate"
 # Values that are computed per scope, not numbers: the pop-scope rate and the state-scope
 # Russification share (test_culture_merge_russification.py reads that one).
-NON_NUMBER_BLOCKS = (RATE_BLOCK, "te_cm_russian_or_east_slavic_share")
+NON_NUMBER_BLOCKS = (RATE_BLOCK, "te_cm_russian_or_east_slavic_share", "te_cm_fervor_of_source")
 
 
 def unwrap(value):

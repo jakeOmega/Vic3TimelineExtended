@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # CULTURE MERGES: TEMPORARY self-checks (delete after the 1.3.x play-test)
 # ============================================================================
-# Delete this file, common/scripted_effects/te_culture_merge_selfcheck_effects.txt, and the five hook lines below, then
+# Delete this file, common/scripted_effects/te_culture_merge_selfcheck_effects.txt, and the seven hook lines below, then
 # the play-test list's "Self-checks" rows (docs/testing/culture-merges-playtest.md) and test_culture_merge_selfchecks.py.
 #
 # The play-test rows (docs/testing/culture-merges-playtest.md, "Self-checks"), one `TE_SELF_CHECK OK|BROKEN <name>` line each,
@@ -14,15 +14,19 @@
 #   cm_switch_homeland          add_homeland reaches every state of the part, and is_homeland = global_var:X reads
 #   cm_formation_keeps_primary  on_country_formed leaves the result a primary culture, before the refresh runs
 #   cm_russification_outcome    the INJECTed second outcome concludes Russification
+#   cm_fervor_copy              set_fervor takes a named value (te_cm_fervor_of_source), and the culture keeps it a month
 #
-# The five hook lines (each one call; the helper does all the work and guards itself):
+# The seven hook lines (each one call; the helper does all the work and guards itself):
 #   te_culture_merge_effects.txt
 #     te_cm_census_part     te_cm_chk_census = { MERGE = $MERGE$ CULTURE = $CULTURE$ }
 #     te_cm_convert_part    te_cm_chk_conversion = { CULTURE = $CULTURE$ RESULT = $RESULT$ }
 #     te_cm_switch_part     te_cm_chk_switch = { CULTURE = $CULTURE$ }
+#     te_cm_copy_fervor     te_cm_chk_fervor = { CULTURE = $CULTURE$ }
 #   te_culture_merge_on_actions.txt
 #     te_cm_yearly_on_action   te_cm_chk_census_year = yes
 #     te_cm_formed_on_action   te_cm_chk_formation = yes
+#     te_cm_monthly_on_action  te_cm_chk_fervor_monthly = yes   (inside the fervor lock, before the copy: it reads last
+#                              month's copy, so it can't sit in this file's pass, whose order against that one is unset)
 # and this file's monthly pass, which reads what the hooks stored.
 
 on_monthly_pulse_country = {

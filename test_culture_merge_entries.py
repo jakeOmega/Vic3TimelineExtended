@@ -600,14 +600,15 @@ class StatusTextTest(unittest.TestCase):
                     self.assertIn("ScriptValue('%s')" % want, text, "%s %s" % (merge.key, culture))
 
     def test_a_vanilla_wait_has_a_row_and_a_tooltip(self):
-        # One per distinct entry: German's North and South share the unification idea, so South German has none (R37).
+        # One per distinct entry. German and Yugoslav wait on nothing: the fervor copy took R37's waits' place.
         waits = [(m, p) for m in cfg.MERGES for p in gen.core_waits(m)]
         self.assertEqual(
             [(m.key, p.cultures[0]) for m, p in waits],
-            [("german", "north_german"), ("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("yugoslav", "serb"), ("american", "dixie")],
+            [("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("american", "dixie")],
         )
-        self.assertNotIn("je_te_cm_german_status_wait_south_german", self.loc)
-        self.assertNotIn("te_cmg_german_wait_south_german_tt", self.loc)
+        for key, culture in (("german", "north_german"), ("german", "south_german"), ("yugoslav", "serb")):
+            self.assertNotIn("je_te_cm_%s_status_wait_%s" % (key, culture), self.loc)
+            self.assertNotIn("te_cmg_%s_wait_%s_tt" % (key, culture), self.loc)
         for merge, part in waits:
             key, culture = merge.key, part.cultures[0]
             self.assertIn("je_te_cm_%s_status_wait_%s" % (key, culture), self.loc)
@@ -787,19 +788,25 @@ class CanStartTest(unittest.TestCase):
         # wait-listed entry in the generated triggers and effects would be the candidate's alone.
         text = squash(text_of(GEN_TRIGGERS)) + " " + squash(text_of(GEN_EFFECTS))
         entries = {e for m in cfg.MERGES for p in m.core + m.optional for e in p.wait_for}
-        self.assertIn("je_german_unification_idea", entries)
-        self.assertIn("je_the_balkan_league", entries)
+        self.assertIn("je_ukraine_cultural_renaissance", entries)
+        self.assertIn("je_acw_reincorporate", entries)
         unwrapped = re.sub(r"any_country = \{ (?:OR = \{ )?(?:has_journal_entry = \w+ )+\}(?: \})?", "", text)
         for entry in sorted(entries):
             self.assertIn("any_country = { has_journal_entry = %s }" % entry, text, entry)
             self.assertNotIn("has_journal_entry = %s" % entry, unwrapped, "%s is read for one country" % entry)
 
     def test_two_core_parts_on_one_entry_share_a_wait_but_each_has_a_join_gate(self):
-        german = [t for t, _ in self.items("german") if "_wait_" in t]
-        self.assertEqual(german, ["te_cmg_german_wait_north_german_tt"])
+        # No merge in the roster has two core parts on one entry since German's waits gave way to the fervor copy, so a
+        # roster of one pins it: the start shows one wait row per distinct entry, and each part keeps its own gate.
+        shared = cfg.Merge(
+            "shared", "cm_shared", cfg.MERGES[0].new,
+            core=(cfg.Part(("north_german",), None, ("je_x",)), cfg.Part(("south_german",), None, ("je_x",))),
+        )
+        self.assertEqual([p.cultures[0] for p in gen.core_waits(shared)], ["north_german"])
+        rendered = gen.render_triggers(gen.load_vanilla(), (shared,))
+        triggers = "\n".join(line.split("#", 1)[0].rstrip() for line in rendered.splitlines())
         for culture in ("north_german", "south_german"):
-            self.assertIsNotNone(block(self.triggers, "te_cmg_german_%s_waiting" % culture), culture)
-        self.assertEqual([p.cultures[0] for p in gen.core_waits(cfg.merge_by_key("german"))], ["north_german"])
+            self.assertIsNotNone(block(triggers, "te_cmg_shared_%s_waiting" % culture), culture)
         # Distinct entries keep a wait each.
         self.assertEqual(
             [p.cultures[0] for p in gen.core_waits(cfg.merge_by_key("east_slavic"))], ["ukrainian", "byelorussian"]

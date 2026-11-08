@@ -48,10 +48,13 @@ SELFCHECKS = (
     "cm_rate_inputs",
     "cm_census_yearly",
     "cm_switch_homeland",
+    "cm_fervor_copy",
 )
 # The checks that read merge state and so wait for the rule (ruling 4). Russification's reads the INJECTed outcome
-# of a vanilla entry, which has no rule gate (Task 7), and no merge variable.
-RULE_GATED = tuple(n for n in SELFCHECKS if n != "cm_russification_outcome")
+# of a vanilla entry, which has no rule gate (Task 7), and no merge variable; the fervor copy's rides the copy, which
+# has no rule gate either (it serves pops that stay switched with the rule off).
+UNGATED = ("cm_russification_outcome", "cm_fervor_copy")
+RULE_GATED = tuple(n for n in SELFCHECKS if n not in UNGATED)
 
 
 def latch(name):
@@ -206,10 +209,10 @@ class SelfCheckLogTest(unittest.TestCase):
             seen = " ".join(limit_text(a) for a in ancestors)
             self.assertIn("te_cm_system_enabled yes", seen, "%s %s is not gated on te_cm_system_enabled" % (verdict, name))
 
-    def test_russification_is_the_one_check_with_no_rule_gate(self):
-        # The INJECTed outcome carries no rule gate, and the check reads no merge variable.
+    def test_the_ungated_checks_have_no_rule_gate(self):
+        # The INJECTed outcome and the fervor copy carry no rule gate, and their checks read no merge state.
         for verdict, name, node, ancestors in self.logs:
-            if name == "cm_russification_outcome":
+            if name in UNGATED:
                 self.assertNotIn("te_cm_system_enabled", " ".join(limit_text(a) for a in ancestors))
 
     def test_every_number_is_read_from_a_global_set_before_the_line(self):
@@ -254,6 +257,8 @@ class HookTest(unittest.TestCase):
         (MERGE_EFFECTS, "te_cm_census_part", "te_cm_chk_census = { MERGE = $MERGE$ CULTURE = $CULTURE$ }"),
         (MERGE_EFFECTS, "te_cm_convert_part", "te_cm_chk_conversion = { CULTURE = $CULTURE$ RESULT = $RESULT$ }"),
         (MERGE_EFFECTS, "te_cm_switch_part", "te_cm_chk_switch = { CULTURE = $CULTURE$ }"),
+        (MERGE_EFFECTS, "te_cm_copy_fervor", "te_cm_chk_fervor = { CULTURE = $CULTURE$ }"),
+        (MERGE_ON_ACTIONS, "te_cm_monthly_on_action", "te_cm_chk_fervor_monthly = yes"),
         (MERGE_ON_ACTIONS, "te_cm_yearly_on_action", "te_cm_chk_census_year = yes"),
         (MERGE_ON_ACTIONS, "te_cm_formed_on_action", "te_cm_chk_formation = yes"),
     )
@@ -360,6 +365,11 @@ class LatchTest(unittest.TestCase):
         # switch_homeland: a part with homeland states to check.
         switch = squash(block(text, "te_cm_chk_switch"))
         self.assertIn("local_var:te_cm_chk_n > 0", switch)
+        # fervor_copy: a source with fervor to copy, and the culture zeroed with a literal before the named set, so a
+        # set that did nothing reads 0, not the target.
+        fervor = squash(block(text, "te_cm_chk_fervor"))
+        self.assertIn("scope:te_cm_fervor_source = { culture_current_fervor >= 5 }", fervor)
+        self.assertLess(fervor.index("set_fervor = 0"), fervor.index("set_fervor = te_cm_fervor_of_source"))
         # conversion_merges_pops: the first pass must have made a result pop to compare the second against.
         monthly = squash(block(text, "te_cm_chk_conversion_monthly"))
         self.assertIn("global_var:te_cm_chk_conv_inc1 >= 1", monthly)
@@ -388,6 +398,12 @@ class LatchTest(unittest.TestCase):
                        "global_var:te_cm_chk_sw_by_global = global_var:te_cm_chk_sw_after",
                        "is_homeland = scope:te_cm_chk_sw_res", "is_homeland = global_var:te_cm_chk_sw_result"):
             self.assertIn(needle, switch)
+        fervor = squash(block(text, "te_cm_chk_fervor_monthly"))
+        for needle in ("global_var:te_cm_chk_fv_later >= global_var:te_cm_chk_fv_low",
+                       "global_var:te_cm_chk_fv_later <= global_var:te_cm_chk_fv_high",
+                       "change_global_variable = { name = te_cm_chk_fv_low add = -2 }",
+                       "change_global_variable = { name = te_cm_chk_fv_high add = 2 }"):
+            self.assertIn(needle, fervor)
         russia = squash(block(text, "te_cm_chk_russification_monthly"))
         self.assertIn("has_global_variable = te_cm_russification_injected_fired", russia)
         self.assertIn("te_cm_russification_complete = yes", russia)

@@ -186,13 +186,6 @@ je_te_cm_german = {
 				}
 			}
 			triggered_desc = {
-				desc = je_te_cm_german_status_wait_north_german
-				trigger = {
-					te_cmg_german_start_basics = yes
-					te_cmg_german_north_german_waiting = yes
-				}
-			}
-			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_german_can_start = yes
@@ -1272,13 +1265,6 @@ je_te_cm_yugoslav = {
 					NOT = {
 						var:te_cm_sol_ok_yugoslav ?= 1
 					}
-				}
-			}
-			triggered_desc = {
-				desc = je_te_cm_yugoslav_status_wait_serb
-				trigger = {
-					te_cmg_yugoslav_start_basics = yes
-					te_cmg_yugoslav_serb_waiting = yes
 				}
 			}
 			triggered_desc = {

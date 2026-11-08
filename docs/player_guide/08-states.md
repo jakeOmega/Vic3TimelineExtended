@@ -359,19 +359,20 @@ hand where history differs from the game's traits: Occitan and Wallonian join
 French at tier 1, Catalan at tier 2.
 
 A few parts wait while any country has a base-game journal entry open that
-works on them. A merge doesn't start while a core part waits: German for German
-National Identity, East Slavic for the Ukrainian and Byelorussian Renaissances,
-Yugoslav for The Balkan League, and American for Readmit the Secessionist
-States. It waits at most 20 years, then goes ahead. A waiting optional part
-stays out until the entry closes, or in Yugoslav and American until the start
-has waited its 20 years: Bulgarian in Yugoslav, Afro-American (Equality for
-All) in American and Anglophone, and Dixie (Readmit the Secessionist States) in
-Anglophone.
+works on them. A merge doesn't start while a core part waits: East Slavic for
+the Ukrainian and Byelorussian Renaissances, and American for Readmit the
+Secessionist States. It waits at most 20 years, then goes ahead. A waiting
+optional part stays out until the entry closes, or in American until the start
+has waited its 20 years: Afro-American (Equality for All) in American and
+Anglophone, and Dixie (Readmit the Secessionist States) in Anglophone.
 
-German National Identity completes on North and South German fervor, which a
-switch would stop growing. Forming Germany needs Pan-nationalism or that
-entry's completion, so a merge doesn't keep a country with Pan-nationalism from
-forming it.
+A culture that has switched has no people left, but it keeps the fervor of the
+culture it became: each month its fervor is set to the merged culture's, and
+at the switch the merged culture takes the part's fervor if its own is lower.
+So base-game content that reads it goes on working: German National Identity
+completes on German fervor once North and South German have switched, The
+Balkan League reads Yugoslav fervor where it read Serb, and the German, Italian
+and Yugoslav national movements can still form.
 
 ### How fast a merge converts
 

@@ -55,6 +55,10 @@ te_cm_yearly_on_action = {
 # Country scope, the monthly pulse. The parts that have switched stay primary cultures for good (spec 7), so
 # a country that has one as primary gets the result too, and pops of a switched part that reappear are
 # converted. Paused with the rule, resumed with it.
+# Then, once a month for the world (the first country whose pulse finds te_cm_fervor_lock run out), every
+# switched culture takes the fervor of the culture it switched into (te_cmg_copy_fervor_all), so vanilla's reads
+# of a merged-away culture's fervor read the merged culture's. No rule gate: the pops it serves stay switched with
+# the rule off. The lock's 25 days are under a month, so a month never goes without a copy.
 on_monthly_pulse_country = {
 	on_actions = { te_cm_monthly_on_action }
 }
@@ -64,6 +68,14 @@ te_cm_monthly_on_action = {
 		if = {
 			limit = { te_cm_system_enabled = yes }
 			te_cmg_monthly_country = yes
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_cm_fervor_lock } }
+			set_global_variable = { name = te_cm_fervor_lock value = yes days = 25 }
+			# TEMPORARY self-check cm_fervor_copy (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+			# Reads last month's copy before this month's.
+			te_cm_chk_fervor_monthly = yes
+			te_cmg_copy_fervor_all = yes
 		}
 	}
 }

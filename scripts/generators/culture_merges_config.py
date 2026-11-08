@@ -92,15 +92,10 @@ def _new(name: str, r: int, g: int, b: int) -> NewCulture:
 MERGES: tuple[Merge, ...] = (
     Merge(
         "german", "cm_german", _new("German", 118, 120, 128),
-        # Vanilla's GER formation needs Pan-Nationalism or the variable je_german_unification_idea sets
-        # when it completes (common/country_formation/00_major_formables.txt), and the entry completes
-        # on North German fervor 40 and South German fervor 30. A part that switched first would leave
-        # a would-be unifier without the technology unable to form Germany, so both core parts wait
-        # for the entry to end in every country (R37).
-        core=(
-            _p("north_german", wait_for=("je_german_unification_idea",)),
-            _p("south_german", wait_for=("je_german_unification_idea",)),
-        ),
+        # je_german_unification_idea completes on North German fervor 40 and South German fervor 30. No
+        # wait: a switched part's fervor follows the merged culture's (te_cmg_copy_fervor_all; owner,
+        # 2026-11-07, in place of R37's wait), so the entry reads German fervor once a part has switched.
+        core=(_p("north_german"), _p("south_german")),
         optional=(_p("alemannic"), _p("east_german")),
     ),
     Merge(
@@ -124,9 +119,10 @@ MERGES: tuple[Merge, ...] = (
     Merge(
         "yugoslav", "cm_yugoslav", _new("Yugoslav", 28, 84, 150),
         # je_the_balkan_league can only be activated while Serb, Bulgarian or Greek fervor is above 75
-        # (05_balkan_wars.txt:58-62), so Serb and Bulgarian wait for it to end in every country (R37).
-        core=(_p("serb", wait_for=("je_the_balkan_league",)), _p("croat"), _p("bosniak")),
-        optional=(_p("slovene"), _p("bulgarian", wait_for=("je_the_balkan_league",))),
+        # (05_balkan_wars.txt:58-62). No wait: a switched part's fervor follows Yugoslav fervor
+        # (te_cmg_copy_fervor_all; owner, 2026-11-07, in place of R37's wait).
+        core=(_p("serb"), _p("croat"), _p("bosniak")),
+        optional=(_p("slovene"), _p("bulgarian")),
     ),
     Merge(
         "czechoslovak", "cm_czechoslovak", _new("Czechoslovak", 205, 90, 130),

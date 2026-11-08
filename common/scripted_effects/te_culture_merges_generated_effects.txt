@@ -160,14 +160,12 @@ te_cmg_german_join_ready = {
 		if = {
 			limit = {
 				te_cmg_german_north_german_can_join = yes
-				NOT = { te_cmg_german_north_german_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = german CULTURE = north_german INDEX = 1 }
 		}
 		if = {
 			limit = {
 				te_cmg_german_south_german_can_join = yes
-				NOT = { te_cmg_german_south_german_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = german CULTURE = south_german INDEX = 1 }
 		}
@@ -205,24 +203,6 @@ te_cmg_start_german = {
 #    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
 # 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
 te_cmg_german_settle = {
-	if = {
-		limit = {
-			te_cmg_german_start_basics = yes
-			OR = {
-				any_country = {
-					has_journal_entry = je_german_unification_idea
-				}
-			}
-		}
-		if = {
-			limit = { NOT = { has_variable = te_cm_wait_years_german } }
-			set_variable = { name = te_cm_wait_years_german value = 0 }
-		}
-		if = {
-			limit = { var:te_cm_wait_years_german < te_cm_wait_cap_years }
-			change_variable = { name = te_cm_wait_years_german add = 1 }
-		}
-	}
 	if = {
 		limit = {
 			te_cm_system_enabled = yes
@@ -1137,7 +1117,6 @@ te_cmg_yugoslav_join_ready = {
 		if = {
 			limit = {
 				te_cmg_yugoslav_serb_can_join = yes
-				NOT = { te_cmg_yugoslav_serb_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = yugoslav CULTURE = serb INDEX = 5 }
 		}
@@ -1162,7 +1141,6 @@ te_cmg_yugoslav_join_ready = {
 		if = {
 			limit = {
 				te_cmg_yugoslav_bulgarian_can_join = yes
-				NOT = { te_cmg_yugoslav_bulgarian_waiting = yes }
 			}
 			te_cm_join_part = { MERGE = yugoslav CULTURE = bulgarian INDEX = 5 }
 		}
@@ -1193,24 +1171,6 @@ te_cmg_start_yugoslav = {
 #    a complete merge, whose finished entry is its end. Merge mechanics never key on the entry.
 # 3. Late joins: the starter of a running or complete merge brings in every part that now qualifies.
 te_cmg_yugoslav_settle = {
-	if = {
-		limit = {
-			te_cmg_yugoslav_start_basics = yes
-			OR = {
-				any_country = {
-					has_journal_entry = je_the_balkan_league
-				}
-			}
-		}
-		if = {
-			limit = { NOT = { has_variable = te_cm_wait_years_yugoslav } }
-			set_variable = { name = te_cm_wait_years_yugoslav value = 0 }
-		}
-		if = {
-			limit = { var:te_cm_wait_years_yugoslav < te_cm_wait_cap_years }
-			change_variable = { name = te_cm_wait_years_yugoslav add = 1 }
-		}
-	}
 	if = {
 		limit = {
 			te_cm_system_enabled = yes
@@ -14385,6 +14345,486 @@ te_cmg_monthly_country = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_kikuyu }
 		te_cm_monthly_switched_culture = { CULTURE = kikuyu }
+	}
+}
+
+# Any scope. Once a month, with no rule gate (te_cm_monthly_on_action, behind te_cm_fervor_lock): every culture that has
+# switched takes the fervor of the culture it switched into (te_cm_copy_fervor), so vanilla's reads of its fervor read
+# the merged culture's. A culture is copied after the one it switched into (fervor_copy_order): cm_italian, which
+# switches into cm_latin, before North Italian, so a chain settles in one pass. One variable check per culture while
+# nothing has switched.
+te_cmg_copy_fervor_all = {
+	if = {
+		limit = { has_global_variable = te_cm_switched_north_german }
+		te_cm_copy_fervor = { CULTURE = north_german }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_south_german }
+		te_cm_copy_fervor = { CULTURE = south_german }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_alemannic }
+		te_cm_copy_fervor = { CULTURE = alemannic }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_east_german }
+		te_cm_copy_fervor = { CULTURE = east_german }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_swedish }
+		te_cm_copy_fervor = { CULTURE = swedish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_danish }
+		te_cm_copy_fervor = { CULTURE = danish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_norwegian }
+		te_cm_copy_fervor = { CULTURE = norwegian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_icelandic }
+		te_cm_copy_fervor = { CULTURE = icelandic }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_szekely }
+		te_cm_copy_fervor = { CULTURE = szekely }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_flemish }
+		te_cm_copy_fervor = { CULTURE = flemish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_karelian }
+		te_cm_copy_fervor = { CULTURE = karelian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_british }
+		te_cm_copy_fervor = { CULTURE = british }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_american }
+		te_cm_copy_fervor = { CULTURE = cm_american }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_anglo_canadian }
+		te_cm_copy_fervor = { CULTURE = anglo_canadian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_australian }
+		te_cm_copy_fervor = { CULTURE = australian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_nordestino }
+		te_cm_copy_fervor = { CULTURE = nordestino }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_paulista }
+		te_cm_copy_fervor = { CULTURE = paulista }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_amazonic }
+		te_cm_copy_fervor = { CULTURE = amazonic }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_sulista }
+		te_cm_copy_fervor = { CULTURE = sulista }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_afro_brazilian }
+		te_cm_copy_fervor = { CULTURE = afro_brazilian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_north_andean }
+		te_cm_copy_fervor = { CULTURE = north_andean }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_south_andean }
+		te_cm_copy_fervor = { CULTURE = south_andean }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_peruvian }
+		te_cm_copy_fervor = { CULTURE = peruvian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bolivian }
+		te_cm_copy_fervor = { CULTURE = bolivian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_colombian }
+		te_cm_copy_fervor = { CULTURE = colombian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_venezuelan }
+		te_cm_copy_fervor = { CULTURE = venezuelan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_ecuadorian }
+		te_cm_copy_fervor = { CULTURE = ecuadorian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_yue }
+		te_cm_copy_fervor = { CULTURE = yue }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_min }
+		te_cm_copy_fervor = { CULTURE = min }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_hakka }
+		te_cm_copy_fervor = { CULTURE = hakka }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_ryukyuan }
+		te_cm_copy_fervor = { CULTURE = ryukyuan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_maghrebi }
+		te_cm_copy_fervor = { CULTURE = maghrebi }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_misri }
+		te_cm_copy_fervor = { CULTURE = misri }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_mashriqi }
+		te_cm_copy_fervor = { CULTURE = mashriqi }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bedouin }
+		te_cm_copy_fervor = { CULTURE = bedouin }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_yemenite }
+		te_cm_copy_fervor = { CULTURE = yemenite }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_sudanese }
+		te_cm_copy_fervor = { CULTURE = sudanese }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_haratin }
+		te_cm_copy_fervor = { CULTURE = haratin }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bidan }
+		te_cm_copy_fervor = { CULTURE = bidan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_luri }
+		te_cm_copy_fervor = { CULTURE = luri }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_tajik }
+		te_cm_copy_fervor = { CULTURE = tajik }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_hazara }
+		te_cm_copy_fervor = { CULTURE = hazara }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_avadhi }
+		te_cm_copy_fervor = { CULTURE = avadhi }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bundeli }
+		te_cm_copy_fervor = { CULTURE = bundeli }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_chhattisgarhi }
+		te_cm_copy_fervor = { CULTURE = chhattisgarhi }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bageli }
+		te_cm_copy_fervor = { CULTURE = bageli }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_tamil }
+		te_cm_copy_fervor = { CULTURE = tamil }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_kannada }
+		te_cm_copy_fervor = { CULTURE = kannada }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_malayalam }
+		te_cm_copy_fervor = { CULTURE = malayalam }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_telegu }
+		te_cm_copy_fervor = { CULTURE = telegu }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_nguni }
+		te_cm_copy_fervor = { CULTURE = nguni }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_zulu }
+		te_cm_copy_fervor = { CULTURE = zulu }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_xhosa }
+		te_cm_copy_fervor = { CULTURE = xhosa }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_french }
+		te_cm_copy_fervor = { CULTURE = french }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_italian }
+		te_cm_copy_fervor = { CULTURE = cm_italian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_spanish }
+		te_cm_copy_fervor = { CULTURE = spanish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_portuguese }
+		te_cm_copy_fervor = { CULTURE = portuguese }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_romanian }
+		te_cm_copy_fervor = { CULTURE = romanian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_platine }
+		te_cm_copy_fervor = { CULTURE = cm_platine }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_chilean }
+		te_cm_copy_fervor = { CULTURE = chilean }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_east_slavic }
+		te_cm_copy_fervor = { CULTURE = cm_east_slavic }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_czechoslovak }
+		te_cm_copy_fervor = { CULTURE = cm_czechoslovak }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_yugoslav }
+		te_cm_copy_fervor = { CULTURE = cm_yugoslav }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_polish }
+		te_cm_copy_fervor = { CULTURE = polish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+		te_cm_copy_fervor = { CULTURE = cm_oghuz_turkic }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_uzbek }
+		te_cm_copy_fervor = { CULTURE = uzbek }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_kazak }
+		te_cm_copy_fervor = { CULTURE = kazak }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_tatar }
+		te_cm_copy_fervor = { CULTURE = tatar }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_kirgiz }
+		te_cm_copy_fervor = { CULTURE = kirgiz }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bashkir }
+		te_cm_copy_fervor = { CULTURE = bashkir }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_crimean_tatar }
+		te_cm_copy_fervor = { CULTURE = crimean_tatar }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_caucasian_turk }
+		te_cm_copy_fervor = { CULTURE = caucasian_turk }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_uighur }
+		te_cm_copy_fervor = { CULTURE = uighur }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_cm_indonesian }
+		te_cm_copy_fervor = { CULTURE = cm_indonesian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_filipino }
+		te_cm_copy_fervor = { CULTURE = filipino }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_swahili }
+		te_cm_copy_fervor = { CULTURE = swahili }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_nyamwezi }
+		te_cm_copy_fervor = { CULTURE = nyamwezi }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_sukuma }
+		te_cm_copy_fervor = { CULTURE = sukuma }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_yao }
+		te_cm_copy_fervor = { CULTURE = yao }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_makua }
+		te_cm_copy_fervor = { CULTURE = makua }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_lacustrine_bantu }
+		te_cm_copy_fervor = { CULTURE = lacustrine_bantu }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_kikuyu }
+		te_cm_copy_fervor = { CULTURE = kikuyu }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_north_italian }
+		te_cm_copy_fervor = { CULTURE = north_italian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_south_italian }
+		te_cm_copy_fervor = { CULTURE = south_italian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_corsican }
+		te_cm_copy_fervor = { CULTURE = corsican }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_russian }
+		te_cm_copy_fervor = { CULTURE = russian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_ukrainian }
+		te_cm_copy_fervor = { CULTURE = ukrainian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_byelorussian }
+		te_cm_copy_fervor = { CULTURE = byelorussian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_serb }
+		te_cm_copy_fervor = { CULTURE = serb }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_croat }
+		te_cm_copy_fervor = { CULTURE = croat }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bosniak }
+		te_cm_copy_fervor = { CULTURE = bosniak }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_slovene }
+		te_cm_copy_fervor = { CULTURE = slovene }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bulgarian }
+		te_cm_copy_fervor = { CULTURE = bulgarian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_czech }
+		te_cm_copy_fervor = { CULTURE = czech }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_slovak }
+		te_cm_copy_fervor = { CULTURE = slovak }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_sorb }
+		te_cm_copy_fervor = { CULTURE = sorb }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_wallonian }
+		te_cm_copy_fervor = { CULTURE = wallonian }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_occitan }
+		te_cm_copy_fervor = { CULTURE = occitan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_catalan }
+		te_cm_copy_fervor = { CULTURE = catalan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_scottish }
+		te_cm_copy_fervor = { CULTURE = scottish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_yankee }
+		te_cm_copy_fervor = { CULTURE = yankee }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_dixie }
+		te_cm_copy_fervor = { CULTURE = dixie }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_afro_american }
+		te_cm_copy_fervor = { CULTURE = afro_american }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_platinean }
+		te_cm_copy_fervor = { CULTURE = platinean }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_argentine }
+		te_cm_copy_fervor = { CULTURE = argentine }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_uruguayan }
+		te_cm_copy_fervor = { CULTURE = uruguayan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_paraguayan }
+		te_cm_copy_fervor = { CULTURE = paraguayan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_turkish }
+		te_cm_copy_fervor = { CULTURE = turkish }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_azerbaijani }
+		te_cm_copy_fervor = { CULTURE = azerbaijani }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_turkmen }
+		te_cm_copy_fervor = { CULTURE = turkmen }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_javan }
+		te_cm_copy_fervor = { CULTURE = javan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_malay }
+		te_cm_copy_fervor = { CULTURE = malay }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_sumatran }
+		te_cm_copy_fervor = { CULTURE = sumatran }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_bornean }
+		te_cm_copy_fervor = { CULTURE = bornean }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_balinese }
+		te_cm_copy_fervor = { CULTURE = balinese }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_visayan }
+		te_cm_copy_fervor = { CULTURE = visayan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_tagalog }
+		te_cm_copy_fervor = { CULTURE = tagalog }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_ilocano }
+		te_cm_copy_fervor = { CULTURE = ilocano }
 	}
 }
 

@@ -7,7 +7,6 @@ generator writes the mod's `cm_` cultures, a mod-aware load would find them
 """
 
 import colorsys
-import json
 import math
 import os
 import re
@@ -171,40 +170,15 @@ class RosterTest(unittest.TestCase):
         self.assertEqual(waits[("american", "afro_american")], ("je_acw_equality",))
         self.assertEqual(waits[("east_slavic", "ukrainian")], ("je_ukraine_cultural_renaissance",))
         self.assertEqual(waits[("east_slavic", "byelorussian")], ("je_belarus_cultural_renaissance",))
-        self.assertEqual(
-            sorted(k for k in waits if k[0] in ("german", "yugoslav")),
-            [("german", "north_german"), ("german", "south_german"), ("yugoslav", "bulgarian"), ("yugoslav", "serb")],
-        )
+        # The German and Yugoslav parts don't wait: their fervor follows the merged culture's (test_culture_merge_fervor).
+        self.assertEqual(sorted(k for k in waits if k[0] in ("german", "yugoslav")), [])
 
-    def test_the_german_core_parts_wait_on_the_unification_idea(self):
-        # R37. Vanilla's GER formation needs Pan-Nationalism or the variable je_german_unification_idea sets
-        # when it completes, and it completes on North German fervor 40 and South German fervor 30: a part
-        # that switched first would leave a would-be unifier without the technology unable to form Germany.
-        german = cfg.merge_by_key("german")
-        for part in german.core:
-            self.assertEqual(part.wait_for, ("je_german_unification_idea",), part.cultures)
-        self.assertEqual(
-            [c for p in german.optional for c in p.cultures if p.wait_for], [], "Alemannic and East German are not read"
-        )
-        data = snapshot()
-        # The formation's variable test and the entry's fervor outcome, in the committed vanilla snapshot.
-        self.assertIn('"has_variable": ["=", "je_german_unification_idea"]', json.dumps(data["Country Formation"]["GER"]))
-        outcome = json.dumps(data["Journal Entries"]["je_german_unification_idea"])
-        self.assertIn("culture_current_fervor", outcome)
-        for culture in ("north_german", "south_german"):
-            self.assertIn("cu:" + culture, outcome)
-
-    def test_the_yugoslav_parts_that_open_the_balkan_league_wait_on_it(self):
-        # R37. je_the_balkan_league can only be activated while Serb or Bulgarian fervor is above 75.
-        yugoslav = cfg.merge_by_key("yugoslav")
-        waiting = {c for p in yugoslav.core + yugoslav.optional if p.wait_for for c in p.cultures}
-        self.assertEqual(waiting, {"serb", "bulgarian"})
-        for p in yugoslav.core + yugoslav.optional:
-            if p.wait_for:
-                self.assertEqual(p.wait_for, ("je_the_balkan_league",))
-        league = json.dumps(snapshot()["Journal Entries"]["je_the_balkan_league"])
-        self.assertIn("cu:serb", league)
-        self.assertIn("cu:bulgarian", league)
+    def test_the_german_and_yugoslav_parts_wait_on_nothing(self):
+        # R37's waits on je_german_unification_idea and je_the_balkan_league gave way to the fervor copy (owner,
+        # 2026-11-07): those entries read the parts' fervor, and a switched part's follows the merged culture's.
+        for key in ("german", "yugoslav"):
+            merge = cfg.merge_by_key(key)
+            self.assertEqual([c for p in merge.core + merge.optional for c in p.cultures if p.wait_for], [], key)
 
     def test_every_wait_names_a_vanilla_journal_entry(self):
         entries = snapshot()["Journal Entries"]

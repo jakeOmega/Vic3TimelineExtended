@@ -888,9 +888,12 @@ class StateIsVariablesTest(unittest.TestCase):
         # measure dominance, switch and keep the primary cultures (Task 6) sit in the same file but are not the
         # census: the release, the unjoin and the switch are the places a global variable is removed, and
         # test_culture_merge_entries and test_culture_merge_switch pin what each of them writes.
+        # The monthly fervor copy (te_cm_copy_fervor, and the lock in te_cm_monthly_on_action) is not the census either;
+        # test_culture_merge_fervor pins it.
         helpers = (
             "te_cm_start_merge", "te_cm_join_part", "te_cm_unjoin_part", "te_cm_release_starter",
             "te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part", "te_cm_monthly_switched_culture",
+            "te_cm_copy_fervor", "te_cm_monthly_on_action",
         )
 
         def census_only(path):

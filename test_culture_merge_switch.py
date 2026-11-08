@@ -602,6 +602,8 @@ class PrimaryUpkeepTest(unittest.TestCase):
             # The TEMPORARY formation self-check (test_culture_merge_selfchecks.py) is one call line inside the rule; the
             # shape holds with or without it, so deleting the self-checks needs no edit here.
             flat = squash(block(self.on_actions, name)).replace("te_cm_chk_formation = yes ", "")
+            # The monthly fervor copy sits beside the rule's block on purpose, with no rule gate (test_culture_merge_fervor).
+            flat = re.sub(r"if = \{ limit = \{ NOT = \{ has_global_variable = te_cm_fervor_lock \} \} .*?te_cmg_copy_fervor_all = yes \} ", "", flat)
             self.assertEqual(
                 flat,
                 "effect = { if = { limit = { te_cm_system_enabled = yes } %s = yes } }" % call, name,
