@@ -44,3 +44,59 @@ te_cm_in_sphere = {
 		}
 	}
 }
+
+# ---- Russification (spec section 7; plan Task 7) ----
+# Vanilla's je_russification completes when 65% of the western borderlands' states are
+# at least 15% Russian. Russian pops that merged into East Slavic no longer count, so the
+# mod injects a second success outcome (journal_entries/te_vanilla_russification_merge.txt)
+# whose trigger is vanilla's with this one test widened.
+#
+# State scope. The state is at least vanilla's minimum Russian-or-East-Slavic.
+# je_russification_state_russian_culture_min is a global script value (vanilla's
+# event_values.txt, 0.15), readable here. No rule gate: pops that already converted stay
+# East Slavic whether the rule is on or off, so counting them is right either way.
+te_cm_russification_state_ok = {
+	te_cm_russian_or_east_slavic_share >= je_russification_state_russian_culture_min
+}
+
+# Country scope. Vanilla's success-outcome trigger for je_russification
+# (game/common/journal_entries/08_russification.txt), copied as it stands except that its
+# `culture_percent_state = { target = cu:russian value >= ... }` test is
+# te_cm_russification_state_ok. The body reads no ROOT or PREV, so it means the same
+# here as in the outcome. test_culture_merge_russification.py compares it with the
+# committed vanilla parse, so a vanilla patch to the trigger fails the test.
+te_cm_russification_complete = {
+	OR = {
+		institution_investment_level = {
+			institution = institution_colonial_affairs
+			value >= 2
+		}
+		institution_investment_level = {
+			institution = institution_schools
+			value >= 2
+		}
+	}
+	bureaucracy >= 0
+	approaching_bureaucracy_shortage = no
+	any_state_in_finland_old = {
+		is_incorporated = yes
+		any_scope_building = {
+			is_building_type = building_naval_fortification
+			level >= 5
+		}
+	}
+	any_state_in_baltic_states_old = {
+		is_incorporated = yes
+		any_scope_building = {
+			is_building_type = building_port
+			level >= 5
+		}
+	}
+	any_state_in_russia_western_borderlands = {
+		percent >= je_russification_region_goal_percent
+		owner ?= c:RUS
+		is_incorporated = yes
+		turmoil < je_russification_state_turmoil_max
+		te_cm_russification_state_ok = yes
+	}
+}

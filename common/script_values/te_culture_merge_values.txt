@@ -140,3 +140,21 @@ te_cm_pop_rate = {
 	min = 0
 	max = 0.5
 }
+
+# ---- Russification (spec section 7; plan Task 7) ----
+# State scope. The share of the state's pops that are Russian or East Slavic (0 to 1).
+# Vanilla's Russification entry completes on a state's Russian share
+# (culture_percent_state target = cu:russian, at je_russification_state_russian_culture_min),
+# and a Russian pop that merged into East Slavic no longer counts there. The injected
+# outcome (journal_entries/te_vanilla_russification_merge.txt) reads this instead, through
+# te_cm_russification_state_ok. Pops of both cultures over all the state's pops, the same
+# ratio culture_percent_state takes of one culture; the denominator is floored at 1 so an
+# empty state reads 0.
+te_cm_russian_or_east_slavic_share = {
+	value = "population_by_culture(cu:russian)"
+	add = "population_by_culture(cu:cm_east_slavic)"
+	divide = {
+		value = state_population
+		min = 1
+	}
+}

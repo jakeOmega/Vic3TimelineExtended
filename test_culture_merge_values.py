@@ -36,6 +36,9 @@ LOC_DIR = ROOT / "localization/english"
 
 SPEED = "country_culture_merge_speed_mult"
 RATE_BLOCK = "te_cm_pop_rate"
+# Values that are computed per scope, not numbers: the pop-scope rate and the state-scope
+# Russification share (test_culture_merge_russification.py reads that one).
+NON_NUMBER_BLOCKS = (RATE_BLOCK, "te_cm_russian_or_east_slavic_share")
 
 
 def unwrap(value):
@@ -68,7 +71,7 @@ def values():
     parsed = parse(VALUES)
     out = {}
     for key, raw in parsed.items():
-        if key == RATE_BLOCK:
+        if key in NON_NUMBER_BLOCKS:
             continue
         if isinstance(raw, dict):
             raw = unwrap(raw["value"])
