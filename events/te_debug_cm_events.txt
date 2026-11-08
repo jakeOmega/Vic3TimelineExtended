@@ -1,0 +1,66 @@
+﻿# ============================================================================
+# CULTURE MERGES TEST CONSOLE: fired only from the console: `event te_debug_cm.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way to run script by hand. Nothing in the
+# mod fires this event. Every option waits for the rule (te_cm_system_enabled), as the system does, and writes to
+# debug.log; the dump's helpers are in common/scripted_effects/te_debug_cm_effects.txt.
+#
+#   A  run the census now: te_cmg_census_all, with no census lock and no year guard. It adds one to the years-together
+#      counters of every tier-1b and tier-2 part that passes, so a second run in the same year counts a year twice
+#   B  run this country's yearly conversion now (te_cmg_yearly_country): every joined part of every merge it is in the
+#      sphere of converts one more step. The real yearly pulse still runs on top
+#   C  run the dominance step now (te_cmg_dominance_all): each joined part's dominance is recomputed from the last
+#      census, and every part at or over the switch share switches (the step is the switch; nothing more is forced)
+#   D  log every te_cm_ variable of this country's merges, and of every merge that is running or complete (TE_CM_DEBUG)
+#
+# The self-checks are separate (TE_SELF_CHECK in debug.log; docs/testing/culture-merges-playtest.md).
+# ============================================================================
+namespace = te_debug_cm
+
+te_debug_cm.1 = { # REVIEWED 2026-11-07: console-only test event (event te_debug_cm.1); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/cultural_exhibition_grand.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_cm.1.t
+	desc = te_debug_cm.1.d
+	flavor = te_debug_cm.1.f
+
+	# The census now, ignoring the lock.
+	option = {
+		name = te_debug_cm.1.a
+		trigger = { te_cm_system_enabled = yes }
+		te_cmg_census_all = yes
+	}
+
+	# This country's conversion step now.
+	option = {
+		name = te_debug_cm.1.b
+		trigger = { te_cm_system_enabled = yes }
+		te_cmg_yearly_country = yes
+	}
+
+	# The dominance step, and the switch of every joined part at or over the threshold.
+	option = {
+		name = te_debug_cm.1.c
+		trigger = { te_cm_system_enabled = yes }
+		te_cmg_dominance_all = yes
+	}
+
+	# Every te_cm_ variable of this country's merges, to debug.log.
+	option = {
+		name = te_debug_cm.1.d_option
+		trigger = { te_cm_system_enabled = yes }
+		te_cmg_debug_dump = yes
+	}
+
+	option = {
+		name = te_debug_cm.1.z
+		default_option = yes
+	}
+}

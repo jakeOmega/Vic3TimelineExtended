@@ -4632,7 +4632,10 @@ company_ig_farben = {
 				level >= 5
 			}
 		}
-		country_has_primary_culture = cu:north_german
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:cm_german
+		}
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
@@ -4703,7 +4706,7 @@ company_shell = {
 		}
 		OR = {
 			country_has_primary_culture = cu:dutch
-			country_has_primary_culture = cu:british
+			country_has_primary_culture = cu:british # REVIEWED 2026-11-07 (culture_merge_ref): cm_anglophone left out: Shell Pernis is Anglo-Dutch, and Britain, America, Canada and Australia would all unlock it
 		}
 	}
 	prosperity_modifier = {
@@ -4839,7 +4842,7 @@ company_sibur = {
 				level >= 5
 			}
 		}
-		country_has_primary_culture = cu:russian
+		country_has_primary_culture = cu:russian # REVIEWED 2026-11-07 (culture_merge_ref): Sibur is a Russian state-linked complex; Russia keeps russian as a primary culture, and cm_east_slavic or cm_pan_slavic would also open it to Ukrainian and Belarusian states
 	}
 	prosperity_modifier = {
 		country_production_tech_research_speed_mult = 0.10

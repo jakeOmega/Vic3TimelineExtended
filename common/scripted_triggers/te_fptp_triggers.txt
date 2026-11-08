@@ -45,9 +45,10 @@ te_fptp_enacting_allowed_voting_law = {
 # the seed gives them the amendment once (te_fptp_seed).
 te_fptp_seed_eligible = {
 	is_in_geographic_region = geographic_region_north_america
-	OR = {
+	OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_anglophone left out: this restates vanilla's usa_two_party_system countries, and Britain, Canada and Australia are not that term
 		country_has_primary_culture = cu:yankee
 		country_has_primary_culture = cu:dixie
+		country_has_primary_culture = cu:cm_american
 	}
 	has_law_or_variant = law_type:law_presidential_republic
 	te_fptp_on_allowed_voting_law = yes
