@@ -240,6 +240,59 @@ def merge_by_key(key: str) -> Merge:
         raise KeyError("no culture merge with key %r" % key) from None
 
 
+def parts_of(result: str) -> set[str]:
+    """Every culture that fills a slot of a merge whose result is ``result``, the
+    result itself left out (an absorb merge's result is its own first core part).
+
+    A slot with alternatives (Anglophone's ``yankee`` / ``cm_american``) gives
+    all of them. Merges that share a result add their parts together.
+    """
+    return {
+        c
+        for m in MERGES
+        if m.result == result
+        for p in m.core + m.optional
+        for c in p.cultures
+        if c != result
+    }
+
+
+def successors_of(culture: str) -> set[str]:
+    """The cultures a part's pops can end up in: the result of every merge the
+    culture is a part of, and those results' own results, down the chain.
+
+    ``corsican`` gives ``{cm_italian, cm_latin}``, and ``scottish`` ``{british,
+    cm_anglophone}``. A culture is never its own successor, so an absorb merge's
+    result (``french``) is skipped in its own merge but still gets the next
+    link (``cm_latin``). It is empty for a culture no merge folds away
+    (``hungarian``).
+
+    This is the whole chain on purpose. A pop-level read (``has_pop_culture``)
+    follows the pops, and they change culture at every link, so the test must
+    name every result that can hold them. A country-level read
+    (``country_has_primary_culture``) loses nothing, because a part stays a
+    primary culture of every country that had it (spec section 7), so the later
+    links there are a judgment call about flavor, and
+    ``test_culture_merge_mod_refs`` lets a line decline them with a ``REVIEWED``
+    comment and a reason.
+    """
+    found: set[str] = set()
+    frontier = [culture]
+    for _ in range(_MAX_RESULT_CHAIN):
+        nxt = []
+        for c in frontier:
+            for m in MERGES:
+                if m.result == c:
+                    continue
+                if any(c in p.cultures for p in m.core + m.optional) and m.result not in found and m.result != culture:
+                    found.add(m.result)
+                    nxt.append(m.result)
+        if not nxt:
+            break
+        frontier = nxt
+    return found
+
+
 # ---------------------------------------------------------------------------
 # Traits
 # ---------------------------------------------------------------------------

@@ -358,5 +358,67 @@ class RosterTest(unittest.TestCase):
             cfg.merge_by_key("no_such_merge")
 
 
+class PartsAndSuccessorsTest(unittest.TestCase):
+    """parts_of and successors_of, which test_culture_merge_mod_refs reads."""
+
+    def test_parts_of_a_new_result(self):
+        self.assertEqual(
+            cfg.parts_of("cm_german"), {"north_german", "south_german", "alemannic", "east_german"}
+        )
+
+    def test_parts_of_an_absorb_result_leaves_the_result_out(self):
+        self.assertEqual(cfg.parts_of("french"), {"wallonian", "occitan", "catalan"})
+        self.assertEqual(cfg.parts_of("han"), {"yue", "min", "hakka"})
+
+    def test_parts_of_a_slot_with_alternatives_gives_both(self):
+        parts = cfg.parts_of("cm_anglophone")
+        self.assertIn("yankee", parts)
+        self.assertIn("cm_american", parts)
+
+    def test_parts_of_a_culture_nothing_merges_into_is_empty(self):
+        self.assertEqual(cfg.parts_of("german"), set())
+        self.assertEqual(cfg.parts_of("north_german"), set())
+
+    def test_parts_of_every_result_are_slot_cultures(self):
+        for m in cfg.MERGES:
+            slot = {c for p in m.core + m.optional for c in p.cultures}
+            self.assertTrue(cfg.parts_of(m.result) <= slot, m.key)
+            self.assertNotIn(m.result, cfg.parts_of(m.result), m.key)
+
+    def test_successors_follow_the_chain(self):
+        self.assertEqual(cfg.successors_of("north_german"), {"cm_german"})
+        self.assertEqual(cfg.successors_of("corsican"), {"cm_italian", "cm_latin"})
+        self.assertEqual(cfg.successors_of("scottish"), {"british", "cm_anglophone"})
+        self.assertEqual(cfg.successors_of("yankee"), {"cm_american", "cm_anglophone"})
+        self.assertEqual(cfg.successors_of("russian"), {"cm_east_slavic", "cm_pan_slavic"})
+
+    def test_a_culture_is_not_its_own_successor(self):
+        # French is the absorb result of its own merge, and a Latin part.
+        self.assertEqual(cfg.successors_of("french"), {"cm_latin"})
+        self.assertEqual(cfg.successors_of("catalan"), {"french", "cm_latin"})
+        for m in cfg.MERGES:
+            for p in m.core + m.optional:
+                for c in p.cultures:
+                    self.assertNotIn(c, cfg.successors_of(c), "%s in %s" % (c, m.key))
+
+    def test_a_culture_no_merge_folds_away_has_none(self):
+        self.assertEqual(cfg.successors_of("hungarian"), set())
+        self.assertEqual(cfg.successors_of("han"), set())
+        self.assertEqual(cfg.successors_of("cm_latin"), set())
+        self.assertEqual(cfg.successors_of("german"), set())
+
+    def test_a_culture_in_two_merges_gets_both_chains(self):
+        # Dixie is an American core part and an Anglophone optional one.
+        self.assertEqual(cfg.successors_of("dixie"), {"cm_american", "cm_anglophone"})
+        # Platinean joins Platine and, as an optional part, Latin.
+        self.assertEqual(cfg.successors_of("platinean"), {"cm_platine", "cm_latin"})
+
+    def test_successors_agree_with_parts_of(self):
+        # Every direct result of a part lists that part in parts_of.
+        for m in cfg.MERGES:
+            for part in cfg.parts_of(m.result):
+                self.assertIn(m.result, cfg.successors_of(part), "%s -> %s" % (part, m.result))
+
+
 if __name__ == "__main__":
     unittest.main()
