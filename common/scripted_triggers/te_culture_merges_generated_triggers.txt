@@ -5,7 +5,7 @@
 # Any scope. The german merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_german_result_switched = {
-	has_global_variable = te_cm_switched_cm_german
+	always = no
 }
 
 # Country scope. Can this country start the german merge? The system is on, a core culture is
@@ -14,6 +14,7 @@ te_cmg_german_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_german_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_german
 	OR = {
 		country_has_primary_culture = cu:north_german
 		country_has_primary_culture = cu:south_german
@@ -296,6 +297,9 @@ te_cmg_german_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_german_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_german
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_german ?= 1 global_var:te_cm_state_german ?= 2 }
@@ -345,6 +349,7 @@ te_cmg_italian_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_italian_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_italian
 	OR = {
 		country_has_primary_culture = cu:north_italian
 		country_has_primary_culture = cu:south_italian
@@ -595,6 +600,9 @@ te_cmg_italian_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_italian_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_italian
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 }
@@ -639,7 +647,7 @@ te_cmg_italian_can_start = {
 # Any scope. The scandinavian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_scandinavian_result_switched = {
-	has_global_variable = te_cm_switched_cm_scandinavian
+	always = no
 }
 
 # Country scope. Can this country start the scandinavian merge? The system is on, a core culture is
@@ -648,6 +656,7 @@ te_cmg_scandinavian_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_scandinavian_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_scandinavian
 	OR = {
 		country_has_primary_culture = cu:swedish
 		country_has_primary_culture = cu:danish
@@ -942,6 +951,9 @@ te_cmg_scandinavian_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_scandinavian_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_scandinavian
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_scandinavian ?= 1 global_var:te_cm_state_scandinavian ?= 2 }
@@ -999,6 +1011,7 @@ te_cmg_east_slavic_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_east_slavic_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_east_slavic
 	OR = {
 		country_has_primary_culture = cu:russian
 		country_has_primary_culture = cu:ukrainian
@@ -1287,6 +1300,9 @@ te_cmg_east_slavic_core_switched = {
 # Country scope. Everything the east_slavic merge needs to start except its waits on vanilla entries
 # (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
 te_cmg_east_slavic_start_basics = {
+	hidden_trigger = {
+		exists = cu:cm_east_slavic
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 }
@@ -1384,6 +1400,7 @@ te_cmg_yugoslav_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_yugoslav_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_yugoslav
 	OR = {
 		country_has_primary_culture = cu:serb
 		country_has_primary_culture = cu:croat
@@ -1742,6 +1759,9 @@ te_cmg_yugoslav_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_yugoslav_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_yugoslav
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 }
@@ -1803,6 +1823,7 @@ te_cmg_czechoslovak_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_czechoslovak_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_czechoslovak
 	OR = {
 		country_has_primary_culture = cu:czech
 		country_has_primary_culture = cu:slovak
@@ -2053,6 +2074,9 @@ te_cmg_czechoslovak_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_czechoslovak_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_czechoslovak
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 }
@@ -2097,7 +2121,7 @@ te_cmg_czechoslovak_can_start = {
 # Any scope. The hungarian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_hungarian_result_switched = {
-	has_global_variable = te_cm_switched_hungarian
+	always = no
 }
 
 # Country scope. Can this country start the hungarian merge? The system is on, a core culture is
@@ -2322,7 +2346,7 @@ te_cmg_hungarian_can_start = {
 # Any scope. The dutch merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_dutch_result_switched = {
-	has_global_variable = te_cm_switched_dutch
+	always = no
 }
 
 # Country scope. Can this country start the dutch merge? The system is on, a core culture is
@@ -2547,7 +2571,7 @@ te_cmg_dutch_can_start = {
 # Any scope. The finnish merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_finnish_result_switched = {
-	has_global_variable = te_cm_switched_finnish
+	always = no
 }
 
 # Country scope. Can this country start the finnish merge? The system is on, a core culture is
@@ -3383,6 +3407,7 @@ te_cmg_american_core_left = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_american_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_american
 	OR = {
 		country_has_primary_culture = cu:yankee
 		country_has_primary_culture = cu:dixie
@@ -3667,6 +3692,9 @@ te_cmg_american_core_switched = {
 # Country scope. Everything the american merge needs to start except its waits on vanilla entries
 # (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
 te_cmg_american_start_basics = {
+	hidden_trigger = {
+		exists = cu:cm_american
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 }
@@ -3733,7 +3761,7 @@ te_cmg_american_can_start = {
 # Any scope. The anglophone merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_anglophone_result_switched = {
-	has_global_variable = te_cm_switched_cm_anglophone
+	always = no
 }
 
 # Country scope. Can this country start the anglophone merge? The system is on, a core culture is
@@ -3742,6 +3770,7 @@ te_cmg_anglophone_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_anglophone_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_anglophone
 	OR = {
 		country_has_primary_culture = cu:british
 		country_has_primary_culture = cu:yankee
@@ -4274,6 +4303,9 @@ te_cmg_anglophone_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_anglophone_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_anglophone
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_anglophone ?= 1 global_var:te_cm_state_anglophone ?= 2 }
@@ -4326,7 +4358,7 @@ te_cmg_anglophone_can_start = {
 # Any scope. The brazilian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_brazilian_result_switched = {
-	has_global_variable = te_cm_switched_brazilian
+	always = no
 }
 
 # Country scope. Can this country start the brazilian merge? The system is on, a core culture is
@@ -4806,6 +4838,7 @@ te_cmg_platine_core_left = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_platine_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_platine
 	OR = {
 		country_has_primary_culture = cu:platinean
 		country_has_primary_culture = cu:argentine
@@ -5122,6 +5155,9 @@ te_cmg_platine_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_platine_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_platine
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_platine ?= 1 global_var:te_cm_state_platine ?= 2 }
@@ -5182,7 +5218,7 @@ te_cmg_platine_can_start = {
 # Any scope. The andean merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_andean_result_switched = {
-	has_global_variable = te_cm_switched_cm_andean
+	always = no
 }
 
 # Country scope. Can this country start the andean merge? The system is on, a core culture is
@@ -5191,6 +5227,7 @@ te_cmg_andean_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_andean_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_andean
 	OR = {
 		country_has_primary_culture = cu:north_andean
 		country_has_primary_culture = cu:south_andean
@@ -5497,6 +5534,9 @@ te_cmg_andean_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_andean_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_andean
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_andean ?= 1 global_var:te_cm_state_andean ?= 2 }
@@ -5553,7 +5593,7 @@ te_cmg_andean_can_start = {
 # Any scope. The gran_colombian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_gran_colombian_result_switched = {
-	has_global_variable = te_cm_switched_cm_gran_colombian
+	always = no
 }
 
 # Country scope. Can this country start the gran_colombian merge? The system is on, a core culture is
@@ -5562,6 +5602,7 @@ te_cmg_gran_colombian_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_gran_colombian_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_gran_colombian
 	OR = {
 		country_has_primary_culture = cu:colombian
 		country_has_primary_culture = cu:venezuelan
@@ -5817,6 +5858,9 @@ te_cmg_gran_colombian_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_gran_colombian_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_gran_colombian
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_gran_colombian ?= 1 global_var:te_cm_state_gran_colombian ?= 2 }
@@ -5865,7 +5909,7 @@ te_cmg_gran_colombian_can_start = {
 # Any scope. The chinese merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_chinese_result_switched = {
-	has_global_variable = te_cm_switched_han
+	always = no
 }
 
 # Country scope. Can this country start the chinese merge? The system is on, a core culture is
@@ -6208,7 +6252,7 @@ te_cmg_chinese_can_start = {
 # Any scope. The japanese merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_japanese_result_switched = {
-	has_global_variable = te_cm_switched_japanese
+	always = no
 }
 
 # Country scope. Can this country start the japanese merge? The system is on, a core culture is
@@ -6433,7 +6477,7 @@ te_cmg_japanese_can_start = {
 # Any scope. The arab merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_arab_result_switched = {
-	has_global_variable = te_cm_switched_cm_arab
+	always = no
 }
 
 # Country scope. Can this country start the arab merge? The system is on, a core culture is
@@ -6442,6 +6486,7 @@ te_cmg_arab_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_arab_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_arab
 	OR = {
 		country_has_primary_culture = cu:maghrebi
 		country_has_primary_culture = cu:misri
@@ -6937,6 +6982,9 @@ te_cmg_arab_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_arab_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_arab
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_arab ?= 1 global_var:te_cm_state_arab ?= 2 }
@@ -7001,7 +7049,7 @@ te_cmg_arab_can_start = {
 # Any scope. The persian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_persian_result_switched = {
-	has_global_variable = te_cm_switched_persian
+	always = no
 }
 
 # Country scope. Can this country start the persian merge? The system is on, a core culture is
@@ -7320,6 +7368,7 @@ te_cmg_oghuz_turkic_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_oghuz_turkic_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_oghuz_turkic
 	OR = {
 		country_has_primary_culture = cu:turkish
 		country_has_primary_culture = cu:azerbaijani
@@ -7577,6 +7626,9 @@ te_cmg_oghuz_turkic_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_oghuz_turkic_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_oghuz_turkic
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 }
@@ -7621,7 +7673,7 @@ te_cmg_oghuz_turkic_can_start = {
 # Any scope. The hindustani merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_hindustani_result_switched = {
-	has_global_variable = te_cm_switched_hindustani
+	always = no
 }
 
 # Country scope. Can this country start the hindustani merge? The system is on, a core culture is
@@ -8023,7 +8075,7 @@ te_cmg_hindustani_can_start = {
 # Any scope. The dravidian merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_dravidian_result_switched = {
-	has_global_variable = te_cm_switched_cm_dravidian
+	always = no
 }
 
 # Country scope. Can this country start the dravidian merge? The system is on, a core culture is
@@ -8032,6 +8084,7 @@ te_cmg_dravidian_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_dravidian_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_dravidian
 	OR = {
 		country_has_primary_culture = cu:tamil
 		country_has_primary_culture = cu:kannada
@@ -8333,6 +8386,9 @@ te_cmg_dravidian_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_dravidian_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_dravidian
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_dravidian ?= 1 global_var:te_cm_state_dravidian ?= 2 }
@@ -8390,6 +8446,7 @@ te_cmg_indonesian_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_indonesian_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_indonesian
 	OR = {
 		country_has_primary_culture = cu:javan
 		country_has_primary_culture = cu:malay
@@ -8746,6 +8803,9 @@ te_cmg_indonesian_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_indonesian_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_indonesian
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 }
@@ -9162,7 +9222,7 @@ te_cmg_filipino_can_start = {
 # Any scope. The nguni merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_nguni_result_switched = {
-	has_global_variable = te_cm_switched_cm_nguni
+	always = no
 }
 
 # Country scope. Can this country start the nguni merge? The system is on, a core culture is
@@ -9171,6 +9231,7 @@ te_cmg_nguni_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_nguni_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_nguni
 	OR = {
 		country_has_primary_culture = cu:nguni
 		country_has_primary_culture = cu:zulu
@@ -9426,6 +9487,9 @@ te_cmg_nguni_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_nguni_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_nguni
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_nguni ?= 1 global_var:te_cm_state_nguni ?= 2 }
@@ -9474,7 +9538,7 @@ te_cmg_nguni_can_start = {
 # Any scope. The latin merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_latin_result_switched = {
-	has_global_variable = te_cm_switched_cm_latin
+	always = no
 }
 
 # Country scope. Can this country start the latin merge? The system is on, a core culture is
@@ -9483,6 +9547,7 @@ te_cmg_latin_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_latin_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_latin
 	OR = {
 		country_has_primary_culture = cu:french
 		country_has_primary_culture = cu:cm_italian
@@ -10137,6 +10202,9 @@ te_cmg_latin_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_latin_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_latin
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_latin ?= 1 global_var:te_cm_state_latin ?= 2 }
@@ -10213,7 +10281,7 @@ te_cmg_latin_can_start = {
 # Any scope. The pan_slavic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_pan_slavic_result_switched = {
-	has_global_variable = te_cm_switched_cm_pan_slavic
+	always = no
 }
 
 # Country scope. Can this country start the pan_slavic merge? The system is on, a core culture is
@@ -10222,6 +10290,7 @@ te_cmg_pan_slavic_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_slavic_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_pan_slavic
 	OR = {
 		country_has_primary_culture = cu:cm_east_slavic
 		country_has_primary_culture = cu:cm_czechoslovak
@@ -10670,6 +10739,9 @@ te_cmg_pan_slavic_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_slavic_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_pan_slavic
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_pan_slavic ?= 1 global_var:te_cm_state_pan_slavic ?= 2 }
@@ -10739,7 +10811,7 @@ te_cmg_pan_slavic_can_start = {
 # Any scope. The pan_turkic merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_pan_turkic_result_switched = {
-	has_global_variable = te_cm_switched_cm_pan_turkic
+	always = no
 }
 
 # Country scope. Can this country start the pan_turkic merge? The system is on, a core culture is
@@ -10748,6 +10820,7 @@ te_cmg_pan_turkic_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_turkic_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_pan_turkic
 	OR = {
 		country_has_primary_culture = cu:cm_oghuz_turkic
 		country_has_primary_culture = cu:uzbek
@@ -11322,6 +11395,9 @@ te_cmg_pan_turkic_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_turkic_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_pan_turkic
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_pan_turkic ?= 1 global_var:te_cm_state_pan_turkic ?= 2 }
@@ -11406,7 +11482,7 @@ te_cmg_pan_turkic_can_start = {
 # Any scope. The pan_malay merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_pan_malay_result_switched = {
-	has_global_variable = te_cm_switched_cm_pan_malay
+	always = no
 }
 
 # Country scope. Can this country start the pan_malay merge? The system is on, a core culture is
@@ -11415,6 +11491,7 @@ te_cmg_pan_malay_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_pan_malay_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_pan_malay
 	OR = {
 		country_has_primary_culture = cu:cm_indonesian
 		country_has_primary_culture = cu:filipino
@@ -11662,6 +11739,9 @@ te_cmg_pan_malay_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_pan_malay_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_pan_malay
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_pan_malay ?= 1 global_var:te_cm_state_pan_malay ?= 2 }
@@ -11716,7 +11796,7 @@ te_cmg_pan_malay_can_start = {
 # Any scope. The east_african merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_east_african_result_switched = {
-	has_global_variable = te_cm_switched_cm_east_african
+	always = no
 }
 
 # Country scope. Can this country start the east_african merge? The system is on, a core culture is
@@ -11725,6 +11805,7 @@ te_cmg_east_african_result_switched = {
 # another merge can take a core part, that part has not switched there (te_cmg_<m>_core_left, R38).
 te_cmg_east_african_is_candidate = {
 	te_cm_system_enabled = yes
+	exists = cu:cm_east_african
 	OR = {
 		country_has_primary_culture = cu:swahili
 		country_has_primary_culture = cu:nyamwezi
@@ -12194,6 +12275,9 @@ te_cmg_east_african_core_switched = {
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
 # Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
 te_cmg_east_african_can_start = {
+	hidden_trigger = {
+		exists = cu:cm_east_african
+	}
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_east_african ?= 1 global_var:te_cm_state_east_african ?= 2 }

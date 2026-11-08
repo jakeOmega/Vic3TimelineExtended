@@ -489,13 +489,21 @@ class ConsoleMenuTest(unittest.TestCase):
         self.assertIsNotNone(body)
         flat = squash(body)
         for merge in cfg.MERGES:
-            self.assertEqual(flat.count("te_cm_debug_dump_merge = { MERGE = %s }" % merge.key), 1, merge.key)
+            # Only a merge with a core wait has the wait counter, so only it names te_cm_wait_years_<m>: a read of a
+            # name nothing sets logs "is used but is never set" at every load (2026-11-08).
+            waiting = bool(gen.core_waits(merge))
+            self.assertEqual(flat.count("te_cm_debug_dump_merge_waiting = { MERGE = %s }" % merge.key), int(waiting), merge.key)
+            self.assertEqual(flat.count("te_cm_debug_dump_merge = { MERGE = %s }" % merge.key), int(not waiting), merge.key)
+            optional = {c for part in merge.optional for c in part.cultures}
             for culture in gen._joinable_slot_cultures(merge):
-                self.assertEqual(flat.count("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s }" % (merge.key, culture)), 1,
-                                 "%s/%s" % (merge.key, culture))
+                # An optional part answers to its own standard-of-living gate, a core part to the merge's.
+                gate = "te_cm_sol_ok_%s_%s" % (merge.key, culture) if culture in optional else "te_cm_sol_ok_%s" % merge.key
+                self.assertEqual(
+                    flat.count("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s SOL_OK = %s }" % (merge.key, culture, gate)),
+                    1, "%s/%s" % (merge.key, culture))
             for culture in slot_cultures(merge):
                 if gen._is_absorb_result(merge, culture):
-                    self.assertNotIn("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s }" % (merge.key, culture), flat)
+                    self.assertNotIn("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s " % (merge.key, culture), flat)
             # Only the merges ROOT is a candidate for or that are not idle.
             self.assertIn(
                 "limit = { OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 te_cmg_%s_is_candidate = yes } }"
@@ -503,18 +511,24 @@ class ConsoleMenuTest(unittest.TestCase):
 
     def test_the_dump_helpers_read_each_variable_behind_a_guard(self):
         text = text_of(CONSOLE_EFFECTS)
-        for helper in ("te_cm_debug_dump_merge", "te_cm_debug_dump_part", "te_cm_dbg_global", "te_cm_dbg_var"):
+        for helper in ("te_cm_debug_dump_merge", "te_cm_debug_dump_merge_waiting", "te_cm_debug_dump_merge_slots",
+                       "te_cm_debug_dump_merge_line", "te_cm_debug_dump_part", "te_cm_dbg_global", "te_cm_dbg_var"):
             self.assertIsNotNone(block(text, helper), helper)
         part = squash(block(text, "te_cm_debug_dump_part"))
         for name in ("te_cm_home_$CULTURE$", "te_cm_home_r_$CULTURE$", "te_cm_joined_$MERGE$_$CULTURE$",
                      "te_cm_dom_$MERGE$_$CULTURE$", "te_cm_in_$CULTURE$", "te_cm_held_$MERGE$_$CULTURE$",
-                     "te_cm_ok_$MERGE$_$CULTURE$", "te_cm_sol_$MERGE$_$CULTURE$", "te_cm_sol_ok_$MERGE$_$CULTURE$",
+                     "te_cm_ok_$MERGE$_$CULTURE$", "te_cm_sol_$MERGE$_$CULTURE$", "$SOL_OK$",
                      "te_cm_years_$MERGE$_$CULTURE$", "te_cm_paused_$MERGE$_$CULTURE$"):
             self.assertIn("NAME = " + name, part)
-        merge = squash(block(text, "te_cm_debug_dump_merge"))
+        slots = squash(block(text, "te_cm_debug_dump_merge_slots"))
         for name in ("te_cm_state_$MERGE$", "te_cm_sol_ok_$MERGE$", "te_cm_started_$MERGE$",
-                     "te_cm_bar_$MERGE$", "te_cm_wait_years_$MERGE$", "te_cm_converted_$MERGE$"):
-            self.assertIn("NAME = " + name, merge)
+                     "te_cm_bar_$MERGE$", "te_cm_converted_$MERGE$"):
+            self.assertIn("NAME = " + name, slots)
+        # The wait counter only in the waiting form; the other prints -1 in its slot.
+        self.assertIn("NAME = te_cm_wait_years_$MERGE$", squash(block(text, "te_cm_debug_dump_merge_waiting")))
+        self.assertNotIn("te_cm_wait_years_", squash(block(text, "te_cm_debug_dump_merge")))
+        self.assertIn("name = te_cm_dbg_j value = -1", squash(block(text, "te_cm_debug_dump_merge")))
+        merge = slots
         # The starter is a country, so it is logged as a yes/no, and where this country stands in the merge.
         for needle in ("exists = global_var:te_cm_starter_$MERGE$", "te_cmg_$MERGE$_is_starter = yes",
                        "te_cmg_$MERGE$_is_candidate = yes", "te_cmg_$MERGE$_core_ok = yes", "te_cmg_$MERGE$_can_start = yes"):

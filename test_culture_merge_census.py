@@ -651,10 +651,14 @@ class TriggerShapeTest(unittest.TestCase):
         self.assertEqual(
             body,
             "te_cm_system_enabled = yes "
+            "exists = cu:cm_german "
             "OR = { country_has_primary_culture = cu:north_german country_has_primary_culture = cu:south_german } "
             "te_cm_tier_tech = { TIER = 1 } "
             "NOT = { global_var:te_cm_state_german ?= 2 }",
         )
+        # A new result culture must exist: a game begun before it was added has none (2026-11-08). An absorbing merge's
+        # result is a vanilla culture, so it isn't asked.
+        self.assertNotIn("exists = cu:", self.trig("te_cmg_hungarian_is_candidate"))
         # A result that is a part of another merge also asks that it has not switched into it (R33, R36), through the
         # one generated trigger that says so (M6).
         self.assertIn("NOT = { te_cmg_italian_result_switched = yes }", self.trig("te_cmg_italian_is_candidate"))

@@ -714,6 +714,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # rule, which would split the journal entries' keys off to JOURNAL_ENTRIES.
     if key in CULTURE_MERGE_RESULT_KEYS or key.startswith(("te_cmg_", "je_te_cm_")):
         return "CULTURE_MERGES_GENERATED"
+    # The six static modifiers the engine expects of each result culture
+    # (`cm_german_standard_of_living_modifier_positive`), named in the same file.
+    if key.endswith(("_modifier_positive", "_modifier_negative")) and any(
+        key.startswith(result + "_") for result in CULTURE_MERGE_RESULT_KEYS if result.startswith("cm_")
+    ):
+        return "CULTURE_MERGES_GENERATED"
     if key.startswith("te_cm_"):
         return "MISCELLANEOUS"
     # Families whose members would otherwise split across files. The nuclear
