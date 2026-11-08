@@ -12,7 +12,9 @@
 # the Map Room's own again: 26 tourism's Base Appeal, 27 Base Comfort (Local Climate before any technology), 28 Current
 # Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 31 power grids (the Power Grids tab's map,
 # 2026-11-07); 32 city rank (tourism's), 33 armed forces (Soldiers and Officers, the yearly walk's), 34 company
-# headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 0 none. 2 was literacy, retired because
+# headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 36 ownership (the walk's), 37
+# population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
+# second round); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -151,6 +153,118 @@ te_jmap_hq_count = {
 		every_scope_building = {
 			limit = { is_building_type = building_company_headquarter }
 			add = 1
+		}
+	}
+}
+
+# The state's company regional headquarters (Company Headquarters' stripes and their hover).
+te_jmap_rhq_count = {
+	value = 0
+	if = {
+		limit = { has_building = building_company_regional_headquarter }
+		every_scope_building = {
+			limit = { is_building_type = building_company_regional_headquarter }
+			add = 1
+		}
+	}
+}
+
+# Ownership (36): who holds the state's capital, the yearly walk's building levels (te_demog_effects.txt: privately,
+# by their own workers, by the state; ownership buildings, subsistence farms and government buildings left out). The
+# leader's code (1 private, 2 their workers, 3 the state; a tie to the first of them), 0 for a state without a walk or
+# with under one level of capital (te_demog_wc_capital_levels, Dynastic Wealth's own test).
+te_jmap_own_lead = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_lv_priv
+			has_variable = te_dg_lv_self
+			has_variable = te_dg_lv_ctry
+		}
+		if = {
+			limit = { te_demog_wc_capital_levels >= 1 }
+			if = {
+				limit = {
+					var:te_dg_lv_priv >= var:te_dg_lv_self
+					var:te_dg_lv_priv >= var:te_dg_lv_ctry
+				}
+				value = 1
+			}
+			else_if = {
+				limit = { var:te_dg_lv_self >= var:te_dg_lv_ctry }
+				value = 2
+			}
+			else = {
+				value = 3
+			}
+		}
+	}
+}
+
+# The leader's share of the state's capital levels, 1/3-1 (0 with no leader): the map fades the leader's color by it.
+te_jmap_own_lead_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead = 1 }
+		value = var:te_dg_lv_priv
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+	else_if = {
+		limit = { te_jmap_own_lead = 2 }
+		value = var:te_dg_lv_self
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+	else_if = {
+		limit = { te_jmap_own_lead = 3 }
+		value = var:te_dg_lv_ctry
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+
+# Each holder's share, for the hover (read only where te_jmap_own_lead is above 0, so every variable is there).
+te_jmap_own_priv_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_priv
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+te_jmap_own_self_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_self
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+te_jmap_own_ctry_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_ctry
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+
+# Population Growth (37): the change in the state's people from one yearly walk to the next, per 1,000 of last year's
+# (te_dg_walk_pop against te_dg_walk_pop_prev, which te_demog_walk_keep_prev keeps every game, whatever the rule). It
+# takes in births, deaths and migration, and also land gained or lost: a state that took or gave up provinces since
+# its last walk jumps. 0 for a state without two walks.
+te_jmap_pop_growth = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+		}
+		if = {
+			limit = { var:te_dg_walk_pop_prev > 0 }
+			# the ratio first, then per 1,000: a state of tens of millions times 1,000 needn't fit the fixed point
+			value = var:te_dg_walk_pop
+			divide = var:te_dg_walk_pop_prev
+			subtract = 1
+			multiply = 1000
 		}
 	}
 }

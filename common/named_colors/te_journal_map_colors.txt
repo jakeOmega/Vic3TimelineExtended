@@ -128,10 +128,33 @@ colors = {
 	te_jmap_hq_low = hsv360 { 200 16 95 }
 	te_jmap_hq_high = hsv360 { 228 86 42 }
 	te_jmap_hq_loss = hsv360 { 4 72 74 }
+	# Company Headquarters' stripes: a foreign company's regional headquarters.
+	te_jmap_hq_regional = hsv360 { 45 90 96 }
+	# je_te_map_room: Ownership, the leading holder of a state's capital, each faded to a pale end of its own hue by its
+	# share (te_jmap_own_factor, 40% to 100%): private gold, their own workers green, the state red.
+	te_jmap_own_priv = hsv360 { 42 82 86 }
+	te_jmap_own_priv_pale = hsv360 { 42 24 96 }
+	te_jmap_own_self = hsv360 { 138 62 50 }
+	te_jmap_own_self_pale = hsv360 { 138 20 92 }
+	te_jmap_own_ctry = hsv360 { 355 72 66 }
+	te_jmap_own_ctry_pale = hsv360 { 355 18 95 }
+	# je_te_map_room: Population Growth per 1,000, diverging at none: shrinking magenta, cream at none, growing teal.
+	te_jmap_growth_low = hsv360 { 305 45 52 }
+	te_jmap_growth_mid = hsv360 { 50 6 92 }
+	te_jmap_growth_high = hsv360 { 172 72 44 }
 	# je_te_map_room, Demographics: War Dead last year, a doubling at a time (pale rose to dried blood); a state with
 	# none is te_jmap_none.
 	te_jmap_war_dead_low = hsv360 { 8 28 94 }
 	te_jmap_war_dead_high = hsv360 { 352 90 34 }
+	# je_te_map_room, Demographics: Family Planning, the means to plan a family (pale sand to violet).
+	te_jmap_means_low = hsv360 { 32 16 94 }
+	te_jmap_means_high = hsv360 { 268 62 42 }
+	# je_te_map_room, Demographics: Health Care, the share medicine reaches (pale sand to deep green).
+	te_jmap_health_low = hsv360 { 36 20 92 }
+	te_jmap_health_high = hsv360 { 158 78 38 }
+	# je_te_map_room, Demographics: Fighting-Age Men, men aged 20 to 39 over the people (pale straw to slate blue).
+	te_jmap_fam_low = hsv360 { 58 20 93 }
+	te_jmap_fam_high = hsv360 { 218 62 44 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

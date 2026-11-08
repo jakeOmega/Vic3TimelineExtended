@@ -249,9 +249,10 @@ class CauseColorsTest(unittest.TestCase):
                              short)
         cause_stripes = [body for limit, body in branches_of(stripes) if re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(len(cause_stripes), len(self.CAUSES), "a stripe that isn't a cause's")
-        # the only other stripes: Power Grids' hubs
+        # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
-        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes"])
+        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes",
+                                  "te_jmap_selector = 34 has_building = building_company_regional_headquarter"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -286,7 +287,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 36)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 41)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -329,6 +330,7 @@ class MapRoomTest(unittest.TestCase):
         self.assertIn(3, gated)
         self.assertTrue({26, 27, 28} <= gated, "tourism and the two climate maps read stored figures")
         self.assertTrue({33, 35} <= gated, "Armed Forces (the walk's) and War Dead (the census's) read stored figures")
+        self.assertTrue(set(range(36, 41)) <= gated, "Ownership, Population Growth and the census's three")
         self.assertFalse({32, 34} & gated, "City Rank and Company Headquarters paint every state")
         self.assertEqual(self.no_data("map_color"), gated, "map_color's 'no data' OR")
         self.assertEqual(self.no_data("map_tooltip"), gated, "map_tooltip's 'no data' OR")
@@ -647,8 +649,8 @@ class PowerGridMapTest(unittest.TestCase):
                              + str(n) + '"')
 
 
-class NinthPassMapsTest(unittest.TestCase):
-    """City Rank, Armed Forces, Company Headquarters and War Dead (selectors 32-35; owner's ask, 2026-11-08)."""
+class _RoomBranches:
+    """The Map Room's map_color and map_tooltip branches, and those of one selector."""
 
     def setUp(self):
         self.room = entry(HOST, "je_te_map_room")
@@ -658,6 +660,10 @@ class NinthPassMapsTest(unittest.TestCase):
     def of(self, part, sel):
         return [(limit, body) for limit, body in part if re.search(r"(^| )te_jmap_selector = " + str(sel) + r"( |$)",
                                                                    limit) and "OR = {" not in limit]
+
+
+class NinthPassMapsTest(_RoomBranches, unittest.TestCase):
+    """City Rank, Armed Forces, Company Headquarters and War Dead (selectors 32-35; owner's ask, 2026-11-08)."""
 
     def test_city_rank_is_tourism_s(self):
         # the first 20 by the Cities bonus tourism gives them, the rest by rank, a state the ranking misses pale
@@ -702,7 +708,9 @@ class NinthPassMapsTest(unittest.TestCase):
         self.assertIn("factor = te_jmap_hq_factor", colors[0][1])
         self.assertEqual(colors[1][1], 'value = "te_jmap_hq_loss"')
         self.assertEqual(colors[2][1], 'value = "te_jmap_no_data"')
-        self.assertEqual([limit for limit, _ in self.of(self.hover, 34)], [limit for limit, _ in colors])
+        # the hover's own ladder; the regional headquarters' line under it is a ladder of its own
+        hover = [limit for limit, _ in self.of(self.hover, 34) if "regional" not in limit]
+        self.assertEqual(hover, [limit for limit, _ in colors])
 
     def test_the_hq_profit_sums_the_headquarters_only_where_one_stands(self):
         values = code(VALUES)
@@ -738,6 +746,88 @@ class NinthPassMapsTest(unittest.TestCase):
         row = block(code(WIDGETS), "te_jmap_pick_row")
         at = row.index('text = "te_jmap_pick_armed_forces"')
         self.assertIn('text = "te_jmap_pick_war_dead"', enclosing(row, enclosing_span(row, at)[0] - 1))
+
+
+class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
+    """Ownership, Population Growth, Family Planning, Health Care, Fighting-Age Men (36-40) and Company HQs' regional
+    headquarters stripes (owner's ask, 2026-11-08, second round)."""
+
+    def test_ownership_paints_the_leading_holder_faded_by_its_share(self):
+        colors = self.of(self.colors, 36)
+        holders = (("priv", 1), ("self", 2), ("ctry", 3))
+        self.assertEqual([limit for limit, _ in colors],
+                         [f"te_jmap_selector = 36 has_variable = te_dg_lv_priv te_jmap_own_lead = {n}" for _, n in holders]
+                         + ["te_jmap_selector = 36 has_variable = te_dg_lv_priv"])
+        palette = code(COLORS)
+        for (short, _n), (_limit, body) in zip(holders, colors):
+            self.assertEqual(body, f'lerp = {{ min_color = "te_jmap_own_{short}_pale" max_color = "te_jmap_own_{short}" '
+                                   f'factor = te_jmap_own_factor }}')
+            full = re.search(r"\bte_jmap_own_" + short + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)", palette)
+            pale = re.search(r"\bte_jmap_own_" + short + r"_pale\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)", palette)
+            self.assertEqual(pale.group(1), full.group(1), f"{short}'s pale end keeps its hue")
+            self.assertLess(int(pale.group(2)), int(full.group(2)), f"{short}'s pale end is paler")
+        self.assertEqual(colors[-1][1], 'value = "te_jmap_none"', "a state with no capital is pale, not 'no data'")
+
+    def test_ownership_reads_the_walk_s_levels(self):
+        values = code(VALUES)
+        lead = block(values, "te_jmap_own_lead")
+        for var in ("te_dg_lv_priv", "te_dg_lv_self", "te_dg_lv_ctry"):
+            self.assertIn(f"has_variable = {var}", block(lead, "limit"))
+        self.assertIn("te_demog_wc_capital_levels >= 1", lead, "Dynastic Wealth's own test for capital to own")
+        for name in ("te_jmap_own_lead_share", "te_jmap_own_priv_share", "te_jmap_own_self_share",
+                     "te_jmap_own_ctry_share"):
+            self.assertIn("divide = { value = te_demog_wc_capital_levels min = 1 }", block(values, name), name)
+        walk = code("common/scripted_effects/te_demog_effects.txt")
+        for var in ("priv", "self", "ctry"):
+            self.assertIn(f"set_variable = {{ name = te_dg_lv_{var} value = local_var:te_dg_w_{var} }}", walk)
+
+    def test_the_walk_s_maps_wait_for_no_rule(self):
+        sguis = code(SGUIS)
+        for name in ("te_jmap_pick_ownership_sgui", "te_jmap_pick_population_growth_sgui"):
+            self.assertEqual(block(block(sguis, name), "is_shown").split(), ["is_player", "=", "yes"], name)
+        for name in ("te_jmap_pick_family_planning_sgui", "te_jmap_pick_health_care_sgui",
+                     "te_jmap_pick_fighting_age_men_sgui"):
+            self.assertIn("te_demog_cohorts_run = yes", block(block(sguis, name), "is_shown"), name)
+
+    def test_population_growth_is_walk_to_walk(self):
+        body = block(code(VALUES), "te_jmap_pop_growth")
+        self.assertIn("has_variable = te_dg_walk_pop_prev", body)
+        self.assertLess(body.index("divide = var:te_dg_walk_pop_prev"), body.index("multiply = 1000"),
+                        "the ratio first: tens of millions times 1,000 needn't fit the fixed point")
+        self.assertIn("set_variable = { name = te_dg_walk_pop_prev value = var:te_dg_walk_pop }",
+                      code("common/scripted_effects/te_demog_effects.txt"))
+
+    def test_the_census_s_three_read_their_figures(self):
+        for sel, factor, guard in ((38, "te_jmap_means_factor", "has_variable = te_dg_means"),
+                                   (39, "te_jmap_health_factor", "has_variable = te_dg_acc"),
+                                   (40, "te_jmap_fam_factor", "has_variable = te_dg_fam has_variable = te_dg_people")):
+            colors = self.of(self.colors, sel)
+            self.assertEqual([limit for limit, _ in colors], [f"te_jmap_selector = {sel} {guard}"], sel)
+            self.assertIn(f"factor = {factor}", colors[0][1], sel)
+            hovers = [limit for limit, _ in self.of(self.hover, sel)]
+            self.assertTrue(all(limit.startswith(f"te_jmap_selector = {sel} {guard}") for limit in hovers), sel)
+
+    def test_regional_headquarters_stripe_and_are_named(self):
+        stripes = branches_of(block(self.room, "map_color_second"))
+        self.assertIn(("te_jmap_selector = 34 has_building = building_company_regional_headquarter",
+                       'value = "te_jmap_hq_regional"'), stripes)
+        self.assertIn("custom_tooltip_no_bullet = te_jmap_tt_hq_regional", block(self.room, "map_tooltip"))
+        body = block(code(VALUES), "te_jmap_rhq_count")
+        self.assertIn("has_building = building_company_regional_headquarter", body)
+        self.assertIn("is_building_type = building_company_regional_headquarter", body)
+
+    def test_the_new_rows(self):
+        row = block(code(WIDGETS), "te_jmap_pick_row")
+
+        def row_of(key):
+            at = row.index(f'text = "te_jmap_pick_{key}"')
+            inner = enclosing_span(row, at)[0] - 1
+            return re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner))
+
+        self.assertEqual(row_of("ownership"), ["ownership", "company_hqs"])
+        self.assertEqual(row_of("armed_forces"), ["armed_forces", "fighting_age_men", "war_dead"])
+        self.assertEqual(row_of("population_growth"), ["sex_balance", "net_migration", "population_growth"])
+        self.assertEqual(row_of("health_care"), ["health_care", "family_planning"])
 
 
 class WindowButtonTest(unittest.TestCase):

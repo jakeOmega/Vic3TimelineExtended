@@ -187,9 +187,9 @@ class ScalesTest(unittest.TestCase):
 
     def test_nearly_every_map_is_fitted_to_the_world(self):
         # owner, 2026-11-07: the regional differences, not the world's level. Only the agent networks (their tiers),
-        # the leading cause's paleness (a share on a categorical map) and City Rank (a rank is already a place in the
-        # world, and its first 20 are tourism's Cities bonus) keep fixed curves.
-        self.assertEqual({s["name"] for s in FIXED}, {"net", "cause", "city_top", "city_rest"})
+        # the paleness of the leading cause and of Ownership's leading holder (a share on a categorical map) and City
+        # Rank (a rank is already a place in the world, and its first 20 are tourism's Cities bonus) keep fixed curves.
+        self.assertEqual({s["name"] for s in FIXED}, {"net", "cause", "own", "city_top", "city_rest"})
 
     def test_each_fixed_tree_follows_its_knots(self):
         for scale in FIXED:
@@ -233,7 +233,8 @@ class ScalesTest(unittest.TestCase):
                         self.assertEqual((round(low, 9), round(high, 9)), (0.5, 1.0))
                     else:
                         self.assertEqual((round(low, 9), round(high, 9)), (0.0, 1.0))
-                    self.assertGreaterEqual(H - L, scale["min_span"] if w["kind"] != "doubling" else 0)
+                    # rounded: 0.5 - 0.4 is 0.0999... in floats
+                    self.assertGreaterEqual(round(H - L, 9), scale["min_span"] if w["kind"] != "doubling" else 0)
 
     def test_a_three_color_map_splits_at_its_midpoint(self):
         # map_color splits on factor < 0.5: a meaningful midpoint (replacement, none, 100 men) is at 0.5 wherever the
@@ -256,7 +257,7 @@ class ScalesTest(unittest.TestCase):
                         self.assertAlmostEqual(self.factor(scale, (L + H) / 2, globs=globs, fixed=True), 0.5,
                                                delta=1e-3)
         mids = {s["name"] for s in FITTED if s["world"]["kind"] == "mid"}
-        self.assertEqual(mids, {"wc", "tfr", "natural", "sex", "mig", "comfort_base", "comfort"})
+        self.assertEqual(mids, {"wc", "tfr", "natural", "sex", "mig", "comfort_base", "comfort", "growth"})
 
     def test_a_figure_is_read_only_once_it_exists(self):
         # issue #1418: a has_variable in the same AND doesn't stop the read, so the read sits inside the guard's if

@@ -30,9 +30,9 @@ fixed curve's ends. Shapes:
   capita, Armed Forces, Company Headquarters, War Dead), the low at least floor and the high at least min_ratio times
   it. A doubling's position is read in straight pieces between powers of two.
 
-Three maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers), the leading
-cause of death's paleness (a share of the deaths on a categorical map) and City Rank (a rank is already a place in
-the world; its first 20 are tourism's Cities bonus). The fixed shapes:
+Four maps stay on fixed curves: the agent networks (0-100, whose 50 and 75 are intelligence tiers), the paleness of
+the leading cause of death and of Ownership's leading holder (a share on a categorical map) and City Rank (a rank is
+already a place in the world; its first 20 are tourism's Cities bonus). The fixed shapes:
 
 - linear(lo, hi): straight from lo to hi.
 - soft_cap(lo, soft, hard): straight from lo to soft, then SLOPE_RATIO times shallower from soft to hard, so the
@@ -258,6 +258,29 @@ SCALES = [
          world=rel_doubling(100, 102400, 4, 10), min_span=4,
          note="War Dead, the census's deaths to war and devastation last year: the same share of the color for each "
               "doubling from the world's low (at least 10 people) to its high"),
+    # Ownership, Population Growth, Family Planning, Health Care and Fighting-Age Men (2026-11-08, second round).
+    dict(name="own", input="te_jmap_own_lead_share", guards=[], three=False, knots=linear(0.4, 1),
+         note="Ownership, the leading holder's share of the state's capital levels (private, their own workers', the "
+              "state's), its color pale at 40% and full at 100%. Fixed: the map is categorical, and this only fades "
+              "each holder's color, as the leading cause's"),
+    dict(name="growth", input="te_jmap_pop_growth", guards=[], three=True, sel=37,
+         where=["has_variable = te_dg_walk_pop", "has_variable = te_dg_walk_pop_prev",
+                "var:te_dg_walk_pop_prev > 0"],
+         world=rel_mid(diverging((-20, -80), 0, (40, 100)), 0, 5), min_span=5,
+         note="Population Growth, the change in people from one yearly walk to the next per 1,000, split at none; "
+              "war, famine and land changing hands run far out"),
+    dict(name="means", input="var:te_dg_means", guards=["te_dg_means"], three=False, sel=38,
+         where=["has_variable = te_dg_means"], world=rel(linear(0, 1)), min_span=0.1,
+         note="Family Planning, the census's means to plan a family, 0-1: the share of the gap to the family size "
+              "people want that they can close"),
+    dict(name="health", input="var:te_dg_acc", guards=["te_dg_acc"], three=False, sel=39,
+         where=["has_variable = te_dg_acc"], world=rel(linear(0.4, 1)), min_span=0.1,
+         note="Health Care, the census's health-care access, the share of the people medicine reaches (0.4 from "
+              "markets and charity everywhere, to 1)"),
+    dict(name="fam", input="te_demog_fam_share", guards=[], three=False, sel=40,
+         where=["has_variable = te_dg_fam", "has_variable = te_dg_people"], world=rel(linear(0.08, 0.2)),
+         min_span=0.02,
+         note="Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people"),
 ]
 
 

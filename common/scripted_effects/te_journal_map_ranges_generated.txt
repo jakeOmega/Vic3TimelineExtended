@@ -1050,6 +1050,182 @@ te_jmap_range_war_dead = {
 	}
 }
 
+# Population Growth, the change in people from one yearly walk to the next per 1,000, split at none; war, famine and land changing hands run far out.
+te_jmap_range_growth = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_growth_lo }
+		remove_global_variable = te_jmap_rng_growth_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_growth_hi }
+		remove_global_variable = te_jmap_rng_growth_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_walk_pop has_variable = te_dg_walk_pop_prev var:te_dg_walk_pop_prev > 0 }
+		order_by = te_jmap_growth_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_growth_hi value = te_jmap_growth_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_walk_pop has_variable = te_dg_walk_pop_prev var:te_dg_walk_pop_prev > 0 }
+		order_by = te_jmap_growth_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_growth_lo value = te_jmap_growth_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_growth_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_walk_pop has_variable = te_dg_walk_pop_prev var:te_dg_walk_pop_prev > 0 }
+			order_by = te_jmap_growth_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_growth_hi value = te_jmap_growth_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_walk_pop has_variable = te_dg_walk_pop_prev var:te_dg_walk_pop_prev > 0 }
+			order_by = te_jmap_growth_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_growth_lo value = te_jmap_growth_input }
+		}
+	}
+}
+
+# Family Planning, the census's means to plan a family, 0-1: the share of the gap to the family size people want that they can close.
+te_jmap_range_means = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_means_lo }
+		remove_global_variable = te_jmap_rng_means_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_means_hi }
+		remove_global_variable = te_jmap_rng_means_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_means }
+		order_by = te_jmap_means_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_means_hi value = te_jmap_means_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_means }
+		order_by = te_jmap_means_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_means_lo value = te_jmap_means_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_means_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_means }
+			order_by = te_jmap_means_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_means_hi value = te_jmap_means_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_means }
+			order_by = te_jmap_means_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_means_lo value = te_jmap_means_input }
+		}
+	}
+}
+
+# Health Care, the census's health-care access, the share of the people medicine reaches (0.4 from markets and charity everywhere, to 1).
+te_jmap_range_health = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_health_lo }
+		remove_global_variable = te_jmap_rng_health_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_health_hi }
+		remove_global_variable = te_jmap_rng_health_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_acc }
+		order_by = te_jmap_health_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_health_hi value = te_jmap_health_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_acc }
+		order_by = te_jmap_health_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_health_lo value = te_jmap_health_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_health_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_acc }
+			order_by = te_jmap_health_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_health_hi value = te_jmap_health_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_acc }
+			order_by = te_jmap_health_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_health_lo value = te_jmap_health_input }
+		}
+	}
+}
+
+# Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people.
+te_jmap_range_fam = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_fam_lo }
+		remove_global_variable = te_jmap_rng_fam_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_fam_hi }
+		remove_global_variable = te_jmap_rng_fam_hi
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_fam has_variable = te_dg_people }
+		order_by = te_jmap_fam_input
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_fam_hi value = te_jmap_fam_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_fam has_variable = te_dg_people }
+		order_by = te_jmap_fam_input_neg
+		position = 4
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_fam_lo value = te_jmap_fam_input }
+	}
+	# Fewer states than the trim takes out: the extremes.
+	if = {
+		limit = { NOT = { has_global_variable = te_jmap_rng_fam_hi } }
+		ordered_state = {
+			limit = { has_variable = te_dg_fam has_variable = te_dg_people }
+			order_by = te_jmap_fam_input
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_fam_hi value = te_jmap_fam_input }
+		}
+		ordered_state = {
+			limit = { has_variable = te_dg_fam has_variable = te_dg_people }
+			order_by = te_jmap_fam_input_neg
+			position = 0
+			check_range_bounds = no
+			set_global_variable = { name = te_jmap_rng_fam_lo value = te_jmap_fam_input }
+		}
+	}
+}
+
 # The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt).
 te_jmap_refresh_range = {
 	if = {
@@ -1151,6 +1327,22 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 35 }
 		te_jmap_range_war_dead = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 37 }
+		te_jmap_range_growth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 38 }
+		te_jmap_range_means = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 39 }
+		te_jmap_range_health = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 40 }
+		te_jmap_range_fam = yes
 	}
 }
 
