@@ -242,10 +242,11 @@ class TestThresholds(unittest.TestCase):
     def test_plan_numbers(self):
         v = values()
         self.assertEqual(v["te_cm_hold_close"], 0.50)
-        self.assertEqual(v["te_cm_accept_open"], 60)
-        self.assertEqual(v["te_cm_accept_close"], 55)
-        self.assertEqual(v["te_cm_accept_high_open"], 80)
-        self.assertEqual(v["te_cm_accept_high_close"], 75)
+        # R39: accepted is Full Acceptance (80); a part at Provisional Acceptance (acceptance_status_4, 60 to 79) can't merge.
+        self.assertEqual(v["te_cm_accept_open"], 80)
+        self.assertEqual(v["te_cm_accept_close"], 75)
+        self.assertEqual(v["te_cm_accept_high_open"], 90)
+        self.assertEqual(v["te_cm_accept_high_close"], 85)
         self.assertEqual(v["te_cm_sol_gap_close"], 4)
         self.assertEqual(v["te_cm_sol_gap_open"], 3)
         self.assertEqual(v["te_cm_meaningful_share"], 0.10)
@@ -261,9 +262,14 @@ class TestThresholds(unittest.TestCase):
         self.assertLess(v["te_cm_sol_gap_open"], v["te_cm_sol_gap_close"])
 
     def test_acceptance_names_resolve_to_vanilla_statuses(self):
+        # The accepted mark is vanilla's own Full Acceptance status; the very high one has no vanilla status above it.
         raw = parse(VALUES)
-        self.assertEqual(unwrap(unwrap(raw["te_cm_accept_open"])["value"]), "acceptance_status_4")
-        self.assertEqual(unwrap(unwrap(raw["te_cm_accept_high_open"])["value"]), "acceptance_status_5")
+        self.assertEqual(unwrap(unwrap(raw["te_cm_accept_open"])["value"]), "acceptance_status_5")
+        self.assertEqual(vanilla_value("acceptance_status_5"), 80)
+        self.assertNotIn("acceptance_status_6", _VANILLA_VALUES)
+        self.assertEqual(float(unwrap(raw["te_cm_accept_high_open"])), 90)
+        # The per-pop slow-down stays below acceptance_status_4 (60).
+        self.assertIn("pop_acceptance < acceptance_status_4", rate_text())
 
 
 class TestRule(unittest.TestCase):

@@ -1821,13 +1821,23 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
                     "in their homeland, and %s is needed." % (culture, held, sv.format("te_cm_hold_open", "%0")),
                 )
             )
-            accept = "te_cm_accept_high_open" if tier == 2 else "te_cm_accept_open"
+            # Accepted is vanilla's Full Acceptance (R39); the status names are spliced, so the mod's own names for them
+            # (replace/ calls acceptance_status_4 Provisional Acceptance) show as the pop panel shows them.
+            if tier == 2:
+                accept_text = (
+                    "$%s$ pops are not accepted highly enough where many of them live: their acceptance in our sphere is "
+                    "below %s, beyond the $full_acceptance$ a closer part needs." % (culture, sv.format("te_cm_accept_high_open", "0"))
+                )
+            else:
+                accept_text = (
+                    "$%s$ pops are not fully accepted where many of them live: their acceptance in our sphere is below "
+                    "$full_acceptance$ (%s), and $second_rate_citizen$ is not enough." % (culture, sv.format("te_cm_accept_open", "0"))
+                )
             rows.append(
                 Row(
                     base + "accept_%s" % culture,
                     unmet + free + ["has_variable = %s" % ok, "var:%s = 0" % ok],
-                    "$%s$ pops are second-class where many of them live: their acceptance in our sphere is below %s."
-                    % (culture, sv.format(accept, "0")),
+                    accept_text,
                 )
             )
             if tier > 1:
@@ -2038,13 +2048,15 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             tier = tiers[part.cultures[0]]
             head = "%s pops are" % _either(part.cultures)
             if tier == 1:
-                tail = "held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live accept them."
+                tail = ("held and accepted: our sphere holds most of their homeland pops, and the countries where many of them "
+                        "live give them $full_acceptance$.")
             elif tier == 2:
                 tail = ("held and very highly accepted for %s years: our sphere holds most of their homeland pops, and the countries "
-                        "where many of them live accept them far above the usual mark." % sv.format("te_cm_years_tier2", "0"))
+                        "where many of them live accept them at %s or more, beyond $full_acceptance$."
+                        % (sv.format("te_cm_years_tier2", "0"), sv.format("te_cm_accept_high_open", "0")))
             else:
                 tail = ("held and accepted for %s years: our sphere holds most of their homeland pops, and the countries "
-                        "where many of them live accept them." % sv.format("te_cm_years_tier3", "0"))
+                        "where many of them live give them $full_acceptance$." % sv.format("te_cm_years_tier3", "0"))
             if tier != start:
                 tail += " They also need $%s$." % TIER_TECH[tier]
             out["te_cmg_%s_core_%d_tt" % (key, index)] = "%s %s" % (head, tail)

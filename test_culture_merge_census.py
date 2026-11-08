@@ -1098,32 +1098,34 @@ class GateScenarioTest(unittest.TestCase):
         values = gate_values()
         self.assertEqual((values["acceptance_status_4"], values["acceptance_status_5"]), (60, 80))
         self.assertEqual((values["te_cm_hold_open"], values["te_cm_hold_close"]), (0.60, 0.50))
-        self.assertEqual((values["te_cm_accept_open"], values["te_cm_accept_close"]), (60, 55))
-        self.assertEqual((values["te_cm_accept_high_open"], values["te_cm_accept_high_close"]), (80, 75))
+        # R39: accepted is Full Acceptance (80), so a part at Provisional Acceptance (60 to 79) is not.
+        self.assertEqual((values["te_cm_accept_open"], values["te_cm_accept_close"]), (80, 75))
+        self.assertEqual((values["te_cm_accept_high_open"], values["te_cm_accept_high_close"]), (90, 85))
 
     def test_a_tier_1_part_opens_closes_and_reopens_at_its_values(self):
         got, want = self.walk([
-            (0.59, 70, 0),  # held short of the open value
-            (0.60, 59, 0),  # accepted short of it
-            (0.60, 60, 1),  # both at the open values: opens
-            (0.51, 56, 1),  # inside both bands: stays open
-            (0.49, 70, 0),  # held below the close value: closes
-            (0.55, 70, 0),  # back above the close value but short of the open one: stays closed
-            (0.60, 70, 1),  # reopens only at the open value
-            (0.70, 54, 0),  # acceptance below its close value: closes
-            (0.70, 59, 0),  # stays closed below the open value
-            (0.70, 60, 1),  # reopens
+            (0.59, 90, 0),  # held short of the open value
+            (0.60, 70, 0),  # Provisional Acceptance: not accepted
+            (0.60, 79, 0),  # accepted short of Full Acceptance
+            (0.60, 80, 1),  # both at the open values: opens
+            (0.51, 76, 1),  # inside both bands: stays open
+            (0.49, 90, 0),  # held below the close value: closes
+            (0.55, 90, 0),  # back above the close value but short of the open one: stays closed
+            (0.60, 90, 1),  # reopens only at the open value
+            (0.70, 74, 0),  # acceptance below its close value: closes
+            (0.70, 79, 0),  # stays closed below the open value
+            (0.70, 80, 1),  # reopens
         ])
         self.assertEqual(got, want)
 
     def test_a_tier_1b_part_uses_the_very_high_pair(self):
         got, want = self.walk([
-            (0.60, 79, 0),
-            (0.60, 80, 1),
-            (0.60, 76, 1),
-            (0.60, 74, 0),
-            (0.60, 79, 0),
-            (0.60, 80, 1),
+            (0.60, 89, 0),
+            (0.60, 90, 1),
+            (0.60, 86, 1),
+            (0.60, 84, 0),
+            (0.60, 89, 0),
+            (0.60, 90, 1),
         ], tier=2)
         self.assertEqual(got, want)
 
@@ -1135,15 +1137,15 @@ class GateScenarioTest(unittest.TestCase):
     def test_acceptance_counts_where_many_live_and_in_the_largest_holder(self):
         sim = GateSim({"CAND": {"te_cm_ok_german_north_german": 0}, "MEM": {}}, {}, {})
         # A member holding a twentieth of the sphere's pops doesn't count; the starter holding most does.
-        self.assertEqual(self.year(sim, 0.9, {"CAND": 70, "MEM": 0}, holders={"CAND": 950, "MEM": 50}), 1)
+        self.assertEqual(self.year(sim, 0.9, {"CAND": 90, "MEM": 0}, holders={"CAND": 950, "MEM": 50}), 1)
         # Holding a fifth, it does, and it fails the close value: the gate closes.
-        self.assertEqual(self.year(sim, 0.9, {"CAND": 70, "MEM": 0}, holders={"CAND": 800, "MEM": 200}), 0)
+        self.assertEqual(self.year(sim, 0.9, {"CAND": 90, "MEM": 0}, holders={"CAND": 800, "MEM": 200}), 0)
         # A part split thin, no country holding a tenth: the largest holders are tested all the same, so the gate
         # can't pass with nobody tested.
         thin = {"C%02d" % i: 10 for i in range(20)}
         thin["CAND"] = 5
         for refuser, expected in ((None, 1), ("C00", 0)):
-            sim = GateSim({c: {} for c in thin}, {c: 70 for c in thin}, {})
+            sim = GateSim({c: {} for c in thin}, {c: 90 for c in thin}, {})
             sim.cvars["CAND"]["te_cm_ok_german_north_german"] = 0
             if refuser:
                 sim.acceptance[refuser] = 0
@@ -1151,7 +1153,7 @@ class GateScenarioTest(unittest.TestCase):
 
     def test_the_years_together_count_while_the_gate_is_open(self):
         sim = GateSim({"CAND": {"te_cm_ok_german_north_german": 0}}, {}, {})
-        for held, acc in ((0.60, 80), (0.60, 80), (0.49, 80), (0.60, 80)):
+        for held, acc in ((0.60, 90), (0.60, 90), (0.49, 90), (0.60, 90)):
             self.year(sim, held, acc, tier=2)
         self.assertEqual(sim.cvars["CAND"]["te_cm_years_german_north_german"], 3)
 

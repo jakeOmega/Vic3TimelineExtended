@@ -54,7 +54,7 @@ te_cm_chk_remove_global = {
 #           division read a wrong denominator), or the largest holder 0 with pops above 0 (the owner-scoped write did not
 #           reach the outer local: the acceptance test's cut-off would be 0 and test every country).
 # cm_acceptance_scale: a candidate whose primary culture this part is, with a tenth of its pops or more:
-#   OK      its average acceptance of that culture reads at or above te_cm_accept_open (acceptance_status_4): the scale
+#   OK      its average acceptance of that culture reads at or above te_cm_accept_open (acceptance_status_5, 80): the scale
 #           the gates assume (0-100, a primary culture near the top).
 #   BROKEN  below it: the gates would never open.
 te_cm_chk_census = {

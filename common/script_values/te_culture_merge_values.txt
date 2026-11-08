@@ -11,17 +11,18 @@ te_cm_hold_open = 0.60
 te_cm_hold_close = 0.50
 
 # ---- Accepted, and very high acceptance ----
-# Vanilla's acceptance_status_4 is 60 ("accepted"), _5 is 80. A part is accepted
-# in a sphere country at 60 and stops being accepted below 55; very high is 80,
-# lost below 75.
+# Accepted is vanilla's Full Acceptance, acceptance_status_5 (80): a country where
+# a part's pops hold only acceptance_status_4 (60 to 79; vanilla's Second-class
+# Citizen, which the mod's replace/ loc calls Provisional Acceptance) treats them
+# as less than equals and can't merge them (owner, R39). A part is accepted in a
+# sphere country at 80 and stops being accepted below 75; very high, for a tier-1b
+# part, is 90, lost below 85.
 te_cm_accept_open = {
-	value = acceptance_status_4
-}
-te_cm_accept_close = 55
-te_cm_accept_high_open = {
 	value = acceptance_status_5
 }
-te_cm_accept_high_close = 75
+te_cm_accept_close = 75
+te_cm_accept_high_open = 90
+te_cm_accept_high_close = 85
 
 # ---- The standard-of-living gap between a part and the sphere ----
 # The gate opens below a gap of 3 and closes above 4.
@@ -67,10 +68,11 @@ te_cm_urban_weight = 0.6
 # states converts faster (the homeland shares gate the merge, and diaspora pops
 # convert at the switch regardless).
 # "Discriminated" is per pop and exact: pop_acceptance below acceptance_status_4
-# (60). That is a cliff beside the country's gate, which has hysteresis: the gate
-# stays open down to te_cm_accept_close (55) once it has opened. A pop at 57
-# therefore converts at a tenth while its country keeps the merge running; the
-# factor is not softened to follow the gate.
+# (60), Open Prejudice or worse. It stays at 60 though
+# the country's gate opens at Full Acceptance (80, R39): the gate reads a country's
+# average, this factor each pop, and only a pop vanilla treats as discriminated is
+# slowed. A pop at 57 in a country whose average keeps the gate open (75 or more)
+# therefore converts at a tenth; the factor is not softened to follow the gate.
 te_cm_discriminated_factor = 0.1
 te_cm_diaspora_factor = 2
 
