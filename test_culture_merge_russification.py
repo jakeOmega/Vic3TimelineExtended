@@ -216,13 +216,13 @@ class TestShare(unittest.TestCase):
         self.assertIn("cu:russian", text)
         self.assertIn("cu:cm_east_slavic", text)
 
-    def test_share_is_pops_over_state_pops_with_a_floored_denominator(self):
+    def test_share_sums_the_two_cultures_shares_in_vanillas_form(self):
+        # The quoted culture_percent_state form is the one vanilla's own Russification value
+        # uses in a script value (event_values.txt:321); population_by_culture has no vanilla use.
         block = named_blocks_anywhere(SHARE)
-        self.assertEqual(block["value"], ["=", '"population_by_culture(cu:russian)"'])
-        self.assertEqual(block["add"], ["=", '"population_by_culture(cu:cm_east_slavic)"'])
-        self.assertEqual(block["divide"], ["=", {"value": ["=", "state_population"], "min": ["=", "1"]}])
-        # Division comes last: the denominator is all of the state's pops, applied to the sum.
-        self.assertEqual(list(block), ["value", "add", "divide"])
+        self.assertEqual(block["value"], ["=", '"culture_percent_state(cu:russian)"'])
+        self.assertEqual(block["add"], ["=", '"culture_percent_state(cu:cm_east_slavic)"'])
+        self.assertEqual(list(block), ["value", "add"])
 
     def test_the_cultures_exist(self):
         self.assertIn("russian", json.loads(VANILLA_CULTURES.read_text(encoding="utf-8")))

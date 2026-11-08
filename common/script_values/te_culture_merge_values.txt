@@ -147,14 +147,10 @@ te_cm_pop_rate = {
 # (culture_percent_state target = cu:russian, at je_russification_state_russian_culture_min),
 # and a Russian pop that merged into East Slavic no longer counts there. The injected
 # outcome (journal_entries/te_vanilla_russification_merge.txt) reads this instead, through
-# te_cm_russification_state_ok. Pops of both cultures over all the state's pops, the same
-# ratio culture_percent_state takes of one culture; the denominator is floored at 1 so an
-# empty state reads 0.
+# te_cm_russification_state_ok. The sum of the two cultures' shares of the state's pops, in
+# the quoted culture_percent_state form vanilla's own Russification value uses
+# (event_values.txt:321), which needs no division and so no floor.
 te_cm_russian_or_east_slavic_share = {
-	value = "population_by_culture(cu:russian)"
-	add = "population_by_culture(cu:cm_east_slavic)"
-	divide = {
-		value = state_population
-		min = 1
-	}
+	value = "culture_percent_state(cu:russian)"
+	add = "culture_percent_state(cu:cm_east_slavic)"
 }
