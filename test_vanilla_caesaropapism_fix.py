@@ -2,15 +2,19 @@
 
 Vanilla names only law_state_religion in six law lists, and the engine doesn't
 read the variant law_caesaropapism as its parent there (a Workshop player's
-Russia, 2026-11-08). The mod INJECTs each list again with law_caesaropapism
+Russia, 2026-11-08). The mod INJECTs five of them again with law_caesaropapism
 added (common/production_methods/te_vanilla_caesaropapism_fix.txt,
-common/laws/te_vanilla_caesaropapism_fix.txt).
+common/laws/te_vanilla_caesaropapism_fix.txt). The sixth, Public Schools'
+disallowing_laws, it leaves as vanilla has it: Caesaropapism allows Public
+Schools by design (owner, 2026-11-08).
 
 Vanilla is read from the committed vanilla_parsed/ snapshot, so after a vanilla
 patch (python3 vanilla_parsed.py build) this fails:
 - when vanilla lists law_caesaropapism itself: delete the INJECT and its row in
   docs/vanilla/vanilla_known_bugs.md, "Vanilla bugs the mod fixes";
-- when vanilla changes one of the lists otherwise: restate the new list.
+- when vanilla changes one of the lists otherwise: restate the new list;
+- when vanilla's Public Schools starts disallowing Caesaropapism: decide whether
+  the mod keeps it allowed, which then takes a REPLACE of that list.
 
 Run: python3 -m unittest test_vanilla_caesaropapism_fix -v
 """
@@ -34,7 +38,11 @@ FIXED = [
     (PMS, "pms", "pm_secular_bureaucrats", "disallowing_laws"),
     (PMS, "pms", "pm_secular_academia", "disallowing_laws"),
     (LAWS, "laws", "law_private_schools", "disallowing_laws"),
-    (LAWS, "laws", "law_public_schools", "disallowing_laws"),
+]
+
+# Left as vanilla has them, so Caesaropapism allows them (owner, 2026-11-08).
+ALLOWED = [
+    ("laws", "law_public_schools", "disallowing_laws"),
 ]
 
 
@@ -74,6 +82,20 @@ class CaesaropapismFixTest(unittest.TestCase):
                 base = vanilla(kind)[name][1][field][1]
                 self.assertEqual(sorted(injected), sorted(base + [VARIANT]),
                                  f"vanilla's {name} {field} changed: restate it with {VARIANT} added")
+
+    def test_caesaropapism_allows_public_schools(self):
+        """Neither vanilla nor any mod law file names the variant in Public Schools' list."""
+        for kind, name, field in ALLOWED:
+            with self.subTest(name=name):
+                self.assertNotIn(VARIANT, vanilla(kind)[name][1][field][1],
+                                 f"vanilla's {name} now disallows {VARIANT}: the mod allows it by design, so "
+                                 "REPLACE the list without it or drop the design and this test")
+                for path in sorted((ROOT / "common/laws").glob("*.txt")):
+                    for key, value in ours(path).items():
+                        if key.split(":")[-1] != name or not isinstance(value[1], dict):
+                            continue
+                        listed = value[1].get(field, [None, []])[1]
+                        self.assertNotIn(VARIANT, listed, f"{path.name} disallows {name} under {VARIANT}")
 
     def test_the_fix_is_listed_with_the_vanilla_bugs_the_mod_fixes(self):
         doc = KNOWN_BUGS.read_text(encoding="utf-8")

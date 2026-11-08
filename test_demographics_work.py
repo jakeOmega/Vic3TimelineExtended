@@ -798,6 +798,24 @@ class TestPanelGates(unittest.TestCase):
         for pos in P.PENSION_POSITIONS:
             self.assertIn(f"GetScriptedGui('te_demog_pension_{pos}_sgui')", gui)
 
+    def test_linked_to_common_waits_for_the_untreateds_own_threshold(self):
+        """Until longevity care begins, Linked to Common heads for Linked to Average's age, so its button is greyed
+        (owner, 2026-11-08), on the variable its target reads and the overview's split shows on; the others aren't."""
+        sguis = _text(SGUIS)
+        gate = "custom_tooltip = { text = te_demog_pension_common_split_tt has_variable = te_dg_old_age_c }"
+        body = _block(sguis, "te_demog_pension_linked_common_sgui")
+        valid = body[body.index("is_valid = {"):body.index("effect = {")]
+        self.assertIn(gate, valid)
+        self.assertNotIn("te_dg_old_age_c", body[:body.index("is_valid = {")], "greyed, not hidden")
+        for pos in P.PENSION_POSITIONS:
+            if pos != "linked_common":
+                self.assertNotIn("te_dg_old_age_c", _block(sguis, f"te_demog_pension_{pos}_sgui"), pos)
+        target = _block(_text(ROOT / "common" / "script_values" / "te_demog_work_values.txt"),
+                        "te_demog_pension_link_target_common")
+        self.assertIn("has_variable = te_dg_old_age_c", target)
+        self.assertIn("has_variable = te_dg_old_age_c",
+                      _block(_text(ROOT / "common" / "scripted_guis" / "te_demog_lx_sguis.txt"), "te_demog_lx_old_c_sgui"))
+
     def test_the_sections_exist_on_both_tabs(self):
         """The country tab's section carries the buttons; the state subtab's none (§10)."""
         gui, layout = _text(GUI), _text(LAYOUT)

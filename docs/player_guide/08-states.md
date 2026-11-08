@@ -579,18 +579,20 @@ read Women's Work, and the rest read Workforce Ratio (replaced by the census).
 With Old Age Pension, you choose the pension age with five buttons on the
 Demographics tab. A setting holds for five years once chosen, and the AI picks
 its own with the same considerations: a heavy bill or debt toward Raised or
-Linked to Average, high unemployment toward Early.
+Linked to Average, high unemployment toward Early. The two linked settings follow
+Old Age From, the age at which your people have fifteen years of life left, which
+the tab shows above the buttons.
 
 | Setting | Pension age | What you gain and what you pay | Interest groups |
 |---|---|---|---|
 | Early Retirement | 60 | More of the old retire and jobs open for the young; the largest bill and the smallest workforce. | Trade Unions +2, Industrialists −1 |
 | Standard | 65 | The default. It grows more generous as lives lengthen, since more people live to draw it, and for longer. | None |
 | Raised Pension Age | 70 | A smaller bill and more old people at work. | Trade Unions −2, Rural Folk −1, Industrialists +1 |
-| Linked to Average Longevity | Five years below where old age begins for your people, at least 65 | Follows lengthening lives, so the bill stays in check, a year at a time. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
-| Linked to Common Longevity | Five years below where old age begins for those who still age, at least 65 | The same until longevity treatment exists; after that it keeps the pension within reach of the untreated, at a larger bill. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
+| Linked to Average Longevity | Five years below Old Age From for all your people, the treated included; at least 65 | Follows lengthening lives, so the bill stays in check. Once longevity treatment spreads, the treated pull it up, and those who still age may die before they reach it. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
+| Linked to Common Longevity | Five years below Old Age From for the people outside longevity care, whose bodies still age; at least 65 | Grayed out until longevity care begins, since until then it gives the same age as Average. After that it stays within reach of those who still age, but the treated draw it for life, so the bill grows. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
 
-The pension age changes at once, but a linked setting moves at most a year a
-year; the bill and the workforce follow at the next census. Under Full, Old Age
+The pension age changes at once, but a linked setting moves toward its target by
+at most one year each year; the bill and the workforce follow at the next census. Under Full, Old Age
 Pension costs money for its pensioners: each year's census sets a weekly expense
 worth 6% of your output per person for each pensioner, per level of Social
 Security: Census: Pension Bill, which the Budget panel's Breakdown tab lists
