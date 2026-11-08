@@ -252,7 +252,7 @@ class CauseColorsTest(unittest.TestCase):
         # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_grid_hub = yes",
-                                  "te_jmap_selector = 34 has_building = building_company_regional_headquarter"])
+                                  "te_jmap_selector = 34 has_variable = te_jmap_rhq_n"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -702,25 +702,58 @@ class NinthPassMapsTest(_RoomBranches, unittest.TestCase):
         # owner, 2026-11-08: a state without a headquarters is grey; one with any, by their profit summed
         colors = self.of(self.colors, 34)
         self.assertEqual([limit for limit, _ in colors],
-                         ["te_jmap_selector = 34 has_building = building_company_headquarter te_jmap_hq_profit > 0",
-                          "te_jmap_selector = 34 has_building = building_company_headquarter",
+                         ["te_jmap_selector = 34 has_variable = te_jmap_hq_n te_jmap_hq_profit > 0",
+                          "te_jmap_selector = 34 has_variable = te_jmap_hq_n",
                           "te_jmap_selector = 34"])
         self.assertIn("factor = te_jmap_hq_factor", colors[0][1])
         self.assertEqual(colors[1][1], 'value = "te_jmap_hq_loss"')
         self.assertEqual(colors[2][1], 'value = "te_jmap_no_data"')
         # the hover's own ladder; the regional headquarters' line under it is a ladder of its own
-        hover = [limit for limit, _ in self.of(self.hover, 34) if "regional" not in limit]
+        hover = [limit for limit, _ in self.of(self.hover, 34) if "te_jmap_rhq_n" not in limit]
         self.assertEqual(hover, [limit for limit, _ in colors])
 
     def test_the_hq_profit_sums_the_headquarters_only_where_one_stands(self):
+        # A headquarters is found by its building group: the engine's per-company building types match no
+        # has_building on the template type (2026-11-08, the first build painted every state grey).
         values = code(VALUES)
-        for name, add in (("te_jmap_hq_profit", "add = weekly_profit"), ("te_jmap_hq_count", "add = 1")):
-            body = block(values, name)
-            guard = block(body, "if")
-            self.assertIn("has_building = building_company_headquarter", block(guard, "limit"), name)
-            walk = block(guard, "every_scope_building")
-            self.assertIn("is_building_type = building_company_headquarter", walk, name)
+        for name, group, add in (("te_jmap_hq_walk_profit", "bg_company_headquarter", "add = weekly_profit"),
+                                 ("te_jmap_hq_walk_count", "bg_company_headquarter", "add = 1"),
+                                 ("te_jmap_rhq_walk_count", "bg_company_regional_headquarter", "add = 1")):
+            walk = block(block(values, name), "every_scope_building")
+            self.assertIn("is_building_group = %s" % group, walk, name)
             self.assertIn(add, walk, name)
+        # The map, its hover and its range read the store's state variables, 0 where unset.
+        for name, var in (("te_jmap_hq_profit", "te_jmap_hq_wp"), ("te_jmap_hq_count", "te_jmap_hq_n"),
+                          ("te_jmap_rhq_count", "te_jmap_rhq_n")):
+            body = " ".join(block(values, name).split())
+            self.assertIn("if = { limit = { has_variable = %s } value = var:%s }" % (var, var), body, name)
+            self.assertNotIn("every_scope_building", body, name)
+
+    def test_the_hq_figures_are_stored_monthly_and_at_the_pick(self):
+        store = " ".join(block(code(EFFECTS), "te_jmap_store_hqs").split())
+        for var, walk in (("te_jmap_hq_n", "te_jmap_hq_walk_count"), ("te_jmap_hq_wp", "te_jmap_hq_walk_profit"),
+                          ("te_jmap_rhq_n", "te_jmap_rhq_walk_count")):
+            self.assertIn("set_variable = { name = %s value = %s }" % (var, walk), store)
+            self.assertIn("remove_variable = %s" % var, store)
+        self.assertTrue(store.startswith("every_state = {"), store[:40])
+        monthly = " ".join(block(code(ON_ACTIONS), "te_jmap_monthly_ranges").split())
+        # stored before the ranges read them, and before the two self-checks
+        self.assertLess(monthly.index("te_jmap_store_hqs = yes"), monthly.index("te_jmap_refresh_range = yes"))
+        self.assertLess(monthly.index("te_jmap_store_hqs = yes"), monthly.index("te_jmap_hq_found_selfcheck = yes"))
+        pick = " ".join(block(code(EFFECTS), "te_jmap_set_selector").split())
+        self.assertIn("if = { limit = { global_var:te_jmap_sel = 34 } te_jmap_store_hqs = yes }", pick)
+        self.assertLess(pick.index("te_jmap_store_hqs = yes"), pick.index("te_jmap_refresh_range = yes"))
+
+    def test_the_hq_store_is_self_checked(self):
+        # TE_SELF_CHECK hq_found: once a game, armed on companies existing (not on what the store finds), so a store
+        # that finds nothing speaks instead of staying silent as the first build's check did.
+        body = block(code(EFFECTS), "te_jmap_hq_found_selfcheck")
+        limit = " ".join(block(body, "limit").split())
+        self.assertIn("NOT = { has_global_variable = te_jmap_hq_found_selfcheck_done }", limit)
+        self.assertIn("any_company = { always = yes }", limit)
+        self.assertNotIn("te_jmap_hq_n", limit)
+        self.assertIn("TE_SELF_CHECK OK hq_found", body)
+        self.assertIn("TE_SELF_CHECK BROKEN hq_found", body)
 
     def test_the_hq_profit_read_is_self_checked(self):
         # TE_SELF_CHECK hq_profit: once a game, only with three headquarters or more to read, from the monthly pulse
@@ -809,12 +842,11 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
 
     def test_regional_headquarters_stripe_and_are_named(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertIn(("te_jmap_selector = 34 has_building = building_company_regional_headquarter",
+        self.assertIn(("te_jmap_selector = 34 has_variable = te_jmap_rhq_n",
                        'value = "te_jmap_hq_regional"'), stripes)
         self.assertIn("custom_tooltip_no_bullet = te_jmap_tt_hq_regional", block(self.room, "map_tooltip"))
-        body = block(code(VALUES), "te_jmap_rhq_count")
-        self.assertIn("has_building = building_company_regional_headquarter", body)
-        self.assertIn("is_building_type = building_company_regional_headquarter", body)
+        body = block(code(VALUES), "te_jmap_rhq_walk_count")
+        self.assertIn("is_building_group = bg_company_regional_headquarter", body)
 
     def test_the_new_rows(self):
         row = block(code(WIDGETS), "te_jmap_pick_row")

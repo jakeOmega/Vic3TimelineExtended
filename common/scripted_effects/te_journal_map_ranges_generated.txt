@@ -973,14 +973,14 @@ te_jmap_range_hq = {
 		remove_global_variable = te_jmap_rng_hq_hi
 	}
 	ordered_state = {
-		limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+		limit = { has_variable = te_jmap_hq_n te_jmap_hq_profit > 0 }
 		order_by = te_jmap_hq_input
 		position = 4
 		check_range_bounds = no
 		set_global_variable = { name = te_jmap_rng_hq_hi value = te_jmap_hq_input }
 	}
 	ordered_state = {
-		limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+		limit = { has_variable = te_jmap_hq_n te_jmap_hq_profit > 0 }
 		order_by = te_jmap_hq_input_neg
 		position = 4
 		check_range_bounds = no
@@ -990,14 +990,14 @@ te_jmap_range_hq = {
 	if = {
 		limit = { NOT = { has_global_variable = te_jmap_rng_hq_hi } }
 		ordered_state = {
-			limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+			limit = { has_variable = te_jmap_hq_n te_jmap_hq_profit > 0 }
 			order_by = te_jmap_hq_input
 			position = 0
 			check_range_bounds = no
 			set_global_variable = { name = te_jmap_rng_hq_hi value = te_jmap_hq_input }
 		}
 		ordered_state = {
-			limit = { has_building = building_company_headquarter te_jmap_hq_profit > 0 }
+			limit = { has_variable = te_jmap_hq_n te_jmap_hq_profit > 0 }
 			order_by = te_jmap_hq_input_neg
 			position = 0
 			check_range_bounds = no
