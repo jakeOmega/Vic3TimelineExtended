@@ -164,9 +164,9 @@ te_cm_russian_or_east_slavic_share = {
 
 # ---- Fervor (owner, 2026-11-07; in place of the German unification and Balkan League waits) ----
 # Any scope. The current fervor of scope:te_cm_fervor_source (0 to 100), in the dotted form vanilla's
-# movement_values.txt reads it (cu:north_german.culture_current_fervor). te_cm_copy_fervor saves the
-# source and passes this to set_fervor, whose documented form is a literal (set_fervor = 3.0): that it
-# takes a named value is the self-check cm_fervor_copy.
+# movement_values.txt reads it (cu:north_german.culture_current_fervor). Read only in comparisons and
+# by the self-check, never passed to set_fervor: that effect is documented with a literal
+# (set_fervor = 3.0), so the copy sets through a ladder of literals (te_cmg_set_fervor_from_source).
 te_cm_fervor_of_source = {
 	value = scope:te_cm_fervor_source.culture_current_fervor
 }

@@ -446,7 +446,10 @@ toward 0. Once a month every switched culture's fervor is set to that of the
 culture it switched into, and at the switch the result takes the part's fervor
 where its own is lower. An INJECT couldn't widen the Balkan League, whose test
 sits in its start condition; this writes a culture's state, not vanilla
-content, so the rule above holds.
+content, so the rule above holds. Ukrainian and Byelorussian are left out:
+vanilla reads their fervor only for an identity apart from Russian (their
+renaissances, the Russian Civil War's releases), which their merge into East
+Slavic has ended.
 
 **A switched part that reappears** (a vanilla event converting pops into it
 after its switch) is converted on the next monthly pass *(designer's call)*;

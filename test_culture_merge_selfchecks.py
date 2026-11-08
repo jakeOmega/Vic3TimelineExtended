@@ -258,7 +258,7 @@ class HookTest(unittest.TestCase):
         (MERGE_EFFECTS, "te_cm_convert_part", "te_cm_chk_conversion = { CULTURE = $CULTURE$ RESULT = $RESULT$ }"),
         (MERGE_EFFECTS, "te_cm_switch_part", "te_cm_chk_switch = { CULTURE = $CULTURE$ }"),
         (MERGE_EFFECTS, "te_cm_copy_fervor", "te_cm_chk_fervor = { CULTURE = $CULTURE$ }"),
-        (MERGE_ON_ACTIONS, "te_cm_monthly_on_action", "te_cm_chk_fervor_monthly = yes"),
+        (MERGE_ON_ACTIONS, "te_cm_fervor_on_action", "te_cm_chk_fervor_monthly = yes"),
         (MERGE_ON_ACTIONS, "te_cm_yearly_on_action", "te_cm_chk_census_year = yes"),
         (MERGE_ON_ACTIONS, "te_cm_formed_on_action", "te_cm_chk_formation = yes"),
     )
@@ -365,11 +365,11 @@ class LatchTest(unittest.TestCase):
         # switch_homeland: a part with homeland states to check.
         switch = squash(block(text, "te_cm_chk_switch"))
         self.assertIn("local_var:te_cm_chk_n > 0", switch)
-        # fervor_copy: a source with fervor to copy, and the culture zeroed with a literal before the named set, so a
-        # set that did nothing reads 0, not the target.
+        # fervor_copy: a source with fervor to copy, and the culture zeroed before the ladder copies, so a copy that did
+        # nothing reads 0, not the target.
         fervor = squash(block(text, "te_cm_chk_fervor"))
         self.assertIn("scope:te_cm_fervor_source = { culture_current_fervor >= 5 }", fervor)
-        self.assertLess(fervor.index("set_fervor = 0"), fervor.index("set_fervor = te_cm_fervor_of_source"))
+        self.assertLess(fervor.index("set_fervor = 0"), fervor.index("te_cmg_set_fervor_from_source = yes"))
         # conversion_merges_pops: the first pass must have made a result pop to compare the second against.
         monthly = squash(block(text, "te_cm_chk_conversion_monthly"))
         self.assertIn("global_var:te_cm_chk_conv_inc1 >= 1", monthly)
@@ -399,9 +399,10 @@ class LatchTest(unittest.TestCase):
                        "is_homeland = scope:te_cm_chk_sw_res", "is_homeland = global_var:te_cm_chk_sw_result"):
             self.assertIn(needle, switch)
         fervor = squash(block(text, "te_cm_chk_fervor_monthly"))
-        for needle in ("global_var:te_cm_chk_fv_later >= global_var:te_cm_chk_fv_low",
+        for needle in ("global_var:te_cm_chk_fv_target >= 5",
+                       "global_var:te_cm_chk_fv_later >= global_var:te_cm_chk_fv_low",
                        "global_var:te_cm_chk_fv_later <= global_var:te_cm_chk_fv_high",
-                       "change_global_variable = { name = te_cm_chk_fv_low add = -2 }",
+                       "change_global_variable = { name = te_cm_chk_fv_low add = -2.5 }",
                        "change_global_variable = { name = te_cm_chk_fv_high add = 2 }"):
             self.assertIn(needle, fervor)
         russia = squash(block(text, "te_cm_chk_russification_monthly"))

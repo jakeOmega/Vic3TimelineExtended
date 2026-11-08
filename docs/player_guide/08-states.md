@@ -372,7 +372,9 @@ at the switch the merged culture takes the part's fervor if its own is lower.
 So base-game content that reads it goes on working: German National Identity
 completes on German fervor once North and South German have switched, The
 Balkan League reads Yugoslav fervor where it read Serb, and the German, Italian
-and Yugoslav national movements can still form.
+and Yugoslav national movements can still form. Ukrainian and Byelorussian are
+the exception: their fervor fades once they switch, so their Cultural
+Renaissances don't open for a people who have become East Slavic.
 
 ### How fast a merge converts
 
@@ -451,9 +453,9 @@ converting, which other merges can then take.
 
 ### Merges and base-game content
 
-Some base-game content reads a part's pops or fervor directly, and after a
-switch it finds none. The German, Italian and Yugoslav national movements lose
-the fervor that drives them; historical characters keep their old culture;
+Some base-game content reads a part's pops directly, and after a switch it
+finds none (fervor is kept; see [Starting a culture merge](#starting-a-culture-merge)).
+Historical characters keep their old culture;
 clothing and ship names tied to a part don't carry over to the merged culture;
 and some texts show a merged culture's plural name as its singular. The Western
 Border (Russification) counts East Slavic pops as Russian, so the East Slavic

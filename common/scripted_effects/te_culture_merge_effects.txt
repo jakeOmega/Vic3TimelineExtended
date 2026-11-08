@@ -697,6 +697,14 @@ te_cm_switch_part = {
 		# TEMPORARY self-check cm_switch_homeland (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
 		# Counts the part's homeland states before any is touched.
 		te_cm_chk_switch = { CULTURE = $CULTURE$ }
+		# The fervor the part's people bring, read before any pop converts: the result takes the part's fervor where its
+		# own is lower, so the monthly copy (te_cm_copy_fervor) doesn't drop the part's at the switch, and vanilla's reads
+		# of it don't dip. Set through the literal ladder (te_cmg_set_fervor_from_source).
+		cu:$CULTURE$ = { save_temporary_scope_as = te_cm_fervor_source }
+		if = {
+			limit = { cu:$RESULT$ = { culture_current_fervor < te_cm_fervor_of_source } }
+			cu:$RESULT$ = { te_cmg_set_fervor_from_source = yes }
+		}
 		every_country = {
 			every_scope_pop = {
 				limit = { culture = cu:$CULTURE$ }
@@ -710,13 +718,6 @@ te_cm_switch_part = {
 			}
 		}
 		set_global_variable = { name = te_cm_switched_$CULTURE$ value = scope:te_cm_result }
-		# The fervor the part's people bring: the result takes the part's fervor where its own is lower, so the monthly
-		# copy (te_cm_copy_fervor) doesn't drop the part's at the switch, and vanilla's reads of it don't dip.
-		cu:$CULTURE$ = { save_temporary_scope_as = te_cm_fervor_source }
-		if = {
-			limit = { cu:$RESULT$ = { culture_current_fervor < te_cm_fervor_of_source } }
-			cu:$RESULT$ = { set_fervor = te_cm_fervor_of_source }
-		}
 		if = {
 			limit = { has_global_variable = te_cm_in_$CULTURE$ }
 			remove_global_variable = te_cm_in_$CULTURE$
@@ -762,11 +763,13 @@ te_cm_monthly_switched_culture = {
 # Italian and Yugoslav pan-national movements' creation_trigger (above 10) and movement_values.txt's averages. A
 # switched culture has no pops, so its target fervor is 0 and its fervor drifts down (CULTURAL_FERVOR_DRIFT, about 1%
 # of the gap a month), and every one of those reads goes dark. Set to the fervor of the culture its people became,
-# they read the merged culture's. te_cmg_copy_fervor_all runs it once a month for every switched culture, with no rule
-# gate: like the Russification outcome, it serves pops that already switched, which stay switched with the rule off.
+# rounded down to the half point (te_cmg_set_fervor_from_source, literals only), they read the merged culture's.
+# te_cmg_copy_fervor_all runs it once a month (the global on_monthly_pulse) for every switched culture but Ukrainian
+# and Byelorussian (culture_merges_config.NO_FERVOR_COPY), with no rule gate: like the Russification outcome, it serves
+# pops that already switched, which stay switched with the rule off.
 te_cm_copy_fervor = {
 	global_var:te_cm_switched_$CULTURE$ = { save_temporary_scope_as = te_cm_fervor_source }
 	# TEMPORARY self-check cm_fervor_copy (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
 	te_cm_chk_fervor = { CULTURE = $CULTURE$ }
-	cu:$CULTURE$ = { set_fervor = te_cm_fervor_of_source }
+	cu:$CULTURE$ = { te_cmg_set_fervor_from_source = yes }
 }

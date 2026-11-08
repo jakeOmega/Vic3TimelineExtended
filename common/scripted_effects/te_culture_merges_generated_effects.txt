@@ -14348,11 +14348,13 @@ te_cmg_monthly_country = {
 	}
 }
 
-# Any scope. Once a month, with no rule gate (te_cm_monthly_on_action, behind te_cm_fervor_lock): every culture that has
+# Any scope. Once a month, with no rule gate (te_cm_fervor_on_action, on the global on_monthly_pulse): every culture that has
 # switched takes the fervor of the culture it switched into (te_cm_copy_fervor), so vanilla's reads of its fervor read
 # the merged culture's. A culture is copied after the one it switched into (fervor_copy_order): cm_italian, which
 # switches into cm_latin, before North Italian, so a chain settles in one pass. One variable check per culture while
 # nothing has switched.
+# Not Ukrainian or Byelorussian (cfg.NO_FERVOR_COPY): vanilla reads their fervor only for an identity apart from
+# Russian (their renaissances, the Russian Civil War's releases), which their merge into East Slavic has ended.
 te_cmg_copy_fervor_all = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_north_german }
@@ -14699,14 +14701,6 @@ te_cmg_copy_fervor_all = {
 		te_cm_copy_fervor = { CULTURE = russian }
 	}
 	if = {
-		limit = { has_global_variable = te_cm_switched_ukrainian }
-		te_cm_copy_fervor = { CULTURE = ukrainian }
-	}
-	if = {
-		limit = { has_global_variable = te_cm_switched_byelorussian }
-		te_cm_copy_fervor = { CULTURE = byelorussian }
-	}
-	if = {
 		limit = { has_global_variable = te_cm_switched_serb }
 		te_cm_copy_fervor = { CULTURE = serb }
 	}
@@ -14825,6 +14819,836 @@ te_cmg_copy_fervor_all = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_ilocano }
 		te_cm_copy_fervor = { CULTURE = ilocano }
+	}
+}
+
+# Culture scope = the culture to set; scope:te_cm_fervor_source = the culture whose fervor it takes. Sets the
+# fervor to the highest half point at or below the source's (fervor_ladder), with literals only: set_fervor is
+# documented with a literal, and a named value it read as 0 would zero the culture. Two levels, bands of ten and
+# then half points, so a set costs at most 30 tests.
+te_cmg_set_fervor_from_source = {
+	if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 90 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 100 } }
+			set_fervor = 100
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 99.5 } }
+			set_fervor = 99.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 99 } }
+			set_fervor = 99
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 98.5 } }
+			set_fervor = 98.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 98 } }
+			set_fervor = 98
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 97.5 } }
+			set_fervor = 97.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 97 } }
+			set_fervor = 97
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 96.5 } }
+			set_fervor = 96.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 96 } }
+			set_fervor = 96
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 95.5 } }
+			set_fervor = 95.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 95 } }
+			set_fervor = 95
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 94.5 } }
+			set_fervor = 94.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 94 } }
+			set_fervor = 94
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 93.5 } }
+			set_fervor = 93.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 93 } }
+			set_fervor = 93
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 92.5 } }
+			set_fervor = 92.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 92 } }
+			set_fervor = 92
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 91.5 } }
+			set_fervor = 91.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 91 } }
+			set_fervor = 91
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 90.5 } }
+			set_fervor = 90.5
+		}
+		else = {
+			set_fervor = 90
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 80 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 89.5 } }
+			set_fervor = 89.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 89 } }
+			set_fervor = 89
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 88.5 } }
+			set_fervor = 88.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 88 } }
+			set_fervor = 88
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 87.5 } }
+			set_fervor = 87.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 87 } }
+			set_fervor = 87
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 86.5 } }
+			set_fervor = 86.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 86 } }
+			set_fervor = 86
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 85.5 } }
+			set_fervor = 85.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 85 } }
+			set_fervor = 85
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 84.5 } }
+			set_fervor = 84.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 84 } }
+			set_fervor = 84
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 83.5 } }
+			set_fervor = 83.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 83 } }
+			set_fervor = 83
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 82.5 } }
+			set_fervor = 82.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 82 } }
+			set_fervor = 82
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 81.5 } }
+			set_fervor = 81.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 81 } }
+			set_fervor = 81
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 80.5 } }
+			set_fervor = 80.5
+		}
+		else = {
+			set_fervor = 80
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 70 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 79.5 } }
+			set_fervor = 79.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 79 } }
+			set_fervor = 79
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 78.5 } }
+			set_fervor = 78.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 78 } }
+			set_fervor = 78
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 77.5 } }
+			set_fervor = 77.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 77 } }
+			set_fervor = 77
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 76.5 } }
+			set_fervor = 76.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 76 } }
+			set_fervor = 76
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 75.5 } }
+			set_fervor = 75.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 75 } }
+			set_fervor = 75
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 74.5 } }
+			set_fervor = 74.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 74 } }
+			set_fervor = 74
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 73.5 } }
+			set_fervor = 73.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 73 } }
+			set_fervor = 73
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 72.5 } }
+			set_fervor = 72.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 72 } }
+			set_fervor = 72
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 71.5 } }
+			set_fervor = 71.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 71 } }
+			set_fervor = 71
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 70.5 } }
+			set_fervor = 70.5
+		}
+		else = {
+			set_fervor = 70
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 60 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 69.5 } }
+			set_fervor = 69.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 69 } }
+			set_fervor = 69
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 68.5 } }
+			set_fervor = 68.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 68 } }
+			set_fervor = 68
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 67.5 } }
+			set_fervor = 67.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 67 } }
+			set_fervor = 67
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 66.5 } }
+			set_fervor = 66.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 66 } }
+			set_fervor = 66
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 65.5 } }
+			set_fervor = 65.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 65 } }
+			set_fervor = 65
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 64.5 } }
+			set_fervor = 64.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 64 } }
+			set_fervor = 64
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 63.5 } }
+			set_fervor = 63.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 63 } }
+			set_fervor = 63
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 62.5 } }
+			set_fervor = 62.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 62 } }
+			set_fervor = 62
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 61.5 } }
+			set_fervor = 61.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 61 } }
+			set_fervor = 61
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 60.5 } }
+			set_fervor = 60.5
+		}
+		else = {
+			set_fervor = 60
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 50 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 59.5 } }
+			set_fervor = 59.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 59 } }
+			set_fervor = 59
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 58.5 } }
+			set_fervor = 58.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 58 } }
+			set_fervor = 58
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 57.5 } }
+			set_fervor = 57.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 57 } }
+			set_fervor = 57
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 56.5 } }
+			set_fervor = 56.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 56 } }
+			set_fervor = 56
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 55.5 } }
+			set_fervor = 55.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 55 } }
+			set_fervor = 55
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 54.5 } }
+			set_fervor = 54.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 54 } }
+			set_fervor = 54
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 53.5 } }
+			set_fervor = 53.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 53 } }
+			set_fervor = 53
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 52.5 } }
+			set_fervor = 52.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 52 } }
+			set_fervor = 52
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 51.5 } }
+			set_fervor = 51.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 51 } }
+			set_fervor = 51
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 50.5 } }
+			set_fervor = 50.5
+		}
+		else = {
+			set_fervor = 50
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 40 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 49.5 } }
+			set_fervor = 49.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 49 } }
+			set_fervor = 49
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 48.5 } }
+			set_fervor = 48.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 48 } }
+			set_fervor = 48
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 47.5 } }
+			set_fervor = 47.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 47 } }
+			set_fervor = 47
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 46.5 } }
+			set_fervor = 46.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 46 } }
+			set_fervor = 46
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 45.5 } }
+			set_fervor = 45.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 45 } }
+			set_fervor = 45
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 44.5 } }
+			set_fervor = 44.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 44 } }
+			set_fervor = 44
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 43.5 } }
+			set_fervor = 43.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 43 } }
+			set_fervor = 43
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 42.5 } }
+			set_fervor = 42.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 42 } }
+			set_fervor = 42
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 41.5 } }
+			set_fervor = 41.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 41 } }
+			set_fervor = 41
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 40.5 } }
+			set_fervor = 40.5
+		}
+		else = {
+			set_fervor = 40
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 30 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 39.5 } }
+			set_fervor = 39.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 39 } }
+			set_fervor = 39
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 38.5 } }
+			set_fervor = 38.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 38 } }
+			set_fervor = 38
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 37.5 } }
+			set_fervor = 37.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 37 } }
+			set_fervor = 37
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 36.5 } }
+			set_fervor = 36.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 36 } }
+			set_fervor = 36
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 35.5 } }
+			set_fervor = 35.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 35 } }
+			set_fervor = 35
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 34.5 } }
+			set_fervor = 34.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 34 } }
+			set_fervor = 34
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 33.5 } }
+			set_fervor = 33.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 33 } }
+			set_fervor = 33
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 32.5 } }
+			set_fervor = 32.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 32 } }
+			set_fervor = 32
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 31.5 } }
+			set_fervor = 31.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 31 } }
+			set_fervor = 31
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 30.5 } }
+			set_fervor = 30.5
+		}
+		else = {
+			set_fervor = 30
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 20 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 29.5 } }
+			set_fervor = 29.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 29 } }
+			set_fervor = 29
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 28.5 } }
+			set_fervor = 28.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 28 } }
+			set_fervor = 28
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 27.5 } }
+			set_fervor = 27.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 27 } }
+			set_fervor = 27
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 26.5 } }
+			set_fervor = 26.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 26 } }
+			set_fervor = 26
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 25.5 } }
+			set_fervor = 25.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 25 } }
+			set_fervor = 25
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 24.5 } }
+			set_fervor = 24.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 24 } }
+			set_fervor = 24
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 23.5 } }
+			set_fervor = 23.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 23 } }
+			set_fervor = 23
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 22.5 } }
+			set_fervor = 22.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 22 } }
+			set_fervor = 22
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 21.5 } }
+			set_fervor = 21.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 21 } }
+			set_fervor = 21
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 20.5 } }
+			set_fervor = 20.5
+		}
+		else = {
+			set_fervor = 20
+		}
+	}
+	else_if = {
+		limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 10 } }
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 19.5 } }
+			set_fervor = 19.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 19 } }
+			set_fervor = 19
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 18.5 } }
+			set_fervor = 18.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 18 } }
+			set_fervor = 18
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 17.5 } }
+			set_fervor = 17.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 17 } }
+			set_fervor = 17
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 16.5 } }
+			set_fervor = 16.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 16 } }
+			set_fervor = 16
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 15.5 } }
+			set_fervor = 15.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 15 } }
+			set_fervor = 15
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 14.5 } }
+			set_fervor = 14.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 14 } }
+			set_fervor = 14
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 13.5 } }
+			set_fervor = 13.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 13 } }
+			set_fervor = 13
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 12.5 } }
+			set_fervor = 12.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 12 } }
+			set_fervor = 12
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 11.5 } }
+			set_fervor = 11.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 11 } }
+			set_fervor = 11
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 10.5 } }
+			set_fervor = 10.5
+		}
+		else = {
+			set_fervor = 10
+		}
+	}
+	else = {
+		if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 9.5 } }
+			set_fervor = 9.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 9 } }
+			set_fervor = 9
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 8.5 } }
+			set_fervor = 8.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 8 } }
+			set_fervor = 8
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 7.5 } }
+			set_fervor = 7.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 7 } }
+			set_fervor = 7
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 6.5 } }
+			set_fervor = 6.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 6 } }
+			set_fervor = 6
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 5.5 } }
+			set_fervor = 5.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 5 } }
+			set_fervor = 5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 4.5 } }
+			set_fervor = 4.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 4 } }
+			set_fervor = 4
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 3.5 } }
+			set_fervor = 3.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 3 } }
+			set_fervor = 3
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 2.5 } }
+			set_fervor = 2.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 2 } }
+			set_fervor = 2
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 1.5 } }
+			set_fervor = 1.5
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 1 } }
+			set_fervor = 1
+		}
+		else_if = {
+			limit = { scope:te_cm_fervor_source = { culture_current_fervor >= 0.5 } }
+			set_fervor = 0.5
+		}
+		else = {
+			set_fervor = 0
+		}
 	}
 }
 

@@ -89,6 +89,15 @@ def _new(name: str, r: int, g: int, b: int) -> NewCulture:
     return NewCulture(name, (r, g, b))
 
 
+# Cultures the monthly fervor copy leaves out (owner, 2026-11-07, R41: a switched culture's fervor follows the
+# culture it switched into, so vanilla's reads of it read the merged culture's). Ukrainian and Byelorussian merge
+# with Russian into East Slavic, and vanilla reads their fervor only for a separate identity: their Cultural
+# Renaissances open on it (Ukrainian at 15, Byelorussian at 20; 08_cultural_renaissances.txt) and the Russian Civil
+# War releases a homeland culture's states on it (10; 05_russian_civil_war_triggers.txt). Copied, East Slavic's
+# fervor would reopen a renaissance for a culture with no people, so theirs drifts to 0 and that content stays shut.
+NO_FERVOR_COPY: tuple[str, ...] = ("ukrainian", "byelorussian")
+
+
 MERGES: tuple[Merge, ...] = (
     Merge(
         "german", "cm_german", _new("German", 118, 120, 128),

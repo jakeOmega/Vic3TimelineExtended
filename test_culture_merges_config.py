@@ -180,6 +180,18 @@ class RosterTest(unittest.TestCase):
             merge = cfg.merge_by_key(key)
             self.assertEqual([c for p in merge.core + merge.optional for c in p.cultures if p.wait_for], [], key)
 
+    def test_the_guides_appendix_lists_exactly_the_configs_waits(self):
+        # docs/player_guide/20-appendix-reference-lists.md, the culture merge table, in roster order: a row names a wait
+        # exactly when one of the merge's parts has one (R41 dropped German's and Yugoslav's and left the rows stale).
+        text = open(os.path.join(REPO, "docs/player_guide/20-appendix-reference-lists.md"), encoding="utf-8").read()
+        table = text[text.index("| Merge | Core parts | Optional parts | Tier | Waits and requirements |"):]
+        rows = [line for line in table.split("\n")[2:] if line.startswith("|")][: len(cfg.MERGES)]
+        self.assertEqual(len(rows), len(cfg.MERGES))
+        for row, merge in zip(rows, cfg.MERGES):
+            waits = sorted({e for p in merge.core + merge.optional for e in p.wait_for})
+            last = row.strip("|").split("|")[-1]
+            self.assertEqual("wait" in last.lower(), bool(waits), (merge.key, last.strip()))
+
     def test_every_wait_names_a_vanilla_journal_entry(self):
         entries = snapshot()["Journal Entries"]
         for m in cfg.MERGES:

@@ -641,6 +641,10 @@ class ButtonTest(unittest.TestCase):
             body = squash(block(on_actions, name))
             if name.startswith("on_"):
                 self.assertIn("on_actions = {", body, name)  # a hook: the rule is tested by the action it calls
+            elif name == "te_cm_fervor_on_action":
+                # R41: the fervor copy serves pops that already switched, which stay switched with the rule off, so it
+                # runs either way (as the Russification outcome does); test_culture_merge_fervor pins its body.
+                self.assertNotIn("te_cm_system_enabled", body, name)
             else:
                 self.assertIn("te_cm_system_enabled = yes", body, name)
         for merge in cfg.MERGES:

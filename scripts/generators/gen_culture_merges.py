@@ -67,8 +67,9 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   in the sphere of: ``te_cm_convert_part`` at the part's own tier), ``te_cmg_dominance_all`` (the dominance of
   each such part, then its switch: ``te_cm_census_dominance`` and ``te_cm_switch_part``),
   ``te_cmg_monthly_country`` (``te_cm_monthly_switched_culture`` for each switched culture),
-  ``te_cmg_copy_fervor_all`` (``te_cm_copy_fervor`` for each switched culture, a culture after the one it switched
-  into: ``fervor_copy_order``; owner, 2026-11-07, in place of the German unification and Balkan League waits),
+  ``te_cmg_copy_fervor_all`` (``te_cm_copy_fervor`` for each switched culture but ``cfg.NO_FERVOR_COPY``, a culture
+  after the one it switched into: ``fervor_copy_order``; owner, 2026-11-07, in place of the German unification and
+  Balkan League waits), ``te_cmg_set_fervor_from_source`` (the literal ladder it sets with: ``fervor_ladder``),
   ``te_cmg_formed_country`` (the same on ``on_country_formed``, then the result back as a primary culture in a
   sphere country that had begun converting, where a part that joined is primary: R34) and
   ``te_cmg_remove_switched_part_homelands`` (the homeland of every part that switched into the culture whose
@@ -670,6 +671,28 @@ def fervor_copy_order(merges: tuple[cfg.Merge, ...]) -> list[str]:
 
     cultures = switchable_cultures(merges)
     return sorted(cultures, key=lambda c: (height(c), cultures.index(c)))
+
+
+def fervor_ladder() -> list[tuple[int, list[float], float]]:
+    """The fervor copy's ladder, as data: for each band of ten, from the top, its lower bound, the steps tested inside
+    it (highest first) and the value its ``else`` sets. A culture's fervor is set to the highest step at or below the
+    source's (0.5 apart), so a copy never reads above the culture it copies and loses less than half a point.
+    Vanilla's ``set_fervor`` is documented with a literal only (``set_fervor = 3.0``), and an effect that reads a
+    named script value as 0 would zero the culture, so every set is a literal (R41)."""
+    bands = []
+    for low in range(90, -1, -10):
+        top = 100.0 if low == 90 else low + 9.5
+        steps = []
+        v = top
+        while v > low:
+            steps.append(v)
+            v -= 0.5
+        bands.append((low, steps, float(low)))
+    return bands
+
+
+def _fervor_literal(value: float) -> str:
+    return ("%.1f" % value).rstrip("0").rstrip(".")
 
 
 def result_can_switch(merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> bool:
@@ -1532,16 +1555,39 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
 
     # ---- the fervor copy ----
     out.line()
-    out.line("# Any scope. Once a month, with no rule gate (te_cm_monthly_on_action, behind te_cm_fervor_lock): every culture that has")
+    out.line("# Any scope. Once a month, with no rule gate (te_cm_fervor_on_action, on the global on_monthly_pulse): every culture that has")
     out.line("# switched takes the fervor of the culture it switched into (te_cm_copy_fervor), so vanilla's reads of its fervor read")
     out.line("# the merged culture's. A culture is copied after the one it switched into (fervor_copy_order): cm_italian, which")
     out.line("# switches into cm_latin, before North Italian, so a chain settles in one pass. One variable check per culture while")
     out.line("# nothing has switched.")
+    out.line("# Not Ukrainian or Byelorussian (cfg.NO_FERVOR_COPY): vanilla reads their fervor only for an identity apart from")
+    out.line("# Russian (their renaissances, the Russian Civil War's releases), which their merge into East Slavic has ended.")
     with out.block("te_cmg_copy_fervor_all"):
         for culture in fervor_copy_order(merges):
+            if culture in cfg.NO_FERVOR_COPY:
+                continue
             with out.block("if"):
                 out.line("limit = { has_global_variable = te_cm_switched_%s }" % culture)
                 out.line("te_cm_copy_fervor = { CULTURE = %s }" % culture)
+
+    out.line()
+    out.line("# Culture scope = the culture to set; scope:te_cm_fervor_source = the culture whose fervor it takes. Sets the")
+    out.line("# fervor to the highest half point at or below the source's (fervor_ladder), with literals only: set_fervor is")
+    out.line("# documented with a literal, and a named value it read as 0 would zero the culture. Two levels, bands of ten and")
+    out.line("# then half points, so a set costs at most 30 tests.")
+    with out.block("te_cmg_set_fervor_from_source"):
+        bands = fervor_ladder()
+        for i, (low, steps, rest) in enumerate(bands):
+            opener = "if" if i == 0 else ("else" if i == len(bands) - 1 else "else_if")
+            with out.block(opener):
+                if opener != "else":
+                    out.line("limit = { scope:te_cm_fervor_source = { culture_current_fervor >= %d } }" % low)
+                for j, step in enumerate(steps):
+                    with out.block("if" if j == 0 else "else_if"):
+                        out.line("limit = { scope:te_cm_fervor_source = { culture_current_fervor >= %s } }" % _fervor_literal(step))
+                        out.line("set_fervor = %s" % _fervor_literal(step))
+                with out.block("else"):
+                    out.line("set_fervor = %s" % _fervor_literal(rest))
 
     # ---- the formation hook ----
     out.line()

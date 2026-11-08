@@ -14,7 +14,7 @@
 #   cm_switch_homeland          add_homeland reaches every state of the part, and is_homeland = global_var:X reads
 #   cm_formation_keeps_primary  on_country_formed leaves the result a primary culture, before the refresh runs
 #   cm_russification_outcome    the INJECTed second outcome concludes Russification
-#   cm_fervor_copy              set_fervor takes a named value (te_cm_fervor_of_source), and the culture keeps it a month
+#   cm_fervor_copy              the literal ladder sets a switched culture's fervor, and the culture keeps it a month
 #
 # The seven hook lines (each one call; the helper does all the work and guards itself):
 #   te_culture_merge_effects.txt
@@ -25,8 +25,8 @@
 #   te_culture_merge_on_actions.txt
 #     te_cm_yearly_on_action   te_cm_chk_census_year = yes
 #     te_cm_formed_on_action   te_cm_chk_formation = yes
-#     te_cm_monthly_on_action  te_cm_chk_fervor_monthly = yes   (inside the fervor lock, before the copy: it reads last
-#                              month's copy, so it can't sit in this file's pass, whose order against that one is unset)
+#     te_cm_fervor_on_action   te_cm_chk_fervor_monthly = yes   (the global pulse, before the copy: it reads last
+#                              month's copy, so it can't sit in this file's country pass)
 # and this file's monthly pass, which reads what the hooks stored.
 
 on_monthly_pulse_country = {
