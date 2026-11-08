@@ -640,9 +640,12 @@ class TriggerShapeTest(unittest.TestCase):
             "te_cm_system_enabled = yes "
             "OR = { country_has_primary_culture = cu:north_german country_has_primary_culture = cu:south_german } "
             "te_cm_tier_tech = { TIER = 1 } "
-            "NOT = { global_var:te_cm_state_german ?= 2 } "
-            "NOT = { has_global_variable = te_cm_switched_cm_german }",
+            "NOT = { global_var:te_cm_state_german ?= 2 }",
         )
+        # A result that is a part of another merge also asks that it has not switched into it (R33, R36).
+        self.assertIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", self.trig("te_cmg_italian_is_candidate"))
+        self.assertIn("NOT = { has_global_variable = te_cm_switched_french }", self.trig("te_cmg_french_is_candidate"))
+        self.assertNotIn("te_cm_switched", self.trig("te_cmg_hungarian_is_candidate"))
 
     def test_candidate_needs_the_tech_of_the_highest_core_tier(self):
         for merge in cfg.MERGES:

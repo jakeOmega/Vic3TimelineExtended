@@ -438,11 +438,19 @@ je_te_cm_italian = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_italian_has_other_starter = yes
+			OR = {
+				te_cmg_italian_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_italian
+					NOT = { te_cmg_italian_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -1000,11 +1008,19 @@ je_te_cm_east_slavic = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_east_slavic_has_other_starter = yes
+			OR = {
+				te_cmg_east_slavic_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_east_slavic
+					NOT = { te_cmg_east_slavic_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -1274,11 +1290,19 @@ je_te_cm_yugoslav = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_yugoslav_has_other_starter = yes
+			OR = {
+				te_cmg_yugoslav_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_yugoslav
+					NOT = { te_cmg_yugoslav_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -1504,11 +1528,19 @@ je_te_cm_czechoslovak = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_czechoslovak_has_other_starter = yes
+			OR = {
+				te_cmg_czechoslovak_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_czechoslovak
+					NOT = { te_cmg_czechoslovak_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -2432,11 +2464,19 @@ je_te_cm_french = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_french_has_other_starter = yes
+			OR = {
+				te_cmg_french_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_french
+					NOT = { te_cmg_french_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -2653,11 +2693,19 @@ je_te_cm_british = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_british_has_other_starter = yes
+			OR = {
+				te_cmg_british_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_british
+					NOT = { te_cmg_british_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -2890,11 +2938,19 @@ je_te_cm_american = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_american_has_other_starter = yes
+			OR = {
+				te_cmg_american_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_american
+					NOT = { te_cmg_american_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -5873,11 +5929,19 @@ je_te_cm_oghuz_turkic = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_oghuz_turkic_has_other_starter = yes
+			OR = {
+				te_cmg_oghuz_turkic_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_oghuz_turkic
+					NOT = { te_cmg_oghuz_turkic_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -6818,11 +6882,19 @@ je_te_cm_indonesian = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_indonesian_has_other_starter = yes
+			OR = {
+				te_cmg_indonesian_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_cm_indonesian
+					NOT = { te_cmg_indonesian_is_starter = yes }
+				}
+			}
 		}
 	}
 
@@ -7127,11 +7199,19 @@ je_te_cm_filipino = {
 	}
 
 	# Another country started this merge first (or it is complete under one): the entry ends silently.
+	# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no
+	# longer start, and only the starter (who has the complete outcome above) keeps the entry.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = te_cm_je_invalid_conclusion_desc
 		trigger = {
-			te_cmg_filipino_has_other_starter = yes
+			OR = {
+				te_cmg_filipino_has_other_starter = yes
+				AND = {
+					has_global_variable = te_cm_switched_filipino
+					NOT = { te_cmg_filipino_is_starter = yes }
+				}
+			}
 		}
 	}
 

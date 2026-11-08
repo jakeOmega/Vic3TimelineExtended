@@ -34,7 +34,7 @@ import culture_merges_config as cfg  # noqa: E402
 import gen_culture_merges as gen  # noqa: E402
 from je_multiplier_scope_audit import parse_text  # noqa: E402
 from test_culture_merge_census import block, slot_cultures, squash, text_of, tier_of  # noqa: E402
-from test_culture_merge_entries import World, child, definitions, holds  # noqa: E402
+from test_culture_merge_entries import World, all_english_loc_keys, child, children, definitions, entry_nodes, holds  # noqa: E402
 from test_homeland_progress import Script, obj  # noqa: E402
 
 EFFECTS = ROOT / "common/scripted_effects/te_culture_merge_effects.txt"
@@ -1111,7 +1111,9 @@ class ChainTest(unittest.TestCase):
         for merge in cfg.MERGES:
             switched = "NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
             key = merge.key
-            self.assertIn(switched, squash(block(triggers, "te_cmg_%s_is_candidate" % key)), key)
+            # Only a result that can switch carries the test in is_candidate (and then in can_start: R36).
+            candidate = squash(block(triggers, "te_cmg_%s_is_candidate" % key))
+            self.assertEqual(switched in candidate, gen.result_can_switch(merge, cfg.MERGES), key)
             self.assertIn(switched, squash(block(triggers, "te_cmg_%s_census_wanted" % key)), key)
             self.assertIn("exists = global_var:te_cm_starter_%s %s" % (key, switched), section(yearly, key), key)
             self.assertIn("NOT = { te_cmg_%s_starter_gone = yes } %s" % (key, switched), section(dominance, key), key)
@@ -1204,6 +1206,138 @@ class SolWalkScenarioTest(unittest.TestCase):
     def test_it_waits_for_the_core_to_have_no_figure_and_every_core_slot_met(self):
         self.assertFalse(self.runs(joined=["alemannic"], n=1))
         self.assertFalse(self.runs(joined=["alemannic"], allcore=0))
+
+
+class StartGuardTest(unittest.TestCase):
+    """R36: a merge whose result has switched into a wider culture cannot be started, by button, entry or effect."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = text_of(GEN_TRIGGERS)
+        cls.effects = text_of(GEN_EFFECTS)
+        cls.entries = entry_nodes()
+        cls.switchable_results = [m for m in cfg.MERGES if gen.result_can_switch(m, cfg.MERGES)]
+
+    def can_start_text(self, key):
+        basics = block(self.triggers, "te_cmg_%s_start_basics" % key) or ""
+        return squash(basics + "\n" + block(self.triggers, "te_cmg_%s_can_start" % key))
+
+    def test_the_merges_whose_result_can_switch_are_the_ones_another_merge_lists(self):
+        self.assertEqual(
+            sorted(m.key for m in self.switchable_results),
+            sorted(["italian", "east_slavic", "czechoslovak", "yugoslav", "oghuz_turkic", "indonesian", "american",
+                    "french", "british", "filipino"]),
+        )
+        for merge in cfg.MERGES:
+            listed = any(merge.result in slot_cultures(other) for other in cfg.MERGES if other is not merge)
+            self.assertEqual(gen.result_can_switch(merge, cfg.MERGES), listed, merge.key)
+
+    def test_can_start_the_invalid_outcome_and_the_start_effect_all_read_the_switched_result(self):
+        for merge in cfg.MERGES:
+            key = merge.key
+            switched = "NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
+            can_start = self.can_start_text(key)
+            start = squash(block(self.effects, "te_cmg_start_%s" % key))
+            invalid = squash(text_of_entry_trigger(self.entries["je_te_cm_%s" % key], 1))
+            if merge in self.switchable_results:
+                self.assertIn("custom_tooltip = { text = te_cm_tt_result_not_merged_on %s }" % switched, can_start, key)
+                self.assertIn(switched, start, key)
+                self.assertIn("has_global_variable = te_cm_switched_%s" % merge.result, invalid, key)
+                # The starter keeps the entry (the complete outcome comes first); a candidate does not.
+                self.assertIn("NOT = { te_cmg_%s_is_starter = yes }" % key, invalid, key)
+            else:
+                self.assertNotIn("te_cm_switched_", can_start, key)
+                self.assertNotIn("te_cm_tt_result_not_merged_on", can_start, key)
+                self.assertNotIn("te_cm_switched_", start, key)
+                self.assertNotIn("te_cm_switched_", invalid, key)
+
+    def test_the_tooltips_have_text(self):
+        keys = all_english_loc_keys()
+        self.assertIn("te_cm_tt_result_not_merged_on", keys)
+        for merge in cfg.MERGES:
+            if merge.skip_if_dlc:
+                self.assertIn("te_cm_tt_dlc_off_%s" % merge.skip_if_dlc, keys)
+
+    def test_every_condition_of_is_candidate_is_in_can_start(self):
+        # R36's drift test: is_candidate and can_start are written apart, and a condition the first has and the second
+        # lacks lets a country that is no candidate press the button. Every statement of is_candidate must appear in
+        # can_start (through start_basics) or be one of the two that hold another way: the rule, which the button's
+        # possible leads with and the entry's disable_evaluation gates, and the merge not being complete, which the
+        # idle test (neither running nor complete) covers.
+        for merge in cfg.MERGES:
+            key = merge.key
+            can_start = self.can_start_text(key)
+            statements = top_level_statements(block(self.triggers, "te_cmg_%s_is_candidate" % key))
+            self.assertGreaterEqual(len(statements), 4, key)
+            for stmt in statements:
+                if stmt == "te_cm_system_enabled = yes":
+                    continue
+                if stmt == "NOT = { global_var:te_cm_state_%s ?= 2 }" % key:
+                    self.assertIn(
+                        "NOR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 }" % (key, key), can_start, key)
+                    continue
+                self.assertIn(stmt, can_start, "%s: is_candidate has %s, can_start has not" % (key, stmt))
+
+    def test_the_drift_test_would_notice(self):
+        # Without the R36 tooltips the drift test fails for the merges with a result that can switch and for Brazil.
+        stripped = self.can_start_text("italian").replace(
+            "custom_tooltip = { text = te_cm_tt_result_not_merged_on NOT = { has_global_variable = te_cm_switched_cm_italian } }", "")
+        candidate = top_level_statements(block(self.triggers, "te_cmg_italian_is_candidate"))
+        self.assertIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", candidate)
+        self.assertNotIn("NOT = { has_global_variable = te_cm_switched_cm_italian }", stripped)
+        brazil = top_level_statements(block(self.triggers, "te_cmg_brazilian_is_candidate"))
+        self.assertIn("NOT = { has_dlc_feature = rp1_content }", brazil)
+        self.assertIn("NOT = { has_dlc_feature = rp1_content }", self.can_start_text("brazilian"))
+
+    # ---- the scenario: Italian after cm_italian went into Latin ----
+    def italian_world(self, **over):
+        g = {"te_cm_switched_cm_italian": "cm_latin"}
+        g.update(over.pop("globals", {}))
+        return Sim(globals=g, alive={"ITA": True, "OTH": True}, **over)
+
+    def test_the_button_is_off_and_the_entry_ends_for_a_candidate_once_cm_italian_has_switched(self):
+        entry = self.entries["je_te_cm_italian"]
+        invalid = children(entry, "outcome")[1]
+        trigger = child(invalid, "trigger").children
+        # Nobody has started Italian: a candidate's stranded entry ends.
+        self.assertTrue(self.italian_world().holds(trigger, this="ITA"))
+        # The merge's own starter keeps its entry: Italian ran, completed, and then went into Latin (the complete outcome).
+        starter = self.italian_world(globals={"te_cm_state_italian": 2, "te_cm_starter_italian": "ITA"})
+        self.assertFalse(starter.holds(trigger, this="ITA"))
+        # ... while another country's entry for it ends too (the existing rule: another starter).
+        self.assertTrue(starter.holds(trigger, this="OTH"))
+        # Before the switch nothing changes for a candidate.
+        unswitched = Sim(globals={}, alive={"ITA": True})
+        self.assertFalse(unswitched.holds(trigger, this="ITA"))
+        # The button's tooltip condition is the one that fails.
+        tip = next(n for n in definitions(GEN_TRIGGERS)["te_cmg_italian_can_start"].children
+                   if n.key == "custom_tooltip" and child(n, "text").value == "te_cm_tt_result_not_merged_on")
+        self.assertFalse(self.italian_world().holds([tip], this="ITA"))
+        self.assertTrue(unswitched.holds([tip], this="ITA"))
+        # ... and the effect does nothing: neither the state nor the primary culture changes.
+        start = definitions(GEN_EFFECTS)["te_cmg_start_italian"]
+        self.assertFalse(self.italian_world().holds(child(child(start, "if"), "limit").children, this="ITA"))
+        self.assertTrue(unswitched.holds(child(child(start, "if"), "limit").children, this="ITA"))
+
+
+def top_level_statements(body):
+    """The statements at depth 0 of a block's raw text, each squashed (a multi-line one is one statement)."""
+    out, current, depth = [], [], 0
+    for line in body.splitlines():
+        if not line.strip():
+            continue
+        current.append(line)
+        depth += line.count("{") - line.count("}")
+        if depth == 0:
+            out.append(squash(" ".join(current)))
+            current = []
+    return out
+
+
+def text_of_entry_trigger(entry, index):
+    """The squashed text of the trigger of the entry's `index`-th outcome (0 = complete, 1 = the hidden invalid one)."""
+    from test_culture_merge_entries import text_of_node
+    return text_of_node(child(children(entry, "outcome")[index], "trigger"))
 
 
 if __name__ == "__main__":

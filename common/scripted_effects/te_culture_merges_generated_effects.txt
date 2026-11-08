@@ -401,9 +401,14 @@ te_cmg_italian_join_ready = {
 
 # Country scope: the button's effect. The country starts the italian merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_italian = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_italian }
+		}
 		te_cm_start_merge = { MERGE = italian RESULT = cm_italian }
 		te_cmg_italian_join_ready = yes
 	}
@@ -831,9 +836,14 @@ te_cmg_east_slavic_join_ready = {
 
 # Country scope: the button's effect. The country starts the east_slavic merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_east_slavic = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+		}
 		te_cm_start_merge = { MERGE = east_slavic RESULT = cm_east_slavic }
 		te_cmg_east_slavic_join_ready = yes
 	}
@@ -1108,9 +1118,14 @@ te_cmg_yugoslav_join_ready = {
 
 # Country scope: the button's effect. The country starts the yugoslav merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_yugoslav = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+		}
 		te_cm_start_merge = { MERGE = yugoslav RESULT = cm_yugoslav }
 		te_cmg_yugoslav_join_ready = yes
 	}
@@ -1329,9 +1344,14 @@ te_cmg_czechoslovak_join_ready = {
 
 # Country scope: the button's effect. The country starts the czechoslovak merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_czechoslovak = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+		}
 		te_cm_start_merge = { MERGE = czechoslovak RESULT = cm_czechoslovak }
 		te_cmg_czechoslovak_join_ready = yes
 	}
@@ -2010,9 +2030,14 @@ te_cmg_french_join_ready = {
 
 # Country scope: the button's effect. The country starts the french merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_french = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_french }
+		}
 		te_cm_start_merge = { MERGE = french RESULT = french }
 		te_cmg_french_join_ready = yes
 	}
@@ -2159,9 +2184,14 @@ te_cmg_british_join_ready = {
 
 # Country scope: the button's effect. The country starts the british merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_british = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_british }
+		}
 		te_cm_start_merge = { MERGE = british RESULT = british }
 		te_cmg_british_join_ready = yes
 	}
@@ -2382,9 +2412,14 @@ te_cmg_american_join_ready = {
 
 # Country scope: the button's effect. The country starts the american merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_american = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_american }
+		}
 		te_cm_start_merge = { MERGE = american RESULT = cm_american }
 		te_cmg_american_join_ready = yes
 	}
@@ -4688,9 +4723,14 @@ te_cmg_oghuz_turkic_join_ready = {
 
 # Country scope: the button's effect. The country starts the oghuz_turkic merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_oghuz_turkic = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+		}
 		te_cm_start_merge = { MERGE = oghuz_turkic RESULT = cm_oghuz_turkic }
 		te_cmg_oghuz_turkic_join_ready = yes
 	}
@@ -5420,9 +5460,14 @@ te_cmg_indonesian_join_ready = {
 
 # Country scope: the button's effect. The country starts the indonesian merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_indonesian = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+		}
 		te_cm_start_merge = { MERGE = indonesian RESULT = cm_indonesian }
 		te_cmg_indonesian_join_ready = yes
 	}
@@ -5615,9 +5660,14 @@ te_cmg_filipino_join_ready = {
 
 # Country scope: the button's effect. The country starts the filipino merge and brings in the parts it
 # holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.
+# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a
+# primary culture again. The button's can_start says so too; this is the guard behind it.
 te_cmg_start_filipino = {
 	if = {
-		limit = { NOR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 } }
+		limit = {
+			NOR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 }
+			NOT = { has_global_variable = te_cm_switched_filipino }
+		}
 		te_cm_start_merge = { MERGE = filipino RESULT = filipino }
 		te_cmg_filipino_join_ready = yes
 	}

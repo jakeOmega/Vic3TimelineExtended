@@ -393,7 +393,15 @@ class EntryShapeTest(unittest.TestCase):
             raw = je_text(key)
             self.assertIn("flags = { hidden invalid_outcome }", raw)
             # R27: no outcome ends the entry for a rule switched off. Off is a pause.
-            self.assertEqual(squash(child_text(invalid, "trigger")), "te_cmg_%s_has_other_starter = yes" % key)
+            if gen.result_can_switch(merge, cfg.MERGES):
+                # R36: also a candidate's stranded entry once the merge's result has switched into a wider culture.
+                self.assertEqual(
+                    squash(child_text(invalid, "trigger")),
+                    "OR = { te_cmg_%s_has_other_starter = yes AND = { has_global_variable = te_cm_switched_%s "
+                    "NOT = { te_cmg_%s_is_starter = yes } } }" % (key, merge.result, key),
+                )
+            else:
+                self.assertEqual(squash(child_text(invalid, "trigger")), "te_cmg_%s_has_other_starter = yes" % key)
             self.assertNotIn("te_cm_system_enabled", text_of_node(invalid))
 
     def test_the_starter_triggers(self):
@@ -692,13 +700,20 @@ class CanStartTest(unittest.TestCase):
             items = self.items(key)
             texts = [t for t, _ in items]
             tier = max(tier_of(merge, p.cultures[0]) for p in merge.core)
+            # R36: right after the idle test, a merge whose result can switch into a wider culture says that result has
+            # not, and the Brazilian merge, which steps aside where vanilla's nation building runs, says that content is off.
+            head = ["te_cm_tt_idle"]
+            if gen.result_can_switch(merge, cfg.MERGES):
+                head.append("te_cm_tt_result_not_merged_on")
+            if merge.skip_if_dlc:
+                head.append("te_cm_tt_dlc_off_%s" % merge.skip_if_dlc)
+            head += ["te_cmg_%s_primary_tt" % key, "te_cm_tt_tech_%d" % tier]
             self.assertEqual(
-                texts[:3 + len(merge.core)],
-                ["te_cm_tt_idle", "te_cmg_%s_primary_tt" % key, "te_cm_tt_tech_%d" % tier]
-                + ["te_cmg_%s_core_%d_tt" % (key, i) for i in range(1, len(merge.core) + 1)],
+                texts[:len(head) + len(merge.core)],
+                head + ["te_cmg_%s_core_%d_tt" % (key, i) for i in range(1, len(merge.core) + 1)],
                 key,
             )
-            tail = texts[3 + len(merge.core):]
+            tail = texts[len(head) + len(merge.core):]
             waits = ["te_cmg_%s_wait_%s_tt" % (key, p.cultures[0]) for p in merge.core if p.wait_for]
             self.assertEqual(
                 tail,
@@ -960,10 +975,14 @@ class CensusTailTest(unittest.TestCase):
         # A second click on the same day, or the AI's, finds the merge already running.
         for merge in cfg.MERGES:
             key = merge.key
+            # R36: a merge whose result can switch into a wider culture is not started once it has.
+            guard = idle(key)
+            if gen.result_can_switch(merge, cfg.MERGES):
+                guard += " NOT = { has_global_variable = te_cm_switched_%s }" % merge.result
             self.assertEqual(
                 squash(block(self.effects, "te_cmg_start_%s" % key)),
                 "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s } te_cmg_%s_join_ready = yes }"
-                % (idle(key), key, merge.result, key),
+                % (guard, key, merge.result, key),
             )
 
     def test_a_wait_year_counts_once_a_census_while_the_merge_could_start_and_an_entry_is_open(self):

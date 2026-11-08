@@ -645,6 +645,12 @@ def switched_into(merges: tuple[cfg.Merge, ...]) -> dict[str, list[str]]:
     return below
 
 
+def result_can_switch(merge: cfg.Merge, merges: tuple[cfg.Merge, ...]) -> bool:
+    """Some merge lists this merge's result as a part (a ``cm_`` result that is a component, or an absorb result
+    such as ``french`` that another merge lists), so it can switch into a wider culture (R33, R36)."""
+    return merge.result in switchable_cultures(merges)
+
+
 def _result_switched(merge: cfg.Merge) -> str:
     """The merge's result has switched into a higher merge's result (R33): the merge does nothing more."""
     return "has_global_variable = te_cm_switched_%s" % merge.result
@@ -727,15 +733,26 @@ def _wait_entry_open(out: "_Script", entries: tuple[str, ...]) -> None:
             out.line("has_journal_entry = %s" % entry)
 
 
-def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[str, int]) -> None:
+def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[str, int], merges: tuple[cfg.Merge, ...]) -> None:
     """The conditions that let a country start the merge, except its waits, each in its own
-    custom_tooltip so the button lists the one that fails. They restate ``is_candidate``'s
-    primary culture and technology, the merge being idle, ``core_ok``'s slots (the same routes),
-    the standard-of-living gate and the component merges."""
+    custom_tooltip so the button lists the one that fails. They restate every condition of ``is_candidate``
+    (the rule, which the button and the entry gate on their own, apart), so a country that is no candidate
+    cannot start: the merge being idle, a core culture primary, the technology, the merge's result not
+    switched into a wider culture (R36: pressing the button would start a merge whose result has gone) and
+    the skipped DLC absent. Then ``core_ok``'s slots (the same routes), the standard-of-living gate and the
+    component merges. ``test_culture_merge_switch`` pins that none of ``is_candidate``'s conditions is missing."""
     key = merge.key
     with out.block("custom_tooltip"):
         out.line("text = te_cm_tt_idle")
         out.line(_state_idle(key))
+    if result_can_switch(merge, merges):
+        with out.block("custom_tooltip"):
+            out.line("text = te_cm_tt_result_not_merged_on")
+            out.line("NOT = { %s }" % _result_switched(merge))
+    if merge.skip_if_dlc:
+        with out.block("custom_tooltip"):
+            out.line("text = te_cm_tt_dlc_off_%s" % merge.skip_if_dlc)
+            out.line("NOT = { has_dlc_feature = %s }" % merge.skip_if_dlc)
     with out.block("custom_tooltip"):
         out.line("text = te_cmg_%s_primary_tt" % key)
         with out.block("OR"):
@@ -796,8 +813,8 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
         out.line("# ---- %s (%s) ----" % (key, ", ".join("/".join(p.cultures) for p in merge.core)))
         out.line()
         out.line("# Country scope. Can this country start the %s merge? The system is on, a core culture is" % key)
-        out.line("# primary, the technology of the highest core tier is known, the merge is not complete and its result has")
-        out.line("# not switched into a higher merge's (R33: then the merge does nothing more).")
+        out.line("# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a")
+        out.line("# part of another merge, that result has not switched into it (R33: then the merge does nothing more).")
         with out.block("te_cmg_%s_is_candidate" % key):
             out.line("te_cm_system_enabled = yes")
             with out.block("OR"):
@@ -805,7 +822,8 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("country_has_primary_culture = cu:%s" % culture)
             out.line("te_cm_tier_tech = { TIER = %d }" % tier)
             out.line("NOT = { global_var:te_cm_state_%s ?= 2 }" % key)
-            out.line("NOT = { %s }" % _result_switched(merge))
+            if result_can_switch(merge, merges):
+                out.line("NOT = { %s }" % _result_switched(merge))
             if merge.skip_if_dlc:
                 out.line("NOT = { has_dlc_feature = %s }" % merge.skip_if_dlc)
         out.line()
@@ -951,7 +969,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             out.line("# Country scope. Everything the %s merge needs to start except its waits on vanilla entries" % key)
             out.line("# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.")
             with out.block("te_cmg_%s_start_basics" % key):
-                _write_start_items(out, merge, tier, tiers)
+                _write_start_items(out, merge, tier, tiers, merges)
             out.line()
         out.line("# Country scope. Can this country start the %s merge now? The merge is idle, a core culture is" % key)
         out.line("# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the" )
@@ -961,7 +979,7 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             if waits:
                 out.line("te_cmg_%s_start_basics = yes" % key)
             else:
-                _write_start_items(out, merge, tier, tiers)
+                _write_start_items(out, merge, tier, tiers, merges)
             _write_wait_items(out, merge)
     cultures = switchable_cultures(merges)
     out.line()
@@ -1022,9 +1040,17 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
     out.line()
     out.line("# Country scope: the button's effect. The country starts the %s merge and brings in the parts it" % key)
     out.line("# holds that qualify now. Only an idle merge starts: a second click on the same day finds it running.")
+    if result_can_switch(merge, merges):
+        out.line("# Not once its result has switched into a wider culture (R36): that culture has gone, and a start would make it a")
+        out.line("# primary culture again. The button's can_start says so too; this is the guard behind it.")
     with out.block("te_cmg_start_%s" % key):
         with out.block("if"):
-            out.line("limit = { %s }" % _state_idle(key))
+            if result_can_switch(merge, merges):
+                with out.block("limit"):
+                    out.line(_state_idle(key))
+                    out.line("NOT = { %s }" % _result_switched(merge))
+            else:
+                out.line("limit = { %s }" % _state_idle(key))
             out.line("te_cm_start_merge = { MERGE = %s RESULT = %s }" % (key, merge.result))
             out.line("te_cmg_%s_join_ready = yes" % key)
     out.line()
@@ -1782,11 +1808,21 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
                     out.line("te_cmg_%s_all_switched = yes" % key)
             out.line()
             out.line("# Another country started this merge first (or it is complete under one): the entry ends silently.")
+            if result_can_switch(merge, merges):
+                out.line("# So does a candidate's entry once the merge's result has switched into a wider culture (R36): it can no")
+                out.line("# longer start, and only the starter (who has the complete outcome above) keeps the entry.")
             with out.block("outcome"):
                 out.line("flags = { hidden invalid_outcome }")
                 out.line("conclusion_desc = te_cm_je_invalid_conclusion_desc")
                 with out.block("trigger"):
-                    out.line("te_cmg_%s_has_other_starter = yes" % key)
+                    if result_can_switch(merge, merges):
+                        with out.block("OR"):
+                            out.line("te_cmg_%s_has_other_starter = yes" % key)
+                            with out.block("AND"):
+                                out.line(_result_switched(merge))
+                                out.line("NOT = { te_cmg_%s_is_starter = yes }" % key)
+                    else:
+                        out.line("te_cmg_%s_has_other_starter = yes" % key)
             out.line()
             out.line("# The bar follows Task 6's dominance figures. Each month the country's variable takes the script")
             out.line("# value and the entry's bar takes the variable (the heir education entry's pattern). A paused system")

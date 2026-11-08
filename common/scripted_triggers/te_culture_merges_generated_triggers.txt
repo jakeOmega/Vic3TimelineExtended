@@ -3,8 +3,8 @@
 # ---- german (north_german, south_german) ----
 
 # Country scope. Can this country start the german merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_german_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -13,7 +13,6 @@ te_cmg_german_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_german ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_german }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -328,8 +327,8 @@ te_cmg_german_can_start = {
 # ---- italian (north_italian, south_italian) ----
 
 # Country scope. Can this country start the italian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_italian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -581,6 +580,10 @@ te_cmg_italian_can_start = {
 		NOR = { global_var:te_cm_state_italian ?= 1 global_var:te_cm_state_italian ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_italian }
+	}
+	custom_tooltip = {
 		text = te_cmg_italian_primary_tt
 		OR = {
 			country_has_primary_culture = cu:north_italian
@@ -614,8 +617,8 @@ te_cmg_italian_can_start = {
 # ---- scandinavian (swedish, danish, norwegian) ----
 
 # Country scope. Can this country start the scandinavian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_scandinavian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -625,7 +628,6 @@ te_cmg_scandinavian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_scandinavian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_scandinavian }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -959,8 +961,8 @@ te_cmg_scandinavian_can_start = {
 # ---- east_slavic (russian, ukrainian, byelorussian) ----
 
 # Country scope. Can this country start the east_slavic merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_east_slavic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1246,6 +1248,10 @@ te_cmg_east_slavic_start_basics = {
 		NOR = { global_var:te_cm_state_east_slavic ?= 1 global_var:te_cm_state_east_slavic ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_east_slavic }
+	}
+	custom_tooltip = {
 		text = te_cmg_east_slavic_primary_tt
 		OR = {
 			country_has_primary_culture = cu:russian
@@ -1315,8 +1321,8 @@ te_cmg_east_slavic_can_start = {
 # ---- yugoslav (serb, croat, bosniak) ----
 
 # Country scope. Can this country start the yugoslav merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_yugoslav_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1672,6 +1678,10 @@ te_cmg_yugoslav_can_start = {
 		NOR = { global_var:te_cm_state_yugoslav ?= 1 global_var:te_cm_state_yugoslav ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+	}
+	custom_tooltip = {
 		text = te_cmg_yugoslav_primary_tt
 		OR = {
 			country_has_primary_culture = cu:serb
@@ -1713,8 +1723,8 @@ te_cmg_yugoslav_can_start = {
 # ---- czechoslovak (czech, slovak) ----
 
 # Country scope. Can this country start the czechoslovak merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_czechoslovak_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -1966,6 +1976,10 @@ te_cmg_czechoslovak_can_start = {
 		NOR = { global_var:te_cm_state_czechoslovak ?= 1 global_var:te_cm_state_czechoslovak ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_czechoslovak }
+	}
+	custom_tooltip = {
 		text = te_cmg_czechoslovak_primary_tt
 		OR = {
 			country_has_primary_culture = cu:czech
@@ -1999,8 +2013,8 @@ te_cmg_czechoslovak_can_start = {
 # ---- hungarian (hungarian, szekely) ----
 
 # Country scope. Can this country start the hungarian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_hungarian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2009,7 +2023,6 @@ te_cmg_hungarian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_hungarian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_hungarian }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -2218,8 +2231,8 @@ te_cmg_hungarian_can_start = {
 # ---- dutch (dutch, flemish) ----
 
 # Country scope. Can this country start the dutch merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_dutch_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2228,7 +2241,6 @@ te_cmg_dutch_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_dutch ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_dutch }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -2437,8 +2449,8 @@ te_cmg_dutch_can_start = {
 # ---- finnish (finnish, karelian) ----
 
 # Country scope. Can this country start the finnish merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_finnish_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2447,7 +2459,6 @@ te_cmg_finnish_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_finnish ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_finnish }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -2656,8 +2667,8 @@ te_cmg_finnish_can_start = {
 # ---- french (french, wallonian, occitan) ----
 
 # Country scope. Can this country start the french merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_french_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -2942,6 +2953,10 @@ te_cmg_french_can_start = {
 		NOR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_french }
+	}
+	custom_tooltip = {
 		text = te_cmg_french_primary_tt
 		OR = {
 			country_has_primary_culture = cu:french
@@ -2980,8 +2995,8 @@ te_cmg_french_can_start = {
 # ---- british (british, scottish) ----
 
 # Country scope. Can this country start the british merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_british_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3169,6 +3184,10 @@ te_cmg_british_can_start = {
 		NOR = { global_var:te_cm_state_british ?= 1 global_var:te_cm_state_british ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_british }
+	}
+	custom_tooltip = {
 		text = te_cmg_british_primary_tt
 		OR = {
 			country_has_primary_culture = cu:british
@@ -3199,8 +3218,8 @@ te_cmg_british_can_start = {
 # ---- american (yankee, dixie) ----
 
 # Country scope. Can this country start the american merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_american_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3481,6 +3500,10 @@ te_cmg_american_start_basics = {
 		NOR = { global_var:te_cm_state_american ?= 1 global_var:te_cm_state_american ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_american }
+	}
+	custom_tooltip = {
 		text = te_cmg_american_primary_tt
 		OR = {
 			country_has_primary_culture = cu:yankee
@@ -3532,8 +3555,8 @@ te_cmg_american_can_start = {
 # ---- anglophone (british, yankee/cm_american) ----
 
 # Country scope. Can this country start the anglophone merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_anglophone_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -3543,7 +3566,6 @@ te_cmg_anglophone_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 2 }
 	NOT = { global_var:te_cm_state_anglophone ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_anglophone }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -4115,8 +4137,8 @@ te_cmg_anglophone_can_start = {
 # ---- brazilian (brazilian, nordestino, paulista, amazonic, sulista) ----
 
 # Country scope. Can this country start the brazilian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_brazilian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -4128,7 +4150,6 @@ te_cmg_brazilian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_brazilian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_brazilian }
 	NOT = { has_dlc_feature = rp1_content }
 }
 
@@ -4504,6 +4525,10 @@ te_cmg_brazilian_can_start = {
 		NOR = { global_var:te_cm_state_brazilian ?= 1 global_var:te_cm_state_brazilian ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_dlc_off_rp1_content
+		NOT = { has_dlc_feature = rp1_content }
+	}
+	custom_tooltip = {
 		text = te_cmg_brazilian_primary_tt
 		OR = {
 			country_has_primary_culture = cu:brazilian
@@ -4558,8 +4583,8 @@ te_cmg_brazilian_can_start = {
 # ---- platine (platinean, argentine, uruguayan, paraguayan) ----
 
 # Country scope. Can this country start the platine merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_platine_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -4570,7 +4595,6 @@ te_cmg_platine_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_platine ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_platine }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -4923,8 +4947,8 @@ te_cmg_platine_can_start = {
 # ---- andean (north_andean, south_andean, peruvian, bolivian) ----
 
 # Country scope. Can this country start the andean merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_andean_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -4935,7 +4959,6 @@ te_cmg_andean_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_andean ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_andean }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -5288,8 +5311,8 @@ te_cmg_andean_can_start = {
 # ---- gran_colombian (colombian, venezuelan, ecuadorian) ----
 
 # Country scope. Can this country start the gran_colombian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_gran_colombian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5299,7 +5322,6 @@ te_cmg_gran_colombian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_gran_colombian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_gran_colombian }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -5594,8 +5616,8 @@ te_cmg_gran_colombian_can_start = {
 # ---- chinese (han, yue, min, hakka) ----
 
 # Country scope. Can this country start the chinese merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_chinese_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5606,7 +5628,6 @@ te_cmg_chinese_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_chinese ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_han }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -5931,8 +5952,8 @@ te_cmg_chinese_can_start = {
 # ---- japanese (japanese, ryukyuan) ----
 
 # Country scope. Can this country start the japanese merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_japanese_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -5941,7 +5962,6 @@ te_cmg_japanese_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_japanese ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_japanese }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -6150,8 +6170,8 @@ te_cmg_japanese_can_start = {
 # ---- arab (maghrebi, misri, mashriqi, bedouin, yemenite) ----
 
 # Country scope. Can this country start the arab merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_arab_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -6163,7 +6183,6 @@ te_cmg_arab_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_arab ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_arab }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -6712,8 +6731,8 @@ te_cmg_arab_can_start = {
 # ---- persian (persian, luri) ----
 
 # Country scope. Can this country start the persian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_persian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -6722,7 +6741,6 @@ te_cmg_persian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_persian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_persian }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -7016,8 +7034,8 @@ te_cmg_persian_can_start = {
 # ---- oghuz_turkic (turkish, azerbaijani) ----
 
 # Country scope. Can this country start the oghuz_turkic merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_oghuz_turkic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7276,6 +7294,10 @@ te_cmg_oghuz_turkic_can_start = {
 		NOR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic }
+	}
+	custom_tooltip = {
 		text = te_cmg_oghuz_turkic_primary_tt
 		OR = {
 			country_has_primary_culture = cu:turkish
@@ -7309,8 +7331,8 @@ te_cmg_oghuz_turkic_can_start = {
 # ---- hindustani (hindustani, avadhi, bundeli, chhattisgarhi, bageli) ----
 
 # Country scope. Can this country start the hindustani merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_hindustani_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7322,7 +7344,6 @@ te_cmg_hindustani_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_hindustani ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_hindustani }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -7705,8 +7726,8 @@ te_cmg_hindustani_can_start = {
 # ---- dravidian (tamil, kannada, malayalam) ----
 
 # Country scope. Can this country start the dravidian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_dravidian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -7716,7 +7737,6 @@ te_cmg_dravidian_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_dravidian ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_dravidian }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -8057,8 +8077,8 @@ te_cmg_dravidian_can_start = {
 # ---- indonesian (javan, malay, sumatran, bornean) ----
 
 # Country scope. Can this country start the indonesian merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_indonesian_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -8412,6 +8432,10 @@ te_cmg_indonesian_can_start = {
 		NOR = { global_var:te_cm_state_indonesian ?= 1 global_var:te_cm_state_indonesian ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_cm_indonesian }
+	}
+	custom_tooltip = {
 		text = te_cmg_indonesian_primary_tt
 		OR = {
 			country_has_primary_culture = cu:javan
@@ -8461,8 +8485,8 @@ te_cmg_indonesian_can_start = {
 # ---- filipino (filipino, visayan, tagalog, ilocano) ----
 
 # Country scope. Can this country start the filipino merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_filipino_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -8752,6 +8776,10 @@ te_cmg_filipino_can_start = {
 		NOR = { global_var:te_cm_state_filipino ?= 1 global_var:te_cm_state_filipino ?= 2 }
 	}
 	custom_tooltip = {
+		text = te_cm_tt_result_not_merged_on
+		NOT = { has_global_variable = te_cm_switched_filipino }
+	}
+	custom_tooltip = {
 		text = te_cmg_filipino_primary_tt
 		OR = {
 			country_has_primary_culture = cu:filipino
@@ -8798,8 +8826,8 @@ te_cmg_filipino_can_start = {
 # ---- nguni (nguni, zulu, xhosa) ----
 
 # Country scope. Can this country start the nguni merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_nguni_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -8809,7 +8837,6 @@ te_cmg_nguni_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 1 }
 	NOT = { global_var:te_cm_state_nguni ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_nguni }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -9104,8 +9131,8 @@ te_cmg_nguni_can_start = {
 # ---- latin (french, cm_italian, spanish, portuguese) ----
 
 # Country scope. Can this country start the latin merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_latin_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -9116,7 +9143,6 @@ te_cmg_latin_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_latin ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_latin }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -9780,8 +9806,8 @@ te_cmg_latin_can_start = {
 # ---- pan_slavic (cm_east_slavic, cm_czechoslovak, cm_yugoslav) ----
 
 # Country scope. Can this country start the pan_slavic merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_pan_slavic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -9791,7 +9817,6 @@ te_cmg_pan_slavic_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_slavic ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_slavic }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -10300,8 +10325,8 @@ te_cmg_pan_slavic_can_start = {
 # ---- pan_turkic (cm_oghuz_turkic, uzbek, kazak, tatar, kirgiz) ----
 
 # Country scope. Can this country start the pan_turkic merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_pan_turkic_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -10313,7 +10338,6 @@ te_cmg_pan_turkic_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_turkic ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_turkic }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -10961,8 +10985,8 @@ te_cmg_pan_turkic_can_start = {
 # ---- pan_malay (cm_indonesian, filipino) ----
 
 # Country scope. Can this country start the pan_malay merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_pan_malay_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -10971,7 +10995,6 @@ te_cmg_pan_malay_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_pan_malay ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_pan_malay }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
@@ -11265,8 +11288,8 @@ te_cmg_pan_malay_can_start = {
 # ---- east_african (swahili, nyamwezi, sukuma) ----
 
 # Country scope. Can this country start the east_african merge? The system is on, a core culture is
-# primary, the technology of the highest core tier is known, the merge is not complete and its result has
-# not switched into a higher merge's (R33: then the merge does nothing more).
+# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
+# part of another merge, that result has not switched into it (R33: then the merge does nothing more).
 te_cmg_east_african_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
@@ -11276,7 +11299,6 @@ te_cmg_east_african_is_candidate = {
 	}
 	te_cm_tier_tech = { TIER = 3 }
 	NOT = { global_var:te_cm_state_east_african ?= 2 }
-	NOT = { has_global_variable = te_cm_switched_cm_east_african }
 }
 
 # Country scope. Every core slot is met: an alternative that passes its gates now (and, in tier 1b or
