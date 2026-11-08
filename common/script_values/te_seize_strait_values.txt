@@ -1,0 +1,82 @@
+﻿# ============================================================================
+# SEIZE STRAIT — infamy share and self-check figures
+#
+# War goal: common/war_goal_types/te_seize_strait.txt
+# ============================================================================
+
+# State scope: provinces in the state, and the shore provinces among them the
+# goal takes.
+te_seize_strait_state_provinces = {
+	value = 0
+	every_province = {
+		add = 1
+	}
+}
+
+te_seize_strait_shore_provinces = {
+	value = 0
+	every_province = {
+		if = {
+			limit = { te_is_seizable_strait_shore = yes }
+			add = 1
+		}
+	}
+}
+
+# State scope: the multiplier on the state's infamy. The share of the state's
+# provinces the goal takes, never below a quarter: a strait is worth more than
+# its acreage, and every state region with a shore has five or more
+# provinces, where a whole state's share would be a fifth or less. A state
+# split down to the shore costs more (Britain's three-province Singapore a
+# third), and a state that is only the shore costs its full infamy, what
+# conquer_state charges for it.
+te_seize_strait_infamy_share = {
+	value = te_seize_strait_shore_provinces
+	divide = {
+		value = te_seize_strait_state_provinces
+		min = 1
+	}
+	min = 0.25
+	max = 1
+}
+
+# Country scope (the goal's holder, in on_enforced): the population each side
+# holds in the strait's state region (scope:te_ss_region).
+te_ss_holder_region_pop = {
+	value = 0
+	scope:te_ss_region ?= {
+		every_scope_state = {
+			if = {
+				limit = { owner = root }
+				add = state_population
+			}
+		}
+	}
+}
+
+te_ss_target_region_pop = {
+	value = 0
+	scope:te_ss_region ?= {
+		every_scope_state = {
+			if = {
+				limit = { owner = scope:target_country }
+				add = state_population
+			}
+		}
+	}
+}
+
+# Read by the self-check's debug_log lines (te_seize_strait_selfcheck_after).
+te_ss_chk_holder_before_g = { value = global_var:te_ss_chk_holder_before }
+te_ss_chk_holder_after_g = { value = global_var:te_ss_chk_holder_after }
+te_ss_chk_target_before_g = { value = global_var:te_ss_chk_target_before }
+te_ss_chk_target_after_g = { value = global_var:te_ss_chk_target_after }
+
+# Country scope: 1 for an AI holder, so the log shows whether the AI uses the goal.
+te_ss_chk_holder_is_ai = {
+	value = 0
+	if = {
+		limit = { is_ai = yes }
+		value = 1
+	}
+}

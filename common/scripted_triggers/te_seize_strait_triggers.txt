@@ -1,0 +1,102 @@
+﻿# ============================================================================
+# SEIZE STRAIT — which provinces the war goal can take
+#
+# The 24 shore provinces of base 1.15's 12 straits, copied from
+# common/strait_definitions/strait_definitions.txt (`first_land_endpoint`,
+# `second_land_endpoint`). Strait scope has no link to its shore provinces,
+# so the list is written out, as the base game's canal events write theirs.
+# test_seize_strait_wargoal.py pins it against the vanilla file and against
+# te_seize_strait_shores (te_seize_strait_effects.txt), which must name the
+# same provinces. On a vanilla patch that adds or moves a strait, update all
+# three.
+#
+# War goal: common/war_goal_types/te_seize_strait.txt
+# ============================================================================
+
+# Province scope. A shore province of a strait the goal may take: any natural
+# strait's shore, and a canal's two provinces once the canal is built.
+te_is_seizable_strait_shore = {
+	OR = {
+		this = p:xBC6ED3	# Gibraltar, north shore (STATE_UPPER_ANDALUSIA)
+		this = p:xA0B0C0	# Gibraltar, south shore (STATE_AL_RIF)
+		this = p:xF0A020	# Bosporus, west shore (STATE_EASTERN_THRACE)
+		this = p:x30A060	# Bosporus, east shore (STATE_HUDAVENDIGAR)
+		this = p:x319060	# Bab-el-Mandeb, east shore (STATE_YEMEN)
+		this = p:x9E8FDD	# Bab-el-Mandeb, west shore (STATE_ERITREA)
+		this = p:xC04161	# Oresund, east shore (STATE_SCANIA)
+		this = p:x7F0BF0	# Oresund, west shore (STATE_ZEALAND)
+		this = p:xC00130	# Malacca, Singapore (STATE_MALAYA)
+		this = p:x48428B	# Malacca, Sumatran shore (STATE_NORTH_SUMATRA)
+		this = p:xE0D080	# Tsugaru, Honshu shore (STATE_TOHOKU)
+		this = p:xA090C0	# Tsugaru, Hokkaido shore (STATE_HOKKAIDO)
+		this = p:xDBE794	# Sunda, Sumatran shore (STATE_SOUTH_SUMATRA)
+		this = p:x6345B2	# Sunda, Javan shore (STATE_WEST_JAVA)
+		this = p:x5ABA94	# Lombok, first shore (STATE_SUNDA_ISLANDS)
+		this = p:x100090	# Lombok, second shore (STATE_SUNDA_ISLANDS)
+		this = p:x0170A0	# Hormuz, north shore (STATE_LARISTAN)
+		this = p:x0DC972	# Hormuz, south shore (STATE_ABU_DHABI)
+		AND = {
+			OR = {
+				this = p:xD0EF40	# Panama Canal (STATE_PANAMA)
+				this = p:x910E14	# Panama Canal (STATE_PANAMA)
+			}
+			te_panama_canal_built = yes
+		}
+		AND = {
+			OR = {
+				this = p:xC01060	# Suez Canal (STATE_SINAI)
+				this = p:x8ED45E	# Suez Canal (STATE_SINAI)
+			}
+			te_suez_canal_built = yes
+		}
+		AND = {
+			OR = {
+				this = p:x804160	# Kiel Canal (STATE_SCHLESWIG_HOLSTEIN)
+				this = p:xBFCC21	# Kiel Canal (STATE_SCHLESWIG_HOLSTEIN)
+			}
+			te_kiel_canal_built = yes
+		}
+	}
+}
+
+# State scope. The state holds at least one shore province the goal may take.
+te_state_has_seizable_strait_shore = {
+	any_province = {
+		te_is_seizable_strait_shore = yes
+	}
+}
+
+# Any scope. A canal is built when some state in its region has the canal
+# building at level 1 or more (one under construction doesn't count).
+te_panama_canal_built = {
+	s:STATE_PANAMA = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_panama_canal
+				level >= 1
+			}
+		}
+	}
+}
+
+te_suez_canal_built = {
+	s:STATE_SINAI = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_suez_canal
+				level >= 1
+			}
+		}
+	}
+}
+
+te_kiel_canal_built = {
+	s:STATE_SCHLESWIG_HOLSTEIN = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_kiel_canal
+				level >= 1
+			}
+		}
+	}
+}
