@@ -1,13 +1,15 @@
 ﻿# Culture Merges: the rule gate, the technology that opens each tier, and the
 # sphere test (docs/superpowers/specs/2026-11-07-culture-merges-design.md).
 
-# The system runs unless the rule is switched off. Written as a negation on
-# purpose: the rule defaults to enabled, so a save that stored no value for it
-# (a campaign begun before the rule existed) gets the system, as intended. (The
-# tax code's gates are positive because that rule defaults to off.) Callable
-# from any scope.
+# The system runs only when the rule is switched on. Named positively on
+# purpose: a save that stored no value for the rule (a campaign begun before it
+# existed) has none of the 21 new result cultures, and a merge started there
+# added an empty primary culture that every vanilla culture trigger then logs
+# as Culture (-1) (#1518). So such a save stays off, as the tax code's and the
+# census's do, whatever the default (off since 2026-11-08). Callable from any
+# scope.
 te_cm_system_enabled = {
-	NOT = { has_game_rule = culture_merges_disabled }
+	has_game_rule = culture_merges_enabled
 }
 
 # The technology that opens a tier of merge. Country scope.

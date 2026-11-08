@@ -680,7 +680,8 @@ class ButtonTest(unittest.TestCase):
 
     def test_every_condition_has_a_reason_in_its_own_custom_tooltip(self):
         # can_start holds each condition in a custom_tooltip, so no raw script reaches the button's tooltip
-        # (button_reason_audit). A bare condition outside one would show as script.
+        # (button_reason_audit). A bare condition outside one would show as script. The one hidden_trigger, that a new
+        # result culture exists, shows nothing, and fails only where is_candidate already hides the button.
         triggers = text_of(GEN_TRIGGERS)
         for merge in cfg.MERGES:
             for name in ("te_cmg_%s_can_start" % merge.key, "te_cmg_%s_start_basics" % merge.key):
@@ -690,7 +691,7 @@ class ButtonTest(unittest.TestCase):
                 depth = 0
                 for line in body.splitlines():
                     stripped = line.strip()
-                    if depth == 0 and stripped and not stripped.startswith(("custom_tooltip = {", "te_cmg_")):
+                    if depth == 0 and stripped and not stripped.startswith(("custom_tooltip = {", "te_cmg_", "hidden_trigger = {")):
                         self.fail("%s: a bare condition in %s: %s" % (merge.key, name, stripped))
                     depth += line.count("{") - line.count("}")
                 self.assertEqual(depth, 0)

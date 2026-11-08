@@ -14,9 +14,12 @@ on_monthly_pulse = {
 
 te_jmap_monthly_ranges = {
 	effect = {
+		# The Company Headquarters map's state figures, before the ranges that read them (te_journal_map_effects.txt).
+		te_jmap_store_hqs = yes
 		te_jmap_refresh_range = yes
 		te_jmap_refresh_entry_ranges = yes
-		# Once a game: whether the Company Headquarters map's profit read is live (te_journal_map_effects.txt).
+		# Once a game each: whether the store finds the headquarters, and whether their profit read is live.
+		te_jmap_hq_found_selfcheck = yes
 		te_jmap_hq_selfcheck = yes
 	}
 }

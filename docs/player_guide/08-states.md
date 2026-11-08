@@ -8,7 +8,7 @@ an empty frontier, and a yearly census counts your people by age and sex. The
 state panel gains tiles that show most of these. Everything in this chapter is
 always on except internal resettlement, which the Internal Resettlement game
 rule controls (see the [Introduction](01-introduction.md)), culture merges,
-which the Culture Merges rule controls (on by default), and the census, which
+which the Culture Merges rule controls (off by default), and the census, which
 is experimental and has a game rule of its own (see
 [Demographics](#demographics)).
 
@@ -300,8 +300,10 @@ the parts' pops converts, and once the merged culture holds 60% of a part's
 homeland, every remaining pop of that part in the world switches at once. One culture where there were several clears homeland thresholds more
 easily, and leaves the game fewer pops to simulate.
 
-The Culture Merges game rule controls the system and is on by default. If you
-turn it off mid-game, every merge pauses where it stands: converted pops keep
+The Culture Merges game rule controls the system and is off by default: turn
+it on when you set up a game. A game saved before it was added keeps it off,
+and if you turn it on there, the merges that make a new culture never start.
+If you turn it off mid-game, every merge pauses where it stands: converted pops keep
 their new culture, and each merge carries on when the rule is turned back on.
 
 ### Merges and their parts

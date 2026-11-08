@@ -25,6 +25,7 @@ BOM = b"\xef\xbb\xbf"
 CULTURES = ROOT / "common/cultures/te_merged_cultures.txt"
 TRAITS = ROOT / "common/discrimination_traits/te_merged_culture_traits.txt"
 LOC = ROOT / "localization/english/te_culture_merges_generated_l_english.yml"
+STATIC_MODIFIERS = ROOT / "common/static_modifiers/te_merged_culture_static_modifiers.txt"
 
 
 def unwrap(value):
@@ -284,6 +285,38 @@ class TraitTest(unittest.TestCase):
         self.assertFalse(set(self.traits) & set(vanilla()["__traits__"]))
 
 
+class StaticModifierTest(unittest.TestCase):
+    """The engine expects six static modifiers of every culture and logs `Missing expected culture static modifier` at
+    load for each one a culture lacks (126 lines for the 21 results, 2026-11-08)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mods = parse(STATIC_MODIFIERS)
+        cls.vanilla_mods = vanilla_parsed.load(str(ROOT / "vanilla_parsed")).data["Modifiers"]
+
+    def test_vanilla_gives_every_culture_the_six(self):
+        # The family the generator writes is the one vanilla gives each of its cultures.
+        for culture in vanilla_parsed.load(str(ROOT / "vanilla_parsed")).data["Cultures"]:
+            for key in gen.culture_static_modifier_keys(culture):
+                self.assertIn(key, self.vanilla_mods, key)
+
+    def test_every_new_result_has_the_six_in_vanillas_shape(self):
+        news = [merge.result for merge in cfg.MERGES if merge.new is not None]
+        self.assertEqual(len(news), 21)
+        expected = {key for culture in news for key in gen.culture_static_modifier_keys(culture)}
+        self.assertEqual(set(self.mods), expected)
+        for culture in news:
+            for vanilla_key, key in zip(gen.culture_static_modifier_keys("scottish"), gen.culture_static_modifier_keys(culture)):
+                vanilla_body = {k: unwrap(v) for k, v in unwrap(self.vanilla_mods[vanilla_key]).items()}
+                body = {k: unwrap(v) for k, v in self.mods[key].items()}
+                self.assertEqual({k.replace("scottish", culture): v for k, v in vanilla_body.items()}, body, key)
+
+    def test_the_file_has_one_bom(self):
+        data = STATIC_MODIFIERS.read_bytes()
+        self.assertTrue(data.startswith(BOM))
+        self.assertFalse(data[3:].startswith(BOM))
+
+
 class LocTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -306,7 +339,8 @@ class LocTest(unittest.TestCase):
             self.assertIn(key, self.loc)
 
     def test_the_file_holds_the_result_keys_and_the_entries_keys(self):
-        self.assertEqual(set(self.loc), gen.result_loc_keys() | set(gen.entry_loc(vanilla())))
+        modifiers = set(gen.static_modifier_loc(gen.build_plan(vanilla())))
+        self.assertEqual(set(self.loc), gen.result_loc_keys() | set(gen.entry_loc(vanilla())) | modifiers)
         self.assertFalse(gen.result_loc_keys() & set(gen.entry_loc(vanilla())))
 
     def test_loc_is_a_generated_section(self):

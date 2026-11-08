@@ -29,7 +29,23 @@ te_cm_dbg_var = {
 
 # Country scope. One merge's own variables and where this country stands in it. $MERGE$ = a merge key.
 # state 0 idle, 1 running, 2 complete; starter_exists / we_are_starter 1 or 0; candidate, core_ok and can_start 1 or 0.
+# Two forms, so a merge with no core wait never names te_cm_wait_years_<m>, which only a core wait sets: a read of a name
+# nothing sets logs "is used but is never set" at every load. te_cmg_debug_dump picks the form.
 te_cm_debug_dump_merge = {
+	te_cm_debug_dump_merge_slots = { MERGE = $MERGE$ }
+	set_global_variable = { name = te_cm_dbg_j value = -1 }
+	te_cm_debug_dump_merge_line = { MERGE = $MERGE$ }
+}
+
+# Country scope. The same, for a merge with a core part that waits on a vanilla entry: its wait counter too.
+te_cm_debug_dump_merge_waiting = {
+	te_cm_debug_dump_merge_slots = { MERGE = $MERGE$ }
+	te_cm_dbg_var = { SLOT = j NAME = te_cm_wait_years_$MERGE$ }
+	te_cm_debug_dump_merge_line = { MERGE = $MERGE$ }
+}
+
+# Country scope. Every slot of the merge line but j (the wait counter).
+te_cm_debug_dump_merge_slots = {
 	te_cm_dbg_global = { SLOT = a NAME = te_cm_state_$MERGE$ }
 	set_global_variable = { name = te_cm_dbg_b value = 0 }
 	if = {
@@ -59,12 +75,18 @@ te_cm_debug_dump_merge = {
 	te_cm_dbg_var = { SLOT = g NAME = te_cm_sol_ok_$MERGE$ }
 	te_cm_dbg_var = { SLOT = h NAME = te_cm_started_$MERGE$ }
 	te_cm_dbg_var = { SLOT = i NAME = te_cm_bar_$MERGE$ }
-	te_cm_dbg_var = { SLOT = j NAME = te_cm_wait_years_$MERGE$ }
 	te_cm_dbg_var = { SLOT = k NAME = te_cm_converted_$MERGE$ }
+}
+
+# Country scope. The merge line, from the slots.
+te_cm_debug_dump_merge_line = {
 	debug_log = "TE_CM_DEBUG merge $MERGE$ country=[THIS.GetCountry.GetTagName] state=[GetGlobalVariable('te_cm_dbg_a').GetValue|0] starter_exists=[GetGlobalVariable('te_cm_dbg_b').GetValue|0] we_are_starter=[GetGlobalVariable('te_cm_dbg_c').GetValue|0] candidate=[GetGlobalVariable('te_cm_dbg_d').GetValue|0] core_ok=[GetGlobalVariable('te_cm_dbg_e').GetValue|0] can_start=[GetGlobalVariable('te_cm_dbg_f').GetValue|0] sol_ok=[GetGlobalVariable('te_cm_dbg_g').GetValue|0] started=[GetGlobalVariable('te_cm_dbg_h').GetValue|0] bar=[GetGlobalVariable('te_cm_dbg_i').GetValue|0] wait_years=[GetGlobalVariable('te_cm_dbg_j').GetValue|0] converted=[GetGlobalVariable('te_cm_dbg_k').GetValue|0] (-1 = not set)"
 }
 
-# Country scope. One slot culture of one merge. $MERGE$ = a merge key, $CULTURE$ = a culture id.
+# Country scope. One slot culture of one merge. $MERGE$ = a merge key, $CULTURE$ = a culture id, $SOL_OK$ = the
+# standard-of-living gate the part answers to: its own te_cm_sol_ok_<m>_<c> for an optional part, the merge's
+# te_cm_sol_ok_<m> for a core part (only optional parts have their own, so naming one for a core part reads a name
+# nothing sets).
 # home / home_r: the census's pops in the part's homeland states (the part's, then the result's, once the part has joined);
 # joined, in (the index of the merge converting it), dom (the result's share), switched 1 or 0 are global; held, ok, sol,
 # sol_ok, years and paused are this country's.
@@ -82,7 +104,7 @@ te_cm_debug_dump_part = {
 	te_cm_dbg_var = { SLOT = g NAME = te_cm_held_$MERGE$_$CULTURE$ }
 	te_cm_dbg_var = { SLOT = h NAME = te_cm_ok_$MERGE$_$CULTURE$ }
 	te_cm_dbg_var = { SLOT = i NAME = te_cm_sol_$MERGE$_$CULTURE$ }
-	te_cm_dbg_var = { SLOT = j NAME = te_cm_sol_ok_$MERGE$_$CULTURE$ }
+	te_cm_dbg_var = { SLOT = j NAME = $SOL_OK$ }
 	te_cm_dbg_var = { SLOT = k NAME = te_cm_years_$MERGE$_$CULTURE$ }
 	te_cm_dbg_var = { SLOT = l NAME = te_cm_paused_$MERGE$_$CULTURE$ }
 	debug_log = "TE_CM_DEBUG part $MERGE$/$CULTURE$ home=[GetGlobalVariable('te_cm_dbg_a').GetValue|0] home_r=[GetGlobalVariable('te_cm_dbg_b').GetValue|0] joined=[GetGlobalVariable('te_cm_dbg_c').GetValue|0] dom=[GetGlobalVariable('te_cm_dbg_d').GetValue|3] in=[GetGlobalVariable('te_cm_dbg_e').GetValue|0] switched=[GetGlobalVariable('te_cm_dbg_f').GetValue|0] held=[GetGlobalVariable('te_cm_dbg_g').GetValue|3] ok=[GetGlobalVariable('te_cm_dbg_h').GetValue|0] sol=[GetGlobalVariable('te_cm_dbg_i').GetValue|2] sol_ok=[GetGlobalVariable('te_cm_dbg_j').GetValue|0] years=[GetGlobalVariable('te_cm_dbg_k').GetValue|0] paused=[GetGlobalVariable('te_cm_dbg_l').GetValue|0] (-1 = not set)"

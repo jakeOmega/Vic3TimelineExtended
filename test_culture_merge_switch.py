@@ -876,8 +876,11 @@ RECORDED = ("te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part")
 
 
 class Sim:
-    def __init__(self, globals=None, cvars=None, alive=None, primary=None, pops=None, stubs=None, techs=(), locals_=None):
+    def __init__(self, globals=None, cvars=None, alive=None, primary=None, pops=None, stubs=None, techs=(), locals_=None,
+                 missing_cultures=()):
         self.globals = dict(globals or {})
+        # Cultures with no object in this game (one begun before the culture was added): exists = cu:<c> fails.
+        self.missing_cultures = set(missing_cultures)
         self.cvars = {c: dict(v) for c, v in (cvars or {}).items()}
         self.alive = dict(alive or {})
         self.primary = {c: set(v) for c, v in (primary or {}).items()}
@@ -933,6 +936,8 @@ class Sim:
             return str(self.cvars.get(self.this, {}).get(k.split(":", 1)[1])) == v
         if k.startswith("local_var:"):
             return str(self.locals.get(k.split(":", 1)[1])) == v
+        if k == "exists" and v.startswith("cu:"):
+            return v.split(":", 1)[1] not in self.missing_cultures
         if k == "exists":
             return v.split(":", 1)[1] in self.globals
         if k == "this":
@@ -1117,8 +1122,11 @@ class ChainTest(unittest.TestCase):
         for merge in cfg.MERGES:
             switched = "NOT = { te_cmg_%s_result_switched = yes }" % merge.key
             key = merge.key
+            # A result no other merge takes never switches, so the test is always = no: nothing would set the variable,
+            # and reading it anyway logs "is used but is never set" at every load (2026-11-08).
             self.assertEqual(squash(block(triggers, "te_cmg_%s_result_switched" % key)),
-                             "has_global_variable = te_cm_switched_%s" % merge.result, key)
+                             "has_global_variable = te_cm_switched_%s" % merge.result
+                             if gen.result_can_switch(merge, cfg.MERGES) else "always = no", key)
             # Only a result that can switch carries the test in is_candidate (and then in can_start: R36).
             candidate = squash(block(triggers, "te_cmg_%s_is_candidate" % key))
             self.assertEqual(switched in candidate, gen.result_can_switch(merge, cfg.MERGES), key)
@@ -1406,6 +1414,17 @@ class StartGuardTest(unittest.TestCase):
                     self.assertIn("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture),
                                   squash(block(triggers, "te_cmg_%s_%s_switched_in" % (key, culture))), culture)
                     self.assertIn("te_cmg_%s_%s_switched_in = yes" % (key, culture), can_start, culture)
+
+    def test_a_game_without_the_result_culture_never_starts_the_merge(self):
+        # A game begun before a new result culture was added has no object for it: cu:<result> is empty, and starting
+        # would add that empty culture as a primary culture (a 1883 save, 2026-11-08: about 8,700 Culture (-1) lines in
+        # two hours). Neither is_candidate nor can_start holds there.
+        world = dict(alive={"PRU": True}, primary={"PRU": {"north_german"}}, techs={1}, stubs={"te_cm_system_enabled": True})
+        candidate = definitions(GEN_TRIGGERS)["te_cmg_german_is_candidate"].children
+        self.assertTrue(Sim(**world).holds(candidate, this="PRU"))
+        self.assertFalse(Sim(missing_cultures={"cm_german"}, **world).holds(candidate, this="PRU"))
+        self.assertIn("hidden_trigger = { exists = cu:cm_german }",
+                      squash(block(text_of(GEN_TRIGGERS), "te_cmg_german_can_start")))
 
     def test_a_core_part_a_higher_merge_switched_ends_the_lower_merges_candidacy(self):
         # R38 M2: Anglophone joined Yankee while American was idle, and Yankee has switched into cm_anglophone.

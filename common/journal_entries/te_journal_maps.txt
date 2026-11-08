@@ -259,11 +259,12 @@ je_te_map_room = {
 			value = "te_jmap_none"
 		}
 		# 34. Company Headquarters: a state with one or more by their weekly profit summed (te_jmap_hq_profit), a doubling
-		# at a time, red at a loss; a state with none grey (the owner's ask, 2026-11-08).
+		# at a time, red at a loss; a state with none grey (the owner's ask, 2026-11-08). The figures are the monthly
+		# store's state variables (te_jmap_store_hqs): the engine's per-company headquarters types match no has_building.
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_headquarter
+				has_variable = te_jmap_hq_n
 				te_jmap_hq_profit > 0
 			}
 			lerp = {
@@ -275,7 +276,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_headquarter
+				has_variable = te_jmap_hq_n
 			}
 			value = "te_jmap_hq_loss"
 		}
@@ -1346,7 +1347,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_regional_headquarter
+				has_variable = te_jmap_rhq_n
 			}
 			value = "te_jmap_hq_regional"
 		}
@@ -1557,7 +1558,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_headquarter
+				has_variable = te_jmap_hq_n
 				te_jmap_hq_profit > 0
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_hq
@@ -1565,7 +1566,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_headquarter
+				has_variable = te_jmap_hq_n
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_hq_loss
 		}
@@ -2166,7 +2167,7 @@ je_te_map_room = {
 		if = {
 			limit = {
 				te_jmap_selector = 34
-				has_building = building_company_regional_headquarter
+				has_variable = te_jmap_rhq_n
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_hq_regional
 		}

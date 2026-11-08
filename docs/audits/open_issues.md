@@ -277,6 +277,17 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 ---
 
+### L30. Culture merges: absorb results' generic gate reads flagged never-set
+**Files:** `scripts/generators/gen_culture_merges.py` (the slot triggers and status rows), `common/scripted_effects/te_culture_merge_effects.txt` (`te_cm_census_part`)
+
+**Problem (2026-11-08):** the engine's load-time validator logs `Variable '<name>' is used but is never set` for 28 culture-merge names, once per launch: for each of the eleven absorbing merges, `te_cm_joined_<m>_<r>` (the merge's own result in its first core slot never joins) and, for the eight of those whose result no wider merge takes, `te_cm_switched_<r>` and `te_cm_home_r_<r>`; and `te_cm_wait_years_anglophone`, which Anglophone's optional parts' waits read and only a core wait adds to. Every read is guarded and reads false, as the design wants. The same triage pruned the other 129 names (`te_cmg_<m>_result_switched` is `always = no` for a result no wider merge takes; the console dump names only variables something sets).
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** give the absorb result's slot its own trigger shapes in the generator (no joined or switched test where `_is_absorb_result` holds) and a `te_cm_census_part` variant without the joined and result-pop reads; let Anglophone's optional waits skip the cap test, since nothing raises that counter. Worth it only alongside other work on those emitters.
+
+---
+
 ## Vanilla 1.13.7 patch impact (2026-05-27)
 
 Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly vanilla-internal (AI fleet logic, naval balance, Japan/USA content, bugfixes); the mod does not override Japan, USA decisions, tolls, treaty articles, or vanilla canals, so most of it needs no action. The real overlap is the **naval domain**.

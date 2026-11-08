@@ -276,13 +276,15 @@ class TestRule(unittest.TestCase):
     def test_rule_polarity(self):
         rules = parse(RULES)
         rule = rules["culture_merges_rule"]
-        self.assertEqual(unwrap(rule["default"]), "culture_merges_enabled")
+        # Off by default, and on only by its own setting: a save begun before the rule existed stores neither, and
+        # has none of the new result cultures (#1518).
+        self.assertEqual(unwrap(rule["default"]), "culture_merges_disabled")
         self.assertIn("culture_merges_enabled", rule)
         self.assertIn("culture_merges_disabled", rule)
         self.assertEqual(unwrap(unwrap(rule["culture_merges_enabled"])["flag"]), "culture_merges_enabled")
         self.assertEqual(unwrap(unwrap(rule["culture_merges_disabled"])["flag"]), "culture_merges_disabled")
         trigger = parse(TRIGGERS)["te_cm_system_enabled"]
-        self.assertEqual(trigger, {"NOT": ("=", {"has_game_rule": ("=", "culture_merges_disabled")})})
+        self.assertEqual(trigger, {"has_game_rule": ("=", "culture_merges_enabled")})
 
     def test_rule_loc(self):
         loc = loc_keys()

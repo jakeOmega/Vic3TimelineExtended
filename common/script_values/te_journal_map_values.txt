@@ -129,43 +129,67 @@ te_jmap_net_strength = {
 # The Map Room's own figures (state scope: the state being painted or hovered)
 # ---------------------------------------------------------------------------
 # Company Headquarters (34): the weekly profit of the state's company headquarters, summed. Script can't read a
-# company's profit (te_company_effects.txt), but each company has one headquarters building
-# (building_company_headquarter: its production method follows the company's category), and an ownership building's
-# profit is what the levels it owns pay it, less its own wages: the company's earnings coming home. Whether it books
-# them so is TE_SELF_CHECK hq_profit (te_jmap_hq_selfcheck). Only a state with a headquarters walks its buildings,
-# so the paint's other states read one has_building.
+# company's profit (te_company_effects.txt), but each company has one headquarters building (its production method
+# follows the company's category), and an ownership building's profit is what the levels it owns pay it, less its own
+# wages: the company's earnings coming home. Whether it books them so is TE_SELF_CHECK hq_profit (te_jmap_hq_selfcheck).
+#
+# A headquarters is found by its building group, never its type. The engine makes a building type for each company type,
+# building_<company type> (building_company_basic_fabrics, building_regional_company_hbc ...), from the two
+# headquarters templates, so has_building = building_company_headquarter and is_building_type = building_company_
+# headquarter match no state: a 1890 save held 61 headquarters and no building of either template type, and this map
+# painted every state grey (2026-11-08). Vanilla counts them by group too (08_tsarpoints_buttons.txt).
+#
+# The map reads state variables the global monthly pulse writes (te_jmap_store_hqs, te_journal_map_effects.txt), as
+# Armed Forces reads the yearly walk's: the paint walks no buildings, and a game's first month after a load is grey.
+
+# The walk itself, state scope: the store's input only.
+te_jmap_hq_walk_count = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_headquarter }
+		add = 1
+	}
+}
+
+te_jmap_hq_walk_profit = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_headquarter }
+		add = weekly_profit
+	}
+}
+
+te_jmap_rhq_walk_count = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_regional_headquarter }
+		add = 1
+	}
+}
+
+# The stored figures, state scope, 0 where unset: the headquarters' weekly profit summed (the map's input), their count
+# and the regional headquarters' count (the hover's).
 te_jmap_hq_profit = {
 	value = 0
 	if = {
-		limit = { has_building = building_company_headquarter }
-		every_scope_building = {
-			limit = { is_building_type = building_company_headquarter }
-			add = weekly_profit
-		}
+		limit = { has_variable = te_jmap_hq_wp }
+		value = var:te_jmap_hq_wp
 	}
 }
 
-# The state's company headquarters, one a company (the hover's count).
 te_jmap_hq_count = {
 	value = 0
 	if = {
-		limit = { has_building = building_company_headquarter }
-		every_scope_building = {
-			limit = { is_building_type = building_company_headquarter }
-			add = 1
-		}
+		limit = { has_variable = te_jmap_hq_n }
+		value = var:te_jmap_hq_n
 	}
 }
 
-# The state's company regional headquarters (Company Headquarters' stripes and their hover).
 te_jmap_rhq_count = {
 	value = 0
 	if = {
-		limit = { has_building = building_company_regional_headquarter }
-		every_scope_building = {
-			limit = { is_building_type = building_company_regional_headquarter }
-			add = 1
-		}
+		limit = { has_variable = te_jmap_rhq_n }
+		value = var:te_jmap_rhq_n
 	}
 }
 

@@ -6,6 +6,11 @@
 # player in a multiplayer game shares it.
 te_jmap_set_selector = {
 	set_global_variable = { name = te_jmap_sel value = $SEL$ }
+	# Company Headquarters paints stored figures: store them now, so a first pick of the month has them.
+	if = {
+		limit = { global_var:te_jmap_sel = 34 }
+		te_jmap_store_hqs = yes
+	}
 	# The picked map's colors run over the world as it stands now (te_journal_map_ranges_generated.txt), measured
 	# here so the reopened page paints on them; the monthly pulse measures them again.
 	te_jmap_refresh_range = yes
@@ -22,27 +27,89 @@ te_jmap_note_viewer = {
 	set_global_variable = { name = te_jmap_viewer value = root }
 }
 
+# The Company Headquarters map's figures (34; te_journal_map_values.txt): each state's headquarters, counted by building
+# group, their weekly profit summed, and its regional headquarters, as state variables the map, its hover and its range
+# read (te_jmap_hq_n, te_jmap_hq_wp, te_jmap_rhq_n), removed where none is left. From the global monthly pulse and a
+# pick of the map. No root: any scope.
+te_jmap_store_hqs = {
+	every_state = {
+		if = {
+			limit = { te_jmap_hq_walk_count > 0 }
+			set_variable = { name = te_jmap_hq_n value = te_jmap_hq_walk_count }
+			set_variable = { name = te_jmap_hq_wp value = te_jmap_hq_walk_profit }
+		}
+		else_if = {
+			limit = { has_variable = te_jmap_hq_n }
+			remove_variable = te_jmap_hq_n
+			remove_variable = te_jmap_hq_wp
+		}
+		if = {
+			limit = { te_jmap_rhq_walk_count > 0 }
+			set_variable = { name = te_jmap_rhq_n value = te_jmap_rhq_walk_count }
+		}
+		else_if = {
+			limit = { has_variable = te_jmap_rhq_n }
+			remove_variable = te_jmap_rhq_n
+		}
+	}
+}
+
+# TE_SELF_CHECK hq_found (docs/testing/journal-map-modes-playtest.md, check 24). The store finds a headquarters by its
+# building group (bg_company_headquarter), because the engine's per-company building types match no has_building on
+# the template type, which drew the first build's map all grey and kept hq_profit below from ever arming (2026-11-08).
+# Once a game, the first month three countries have a company (each company has a headquarters, so the store must find
+# some): OK when it found any, with the count of states; BROKEN when it found none, and the map is grey everywhere.
+# Global monthly pulse, after the store: no root, so the counts are globals. The fallback, if BROKEN: read the
+# headquarters through the companies instead (every_country, every_company, and the regional ones through
+# every_scope_regional_hqs, which reach their buildings).
+te_jmap_hq_found_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_hq_found_selfcheck_done }
+			any_country = {
+				count >= 3
+				any_company = { always = yes }
+			}
+		}
+		set_global_variable = te_jmap_hq_found_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_hq_found value = 0 }
+		every_state = {
+			limit = { has_variable = te_jmap_hq_n }
+			change_global_variable = { name = te_jmap_sc_hq_found add = 1 }
+		}
+		if = {
+			limit = { global_var:te_jmap_sc_hq_found > 0 }
+			debug_log = "TE_SELF_CHECK OK hq_found states=[GetGlobalVariable('te_jmap_sc_hq_found').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the store found company headquarters by building group)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN hq_found states=0 (three countries have a company, but no state holds a building of group bg_company_headquarter: the Company Headquarters map is grey everywhere; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_hq_found
+	}
+}
+
 # TE_SELF_CHECK hq_profit (docs/testing/journal-map-modes-playtest.md, check 24). The Company Headquarters map (34)
 # colors a state by its headquarters' weekly_profit (te_jmap_hq_profit), on the unverified fact that an ownership
 # building books what the levels it owns pay it, as the building panel's profit. Once a game, the first month at least
 # three states hold a headquarters (fewer and an all-zero read proves nothing): OK when any reads a profit other than
-# 0, BROKEN when every one reads exactly 0, and the map paints every headquarters as a loss. Global monthly pulse
-# (te_journal_map_on_actions.txt): no root, so the counts are globals. The fallback, if BROKEN: color by the company's
-# prosperity or its owned levels instead (a company is reached from its country, every_company).
+# 0, BROKEN when every one reads exactly 0, and the map paints every headquarters as a loss. It arms on the store's
+# count, which hq_found checks, not on the profit it tests. Global monthly pulse (te_journal_map_on_actions.txt), after
+# the store: no root, so the counts are globals. The fallback, if BROKEN: color by the company's prosperity or its owned
+# levels instead (a company is reached from its country, every_company).
 te_jmap_hq_selfcheck = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_jmap_hq_selfcheck_done }
 			any_state = {
 				count >= 3
-				has_building = building_company_headquarter
+				has_variable = te_jmap_hq_n
 			}
 		}
 		set_global_variable = te_jmap_hq_selfcheck_done
 		set_global_variable = { name = te_jmap_sc_hq_states value = 0 }
 		set_global_variable = { name = te_jmap_sc_hq_nonzero value = 0 }
 		every_state = {
-			limit = { has_building = building_company_headquarter }
+			limit = { has_variable = te_jmap_hq_n }
 			change_global_variable = { name = te_jmap_sc_hq_states add = 1 }
 			if = {
 				limit = {

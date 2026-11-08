@@ -199,3 +199,40 @@ untyped trigger [ Scoped object of type 'country' is not valid (Country  (429496
 ```
 
 The engine re-checks each decree's `country_trigger` weekly (vanilla's decree file header: it "should invalidate the Decree on a weekly basis if found invalid"), and now and then it does so with the null country. Vanilla's own decrees log the same message in the same second, and the `<unknown>:0` untyped-trigger entry in the vanilla registry tags those; its `- stack: vanilla only` leaves this file's lines visible. Medical Outreach's trigger logged once on 2026-10-25. Script can't guard a root that is invalid before the block runs. Tracked at `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`.
+
+### `jomini_effect.cpp:1144` — culture merges: absorb results' generic gate reads flagged never-set
+- source: `jomini_effect.cpp:1144`
+- tracked: `docs/audits/open_issues.md#l30-culture-merges-absorb-results-generic-gate-reads-flagged-never-set`
+
+```
+Variable 'te_cm_home_r_brazilian' is used but is never set
+Variable 'te_cm_home_r_dutch' is used but is never set
+Variable 'te_cm_home_r_finnish' is used but is never set
+Variable 'te_cm_home_r_han' is used but is never set
+Variable 'te_cm_home_r_hindustani' is used but is never set
+Variable 'te_cm_home_r_hungarian' is used but is never set
+Variable 'te_cm_home_r_japanese' is used but is never set
+Variable 'te_cm_home_r_persian' is used but is never set
+Variable 'te_cm_joined_brazilian_brazilian' is used but is never set
+Variable 'te_cm_joined_british_british' is used but is never set
+Variable 'te_cm_joined_chinese_han' is used but is never set
+Variable 'te_cm_joined_dutch_dutch' is used but is never set
+Variable 'te_cm_joined_filipino_filipino' is used but is never set
+Variable 'te_cm_joined_finnish_finnish' is used but is never set
+Variable 'te_cm_joined_french_french' is used but is never set
+Variable 'te_cm_joined_hindustani_hindustani' is used but is never set
+Variable 'te_cm_joined_hungarian_hungarian' is used but is never set
+Variable 'te_cm_joined_japanese_japanese' is used but is never set
+Variable 'te_cm_joined_persian_persian' is used but is never set
+Variable 'te_cm_switched_brazilian' is used but is never set
+Variable 'te_cm_switched_dutch' is used but is never set
+Variable 'te_cm_switched_finnish' is used but is never set
+Variable 'te_cm_switched_han' is used but is never set
+Variable 'te_cm_switched_hindustani' is used but is never set
+Variable 'te_cm_switched_hungarian' is used but is never set
+Variable 'te_cm_switched_japanese' is used but is never set
+Variable 'te_cm_switched_persian' is used but is never set
+Variable 'te_cm_wait_years_anglophone' is used but is never set
+```
+
+Twenty-eight lines once per launch, from the culture merges (#1509). Eleven merges absorb their parts into an existing culture (Hungarian, Han, Japanese ...), and that culture is the merge's first core slot, held and acceptance-tested but never joined, converted or switched (see the culture merges system file). The generator writes its slot's triggers and the census helper's call like any other part's, so its joined, switched and result-pop reads name variables nothing sets; Anglophone's wait counter is read by its optional parts' waits and only a core wait adds to it, as documented. The reads sit behind `has_global_variable` or `?=` and read false, as they should. Each signature names its own variable, so a new never-set culture-merge name still shows. The 2026-11-08 triage removed the other 129 such names (results no wider merge takes, and the console dump). Tracked at `docs/audits/open_issues.md#l30-culture-merges-absorb-results-generic-gate-reads-flagged-never-set`.

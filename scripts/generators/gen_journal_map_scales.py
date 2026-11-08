@@ -247,8 +247,10 @@ SCALES = [
          world=rel_doubling(500, 64000, 4, 100), min_span=4,
          note="Armed Forces, the state's Soldiers and Officers (the yearly walk's): the same share of the color for "
               "each doubling from the world's low (at least 100 people) to its high"),
+    # Company Headquarters reads the monthly store's state variables (te_jmap_store_hqs): the engine's per-company
+    # headquarters types match no has_building on the template type, so a headquarters is found by its building group.
     dict(name="hq", input="te_jmap_hq_profit", guards=[], three=False, sel=34,
-         where=["has_building = building_company_headquarter", "te_jmap_hq_profit > 0"],
+         where=["has_variable = te_jmap_hq_n", "te_jmap_hq_profit > 0"],
          world=rel_doubling(100, 25600, 4, 1), min_span=4,
          note="Company Headquarters, their weekly profit summed: the same share of the color for each doubling from "
               "the world's low (at least 1) to its high; a loss is red, apart from the scale"),

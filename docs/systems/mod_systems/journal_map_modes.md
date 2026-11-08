@@ -51,8 +51,8 @@ journal page has a see-through eye (below) to look past it. An inactive entry's 
 too.
 
 **Cheap reads only.** Every value runs once per state, as the game runs, so
-the maps read stored variables and engine figures, never walk pops. Company HQs walks a state's buildings, but only
-where `has_building = building_company_headquarter` holds (a few dozen states), so every other state costs one check. A figure behind a long `state_region` chain is
+the maps read stored variables and engine figures, never walk pops. Company HQs reads state variables the global
+monthly pulse stores from a walk of each state's buildings (`te_jmap_store_hqs`), so the paint walks none. A figure behind a long `state_region` chain is
 stored by the refresh that already computes it: tourism's Base Appeal (some 700 branches) and Local Climate's
 penalties (eight chains of 680). Each map's color comes from a factor, 0–1, on a curve fitted to the world as it
 stands (below). Colors are named in `common/named_colors/te_journal_map_colors.txt`, one family per map.
@@ -160,16 +160,26 @@ entry, in no country's journal.
   year (`te_dg_dc_war`, once stepped, as the Causes of Death row): each a doubling at a time, a zero pale and no figure
   grey, on one row of the page because the census shares a country's war dead out to its states by their soldiers
   (`te_demog_share_war_dead`), so the dead show where the soldiers came from, not where they fell. 34 **Company HQs**:
-  a state without a `building_company_headquarter` grey (`te_jmap_no_data`, the owner's spec), one with any by their
-  weekly profit summed (`te_jmap_hq_profit`), a doubling at a time, red at a loss or none. Script can't read a company's
+  a state without a company headquarters grey (`te_jmap_no_data`, the owner's spec), one with any by their weekly
+  profit summed (`te_jmap_hq_profit`), a doubling at a time, red at a loss or none. Script can't read a company's
   profit (`te_company_effects.txt`), and no link leads from a state or a building to a company, but each company has its
   own headquarters building (its production method follows the company's category), and an ownership building's profit
-  is what the levels it owns pay it less its wages: the company's earnings coming home. That reading is unverified, so
-  `te_jmap_hq_selfcheck` (once a game, from the global monthly pulse, once three states hold a headquarters) logs
-  `TE_SELF_CHECK OK|BROKEN hq_profit`: BROKEN when every headquarters reads exactly 0 (play-test check 24 names the
-  fallback). A state with a `building_company_regional_headquarter` is striped gold over its color (grey where it holds
-  no headquarters of its own), the Map Room's third `map_color_second` branch, and its hover adds a line counting them
-  (`te_jmap_rhq_count`).
+  is what the levels it owns pay it less its wages: the company's earnings coming home. A headquarters is found by its
+  building group (`bg_company_headquarter`, `bg_company_regional_headquarter`), never its type: the engine makes a
+  building type per company type (`building_company_basic_fabrics`, `building_regional_company_hbc` ...) from the two
+  templates, so `has_building = building_company_headquarter` matches no state, and the first build (#1514) painted
+  every state grey (2026-11-08; `test_company_hq_building_tests.py` now fails on a test by template type). The global
+  monthly pulse, and a pick of the map, store each state's count, profit and regional count as state variables
+  (`te_jmap_store_hqs`: `te_jmap_hq_n`, `te_jmap_hq_wp`, `te_jmap_rhq_n`, removed where none is left), which the
+  paint, the hover and the range read through `te_jmap_hq_profit`, `te_jmap_hq_count` and `te_jmap_rhq_count`; so the
+  figures are up to a month old, and a load's first month is grey until a pick. Two once-a-game checks, from the global
+  monthly pulse after the store: `TE_SELF_CHECK OK|BROKEN hq_found` (`te_jmap_hq_found_selfcheck`, once three countries
+  have a company: BROKEN when the store found no headquarters) and `TE_SELF_CHECK OK|BROKEN hq_profit`
+  (`te_jmap_hq_selfcheck`, once three states hold one: BROKEN when every headquarters reads exactly 0). hq_found arms on
+  companies, not on what the store finds, so a store that finds nothing speaks; the first build's hq_profit armed on
+  the same broken test it measured and never spoke. Play-test check 24 names both fallbacks. A state with a regional
+  headquarters is striped gold over its color (grey where it holds no headquarters of its own), the Map Room's third
+  `map_color_second` branch, and its hover adds a line counting them (`te_jmap_rhq_count`).
 - **The ninth pass's second round** (2026-11-08, the owner's pick from the eighth's suggestions). 36 **Ownership**: who
   holds the state's capital, the yearly walk's building levels (`te_dg_lv_priv`, `_self`, `_ctry`: ownership buildings,
   subsistence farms and government buildings left out), whatever the rule. The leading holder's color (private gold,

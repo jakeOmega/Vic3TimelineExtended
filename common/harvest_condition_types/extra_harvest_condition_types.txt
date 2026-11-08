@@ -19,7 +19,7 @@ financial_panic = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}
@@ -87,7 +87,7 @@ market_downturn = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}
@@ -139,7 +139,7 @@ bull_market = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}
