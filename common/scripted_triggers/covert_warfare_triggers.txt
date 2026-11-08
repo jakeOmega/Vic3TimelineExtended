@@ -13,18 +13,11 @@ covert_warfare_entry_unlocked = {
 	custom_tooltip = {
 		text = covert_warfare_unlock_tt
 		OR = {
-			AND = {
-				country_rank >= rank_value:great_power
-				covert_operation_max_slots >= 4
-			}
-			AND = {
-				country_rank = rank_value:major_power
-				covert_operation_max_slots >= 3
-			}
-			AND = {
-				NOT = { country_rank >= rank_value:major_power }
-				covert_operation_max_slots >= 2
-			}
+			has_technology_researched = mainframe_computers
+			has_technology_researched = computer_networks
+			has_technology_researched = cyber_warfare
+			has_technology_researched = quantum_computing
+			has_law = law_type:law_ministry_of_intelligence_and_security
 		}
 	}
 }

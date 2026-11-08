@@ -22,6 +22,18 @@ It also settles a helper anchor for the mod's script calls, whose errors carry t
 
 > **Re-verify pass due (2026-07-03, 1.13.9 migration):** vanilla 1.13.6–1.13.9 modified 24 of the files tracked below (notably `movement_events.txt`, `agitators_events/coup_events.txt`, `treaty_articles/31_ship_transfer.txt`, `journal_entries/07_hokkaido.txt`, `laws/00_distribution_of_power.txt`, `ideologies/01_character_ideologies.txt`, `scripted_effects/00_victoria_ip4_scripted_effects.txt`). Spot-diffs were inconclusive — line numbers have shifted and some flagged regions were rewritten. On the next `log-triage` run against a 1.13.9 session, retire any entry whose error no longer appears rather than trusting the stale line numbers here.
 
+## Vanilla bugs the mod fixes
+
+Most bugs in this file are left to vanilla. A few hurt play enough that the mod patches them, and each patch is meant to go once vanilla fixes the bug. So each one:
+
+- starts its file, or its block, with `# VANILLA FIX:`, naming this section and when to remove it (`git grep -l "VANILLA FIX:" common/ events/ gui/` lists them);
+- has a test that reads the committed `vanilla_parsed/` and fails once vanilla has fixed the bug, or has changed what the patch restates, so the rebuild after a vanilla patch names it (`docs/guides/vanilla_patch_runbook.md` § 6c);
+- has a row here. No `###` heading: this section holds no log signatures.
+
+| Bug | Mod fix | Remove when | Test |
+|---|---|---|---|
+| Caesaropapism, a variant of State Religion, doesn't count as State Religion where vanilla lists only `law_state_religion`: the state-church Urban Center method (`unlocking_laws`), and the Free Churches, secular bureaucrats and secular academia methods and the Public and Private Schools laws (`disallowing_laws`). The engine doesn't read a variant as its parent there: a Caesaropapist Russia was kept on Free Churches and ran Public Schools (Workshop report, 2026-11-08). Vanilla's other two variants, the Millet System and People of the Book, have the same gaps and are left as they are (tolerant variants, perhaps meant to allow these). The sweep that found these, every vanilla list naming a parent law without its variants, also turned up Manorialism, Bakufu, Neo-Absolutism, Sakoku, the Canton System, Homesteading and Colonial Administration; each may be intended, and none is fixed | `common/production_methods/te_vanilla_caesaropapism_fix.txt`, `common/laws/te_vanilla_caesaropapism_fix.txt`: each list restated with `law_caesaropapism`; `gen_law_consistency.py` reads the school laws' | Vanilla lists `law_caesaropapism` in them | `test_vanilla_caesaropapism_fix.py` |
+
 ## Script errors observed
 
 ### `common/ai_strategies/00_default_strategy.txt:5065` — invalid `region` event target
