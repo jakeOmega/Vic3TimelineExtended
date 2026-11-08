@@ -1,0 +1,96 @@
+﻿# Culture Merges: a second success outcome for vanilla's Russification entry
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md section 7; plan Task 7).
+#
+# Vanilla's je_russification (08_russification.txt, ip5_content) completes when 65% of the
+# western borderlands' states are at least 15% Russian. A Russian pop that merges into East
+# Slavic (cm_east_slavic) stops counting there, and the entry has no timeout, so once the
+# merge has run it could never complete. The success outcome's culture test is inline in
+# vanilla's trigger, so an INJECT can't edit it. It can add a second success outcome
+# instead: vanilla's own, with the test widened to Russian or East Slavic
+# (te_cm_russification_complete; the share is te_cm_russian_or_east_slavic_share). The
+# entry concludes through whichever outcome's trigger holds.
+#
+# Everything but the trigger is vanilla's success outcome, copied as it stands: the
+# headers, color, conclusion, the effect and both event_outcome_effect_desc blocks. So the
+# outcome reuses vanilla's loc keys and adds none, and a vanilla patch to the entry must be
+# mirrored here; test_culture_merge_russification.py compares the copy with the committed
+# vanilla parse (rebuild it with `python3 vanilla_parsed.py build` after a patch). The
+# effect also sets the global variable te_cm_russification_injected_fired, which the
+# cm_russification_outcome self-check reads.
+#
+# No rule gate: culture_merges_rule can be switched mid-game, but pops that already
+# converted stay East Slavic, and counting them is right whether the rule is on or off.
+# With no merge run the outcome's widened test equals vanilla's.
+#
+# Unverified in game: that the engine takes an INJECTed outcome as a second outcome
+# (the tooling assumes it appends; scripting_best_practices.md, "journal entries end
+# through outcome blocks"), and which outcome concludes the entry when both triggers hold,
+# which they do whenever vanilla's does (ours is a superset). Both run the same cleanup
+# and event. If the INJECT doesn't apply, the fallback is for East Slavic to wait for
+# Russification (the wait is capped at 20 years). The panel will list the two success
+# outcomes, and the map highlight (je_russification_state_is_russian_assimilated) still
+# counts Russians only; that cosmetic gap is noted in the system doc.
+INJECT:je_russification = { # REVIEWED 2026-11-07: a second success outcome that counts East Slavic, as the design spec section 7 settles ("Russification gets an injected outcome instead of a wait"); the target is vanilla and nothing in the mod replaces it, so mod_structure_audit has nothing to flag
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			te_cm_russification_complete = yes
+		}
+		effect = {
+			# The self-check's marker (not in vanilla's effect).
+			set_global_variable = te_cm_russification_injected_fired
+
+			je_russification_cleanup = yes
+
+			trigger_event = {
+				id = russification.2
+				days = 1
+			}
+		}
+
+		event_outcome_effect_desc = {
+			header = russification.2.a
+			effect = { # any changes to russification.2.a effects must be updated here
+				if = {
+					limit = {
+						has_journal_entry = je_tsarpoints_master
+					}
+					je_tsarpoints_add_med = yes
+				}
+				add_modifier = {
+					name = modifier_je_russification_secured_ext
+					days = very_long_modifier_time
+				}
+				every_interest_group = {
+					limit = {
+						is_in_government = yes
+					}
+					add_modifier = {
+						name = modifier_je_russification_ig_str
+						days = moderately_long_modifier_time
+					}
+				}
+			}
+		}
+
+		event_outcome_effect_desc = {
+			header = russification.2.b
+			effect = { # any changes to russification.2.b effects must be updated here
+				if = {
+					limit = {
+						has_journal_entry = je_tsarpoints_master
+					}
+					je_tsarpoints_add_med = yes
+				}
+				add_modifier = {
+					name = modifier_je_russification_secured_int
+					days = moderately_long_modifier_time
+				}
+				custom_tooltip = russification_2b_character_modifier_tt
+			}
+		}
+	}
+}

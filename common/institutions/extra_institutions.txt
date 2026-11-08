@@ -119,6 +119,7 @@ institution_ministry_of_culture = {
 		country_society_tech_research_speed_mult = 0.05
 		country_cultural_pull_mult = 0.05
 		country_cultural_program_max_funding_add = 1
+		country_culture_merge_speed_mult = 0.05	# per level (Culture Merges)
 	}
 }
 

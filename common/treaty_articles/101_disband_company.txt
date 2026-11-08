@@ -105,6 +105,12 @@ disband_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, 
 			}
 		}
 
+		# Per-partner gate (evaluation_chance has root only): the AI asks for
+		# the disbandment in a treaty, or presses it as a war goal, only of a
+		# company that owns enough to matter.
+		proposal_weight = { value = disband_company_ai_demand_weight }
+		wargoal_score_multiplier = { value = disband_company_ai_demand_weight }
+
 		# AI decision-making on whether to ACCEPT the article.
 		# When evaluated, "this" is the country deciding. The article forces
 		# source_country to disband their company.

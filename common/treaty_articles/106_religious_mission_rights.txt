@@ -58,6 +58,18 @@ religious_mission_rights = {
 			NOT = { is_country_type = decentralized }
 			NOT = { has_law = law_type:law_state_atheism }
 		}
+		# The missionary power is scope:other_country. Its bloc is tested here
+		# one way round as well as in can_ratify: a war goal enforcing the
+		# article checks possible and not can_ratify.
+		custom_tooltip = {
+			text = religious_mission_rights_missionary_bloc_possible_tt
+			scope:other_country = {
+				is_in_power_bloc = yes
+				power_bloc ?= {
+					has_identity = identity:identity_religious
+				}
+			}
+		}
 	}
 
 	can_ratify = {
@@ -166,6 +178,12 @@ religious_mission_rights = {
 				add = 0.1
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): missions are asked
+		# for in a treaty, or pressed as a war goal, only for a state with
+		# people of another faith to convert.
+		proposal_weight = { value = religious_mission_rights_ai_demand_weight }
+		wargoal_score_multiplier = { value = religious_mission_rights_ai_demand_weight }
 
 		inherent_accept_score = {
 			value = 0

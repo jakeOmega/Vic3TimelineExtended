@@ -1,0 +1,104 @@
+﻿# ============================================================================
+# CULTURE MERGES: the yearly pulse
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md; plan Task 4)
+# ============================================================================
+
+on_yearly_pulse_country = {
+	on_actions = { te_cm_yearly_on_action }
+}
+
+# The first country whose pulse fires runs the global census; the others skip. The census
+# runs once per calendar year: the year it last ran is stored (te_cm_census_year, read with
+# the same `value = year` the Grand Monuments founding year uses) and a pulse in a later
+# year runs it again. A lock alone can't give that: Cultural Hegemony's ch_ldr_lock is 180
+# days, and even a 330-day lock lets a census fall every 330 days, 1.1 a year, so the
+# counters that add one per census (te_cm_years_*) would run ahead of the calendar. The
+# 330-day lock is kept as a backstop beside the year. A rule switched off mid-game pauses
+# the whole system: nothing is recomputed, and no variable is reset or removed, so every
+# gate and counter keeps its last value until the rule is turned back on.
+te_cm_yearly_on_action = {
+	effect = {
+		if = {
+			limit = {
+				te_cm_system_enabled = yes
+				NOT = { has_global_variable = te_cm_census_lock }
+			}
+			set_local_variable = { name = te_cm_year value = year }
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_global_variable = te_cm_census_year }
+						global_var:te_cm_census_year < local_var:te_cm_year
+					}
+				}
+				set_global_variable = { name = te_cm_census_lock value = yes days = 330 }
+				set_global_variable = { name = te_cm_census_year value = local_var:te_cm_year }
+				# TEMPORARY self-check cm_census_yearly (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+				te_cm_chk_census_year = yes
+				# A running merge whose starter is gone returns to idle first, so the census below
+				# treats it as one a country can start again.
+				te_cmg_release_lost_starters = yes
+				te_cmg_census_all = yes
+				# The switch comes last, after the walks: it reads what the census just stored (R22).
+				te_cmg_dominance_all = yes
+			}
+		}
+		# The conversion is every country's own, on its own yearly pulse: not under the census's calendar-year
+		# guard or its lock, which let one country a year through. It pauses with the rule like the rest.
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			te_cmg_yearly_country = yes
+		}
+	}
+}
+
+# Country scope, the monthly pulse. The parts that have switched stay primary cultures for good (spec 7), so
+# a country that has one as primary gets the result too, and pops of a switched part that reappear are
+# converted. Paused with the rule, resumed with it.
+on_monthly_pulse_country = {
+	on_actions = { te_cm_monthly_on_action }
+}
+
+te_cm_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			te_cmg_monthly_country = yes
+		}
+	}
+}
+
+# No root scope: the global monthly pulse, once a month for the world. Every switched culture takes the fervor of
+# the culture it switched into (te_cmg_copy_fervor_all), so vanilla's reads of a merged-away culture's fervor read
+# the merged culture's. Nothing here reads ROOT. No rule gate: the pops it serves stay switched with the rule off.
+on_monthly_pulse = {
+	on_actions = { te_cm_fervor_on_action }
+}
+
+te_cm_fervor_on_action = {
+	effect = {
+		# TEMPORARY self-check cm_fervor_copy (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test).
+		# Reads last month's copy before this month's.
+		te_cm_chk_fervor_monthly = yes
+		te_cmg_copy_fervor_all = yes
+	}
+}
+
+# Country scope: the newly formed country. A formation may reset primary cultures (unverified, spec 10), so a
+# country formed or released from a definition that lists only the parts gets the result at once, not within a
+# month, and a sphere country that was already converting gets the result back.
+on_country_formed = {
+	on_actions = { te_cm_formed_on_action }
+}
+
+te_cm_formed_on_action = {
+	effect = {
+		if = {
+			limit = { te_cm_system_enabled = yes }
+			# TEMPORARY self-check cm_formation_keeps_primary (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x
+			# play-test). First, so it reads the primary cultures before the refresh below puts a result back.
+			te_cm_chk_formation = yes
+			te_cmg_formed_country = yes
+		}
+	}
+}

@@ -223,6 +223,12 @@ enforce_emissions_reduction = {  # REVIEWED 2026-11-03 (involvement): an imposed
 			}
 		}
 
+		# Per-partner gate (evaluation_chance has root only): the cuts are asked for
+		# in a treaty, or pressed as a war goal, only of a country that emits at
+		# least 1% of the world's yearly total and doesn't run all seven policies.
+		proposal_weight = { value = enforce_emissions_reduction_ai_demand_weight }
+		wargoal_score_multiplier = { value = enforce_emissions_reduction_ai_demand_weight }
+
 		inherent_accept_score = {
 			value = 0
 

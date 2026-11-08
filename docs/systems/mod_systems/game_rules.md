@@ -4,7 +4,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 ## Game Rules
 
-Twenty mod systems can be toggled or set at game setup via `common/game_rules/extra_game_rules.txt`.
+Twenty-one mod systems can be toggled or set at game setup via `common/game_rules/extra_game_rules.txt`; a rule can also be changed mid-game, from the change-country screen.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -28,6 +28,7 @@ Twenty mod systems can be toggled or set at game setup via `common/game_rules/ex
 | `te_principle_slots_rule` | `te_principle_slots_eight` | eight | Power bloc principle slots from the four slot technologies (`te_pb_tech_principle_slots`, 0 under `te_principle_slots_four`); `MAX_PRINCIPLES` stays 8 and every slot limit reads `te_pb_principle_slot_cap`. The power bloc panel shows slots 5–8 (locked above the count) only when `te_pb_principle_slots_max` is 8. Checked as `NOT = { has_game_rule = te_principle_slots_four }` |
 | `te_tax_code_rule` | `te_tax_code_enabled`, `te_tax_code_enabled_customs`, `te_tax_code_light` | **disabled** | The legislated tax code: vanilla taxation laws gated off, `law_te_tax_code` carrier with generated rate amendments (`gen_tax_code.py`); `_enabled_customs` also legislates customs. `_light` keeps the vanilla laws as bounds and sets each rate at once within them. Checked **positively**, as `te_tax_code_on` (any enabled setting) / `te_tax_code_full` / `te_tax_code_light_on` / `te_tax_customs_on` (`common/scripted_triggers/te_tax_triggers.txt`), never `NOT = { ...disabled }` |
 | `global_commons_rule` | `global_commons_enabled` | enabled | Seabed licences capping the Deep-Sea Mine (§ Global Commons) and the UN's Law of the Sea and Antarctic Treaty terms built on them; disabled = the mine uncapped. Checked **positively** through `te_global_commons_enabled`: the system arrives with the rule, so a save from before it keeps the uncapped mine until the rule is switched on, when the first recording grandfathers every standing level. Launch windows and debris follow `space_race_rule` |
+| `culture_merges_rule` | `culture_merges_enabled` | enabled | Culture merges (§ Culture Merges): the yearly census, the 32 merge journal entries and start buttons, conversion, the switch, the monthly primary-culture upkeep and the formation hook. Checked as `te_cm_system_enabled` = `NOT = { has_game_rule = culture_merges_disabled }`, so a save with no stored value runs the system. Switched off mid-game, every merge pauses where it stands and no variable is reset; switched back on, each resumes (the yearly net re-adds a candidate's or a running starter's pruned entry). Converted pops keep their culture, and the speed sources (Public Schools, the Ministry of Culture, Radio, Film, Mass Propaganda) keep their other effects. The injected Russification outcome has no rule gate |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
