@@ -1429,6 +1429,24 @@ Got value of type 'none'
 
 When the conference assigns the votes of countries that haven't voted, each involved country saves itself as the temporary scope `voting_country` and one `random_list` branch adds `scope:voting_country.prestige` to a proposal's tally. Once, in June 1838 of the 2026-11-06 observer game, that read came back none at the fourth proposal's branch; the other branches read the same scope the same way and didn't log. The mod neither overrides the file nor writes its variables, and the line has no script frame. That proposal's tally misses one voter's prestige.
 
+### `common/journal_entries/05_montenegro_je.txt:278` — the raiding entry's cleanup removes pacts that were never made (1.15)
+- stack: vanilla only
+
+```
+pact was not found between
+```
+
+When Montenegro's raiding entry ends, `je_montenegrin_raiding_cleanup` runs `end_raiding_cleanup` from `00_chris_scripted_effects.txt`, whose `hidden_effect` has Russia remove its disapproval pact with Montenegro and the Ottomans their raiding pact, with no check that either pact exists. One line each, at 16:26:52 of the 2026-11-08 observer game, through `00_victoria_cleanup_scripted_effects.txt:1494`; nothing happens beyond the log line.
+
+### `common/dynamic_country_map_colors/00_default.txt:315` — Feminist Britain's map color reads a ruler Britain may not have (1.15)
+- stack: vanilla only
+
+```
+Event target link 'ruler' returned an invalid object
+```
+
+The `feminist_britain` color's `possible` checks `c:GBR ?= THIS`, then reads `ruler = { has_ideology = … is_female = yes }` with no `exists = ruler`. Two lines in one second, 16:37 of the 2026-11-08 observer game, while Britain had no ruler for a moment.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
