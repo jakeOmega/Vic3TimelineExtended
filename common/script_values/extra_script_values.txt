@@ -3011,14 +3011,42 @@ enforce_privatization_state_owned_levels = {
 # not bound by it.
 enforce_privatization_ai_min_levels = 10
 
+# What an AI demand of scope:source_country is worth by the size of its
+# economy, as its place in the world's GDP ranking (era-independent, unlike a
+# GDP figure): 1 for the ten largest, 0.4 for the next ten, 0.1 for the rest,
+# since prying open, disarming or cleaning up a small economy is worth little
+# to a great power (owner, 2026-11-08). Read by the AI demand weights of
+# Privatization, Forced Disarmament, Free Port Concession and Enforce Emissions
+# Reduction once their gates pass.
+treaty_ai_demand_economy_factor = {
+	value = 0.1
+	# gdp_ranking > 0 guards a country left out of the ranking, should it read 0.
+	if = {
+		limit = {
+			scope:source_country = {
+				gdp_ranking > 0
+				gdp_ranking <= 10
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				gdp_ranking > 0
+				gdp_ranking <= 20
+			}
+		}
+		value = 0.4
+	}
+}
+
 # How keen the AI is to demand enforce_privatization of scope:source_country,
 # the country that would privatize: the article's proposal_weight (asking for it
 # in a treaty) and wargoal_score_multiplier (pressing it as an enforce war goal).
 # Root is the demander. 0 unless root runs a market economy and the source has
 # enough state-owned enterprise to sell. Then it scales with the source's
-# economy, by its place in the world's GDP ranking (era-independent, unlike a
-# GDP figure): 1 for the ten largest, 0.4 for the next ten, 0.1 for the rest,
-# since prying open a small economy is worth little to a great power.
+# economy (treaty_ai_demand_economy_factor).
 enforce_privatization_ai_demand_weight = {
 	value = 0
 	if = {
@@ -3031,26 +3059,7 @@ enforce_privatization_ai_demand_weight = {
 				enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels
 			}
 		}
-		value = 0.1
-		# gdp_ranking > 0 guards a country left out of the ranking, should it read 0.
-		if = {
-			limit = {
-				scope:source_country = {
-					gdp_ranking > 0
-					gdp_ranking <= 10
-				}
-			}
-			value = 1
-		}
-		else_if = {
-			limit = {
-				scope:source_country = {
-					gdp_ranking > 0
-					gdp_ranking <= 20
-				}
-			}
-			value = 0.4
-		}
+		value = treaty_ai_demand_economy_factor
 	}
 }
 
@@ -3060,8 +3069,10 @@ enforce_privatization_ai_demand_weight = {
 # How keen the AI is to demand an article of scope:source_country, the country
 # that concedes. Each weight is read by its article's proposal_weight (asking
 # for it in a treaty) and wargoal_score_multiplier (pressing it as an enforce
-# war goal in a play), and is 0 where the demand would buy nothing, 1
-# otherwise. Both fields bind scope:source_country, scope:target_country (the
+# war goal in a play), and is 0 where the demand would buy nothing. Otherwise
+# it is 1, or for a demand whose prize is the conceder's economy as a whole
+# (disarmament, a free port, emission cuts) treaty_ai_demand_economy_factor
+# above, as Privatization's is. Both fields bind scope:source_country, scope:target_country (the
 # side that gains: the war goal's holder) and scope:article; vanilla's
 # treaty_port and law_commitment read the chosen input there as
 # scope:article.input_<kind>. evaluation_chance has root only, so these checks
@@ -3154,7 +3165,8 @@ minority_protection_ai_demand_weight = {
 free_port_concession_ai_min_state_gdp = 500000
 
 # Only between two markets, since tariffs don't apply inside one, and for a
-# port with an economy (te_free_port_state_worth).
+# port with an economy (te_free_port_state_worth); then by the size of the
+# source's economy (treaty_ai_demand_economy_factor).
 free_port_concession_ai_demand_weight = {
 	value = 0
 	if = {
@@ -3171,7 +3183,7 @@ free_port_concession_ai_demand_weight = {
 				limit = {
 					scope:article.input_state = { te_free_port_state_worth = yes }
 				}
-				value = 1
+				value = treaty_ai_demand_economy_factor
 			}
 		}
 		else_if = {
@@ -3180,7 +3192,7 @@ free_port_concession_ai_demand_weight = {
 					any_scope_state = { te_free_port_state_worth = yes }
 				}
 			}
-			value = 1
+			value = treaty_ai_demand_economy_factor
 		}
 	}
 }
@@ -3239,7 +3251,8 @@ demilitarized_zone_ai_demand_weight = {
 # have before the AI demands its disarmament, unless it has military industry.
 forced_disarmament_ai_min_units = 10
 
-# Only of a country with an army, a navy or military industry to lose.
+# Only of a country with an army, a navy or military industry to lose; then by
+# the size of its economy (treaty_ai_demand_economy_factor).
 forced_disarmament_ai_demand_weight = {
 	value = 0
 	if = {
@@ -3258,7 +3271,7 @@ forced_disarmament_ai_demand_weight = {
 				}
 			}
 		}
-		value = 1
+		value = treaty_ai_demand_economy_factor
 	}
 }
 
@@ -3268,8 +3281,9 @@ forced_disarmament_ai_demand_weight = {
 enforce_emissions_reduction_ai_min_share_pct = 1
 
 # Only of a country that emits enough to matter and doesn't already run all
-# seven policies the article forces (on_entry_into_force). Without a yearly
-# figure yet, the share reads 0.
+# seven policies the article forces (on_entry_into_force); then by the size of
+# its economy (treaty_ai_demand_economy_factor). Without a yearly figure yet,
+# the share reads 0.
 enforce_emissions_reduction_ai_demand_weight = {
 	value = 0
 	if = {
@@ -3287,7 +3301,7 @@ enforce_emissions_reduction_ai_demand_weight = {
 				}
 			}
 		}
-		value = 1
+		value = treaty_ai_demand_economy_factor
 	}
 }
 
