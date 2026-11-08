@@ -326,6 +326,25 @@ class AuditTests(unittest.TestCase):
         result = audit(ms, mod_path=tmp)
         self.assertEqual(result.flags, [])
 
+    def test_culture_modifier_types_need_no_loc(self):
+        # The three modifier types a culture's static modifiers use are named by the engine from the culture
+        # (vanilla's 322 cultures' carry no loc key), so a mod culture's own aren't flagged (2026-11-08). The same
+        # shape on a name that is no culture still is.
+        tmp = tempfile.mkdtemp()
+        names = [
+            "state_cm_german_standard_of_living_add",
+            "country_cm_german_cultural_acceptance_add",
+            "country_fervor_target_cm_german_add",
+            "state_lower_strata_standard_of_living_add",
+        ]
+        _write(tmp, "common/modifier_type_definitions/x.txt", "".join(f"{n} = {{\n}}\n" for n in names))
+        ms = FakeMS(
+            mod_data={"Modifier Types": {n: {} for n in names}, "Cultures": {"cm_german": {}}},
+            base_data={"Modifier Types": {}, "Cultures": {"scottish": {}}},
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual([f.entity for f in result.flags], ["state_lower_strata_standard_of_living_add"])
+
     def test_government_type_missing_name_flagged(self):
         # Regression for gov_algorithmic_directorate: a mod-new government type
         # with no loc key leaks the raw name into the government panel.

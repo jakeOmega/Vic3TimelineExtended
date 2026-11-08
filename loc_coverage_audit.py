@@ -472,6 +472,35 @@ def _build_entity_locations(
     return locations
 
 
+# The modifier types vanilla registers for every culture (in 99_todo_sort_into_other_files.txt and the 10_/11_
+# culture files) and gives no loc key: the engine names them from the culture, through STATE_CULTURE_SOL_MODIFIER,
+# COUNTRY_CULTURE_CULTURAL_ACCEPTANCE_MODIFIER and COUNTRY_FERVOR_TARGET_CULTURE_MODIFIER. A mod culture's own
+# (gen_culture_merges' te_merged_culture_modifier_types.txt) are named the same way, so they need no key either.
+_CULTURE_TYPE_RES = (
+    re.compile(r"state_(?P<c>\w+)_standard_of_living_add"),
+    re.compile(r"country_(?P<c>\w+)_cultural_acceptance_add"),
+    re.compile(r"country_fervor_target_(?P<c>\w+)_add"),
+)
+
+
+def _culture_names(ms) -> set[str]:
+    names: set[str] = set()
+    for parsers in (ms.base_parsers, ms.mod_parsers):
+        parser = parsers.get("Cultures")
+        if parser is not None and parser.data:
+            names |= set(parser.data)
+    return names
+
+
+def engine_named_culture_type(name: str, cultures: set[str]) -> bool:
+    """True when ``name`` is one of a culture's three modifier types, which the engine names from the culture."""
+    for pattern in _CULTURE_TYPE_RES:
+        m = pattern.fullmatch(name)
+        if m and m.group("c") in cultures:
+            return True
+    return False
+
+
 def _scan_category(
     ms,
     mod_path: str,
@@ -486,6 +515,9 @@ def _scan_category(
     base_keys = set(base.data.keys()) if base else set()
     mod_keys = set(mod.data.keys())
     new_keys = mod_keys - base_keys
+    if category == "Modifier Types":
+        cultures = _culture_names(ms)
+        new_keys = {k for k in new_keys if not engine_named_culture_type(k, cultures)}
     if not new_keys:
         return [], set()
     dir_rel = _DIR_MAP.get(category)
