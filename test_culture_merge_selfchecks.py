@@ -341,8 +341,11 @@ class LatchTest(unittest.TestCase):
     def test_degenerate_inputs_are_left_out(self):
         text = text_of(CHECK_EFFECTS)
         census = squash(block(text, "te_cm_chk_census"))
-        # census_sane: the sphere must hold some of the part in its homeland states, or 0 would read as OK and BROKEN.
+        # census_sane: the sphere must hold some of the part in its homeland states, or 0 would read as OK and BROKEN, and the part
+        # must have an owned homeland state: the world fallback notes its holders in country scope, which proves nothing about
+        # the write from inside owner = { }.
         self.assertIn("local_var:te_cm_cp_pops > 0", census)
+        self.assertIn("local_var:te_cm_cp_states > 0", census)
         # acceptance_scale: a primary culture with a real share of the country's pops, not a handful.
         self.assertIn("country_has_primary_culture = cu:$CULTURE$", census)
         self.assertRegex(census, r"culture_percent_country = \{ target = cu:\$CULTURE\$ value >= 0\.1 \}")
@@ -360,6 +363,10 @@ class LatchTest(unittest.TestCase):
         # conversion_merges_pops: the first pass must have made a result pop to compare the second against.
         monthly = squash(block(text, "te_cm_chk_conversion_monthly"))
         self.assertIn("global_var:te_cm_chk_conv_inc1 >= 1", monthly)
+        # The sample's cultures are saved inside the block that picks the state, not from a global read back after it.
+        self.assertNotIn("limit = { has_global_variable = te_cm_chk_conv_stage } cu:", conversion)
+        self.assertLess(conversion.index("random_scope_state"), conversion.index("name = te_cm_chk_conv_part"))
+        self.assertLess(conversion.index("name = te_cm_chk_conv_part"), conversion.index("name = te_cm_chk_conv_stage value = 1"))
 
     def test_the_verdict_logic(self):
         text = text_of(CHECK_EFFECTS)

@@ -43,7 +43,10 @@ te_cm_chk_remove_global = {
 # culture. The caller's locals are alive: te_cm_cp_pops (the sphere's pops of the part in its homeland states),
 # te_cm_cp_max_cnt (the largest holder's count, written from inside owner = { te_cm_cp_note_holder }) and te_cm_cp_joined.
 #
-# cm_census_sane: the sphere holds some of a part that has not joined, so
+# cm_census_sane: the part has an owned homeland state (te_cm_cp_states above 0) and the sphere holds some of it, so the pops
+#   came through the homeland-state walk, where te_cm_cp_note_holder runs inside owner = { }. A part with no owned homeland
+#   state is counted in the world instead, where it runs in country scope and proves nothing about that write, so it is left
+#   out. Then
 #   OK      the world's pops of the part in its homeland states (home) are above 0, the hold is above 0 and at most 1, the
 #           sphere's pops do not exceed the world's, and the largest holder's count is above 0: a local written inside
 #           owner = { } reached the census, and the globals it divides by were read back.
@@ -60,6 +63,7 @@ te_cm_chk_census = {
 			NOT = { has_global_variable = te_cm_chk_census_sane_done }
 			te_cm_system_enabled = yes
 			local_var:te_cm_cp_joined = 0
+			local_var:te_cm_cp_states > 0
 			local_var:te_cm_cp_pops > 0
 		}
 		set_global_variable = { name = te_cm_chk_census_sane_done value = yes }
@@ -268,15 +272,12 @@ te_cm_chk_conversion = {
 				change_local_variable = { name = te_cm_chk_n add = 1 }
 			}
 			set_global_variable = { name = te_cm_chk_conv_before value = local_var:te_cm_chk_n }
-			set_global_variable = { name = te_cm_chk_conv_stage value = 1 }
-			set_global_variable = { name = te_cm_chk_conv_wait value = yes days = 35 }
-		}
-		if = {
-			limit = { has_global_variable = te_cm_chk_conv_stage }
 			cu:$CULTURE$ = { save_temporary_scope_as = te_cm_chk_part_s }
 			cu:$RESULT$ = { save_temporary_scope_as = te_cm_chk_result_s }
 			set_global_variable = { name = te_cm_chk_conv_part value = scope:te_cm_chk_part_s }
 			set_global_variable = { name = te_cm_chk_conv_result value = scope:te_cm_chk_result_s }
+			set_global_variable = { name = te_cm_chk_conv_stage value = 1 }
+			set_global_variable = { name = te_cm_chk_conv_wait value = yes days = 35 }
 		}
 	}
 
