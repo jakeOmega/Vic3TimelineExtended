@@ -760,7 +760,7 @@ The donations are the [Development Programs](#development-programs-sizes)
 contributions, which open only once the Fund stands, to any member that holds its
 seat, pays its dues and draws no grant. A contributor's money pays the grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
-laws allow no investment pool or your banking system has not started. The line
+laws allow no investment pool or the Banking System game rule is Disabled. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
 the budget line shows what the Fund and the Standing UN Force take. The World
 Development Fund section of the UN panel lists every member the Fund pays this

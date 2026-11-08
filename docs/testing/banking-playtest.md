@@ -267,3 +267,19 @@ list, a weekly counter, display-only static modifiers), and what is new is GUI r
     *Fallback if it renders nothing on a row's amount:* put the `using` on the row, or give the row a tooltip key.
     An institution's hover gives its level and share of the pool; Administration's gives the pool. A banking event
     charge's modifier tooltip reads "Breakdown: Banking" under Government Expenses.
+
+## The investment pool's weekly add before the cycle starts (2026-11-07)
+
+`je_banking_cycle`'s weekly pulse now runs `banking_weekly_investment_pool_add` for every holder of the entry, its
+cycle started or not; until then it waited for the cycle. Pick a country without Stock Exchange (the entry shows Not
+Started).
+
+1. **Neocolonial Dependency takes from a dormant pool.** Give the country Neocolonial Dependency (free a colonial
+   subject under the Neocolonialism law, or `event` the decolonization release). Its investment pool's weekly change
+   falls by 12% of the pool's weekly gross income, as it would with the cycle running; before the change it took
+   nothing.
+2. **The UN grant goes into a dormant pool.** A Development Fund recipient whose laws keep an investment pool: the UN
+   panel's Our Obligations line reads "into our investment pool", not "into our treasury", the modifier list shows
+   the pool grant (Weekly Investment Pool Change) and not the treasury one, and the pool grows by the grant each week.
+   Under laws with no investment pool, or with the Banking System rule Disabled, it still reads "into our treasury".
+3. **Nothing else wakes.** The dormant entry still shows no phase, bars or tools, and no banking events fire.

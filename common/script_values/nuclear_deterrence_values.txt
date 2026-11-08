@@ -1776,6 +1776,10 @@ nd_yp_stakes_territory_value = {
 		add = -10
 	}
 	if = {
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_seize_strait TARGET = scope:nd_target } } }
+		add = -10
+	}
+	if = {
 		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_country TARGET = scope:nd_target } } }
 		add = -10
 	}

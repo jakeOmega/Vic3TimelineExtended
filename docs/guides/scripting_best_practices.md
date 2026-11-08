@@ -4461,7 +4461,7 @@ Reusability pattern: wrap `create_treaty` in a parameterized scripted_effect (`$
 
 ## `country_weekly_investment_pool_mult` Is a Share of Weekly Pool Income
 
-The mod-defined `country_weekly_investment_pool_mult` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt`) is read only by `banking_cycle_weekly_effects` (the banking journal entry's weekly block, so a country without the entry gets nothing), through `investment_pool_banking_cycle_income_add`: each week it adds that share of `investment_pool_gross_income`, the pool's income before expenses, clamped so it never takes more than the pool holds. It is a flow: +0.24 adds a quarter of a week's income, every week.
+The mod-defined `country_weekly_investment_pool_mult` (`common/modifier_type_definitions/banking_cycle_modifier_types.txt`) is read only by `banking_weekly_investment_pool_add` (the banking journal entry's weekly block, which runs whether or not the entry's cycle has started, so a country without the entry gets nothing), through `investment_pool_banking_cycle_income_add`: each week it adds that share of `investment_pool_gross_income`, the pool's income before expenses, clamped so it never takes more than the pool holds. It is a flow: +0.24 adds a quarter of a week's income, every week.
 
 **Until 2026-10-05 it multiplied the pool's balance**, which compounds. The cooperative Frenzy phase's +0.01 a week grew an unspent pool ×1.68 a year and kept Overinvestment running (`docs/audits/banking_cycle_simulation.md` §21). A term on a stock that also feeds that stock is a growth rate, so a weekly one is ruinous at any value large enough to read in a tooltip; scale script money by a flow (income, GDP) unless compounding is the point. Old balance-share values convert to income shares ×24, the pool a country spending a 24th of it a week settles at.
 
@@ -5436,6 +5436,8 @@ One auto-running probe in an 1836 observer game (`te_probe_nr_*`, the nuclear cr
 - **`remove_claim = <country>`** (state-region scope) removes another country's claim, including one from history, at once.
 - **`remove_diplomatic_pact = { country = X type = <covert operation> }`** from the pact's first country ends it at once; another country's pact of the same type stays.
 
+
+**A new war goal type joins the mod's hand-kept goal lists.** Script can't list a play's war goals, only test one type at a time, so several systems name every goal type they react to, the mod's own included, and a goal left out is engine-silent. Seize Strait (2026-11-07) went into: `un_force_has_strikeable_goal` and `un_force_strike_war_goals` (a goal a play opens with; `test_un_force_play_types.py` fails on one missing), `un_mandate_has_prohibited_goal` and the mandate's strike list (territorial or subjugation goals), and in the nuclear crisis `nd_side_holds_any_goal_against`, the concession's `remove_war_goal` ladder in `nuclear_crisis_effects.txt`, `nd_yp_stakes_territory_value` and `nd_core_threatened_by` (territorial), while the existence lists (`nd_enemy_threatens_existence`, `nd_yp_stakes_value`) take only annexation and subjugation. `git grep -n <the vanilla goal it most resembles> -- common` finds them.
 
 ## A Generated Table's Index Is Saved: Append New Rows, Never Insert
 

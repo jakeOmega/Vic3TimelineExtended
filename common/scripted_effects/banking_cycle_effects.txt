@@ -2204,9 +2204,22 @@ banking_cycle_start = {
 	banking_cycle_update_progress_bars = yes
 }
 
-# 0. Weekly effects
-banking_cycle_weekly_effects = {
+# 0. The investment pool's weekly add: a share of its weekly gross income
+#    (country_weekly_investment_pool_mult) plus a flat amount
+#    (country_weekly_investment_pool_add), investment_pool_banking_cycle_add in
+#    extra_script_values.txt. The two keys are the mod's own (script-only), so
+#    nothing but this effect moves them into the pool. Called from
+#    je_banking_cycle's weekly pulse for every holder of the entry, its cycle
+#    running or not (owner, 2026-11-07): Neocolonial Dependency and the UN
+#    Development Fund's grant carry them too, and a country without the entry
+#    gets neither (un_dev_fund_pays_into_pool sends that one's grant to the
+#    treasury). Until then it ran only once the cycle had started.
+banking_weekly_investment_pool_add = {
 	add_investment_pool = investment_pool_banking_cycle_add
+}
+
+# 0. The cycle's weekly effects, only while it runs (je_banking_cycle's weekly pulse)
+banking_cycle_weekly_effects = {
 	# A bank holiday's days left, for its Active Policies row (set by
 	# banking_effect_cb_bank_holiday). A week's resolution is enough for a
 	# ninety-day term. Gone once the modifier is: expired, disabled, removed

@@ -5040,22 +5040,22 @@ pm_drone_delivery_systems = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_glass_add = 2                            # Price:   40, Total cost:    80.0 (3.69%)
-			goods_input_steel_add = 2                            # Price:   50, Total cost:   100.0 (4.61%)
-			goods_input_radios_add = 2                           # Price:   80, Total cost:   160.0 (7.37%)
-			goods_input_telephones_add = 4                       # Price:   70, Total cost:   280.0 (12.90%)
-			goods_input_robotics_add = 10                        # Price:   80, Total cost:   800.0 (36.87%)
-			goods_input_transportation_add = 9                   # Price:   30, Total cost:   270.0 (12.44%)
-			goods_input_digital_access_add = 4                   # Price:  120, Total cost:   480.0 (22.12%)
+			goods_input_glass_add = 2                            # Price:   40, Total cost:    80.0 (3.20%)
+			goods_input_steel_add = 2                            # Price:   50, Total cost:   100.0 (4.00%)
+			goods_input_radios_add = 2                           # Price:   80, Total cost:   160.0 (6.40%)
+			goods_input_telephones_add = 4                       # Price:   70, Total cost:   280.0 (11.20%)
+			goods_input_robotics_add = 10                        # Price:   80, Total cost:   800.0 (32.00%)
+			goods_input_transportation_add = 20                  # Price:   30, Total cost:   600.0 (24.00%)
+			goods_input_digital_access_add = 4                   # Price:  120, Total cost:   480.0 (19.20%)
 			# Output goods
 			goods_output_services_add = 350                      # Price:   30, Total cost: 10500.0 (100.00%)
-			# Total input cost: 2170.0
+			# Total input cost: 2500.0
 			# Total output cost: 10500.0
-			# Profit: 8330.0
-			# Profit margin: 383.87%
-			# Zero profit price multiplier: 0.21
+			# Profit: 8000.0
+			# Profit margin: 320.00%
+			# Zero profit price multiplier: 0.24
 			# Employment: 1200
-			# Wage breakeven: 6.94
+			# Wage breakeven: 6.67
 		}
 
 		level_scaled = {
@@ -8391,17 +8391,17 @@ pm_advanced_process_control = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (54.79%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (41.10%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (4.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (40.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (30.00%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (30.00%)
 			# Output goods
-			# Total input cost: 730.0
+			# Total input cost: 1000.0
 			# Total output cost: 0
-			# Profit: -730.0
+			# Profit: -1000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -3000
-			# Wage breakeven: 0.24
+			# Wage breakeven: 0.33
 		}
 
 		level_scaled = {
@@ -8431,18 +8431,18 @@ pm_distributed_control_systems = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (30.08%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (22.56%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.26%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (45.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (18.75%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (18.75%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (37.50%)
 			# Output goods
-			# Total input cost: 1330.0
+			# Total input cost: 1600.0
 			# Total output cost: 0
-			# Profit: -1330.0
+			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -4300
-			# Wage breakeven: 0.31
+			# Wage breakeven: 0.37
 		}
 
 		level_scaled = {
@@ -8475,18 +8475,18 @@ pm_ai_managed_chemical_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (20.73%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (15.54%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (1.55%)
-			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (62.18%)
+			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (18.18%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (13.64%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (13.64%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (54.55%)
 			# Output goods
-			# Total input cost: 1930.0
+			# Total input cost: 2200.0
 			# Total output cost: 0
-			# Profit: -1930.0
+			# Profit: -2200.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -5500
-			# Wage breakeven: 0.35
+			# Wage breakeven: 0.40
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -8537,18 +8537,18 @@ pm_ai_managed_explosives_factory = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (20.73%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (15.54%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (1.55%)
-			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (62.18%)
+			goods_input_robotics_add = 5                         # Price:   80, Total cost:   400.0 (18.18%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (13.64%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (13.64%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (54.55%)
 			# Output goods
-			# Total input cost: 1930.0
+			# Total input cost: 2200.0
 			# Total output cost: 0
-			# Profit: -1930.0
+			# Profit: -2200.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -5500
-			# Wage breakeven: 0.35
+			# Wage breakeven: 0.40
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -8598,17 +8598,17 @@ pm_advanced_process_control_explosives_factory = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (54.79%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (41.10%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (4.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (40.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (30.00%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (30.00%)
 			# Output goods
-			# Total input cost: 730.0
+			# Total input cost: 1000.0
 			# Total output cost: 0
-			# Profit: -730.0
+			# Profit: -1000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -3000
-			# Wage breakeven: 0.24
+			# Wage breakeven: 0.33
 		}
 
 		level_scaled = {
@@ -8645,18 +8645,18 @@ pm_distributed_control_systems_explosives_factory = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (30.08%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (22.56%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.26%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (45.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (18.75%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (18.75%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (37.50%)
 			# Output goods
-			# Total input cost: 1330.0
+			# Total input cost: 1600.0
 			# Total output cost: 0
-			# Profit: -1330.0
+			# Profit: -1600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -4300
-			# Wage breakeven: 0.31
+			# Wage breakeven: 0.37
 		}
 
 		level_scaled = {
@@ -12118,17 +12118,17 @@ pm_power_integrated_smart_systems = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (48.19%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (3.61%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (48.19%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (36.36%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (27.27%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (36.36%)
 			# Output goods
-			# Total input cost: 830.0
+			# Total input cost: 1100.0
 			# Total output cost: 0
-			# Profit: -830.0
+			# Profit: -1100.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -740
-			# Wage breakeven: 1.12
+			# Wage breakeven: 1.49
 		}
 
 		level_scaled = {
@@ -12164,18 +12164,18 @@ pm_ai_managed_power_plant = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (23.53%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.65%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (23.53%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (35.29%)
 			# Output goods
-			# Total input cost: 1430.0
+			# Total input cost: 1700.0
 			# Total output cost: 0
-			# Profit: -1430.0
+			# Profit: -1700.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -1000
-			# Wage breakeven: 1.43
+			# Wage breakeven: 1.70
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -12221,18 +12221,18 @@ pm_ai_managed_power_plant_reactor = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (23.53%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.65%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (23.53%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (35.29%)
 			# Output goods
-			# Total input cost: 1430.0
+			# Total input cost: 1700.0
 			# Total output cost: 0
-			# Profit: -1430.0
+			# Profit: -1700.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -1100
-			# Wage breakeven: 1.30
+			# Wage breakeven: 1.55
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -12276,18 +12276,18 @@ pm_ai_managed_power_plant_aneutronic = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (23.53%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.65%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (23.53%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (35.29%)
 			# Output goods
-			# Total input cost: 1430.0
+			# Total input cost: 1700.0
 			# Total output cost: 0
-			# Profit: -1430.0
+			# Profit: -1700.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -950
-			# Wage breakeven: 1.51
+			# Wage breakeven: 1.79
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -12330,18 +12330,18 @@ pm_ai_managed_power_plant_hydro = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
-			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
-			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (23.53%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.65%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (23.53%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (35.29%)
 			# Output goods
-			# Total input cost: 1430.0
+			# Total input cost: 1700.0
 			# Total output cost: 0
-			# Profit: -1430.0
+			# Profit: -1700.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -5500
-			# Wage breakeven: 0.26
+			# Wage breakeven: 0.31
 		}
 
 		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
@@ -14148,18 +14148,18 @@ pm_cleanroom_fabs = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (22.79%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (17.09%)
-			goods_input_transportation_add = 8.5                 # Price:   30, Total cost:   255.0 (14.53%)
-			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (45.58%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (22.22%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (16.67%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (16.67%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (44.44%)
 			# Output goods
-			# Total input cost: 1755.0
+			# Total input cost: 1800.0
 			# Total output cost: 0
-			# Profit: -1755.0
+			# Profit: -1800.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -2500
-			# Wage breakeven: 0.70
+			# Wage breakeven: 0.72
 		}
 
 		level_scaled = {
@@ -14191,19 +14191,19 @@ pm_ai_managed_fab = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_robotics_add = 4                         # Price:   80, Total cost:   320.0 (6.56%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (6.15%)
-			goods_input_transportation_add = 8.5                 # Price:   30, Total cost:   255.0 (5.23%)
-			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (32.82%)
-			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (49.23%)
+			goods_input_robotics_add = 4                         # Price:   80, Total cost:   320.0 (6.50%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (6.10%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (6.10%)
+			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (32.52%)
+			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (48.78%)
 			# Output goods
-			# Total input cost: 4875.0
+			# Total input cost: 4920.0
 			# Total output cost: 0
-			# Profit: -4875.0
+			# Profit: -4920.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -4500
-			# Wage breakeven: 1.08
+			# Wage breakeven: 1.09
 		}
 
 		# Flat-staff prototype (docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md):
@@ -17655,20 +17655,20 @@ REPLACE:pm_iron_frame_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 16                            # Price:   20, Total cost:   320.0 (21.77%)
-			goods_input_fabric_add = 8                           # Price:   20, Total cost:   160.0 (10.88%)
-			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (54.42%)
-			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (10.88%)
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.04%)
+			goods_input_wood_add = 16                            # Price:   20, Total cost:   320.0 (18.39%)
+			goods_input_fabric_add = 8                           # Price:   20, Total cost:   160.0 (9.20%)
+			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (45.98%)
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (9.20%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.24%)
 			# Output goods
 			goods_output_construction_add = 2                    # Price: 1000, Total cost:  2000.0 (100.00%)
-			# Total input cost: 1470.0
+			# Total input cost: 1740.0
 			# Total output cost: 2000.0
-			# Profit: 530.0
-			# Profit margin: 36.05%
-			# Zero profit price multiplier: 0.73
+			# Profit: 260.0
+			# Profit margin: 14.94%
+			# Zero profit price multiplier: 0.87
 			# Employment: 6500
-			# Wage breakeven: 0.08
+			# Wage breakeven: 0.04
 		}
 
 		level_scaled = {
@@ -19519,83 +19519,25 @@ INJECT:pm_road_carts = {
 pm_partial_bulk_transport = {
 	texture = "gfx/interface/icons/production_method_icons/pm_partial_bulk_transport.dds"
 
+	# Sits between Road Carts (no transportation, +2,000 laborers a level, no
+	# economy of scale) and Rail Transportation, vanilla's pm_rail_transport_mine
+	# and pm_steam_rail_transport (5 transportation, -1,000 laborers), which the
+	# mod doesn't override: it buys the state's carts and boats instead of hiring
+	# carters. For a level-5 Picks and Shovels coal mine at base prices it beats
+	# Road Carts from a wage of about GBP 0.03, and Rail beats it from about
+	# GBP 0.08 (transport_goods.md, "Mine and plantation transport tiers").
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 5                   # Price:   30, Total cost:   150.0 (100.00%)
+			goods_input_transportation_add = 2.5                 # Price:   30, Total cost:    75.0 (100.00%)
 			# Output goods
-			# Total input cost: 150.0
+			# Total input cost: 75.0
 			# Total output cost: 0
-			# Profit: -150.0
+			# Profit: -75.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
 			# Wage breakeven: 0.00
-		}
-	}
-}
-
-REPLACE:pm_steam_rail_transport = {
-	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
-
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
-	}
-
-	unlocking_technologies = {
-		railways
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (100.00%)
-			# Output goods
-			# Total input cost: 30.0
-			# Total output cost: 0
-			# Profit: -30.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: -1000
-			# Wage breakeven: 0.03
-		}
-
-		level_scaled = {
-			building_employment_laborers_add = -1000
-		}
-	}
-}
-
-REPLACE:pm_rail_transport_mine = {
-	texture = "gfx/interface/icons/production_method_icons/rail_transport.dds"
-	state_modifiers = {
-		workforce_scaled = {
-			state_pollution_generation_add = 10
-		}
-	}
-
-	unlocking_technologies = {
-		railways
-	}
-
-	building_modifiers = {
-		workforce_scaled = {
-			# Input goods
-			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (100.00%)
-			# Output goods
-			# Total input cost: 30.0
-			# Total output cost: 0
-			# Profit: -30.0
-			# Profit margin: -100.00%
-			# Zero profit price multiplier: 0.00
-			# Employment: -1000
-			# Wage breakeven: 0.03
-		}
-
-		level_scaled = {
-			building_employment_laborers_add = -1000
 		}
 	}
 }
@@ -19752,15 +19694,15 @@ pm_rail_transport_mine_infrastructure_4 = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_transportation_add = 16.5                # Price:   30, Total cost:   495.0 (100.00%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (100.00%)
 			# Output goods
-			# Total input cost: 495.0
+			# Total input cost: 300.0
 			# Total output cost: 0
-			# Profit: -495.0
+			# Profit: -300.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: -1500
-			# Wage breakeven: 0.33
+			# Wage breakeven: 0.20
 		}
 
 		level_scaled = {

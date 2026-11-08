@@ -10,15 +10,16 @@
 # x the weekly grant (var:un_dev_fund_grant), so one point is one pound a week.
 # country_weekly_investment_pool_add is the mod's own (script-only) modifier;
 # the Banking Cycle entry's weekly pulse moves it into the pool
-# (banking_cycle_weekly_effects), which is why the Fund pays it only to a
-# country running that entry (un_dev_fund_pays_into_pool).
+# (banking_weekly_investment_pool_add, its cycle started or not), which is why
+# the Fund pays it only to a country holding that entry
+# (un_dev_fund_pays_into_pool).
 un_dev_fund_pool_grant_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_weekly_investment_pool_add = 1
 }
 
 # The same grant into the treasury, as weekly income, for a recipient whose
-# laws allow no investment pool or that runs no banking system yet. x the
+# laws allow no investment pool or that holds no Banking Cycle entry. x the
 # weekly grant (var:un_dev_fund_grant). Income rather than a negative
 # country_expenses_add (scripting_best_practices.md, "Expense Scaling with
 # GDP": avoid negative expenses), as the Strategic Reserve's sale profit does
