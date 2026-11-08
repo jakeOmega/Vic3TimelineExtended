@@ -51,7 +51,7 @@ Every `can_be_enforced` article tells the AI where a demand buys nothing, throug
 | Religious Mission Rights | at least a tenth of the state is of another faith than the missionary power's |
 | Demilitarized Zone | the state holds a Barracks, Naval Administration, Naval Fortification, Naval Logistics Center or Military Base, or borders the demander |
 | Forced Disarmament | the source has `forced_disarmament_ai_min_units` (10) battalions or flotillas, or an Arms Industry, Artillery Foundry or Munition Plant |
-| Enforce Emissions Reduction | the source emits at least `enforce_emissions_reduction_ai_min_share_pct` (1%) of the world's yearly total and doesn't already run all seven forced policies |
+| Emissions Reduction | the source emits at least `enforce_emissions_reduction_ai_min_share_pct` (1%) of the world's yearly total and doesn't already run all seven forced policies |
 | Imposed Currency Peg | the source isn't already pegged (`te_mon_is_anchored`) |
 | Debt Receivership | the source isn't already under a receivership or a lender-of-last-resort guarantee |
 | Nuclear Program Freeze, Nuclear Disarmament | `docs/systems/mod_systems/nuclear.md` |
