@@ -2427,6 +2427,10 @@ nd_crisis_drop_goals = {
 		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = scope:nd_crisis_other_side } } }
 		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_un_mandate_restore_state } }
 	}
+	if = {
+		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_seize_strait target = scope:nd_crisis_other_side } } }
+		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_seize_strait } }
+	}
 }
 
 # Issuer scope: abandon the threat.

@@ -379,6 +379,7 @@ nd_core_threatened_by = {
 			war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_ct_self }
 			war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_ct_self }
 			war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_ct_self }
+			war_side_has_war_goal_of_type_against = { type = te_seize_strait target = scope:nd_ct_self }
 			war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_ct_self }
 		}
 	}
@@ -2453,6 +2454,7 @@ nd_side_holds_any_goal_against = {
 		war_side_has_war_goal_of_type_against = { type = te_colonial_independence target = $TARGET$ }
 		war_side_has_war_goal_of_type_against = { type = te_colonial_reconquest target = $TARGET$ }
 		war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = $TARGET$ }
+		war_side_has_war_goal_of_type_against = { type = te_seize_strait target = $TARGET$ }
 	}
 }
 
