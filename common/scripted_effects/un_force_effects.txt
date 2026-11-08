@@ -93,6 +93,7 @@ un_force_strike_war_goals = {
 		# One opening play: struck unless this play is of that type.
 		un_force_strike_goal_type = { TYPE = conquer_state PLAY = dp_conquer_state }
 		un_force_strike_goal_type = { TYPE = take_treaty_port PLAY = dp_take_treaty_port }
+		un_force_strike_goal_type = { TYPE = te_seize_strait PLAY = dp_te_seize_strait }
 		un_force_strike_goal_type = { TYPE = liberate_country PLAY = dp_liberate_country }
 		un_force_strike_goal_type = { TYPE = liberate_subject PLAY = dp_liberate_subject }
 		un_force_strike_goal_type = { TYPE = secession PLAY = dp_secession }

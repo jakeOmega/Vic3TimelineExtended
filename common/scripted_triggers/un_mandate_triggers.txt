@@ -223,6 +223,7 @@ un_mandate_has_prohibited_goal = {
 		un_mandate_prohibited_goal_held = { TYPE = conquer_state TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = return_state TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = take_treaty_port TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = te_seize_strait TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = liberate_country TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = secession TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = unification TARGET = $TARGET$ }

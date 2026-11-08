@@ -647,6 +647,7 @@ un_mandate_ai_strike_prohibited = {
 		un_mandate_strike_goal_type = { TYPE = conquer_state }
 		un_mandate_strike_goal_type = { TYPE = return_state }
 		un_mandate_strike_goal_type = { TYPE = take_treaty_port }
+		un_mandate_strike_goal_type = { TYPE = te_seize_strait }
 		un_mandate_strike_goal_type = { TYPE = liberate_country }
 		un_mandate_strike_goal_type = { TYPE = secession }
 		un_mandate_strike_goal_type = { TYPE = unification }

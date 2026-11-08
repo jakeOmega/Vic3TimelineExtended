@@ -1,9 +1,9 @@
 # Diplomacy
 
-The mod adds 41 treaty articles, extra escalation in diplomatic plays, events
-between rival powers, a reunification system for divided nations, two more tiers
-of power bloc principles, ten late-game formable countries, and 22 city-states
-you can release. None of this has a game rule or journal entry of its own: it
+The mod adds 41 treaty articles, extra escalation in diplomatic plays, a war
+goal that takes a strait's shore, events between rival powers, a reunification
+system for divided nations, two more tiers of power bloc principles, ten
+late-game formable countries, and 22 city-states you can release. None of this has a game rule or journal entry of its own: it
 works through the base game's treaty screen, diplomatic plays, power bloc panel,
 formation panel and releasable countries list, though some
 pieces depend on other systems' rules. Much of it opens up in era 6, with
@@ -221,6 +221,29 @@ escalate about two and a half times as fast as in the base game, leaving the
 defender little time to gather support. The mod adds no escalation events of its
 own; Nuclear Brinkmanship, below, fires during plays between nuclear-armed
 countries.
+
+## Seizing a strait
+
+The Seize Strait war goal takes only the shore of a strait from an enemy state
+and leaves the rest of the state with its owner. Holding a shore makes you a
+controller of that strait, so you can charge tolls or close it. You can open a
+play with it or add it to one, against any state that holds a shore of one of
+the twelve straits: the Panama, Suez and Kiel canals, Gibraltar, the Bosporus,
+Bab-el-Mandeb, the Øresund, Malacca, Tsugaru, Sunda, Lombok and Hormuz.
+
+Each goal takes the shore of one state. Most straits have one shore in each of
+two states, often owned by different countries: Singapore lies in Malaya and the
+far side of the Strait of Malacca in North Sumatra, so taking both is two war
+goals. The canals and Lombok have both shores in one state, and one goal takes
+both. A canal can be seized only once it is built, since a canal zone cut off
+from the rest of its state could never build one. At Gibraltar one shore is not
+enough to close the strait, bar warships or charge tolls; you need both.
+
+The goal costs a quarter of the infamy of conquering the whole state, or the
+share of the state's provinces it takes if that is more. A state that is only
+the shore, such as Britain's Gibraltar at the start, costs as much as conquering
+it. It can't be held mid-war to enforce itself; it is settled when the enemy
+capitulates or agrees to peace.
 
 ## International relations events
 

@@ -66,7 +66,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 | [Covert Warfare](mod_systems/covert_warfare.md) | Covert operations, networks, tradecraft, backlash, counterintelligence; the intelligence-sharing shield | Covert Warfare System<br>Intelligence Sharing Defense Shield |
 | [Treaty Articles](mod_systems/treaties.md) | Treaty articles with entity selection, Enforce Emissions Reduction, dynamic treaty names, the Involvement each article builds | Treaty Articles with Entity Selection<br>Dynamic Treaty Names<br>Involvement |
 | [Power Blocs](mod_systems/power_blocs.md) | Bloc summits, which spend a spare mandate on a ten-year initiative, and what script can do with mandates since 1.15 | Power Bloc Summits (`te_pb_summit.1`)<br>Mandates in Script (1.15) |
-| [War](mod_systems/war.md) | The Rules of War laws, war support feeds, wartime munitions demand | Rules of War (`lawgroup_rules_of_war`)<br>War Support Feeds (1.14 hook)<br>Wartime Munitions Demand |
+| [War](mod_systems/war.md) | The Rules of War laws, war support feeds, wartime munitions demand, the Seize Strait war goal | Rules of War (`lawgroup_rules_of_war`)<br>War Support Feeds (1.14 hook)<br>Wartime Munitions Demand<br>Seize Strait War Goal |
 
 ## Colonies, space and the global commons
 
