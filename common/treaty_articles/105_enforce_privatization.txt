@@ -51,6 +51,13 @@ enforce_privatization = {  # REVIEWED 2026-11-03 (involvement): an imposed restr
 		}
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
+			# The demander must be capitalist. can_ratify says so too, but a war
+			# goal enforcing the article checks only possible, so without this
+			# any economy could demand it in a war.
+			OR = {
+				has_law = law_type:law_laissez_faire
+				has_law = law_type:law_interventionism
+			}
 		}
 	}
 
@@ -121,6 +128,13 @@ enforce_privatization = {  # REVIEWED 2026-11-03 (involvement): an imposed restr
 				multiply = 0.1
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): the AI asks for
+		# privatization in a treaty or presses it as a war goal only where there
+		# are state-owned enterprises to sell. Without it Britain pressed the
+		# demand on Tahiti, which has none, in a war against France (2026-11-08).
+		proposal_weight = { value = enforce_privatization_ai_demand_weight }
+		wargoal_score_multiplier = { value = enforce_privatization_ai_demand_weight }
 
 		inherent_accept_score = {
 			value = 0

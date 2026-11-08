@@ -5596,8 +5596,8 @@
   "es": "• Obliga al país de origen a activar todas las políticas importantes de mitigación de gases de efecto invernadero.\\n• El país de origen debe haber investigado [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] y [GetTechnology('modern_urban_planning').GetName], que esas políticas necesitan.\\n• Impide revertir las políticas mientras el tratado esté vigente.\\n• Elimina el coste de [concept_authority|l] de las políticas que impone, que el país de origen no puede derogar, pero enfurece a los industrialistas.\\n• Aplica penalizaciones adicionales a la expansión de los combustibles fósiles y de la energía heredada.\\n• Se puede imponer en una guerra u ofrecer como concesión negociada."
  },
  "enforce_privatization": {
-  "en": "Enforce Privatization",
-  "es": "Imponer la privatización"
+  "en": "Privatization",
+  "es": "Privatización"
  },
  "enforce_privatization_article_short_desc": {
   "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will [concept_privatize] state enterprises",
