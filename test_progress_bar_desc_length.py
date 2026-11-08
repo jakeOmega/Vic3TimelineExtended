@@ -30,9 +30,7 @@ MAX_CHARS = 60
 
 # Bars whose text is known to run off the bar. Remove a bar from here when its text is shortened;
 # the test fails on an entry that no longer needs to be here.
-KNOWN_TOO_LONG = {
-    "civil_rights_support_bar_desc",
-}
+KNOWN_TOO_LONG = set()
 
 
 def _unwrap(value):
