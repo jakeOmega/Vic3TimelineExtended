@@ -3015,7 +3015,10 @@ enforce_privatization_ai_min_levels = 10
 # the country that would privatize: the article's proposal_weight (asking for it
 # in a treaty) and wargoal_score_multiplier (pressing it as an enforce war goal).
 # Root is the demander. 0 unless root runs a market economy and the source has
-# enough state-owned enterprise to sell; 1 otherwise.
+# enough state-owned enterprise to sell. Then it scales with the source's
+# economy, by its place in the world's GDP ranking (era-independent, unlike a
+# GDP figure): 1 for the ten largest, 0.4 for the next ten, 0.1 for the rest,
+# since prying open a small economy is worth little to a great power.
 enforce_privatization_ai_demand_weight = {
 	value = 0
 	if = {
@@ -3028,7 +3031,26 @@ enforce_privatization_ai_demand_weight = {
 				enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels
 			}
 		}
-		value = 1
+		value = 0.1
+		# gdp_ranking > 0 guards a country left out of the ranking, should it read 0.
+		if = {
+			limit = {
+				scope:source_country = {
+					gdp_ranking > 0
+					gdp_ranking <= 10
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				scope:source_country = {
+					gdp_ranking > 0
+					gdp_ranking <= 20
+				}
+			}
+			value = 0.4
+		}
 	}
 }
 
