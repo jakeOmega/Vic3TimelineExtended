@@ -984,8 +984,10 @@ class LeavingTests(unittest.TestCase):
         self.assertEqual(found, {_mirror(c) for c in RATIFIED})
 
     def test_dissolution_lapses_every_convention(self):
+        # In the dissolution's quiet half, which the rule switched off mid-game runs too (2026-11-08).
+        self.assertIn("un_dissolve_quiet = yes", _block(self.ladder, "un_dissolve"))
         found = set(re.findall(r"un_dissolve_remove_global\s*=\s*\{\s*NAME\s*=\s*(\w+)",
-                               _block(self.ladder, "un_dissolve")))
+                               _block(self.ladder, "un_dissolve_quiet")))
         expected = {c.in_force for c in CONVENTIONS}
         self.assertLessEqual(expected, found)
         self.assertLessEqual({n for n in found if n.startswith("un_agency_")} - expected, OTHER_AGENCIES)

@@ -720,6 +720,8 @@ Allows monarchies to shape their heir's education through active focus choices. 
 **File:** `common/journal_entries/je_united_nations.txt`
 **Group:** `je_group_foreign_affairs`
 
+**Switched off mid-game** (2026-11-08). A game rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only inactive records, so after the rule was switched off membership, the 53 declared modifiers and the pulse ran on, and the global pulse would have let a memberless UN decline into a dissolution, events and all. The entry now ends through a hidden invalid outcome on the rule, and `un_stop_for_rule` (from that outcome and monthly from `un_global_authority_on_action` while the rule is off) ends the organisation quietly: `un_dissolve_quiet`, the second half of `un_dissolve` (business, missions, mandates voided with the holder's notice as the rule-off sweep always did, every country stripped by `un_dissolve_strip_country`, the headquarters, the agencies, the charter, the globals), with no dissolution record, refounding cooldown, `un_events.30` or bloc vacuum. A founding conference breaks up, and a vacuum modifier left from an earlier dissolution comes off. The global pulse's ladder, docket and conference run only with the rule. Timed penalties and costs run out as after a dissolution. Switched back on, the entry doesn't return. Play-test: `docs/testing/rules-off-midgame-playtest.md`.
+
 ### Purpose
 Simulates an intergovernmental organization with membership, authority, Security Council mechanics, and specialized agencies. Visible when any country has Intergovernmental Organizations tech OR the UN has been founded.
 
@@ -1702,6 +1704,8 @@ Each category uses select/deselect toggle pairs.
 
 **File:** `common/journal_entries/world_war_je.txt`
 **Group:** `je_group_foreign_affairs`
+
+**Switched off mid-game** (2026-11-08). A game rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only inactive records, so the entry ran on after its rule was switched off. A hidden invalid outcome on the rule, after the failure outcome, ends it with its modifiers and runs `ww_stop_for_rule` (what completion clears, and the latches). `world_war_events_on_action`, otherwise empty, runs the same each month for any country still holding a world war variable, the war's target and late joiners included, so a stale `ww_active_phase` can't block a later world war (`world_war_conditions_met`). `ww_on_wargoal_enforced` asks the rule. A war under way goes on as an ordinary war. Switched back on, the entry doesn't return. Play-test: `docs/testing/rules-off-midgame-playtest.md`.
 
 ### Purpose
 Models a World War lifecycle from rising tensions through active total war to post-war resolution. Great powers track ideological tensions, war phases, and post-war cleanup.

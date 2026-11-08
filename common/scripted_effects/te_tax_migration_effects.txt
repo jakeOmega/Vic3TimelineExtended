@@ -60,6 +60,82 @@ te_tax_migrate_country = {
 	}
 }
 
+# Country scope. The rule switched to Disabled mid-game (te_tax_rule_off_net,
+# 2026-11-08): the inverse of the two migrations, once.
+#   - Full code: the carrier gives way to the vanilla taxation law the enacted
+#     code is equivalent to, as te_tax_code_equivalent_* map it for the interest
+#     groups: Graduated, else Proportional, else Per-Capita, else Land-Based
+#     where the code levies a rural assessment, else Consumption-Based. Those
+#     triggers ask the rule, so their tests are restated here without it
+#     (test_rule_off_teardown.py holds the two to each other). The amendments
+#     go with the carrier, as on any replacement of it. te_tax_on_law_activated
+#     asks the rule, so nothing puts the carrier back; te_tax_migrated = 0, so
+#     the dispatch's self-heal migrates the country again if the rule is
+#     switched back on.
+#   - Light code: te_tax_light_on = 0, so te_tax_light_migrate_country starts it
+#     afresh then.
+#   - Both: the view bands (te_tax_clear_ig_views_for_rule) and the relief
+#     modifiers, which only the rule-gated te_tax_sync_relief kept
+#     (te_tax_clear_relief_for_rule), each in the file that owns its modifiers.
+# Vanilla's tax level stays where the code left it; with the rule off its
+# buttons are no longer greyed.
+te_tax_leave_code_for_rule = {
+	if = {
+		limit = { has_law = law_type:law_te_tax_code }
+		# te_tax_code_counts_as_graduated
+		if = {
+			limit = {
+				has_variable = te_tax_en_wage
+				has_variable = te_tax_en_div
+				var:te_tax_en_wage >= 4
+				var:te_tax_en_div >= var:te_tax_en_wage
+			}
+			activate_law = law_type:law_graduated_taxation
+		}
+		# te_tax_code_counts_as_proportional
+		else_if = {
+			limit = {
+				has_variable = te_tax_en_wage
+				has_variable = te_tax_en_div
+				var:te_tax_en_wage >= 4
+				var:te_tax_en_div >= 1
+			}
+			activate_law = law_type:law_proportional_taxation
+		}
+		# te_tax_code_counts_as_per_capita
+		else_if = {
+			limit = {
+				has_variable = te_tax_en_head
+				has_variable = te_tax_en_wage
+				var:te_tax_en_head >= 1
+				var:te_tax_en_wage >= 1
+			}
+			activate_law = law_type:law_per_capita_based_taxation
+		}
+		# te_tax_code_equivalent_land_based
+		else_if = {
+			limit = {
+				has_variable = te_tax_en_land
+				var:te_tax_en_land >= 1
+			}
+			activate_law = law_type:law_land_based_taxation
+		}
+		else = {
+			activate_law = law_type:law_consumption_based_taxation
+		}
+	}
+	if = {
+		limit = { has_variable = te_tax_migrated }
+		set_variable = { name = te_tax_migrated value = 0 }
+	}
+	if = {
+		limit = { has_variable = te_tax_light_on }
+		set_variable = { name = te_tax_light_on value = 0 }
+	}
+	te_tax_clear_ig_views_for_rule = yes
+	te_tax_clear_relief_for_rule = yes
+}
+
 # Country scope (the hidden te_tax.5, raised from on_law_activated when another
 # taxation law was activated in a migrated country). Puts the carrier back. The
 # enacted code is not touched: it is still the law, and the next sync writes it

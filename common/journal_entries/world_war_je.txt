@@ -4,7 +4,8 @@
 # Tracks ideological polarization building toward a global conflict
 # Phases: Leadup (rising tensions) > Active War > Peace Conference > Post-War
 #
-# This JE is the SOLE driver of all world war events. The on_action is empty.
+# This JE is the SOLE driver of all world war events. The on_action only
+# clears up after the rule is switched off mid-game.
 # The JE activates for any great power when opposing ideology GPs exist,
 # and remains active through war and post-war phases.
 # ============================================================================
@@ -19,7 +20,9 @@ je_world_war = {
 		always = yes
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { has_game_rule = world_war_enabled }
 	}
@@ -218,6 +221,25 @@ je_world_war = {
 			# below great power before the victors' peace conference fires, and the
 			# victors find the powers they beat by these latches. The next outbreak
 			# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends the entry, so its modifiers and its pulse,
+	# the sole driver of the world war's events, ran on. It ends on its next
+	# update, taking the modifiers along, and ww_stop_for_rule clears the
+	# variables and latches; world_war_events_on_action does the same for a
+	# belligerent that holds no entry, so a stale ww_active_phase can't block a
+	# later world war (world_war_conditions_met) once the rule is back on. A war
+	# already under way goes on as an ordinary war.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_world_war_invalid_conclusion_desc
+		trigger = {
+			NOT = { has_game_rule = world_war_enabled }
+		}
+		effect = {
+			ww_stop_for_rule = yes
 		}
 	}
 

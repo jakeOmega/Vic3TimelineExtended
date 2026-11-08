@@ -806,9 +806,17 @@ class JournalEntryTest(unittest.TestCase):
         self.assertIn("var:te_tax_migrated >= 1", in_force)
 
     def test_never_completes_fails_or_times_out(self):
-        for field in ("outcome", "complete", "on_complete", "fail", "on_fail", "invalid", "timeout", "can_deactivate"):
+        for field in ("complete", "on_complete", "fail", "on_fail", "invalid", "timeout", "can_deactivate"):
             with self.subTest(field=field):
                 self.assertNotRegex(self.body, rf"(?m)^\t{field} =")
+        # Its one outcome is hidden and invalid, on the rule switched to Disabled mid-game (2026-11-08,
+        # test_journal_entry_shape.py's RuleEndTreeTest): no success, failure or timeout, and no effect.
+        self.assertEqual(len(re.findall(r"(?m)^\toutcome =", self.body)), 1)
+        outcome = self.body[self.body.index("\toutcome = {"):]
+        outcome = outcome[:outcome.index("\n\t}\n")]
+        self.assertIn("flags = { hidden invalid_outcome }", outcome)
+        self.assertIn("NOT = { te_tax_code_on = yes }", outcome)
+        self.assertNotIn("effect =", outcome)
 
     def test_activation_writes_nothing(self):
         """A revolution's winner re-runs `immediate` on the inherited entry

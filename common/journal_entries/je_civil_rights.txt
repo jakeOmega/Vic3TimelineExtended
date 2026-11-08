@@ -8,7 +8,9 @@
 		always = yes
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { has_game_rule = social_movements_enabled }
 	}
@@ -255,6 +257,9 @@
 		trigger = {
 			OR = {
 				is_country_type = decentralized
+				# The rule switched off mid-game: the struggle ends, and the cleanup
+				# below takes the path modifiers off the country.
+				NOT = { has_game_rule = social_movements_enabled }
 				NOT = {
 					any_scope_state = {
 						is_incorporated = yes
@@ -266,9 +271,9 @@
 			}
 		}
 		effect = {
-			# JE invalidated without victory/defeat -- still strip the path modifiers
-			# so they don't persist on the country after the political pretext for
-			# the movement disappeared. Deliberately does not set
+			# JE invalidated without victory/defeat (or the Social Movements rule
+			# switched off) -- still strip the path modifiers so they don't persist
+			# on the country after the political pretext for the movement disappeared. Deliberately does not set
 			# civil_rights_resolved: no outcome was reached and nothing was granted,
 			# so there is nothing to replay, and if the grievance returns the
 			# struggle may too. The cleanup ends the run, so that one starts clean.

@@ -24,6 +24,10 @@ VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
+# sr_space_race_on, the rule test sr_solar_colonization_running starts with (2026-11-08).
+SITE_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "sr_site_triggers.txt")
+# The game rule's default setting: a context without "rules" plays under it.
+DEFAULT_RULES = frozenset(("space_race_colonies_full",))
 BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "space_race_buttons.txt")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
@@ -59,15 +63,29 @@ def _block(text, name):
     raise AssertionError("unclosed block")
 
 
+_OPS = frozenset(("=", "?=", "<", ">", "<=", ">=", "!=", "=="))
+
+
 def _parse(text):
-    tokens = iter(t.strip() for t in ParadoxFileParser().tokenize(text))
+    """(key, op, value) triples, a block's value a list of them. A bare list item, such as an outcome's
+    `flags = { hidden invalid_outcome }`, is (item, None, None); read as a key it took the next item for its operator
+    and cut the entry's parse short (the rule-off outcomes, 2026-11-08)."""
+    tokens = [t.strip() for t in ParadoxFileParser().tokenize(text)]
+    pos = 0
 
     def body():
+        nonlocal pos
         out = []
-        for key in tokens:
+        while pos < len(tokens):
+            key = tokens[pos]
+            pos += 1
             if key == "}":
                 return out
-            op, value = next(tokens), next(tokens)
+            if pos >= len(tokens) or tokens[pos] not in _OPS:
+                out.append((key, None, None))
+                continue
+            op, value = tokens[pos], tokens[pos + 1]
+            pos += 2
             out.append((key, op, body() if value == "{" else value))
         return out
 
@@ -95,7 +113,7 @@ class Script:
         for path in (VALUES, DISPLAY):
             for key, _, body in _parse(_read(path)):
                 self.values[key] = body
-        self.triggers = {key: body for key, _, body in _parse(_read(TRIGGERS))}
+        self.triggers = {key: body for path in (TRIGGERS, SITE_TRIGGERS) for key, _, body in _parse(_read(path))}
 
     def number(self, token, ctx):
         if isinstance(token, list):
@@ -117,6 +135,8 @@ class Script:
         for key, op, value in body:
             if key == "has_variable":
                 ok = value in ctx["vars"]
+            elif key == "has_game_rule":
+                ok = value in ctx.get("rules", DEFAULT_RULES)
             elif key == "has_global_variable":
                 # none set: the race isn't over (sr_colonization_by_choice)
                 ok = value in ctx.get("globals", ())

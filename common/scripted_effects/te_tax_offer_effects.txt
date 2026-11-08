@@ -263,3 +263,14 @@ te_tax_refresh_ig_views = {
 		te_tax_gen_ig_views = yes
 	}
 }
+
+# Country scope. The rule switched to Disabled mid-game (te_tax_leave_code_for_rule,
+# 2026-11-08): every te_tax_ig_band_<ig> reads 0 without the rule (each
+# te_tax_code_equivalent_* asks it), so the generated swap takes every band's
+# modifier off, the light code's included (the same te_tax_ig_view_* keys).
+te_tax_clear_ig_views_for_rule = {
+	if = {
+		limit = { NOT = { te_tax_code_on = yes } }
+		te_tax_gen_ig_views = yes
+	}
+}

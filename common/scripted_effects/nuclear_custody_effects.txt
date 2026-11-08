@@ -221,8 +221,14 @@ nd_custody_round = {
 # mod's own `annex` sites, and from on_monthly_pulse as the catch-all for every
 # other path (te_civil_war_on_actions.txt).
 nd_custody_reconcile = {
+	# Not with the rule switched off mid-game (2026-11-08): no arsenal changes
+	# hands, and no custody event fires; an ended owner's record waits for the
+	# rule's return, when the next pass settles it.
 	if = {
-		limit = { has_global_variable_list = nd_arsenal_records }
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			has_global_variable_list = nd_arsenal_records
+		}
 		every_in_global_list = {
 			variable = nd_arsenal_records
 			limit = { nd_ar_owner_gone = yes }

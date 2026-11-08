@@ -4,6 +4,9 @@
   one-shot outcome converter, retired with #1404).
 - `disable_evaluation` (#1404, design § 1): every entry whose gate requires a game rule prunes on that rule, and a
   prune reads nothing but game rules, so it can't delete an entry a country could still come to qualify for.
+- Ends on its rule: a prune touches only inactive records, and a rule can be switched off mid-game, so every
+  rule-pruned entry also ends through its invalid outcome when the rule is off, unless it carries
+  `# REVIEWED YYYY-MM-DD (rule_outlives): rationale` on its `disable_evaluation = {` line (Culture Merges pause).
 - `scaling_modifiers_while_active` (design § 3): a declared modifier exists, and nothing adds, removes or tests it
   with `has_modifier`, which can't see one.
 """
@@ -93,11 +96,11 @@ def _calls(node: Node, triggers: dict[str, Node]) -> Node | None:
     return triggers[node.key] if node.value == "yes" or (node.value is None and node.children) else None
 
 
-def gate_conjuncts(entry: Node, triggers: dict[str, Node]) -> list[Node]:
-    """The direct children of `is_shown_when_inactive`, each followed by the top-level conjuncts of a named trigger
-    it calls, recursively (`sr_milestone_followup_is_shown` carries the Space Race rule; `te_banking_entry_expected`
-    carries Banking's)."""
-    gate = child(entry, "is_shown_when_inactive")
+def gate_conjuncts(entry: Node, triggers: dict[str, Node], field: str = "is_shown_when_inactive") -> list[Node]:
+    """The direct children of `is_shown_when_inactive` (or `field`), each followed by the top-level conjuncts of a
+    named trigger it calls, recursively (`sr_milestone_followup_is_shown` carries the Space Race rule;
+    `te_banking_entry_expected` carries Banking's)."""
+    gate = child(entry, field)
     out: list[Node] = []
 
     def walk(nodes: list[Node], seen: tuple[str, ...]):
@@ -232,6 +235,187 @@ class PruneTreeTest(unittest.TestCase):
         for rel, entry in load_entries():
             with self.subTest(file=rel, entry=entry.key):
                 self.assertEqual(prune_problems(entry, triggers), [])
+
+
+# --- ends on its rule ------------------------------------------------------------------------------------------
+#
+# A rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only
+# inactive records: an active entry runs on, with its modifiers, pulses and events, unless an outcome ends it. A
+# Workshop player saw Banking do exactly that (2026-11-08). So a rule-pruned entry also ends when its rule is off,
+# through its one invalid outcome (an entry has at most one): the outcome's trigger holds whenever the prune's does,
+# alone or folded into an OR. Or it deactivates: `can_deactivate = yes` with the prune's rule a conjunct of
+# `possible` takes it off the journal when the rule goes (scripting_best_practices.md, "an entry leaves the journal
+# by concluding, or by can_deactivate"), and the prune then removes the record (the Nuclear Program; no effect runs,
+# so its teardown is a pulse's). An entry meant to outlive its rule says why with
+# `# REVIEWED YYYY-MM-DD (rule_outlives): rationale` on its `disable_evaluation = {` line; the 32 culture merges
+# pause where they stand and resume when the rule is switched back on (R19), and so does an interstellar probe's
+# transit, which nothing would add back. A tag on an entry that does end on its rule, or that no rule prunes, is stale.
+
+OUTLIVES_TAG = "rule_outlives"
+_OUTLIVES_RE = re.compile(r"REVIEWED\s+\d{4}-\d{2}-\d{2}\s*\(" + OUTLIVES_TAG + r"\)\s*:\s*\S")
+_FLAGS_RE = re.compile(r"flags\s*=\s*\{([^{}]*)\}")
+
+
+def prune_rules(entry: Node, triggers: dict[str, Node]) -> set[tuple[str, str | None]]:
+    """The rule tests a prune's `NOT = { <rule> }` lines name: empty for an entry no rule prunes."""
+    prune = child(entry, "disable_evaluation")
+    if prune is None or is_contextless(entry):
+        return set()
+    return {(t.children[0].key, t.children[0].value) for t in prune.children
+            if t.key == "NOT" and len(t.children) == 1 and is_rule_test(t.children[0], triggers)}
+
+
+def outcome_flags(outcome: Node, lines: list[str]) -> set[str]:
+    """An outcome's `flags = { … }` words. The parser skips bare list items, so they are read from the source."""
+    flags = child(outcome, "flags")
+    if flags is None:
+        return set()
+    text = "\n".join(line.split("#", 1)[0] for line in lines[flags.line - 1:flags.line + 4])
+    match = _FLAGS_RE.search(text)
+    return set(match.group(1).split()) if match else set()
+
+
+def _true_with_rule_off(node: Node, rules: set[tuple[str, str | None]]) -> bool:
+    # `T = no` is `NOT = { T = yes }` for a rule-pure trigger (gm_system_enabled = no).
+    if node.value == "no" and not node.children and (node.key, "yes") in rules:
+        return True
+    if node.key == "NOT" and len(node.children) == 1:
+        return (node.children[0].key, node.children[0].value) in rules
+    if node.key == "OR":
+        return any(_true_with_rule_off(c, rules) for c in node.children)
+    if node.key == "AND":
+        return bool(node.children) and all(_true_with_rule_off(c, rules) for c in node.children)
+    return False
+
+
+def deactivates_on_rule(entry: Node, triggers: dict[str, Node], rules: set[tuple[str, str | None]]) -> bool:
+    """`can_deactivate = yes`, and `possible` requires one of the prune's rules."""
+    flag = child(entry, "can_deactivate")
+    return flag is not None and flag.value == "yes" and any(
+        (c.key, c.value) in rules and is_rule_test(c, triggers) for c in gate_conjuncts(entry, triggers, "possible"))
+
+
+def rule_end_problems(entry: Node, triggers: dict[str, Node], lines: list[str], comments: dict[int, str]) -> list[str]:
+    rules = prune_rules(entry, triggers)
+    prune = child(entry, "disable_evaluation")
+    tagged = prune is not None and bool(_OUTLIVES_RE.search(comments.get(prune.line, "")))
+    if not rules:
+        return [f"line {prune.line}: ({OUTLIVES_TAG}) tag on an entry no rule prunes"] if tagged else []
+    invalid = [o for o in entry.children if o.key == "outcome" and "invalid_outcome" in outcome_flags(o, lines)]
+    if len(invalid) > 1:
+        return [f"line {o.line}: a second invalid outcome (an entry has at most one)" for o in invalid[1:]]
+    trigger = child(invalid[0], "trigger") if invalid else None
+    ends = deactivates_on_rule(entry, triggers, rules) or (trigger is not None and bool(trigger.children) and all(
+        _true_with_rule_off(c, rules) for c in trigger.children))
+    if tagged:
+        return [f"line {prune.line}: stale ({OUTLIVES_TAG}) tag, the entry ends on its rule"] if ends else []
+    if ends:
+        return []
+    if not invalid:
+        return ["rule-pruned entry has no invalid outcome, so an active one runs on when its rule is switched off"]
+    return [f"line {invalid[0].line}: the invalid outcome doesn't hold with the rule off; "
+            "fold NOT = { <the prune's rule> } into its trigger with OR"]
+
+
+def load_entry_sources() -> list[tuple[str, Node, list[str], dict[int, str]]]:
+    """(repo-relative path, entry node, source lines, comments by line) for every entry in common/journal_entries/."""
+    out = []
+    for path in sorted(JE_DIR.glob("*.txt")):
+        rel = path.relative_to(ROOT).as_posix()
+        text = path.read_text(encoding="utf-8-sig")
+        nodes, comments = parse_text(text, rel)
+        out.extend((rel, n, text.split("\n"), comments) for n in nodes if n.children)
+    return out
+
+
+class RuleEndFixtureTest(unittest.TestCase):
+    PRUNE = "\tdisable_evaluation = {%s\n\t\tNOT = { has_game_rule = r }\n\t}\n"
+    GATE = "\tis_shown_when_inactive = { has_game_rule = r has_variable = x }\n"
+
+    def check(self, outcomes: str, tag: str = "", prune: bool = True) -> list[str]:
+        text = "je_x = {\n" + (self.PRUNE % tag if prune else "") + self.GATE + outcomes + "}\n"
+        nodes, comments = parse_text(text, "j.txt")
+        return rule_end_problems(nodes[0], {}, text.split("\n"), comments)
+
+    @staticmethod
+    def invalid(trigger: str) -> str:
+        return f"\toutcome = {{\n\t\tflags = {{ hidden invalid_outcome }}\n\t\ttrigger = {{ {trigger} }}\n\t}}\n"
+
+    def test_the_rule_alone_ends_it(self):
+        self.assertEqual(self.check(self.invalid("NOT = { has_game_rule = r }")), [])
+
+    def test_the_rule_folded_into_an_or_ends_it(self):
+        self.assertEqual(self.check(self.invalid("OR = { is_country_type = decentralized "
+                                                 "NOT = { has_game_rule = r } }")), [])
+
+    def test_a_rule_trigger_at_no_ends_it(self):
+        entry = ("je_x = {\n\tdisable_evaluation = { NOT = { w = yes } }\n\tis_shown_when_inactive = { w = yes }\n"
+                 + self.invalid("OR = { w = no has_variable = idle }") + "}\n")
+        nodes, comments = parse_text(entry, "j.txt")
+        triggers = _triggers("w = { has_game_rule = r }")
+        self.assertEqual(rule_end_problems(nodes[0], triggers, entry.split("\n"), comments), [])
+
+    def test_deactivating_on_the_rule_ends_it(self):
+        def run(deactivate: str, possible: str) -> list[str]:
+            text = ("je_x = {\n" + self.PRUNE % "" + self.GATE + f"\tpossible = {{ {possible} }}\n"
+                    f"\tcan_deactivate = {deactivate}\n}}\n")
+            nodes, comments = parse_text(text, "j.txt")
+            return rule_end_problems(nodes[0], _triggers("w = { has_game_rule = r has_variable = y }"),
+                                     text.split("\n"), comments)
+        self.assertEqual(run("yes", "has_game_rule = r has_variable = x"), [])
+        self.assertEqual(run("yes", "w = yes"), [])  # through a named trigger
+        self.assertEqual(len(run("no", "has_game_rule = r")), 1)
+        self.assertEqual(len(run("yes", "has_variable = x")), 1)
+
+    def test_no_invalid_outcome_is_flagged(self):
+        problems = self.check("\toutcome = {\n\t\ttrigger = { NOT = { has_game_rule = r } }\n\t}\n")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("no invalid outcome", problems[0])
+
+    def test_an_invalid_outcome_on_something_else_is_flagged(self):
+        self.assertEqual(len(self.check(self.invalid("is_country_type = decentralized"))), 1)
+
+    def test_the_rule_and_another_condition_is_flagged(self):
+        """Both must hold, so the entry runs on while the other doesn't."""
+        self.assertEqual(len(self.check(self.invalid("NOT = { has_game_rule = r } has_variable = y"))), 1)
+        self.assertEqual(len(self.check(self.invalid("NOT = { has_game_rule = s }"))), 1)
+
+    def test_a_second_invalid_outcome_is_flagged(self):
+        twice = self.invalid("NOT = { has_game_rule = r }") * 2
+        self.assertEqual(len(self.check(twice)), 1)
+
+    def test_flags_are_read_from_the_source(self):
+        outcome = ("\toutcome = {\n\t\tflags = {\n\t\t\thidden # the panel shows nothing\n\t\t\tinvalid_outcome\n"
+                   "\t\t}\n\t\ttrigger = { NOT = { has_game_rule = r } }\n\t}\n")
+        self.assertEqual(self.check(outcome), [])
+
+    def test_the_tag_exempts_and_goes_stale(self):
+        tag = " # REVIEWED 2026-11-08 (rule_outlives): pauses and resumes"
+        self.assertEqual(self.check("", tag), [])
+        stale = self.check(self.invalid("NOT = { has_game_rule = r }"), tag)
+        self.assertEqual(len(stale), 1)
+        self.assertIn("stale", stale[0])
+        # Another check's tag is not this one's.
+        self.assertEqual(len(self.check("", " # REVIEWED 2026-11-08: something else")), 1)
+
+    def test_an_entry_no_rule_prunes_needs_nothing(self):
+        self.assertEqual(self.check("", prune=False), [])
+
+
+class RuleEndTreeTest(unittest.TestCase):
+    def test_every_rule_pruned_entry_ends_on_its_rule(self):
+        triggers = load_triggers()
+        checked = exempt = 0
+        for rel, entry, lines, comments in load_entry_sources():
+            if not prune_rules(entry, triggers):
+                continue
+            checked += 1
+            prune = child(entry, "disable_evaluation")
+            exempt += bool(_OUTLIVES_RE.search(comments.get(prune.line, "")))
+            with self.subTest(file=rel, entry=entry.key):
+                self.assertEqual(rule_end_problems(entry, triggers, lines, comments), [])
+        self.assertEqual(checked, 57)
+        self.assertEqual(exempt, 33, "the 32 culture merges and the interstellar probe's transit outlive their rule")
 
 
 # --- scaling_modifiers_while_active (design § 3) -----------------------------------------------------------------

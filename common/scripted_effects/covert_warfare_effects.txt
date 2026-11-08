@@ -2959,6 +2959,32 @@ covert_effect_stand_down = {
 	}
 }
 
+# Country scope (the operator). The Covert Warfare rule switched off mid-game,
+# from the screen that changes country (2026-11-08): je_covert_warfare's
+# invalid outcome. Funding to 0 is the ordinary way to end every operation:
+# each pact's requirement_to_maintain asks for funding of 1 or more, and its
+# auto_break_effect runs covert_op_end, which destroys the operation's
+# container and forgets the target's watch record, with no infamy and no
+# event. The agent networks go too, as the monthly reap takes one: Space
+# Race intelligence (sr_has_intel_tier), loose material's leads and the map
+# read them. Tradecraft and the exposure records stay; the operations'
+# own modifiers last three months and lapse.
+covert_stop_for_rule = {
+	set_variable = { name = iw_funding_level value = 0 }
+	if = {
+		limit = { has_variable_list = iw_nets }
+		every_in_list = {
+			variable = iw_nets
+			add_to_temporary_list = iw_rule_off_nets
+		}
+		every_in_list = {
+			list = iw_rule_off_nets
+			root = { remove_list_variable = { name = iw_nets target = PREV } }
+			destroy_container = yes
+		}
+	}
+}
+
 # ============================================================================
 # PRIORITY
 # ============================================================================

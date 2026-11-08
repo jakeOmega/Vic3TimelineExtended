@@ -683,7 +683,13 @@ class LocalPulseTests(unittest.TestCase):
         self.e = read(EFFECTS)
 
     def test_removes_every_local_modifier(self):
-        body = squash(block(self.e, "gm_remove_local_modifiers"))
+        # The local modifiers sit in gm_remove_local_effect_modifiers, which the rule switched off mid-game runs
+        # alone (gm_state_rule_off_on_action, 2026-11-08); the full removal adds the upkeep exemption.
+        full = squash(block(self.e, "gm_remove_local_modifiers"))
+        self.assertIn("gm_remove_local_effect_modifiers = yes", full)
+        self.assertIn("remove_modifier = gm_upkeep", full)
+        body = squash(block(self.e, "gm_remove_local_effect_modifiers"))
+        self.assertNotIn("gm_upkeep", body)
         self.assertIn("remove_modifier = gm_local_tourism", body)
         for d in DEDICATIONS:
             self.assertIn(f"remove_modifier = gm_local_{d.key}", body)
@@ -5962,7 +5968,7 @@ class SignatureEffectTests(unittest.TestCase):
 
     def test_local_effects_on_the_state_pulse(self):
         monthly = squash(block(read(EFFECTS), "gm_state_monthly"))
-        remove = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
+        remove = squash(block(read(EFFECTS), "gm_remove_local_effect_modifiers"))
         zero = squash(block(read(SIG_EFFECTS), "gm_state_sig_zero_local_steps"))
         for k in SIG_LOCAL:
             self.assertRegex(monthly, rf"gm_state_sig_local_steps_one = \{{ SIG = {k} FACTOR = [\w.]+ \}}", k)
@@ -7148,8 +7154,9 @@ class SitePanelTests(unittest.TestCase):
 
     def test_the_values(self):
         values = read(VALUES)
+        # Not with the rule switched off mid-game (2026-11-08): the card carries Dedicate.
         self.assertEqual(squash(block(values, "gm_state_disp_site")),
-                         "value = 0 if = { limit = { gm_state_has_site = yes } value = 1 }")
+                         "value = 0 if = { limit = { gm_system_enabled = yes gm_state_has_site = yes } value = 1 }")
         self.assertEqual(squash(block(values, "gm_state_disp_site_grandeur")),
                          "value = 0 if = { limit = { has_variable = gm_site_grandeur } value = var:gm_site_grandeur }")
         self.assertEqual(squash(block(values, "gm_state_disp_site_building")),

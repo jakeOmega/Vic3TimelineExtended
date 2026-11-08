@@ -70,7 +70,9 @@ je_space_race_suborbital = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -252,6 +254,23 @@ je_space_race_suborbital = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = suborbital }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_suborbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -308,7 +327,9 @@ je_space_race_orbital = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -522,6 +543,23 @@ je_space_race_orbital = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = orbital }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_orbital = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -579,7 +617,9 @@ je_space_race_moon_landing = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -806,6 +846,23 @@ je_space_race_moon_landing = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = moon_landing }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_moon_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -863,7 +920,9 @@ je_space_race_probe = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -1078,6 +1137,23 @@ je_space_race_probe = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = probe }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -1135,7 +1211,9 @@ je_space_race_mars_landing = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -1350,6 +1428,23 @@ je_space_race_mars_landing = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = mars_landing }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_mars_landing = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -1408,7 +1503,9 @@ je_space_race_interstellar_probe = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -1582,6 +1679,23 @@ je_space_race_interstellar_probe = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = interstellar_probe }
+		}
+	}
+
 	on_weekly_pulse = {
 		effect = {
 			legacy_scaling_strip_space_race_interstellar_probe = yes		# PENDING REMOVAL after 2026-12-31 (#1404): an older save's added copies, legacy_modifier_cleanup.txt
@@ -1631,8 +1745,12 @@ je_space_race_interstellar_results = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
-	disable_evaluation = {
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country. An active entry outlives it: it
+	# carries no modifier, nothing adds it back, and ending it would lose a launched
+	# probe's results for good, so its transit pauses (on_monthly_pulse) and resumes
+	# when the rule is switched back on.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): a paused transit resumes where it stood; nothing re-adds the entry
 		NOT = { sr_space_race_on = yes }
 	}
 	is_shown_when_inactive = {
@@ -1701,9 +1819,13 @@ je_space_race_interstellar_results = {
 		}
 	}
 
+	# Paused while the rule is switched off (the disable_evaluation note above).
 	on_monthly_pulse = {
 		effect = {
-			change_variable = { name = sr_interstellar_transit_progress add = 1 }
+			if = {
+				limit = { sr_space_race_on = yes }
+				change_variable = { name = sr_interstellar_transit_progress add = 1 }
+			}
 		}
 	}
 
@@ -1765,7 +1887,9 @@ je_space_race_solar_colonization = {
 		container = "custom_widget_container_7"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { sr_space_race_on = yes }
 	}
@@ -2022,6 +2146,23 @@ je_space_race_solar_colonization = {
 				sr_launch_bank_staged_fleets = yes
 				sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
 			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = solar_colonization }
 		}
 	}
 

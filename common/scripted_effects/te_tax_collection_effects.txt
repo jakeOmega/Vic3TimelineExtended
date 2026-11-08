@@ -259,6 +259,24 @@ te_tax_sync_relief = {
 	}
 }
 
+# Country scope. The rule switched to Disabled mid-game (te_tax_leave_code_for_rule,
+# 2026-11-08): te_tax_sync_relief no longer runs, so its modifiers come off here,
+# the country's and its states'.
+te_tax_clear_relief_for_rule = {
+	if = { limit = { has_modifier = te_tax_relief_ag_1 } remove_modifier = te_tax_relief_ag_1 }
+	if = { limit = { has_modifier = te_tax_relief_ag_2 } remove_modifier = te_tax_relief_ag_2 }
+	every_scope_state = {
+		limit = {
+			OR = {
+				has_modifier = te_tax_relief_region_1
+				has_modifier = te_tax_relief_region_2
+			}
+		}
+		if = { limit = { has_modifier = te_tax_relief_region_1 } remove_modifier = te_tax_relief_region_1 }
+		if = { limit = { has_modifier = te_tax_relief_region_2 } remove_modifier = te_tax_relief_region_2 }
+	}
+}
+
 # Country scope; needs scope:te_tax_country. The customs schedule's sync (plan
 # Task 15; docs/systems/tax_code_schema.md, "Customs schedule"): only while the
 # code holds the country's customs (te_tax_customs_authority: the customs

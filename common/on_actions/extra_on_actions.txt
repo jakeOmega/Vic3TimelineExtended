@@ -2015,6 +2015,7 @@ international_relations_events_on_action = {
 				# Nuclear Close Call (outside the deterrence system — see the event)
 				3 = {
 					trigger = {
+						has_game_rule = nuclear_weapons_enabled
 						has_modifier = nuclear_power
 						any_rival_country = { has_modifier = nuclear_power }
 						NOT = { nd_is_armed = yes }
@@ -2024,6 +2025,7 @@ international_relations_events_on_action = {
 				# Anti-Nuclear Movement
 				3 = {
 					trigger = {
+						has_game_rule = nuclear_weapons_enabled
 						has_technology_researched = nuclear_weapons
 						has_variable = nuclear_weapons_program_funding
 						var:nuclear_weapons_program_funding >= 1
@@ -3217,12 +3219,30 @@ free_port_tariff_update_on_action = {
 # instead.
 
 # ============================================================================
-# WORLD WAR EVENTS - DEPRECATED: All events now fire from je_world_war
-# monthly pulse. This on_action is kept as an empty stub to avoid breaking
-# the on_monthly_pulse_country reference.
+# WORLD WAR EVENTS: all events fire from je_world_war's monthly pulse. This
+# on_action (on_monthly_pulse_country) only clears up after the World War rule
+# is switched off mid-game (2026-11-08): the entry's invalid outcome clears its
+# own country, but the war's target and late joiners carry the variables too,
+# and a stale ww_active_phase anywhere blocks every later world war
+# (world_war_conditions_met). Monthly, so an event option chosen after the rule
+# went off is caught too.
 # ============================================================================
 world_war_events_on_action = {
-	effect = { }
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_game_rule = world_war_enabled }
+				OR = {
+					has_variable = ww_active_phase
+					has_variable = ww_peace_concluded
+					has_variable = ww_war_began
+					has_variable = ww_fought_as_aggressor
+					has_variable = ww_fought_as_defender
+				}
+			}
+			ww_stop_for_rule = yes
+		}
+	}
 }
 
 orbital_battlestation_on_action = {

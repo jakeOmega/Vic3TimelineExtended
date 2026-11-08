@@ -49,6 +49,22 @@ ww_clear_stale_outcome_latches = {
 	}
 }
 
+# Country scope. The World War rule switched off mid-game, from the screen that
+# changes country (2026-11-08): every world war variable and outcome latch off
+# the country, as the completion outcome takes them. From je_world_war's invalid
+# outcome and, for a belligerent that holds no entry, world_war_events_on_action.
+ww_stop_for_rule = {
+	remove_variable = ww_active_phase
+	remove_variable = ww_aggressor_side
+	remove_variable = ww_defender_side
+	remove_variable = ww_years_elapsed
+	remove_variable = ww_months_counter
+	remove_variable = ww_peace_concluded
+	remove_variable = ww_peace_months
+	remove_variable = ww_fully_resolved
+	ww_clear_outcome_latches = yes
+}
+
 # Country scope. The diplomatic play that was meant to start the world war ended
 # without a war (a side backed down, or the play never formed): this country is
 # no longer a belligerent, and the singleton guard in world_war_conditions_met

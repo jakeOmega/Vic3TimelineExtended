@@ -264,8 +264,20 @@ gm_state_try_heritage_as_faith_skin = {
 }
 
 # ---- Forgetting a monument ---------------------------------------------------
-# State scope. Every local modifier, whichever dedication added it.
+# State scope. Every local modifier, whichever dedication added it, and the
+# building's upkeep exemption.
 gm_remove_local_modifiers = {
+	gm_remove_local_effect_modifiers = yes
+	b:building_grand_monument ?= {
+		remove_modifier = gm_upkeep
+	}
+}
+
+# State scope. The local modifiers alone, without gm_upkeep: what the rule
+# switched off mid-game takes away (gm_state_rule_off_on_action). The building
+# keeps its upkeep exemption, since a monument can't be downsized and
+# shouldn't start charging maintenance.
+gm_remove_local_effect_modifiers = {
 	remove_modifier = gm_local_tourism
 	remove_modifier = gm_local_crown
 	remove_modifier = gm_local_republic
@@ -283,9 +295,6 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_sig_antiquity
 	remove_modifier = gm_local_sig_archive
 	remove_modifier = gm_local_sig_first_emperor
-	b:building_grand_monument ?= {
-		remove_modifier = gm_upkeep
-	}
 }
 
 # State scope. Add $AGE$ to the primary's age grandeur (gm_age), creating it.

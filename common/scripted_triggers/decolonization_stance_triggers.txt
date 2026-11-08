@@ -12,13 +12,18 @@
 # The stance counts: held by a great power, the only rank whose stance any
 # colonial empire's bar weighs. While it counts the country holds the stance's
 # policy modifier and pays its influence (decol_stance_refresh); below
-# great-power rank the stance lies dormant.
+# great-power rank the stance lies dormant. So it does with the Decolonization
+# rule switched off mid-game (2026-11-08): the monthly refresh takes the
+# modifier off, and puts it back when the rule is switched on again, so the
+# choice is kept.
 decol_stance_anti_counts = {
+	has_game_rule = decolonization_enabled
 	has_variable = gp_anti_colonial_stance
 	country_rank >= rank_value:great_power
 }
 
 decol_stance_pro_counts = {
+	has_game_rule = decolonization_enabled
 	has_variable = gp_pro_colonial_stance
 	country_rank >= rank_value:great_power
 }

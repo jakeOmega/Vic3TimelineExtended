@@ -249,6 +249,15 @@ class BilledValueTest(unittest.TestCase):
                 self.assertGreater(SCRIPT.evaluate(_value("solar_colonization", modifier), on), 0)
                 self.assertEqual(SCRIPT.evaluate(_value("solar_colonization", modifier), off), 0)
 
+    def test_solar_colonization_with_the_rule_off_is_not_billed(self):
+        """The rule switched off mid-game (2026-11-08): sr_solar_colonization_running asks it first, so the bill stops
+        at once, before the entry's invalid outcome ends it."""
+        off = _billed_ctx("solar_colonization", 3, 7, "safe")
+        off["rules"] = frozenset()
+        for modifier in BILLED:
+            with self.subTest(modifier=modifier):
+                self.assertEqual(SCRIPT.evaluate(_value("solar_colonization", modifier), off), 0)
+
     def test_solar_colonization_costs_8_a_level_after_the_mars_landing(self):
         ctx = _billed_ctx("solar_colonization", 2, 7)
         self.assertAlmostEqual(SCRIPT.evaluate(_value("solar_colonization", "sr_space_program_cost"), ctx), 10)

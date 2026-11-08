@@ -52,7 +52,10 @@ je_nuclear_program = {
 		always = yes
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry deactivates then
+	# (can_deactivate, with the rule first in possible) and the prune removes it. No
+	# effect runs, so the teardown is nd_country_monthly_cleanup's.
 	disable_evaluation = {
 		NOT = { has_game_rule = nuclear_weapons_enabled }
 	}

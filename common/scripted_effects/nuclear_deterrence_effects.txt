@@ -3476,6 +3476,24 @@ nd_country_monthly_cleanup = {
 		}
 		else_if = { limit = { NOT = { has_journal_entry = je_nuclear_program } } nd_exchange_weekly_update = yes }
 	}
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). The entry deactivates (can_deactivate, the rule first in
+	# possible) and takes its declared modifiers along, but nothing it runs
+	# can take what it put on the country: nuclear_power (prestige, leverage,
+	# the strike actions' potential, about 25 readers) and the taboo's
+	# held-programme marker. A crisis closes as invalid (OUTCOME 9: no notice,
+	# no consequence). The stockpile and doctrine stay, read by nothing while
+	# the rule is off (nd_is_armed reads it).
+	if = {
+		limit = { NOT = { has_game_rule = nuclear_weapons_enabled } }
+		if = { limit = { has_modifier = nuclear_power } remove_modifier = nuclear_power }
+		if = { limit = { has_modifier = nd_taboo_programme_held } remove_modifier = nd_taboo_programme_held }
+		if = {
+			limit = { nd_is_crisis_owner = yes }
+			nd_crisis_save_parties = yes
+			nd_crisis_close = { OUTCOME = 9 }
+		}
+	}
 	if = {
 		limit = {
 			has_variable = nd_stance_applied

@@ -37,7 +37,9 @@
 		container = "custom_widget_container_3"
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { has_game_rule = united_nations_enabled }
 	}
@@ -1152,6 +1154,22 @@
 			custom_tooltip = je_un_preview_pariah_tt
 			add_modifier = { name = un_nonmember_pariah_modifier }
 			add_modifier = { name = un_nonmember_pariah_strong_modifier }
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends this entry, so membership (its modifiers),
+	# the 53 declared modifiers and the pulse ran on. It ends on its next update
+	# and takes them along; un_stop_for_rule ends the organisation the same day,
+	# quietly, for every country (the global pulse repeats it monthly).
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_united_nations_invalid_conclusion_desc
+		trigger = {
+			NOT = { has_game_rule = united_nations_enabled }
+		}
+		effect = {
+			un_stop_for_rule = yes
 		}
 	}
 

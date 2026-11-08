@@ -118,7 +118,9 @@ je_create_new_religion = {
 		always = yes
 	}
 
-	# 1.15: with the rule off, drop the inactive record for good (a rule never changes mid-game).
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
 	disable_evaluation = {
 		NOT = { has_game_rule = custom_religions_allowed }
 	}
@@ -311,6 +313,17 @@ je_create_new_religion = {
 		conclusion_desc = je_create_new_religion_complete_conclusion_desc
 		trigger = {
 			country_has_any_custom_religion = yes
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country: the
+	# builder's buttons don't read the rule, so it would still found a religion
+	# the rule now forbids. Its counters are read by nothing else, so they stay.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_create_new_religion_invalid_conclusion_desc
+		trigger = {
+			NOT = { has_game_rule = custom_religions_allowed }
 		}
 	}
 

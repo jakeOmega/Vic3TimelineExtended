@@ -13,7 +13,10 @@
 # They are written positively on purpose. A save from before the rule existed
 # has no value stored for it, so NOT = { has_game_rule = te_tax_code_disabled }
 # would be true there and migrate the campaign. Do not rewrite these as
-# negations, and do not add a negated check anywhere else.
+# negations, and do not add a negated check anywhere else. The exceptions read
+# the rule off together with something no pre-rule save has: je_tax_code's
+# prune and invalid outcome (the entry needs the rule to exist) and
+# te_tax_rule_off_net (a migration marker).
 
 # True under both enabled settings: the legislated (full) code.
 te_tax_code_full = {
