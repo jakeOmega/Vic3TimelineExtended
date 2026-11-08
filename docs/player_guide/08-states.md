@@ -587,7 +587,7 @@ the tab shows above the buttons.
 | Standard | 65 | The default. It grows more generous as lives lengthen, since more people live to draw it, and for longer. | None |
 | Raised Pension Age | 70 | A smaller bill and more old people at work. | Trade Unions −2, Rural Folk −1, Industrialists +1 |
 | Linked to Average Longevity | Five years below Old Age From for all your people, the treated included; at least 65 | Follows lengthening lives, so the bill stays in check. Once longevity treatment spreads, the treated pull it up, and those who still age may die before they reach it. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
-| Linked to Common Longevity | Five years below Old Age From for the people outside longevity care, whose bodies still age; at least 65 | The same as Average until longevity treatment exists. After that it stays within reach of those who still age, but the treated draw it for life, so the bill grows. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
+| Linked to Common Longevity | Five years below Old Age From for the people outside longevity care, whose bodies still age; at least 65 | Grayed out until longevity care begins, since until then it gives the same age as Average. After that it stays within reach of those who still age, but the treated draw it for life, so the bill grows. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
 
 The pension age changes at once, but a linked setting moves toward its target by
 at most one year each year; the bill and the workforce follow at the next census. Under Full, Old Age

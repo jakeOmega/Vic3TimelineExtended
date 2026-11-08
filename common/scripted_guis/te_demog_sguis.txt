@@ -389,11 +389,15 @@ te_demog_pension_linked_average_sgui = {
 	ai_is_valid = { always = no }
 }
 
+# Greyed until the untreated have an old-age threshold of their own (te_dg_old_age_c, once longevity care has begun in a
+# census state; te_demog_lx_old_c_sgui shows it on the overview): before then it heads for Linked to Average's age
+# (te_demog_pension_link_target_common), so the button would be a second copy (owner, 2026-11-08, Workshop feedback).
 te_demog_pension_linked_common_sgui = {
 	scope = country
 	is_shown = { te_demog_has_pension_law = yes }
 	is_valid = {
 		custom_tooltip = { text = te_demog_pension_full_only_tt te_demog_effects_run = yes }
+		custom_tooltip = { text = te_demog_pension_common_split_tt has_variable = te_dg_old_age_c }
 		custom_tooltip = { text = te_demog_pension_current_tt NOT = { te_demog_pension_pos = te_demog_k_pension_pos_linked_common } }
 		custom_tooltip = { text = te_demog_pension_term_tt te_demog_pension_can_change = yes }
 	}
