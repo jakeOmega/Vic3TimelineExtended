@@ -536,6 +536,33 @@ class StatusTextTest(unittest.TestCase):
             self.assertNotIn("all_switched", rows["je_te_cm_%s_status_late" % key])
             self.assertIn("global_var:te_cm_state_%s ?= 2" % key, rows["je_te_cm_%s_status_late" % key])
 
+    def test_the_gap_row_names_both_ends_and_the_gap(self):
+        # "Too wide" alone left the player to find which cultures (2026-11-09): the row names the best- and worst-off
+        # core cultures from the last census, their standards of living and the gap, and the value it must be under.
+        for merge in cfg.MERGES:
+            key = merge.key
+            var = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_%s_" + key + "')%s]"
+            wide = self.loc["je_te_cm_%s_status_sol_wide" % key]
+            for name, accessor in (("best", ".GetCulture.GetName"), ("worst", ".GetCulture.GetName"), ("hi", ".GetValue|1"),
+                                   ("lo", ".GetValue|1"), ("gap", ".GetValue|1")):
+                self.assertIn(var % (name, accessor), wide, key)
+            self.assertIn("ScriptValue('te_cm_sol_gap_open')|0]", wide)
+            close = self.loc["je_te_cm_%s_status_sol_close" % key]
+            self.assertIn(var % ("gap", ".GetValue|1"), close, key)
+            self.assertNotIn("GetCulture", close, key)  # one measured culture would be both ends
+            # Wide while the gap is at or over the open value; under it with the gate still shut, a slot was unmet at
+            # the last census and the next one counts it; with no figure at all, the shared row.
+            rows = dict(self.rows(key)[1])
+            shut = "NOT = { var:te_cm_sol_ok_%s ?= 1 }" % key
+            figure = "has_variable = te_cm_sol_gap_%s" % key
+            self.assertEqual(rows["je_te_cm_%s_status_sol_wide" % key],
+                             "%s %s var:te_cm_sol_gap_%s >= te_cm_sol_gap_open" % (shut, figure, key))
+            self.assertEqual(rows["je_te_cm_%s_status_sol_close" % key], "%s %s" % (shut, figure))
+            self.assertEqual(rows["te_cm_status_sol"], shut)
+            descs = [d for d, _ in self.rows(key)[1]]
+            sol = descs.index("te_cm_status_sol")
+            self.assertEqual(descs[sol - 2:sol], ["je_te_cm_%s_status_sol_wide" % key, "je_te_cm_%s_status_sol_close" % key])
+
     def test_running_shows_the_lowest_share_and_the_starters_speed(self):
         # R28: the starter's Culture Merge Speed total, beside the lowest core dominance.
         for merge in cfg.MERGES:
@@ -1233,9 +1260,13 @@ class LocTest(unittest.TestCase):
 
     def test_variables_in_the_text_are_ones_the_census_writes(self):
         census = text_of(EFFECTS) + text_of(GEN_EFFECTS)
+        shown = ("best", "worst", "hi", "lo", "gap")
         for key, text in self.generated.items():
             for name in re.findall(r"Var\('(\w+)'\)", text):
-                self.assertTrue(name.startswith(("te_cm_held_", "te_cm_years_")), "%s reads %s" % (key, name))
+                if name.startswith(("te_cm_held_", "te_cm_years_")):
+                    continue
+                self.assertRegex(name, r"^te_cm_sol_(%s)_" % "|".join(shown), "%s reads %s" % (key, name))
+                self.assertIn("set_variable = { name = %s value = " % name, census, "%s reads %s" % (key, name))
         self.assertIn("te_cm_held_$MERGE$_$CULTURE$", census)
         self.assertIn("te_cm_years_$MERGE$_$CULTURE$", census)
 

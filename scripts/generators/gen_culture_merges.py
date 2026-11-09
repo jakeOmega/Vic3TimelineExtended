@@ -1358,6 +1358,8 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
         out.line("# te_cm_sol_ok_%s_<culture>, over the core range plus that part; with no core figure left, against the" % key)
         out.line("# result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or")
         out.line("# not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).")
+        out.line("# The status row names the core gap's two ends: te_cm_sol_best_%s and te_cm_sol_worst_%s (cultures)," % (key, key))
+        out.line("# te_cm_sol_hi_%s, te_cm_sol_lo_%s and te_cm_sol_gap_%s, removed while no core part has a figure." % (key, key, key))
         with out.block("te_cmg_census_%s_country" % key):
             for culture in cultures:
                 tier = cfg.derive_tier(merge, culture, vanilla, merges)
@@ -1394,10 +1396,16 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
             with out.block("if"):
                 out.line("limit = { NOT = { has_variable = te_cm_sol_ok_%s } }" % key)
                 out.line("set_variable = { name = te_cm_sol_ok_%s value = 0 }" % key)
+            # The figures the gate reads, kept for the status row: the best- and worst-off core cultures (culture
+            # scopes), their standards of living and the gap. None while no core part has a figure.
+            kept = (("best", "te_cm_sg_best"), ("worst", "te_cm_sg_worst"), ("hi", "te_cm_sg_max"),
+                    ("lo", "te_cm_sg_min"), ("gap", "te_cm_sg_gap"))
             with out.block("if"):
                 out.line("limit = { local_var:te_cm_sg_n > 0 }")
                 out.line("set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }")
                 out.line("change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }")
+                for name, local in kept:
+                    out.line("set_variable = { name = te_cm_sol_%s_%s value = local_var:%s }" % (name, key, local))
                 with out.block("if"):
                     out.line("limit = { var:te_cm_sol_ok_%s = 1 }" % key)
                     with out.block("if"):
@@ -1409,6 +1417,9 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
                             out.line("local_var:te_cm_sg_gap < te_cm_sol_gap_open")
                             out.line("local_var:te_cm_sg_all = 1")
                         out.line("set_variable = { name = te_cm_sol_ok_%s value = 1 }" % key)
+            with out.block("else"):
+                for name, _ in kept:
+                    out.line("remove_variable = te_cm_sol_%s_%s" % (name, key))
             if optional:
                 # The walk only feeds te_cm_sol_gate_part, which reads its figure only for a part whose own gates are on
                 # (R38 M1): no walk for a finished merge whose optional parts don't qualify.
@@ -2055,7 +2066,30 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
                         "$%s$ pops need $%s$ as well." % (culture, TIER_TECH[tier]),
                     )
                 )
-    rows.append(Row("te_cm_status_sol", _negated(["var:te_cm_sol_ok_%s ?= 1" % key])))
+    # The gap's two ends and the gap itself, from the last census (2026-11-09: "too wide" alone left the player to find which
+    # cultures). A gap already under the open value with the gate shut means a slot was unmet at that census and is met now;
+    # the generic row is left for no figure at all (no core part measured, or a save from before the figures were kept).
+    sol_shut = _negated(["var:te_cm_sol_ok_%s ?= 1" % key])
+    var = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_%s_" + key + "')%s]"
+    rows.append(
+        Row(
+            base + "sol_wide",
+            sol_shut + ["has_variable = te_cm_sol_gap_%s" % key, "var:te_cm_sol_gap_%s >= te_cm_sol_gap_open" % key],
+            "The core cultures live at standards of living too far apart: %s pops are the best off, at %s, and %s pops the "
+            "worst off, at %s. The gap of %s must be under %s to begin."
+            % (var % ("best", ".GetCulture.GetName"), var % ("hi", ".GetValue|1"), var % ("worst", ".GetCulture.GetName"),
+               var % ("lo", ".GetValue|1"), var % ("gap", ".GetValue|1"), sv.format("te_cm_sol_gap_open", "0")),
+        )
+    )
+    rows.append(
+        Row(
+            base + "sol_close",
+            sol_shut + ["has_variable = te_cm_sol_gap_%s" % key],
+            "The core cultures' standards of living are close enough now: the gap between the best and the worst off is %s, "
+            "under %s. The next yearly census will count it." % (var % ("gap", ".GetValue|1"), sv.format("te_cm_sol_gap_open", "0")),
+        )
+    )
+    rows.append(Row("te_cm_status_sol", sol_shut))
     for part in core_waits(merge):
         culture = part.cultures[0]
         rows.append(

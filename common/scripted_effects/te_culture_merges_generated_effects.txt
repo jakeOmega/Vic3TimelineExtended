@@ -45,6 +45,8 @@ te_cmg_german_result_sol = {
 # te_cm_sol_ok_german_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_german and te_cm_sol_worst_german (cultures),
+# te_cm_sol_hi_german, te_cm_sol_lo_german and te_cm_sol_gap_german, removed while no core part has a figure.
 te_cmg_census_german_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_german } }
@@ -105,6 +107,11 @@ te_cmg_census_german_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_german value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_german value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_german value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_german value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_german value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_german = 1 }
 			if = {
@@ -121,6 +128,13 @@ te_cmg_census_german_country = {
 				set_variable = { name = te_cm_sol_ok_german value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_german
+		remove_variable = te_cm_sol_worst_german
+		remove_variable = te_cm_sol_hi_german
+		remove_variable = te_cm_sol_lo_german
+		remove_variable = te_cm_sol_gap_german
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -287,6 +301,8 @@ te_cmg_italian_result_sol = {
 # te_cm_sol_ok_italian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_italian and te_cm_sol_worst_italian (cultures),
+# te_cm_sol_hi_italian, te_cm_sol_lo_italian and te_cm_sol_gap_italian, removed while no core part has a figure.
 te_cmg_census_italian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_italian } }
@@ -343,6 +359,11 @@ te_cmg_census_italian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_italian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_italian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_italian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_italian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_italian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_italian = 1 }
 			if = {
@@ -359,6 +380,13 @@ te_cmg_census_italian_country = {
 				set_variable = { name = te_cm_sol_ok_italian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_italian
+		remove_variable = te_cm_sol_worst_italian
+		remove_variable = te_cm_sol_hi_italian
+		remove_variable = te_cm_sol_lo_italian
+		remove_variable = te_cm_sol_gap_italian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -520,6 +548,8 @@ te_cmg_scandinavian_result_sol = {
 # te_cm_sol_ok_scandinavian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_scandinavian and te_cm_sol_worst_scandinavian (cultures),
+# te_cm_sol_hi_scandinavian, te_cm_sol_lo_scandinavian and te_cm_sol_gap_scandinavian, removed while no core part has a figure.
 te_cmg_census_scandinavian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swedish } }
@@ -593,6 +623,11 @@ te_cmg_census_scandinavian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_scandinavian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_scandinavian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_scandinavian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_scandinavian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_scandinavian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_scandinavian = 1 }
 			if = {
@@ -609,6 +644,13 @@ te_cmg_census_scandinavian_country = {
 				set_variable = { name = te_cm_sol_ok_scandinavian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_scandinavian
+		remove_variable = te_cm_sol_worst_scandinavian
+		remove_variable = te_cm_sol_hi_scandinavian
+		remove_variable = te_cm_sol_lo_scandinavian
+		remove_variable = te_cm_sol_gap_scandinavian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -731,6 +773,8 @@ te_cmg_census_scandinavian = {
 # te_cm_sol_ok_east_slavic_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_east_slavic and te_cm_sol_worst_east_slavic (cultures),
+# te_cm_sol_hi_east_slavic, te_cm_sol_lo_east_slavic and te_cm_sol_gap_east_slavic, removed while no core part has a figure.
 te_cmg_census_east_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_russian } }
@@ -800,6 +844,11 @@ te_cmg_census_east_slavic_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_east_slavic value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_east_slavic value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_east_slavic value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_east_slavic value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_east_slavic value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_east_slavic = 1 }
 			if = {
@@ -816,6 +865,13 @@ te_cmg_census_east_slavic_country = {
 				set_variable = { name = te_cm_sol_ok_east_slavic value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_east_slavic
+		remove_variable = te_cm_sol_worst_east_slavic
+		remove_variable = te_cm_sol_hi_east_slavic
+		remove_variable = te_cm_sol_lo_east_slavic
+		remove_variable = te_cm_sol_gap_east_slavic
 	}
 	te_cmg_east_slavic_settle = yes
 }
@@ -982,6 +1038,8 @@ te_cmg_yugoslav_result_sol = {
 # te_cm_sol_ok_yugoslav_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_yugoslav and te_cm_sol_worst_yugoslav (cultures),
+# te_cm_sol_hi_yugoslav, te_cm_sol_lo_yugoslav and te_cm_sol_gap_yugoslav, removed while no core part has a figure.
 te_cmg_census_yugoslav_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_serb } }
@@ -1059,6 +1117,11 @@ te_cmg_census_yugoslav_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_yugoslav value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_yugoslav value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_yugoslav value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_yugoslav value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_yugoslav value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_yugoslav = 1 }
 			if = {
@@ -1075,6 +1138,13 @@ te_cmg_census_yugoslav_country = {
 				set_variable = { name = te_cm_sol_ok_yugoslav value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_yugoslav
+		remove_variable = te_cm_sol_worst_yugoslav
+		remove_variable = te_cm_sol_hi_yugoslav
+		remove_variable = te_cm_sol_lo_yugoslav
+		remove_variable = te_cm_sol_gap_yugoslav
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -1255,6 +1325,8 @@ te_cmg_czechoslovak_result_sol = {
 # te_cm_sol_ok_czechoslovak_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_czechoslovak and te_cm_sol_worst_czechoslovak (cultures),
+# te_cm_sol_hi_czechoslovak, te_cm_sol_lo_czechoslovak and te_cm_sol_gap_czechoslovak, removed while no core part has a figure.
 te_cmg_census_czechoslovak_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_czech } }
@@ -1311,6 +1383,11 @@ te_cmg_census_czechoslovak_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_czechoslovak value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_czechoslovak value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_czechoslovak value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_czechoslovak value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_czechoslovak value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_czechoslovak = 1 }
 			if = {
@@ -1327,6 +1404,13 @@ te_cmg_census_czechoslovak_country = {
 				set_variable = { name = te_cm_sol_ok_czechoslovak value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_czechoslovak
+		remove_variable = te_cm_sol_worst_czechoslovak
+		remove_variable = te_cm_sol_hi_czechoslovak
+		remove_variable = te_cm_sol_lo_czechoslovak
+		remove_variable = te_cm_sol_gap_czechoslovak
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -1451,6 +1535,8 @@ te_cmg_census_czechoslovak = {
 # te_cm_sol_ok_hungarian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_hungarian and te_cm_sol_worst_hungarian (cultures),
+# te_cm_sol_hi_hungarian, te_cm_sol_lo_hungarian and te_cm_sol_gap_hungarian, removed while no core part has a figure.
 te_cmg_census_hungarian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hungarian } }
@@ -1498,6 +1584,11 @@ te_cmg_census_hungarian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_hungarian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_hungarian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_hungarian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_hungarian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_hungarian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_hungarian = 1 }
 			if = {
@@ -1514,6 +1605,13 @@ te_cmg_census_hungarian_country = {
 				set_variable = { name = te_cm_sol_ok_hungarian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_hungarian
+		remove_variable = te_cm_sol_worst_hungarian
+		remove_variable = te_cm_sol_hi_hungarian
+		remove_variable = te_cm_sol_lo_hungarian
+		remove_variable = te_cm_sol_gap_hungarian
 	}
 	te_cmg_hungarian_settle = yes
 }
@@ -1600,6 +1698,8 @@ te_cmg_census_hungarian = {
 # te_cm_sol_ok_dutch_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_dutch and te_cm_sol_worst_dutch (cultures),
+# te_cm_sol_hi_dutch, te_cm_sol_lo_dutch and te_cm_sol_gap_dutch, removed while no core part has a figure.
 te_cmg_census_dutch_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_dutch } }
@@ -1647,6 +1747,11 @@ te_cmg_census_dutch_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_dutch value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_dutch value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_dutch value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_dutch value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_dutch value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_dutch = 1 }
 			if = {
@@ -1663,6 +1768,13 @@ te_cmg_census_dutch_country = {
 				set_variable = { name = te_cm_sol_ok_dutch value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_dutch
+		remove_variable = te_cm_sol_worst_dutch
+		remove_variable = te_cm_sol_hi_dutch
+		remove_variable = te_cm_sol_lo_dutch
+		remove_variable = te_cm_sol_gap_dutch
 	}
 	te_cmg_dutch_settle = yes
 }
@@ -1749,6 +1861,8 @@ te_cmg_census_dutch = {
 # te_cm_sol_ok_finnish_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_finnish and te_cm_sol_worst_finnish (cultures),
+# te_cm_sol_hi_finnish, te_cm_sol_lo_finnish and te_cm_sol_gap_finnish, removed while no core part has a figure.
 te_cmg_census_finnish_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_finnish } }
@@ -1796,6 +1910,11 @@ te_cmg_census_finnish_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_finnish value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_finnish value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_finnish value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_finnish value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_finnish value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_finnish = 1 }
 			if = {
@@ -1812,6 +1931,13 @@ te_cmg_census_finnish_country = {
 				set_variable = { name = te_cm_sol_ok_finnish value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_finnish
+		remove_variable = te_cm_sol_worst_finnish
+		remove_variable = te_cm_sol_hi_finnish
+		remove_variable = te_cm_sol_lo_finnish
+		remove_variable = te_cm_sol_gap_finnish
 	}
 	te_cmg_finnish_settle = yes
 }
@@ -1935,6 +2061,8 @@ te_cmg_french_result_sol = {
 # te_cm_sol_ok_french_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_french and te_cm_sol_worst_french (cultures),
+# te_cm_sol_hi_french, te_cm_sol_lo_french and te_cm_sol_gap_french, removed while no core part has a figure.
 te_cmg_census_french_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -2003,6 +2131,11 @@ te_cmg_census_french_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_french value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_french value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_french value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_french value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_french value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_french = 1 }
 			if = {
@@ -2019,6 +2152,13 @@ te_cmg_census_french_country = {
 				set_variable = { name = te_cm_sol_ok_french value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_french
+		remove_variable = te_cm_sol_worst_french
+		remove_variable = te_cm_sol_hi_french
+		remove_variable = te_cm_sol_lo_french
+		remove_variable = te_cm_sol_gap_french
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -2143,6 +2283,8 @@ te_cmg_census_french = {
 # te_cm_sol_ok_british_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_british and te_cm_sol_worst_british (cultures),
+# te_cm_sol_hi_british, te_cm_sol_lo_british and te_cm_sol_gap_british, removed while no core part has a figure.
 te_cmg_census_british_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -2190,6 +2332,11 @@ te_cmg_census_british_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_british value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_british value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_british value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_british value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_british value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_british = 1 }
 			if = {
@@ -2206,6 +2353,13 @@ te_cmg_census_british_country = {
 				set_variable = { name = te_cm_sol_ok_british value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_british
+		remove_variable = te_cm_sol_worst_british
+		remove_variable = te_cm_sol_hi_british
+		remove_variable = te_cm_sol_lo_british
+		remove_variable = te_cm_sol_gap_british
 	}
 	te_cmg_british_settle = yes
 }
@@ -2336,6 +2490,8 @@ te_cmg_american_result_sol = {
 # te_cm_sol_ok_american_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_american and te_cm_sol_worst_american (cultures),
+# te_cm_sol_hi_american, te_cm_sol_lo_american and te_cm_sol_gap_american, removed while no core part has a figure.
 te_cmg_census_american_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_yankee } }
@@ -2392,6 +2548,11 @@ te_cmg_census_american_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_american value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_american value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_american value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_american value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_american value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_american = 1 }
 			if = {
@@ -2408,6 +2569,13 @@ te_cmg_census_american_country = {
 				set_variable = { name = te_cm_sol_ok_american value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_american
+		remove_variable = te_cm_sol_worst_american
+		remove_variable = te_cm_sol_hi_american
+		remove_variable = te_cm_sol_lo_american
+		remove_variable = te_cm_sol_gap_american
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -2589,6 +2757,8 @@ te_cmg_anglophone_result_sol = {
 # te_cm_sol_ok_anglophone_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_anglophone and te_cm_sol_worst_anglophone (cultures),
+# te_cm_sol_hi_anglophone, te_cm_sol_lo_anglophone and te_cm_sol_gap_anglophone, removed while no core part has a figure.
 te_cmg_census_anglophone_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_british } }
@@ -2671,6 +2841,11 @@ te_cmg_census_anglophone_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_anglophone value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_anglophone value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_anglophone value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_anglophone value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_anglophone value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_anglophone = 1 }
 			if = {
@@ -2687,6 +2862,13 @@ te_cmg_census_anglophone_country = {
 				set_variable = { name = te_cm_sol_ok_anglophone value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_anglophone
+		remove_variable = te_cm_sol_worst_anglophone
+		remove_variable = te_cm_sol_hi_anglophone
+		remove_variable = te_cm_sol_lo_anglophone
+		remove_variable = te_cm_sol_gap_anglophone
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -2906,6 +3088,8 @@ te_cmg_brazilian_result_sol = {
 # te_cm_sol_ok_brazilian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_brazilian and te_cm_sol_worst_brazilian (cultures),
+# te_cm_sol_hi_brazilian, te_cm_sol_lo_brazilian and te_cm_sol_gap_brazilian, removed while no core part has a figure.
 te_cmg_census_brazilian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_brazilian } }
@@ -3008,6 +3192,11 @@ te_cmg_census_brazilian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_brazilian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_brazilian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_brazilian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_brazilian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_brazilian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_brazilian = 1 }
 			if = {
@@ -3024,6 +3213,13 @@ te_cmg_census_brazilian_country = {
 				set_variable = { name = te_cm_sol_ok_brazilian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_brazilian
+		remove_variable = te_cm_sol_worst_brazilian
+		remove_variable = te_cm_sol_hi_brazilian
+		remove_variable = te_cm_sol_lo_brazilian
+		remove_variable = te_cm_sol_gap_brazilian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -3152,6 +3348,8 @@ te_cmg_census_brazilian = {
 # te_cm_sol_ok_platine_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_platine and te_cm_sol_worst_platine (cultures),
+# te_cm_sol_hi_platine, te_cm_sol_lo_platine and te_cm_sol_gap_platine, removed while no core part has a figure.
 te_cmg_census_platine_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_platinean } }
@@ -3238,6 +3436,11 @@ te_cmg_census_platine_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_platine value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_platine value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_platine value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_platine value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_platine value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_platine = 1 }
 			if = {
@@ -3254,6 +3457,13 @@ te_cmg_census_platine_country = {
 				set_variable = { name = te_cm_sol_ok_platine value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_platine
+		remove_variable = te_cm_sol_worst_platine
+		remove_variable = te_cm_sol_hi_platine
+		remove_variable = te_cm_sol_lo_platine
+		remove_variable = te_cm_sol_gap_platine
 	}
 	te_cmg_platine_settle = yes
 }
@@ -3366,6 +3576,8 @@ te_cmg_census_platine = {
 # te_cm_sol_ok_andean_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_andean and te_cm_sol_worst_andean (cultures),
+# te_cm_sol_hi_andean, te_cm_sol_lo_andean and te_cm_sol_gap_andean, removed while no core part has a figure.
 te_cmg_census_andean_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_north_andean } }
@@ -3452,6 +3664,11 @@ te_cmg_census_andean_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_andean value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_andean value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_andean value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_andean value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_andean value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_andean = 1 }
 			if = {
@@ -3468,6 +3685,13 @@ te_cmg_census_andean_country = {
 				set_variable = { name = te_cm_sol_ok_andean value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_andean
+		remove_variable = te_cm_sol_worst_andean
+		remove_variable = te_cm_sol_hi_andean
+		remove_variable = te_cm_sol_lo_andean
+		remove_variable = te_cm_sol_gap_andean
 	}
 	te_cmg_andean_settle = yes
 }
@@ -3572,6 +3796,8 @@ te_cmg_census_andean = {
 # te_cm_sol_ok_gran_colombian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_gran_colombian and te_cm_sol_worst_gran_colombian (cultures),
+# te_cm_sol_hi_gran_colombian, te_cm_sol_lo_gran_colombian and te_cm_sol_gap_gran_colombian, removed while no core part has a figure.
 te_cmg_census_gran_colombian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_colombian } }
@@ -3641,6 +3867,11 @@ te_cmg_census_gran_colombian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_gran_colombian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_gran_colombian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_gran_colombian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_gran_colombian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_gran_colombian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_gran_colombian = 1 }
 			if = {
@@ -3657,6 +3888,13 @@ te_cmg_census_gran_colombian_country = {
 				set_variable = { name = te_cm_sol_ok_gran_colombian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_gran_colombian
+		remove_variable = te_cm_sol_worst_gran_colombian
+		remove_variable = te_cm_sol_hi_gran_colombian
+		remove_variable = te_cm_sol_lo_gran_colombian
+		remove_variable = te_cm_sol_gap_gran_colombian
 	}
 	te_cmg_gran_colombian_settle = yes
 }
@@ -3755,6 +3993,8 @@ te_cmg_census_gran_colombian = {
 # te_cm_sol_ok_chinese_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_chinese and te_cm_sol_worst_chinese (cultures),
+# te_cm_sol_hi_chinese, te_cm_sol_lo_chinese and te_cm_sol_gap_chinese, removed while no core part has a figure.
 te_cmg_census_chinese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_han } }
@@ -3836,6 +4076,11 @@ te_cmg_census_chinese_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_chinese value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_chinese value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_chinese value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_chinese value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_chinese value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_chinese = 1 }
 			if = {
@@ -3852,6 +4097,13 @@ te_cmg_census_chinese_country = {
 				set_variable = { name = te_cm_sol_ok_chinese value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_chinese
+		remove_variable = te_cm_sol_worst_chinese
+		remove_variable = te_cm_sol_hi_chinese
+		remove_variable = te_cm_sol_lo_chinese
+		remove_variable = te_cm_sol_gap_chinese
 	}
 	te_cmg_chinese_settle = yes
 }
@@ -3950,6 +4202,8 @@ te_cmg_census_chinese = {
 # te_cm_sol_ok_japanese_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_japanese and te_cm_sol_worst_japanese (cultures),
+# te_cm_sol_hi_japanese, te_cm_sol_lo_japanese and te_cm_sol_gap_japanese, removed while no core part has a figure.
 te_cmg_census_japanese_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_japanese } }
@@ -3997,6 +4251,11 @@ te_cmg_census_japanese_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_japanese value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_japanese value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_japanese value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_japanese value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_japanese value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_japanese = 1 }
 			if = {
@@ -4013,6 +4272,13 @@ te_cmg_census_japanese_country = {
 				set_variable = { name = te_cm_sol_ok_japanese value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_japanese
+		remove_variable = te_cm_sol_worst_japanese
+		remove_variable = te_cm_sol_hi_japanese
+		remove_variable = te_cm_sol_lo_japanese
+		remove_variable = te_cm_sol_gap_japanese
 	}
 	te_cmg_japanese_settle = yes
 }
@@ -4138,6 +4404,8 @@ te_cmg_arab_result_sol = {
 # te_cm_sol_ok_arab_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_arab and te_cm_sol_worst_arab (cultures),
+# te_cm_sol_hi_arab, te_cm_sol_lo_arab and te_cm_sol_gap_arab, removed while no core part has a figure.
 te_cmg_census_arab_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_maghrebi } }
@@ -4253,6 +4521,11 @@ te_cmg_census_arab_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_arab value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_arab value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_arab value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_arab value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_arab value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_arab = 1 }
 			if = {
@@ -4269,6 +4542,13 @@ te_cmg_census_arab_country = {
 				set_variable = { name = te_cm_sol_ok_arab value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_arab
+		remove_variable = te_cm_sol_worst_arab
+		remove_variable = te_cm_sol_hi_arab
+		remove_variable = te_cm_sol_lo_arab
+		remove_variable = te_cm_sol_gap_arab
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -4467,6 +4747,8 @@ te_cmg_persian_result_sol = {
 # te_cm_sol_ok_persian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_persian and te_cm_sol_worst_persian (cultures),
+# te_cm_sol_hi_persian, te_cm_sol_lo_persian and te_cm_sol_gap_persian, removed while no core part has a figure.
 te_cmg_census_persian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_persian } }
@@ -4522,6 +4804,11 @@ te_cmg_census_persian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_persian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_persian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_persian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_persian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_persian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_persian = 1 }
 			if = {
@@ -4538,6 +4825,13 @@ te_cmg_census_persian_country = {
 				set_variable = { name = te_cm_sol_ok_persian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_persian
+		remove_variable = te_cm_sol_worst_persian
+		remove_variable = te_cm_sol_hi_persian
+		remove_variable = te_cm_sol_lo_persian
+		remove_variable = te_cm_sol_gap_persian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -4698,6 +4992,8 @@ te_cmg_oghuz_turkic_result_sol = {
 # te_cm_sol_ok_oghuz_turkic_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_oghuz_turkic and te_cm_sol_worst_oghuz_turkic (cultures),
+# te_cm_sol_hi_oghuz_turkic, te_cm_sol_lo_oghuz_turkic and te_cm_sol_gap_oghuz_turkic, removed while no core part has a figure.
 te_cmg_census_oghuz_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_turkish } }
@@ -4754,6 +5050,11 @@ te_cmg_census_oghuz_turkic_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_oghuz_turkic value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_oghuz_turkic value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_oghuz_turkic value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_oghuz_turkic value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_oghuz_turkic value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_oghuz_turkic = 1 }
 			if = {
@@ -4770,6 +5071,13 @@ te_cmg_census_oghuz_turkic_country = {
 				set_variable = { name = te_cm_sol_ok_oghuz_turkic value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_oghuz_turkic
+		remove_variable = te_cm_sol_worst_oghuz_turkic
+		remove_variable = te_cm_sol_hi_oghuz_turkic
+		remove_variable = te_cm_sol_lo_oghuz_turkic
+		remove_variable = te_cm_sol_gap_oghuz_turkic
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -4894,6 +5202,8 @@ te_cmg_census_oghuz_turkic = {
 # te_cm_sol_ok_hindustani_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_hindustani and te_cm_sol_worst_hindustani (cultures),
+# te_cm_sol_hi_hindustani, te_cm_sol_lo_hindustani and te_cm_sol_gap_hindustani, removed while no core part has a figure.
 te_cmg_census_hindustani_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hindustani } }
@@ -4992,6 +5302,11 @@ te_cmg_census_hindustani_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_hindustani value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_hindustani value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_hindustani value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_hindustani value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_hindustani value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_hindustani = 1 }
 			if = {
@@ -5008,6 +5323,13 @@ te_cmg_census_hindustani_country = {
 				set_variable = { name = te_cm_sol_ok_hindustani value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_hindustani
+		remove_variable = te_cm_sol_worst_hindustani
+		remove_variable = te_cm_sol_hi_hindustani
+		remove_variable = te_cm_sol_lo_hindustani
+		remove_variable = te_cm_sol_gap_hindustani
 	}
 	te_cmg_hindustani_settle = yes
 }
@@ -5149,6 +5471,8 @@ te_cmg_dravidian_result_sol = {
 # te_cm_sol_ok_dravidian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_dravidian and te_cm_sol_worst_dravidian (cultures),
+# te_cm_sol_hi_dravidian, te_cm_sol_lo_dravidian and te_cm_sol_gap_dravidian, removed while no core part has a figure.
 te_cmg_census_dravidian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_tamil } }
@@ -5222,6 +5546,11 @@ te_cmg_census_dravidian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_dravidian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_dravidian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_dravidian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_dravidian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_dravidian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_dravidian = 1 }
 			if = {
@@ -5238,6 +5567,13 @@ te_cmg_census_dravidian_country = {
 				set_variable = { name = te_cm_sol_ok_dravidian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_dravidian
+		remove_variable = te_cm_sol_worst_dravidian
+		remove_variable = te_cm_sol_hi_dravidian
+		remove_variable = te_cm_sol_lo_dravidian
+		remove_variable = te_cm_sol_gap_dravidian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -5398,6 +5734,8 @@ te_cmg_indonesian_result_sol = {
 # te_cm_sol_ok_indonesian_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_indonesian and te_cm_sol_worst_indonesian (cultures),
+# te_cm_sol_hi_indonesian, te_cm_sol_lo_indonesian and te_cm_sol_gap_indonesian, removed while no core part has a figure.
 te_cmg_census_indonesian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_javan } }
@@ -5488,6 +5826,11 @@ te_cmg_census_indonesian_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_indonesian value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_indonesian value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_indonesian value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_indonesian value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_indonesian value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_indonesian = 1 }
 			if = {
@@ -5504,6 +5847,13 @@ te_cmg_census_indonesian_country = {
 				set_variable = { name = te_cm_sol_ok_indonesian value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_indonesian
+		remove_variable = te_cm_sol_worst_indonesian
+		remove_variable = te_cm_sol_hi_indonesian
+		remove_variable = te_cm_sol_lo_indonesian
+		remove_variable = te_cm_sol_gap_indonesian
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -5640,6 +5990,8 @@ te_cmg_census_indonesian = {
 # te_cm_sol_ok_filipino_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_filipino and te_cm_sol_worst_filipino (cultures),
+# te_cm_sol_hi_filipino, te_cm_sol_lo_filipino and te_cm_sol_gap_filipino, removed while no core part has a figure.
 te_cmg_census_filipino_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_filipino } }
@@ -5721,6 +6073,11 @@ te_cmg_census_filipino_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_filipino value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_filipino value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_filipino value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_filipino value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_filipino value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_filipino = 1 }
 			if = {
@@ -5737,6 +6094,13 @@ te_cmg_census_filipino_country = {
 				set_variable = { name = te_cm_sol_ok_filipino value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_filipino
+		remove_variable = te_cm_sol_worst_filipino
+		remove_variable = te_cm_sol_hi_filipino
+		remove_variable = te_cm_sol_lo_filipino
+		remove_variable = te_cm_sol_gap_filipino
 	}
 	te_cmg_filipino_settle = yes
 }
@@ -5843,6 +6207,8 @@ te_cmg_census_filipino = {
 # te_cm_sol_ok_nguni_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_nguni and te_cm_sol_worst_nguni (cultures),
+# te_cm_sol_hi_nguni, te_cm_sol_lo_nguni and te_cm_sol_gap_nguni, removed while no core part has a figure.
 te_cmg_census_nguni_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_nguni } }
@@ -5912,6 +6278,11 @@ te_cmg_census_nguni_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_nguni value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_nguni value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_nguni value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_nguni value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_nguni value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_nguni = 1 }
 			if = {
@@ -5928,6 +6299,13 @@ te_cmg_census_nguni_country = {
 				set_variable = { name = te_cm_sol_ok_nguni value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_nguni
+		remove_variable = te_cm_sol_worst_nguni
+		remove_variable = te_cm_sol_hi_nguni
+		remove_variable = te_cm_sol_lo_nguni
+		remove_variable = te_cm_sol_gap_nguni
 	}
 	te_cmg_nguni_settle = yes
 }
@@ -6064,6 +6442,8 @@ te_cmg_latin_result_sol = {
 # te_cm_sol_ok_latin_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_latin and te_cm_sol_worst_latin (cultures),
+# te_cm_sol_hi_latin, te_cm_sol_lo_latin and te_cm_sol_gap_latin, removed while no core part has a figure.
 te_cmg_census_latin_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_french } }
@@ -6174,6 +6554,11 @@ te_cmg_census_latin_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_latin value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_latin value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_latin value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_latin value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_latin value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_latin = 1 }
 			if = {
@@ -6190,6 +6575,13 @@ te_cmg_census_latin_country = {
 				set_variable = { name = te_cm_sol_ok_latin value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_latin
+		remove_variable = te_cm_sol_worst_latin
+		remove_variable = te_cm_sol_hi_latin
+		remove_variable = te_cm_sol_lo_latin
+		remove_variable = te_cm_sol_gap_latin
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -6425,6 +6817,8 @@ te_cmg_pan_slavic_result_sol = {
 # te_cm_sol_ok_pan_slavic_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_pan_slavic and te_cm_sol_worst_pan_slavic (cultures),
+# te_cm_sol_hi_pan_slavic, te_cm_sol_lo_pan_slavic and te_cm_sol_gap_pan_slavic, removed while no core part has a figure.
 te_cmg_census_pan_slavic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_east_slavic } }
@@ -6506,6 +6900,11 @@ te_cmg_census_pan_slavic_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_pan_slavic value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_pan_slavic value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_pan_slavic value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_pan_slavic value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_pan_slavic value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_pan_slavic = 1 }
 			if = {
@@ -6522,6 +6921,13 @@ te_cmg_census_pan_slavic_country = {
 				set_variable = { name = te_cm_sol_ok_pan_slavic value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_pan_slavic
+		remove_variable = te_cm_sol_worst_pan_slavic
+		remove_variable = te_cm_sol_hi_pan_slavic
+		remove_variable = te_cm_sol_lo_pan_slavic
+		remove_variable = te_cm_sol_gap_pan_slavic
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -6711,6 +7117,8 @@ te_cmg_pan_turkic_result_sol = {
 # te_cm_sol_ok_pan_turkic_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_pan_turkic and te_cm_sol_worst_pan_turkic (cultures),
+# te_cm_sol_hi_pan_turkic, te_cm_sol_lo_pan_turkic and te_cm_sol_gap_pan_turkic, removed while no core part has a figure.
 te_cmg_census_pan_turkic_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_oghuz_turkic } }
@@ -6830,6 +7238,11 @@ te_cmg_census_pan_turkic_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_pan_turkic value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_pan_turkic value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_pan_turkic value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_pan_turkic value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_pan_turkic value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_pan_turkic = 1 }
 			if = {
@@ -6846,6 +7259,13 @@ te_cmg_census_pan_turkic_country = {
 				set_variable = { name = te_cm_sol_ok_pan_turkic value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_pan_turkic
+		remove_variable = te_cm_sol_worst_pan_turkic
+		remove_variable = te_cm_sol_hi_pan_turkic
+		remove_variable = te_cm_sol_lo_pan_turkic
+		remove_variable = te_cm_sol_gap_pan_turkic
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
@@ -7022,6 +7442,8 @@ te_cmg_census_pan_turkic = {
 # te_cm_sol_ok_pan_malay_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_pan_malay and te_cm_sol_worst_pan_malay (cultures),
+# te_cm_sol_hi_pan_malay, te_cm_sol_lo_pan_malay and te_cm_sol_gap_pan_malay, removed while no core part has a figure.
 te_cmg_census_pan_malay_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_cm_indonesian } }
@@ -7074,6 +7496,11 @@ te_cmg_census_pan_malay_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_pan_malay value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_pan_malay value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_pan_malay value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_pan_malay value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_pan_malay value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_pan_malay = 1 }
 			if = {
@@ -7090,6 +7517,13 @@ te_cmg_census_pan_malay_country = {
 				set_variable = { name = te_cm_sol_ok_pan_malay value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_pan_malay
+		remove_variable = te_cm_sol_worst_pan_malay
+		remove_variable = te_cm_sol_hi_pan_malay
+		remove_variable = te_cm_sol_lo_pan_malay
+		remove_variable = te_cm_sol_gap_pan_malay
 	}
 	te_cmg_pan_malay_settle = yes
 }
@@ -7219,6 +7653,8 @@ te_cmg_east_african_result_sol = {
 # te_cm_sol_ok_east_african_<culture>, over the core range plus that part; with no core figure left, against the
 # result's (walked only then, and only while an optional part whose own gates are on has not switched, joined or
 # not: the gate of a part that has joined must keep following the result, or one dip would freeze it for good).
+# The status row names the core gap's two ends: te_cm_sol_best_east_african and te_cm_sol_worst_east_african (cultures),
+# te_cm_sol_hi_east_african, te_cm_sol_lo_east_african and te_cm_sol_gap_east_african, removed while no core part has a figure.
 te_cmg_census_east_african_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_swahili } }
@@ -7304,6 +7740,11 @@ te_cmg_census_east_african_country = {
 		limit = { local_var:te_cm_sg_n > 0 }
 		set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max }
 		change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_best_east_african value = local_var:te_cm_sg_best }
+		set_variable = { name = te_cm_sol_worst_east_african value = local_var:te_cm_sg_worst }
+		set_variable = { name = te_cm_sol_hi_east_african value = local_var:te_cm_sg_max }
+		set_variable = { name = te_cm_sol_lo_east_african value = local_var:te_cm_sg_min }
+		set_variable = { name = te_cm_sol_gap_east_african value = local_var:te_cm_sg_gap }
 		if = {
 			limit = { var:te_cm_sol_ok_east_african = 1 }
 			if = {
@@ -7320,6 +7761,13 @@ te_cmg_census_east_african_country = {
 				set_variable = { name = te_cm_sol_ok_east_african value = 1 }
 			}
 		}
+	}
+	else = {
+		remove_variable = te_cm_sol_best_east_african
+		remove_variable = te_cm_sol_worst_east_african
+		remove_variable = te_cm_sol_hi_east_african
+		remove_variable = te_cm_sol_lo_east_african
+		remove_variable = te_cm_sol_gap_east_african
 	}
 	set_local_variable = { name = te_cm_sg_ref value = 0 }
 	if = {
