@@ -982,6 +982,15 @@ add_liberty_desire effect [ Subject Pact not found for Country:
 
 The action's `decline_effect` runs `add_liberty_desire = 10` on the subject with no check that its subject pact still exists, so a request declined after the pact ended (Indore, about 1855, in the 2026-11-06 observer game) logs this once and adds nothing. The mod doesn't override the file.
 
+### `common/diplomatic_actions/36_subjects_grant_own_market.txt:13` — Grant Own Market weighed for a target country with no market (1.15)
+- stack: vanilla only
+
+```
+Event target link 'market' returned an invalid object
+```
+
+The action's `potential` opens with `scope:target_country = { market = prev.market }`, which reads the target's market with no check that it has one, so a target that holds no state logs the line once for each time the action list is built. 10 lines in one second, 2026-11-09, the panel of one such country open. The mod doesn't override the file.
+
 ### `events/hawaii_events.txt:352` — the annexation option creates an incident against the Hawaii it just annexed (1.15)
 - stack: vanilla only
 
@@ -1332,6 +1341,17 @@ Failed to switch player to new country in play_as effect - no player for scoped 
 ```
 
 The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05). The Kazakh event's `play_as = c:KAZ` does the same when the country it fires for has no player: once the same night. The Dutch East Indies breakup in `events/dei_breakup.txt` (line 196, `play_as = scope:russian_evacuation_state.owner`) does it too when it fires for a country no player holds: once, 2026-11-08.
+
+### `events/soi_events/00_ep1_caucasus_events.txt:85` — the failed-incursion option notifies an adversary the event never saved (1.15)
+- stack: vanilla only
+
+```
+Undefined event target 'adversary_scope'
+Event target link 'scope' returned an unset scope
+post_notification effect [ Type mismatch, notification is incompatible with scope ]
+```
+
+`caucasuswar.1.a` runs `scope:adversary_scope = { post_notification = caucasus_russian_failed_attack_notification }` with no `exists` check, and the event can fire without that scope saved, so the option's choice logs the three lines together and posts nothing. Once, 2026-11-09. The mod doesn't override the file.
 
 ### `common/journal_entries/06_morocco_lands_of_anarchy.txt:99` — `owner = root` on an al-Rif state with no owner (1.15)
 
