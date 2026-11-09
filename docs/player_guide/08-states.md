@@ -334,10 +334,10 @@ Every merge is in the [Culture merge list](20-appendix-reference-lists.md#cultur
 Each merge has a journal entry under Domestic Affairs, such as Cultural Merge:
 German. It appears once one of the merge's core cultures is a primary culture of
 yours and you have the technology for its tier. Until the merge can start, the
-entry names the first condition that fails; then a button, Begin the German
-Merge, starts it, and its tooltip lists anything still missing. The AI starts a
-merge as soon as it qualifies. Only one country runs each merge, and once
-another country has started it, your entry ends.
+entry lists its conditions and checks off each one that holds; then a button,
+Begin the German Merge, starts it, and its tooltip lists anything still
+missing. The AI starts a merge as soon as it qualifies. Only one country runs
+each merge, and once another country has started it, your entry ends.
 
 The conditions are measured across your sphere: your country, your subjects and,
 if you lead a power bloc, its members. For every core culture:
@@ -349,8 +349,9 @@ if you lead a power bloc, its members. For every core culture:
   average acceptance is at least 80, Full Acceptance (Provisional Acceptance
   isn't enough), or 90 for a tier 1b culture;
 - the core cultures' average standards of living across the sphere are less than
-  3 apart. While they aren't, the entry names the best- and worst-off core
-  cultures, their standards of living and the gap.
+  3 apart. Once a yearly census has measured them, the condition names the
+  best- and worst-off core cultures, their standards of living and the gap.
+  Only cultures already held and accepted are measured.
 
 Each constituent culture has a tier, set by how close it is to the others:
 

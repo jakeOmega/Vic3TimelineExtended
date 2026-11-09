@@ -28,7 +28,10 @@ je_te_cm_german = {
 	possible = {
 		OR = {
 			te_cmg_german_can_start = yes
-			te_cmg_german_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_german_is_starter = yes
+			}
 		}
 	}
 
@@ -288,7 +291,10 @@ je_te_cm_italian = {
 	possible = {
 		OR = {
 			te_cmg_italian_can_start = yes
-			te_cmg_italian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_italian_is_starter = yes
+			}
 		}
 	}
 
@@ -556,7 +562,10 @@ je_te_cm_scandinavian = {
 	possible = {
 		OR = {
 			te_cmg_scandinavian_can_start = yes
-			te_cmg_scandinavian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_scandinavian_is_starter = yes
+			}
 		}
 	}
 
@@ -860,7 +869,10 @@ je_te_cm_east_slavic = {
 	possible = {
 		OR = {
 			te_cmg_east_slavic_can_start = yes
-			te_cmg_east_slavic_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_east_slavic_is_starter = yes
+			}
 		}
 	}
 
@@ -1186,7 +1198,10 @@ je_te_cm_yugoslav = {
 	possible = {
 		OR = {
 			te_cmg_yugoslav_can_start = yes
-			te_cmg_yugoslav_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_yugoslav_is_starter = yes
+			}
 		}
 	}
 
@@ -1498,7 +1513,10 @@ je_te_cm_czechoslovak = {
 	possible = {
 		OR = {
 			te_cmg_czechoslovak_can_start = yes
-			te_cmg_czechoslovak_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_czechoslovak_is_starter = yes
+			}
 		}
 	}
 
@@ -1766,7 +1784,10 @@ je_te_cm_hungarian = {
 	possible = {
 		OR = {
 			te_cmg_hungarian_can_start = yes
-			te_cmg_hungarian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_hungarian_is_starter = yes
+			}
 		}
 	}
 
@@ -2017,7 +2038,10 @@ je_te_cm_dutch = {
 	possible = {
 		OR = {
 			te_cmg_dutch_can_start = yes
-			te_cmg_dutch_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_dutch_is_starter = yes
+			}
 		}
 	}
 
@@ -2268,7 +2292,10 @@ je_te_cm_finnish = {
 	possible = {
 		OR = {
 			te_cmg_finnish_can_start = yes
-			te_cmg_finnish_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_finnish_is_starter = yes
+			}
 		}
 	}
 
@@ -2519,7 +2546,10 @@ je_te_cm_french = {
 	possible = {
 		OR = {
 			te_cmg_french_can_start = yes
-			te_cmg_french_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_french_is_starter = yes
+			}
 		}
 	}
 
@@ -2822,7 +2852,10 @@ je_te_cm_british = {
 	possible = {
 		OR = {
 			te_cmg_british_can_start = yes
-			te_cmg_british_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_british_is_starter = yes
+			}
 		}
 	}
 
@@ -3086,7 +3119,10 @@ je_te_cm_american = {
 	possible = {
 		OR = {
 			te_cmg_american_can_start = yes
-			te_cmg_american_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_american_is_starter = yes
+			}
 		}
 	}
 
@@ -3366,7 +3402,10 @@ je_te_cm_anglophone = {
 	possible = {
 		OR = {
 			te_cmg_anglophone_can_start = yes
-			te_cmg_anglophone_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_anglophone_is_starter = yes
+			}
 		}
 	}
 
@@ -3773,7 +3812,10 @@ je_te_cm_brazilian = {
 	possible = {
 		OR = {
 			te_cmg_brazilian_can_start = yes
-			te_cmg_brazilian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_brazilian_is_starter = yes
+			}
 		}
 	}
 
@@ -4156,7 +4198,10 @@ je_te_cm_platine = {
 	possible = {
 		OR = {
 			te_cmg_platine_can_start = yes
-			te_cmg_platine_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_platine_is_starter = yes
+			}
 		}
 	}
 
@@ -4517,7 +4562,10 @@ je_te_cm_andean = {
 	possible = {
 		OR = {
 			te_cmg_andean_can_start = yes
-			te_cmg_andean_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_andean_is_starter = yes
+			}
 		}
 	}
 
@@ -4865,7 +4913,10 @@ je_te_cm_gran_colombian = {
 	possible = {
 		OR = {
 			te_cmg_gran_colombian_can_start = yes
-			te_cmg_gran_colombian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_gran_colombian_is_starter = yes
+			}
 		}
 	}
 
@@ -5169,7 +5220,10 @@ je_te_cm_chinese = {
 	possible = {
 		OR = {
 			te_cmg_chinese_can_start = yes
-			te_cmg_chinese_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_chinese_is_starter = yes
+			}
 		}
 	}
 
@@ -5508,7 +5562,10 @@ je_te_cm_japanese = {
 	possible = {
 		OR = {
 			te_cmg_japanese_can_start = yes
-			te_cmg_japanese_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_japanese_is_starter = yes
+			}
 		}
 	}
 
@@ -5759,7 +5816,10 @@ je_te_cm_arab = {
 	possible = {
 		OR = {
 			te_cmg_arab_can_start = yes
-			te_cmg_arab_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_arab_is_starter = yes
+			}
 		}
 	}
 
@@ -6151,7 +6211,10 @@ je_te_cm_persian = {
 	possible = {
 		OR = {
 			te_cmg_persian_can_start = yes
-			te_cmg_persian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_persian_is_starter = yes
+			}
 		}
 	}
 
@@ -6402,7 +6465,10 @@ je_te_cm_oghuz_turkic = {
 	possible = {
 		OR = {
 			te_cmg_oghuz_turkic_can_start = yes
-			te_cmg_oghuz_turkic_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_oghuz_turkic_is_starter = yes
+			}
 		}
 	}
 
@@ -6670,7 +6736,10 @@ je_te_cm_hindustani = {
 	possible = {
 		OR = {
 			te_cmg_hindustani_can_start = yes
-			te_cmg_hindustani_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_hindustani_is_starter = yes
+			}
 		}
 	}
 
@@ -7053,7 +7122,10 @@ je_te_cm_dravidian = {
 	possible = {
 		OR = {
 			te_cmg_dravidian_can_start = yes
-			te_cmg_dravidian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_dravidian_is_starter = yes
+			}
 		}
 	}
 
@@ -7357,7 +7429,10 @@ je_te_cm_indonesian = {
 	possible = {
 		OR = {
 			te_cmg_indonesian_can_start = yes
-			te_cmg_indonesian_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_indonesian_is_starter = yes
+			}
 		}
 	}
 
@@ -7713,7 +7788,10 @@ je_te_cm_filipino = {
 	possible = {
 		OR = {
 			te_cmg_filipino_can_start = yes
-			te_cmg_filipino_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_filipino_is_starter = yes
+			}
 		}
 	}
 
@@ -8060,7 +8138,10 @@ je_te_cm_nguni = {
 	possible = {
 		OR = {
 			te_cmg_nguni_can_start = yes
-			te_cmg_nguni_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_nguni_is_starter = yes
+			}
 		}
 	}
 
@@ -8364,7 +8445,10 @@ je_te_cm_latin = {
 	possible = {
 		OR = {
 			te_cmg_latin_can_start = yes
-			te_cmg_latin_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_latin_is_starter = yes
+			}
 		}
 	}
 
@@ -8840,7 +8924,10 @@ je_te_cm_pan_slavic = {
 	possible = {
 		OR = {
 			te_cmg_pan_slavic_can_start = yes
-			te_cmg_pan_slavic_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_slavic_is_starter = yes
+			}
 		}
 	}
 
@@ -9252,7 +9339,10 @@ je_te_cm_pan_turkic = {
 	possible = {
 		OR = {
 			te_cmg_pan_turkic_can_start = yes
-			te_cmg_pan_turkic_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_turkic_is_starter = yes
+			}
 		}
 	}
 
@@ -9810,7 +9900,10 @@ je_te_cm_pan_malay = {
 	possible = {
 		OR = {
 			te_cmg_pan_malay_can_start = yes
-			te_cmg_pan_malay_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_malay_is_starter = yes
+			}
 		}
 	}
 
@@ -10142,7 +10235,10 @@ je_te_cm_east_african = {
 	possible = {
 		OR = {
 			te_cmg_east_african_can_start = yes
-			te_cmg_east_african_is_starter = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_east_african_is_starter = yes
+			}
 		}
 	}
 

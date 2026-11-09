@@ -329,9 +329,18 @@ te_cmg_german_can_start = {
 			te_cmg_german_south_german_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_german ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_german }
+		custom_tooltip = {
+			text = te_cmg_german_sol_tt
+			var:te_cm_sol_ok_german ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_german ?= 1
+		}
 	}
 }
 
@@ -636,9 +645,18 @@ te_cmg_italian_can_start = {
 			te_cmg_italian_south_italian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_italian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_italian }
+		custom_tooltip = {
+			text = te_cmg_italian_sol_tt
+			var:te_cm_sol_ok_italian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_italian ?= 1
+		}
 	}
 }
 
@@ -991,9 +1009,18 @@ te_cmg_scandinavian_can_start = {
 			te_cmg_scandinavian_norwegian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_scandinavian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_scandinavian }
+		custom_tooltip = {
+			text = te_cmg_scandinavian_sol_tt
+			var:te_cm_sol_ok_scandinavian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_scandinavian ?= 1
+		}
 	}
 }
 
@@ -1344,9 +1371,18 @@ te_cmg_east_slavic_start_basics = {
 			te_cmg_east_slavic_byelorussian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_east_slavic ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_east_slavic }
+		custom_tooltip = {
+			text = te_cmg_east_slavic_sol_tt
+			var:te_cm_sol_ok_east_slavic ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_east_slavic ?= 1
+		}
 	}
 }
 
@@ -1803,9 +1839,18 @@ te_cmg_yugoslav_can_start = {
 			te_cmg_yugoslav_bosniak_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_yugoslav ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_yugoslav }
+		custom_tooltip = {
+			text = te_cmg_yugoslav_sol_tt
+			var:te_cm_sol_ok_yugoslav ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_yugoslav ?= 1
+		}
 	}
 }
 
@@ -2110,9 +2155,18 @@ te_cmg_czechoslovak_can_start = {
 			te_cmg_czechoslovak_slovak_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_czechoslovak ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_czechoslovak }
+		custom_tooltip = {
+			text = te_cmg_czechoslovak_sol_tt
+			var:te_cm_sol_ok_czechoslovak ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_czechoslovak ?= 1
+		}
 	}
 }
 
@@ -2335,9 +2389,18 @@ te_cmg_hungarian_can_start = {
 			te_cmg_hungarian_szekely_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_hungarian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_hungarian }
+		custom_tooltip = {
+			text = te_cmg_hungarian_sol_tt
+			var:te_cm_sol_ok_hungarian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_hungarian ?= 1
+		}
 	}
 }
 
@@ -2560,9 +2623,18 @@ te_cmg_dutch_can_start = {
 			te_cmg_dutch_flemish_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_dutch ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_dutch }
+		custom_tooltip = {
+			text = te_cmg_dutch_sol_tt
+			var:te_cm_sol_ok_dutch ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_dutch ?= 1
+		}
 	}
 }
 
@@ -2785,9 +2857,18 @@ te_cmg_finnish_can_start = {
 			te_cmg_finnish_karelian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_finnish ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_finnish }
+		custom_tooltip = {
+			text = te_cmg_finnish_sol_tt
+			var:te_cm_sol_ok_finnish ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_finnish ?= 1
+		}
 	}
 }
 
@@ -3128,9 +3209,18 @@ te_cmg_french_can_start = {
 			te_cmg_french_occitan_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_french ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_french }
+		custom_tooltip = {
+			text = te_cmg_french_sol_tt
+			var:te_cm_sol_ok_french ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_french ?= 1
+		}
 	}
 }
 
@@ -3373,9 +3463,18 @@ te_cmg_british_can_start = {
 			te_cmg_british_scottish_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_british ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_british }
+		custom_tooltip = {
+			text = te_cmg_british_sol_tt
+			var:te_cm_sol_ok_british ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_british ?= 1
+		}
 	}
 }
 
@@ -3728,9 +3827,18 @@ te_cmg_american_start_basics = {
 			te_cmg_american_dixie_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_american ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_american }
+		custom_tooltip = {
+			text = te_cmg_american_sol_tt
+			var:te_cm_sol_ok_american ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_american ?= 1
+		}
 	}
 }
 
@@ -4347,9 +4455,18 @@ te_cmg_anglophone_can_start = {
 			te_cmg_anglophone_cm_american_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_anglophone ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_anglophone }
+		custom_tooltip = {
+			text = te_cmg_anglophone_sol_tt
+			var:te_cm_sol_ok_anglophone ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_anglophone ?= 1
+		}
 	}
 }
 
@@ -4800,9 +4917,18 @@ te_cmg_brazilian_can_start = {
 			te_cmg_brazilian_sulista_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_brazilian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_brazilian }
+		custom_tooltip = {
+			text = te_cmg_brazilian_sol_tt
+			var:te_cm_sol_ok_brazilian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_brazilian ?= 1
+		}
 	}
 }
 
@@ -5207,9 +5333,18 @@ te_cmg_platine_can_start = {
 			te_cmg_platine_paraguayan_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_platine ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_platine }
+		custom_tooltip = {
+			text = te_cmg_platine_sol_tt
+			var:te_cm_sol_ok_platine ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_platine ?= 1
+		}
 	}
 }
 
@@ -5582,9 +5717,18 @@ te_cmg_andean_can_start = {
 			te_cmg_andean_bolivian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_andean ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_andean }
+		custom_tooltip = {
+			text = te_cmg_andean_sol_tt
+			var:te_cm_sol_ok_andean ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_andean ?= 1
+		}
 	}
 }
 
@@ -5898,9 +6042,18 @@ te_cmg_gran_colombian_can_start = {
 			te_cmg_gran_colombian_ecuadorian_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_gran_colombian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_gran_colombian }
+		custom_tooltip = {
+			text = te_cmg_gran_colombian_sol_tt
+			var:te_cm_sol_ok_gran_colombian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_gran_colombian ?= 1
+		}
 	}
 }
 
@@ -6241,9 +6394,18 @@ te_cmg_chinese_can_start = {
 			te_cmg_chinese_hakka_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_chinese ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_chinese }
+		custom_tooltip = {
+			text = te_cmg_chinese_sol_tt
+			var:te_cm_sol_ok_chinese ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_chinese ?= 1
+		}
 	}
 }
 
@@ -6466,9 +6628,18 @@ te_cmg_japanese_can_start = {
 			te_cmg_japanese_ryukyuan_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_japanese ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_japanese }
+		custom_tooltip = {
+			text = te_cmg_japanese_sol_tt
+			var:te_cm_sol_ok_japanese ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_japanese ?= 1
+		}
 	}
 }
 
@@ -7038,9 +7209,18 @@ te_cmg_arab_can_start = {
 			te_cmg_arab_yemenite_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_arab ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_arab }
+		custom_tooltip = {
+			text = te_cmg_arab_sol_tt
+			var:te_cm_sol_ok_arab ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_arab ?= 1
+		}
 	}
 }
 
@@ -7348,9 +7528,18 @@ te_cmg_persian_can_start = {
 			te_cmg_persian_luri_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_persian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_persian }
+		custom_tooltip = {
+			text = te_cmg_persian_sol_tt
+			var:te_cm_sol_ok_persian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_persian ?= 1
+		}
 	}
 }
 
@@ -7662,9 +7851,18 @@ te_cmg_oghuz_turkic_can_start = {
 			te_cmg_oghuz_turkic_azerbaijani_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_oghuz_turkic ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_oghuz_turkic }
+		custom_tooltip = {
+			text = te_cmg_oghuz_turkic_sol_tt
+			var:te_cm_sol_ok_oghuz_turkic ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_oghuz_turkic ?= 1
+		}
 	}
 }
 
@@ -8064,9 +8262,18 @@ te_cmg_hindustani_can_start = {
 			te_cmg_hindustani_bageli_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_hindustani ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_hindustani }
+		custom_tooltip = {
+			text = te_cmg_hindustani_sol_tt
+			var:te_cm_sol_ok_hindustani ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_hindustani ?= 1
+		}
 	}
 }
 
@@ -8426,9 +8633,18 @@ te_cmg_dravidian_can_start = {
 			te_cmg_dravidian_malayalam_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_dravidian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_dravidian }
+		custom_tooltip = {
+			text = te_cmg_dravidian_sol_tt
+			var:te_cm_sol_ok_dravidian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_dravidian ?= 1
+		}
 	}
 }
 
@@ -8855,9 +9071,18 @@ te_cmg_indonesian_can_start = {
 			te_cmg_indonesian_bornean_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_indonesian ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_indonesian }
+		custom_tooltip = {
+			text = te_cmg_indonesian_sol_tt
+			var:te_cm_sol_ok_indonesian ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_indonesian ?= 1
+		}
 	}
 }
 
@@ -9211,9 +9436,18 @@ te_cmg_filipino_can_start = {
 			te_cmg_filipino_ilocano_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_filipino ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_filipino }
+		custom_tooltip = {
+			text = te_cmg_filipino_sol_tt
+			var:te_cm_sol_ok_filipino ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_filipino ?= 1
+		}
 	}
 }
 
@@ -9527,9 +9761,18 @@ te_cmg_nguni_can_start = {
 			te_cmg_nguni_xhosa_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_nguni ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_nguni }
+		custom_tooltip = {
+			text = te_cmg_nguni_sol_tt
+			var:te_cm_sol_ok_nguni ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_nguni ?= 1
+		}
 	}
 }
 
@@ -10262,9 +10505,18 @@ te_cmg_latin_can_start = {
 			te_cmg_latin_portuguese_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_latin ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_latin }
+		custom_tooltip = {
+			text = te_cmg_latin_sol_tt
+			var:te_cm_sol_ok_latin ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_latin ?= 1
+		}
 	}
 	custom_tooltip = {
 		text = te_cmg_latin_comp_french_tt
@@ -10788,9 +11040,18 @@ te_cmg_pan_slavic_can_start = {
 			te_cmg_pan_slavic_cm_yugoslav_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_pan_slavic ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_pan_slavic }
+		custom_tooltip = {
+			text = te_cmg_pan_slavic_sol_tt
+			var:te_cm_sol_ok_pan_slavic ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_pan_slavic ?= 1
+		}
 	}
 	custom_tooltip = {
 		text = te_cmg_pan_slavic_comp_east_slavic_tt
@@ -11467,9 +11728,18 @@ te_cmg_pan_turkic_can_start = {
 			te_cmg_pan_turkic_kirgiz_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_pan_turkic ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_pan_turkic }
+		custom_tooltip = {
+			text = te_cmg_pan_turkic_sol_tt
+			var:te_cm_sol_ok_pan_turkic ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_pan_turkic ?= 1
+		}
 	}
 	custom_tooltip = {
 		text = te_cmg_pan_turkic_comp_oghuz_turkic_tt
@@ -11777,9 +12047,18 @@ te_cmg_pan_malay_can_start = {
 			te_cmg_pan_malay_filipino_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_pan_malay ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_pan_malay }
+		custom_tooltip = {
+			text = te_cmg_pan_malay_sol_tt
+			var:te_cm_sol_ok_pan_malay ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_pan_malay ?= 1
+		}
 	}
 	custom_tooltip = {
 		text = te_cmg_pan_malay_comp_indonesian_tt
@@ -12324,9 +12603,18 @@ te_cmg_east_african_can_start = {
 			te_cmg_east_african_sukuma_switched_in = yes
 		}
 	}
-	custom_tooltip = {
-		text = te_cm_tt_sol
-		var:te_cm_sol_ok_east_african ?= 1
+	trigger_if = {
+		limit = { has_variable = te_cm_sol_gap_east_african }
+		custom_tooltip = {
+			text = te_cmg_east_african_sol_tt
+			var:te_cm_sol_ok_east_african ?= 1
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_cm_tt_sol
+			var:te_cm_sol_ok_east_african ?= 1
+		}
 	}
 }
 
