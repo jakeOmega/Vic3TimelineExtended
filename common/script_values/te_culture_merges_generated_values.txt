@@ -1070,24 +1070,10 @@ te_cmg_french_lowest_dom = {
 	if = {
 		limit = {
 			OR = {
-				global_var:te_cm_joined_french_wallonian ?= 1
 				global_var:te_cm_joined_french_occitan ?= 1
 			}
 		}
 		value = 1
-		if = {
-			limit = {
-				global_var:te_cm_joined_french_wallonian ?= 1
-				NOT = { has_global_variable = te_cm_switched_wallonian }
-			}
-			if = {
-				limit = { has_global_variable = te_cm_dom_french_wallonian }
-				max = global_var:te_cm_dom_french_wallonian
-			}
-			else = {
-				max = 0
-			}
-		}
 		if = {
 			limit = {
 				global_var:te_cm_joined_french_occitan ?= 1
@@ -1110,25 +1096,12 @@ te_cmg_french_lowest_dom_all = {
 	if = {
 		limit = {
 			OR = {
-				global_var:te_cm_joined_french_wallonian ?= 1
 				global_var:te_cm_joined_french_occitan ?= 1
+				global_var:te_cm_joined_french_wallonian ?= 1
 				global_var:te_cm_joined_french_catalan ?= 1
 			}
 		}
 		value = 1
-		if = {
-			limit = {
-				global_var:te_cm_joined_french_wallonian ?= 1
-				NOT = { has_global_variable = te_cm_switched_wallonian }
-			}
-			if = {
-				limit = { has_global_variable = te_cm_dom_french_wallonian }
-				max = global_var:te_cm_dom_french_wallonian
-			}
-			else = {
-				max = 0
-			}
-		}
 		if = {
 			limit = {
 				global_var:te_cm_joined_french_occitan ?= 1
@@ -1137,6 +1110,19 @@ te_cmg_french_lowest_dom_all = {
 			if = {
 				limit = { has_global_variable = te_cm_dom_french_occitan }
 				max = global_var:te_cm_dom_french_occitan
+			}
+			else = {
+				max = 0
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_french_wallonian ?= 1
+				NOT = { has_global_variable = te_cm_switched_wallonian }
+			}
+			if = {
+				limit = { has_global_variable = te_cm_dom_french_wallonian }
+				max = global_var:te_cm_dom_french_wallonian
 			}
 			else = {
 				max = 0

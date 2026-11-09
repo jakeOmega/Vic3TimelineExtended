@@ -341,8 +341,10 @@ class RosterTest(unittest.TestCase):
             return [p.cultures for p in parts]
 
         french = cfg.merge_by_key("french")
-        self.assertEqual(cultures(french.core), [("french",), ("wallonian",), ("occitan",)])
-        self.assertEqual(cultures(french.optional), [("catalan",)])
+        # Walloon is optional (owner, 2026-11-09): its homeland is Belgium's, so as a core culture it held back France's
+        # whole merge, Occitan included, until France took Belgium.
+        self.assertEqual(cultures(french.core), [("french",), ("occitan",)])
+        self.assertEqual(cultures(french.optional), [("wallonian",), ("catalan",)])
         american = cfg.merge_by_key("american")
         self.assertEqual(cultures(american.core), [("yankee",), ("dixie",)])
         self.assertEqual(cultures(american.optional), [("afro_american",)])

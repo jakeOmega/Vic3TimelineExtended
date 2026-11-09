@@ -163,7 +163,7 @@ holds the merge's start, for at most 20 years.
 | Hungarian (existing) | Hungarian, Szekler | none | 1 | none |
 | Dutch (existing) | Dutch, Flemish | none | 1 | none |
 | Finnish (existing) | Finnish, Karelian | none | 1 | none |
-| French (existing) | French, Wallonian, Occitan | Catalan (tier 2) | 1 | none |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 | none |
 | English (existing) | English, Scottish | none | 1 | none |
 | American | Yankee, Dixie | Afro-American (tier 1b) | 1 | Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
 | Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b | Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
