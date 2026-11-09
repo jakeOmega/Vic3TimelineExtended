@@ -203,9 +203,18 @@ je_te_cm_german = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_german_complete_conclusion_desc
 		trigger = {
-			te_cmg_german_is_starter = yes
-			global_var:te_cm_state_german ?= 2
-			te_cmg_german_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_german_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_german_done_core_tt
+				global_var:te_cm_state_german ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_german_all_switched = yes
+			}
 		}
 	}
 
@@ -435,9 +444,18 @@ je_te_cm_italian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_italian_complete_conclusion_desc
 		trigger = {
-			te_cmg_italian_is_starter = yes
-			global_var:te_cm_state_italian ?= 2
-			te_cmg_italian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_italian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_italian_done_core_tt
+				global_var:te_cm_state_italian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_italian_all_switched = yes
+			}
 		}
 	}
 
@@ -719,9 +737,18 @@ je_te_cm_scandinavian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_scandinavian_complete_conclusion_desc
 		trigger = {
-			te_cmg_scandinavian_is_starter = yes
-			global_var:te_cm_state_scandinavian ?= 2
-			te_cmg_scandinavian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_scandinavian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_scandinavian_done_core_tt
+				global_var:te_cm_state_scandinavian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_scandinavian_all_switched = yes
+			}
 		}
 	}
 
@@ -1009,9 +1036,18 @@ je_te_cm_east_slavic = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_east_slavic_complete_conclusion_desc
 		trigger = {
-			te_cmg_east_slavic_is_starter = yes
-			global_var:te_cm_state_east_slavic ?= 2
-			te_cmg_east_slavic_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_east_slavic_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_east_slavic_done_core_tt
+				global_var:te_cm_state_east_slavic ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_east_slavic_all_switched = yes
+			}
 		}
 	}
 
@@ -1293,9 +1329,18 @@ je_te_cm_yugoslav = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_yugoslav_complete_conclusion_desc
 		trigger = {
-			te_cmg_yugoslav_is_starter = yes
-			global_var:te_cm_state_yugoslav ?= 2
-			te_cmg_yugoslav_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_yugoslav_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_yugoslav_done_core_tt
+				global_var:te_cm_state_yugoslav ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_yugoslav_all_switched = yes
+			}
 		}
 	}
 
@@ -1533,9 +1578,18 @@ je_te_cm_czechoslovak = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_czechoslovak_complete_conclusion_desc
 		trigger = {
-			te_cmg_czechoslovak_is_starter = yes
-			global_var:te_cm_state_czechoslovak ?= 2
-			te_cmg_czechoslovak_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_czechoslovak_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_czechoslovak_done_core_tt
+				global_var:te_cm_state_czechoslovak ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_czechoslovak_all_switched = yes
+			}
 		}
 	}
 
@@ -1764,9 +1818,18 @@ je_te_cm_hungarian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_hungarian_complete_conclusion_desc
 		trigger = {
-			te_cmg_hungarian_is_starter = yes
-			global_var:te_cm_state_hungarian ?= 2
-			te_cmg_hungarian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_hungarian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_hungarian_done_core_tt
+				global_var:te_cm_state_hungarian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_hungarian_all_switched = yes
+			}
 		}
 	}
 
@@ -1987,9 +2050,18 @@ je_te_cm_dutch = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_dutch_complete_conclusion_desc
 		trigger = {
-			te_cmg_dutch_is_starter = yes
-			global_var:te_cm_state_dutch ?= 2
-			te_cmg_dutch_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_dutch_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_dutch_done_core_tt
+				global_var:te_cm_state_dutch ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_dutch_all_switched = yes
+			}
 		}
 	}
 
@@ -2210,9 +2282,18 @@ je_te_cm_finnish = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_finnish_complete_conclusion_desc
 		trigger = {
-			te_cmg_finnish_is_starter = yes
-			global_var:te_cm_state_finnish ?= 2
-			te_cmg_finnish_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_finnish_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_finnish_done_core_tt
+				global_var:te_cm_state_finnish ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_finnish_all_switched = yes
+			}
 		}
 	}
 
@@ -2477,9 +2558,18 @@ je_te_cm_french = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_french_complete_conclusion_desc
 		trigger = {
-			te_cmg_french_is_starter = yes
-			global_var:te_cm_state_french ?= 2
-			te_cmg_french_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_french_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_french_done_core_tt
+				global_var:te_cm_state_french ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_french_all_switched = yes
+			}
 		}
 	}
 
@@ -2708,9 +2798,18 @@ je_te_cm_british = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_british_complete_conclusion_desc
 		trigger = {
-			te_cmg_british_is_starter = yes
-			global_var:te_cm_state_british ?= 2
-			te_cmg_british_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_british_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_british_done_core_tt
+				global_var:te_cm_state_british ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_british_all_switched = yes
+			}
 		}
 	}
 
@@ -2960,9 +3059,18 @@ je_te_cm_american = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_american_complete_conclusion_desc
 		trigger = {
-			te_cmg_american_is_starter = yes
-			global_var:te_cm_state_american ?= 2
-			te_cmg_american_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_american_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_american_done_core_tt
+				global_var:te_cm_state_american ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_american_all_switched = yes
+			}
 		}
 	}
 
@@ -3352,9 +3460,18 @@ je_te_cm_anglophone = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_anglophone_complete_conclusion_desc
 		trigger = {
-			te_cmg_anglophone_is_starter = yes
-			global_var:te_cm_state_anglophone ?= 2
-			te_cmg_anglophone_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_anglophone_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_anglophone_done_core_tt
+				global_var:te_cm_state_anglophone ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_anglophone_all_switched = yes
+			}
 		}
 	}
 
@@ -3707,9 +3824,18 @@ je_te_cm_brazilian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_brazilian_complete_conclusion_desc
 		trigger = {
-			te_cmg_brazilian_is_starter = yes
-			global_var:te_cm_state_brazilian ?= 2
-			te_cmg_brazilian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_brazilian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_brazilian_done_core_tt
+				global_var:te_cm_state_brazilian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_brazilian_all_switched = yes
+			}
 		}
 	}
 
@@ -4027,9 +4153,18 @@ je_te_cm_platine = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_platine_complete_conclusion_desc
 		trigger = {
-			te_cmg_platine_is_starter = yes
-			global_var:te_cm_state_platine ?= 2
-			te_cmg_platine_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_platine_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_platine_done_core_tt
+				global_var:te_cm_state_platine ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_platine_all_switched = yes
+			}
 		}
 	}
 
@@ -4360,9 +4495,18 @@ je_te_cm_andean = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_andean_complete_conclusion_desc
 		trigger = {
-			te_cmg_andean_is_starter = yes
-			global_var:te_cm_state_andean ?= 2
-			te_cmg_andean_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_andean_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_andean_done_core_tt
+				global_var:te_cm_state_andean ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_andean_all_switched = yes
+			}
 		}
 	}
 
@@ -4636,9 +4780,18 @@ je_te_cm_gran_colombian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_gran_colombian_complete_conclusion_desc
 		trigger = {
-			te_cmg_gran_colombian_is_starter = yes
-			global_var:te_cm_state_gran_colombian ?= 2
-			te_cmg_gran_colombian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_gran_colombian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_gran_colombian_done_core_tt
+				global_var:te_cm_state_gran_colombian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_gran_colombian_all_switched = yes
+			}
 		}
 	}
 
@@ -4947,9 +5100,18 @@ je_te_cm_chinese = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_chinese_complete_conclusion_desc
 		trigger = {
-			te_cmg_chinese_is_starter = yes
-			global_var:te_cm_state_chinese ?= 2
-			te_cmg_chinese_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_chinese_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_chinese_done_core_tt
+				global_var:te_cm_state_chinese ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_chinese_all_switched = yes
+			}
 		}
 	}
 
@@ -5170,9 +5332,18 @@ je_te_cm_japanese = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_japanese_complete_conclusion_desc
 		trigger = {
-			te_cmg_japanese_is_starter = yes
-			global_var:te_cm_state_japanese ?= 2
-			te_cmg_japanese_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_japanese_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_japanese_done_core_tt
+				global_var:te_cm_state_japanese ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_japanese_all_switched = yes
+			}
 		}
 	}
 
@@ -5534,9 +5705,18 @@ je_te_cm_arab = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_arab_complete_conclusion_desc
 		trigger = {
-			te_cmg_arab_is_starter = yes
-			global_var:te_cm_state_arab ?= 2
-			te_cmg_arab_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_arab_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_arab_done_core_tt
+				global_var:te_cm_state_arab ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_arab_all_switched = yes
+			}
 		}
 	}
 
@@ -5757,9 +5937,18 @@ je_te_cm_persian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_persian_complete_conclusion_desc
 		trigger = {
-			te_cmg_persian_is_starter = yes
-			global_var:te_cm_state_persian ?= 2
-			te_cmg_persian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_persian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_persian_done_core_tt
+				global_var:te_cm_state_persian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_persian_all_switched = yes
+			}
 		}
 	}
 
@@ -5989,9 +6178,18 @@ je_te_cm_oghuz_turkic = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_oghuz_turkic_complete_conclusion_desc
 		trigger = {
-			te_cmg_oghuz_turkic_is_starter = yes
-			global_var:te_cm_state_oghuz_turkic ?= 2
-			te_cmg_oghuz_turkic_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_oghuz_turkic_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_oghuz_turkic_done_core_tt
+				global_var:te_cm_state_oghuz_turkic ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_oghuz_turkic_all_switched = yes
+			}
 		}
 	}
 
@@ -6352,9 +6550,18 @@ je_te_cm_hindustani = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_hindustani_complete_conclusion_desc
 		trigger = {
-			te_cmg_hindustani_is_starter = yes
-			global_var:te_cm_state_hindustani ?= 2
-			te_cmg_hindustani_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_hindustani_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_hindustani_done_core_tt
+				global_var:te_cm_state_hindustani ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_hindustani_all_switched = yes
+			}
 		}
 	}
 
@@ -6628,9 +6835,18 @@ je_te_cm_dravidian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_dravidian_complete_conclusion_desc
 		trigger = {
-			te_cmg_dravidian_is_starter = yes
-			global_var:te_cm_state_dravidian ?= 2
-			te_cmg_dravidian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_dravidian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_dravidian_done_core_tt
+				global_var:te_cm_state_dravidian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_dravidian_all_switched = yes
+			}
 		}
 	}
 
@@ -6948,9 +7164,18 @@ je_te_cm_indonesian = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_indonesian_complete_conclusion_desc
 		trigger = {
-			te_cmg_indonesian_is_starter = yes
-			global_var:te_cm_state_indonesian ?= 2
-			te_cmg_indonesian_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_indonesian_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_indonesian_done_core_tt
+				global_var:te_cm_state_indonesian ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_indonesian_all_switched = yes
+			}
 		}
 	}
 
@@ -7267,9 +7492,18 @@ je_te_cm_filipino = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_filipino_complete_conclusion_desc
 		trigger = {
-			te_cmg_filipino_is_starter = yes
-			global_var:te_cm_state_filipino ?= 2
-			te_cmg_filipino_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_filipino_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_filipino_done_core_tt
+				global_var:te_cm_state_filipino ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_filipino_all_switched = yes
+			}
 		}
 	}
 
@@ -7551,9 +7785,18 @@ je_te_cm_nguni = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_nguni_complete_conclusion_desc
 		trigger = {
-			te_cmg_nguni_is_starter = yes
-			global_var:te_cm_state_nguni ?= 2
-			te_cmg_nguni_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_nguni_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_nguni_done_core_tt
+				global_var:te_cm_state_nguni ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_nguni_all_switched = yes
+			}
 		}
 	}
 
@@ -7999,9 +8242,18 @@ je_te_cm_latin = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_latin_complete_conclusion_desc
 		trigger = {
-			te_cmg_latin_is_starter = yes
-			global_var:te_cm_state_latin ?= 2
-			te_cmg_latin_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_latin_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_latin_done_core_tt
+				global_var:te_cm_state_latin ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_latin_all_switched = yes
+			}
 		}
 	}
 
@@ -8383,9 +8635,18 @@ je_te_cm_pan_slavic = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_pan_slavic_complete_conclusion_desc
 		trigger = {
-			te_cmg_pan_slavic_is_starter = yes
-			global_var:te_cm_state_pan_slavic ?= 2
-			te_cmg_pan_slavic_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_slavic_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_pan_slavic_done_core_tt
+				global_var:te_cm_state_pan_slavic ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_pan_slavic_all_switched = yes
+			}
 		}
 	}
 
@@ -8913,9 +9174,18 @@ je_te_cm_pan_turkic = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_pan_turkic_complete_conclusion_desc
 		trigger = {
-			te_cmg_pan_turkic_is_starter = yes
-			global_var:te_cm_state_pan_turkic ?= 2
-			te_cmg_pan_turkic_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_turkic_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_pan_turkic_done_core_tt
+				global_var:te_cm_state_pan_turkic ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_pan_turkic_all_switched = yes
+			}
 		}
 	}
 
@@ -9217,9 +9487,18 @@ je_te_cm_pan_malay = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_pan_malay_complete_conclusion_desc
 		trigger = {
-			te_cmg_pan_malay_is_starter = yes
-			global_var:te_cm_state_pan_malay ?= 2
-			te_cmg_pan_malay_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_pan_malay_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_pan_malay_done_core_tt
+				global_var:te_cm_state_pan_malay ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_pan_malay_all_switched = yes
+			}
 		}
 	}
 
@@ -9577,9 +9856,18 @@ je_te_cm_east_african = {
 		color = "gold_positive"
 		conclusion_desc = je_te_cm_east_african_complete_conclusion_desc
 		trigger = {
-			te_cmg_east_african_is_starter = yes
-			global_var:te_cm_state_east_african ?= 2
-			te_cmg_east_african_all_switched = yes
+			custom_tooltip = {
+				text = te_cm_tt_done_starter
+				te_cmg_east_african_is_starter = yes
+			}
+			custom_tooltip = {
+				text = te_cmg_east_african_done_core_tt
+				global_var:te_cm_state_east_african ?= 2
+			}
+			custom_tooltip = {
+				text = te_cm_tt_done_all
+				te_cmg_east_african_all_switched = yes
+			}
 		}
 	}
 

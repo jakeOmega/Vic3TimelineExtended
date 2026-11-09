@@ -600,7 +600,7 @@
  civil_rights_phase_imminent_modifier_desc:0 "Reform proposals dominate the legislative agenda; passing rights legislation has become noticeably easier."
  civil_rights_phase_marginal_modifier_desc:0 "The movement is too weak to attract organized [Concept('concept_radical', 'radicals')]."
  civil_rights_phase_pressuring_modifier_desc:0 "Mass mobilization sharpens unrest; the political class scrambles to position itself."
- civil_rights_support_bar_desc:0 "Tracks momentum behind the civil rights movement. At 100, victory legislation passes; at 0, the movement collapses. Drift is shaped by laws, radicalization, and the policy stance you toggle below."
+ civil_rights_support_bar_desc:0 "$civil_rights_support_bar_name$: #v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%]#!"
  civil_rights_suppression_modifier_desc:0 "The suppression of civil rights demonstrators has damaged our reputation and increased social unrest."
  civil_rights_triumph_coopted_modifier_desc:0 "On paper a victory. In practice, the moderates were promoted and the [Concept('concept_radical', 'radicals')] went quiet."
  civil_rights_triumph_federal_modifier_desc:0 "Federal civil rights legislation, signed at the capital, marks a new constitutional baseline."
