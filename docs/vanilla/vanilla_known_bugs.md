@@ -160,6 +160,7 @@ Affected vanilla files (all share the same root cause):
 - `events/agitators_events/agitators_election_events.txt:1194, 1200, 5101`
 - `events/soi_events/00_lobbies_events_03.txt:220, 245, 300, 858, 1729, 2507`
 - `events/agitators_events/land_ownership_law_events.txt:1947`
+- `events/ig_suppression_events.txt:771` (the suppression entry's ending event reads `scope:target`'s leader; 2026-11-08, Mecklenburg's Trade Unions)
 
 ```
 Error: Could not get leader of interest group
