@@ -277,7 +277,7 @@ society_technology_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_revolution_sixties.dds" }
+	event_image = { video = "middleeast_middleclass_cafe" }	# interim until social_revolution_sixties is redrawn without placard lettering
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 

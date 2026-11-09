@@ -1264,7 +1264,8 @@ IMAGES = {
         "events": ["society_technology_events.3"],
     },
     "social_revolution_sixties": {
-        "prompt": "1960s social movement collage: protests and youth culture.",
+        # Redrawn: the first render's protest placards were nonsense lettering.
+        "prompt": "A city park on a warm 1960s summer afternoon: young couples in bright patterned clothes lounge together on the grass, one pair sitting close in an embrace. In the foreground an elderly woman in a dark coat and hat sits stiffly on a wooden bench, handbag on her knees, turned away from them. Plane trees and a low stone wall behind.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.4"],
     },
