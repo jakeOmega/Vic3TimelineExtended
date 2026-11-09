@@ -8,6 +8,9 @@
 #    1       hidden: every state's first census at game start
 #    2-3     hidden: fast mode's census clock (console only): each state's
 #            step, then each country's census a day later
+#    4       hidden: a state's engine lines refreshed (law, technology,
+#            new game)
+#    5       hidden: .4 again a day later in each of a country's states
 # ======================================================================
 
 # ======================================================================
@@ -75,5 +78,22 @@ te_demog_events.4 = {
 		te_demog_workforce_lines_refresh = yes
 		te_demog_workforce_heal = yes
 		te_demog_rates_heal = yes
+	}
+}
+
+# ======================================================================
+#  5 – The same a day later, through the country (hidden)
+#  The law and technology hooks refresh each state again a day on, in case the engine hadn't re-summed the families
+#  on the day. A state event triggered with a delay never runs (the delayed_state_event self-check, BROKEN in the
+#  2026-11-08 new game), so the day waits on this country event, which runs .4 in each of its states undelayed.
+# ======================================================================
+te_demog_events.5 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			trigger_event = { id = te_demog_events.4 }
+		}
 	}
 }

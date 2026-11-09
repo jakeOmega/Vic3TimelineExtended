@@ -8,10 +8,13 @@ each verdict's week now waits on a country event that runs the state's verdict u
 
 This test lists every delayed trigger_event whose target is a state event. Each one left is named in KNOWN with why;
 anything new fails, so the next self-check or system doesn't build on the path that never ran. te_debug_demog.199 is
-the probe that tests the fact once a game (delayed_state_event, docs/testing/demographics-playtest.md): if it reads OK,
-the path works after all and the three gameplay entries need nothing; if BROKEN, move those three to a country
-event too.
+the probe that tests the fact once a game (delayed_state_event, docs/testing/demographics-playtest.md). It read BROKEN
+in the first new game after it landed (2026-11-08, January 1836), so the three gameplay calls that were left waiting on
+it now wait on a country event too: te_demog_events.5 runs .4 in each of the country's states, and monument_events.34
+and .35 run .30 and .31 in each state gm_state_tomorrow marked. The probe stays, to say when a patch makes the path
+work.
 """
+import functools
 import re
 import unittest
 from pathlib import Path
@@ -25,9 +28,6 @@ DELAY = re.compile(r"\b(days|weeks|months|years)\s*=")
 # target event -> why its delayed call stays
 KNOWN = {
     "te_debug_demog.199": "the probe itself: delayed_state_event tests whether this path runs",
-    "te_demog_events.4": "gameplay, te_demog_lines_country_on_action's day-later refresh; awaits delayed_state_event",
-    "monument_events.30": "gameplay, gm_state_run_mon_orders's next order a day later; awaits delayed_state_event",
-    "monument_events.31": "gameplay, gm_state_adopt_orphans's day-later pass; awaits delayed_state_event",
 }
 
 
@@ -54,6 +54,7 @@ def _script_files():
         yield from sorted((ROOT / sub).rglob("*.txt"))
 
 
+@functools.lru_cache(maxsize=None)
 def _event_types():
     types = {}
     for path in sorted((ROOT / "events").rglob("*.txt")):
@@ -65,17 +66,76 @@ def _event_types():
     return types
 
 
+TOP_OPEN = re.compile(r"^(\w+)\s*=\s*\{", re.M)
+
+
+def _enclosing_top_level(text, pos):
+    """The name of the top-level block (a scripted effect, an event) that holds ``pos``."""
+    name = None
+    for m in TOP_OPEN.finditer(text):
+        if m.start() > pos:
+            break
+        name = m.group(1)
+    return name
+
+
+def _helper_call_sites(helper):
+    """[(file, text, position, {argument: value})] for each call of ``helper`` (an indented ``helper = { ... }``, so
+    not its definition)."""
+    out = []
+    for path in _script_files():
+        text = _strip_comments(path.read_text(encoding="utf-8-sig"))
+        for m in re.finditer(rf"(?m)^[ \t]+{helper}\s*=\s*\{{", text):
+            body = _block_at(text, m.end() - 1)
+            args = dict(re.findall(r"\b([A-Z_]+)\s*=\s*(\S+)", body))
+            out.append((path.relative_to(ROOT).as_posix(), text, m.start(), args))
+    return out
+
+
+def _helper_calls(helper):
+    """[(file, {argument: value})] for each call of ``helper``."""
+    return [(path, args) for path, _text, _pos, args in _helper_call_sites(helper)]
+
+
+def _helper_arguments(helper, argument, seen=()):
+    """[(file, value)] for each literal ``argument`` a call of ``helper`` passes. A value that is itself a parameter
+    (``EVENT = $EVENT$``, a helper calling a helper, as un_docket_send_offer does) is followed through the outer
+    helper's own calls."""
+    out = []
+    for path, text, pos, args in _helper_call_sites(helper):
+        value = args.get(argument)
+        if value is None:
+            continue
+        param = re.fullmatch(r"\$(\w+)\$", value)
+        if param:
+            outer = _enclosing_top_level(text, pos)
+            if outer and (outer, param.group(1)) not in seen:
+                out.extend(_helper_arguments(outer, param.group(1), seen + ((helper, argument),)))
+            continue
+        out.append((path, value))
+    return out
+
+
+@functools.lru_cache(maxsize=None)
 def _delayed_calls():
-    """(file, target id) for each trigger_event with a delay."""
+    """(file, target id) for each trigger_event with a delay. An id a scripted effect takes as an argument
+    (``id = $EVENT$``) counts at each call of that effect, with the id the call passes."""
     out = []
     for path in _script_files():
         text = _strip_comments(path.read_text(encoding="utf-8-sig"))
         for m in re.finditer(r"\btrigger_event\s*=\s*\{", text):
             body = _block_at(text, m.end() - 1)
+            if not DELAY.search(body):
+                continue
             ident = re.search(r"\bid\s*=\s*([\w.]+)", body)
-            if ident and DELAY.search(body):
+            if ident:
                 out.append((path.relative_to(ROOT).as_posix(), ident.group(1)))
-    return out
+                continue
+            param = re.search(r"\bid\s*=\s*\$(\w+)\$", body)
+            helper = _enclosing_top_level(text, m.start()) if param else None
+            if helper:
+                out.extend(_helper_arguments(helper, param.group(1)))
+    return tuple(out)
 
 
 class TestDelayedStateEvents(unittest.TestCase):
@@ -98,8 +158,21 @@ class TestDelayedStateEvents(unittest.TestCase):
         types = _event_types()
         self.assertEqual(types.get("te_debug_demog.5"), "state_event")
         self.assertEqual(types.get("te_debug_demog.205"), "country_event")
-        self.assertIn(("common/on_actions/te_demog_on_actions.txt", "te_demog_events.4"), _delayed_calls())
-        self.assertEqual(types.get("te_demog_events.4"), "state_event")
+        self.assertIn(("common/scripted_effects/te_debug_demog_effects.txt", "te_debug_demog.199"), _delayed_calls())
+        self.assertEqual(types.get("te_debug_demog.199"), "state_event")
+
+    def test_the_scan_follows_an_id_passed_to_a_helper(self):
+        # gm_state_tomorrow's trigger_event reads id = $EVENT$: each call counts with the id it passes
+        calls = _delayed_calls()
+        self.assertIn(("common/scripted_effects/gm_monument_effects.txt", "monument_events.34"), calls)
+        self.assertIn(("common/scripted_effects/gm_monument_effects.txt", "monument_events.35"), calls)
+        # and through a helper that passes its own $EVENT$ on: un_docket_send_offer's one direct call passes
+        # un_events.2, and the rest of the docket's offers reach it through un_docket_offer_topic_next
+        direct = {args["EVENT"] for _path, args in _helper_calls("un_docket_send_offer")
+                  if re.fullmatch(r"[\w.]+", args.get("EVENT", "$"))}
+        docket = {ident for path, ident in calls if path.endswith("un_docket_effects.txt")}
+        self.assertTrue(direct)
+        self.assertGreater(docket, direct)
 
     def test_each_relay_runs_its_verdict(self):
         events = _strip_comments((ROOT / "events" / "te_debug_demog_events.txt").read_text(encoding="utf-8-sig"))
@@ -125,6 +198,41 @@ class TestDelayedStateEvents(unittest.TestCase):
                 self.assertIn(f"trigger_event = {{ id = {verdict} }}", body)   # undelayed
                 self.assertTrue(any(i == relay for _, i in calls), f"nothing arms {relay} with a delay")
                 self.assertFalse(any(i == verdict for _, i in calls), f"{verdict} is still triggered with a delay")
+
+    def test_each_gameplay_relay_runs_its_state_event(self):
+        # The three gameplay calls the probe's BROKEN verdict moved (2026-11-08): each relay is a country event that
+        # runs the state event undelayed, something arms it with a delay, and the state event has no delayed call.
+        demog = _strip_comments((ROOT / "events" / "te_demog_events.txt").read_text(encoding="utf-8-sig"))
+        monuments = _strip_comments((ROOT / "events" / "monument_events.txt").read_text(encoding="utf-8-sig"))
+        relays = {
+            "te_demog_events.5": ("te_demog_events.4", demog, None),
+            "monument_events.34": ("monument_events.30", monuments, "gm_mon_orders_tomorrow"),
+            "monument_events.35": ("monument_events.31", monuments, "gm_adopt_orphans_tomorrow"),
+        }
+        calls = _delayed_calls()
+        for relay, (event, text, mark) in relays.items():
+            with self.subTest(relay=relay):
+                body = _block_at(text, text.index(f"{relay} = {{") + len(relay))
+                self.assertIn("type = country_event", body)
+                self.assertIn(f"trigger_event = {{ id = {event} }}", body)
+                self.assertTrue(any(i == relay for _, i in calls), f"nothing arms {relay} with a delay")
+                self.assertFalse(any(i == event for _, i in calls), f"{event} is still triggered with a delay")
+                if mark:
+                    # the mark comes off before the event runs, so a state the event asks again waits a relay
+                    self.assertLess(body.index(f"remove_variable = {mark}"), body.index(f"id = {event}"))
+
+    def test_each_tomorrow_call_marks_what_its_relay_reads(self):
+        # A call whose MARK or QUEUED isn't the relay's own would pass the checks above and never run.
+        monuments = _strip_comments((ROOT / "events" / "monument_events.txt").read_text(encoding="utf-8-sig"))
+        calls = _helper_calls("gm_state_tomorrow")
+        self.assertEqual(len(calls), 3)
+        for path, args in calls:
+            with self.subTest(call=args):
+                relay = args["EVENT"]
+                body = _block_at(monuments, monuments.index(f"{relay} = {{") + len(relay))
+                self.assertIn(f"has_variable = {args['MARK']}", body)
+                self.assertIn(f"remove_variable = {args['MARK']}", body)
+                self.assertIn(f"remove_variable = {args['QUEUED']}", body)
 
     def test_the_probe_has_both_verdicts(self):
         events = _strip_comments((ROOT / "events" / "te_debug_demog_events.txt").read_text(encoding="utf-8-sig"))

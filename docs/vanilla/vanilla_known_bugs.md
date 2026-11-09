@@ -160,6 +160,7 @@ Affected vanilla files (all share the same root cause):
 - `events/agitators_events/agitators_election_events.txt:1194, 1200, 5101`
 - `events/soi_events/00_lobbies_events_03.txt:220, 245, 300, 858, 1729, 2507`
 - `events/agitators_events/land_ownership_law_events.txt:1947`
+- `events/ig_suppression_events.txt:771` (the suppression entry's ending event reads `scope:target`'s leader; 2026-11-08, Mecklenburg's Trade Unions)
 
 ```
 Error: Could not get leader of interest group
@@ -492,7 +493,7 @@ Vanilla character-aging on-action calls `retire_character` without a `is_alive =
 Event target link 'ruler' returned an invalid object
 ```
 
-Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence. 2026-10-04: also the council-republic checks in `common/parties/anarchist_party.txt:156` and `common/parties/communist_party.txt:440` (`owner = { ruler = { has_ideology = … } }`), two lines each. 2026-10-05: also the Caudillo event's trigger in `events/brazil/caudillo.txt:201` (`ruler = { interest_group ?= { … } }`), two lines. 2026-10-18: also the Exile interaction's "ideology not too close" check in `common/character_interactions/00_character_interactions.txt:570, 576, 582, 588, 594` (`owner.ruler = { has_<x>_ideology = yes }` in `exile_character`'s `possible`), five lines in one second with no mod frame. Since 2026-10-25 the two party checks log at the mod's copy of them instead: see the next entry.
+Vanilla event triggers read `ruler = { ... }` properties without an outer `has_ruler = yes` guard. Throws when the country has no ruler (vacant throne, revolt-synthesized country, regency edge cases). Same root cause across all four files; recognize as one vanilla pattern, not four. Likely more files share this — match the message `Event target link 'ruler' returned an invalid object` for any new occurrence. 2026-10-04: also the council-republic checks in `common/parties/anarchist_party.txt:156` and `common/parties/communist_party.txt:440` (`owner = { ruler = { has_ideology = … } }`), two lines each. 2026-10-05: also the Caudillo event's trigger in `events/brazil/caudillo.txt:201` (`ruler = { interest_group ?= { … } }`), two lines. 2026-10-18: also the Exile interaction's "ideology not too close" check in `common/character_interactions/00_character_interactions.txt:570, 576, 582, 588, 594` (`owner.ruler = { has_<x>_ideology = yes }` in `exile_character`'s `possible`), five lines in one second with no mod frame. 2026-11-08: also Seek Royal Marriage's `possible` in `common/diplomatic_actions/45_seek_royal_marriage.txt:56` (`scope:target_country = { … ruler = { is_adult = yes … } }`), one line with no mod frame. Since 2026-10-25 the two party checks log at the mod's copy of them instead: see the next entry.
 
 ### `common/parties/zz_te_party_join_weights.txt:482, 815` — vanilla's council-republic ruler reads, replayed in the mod's join weights
 - reviewed: mod anchor, the file is gen_party_join_weights.py's restatement of vanilla's party join_weight fields, and these two lines are vanilla's
@@ -851,7 +852,7 @@ Event target link 'market' returned an invalid object
 has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
 ```
 
-A country that loses every state while it is still at war stays alive until that war ends, with no `capital` and no `market_capital` (the `market` lines are those links' follow-on). Vanilla evaluates journal entries, buttons and events against it with no `exists` guard: the Corn Laws `possible` (`market_capital.market`), the Canada/Australia and Iberian Union `capital = { is_in_geographic_region … }` checks, Struggle for the Highveld's `any_country = { capital = { … } }`, the metro event's `ROOT.market_capital`, the trade-route event's `capital.market`, and Foreign Investment Rights' `scope:source_country.capital.region`. 2026-10-04: Khiva, 22:24:15 to 22:31:11 (about 70 game weeks, ~380 lines from these files). They stopped when that war ended. The mod's own sites of this shape are guarded with `exists = capital` / `exists = market_capital.owner`, so a mod file in one of these lines is a mod bug. 2026-10-05: four more vanilla sites in one 25-second burst, while the AI weighed treaties: the `goods_valid_trigger` of No Tariffs (`common/treaty_articles/21_no_tariffs.txt:117`, 130 lines) and No Subventions (`common/treaty_articles/26_no_subventions.txt:90`, 65 lines), both `root.market = { … }`; the Indochina intervention event's `capital = { region = … }` (`events/indochina.txt:29`); and the lobby event's `ROOT.market_capital = { owner = ROOT }` (`events/soi_events/00_lobbies_events_04.txt:3758`).
+A country that loses every state while it is still at war stays alive until that war ends, with no `capital` and no `market_capital` (the `market` lines are those links' follow-on). Vanilla evaluates journal entries, buttons and events against it with no `exists` guard: the Corn Laws `possible` (`market_capital.market`), the Canada/Australia and Iberian Union `capital = { is_in_geographic_region … }` checks, Struggle for the Highveld's `any_country = { capital = { … } }`, the metro event's `ROOT.market_capital`, the trade-route event's `capital.market`, and Foreign Investment Rights' `scope:source_country.capital.region`. 2026-10-04: Khiva, 22:24:15 to 22:31:11 (about 70 game weeks, ~380 lines from these files). They stopped when that war ended. The mod's own sites of this shape are guarded with `exists = capital` / `exists = market_capital.owner`, so a mod file in one of these lines is a mod bug. 2026-10-05: four more vanilla sites in one 25-second burst, while the AI weighed treaties: the `goods_valid_trigger` of No Tariffs (`common/treaty_articles/21_no_tariffs.txt:117`, 130 lines) and No Subventions (`common/treaty_articles/26_no_subventions.txt:90`, 65 lines), both `root.market = { … }`; the Indochina intervention event's `capital = { region = … }` (`events/indochina.txt:29`); and the lobby event's `ROOT.market_capital = { owner = ROOT }` (`events/soi_events/00_lobbies_events_04.txt:3758`). 2026-11-08 (observer, 1854–1856): Goods Transfer's `possible`, `market = { is_adjacent_to_market = scope:other_country.market }` (`common/treaty_articles/13_goods_transfer.txt:44`, 42 lines), in a burst of about 10,300 lines in six minutes from these sites (mostly No Subventions and No Tariffs), which rotated every `error.log` generation. The stateless country was Mecklenburg-Strelitz (`MST`, a country made in the game), whose land was gone in the 1855 and 1856 autosaves and which was dead by 1857, with Zululand and Tuat stateless beside it in 1855.
 
 ### `events/brazil/culture_south_america.txt:386` — the old South American culture is compared before it is saved
 
@@ -1428,6 +1429,33 @@ Got value of type 'none'
 ```
 
 When the conference assigns the votes of countries that haven't voted, each involved country saves itself as the temporary scope `voting_country` and one `random_list` branch adds `scope:voting_country.prestige` to a proposal's tally. Once, in June 1838 of the 2026-11-06 observer game, that read came back none at the fourth proposal's branch; the other branches read the same scope the same way and didn't log. The mod neither overrides the file nor writes its variables, and the line has no script frame. That proposal's tally misses one voter's prestige.
+
+### `common/journal_entries/05_montenegro_je.txt:278` — the raiding entry's cleanup removes pacts that were never made (1.15)
+- stack: vanilla only
+
+```
+pact was not found between
+```
+
+When Montenegro's raiding entry ends, `je_montenegrin_raiding_cleanup` runs `end_raiding_cleanup` from `00_chris_scripted_effects.txt`, whose `hidden_effect` has Russia remove its disapproval pact with Montenegro and the Ottomans their raiding pact, with no check that either pact exists. One line each, at 16:26:52 of the 2026-11-08 observer game, through `00_victoria_cleanup_scripted_effects.txt:1494`; nothing happens beyond the log line.
+
+### `common/dynamic_country_map_colors/00_default.txt:315` — Feminist Britain's map color reads a ruler Britain may not have (1.15)
+- stack: vanilla only
+
+```
+Event target link 'ruler' returned an invalid object
+```
+
+The `feminist_britain` color's `possible` checks `c:GBR ?= THIS`, then reads `ruler = { has_ideology = … is_female = yes }` with no `exists = ruler`. Two lines in one second, 16:37 of the 2026-11-08 observer game, while Britain had no ruler for a moment.
+
+### `common/decrees/00_decree.txt:2639` — Establish Missions reads the religion of a merged-away state's owner (1.15)
+- stack: vanilla only
+
+```
+religion_percent_state trigger [ Invalid target religion for
+```
+
+`decree_establish_missions`'s `state_trigger` runs `religion_percent_state = { target = owner.religion … }` with no `exists = owner`. When two parts of a split state merge, the absorbed part still resolves for a while with no owner, and the decree's state check reads it. Two lines in the 2026-11-08 observer game, each about 45 seconds after French Guinée took in more provinces (17:35:50 and 17:43:05, 1878 and 1880), on two different state ids that share an index. The mod doesn't touch this decree.
 
 ## Expected mod-override noise
 
