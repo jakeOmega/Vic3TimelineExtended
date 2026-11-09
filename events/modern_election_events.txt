@@ -2650,7 +2650,20 @@ modern_election_events.29 = {
 	placement = ROOT
 
 	title = modern_election_events.29.t
-	desc = modern_election_events.29.d
+	# With the law already in force the campaign argues over keeping it, not
+	# over a proposal.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_universal_basic_income }
+				desc = modern_election_events.29.d_enacted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = modern_election_events.29.d
+			}
+		}
+	}
 	flavor = modern_election_events.29.f
 
 	event_image = { texture = "gfx/event_pictures/grassroots_canvassing.dds" }
