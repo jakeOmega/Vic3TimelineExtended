@@ -35,6 +35,7 @@ The house style is `docs/guides/loc_style_guide.md`. Read it in full before writ
 - **The lints:** `python3 scripts/analysis/check_loc_style.py --check` and `python3 scripts/analysis/flavor_forms.py --check`. After rewriting old text both will report stale baseline entries: run each with `--update` and commit the smaller baseline. A word the lint flags that is meant takes `# REVIEWED YYYY-MM-DD (loc_style): why` trailing on the loc line.
 - **Do not translate.** A rewritten key's German and Spanish go stale and ship English until the next translation pass; that is expected.
 - **Script bugs found while reading** (an option that does not do what its name says, a trigger that does not guarantee what the text needs) are reported as their own issues, not written around.
+- **What only the game shows** (how a list or document renders, a new gated description, a live figure) goes in `docs/testing/event-text-playtest.md`, a few rows per batch.
 - **Before pushing:** `.venv/bin/python scripts/preflight.py`.
 
 ## For a rewrite batch (#1539)
