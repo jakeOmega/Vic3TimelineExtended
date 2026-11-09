@@ -48,7 +48,11 @@ LOC_DIR = REPO_ROOT / "localization" / "english"
 BASELINE = REPO_ROOT / "scripts" / "analysis" / "loc_style_baseline.txt"
 
 # Words the player guide bans that are ordinary in the game's own vocabulary.
-GAME_WORDS = {r"key", r"realms?", r"journeys?", r"diverse", r"valuable", r"landscapes?", r"enduring"}
+GAME_WORDS = {
+    r"key", r"realms?", r"journeys?", r"diverse", r"valuable", r"landscapes?", r"enduring",
+    # Human enhancement is a subject of the mod's late eras, and of its laws' names.
+    r"enhanc(?:e|es|ed|ing|ement)",
+}
 
 STOCK_METAPHORS = [
     r"mountains? of", r"a flood of", r"floods? of", r"a wave of", r"a tide of", r"a sea of",

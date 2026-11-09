@@ -212,6 +212,13 @@ the file only shrinks. `scripts/analysis/flavor_forms.py` classes each event fla
 quotation, scene, narration) and prints a chain's mix; `--check` fails when a form over a third of its chain gains a
 text (`flavor_forms_baseline.json`).
 
+`scripts/analysis/event_guarantees.py <event id | namespace>` prints what an event's own trigger guarantees, for
+whoever writes its text: the technologies it requires with their eras, their prerequisites all the way down, the era
+at or before which every technology may be assumed (three or more eras behind the latest required; owner,
+2026-11-09), technologies it requires to be absent, and the trigger's other top-level lines. `--tech <name>` shows one
+technology. It reads the mod's technology files and `vanilla_parsed/`, and reads only the trigger: what fires the
+event, and an option's own trigger, can guarantee more.
+
 `scripts/lessons.py <name>…` searches the guides' `##` sections for an effect, trigger, modifier or any word, ranks
 a heading match above a body match, and prints a section with `--show N`. It is the way into
 `scripting_best_practices.md`, whose sections are filed in the order they were learned.

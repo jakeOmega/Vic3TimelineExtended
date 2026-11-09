@@ -12,6 +12,8 @@ class ClassifyTests(unittest.TestCase):
             r'\"The geysers are how we found the ocean.\"\n\n— A Name, Lead': "quotation",
             r'The guard read the papers.\n\n\"Not valid,\" he said.\n\nShe waited.\n\nThe queue grew.': "scene",
             r"The examiner worked along the bay.\n\nBy evening he had reached the far wall.": "narration",
+            r"Notes from the campaign office, for its candidates:\n\nBegin with the factories.\nGive no number.\nKeep to twenty minutes.": "list",
+            r"To the government, from the examiners of the grain reserve. We opened one sack in twenty.": "document",
         }
         for text, form in cases.items():
             self.assertEqual(ff.classify(text), form, text)

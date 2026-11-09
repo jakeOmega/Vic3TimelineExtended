@@ -17,7 +17,12 @@ The classes are read from the text's shape, so they are approximate:
   one voice   a single quoted paragraph, or one speaker throughout
   quotation   ends in an attribution line (`— Name`)
   scene       narration with some speech in it
-  narration   no speech at all (a scene without speech, a document, a list)
+  list        a heading line ending in a colon, then three or more items
+  document    opens as a paper does ("To the ..., from ...", "Notes from ...")
+  narration   no speech at all (a scene without speech)
+
+The guide's "several voices" cannot be told from an exchange by shape, and
+counts as one.
 
 `--check` is the ratchet CI runs. scripts/analysis/flavor_forms_baseline.json
 records, for each chain of six or more texts, how many texts it had in any form
@@ -46,7 +51,10 @@ BASELINE = os.path.join("scripts", "analysis", "flavor_forms_baseline.json")
 MIN_CHAIN = 6
 
 FLAVOR_KEY = re.compile(r'^\s*((?P<ns>[\w\-]+)\.\d+\.f\w*):\d*\s*"(?P<text>.*)"\s*(?:#.*)?$')
-FORMS = ("exchange", "one voice", "quotation", "scene", "narration")
+FORMS = ("exchange", "one voice", "quotation", "scene", "list", "document", "narration")
+DOCUMENT_OPENING = re.compile(
+    r"^(?:To |From |Notes? (?:from|for|of) |Memorandum|Minutes |Dear |Report |Order |Notice |Circular |Resolved)"
+)
 SHARE_LIMIT = 1 / 3
 QUOTE_OPENERS = ('\\"', "'", "\u201c", "\u2018")
 
@@ -61,6 +69,11 @@ def classify(text: str) -> str:
         return "narration"
     if paras[-1].startswith(("\u2014", "--")) or re.search(r"\\n\u2014 ", text):
         return "quotation"
+    if len(paras) >= 2 and paras[0].endswith(":") and "\\n" not in paras[0] \
+            and sum(len(p.split("\\n")) for p in paras[1:]) >= 3:
+        return "list"
+    if DOCUMENT_OPENING.match(paras[0]):
+        return "document"
     quoted = [p for p in paras if p.startswith(QUOTE_OPENERS)]
     has_speech = '\\"' in text or bool(re.search(r"(^|\s)'\w", text))
     if len(paras) == 1:

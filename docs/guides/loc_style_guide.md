@@ -62,6 +62,7 @@ Things an event may not assume unless its trigger guarantees them or the text re
 |---|---|
 | Elapsed time, dates, "for two years", "since the war", "a generation ago" | The reserve was built last year; there was no war |
 | Quantities of anything the game tracks (tons in the reserve, the size of the army, the price of bread) | The game shows a different figure one click away |
+| Crowds and audiences by the number: "millions shared it", "thirty million watched", "a hundred thousand marched" | Population is tracked too, and the country may have two million people |
 | Era and technology (telegrams, radio, cars, cameras, the internet, a railway) | The event fires in 1840, or in 2030 |
 | Religion, clergy, holy days, places of worship | A sermon in a country with no church |
 | Culture: personal names, food, dress, forms of address | "Sir" and "Father" are English and Christian |
@@ -77,15 +78,19 @@ Three ways to keep a detail that is at risk:
 2. **Gate it.** A variant description or flavor (`first_valid`, a triggered `desc`) for the countries where it holds, with a neutral default last. "The Old Rules" does this for its priest.
 3. **Write it one level more general.** "A message arrived before dawn", not "the telegram"; "the district's elders", not "the parish council"; "for as long as the ledgers go back", not "for two years"; "a tenth of the stock", which is the mechanic, not "twelve thousand tons".
 
-Details that are always safe are the ones the game holds no fact about: what a clerk said, the state of a ledger, a queue, the hour, someone's hands, the order in which things were found.
+Details that are always safe are the ones the game holds no fact about: what a clerk said, the state of a ledger, a queue, the hour, someone's hands, the order in which things were found. An invented, unnamed person's own history is safe ("forty years on the line"); an office they held is not ("three terms in cabinet" assumes a cabinet).
+
+**Pronouns.** An invented person in a description is "they". In flavor, a speaker or a figure in a scene may be "she" or "he", unless the role is one the country's laws may close to them (a woman candidate where women cannot stand): then read the law, gate the text, or leave the person ungendered.
+
+**A real quotation** may be older or younger than the game's year; leave the date off its attribution.
 
 ### What a chain's triggers already guarantee
 
-The other half of the rule: do not hedge what is secured. Read the event's `trigger`, and what fires it, and use what they guarantee. Each batch of event work records here what it found, so the next writer in that chain starts from it.
+The other half of the rule: do not hedge what is secured. Read the event's `trigger`, and what fires it, and use what they guarantee. `python3 scripts/analysis/event_guarantees.py <event id or namespace>` prints an event's required technologies, what follows from them, and the rest of its trigger. Each batch of event work records here what it found, so the next writer in that chain starts from it.
 
 | Where | Guaranteed | Not guaranteed |
 |---|---|---|
-| Any event behind a technology | That technology and everything before it in its tree: an event needing `social_media` can show phones, posts and newsrooms | Later technology; that the *other* country has it |
+| Any event behind a technology | That technology, its prerequisites all the way down, and **every technology more than two eras behind it** (owner, 2026-11-09). A technology cannot require one from another category, so the prerequisites alone miss the obvious: `social_media` (era 9, society) does not require the telephone (era 4, production). Technology spread makes anything three eras back as good as certain, so an era 9 event may assume all of eras 1 to 6. `python3 scripts/analysis/event_guarantees.py <event id>` prints both lists | A technology one or two eras back that is not a prerequisite; later technology; that the *other* country has any of it |
 | Any event of a system with a game rule | The system's journal entry and its vocabulary | That the player has opened the tab |
 | An option with its own `trigger` | What that trigger tests, in that option's text only | The same in the description |
 | `modern_election_events` (all 35 sit at weight 1 in vanilla's `elections_monthly_events` pool and need `in_election_campaign`, no single-party state and no `election_event_cooldown`, so any can follow any other or a vanilla election event) | An election campaign: parties standing, candidates, voters, a vote still to come. Newspapers (every event is at least era 5). Each event's own technology: television only where its tree reaches `television_broadcasting` (.1, .4–.10, .19, .22, .24, .29, .32); the web only in .2, .4, .28, .33, .35. Film and newsreels in .11 and .12. The industrialists' party in .7 and .13 (`corp_party`, `press_party`). An opposition party in .1, .2, .5, .9, .22; a governing party only in .9. A colony in .32 only with the space race on; a surveillance apparatus in .25; a civil rights movement in .16; a global anomaly of 1.0 °C in .3 and .27, readable as `temperature_anomaly_display` | `govt_party` and `opp_party` anywhere else: every event `exists`-guards them, and .28 has a variant for the case. The issue parties (`scope:<FOR>` and `scope:<AGAINST>` from `me_save_issue_parties`, in .3, .14, .16, .20, .21, .23, .24, .26, .27, .29, .31–.35): either can be missing. Radio, even in .11 (`mass_propaganda` does not need `radio`). Television in .14, .16–.18, .20, .21, .23 and the other late events not listed. A telephone: the society and production trees cross less than they look, so `social_media` does not bring `telephone` and `cyber_warfare` does not bring the web. A free press (outlawed dissent is possible), a parliament or court of a given shape, two-party politics ("bipartisan"), a war fought, private firms, a boom (.15 checks the economy only with the banking cycle on), local weather or refugees at our border (.3 and .27 need only the global figure), neural interfaces (.33) or synthetic food on sale (.34). Whether the vote is days or months away |
@@ -206,14 +211,16 @@ So the form is a choice to make each time, and the two-voice exchange is no long
 
 The rules:
 
-- **In a chain, no form takes more than a third of the events,** and events that can fire one after another differ in form. `python3 scripts/analysis/flavor_forms.py <namespace>` prints a chain's current mix: run it before adding to a chain, and write in a form the chain is short of.
+- **In a chain, no form takes more than a third of the events,** and events that can fire one after another differ in form. Where a chain's events share one random pool, any can follow any other, so the rule becomes an even spread across the chain. `python3 scripts/analysis/flavor_forms.py <namespace>` prints a chain's current mix: run it before adding to a chain, and write in a form the chain is short of.
 - **The register varies too.** Dry is one register among several: a text can be angry, proud, frightened, tired, formal or tender. Most events are not funny, and their flavor is not either.
 - **Most flavor texts stop without turning** ([No kicker](#no-kicker)). A scene can end in the middle of the work; a letter can end with its closing; a speaker can simply finish.
+- **No form grows a formula of its own.** The election pilot's several-voices texts each ended on the one voice that made the pointed demand, which is the kicker again. In a several-voices text the order should not matter: if one voice has to be last, move it up or cut it.
+- **The reader arrives cold.** The first sentence of a flavor text says, without a word that could mean two things, who is speaking or writing and to whom. "Lines for the government's speakers" could be loudspeakers; "Notes from the government's campaign office, for its candidates' speeches" cannot.
 - **Someone is there.** Every form has a point of view: who is writing the letter, who is counting the sacks. Narration from nowhere reads as a news summary.
 - **Speakers are unnamed and unplaced** unless a scope supplies the name ([Detail that cannot be wrong](#detail-that-cannot-be-wrong)). A document's letterhead, date and place are assumptions like any other.
 - **Length:** 50 to 150 words. A short exchange under 50 words is usually a setup and a punchline; give it a different form.
 
-**Laying out a list or a document.** A list opens with one heading line that says whose list it is, ending in a colon, then `\n\n`, then one item to a line (`\n` between them), each a phrase or sentence with its full stop, and no bullets. A document opens by saying who writes to whom ("To the government, from the examiners of the grain reserve."), carries no date, place or letterhead, and closes the way such a paper closes: with its request, its next step or the writer's office.
+**Laying out a list or a document.** A list opens with one heading line that says whose list it is, ending in a colon, then `\n\n`, then one item to a line (`\n` between them), each a full sentence or two with its full stop, and no bullets. **Each item carries its reason** (owner, 2026-11-09): not "Do not use the word boom." but "The opposition has been saying that a boom always ends in a bust. Do not use the word boom; say growth." A reader who has to guess why an instruction was given is being teased. Over-explain before you under-explain, in a list and everywhere else. A document opens by saying who writes to whom ("To the government, from the examiners of the grain reserve."), carries no date, place or letterhead, and closes the way such a paper closes: with its request, its next step or the writer's office.
 
 **A closing or a kicker?** A document's last line is plain when it is what that paper would end on whoever wrote it: "We ask for instructions on the remainder." "I will report again when the count is done." It is a kicker when it is a detail held back for the end: "His coat. His umbrella is still on the stand." In a list, the test is whether the last item could change places with the third without loss. If it has to be last, it is a kicker.
 
@@ -274,5 +281,5 @@ Neither can judge whether a sentence is particular, whether a game could make it
 
 ## Still open
 
-1. **Existing text.** The flavor rewrites are tracked in #1539, one batch of related chains per sub-issue, with the election chain as the pilot. Each batch also adds its chain's row to the table of what triggers guarantee.
+1. **Existing text.** The election chain was the pilot (2026-11-09): all 35 flavor texts and all 36 descriptions needed rewriting, since every description had a verdict word, a stock metaphor, a closing line or an unbacked claim. Expect the same of chains written in the same period. The flavor rewrites are tracked in #1539, one batch of related chains per sub-issue. Each batch also adds its chain's row to the table of what triggers guarantee.
 2. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.
