@@ -7401,7 +7401,7 @@
  te_cm_status_pending:0 "Not every condition is met yet. The start button lists what is missing."
  te_cm_status_ready:0 "Nothing stands in the way. The button starts the merge."
  te_cm_status_rule_off:0 "The $rule_culture_merges_rule$ game rule is off. Merges are paused, and none can start, until it is turned back on."
- te_cm_status_sol:0 "The core cultures live at different standards of living: the gap between the best and the worst off is too wide."
+ te_cm_status_sol:0 "The core cultures' standards of living have not been compared yet. The next yearly census will compare them."
  te_cm_status_unmeasured:0 "The yearly census has not measured the constituent cultures yet. The first figures arrive with the next one."
  te_cm_tt_dlc_off_rp1_content:0 "The $dlc008$ content is off. With it on, the base game's own $je_brazilian_nation_building$ entry merges these cultures instead."
  te_cm_tt_done_all:0 "Every other culture that joined the merge has switched too."

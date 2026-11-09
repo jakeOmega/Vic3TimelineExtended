@@ -180,6 +180,25 @@ je_te_cm_german = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_german_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_german ?= 1
+					}
+					has_variable = te_cm_sol_gap_german
+					var:te_cm_sol_gap_german >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_german_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_german ?= 1
+					}
+					has_variable = te_cm_sol_gap_german
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -418,6 +437,25 @@ je_te_cm_italian = {
 					NOT = { has_global_variable = te_cm_switched_south_italian }
 					has_variable = te_cm_ok_italian_south_italian
 					var:te_cm_ok_italian_south_italian = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_italian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_italian ?= 1
+					}
+					has_variable = te_cm_sol_gap_italian
+					var:te_cm_sol_gap_italian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_italian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_italian ?= 1
+					}
+					has_variable = te_cm_sol_gap_italian
 				}
 			}
 			triggered_desc = {
@@ -714,6 +752,25 @@ je_te_cm_scandinavian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_scandinavian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_scandinavian ?= 1
+					}
+					has_variable = te_cm_sol_gap_scandinavian
+					var:te_cm_sol_gap_scandinavian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_scandinavian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_scandinavian ?= 1
+					}
+					has_variable = te_cm_sol_gap_scandinavian
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -996,6 +1053,25 @@ je_te_cm_east_slavic = {
 					NOT = { has_global_variable = te_cm_switched_byelorussian }
 					has_variable = te_cm_ok_east_slavic_byelorussian
 					var:te_cm_ok_east_slavic_byelorussian = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_east_slavic_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_east_slavic ?= 1
+					}
+					has_variable = te_cm_sol_gap_east_slavic
+					var:te_cm_sol_gap_east_slavic >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_east_slavic_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_east_slavic ?= 1
+					}
+					has_variable = te_cm_sol_gap_east_slavic
 				}
 			}
 			triggered_desc = {
@@ -1306,6 +1382,25 @@ je_te_cm_yugoslav = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_yugoslav_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_yugoslav ?= 1
+					}
+					has_variable = te_cm_sol_gap_yugoslav
+					var:te_cm_sol_gap_yugoslav >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_yugoslav_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_yugoslav ?= 1
+					}
+					has_variable = te_cm_sol_gap_yugoslav
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -1555,6 +1650,25 @@ je_te_cm_czechoslovak = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_czechoslovak_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_czechoslovak ?= 1
+					}
+					has_variable = te_cm_sol_gap_czechoslovak
+					var:te_cm_sol_gap_czechoslovak >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_czechoslovak_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_czechoslovak ?= 1
+					}
+					has_variable = te_cm_sol_gap_czechoslovak
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -1795,6 +1909,25 @@ je_te_cm_hungarian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_hungarian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_hungarian ?= 1
+					}
+					has_variable = te_cm_sol_gap_hungarian
+					var:te_cm_sol_gap_hungarian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_hungarian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_hungarian ?= 1
+					}
+					has_variable = te_cm_sol_gap_hungarian
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -2027,6 +2160,25 @@ je_te_cm_dutch = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_dutch_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_dutch ?= 1
+					}
+					has_variable = te_cm_sol_gap_dutch
+					var:te_cm_sol_gap_dutch >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_dutch_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_dutch ?= 1
+					}
+					has_variable = te_cm_sol_gap_dutch
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -2256,6 +2408,25 @@ je_te_cm_finnish = {
 					NOT = { has_global_variable = te_cm_switched_karelian }
 					has_variable = te_cm_ok_finnish_karelian
 					var:te_cm_ok_finnish_karelian = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_finnish_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_finnish ?= 1
+					}
+					has_variable = te_cm_sol_gap_finnish
+					var:te_cm_sol_gap_finnish >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_finnish_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_finnish ?= 1
+					}
+					has_variable = te_cm_sol_gap_finnish
 				}
 			}
 			triggered_desc = {
@@ -2535,6 +2706,25 @@ je_te_cm_french = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_french_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_french ?= 1
+					}
+					has_variable = te_cm_sol_gap_french
+					var:te_cm_sol_gap_french >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_french_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_french ?= 1
+					}
+					has_variable = te_cm_sol_gap_french
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -2772,6 +2962,25 @@ je_te_cm_british = {
 					NOT = { has_global_variable = te_cm_switched_scottish }
 					has_variable = te_cm_ok_british_scottish
 					var:te_cm_ok_british_scottish = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_british_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_british ?= 1
+					}
+					has_variable = te_cm_sol_gap_british
+					var:te_cm_sol_gap_british >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_british_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_british ?= 1
+					}
+					has_variable = te_cm_sol_gap_british
 				}
 			}
 			triggered_desc = {
@@ -3026,6 +3235,25 @@ je_te_cm_american = {
 					NOT = { has_global_variable = te_cm_switched_dixie }
 					has_variable = te_cm_ok_american_dixie
 					var:te_cm_ok_american_dixie = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_american_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_american ?= 1
+					}
+					has_variable = te_cm_sol_gap_american
+					var:te_cm_sol_gap_american >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_american_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_american ?= 1
+					}
+					has_variable = te_cm_sol_gap_american
 				}
 			}
 			triggered_desc = {
@@ -3437,6 +3665,25 @@ je_te_cm_anglophone = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_anglophone_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_anglophone ?= 1
+					}
+					has_variable = te_cm_sol_gap_anglophone
+					var:te_cm_sol_gap_anglophone >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_anglophone_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_anglophone ?= 1
+					}
+					has_variable = te_cm_sol_gap_anglophone
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -3801,6 +4048,25 @@ je_te_cm_brazilian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_brazilian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_brazilian ?= 1
+					}
+					has_variable = te_cm_sol_gap_brazilian
+					var:te_cm_sol_gap_brazilian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_brazilian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_brazilian ?= 1
+					}
+					has_variable = te_cm_sol_gap_brazilian
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -4127,6 +4393,25 @@ je_te_cm_platine = {
 					NOT = { has_global_variable = te_cm_switched_paraguayan }
 					has_variable = te_cm_ok_platine_paraguayan
 					var:te_cm_ok_platine_paraguayan = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_platine_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_platine ?= 1
+					}
+					has_variable = te_cm_sol_gap_platine
+					var:te_cm_sol_gap_platine >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_platine_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_platine ?= 1
+					}
+					has_variable = te_cm_sol_gap_platine
 				}
 			}
 			triggered_desc = {
@@ -4472,6 +4757,25 @@ je_te_cm_andean = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_andean_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_andean ?= 1
+					}
+					has_variable = te_cm_sol_gap_andean
+					var:te_cm_sol_gap_andean >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_andean_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_andean ?= 1
+					}
+					has_variable = te_cm_sol_gap_andean
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -4754,6 +5058,25 @@ je_te_cm_gran_colombian = {
 					NOT = { has_global_variable = te_cm_switched_ecuadorian }
 					has_variable = te_cm_ok_gran_colombian_ecuadorian
 					var:te_cm_ok_gran_colombian_ecuadorian = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_gran_colombian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_gran_colombian ?= 1
+					}
+					has_variable = te_cm_sol_gap_gran_colombian
+					var:te_cm_sol_gap_gran_colombian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_gran_colombian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_gran_colombian ?= 1
+					}
+					has_variable = te_cm_sol_gap_gran_colombian
 				}
 			}
 			triggered_desc = {
@@ -5077,6 +5400,25 @@ je_te_cm_chinese = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_chinese_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_chinese ?= 1
+					}
+					has_variable = te_cm_sol_gap_chinese
+					var:te_cm_sol_gap_chinese >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_chinese_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_chinese ?= 1
+					}
+					has_variable = te_cm_sol_gap_chinese
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -5306,6 +5648,25 @@ je_te_cm_japanese = {
 					NOT = { has_global_variable = te_cm_switched_ryukyuan }
 					has_variable = te_cm_ok_japanese_ryukyuan
 					var:te_cm_ok_japanese_ryukyuan = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_japanese_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_japanese ?= 1
+					}
+					has_variable = te_cm_sol_gap_japanese
+					var:te_cm_sol_gap_japanese >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_japanese_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_japanese ?= 1
+					}
+					has_variable = te_cm_sol_gap_japanese
 				}
 			}
 			triggered_desc = {
@@ -5682,6 +6043,25 @@ je_te_cm_arab = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_arab_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_arab ?= 1
+					}
+					has_variable = te_cm_sol_gap_arab
+					var:te_cm_sol_gap_arab >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_arab_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_arab ?= 1
+					}
+					has_variable = te_cm_sol_gap_arab
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -5911,6 +6291,25 @@ je_te_cm_persian = {
 					NOT = { has_global_variable = te_cm_switched_luri }
 					has_variable = te_cm_ok_persian_luri
 					var:te_cm_ok_persian_luri = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_persian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_persian ?= 1
+					}
+					has_variable = te_cm_sol_gap_persian
+					var:te_cm_sol_gap_persian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_persian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_persian ?= 1
+					}
+					has_variable = te_cm_sol_gap_persian
 				}
 			}
 			triggered_desc = {
@@ -6152,6 +6551,25 @@ je_te_cm_oghuz_turkic = {
 					NOT = { has_global_variable = te_cm_switched_azerbaijani }
 					has_variable = te_cm_ok_oghuz_turkic_azerbaijani
 					var:te_cm_ok_oghuz_turkic_azerbaijani = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_oghuz_turkic_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_oghuz_turkic ?= 1
+					}
+					has_variable = te_cm_sol_gap_oghuz_turkic
+					var:te_cm_sol_gap_oghuz_turkic >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_oghuz_turkic_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_oghuz_turkic ?= 1
+					}
+					has_variable = te_cm_sol_gap_oghuz_turkic
 				}
 			}
 			triggered_desc = {
@@ -6527,6 +6945,25 @@ je_te_cm_hindustani = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_hindustani_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_hindustani ?= 1
+					}
+					has_variable = te_cm_sol_gap_hindustani
+					var:te_cm_sol_gap_hindustani >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_hindustani_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_hindustani ?= 1
+					}
+					has_variable = te_cm_sol_gap_hindustani
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -6809,6 +7246,25 @@ je_te_cm_dravidian = {
 					NOT = { has_global_variable = te_cm_switched_malayalam }
 					has_variable = te_cm_ok_dravidian_malayalam
 					var:te_cm_ok_dravidian_malayalam = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_dravidian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_dravidian ?= 1
+					}
+					has_variable = te_cm_sol_gap_dravidian
+					var:te_cm_sol_gap_dravidian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_dravidian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_dravidian ?= 1
+					}
+					has_variable = te_cm_sol_gap_dravidian
 				}
 			}
 			triggered_desc = {
@@ -7141,6 +7597,25 @@ je_te_cm_indonesian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_indonesian_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_indonesian ?= 1
+					}
+					has_variable = te_cm_sol_gap_indonesian
+					var:te_cm_sol_gap_indonesian >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_indonesian_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_indonesian ?= 1
+					}
+					has_variable = te_cm_sol_gap_indonesian
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -7469,6 +7944,25 @@ je_te_cm_filipino = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_filipino_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_filipino ?= 1
+					}
+					has_variable = te_cm_sol_gap_filipino
+					var:te_cm_sol_gap_filipino >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_filipino_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_filipino ?= 1
+					}
+					has_variable = te_cm_sol_gap_filipino
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -7759,6 +8253,25 @@ je_te_cm_nguni = {
 					NOT = { has_global_variable = te_cm_switched_xhosa }
 					has_variable = te_cm_ok_nguni_xhosa
 					var:te_cm_ok_nguni_xhosa = 0
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_nguni_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_nguni ?= 1
+					}
+					has_variable = te_cm_sol_gap_nguni
+					var:te_cm_sol_gap_nguni >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_nguni_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_nguni ?= 1
+					}
+					has_variable = te_cm_sol_gap_nguni
 				}
 			}
 			triggered_desc = {
@@ -8219,6 +8732,25 @@ je_te_cm_latin = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_latin_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_latin ?= 1
+					}
+					has_variable = te_cm_sol_gap_latin
+					var:te_cm_sol_gap_latin >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_latin_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_latin ?= 1
+					}
+					has_variable = te_cm_sol_gap_latin
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -8609,6 +9141,25 @@ je_te_cm_pan_slavic = {
 					var:te_cm_ok_pan_slavic_cm_yugoslav ?= 1
 					has_variable = te_cm_years_pan_slavic_cm_yugoslav
 					NOT = { te_cmg_pan_slavic_cm_yugoslav_years_met = yes }
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_pan_slavic_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_slavic ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_slavic
+					var:te_cm_sol_gap_pan_slavic >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_pan_slavic_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_slavic ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_slavic
 				}
 			}
 			triggered_desc = {
@@ -9151,6 +9702,25 @@ je_te_cm_pan_turkic = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_pan_turkic_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_turkic ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_turkic
+					var:te_cm_sol_gap_pan_turkic >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_pan_turkic_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_turkic ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_turkic
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_sol
 				trigger = {
 					NOT = {
@@ -9461,6 +10031,25 @@ je_te_cm_pan_malay = {
 					var:te_cm_ok_pan_malay_filipino ?= 1
 					has_variable = te_cm_years_pan_malay_filipino
 					NOT = { te_cmg_pan_malay_filipino_years_met = yes }
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_pan_malay_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_malay ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_malay
+					var:te_cm_sol_gap_pan_malay >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_pan_malay_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_pan_malay ?= 1
+					}
+					has_variable = te_cm_sol_gap_pan_malay
 				}
 			}
 			triggered_desc = {
@@ -9830,6 +10419,25 @@ je_te_cm_east_african = {
 					var:te_cm_ok_east_african_sukuma ?= 1
 					has_variable = te_cm_years_east_african_sukuma
 					NOT = { te_cmg_east_african_sukuma_years_met = yes }
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_east_african_status_sol_wide
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_east_african ?= 1
+					}
+					has_variable = te_cm_sol_gap_east_african
+					var:te_cm_sol_gap_east_african >= te_cm_sol_gap_open
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_east_african_status_sol_close
+				trigger = {
+					NOT = {
+						var:te_cm_sol_ok_east_african ?= 1
+					}
+					has_variable = te_cm_sol_gap_east_african
 				}
 			}
 			triggered_desc = {

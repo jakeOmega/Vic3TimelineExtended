@@ -349,7 +349,8 @@ if you lead a power bloc, its members. For every core culture:
   average acceptance is at least 80, Full Acceptance (Provisional Acceptance
   isn't enough), or 90 for a tier 1b culture;
 - the core cultures' average standards of living across the sphere are less than
-  3 apart.
+  3 apart. While they aren't, the entry names the best- and worst-off core
+  cultures, their standards of living and the gap.
 
 Each constituent culture has a tier, set by how close it is to the others:
 

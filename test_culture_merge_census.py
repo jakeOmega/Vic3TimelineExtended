@@ -31,6 +31,8 @@ ON_ACTIONS = ROOT / "common/on_actions/te_culture_merge_on_actions.txt"
 GEN_EFFECTS = ROOT / "common/scripted_effects/te_culture_merges_generated_effects.txt"
 GEN_TRIGGERS = ROOT / "common/scripted_triggers/te_culture_merges_generated_triggers.txt"
 SCRIPT_FILES = (EFFECTS, ON_ACTIONS, GEN_EFFECTS, GEN_TRIGGERS)
+# The core gap's figures the census keeps for the status row, te_cm_sol_<name>_<merge>.
+SOL_SHOWN = ("best", "worst", "hi", "lo", "gap")
 BOM = b"\xef\xbb\xbf"
 
 
@@ -627,6 +629,34 @@ class SolGateTest(unittest.TestCase):
         body = squash(block(self.effects, "te_cmg_census_german_country"))
         self.assertIn("if = { limit = { local_var:te_cm_sg_n > 0 }", body)
 
+    def test_the_gap_and_its_two_ends_are_kept_for_the_status_row(self):
+        # The status row names the best- and worst-off core cultures, their figures and the gap (2026-11-09), so the
+        # census keeps what the gate read, and takes it away once no core part has a figure.
+        track = squash(block(self.helpers, "te_cm_sol_track"))
+        self.assertIn(
+            "limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_min } "
+            "set_local_variable = { name = te_cm_sg_min value = var:te_cm_sol_$MERGE$_$CULTURE$ } "
+            "set_local_variable = { name = te_cm_sg_worst value = cu:$CULTURE$ }", track,
+        )
+        self.assertIn(
+            "limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_max } "
+            "set_local_variable = { name = te_cm_sg_max value = var:te_cm_sol_$MERGE$_$CULTURE$ } "
+            "set_local_variable = { name = te_cm_sg_best value = cu:$CULTURE$ }", track,
+        )
+        for merge in cfg.MERGES:
+            key = merge.key
+            body = squash(block(self.effects, "te_cmg_census_%s_country" % key))
+            kept = " ".join(
+                "set_variable = { name = te_cm_sol_%s_%s value = local_var:%s }" % (name, key, local)
+                for name, local in zip(SOL_SHOWN, ("te_cm_sg_best", "te_cm_sg_worst", "te_cm_sg_max", "te_cm_sg_min", "te_cm_sg_gap"))
+            )
+            self.assertIn(
+                "if = { limit = { local_var:te_cm_sg_n > 0 } set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_max } "
+                "change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_min } %s " % kept,
+                body, key,
+            )
+            self.assertIn("else = { %s }" % " ".join("remove_variable = te_cm_sol_%s_%s" % (n, key) for n in SOL_SHOWN), body, key)
+
     def test_every_part_is_censused_at_its_own_tier(self):
         for merge in cfg.MERGES:
             body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
@@ -911,9 +941,12 @@ class StateIsVariablesTest(unittest.TestCase):
             self.assertNotIn("has_game_rule", text, path.name)
             self.assertNotIn("remove_global_variable", text, path.name)
             self.assertNotIn("clear_global_variable_list", text, path.name)
-        # The one removal is the temporary holder variable, which never outlives its census call.
+        # The removals are the temporary holder variable, which never outlives its census call, and the
+        # standard-of-living figures the status row prints, taken away when no core part has one: they are for display
+        # only (the gate is te_cm_sol_ok_<m>, never removed), and with the rule off no census runs to touch them.
         removed = set(re.findall(r"remove_variable = (\w+)", census_only(EFFECTS) + census_only(GEN_EFFECTS)))
-        self.assertEqual(removed, {"te_cm_tmp_cnt"})
+        shown = {"te_cm_sol_%s_%s" % (name, merge.key) for name in SOL_SHOWN for merge in cfg.MERGES}
+        self.assertEqual(removed, {"te_cm_tmp_cnt"} | shown)
         written = set(re.findall(r"set_global_variable = \{ name = ([\w$]+)", census_only(EFFECTS) + census_only(ON_ACTIONS)))
         self.assertEqual(written, {"te_cm_census_lock", "te_cm_census_year"} | {"te_cm_home_$CULTURE$", "te_cm_home_r_$CULTURE$"})
 
@@ -1161,6 +1194,56 @@ class GateScenarioTest(unittest.TestCase):
         for held, acc in ((0.60, 90), (0.60, 90), (0.49, 90), (0.60, 90)):
             self.year(sim, held, acc, tier=2)
         self.assertEqual(sim.cvars["CAND"]["te_cm_years_german_north_german"], 3)
+
+
+class SolFiguresScenarioTest(unittest.TestCase):
+    """The census's standard-of-living section for East Slavic (three core cultures, no alternatives), run: it keeps the
+    best- and worst-off cultures and the gap the gate read, and drops them once no core culture has a figure."""
+
+    class Sim(GateSim):
+        def num(self, token):
+            return token if token.startswith("cu:") else super().num(token)
+
+    @classmethod
+    def setUpClass(cls):
+        body = block(text_of(GEN_EFFECTS), "te_cmg_census_east_slavic_country")
+        body = body[body.index("set_local_variable = { name = te_cm_sg_min"):body.index("te_cmg_east_slavic_settle")]
+        track = block(text_of(EFFECTS), "te_cm_sol_track")
+        cls.cultures = [part.cultures[0] for part in cfg.merge_by_key("east_slavic").core]
+        for culture in cls.cultures:
+            body = body.replace("te_cm_sol_track = { MERGE = east_slavic CULTURE = %s }" % culture,
+                                track.replace("$MERGE$", "east_slavic").replace("$CULTURE$", culture))
+            body = body.replace("te_cmg_east_slavic_%s_measured = yes" % culture, "local_var:measured_%s = 1" % culture)
+            body = body.replace("te_cmg_east_slavic_%s_switched_in = yes" % culture, "local_var:switched_%s = 1" % culture)
+        cls.nodes = parse_ops(body)
+
+    def census(self, sim, sol):
+        """One census: `sol` maps each measured core culture to its standard of living; the rest are unmeasured."""
+        for culture in self.cultures:
+            sim.locals["measured_%s" % culture] = 1 if culture in sol else 0
+            sim.locals["switched_%s" % culture] = 0
+            if culture in sol:
+                sim.cvars["CAND"]["te_cm_sol_east_slavic_%s" % culture] = sol[culture]
+        sim.run(self.nodes)
+        return {n: sim.cvars["CAND"].get("te_cm_sol_%s_east_slavic" % n) for n in SOL_SHOWN}
+
+    def test_the_figures_follow_the_gate(self):
+        self.assertEqual(self.cultures, ["russian", "ukrainian", "byelorussian"])
+        sim = self.Sim({"CAND": {}}, {}, {})
+        got = self.census(sim, {"russian": 14.0, "ukrainian": 9.5, "byelorussian": 11.0})
+        self.assertEqual(got, {"best": "cu:russian", "worst": "cu:ukrainian", "hi": 14.0, "lo": 9.5, "gap": 4.5})
+        self.assertEqual(sim.cvars["CAND"]["te_cm_sol_ok_east_slavic"], 0)
+        # Ukrainian catches up: a new worst-off culture, and the gap under the open value opens the gate.
+        got = self.census(sim, {"russian": 14.0, "ukrainian": 12.5, "byelorussian": 11.5})
+        self.assertEqual(got, {"best": "cu:russian", "worst": "cu:byelorussian", "hi": 14.0, "lo": 11.5, "gap": 2.5})
+        self.assertEqual(sim.cvars["CAND"]["te_cm_sol_ok_east_slavic"], 1)
+        # One culture measured: it is both ends, a gap of 0.
+        got = self.census(sim, {"ukrainian": 12.0})
+        self.assertEqual(got, {"best": "cu:ukrainian", "worst": "cu:ukrainian", "hi": 12.0, "lo": 12.0, "gap": 0.0})
+        # None measured: no figures to show, and the gate stays as it was.
+        got = self.census(sim, {})
+        self.assertEqual(got, dict.fromkeys(SOL_SHOWN))
+        self.assertEqual(sim.cvars["CAND"]["te_cm_sol_ok_east_slavic"], 1)
 
 
 class CallsMatchTheirHelpersTest(unittest.TestCase):
