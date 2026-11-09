@@ -36,5 +36,34 @@ class RepoTests(unittest.TestCase):
         self.assertIn("exchange is 100%", ff.row("chain", entries))
 
 
+class RatchetTests(unittest.TestCase):
+    EXCHANGE = r'\"A.\"\n\n\"B.\"'
+    SCENE = r"The examiner worked along the bay.\n\nBy evening he had reached the far wall."
+
+    def chain(self, exchanges, scenes):
+        return {"chain": [("k", self.EXCHANGE)] * exchanges + [("k", self.SCENE)] * scenes}
+
+    def test_an_over_used_form_takes_no_new_text(self):
+        baseline = ff.over_counts(self.chain(6, 0))
+        self.assertEqual(baseline, {"chain": {"exchange": 6}})
+        self.assertEqual(ff.check(self.chain(6, 0), baseline), [])
+        self.assertEqual(ff.check(self.chain(6, 3), baseline), [])  # another form is welcome
+        self.assertEqual(len(ff.check(self.chain(7, 0), baseline)), 1)
+
+    def test_a_form_may_not_newly_pass_a_third(self):
+        baseline = ff.over_counts(self.chain(2, 4))
+        self.assertNotIn("exchange", baseline["chain"])
+        self.assertEqual(ff.check(self.chain(2, 4), baseline), [])
+        problems = ff.check(self.chain(4, 4), baseline)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("under a third before", problems[0])
+
+    def test_short_chains_are_left_alone(self):
+        self.assertEqual(ff.over_counts(self.chain(5, 0)), {})
+
+    def test_the_committed_baseline_holds(self):
+        self.assertEqual(ff.check(ff.load(), ff.read_baseline()), [])
+
+
 if __name__ == "__main__":
     unittest.main()

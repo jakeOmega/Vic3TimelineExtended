@@ -1,6 +1,6 @@
 # Writing in-game text
 
-**Adopted 2026-11-09**, after the owner read two rounds of sample text written from its drafts. The word-list lint is still to build; `scripts/analysis/flavor_forms.py` exists.
+**Adopted 2026-11-09**, after the owner read two rounds of sample text written from its drafts. Two lints hold new text to the parts a machine can check (§ "What the machine checks").
 
 **Who writes it.** Event text is written by the strongest model available (owner, 2026-11-09: Opus-class or better; in the trials a smaller model followed the rules but wrote flatter text and checked less of the script). Labels, tooltips and modifier descriptions are within any model's reach with this guide.
 
@@ -263,8 +263,16 @@ The same event in three forms, none ending on a turn:
 6. For flavor, run `scripts/analysis/flavor_forms.py <namespace>` and pick a form the chain is short of.
 7. Read the longest it can render (the longest country name, the largest figure) against the cell or tooltip it sits in.
 
+## What the machine checks
+
+Two lints run in `scripts/preflight.py` and CI. Both are ratchets: the mod's older text is recorded in a baseline, and only new text is held to the rule.
+
+- `python3 scripts/analysis/check_loc_style.py --check` fails on a new stock metaphor, verdict word, inflated word or phrase, "not just X but Y", ` - ` as a dash, or a text ending in an ellipsis or `\n`. A use that is meant takes `# REVIEWED YYYY-MM-DD (loc_style): why` trailing on the loc line. After rewriting old text, run it with `--update` and commit the smaller baseline.
+- `python3 scripts/analysis/flavor_forms.py --check` fails when a form that is over a third of its chain gains a text. After rewriting a chain, `--update`.
+
+Neither can judge whether a sentence is particular, whether a game could make it false, or whether it ends on a kicker. Those are the writer's.
+
 ## Still open
 
-1. **Existing text.** The flavor rewrites are tracked as issues, one batch of related chains each, with the election chain as the pilot. Each batch also adds its chain's row to the table of what triggers guarantee.
-2. **A lint.** `flavor_forms.py --check` could fail a chain whose share of one form rises, starting from today's figures as the ceiling. The word-list part (stock metaphors, verdict words, ` - ` as a dash) would start from an allowlist of today's hits and fail only new ones.
-3. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.
+1. **Existing text.** The flavor rewrites are tracked in #1539, one batch of related chains per sub-issue, with the election chain as the pilot. Each batch also adds its chain's row to the table of what triggers guarantee.
+2. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.

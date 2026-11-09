@@ -295,6 +295,17 @@ CHECKS: tuple[Check, ...] = (
     Check("organize-loc", "content", "Localization keys sit where organize_loc files them",
           check_organize_loc, ("localization/*", "organize_loc.py"),
           fix="Run `python3 organize_loc.py` and commit everything it rewrote, new files and deletions included."),
+    Check("loc-style", "content", "In-game text: no new stock phrases (ratchet against a baseline)",
+          command(PY, "scripts/analysis/check_loc_style.py", "--check"),
+          ("localization/*", "scripts/analysis/check_loc_style.py", "scripts/analysis/loc_style_baseline.txt",
+           "scripts/analysis/check_player_guide_style.py"),
+          fix="Rewrite the text (docs/guides/loc_style_guide.md). If only baseline lines are stale, run "
+              "`python3 scripts/analysis/check_loc_style.py --update` and commit the baseline."),
+    Check("flavor-forms", "content", "Event flavor: no chain's dominant form has grown",
+          command(PY, "scripts/analysis/flavor_forms.py", "--check"),
+          ("localization/*", "scripts/analysis/flavor_forms.py", "scripts/analysis/flavor_forms_baseline.json"),
+          fix="Write the new flavor text in a form the chain is short of "
+              "(`python3 scripts/analysis/flavor_forms.py <namespace>`)."),
     Check("line-endings", "content", "The CRLF docs are still CRLF",
           check_line_endings, CRLF_DOCS,
           fix="Restore the file's line endings (`unix2dos <file>`, or redo the edit with "

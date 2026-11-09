@@ -203,6 +203,15 @@ The audits run through `scripts/run_audits.py` (all of CI's, in parallel, about 
 `audit_registry.py`'s; `docs/guides/audits.md` is generated from it. A failing audit prints what its flag means and
 the exact comment that suppresses an intended one.
 
+Two more checks in the `content` group hold new in-game text to `loc_style_guide.md`, both as ratchets against a
+committed baseline, so the mod's older text passes and only new text is judged. `scripts/analysis/check_loc_style.py`
+(`--check`, `--update`, `--rule`, `--key`) flags stock metaphors, verdict words, the player-guide lint's inflated
+words and phrases, ` - ` as a dash and a text ending in an ellipsis or `\n`; its baseline is
+`scripts/analysis/loc_style_baseline.txt` (`rule<TAB>key`), and a baseline line whose finding is gone also fails, so
+the file only shrinks. `scripts/analysis/flavor_forms.py` classes each event flavor text by shape (exchange, one voice,
+quotation, scene, narration) and prints a chain's mix; `--check` fails when a form over a third of its chain gains a
+text (`flavor_forms_baseline.json`).
+
 `scripts/lessons.py <name>…` searches the guides' `##` sections for an effect, trigger, modifier or any word, ranks
 a heading match above a body match, and prints a section with `--show N`. It is the way into
 `scripting_best_practices.md`, whose sections are filed in the order they were learned.
