@@ -83,6 +83,28 @@ te_cm_debug_dump_merge_line = {
 	debug_log = "TE_CM_DEBUG merge $MERGE$ country=[THIS.GetCountry.GetTagName] state=[GetGlobalVariable('te_cm_dbg_a').GetValue|0] starter_exists=[GetGlobalVariable('te_cm_dbg_b').GetValue|0] we_are_starter=[GetGlobalVariable('te_cm_dbg_c').GetValue|0] candidate=[GetGlobalVariable('te_cm_dbg_d').GetValue|0] core_ok=[GetGlobalVariable('te_cm_dbg_e').GetValue|0] can_start=[GetGlobalVariable('te_cm_dbg_f').GetValue|0] sol_ok=[GetGlobalVariable('te_cm_dbg_g').GetValue|0] started=[GetGlobalVariable('te_cm_dbg_h').GetValue|0] bar=[GetGlobalVariable('te_cm_dbg_i').GetValue|0] wait_years=[GetGlobalVariable('te_cm_dbg_j').GetValue|0] converted=[GetGlobalVariable('te_cm_dbg_k').GetValue|0] (-1 = not set)"
 }
 
+# Country scope. A merge's bespoke gate (te_culture_merge_gate_triggers.txt): ok is te_cmg_$MERGE$_gate_ok, 1 or 0.
+# Called only for a merge with a standing gate; a milestone's form below adds its latch.
+te_cm_debug_dump_gate = {
+	set_global_variable = { name = te_cm_dbg_a value = 0 }
+	if = {
+		limit = { te_cmg_$MERGE$_gate_ok = yes }
+		set_global_variable = { name = te_cm_dbg_a value = 1 }
+	}
+	debug_log = "TE_CM_DEBUG gate $MERGE$ country=[THIS.GetCountry.GetTagName] standing ok=[GetGlobalVariable('te_cm_dbg_a').GetValue|0]"
+}
+
+# Country scope. The same for a milestone gate, with its latch te_cm_gate_met_$MERGE$ (-1 = not set).
+te_cm_debug_dump_gate_milestone = {
+	set_global_variable = { name = te_cm_dbg_a value = 0 }
+	if = {
+		limit = { te_cmg_$MERGE$_gate_ok = yes }
+		set_global_variable = { name = te_cm_dbg_a value = 1 }
+	}
+	te_cm_dbg_var = { SLOT = b NAME = te_cm_gate_met_$MERGE$ }
+	debug_log = "TE_CM_DEBUG gate $MERGE$ country=[THIS.GetCountry.GetTagName] milestone ok=[GetGlobalVariable('te_cm_dbg_a').GetValue|0] met=[GetGlobalVariable('te_cm_dbg_b').GetValue|0] (-1 = not set)"
+}
+
 # Country scope. One slot culture of one merge. $MERGE$ = a merge key, $CULTURE$ = a culture id, $SOL_OK$ = the
 # standard-of-living gate the part answers to: its own te_cm_sol_ok_<m>_<c> for an optional part, the merge's
 # te_cm_sol_ok_<m> for a core part (only optional parts have their own, so naming one for a core part reads a name

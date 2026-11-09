@@ -95,6 +95,14 @@ je_te_cm_german = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_german_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_german_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_german_status_busy_1
 				trigger = {
 					NOT = {
@@ -354,6 +362,14 @@ je_te_cm_italian = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_italian_north_italian
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_italian_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_italian_gate_ok = yes
 					}
 				}
 			}
@@ -625,6 +641,14 @@ je_te_cm_scandinavian = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_scandinavian_swedish
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_scandinavian_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_scandinavian_gate_ok = yes
 					}
 				}
 			}
@@ -1265,6 +1289,14 @@ je_te_cm_yugoslav = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_yugoslav_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_yugoslav_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_yugoslav_status_busy_1
 				trigger = {
 					NOT = {
@@ -1576,6 +1608,14 @@ je_te_cm_czechoslovak = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_czechoslovak_czech
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_czechoslovak_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_czechoslovak_gate_ok = yes
 					}
 				}
 			}
@@ -2578,6 +2618,15 @@ je_te_cm_french = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_french_status_paused
+				trigger = {
+					te_cmg_french_is_starter = yes
+					NOT = {
+						te_cmg_french_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_french_status_late
 				trigger = {
 					te_cmg_french_is_starter = yes
@@ -2609,6 +2658,14 @@ je_te_cm_french = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_french_french
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_french_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_french_gate_ok = yes
 					}
 				}
 			}
@@ -3107,6 +3164,15 @@ je_te_cm_american = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_american_status_paused
+				trigger = {
+					te_cmg_american_is_starter = yes
+					NOT = {
+						te_cmg_american_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_american_status_late
 				trigger = {
 					te_cmg_american_is_starter = yes
@@ -3138,6 +3204,14 @@ je_te_cm_american = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_american_yankee
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_american_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_american_gate_ok = yes
 					}
 				}
 			}
@@ -3390,6 +3464,15 @@ je_te_cm_anglophone = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_anglophone_status_paused
+				trigger = {
+					te_cmg_anglophone_is_starter = yes
+					NOT = {
+						te_cmg_anglophone_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_anglophone_status_late
 				trigger = {
 					te_cmg_anglophone_is_starter = yes
@@ -3421,6 +3504,14 @@ je_te_cm_anglophone = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_anglophone_british
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_anglophone_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_anglophone_gate_ok = yes
 					}
 				}
 			}
@@ -4073,6 +4164,13 @@ je_te_cm_brazilian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_brazilian_status_wait_sulista
+				trigger = {
+					te_cmg_brazilian_start_basics = yes
+					te_cmg_brazilian_sulista_waiting = yes
+				}
+			}
+			triggered_desc = {
 				desc = te_cm_status_ready
 				trigger = {
 					te_cmg_brazilian_can_start = yes
@@ -4217,6 +4315,14 @@ je_te_cm_platine = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_platine_platinean
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_platine_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_platine_gate_ok = yes
 					}
 				}
 			}
@@ -4585,6 +4691,14 @@ je_te_cm_andean = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_andean_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_andean_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_andean_status_busy_1
 				trigger = {
 					NOT = {
@@ -4936,6 +5050,14 @@ je_te_cm_gran_colombian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_gran_colombian_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_gran_colombian_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_gran_colombian_status_busy_1
 				trigger = {
 					NOT = {
@@ -5208,6 +5330,15 @@ je_te_cm_chinese = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_chinese_status_paused
+				trigger = {
+					te_cmg_chinese_is_starter = yes
+					NOT = {
+						te_cmg_chinese_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_chinese_status_late
 				trigger = {
 					te_cmg_chinese_is_starter = yes
@@ -5239,6 +5370,14 @@ je_te_cm_chinese = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_chinese_han
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_chinese_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_chinese_gate_ok = yes
 					}
 				}
 			}
@@ -5585,6 +5724,14 @@ je_te_cm_japanese = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_japanese_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_japanese_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_japanese_status_busy_1
 				trigger = {
 					NOT = {
@@ -5804,6 +5951,15 @@ je_te_cm_arab = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_arab_status_paused
+				trigger = {
+					te_cmg_arab_is_starter = yes
+					NOT = {
+						te_cmg_arab_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_arab_status_late
 				trigger = {
 					te_cmg_arab_is_starter = yes
@@ -5835,6 +5991,14 @@ je_te_cm_arab = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_arab_maghrebi
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_arab_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_arab_gate_ok = yes
 					}
 				}
 			}
@@ -6724,6 +6888,15 @@ je_te_cm_hindustani = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_hindustani_status_paused
+				trigger = {
+					te_cmg_hindustani_is_starter = yes
+					NOT = {
+						te_cmg_hindustani_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_hindustani_status_late
 				trigger = {
 					te_cmg_hindustani_is_starter = yes
@@ -6755,6 +6928,14 @@ je_te_cm_hindustani = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_hindustani_hindustani
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_hindustani_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_hindustani_gate_ok = yes
 					}
 				}
 			}
@@ -7145,6 +7326,14 @@ je_te_cm_dravidian = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_dravidian_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_dravidian_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_dravidian_status_busy_1
 				trigger = {
 					NOT = {
@@ -7448,6 +7637,14 @@ je_te_cm_indonesian = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_indonesian_javan
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_indonesian_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_indonesian_gate_ok = yes
 					}
 				}
 			}
@@ -7776,6 +7973,15 @@ je_te_cm_filipino = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_filipino_status_paused
+				trigger = {
+					te_cmg_filipino_is_starter = yes
+					NOT = {
+						te_cmg_filipino_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_filipino_status_late
 				trigger = {
 					te_cmg_filipino_is_starter = yes
@@ -7807,6 +8013,14 @@ je_te_cm_filipino = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_filipino_filipino
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_filipino_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_filipino_gate_ok = yes
 					}
 				}
 			}
@@ -10223,6 +10437,15 @@ je_te_cm_east_african = {
 				}
 			}
 			triggered_desc = {
+				desc = je_te_cm_east_african_status_paused
+				trigger = {
+					te_cmg_east_african_is_starter = yes
+					NOT = {
+						te_cmg_east_african_gate_ok = yes
+					}
+				}
+			}
+			triggered_desc = {
 				desc = je_te_cm_east_african_status_late
 				trigger = {
 					te_cmg_east_african_is_starter = yes
@@ -10254,6 +10477,14 @@ je_te_cm_east_african = {
 				trigger = {
 					NOT = {
 						has_variable = te_cm_ok_east_african_swahili
+					}
+				}
+			}
+			triggered_desc = {
+				desc = je_te_cm_east_african_status_gate
+				trigger = {
+					NOT = {
+						te_cmg_east_african_gate_ok = yes
 					}
 				}
 			}

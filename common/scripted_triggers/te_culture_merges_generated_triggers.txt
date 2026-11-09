@@ -8,6 +8,15 @@ te_cmg_german_result_switched = {
 	always = no
 }
 
+# Country scope. The german merge's own precondition, a milestone (te_cm_gate_formed_germany): met now, or latched in te_cm_gate_met_german
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_german_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_german
+		te_cm_gate_formed_germany = yes
+	}
+}
+
 # Country scope. Can this country start the german merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -324,6 +333,10 @@ te_cmg_german_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_german_gate_tt
+		te_cmg_german_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_german_core_1_tt
 		OR = {
 			te_cmg_german_north_german_measured = yes
@@ -358,6 +371,15 @@ te_cmg_german_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_italian_result_switched = {
 	has_global_variable = te_cm_switched_cm_italian
+}
+
+# Country scope. The italian merge's own precondition, a milestone (te_cm_gate_formed_italy): met now, or latched in te_cm_gate_met_italian
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_italian_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_italian
+		te_cm_gate_formed_italy = yes
+	}
 }
 
 # Country scope. Can this country start the italian merge? The system is on, a core culture is
@@ -648,6 +670,10 @@ te_cmg_italian_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_italian_gate_tt
+		te_cmg_italian_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_italian_core_1_tt
 		OR = {
 			te_cmg_italian_north_italian_measured = yes
@@ -682,6 +708,15 @@ te_cmg_italian_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_scandinavian_result_switched = {
 	always = no
+}
+
+# Country scope. The scandinavian merge's own precondition, a milestone (te_cm_gate_formed_scandinavia): met now, or latched in te_cm_gate_met_scandinavian
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_scandinavian_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_scandinavian
+		te_cm_gate_formed_scandinavia = yes
+	}
 }
 
 # Country scope. Can this country start the scandinavian merge? The system is on, a core culture is
@@ -1011,6 +1046,10 @@ te_cmg_scandinavian_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_1
 		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_scandinavian_gate_tt
+		te_cmg_scandinavian_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_scandinavian_core_1_tt
@@ -1462,6 +1501,15 @@ te_cmg_yugoslav_result_switched = {
 	has_global_variable = te_cm_switched_cm_yugoslav
 }
 
+# Country scope. The yugoslav merge's own precondition, a milestone (te_cm_gate_formed_yugoslavia): met now, or latched in te_cm_gate_met_yugoslav
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_yugoslav_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_yugoslav
+		te_cm_gate_formed_yugoslavia = yes
+	}
+}
+
 # Country scope. Can this country start the yugoslav merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -1859,6 +1907,10 @@ te_cmg_yugoslav_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_yugoslav_gate_tt
+		te_cmg_yugoslav_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_yugoslav_core_1_tt
 		OR = {
 			te_cmg_yugoslav_serb_measured = yes
@@ -1900,6 +1952,15 @@ te_cmg_yugoslav_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_czechoslovak_result_switched = {
 	has_global_variable = te_cm_switched_cm_czechoslovak
+}
+
+# Country scope. The czechoslovak merge's own precondition, a milestone (te_cm_gate_formed_czechoslovakia): met now, or latched in te_cm_gate_met_czechoslovak
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_czechoslovak_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_czechoslovak
+		te_cm_gate_formed_czechoslovakia = yes
+	}
 }
 
 # Country scope. Can this country start the czechoslovak merge? The system is on, a core culture is
@@ -2188,6 +2249,10 @@ te_cmg_czechoslovak_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_1
 		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_czechoslovak_gate_tt
+		te_cmg_czechoslovak_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_czechoslovak_core_1_tt
@@ -2952,6 +3017,12 @@ te_cmg_french_result_switched = {
 	has_global_variable = te_cm_switched_french
 }
 
+# Country scope. The french merge's own precondition, a standing one (te_cm_gate_public_schools): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_french_gate_ok = {
+	te_cm_gate_public_schools = yes
+}
+
 # Country scope. Can this country start the french merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -3257,6 +3328,10 @@ te_cmg_french_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_1
 		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_french_gate_tt
+		te_cmg_french_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_french_core_1_tt
@@ -3568,6 +3643,12 @@ te_cmg_american_core_left = {
 	}
 }
 
+# Country scope. The american merge's own precondition, a standing one (te_cm_gate_slavery_settled): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_american_gate_ok = {
+	te_cm_gate_slavery_settled = yes
+}
+
 # Country scope. Can this country start the american merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -3714,6 +3795,7 @@ te_cmg_american_afro_american_can_join = {
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_american_afro_american_years_met = yes
 	var:te_cm_sol_ok_american_afro_american ?= 1
+	te_cm_gate_slavery_banned = yes
 }
 
 # Country scope. afro_american waits on a vanilla journal entry that some country holds (je_acw_equality, R37) and the merge
@@ -3890,6 +3972,10 @@ te_cmg_american_start_basics = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_american_gate_tt
+		te_cmg_american_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_american_core_1_tt
 		OR = {
 			te_cmg_american_yankee_measured = yes
@@ -3946,6 +4032,12 @@ te_cmg_american_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_anglophone_result_switched = {
 	always = no
+}
+
+# Country scope. The anglophone merge's own precondition, a standing one (te_cm_gate_slavery_banned): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_anglophone_gate_ok = {
+	te_cm_gate_slavery_banned = yes
 }
 
 # Country scope. Can this country start the anglophone merge? The system is on, a core culture is
@@ -4515,6 +4607,10 @@ te_cmg_anglophone_can_start = {
 		te_cm_tier_tech = { TIER = 2 }
 	}
 	custom_tooltip = {
+		text = te_cmg_anglophone_gate_tt
+		te_cmg_anglophone_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_anglophone_core_1_tt
 		OR = {
 			AND = {
@@ -4746,6 +4842,20 @@ te_cmg_brazilian_sulista_can_join = {
 	te_cm_tier_tech = { TIER = 1 }
 }
 
+# Country scope. sulista waits on a vanilla journal entry that some country holds (ragamuffin_war, R37) and the merge
+# has not yet waited te_cm_wait_cap_years: it doesn't join, and a core part doesn't let the merge start.
+te_cmg_brazilian_sulista_waiting = {
+	any_country = {
+		has_journal_entry = ragamuffin_war
+	}
+	NOT = {
+		AND = {
+			has_variable = te_cm_wait_years_brazilian
+			trigger_if = { limit = { has_variable = te_cm_wait_years_brazilian } var:te_cm_wait_years_brazilian >= te_cm_wait_cap_years }
+		}
+	}
+}
+
 # Any scope. afro_brazilian is free for the brazilian merge.
 te_cmg_brazilian_afro_brazilian_available = {
 	always = yes
@@ -4782,6 +4892,7 @@ te_cmg_brazilian_afro_brazilian_can_join = {
 	te_cm_tier_tech = { TIER = 2 }
 	te_cmg_brazilian_afro_brazilian_years_met = yes
 	var:te_cm_sol_ok_brazilian_afro_brazilian ?= 1
+	te_cm_gate_slavery_banned = yes
 }
 
 # Any scope. Is the yearly census of the brazilian merge worth running? An idle merge with a
@@ -4950,11 +5061,9 @@ te_cmg_brazilian_core_switched = {
 	}
 }
 
-# Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
-# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
-# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
-# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
-te_cmg_brazilian_can_start = {
+# Country scope. Everything the brazilian merge needs to start except its waits on vanilla entries
+# (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
+te_cmg_brazilian_start_basics = {
 	custom_tooltip = {
 		text = te_cm_tt_idle
 		NOR = { global_var:te_cm_state_brazilian ?= 1 global_var:te_cm_state_brazilian ?= 2 }
@@ -5024,6 +5133,28 @@ te_cmg_brazilian_can_start = {
 	}
 }
 
+# Country scope. Can this country start the brazilian merge now? The merge is idle, a core culture is
+# primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
+# component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
+# Each condition sits in its own custom_tooltip, which the button and the entry show as a reason.
+te_cmg_brazilian_can_start = {
+	te_cmg_brazilian_start_basics = yes
+	custom_tooltip = {
+		text = te_cmg_brazilian_wait_sulista_tt
+		OR = {
+			NOT = {
+				any_country = {
+					has_journal_entry = ragamuffin_war
+				}
+			}
+			AND = {
+				has_variable = te_cm_wait_years_brazilian
+				trigger_if = { limit = { has_variable = te_cm_wait_years_brazilian } var:te_cm_wait_years_brazilian >= te_cm_wait_cap_years }
+			}
+		}
+	}
+}
+
 # ---- platine (platinean, argentine, uruguayan, paraguayan) ----
 
 # Any scope. The platine merge's result has switched into a higher merge's (R33): the merge then joins, converts,
@@ -5047,6 +5178,15 @@ te_cmg_platine_core_left = {
 	OR = {
 		NOT = { has_global_variable = te_cm_switched_uruguayan }
 		global_var:te_cm_joined_platine_uruguayan ?= 1
+	}
+}
+
+# Country scope. The platine merge's own precondition, a milestone (te_cm_gate_formed_la_plata): met now, or latched in te_cm_gate_met_platine
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_platine_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_platine
+		te_cm_gate_formed_la_plata = yes
 	}
 }
 
@@ -5406,6 +5546,10 @@ te_cmg_platine_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_platine_gate_tt
+		te_cmg_platine_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_platine_core_1_tt
 		OR = {
 			te_cmg_platine_platinean_measured = yes
@@ -5454,6 +5598,15 @@ te_cmg_platine_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_andean_result_switched = {
 	always = no
+}
+
+# Country scope. The andean merge's own precondition, a milestone (te_cm_gate_formed_andes): met now, or latched in te_cm_gate_met_andean
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_andean_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_andean
+		te_cm_gate_formed_andes = yes
+	}
 }
 
 # Country scope. Can this country start the andean merge? The system is on, a core culture is
@@ -5798,6 +5951,10 @@ te_cmg_andean_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_andean_gate_tt
+		te_cmg_andean_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_andean_core_1_tt
 		OR = {
 			te_cmg_andean_north_andean_measured = yes
@@ -5846,6 +6003,15 @@ te_cmg_andean_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_gran_colombian_result_switched = {
 	always = no
+}
+
+# Country scope. The gran_colombian merge's own precondition, a milestone (te_cm_gate_formed_gran_colombia): met now, or latched in te_cm_gate_met_gran_colombian
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_gran_colombian_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_gran_colombian
+		te_cm_gate_formed_gran_colombia = yes
+	}
 }
 
 # Country scope. Can this country start the gran_colombian merge? The system is on, a core culture is
@@ -6138,6 +6304,10 @@ te_cmg_gran_colombian_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_gran_colombian_gate_tt
+		te_cmg_gran_colombian_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_gran_colombian_core_1_tt
 		OR = {
 			te_cmg_gran_colombian_colombian_measured = yes
@@ -6179,6 +6349,12 @@ te_cmg_gran_colombian_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_chinese_result_switched = {
 	always = no
+}
+
+# Country scope. The chinese merge's own precondition, a standing one (te_cm_gate_public_schools): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_chinese_gate_ok = {
+	te_cm_gate_public_schools = yes
 }
 
 # Country scope. Can this country start the chinese merge? The system is on, a core culture is
@@ -6494,6 +6670,10 @@ te_cmg_chinese_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_chinese_gate_tt
+		te_cmg_chinese_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_chinese_core_1_tt
 		te_cmg_chinese_han_measured = yes
 	}
@@ -6539,6 +6719,15 @@ te_cmg_chinese_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_japanese_result_switched = {
 	always = no
+}
+
+# Country scope. The japanese merge's own precondition, a milestone (te_cm_gate_meiji): met now, or latched in te_cm_gate_met_japanese
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_japanese_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_japanese
+		te_cm_gate_meiji = yes
+	}
 }
 
 # Country scope. Can this country start the japanese merge? The system is on, a core culture is
@@ -6750,6 +6939,10 @@ te_cmg_japanese_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_japanese_gate_tt
+		te_cmg_japanese_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_japanese_core_1_tt
 		te_cmg_japanese_japanese_measured = yes
 	}
@@ -6781,6 +6974,12 @@ te_cmg_japanese_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_arab_result_switched = {
 	always = no
+}
+
+# Country scope. The arab merge's own precondition, a standing one (te_cm_gate_independent_schools): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_arab_gate_ok = {
+	te_cm_gate_independent_schools = yes
 }
 
 # Country scope. Can this country start the arab merge? The system is on, a core culture is
@@ -7313,6 +7512,10 @@ te_cmg_arab_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_1
 		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_arab_gate_tt
+		te_cmg_arab_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_arab_core_1_tt
@@ -8115,6 +8318,12 @@ te_cmg_hindustani_result_switched = {
 	always = no
 }
 
+# Country scope. The hindustani merge's own precondition, a standing one (te_cm_gate_independent): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_hindustani_gate_ok = {
+	te_cm_gate_independent = yes
+}
+
 # Country scope. Can this country start the hindustani merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -8480,6 +8689,10 @@ te_cmg_hindustani_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_hindustani_gate_tt
+		te_cmg_hindustani_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_hindustani_core_1_tt
 		te_cmg_hindustani_hindustani_measured = yes
 	}
@@ -8532,6 +8745,15 @@ te_cmg_hindustani_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_dravidian_result_switched = {
 	always = no
+}
+
+# Country scope. The dravidian merge's own precondition, a milestone (te_cm_gate_formed_dravida_nadu): met now, or latched in te_cm_gate_met_dravidian
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_dravidian_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_dravidian
+		te_cm_gate_formed_dravida_nadu = yes
+	}
 }
 
 # Country scope. Can this country start the dravidian merge? The system is on, a core culture is
@@ -8870,6 +9092,10 @@ te_cmg_dravidian_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_dravidian_gate_tt
+		te_cmg_dravidian_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_dravidian_core_1_tt
 		OR = {
 			te_cmg_dravidian_tamil_measured = yes
@@ -8911,6 +9137,15 @@ te_cmg_dravidian_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_indonesian_result_switched = {
 	has_global_variable = te_cm_switched_cm_indonesian
+}
+
+# Country scope. The indonesian merge's own precondition, a milestone (te_cm_gate_formed_indonesia): met now, or latched in te_cm_gate_met_indonesian
+# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.
+te_cmg_indonesian_gate_ok = {
+	OR = {
+		has_variable = te_cm_gate_met_indonesian
+		te_cm_gate_formed_indonesia = yes
+	}
 }
 
 # Country scope. Can this country start the indonesian merge? The system is on, a core culture is
@@ -9309,6 +9544,10 @@ te_cmg_indonesian_can_start = {
 		te_cm_tier_tech = { TIER = 1 }
 	}
 	custom_tooltip = {
+		text = te_cmg_indonesian_gate_tt
+		te_cmg_indonesian_gate_ok = yes
+	}
+	custom_tooltip = {
 		text = te_cmg_indonesian_core_1_tt
 		OR = {
 			te_cmg_indonesian_javan_measured = yes
@@ -9357,6 +9596,12 @@ te_cmg_indonesian_can_start = {
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
 te_cmg_filipino_result_switched = {
 	has_global_variable = te_cm_switched_filipino
+}
+
+# Country scope. The filipino merge's own precondition, a standing one (te_cm_gate_independent): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_filipino_gate_ok = {
+	te_cm_gate_independent = yes
 }
 
 # Country scope. Can this country start the filipino merge? The system is on, a core culture is
@@ -9683,6 +9928,10 @@ te_cmg_filipino_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_1
 		te_cm_tier_tech = { TIER = 1 }
+	}
+	custom_tooltip = {
+		text = te_cmg_filipino_gate_tt
+		te_cmg_filipino_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_filipino_core_1_tt
@@ -12391,6 +12640,12 @@ te_cmg_east_african_result_switched = {
 	always = no
 }
 
+# Country scope. The east_african merge's own precondition, a standing one (te_cm_gate_independent_schools): read to start and, on the starter,
+# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
+te_cmg_east_african_gate_ok = {
+	te_cm_gate_independent_schools = yes
+}
+
 # Country scope. Can this country start the east_african merge? The system is on, a core culture is
 # primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a
 # part of another merge, that result has not switched into it (R33: then the merge does nothing more). Where
@@ -12893,6 +13148,10 @@ te_cmg_east_african_can_start = {
 	custom_tooltip = {
 		text = te_cm_tt_tech_3
 		te_cm_tier_tech = { TIER = 3 }
+	}
+	custom_tooltip = {
+		text = te_cmg_east_african_gate_tt
+		te_cmg_east_african_gate_ok = yes
 	}
 	custom_tooltip = {
 		text = te_cmg_east_african_core_1_tt

@@ -346,6 +346,10 @@ class YearlyConversionTest(unittest.TestCase):
                 gates = "var:te_cm_ok_%s_%s ?= 1" % (key, culture)
                 if culture in optional_cultures(merge):
                     gates += " var:te_cm_sol_ok_%s_%s ?= 1" % (key, culture)
+                part = next(p for p in merge.core + merge.optional if culture in p.cultures)
+                if part.gate:
+                    # Its own bespoke gate (Afro-American pops once slavery is banned), read on the starter too.
+                    gates += " %s = yes" % part.gate.trigger
                 self.assertIn(
                     "if = { limit = { global_var:te_cm_joined_%s_%s ?= 1 NOT = { has_global_variable = te_cm_switched_%s } "
                     "scope:te_cm_starter = { %s } } te_cm_convert_part" % (key, culture, culture, gates),
@@ -920,8 +924,11 @@ RECORDED = ("te_cm_convert_part", "te_cm_census_dominance", "te_cm_switch_part")
 
 class Sim:
     def __init__(self, globals=None, cvars=None, alive=None, primary=None, pops=None, stubs=None, techs=(), locals_=None,
-                 missing_cultures=()):
+                 missing_cultures=(), gates=None):
         self.globals = dict(globals or {})
+        # The bespoke gates (te_culture_merge_gate_triggers.txt): trigger -> the countries where it holds. A gate the
+        # scenario doesn't name holds everywhere, so a scenario about something else isn't held back by one.
+        self.gates = {k: set(v) for k, v in (gates or {}).items()}
         # Cultures with no object in this game (one begun before the culture was added): exists = cu:<c> fails.
         self.missing_cultures = set(missing_cultures)
         self.cvars = {c: dict(v) for c, v in (cvars or {}).items()}
@@ -1001,6 +1008,8 @@ class Sim:
             return int(child(n, "TIER").value) in self.techs
         if k in self.stubs:
             return self.stubs[k] == (v == "yes")
+        if k.startswith("te_cm_gate_"):
+            return (k not in self.gates or self.this in self.gates[k]) == (v == "yes")
         for path in (GEN_TRIGGERS,):
             if k in definitions(path) and v == "yes":
                 return self.holds(definitions(path)[k].children)
@@ -1028,6 +1037,9 @@ class Sim:
                 args = {c.key: c.value for c in n.children}
                 self.globals["te_cm_joined_%s_%s" % (args["MERGE"], args["CULTURE"])] = 1
                 self.globals["te_cm_in_%s" % args["CULTURE"]] = int(args["INDEX"])
+            elif k == "set_variable" and n.children:
+                args = {c.key: c.value for c in n.children}
+                self.cvars.setdefault(self.this, {})[args["name"]] = args["value"]
             elif k in RECORDED:
                 self.calls.append((k, {c.key: c.value for c in n.children}))
             elif k.endswith("_join_ready") and n.value == "yes":
@@ -1182,10 +1194,13 @@ class ChainTest(unittest.TestCase):
             join_ready = squash(block(effects, "te_cmg_%s_join_ready" % key))
             # R38 I1: a merge whose result can switch also takes nothing once a higher merge has joined that result.
             joined_higher = "NOT = { has_global_variable = te_cm_in_%s }" % merge.result
+            # And a merge with a standing gate (cfg.Gate) takes nothing while that gate fails.
+            guard = switched
             if gen.result_can_switch(merge, cfg.MERGES):
-                self.assertTrue(join_ready.startswith("if = { limit = { %s %s } " % (switched, joined_higher)), key)
-            else:
-                self.assertTrue(join_ready.startswith("if = { limit = { %s } " % switched), key)
+                guard += " " + joined_higher
+            if gen.standing_gate(merge):
+                guard += " te_cmg_%s_gate_ok = yes" % key
+            self.assertTrue(join_ready.startswith("if = { limit = { %s } " % guard), key)
             for culture in slot_cultures(merge):
                 can_join = squash(block(triggers, "te_cmg_%s_%s_can_join" % (key, culture)))
                 self.assertIn(switched, can_join, "%s/%s" % (key, culture))

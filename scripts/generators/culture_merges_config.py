@@ -34,6 +34,10 @@ Conventions
   in every country, and the entry reads their fervor or share there), until it has waited
   ``te_cm_wait_cap_years`` (20) years. Two core parts that wait on the same entry share one start
   condition and one status row.
+* A merge's ``gate`` is its own historical precondition (owner, 2026-11-09): Germany formed, slavery settled, Public
+  Schools, independence. A milestone gate opens the start for good once met; a standing one also pauses a running
+  merge while it fails. An optional part can carry a standing gate of its own (Afro-American and Afro-Brazilian pops
+  join only once slavery is banned). See ``Gate``.
 * **Tiers** are numbers: 1 = same language and heritage, 2 = same language
   across heritages (the spec's "1b"), 3 = same language family only (the spec's
   "tier 2"). A part's tier is **derived** from vanilla's traits (``derive_tier``)
@@ -56,12 +60,36 @@ _MAX_RESULT_CHAIN = 8
 
 
 @dataclass(frozen=True)
+class Gate:
+    """A merge's own historical precondition (owner, 2026-11-09): what had to be settled before these peoples could
+    become one, beyond the gates every merge has. A formation (Germany), a law (slavery), independence.
+
+    ``trigger`` is a hand-written country-scope scripted trigger in
+    ``common/scripted_triggers/te_culture_merge_gate_triggers.txt``, read on the candidate or the starter.
+    A **milestone** stays met once met: it is a start condition only, latched in ``te_cm_gate_met_<m>`` at each
+    census, so a later formation (Germany into United Europe) or a civil war's winner keeps it. A **standing**
+    condition is also read while the merge runs: while it fails, no culture joins and none converts, complete or not.
+    ``clause`` is player text, lowercase and with no full stop, read after "only once" ("we have formed $GER$");
+    ``why`` is the status sentence for an idle merge it holds back. Both splice names, never spell them.
+    """
+
+    trigger: str
+    milestone: bool
+    clause: str
+    why: str
+
+
+@dataclass(frozen=True)
 class Part:
-    """One slot of a merge. ``cultures`` are alternatives filling it, usually one id."""
+    """One slot of a merge. ``cultures`` are alternatives filling it, usually one id.
+
+    ``gate``, on an optional part only and only a standing one: a condition of its own for joining and converting,
+    read on the starter (Afro-American pops join only once slavery is banned)."""
 
     cultures: tuple[str, ...]
     tier: int | None = None
     wait_for: tuple[str, ...] = ()
+    gate: Gate | None = None
 
 
 @dataclass(frozen=True)
@@ -79,10 +107,11 @@ class Merge:
     optional: tuple[Part, ...] = ()
     components: tuple[str, ...] = ()
     skip_if_dlc: str | None = None
+    gate: Gate | None = None
 
 
-def _p(*cultures: str, tier: int | None = None, wait_for: tuple[str, ...] = ()) -> Part:
-    return Part(tuple(cultures), tier, tuple(wait_for))
+def _p(*cultures: str, tier: int | None = None, wait_for: tuple[str, ...] = (), gate: Gate | None = None) -> Part:
+    return Part(tuple(cultures), tier, tuple(wait_for), gate)
 
 
 def _new(name: str, r: int, g: int, b: int) -> NewCulture:
@@ -98,6 +127,84 @@ def _new(name: str, r: int, g: int, b: int) -> NewCulture:
 NO_FERVOR_COPY: tuple[str, ...] = ("ukrainian", "byelorussian")
 
 
+# The bespoke gates (owner, 2026-11-09): what history says had to be settled before a set of peoples became one. Each
+# trigger is hand-written in common/scripted_triggers/te_culture_merge_gate_triggers.txt, with its reasoning there. A
+# formation gate names every tag that stands for the union, vanilla's and the mod's. The texts are player-facing:
+# names are spliced ($GER$, $law_slavery_banned$), never spelled, and they hold no digit.
+def _formed(name: str, tags: str, why: str) -> Gate:
+    return Gate("te_cm_gate_formed_%s" % name, True, "we have formed %s" % tags,
+                "%s The merge begins once we have formed %s." % (why, tags))
+
+
+GATE_FORMED_GERMANY = _formed(
+    "germany", "$GER$ or $HRE$",
+    "Princes and confessions kept the north and the south apart, and a nation-state of their own is what joined them.")
+GATE_FORMED_ITALY = _formed(
+    "italy", "$ITA$",
+    "Unification came first and the nation after it: once the country was made, its people still had to be made one.")
+GATE_FORMED_SCANDINAVIA = _formed(
+    "scandinavia", "$SCA$",
+    "The northern kingdoms shared a heritage but never a state, and their union movement faded once each went its own way.")
+GATE_FORMED_YUGOSLAVIA = _formed(
+    "yugoslavia", "$YUG$",
+    "Three faiths and two empires divided the South Slavs, and only a kingdom of their own set out to make one nation of them.")
+GATE_FORMED_CZECHOSLOVAKIA = _formed(
+    "czechoslovakia", "$CZH$",
+    "One people was ruled from Vienna and the other from Budapest. A single nation was the doctrine of the republic they "
+    "founded together.")
+GATE_FORMED_LA_PLATA = _formed(
+    "la_plata", "$PLT$",
+    "The provinces of the River Plate broke apart into rival republics, and only their union can undo what separate "
+    "statehood made.")
+GATE_FORMED_GRAN_COLOMBIA = _formed(
+    "gran_colombia", "$GCO$",
+    "Bolívar's republic broke into three, each building an identity of its own, and only their union can undo it.")
+GATE_FORMED_ANDES = _formed(
+    "andes", "$PBC$ or $FND$",
+    "Peru and Bolivia were one confederation until war split them, and only a union can undo what separate statehood made.")
+GATE_FORMED_DRAVIDA_NADU = _formed(
+    "dravida_nadu", "$DRA$",
+    "Four literary languages divide the south, and each won a state of its own. Only the movement for a southern nation "
+    "ever claimed them as one people.")
+# The mod's Nusantara (NUS) counts too, and is called Indonesia in game as well, so the text names one.
+GATE_FORMED_INDONESIA = _formed(
+    "indonesia", "$IDN$",
+    "A common national language came with the independence movement and the republic it founded.")
+GATE_MEIJI = Gate(
+    "te_cm_gate_meiji", True,
+    "the restoration crisis is over: $je_meiji_restoration$ has concluded, or the $law_bakufu$ law is gone",
+    "The shogunate kept Ryukyu nominally foreign to protect its trade with China. The modern state that followed annexed "
+    "it and schooled its people in the standard language. The merge begins once $je_meiji_restoration$ has concluded, or "
+    "the $law_bakufu$ law is gone.")
+GATE_SLAVERY_SETTLED = Gate(
+    "te_cm_gate_slavery_settled", False,
+    "slavery is settled one way or the other, and any civil war over it has ended: the $law_slavery_banned$ law with "
+    "$je_acw_countdown$ over, or slavery legal in every state under $law_slave_trade$ or $law_debt_slavery$",
+    "A house divided against itself cannot stand. While slavery is legal in some states and not in others, these "
+    "peoples stay apart. The merge begins once slavery is banned and $je_acw_countdown$ is over, or once it is legal in "
+    "every state under $law_slave_trade$ or $law_debt_slavery$, and any civil war over it has ended.")
+GATE_SLAVERY_BANNED = Gate(
+    "te_cm_gate_slavery_banned", False,
+    "the $law_slavery_banned$ law is in force",
+    "No common identity was ever on offer between a free country and a slaveholding one. The merge begins once the "
+    "$law_slavery_banned$ law is in force.")
+GATE_PUBLIC_SCHOOLS = Gate(
+    "te_cm_gate_public_schools", False,
+    "the $law_public_schools$ law is in force",
+    "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. "
+    "The merge begins once the $law_public_schools$ law is in force.")
+GATE_INDEPENDENT = Gate(
+    "te_cm_gate_independent", False,
+    "we are not a subject of another country",
+    "A national culture here was the work of the independence movement and the state it won, not of foreign rule. The "
+    "merge begins once we are not a subject of another country.")
+GATE_INDEPENDENT_SCHOOLS = Gate(
+    "te_cm_gate_independent_schools", False,
+    "we are not a subject of another country, and the $law_public_schools$ law is in force",
+    "The shared standard language spread through the schools and broadcasts of independent states, not under foreign "
+    "rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.")
+
+
 MERGES: tuple[Merge, ...] = (
     Merge(
         "german", "cm_german", _new("German", 118, 120, 128),
@@ -106,16 +213,19 @@ MERGES: tuple[Merge, ...] = (
         # 2026-11-07, in place of R37's wait), so the entry reads German fervor once a part has switched.
         core=(_p("north_german"), _p("south_german")),
         optional=(_p("alemannic"), _p("east_german")),
+        gate=GATE_FORMED_GERMANY,
     ),
     Merge(
         "italian", "cm_italian", _new("Italian", 40, 140, 90),
         core=(_p("north_italian"), _p("south_italian")),
         optional=(_p("corsican"),),
+        gate=GATE_FORMED_ITALY,
     ),
     Merge(
         "scandinavian", "cm_scandinavian", _new("Scandinavian", 66, 130, 190),
         core=(_p("swedish"), _p("danish"), _p("norwegian")),
         optional=(_p("icelandic"),),
+        gate=GATE_FORMED_SCANDINAVIA,
     ),
     Merge(
         "east_slavic", "cm_east_slavic", _new("East Slavic", 168, 62, 52),
@@ -132,11 +242,13 @@ MERGES: tuple[Merge, ...] = (
         # (te_cmg_copy_fervor_all; owner, 2026-11-07, in place of R37's wait).
         core=(_p("serb"), _p("croat"), _p("bosniak")),
         optional=(_p("slovene"), _p("bulgarian")),
+        gate=GATE_FORMED_YUGOSLAVIA,
     ),
     Merge(
         "czechoslovak", "cm_czechoslovak", _new("Czechoslovak", 205, 90, 130),
         core=(_p("czech"), _p("slovak")),
         optional=(_p("sorb"),),
+        gate=GATE_FORMED_CZECHOSLOVAKIA,
     ),
     Merge("hungarian", "hungarian", None, core=(_p("hungarian"), _p("szekely"))),
     Merge("dutch", "dutch", None, core=(_p("dutch"), _p("flemish"))),
@@ -151,12 +263,14 @@ MERGES: tuple[Merge, ...] = (
         # Occitan included. It still joins at tier 1 once the sphere holds Wallonia.
         core=(_p("french", tier=1), _p("occitan", tier=1)),
         optional=(_p("wallonian", tier=1), _p("catalan", tier=3)),
+        gate=GATE_PUBLIC_SCHOOLS,
     ),
     Merge("british", "british", None, core=(_p("british"), _p("scottish"))),
     Merge(
         "american", "cm_american", _new("American", 70, 60, 150),
         core=(_p("yankee"), _p("dixie", wait_for=("je_acw_reincorporate",))),
-        optional=(_p("afro_american", wait_for=("je_acw_equality",)),),
+        optional=(_p("afro_american", wait_for=("je_acw_equality",), gate=GATE_SLAVERY_BANNED),),
+        gate=GATE_SLAVERY_SETTLED,
     ),
     Merge(
         "anglophone", "cm_anglophone", _new("Anglophone", 124, 66, 150),
@@ -168,35 +282,44 @@ MERGES: tuple[Merge, ...] = (
             _p("dixie", wait_for=("je_acw_reincorporate",)),
             _p("afro_american", wait_for=("je_acw_equality",)),
         ),
+        gate=GATE_SLAVERY_BANNED,
     ),
     Merge(
         "brazilian", "brazilian", None,
-        core=(_p("brazilian"), _p("nordestino"), _p("paulista"), _p("amazonic"), _p("sulista")),
-        optional=(_p("afro_brazilian"),),
+        core=(
+            _p("brazilian"), _p("nordestino"), _p("paulista"), _p("amazonic"),
+            _p("sulista", wait_for=("ragamuffin_war",)),
+        ),
+        optional=(_p("afro_brazilian", gate=GATE_SLAVERY_BANNED),),
         skip_if_dlc="rp1_content",
     ),
     Merge(
         "platine", "cm_platine", _new("Platine", 90, 170, 215),
         core=(_p("platinean"), _p("argentine"), _p("uruguayan"), _p("paraguayan")),
+        gate=GATE_FORMED_LA_PLATA,
     ),
     Merge(
         "andean", "cm_andean", _new("Andean", 196, 132, 40),
         core=(_p("north_andean"), _p("south_andean"), _p("peruvian"), _p("bolivian")),
+        gate=GATE_FORMED_ANDES,
     ),
     Merge(
         "gran_colombian", "cm_gran_colombian", _new("Gran Colombian", 232, 200, 48),
         core=(_p("colombian"), _p("venezuelan"), _p("ecuadorian")),
+        gate=GATE_FORMED_GRAN_COLOMBIA,
     ),
     Merge(
         "chinese", "han", None,
         # Four vanilla languages, one historical Han identity (spec section 3).
         core=(_p("han", tier=1), _p("yue", tier=1), _p("min", tier=1), _p("hakka", tier=1)),
+        gate=GATE_PUBLIC_SCHOOLS,
     ),
-    Merge("japanese", "japanese", None, core=(_p("japanese", tier=1), _p("ryukyuan", tier=1))),
+    Merge("japanese", "japanese", None, core=(_p("japanese", tier=1), _p("ryukyuan", tier=1)), gate=GATE_MEIJI),
     Merge(
         "arab", "cm_arab", _new("Arab", 30, 112, 70),
         core=(_p("maghrebi"), _p("misri"), _p("mashriqi"), _p("bedouin"), _p("yemenite")),
         optional=(_p("sudanese"), _p("haratin"), _p("bidan")),
+        gate=GATE_INDEPENDENT_SCHOOLS,
     ),
     Merge(
         "persian", "persian", None,
@@ -215,21 +338,25 @@ MERGES: tuple[Merge, ...] = (
     Merge(
         "hindustani", "hindustani", None,
         core=(_p("hindustani"), _p("avadhi"), _p("bundeli"), _p("chhattisgarhi"), _p("bageli")),
+        gate=GATE_INDEPENDENT,
     ),
     Merge(
         "dravidian", "cm_dravidian", _new("Dravidian", 156, 92, 34),
         # Kannada is Deccani, Tamil and Malayalam Carnatic; Telugu a separate language.
         core=(_p("tamil"), _p("kannada", tier=1), _p("malayalam")),
         optional=(_p("telegu"),),
+        gate=GATE_FORMED_DRAVIDA_NADU,
     ),
     Merge(
         "indonesian", "cm_indonesian", _new("Indonesian", 214, 76, 40),
         core=(_p("javan"), _p("malay"), _p("sumatran"), _p("bornean")),
         optional=(_p("balinese"),),
+        gate=GATE_FORMED_INDONESIA,
     ),
     Merge(
         "filipino", "filipino", None,
         core=(_p("filipino"), _p("visayan"), _p("tagalog"), _p("ilocano")),
+        gate=GATE_INDEPENDENT,
     ),
     Merge(
         "nguni", "cm_nguni", _new("Greater Nguni", 110, 70, 40),
@@ -267,6 +394,7 @@ MERGES: tuple[Merge, ...] = (
         # Tier 3 with no tier-1 merge to wait for (owner's ruling).
         core=(_p("swahili"), _p("nyamwezi"), _p("sukuma")),
         optional=(_p("yao"), _p("makua"), _p("lacustrine_bantu"), _p("kikuyu")),
+        gate=GATE_INDEPENDENT_SCHOOLS,
     ),
 )
 
@@ -476,6 +604,20 @@ def validate(cultures: dict, merges: tuple[Merge, ...] | None = None) -> list[st
                     errors.append("%s: %s is the merge's own result" % (where, c))
                 elif c not in vanilla and c not in new_results:
                     errors.append("%s: %s is not a vanilla culture or a merge result" % (where, c))
+
+        gates = ([m.gate] if m.gate else []) + [p.gate for p in m.core + m.optional if p.gate]
+        for gate in gates:
+            if not gate.trigger.startswith("te_cm_gate_"):
+                errors.append("%s: gate trigger %s must be a te_cm_gate_ trigger" % (where, gate.trigger))
+            if not gate.clause or gate.clause[-1] == "." or not gate.why.endswith("."):
+                errors.append("%s: gate %s needs a clause with no full stop and a why sentence" % (where, gate.trigger))
+        for part in m.core:
+            if part.gate:
+                # A core part's gate would belong in core_ok, the start and the whole-merge stall: that is the merge's gate.
+                errors.append("%s: a gate on core part %s; give the merge the gate" % (where, "/".join(part.cultures)))
+        for part in m.optional:
+            if part.gate and part.gate.milestone:
+                errors.append("%s: optional part %s has a milestone gate; only a standing one gates a part" % (where, "/".join(part.cultures)))
 
         for comp in m.components:
             if comp not in keys:

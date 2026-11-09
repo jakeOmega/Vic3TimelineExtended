@@ -150,42 +150,44 @@ culture the game already has. A culture in the last column doesn't join while
 any country has that
 journal entry open, except that Afro-American in American joins once the start
 has waited its 20 years. A core culture's wait also
-holds the merge's start, for at most 20 years.
+holds the merge's start, for at most 20 years. The last column also gives each
+merge's own condition: a nation formed counts for good once you have formed it;
+a law or independence must keep holding, or the merge pauses.
 
 | Merge | Core cultures | Optional cultures | Tier | Waits and requirements |
 |---|---|---|---|---|
-| German | North German, South German | Alemannic, Eastern German | 1 | none |
-| Italian | North Italian, South Italian | Corsican | 1 | none |
-| Scandinavian | Swedish, Danish, Norwegian | Icelandic | 1 | none |
+| German | North German, South German | Alemannic, Eastern German | 1 | Germany or Central Europe formed |
+| Italian | North Italian, South Italian | Corsican | 1 | Italy formed |
+| Scandinavian | Swedish, Danish, Norwegian | Icelandic | 1 | Scandinavia formed |
 | East Slavic | Russian, Ukrainian, Byelorussian | none | 1 | Ukrainian waits for the Ukrainian Renaissance, Byelorussian for the Byelorussian Renaissance |
-| Yugoslav | Serbian, Croatian, Bosniak | Slovene (tier 2), Bulgarian (tier 2) | 1 | none |
-| Czechoslovak | Czech, Slovak | Sorb | 1 | none |
+| Yugoslav | Serbian, Croatian, Bosniak | Slovene (tier 2), Bulgarian (tier 2) | 1 | Yugoslavia formed |
+| Czechoslovak | Czech, Slovak | Sorb | 1 | Czechoslovakia formed |
 | Hungarian (existing) | Hungarian, Szekler | none | 1 | none |
 | Dutch (existing) | Dutch, Flemish | none | 1 | none |
 | Finnish (existing) | Finnish, Karelian | none | 1 | none |
-| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 | none |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 | Public Schools |
 | English (existing) | English, Scottish | none | 1 | none |
-| American | Yankee, Dixie | Afro-American (tier 1b) | 1 | Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
-| Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b | Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
-| Brazilian (existing) | Brazilian, Nordestino, Paulista, Amazonic, Sulista | Afro-Brazilian (tier 1b) | 1 | Only without the Colossus of the South content |
-| Platine | Platinean, Argentine, Uruguayan, Paraguayan | none | 1 | none |
-| Andean | North Andean, South Andean, Peruvian, Bolivian | none | 1 | none |
-| Gran Colombian | Colombian, Venezuelan, Ecuadorian | none | 1 | none |
-| Han (existing) | Han, Yue, Min, Hakka | none | 1 | none |
-| Japanese (existing) | Japanese, Ryukyuan | none | 1 | none |
-| Arab | Maghrebi, Misri, Mashriqi, Bedouin, Yemenite | Sudanese (tier 1b), Haratin (tier 1b), Bidan (tier 1b) | 1 | none |
+| American | Yankee, Dixie | Afro-American (tier 1b) | 1 | Slavery settled: Slavery Banned with The Slavery Debate over, or Slave Trade or Debt Slavery, and no civil war over it under way. Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All and joins only under Slavery Banned |
+| Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b | Slavery Banned. Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
+| Brazilian (existing) | Brazilian, Nordestino, Paulista, Amazonic, Sulista | Afro-Brazilian (tier 1b) | 1 | Only without the Colossus of the South content. Sulista waits for the Ragamuffin War. Afro-Brazilian joins only under Slavery Banned |
+| Platine | Platinean, Argentine, Uruguayan, Paraguayan | none | 1 | Rio de la Plata formed |
+| Andean | North Andean, South Andean, Peruvian, Bolivian | none | 1 | Peru-Bolivia or the Federation of the Andes formed |
+| Gran Colombian | Colombian, Venezuelan, Ecuadorian | none | 1 | Gran Colombia formed |
+| Han (existing) | Han, Yue, Min, Hakka | none | 1 | Public Schools |
+| Japanese (existing) | Japanese, Ryukyuan | none | 1 | The Honorable Restoration concluded, or the Bakufu law gone |
+| Arab | Maghrebi, Misri, Mashriqi, Bedouin, Yemenite | Sudanese (tier 1b), Haratin (tier 1b), Bidan (tier 1b) | 1 | Not a subject of another country, and Public Schools |
 | Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b), Mazanderani, Baluchi (tier 2) | 1 | none |
 | Oghuz Turkic | Turkish, Azerbaijani | Turkmen (tier 1b) | 1 | none |
-| Hindustani (existing) | Hindustani, Avadhi, Bundeli, Chhattisgarhi, Bagheli | none | 1 | none |
-| Dravidian | Tamil, Kannada, Malayalam | Telugu (tier 2) | 1 | none |
-| Indonesian | Javan, Malay, Sumatran, Bornean | Balinese | 1 | none |
-| Pilipino (existing) | Pilipino, Visayan, Tagalog, Ilocano | none | 1 | none |
+| Hindustani (existing) | Hindustani, Avadhi, Bundeli, Chhattisgarhi, Bagheli | none | 1 | Not a subject of another country |
+| Dravidian | Tamil, Kannada, Malayalam | Telugu (tier 2) | 1 | Dravida Nadu formed |
+| Indonesian | Javan, Malay, Sumatran, Bornean | Balinese | 1 | Indonesia formed |
+| Pilipino (existing) | Pilipino, Visayan, Tagalog, Ilocano | none | 1 | Not a subject of another country |
 | Greater Nguni | Nguni, Zulu, Xhosa | none | 1 | none |
 | Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 | The French and Italian merges complete |
 | Pan-Slavic | East Slavic, Czechoslovak, Yugoslav | Polish (tier 1), Slovene, Bulgarian | 2 | The East Slavic, Czechoslovak and Yugoslav merges complete |
 | Pan-Turkic | Oghuz Turkic, Uzbek, Kazakh (tier 1), Tatar (tier 1b), Kyrgyz (tier 1) | Bashkir (tier 1), Crimean Tatar (tier 1), Caucasian Turk (tier 1b), Uighur (tier 1b) | 2 | The Oghuz Turkic merge complete |
 | Pan-Malay | Indonesian, Pilipino | none | 2 | The Indonesian and Pilipino merges complete |
-| East African | Swahili, Nyamwezi, Sukuma | Yao, Makua, Lacustrine Bantu, Kikuyu | 2 | none |
+| East African | Swahili, Nyamwezi, Sukuma | Yao, Makua, Lacustrine Bantu, Kikuyu | 2 | Not a subject of another country, and Public Schools |
 
 ## City-state list
 
