@@ -4,8 +4,8 @@
 # satisfy path_constants' lazy resolution, and no step starts mod_state_server.
 # Audits that need the vanilla game stay out of CI — without the base game they
 # degrade to noise. A few audits build a ModState anyway, taking vanilla from the
-# committed vanilla_parsed/ snapshot; the loc_coverage_audit, pm_employment_audit
-# and concept_reference_audit steps below build the full one
+# committed vanilla_parsed/ snapshot; loc_coverage_audit, pm_employment_audit
+# and concept_reference_audit build the full one
 # (mod_state_server.cli_mod_state, ~7 s each). A stale snapshot
 # (`python3 vanilla_parsed.py check`) could make them flag or hide a vanilla key.
 name: CI
@@ -29,8 +29,9 @@ jobs:
   checks:
     name: Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    # The whole job takes 8-10 minutes (October 2026; 3.11 is the slower one);
-    # 30 caps a hung step instead of burning the default 6-hour allowance.
+    # The whole job takes 14-17 minutes (November 2026), nearly all of it the
+    # unit tests; 30 caps a hung step instead of burning the default 6-hour
+    # allowance.
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -75,298 +76,55 @@ jobs:
           python3 -m pip install "ruff==0.15.8" "pytest==9.1.1" "pytest-xdist==3.8.0"
           ruff --version
 
-      - name: Byte-compile every Python file
+      # Every check from here on is one entry in scripts/preflight.py's CHECKS
+      # table, grouped; each step runs one group. Adding a check there adds it
+      # here, and `.venv/bin/python scripts/preflight.py` runs the same list on
+      # a developer's machine. The audits are one group: their roster,
+      # arguments and suppression comments are audit_registry.py's, and
+      # scripts/run_audits.py runs them in parallel. test_audit_registry.py
+      # fails if a group has no step below.
+      #
+      # compileall, the 3.11 f-string scan and `ruff check .` (rules in
+      # ruff.toml, `[lint] select = ["F"]`; zero findings since #277).
+      - name: Python — compile, lint
         if: ${{ !cancelled() }}
-        run: python3 -m compileall -q .
+        run: python3 scripts/preflight.py --ci --only python
 
       # The tests are unittest classes; pytest runs them unchanged, one worker
       # per CPU (-n auto). --dist loadfile runs each file whole, in order, on one
       # worker, as unittest does: under loadscope a file's classes are split into
       # batches, and pytest runs tearDownModule after each, so
       # test_econ_save_series lost its temporary directory midway. This step
-      # takes 6-7 minutes; run one test at a time, it took 16-24 (October 2026).
+      # takes about 14 minutes on the runner's cores (November 2026).
       # --durations=25 lists the slowest tests, so a new slow one shows in the
       # log. `python3 -m unittest discover -s . -p 'test_*.py'` still runs the
       # same tests serially.
       - name: Unit tests
         if: ${{ !cancelled() }}
-        run: python3 -m pytest -n auto --dist loadfile -p no:cacheprovider --durations=25 -q test_*.py
+        run: python3 scripts/preflight.py --ci --only tests
 
-      # Bare `ruff check .` on purpose — the rule set lives in ruff.toml
-      # (`[lint] select = ["F"]`), so this is byte-for-byte the command the
-      # README/CLAUDE.md tell you to run before pushing. Zero findings since #277.
-      - name: Lint (ruff, pyflakes rules)
+      # Tab indentation, localization file sanity, American spelling,
+      # organize_loc (its --check, then the writer and a clean tree: a key
+      # filed where it would not put it moves on the next reload, and
+      # committing half of that move drops keys, #613, #617), and the CRLF docs.
+      - name: Mod content — tabs, localization files, spelling, line endings
         if: ${{ !cancelled() }}
-        run: ruff check .
+        run: python3 scripts/preflight.py --ci --only content
 
-      - name: Paradox tab indentation
+      # Thirty-odd audits, each flagging something the engine accepts silently.
+      # A failing one prints what the flag means and the comment that
+      # suppresses an intended one. docs/guides/audits.md lists them all.
+      - name: Audits (audit_registry.py)
         if: ${{ !cancelled() }}
-        # `:(glob)` magic is deliberate. In a plain git pathspec `*` already
-        # crosses `/`, so `events/**/*.txt` needs a second literal slash and
-        # matches NOTHING (silently checking zero event files); under `:(glob)`,
-        # `**` has gitignore semantics — zero or more directories — so both
-        # pathspecs stay recursive as the tree grows subdirectories.
-        #
-        # The two exclusion pathspecs cover 2 files, each wholly rewritten by a
-        # POST /reload generator that emits the unformatted text verbatim
-        # (apply_ideologies.py, gen_law_consistency.py), so
-        # normalizing them would be undone by the next reload. See PR #272 for the
-        # per-file rationale.
-        run: |
-          mapfile -t files < <(git ls-files \
-            ':(glob)common/**/*.txt' \
-            ':(glob)events/**/*.txt' \
-            ':!:common/ideologies/modified.txt' \
-            ':!:common/scripted_effects/extra_law_consistency_generated.txt')
-          if [ "${#files[@]}" -eq 0 ]; then
-            # Never pass an empty argv to the formatter: it would check nothing
-            # and still exit 0, so a broken pathspec would look like a pass.
-            echo "::warning::Tab check matched no files — the pathspecs above are stale. Skipping."
-            exit 0
-          fi
-          echo "Checking ${#files[@]} Paradox .txt files."
-          python3 scripts/format_paradox_tabs.py --check "${files[@]}"
+        run: python3 scripts/preflight.py --ci --only audits
 
-      - name: Localization file sanity (BOM, header, duplicate keys)
+      # docs/guides/audits.md against the registry, the post-load rosters
+      # against the docs that list them (#248), and the player guide: its style
+      # lint, and the committed PDF against its sources (neither needs pandoc
+      # or Typst).
+      - name: Docs — generated pages, rosters, player guide
         if: ${{ !cancelled() }}
-        run: python3 scripts/analysis/check_localization_files.py
-
-      # Loc and player-guide text are American English (owner, 2026-10-27).
-      # Fix: run the script without --check and commit what it rewrote.
-      - name: Localization and player guide spelling (American)
-        if: ${{ !cancelled() }}
-        run: python3 scripts/analysis/check_loc_spelling.py --check
-
-      # organize_loc.py rewrites localization/english/ on every full /reload.
-      # A key filed where it would not put it (a hand-placed key, a new prefix
-      # with no categorize_key rule) moves on the next reload, and committing
-      # half of that move drops keys (#613, #617). Fix: run it and commit the result.
-      # Check the actual writer as well as its read-only output plan. git diff
-      # catches tracked edits/deletions; status also catches newly created files.
-      - name: Localization organised and regeneration leaves it clean
-        if: ${{ !cancelled() }}
-        run: |
-          python3 organize_loc.py --check
-          python3 organize_loc.py
-          if ! git diff --exit-code -- localization/ || \
-             [ -n "$(git status --porcelain --untracked-files=all -- localization/)" ]; then
-            git status --short --untracked-files=all -- localization/
-            echo '::error::Run `python3 organize_loc.py` and commit everything it rewrote, including new files and deletions.'
-            exit 1
-          fi
-
-      - name: Audit — GUI references and widget mounts
-        if: ${{ !cancelled() }}
-        run: python3 gui_reference_audit.py --strict
-
-      - name: Audit — duplicate top-level keys
-        if: ${{ !cancelled() }}
-        run: python3 duplicate_key_audit.py --strict
-
-      - name: Audit — any_* with limit
-        if: ${{ !cancelled() }}
-        run: python3 any_limit_audit.py --strict
-
-      - name: Audit — localization rendering
-        if: ${{ !cancelled() }}
-        run: python3 loc_render_audit.py --strict
-
-      - name: Audit — orphaned events
-        if: ${{ !cancelled() }}
-        run: python3 orphaned_event_audit.py --strict
-
-      - name: Audit — attitude keys
-        if: ${{ !cancelled() }}
-        run: python3 attitude_key_audit.py
-
-      - name: Audit — kill_character guards
-        if: ${{ !cancelled() }}
-        run: python3 kill_character_audit.py --check
-
-      - name: Audit — iterator limit placement
-        if: ${{ !cancelled() }}
-        run: python3 iterator_limit_audit.py --strict
-
-      - name: Audit — modifier multiplier variables
-        if: ${{ !cancelled() }}
-        run: python3 modifier_multiplier_var_audit.py --strict
-
-      - name: Audit — journal-entry multiplier scope
-        if: ${{ !cancelled() }}
-        run: python3 je_multiplier_scope_audit.py --strict
-
-      - name: Audit — event images
-        if: ${{ !cancelled() }}
-        run: python3 event_image_audit.py --strict
-
-      - name: Audit — treaty leverage side
-        if: ${{ !cancelled() }}
-        run: python3 treaty_leverage_side_audit.py --strict
-
-      - name: Audit — treaty AI proposal scope
-        if: ${{ !cancelled() }}
-        run: python3 treaty_evaluation_scope_audit.py --strict
-
-      - name: Audit — event context (system gating, unchosen actions)
-        if: ${{ !cancelled() }}
-        run: python3 event_context_audit.py --strict
-
-      - name: Audit — silent variable writes in event options
-        if: ${{ !cancelled() }}
-        run: python3 silent_variable_audit.py --strict
-
-      - name: Audit — prev resolving to a named scope
-        if: ${{ !cancelled() }}
-        run: python3 prev_scope_audit.py --strict
-
-      - name: Audit — timed variables on script containers
-        if: ${{ !cancelled() }}
-        run: python3 container_timed_variable_audit.py --strict
-
-      - name: Audit — unguarded resets in journal-entry immediate blocks
-        if: ${{ !cancelled() }}
-        run: python3 je_immediate_reset_audit.py --strict
-
-      - name: Audit — empty effect blocks and no-effect event options
-        if: ${{ !cancelled() }}
-        run: python3 empty_effect_audit.py --strict
-
-      - name: Audit — min / max inside change_variable
-        if: ${{ !cancelled() }}
-        run: python3 change_variable_clamp_audit.py --strict
-
-      - name: Audit — variable operations in building scope
-        if: ${{ !cancelled() }}
-        run: python3 building_scope_variable_audit.py --strict
-
-      - name: Audit — principle tiers restate the tier below
-        if: ${{ !cancelled() }}
-        run: python3 principle_tier_audit.py --strict
-
-      - name: Audit — prestige goods the company's roster makes
-        if: ${{ !cancelled() }}
-        run: python3 prestige_good_roster_audit.py --strict
-
-      - name: Audit — every amendment has a scripted way in
-        if: ${{ !cancelled() }}
-        run: python3 amendment_reachability_audit.py --strict
-
-      - name: Audit — ideology lawgroup blocks name every law
-        if: ${{ !cancelled() }}
-        run: python3 ideology_lawgroup_audit.py --strict
-
-      # Effect and trigger names the engine doesn't know, and known ones in the
-      # wrong kind of block: an effect where triggers are read (save_scope_as in
-      # a scripted trigger) or the reverse. The engine logs either at load and
-      # drops the line (#1142). Reads only the committed catalogs under
-      # docs/engine/.
-      - name: Audit — effect and trigger names, and the context they're used in
-        if: ${{ !cancelled() }}
-        run: python3 effect_trigger_validity_audit.py --strict
-
-      # Mod callees only here: vanilla scripted effects and triggers come from
-      # the game files, which CI doesn't have. A reload on a machine with the
-      # game checks calls to vanilla's too.
-      - name: Audit — script calls pass the arguments their callee names
-        if: ${{ !cancelled() }}
-        run: python3 script_argument_audit.py --strict
-
-      # add_modifier reads a duration given as a script value written as a
-      # block, or computed, as 0 days ("for 0 days" in the tooltip).
-      - name: Audit — add_modifier durations a script value would zero
-        if: ${{ !cancelled() }}
-        run: python3 modifier_duration_audit.py --strict
-
-      # Vanilla's file list comes from the committed catalog
-      # docs/engine/vanilla_asset_paths.txt (no game here), the mod's from
-      # `git ls-files gfx/`, which lists every texture this sparse checkout
-      # leaves off the disk. The engine logs a missing texture only on first
-      # render. It also flags an entity that declares no art field its type
-      # needs (a building's `background`), with vanilla's from vanilla_parsed/.
-      - name: Audit — asset paths in script that name no file
-        if: ${{ !cancelled() }}
-        run: python3 texture_reference_audit.py --strict
-
-      - name: Audit — loc keys named in script that no loc file defines
-        if: ${{ !cancelled() }}
-        run: python3 script_loc_reference_audit.py --strict
-
-      # ScriptValue('x') in a loc value or a script string (common/, events/)
-      # naming no script value renders 0. The .gui half is
-      # gui_reference_audit's, above.
-      - name: Audit — loc and script-string ScriptValue reads that name no script value
-        if: ${{ !cancelled() }}
-        run: python3 loc_script_value_audit.py --strict
-
-      # The four GUI and loc audits of #1213 (the 2026-10-27 GUI audit's
-      # findings 4 to 7). Each reads the .gui, script and loc files, with
-      # vanilla's loc and static modifiers from the committed vanilla_parsed/;
-      # each flag is fixed or carries a check-tagged REVIEWED comment.
-      # Live text and tooltips over 500 rendered characters outside a How
-      # section: the rules belong in How, or in a concept the tooltip links.
-      - name: Audit — live tooltips that run long
-        if: ${{ !cancelled() }}
-        run: python3 long_tooltip_audit.py --strict
-
-      # A custom_tooltip wrapping an add_modifier whose text renders no
-      # GetStaticModifier for it: the engine prints only the text.
-      - name: Audit — custom_tooltips that hide a modifier's lines
-        if: ${{ !cancelled() }}
-        run: python3 hidden_modifier_audit.py --strict
-
-      # A button greyed by a scripted GUI's IsValid whose tooltip prints no
-      # IsValidTooltip, and a condition such a tooltip prints as raw script.
-      - name: Audit — greyed buttons that don't say why
-        if: ${{ !cancelled() }}
-        run: python3 button_reason_audit.py --strict
-
-      # Needs no game: the CLI builds a ModState from the committed
-      # vanilla_parsed/ snapshot and its English loc. This is the check that
-      # catches a mod-introduced entity (a modifier type, a PM, a building) with
-      # no loc key, which the engine renders as the raw key without a log line.
-      # A branch never commits the report this audit regenerates, so before this
-      # step the first sign was a reviewer's server (#681, #685).
-      - name: Audit — mod entities with no localization key
-        if: ${{ !cancelled() }}
-        run: python3 loc_coverage_audit.py --strict
-
-      # Same ModState-from-snapshot harness. Fails on an unreviewed mod-relevant
-      # negative-employment combination, and also when any building is skipped
-      # for exceeding the combo-count cap: a skipped building is unaudited, so
-      # #681 took that from 0 to 13 (every mine type) with nothing failing.
-      - name: Audit — PM combinations that drive employment negative
-        if: ${{ !cancelled() }}
-        run: python3 pm_employment_audit.py --strict
-
-      # Same ModState-from-snapshot harness, for its registry of game concepts,
-      # vanilla's and the mod's. A loc value linking [concept_x] or
-      # [Concept('x', ...)] with no x in common/game_concepts/ renders a broken
-      # link and logs three errors per render. Before this step only a server
-      # reload ran it: #1257 shipped one (je_space_race_widget_mod_mine_tt
-      # linking concept_sr_extraplanetary_base), fixed in #1258.
-      - name: Audit — loc links to game concepts that don't exist
-        if: ${{ !cancelled() }}
-        run: python3 concept_reference_audit.py --strict
-
-      # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
-      # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md
-      # or docs/auto_generated_files.md. Reads the rosters with `ast`, so it needs
-      # no server and no game install. (#248)
-      - name: Post-load roster / docs drift
-        if: ${{ !cancelled() }}
-        run: python3 scripts/analysis/check_post_load_rosters.py
-
-      # The player guide (docs/player_guide/). The lint keeps the chapters free of
-      # script keys, broken links and machine-sounding prose; --check fails when a
-      # chapter (or the template) changed but the committed PDF wasn't rebuilt.
-      # Neither step needs pandoc or Typst.
-      - name: Player guide — style lint
-        if: ${{ !cancelled() }}
-        run: python3 scripts/analysis/check_player_guide_style.py --strict
-
-      - name: Player guide — PDF matches its sources
-        if: ${{ !cancelled() }}
-        run: python3 scripts/build_player_guide.py --check
+        run: python3 scripts/preflight.py --ci --only docs
 
   dds-dimensions:
     name: DDS texture dimensions

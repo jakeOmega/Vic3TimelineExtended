@@ -201,8 +201,9 @@ class RepoTests(unittest.TestCase):
         root = os.path.dirname(os.path.abspath(__file__))
         self.assertIn("modifier_duration_audit", extract_rosters(
             os.path.join(root, "mod_state_server.py"))["POST_LOAD_AUDITS"])
-        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
-            self.assertIn("python3 modifier_duration_audit.py --strict", fh.read())
+        import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
+        self.assertEqual(audit_registry.get("modifier_duration_audit").command,
+                         "python3 modifier_duration_audit.py --strict")
 
 
 if __name__ == "__main__":

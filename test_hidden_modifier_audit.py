@@ -195,9 +195,9 @@ class RepoTests(unittest.TestCase):
         self.assertEqual(result.stale_tags, [])
 
     def test_ci_runs_it_strict(self):
-        root = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
-            self.assertIn("python3 hidden_modifier_audit.py --strict", fh.read())
+        import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
+        self.assertEqual(audit_registry.get("hidden_modifier_audit").command,
+                         "python3 hidden_modifier_audit.py --strict")
 
 
 if __name__ == "__main__":

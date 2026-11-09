@@ -178,8 +178,9 @@ class IntegrationTests(unittest.TestCase):
         root = Path(__file__).resolve().parent
         self.assertIn("building_scope_variable_audit", extract_rosters(
             str(root / "mod_state_server.py"))["POST_LOAD_AUDITS"])
-        self.assertIn("python3 building_scope_variable_audit.py --strict",
-                      (root / ".github/workflows/ci.yml").read_text())
+        import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
+        self.assertEqual(audit_registry.get("building_scope_variable_audit").command,
+                         "python3 building_scope_variable_audit.py --strict")
 
 
 if __name__ == "__main__":

@@ -214,6 +214,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
 
 ALWAYS_READ = [
     "CLAUDE.md",
+    ".claude/rules/script.md",
     "docs/guides/scripting_best_practices.md",
     "docs/vanilla/CLAUDE.md",
     "docs/audits/open_issues.md",

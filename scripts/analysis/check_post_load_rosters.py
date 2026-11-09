@@ -1,18 +1,21 @@
 """Verify the post-load generator/audit rosters are fully documented (issue #248).
 
 `mod_state_server.py` owns two canonical rosters — `POST_LOAD_REGENERATORS`
-(file-rewriting generators) and `POST_LOAD_AUDITS` (read-only audits). Three
+(file-rewriting generators) and `POST_LOAD_AUDITS` (read-only audits). Two
 docs restate them by hand:
 
-* `CLAUDE.md`               — the "auto-run on /reload" bullet
 * `docs/guides/python_tools.md` — the § "Auto-run on server reload" table
 * `docs/auto_generated_files.md` — the generator -> output ownership map
 
+(`CLAUDE.md` restated them too until the audits got a registry: it now points
+at `docs/guides/audits.md`, which `audit_registry.py` generates, and
+`test_audit_registry.py` holds the registry to `POST_LOAD_AUDITS`.)
+
 Hand-maintained copies drift the moment someone appends a roster entry, which
-is exactly what issue #248 found (11 modules missing across the three docs).
+is exactly what issue #248 found (11 modules missing across the docs).
 This checker closes the loop: it reads the rosters straight out of
-`mod_state_server.py` and fails if any module name is missing from any of the
-three docs.
+`mod_state_server.py` and fails if any module name is missing from either
+doc.
 
 The rosters are extracted with `ast`, not by importing `mod_state_server` —
 importing pulls in the whole server (and, transitively, a resolved Victoria 3
@@ -23,7 +26,7 @@ Run:
     python3 scripts/analysis/check_post_load_rosters.py           # exit 1 on drift
     python3 scripts/analysis/check_post_load_rosters.py --list    # print rosters
 
-Exit code 0 = every roster module is named in all three docs; 1 = drift (the
+Exit code 0 = every roster module is named in both docs; 1 = drift (the
 missing (module, doc) pairs are printed). Unit test: `test_post_load_rosters.py`.
 """
 import argparse
@@ -44,7 +47,6 @@ ROSTERS = {
 
 # Docs that restate the rosters and must name every module.
 DOC_FILES = (
-    "CLAUDE.md",
     os.path.join("docs", "guides", "python_tools.md"),
     os.path.join("docs", "auto_generated_files.md"),
 )
@@ -99,7 +101,7 @@ def check_docs(rosters, repo_root=REPO_ROOT, doc_files=DOC_FILES):
     """Return a sorted list of (module, doc_rel_path) pairs the docs don't mention.
 
     A module counts as documented when its bare name appears as a whole word
-    anywhere in the doc — the three docs spell it differently (`pm_costs`,
+    anywhere in the doc — the docs spell it differently (`pm_costs`,
     `pm_costs.py`, `scripts/generators/gen_company_building_cleanup.py`), and a
     word-boundary match accepts all of those without hard-coding a format.
     """

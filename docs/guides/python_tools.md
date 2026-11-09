@@ -178,7 +178,56 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
 | `mod_state_script.py` | Generates text reference docs (`docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
 
+### Before you push: `scripts/preflight.py`
+
+`.venv/bin/python scripts/preflight.py` runs every check of CI's main job and prints, for each failure, the output's
+tail, the fix and the command that reruns that one check. Its `CHECKS` table is the single list of those checks:
+`.github/workflows/ci.yml` runs `preflight.py --ci --only <group>` once per group (`python`, `tests`, `content`,
+`audits`, `docs`), so a check added to the table runs in CI and locally alike.
+
+| Flag | Effect |
+|---|---|
+| (none) | Everything: about 8 minutes on four cores, nearly all of it the test suite |
+| `--quick` | Everything but the test suite: about 80 s |
+| `--changed [--base REF]` | Only checks the diff against `origin/main` (committed, uncommitted and untracked) can reach. The test run narrows only for a Python-only diff, to the changed tests and the test named for each changed module. For the loop while you work, not the gate before a push |
+| `--only NAME…` / `--skip NAME…` | Groups or check ids (`--list` shows both) |
+| `--ci` | Stream each check's output under a log group, and run `organize_loc`'s writer as well as its `--check` |
+| `--real-paths` | Use this machine's game paths. By default every check gets CI's dummy `VIC3_*` paths and no `PYTHONPATH`, even on a machine with the game, so the answer is CI's: with a real install some audits read vanilla's files and report differently (#1271, #1349) |
+
+Two checks exist only here, not as scripts of their own: `py311` tokenizes every Python file for f-string syntax
+3.11 rejects and 3.12 accepts (the string's own quote, a backslash, a comment or a line break inside the braces),
+and `line-endings` fails when one of the four CRLF docs has gained LF lines.
+
+The audits run through `scripts/run_audits.py` (all of CI's, in parallel, about a minute; or name some:
+`scripts/run_audits.py prev_scope silent_variable`). Their roster, arguments and suppression comments are
+`audit_registry.py`'s; `docs/guides/audits.md` is generated from it. A failing audit prints what its flag means and
+the exact comment that suppresses an intended one.
+
+Two more checks in the `content` group hold new in-game text to `loc_style_guide.md`, both as ratchets against a
+committed baseline, so the mod's older text passes and only new text is judged. `scripts/analysis/check_loc_style.py`
+(`--check`, `--update`, `--rule`, `--key`) flags stock metaphors, verdict words, the player-guide lint's inflated
+words and phrases, ` - ` as a dash and a text ending in an ellipsis or `\n`; its baseline is
+`scripts/analysis/loc_style_baseline.txt` (`rule<TAB>key`), and a baseline line whose finding is gone also fails, so
+the file only shrinks. `scripts/analysis/flavor_forms.py` classes each event flavor text by shape (exchange, one voice,
+quotation, scene, narration) and prints a chain's mix; `--check` fails when a form over a third of its chain gains a
+text (`flavor_forms_baseline.json`).
+
+`scripts/analysis/event_guarantees.py <event id | namespace>` prints what an event's own trigger guarantees, for
+whoever writes its text: the technologies it requires with their eras, their prerequisites all the way down, the era
+at or before which every technology may be assumed (three or more eras behind the latest required; owner,
+2026-11-09), technologies it requires to be absent, and the trigger's other top-level lines. `--tech <name>` shows one
+technology. It reads the mod's technology files and `vanilla_parsed/`, and reads only the trigger: what fires the
+event, and an option's own trigger, can guarantee more.
+
+`scripts/lessons.py <name>…` searches the guides' `##` sections for an effect, trigger, modifier or any word, ranks
+a heading match above a body match, and prints a section with `--show N`. It is the way into
+`scripting_best_practices.md`, whose sections are filed in the order they were learned.
+
 ### Running the suite
+
+A bare pytest run needs no game install and no environment: `conftest.py` sets dummy `VIC3_*` paths when the machine
+has neither `paths.local.json` nor the variables. `unittest` does not read `conftest.py`.
+
 
 `.venv/bin/python -m pytest -n auto test_*.py` runs every test file in parallel (pytest-xdist, one worker per CPU).
 CI's "Unit tests" step adds `--dist loadfile`, which runs each file whole, in order, on one worker, and `--durations=25`,
