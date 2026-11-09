@@ -1331,7 +1331,7 @@ Through the Great Game scripted effects (00_victoria_great_game_scripted_effects
 Failed to switch player to new country in play_as effect - no player for scoped country
 ```
 
-The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05). The Kazakh event's `play_as = c:KAZ` does the same when the country it fires for has no player: once the same night.
+The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05). The Kazakh event's `play_as = c:KAZ` does the same when the country it fires for has no player: once the same night. The Dutch East Indies breakup in `events/dei_breakup.txt` (line 196, `play_as = scope:russian_evacuation_state.owner`) does it too when it fires for a country no player holds: once, 2026-11-08.
 
 ### `common/journal_entries/06_morocco_lands_of_anarchy.txt:99` — `owner = root` on an al-Rif state with no owner (1.15)
 
@@ -1830,6 +1830,14 @@ Could not get leader of interest group 'Industrialists' in country
 ```
 
 Parallel to the existing `events/slave_revolts.txt:38` entry. Vanilla secession event reads the Industrialists IG leader on a freshly-synthesized revolt country before its IGs have been populated with characters. Casts as a `leader returned an unset scope` cascade on the same line. Cosmetic — null leader is handled gracefully downstream.
+
+### `events/secession_situations.txt:282` — a secession leader for an interest group the event never found
+
+```
+Invalid Interest Group scope when creating Character
+```
+
+The secession event's `immediate` saves `scope:secessionist_ig` from a `random_interest_group` whose `limit` takes only a group out of government (and, for the British East India Company, neither the Armed Forces nor the Industrialists). When no group qualifies, the scope stays unset and the `create_character` after it, `interest_group = scope:secessionist_ig`, has no group to give the politician. Once, 2026-11-08, three minutes before the Indian-revolution hack (the on_revolution_start entry above) fired for the Revolutionary East India Company.
 
 ### `jomini_mapobject_manager.cpp:3509` — invalid camera index 0
 - source: `jomini_mapobject_manager.cpp:3509`
