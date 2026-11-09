@@ -691,6 +691,7 @@ te_cm_census_dominance = {
 #    of the merge it was converting in.
 # 4. The merge is complete (state 2) once no core part that joined is left unswitched, and at least one
 #    has switched (te_cmg_<m>_core_switched). A late part still converts, and still switches, after that.
+# 5. The starter, if a human plays it, gets te_culture_merge.1 naming the part and the result.
 te_cm_switch_part = {
 	if = {
 		limit = {
@@ -732,6 +733,19 @@ te_cm_switch_part = {
 				te_cmg_$MERGE$_core_switched = yes
 			}
 			set_global_variable = { name = te_cm_state_$MERGE$ value = 2 }
+		}
+		# 5. The starter hears of it (te_culture_merge.1), a human only: nothing else tells the player a culture switched.
+		# The event names the two cultures from these scopes, and each popup keeps its own copy.
+		cu:$CULTURE$ = { save_scope_as = te_cm_ev_part }
+		cu:$RESULT$ = { save_scope_as = te_cm_ev_result }
+		if = {
+			limit = { exists = global_var:te_cm_starter_$MERGE$ }
+			global_var:te_cm_starter_$MERGE$ = {
+				if = {
+					limit = { is_ai = no }
+					trigger_event = { id = te_culture_merge.1 popup = yes }
+				}
+			}
 		}
 	}
 }

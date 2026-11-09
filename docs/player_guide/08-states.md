@@ -441,6 +441,8 @@ status line gives the share itself. At the switch:
 - every country with the culture as a primary culture gains the merged culture as
   one.
 
+If you run the merge, an event tells you each time a culture switches.
+
 The old culture keeps its homelands and stays a primary culture of every country that
 had it, so formable countries and other content that look for it keep working.
 Its homeland in a state lasts as long as the merged culture's homeland there:
