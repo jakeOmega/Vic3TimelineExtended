@@ -28,6 +28,8 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder (se
 | Docs, the player guide | `.claude/rules/docs.md` | a file under `docs/` |
 | Vanilla references | `docs/vanilla/CLAUDE.md` | a file under `docs/vanilla/` |
 | Branches, stacked PRs, worktrees, multi-agent waves, play-testing unmerged work | `docs/guides/git_workflow.md` | never on its own: read it before any of these |
+| Writing or rewriting in-game text | the `event-text` skill, which follows `docs/guides/loc_style_guide.md` | on request |
+| Adding an event | the `add-event` skill | on request |
 | Game logs | the `log-triage` skill | on request |
 
 ## Common commands
