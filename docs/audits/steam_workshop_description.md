@@ -1,6 +1,6 @@
 # Steam Workshop description
 
-The description for the Workshop as of 1.3.0 (2026-11-06; 1.2.0's is in git history). Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
+The description for the Workshop as of 1.3.1 (2026-11-09; the text is 1.3.0's with the guide link moved to the new tag, and 1.2.0's is in git history). Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
 
 - **Length.** Steam caps a description at 8,000 characters. This one is 7,848 characters (7,902 UTF-8 bytes, 7,941 counting each line break as two), so it fits however Steam counts. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
 - **Player guide link.** Point it at the release's tag (`/tree/<version>/docs/player_guide/README.md`), not `main`, so it shows the guide that shipped. See `docs/guides/release_checklist.md`.
@@ -25,7 +25,7 @@ When you have screenshots ready, paste `[img]<steam-hosted-url>[/img]` at these 
 
 [i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
-[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.0/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.1/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
 [h1]At a glance[/h1]
 [list]
