@@ -22228,7 +22228,7 @@
   "de": "Die Zahlen werden zu Beginn des nächsten Monats aktualisiert."
  },
  "rt_how_emissions": {
-  "en": "Closing supply does not cut emissions by itself. Fewer mines and rigs mean less coal and oil for sale, dearer fuel, and buildings that switch to cleaner methods or stop. But our market's emissions come from what the whole market burns, wherever it was mined: coal imported to replace ours emits just the same. Clean generation and synthetic fuel are what let the market burn less without going short.",
+  "en": "Closing supply does not cut emissions by itself. Fewer mines and rigs mean less coal and oil for sale, costlier fuel, and buildings that switch to cleaner methods or stop. But our market's emissions come from what the whole market burns, wherever it was mined: coal imported to replace ours emits just the same. Clean generation and synthetic fuel are what let the market burn less without going short.",
   "de": "Das Schließen des Angebots senkt die Emissionen nicht von selbst. Weniger Minen und Bohranlagen bedeuten weniger Kohle und Öl zum Verkauf, teureren Brennstoff und Gebäude, die auf sauberere Methoden umstellen oder den Betrieb einstellen. Aber die Emissionen unseres Marktes stammen aus dem, was der gesamte Markt verbrennt, egal wo es gefördert wurde: Importierte Kohle als Ersatz für unsere verursacht genau dieselben Emissionen. Saubere Erzeugung und synthetische Kraftstoffe sind es, die den Markt weniger verbrennen lassen, ohne dass es knapp wird."
  },
  "rt_how_emissions_head": {
@@ -28416,11 +28416,11 @@
   "de": "Verstreute Städte"
  },
  "te_demog_mt_dispersed_desc": {
-  "en": "The state's urban people are spread over many small market towns, which are dearer to serve than one city, so they give less infrastructure. Grows as the largest town's share of the urban people falls, from nothing at 20% to its full size at 5%.",
+  "en": "The state's urban people are spread over many small market towns, which are costlier to serve than one city, so they give less infrastructure. Grows as the largest town's share of the urban people falls, from nothing at 20% to its full size at 5%.",
   "de": "Die Stadtbewohner des Staates verteilen sich auf viele kleine Marktstädte, die teurer zu versorgen sind als eine Stadt, sodass sie weniger Infrastruktur liefern. Wächst, wenn der Anteil der größten Stadt an den Stadtbewohnern fällt, von null bei 20% bis zur vollen Größe bei 5%."
  },
  "te_demog_mt_eff_dispersed": {
-  "en": "#b Effects#! at #v [State.MakeScope.ScriptValue('te_demog_mt_e_neg')|%0]#! strength (none at 20%, 100% at 5%; the state takes a new figure at its next yearly count): its people give #v -[State.MakeScope.ScriptValue('te_demog_mt_shown_infra_down')|%0]#! [concept_infrastructure], since many small towns are dearer to serve than one city.",
+  "en": "#b Effects#! at #v [State.MakeScope.ScriptValue('te_demog_mt_e_neg')|%0]#! strength (none at 20%, 100% at 5%; the state takes a new figure at its next yearly count): its people give #v -[State.MakeScope.ScriptValue('te_demog_mt_shown_infra_down')|%0]#! [concept_infrastructure], since many small towns are costlier to serve than one city.",
   "de": "#b Effekte#! bei #v [State.MakeScope.ScriptValue('te_demog_mt_e_neg')|%0]#! Stärke (keine bei 20%, 100% bei 5%; der Staat übernimmt bei seiner nächsten jährlichen Zählung einen neuen Wert): Seine Menschen liefern #v -[State.MakeScope.ScriptValue('te_demog_mt_shown_infra_down')|%0]#! [concept_infrastructure], da viele kleine Städte teurer zu versorgen sind als eine Stadt."
  },
  "te_demog_mt_eff_display": {
@@ -31248,7 +31248,7 @@
   "de": "Schwache Währung"
  },
  "te_fx_weak_desc": {
-  "en": "The exchange rate is under par. What this country sells abroad is cheap and what it buys is dear — by one and a quarter per cent for every point of the index.",
+  "en": "The exchange rate is under par. What this country sells abroad is cheap and what it buys is expensive — by one and a quarter per cent for every point of the index.",
   "de": "Der Wechselkurs liegt unter pari. Was dieses Land ins Ausland verkauft, ist günstig, und was es kauft, ist teuer — um jeweils ein und ein viertel Prozent für jeden Punkt des Index."
  },
  "te_grid_bld_flow": {
@@ -31376,7 +31376,7 @@
   "de": "Noch keine. Eine Station schließt sich dem Netz beim ersten monatlichen Abgleich nach ihrem Bau an."
  },
  "te_grid_how_grids": {
-  "en": "A $building_grid_transfer_station$ joins its state to a [concept_power_grid]. A grid starts as one country's stations in one [concept_market_area]. Once a month it moves $electricity$ from states where it is cheap to states where it is dear: a sending state's station buys its spare power and sends it, and a receiving state's station delivers it. A grid takes out what it puts in. After a change, such as a new power plant or station, it takes a few months to settle. Each grid is named for its hub, its largest producer.",
+  "en": "A $building_grid_transfer_station$ joins its state to a [concept_power_grid]. A grid starts as one country's stations in one [concept_market_area]. Once a month it moves $electricity$ from states where it is cheap to states where it is expensive: a sending state's station buys its spare power and sends it, and a receiving state's station delivers it. A grid takes out what it puts in. After a change, such as a new power plant or station, it takes a few months to settle. Each grid is named for its hub, its largest producer.",
   "de": "Eine $building_grid_transfer_station$ verbindet ihren Staat mit einem [concept_power_grid]. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area]. Einmal im Monat bewegt es $electricity$ von Staaten, in denen sie billig ist, zu Staaten, in denen sie teuer ist: Die Station eines sendenden Staates kauft seinen überschüssigen Strom und sendet ihn, und die Station eines empfangenden Staates liefert ihn. Ein Netz nimmt heraus, was es hineingibt. Nach einer Veränderung, etwa einem neuen Kraftwerk oder einer neuen Station, braucht es einige Monate, um sich einzupendeln. Jedes Netz ist nach seinem Knoten benannt, seinem größten Erzeuger."
  },
  "te_grid_how_header": {
@@ -32760,7 +32760,7 @@
   "de": "Abgewertete Bindung"
  },
  "te_mon_peg_devalued_desc": {
-  "en": "#lore (From an earlier version: a devaluation now moves the Exchange Rate Index instead.)#! The currency still converts to gold — at a worse price than it did. Everything this country sells abroad is suddenly cheap and everything it buys is dear, an advantage that wears off as prices at home catch up.",
+  "en": "#lore (From an earlier version: a devaluation now moves the Exchange Rate Index instead.)#! The currency still converts to gold — at a worse price than it did. Everything this country sells abroad is suddenly cheap and everything it buys is expensive, an advantage that wears off as prices at home catch up.",
   "de": "#lore (Aus einer früheren Version: Eine Abwertung bewegt inzwischen stattdessen den Wechselkursindex.)#! Die Währung lässt sich weiterhin in Gold umtauschen — nur zu einem schlechteren Kurs als zuvor. Alles, was dieses Land ins Ausland verkauft, ist plötzlich günstig, und alles, was es kauft, ist teuer — ein Vorteil, der schwindet, sobald die Preise im Inland aufholen."
  },
  "te_mon_peg_suspension": {
@@ -33736,7 +33736,7 @@
   "de": "Mehr Ansprüche verlangt, als es entbehren kann"
  },
  "te_seabed_ai_lease_wanted": {
-  "en": "Short of seabed claims, with $tech_metals$ dear",
+  "en": "Short of seabed claims, with $tech_metals$ expensive",
   "de": "Knapp an Meeresbodenansprüchen, bei hohem Preis für $tech_metals$"
  },
  "te_seabed_basin_arctic": {

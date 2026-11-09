@@ -1,0 +1,246 @@
+{
+ "cm_american": {
+  "en": "American",
+  "de": "Amerikanisch"
+ },
+ "cm_andean": {
+  "en": "Andean",
+  "de": "Andin"
+ },
+ "cm_anglophone": {
+  "en": "Anglophone",
+  "de": "Anglophon"
+ },
+ "cm_arab": {
+  "en": "Arab",
+  "de": "Arabisch"
+ },
+ "cm_czechoslovak": {
+  "en": "Czechoslovak",
+  "de": "Tschechoslowakisch"
+ },
+ "cm_dravidian": {
+  "en": "Dravidian",
+  "de": "Drawidisch"
+ },
+ "cm_east_african": {
+  "en": "East African",
+  "de": "Ostafrikanisch"
+ },
+ "cm_east_slavic": {
+  "en": "East Slavic",
+  "de": "Ostslawisch"
+ },
+ "cm_german": {
+  "en": "German",
+  "de": "Deutsch"
+ },
+ "cm_gran_colombian": {
+  "en": "Gran Colombian",
+  "de": "Großkolumbianisch"
+ },
+ "cm_indonesian": {
+  "en": "Indonesian",
+  "de": "Indonesisch"
+ },
+ "cm_italian": {
+  "en": "Italian",
+  "de": "Italienisch"
+ },
+ "cm_latin": {
+  "en": "Latin",
+  "de": "Lateinisch"
+ },
+ "cm_nguni": {
+  "en": "Greater Nguni",
+  "de": "Groß-Nguni"
+ },
+ "cm_oghuz_turkic": {
+  "en": "Oghuz Turkic",
+  "de": "Oghusisch"
+ },
+ "cm_pan_malay": {
+  "en": "Pan-Malay",
+  "de": "Panmalaiisch"
+ },
+ "cm_pan_slavic": {
+  "en": "Pan-Slavic",
+  "de": "Panslawisch"
+ },
+ "cm_pan_turkic": {
+  "en": "Pan-Turkic",
+  "de": "Pantürkisch"
+ },
+ "cm_platine": {
+  "en": "Platine",
+  "de": "Rioplatensisch"
+ },
+ "cm_scandinavian": {
+  "en": "Scandinavian",
+  "de": "Skandinavisch"
+ },
+ "cm_yugoslav": {
+  "en": "Yugoslav",
+  "de": "Jugoslawisch"
+ },
+ "heritage_cm_latin": {
+  "en": "Latin",
+  "de": "Lateinisch"
+ },
+ "heritage_cm_pan_slavic": {
+  "en": "Pan-Slavic",
+  "de": "Panslawisch"
+ },
+ "heritage_cm_pan_turkic": {
+  "en": "Pan-Turkic",
+  "de": "Pantürkisch"
+ },
+ "je_te_cm_american": {
+  "en": "Cultural Merge: $cm_american$",
+  "de": "Kulturverschmelzung: $cm_american$"
+ },
+ "je_te_cm_andean": {
+  "en": "Cultural Merge: $cm_andean$",
+  "de": "Kulturverschmelzung: $cm_andean$"
+ },
+ "je_te_cm_anglophone": {
+  "en": "Cultural Merge: $cm_anglophone$",
+  "de": "Kulturverschmelzung: $cm_anglophone$"
+ },
+ "je_te_cm_arab": {
+  "en": "Cultural Merge: $cm_arab$",
+  "de": "Kulturverschmelzung: $cm_arab$"
+ },
+ "je_te_cm_brazilian": {
+  "en": "Cultural Merge: $brazilian$",
+  "de": "Kulturverschmelzung: $brazilian$"
+ },
+ "je_te_cm_british": {
+  "en": "Cultural Merge: $british$",
+  "de": "Kulturverschmelzung: $british$"
+ },
+ "je_te_cm_chinese": {
+  "en": "Cultural Merge: $han$",
+  "de": "Kulturverschmelzung: $han$"
+ },
+ "je_te_cm_czechoslovak": {
+  "en": "Cultural Merge: $cm_czechoslovak$",
+  "de": "Kulturverschmelzung: $cm_czechoslovak$"
+ },
+ "je_te_cm_dravidian": {
+  "en": "Cultural Merge: $cm_dravidian$",
+  "de": "Kulturverschmelzung: $cm_dravidian$"
+ },
+ "je_te_cm_dutch": {
+  "en": "Cultural Merge: $dutch$",
+  "de": "Kulturverschmelzung: $dutch$"
+ },
+ "je_te_cm_east_african": {
+  "en": "Cultural Merge: $cm_east_african$",
+  "de": "Kulturverschmelzung: $cm_east_african$"
+ },
+ "je_te_cm_east_slavic": {
+  "en": "Cultural Merge: $cm_east_slavic$",
+  "de": "Kulturverschmelzung: $cm_east_slavic$"
+ },
+ "je_te_cm_filipino": {
+  "en": "Cultural Merge: $filipino$",
+  "de": "Kulturverschmelzung: $filipino$"
+ },
+ "je_te_cm_finnish": {
+  "en": "Cultural Merge: $finnish$",
+  "de": "Kulturverschmelzung: $finnish$"
+ },
+ "je_te_cm_french": {
+  "en": "Cultural Merge: $french$",
+  "de": "Kulturverschmelzung: $french$"
+ },
+ "je_te_cm_german": {
+  "en": "Cultural Merge: $cm_german$",
+  "de": "Kulturverschmelzung: $cm_german$"
+ },
+ "je_te_cm_gran_colombian": {
+  "en": "Cultural Merge: $cm_gran_colombian$",
+  "de": "Kulturverschmelzung: $cm_gran_colombian$"
+ },
+ "je_te_cm_hindustani": {
+  "en": "Cultural Merge: $hindustani$",
+  "de": "Kulturverschmelzung: $hindustani$"
+ },
+ "je_te_cm_hungarian": {
+  "en": "Cultural Merge: $hungarian$",
+  "de": "Kulturverschmelzung: $hungarian$"
+ },
+ "je_te_cm_indonesian": {
+  "en": "Cultural Merge: $cm_indonesian$",
+  "de": "Kulturverschmelzung: $cm_indonesian$"
+ },
+ "je_te_cm_italian": {
+  "en": "Cultural Merge: $cm_italian$",
+  "de": "Kulturverschmelzung: $cm_italian$"
+ },
+ "je_te_cm_japanese": {
+  "en": "Cultural Merge: $japanese$",
+  "de": "Kulturverschmelzung: $japanese$"
+ },
+ "je_te_cm_latin": {
+  "en": "Cultural Merge: $cm_latin$",
+  "de": "Kulturverschmelzung: $cm_latin$"
+ },
+ "je_te_cm_nguni": {
+  "en": "Cultural Merge: $cm_nguni$",
+  "de": "Kulturverschmelzung: $cm_nguni$"
+ },
+ "je_te_cm_oghuz_turkic": {
+  "en": "Cultural Merge: $cm_oghuz_turkic$",
+  "de": "Kulturverschmelzung: $cm_oghuz_turkic$"
+ },
+ "je_te_cm_pan_malay": {
+  "en": "Cultural Merge: $cm_pan_malay$",
+  "de": "Kulturverschmelzung: $cm_pan_malay$"
+ },
+ "je_te_cm_pan_slavic": {
+  "en": "Cultural Merge: $cm_pan_slavic$",
+  "de": "Kulturverschmelzung: $cm_pan_slavic$"
+ },
+ "je_te_cm_pan_turkic": {
+  "en": "Cultural Merge: $cm_pan_turkic$",
+  "de": "Kulturverschmelzung: $cm_pan_turkic$"
+ },
+ "je_te_cm_persian": {
+  "en": "Cultural Merge: $persian$",
+  "de": "Kulturverschmelzung: $persian$"
+ },
+ "je_te_cm_platine": {
+  "en": "Cultural Merge: $cm_platine$",
+  "de": "Kulturverschmelzung: $cm_platine$"
+ },
+ "je_te_cm_scandinavian": {
+  "en": "Cultural Merge: $cm_scandinavian$",
+  "de": "Kulturverschmelzung: $cm_scandinavian$"
+ },
+ "je_te_cm_yugoslav": {
+  "en": "Cultural Merge: $cm_yugoslav$",
+  "de": "Kulturverschmelzung: $cm_yugoslav$"
+ },
+ "language_cm_east_african": {
+  "en": "East African",
+  "de": "Ostafrikanisch"
+ },
+ "language_cm_latin": {
+  "en": "Latin",
+  "de": "Lateinisch"
+ },
+ "language_cm_pan_malay": {
+  "en": "Pan-Malay",
+  "de": "Panmalaiisch"
+ },
+ "language_cm_pan_slavic": {
+  "en": "Pan-Slavic",
+  "de": "Panslawisch"
+ },
+ "language_cm_pan_turkic": {
+  "en": "Pan-Turkic",
+  "de": "Pantürkisch"
+ }
+}

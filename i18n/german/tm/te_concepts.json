@@ -3096,7 +3096,7 @@
   "de": "Währungsabwertung"
  },
  "concept_currency_devaluation_desc": {
-  "en": "A fall in what the national currency is worth abroad. Under a floating currency it is not a decision but an outcome — of a policy rate held under the world's, of inflation above the world's, or of lenders fleeing a distressed treasury — and it makes exports cheap, imports dear and prices rise. Under a gold standard it is a choice, offered when a convertibility crisis breaks: re-peg at a lower value, take the trade edge while it lasts, and accept the [concept_infamy] and the great powers' resentment that come with undercutting them.",
+  "en": "A fall in what the national currency is worth abroad. Under a floating currency it is not a decision but an outcome — of a policy rate held under the world's, of inflation above the world's, or of lenders fleeing a distressed treasury — and it makes exports cheap, imports expensive and prices rise. Under a gold standard it is a choice, offered when a convertibility crisis breaks: re-peg at a lower value, take the trade edge while it lasts, and accept the [concept_infamy] and the great powers' resentment that come with undercutting them.",
   "de": "Ein Wertverfall der Landeswährung im Ausland. Bei einer freien Währung ist dies keine Entscheidung, sondern eine Folge — eines unter dem Weltniveau gehaltenen Leitzinses, einer über dem Weltniveau liegenden Inflation oder von Gläubigern, die vor einer angeschlagenen Staatskasse fliehen — und sie macht Exporte billig, Importe teuer und die Preise steigen. Unter dem Goldstandard ist sie eine Wahl, die sich bietet, wenn eine Konvertibilitätskrise ausbricht: die Bindung zu einem niedrigeren Wert neu festlegen, den Handelsvorteil nutzen, solange er anhält, und die [concept_infamy] sowie den Groll der Großmächte in Kauf nehmen, den das Unterbieten mit sich bringt."
  },
  "concept_custom_treaty_articles_desc": {
@@ -11068,7 +11068,7 @@
   "de": "Dieser Hub gibt Panzer aus der strategischen Reserve frei."
  },
  "state_power_grid_connection_bool_desc": {
-  "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is dear.",
+  "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is expensive.",
   "de": "Dieser Staat ist an ein [concept_power_grid] angeschlossen. Einmal im Monat verschiebt das Netz $electricity$ über die $building_grid_transfer_station$ des Staates, aus Staaten, in denen sie billig ist, in Staaten, in denen sie teuer ist."
  },
  "state_power_grid_disrupted_bool_desc": {

@@ -3096,7 +3096,7 @@
   "es": "Devaluación de la moneda"
  },
  "concept_currency_devaluation_desc": {
-  "en": "A fall in what the national currency is worth abroad. Under a floating currency it is not a decision but an outcome — of a policy rate held under the world's, of inflation above the world's, or of lenders fleeing a distressed treasury — and it makes exports cheap, imports dear and prices rise. Under a gold standard it is a choice, offered when a convertibility crisis breaks: re-peg at a lower value, take the trade edge while it lasts, and accept the [concept_infamy] and the great powers' resentment that come with undercutting them.",
+  "en": "A fall in what the national currency is worth abroad. Under a floating currency it is not a decision but an outcome — of a policy rate held under the world's, of inflation above the world's, or of lenders fleeing a distressed treasury — and it makes exports cheap, imports expensive and prices rise. Under a gold standard it is a choice, offered when a convertibility crisis breaks: re-peg at a lower value, take the trade edge while it lasts, and accept the [concept_infamy] and the great powers' resentment that come with undercutting them.",
   "es": "Una caída del valor de la moneda nacional en el extranjero. Con una moneda flotante no es una decisión sino un resultado —de un tipo de interés oficial por debajo del mundial, de una inflación superior a la mundial o de prestamistas que huyen de un tesoro en apuros— y abarata las exportaciones, encarece las importaciones y hace subir los precios. Con el patrón oro es una elección, que se ofrece cuando estalla una crisis de convertibilidad: fijar de nuevo la paridad a un valor más bajo, aprovechar la ventaja comercial mientras dure y asumir la [concept_infamy|l] y el resentimiento de las grandes potencias que conlleva restarles competitividad."
  },
  "concept_custom_treaty_articles_desc": {
@@ -11068,7 +11068,7 @@
   "es": "Este centro está liberando tanques de la reserva estratégica."
  },
  "state_power_grid_connection_bool_desc": {
-  "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is dear.",
+  "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is expensive.",
   "es": "Este estado está conectado a una [concept_power_grid|l]. Una vez al mes la red mueve $electricity$ a través de la $building_grid_transfer_station$ del estado, de los estados donde es barata a los estados donde es cara."
  },
  "state_power_grid_disrupted_bool_desc": {
