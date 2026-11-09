@@ -46,8 +46,8 @@ Conventions
 Hand-set tiers (spec section 3: vanilla's traits sometimes disagree with history):
 * tier 1: Occitan, Walloon (heritage Netherlandish, not Gallic), French (which
   Walloon's heritage would otherwise put at tier 2), Han with Yue, Hakka and Min
-  (four vanilla languages, one Han identity), Japanese with Ryukyuan, and Kannada
-  (heritage Deccani, not Carnatic);
+  (four vanilla languages, one Han identity), Japanese with Ryukyuan, Kannada
+  (heritage Deccani, not Carnatic), and Mazanderani (Tabari, its own language);
 * tier 3: Catalan, which shares Occitan's language but stays a later join.
 """
 
@@ -323,8 +323,12 @@ MERGES: tuple[Merge, ...] = (
     ),
     Merge(
         "persian", "persian", None,
+        # Both added by the owner, 2026-11-09. Mazanderani (Tabari, its own language in vanilla) joins at tier 1,
+        # like Occitan: Shia and Persianate, its homeland wholly Iran's, and no separatist movement. Baluchi keeps
+        # the tier its traits give (3): a Sunni people living mostly outside Persia in 1836, which only a long,
+        # accepted hold would fold in.
         core=(_p("persian"), _p("luri")),
-        optional=(_p("tajik"), _p("hazara")),
+        optional=(_p("tajik"), _p("hazara"), _p("mazanderani", tier=1), _p("baluchi")),
     ),
     Merge(
         "oghuz_turkic", "cm_oghuz_turkic", _new("Oghuz Turkic", 222, 44, 70),

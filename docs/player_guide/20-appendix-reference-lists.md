@@ -176,7 +176,7 @@ a law or independence must keep holding, or the merge pauses.
 | Han (existing) | Han, Yue, Min, Hakka | none | 1 | Public Schools |
 | Japanese (existing) | Japanese, Ryukyuan | none | 1 | The Honorable Restoration concluded, or the Bakufu law gone |
 | Arab | Maghrebi, Misri, Mashriqi, Bedouin, Yemenite | Sudanese (tier 1b), Haratin (tier 1b), Bidan (tier 1b) | 1 | Not a subject of another country, and Public Schools |
-| Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b) | 1 | none |
+| Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b), Mazanderani, Baluchi (tier 2) | 1 | none |
 | Oghuz Turkic | Turkish, Azerbaijani | Turkmen (tier 1b) | 1 | none |
 | Hindustani (existing) | Hindustani, Avadhi, Bundeli, Chhattisgarhi, Bagheli | none | 1 | Not a subject of another country |
 | Dravidian | Tamil, Kannada, Malayalam | Telugu (tier 2) | 1 | Dravida Nadu formed |

@@ -915,14 +915,14 @@ gm_tr_repair_places = {
 	if = {
 		limit = {
 			has_tag = gm_monument
-			NOT = { exists = var:gm_tr_origin }
+			gm_tr_origin_gone = yes
 			has_variable = gm_tr_origin_region
 		}
 		gm_mon_repair_origin = yes
 	}
 	if = {
 		limit = {
-			NOT = { exists = var:gm_tr_origin }
+			gm_tr_origin_gone = yes
 			has_variable = gm_tr_origin_region
 		}
 		clear_saved_scope = gm_tr_repair_state

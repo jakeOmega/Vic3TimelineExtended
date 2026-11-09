@@ -4867,6 +4867,14 @@ te_cmg_census_persian_country = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hazara } }
 		te_cm_census_part = { MERGE = persian CULTURE = hazara RESULT = persian TIER = 2 }
 	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_mazanderani } }
+		te_cm_census_part = { MERGE = persian CULTURE = mazanderani RESULT = persian TIER = 1 }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_baluchi } }
+		te_cm_census_part = { MERGE = persian CULTURE = baluchi RESULT = persian TIER = 3 }
+	}
 	set_local_variable = { name = te_cm_sg_min value = 999 }
 	set_local_variable = { name = te_cm_sg_max value = -1 }
 	set_local_variable = { name = te_cm_sg_n value = 0 }
@@ -4948,6 +4956,14 @@ te_cmg_census_persian_country = {
 					NOT = { has_global_variable = te_cm_switched_hazara }
 					var:te_cm_ok_persian_hazara ?= 1
 				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_mazanderani }
+					var:te_cm_ok_persian_mazanderani ?= 1
+				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_baluchi }
+					var:te_cm_ok_persian_baluchi ?= 1
+				}
 			}
 		}
 		te_cmg_persian_result_sol = yes
@@ -4959,6 +4975,14 @@ te_cmg_census_persian_country = {
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_hazara } }
 		te_cm_sol_gate_part = { MERGE = persian CULTURE = hazara }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_mazanderani } }
+		te_cm_sol_gate_part = { MERGE = persian CULTURE = mazanderani }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_baluchi } }
+		te_cm_sol_gate_part = { MERGE = persian CULTURE = baluchi }
 	}
 	te_cmg_persian_settle = yes
 }
@@ -4986,6 +5010,18 @@ te_cmg_persian_join_ready = {
 				te_cmg_persian_hazara_can_join = yes
 			}
 			te_cm_join_part = { MERGE = persian CULTURE = hazara INDEX = 21 }
+		}
+		if = {
+			limit = {
+				te_cmg_persian_mazanderani_can_join = yes
+			}
+			te_cm_join_part = { MERGE = persian CULTURE = mazanderani INDEX = 21 }
+		}
+		if = {
+			limit = {
+				te_cmg_persian_baluchi_can_join = yes
+			}
+			te_cm_join_part = { MERGE = persian CULTURE = baluchi INDEX = 21 }
 		}
 	}
 }
@@ -8801,6 +8837,8 @@ te_cmg_release_lost_starters = {
 		te_cm_unjoin_part = { MERGE = persian CULTURE = luri INDEX = 21 }
 		te_cm_unjoin_part = { MERGE = persian CULTURE = tajik INDEX = 21 }
 		te_cm_unjoin_part = { MERGE = persian CULTURE = hazara INDEX = 21 }
+		te_cm_unjoin_part = { MERGE = persian CULTURE = mazanderani INDEX = 21 }
+		te_cm_unjoin_part = { MERGE = persian CULTURE = baluchi INDEX = 21 }
 	}
 	if = {
 		limit = {
@@ -10217,6 +10255,32 @@ te_cmg_census_all = {
 		}
 		else = {
 			te_cm_census_culture = { CULTURE = hazara }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_switched_mazanderani }
+			te_cmg_persian_census_wanted = yes
+		}
+		if = {
+			limit = { global_var:te_cm_joined_persian_mazanderani ?= 1 }
+			te_cm_census_culture_joined = { CULTURE = mazanderani RESULT = persian }
+		}
+		else = {
+			te_cm_census_culture = { CULTURE = mazanderani }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_switched_baluchi }
+			te_cmg_persian_census_wanted = yes
+		}
+		if = {
+			limit = { global_var:te_cm_joined_persian_baluchi ?= 1 }
+			te_cm_census_culture_joined = { CULTURE = baluchi RESULT = persian }
+		}
+		else = {
+			te_cm_census_culture = { CULTURE = baluchi }
 		}
 	}
 	if = {
@@ -12264,6 +12328,28 @@ te_cmg_yearly_country = {
 				}
 				te_cm_convert_part = { MERGE = persian CULTURE = hazara RESULT = persian TIER = 2 }
 			}
+			if = {
+				limit = {
+					global_var:te_cm_joined_persian_mazanderani ?= 1
+					NOT = { has_global_variable = te_cm_switched_mazanderani }
+					scope:te_cm_starter = {
+						var:te_cm_ok_persian_mazanderani ?= 1
+						var:te_cm_sol_ok_persian_mazanderani ?= 1
+					}
+				}
+				te_cm_convert_part = { MERGE = persian CULTURE = mazanderani RESULT = persian TIER = 1 }
+			}
+			if = {
+				limit = {
+					global_var:te_cm_joined_persian_baluchi ?= 1
+					NOT = { has_global_variable = te_cm_switched_baluchi }
+					scope:te_cm_starter = {
+						var:te_cm_ok_persian_baluchi ?= 1
+						var:te_cm_sol_ok_persian_baluchi ?= 1
+					}
+				}
+				te_cm_convert_part = { MERGE = persian CULTURE = baluchi RESULT = persian TIER = 3 }
+			}
 		}
 	}
 	if = {
@@ -13898,6 +13984,22 @@ te_cmg_dominance_all = {
 			te_cm_census_dominance = { MERGE = persian CULTURE = hazara }
 			te_cm_switch_part = { MERGE = persian CULTURE = hazara RESULT = persian }
 		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_persian_mazanderani ?= 1
+				NOT = { has_global_variable = te_cm_switched_mazanderani }
+			}
+			te_cm_census_dominance = { MERGE = persian CULTURE = mazanderani }
+			te_cm_switch_part = { MERGE = persian CULTURE = mazanderani RESULT = persian }
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_persian_baluchi ?= 1
+				NOT = { has_global_variable = te_cm_switched_baluchi }
+			}
+			te_cm_census_dominance = { MERGE = persian CULTURE = baluchi }
+			te_cm_switch_part = { MERGE = persian CULTURE = baluchi RESULT = persian }
+		}
 	}
 	if = {
 		limit = {
@@ -14732,6 +14834,14 @@ te_cmg_monthly_country = {
 		te_cm_monthly_switched_culture = { CULTURE = hazara }
 	}
 	if = {
+		limit = { has_global_variable = te_cm_switched_mazanderani }
+		te_cm_monthly_switched_culture = { CULTURE = mazanderani }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_baluchi }
+		te_cm_monthly_switched_culture = { CULTURE = baluchi }
+	}
+	if = {
 		limit = { has_global_variable = te_cm_switched_turkish }
 		te_cm_monthly_switched_culture = { CULTURE = turkish }
 	}
@@ -15112,6 +15222,14 @@ te_cmg_copy_fervor_all = {
 	if = {
 		limit = { has_global_variable = te_cm_switched_hazara }
 		te_cm_copy_fervor = { CULTURE = hazara }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_mazanderani }
+		te_cm_copy_fervor = { CULTURE = mazanderani }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_baluchi }
+		te_cm_copy_fervor = { CULTURE = baluchi }
 	}
 	if = {
 		limit = { has_global_variable = te_cm_switched_avadhi }
@@ -17026,6 +17144,14 @@ te_cmg_formed_country = {
 							global_var:te_cm_joined_persian_hazara ?= 1
 							country_has_primary_culture = cu:hazara
 						}
+						AND = {
+							global_var:te_cm_joined_persian_mazanderani ?= 1
+							country_has_primary_culture = cu:mazanderani
+						}
+						AND = {
+							global_var:te_cm_joined_persian_baluchi ?= 1
+							country_has_primary_culture = cu:baluchi
+						}
 					}
 				}
 			}
@@ -18007,6 +18133,20 @@ te_cmg_remove_switched_part_homelands = {
 	}
 	if = {
 		limit = {
+			global_var:te_cm_switched_mazanderani ?= scope:te_cm_removed_culture
+			is_homeland = cu:mazanderani
+		}
+		remove_homeland = cu:mazanderani
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_baluchi ?= scope:te_cm_removed_culture
+			is_homeland = cu:baluchi
+		}
+		remove_homeland = cu:baluchi
+	}
+	if = {
+		limit = {
 			global_var:te_cm_switched_turkish ?= scope:te_cm_removed_culture
 			is_homeland = cu:turkish
 		}
@@ -18853,6 +18993,8 @@ te_cmg_debug_dump = {
 		te_cm_debug_dump_part = { MERGE = persian CULTURE = luri SOL_OK = te_cm_sol_ok_persian }
 		te_cm_debug_dump_part = { MERGE = persian CULTURE = tajik SOL_OK = te_cm_sol_ok_persian_tajik }
 		te_cm_debug_dump_part = { MERGE = persian CULTURE = hazara SOL_OK = te_cm_sol_ok_persian_hazara }
+		te_cm_debug_dump_part = { MERGE = persian CULTURE = mazanderani SOL_OK = te_cm_sol_ok_persian_mazanderani }
+		te_cm_debug_dump_part = { MERGE = persian CULTURE = baluchi SOL_OK = te_cm_sol_ok_persian_baluchi }
 	}
 	if = {
 		limit = { OR = { global_var:te_cm_state_oghuz_turkic ?= 1 global_var:te_cm_state_oghuz_turkic ?= 2 te_cmg_oghuz_turkic_is_candidate = yes } }

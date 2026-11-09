@@ -62,7 +62,12 @@ on_monthly_pulse_country = {
 te_cm_monthly_on_action = {
 	effect = {
 		if = {
-			limit = { te_cm_system_enabled = yes }
+			# Not for a country that owns no state. One that loses every state lives on until its war ends, and
+			# add_primary_culture refuses it as a "non existing country" (Baden, 1897, observer game 2026-11-08).
+			limit = {
+				te_cm_system_enabled = yes
+				any_scope_state = { always = yes }
+			}
 			te_cmg_monthly_country = yes
 		}
 	}

@@ -26,6 +26,7 @@ CULTURES = ROOT / "common/cultures/te_merged_cultures.txt"
 TRAITS = ROOT / "common/discrimination_traits/te_merged_culture_traits.txt"
 LOC = ROOT / "localization/english/te_culture_merges_generated_l_english.yml"
 STATIC_MODIFIERS = ROOT / "common/static_modifiers/te_merged_culture_static_modifiers.txt"
+MODIFIER_TYPES = ROOT / "common/modifier_type_definitions/te_merged_culture_modifier_types.txt"
 
 
 def unwrap(value):
@@ -38,6 +39,12 @@ def parse(path):
     parser = ParadoxFileParser()
     parser.parse_file(str(path))
     return {key: unwrap(value) for key, value in parser.data.items()}
+
+
+def deep(value):
+    """``value`` with every `=` wrapper removed, at every depth."""
+    value = unwrap(value)
+    return {k: deep(v) for k, v in value.items()} if isinstance(value, dict) else value
 
 
 def field(body, name):
@@ -315,6 +322,41 @@ class StaticModifierTest(unittest.TestCase):
         data = STATIC_MODIFIERS.read_bytes()
         self.assertTrue(data.startswith(BOM))
         self.assertFalse(data[3:].startswith(BOM))
+
+
+class ModifierTypeTest(unittest.TestCase):
+    """The engine creates no modifier type for a culture: vanilla registers three for each of its own, and a static
+    modifier naming an unregistered one logs `Unknown modifier type` at load and loads empty (126 lines, the first
+    launch after the static modifiers, 2026-11-08)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = parse(MODIFIER_TYPES)
+        snapshot = vanilla_parsed.load(str(ROOT / "vanilla_parsed")).data
+        cls.vanilla_types = snapshot["Modifier Types"]
+        cls.vanilla_cultures = snapshot["Cultures"]
+
+    def test_vanilla_registers_the_three_for_every_culture(self):
+        for culture in self.vanilla_cultures:
+            for name in gen.culture_modifier_types(culture):
+                self.assertIn(name, self.vanilla_types, name)
+
+    def test_every_new_result_has_the_three_in_vanillas_shape(self):
+        news = [merge.result for merge in cfg.MERGES if merge.new is not None]
+        self.assertEqual(set(self.types), {name for culture in news for name in gen.culture_modifier_types(culture)})
+        for culture in news:
+            template = next(iter(self.vanilla_cultures))   # any vanilla culture: all 322 have the same three
+            for vanilla_name, name in zip(gen.culture_modifier_types(template), gen.culture_modifier_types(culture)):
+                self.assertEqual(deep(self.vanilla_types[vanilla_name]), deep(self.types[name]), name)
+
+    def test_every_static_modifier_field_is_a_generated_type(self):
+        for key, body in parse(STATIC_MODIFIERS).items():
+            for name in body:
+                if name != "icon":
+                    self.assertIn(name, self.types, key)
+
+    def test_no_type_clashes_with_vanilla(self):
+        self.assertFalse(set(self.types) & set(self.vanilla_types))
 
 
 class LocTest(unittest.TestCase):

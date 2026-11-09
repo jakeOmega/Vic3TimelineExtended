@@ -206,7 +206,8 @@ class CensusRunsOnlyWhenNeededTest(unittest.TestCase):
             self.assertIn(idle + "any_country = { te_cmg_%s_is_candidate = yes }" % key, body, key)
             running = "OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 } " % (key, key)
             self.assertIn(running + "exists = global_var:te_cm_starter_%s" % key, body, key)
-            self.assertNotIn("limit", body, key)  # a trigger, and no any_* takes a limit
+            # A trigger, and no any_* takes a limit; a trigger_if's guards the starter read (the entries' tooltip test).
+            self.assertNotIn("limit", body.replace("trigger_if = { limit = ", "trigger_if = { "), key)
 
     def test_a_running_or_complete_merge_needs_a_slot_culture_still_to_convert(self):
         # Neither switched nor absent from the world; an absorb merge's result never switches.

@@ -141,6 +141,17 @@ gm_tr_claimed_by = {
 	var:gm_tr_origin ?= { owner ?= $WHO$ }
 }
 
+# Container scope. Its origin state is gone: unset, or a state merged into
+# another part of its region, which still resolves for some days after the
+# merge but has no owner (2026-11-08: the listing read its owner and logged
+# `Scoped object is not valid. Type: Country`). gm_tr_repair_places repairs both.
+gm_tr_origin_gone = {
+	OR = {
+		NOT = { exists = var:gm_tr_origin }
+		var:gm_tr_origin ?= { NOT = { exists = owner } }
+	}
+}
+
 # Its holder owns its origin: it can come home without a treaty.
 gm_tr_holder_owns_origin = {
 	var:gm_tr_site ?= { owner ?= { save_temporary_scope_as = gm_tmp_tr_holder } }
