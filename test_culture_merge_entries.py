@@ -186,6 +186,9 @@ def _holds_one(n, world):
         return v == "yes"
     if k == "custom_tooltip":
         return holds([c for c in n.children if c.key != "text"], world)
+    if k == "trigger_if":  # passes when its limit fails
+        limit = child(n, "limit")
+        return not holds(limit.children, world) or holds([c for c in n.children if c.key != "limit"], world)
     if k.startswith("global_var:"):
         name = k.split(":", 1)[1]
         if n.children:  # global_var:x = { is_country_alive = no }
@@ -423,21 +426,47 @@ class EntryShapeTest(unittest.TestCase):
         for merge in cfg.MERGES:
             key = merge.key
             running = "OR = { global_var:te_cm_state_%s ?= 1 global_var:te_cm_state_%s ?= 2 }" % (key, key)
+            guard = "trigger_if = { limit = { exists = global_var:te_cm_starter_%s }" % key
             self.assertEqual(
                 squash(block(triggers, "te_cmg_%s_starter_gone" % key)),
-                "OR = { NOT = { exists = global_var:te_cm_starter_%s } AND = { exists = global_var:te_cm_starter_%s "
-                "global_var:te_cm_starter_%s = { is_country_alive = no } } }" % (key, key, key),
+                guard + " global_var:te_cm_starter_%s = { is_country_alive = no } }" % key,
             )
             self.assertEqual(
                 squash(block(triggers, "te_cmg_%s_is_starter" % key)),
-                running + " OR = { AND = { exists = global_var:te_cm_starter_%s this = global_var:te_cm_starter_%s } "
-                "AND = { has_variable = te_cm_started_%s te_cmg_%s_starter_gone = yes } }" % (key, key, key, key),
+                running + " OR = { AND = { exists = global_var:te_cm_starter_%s %s this = global_var:te_cm_starter_%s } } "
+                "AND = { has_variable = te_cm_started_%s te_cmg_%s_starter_gone = yes } }" % (key, guard, key, key, key),
             )
             self.assertEqual(
                 squash(block(triggers, "te_cmg_%s_has_other_starter" % key)),
-                running + " exists = global_var:te_cm_starter_%s global_var:te_cm_starter_%s = { is_country_alive = yes } "
-                "NOT = { this = global_var:te_cm_starter_%s } NOT = { has_variable = te_cm_started_%s }" % (key, key, key, key),
+                running + " exists = global_var:te_cm_starter_%s %s global_var:te_cm_starter_%s = { is_country_alive = yes } "
+                "NOT = { this = global_var:te_cm_starter_%s } } NOT = { has_variable = te_cm_started_%s }"
+                % (key, guard, key, key, key),
             )
+
+    def test_every_read_of_a_starter_waits_behind_a_trigger_if(self):
+        # A journal entry's tooltip lists every child of an AND, so `exists` beside a read stops nothing there: the
+        # French entry's `possible` logged 2,359 each of three script errors and 9,204 loc errors in about twenty seconds
+        # of an observer game (2026-11-08), reading te_cm_starter_french, which an idle merge never sets. Only a
+        # trigger_if's contents wait for its limit.
+        reads = re.compile(r"global_var:te_cm_starter_(\w+)")
+        lines = text_of(GEN_TRIGGERS).splitlines()
+        stack, bad = [], []
+        for number, line in enumerate(lines, 1):
+            body = line.split("#", 1)[0].strip()
+            m = reads.search(body)
+            if m and not body.startswith(("exists = ", "limit = ")):
+                guard = "limit = { exists = global_var:te_cm_starter_%s }" % m.group(1)
+                if not any(opener == "trigger_if" and limit == guard for opener, limit in stack):
+                    bad.append((number, body))
+            if body.startswith("limit = ") and stack and stack[-1][0] == "trigger_if":
+                stack[-1] = ("trigger_if", body)
+            opened, closed = body.count("{"), body.count("}")
+            if opened > closed:
+                stack.append((body.split("=", 1)[0].strip(), None))
+            elif closed > opened:
+                del stack[len(stack) - (closed - opened):]
+        self.assertEqual(stack, [])
+        self.assertEqual(bad, [])
 
     def test_the_bar_follows_the_progress_each_month_and_pauses_with_the_rule(self):
         for merge in cfg.MERGES:
@@ -951,11 +980,12 @@ class StarterLossTest(unittest.TestCase):
 
     def test_a_dead_starter_is_released_as_well_as_a_missing_one(self):
         # The task 4 review: a country that lost every state still resolves, so its absence can't be the only test.
-        triggers = text_of(GEN_TRIGGERS)
         for merge in cfg.MERGES:
-            gone = squash(block(triggers, "te_cmg_%s_starter_gone" % merge.key))
-            self.assertIn("NOT = { exists = global_var:te_cm_starter_%s }" % merge.key, gone)
-            self.assertIn("global_var:te_cm_starter_%s = { is_country_alive = no }" % merge.key, gone)
+            gone = definitions(GEN_TRIGGERS)["te_cmg_%s_starter_gone" % merge.key].children
+            starter = "te_cm_starter_%s" % merge.key
+            self.assertTrue(holds(gone, World()), merge.key)
+            self.assertTrue(holds(gone, World(globals={starter: "FRA"}, alive={"FRA": False})), merge.key)
+            self.assertFalse(holds(gone, World(globals={starter: "FRA"}, alive={"FRA": True})), merge.key)
 
     def test_a_flag_holder_takes_the_merge_over_before_it_is_released(self):
         # R30: the re-point comes first, in the same pass, and the release only follows if it found nobody.

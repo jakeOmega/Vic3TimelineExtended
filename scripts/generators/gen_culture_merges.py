@@ -1155,7 +1155,9 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     for line in _state_running_or_complete(key):
                         out.line(line)
                     out.line("exists = global_var:te_cm_starter_%s" % key)
-                    out.line("global_var:te_cm_starter_%s = { is_country_alive = yes }" % key)
+                    with out.block("trigger_if"):
+                        out.line("limit = { exists = global_var:te_cm_starter_%s }" % key)
+                        out.line("global_var:te_cm_starter_%s = { is_country_alive = yes }" % key)
                     out.line("NOT = { %s }" % _result_switched(merge))
                     with out.block("OR"):
                         for culture in slot_cultures(merge):
@@ -1164,13 +1166,13 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                             for line in _live_culture(culture):
                                 out.line(line)
         out.line()
-        out.line("# Any scope. The %s merge's starter is missing, or is no longer a living country." % key)
+        out.line("# Any scope. The %s merge's starter is missing, or is no longer a living country. Each read of the" % key)
+        out.line("# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a")
+        out.line("# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.")
         with out.block("te_cmg_%s_starter_gone" % key):
-            with out.block("OR"):
-                out.line("NOT = { exists = global_var:te_cm_starter_%s }" % key)
-                with out.block("AND"):
-                    out.line("exists = global_var:te_cm_starter_%s" % key)
-                    out.line("global_var:te_cm_starter_%s = { is_country_alive = no }" % key)
+            with out.block("trigger_if"):
+                out.line("limit = { exists = global_var:te_cm_starter_%s }" % key)
+                out.line("global_var:te_cm_starter_%s = { is_country_alive = no }" % key)
         out.line()
         out.line("# Country scope. This country started the %s merge, which is running or complete: it is the global starter," % key)
         out.line("# or it carries te_cm_started_%s (set by te_cm_start_merge, inherited by a civil war's winner, which" % key)
@@ -1181,7 +1183,9 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             with out.block("OR"):
                 with out.block("AND"):
                     out.line("exists = global_var:te_cm_starter_%s" % key)
-                    out.line("this = global_var:te_cm_starter_%s" % key)
+                    with out.block("trigger_if"):
+                        out.line("limit = { exists = global_var:te_cm_starter_%s }" % key)
+                        out.line("this = global_var:te_cm_starter_%s" % key)
                 with out.block("AND"):
                     out.line("has_variable = te_cm_started_%s" % key)
                     out.line("te_cmg_%s_starter_gone = yes" % key)
@@ -1192,8 +1196,10 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
             for line in _state_running_or_complete(key):
                 out.line(line)
             out.line("exists = global_var:te_cm_starter_%s" % key)
-            out.line("global_var:te_cm_starter_%s = { is_country_alive = yes }" % key)
-            out.line("NOT = { this = global_var:te_cm_starter_%s }" % key)
+            with out.block("trigger_if"):
+                out.line("limit = { exists = global_var:te_cm_starter_%s }" % key)
+                out.line("global_var:te_cm_starter_%s = { is_country_alive = yes }" % key)
+                out.line("NOT = { this = global_var:te_cm_starter_%s }" % key)
             out.line("NOT = { has_variable = te_cm_started_%s }" % key)
         out.line()
         out.line("# Any scope. No part of the %s merge that joined is still unswitched: a part that joins late, after the" % key)

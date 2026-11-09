@@ -175,7 +175,10 @@ te_cmg_german_census_wanted = {
 				global_var:te_cm_state_german ?= 2
 			}
 			exists = global_var:te_cm_starter_german
-			global_var:te_cm_starter_german = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_german }
+				global_var:te_cm_starter_german = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_german_result_switched = yes }
 			OR = {
 				AND = {
@@ -199,14 +202,13 @@ te_cmg_german_census_wanted = {
 	}
 }
 
-# Any scope. The german merge's starter is missing, or is no longer a living country.
+# Any scope. The german merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_german_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_german }
-		AND = {
-			exists = global_var:te_cm_starter_german
-			global_var:te_cm_starter_german = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_german }
+		global_var:te_cm_starter_german = { is_country_alive = no }
 	}
 }
 
@@ -221,7 +223,10 @@ te_cmg_german_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_german
-			this = global_var:te_cm_starter_german
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_german }
+				this = global_var:te_cm_starter_german
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_german
@@ -238,8 +243,11 @@ te_cmg_german_has_other_starter = {
 		global_var:te_cm_state_german ?= 2
 	}
 	exists = global_var:te_cm_starter_german
-	global_var:te_cm_starter_german = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_german }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_german }
+		global_var:te_cm_starter_german = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_german }
+	}
 	NOT = { has_variable = te_cm_started_german }
 }
 
@@ -486,7 +494,10 @@ te_cmg_italian_census_wanted = {
 				global_var:te_cm_state_italian ?= 2
 			}
 			exists = global_var:te_cm_starter_italian
-			global_var:te_cm_starter_italian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_italian }
+				global_var:te_cm_starter_italian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_italian_result_switched = yes }
 			OR = {
 				AND = {
@@ -506,14 +517,13 @@ te_cmg_italian_census_wanted = {
 	}
 }
 
-# Any scope. The italian merge's starter is missing, or is no longer a living country.
+# Any scope. The italian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_italian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_italian }
-		AND = {
-			exists = global_var:te_cm_starter_italian
-			global_var:te_cm_starter_italian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_italian }
+		global_var:te_cm_starter_italian = { is_country_alive = no }
 	}
 }
 
@@ -528,7 +538,10 @@ te_cmg_italian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_italian
-			this = global_var:te_cm_starter_italian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_italian }
+				this = global_var:te_cm_starter_italian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_italian
@@ -545,8 +558,11 @@ te_cmg_italian_has_other_starter = {
 		global_var:te_cm_state_italian ?= 2
 	}
 	exists = global_var:te_cm_starter_italian
-	global_var:te_cm_starter_italian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_italian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_italian }
+		global_var:te_cm_starter_italian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_italian }
+	}
 	NOT = { has_variable = te_cm_started_italian }
 }
 
@@ -821,7 +837,10 @@ te_cmg_scandinavian_census_wanted = {
 				global_var:te_cm_state_scandinavian ?= 2
 			}
 			exists = global_var:te_cm_starter_scandinavian
-			global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_scandinavian }
+				global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_scandinavian_result_switched = yes }
 			OR = {
 				AND = {
@@ -845,14 +864,13 @@ te_cmg_scandinavian_census_wanted = {
 	}
 }
 
-# Any scope. The scandinavian merge's starter is missing, or is no longer a living country.
+# Any scope. The scandinavian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_scandinavian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_scandinavian }
-		AND = {
-			exists = global_var:te_cm_starter_scandinavian
-			global_var:te_cm_starter_scandinavian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_scandinavian }
+		global_var:te_cm_starter_scandinavian = { is_country_alive = no }
 	}
 }
 
@@ -867,7 +885,10 @@ te_cmg_scandinavian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_scandinavian
-			this = global_var:te_cm_starter_scandinavian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_scandinavian }
+				this = global_var:te_cm_starter_scandinavian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_scandinavian
@@ -884,8 +905,11 @@ te_cmg_scandinavian_has_other_starter = {
 		global_var:te_cm_state_scandinavian ?= 2
 	}
 	exists = global_var:te_cm_starter_scandinavian
-	global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_scandinavian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_scandinavian }
+		global_var:te_cm_starter_scandinavian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_scandinavian }
+	}
 	NOT = { has_variable = te_cm_started_scandinavian }
 }
 
@@ -1180,7 +1204,10 @@ te_cmg_east_slavic_census_wanted = {
 				global_var:te_cm_state_east_slavic ?= 2
 			}
 			exists = global_var:te_cm_starter_east_slavic
-			global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_east_slavic }
+				global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_east_slavic_result_switched = yes }
 			OR = {
 				AND = {
@@ -1200,14 +1227,13 @@ te_cmg_east_slavic_census_wanted = {
 	}
 }
 
-# Any scope. The east_slavic merge's starter is missing, or is no longer a living country.
+# Any scope. The east_slavic merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_east_slavic_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_east_slavic }
-		AND = {
-			exists = global_var:te_cm_starter_east_slavic
-			global_var:te_cm_starter_east_slavic = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_east_slavic }
+		global_var:te_cm_starter_east_slavic = { is_country_alive = no }
 	}
 }
 
@@ -1222,7 +1248,10 @@ te_cmg_east_slavic_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_east_slavic
-			this = global_var:te_cm_starter_east_slavic
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_east_slavic }
+				this = global_var:te_cm_starter_east_slavic
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_east_slavic
@@ -1239,8 +1268,11 @@ te_cmg_east_slavic_has_other_starter = {
 		global_var:te_cm_state_east_slavic ?= 2
 	}
 	exists = global_var:te_cm_starter_east_slavic
-	global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_east_slavic }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_east_slavic }
+		global_var:te_cm_starter_east_slavic = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_east_slavic }
+	}
 	NOT = { has_variable = te_cm_started_east_slavic }
 }
 
@@ -1621,7 +1653,10 @@ te_cmg_yugoslav_census_wanted = {
 				global_var:te_cm_state_yugoslav ?= 2
 			}
 			exists = global_var:te_cm_starter_yugoslav
-			global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_yugoslav }
+				global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_yugoslav_result_switched = yes }
 			OR = {
 				AND = {
@@ -1649,14 +1684,13 @@ te_cmg_yugoslav_census_wanted = {
 	}
 }
 
-# Any scope. The yugoslav merge's starter is missing, or is no longer a living country.
+# Any scope. The yugoslav merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_yugoslav_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_yugoslav }
-		AND = {
-			exists = global_var:te_cm_starter_yugoslav
-			global_var:te_cm_starter_yugoslav = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_yugoslav }
+		global_var:te_cm_starter_yugoslav = { is_country_alive = no }
 	}
 }
 
@@ -1671,7 +1705,10 @@ te_cmg_yugoslav_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_yugoslav
-			this = global_var:te_cm_starter_yugoslav
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_yugoslav }
+				this = global_var:te_cm_starter_yugoslav
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_yugoslav
@@ -1688,8 +1725,11 @@ te_cmg_yugoslav_has_other_starter = {
 		global_var:te_cm_state_yugoslav ?= 2
 	}
 	exists = global_var:te_cm_starter_yugoslav
-	global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_yugoslav }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_yugoslav }
+		global_var:te_cm_starter_yugoslav = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_yugoslav }
+	}
 	NOT = { has_variable = te_cm_started_yugoslav }
 }
 
@@ -1960,7 +2000,10 @@ te_cmg_czechoslovak_census_wanted = {
 				global_var:te_cm_state_czechoslovak ?= 2
 			}
 			exists = global_var:te_cm_starter_czechoslovak
-			global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_czechoslovak }
+				global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_czechoslovak_result_switched = yes }
 			OR = {
 				AND = {
@@ -1980,14 +2023,13 @@ te_cmg_czechoslovak_census_wanted = {
 	}
 }
 
-# Any scope. The czechoslovak merge's starter is missing, or is no longer a living country.
+# Any scope. The czechoslovak merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_czechoslovak_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_czechoslovak }
-		AND = {
-			exists = global_var:te_cm_starter_czechoslovak
-			global_var:te_cm_starter_czechoslovak = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_czechoslovak }
+		global_var:te_cm_starter_czechoslovak = { is_country_alive = no }
 	}
 }
 
@@ -2002,7 +2044,10 @@ te_cmg_czechoslovak_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_czechoslovak
-			this = global_var:te_cm_starter_czechoslovak
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_czechoslovak }
+				this = global_var:te_cm_starter_czechoslovak
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_czechoslovak
@@ -2019,8 +2064,11 @@ te_cmg_czechoslovak_has_other_starter = {
 		global_var:te_cm_state_czechoslovak ?= 2
 	}
 	exists = global_var:te_cm_starter_czechoslovak
-	global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_czechoslovak }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_czechoslovak }
+		global_var:te_cm_starter_czechoslovak = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_czechoslovak }
+	}
 	NOT = { has_variable = te_cm_started_czechoslovak }
 }
 
@@ -2219,7 +2267,10 @@ te_cmg_hungarian_census_wanted = {
 				global_var:te_cm_state_hungarian ?= 2
 			}
 			exists = global_var:te_cm_starter_hungarian
-			global_var:te_cm_starter_hungarian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_hungarian }
+				global_var:te_cm_starter_hungarian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_hungarian_result_switched = yes }
 			OR = {
 				AND = {
@@ -2231,14 +2282,13 @@ te_cmg_hungarian_census_wanted = {
 	}
 }
 
-# Any scope. The hungarian merge's starter is missing, or is no longer a living country.
+# Any scope. The hungarian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_hungarian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_hungarian }
-		AND = {
-			exists = global_var:te_cm_starter_hungarian
-			global_var:te_cm_starter_hungarian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_hungarian }
+		global_var:te_cm_starter_hungarian = { is_country_alive = no }
 	}
 }
 
@@ -2253,7 +2303,10 @@ te_cmg_hungarian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_hungarian
-			this = global_var:te_cm_starter_hungarian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_hungarian }
+				this = global_var:te_cm_starter_hungarian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_hungarian
@@ -2270,8 +2323,11 @@ te_cmg_hungarian_has_other_starter = {
 		global_var:te_cm_state_hungarian ?= 2
 	}
 	exists = global_var:te_cm_starter_hungarian
-	global_var:te_cm_starter_hungarian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_hungarian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_hungarian }
+		global_var:te_cm_starter_hungarian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_hungarian }
+	}
 	NOT = { has_variable = te_cm_started_hungarian }
 }
 
@@ -2444,7 +2500,10 @@ te_cmg_dutch_census_wanted = {
 				global_var:te_cm_state_dutch ?= 2
 			}
 			exists = global_var:te_cm_starter_dutch
-			global_var:te_cm_starter_dutch = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_dutch }
+				global_var:te_cm_starter_dutch = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_dutch_result_switched = yes }
 			OR = {
 				AND = {
@@ -2456,14 +2515,13 @@ te_cmg_dutch_census_wanted = {
 	}
 }
 
-# Any scope. The dutch merge's starter is missing, or is no longer a living country.
+# Any scope. The dutch merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_dutch_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_dutch }
-		AND = {
-			exists = global_var:te_cm_starter_dutch
-			global_var:te_cm_starter_dutch = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_dutch }
+		global_var:te_cm_starter_dutch = { is_country_alive = no }
 	}
 }
 
@@ -2478,7 +2536,10 @@ te_cmg_dutch_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_dutch
-			this = global_var:te_cm_starter_dutch
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_dutch }
+				this = global_var:te_cm_starter_dutch
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_dutch
@@ -2495,8 +2556,11 @@ te_cmg_dutch_has_other_starter = {
 		global_var:te_cm_state_dutch ?= 2
 	}
 	exists = global_var:te_cm_starter_dutch
-	global_var:te_cm_starter_dutch = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_dutch }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_dutch }
+		global_var:te_cm_starter_dutch = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_dutch }
+	}
 	NOT = { has_variable = te_cm_started_dutch }
 }
 
@@ -2669,7 +2733,10 @@ te_cmg_finnish_census_wanted = {
 				global_var:te_cm_state_finnish ?= 2
 			}
 			exists = global_var:te_cm_starter_finnish
-			global_var:te_cm_starter_finnish = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_finnish }
+				global_var:te_cm_starter_finnish = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_finnish_result_switched = yes }
 			OR = {
 				AND = {
@@ -2681,14 +2748,13 @@ te_cmg_finnish_census_wanted = {
 	}
 }
 
-# Any scope. The finnish merge's starter is missing, or is no longer a living country.
+# Any scope. The finnish merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_finnish_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_finnish }
-		AND = {
-			exists = global_var:te_cm_starter_finnish
-			global_var:te_cm_starter_finnish = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_finnish }
+		global_var:te_cm_starter_finnish = { is_country_alive = no }
 	}
 }
 
@@ -2703,7 +2769,10 @@ te_cmg_finnish_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_finnish
-			this = global_var:te_cm_starter_finnish
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_finnish }
+				this = global_var:te_cm_starter_finnish
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_finnish
@@ -2720,8 +2789,11 @@ te_cmg_finnish_has_other_starter = {
 		global_var:te_cm_state_finnish ?= 2
 	}
 	exists = global_var:te_cm_starter_finnish
-	global_var:te_cm_starter_finnish = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_finnish }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_finnish }
+		global_var:te_cm_starter_finnish = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_finnish }
+	}
 	NOT = { has_variable = te_cm_started_finnish }
 }
 
@@ -2976,7 +3048,10 @@ te_cmg_french_census_wanted = {
 				global_var:te_cm_state_french ?= 2
 			}
 			exists = global_var:te_cm_starter_french
-			global_var:te_cm_starter_french = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_french }
+				global_var:te_cm_starter_french = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_french_result_switched = yes }
 			OR = {
 				AND = {
@@ -2996,14 +3071,13 @@ te_cmg_french_census_wanted = {
 	}
 }
 
-# Any scope. The french merge's starter is missing, or is no longer a living country.
+# Any scope. The french merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_french_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_french }
-		AND = {
-			exists = global_var:te_cm_starter_french
-			global_var:te_cm_starter_french = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_french }
+		global_var:te_cm_starter_french = { is_country_alive = no }
 	}
 }
 
@@ -3018,7 +3092,10 @@ te_cmg_french_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_french
-			this = global_var:te_cm_starter_french
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_french }
+				this = global_var:te_cm_starter_french
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_french
@@ -3035,8 +3112,11 @@ te_cmg_french_has_other_starter = {
 		global_var:te_cm_state_french ?= 2
 	}
 	exists = global_var:te_cm_starter_french
-	global_var:te_cm_starter_french = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_french }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_french }
+		global_var:te_cm_starter_french = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_french }
+	}
 	NOT = { has_variable = te_cm_started_french }
 }
 
@@ -3253,7 +3333,10 @@ te_cmg_british_census_wanted = {
 				global_var:te_cm_state_british ?= 2
 			}
 			exists = global_var:te_cm_starter_british
-			global_var:te_cm_starter_british = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_british }
+				global_var:te_cm_starter_british = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_british_result_switched = yes }
 			OR = {
 				AND = {
@@ -3265,14 +3348,13 @@ te_cmg_british_census_wanted = {
 	}
 }
 
-# Any scope. The british merge's starter is missing, or is no longer a living country.
+# Any scope. The british merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_british_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_british }
-		AND = {
-			exists = global_var:te_cm_starter_british
-			global_var:te_cm_starter_british = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_british }
+		global_var:te_cm_starter_british = { is_country_alive = no }
 	}
 }
 
@@ -3287,7 +3369,10 @@ te_cmg_british_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_british
-			this = global_var:te_cm_starter_british
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_british }
+				this = global_var:te_cm_starter_british
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_british
@@ -3304,8 +3389,11 @@ te_cmg_british_has_other_starter = {
 		global_var:te_cm_state_british ?= 2
 	}
 	exists = global_var:te_cm_starter_british
-	global_var:te_cm_starter_british = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_british }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_british }
+		global_var:te_cm_starter_british = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_british }
+	}
 	NOT = { has_variable = te_cm_started_british }
 }
 
@@ -3580,7 +3668,10 @@ te_cmg_american_census_wanted = {
 				global_var:te_cm_state_american ?= 2
 			}
 			exists = global_var:te_cm_starter_american
-			global_var:te_cm_starter_american = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_american }
+				global_var:te_cm_starter_american = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_american_result_switched = yes }
 			OR = {
 				AND = {
@@ -3600,14 +3691,13 @@ te_cmg_american_census_wanted = {
 	}
 }
 
-# Any scope. The american merge's starter is missing, or is no longer a living country.
+# Any scope. The american merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_american_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_american }
-		AND = {
-			exists = global_var:te_cm_starter_american
-			global_var:te_cm_starter_american = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_american }
+		global_var:te_cm_starter_american = { is_country_alive = no }
 	}
 }
 
@@ -3622,7 +3712,10 @@ te_cmg_american_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_american
-			this = global_var:te_cm_starter_american
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_american }
+				this = global_var:te_cm_starter_american
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_american
@@ -3639,8 +3732,11 @@ te_cmg_american_has_other_starter = {
 		global_var:te_cm_state_american ?= 2
 	}
 	exists = global_var:te_cm_starter_american
-	global_var:te_cm_starter_american = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_american }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_american }
+		global_var:te_cm_starter_american = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_american }
+	}
 	NOT = { has_variable = te_cm_started_american }
 }
 
@@ -4141,7 +4237,10 @@ te_cmg_anglophone_census_wanted = {
 				global_var:te_cm_state_anglophone ?= 2
 			}
 			exists = global_var:te_cm_starter_anglophone
-			global_var:te_cm_starter_anglophone = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_anglophone }
+				global_var:te_cm_starter_anglophone = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_anglophone_result_switched = yes }
 			OR = {
 				AND = {
@@ -4181,14 +4280,13 @@ te_cmg_anglophone_census_wanted = {
 	}
 }
 
-# Any scope. The anglophone merge's starter is missing, or is no longer a living country.
+# Any scope. The anglophone merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_anglophone_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_anglophone }
-		AND = {
-			exists = global_var:te_cm_starter_anglophone
-			global_var:te_cm_starter_anglophone = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_anglophone }
+		global_var:te_cm_starter_anglophone = { is_country_alive = no }
 	}
 }
 
@@ -4203,7 +4301,10 @@ te_cmg_anglophone_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_anglophone
-			this = global_var:te_cm_starter_anglophone
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_anglophone }
+				this = global_var:te_cm_starter_anglophone
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_anglophone
@@ -4220,8 +4321,11 @@ te_cmg_anglophone_has_other_starter = {
 		global_var:te_cm_state_anglophone ?= 2
 	}
 	exists = global_var:te_cm_starter_anglophone
-	global_var:te_cm_starter_anglophone = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_anglophone }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_anglophone }
+		global_var:te_cm_starter_anglophone = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_anglophone }
+	}
 	NOT = { has_variable = te_cm_started_anglophone }
 }
 
@@ -4600,7 +4704,10 @@ te_cmg_brazilian_census_wanted = {
 				global_var:te_cm_state_brazilian ?= 2
 			}
 			exists = global_var:te_cm_starter_brazilian
-			global_var:te_cm_starter_brazilian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_brazilian }
+				global_var:te_cm_starter_brazilian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_brazilian_result_switched = yes }
 			OR = {
 				AND = {
@@ -4628,14 +4735,13 @@ te_cmg_brazilian_census_wanted = {
 	}
 }
 
-# Any scope. The brazilian merge's starter is missing, or is no longer a living country.
+# Any scope. The brazilian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_brazilian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_brazilian }
-		AND = {
-			exists = global_var:te_cm_starter_brazilian
-			global_var:te_cm_starter_brazilian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_brazilian }
+		global_var:te_cm_starter_brazilian = { is_country_alive = no }
 	}
 }
 
@@ -4650,7 +4756,10 @@ te_cmg_brazilian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_brazilian
-			this = global_var:te_cm_starter_brazilian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_brazilian }
+				this = global_var:te_cm_starter_brazilian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_brazilian
@@ -4667,8 +4776,11 @@ te_cmg_brazilian_has_other_starter = {
 		global_var:te_cm_state_brazilian ?= 2
 	}
 	exists = global_var:te_cm_starter_brazilian
-	global_var:te_cm_starter_brazilian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_brazilian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_brazilian }
+		global_var:te_cm_starter_brazilian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_brazilian }
+	}
 	NOT = { has_variable = te_cm_started_brazilian }
 }
 
@@ -5017,7 +5129,10 @@ te_cmg_platine_census_wanted = {
 				global_var:te_cm_state_platine ?= 2
 			}
 			exists = global_var:te_cm_starter_platine
-			global_var:te_cm_starter_platine = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_platine }
+				global_var:te_cm_starter_platine = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_platine_result_switched = yes }
 			OR = {
 				AND = {
@@ -5041,14 +5156,13 @@ te_cmg_platine_census_wanted = {
 	}
 }
 
-# Any scope. The platine merge's starter is missing, or is no longer a living country.
+# Any scope. The platine merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_platine_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_platine }
-		AND = {
-			exists = global_var:te_cm_starter_platine
-			global_var:te_cm_starter_platine = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_platine }
+		global_var:te_cm_starter_platine = { is_country_alive = no }
 	}
 }
 
@@ -5063,7 +5177,10 @@ te_cmg_platine_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_platine
-			this = global_var:te_cm_starter_platine
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_platine }
+				this = global_var:te_cm_starter_platine
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_platine
@@ -5080,8 +5197,11 @@ te_cmg_platine_has_other_starter = {
 		global_var:te_cm_state_platine ?= 2
 	}
 	exists = global_var:te_cm_starter_platine
-	global_var:te_cm_starter_platine = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_platine }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_platine }
+		global_var:te_cm_starter_platine = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_platine }
+	}
 	NOT = { has_variable = te_cm_started_platine }
 }
 
@@ -5396,7 +5516,10 @@ te_cmg_andean_census_wanted = {
 				global_var:te_cm_state_andean ?= 2
 			}
 			exists = global_var:te_cm_starter_andean
-			global_var:te_cm_starter_andean = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_andean }
+				global_var:te_cm_starter_andean = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_andean_result_switched = yes }
 			OR = {
 				AND = {
@@ -5420,14 +5543,13 @@ te_cmg_andean_census_wanted = {
 	}
 }
 
-# Any scope. The andean merge's starter is missing, or is no longer a living country.
+# Any scope. The andean merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_andean_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_andean }
-		AND = {
-			exists = global_var:te_cm_starter_andean
-			global_var:te_cm_starter_andean = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_andean }
+		global_var:te_cm_starter_andean = { is_country_alive = no }
 	}
 }
 
@@ -5442,7 +5564,10 @@ te_cmg_andean_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_andean
-			this = global_var:te_cm_starter_andean
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_andean }
+				this = global_var:te_cm_starter_andean
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_andean
@@ -5459,8 +5584,11 @@ te_cmg_andean_has_other_starter = {
 		global_var:te_cm_state_andean ?= 2
 	}
 	exists = global_var:te_cm_starter_andean
-	global_var:te_cm_starter_andean = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_andean }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_andean }
+		global_var:te_cm_starter_andean = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_andean }
+	}
 	NOT = { has_variable = te_cm_started_andean }
 }
 
@@ -5736,7 +5864,10 @@ te_cmg_gran_colombian_census_wanted = {
 				global_var:te_cm_state_gran_colombian ?= 2
 			}
 			exists = global_var:te_cm_starter_gran_colombian
-			global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_gran_colombian }
+				global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_gran_colombian_result_switched = yes }
 			OR = {
 				AND = {
@@ -5756,14 +5887,13 @@ te_cmg_gran_colombian_census_wanted = {
 	}
 }
 
-# Any scope. The gran_colombian merge's starter is missing, or is no longer a living country.
+# Any scope. The gran_colombian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_gran_colombian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_gran_colombian }
-		AND = {
-			exists = global_var:te_cm_starter_gran_colombian
-			global_var:te_cm_starter_gran_colombian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_gran_colombian }
+		global_var:te_cm_starter_gran_colombian = { is_country_alive = no }
 	}
 }
 
@@ -5778,7 +5908,10 @@ te_cmg_gran_colombian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_gran_colombian
-			this = global_var:te_cm_starter_gran_colombian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_gran_colombian }
+				this = global_var:te_cm_starter_gran_colombian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_gran_colombian
@@ -5795,8 +5928,11 @@ te_cmg_gran_colombian_has_other_starter = {
 		global_var:te_cm_state_gran_colombian ?= 2
 	}
 	exists = global_var:te_cm_starter_gran_colombian
-	global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_gran_colombian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_gran_colombian }
+		global_var:te_cm_starter_gran_colombian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_gran_colombian }
+	}
 	NOT = { has_variable = te_cm_started_gran_colombian }
 }
 
@@ -6077,7 +6213,10 @@ te_cmg_chinese_census_wanted = {
 				global_var:te_cm_state_chinese ?= 2
 			}
 			exists = global_var:te_cm_starter_chinese
-			global_var:te_cm_starter_chinese = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_chinese }
+				global_var:te_cm_starter_chinese = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_chinese_result_switched = yes }
 			OR = {
 				AND = {
@@ -6097,14 +6236,13 @@ te_cmg_chinese_census_wanted = {
 	}
 }
 
-# Any scope. The chinese merge's starter is missing, or is no longer a living country.
+# Any scope. The chinese merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_chinese_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_chinese }
-		AND = {
-			exists = global_var:te_cm_starter_chinese
-			global_var:te_cm_starter_chinese = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_chinese }
+		global_var:te_cm_starter_chinese = { is_country_alive = no }
 	}
 }
 
@@ -6119,7 +6257,10 @@ te_cmg_chinese_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_chinese
-			this = global_var:te_cm_starter_chinese
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_chinese }
+				this = global_var:te_cm_starter_chinese
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_chinese
@@ -6136,8 +6277,11 @@ te_cmg_chinese_has_other_starter = {
 		global_var:te_cm_state_chinese ?= 2
 	}
 	exists = global_var:te_cm_starter_chinese
-	global_var:te_cm_starter_chinese = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_chinese }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_chinese }
+		global_var:te_cm_starter_chinese = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_chinese }
+	}
 	NOT = { has_variable = te_cm_started_chinese }
 }
 
@@ -6350,7 +6494,10 @@ te_cmg_japanese_census_wanted = {
 				global_var:te_cm_state_japanese ?= 2
 			}
 			exists = global_var:te_cm_starter_japanese
-			global_var:te_cm_starter_japanese = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_japanese }
+				global_var:te_cm_starter_japanese = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_japanese_result_switched = yes }
 			OR = {
 				AND = {
@@ -6362,14 +6509,13 @@ te_cmg_japanese_census_wanted = {
 	}
 }
 
-# Any scope. The japanese merge's starter is missing, or is no longer a living country.
+# Any scope. The japanese merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_japanese_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_japanese }
-		AND = {
-			exists = global_var:te_cm_starter_japanese
-			global_var:te_cm_starter_japanese = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_japanese }
+		global_var:te_cm_starter_japanese = { is_country_alive = no }
 	}
 }
 
@@ -6384,7 +6530,10 @@ te_cmg_japanese_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_japanese
-			this = global_var:te_cm_starter_japanese
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_japanese }
+				this = global_var:te_cm_starter_japanese
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_japanese
@@ -6401,8 +6550,11 @@ te_cmg_japanese_has_other_starter = {
 		global_var:te_cm_state_japanese ?= 2
 	}
 	exists = global_var:te_cm_starter_japanese
-	global_var:te_cm_starter_japanese = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_japanese }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_japanese }
+		global_var:te_cm_starter_japanese = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_japanese }
+	}
 	NOT = { has_variable = te_cm_started_japanese }
 }
 
@@ -6804,7 +6956,10 @@ te_cmg_arab_census_wanted = {
 				global_var:te_cm_state_arab ?= 2
 			}
 			exists = global_var:te_cm_starter_arab
-			global_var:te_cm_starter_arab = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_arab }
+				global_var:te_cm_starter_arab = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_arab_result_switched = yes }
 			OR = {
 				AND = {
@@ -6844,14 +6999,13 @@ te_cmg_arab_census_wanted = {
 	}
 }
 
-# Any scope. The arab merge's starter is missing, or is no longer a living country.
+# Any scope. The arab merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_arab_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_arab }
-		AND = {
-			exists = global_var:te_cm_starter_arab
-			global_var:te_cm_starter_arab = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_arab }
+		global_var:te_cm_starter_arab = { is_country_alive = no }
 	}
 }
 
@@ -6866,7 +7020,10 @@ te_cmg_arab_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_arab
-			this = global_var:te_cm_starter_arab
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_arab }
+				this = global_var:te_cm_starter_arab
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_arab
@@ -6883,8 +7040,11 @@ te_cmg_arab_has_other_starter = {
 		global_var:te_cm_state_arab ?= 2
 	}
 	exists = global_var:te_cm_starter_arab
-	global_var:te_cm_starter_arab = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_arab }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_arab }
+		global_var:te_cm_starter_arab = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_arab }
+	}
 	NOT = { has_variable = te_cm_started_arab }
 }
 
@@ -7216,7 +7376,10 @@ te_cmg_persian_census_wanted = {
 				global_var:te_cm_state_persian ?= 2
 			}
 			exists = global_var:te_cm_starter_persian
-			global_var:te_cm_starter_persian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_persian }
+				global_var:te_cm_starter_persian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_persian_result_switched = yes }
 			OR = {
 				AND = {
@@ -7236,14 +7399,13 @@ te_cmg_persian_census_wanted = {
 	}
 }
 
-# Any scope. The persian merge's starter is missing, or is no longer a living country.
+# Any scope. The persian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_persian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_persian }
-		AND = {
-			exists = global_var:te_cm_starter_persian
-			global_var:te_cm_starter_persian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_persian }
+		global_var:te_cm_starter_persian = { is_country_alive = no }
 	}
 }
 
@@ -7258,7 +7420,10 @@ te_cmg_persian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_persian
-			this = global_var:te_cm_starter_persian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_persian }
+				this = global_var:te_cm_starter_persian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_persian
@@ -7275,8 +7440,11 @@ te_cmg_persian_has_other_starter = {
 		global_var:te_cm_state_persian ?= 2
 	}
 	exists = global_var:te_cm_starter_persian
-	global_var:te_cm_starter_persian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_persian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_persian }
+		global_var:te_cm_starter_persian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_persian }
+	}
 	NOT = { has_variable = te_cm_started_persian }
 }
 
@@ -7512,7 +7680,10 @@ te_cmg_oghuz_turkic_census_wanted = {
 				global_var:te_cm_state_oghuz_turkic ?= 2
 			}
 			exists = global_var:te_cm_starter_oghuz_turkic
-			global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_oghuz_turkic }
+				global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_oghuz_turkic_result_switched = yes }
 			OR = {
 				AND = {
@@ -7532,14 +7703,13 @@ te_cmg_oghuz_turkic_census_wanted = {
 	}
 }
 
-# Any scope. The oghuz_turkic merge's starter is missing, or is no longer a living country.
+# Any scope. The oghuz_turkic merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_oghuz_turkic_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_oghuz_turkic }
-		AND = {
-			exists = global_var:te_cm_starter_oghuz_turkic
-			global_var:te_cm_starter_oghuz_turkic = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_oghuz_turkic }
+		global_var:te_cm_starter_oghuz_turkic = { is_country_alive = no }
 	}
 }
 
@@ -7554,7 +7724,10 @@ te_cmg_oghuz_turkic_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_oghuz_turkic
-			this = global_var:te_cm_starter_oghuz_turkic
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_oghuz_turkic }
+				this = global_var:te_cm_starter_oghuz_turkic
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_oghuz_turkic
@@ -7571,8 +7744,11 @@ te_cmg_oghuz_turkic_has_other_starter = {
 		global_var:te_cm_state_oghuz_turkic ?= 2
 	}
 	exists = global_var:te_cm_starter_oghuz_turkic
-	global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_oghuz_turkic }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_oghuz_turkic }
+		global_var:te_cm_starter_oghuz_turkic = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_oghuz_turkic }
+	}
 	NOT = { has_variable = te_cm_started_oghuz_turkic }
 }
 
@@ -7876,7 +8052,10 @@ te_cmg_hindustani_census_wanted = {
 				global_var:te_cm_state_hindustani ?= 2
 			}
 			exists = global_var:te_cm_starter_hindustani
-			global_var:te_cm_starter_hindustani = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_hindustani }
+				global_var:te_cm_starter_hindustani = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_hindustani_result_switched = yes }
 			OR = {
 				AND = {
@@ -7900,14 +8079,13 @@ te_cmg_hindustani_census_wanted = {
 	}
 }
 
-# Any scope. The hindustani merge's starter is missing, or is no longer a living country.
+# Any scope. The hindustani merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_hindustani_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_hindustani }
-		AND = {
-			exists = global_var:te_cm_starter_hindustani
-			global_var:te_cm_starter_hindustani = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_hindustani }
+		global_var:te_cm_starter_hindustani = { is_country_alive = no }
 	}
 }
 
@@ -7922,7 +8100,10 @@ te_cmg_hindustani_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_hindustani
-			this = global_var:te_cm_starter_hindustani
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_hindustani }
+				this = global_var:te_cm_starter_hindustani
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_hindustani
@@ -7939,8 +8120,11 @@ te_cmg_hindustani_has_other_starter = {
 		global_var:te_cm_state_hindustani ?= 2
 	}
 	exists = global_var:te_cm_starter_hindustani
-	global_var:te_cm_starter_hindustani = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_hindustani }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_hindustani }
+		global_var:te_cm_starter_hindustani = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_hindustani }
+	}
 	NOT = { has_variable = te_cm_started_hindustani }
 }
 
@@ -8256,7 +8440,10 @@ te_cmg_dravidian_census_wanted = {
 				global_var:te_cm_state_dravidian ?= 2
 			}
 			exists = global_var:te_cm_starter_dravidian
-			global_var:te_cm_starter_dravidian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_dravidian }
+				global_var:te_cm_starter_dravidian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_dravidian_result_switched = yes }
 			OR = {
 				AND = {
@@ -8280,14 +8467,13 @@ te_cmg_dravidian_census_wanted = {
 	}
 }
 
-# Any scope. The dravidian merge's starter is missing, or is no longer a living country.
+# Any scope. The dravidian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_dravidian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_dravidian }
-		AND = {
-			exists = global_var:te_cm_starter_dravidian
-			global_var:te_cm_starter_dravidian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_dravidian }
+		global_var:te_cm_starter_dravidian = { is_country_alive = no }
 	}
 }
 
@@ -8302,7 +8488,10 @@ te_cmg_dravidian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_dravidian
-			this = global_var:te_cm_starter_dravidian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_dravidian }
+				this = global_var:te_cm_starter_dravidian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_dravidian
@@ -8319,8 +8508,11 @@ te_cmg_dravidian_has_other_starter = {
 		global_var:te_cm_state_dravidian ?= 2
 	}
 	exists = global_var:te_cm_starter_dravidian
-	global_var:te_cm_starter_dravidian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_dravidian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_dravidian }
+		global_var:te_cm_starter_dravidian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_dravidian }
+	}
 	NOT = { has_variable = te_cm_started_dravidian }
 }
 
@@ -8657,7 +8849,10 @@ te_cmg_indonesian_census_wanted = {
 				global_var:te_cm_state_indonesian ?= 2
 			}
 			exists = global_var:te_cm_starter_indonesian
-			global_var:te_cm_starter_indonesian = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_indonesian }
+				global_var:te_cm_starter_indonesian = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_indonesian_result_switched = yes }
 			OR = {
 				AND = {
@@ -8685,14 +8880,13 @@ te_cmg_indonesian_census_wanted = {
 	}
 }
 
-# Any scope. The indonesian merge's starter is missing, or is no longer a living country.
+# Any scope. The indonesian merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_indonesian_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_indonesian }
-		AND = {
-			exists = global_var:te_cm_starter_indonesian
-			global_var:te_cm_starter_indonesian = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_indonesian }
+		global_var:te_cm_starter_indonesian = { is_country_alive = no }
 	}
 }
 
@@ -8707,7 +8901,10 @@ te_cmg_indonesian_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_indonesian
-			this = global_var:te_cm_starter_indonesian
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_indonesian }
+				this = global_var:te_cm_starter_indonesian
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_indonesian
@@ -8724,8 +8921,11 @@ te_cmg_indonesian_has_other_starter = {
 		global_var:te_cm_state_indonesian ?= 2
 	}
 	exists = global_var:te_cm_starter_indonesian
-	global_var:te_cm_starter_indonesian = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_indonesian }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_indonesian }
+		global_var:te_cm_starter_indonesian = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_indonesian }
+	}
 	NOT = { has_variable = te_cm_started_indonesian }
 }
 
@@ -9043,7 +9243,10 @@ te_cmg_filipino_census_wanted = {
 				global_var:te_cm_state_filipino ?= 2
 			}
 			exists = global_var:te_cm_starter_filipino
-			global_var:te_cm_starter_filipino = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_filipino }
+				global_var:te_cm_starter_filipino = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_filipino_result_switched = yes }
 			OR = {
 				AND = {
@@ -9063,14 +9266,13 @@ te_cmg_filipino_census_wanted = {
 	}
 }
 
-# Any scope. The filipino merge's starter is missing, or is no longer a living country.
+# Any scope. The filipino merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_filipino_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_filipino }
-		AND = {
-			exists = global_var:te_cm_starter_filipino
-			global_var:te_cm_starter_filipino = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_filipino }
+		global_var:te_cm_starter_filipino = { is_country_alive = no }
 	}
 }
 
@@ -9085,7 +9287,10 @@ te_cmg_filipino_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_filipino
-			this = global_var:te_cm_starter_filipino
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_filipino }
+				this = global_var:te_cm_starter_filipino
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_filipino
@@ -9102,8 +9307,11 @@ te_cmg_filipino_has_other_starter = {
 		global_var:te_cm_state_filipino ?= 2
 	}
 	exists = global_var:te_cm_starter_filipino
-	global_var:te_cm_starter_filipino = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_filipino }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_filipino }
+		global_var:te_cm_starter_filipino = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_filipino }
+	}
 	NOT = { has_variable = te_cm_started_filipino }
 }
 
@@ -9365,7 +9573,10 @@ te_cmg_nguni_census_wanted = {
 				global_var:te_cm_state_nguni ?= 2
 			}
 			exists = global_var:te_cm_starter_nguni
-			global_var:te_cm_starter_nguni = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_nguni }
+				global_var:te_cm_starter_nguni = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_nguni_result_switched = yes }
 			OR = {
 				AND = {
@@ -9385,14 +9596,13 @@ te_cmg_nguni_census_wanted = {
 	}
 }
 
-# Any scope. The nguni merge's starter is missing, or is no longer a living country.
+# Any scope. The nguni merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_nguni_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_nguni }
-		AND = {
-			exists = global_var:te_cm_starter_nguni
-			global_var:te_cm_starter_nguni = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_nguni }
+		global_var:te_cm_starter_nguni = { is_country_alive = no }
 	}
 }
 
@@ -9407,7 +9617,10 @@ te_cmg_nguni_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_nguni
-			this = global_var:te_cm_starter_nguni
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_nguni }
+				this = global_var:te_cm_starter_nguni
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_nguni
@@ -9424,8 +9637,11 @@ te_cmg_nguni_has_other_starter = {
 		global_var:te_cm_state_nguni ?= 2
 	}
 	exists = global_var:te_cm_starter_nguni
-	global_var:te_cm_starter_nguni = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_nguni }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_nguni }
+		global_var:te_cm_starter_nguni = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_nguni }
+	}
 	NOT = { has_variable = te_cm_started_nguni }
 }
 
@@ -10016,7 +10232,10 @@ te_cmg_latin_census_wanted = {
 				global_var:te_cm_state_latin ?= 2
 			}
 			exists = global_var:te_cm_starter_latin
-			global_var:te_cm_starter_latin = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_latin }
+				global_var:te_cm_starter_latin = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_latin_result_switched = yes }
 			OR = {
 				AND = {
@@ -10064,14 +10283,13 @@ te_cmg_latin_census_wanted = {
 	}
 }
 
-# Any scope. The latin merge's starter is missing, or is no longer a living country.
+# Any scope. The latin merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_latin_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_latin }
-		AND = {
-			exists = global_var:te_cm_starter_latin
-			global_var:te_cm_starter_latin = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_latin }
+		global_var:te_cm_starter_latin = { is_country_alive = no }
 	}
 }
 
@@ -10086,7 +10304,10 @@ te_cmg_latin_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_latin
-			this = global_var:te_cm_starter_latin
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_latin }
+				this = global_var:te_cm_starter_latin
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_latin
@@ -10103,8 +10324,11 @@ te_cmg_latin_has_other_starter = {
 		global_var:te_cm_state_latin ?= 2
 	}
 	exists = global_var:te_cm_starter_latin
-	global_var:te_cm_starter_latin = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_latin }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_latin }
+		global_var:te_cm_starter_latin = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_latin }
+	}
 	NOT = { has_variable = te_cm_started_latin }
 }
 
@@ -10593,7 +10817,10 @@ te_cmg_pan_slavic_census_wanted = {
 				global_var:te_cm_state_pan_slavic ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_slavic
-			global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_slavic }
+				global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_pan_slavic_result_switched = yes }
 			OR = {
 				AND = {
@@ -10625,14 +10852,13 @@ te_cmg_pan_slavic_census_wanted = {
 	}
 }
 
-# Any scope. The pan_slavic merge's starter is missing, or is no longer a living country.
+# Any scope. The pan_slavic merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_pan_slavic_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_pan_slavic }
-		AND = {
-			exists = global_var:te_cm_starter_pan_slavic
-			global_var:te_cm_starter_pan_slavic = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_slavic }
+		global_var:te_cm_starter_pan_slavic = { is_country_alive = no }
 	}
 }
 
@@ -10647,7 +10873,10 @@ te_cmg_pan_slavic_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_pan_slavic
-			this = global_var:te_cm_starter_pan_slavic
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_slavic }
+				this = global_var:te_cm_starter_pan_slavic
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_pan_slavic
@@ -10664,8 +10893,11 @@ te_cmg_pan_slavic_has_other_starter = {
 		global_var:te_cm_state_pan_slavic ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_slavic
-	global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_pan_slavic }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_slavic }
+		global_var:te_cm_starter_pan_slavic = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_pan_slavic }
+	}
 	NOT = { has_variable = te_cm_started_pan_slavic }
 }
 
@@ -11209,7 +11441,10 @@ te_cmg_pan_turkic_census_wanted = {
 				global_var:te_cm_state_pan_turkic ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_turkic
-			global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_turkic }
+				global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_pan_turkic_result_switched = yes }
 			OR = {
 				AND = {
@@ -11253,14 +11488,13 @@ te_cmg_pan_turkic_census_wanted = {
 	}
 }
 
-# Any scope. The pan_turkic merge's starter is missing, or is no longer a living country.
+# Any scope. The pan_turkic merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_pan_turkic_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_pan_turkic }
-		AND = {
-			exists = global_var:te_cm_starter_pan_turkic
-			global_var:te_cm_starter_pan_turkic = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_turkic }
+		global_var:te_cm_starter_pan_turkic = { is_country_alive = no }
 	}
 }
 
@@ -11275,7 +11509,10 @@ te_cmg_pan_turkic_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_pan_turkic
-			this = global_var:te_cm_starter_pan_turkic
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_turkic }
+				this = global_var:te_cm_starter_pan_turkic
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_pan_turkic
@@ -11292,8 +11529,11 @@ te_cmg_pan_turkic_has_other_starter = {
 		global_var:te_cm_state_pan_turkic ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_turkic
-	global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_pan_turkic }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_turkic }
+		global_var:te_cm_starter_pan_turkic = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_pan_turkic }
+	}
 	NOT = { has_variable = te_cm_started_pan_turkic }
 }
 
@@ -11633,7 +11873,10 @@ te_cmg_pan_malay_census_wanted = {
 				global_var:te_cm_state_pan_malay ?= 2
 			}
 			exists = global_var:te_cm_starter_pan_malay
-			global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_malay }
+				global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_pan_malay_result_switched = yes }
 			OR = {
 				AND = {
@@ -11649,14 +11892,13 @@ te_cmg_pan_malay_census_wanted = {
 	}
 }
 
-# Any scope. The pan_malay merge's starter is missing, or is no longer a living country.
+# Any scope. The pan_malay merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_pan_malay_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_pan_malay }
-		AND = {
-			exists = global_var:te_cm_starter_pan_malay
-			global_var:te_cm_starter_pan_malay = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_malay }
+		global_var:te_cm_starter_pan_malay = { is_country_alive = no }
 	}
 }
 
@@ -11671,7 +11913,10 @@ te_cmg_pan_malay_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_pan_malay
-			this = global_var:te_cm_starter_pan_malay
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_pan_malay }
+				this = global_var:te_cm_starter_pan_malay
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_pan_malay
@@ -11688,8 +11933,11 @@ te_cmg_pan_malay_has_other_starter = {
 		global_var:te_cm_state_pan_malay ?= 2
 	}
 	exists = global_var:te_cm_starter_pan_malay
-	global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_pan_malay }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_pan_malay }
+		global_var:te_cm_starter_pan_malay = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_pan_malay }
+	}
 	NOT = { has_variable = te_cm_started_pan_malay }
 }
 
@@ -12121,7 +12369,10 @@ te_cmg_east_african_census_wanted = {
 				global_var:te_cm_state_east_african ?= 2
 			}
 			exists = global_var:te_cm_starter_east_african
-			global_var:te_cm_starter_east_african = { is_country_alive = yes }
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_east_african }
+				global_var:te_cm_starter_east_african = { is_country_alive = yes }
+			}
 			NOT = { te_cmg_east_african_result_switched = yes }
 			OR = {
 				AND = {
@@ -12157,14 +12408,13 @@ te_cmg_east_african_census_wanted = {
 	}
 }
 
-# Any scope. The east_african merge's starter is missing, or is no longer a living country.
+# Any scope. The east_african merge's starter is missing, or is no longer a living country. Each read of the
+# starter sits in a trigger_if behind its exists: the entry's tooltip lists every child of an AND, so a
+# guard beside the read stops nothing there (2026-11-08). A trigger_if passes when its limit fails.
 te_cmg_east_african_starter_gone = {
-	OR = {
-		NOT = { exists = global_var:te_cm_starter_east_african }
-		AND = {
-			exists = global_var:te_cm_starter_east_african
-			global_var:te_cm_starter_east_african = { is_country_alive = no }
-		}
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_east_african }
+		global_var:te_cm_starter_east_african = { is_country_alive = no }
 	}
 }
 
@@ -12179,7 +12429,10 @@ te_cmg_east_african_is_starter = {
 	OR = {
 		AND = {
 			exists = global_var:te_cm_starter_east_african
-			this = global_var:te_cm_starter_east_african
+			trigger_if = {
+				limit = { exists = global_var:te_cm_starter_east_african }
+				this = global_var:te_cm_starter_east_african
+			}
 		}
 		AND = {
 			has_variable = te_cm_started_east_african
@@ -12196,8 +12449,11 @@ te_cmg_east_african_has_other_starter = {
 		global_var:te_cm_state_east_african ?= 2
 	}
 	exists = global_var:te_cm_starter_east_african
-	global_var:te_cm_starter_east_african = { is_country_alive = yes }
-	NOT = { this = global_var:te_cm_starter_east_african }
+	trigger_if = {
+		limit = { exists = global_var:te_cm_starter_east_african }
+		global_var:te_cm_starter_east_african = { is_country_alive = yes }
+		NOT = { this = global_var:te_cm_starter_east_african }
+	}
 	NOT = { has_variable = te_cm_started_east_african }
 }
 

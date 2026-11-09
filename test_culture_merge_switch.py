@@ -919,6 +919,9 @@ class Sim:
             return v == "yes"
         if k == "custom_tooltip":
             return all(self.holds_one(c) for c in n.children if c.key != "text")
+        if k == "trigger_if":  # passes when its limit fails
+            limit = next(c for c in n.children if c.key == "limit")
+            return not self.holds_one(limit) or all(self.holds_one(c) for c in n.children if c.key != "limit")
         if k == "limit":
             return all(self.holds_one(c) for c in n.children)
         if k.startswith("global_var:"):
