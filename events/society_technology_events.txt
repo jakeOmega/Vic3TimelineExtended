@@ -283,7 +283,12 @@ society_technology_events.4 = {
 
 	title = society_technology_events.4.t
 	desc = society_technology_events.4.d
-	flavor = society_technology_events.4.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = society_technology_events.4.f }
+			triggered_desc = { trigger = { always = yes } desc = society_technology_events.4.f_matchmaker }
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
