@@ -277,13 +277,18 @@ society_technology_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_revolution_sixties.dds" }
+	event_image = { video = "middleeast_middleclass_cafe" }	# interim until social_revolution_sixties is redrawn without placard lettering
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = society_technology_events.4.t
 	desc = society_technology_events.4.d
-	flavor = society_technology_events.4.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = society_technology_events.4.f }
+			triggered_desc = { trigger = { always = yes } desc = society_technology_events.4.f_matchmaker }
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
