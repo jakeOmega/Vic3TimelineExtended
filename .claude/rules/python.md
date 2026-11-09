@@ -1,0 +1,20 @@
+---
+paths:
+  - "**/*.py"
+---
+
+# Python tooling rules
+
+Loaded when you read or edit a `.py` file.
+
+- **Before you push: `.venv/bin/python scripts/preflight.py`.** It runs what CI's main job runs, with CI's dummy game paths. `--quick` leaves out the test suite (about 80 s instead of 8 minutes); `--changed` narrows to what your diff can reach, for the loop while you work.
+- **Local Python is 3.12; CI also runs 3.11.** An f-string that reuses its own quote inside the braces (`f"no loc for {"KEY"}"`, PEP 701) passes every local run and fails CI's `compileall` on 3.11. Scan before pushing: `grep -nE "f\"[^\"]*\{[^}\"]*\"|f'[^']*\{[^}']*'" <files>`. Floats differ too: 3.12's `sum()` uses compensated summation, so an exact float recorded on 3.12 can miss in the last place on 3.11 (#932's golden); compare with `math.isclose(rel_tol=1e-12)`. `preflight.py`'s `py311` check scans for all of these.
+- **Read the result with `grep -E '^(Ran |OK|FAILED)'`, not `| tail`.** unittest writes its summary to stderr, but tests' own `print`s go to stdout, which is block-buffered when piped and flushed at exit, so `2>&1 | tail` shows test output instead of the summary. Redirect to a file and grep it, or run `python3 -u`. pytest needs neither: it captures tests' output, and its last line is the summary (`N passed …`).
+- **`ruff` is in the venv, not on `PATH`**: `.venv/bin/ruff check .`. A worktree has no `.venv` of its own, so use the main checkout's: `<mod_path>/.venv/bin/ruff check .`, and its `.venv/bin/python` for the suite (the system `python3` lacks `numpy`).
+- **CI checks out without `gfx/`**, so a test that a texture exists must also accept one git tracks (`git ls-files --error-unmatch`, as `test_nuclear_deterrence.py`'s `tracked()` does): #909 turned main red by asserting `.exists()`.
+- **A bare pytest run needs no game**: `conftest.py` sets dummy `VIC3_*` paths where the machine has none. `python3 -m unittest` does not read it; there, set `VIC3_BASE_GAME=/nonexistent VIC3_MOD_DEPLOY_TARGET=/nonexistent VIC3_VANILLA_REPO=/nonexistent VIC3_VANILLA_DOCS_RUNTIME=/nonexistent VIC3_GAME_LOGS=/nonexistent`.
+- **`test_reload_post_load.py` fires a real `POST /reload`, but only at its own checkout's server.** Its live tests skip unless the server on :8950 reports the test's own `mod_path` in `/status` (#306), so `unittest discover` from a worktree no longer regenerates the main checkout. A server started before `/status` had that field skips them too, until restarted. Agents working in worktrees still use the server's GET endpoints only, since a `POST /reload` regenerates the checkout the server was started from. To reload-check a worktree branch, run a second server from the worktree on another port (`docs/guides/python_tools.md` § "Starting the Server").
+- **Git pathspecs: `**` is not recursive across `/` unless you use `:(glob)`.** `git ls-files 'events/**/*.txt'` matches nothing; `git ls-files ':(glob)events/**/*.txt'` (or the plain `'events/*.txt'`, which already crosses directories) does. `.github/workflows/ci.yml` uses the `:(glob)` form.
+- **A new audit** is one entry in `audit_registry.py` plus `python3 audit_registry.py --write`; the steps are at the end of `docs/guides/audits.md`.
+- **A new generated file** needs a row in `docs/auto_generated_files.md` and a classification in `scripts/nightly_audit_select.py` (`EXCLUDED_REGISTRY_GLOBS` for generator output, `INTENTIONALLY_NOT_EXCLUDED` for inputs); `test_nightly_audit_select` fails otherwise.
+- Bulk generators import `ModState` directly (`from mod_state import ModState`) rather than going through HTTP.

@@ -47,6 +47,8 @@ Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-do
 | [`guides/vanilla_patch_runbook.md`](guides/vanilla_patch_runbook.md) | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
 | [`guides/release_checklist.md`](guides/release_checklist.md) | Cutting a release: pre-release checks, what ships (`main`, or a branch that strips the Demographics census), deploy and upload, tag and GitHub release, the Workshop description's guide link and length | Before a release |
 | [`guides/quick_reference_ids.md`](guides/quick_reference_ids.md) | Vanilla law / IG / pop / strata IDs, script values, modifier durations | Looking up game IDs or script-value names quickly |
+| [`guides/audits.md`](guides/audits.md) | `[auto-gen]` Every offline audit: what a flag means, how CI runs it, the suppression comment and where it goes. Generated from `audit_registry.py` | An audit flagged your change; adding an audit |
+| [`guides/git_workflow.md`](guides/git_workflow.md) | Sparse worktrees, stacked PRs and squash-merged stacks, multi-branch agent waves, play-testing unmerged work, `gh` traps | Before opening a stacked PR, merging a stack, dispatching sub-agents on branches, or deploying an unmerged branch |
 
 ## Mod Systems — `systems/`
 
