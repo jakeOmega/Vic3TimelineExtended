@@ -1448,6 +1448,15 @@ Event target link 'ruler' returned an invalid object
 
 The `feminist_britain` color's `possible` checks `c:GBR ?= THIS`, then reads `ruler = { has_ideology = … is_female = yes }` with no `exists = ruler`. Two lines in one second, 16:37 of the 2026-11-08 observer game, while Britain had no ruler for a moment.
 
+### `common/decrees/00_decree.txt:2639` — Establish Missions reads the religion of a merged-away state's owner (1.15)
+- stack: vanilla only
+
+```
+religion_percent_state trigger [ Invalid target religion for
+```
+
+`decree_establish_missions`'s `state_trigger` runs `religion_percent_state = { target = owner.religion … }` with no `exists = owner`. When two parts of a split state merge, the absorbed part still resolves for a while with no owner, and the decree's state check reads it. Two lines in the 2026-11-08 observer game, each about 45 seconds after French Guinée took in more provinces (17:35:50 and 17:43:05, 1878 and 1880), on two different state ids that share an index. The mod doesn't touch this decree.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
