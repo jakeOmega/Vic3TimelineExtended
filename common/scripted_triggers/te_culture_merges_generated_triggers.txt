@@ -7519,6 +7519,75 @@ te_cmg_persian_hazara_can_join = {
 	var:te_cm_sol_ok_persian_hazara ?= 1
 }
 
+# Any scope. mazanderani is free for the persian merge.
+te_cmg_persian_mazanderani_available = {
+	always = yes
+}
+
+# Country scope. mazanderani passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_mazanderani_measured = {
+	var:te_cm_ok_persian_mazanderani ?= 1
+	te_cmg_persian_mazanderani_available = yes
+	NOT = { has_global_variable = te_cm_switched_mazanderani }
+}
+
+# Country scope. mazanderani joined the persian merge and has switched into its result.
+te_cmg_persian_mazanderani_switched_in = {
+	global_var:te_cm_joined_persian_mazanderani ?= 1
+	has_global_variable = te_cm_switched_mazanderani
+}
+
+# Country scope. mazanderani (tier 1) passes its gates and can join the persian merge now: it has not switched
+# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+te_cmg_persian_mazanderani_can_join = {
+	var:te_cm_ok_persian_mazanderani ?= 1
+	te_cmg_persian_mazanderani_available = yes
+	NOT = { global_var:te_cm_joined_persian_mazanderani ?= 1 }
+	NOT = { has_global_variable = te_cm_switched_mazanderani }
+	NOT = { te_cmg_persian_result_switched = yes }
+	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_persian_mazanderani ?= 1
+}
+
+# Any scope. baluchi is free for the persian merge.
+te_cmg_persian_baluchi_available = {
+	always = yes
+}
+
+# Country scope. baluchi passes its gates for the persian merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_persian_baluchi_measured = {
+	var:te_cm_ok_persian_baluchi ?= 1
+	te_cmg_persian_baluchi_available = yes
+	NOT = { has_global_variable = te_cm_switched_baluchi }
+}
+
+# Country scope. baluchi (tier 2) has spent the years together its tier asks for.
+te_cmg_persian_baluchi_years_met = {
+	has_variable = te_cm_years_persian_baluchi
+	trigger_if = { limit = { has_variable = te_cm_years_persian_baluchi } var:te_cm_years_persian_baluchi >= te_cm_years_tier3 }
+}
+
+# Country scope. baluchi joined the persian merge and has switched into its result.
+te_cmg_persian_baluchi_switched_in = {
+	global_var:te_cm_joined_persian_baluchi ?= 1
+	has_global_variable = te_cm_switched_baluchi
+}
+
+# Country scope. baluchi (tier 2) passes its gates and can join the persian merge now: it has not switched
+# (R32), the merge's own result has not (R33), and the rest of its gates hold.
+te_cmg_persian_baluchi_can_join = {
+	var:te_cm_ok_persian_baluchi ?= 1
+	te_cmg_persian_baluchi_available = yes
+	NOT = { global_var:te_cm_joined_persian_baluchi ?= 1 }
+	NOT = { has_global_variable = te_cm_switched_baluchi }
+	NOT = { te_cmg_persian_result_switched = yes }
+	te_cm_tier_tech = { TIER = 3 }
+	te_cmg_persian_baluchi_years_met = yes
+	var:te_cm_sol_ok_persian_baluchi ?= 1
+}
+
 # Any scope. Is the yearly census of the persian merge worth running? An idle merge with a
 # candidate; or a running or complete one whose starter is alive and which still has a
 # part that has neither switched nor left the world (a complete merge keeps its census so
@@ -7553,6 +7622,14 @@ te_cmg_persian_census_wanted = {
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_hazara }
 					any_country = { culture_percent_country = { target = cu:hazara value > 0 } }
+				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_mazanderani }
+					any_country = { culture_percent_country = { target = cu:mazanderani value > 0 } }
+				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_baluchi }
+					any_country = { culture_percent_country = { target = cu:baluchi value > 0 } }
 				}
 			}
 		}
@@ -7623,6 +7700,14 @@ te_cmg_persian_all_switched = {
 		AND = {
 			global_var:te_cm_joined_persian_hazara ?= 1
 			NOT = { has_global_variable = te_cm_switched_hazara }
+		}
+		AND = {
+			global_var:te_cm_joined_persian_mazanderani ?= 1
+			NOT = { has_global_variable = te_cm_switched_mazanderani }
+		}
+		AND = {
+			global_var:te_cm_joined_persian_baluchi ?= 1
+			NOT = { has_global_variable = te_cm_switched_baluchi }
 		}
 	}
 }
@@ -12856,7 +12941,7 @@ te_cmg_east_african_can_start = {
 
 # ---- Switched parts ----
 
-# Culture scope. This culture is one of the 118 that can switch into a merge's result, and it has.
+# Culture scope. This culture is one of the 120 that can switch into a merge's result, and it has.
 # A test for the flavor patches of spec 7 (party names, formable names ...); nothing reads it yet.
 te_cmg_is_switched_part = {
 	OR = {
@@ -13129,6 +13214,14 @@ te_cmg_is_switched_part = {
 			this = cu:hazara
 		}
 		AND = {
+			has_global_variable = te_cm_switched_mazanderani
+			this = cu:mazanderani
+		}
+		AND = {
+			has_global_variable = te_cm_switched_baluchi
+			this = cu:baluchi
+		}
+		AND = {
 			has_global_variable = te_cm_switched_turkish
 			this = cu:turkish
 		}
@@ -13339,7 +13432,7 @@ te_cmg_is_switched_part = {
 # culture's homeland in ROOT alone: it is a part that has switched, and the culture it switched into is
 # a homeland of the state too (owner, 2026-11-07). The part's homeland follows its successor's: once that is removed
 # (te_cmg_remove_switched_part_homelands) the part's goes with it. Not behind the rule: it is about map state.
-# has_global_variable comes first in every clause, so a game with nothing switched prunes all 118 at once.
+# has_global_variable comes first in every clause, so a game with nothing switched prunes all 120 at once.
 te_cmg_switched_part_kept = {
 	OR = {
 		AND = {
@@ -13676,6 +13769,16 @@ te_cmg_switched_part_kept = {
 			has_global_variable = te_cm_switched_hazara
 			this = cu:hazara
 			ROOT.state_region = { is_homeland = global_var:te_cm_switched_hazara }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_mazanderani
+			this = cu:mazanderani
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_mazanderani }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_baluchi
+			this = cu:baluchi
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_baluchi }
 		}
 		AND = {
 			has_global_variable = te_cm_switched_turkish
