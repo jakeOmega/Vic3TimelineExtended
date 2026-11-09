@@ -598,13 +598,16 @@ class PrimaryUpkeepTest(unittest.TestCase):
 
     def test_the_monthly_and_formation_hooks_pause_with_the_rule(self):
         # Ruling (e), R19: off pauses them and resets nothing.
-        for name, call in (("te_cm_monthly_on_action", "te_cmg_monthly_country"), ("te_cm_formed_on_action", "te_cmg_formed_country")):
+        # The monthly pass also skips a country that owns no state: one that loses every state lives on until its war
+        # ends, and add_primary_culture refuses it (Baden, 1897, observer game 2026-11-08). A formed country has states.
+        for name, call, extra in (("te_cm_monthly_on_action", "te_cmg_monthly_country", " any_scope_state = { always = yes }"),
+                                  ("te_cm_formed_on_action", "te_cmg_formed_country", "")):
             # The TEMPORARY formation self-check (test_culture_merge_selfchecks.py) is one call line inside the rule; the
             # shape holds with or without it, so deleting the self-checks needs no edit here.
             flat = squash(block(self.on_actions, name)).replace("te_cm_chk_formation = yes ", "")
             self.assertEqual(
                 flat,
-                "effect = { if = { limit = { te_cm_system_enabled = yes } %s = yes } }" % call, name,
+                "effect = { if = { limit = { te_cm_system_enabled = yes%s } %s = yes } }" % (extra, call), name,
             )
 
     def test_the_monthly_effect_adds_the_result_where_the_part_is_primary(self):

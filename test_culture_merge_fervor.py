@@ -147,7 +147,7 @@ class CopyTest(unittest.TestCase):
         # Once a month for the world, so no lock: the country pulse keeps only the rule's upkeep.
         self.assertEqual(
             squash(block(text, "te_cm_monthly_on_action")),
-            "effect = { if = { limit = { te_cm_system_enabled = yes } te_cmg_monthly_country = yes } }",
+            "effect = { if = { limit = { te_cm_system_enabled = yes any_scope_state = { always = yes } } te_cmg_monthly_country = yes } }",
         )
         self.assertNotIn("te_cm_fervor_lock", text)
 
