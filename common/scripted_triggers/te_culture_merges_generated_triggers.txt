@@ -2872,7 +2872,7 @@ te_cmg_finnish_can_start = {
 	}
 }
 
-# ---- french (french, wallonian, occitan) ----
+# ---- french (french, occitan) ----
 
 # Any scope. The french merge's result has switched into a higher merge's (R33): the merge then joins, converts,
 # measures and switches nothing more, and is no candidate. Never true for a result no other merge lists.
@@ -2888,7 +2888,6 @@ te_cmg_french_is_candidate = {
 	te_cm_system_enabled = yes
 	OR = {
 		country_has_primary_culture = cu:french
-		country_has_primary_culture = cu:wallonian
 		country_has_primary_culture = cu:occitan
 	}
 	te_cm_tier_tech = { TIER = 1 }
@@ -2900,10 +2899,6 @@ te_cmg_french_is_candidate = {
 # tier 2, has its years together), or one that joined this merge and has switched.
 te_cmg_french_core_ok = {
 	te_cmg_french_french_measured = yes
-	OR = {
-		te_cmg_french_wallonian_measured = yes
-		te_cmg_french_wallonian_switched_in = yes
-	}
 	OR = {
 		te_cmg_french_occitan_measured = yes
 		te_cmg_french_occitan_switched_in = yes
@@ -2931,38 +2926,6 @@ te_cmg_french_french_can_join = {
 	te_cmg_french_french_available = yes
 	NOT = { global_var:te_cm_joined_french_french ?= 1 }
 	NOT = { has_global_variable = te_cm_switched_french }
-	NOT = { te_cmg_french_result_switched = yes }
-	NOT = { has_global_variable = te_cm_in_french }
-	te_cm_tier_tech = { TIER = 1 }
-}
-
-# Any scope. wallonian is free for the french merge.
-te_cmg_french_wallonian_available = {
-	always = yes
-}
-
-# Country scope. wallonian passes its gates for the french merge now: held and accepted, free for it,
-# and not yet switched (a switched part has no pops left to measure).
-te_cmg_french_wallonian_measured = {
-	var:te_cm_ok_french_wallonian ?= 1
-	te_cmg_french_wallonian_available = yes
-	NOT = { has_global_variable = te_cm_switched_wallonian }
-}
-
-# Country scope. wallonian joined the french merge and has switched into its result.
-te_cmg_french_wallonian_switched_in = {
-	global_var:te_cm_joined_french_wallonian ?= 1
-	has_global_variable = te_cm_switched_wallonian
-}
-
-# Country scope. wallonian (tier 1) passes its gates and can join the french merge now: it has not switched
-# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
-# of its gates hold.
-te_cmg_french_wallonian_can_join = {
-	var:te_cm_ok_french_wallonian ?= 1
-	te_cmg_french_wallonian_available = yes
-	NOT = { global_var:te_cm_joined_french_wallonian ?= 1 }
-	NOT = { has_global_variable = te_cm_switched_wallonian }
 	NOT = { te_cmg_french_result_switched = yes }
 	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 1 }
@@ -2998,6 +2961,39 @@ te_cmg_french_occitan_can_join = {
 	NOT = { te_cmg_french_result_switched = yes }
 	NOT = { has_global_variable = te_cm_in_french }
 	te_cm_tier_tech = { TIER = 1 }
+}
+
+# Any scope. wallonian is free for the french merge.
+te_cmg_french_wallonian_available = {
+	always = yes
+}
+
+# Country scope. wallonian passes its gates for the french merge now: held and accepted, free for it,
+# and not yet switched (a switched part has no pops left to measure).
+te_cmg_french_wallonian_measured = {
+	var:te_cm_ok_french_wallonian ?= 1
+	te_cmg_french_wallonian_available = yes
+	NOT = { has_global_variable = te_cm_switched_wallonian }
+}
+
+# Country scope. wallonian joined the french merge and has switched into its result.
+te_cmg_french_wallonian_switched_in = {
+	global_var:te_cm_joined_french_wallonian ?= 1
+	has_global_variable = te_cm_switched_wallonian
+}
+
+# Country scope. wallonian (tier 1) passes its gates and can join the french merge now: it has not switched
+# (R32), the merge's own result has not (R33) and no higher merge has joined that result (R38), and the rest
+# of its gates hold.
+te_cmg_french_wallonian_can_join = {
+	var:te_cm_ok_french_wallonian ?= 1
+	te_cmg_french_wallonian_available = yes
+	NOT = { global_var:te_cm_joined_french_wallonian ?= 1 }
+	NOT = { has_global_variable = te_cm_switched_wallonian }
+	NOT = { te_cmg_french_result_switched = yes }
+	NOT = { has_global_variable = te_cm_in_french }
+	te_cm_tier_tech = { TIER = 1 }
+	var:te_cm_sol_ok_french_wallonian ?= 1
 }
 
 # Any scope. catalan is free for the french merge.
@@ -3061,12 +3057,12 @@ te_cmg_french_census_wanted = {
 			NOT = { te_cmg_french_result_switched = yes }
 			OR = {
 				AND = {
-					NOT = { has_global_variable = te_cm_switched_wallonian }
-					any_country = { culture_percent_country = { target = cu:wallonian value > 0 } }
-				}
-				AND = {
 					NOT = { has_global_variable = te_cm_switched_occitan }
 					any_country = { culture_percent_country = { target = cu:occitan value > 0 } }
+				}
+				AND = {
+					NOT = { has_global_variable = te_cm_switched_wallonian }
+					any_country = { culture_percent_country = { target = cu:wallonian value > 0 } }
 				}
 				AND = {
 					NOT = { has_global_variable = te_cm_switched_catalan }
@@ -3126,12 +3122,12 @@ te_cmg_french_has_other_starter = {
 te_cmg_french_all_switched = {
 	NOR = {
 		AND = {
-			global_var:te_cm_joined_french_wallonian ?= 1
-			NOT = { has_global_variable = te_cm_switched_wallonian }
-		}
-		AND = {
 			global_var:te_cm_joined_french_occitan ?= 1
 			NOT = { has_global_variable = te_cm_switched_occitan }
+		}
+		AND = {
+			global_var:te_cm_joined_french_wallonian ?= 1
+			NOT = { has_global_variable = te_cm_switched_wallonian }
 		}
 		AND = {
 			global_var:te_cm_joined_french_catalan ?= 1
@@ -3146,19 +3142,11 @@ te_cmg_french_all_switched = {
 te_cmg_french_core_switched = {
 	OR = {
 		AND = {
-			global_var:te_cm_joined_french_wallonian ?= 1
-			has_global_variable = te_cm_switched_wallonian
-		}
-		AND = {
 			global_var:te_cm_joined_french_occitan ?= 1
 			has_global_variable = te_cm_switched_occitan
 		}
 	}
 	NOR = {
-		AND = {
-			global_var:te_cm_joined_french_wallonian ?= 1
-			NOT = { has_global_variable = te_cm_switched_wallonian }
-		}
 		AND = {
 			global_var:te_cm_joined_french_occitan ?= 1
 			NOT = { has_global_variable = te_cm_switched_occitan }
@@ -3183,7 +3171,6 @@ te_cmg_french_can_start = {
 		text = te_cmg_french_primary_tt
 		OR = {
 			country_has_primary_culture = cu:french
-			country_has_primary_culture = cu:wallonian
 			country_has_primary_culture = cu:occitan
 		}
 	}
@@ -3197,13 +3184,6 @@ te_cmg_french_can_start = {
 	}
 	custom_tooltip = {
 		text = te_cmg_french_core_2_tt
-		OR = {
-			te_cmg_french_wallonian_measured = yes
-			te_cmg_french_wallonian_switched_in = yes
-		}
-	}
-	custom_tooltip = {
-		text = te_cmg_french_core_3_tt
 		OR = {
 			te_cmg_french_occitan_measured = yes
 			te_cmg_french_occitan_switched_in = yes
@@ -9843,8 +9823,8 @@ te_cmg_latin_french_available = {
 			te_cmg_french_all_switched = yes
 		}
 		NOR = {
-			global_var:te_cm_joined_french_wallonian ?= 1
 			global_var:te_cm_joined_french_occitan ?= 1
+			global_var:te_cm_joined_french_wallonian ?= 1
 			global_var:te_cm_joined_french_catalan ?= 1
 		}
 	}
@@ -12725,12 +12705,12 @@ te_cmg_is_switched_part = {
 			this = cu:karelian
 		}
 		AND = {
-			has_global_variable = te_cm_switched_wallonian
-			this = cu:wallonian
-		}
-		AND = {
 			has_global_variable = te_cm_switched_occitan
 			this = cu:occitan
+		}
+		AND = {
+			has_global_variable = te_cm_switched_wallonian
+			this = cu:wallonian
 		}
 		AND = {
 			has_global_variable = te_cm_switched_catalan
@@ -13232,14 +13212,14 @@ te_cmg_switched_part_kept = {
 			ROOT.state_region = { is_homeland = global_var:te_cm_switched_karelian }
 		}
 		AND = {
-			has_global_variable = te_cm_switched_wallonian
-			this = cu:wallonian
-			ROOT.state_region = { is_homeland = global_var:te_cm_switched_wallonian }
-		}
-		AND = {
 			has_global_variable = te_cm_switched_occitan
 			this = cu:occitan
 			ROOT.state_region = { is_homeland = global_var:te_cm_switched_occitan }
+		}
+		AND = {
+			has_global_variable = te_cm_switched_wallonian
+			this = cu:wallonian
+			ROOT.state_region = { is_homeland = global_var:te_cm_switched_wallonian }
 		}
 		AND = {
 			has_global_variable = te_cm_switched_catalan

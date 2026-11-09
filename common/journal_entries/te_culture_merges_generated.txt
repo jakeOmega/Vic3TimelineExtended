@@ -2523,7 +2523,7 @@ je_te_cm_finnish = {
 	can_deactivate = no
 }
 
-# ---- french (french, wallonian, occitan) ----
+# ---- french (french, occitan) ----
 je_te_cm_french = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 	group = je_group_internal_affairs
@@ -2649,50 +2649,6 @@ je_te_cm_french = {
 			}
 			triggered_desc = {
 				desc = je_te_cm_french_status_busy_2
-				trigger = {
-					NOT = {
-						OR = {
-							te_cmg_french_wallonian_measured = yes
-							te_cmg_french_wallonian_switched_in = yes
-						}
-					}
-					NOR = {
-						te_cmg_french_wallonian_available = yes
-					}
-				}
-			}
-			triggered_desc = {
-				desc = je_te_cm_french_status_hold_wallonian
-				trigger = {
-					NOT = {
-						OR = {
-							te_cmg_french_wallonian_measured = yes
-							te_cmg_french_wallonian_switched_in = yes
-						}
-					}
-					te_cmg_french_wallonian_available = yes
-					NOT = { has_global_variable = te_cm_switched_wallonian }
-					has_variable = te_cm_held_french_wallonian
-					var:te_cm_held_french_wallonian < te_cm_hold_open
-				}
-			}
-			triggered_desc = {
-				desc = je_te_cm_french_status_accept_wallonian
-				trigger = {
-					NOT = {
-						OR = {
-							te_cmg_french_wallonian_measured = yes
-							te_cmg_french_wallonian_switched_in = yes
-						}
-					}
-					te_cmg_french_wallonian_available = yes
-					NOT = { has_global_variable = te_cm_switched_wallonian }
-					has_variable = te_cm_ok_french_wallonian
-					var:te_cm_ok_french_wallonian = 0
-				}
-			}
-			triggered_desc = {
-				desc = je_te_cm_french_status_busy_3
 				trigger = {
 					NOT = {
 						OR = {

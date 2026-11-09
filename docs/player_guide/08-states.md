@@ -294,7 +294,7 @@ society laws](06-politics.md#rights-and-society-laws).
 
 Closely related cultures can merge into one national culture over a few
 decades: North and South German pops become German, Yankee and Dixie pops
-American, and Wallonian and Occitan pops French. A merge starts in a country
+American, and Occitan pops French. A merge starts in a country
 that holds most of its constituent cultures and treats them as equals. Each
 year a share of their pops converts, and once the merged culture holds 60% of a
 constituent culture's homeland, every remaining pop of that culture in the
@@ -313,7 +313,7 @@ The mod defines 32 merges. A merge's core cultures must all qualify before it
 can start; an optional culture joins once it qualifies too, while the merge runs
 or after it is complete. Most merges make a new culture, and eleven, marked
 existing, fold their constituent cultures into one that already exists, as
-French takes in Wallonian and Occitan. A culture can belong to several merges,
+French takes in Occitan. A culture can belong to several merges,
 but to only one running merge at a time. The tier, explained
 [below](#starting-a-culture-merge), is the one a merge starts on; a culture
 marked with another tier joins on that tier's conditions.
@@ -322,7 +322,7 @@ marked with another tier joins on that tier's conditions.
 |---|---|---|---|
 | German | North German, South German | Alemannic, Eastern German | 1 |
 | East Slavic | Russian, Ukrainian, Byelorussian | none | 1 |
-| French (existing) | French, Wallonian, Occitan | Catalan (tier 2) | 1 |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 |
 | American | Yankee, Dixie | Afro-American (tier 1b) | 1 |
 | Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b |
 | Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 |

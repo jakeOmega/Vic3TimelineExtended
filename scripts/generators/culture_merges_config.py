@@ -145,9 +145,12 @@ MERGES: tuple[Merge, ...] = (
         "french", "french", None,
         # Walloon (Netherlandish heritage) and Occitan (its own language) read as
         # French from the Third Republic on; Catalan, mostly in Spain, stays a
-        # later, tier-3 join.
-        core=(_p("french", tier=1), _p("wallonian", tier=1), _p("occitan", tier=1)),
-        optional=(_p("catalan", tier=3),),
+        # later, tier-3 join. Walloon is optional (owner, 2026-11-09): its homeland
+        # is Belgium's, which France's sphere holds only by annexing Belgium or
+        # making it a subject, so as a core culture it held back the whole merge,
+        # Occitan included. It still joins at tier 1 once the sphere holds Wallonia.
+        core=(_p("french", tier=1), _p("occitan", tier=1)),
+        optional=(_p("wallonian", tier=1), _p("catalan", tier=3)),
     ),
     Merge("british", "british", None, core=(_p("british"), _p("scottish"))),
     Merge(
