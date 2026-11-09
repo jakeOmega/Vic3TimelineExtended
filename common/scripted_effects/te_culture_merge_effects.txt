@@ -355,16 +355,20 @@ te_cm_census_part = {
 
 # Country scope: folds one passing core part into the SoL gap's running range. $MERGE$,
 # $CULTURE$. The caller resets te_cm_sg_min (999), te_cm_sg_max (-1) and te_cm_sg_n (0)
-# and reads them back as the gap, largest minus smallest.
+# and reads them back as the gap, largest minus smallest. te_cm_sg_worst and te_cm_sg_best
+# hold the cultures at the two ends (culture scopes), which the caller keeps for the status
+# text; the first part folded in sets both.
 te_cm_sol_track = {
 	change_local_variable = { name = te_cm_sg_n add = 1 }
 	if = {
 		limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_min }
 		set_local_variable = { name = te_cm_sg_min value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+		set_local_variable = { name = te_cm_sg_worst value = cu:$CULTURE$ }
 	}
 	if = {
 		limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_max }
 		set_local_variable = { name = te_cm_sg_max value = var:te_cm_sol_$MERGE$_$CULTURE$ }
+		set_local_variable = { name = te_cm_sg_best value = cu:$CULTURE$ }
 	}
 }
 
