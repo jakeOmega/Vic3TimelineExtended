@@ -1,0 +1,36 @@
+﻿# ============================================================================
+# CULTURE MERGES: notifications to the country running a merge
+# ============================================================================
+# te_culture_merge.1: a constituent culture has switched. Fired by te_cm_switch_part
+# (common/scripted_effects/te_culture_merge_effects.txt) on the merge's starter, a human only,
+# once per culture that switches, with the culture saved as scope:te_cm_ev_part and the culture
+# it became as scope:te_cm_ev_result. Each popup carries its own copy of the two scopes, so two
+# cultures switching in one census each get their own. The switch has already happened when it
+# opens; the event only says so (2026-11-09: until then nothing told the player).
+
+namespace = te_culture_merge
+
+te_culture_merge.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_culture_merge.1.t
+	desc = te_culture_merge.1.d
+	flavor = te_culture_merge.1.f
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cm_ev_part
+		exists = scope:te_cm_ev_result
+	}
+
+	option = {
+		name = te_culture_merge.1.a
+		default_option = yes
+	}
+}

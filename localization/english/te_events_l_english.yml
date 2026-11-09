@@ -5488,6 +5488,14 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_CULTURE_MERGE
+#
+ te_culture_merge.1.a:0 "One people, at last."
+ te_culture_merge.1.d:0 "In the [SCOPE.sCulture('te_cm_ev_part').GetName] homeland most people now call themselves [SCOPE.sCulture('te_cm_ev_result').GetName], and the last [SCOPE.sCulture('te_cm_ev_part').GetName] pops, at home and abroad, have followed them. The [SCOPE.sCulture('te_cm_ev_part').GetName] lands are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland as well, and [SCOPE.sCulture('te_cm_ev_part').GetName] stays a primary culture wherever it was one."
+ te_culture_merge.1.f:0 "\"When I was a boy, the schoolmaster rapped our knuckles for talking the way we talked at home. My grandson has never had his knuckles rapped. He has nothing left to be rapped for.\"\n\n\"The census clerk asked what we were. My father gave the old answer out of habit, and the clerk wrote down the new one without looking up. Nobody in the queue said a word. Most of them had already written it themselves.\""
+ te_culture_merge.1.t:0 "From [SCOPE.sCulture('te_cm_ev_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]"
+
+#
 # TE_DEBUG_CH
 #
  te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"

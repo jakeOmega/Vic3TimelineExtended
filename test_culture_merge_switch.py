@@ -47,6 +47,17 @@ SCRIPT_FILES = (EFFECTS, ON_ACTIONS, GEN_EFFECTS, GEN_TRIGGERS, HOMELAND_TRIGGER
 BOM = b"\xef\xbb\xbf"
 
 
+def all_english_loc_keys_with_text():
+    """Every english loc key with its text, from every file (the event keys live in te_events_l_english.yml)."""
+    out = {}
+    for path in sorted((ROOT / "localization/english").rglob("*.yml")):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r' ([\w.\-]+):\d* "(.*)"\s*$', line)
+            if m:
+                out[m.group(1)] = m.group(2)
+    return out
+
+
 def _absorb_result(merge, culture):
     return merge.new is None and culture == merge.result
 
@@ -511,6 +522,35 @@ class SwitchTest(unittest.TestCase):
         # The whole body sits under the threshold and the not-yet-switched test.
         self.assertTrue(self.body.startswith("if = { limit = { NOT = { has_global_variable = te_cm_switched_$CULTURE$ } "
                                              "global_var:te_cm_dom_$MERGE$_$CULTURE$ >= te_cm_switch_share } "))
+
+    def test_the_starter_hears_of_the_switch_once_it_is_done(self):
+        # 2026-11-09: nothing told the player a culture had switched. The starter, a human only, gets te_culture_merge.1
+        # after the switch has written everything (the state included), with the two cultures in scopes of its own.
+        call = ("cu:$CULTURE$ = { save_scope_as = te_cm_ev_part } cu:$RESULT$ = { save_scope_as = te_cm_ev_result } "
+                "if = { limit = { exists = global_var:te_cm_starter_$MERGE$ } global_var:te_cm_starter_$MERGE$ = { "
+                "if = { limit = { is_ai = no } trigger_event = { id = te_culture_merge.1 popup = yes } } } }")
+        self.assertIn(call, self.body)
+        self.assertEqual(self.body.count("trigger_event"), 1)
+        self.assertGreater(self.body.index(call), self.body.index("set_global_variable = { name = te_cm_state_$MERGE$ value = 2 }"))
+        # Permanent scopes, so the popup carries them; nothing else in the mod saves these names.
+        for name in ("te_cm_ev_part", "te_cm_ev_result"):
+            self.assertNotIn("save_temporary_scope_as = %s" % name, squash(text_of(EFFECTS) + text_of(GEN_EFFECTS)))
+
+    def test_the_switch_event_names_both_cultures(self):
+        path = ROOT / "events/te_culture_merge_events.txt"
+        self.assertTrue(path.read_bytes().startswith(BOM))
+        event = squash(block(text_of(path), "te_culture_merge.1"))
+        self.assertIn("type = country_event", event)
+        self.assertIn('event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }', event)
+        self.assertIn("trigger = { exists = scope:te_cm_ev_part exists = scope:te_cm_ev_result }", event)
+        loc = {k: v for k, v in all_english_loc_keys_with_text().items() if k.startswith("te_culture_merge.1.")}
+        self.assertEqual(sorted(loc), ["te_culture_merge.1.a", "te_culture_merge.1.d", "te_culture_merge.1.f", "te_culture_merge.1.t"])
+        for key in ("te_culture_merge.1.t", "te_culture_merge.1.d"):
+            self.assertIn("[SCOPE.sCulture('te_cm_ev_part').GetName]", loc[key], key)
+            self.assertIn("[SCOPE.sCulture('te_cm_ev_result').GetName]", loc[key], key)
+        # The event reads no other saved scope (the switch's te_cm_result is temporary and not carried).
+        for text in loc.values():
+            self.assertEqual(set(re.findall(r"sCulture\('(\w+)'\)", text)) - {"te_cm_ev_part", "te_cm_ev_result"}, set())
 
     def test_the_switch_names_the_result_and_leaves_the_merge_it_was_in(self):
         self.assertIn("cu:$RESULT$ = { save_temporary_scope_as = te_cm_result }", self.body)
