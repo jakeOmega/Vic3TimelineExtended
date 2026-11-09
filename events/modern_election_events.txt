@@ -2655,7 +2655,7 @@ modern_election_events.29 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { has_law = law_type:law_universal_basic_income }
+				trigger = { has_law_or_variant = law_type:law_universal_basic_income }
 				desc = modern_election_events.29.d_enacted
 			}
 			triggered_desc = {
@@ -2701,7 +2701,7 @@ modern_election_events.29 = {
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 5
-			modifier = { trigger = { has_law = law_type:law_universal_basic_income } add = 5 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_universal_basic_income } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_command_economy } add = 3 }
 		}
 	}
