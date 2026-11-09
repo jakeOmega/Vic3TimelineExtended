@@ -2696,6 +2696,8 @@ te_cmg_persian_lowest_dom_all = {
 				global_var:te_cm_joined_persian_luri ?= 1
 				global_var:te_cm_joined_persian_tajik ?= 1
 				global_var:te_cm_joined_persian_hazara ?= 1
+				global_var:te_cm_joined_persian_mazanderani ?= 1
+				global_var:te_cm_joined_persian_baluchi ?= 1
 			}
 		}
 		value = 1
@@ -2733,6 +2735,32 @@ te_cmg_persian_lowest_dom_all = {
 			if = {
 				limit = { has_global_variable = te_cm_dom_persian_hazara }
 				max = global_var:te_cm_dom_persian_hazara
+			}
+			else = {
+				max = 0
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_persian_mazanderani ?= 1
+				NOT = { has_global_variable = te_cm_switched_mazanderani }
+			}
+			if = {
+				limit = { has_global_variable = te_cm_dom_persian_mazanderani }
+				max = global_var:te_cm_dom_persian_mazanderani
+			}
+			else = {
+				max = 0
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_persian_baluchi ?= 1
+				NOT = { has_global_variable = te_cm_switched_baluchi }
+			}
+			if = {
+				limit = { has_global_variable = te_cm_dom_persian_baluchi }
+				max = global_var:te_cm_dom_persian_baluchi
 			}
 			else = {
 				max = 0

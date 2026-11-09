@@ -174,7 +174,7 @@ holds the merge's start, for at most 20 years.
 | Han (existing) | Han, Yue, Min, Hakka | none | 1 | none |
 | Japanese (existing) | Japanese, Ryukyuan | none | 1 | none |
 | Arab | Maghrebi, Misri, Mashriqi, Bedouin, Yemenite | Sudanese (tier 1b), Haratin (tier 1b), Bidan (tier 1b) | 1 | none |
-| Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b) | 1 | none |
+| Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b), Mazanderani, Baluchi (tier 2) | 1 | none |
 | Oghuz Turkic | Turkish, Azerbaijani | Turkmen (tier 1b) | 1 | none |
 | Hindustani (existing) | Hindustani, Avadhi, Bundeli, Chhattisgarhi, Bagheli | none | 1 | none |
 | Dravidian | Tamil, Kannada, Malayalam | Telugu (tier 2) | 1 | none |
