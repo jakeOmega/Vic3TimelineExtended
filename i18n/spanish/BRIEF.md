@@ -27,6 +27,17 @@ Some lines were translated before, and the English has changed since. Two commen
 
 Compare the two English versions and change the translation only where the English changed, keeping its wording and terms everywhere else. Here the concept link is gone, so it goes from the Spanish too: «… por las obligaciones del tratado de puerto franco». Where the English has been rewritten, translate the new text afresh. Either way, write the line in full, like any other.
 
+## Template lines
+
+A generated file repeats some lines once for each copy of a system (each culture merge, say), with only their `$...$` references and `[...]` values changed. Your chunk holds one copy of such a line, under a comment naming what changes:
+
+```
+# TEMPLATE: the script copies this translation to 96 more lines, replacing $dixie$, [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] with each line's own. …
+ je_te_cm_american_status_hold_dixie:0 "$dixie$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] of them in their homeland, …"
+```
+
+A script writes your translation into every other copy, swapping in each one's own references. Keep the ones the comment names exactly as written: one with a case flag added can't be swapped, and its copies stay English. Translate the line so it reads right whatever they insert. Here every merge's culture takes the place of `$dixie$`, so phrase around its gender: «Los colectivos de cultura $dixie$ están fuera de alcance…» (Country names, below, explains why a bare name can't take an agreeing word.)
+
 ## Keep the markup exactly
 
 Everything that isn't prose passes through unchanged. The checker compares them as counts per line.
