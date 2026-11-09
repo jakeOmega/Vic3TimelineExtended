@@ -181,7 +181,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Tone:** varied. Dry and ironic is one register; a text can as well be angry, proud, frightened, tired or formal. Most events are not funny, and their flavor is not either.
 
 ### Option Text (`.a`, `.b`, `.c`, etc.)
-- **Short, punchy, and in the voice of the player/ruler.** Option text is what the player "says" when choosing.
+- **Short, punchy, and in the voice of the player/ruler.** Option text is what the player "says" when choosing. This is the one slot where a light or exclaiming tone belongs, as in the base game's "Thank goodness for quick-thinking engineers!"; lean flat before quippy, and give a grave event grave options (owner, 2026-11-09; `loc_style_guide.md` § Events).
 - **Typical length:** 5–15 words. One sentence or a short phrase. Never more than two sentences.
 - **Common patterns:**
   - Declarative statements of policy: "Capital drives progress." / "Workers deserve the fruits of their labor."

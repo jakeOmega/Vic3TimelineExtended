@@ -1,6 +1,8 @@
 # Writing in-game text
 
-**Draft, second revision (2026-11-09), after the owner read sample text written from the first.** Nothing lints against this yet.
+**Adopted 2026-11-09**, after the owner read two rounds of sample text written from its drafts. The word-list lint is still to build; `scripts/analysis/flavor_forms.py` exists.
+
+**Who writes it.** Event text is written by the strongest model available (owner, 2026-11-09: Opus-class or better; in the trials a smaller model followed the rules but wrote flatter text and checked less of the script). Labels, tooltips and modifier descriptions are within any model's reach with this guide.
 
 This is the house style for everything under `localization/english/`: what a player reads in the game. It says how each kind of text should read. Where it and `event_creation_guide.md` differ on voice, this guide wins; that guide keeps the mechanics of events (keys, scope references, images, option design). Other homes:
 
@@ -45,7 +47,7 @@ The rules:
 - **A text ends when the facts are told.** The last sentence is as plain as the others: the last thing that happened, or what is now being asked of the government. If the paragraph is complete without its final sentence, delete the final sentence.
 - **The narrator does not insinuate.** Say what is known. If fraud is suspected, somebody in the text suspects it: "The auditors have asked who signed the quarterly counts."
 - **No sentence that needs the reader to finish it,** and no two-part sentence whose second half reverses the first.
-- **A flavor text may turn at the end about one time in five.** Before writing one, read the two or three events that fire near it. If they turn, this one does not.
+- **This is a ban, not a ration** (owner, 2026-11-09). A turn at the end is acceptable when it is rare, and the ones that slip through will keep it from being absent. Do not write one on purpose.
 
 > **Kicker:** An audit of the grain reserve has found that a tenth of the stock has rotted in its silos. The warehouse books listed every sack as sound. Nobody has yet said whether the books were wrong or were written to be.
 > **Plain:** An audit of the grain reserve has found that a tenth of the stock has rotted in its silos. The warehouse books list every sack as sound, and the quartermaster's office signed each count. The auditors want to know who did the counting.
@@ -76,6 +78,17 @@ Three ways to keep a detail that is at risk:
 3. **Write it one level more general.** "A message arrived before dawn", not "the telegram"; "the district's elders", not "the parish council"; "for as long as the ledgers go back", not "for two years"; "a tenth of the stock", which is the mechanic, not "twelve thousand tons".
 
 Details that are always safe are the ones the game holds no fact about: what a clerk said, the state of a ledger, a queue, the hour, someone's hands, the order in which things were found.
+
+### What a chain's triggers already guarantee
+
+The other half of the rule: do not hedge what is secured. Read the event's `trigger`, and what fires it, and use what they guarantee. Each batch of event work records here what it found, so the next writer in that chain starts from it.
+
+| Where | Guaranteed | Not guaranteed |
+|---|---|---|
+| Any event behind a technology | That technology and everything before it in its tree: an event needing `social_media` can show phones, posts and newsrooms | Later technology; that the *other* country has it |
+| Any event of a system with a game rule | The system's journal entry and its vocabulary | That the player has opened the tab |
+| An option with its own `trigger` | What that trigger tests, in that option's text only | The same in the description |
+| `modern_election_events` (all need `in_election_campaign` and no single-party state) | An election campaign, more than one party, voters, candidates, a press that reports | A governing party or an opposition party as a scope (both are `exists`-guarded in .3 and .4; .1 and .2 guarantee an opposition interest group with a party). Private firms. Any local weather: .3 needs only a *global* anomaly of 1.0 °C |
 
 ## Who is speaking
 
@@ -126,6 +139,8 @@ The modifier's lines already show what it does. The description says why we have
 
 **Find the reason in the script, not in the modifier's lines.** Look up what adds the modifier (`/references/<name>` on the server, or grep `common/` and `events/`): the event option, the journal entry's completion, the button. The description names that cause. If you find yourself turning an effect into a story ("scientists are leaving" for an innovation penalty), you are restating the effect. Say what was done ("We have put every citizen under watch") and leave the consequence to the numbers.
 
+**A timed modifier describes the event, not a standing state.** The tooltip shows the time left, so the text does not say "temporarily". But a modifier that fades should not read as a law in force: "We have banned non-medical augmentation" sounds permanent and may sit beside an augmentation law that says otherwise. Write what happened: "Our government has ordered an end to non-medical augmentation, and the clinics are closing." For a modifier that lasts while something else does, name that thing: "while the relief lasts", "until the loan is repaid".
+
 ### Law descriptions
 
 Say what the law provides and who decides, plainly enough that a player can tell it from the law beside it. Do not argue for the law.
@@ -163,7 +178,13 @@ It answers the three things a player wonders on first seeing the control: what i
 
 The first version has four stock metaphors (mountains, starving, grinding to a halt, planting seeds). The second says who cannot borrow, who is asking for what, and what the banks answer, and it stops there.
 
-**Options are what the ruler says, not labels,** and an option's wording is a claim like any other. "Rush a replacement vehicle to the next pad" was the slowest of its event's three options. Read what each option does before naming it, and promise no speed, safety or saving the script does not deliver.
+**Options are where the ruler speaks,** and the one place a light or exclaiming tone belongs. They are short because the button is: 5 to 15 words. The base game's usual note is a brief, human reaction: "Thank goodness for quick-thinking engineers!" That is the ideal. Plain is acceptable; **lean flat before quippy** (owner, 2026-11-09). A grave event gets grave options, and no event needs a joke on every button.
+
+> **Too flat to be the ruler speaking:** Use the data.
+> **Good:** Buy the records. Every other campaign will.
+> **Trying too hard:** Knowledge is power, and power is on sale.
+
+An option's wording is also a claim like any other. "Rush a replacement vehicle to the next pad" was the slowest of its event's three options. Read what each option does before naming it, and promise no speed, safety or saving the script does not deliver.
 
 **Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay.
 
@@ -191,6 +212,10 @@ The rules:
 - **Someone is there.** Every form has a point of view: who is writing the letter, who is counting the sacks. Narration from nowhere reads as a news summary.
 - **Speakers are unnamed and unplaced** unless a scope supplies the name ([Detail that cannot be wrong](#detail-that-cannot-be-wrong)). A document's letterhead, date and place are assumptions like any other.
 - **Length:** 50 to 150 words. A short exchange under 50 words is usually a setup and a punchline; give it a different form.
+
+**Laying out a list or a document.** A list opens with one heading line that says whose list it is, ending in a colon, then `\n\n`, then one item to a line (`\n` between them), each a phrase or sentence with its full stop, and no bullets. A document opens by saying who writes to whom ("To the government, from the examiners of the grain reserve."), carries no date, place or letterhead, and closes the way such a paper closes: with its request, its next step or the writer's office.
+
+**A closing or a kicker?** A document's last line is plain when it is what that paper would end on whoever wrote it: "We ask for instructions on the remainder." "I will report again when the count is done." It is a kicker when it is a detail held back for the end: "His coat. His umbrella is still on the stand." In a list, the test is whether the last item could change places with the third without loss. If it has to be last, it is a kicker.
 
 The same event in three forms, none ending on a turn:
 
@@ -238,8 +263,8 @@ The same event in three forms, none ending on a turn:
 6. For flavor, run `scripts/analysis/flavor_forms.py <namespace>` and pick a form the chain is short of.
 7. Read the longest it can render (the longest country name, the largest figure) against the cell or tooltip it sits in.
 
-## Open questions for the owner
+## Still open
 
-1. **Existing text.** Of 1,155 flavor texts, 510 are two-voice exchanges. Bringing the heaviest chains (banking, elections, movements, wonders, law events) under a third each means rewriting roughly 250 of them, and every rewritten line needs retranslating into German and Spanish. I would do it a chain at a time, with you reading the first chain before the rest.
+1. **Existing text.** The flavor rewrites are tracked as issues, one batch of related chains each, with the election chain as the pilot. Each batch also adds its chain's row to the table of what triggers guarantee.
 2. **A lint.** `flavor_forms.py --check` could fail a chain whose share of one form rises, starting from today's figures as the ceiling. The word-list part (stock metaphors, verdict words, ` - ` as a dash) would start from an allowlist of today's hits and fail only new ones.
 3. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.
