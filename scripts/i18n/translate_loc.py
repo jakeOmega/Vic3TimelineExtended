@@ -7,6 +7,8 @@ The model never edits a `.yml`. This script does everything deterministic:
               glossary it needs (mod terms already fixed, vanilla terms)
     merge     read the agents' output, check every value's markup against the
               English, and add what passes to the translation memory
+    expand    write the copies of each template (`prepare --templates`) from
+              its example's merged translation, for `merge` to check
     status    count translated, stale and missing keys
     respell   re-point translations whose English changed only from British to
               American spelling at the new English, so no agent redoes them
@@ -26,7 +28,9 @@ Working files (chunks, agent output, reports) live under the gitignored
 Usage:
     python3 scripts/i18n/translate_loc.py prepare --set names
     python3 scripts/i18n/translate_loc.py prepare --set all --files te_events --limit 1
+    python3 scripts/i18n/translate_loc.py prepare --templates te_culture_merges_generated
     python3 scripts/i18n/translate_loc.py merge
+    python3 scripts/i18n/translate_loc.py expand && python3 scripts/i18n/translate_loc.py merge x-001
     python3 scripts/i18n/translate_loc.py status
 """
 
@@ -606,6 +610,131 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
 
 
 # --------------------------------------------------------------------------
+# Templates
+#
+# A generated loc file (te_culture_merges_generated) repeats each line template
+# once per copy, varying only its $...$ references and [...] script values.
+# `prepare --templates` offers one example per template and `expand` writes
+# the others from its translation, swapping in each line's own tokens.
+
+TEMPLATE_TOKEN = re.compile(r"\$[^$\s]+\$|\[[^\[\]]*\]")
+
+
+def template_signature(value: str) -> str:
+    """The English with every token blanked: `$X$` for a reference, `[V]` for
+    a script value."""
+    return TEMPLATE_TOKEN.sub(lambda m: "$X$" if m.group(0).startswith("$") else "[V]", value)
+
+
+def token_mapping(example_en: str, line_en: str) -> dict[str, str] | None:
+    """Example token -> the line's token in its place, or None if the two
+    aren't one template: different blanked text, or an example token that
+    maps to two different tokens."""
+    if template_signature(example_en) != template_signature(line_en):
+        return None
+    mapping: dict[str, str] = {}
+    for mine, theirs in zip(TEMPLATE_TOKEN.findall(example_en), TEMPLATE_TOKEN.findall(line_en)):
+        if mapping.setdefault(mine, theirs) != theirs:
+            return None
+    return mapping
+
+
+def _markup_names(value: str) -> Counter:
+    return Counter(name for token in TEMPLATE_TOKEN.findall(value) for name in re.findall(r"\w+", token))
+
+
+def expand_template(example_en: str, example_text: str, line_en: str) -> tuple[str | None, str | None]:
+    """(the line's text, None), made from the example's text (its translation,
+    or its English) by swapping each example token that differs for the
+    line's, in one alternation, longest token first; or (None, why not).
+
+    Fails where a swapped-out token survives: a name inside it (`dixie`,
+    `te_cm_held_american_dixie`) still appears in the result's markup more
+    often than in the line's English. That happens where the translation
+    altered a varying token (a case flag, a concept call's display text), so
+    its literal form wasn't there to swap."""
+    mapping = token_mapping(example_en, line_en)
+    if mapping is None:
+        return None, "not the same template"
+    swaps = {mine: theirs for mine, theirs in mapping.items() if mine != theirs}
+    if not swaps:
+        return example_text, None
+    pattern = re.compile("|".join(map(re.escape, sorted(swaps, key=len, reverse=True))))
+    result = pattern.sub(lambda m: swaps[m.group(0)], example_text)
+    gone = set()
+    for mine, theirs in swaps.items():
+        gone |= set(re.findall(r"\w+", mine)) - set(re.findall(r"\w+", theirs))
+    have, want = _markup_names(result), _markup_names(line_en)
+    survivors = sorted(name for name in gone if have[name] > want[name])
+    if survivors:
+        return None, "the example's text keeps its own " + ", ".join(survivors) + " where this line needs its own"
+    return result, None
+
+
+def template_groups(entries: list[Entry], translations: dict[str, str] | None = None) -> list[list[Entry]]:
+    """Group lines that repeat one template, in the order given; the first
+    line of each group is its example. A line joins an example only if the
+    two have the same English with every token blanked, the tokens map
+    position by position with no example token mapping to two different
+    ones, and swapping them turns the example's English into the line's.
+    Otherwise it starts its own group. An example with a translation in
+    `translations` takes a line only if its translation expands onto it."""
+    groups: dict[str, list[list[Entry]]] = defaultdict(list)
+    ordered: list[list[Entry]] = []
+    for entry in entries:
+        for group in groups[template_signature(entry.en)]:
+            example = group[0]
+            if expand_template(example.en, example.en, entry.en)[0] != entry.en:
+                continue
+            if translations and example.key in translations and \
+                    expand_template(example.en, translations[example.key], entry.en)[0] is None:
+                continue
+            group.append(entry)
+            break
+        else:
+            group = [entry]
+            groups[template_signature(entry.en)].append(group)
+            ordered.append(group)
+    return ordered
+
+
+def varying_tokens(example: Entry, lines: list[Entry]) -> list[str]:
+    """The example's tokens that some of `lines` replace, in order."""
+    out: list[str] = []
+    for line in lines:
+        for mine, theirs in (token_mapping(example.en, line.en) or {}).items():
+            if mine != theirs and mine not in out:
+                out.append(mine)
+    order = TEMPLATE_TOKEN.findall(example.en)
+    return sorted(out, key=order.index)
+
+
+def plan_templates(pending: list[Entry], translated: list[Entry], tm: dict[str, dict], field: str,
+                   prefixes: list[str]) -> dict[str, Entry]:
+    """Sibling key -> its example, for the pending lines of files whose name
+    starts with one of `prefixes`. Translated lines of those files are tried
+    as examples first, so a template already in the memory needs no agent: a
+    new copy, or a copy whose English changed only in its tokens, expands from
+    it at once. Stale lines group like missing ones; the example of a template
+    whose English changed is offered again, and its siblings are expanded from
+    the new translation. Country names (declined in German) are left out."""
+    def templated(entry: Entry) -> bool:
+        return os.path.basename(entry.file).startswith(tuple(prefixes)) and not is_country_name(entry)
+
+    seeds = [e for e in translated if templated(e)]
+    candidates = [e for e in pending if templated(e)]
+    waiting = {e.key for e in candidates}
+    groups = template_groups(seeds + candidates, {e.key: tm[e.key][field] for e in seeds})
+    return {line.key: group[0] for group in groups for line in group[1:] if line.key in waiting}
+
+
+def _template_comment(info: dict) -> str:
+    return (f"# TEMPLATE: the script copies this translation to {info['copies']} more lines, replacing "
+            + ", ".join(info["varying"]) + " with each line's own. Keep those exactly as written (no case flag,"
+            " no GetAltName), and word the line so it reads right whatever they insert.")
+
+
+# --------------------------------------------------------------------------
 # Chunking
 
 
@@ -643,13 +772,18 @@ def _loc_line(key: str, value: str) -> str:
 
 def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str],
                 country_names: list[Entry], language: str,
-                previous: dict[str, dict] | None = None, lang_field: str = "de") -> None:
+                previous: dict[str, dict] | None = None, lang_field: str = "de",
+                templates: dict[str, dict] | None = None) -> None:
     """`previous` holds the TM records of stale keys: each such line is shown
     with the English its current translation was made from and that
-    translation, so the agent updates it rather than starting over."""
+    translation, so the agent updates it rather than starting over.
+    `templates` marks the template examples (`prepare --templates`): example
+    key -> {"copies": siblings, "varying": the tokens `expand` swaps}."""
+    templates = templates or {}
     lines = [
         f"# CHUNK {chunk_id} — translate into {language}. Instructions: i18n/{language}/BRIEF.md",
-        f"# {len(chunk)} lines to translate" + (f", plus the declined forms of {len(country_names)} country names" if country_names else ""),
+        f"# {len(chunk)} lines to translate" + (f", plus the declined forms of {len(country_names)} country names" if country_names else "")
+        + (f"; {len(templates)} of them are templates for other lines (# TEMPLATE)" if templates else ""),
         "#",
         *glossary,
         "#",
@@ -660,6 +794,8 @@ def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str
         if entry.file != current_file:
             current_file = entry.file
             lines.append(f"# --- from {entry.file}")
+        if entry.key in templates:
+            lines.append(_template_comment(templates[entry.key]))
         record = (previous or {}).get(entry.key)
         if record:
             lines.append(f"# PREVIOUS ENGLISH: {record['en']}")
@@ -683,6 +819,7 @@ def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str
 def cmd_prepare(args) -> int:
     language, lang_field = args.language, args.field
     entries = load_english()
+    by_key = {e.key: e for e in entries}
     tm = load_tm(language)
     state = classify(entries, tm)
     pending = state["missing"] + state["stale_minor"] + state["stale_major"]
@@ -691,24 +828,35 @@ def cmd_prepare(args) -> int:
     glossary_keys = {e.key for e in entries if is_glossary_entry(e)}
 
     country_names: list[Entry] = []
-    if args.set == "names":
-        pending = [e for e in pending if e.key in glossary_keys]
-        if country_forms(language):
-            country_names = [e for e in pending if is_country_name(e)]
-    else:
-        pending = [e for e in pending if e.key not in glossary_keys]
+    in_set = (lambda e: e.key in glossary_keys) if args.set == "names" else (lambda e: e.key not in glossary_keys)
+    pending = [e for e in pending if in_set(e)]
+    if args.set == "names" and country_forms(language):
+        country_names = [e for e in pending if is_country_name(e)]
     if args.files:
         pending = [e for e in pending if any(os.path.basename(e.file).startswith(f) for f in args.files)]
-    if not pending:
+    # Template files: only one example per template goes to an agent; `expand`
+    # writes the rest (its siblings) once the examples have merged.
+    example_of: dict[str, Entry] = {}
+    if args.templates:
+        translated = [e for e in state["translated"] if in_set(e)]
+        example_of = plan_templates(pending, translated, tm, lang_field, args.templates)
+        pending = [e for e in pending if e.key not in example_of]
+    if not pending and not example_of:
         print("Nothing to translate.")
         return 0
 
     budget = 10**9 if args.set == "names" else args.chunk_words
-    chunks = split_chunks(pending, budget, 10**9 if args.set == "names" else args.max_keys)
+    chunks = split_chunks(pending, budget, 10**9 if args.set == "names" else args.max_keys) if pending else []
     if args.limit:
         chunks = chunks[: args.limit]
+    # A sibling whose example sits in no chunk written now waits for a later run.
+    offered = {e.key for chunk in chunks for e in chunk}
+    example_of = {k: ex for k, ex in example_of.items() if ex.key in offered or tm.get(ex.key, {}).get("en") == ex.en}
+    siblings_of: dict[str, list[Entry]] = defaultdict(list)
+    for key, example in example_of.items():
+        siblings_of[example.key].append(by_key[key])
 
-    vanilla = None if args.no_vanilla else VanillaTerms(language)
+    vanilla = None if args.no_vanilla or not chunks else VanillaTerms(language)
     terms = load_terms(language)
     work = language_dirs(language)[1]
     chunk_dir = os.path.join(work, "chunks")
@@ -725,16 +873,36 @@ def cmd_prepare(args) -> int:
                                   cap=400 if args.set == "names" else 160, terms=terms)
         names_here = [e for e in country_names if e in chunk]
         previous = {e.key: tm[e.key] for e in chunk if e.key in tm}
+        templates = {e.key: {"copies": len(siblings_of[e.key]), "varying": varying_tokens(e, siblings_of[e.key])}
+                     for e in chunk if e.key in siblings_of}
         write_chunk(os.path.join(chunk_dir, chunk_id + ".txt"), chunk_id, chunk, glossary, names_here, language,
-                    previous, lang_field)
+                    previous, lang_field, templates)
         manifest[chunk_id] = {
             "keys": {e.key: e.en for e in chunk},
             "country_names": [e.key for e in names_here],
             "words": sum(word_count(e.en) for e in chunk),
             "previous": previous,
         }
+        if templates:
+            manifest[chunk_id]["templates"] = templates
         print(f"{chunk_id}: {len(chunk)} keys, {manifest[chunk_id]['words']} words, "
-              f"{len(glossary)} glossary lines -> {os.path.relpath(os.path.join(chunk_dir, chunk_id + '.txt'), REPO_ROOT)}")
+              f"{len(glossary)} glossary lines"
+              + (f", {len(templates)} template examples" if templates else "")
+              + f" -> {os.path.relpath(os.path.join(chunk_dir, chunk_id + '.txt'), REPO_ROOT)}")
+    if example_of:
+        # Written by `expand`, not an agent; `merge` checks it like any chunk.
+        expand_id = f"x-{1 + sum(1 for cid in manifest if cid.startswith('x-')):03d}"
+        manifest[expand_id] = {
+            "keys": {k: by_key[k].en for k in example_of},
+            "country_names": [],
+            "words": sum(word_count(by_key[k].en) for k in example_of),
+            "examples": {k: ex.key for k, ex in example_of.items()},
+            "example_en": {ex.key: ex.en for ex in example_of.values()},
+        }
+        from_memory = sum(1 for ex in example_of.values() if ex.key not in offered)
+        print(f"{expand_id}: {len(example_of)} template copies of {len(siblings_of)} examples"
+              + (f" ({from_memory} from translations already in the memory)" if from_memory else "")
+              + "; run `expand` once the examples have merged, then `merge` it")
     os.makedirs(work, exist_ok=True)
     with open(manifest_path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=1)
@@ -757,14 +925,74 @@ def cmd_refresh(args) -> int:
         manifest = json.load(fh)
     for cid in args.chunks:
         info = manifest[cid]
+        if "examples" in info:
+            print(f"{cid}: template copies, written by `expand`; nothing to refresh")
+            continue
         chunk = [by_key[k] for k in info["keys"] if k in by_key]
         names_here = [by_key[k] for k in info.get("country_names", []) if k in by_key]
         glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field, terms=terms,
                                   cap=400 if cid.startswith("names-") else 160)
         write_chunk(os.path.join(work, "chunks", cid + ".txt"), cid, chunk, glossary, names_here, language,
-                    info.get("previous"), lang_field)
+                    info.get("previous"), lang_field, info.get("templates"))
         print(f"{cid}: {len(chunk)} keys, {len(glossary)} glossary lines")
     return 0
+
+
+def cmd_expand(args) -> int:
+    """Write each template-copies chunk's output (`out/x-NNN.01.txt`) from its
+    examples' merged translations, for `merge` to check like any chunk. A
+    copy is left out, and stays pending, while its example has no translation
+    of the English it was grouped by (not merged yet, or rejected), when
+    either line's English has changed since `prepare`, or when the swap
+    leaves the example's own tokens in place (`expand_template`)."""
+    language, lang_field = args.language, args.field
+    current = {e.key: e.en for e in load_english()}
+    tm = load_tm(language)
+    work = language_dirs(language)[1]
+    with open(os.path.join(work, "manifest.json"), encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    chunk_ids = args.chunks or sorted(cid for cid, info in manifest.items() if "examples" in info)
+    report, skipped_total = {}, 0
+    for cid in chunk_ids:
+        info = manifest[cid]
+        if "examples" not in info:
+            print(f"{cid}: not a template-copies chunk (those are x-NNN)")
+            continue
+        lines, skipped, kinds = [], {}, Counter()
+        for key, en in info["keys"].items():
+            example = info["examples"][key]
+            example_en = info["example_en"][example]
+            record = tm.get(example)
+            detail = None
+            if current.get(key) != en or current.get(example) != example_en:
+                kind = "English changed since prepare; prepare again"
+            elif record is None or record["en"] != example_en:
+                kind = "example not translated (not merged yet, or rejected)"
+            else:
+                value, detail = expand_template(example_en, record[lang_field], en)
+                if value is not None:
+                    lines.append(_loc_line(key, value))
+                    continue
+                kind = "the example's translation altered a token the swap replaces"
+            skipped[key] = f"{detail or kind} (example {example})"
+            kinds[kind] += 1
+        path = os.path.join(work, "out", cid + ".01.txt")
+        for old in glob.glob(os.path.join(work, "out", cid + ".*.txt")):
+            os.remove(old)
+        if lines:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write("\n".join(lines) + "\n")
+        report[cid] = {"written": len(lines), "skipped": skipped}
+        skipped_total += len(skipped)
+        print(f"{cid}: {len(lines)} lines written, {len(skipped)} left pending"
+              + "".join(f"\n    {n}: {kind}" for kind, n in kinds.most_common()))
+    with open(os.path.join(work, "expand_report.json"), "w", encoding="utf-8") as fh:
+        json.dump(report, fh, ensure_ascii=False, indent=1)
+    if report:
+        print(f"Now merge {' '.join(report)}. Report: "
+              f"{os.path.relpath(os.path.join(work, 'expand_report.json'), REPO_ROOT)}")
+    return 1 if skipped_total else 0
 
 
 def repair_bare_quotes(line: str, language: str = "german") -> str | None:
@@ -887,7 +1115,7 @@ AGENT_PROMPT = """You are translating one chunk of a Victoria 3 mod's localizati
 
 Files (absolute paths):
 - Instructions, read in full first: {brief}
-- Your chunk: {chunk} (a glossary header, then {lines} lines to translate{content}{updates})
+- Your chunk: {chunk} (a glossary header, then {lines} lines to translate{content}{updates}{templates})
 - Write output to: {out}/ as {cid}.01.txt, {cid}.02.txt, … with at most {part} lines each.
 
 Rules that override anything else:
@@ -906,6 +1134,9 @@ def cmd_prompt(args) -> int:
         manifest = json.load(fh)
     for cid in args.chunks:
         info = manifest[cid]
+        if "examples" in info:
+            print(f"{cid}: template copies, written by `expand`, not an agent\n")
+            continue
         words_per_line = info["words"] / max(1, len(info["keys"]))
         events = any("." in k for k in info["keys"])
         # Long event prose fills a response fast; short labels don't.
@@ -918,6 +1149,8 @@ def cmd_prompt(args) -> int:
             content=", mostly event text" if events else "",
             updates=(f"; {len(info['previous'])} of them update an existing translation, see BRIEF.md § Updated lines"
                      if info.get("previous") else ""),
+            templates=(f"; {len(info['templates'])} of them are templates a script copies to other lines,"
+                       " see BRIEF.md § Template lines" if info.get("templates") else ""),
             out=os.path.join(work, "out"),
             cid=cid,
             part=part,
@@ -1054,8 +1287,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--max-keys", type=int, default=DEFAULT_MAX_KEYS,
                    help="also end a chunk at this many keys (label-heavy files)")
     p.add_argument("--no-vanilla", action="store_true", help="skip the vanilla glossary (no game install)")
+    p.add_argument("--templates", nargs="+", metavar="PREFIX",
+                   help="for English files whose name starts with one of these (generated files that repeat line "
+                        "templates), offer one example per template; `expand` writes the other copies")
     m = sub.add_parser("merge")
     m.add_argument("chunks", nargs="*")
+    ex = sub.add_parser("expand", help="write template copies (x-NNN) from their examples' merged translations")
+    ex.add_argument("chunks", nargs="*")
     sub.add_parser("status")
     sub.add_parser("respell", help="keep translations whose English changed only to American spelling")
     rf = sub.add_parser("refresh", help="rebuild unstarted chunks' glossaries from the manifest")
@@ -1070,7 +1308,7 @@ def main(argv: list[str] | None = None) -> int:
     pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
     args.field = args.field or tm_field(args.language)
-    return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
+    return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status, "expand": cmd_expand,
             "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh, "prepare-fixes": cmd_prepare_fixes,
             "respell": cmd_respell}[args.command](args)
 
