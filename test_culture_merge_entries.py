@@ -366,10 +366,13 @@ class EntryShapeTest(unittest.TestCase):
             (possible,) = children(entry, "possible")
             (alt,) = possible.children
             self.assertEqual(alt.key, "OR")
-            self.assertEqual(
-                [(c.key, c.value) for c in alt.children],
-                [("te_cmg_%s_can_start" % key, "yes"), ("te_cmg_%s_is_starter" % key, "yes")],
-            )
+            can_start, starter = alt.children
+            self.assertEqual((can_start.key, can_start.value), ("te_cmg_%s_can_start" % key, "yes"))
+            # The starter test in a custom_tooltip: bare, the page printed its script ("They are", "has the variable in
+            # question") and logged a nullptr promote for the empty starter on every redraw (2026-11-09).
+            self.assertEqual(starter.key, "custom_tooltip")
+            self.assertEqual([(c.key, c.value) for c in starter.children],
+                             [("text", "te_cm_tt_done_starter"), ("te_cmg_%s_is_starter" % key, "yes")])
 
     def test_stays_active_and_follows_a_revolution(self):
         for name, entry in self.entries.items():
@@ -563,6 +566,21 @@ class StatusTextTest(unittest.TestCase):
             sol = descs.index("te_cm_status_sol")
             self.assertEqual(descs[sol - 2:sol], ["je_te_cm_%s_status_sol_wide" % key, "je_te_cm_%s_status_sol_close" % key])
 
+    def test_the_gap_condition_names_both_ends_and_the_gap(self):
+        # An inactive entry's page lists the start conditions and no status row (2026-11-09), so the gap condition itself
+        # carries the figures, read the way vanilla's own entry and button conditions read a country variable.
+        for merge in cfg.MERGES:
+            key = merge.key
+            var = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_%s_" + key + "')%s]"
+            text = self.loc["te_cmg_%s_sol_tt" % key]
+            for name, accessor in (("best", ".GetCulture.GetName"), ("worst", ".GetCulture.GetName"), ("hi", ".GetValue|1"),
+                                   ("lo", ".GetValue|1"), ("gap", ".GetValue|1")):
+                self.assertIn(var % (name, accessor), text, key)
+            self.assertIn("ScriptValue('te_cm_sol_gap_open')|0]", text)
+            self.assertIn("ScriptValue('te_cm_sol_gap_close')|0]", text)
+            # The figures cover only the cultures measured, so a line with a small gap can still be unmet.
+            self.assertIn("once every core culture is held and accepted", text)
+
     def test_running_shows_the_lowest_share_and_the_starters_speed(self):
         # R28: the starter's Culture Merge Speed total, beside the lowest core dominance.
         for merge in cfg.MERGES:
@@ -726,10 +744,15 @@ class ButtonTest(unittest.TestCase):
                 if body is None:
                     continue
                 depth = 0
+                branch = False  # inside a trigger_if or trigger_else, whose conditions sit one level down
                 for line in body.splitlines():
                     stripped = line.strip()
-                    if depth == 0 and stripped and not stripped.startswith(("custom_tooltip = {", "te_cmg_", "hidden_trigger = {")):
-                        self.fail("%s: a bare condition in %s: %s" % (merge.key, name, stripped))
+                    if depth == 0 and stripped:
+                        branch = stripped.startswith(("trigger_if = {", "trigger_else = {"))
+                        if not branch and not stripped.startswith(("custom_tooltip = {", "te_cmg_", "hidden_trigger = {")):
+                            self.fail("%s: a bare condition in %s: %s" % (merge.key, name, stripped))
+                    elif depth == 1 and branch and stripped != "}" and not stripped.startswith(("limit = {", "custom_tooltip = {")):
+                        self.fail("%s: a bare condition in a branch of %s: %s" % (merge.key, name, stripped))
                     depth += line.count("{") - line.count("}")
                 self.assertEqual(depth, 0)
 
@@ -777,12 +800,22 @@ class CanStartTest(unittest.TestCase):
             waits = ["te_cmg_%s_wait_%s_tt" % (key, p.cultures[0]) for p in gen.core_waits(merge)]
             self.assertEqual(
                 tail,
-                ["te_cm_tt_sol"] + ["te_cmg_%s_comp_%s_tt" % (key, c) for c in merge.components] + waits,
+                ["te_cmg_%s_sol_tt" % key, "te_cm_tt_sol"] + ["te_cmg_%s_comp_%s_tt" % (key, c) for c in merge.components] + waits,
                 key,
             )
             by_text = dict(items)
             self.assertEqual(by_text["te_cm_tt_idle"], idle(key))
-            self.assertEqual(by_text["te_cm_tt_sol"], "var:te_cm_sol_ok_%s ?= 1" % key)
+            # The gap line names its figures once the census has kept them, and the generic line stands in until then;
+            # both test the one gate, and the trigger_else follows its trigger_if (a trigger_if whose limit fails passes).
+            gate = "var:te_cm_sol_ok_%s ?= 1" % key
+            self.assertEqual(by_text["te_cmg_%s_sol_tt" % key], gate)
+            self.assertEqual(by_text["te_cm_tt_sol"], gate)
+            self.assertIn(
+                "trigger_if = { limit = { has_variable = te_cm_sol_gap_%s } custom_tooltip = { text = te_cmg_%s_sol_tt %s } } "
+                "trigger_else = { custom_tooltip = { text = te_cm_tt_sol %s } }" % (key, key, gate, gate),
+                squash((block(self.triggers, "te_cmg_%s_start_basics" % key) or "") + "\n" + block(self.triggers, "te_cmg_%s_can_start" % key)),
+                key,
+            )
             for component in merge.components:
                 self.assertEqual(by_text["te_cmg_%s_comp_%s_tt" % (key, component)], "global_var:te_cm_state_%s ?= 2" % component)
 

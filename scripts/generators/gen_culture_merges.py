@@ -962,9 +962,18 @@ def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[
         with out.block("custom_tooltip"):
             out.line("text = te_cmg_%s_core_%d_tt" % (key, index))
             _write_routes(out, _slot_routes(merge, part, tiers))
-    with out.block("custom_tooltip"):
-        out.line("text = te_cm_tt_sol")
-        out.line("var:te_cm_sol_ok_%s ?= 1" % key)
+    # An inactive entry's page lists these lines and no status row (2026-11-09), so the gap line itself names the two
+    # ends and the gap once the census has kept them; reading them unset would log on every redraw, hence the guard.
+    # The pair tests one gate either way (a trigger_if whose limit fails passes, so the trigger_else must follow it).
+    with out.block("trigger_if"):
+        out.line("limit = { has_variable = te_cm_sol_gap_%s }" % key)
+        with out.block("custom_tooltip"):
+            out.line("text = te_cmg_%s_sol_tt" % key)
+            out.line("var:te_cm_sol_ok_%s ?= 1" % key)
+    with out.block("trigger_else"):
+        with out.block("custom_tooltip"):
+            out.line("text = te_cm_tt_sol")
+            out.line("var:te_cm_sol_ok_%s ?= 1" % key)
     for component in merge.components:
         with out.block("custom_tooltip"):
             out.line("text = te_cmg_%s_comp_%s_tt" % (key, component))
@@ -2147,10 +2156,14 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
             with out.block("is_shown_when_inactive"):
                 out.line("te_cm_system_enabled = yes")
                 out.line("te_cmg_%s_is_candidate = yes" % key)
+            # The starter test in a custom_tooltip: bare, the page printed its script ("They are", "has the variable in
+            # question") and logged a nullptr promote for the empty starter on every redraw (2026-11-09, 1,243 a session).
             with out.block("possible"):
                 with out.block("OR"):
                     out.line("te_cmg_%s_can_start = yes" % key)
-                    out.line("te_cmg_%s_is_starter = yes" % key)
+                    with out.block("custom_tooltip"):
+                        out.line("text = te_cm_tt_done_starter")
+                        out.line("te_cmg_%s_is_starter = yes" % key)
             out.line()
             out.line("should_be_pinned_by_default_uninvolved_or_context = yes")
             out.line("scripted_button = te_cmg_start_%s_button" % key)
@@ -2303,6 +2316,15 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             if tier != start:
                 tail += " They also need $%s$." % TIER_TECH[tier]
             out["te_cmg_%s_core_%d_tt" % (key, index)] = "%s %s" % (head, tail)
+        var = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_%s_" + key + "')%s]"
+        out["te_cmg_%s_sol_tt" % key] = (
+            "The core cultures live at similar standards of living: the gap between the best and the worst off is under %s "
+            "to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes %s. "
+            "At the last census, %s pops were the best off, at %s, and %s pops the worst off, at %s: a gap of %s."
+            % (sv.format("te_cm_sol_gap_open", "0"), sv.format("te_cm_sol_gap_close", "0"),
+               var % ("best", ".GetCulture.GetName"), var % ("hi", ".GetValue|1"),
+               var % ("worst", ".GetCulture.GetName"), var % ("lo", ".GetValue|1"), var % ("gap", ".GetValue|1"))
+        )
         for component in merge.components:
             out["te_cmg_%s_comp_%s_tt" % (key, component)] = "The %s merge is complete." % _names([merge_by_key(component).result])
         for part in core_waits(merge):
