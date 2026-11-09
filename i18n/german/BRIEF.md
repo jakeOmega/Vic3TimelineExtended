@@ -91,6 +91,8 @@ Use `GetAltName` only on scopes that are certainly countries: names like `COUNTR
 
 `GetAdjective` gives an uninflected stem. The official German writes `[X.GetAdjective|l]en` or `…e` to decline it. Do the same.
 
+A `$key$` reference that inserts a name (a country tag such as `$CZH$`, a culture, a technology) gives its bare nominative, with no article, and nothing can decline it. Phrase around it so the bare name fits: „sobald wir das Land $CZH$ gebildet haben“ (not „… $CZH$ gebildet haben“, which reads „Tschechoslowakei“ without its article), „Die Technologie $mass_media$ ist erforscht“, „Pops der Kultur $yankee$“.
+
 ### Country name forms (glossary chunk only)
 
 The glossary chunk ends with a `=== COUNTRY NAME FORMS ===` section listing the mod's formable countries and dynamic country names. For each one, translate the name as a normal line (` AFU:0 "Afrikanische Union"`), then write its seven declined forms as extra keys, `<KEY>_NOM`, `_GEN`, `_DAT`, `_AKK`, `_VON`, `_IN`, `_NACH`, each including its article or preposition:

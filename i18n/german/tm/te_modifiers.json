@@ -223,6 +223,14 @@
   "en": "A percentage bonus or penalty to the nation's [concept_cultural_pull] raw score, applied after all [concept_cultural_pull_components] are summed.",
   "de": "Ein prozentualer Bonus oder Malus auf den rohen [concept_cultural_pull]-Wert der Nation, angewendet, nachdem alle [concept_cultural_pull_components] summiert wurden."
  },
+ "country_culture_merge_speed_mult": {
+  "en": "Culture Merge Speed",
+  "de": "Tempo der Kulturverschmelzung"
+ },
+ "country_culture_merge_speed_mult_desc": {
+  "en": "How much faster the pops of a running culture merge become the merged culture in this country. $law_public_schools$, the $institution_ministry_of_culture$ (per level), $radio$, $film$ and $mass_propaganda$ add to it. A subject or bloc member of the country that started the merge converts at half the pace its own literacy, urbanization and $country_culture_merge_speed_mult$ give.",
+  "de": "Wie viel schneller die Pops einer laufenden Kulturverschmelzung in diesem Land zur verschmolzenen Kultur werden. $law_public_schools$, das $institution_ministry_of_culture$ (je Stufe), $radio$, $film$ und $mass_propaganda$ tragen dazu bei. Ein Klientelstaat oder Blockmitglied des Landes, das die Verschmelzung begonnen hat, wandelt mit der Hälfte des Tempos um, das seine eigene Alphabetisierung, Urbanisierung und $country_culture_merge_speed_mult$ ergeben."
+ },
  "country_defender_diplomatic_play_escalation_weekly_add": {
   "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You",
   "de": "Wöchentliche Eskalation in gegen Sie gerichteten [Concept('concept_diplomatic_play', 'Diplomatiespielen')]"

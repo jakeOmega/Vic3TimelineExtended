@@ -3,6 +3,10 @@
   "en": "Tax Code",
   "de": "Steuerordnung"
  },
+ "je_tax_code_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the $rule_te_tax_code_rule$ game rule was switched to Disabled, and the code with it",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel $rule_te_tax_code_rule$ auf Deaktiviert gestellt wurde, und der Kodex mit ihr"
+ },
  "je_tax_code_reason": {
   "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
   "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] bleibt bestehen, bis eine [concept_tax_bill] ihn ändert oder er ausläuft. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald ihr genug [Concept('concept_interest_group','$concept_interest_groups|q$')] zusagen, und gilt ab dem Zeitpunkt ihres [Concept('concept_tax_commencement','Inkrafttretens')]."

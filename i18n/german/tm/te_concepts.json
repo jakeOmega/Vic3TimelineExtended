@@ -2788,8 +2788,8 @@
   "de": "Übergeben Sie den Regler an die Zentralbank, und sie legt jeden Monat den [concept_banking_rate_target] anhand ihres [Concept('concept_banking_mandate', 'Mandats')] fest, statt ihn dort zu belassen, wo Sie ihn zuletzt gesetzt haben. Der Wechsel ist in beide Richtungen kostenlos, und wenn Sie den Regler zurücknehmen, bleibt das Ziel dort, wo die Bank es gelassen hat."
  },
  "concept_banking_exchange_rate_desc": {
-  "en": "How dear your currency is to foreigners, in real terms: 100 is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it is the parity and stays at par; otherwise it drifts toward a target each month. Where it stands moves your trade and your prices.",
-  "de": "Wie teuer Ihre Währung für Ausländer ist, real gerechnet: 100 ist Parität, darunter ist die Währung schwach, darüber stark. Niemand legt ihn fest. Bei Metallbindung entspricht er der Parität und bleibt bei Parität; sonst nähert er sich jeden Monat einem Zielwert an. Wo er steht, wirkt sich auf Ihren Handel und Ihre Preise aus."
+  "en": "What your currency is worth to foreigners, in real terms: 100 is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it is the parity and stays at par; otherwise it drifts toward a target each month. Where it stands moves your trade and your prices.",
+  "de": "Was Ihre Währung für Ausländer wert ist, real gerechnet: 100 ist Parität, darunter ist die Währung schwach, darüber stark. Niemand legt ihn fest. Bei Metallbindung entspricht er der Parität und bleibt bei Parität; sonst nähert er sich jeden Monat einem Zielwert an. Wo er steht, wirkt sich auf Ihren Handel und Ihre Preise aus."
  },
  "concept_banking_expected_inflation_desc": {
   "en": "What your lenders and your workers assume prices are going to do. It is the expensive half: inflation nobody saw coming erodes a debt, and inflation everybody expects is simply priced in.",
@@ -3496,8 +3496,8 @@
   "de": "Stromnetz"
  },
  "concept_power_grid_desc": {
-  "en": "Grid Transfer Stations that share their $electricity$. A grid starts as one country's stations in one [concept_market_area], and joins another group across the sea where both ends have an undersea cable (an $building_grid_hvdc_interconnector$) and either end's $building_grid_undersea_cable_range_add$ reaches the other, or another country's stations across a border under a $grid_interconnection_agreement$, in our [concept_market] or another. Once a month the grid moves $electricity$ from where it is cheap to where it is dear until it sells at one price in the states that send it and at that price over their owner's #b Grid Transmission Efficiency#! in the states that receive it, since a receiving station loses the rest on the way. Stations settle in $grid_power$, whose price is fixed: a sending station is paid what its power cost at the grid's price and a receiving one pays what its power sells for, so a station covers its goods unless the grid is so short its receivers' price can rise no further, and power that crosses between markets is paid for at that price.",
-  "de": "Netzübergabestationen, die $electricity$ untereinander teilen. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area] und schließt sich über das Meer mit einer anderen Gruppe zusammen, wo beide Enden ein Seekabel ($building_grid_hvdc_interconnector$) haben und die $building_grid_undersea_cable_range_add$ eines der beiden Enden das andere erreicht, oder mit den Stationen eines anderen Landes über eine Grenze hinweg unter einem $grid_interconnection_agreement$, in unserem [concept_market] oder einem anderen. Einmal im Monat verschiebt das Netz $electricity$ von dort, wo sie billig ist, dorthin, wo sie teuer ist, bis sie in den sendenden Staaten zu einem Preis verkauft wird und in den empfangenden zu diesem Preis geteilt durch die #b Netzübertragungseffizienz#! ihres Besitzers, da eine empfangende Station den Rest unterwegs verliert. Die Stationen rechnen in $grid_power$ ab, dessen Preis fest ist: Eine sendende Station erhält zum Preis des Netzes, was ihr Strom gekostet hat, und eine empfangende zahlt, wofür ihr Strom verkauft wird, sodass eine Station ihre Waren deckt, es sei denn, das Netz ist so knapp, dass der Preis seiner Empfänger nicht weiter steigen kann; und Strom, der zwischen Märkten fließt, wird zu diesem Preis bezahlt."
+  "en": "Grid Transfer Stations that share their $electricity$. A grid starts as one country's stations in one [concept_market_area], and joins another group across the sea where both ends have an undersea cable (an $building_grid_hvdc_interconnector$) and either end's $building_grid_undersea_cable_range_add$ reaches the other, or another country's stations across a border under a $grid_interconnection_agreement$, in our [concept_market] or another. Once a month the grid moves $electricity$ from where it is cheap to where it is expensive, until it sells at one price in the states that send it. Some power is lost on the way, so in the states that receive it, it sells at that price divided by their owner's #b Grid Transmission Efficiency#!. Stations settle in $grid_power$, whose price is fixed: a sending station is paid for its power at the grid's price, and a receiving one pays what its power sells for. That covers each station's goods, unless the grid is so short its receivers' price can rise no further. Power that crosses between markets is paid for at the grid's price too.",
+  "de": "Netzübergabestationen, die $electricity$ untereinander teilen. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area] und schließt sich über das Meer mit einer anderen Gruppe zusammen, wo beide Enden ein Seekabel ($building_grid_hvdc_interconnector$) haben und die $building_grid_undersea_cable_range_add$ eines der beiden Enden das andere erreicht, oder mit den Stationen eines anderen Landes über eine Grenze hinweg unter einem $grid_interconnection_agreement$, in unserem [concept_market] oder einem anderen. Einmal im Monat verschiebt das Netz $electricity$ von dort, wo sie billig ist, dorthin, wo sie teuer ist, bis sie in den sendenden Staaten zu einem Preis verkauft wird. Unterwegs geht etwas Strom verloren, daher wird er in den empfangenden Staaten zu diesem Preis geteilt durch die #b Netzübertragungseffizienz#! ihres Besitzers verkauft. Die Stationen rechnen in $grid_power$ ab, dessen Preis fest ist: Eine sendende Station erhält für ihren Strom den Preis des Netzes, und eine empfangende zahlt, wofür ihr Strom verkauft wird. Das deckt die Waren jeder Station, es sei denn, das Netz ist so knapp, dass der Preis seiner Empfänger nicht weiter steigen kann. Strom, der zwischen Märkten fließt, wird ebenfalls zum Preis des Netzes bezahlt."
  },
  "concept_religious_revival": {
   "en": "Religious Revival",
@@ -5458,6 +5458,10 @@
  "dp_te_independence_war_desc": {
   "en": "Sets the initiating [concept_war_goal] to keep the independence a colony declared from its colonial power.",
   "de": "Setzt das auslösende [concept_war_goal] auf den Erhalt der Unabhängigkeit, die eine Kolonie gegenüber ihrer Kolonialmacht erklärt hat."
+ },
+ "dp_te_seize_strait_desc": {
+  "en": "Sets the initiating [concept_war_goal] to force the targeted [concept_country] to cede the [concept_strait] shore of the targeted [concept_state], keeping the rest of it.",
+  "de": "Legt das einleitende [concept_war_goal] fest, mit dem das betroffene [concept_country] gezwungen wird, die [concept_strait]-Küste des betroffenen [Concept('concept_state', 'Staates')] abzutreten, während es den Rest behält."
  },
  "dp_te_un_mandate_restore_state_desc": {
   "en": "Sets the initiating [concept_war_goal] to recover the [concept_state] the [concept_un_general_assembly] has authorized us to recover. Only available while we hold an unexercised mandate against this [concept_country]. #R The mandate covers this one demand:#! adding any other demand against that country for territory, subjugation, regime change or humiliation to the same [concept_diplomatic_play] voids it, earns the Assembly's condemnation and suspends our standing benefits for ten years. Backing down from the play forfeits it as well.",
@@ -11799,81 +11803,105 @@
   "en": "#lore History is kept only for played countries and major powers.#!",
   "de": "#lore Die Geschichte wird nur für gespielte Länder und Mittelmächte geführt.#!"
  },
+ "te_jmap_pick_armed_forces_desc": {
+  "en": "Color each state by its Soldiers and Officers, against the world as it is now: the same share of the color for each doubling from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#! people. A state with none is pale. Counted once a year.",
+  "de": "Färbt jeden Staat nach seinen Soldaten und Offizieren, im Vergleich zur Welt, wie sie jetzt ist: derselbe Anteil der Farbe für jede Verdopplung von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#! Menschen. Ein Staat ohne sie ist blass. Wird einmal im Jahr gezählt."
+ },
  "te_jmap_pick_base_comfort_desc": {
-  "en": "Color each state by what its [concept_local_climate] does to its [concept_migration_pull] before any technology eases it: green where a mild or sunny winter draws people (at most +10.8%), cream at none, and red where it costs, most of the way by −30% and all of it at −80%. Worked out once a year, at the world's warming then.",
-  "de": "Färbt jeden Staat danach, was sein [concept_local_climate] mit seiner [concept_migration_pull] macht, bevor eine Technologie es abmildert: grün, wo ein milder oder sonniger Winter Menschen anzieht (höchstens +10,8%), cremefarben bei null und rot, wo es etwas kostet, größtenteils bei −30% und vollständig bei −80%. Wird einmal im Jahr berechnet, bei der dann herrschenden Erwärmung der Welt."
+  "en": "Color each state by what its [concept_local_climate] does to its [concept_migration_pull] before any technology eases it: green where a mild or sunny winter draws people, cream at none, red where it costs. Each side's colors run to the world's extreme now, a penalty of #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_lo')|0]%#! and of #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_hi')|0]%#!, a draw counting below 0. Worked out once a year, at the world's warming then.",
+  "de": "Färbt jeden Staat danach, was sein [concept_local_climate] mit seiner [concept_migration_pull] macht, bevor eine Technologie es abmildert: grün, wo ein milder oder sonniger Winter Menschen anzieht, cremefarben bei null, rot, wo es etwas kostet. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, einer Einbuße von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_lo')|0]%#! und von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_hi')|0]%#!, wobei ein Zuzug unter 0 zählt. Wird einmal im Jahr berechnet, bei der dann herrschenden Erwärmung der Welt."
  },
  "te_jmap_pick_birth_rate_desc": {
-  "en": "Color each state by its births per 1,000 people last year, from 8 to 50.",
-  "de": "Färbt jeden Staat nach seinen Geburten pro 1.000 Einwohner im letzten Jahr, von 8 bis 50."
+  "en": "Color each state by its births per 1,000 people last year, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!.",
+  "de": "Färbt jeden Staat nach seinen Geburten pro 1.000 Einwohner im letzten Jahr, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!."
+ },
+ "te_jmap_pick_city_rank_desc": {
+  "en": "Color each state by its city's place in the world's ranking, the one tourism's [concept_tourism_cities] bonus reads: the 20 largest from amber at 20th to crimson at 1st, the rest steel blue, paler with each doubling of the rank. A state past 501st has no rank and is pale. The ranking is recalculated every month.",
+  "de": "Färbt jeden Staat nach dem Platz seiner Stadt in der Weltrangliste, den der Bonus der [concept_tourism_cities] des Tourismus liest: die 20 größten von Bernstein auf Platz 20 bis Purpur auf Platz 1, der Rest stahlblau, mit jeder Verdopplung des Rangs blasser. Ein Staat jenseits von Platz 501 hat keinen Rang und ist blass. Die Rangliste wird jeden Monat neu berechnet."
  },
  "te_jmap_pick_colonies_desc": {
   "en": "Color each colony, and each colonial subject's state, by its empire's [concept_colonial_stability]: red while it collapses, then orange, yellow and green up to solidified. An empire's home states are taupe.",
   "de": "Färbt jede Kolonie und jeden Staat eines kolonialen Klientellands nach der [concept_colonial_stability] seines Reiches: rot, solange sie zusammenbricht, dann orange, gelb und grün bis hin zu gefestigt. Die Kernstaaten eines Reiches sind graubraun."
  },
+ "te_jmap_pick_company_hqs_desc": {
+  "en": "Color each state that holds a company's headquarters by their weekly profit: what the companies' buildings pay home, less the headquarters' own wages. The same share of the color for each doubling from @money![GetPlayer.MakeScope.ScriptValue('te_jmap_hq_lo')|K] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_hq_hi')|K] a week, against the world as it is now; red at a loss. A state with no headquarters is gray. Gold stripes mark a state where a company keeps a regional headquarters.",
+  "de": "Färbt jeden Staat, der den Hauptsitz eines Unternehmens beherbergt, nach dem wöchentlichen Gewinn: was die Gebäude der Unternehmen nach Hause zahlen, abzüglich der eigenen Löhne der Hauptsitze. Derselbe Anteil der Farbe für jede Verdopplung von @money![GetPlayer.MakeScope.ScriptValue('te_jmap_hq_lo')|K] bis @money![GetPlayer.MakeScope.ScriptValue('te_jmap_hq_hi')|K] pro Woche, im Vergleich zur Welt, wie sie jetzt ist; rot bei Verlust. Ein Staat ohne Hauptsitz ist grau. Goldene Streifen markieren einen Staat, in dem ein Unternehmen einen regionalen Hauptsitz unterhält."
+ },
  "te_jmap_pick_crowding_desc": {
-  "en": "Color each state by what [concept_migration_crowding] takes from its [concept_migration_pull], as the state panel shows it: cream where it has room, about two-thirds of the way to purple at −45%, with ten times the people its threshold allows, and all of it at −145%, with twenty times.",
-  "de": "Färbt jeden Staat danach, was die [concept_migration_crowding] seiner [concept_migration_pull] entzieht, wie es die Staatstafel zeigt: cremefarben, wo noch Platz ist, etwa zwei Drittel des Weges zu Violett bei −45%, beim Zehnfachen der Einwohner, die seine Schwelle zulässt, und vollständig bei −145%, beim Zwanzigfachen."
+  "en": "Color each state by what [concept_migration_crowding] takes from its [concept_migration_pull], as the state panel shows it, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_crowding_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_crowding_hi')|%0]#!, two-thirds of the color in the first third of that span.",
+  "de": "Färbt jeden Staat danach, was die [concept_migration_crowding] seiner [concept_migration_pull] entzieht, wie es die Staatstafel zeigt, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_crowding_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_crowding_hi')|%0]#!, zwei Drittel der Farbe im ersten Drittel dieser Spanne."
  },
  "te_jmap_pick_current_comfort_desc": {
-  "en": "Color each state by what its [concept_local_climate] does to its [concept_migration_pull] after the relief its owner's technologies give: the state panel's Comfort row, worked out once a year. The colors are Base Comfort's, so the two maps compare directly.",
-  "de": "Färbt jeden Staat danach, was sein [concept_local_climate] mit seiner [concept_migration_pull] macht, nachdem die Technologien seines Besitzers Entlastung geschaffen haben: die Zeile „Komfort“ der Staatstafel, einmal im Jahr berechnet. Die Farben sind die von „Grundkomfort“, sodass sich beide Karten direkt vergleichen lassen."
+  "en": "Color each state by what its [concept_local_climate] does to its [concept_migration_pull] after the relief its owner's technologies give: the state panel's Comfort row, worked out once a year. The colors and their range, penalties from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_lo')|0]%#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_hi')|0]%#!, are Base Comfort's, so the two maps compare directly.",
+  "de": "Färbt jeden Staat danach, was sein [concept_local_climate] mit seiner [concept_migration_pull] macht, nachdem die Technologien seines Besitzers Entlastung geschaffen haben: die Zeile „Komfort“ der Staatstafel, einmal im Jahr berechnet. Die Farben und ihre Spanne, Einbußen von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_lo')|0]%#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_hi')|0]%#!, sind die von „Grundkomfort“, sodass sich beide Karten direkt vergleichen lassen."
  },
  "te_jmap_pick_death_rate_desc": {
-  "en": "Color each state by its deaths per 1,000 people last year: most of the color from 5 to 40, the rest more slowly, up to 100 in famine or war.",
-  "de": "Färbt jeden Staat nach seinen Todesfällen pro 1.000 Einwohner im letzten Jahr: der größte Teil der Farbe von 5 bis 40, der Rest langsamer, bis 100 bei Hungersnot oder Krieg."
+  "en": "Color each state by its deaths per 1,000 people last year, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cdr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cdr_hi')|0]#!, most of the color in the first third of that span and the rest for famine and war.",
+  "de": "Färbt jeden Staat nach seinen Todesfällen pro 1.000 Einwohner im letzten Jahr, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cdr_lo')|0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cdr_hi')|0]#!, der größte Teil der Farbe im ersten Drittel dieser Spanne und der Rest für Hungersnot und Krieg."
  },
  "te_jmap_pick_devastation_desc": {
-  "en": "Color each state by its [concept_devastation]: half the color by 20% devastated, the rest more slowly, up to complete ruin.",
-  "de": "Färbt jeden Staat nach seiner [concept_devastation]: die Hälfte der Farbe bei 20% Verwüstung, der Rest langsamer, bis zur völligen Zerstörung."
+  "en": "Color each state by its [concept_devastation], against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#! devastated, half the color in the first fifth of that span.",
+  "de": "Färbt jeden Staat nach seiner [concept_devastation], im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#! verwüstet, die Hälfte der Farbe im ersten Fünftel dieser Spanne."
  },
  "te_jmap_pick_dynastic_wealth_desc": {
-  "en": "Color each state by its [concept_inheritance_concentration], from 0 to 100: teal below 50, where property is dispersed, cream at 50, plum above it, where it is concentrated.",
-  "de": "Färbt jeden Staat nach seinem [Concept('concept_inheritance_concentration','Dynastischen Vermögen')], von 0 bis 100: petrol unter 50, wo das Eigentum verstreut ist, cremefarben bei 50, pflaumenfarben darüber, wo es konzentriert ist."
+  "en": "Color each state by its [concept_inheritance_concentration]: teal below 50, where property is dispersed, cream at 50, plum above it, where it is concentrated. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_lo')|0]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_hi')|0]#!.",
+  "de": "Färbt jeden Staat nach seinem [Concept('concept_inheritance_concentration','Dynastischen Vermögen')]: petrol unter 50, wo das Eigentum verstreut ist, cremefarben bei 50, pflaumenfarben darüber, wo es konzentriert ist. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_lo')|0]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_hi')|0]#!."
  },
  "te_jmap_pick_emissions_desc": {
-  "en": "Color each state by its share of the world's greenhouse gas emissions last year: half the color by 1%, all of it at 5%. Green where a state takes more out of the air than it puts in. A state's emissions are counted once a year.",
-  "de": "Färbt jeden Staat nach seinem Anteil an den weltweiten Treibhausgasemissionen im letzten Jahr: die Hälfte der Farbe bei 1%, vollständig bei 5%. Grün, wo ein Staat der Luft mehr entzieht, als er ausstößt. Die Emissionen eines Staates werden einmal im Jahr gezählt."
+  "en": "Color each state by its share of the world's greenhouse gas emissions last year, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gw_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gw_hi')|%1]#!, half the color in the first fifth of that span. Green where a state takes more out of the air than it puts in. A state's emissions are counted once a year.",
+  "de": "Färbt jeden Staat nach seinem Anteil an den weltweiten Treibhausgasemissionen im letzten Jahr, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gw_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gw_hi')|%1]#!, die Hälfte der Farbe im ersten Fünftel dieser Spanne. Grün, wo ein Staat der Luft mehr entzieht, als er ausstößt. Die Emissionen eines Staates werden einmal im Jahr gezählt."
+ },
+ "te_jmap_pick_family_planning_desc": {
+  "en": "Color each state by its people's means to plan a family in the last census: how much of the gap between the children they would have and the family size they want they can close, by traditional methods and the contraception technology brings, as far as literacy spreads them. Against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_means_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_means_hi')|%0]#!. The hover adds the older ways of having fewer children: the age women marry at and the share of families that space births by custom.",
+  "de": "Färbt jeden Staat nach den Mitteln seiner Einwohner zur Familienplanung in der letzten Volkszählung: wie viel der Lücke zwischen den Kindern, die sie bekämen, und der gewünschten Familiengröße sie schließen können, durch traditionelle Methoden und die Verhütung, die die Technologie bringt, soweit Lese- und Schreibkenntnis sie verbreitet. Im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_means_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_means_hi')|%0]#!. Beim Überfahren werden die älteren Wege zu weniger Kindern ergänzt: das Heiratsalter der Frauen und der Anteil der Familien, die Geburten aus Brauch auseinanderlegen."
  },
  "te_jmap_pick_fertility_desc": {
-  "en": "Color each state by the children a woman has in the last census: blue below replacement (2.1), cream at it, rust above.",
-  "de": "Färbt jeden Staat nach der Zahl der Kinder pro Frau in der letzten Volkszählung: blau unter dem Bestandserhaltungsniveau (2,1), cremefarben darauf, rostrot darüber."
+  "en": "Color each state by the children a woman has in the last census: blue below replacement (2.1), cream at it, rust above. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tfr_lo')|1]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tfr_hi')|1]#!; where every state is on one side, cream marks the one nearest replacement.",
+  "de": "Färbt jeden Staat nach der Zahl der Kinder pro Frau in der letzten Volkszählung: blau unter dem Bestandserhaltungsniveau (2,1), cremefarben darauf, rostrot darüber. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tfr_lo')|1]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tfr_hi')|1]#!; wo alle Staaten auf einer Seite liegen, markiert Cremefarben den, der dem Bestandserhaltungsniveau am nächsten ist."
+ },
+ "te_jmap_pick_fighting_age_men_desc": {
+  "en": "Color each state by its men aged 20 to 39 in the last census, the pool conscription draws on, as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_hi')|%1]#!. War and emigration thin it.",
+  "de": "Färbt jeden Staat nach seinen Männern im Alter von 20 bis 39 Jahren in der letzten Volkszählung, dem Reservoir, aus dem die Wehrpflicht schöpft, als Anteil an seinen Einwohnern, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_hi')|%1]#!. Krieg und Auswanderung dünnen ihn aus."
  },
  "te_jmap_pick_gdp_per_capita_desc": {
-  "en": "Color each state by its [Concept('concept_gdp_per_capita', 'GDP per capita')], a year's GDP over its people: a tenth of the color for each doubling, from @money!0.25 to @money!256. A rich country stands near @money!1 in 1836.",
-  "de": "Färbt jeden Staat nach seinem [Concept('concept_gdp_per_capita', 'BIP pro Kopf')], dem BIP eines Jahres geteilt durch seine Einwohner: ein Zehntel der Farbe pro Verdopplung, von @money!0,25 bis @money!256. Ein reiches Land liegt 1836 bei etwa @money!1."
+  "en": "Color each state by its [Concept('concept_gdp_per_capita', 'GDP per capita')], a year's GDP over its people, against the world as it is now: the same share of the color for each doubling from @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_lo')|2] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_hi')|2]. A rich country stands near @money!1 in 1836.",
+  "de": "Färbt jeden Staat nach seinem [Concept('concept_gdp_per_capita', 'BIP pro Kopf')], dem BIP eines Jahres geteilt durch seine Einwohner, im Vergleich zur Welt, wie sie jetzt ist: derselbe Anteil der Farbe für jede Verdopplung von @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_lo')|2] bis @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_hi')|2]. Ein reiches Land liegt 1836 bei etwa @money!1."
  },
  "te_jmap_pick_gini_desc": {
-  "en": "Color each state by how unequally income is spread over its people, from a Gini coefficient of 0.30 to 0.80. Britain in 1836 stands at about 0.55.",
-  "de": "Färbt jeden Staat danach, wie ungleich das Einkommen unter seinen Einwohnern verteilt ist, von einem Gini-Koeffizienten von 0,30 bis 0,80. Großbritannien liegt 1836 bei etwa 0,55."
+  "en": "Color each state by how unequally income is spread over its people, against the world as it is now: from a Gini coefficient of #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gini_lo')|2]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gini_hi')|2]#!. Britain in 1836 stands at about 0.55.",
+  "de": "Färbt jeden Staat danach, wie ungleich das Einkommen unter seinen Einwohnern verteilt ist, im Vergleich zur Welt, wie sie jetzt ist: von einem Gini-Koeffizienten von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gini_lo')|2]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gini_hi')|2]#!. Großbritannien liegt 1836 bei etwa 0,55."
  },
  "te_jmap_pick_grandeur_desc": {
-  "en": "Color each state by the [concept_grandeur] of its grand monuments: most of the color by 75, the rest more slowly, up to 225.",
-  "de": "Färbt jeden Staat nach der [concept_grandeur] seiner Großen Monumente: der größte Teil der Farbe bei 75, der Rest langsamer, bis 225."
+  "en": "Color each state by the [concept_grandeur] of its grand monuments, against the world's monuments now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_hi')|0]#!, most of the color in the first third of that span.",
+  "de": "Färbt jeden Staat nach der [concept_grandeur] seiner Großen Monumente, im Vergleich zu den Monumenten der Welt jetzt: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_lo')|0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_hi')|0]#!, der größte Teil der Farbe im ersten Drittel dieser Spanne."
+ },
+ "te_jmap_pick_health_care_desc": {
+  "en": "Color each state by its [concept_health_care_access] in the last census, the share of its people medicine reaches, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_hi')|%0]#!. Its health law and health system raise it, a step each year. The hover adds the mothers who die in childbirth.",
+  "de": "Färbt jeden Staat nach seinem [concept_health_care_access] in der letzten Volkszählung, dem Anteil seiner Einwohner, den die Medizin erreicht, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_hi')|%0]#!. Sein Gesundheitsgesetz und sein Gesundheitssystem heben ihn, jedes Jahr um eine Stufe. Beim Überfahren werden die Mütter ergänzt, die bei der Geburt sterben."
  },
  "te_jmap_pick_infant_mortality_desc": {
-  "en": "Color each state by how many of every 1,000 babies die in their first year, in the last census: teal near none, amber at 50, most of the way to oxblood by 300 and all of it at 500.",
-  "de": "Färbt jeden Staat danach, wie viele von je 1.000 Babys in der letzten Volkszählung im ersten Lebensjahr sterben: petrol bei nahezu keinem, bernsteinfarben bei 50, größtenteils bis Ochsenblutrot bei 300 und vollständig bei 500."
+  "en": "Color each state by how many of every 1,000 babies die in their first year, in the last census, against the world as it is now: teal at #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#!, amber halfway and oxblood at #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!.",
+  "de": "Färbt jeden Staat danach, wie viele von je 1.000 Babys in der letzten Volkszählung im ersten Lebensjahr sterben, im Vergleich zur Welt, wie sie jetzt ist: petrol bei #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#!, bernsteinfarben in der Mitte und ochsenblutrot bei #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!."
  },
  "te_jmap_pick_leading_cause_desc": {
   "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red. The color is full where that cause took 90% of the deaths or more, and fades to pale at 30%. Stripes in a second cause's color mark a state where the runner-up took at least half as many deaths as the leader.",
   "de": "Färbt jeden Staat nach dem, was im letzten Jahr die meisten seiner Einwohner getötet hat, in den Farben des Diagramms „Todesursachen“: Infektion blau, chronische Krankheit orange, Unfälle grün, Arbeit gold, Geburt rosa, durch Ereignisse getötet lavendelfarben, Krieg rot. Die Farbe ist am kräftigsten, wo diese Ursache 90% der Todesfälle oder mehr ausmachte, und wird bis 30% immer blasser. Streifen in der Farbe einer zweiten Ursache kennzeichnen einen Staat, in dem die zweithäufigste Ursache mindestens halb so viele Todesfälle forderte wie die häufigste."
  },
  "te_jmap_pick_life_expectancy_desc": {
-  "en": "Color each state by its life expectancy at birth in the last census, from 25 years to 80.",
-  "de": "Färbt jeden Staat nach seiner Lebenserwartung bei der Geburt in der letzten Volkszählung, von 25 Jahren bis 80."
+  "en": "Color each state by its life expectancy at birth in the last census, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_lo')|0]#! years to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_hi')|0]#!, cream halfway.",
+  "de": "Färbt jeden Staat nach seiner Lebenserwartung bei der Geburt in der letzten Volkszählung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_lo')|0]#! Jahren bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_hi')|0]#!, cremefarben in der Mitte."
  },
  "te_jmap_pick_median_age_desc": {
-  "en": "Color each state by the median age of its people in the last census, from 15 years to 45.",
-  "de": "Färbt jeden Staat nach dem Medianalter seiner Einwohner in der letzten Volkszählung, von 15 Jahren bis 45."
+  "en": "Color each state by the median age of its people in the last census, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_lo')|0]#! years to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_hi')|0]#!.",
+  "de": "Färbt jeden Staat nach dem Medianalter seiner Einwohner in der letzten Volkszählung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_lo')|0]#! Jahren bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_hi')|0]#!."
  },
  "te_jmap_pick_natural_change_desc": {
-  "en": "Color each state by its births less deaths per 1,000 people last year: cream at none, violet where it shrinks, most of the way by −15 and all of it at −40, green where it grows, most of the way by +30 and all of it at +45.",
-  "de": "Färbt jeden Staat nach seinen Geburten abzüglich der Todesfälle pro 1.000 Einwohner im letzten Jahr: cremefarben bei null, violett, wo er schrumpft, größtenteils bei −15 und vollständig bei −40, grün, wo er wächst, größtenteils bei +30 und vollständig bei +45."
+  "en": "Color each state by its births less deaths per 1,000 people last year: cream at none, violet where it shrinks, green where it grows. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_natural_lo')|0]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_natural_hi')|0]#!, most of them for the common rates.",
+  "de": "Färbt jeden Staat nach seinen Geburten abzüglich der Todesfälle pro 1.000 Einwohner im letzten Jahr: cremefarben bei null, violett, wo er schrumpft, grün, wo er wächst. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_natural_lo')|0]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_natural_hi')|0]#!, der größte Teil davon für die üblichen Raten."
  },
  "te_jmap_pick_net_migration_desc": {
-  "en": "Color each state by the people who settled there less those who left, per 1,000 people last year: cream at none, orange where they leave and blue where they arrive, two-thirds of the way by 20 and all of it at 60.",
-  "de": "Färbt jeden Staat nach den Menschen, die sich dort niedergelassen haben, abzüglich derer, die gegangen sind, pro 1.000 Einwohner im letzten Jahr: cremefarben bei null, orange, wo sie abwandern, und blau, wo sie zuwandern, zwei Drittel des Weges bei 20 und vollständig bei 60."
+  "en": "Color each state by the people who settled there less those who left, per 1,000 people last year: cream at none, orange where they leave and blue where they arrive. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_mig_lo')|0]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_mig_hi')|0]#!, most of them for the common rates.",
+  "de": "Färbt jeden Staat nach den Menschen, die sich dort niedergelassen haben, abzüglich derer, die gegangen sind, pro 1.000 Einwohner im letzten Jahr: cremefarben bei null, orange, wo sie abwandern, und blau, wo sie zuwandern. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_mig_lo')|0]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_mig_hi')|0]#!, der größte Teil davon für die üblichen Raten."
  },
  "te_jmap_pick_networks_desc": {
   "en": "Color each country by the strength of your [concept_agent_network] there, faint to full (0 to 100). From 50 a network reports the country's intelligence capacity and technology, from 75 its operations against you. Your own country is blue.",
@@ -11888,32 +11916,48 @@
   "de": "Färbt jeden Küstenstaat nach dem Meeresbecken, aus dem seine [Concept('concept_seabed_licence','Meeresbodenlizenzen')] stammen: Pazifik, Atlantik, Indischer Ozean, Arktis oder Südpolarmeer."
  },
  "te_jmap_pick_old_share_desc": {
-  "en": "Color each state by its share of people aged 65 and over in the last census, from 2% to 30%.",
-  "de": "Färbt jeden Staat nach dem Anteil der Menschen ab 65 Jahren in der letzten Volkszählung, von 2% bis 30%."
+  "en": "Color each state by its share of people aged 65 and over in the last census, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_old_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_old_hi')|%0]#!.",
+  "de": "Färbt jeden Staat nach dem Anteil der Menschen ab 65 Jahren in der letzten Volkszählung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_old_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_old_hi')|%0]#!."
+ },
+ "te_jmap_pick_ownership_desc": {
+  "en": "Color each state by who holds most of its capital, the levels of the buildings that earn for an owner: private owners gold, their own workers green, the state red. The color is full where one holds them all and pale at 40%. Subsistence farms, government buildings and the ownership buildings (financial districts, manor houses, company headquarters) are left out. Counted once a year.",
+  "de": "Färbt jeden Staat danach, wer den größten Teil seines Kapitals hält, gemessen an den Stufen der Gebäude, die einem Besitzer etwas einbringen: private Besitzer gold, die eigenen Arbeiter grün, der Staat rot. Die Farbe ist voll, wo einer sie alle hält, und blass bei 40%. Subsistenzfarmen, Regierungsgebäude und die Eigentumsgebäude (Finanzviertel, Herrenhäuser, Unternehmenshauptsitze) bleiben unberücksichtigt. Wird einmal im Jahr gezählt."
  },
  "te_jmap_pick_political_models_desc": {
   "en": "Color each country by its political model at the last census of models, in the colors of the Cultural Hegemony panel's model chart.",
   "de": "Färbt jedes Land nach seinem politischen Modell bei der letzten Modellerhebung, in den Farben des Modelldiagramms der Tafel „Kulturelle Hegemonie“."
  },
+ "te_jmap_pick_population_growth_desc": {
+  "en": "Color each state by how far its people grew or shrank over the last year, per 1,000: magenta where they shrank, cream at none, teal where they grew. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_lo')|0]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_hi')|0]#!. Births, deaths and migration all count, and so does land: a state that gained or lost provinces jumps. Counted once a year.",
+  "de": "Färbt jeden Staat danach, wie stark seine Einwohnerzahl im letzten Jahr gewachsen oder geschrumpft ist, pro 1.000: magenta, wo sie geschrumpft ist, cremefarben bei null, petrol, wo sie gewachsen ist. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_lo')|0]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_hi')|0]#!. Geburten, Todesfälle und Migration zählen alle, und das Land ebenso: Ein Staat, der Provinzen gewonnen oder verloren hat, springt. Wird einmal im Jahr gezählt."
+ },
+ "te_jmap_pick_power_grids_desc": {
+  "en": "Color each state with a $building_grid_transfer_station$ by its [concept_power_grid], each grid in a color of its own and bordering grids apart. A grid's hub, its largest producer of $electricity$, is striped white; a station on no grid this month is gray.",
+  "de": "Färbt jeden Staat mit einer $building_grid_transfer_station$ nach seinem [concept_power_grid], jedes Netz in einer eigenen Farbe, aneinandergrenzende Netze unterscheidbar. Der Knoten eines Netzes, sein größter Erzeuger von $electricity$, ist weiß gestreift; eine Station, die diesen Monat in keinem Netz liegt, ist grau."
+ },
  "te_jmap_pick_sex_balance_desc": {
-  "en": "Color each state by its men per 100 women aged 20 to 59 in the last census: rose with fewer men (to 80), cream at even, blue with more (to 130).",
-  "de": "Färbt jeden Staat nach seinen Männern pro 100 Frauen im Alter von 20 bis 59 Jahren in der letzten Volkszählung: rosa bei weniger Männern (bis 80), cremefarben bei Gleichstand, blau bei mehr (bis 130)."
+  "en": "Color each state by its men per 100 women aged 20 to 59 in the last census: rose with fewer men, cream at even, blue with more. Each side's colors run to the world's extreme now, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_lo')|0]#! and #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_hi')|0]#!.",
+  "de": "Färbt jeden Staat nach seinen Männern pro 100 Frauen im Alter von 20 bis 59 Jahren in der letzten Volkszählung: rosa bei weniger Männern, cremefarben bei Gleichstand, blau bei mehr. Die Farben jeder Seite reichen bis zum jetzigen Extrem der Welt, #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_lo')|0]#! und #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_hi')|0]#!."
  },
  "te_jmap_pick_tourism_appeal_desc": {
-  "en": "Color each state by its [concept_tourism_base_appeal], the score its scenery, climate and townscape give its tourism, from 20%, the score of a region without one of its own, to 100%. As on the state panel, the share its monuments stand for counts under them instead.",
-  "de": "Färbt jeden Staat nach seiner [concept_tourism_base_appeal], dem Wert, den Landschaft, Klima und Stadtbild seinem Tourismus verleihen, von 20%, dem Wert einer Region, die keinen eigenen hat, bis 100%. Wie auf der Staatstafel zählt der Anteil, den seine Monumente ausmachen, stattdessen unter diesen."
+  "en": "Color each state by its [concept_tourism_base_appeal], the score its scenery, climate and townscape give its tourism, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_hi')|%0]#!. As on the state panel, the share its monuments stand for counts under them instead.",
+  "de": "Färbt jeden Staat nach seiner [concept_tourism_base_appeal], dem Wert, den Landschaft, Klima und Stadtbild seinem Tourismus verleihen, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_hi')|%0]#!. Wie auf der Staatstafel zählt der Anteil, den seine Monumente ausmachen, stattdessen unter diesen."
  },
  "te_jmap_pick_turmoil_desc": {
-  "en": "Color each state by its [concept_turmoil]: half the color by a fifth of its people radical, the rest more slowly, up to all of them.",
-  "de": "Färbt jeden Staat nach seinem [concept_turmoil]: die Hälfte der Farbe, wenn ein Fünftel seiner Einwohner radikal ist, der Rest langsamer, bis hin zu allen."
+  "en": "Color each state by its [concept_turmoil], against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_hi')|%0]#! of its people radical, half the color in the first fifth of that span.",
+  "de": "Färbt jeden Staat nach seinem [concept_turmoil], im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_hi')|%0]#! seiner Einwohner radikal, die Hälfte der Farbe im ersten Fünftel dieser Spanne."
  },
  "te_jmap_pick_united_nations_desc": {
   "en": "Members of the United Nations in blue, permanent members of the [concept_un_security_council] darker, the headquarters gold, and every state where a [concept_un_mission] is at work in its mission's color: peacekeeping cyan, aid orange, stabilization red, electoral observers green.",
   "de": "Mitglieder der Vereinten Nationen in Blau, ständige Mitglieder des [Concept('concept_un_security_council','Sicherheitsrats')] dunkler, das Hauptquartier in Gold und jeder Staat, in dem eine [concept_un_mission] tätig ist, in der Farbe ihrer Mission: Friedenssicherung zyan, Hilfe orange, Stabilisierung rot, Wahlbeobachter grün."
  },
  "te_jmap_pick_urban_share_desc": {
-  "en": "Color each state by its share of urban people, those not working at a farm, plantation, ranch, mine or other rural workplace, from none to all.",
-  "de": "Färbt jeden Staat nach seinem Anteil städtischer Einwohner, also derjenigen, die nicht auf einem Bauernhof, einer Plantage, einer Ranch, in einer Mine oder an einem anderen ländlichen Arbeitsplatz arbeiten, von keinem bis zu allen."
+  "en": "Color each state by its share of urban people, those not working at a farm, plantation, ranch, mine or other rural workplace, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_hi')|%0]#!.",
+  "de": "Färbt jeden Staat nach seinem Anteil städtischer Einwohner, also derjenigen, die nicht auf einem Bauernhof, einer Plantage, einer Ranch, in einer Mine oder an einem anderen ländlichen Arbeitsplatz arbeiten, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_hi')|%0]#!."
+ },
+ "te_jmap_pick_war_dead_desc": {
+  "en": "Color each state by its dead to war and devastation last year, from the census's Causes of Death, against the world as it is now: the same share of the color for each doubling from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. The census shares a country's war dead out to its states by their soldiers, so the map shows where the dead came from, not where they fell; under the Full setting the civilians devastation kills count too. A state that lost none is pale.",
+  "de": "Färbt jeden Staat nach seinen Toten durch Krieg und Verwüstung im letzten Jahr, aus den Todesursachen der Volkszählung, im Vergleich zur Welt, wie sie jetzt ist: derselbe Anteil der Farbe für jede Verdopplung von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. Die Volkszählung verteilt die Kriegstoten eines Landes nach der Zahl der Soldaten auf seine Staaten, sodass die Karte zeigt, woher die Toten kamen, nicht, wo sie fielen; in der Einstellung „Voll“ zählen auch die Zivilisten mit, die die Verwüstung tötet. Ein Staat ohne Verluste ist blass."
  },
  "te_jud_act_upheld_desc": {
   "en": "The courts found the act we forced through lawful, and it carries their approval.",
@@ -12106,6 +12150,10 @@
  "te_political_commissars_indoctrination_desc": {
   "en": "Party commissars in every unit school the troops, and through them their families, in loyalty to the government. Scales with the share of your regular battalions trained under $pm_political_commissars$.",
   "de": "Parteikommissare in jeder Einheit schulen die Truppen und durch sie deren Familien in Loyalität zur Regierung. Skaliert mit dem Anteil Ihrer regulären Bataillone, die unter $pm_political_commissars$ ausgebildet werden."
+ },
+ "te_renaissance_no_homeland_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended with no homeland of its culture left",
+  "de": "Der $concept_journal_entry$ endete, ohne dass eine Heimat ihrer Kultur übrig war"
  },
  "te_reserve_cadre_capacity_desc": {
   "en": "Room for the reservists of this state's $pm_reserve_cadre$ barracks: one more [Concept('concept_conscription_center', 'conscription center')] per [Concept('concept_reserve_battalions', 'reserve battalion')].",
@@ -12520,7 +12568,7 @@
   "de": "Unser Anteil an den Zuwendungen des [Concept('concept_un_development_fund', 'Weltentwicklungsfonds')], jede Woche in unseren [concept_investment_pool] eingezahlt. Der Fonds verteilt die Beiträge der Mitglieder zu den Entwicklungsprogrammen und seinen Anteil am UN-Haushalt nach Bevölkerung auf die Mitglieder unterhalb seiner Schwelle und berechnet die Anteile jeden Monat neu."
  },
  "un_dev_fund_treasury_grant_modifier_desc": {
-  "en": "Our share of the [concept_un_development_fund]'s grants, paid into our [concept_treasury] every week as income: our laws allow no [concept_investment_pool], or we have no banking system yet. The Fund shares the major powers' Development Programs contributions and its share of the UN budget among the members below its line, by population, and works the shares out again each month.",
+  "en": "Our share of the [concept_un_development_fund]'s grants, paid into our [concept_treasury] every week as income: our laws allow no [concept_investment_pool], or we have no banking system. The Fund shares the major powers' Development Programs contributions and its share of the UN budget among the members below its line, by population, and works the shares out again each month.",
   "de": "Unser Anteil an den Zuwendungen des [Concept('concept_un_development_fund', 'Weltentwicklungsfonds')], jede Woche als Einnahme in unsere [concept_treasury] eingezahlt: Unsere Gesetze erlauben keinen [concept_investment_pool], oder wir haben noch kein Bankensystem. Der Fonds verteilt die Beiträge der Mittelmächte zu den Entwicklungsprogrammen und seinen Anteil am UN-Haushalt nach Bevölkerung auf die Mitglieder unterhalb seiner Schwelle und berechnet die Anteile jeden Monat neu."
  },
  "un_development_contributor_cost_desc": {

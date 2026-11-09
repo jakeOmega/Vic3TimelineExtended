@@ -21767,6 +21767,22 @@
   "en": "Foreign Cyber-Espionage",
   "de": "Ausländische Cyberspionage"
  },
+ "te_culture_merge.1.a": {
+  "en": "One people, at last.",
+  "de": "Endlich ein Volk."
+ },
+ "te_culture_merge.1.d": {
+  "en": "In the [SCOPE.sCulture('te_cm_ev_part').GetName] homeland most people now call themselves [SCOPE.sCulture('te_cm_ev_result').GetName], and the last [SCOPE.sCulture('te_cm_ev_part').GetName] pops, at home and abroad, have followed them. The [SCOPE.sCulture('te_cm_ev_part').GetName] lands are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland as well, and [SCOPE.sCulture('te_cm_ev_part').GetName] stays a primary culture wherever it was one.",
+  "de": "Im Heimatland der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName] bezeichnen sich die meisten Menschen inzwischen als [SCOPE.sCulture('te_cm_ev_result').GetName], und auch die letzten Pops der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName], im Inland wie im Ausland, sind ihnen gefolgt. Auch die Länder der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName] sind nun ein Heimatland der Kultur [SCOPE.sCulture('te_cm_ev_result').GetName], und [SCOPE.sCulture('te_cm_ev_part').GetName] bleibt überall dort eine Primärkultur, wo sie es war."
+ },
+ "te_culture_merge.1.f": {
+  "en": "\\\"When I was a boy, the schoolmaster rapped our knuckles for talking the way we talked at home. My grandson has never had his knuckles rapped. He has nothing left to be rapped for.\\\"\\n\\n\\\"The census clerk asked what we were. My father gave the old answer out of habit, and the clerk wrote down the new one without looking up. Nobody in the queue said a word. Most of them had already written it themselves.\\\"",
+  "de": "„Als ich ein Junge war, gab der Schulmeister uns Schläge auf die Finger, wenn wir so sprachen wie zu Hause. Mein Enkel hat nie Schläge auf die Finger bekommen. Es gibt nichts mehr, wofür man ihn schlagen könnte.“\\n\\n„Der Volkszählungsbeamte fragte, was wir seien. Mein Vater gab aus Gewohnheit die alte Antwort, und der Beamte schrieb die neue auf, ohne aufzusehen. Niemand in der Schlange sagte ein Wort. Die meisten hatten sie schon selbst hingeschrieben.“"
+ },
+ "te_culture_merge.1.t": {
+  "en": "From [SCOPE.sCulture('te_cm_ev_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]",
+  "de": "Von [SCOPE.sCulture('te_cm_ev_part').GetName] zu [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
  "te_debug_ch.1.a": {
   "en": "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running",
   "de": "A – Einrichten: Kulturministerium, Förderobergrenze 4, Förderung bei 2, Außenarbeit + Institute + Protektionismus laufen"
@@ -21810,6 +21826,38 @@
  "te_debug_ch.1.t": {
   "en": "Cultural Hegemony Test Console",
   "de": "Testkonsole: Kulturelle Hegemonie"
+ },
+ "te_debug_cm.1.a": {
+  "en": "A — Run the census now, with no lock and no year guard",
+  "de": "A — Volkszählung jetzt durchführen, ohne Sperre und ohne Jahresprüfung"
+ },
+ "te_debug_cm.1.b": {
+  "en": "B — Run this country's yearly conversion now",
+  "de": "B — Die jährliche Umwandlung dieses Landes jetzt durchführen"
+ },
+ "te_debug_cm.1.c": {
+  "en": "C — Run the dominance step now: every joined part at or over the switch share switches",
+  "de": "C — Den Dominanzschritt jetzt durchführen: Jede beigetretene Teilkultur ab dem Wechselanteil wechselt"
+ },
+ "te_debug_cm.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event; it exists so the culture merges can be driven by hand in a play-test.#!\\n\\nEvery option waits for the culture merges rule. #b A#! runs the census at once (it adds a year to the years-together counters, so a second run in the same year counts a year twice). #b B#! converts one more step in this country. #b C#! recomputes each joined part's dominance from the last census and switches every part at or over the switch share. #b D#! writes every culture merge variable of this country's merges, and of every merge that is running or complete, to debug.log as TE_CM_DEBUG lines.\\n\\nThe once-a-game self-checks are separate: grep TE_SELF_CHECK in debug.log.",
+  "de": "#lore Nur Konsole. Kein Teil der Mod löst dieses Ereignis aus; es existiert, damit die Kulturverschmelzungen in einem Probespiel von Hand gesteuert werden können.#!\\n\\nJede Option wartet auf die Spielregel für Kulturverschmelzungen. #b A#! führt die Volkszählung sofort durch (sie erhöht die Zähler für die gemeinsamen Jahre um ein Jahr, ein zweiter Durchlauf im selben Jahr zählt also doppelt). #b B#! wandelt in diesem Land einen weiteren Schritt um. #b C#! berechnet die Dominanz jeder beigetretenen Teilkultur aus der letzten Volkszählung neu und lässt jede Teilkultur ab dem Wechselanteil wechseln. #b D#! schreibt jede Kulturverschmelzungsvariable der Verschmelzungen dieses Landes und jeder laufenden oder abgeschlossenen Verschmelzung als TE_CM_DEBUG-Zeilen in die debug.log.\\n\\nDie einmal pro Spiel laufenden Selbsttests sind getrennt: TE_SELF_CHECK in der debug.log suchen."
+ },
+ "te_debug_cm.1.d_option": {
+  "en": "D — Log every culture merge variable of this country's merges (TE_CM_DEBUG)",
+  "de": "D — Jede Kulturverschmelzungsvariable der Verschmelzungen dieses Landes protokollieren (TE_CM_DEBUG)"
+ },
+ "te_debug_cm.1.f": {
+  "en": "\\\"Closely related peoples can come to see themselves as one nation.\\\"",
+  "de": "„Eng verwandte Völker können sich irgendwann als eine Nation begreifen.“"
+ },
+ "te_debug_cm.1.t": {
+  "en": "Culture Merges Test Console",
+  "de": "Testkonsole für Kulturverschmelzungen"
+ },
+ "te_debug_cm.1.z": {
+  "en": "Close",
+  "de": "Schließen"
  },
  "te_debug_colonial_empire.1.a": {
   "en": "Solidified (95)",

@@ -3416,7 +3416,7 @@
   "de": "Festes Budget"
  },
  "TE_CM_MODE_BUDGET_TT": {
-  "en": "#header Fixed Budget#!\\nThe government spends a set sum on construction each week, and the number of points it buys follows the price: when construction gets dearer, the same budget buys fewer points. A raise is phased in over a few weeks; a cut takes hold faster.\\n\\nSwitching carries the purchase over: the budget starts at what your current purchase costs, to the nearest @money!1,000.",
+  "en": "#header Fixed Budget#!\\nThe government spends a set sum on construction each week, and the number of points it buys follows the price: when construction gets more expensive, the same budget buys fewer points. A raise is phased in over a few weeks; a cut takes hold faster.\\n\\nSwitching carries the purchase over: the budget starts at what your current purchase costs, to the nearest @money!1,000.",
   "de": "#header Festes Budget#!\\nDer Staat gibt jede Woche eine feste Summe für Bau aus, und die Anzahl der gekauften Punkte folgt dem Preis: Wird Bau teurer, kauft dasselbe Budget weniger Punkte. Eine Erhöhung wird über einige Wochen eingeführt; eine Kürzung wirkt schneller.\\n\\nBeim Wechsel wird der Einkauf übernommen: Das Budget beginnt bei dem, was Ihr aktueller Einkauf kostet, gerundet auf die nächsten @money!1.000."
  },
  "TE_CM_MODE_QUANTITY": {
@@ -3424,7 +3424,7 @@
   "de": "Feste Menge"
  },
  "TE_CM_MODE_QUANTITY_TT": {
-  "en": "#header Fixed Quantity#!\\nThe government buys a set number of construction points each week, and what it pays follows the price: when construction gets dearer, the same purchase costs the [concept_treasury] more.\\n\\nSwitching carries the purchase over: the quantity starts at what your budget is buying now.",
+  "en": "#header Fixed Quantity#!\\nThe government buys a set number of construction points each week, and what it pays follows the price: when construction gets more expensive, the same purchase costs the [concept_treasury] more.\\n\\nSwitching carries the purchase over: the quantity starts at what your budget is buying now.",
   "de": "#header Feste Menge#!\\nDer Staat kauft jede Woche eine feste Anzahl an Baupunkten, und was er dafür bezahlt, folgt dem Preis: Wird Bau teurer, kostet derselbe Einkauf die [concept_treasury] mehr.\\n\\nBeim Wechsel wird der Einkauf übernommen: Die Menge beginnt bei dem, was Ihr Budget derzeit kauft."
  },
  "TE_CM_PURCHASE_TT": {
@@ -3448,7 +3448,7 @@
   "de": "Schließt sich noch"
  },
  "TE_CM_STAT_BUDGET_STEP_TT": {
-  "en": "#header Why the Purchase Moves in Steps#!\\nBuying more makes construction dearer, so each week the purchase closes only part of the gap to what the budget buys, rather than overshooting. This week: #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_step_percent')|0]%#!.\\n\\nA raise closes at most half of the gap each week, a cut as much as the price allows. The share is smaller when the government is a large part of the market, or construction is near its cheapest.",
+  "en": "#header Why the Purchase Moves in Steps#!\\nBuying more makes construction more expensive, so each week the purchase closes only part of the gap to what the budget buys, rather than overshooting. This week: #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_step_percent')|0]%#!.\\n\\nA raise closes at most half of the gap each week, a cut as much as the price allows. The share is smaller when the government is a large part of the market, or construction is near its cheapest.",
   "de": "#header Warum sich der Einkauf schrittweise bewegt#!\\nMehr zu kaufen macht Bau teurer, deshalb schließt der Einkauf jede Woche nur einen Teil der Lücke zu dem, was das Budget kauft, statt über das Ziel hinauszuschießen. Diese Woche: #v [GetPlayer.MakeScope.ScriptValue('te_construction_market_display_budget_step_percent')|0]%#!.\\n\\nEine Erhöhung schließt pro Woche höchstens die Hälfte der Lücke, eine Kürzung so viel, wie der Preis zulässt. Der Anteil ist kleiner, wenn der Staat einen großen Teil des Marktes ausmacht oder Bau fast so billig wie möglich ist."
  },
  "TE_CM_STAT_BUDGET_STEP_VALUE": {
@@ -3655,6 +3655,10 @@
   "en": "[Concept('concept_law', '$concept_laws|q$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) or [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] tier II or higher in the country's [concept_power_bloc]\\n[concept_technology]: [GetTechnology('mass_media').GetName]",
   "de": "[Concept('concept_law', '$concept_laws|q$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) oder [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] Stufe II oder höher im [concept_power_bloc] des Landes\\n[concept_technology]: [GetTechnology('mass_media').GetName]"
  },
+ "TE_INFAMY_STRAIT_SHORE_SHARE": {
+  "en": "Share of the [concept_state] taken",
+  "de": "Anteil des [Concept('concept_state', 'Staates')], der genommen wird"
+ },
  "TE_STATE_ANTIMATTER_TT": {
   "en": "#bold [concept_antimatter_facility] Slots#!\\nIn Use: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserved, queued levels included: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nEach [concept_antimatter_facility] level gives the whole country #v 5#! slots for Antimatter Engines and Warhead Plants.",
   "de": "#bold [concept_antimatter_facility]-Plätze#!\\nIn Gebrauch: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserviert, einschließlich Stufen in der Warteschlange: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nJede Stufe der [concept_antimatter_facility] gibt dem ganzen Land #v 5#! Plätze für Antimaterie-Triebwerke und Sprengkopfanlagen."
@@ -3744,16 +3748,16 @@
   "de": "Effizienz"
  },
  "TE_STATE_GRID_ROW_EFFICIENCY_TT": {
-  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $electricity$ sent to this state's station that arrives: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Rural Electrification, Transistors, Microprocessor, Clean Energy Technologies, Smart Grids and Quantum Materials raise it.",
-  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil der $electricity$, die an die Station dieses Staates gesendet wird und dort ankommt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Elektrifizierung des ländlichen Raums, Transistoren, Mikroprozessor, Saubere-Energie-Technologien, Intelligente Stromnetze und Quantenmaterialien erhöhen ihn."
+  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $electricity$ sent to this state's station that arrives: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!; the rest is lost on the way. Rural Electrification, Transistors, Microprocessor, Clean Energy Technologies, Smart Grids and Quantum Materials raise it.",
+  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil der $electricity$, die an die Station dieses Staates gesendet wird und dort ankommt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!; der Rest geht unterwegs verloren. Elektrifizierung des ländlichen Raums, Transistoren, Mikroprozessor, Saubere-Energie-Technologien, Intelligente Stromnetze und Quantenmaterialien erhöhen ihn."
  },
  "TE_STATE_GRID_ROW_HUB": {
   "en": "Hub",
   "de": "Knoten"
  },
  "TE_STATE_GRID_ROW_HUB_TT": {
-  "en": "#b Hub#!\\nThe grid's largest producer of $electricity$: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Every state on a grid names the same hub, so it tells grids apart.",
-  "de": "#b Knoten#!\\nDer größte Erzeuger von $electricity$ im Netz: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Jeder Staat in einem Netz nennt denselben Knoten, daran lassen sich die Netze unterscheiden."
+  "en": "#b Hub#!\\nThe state on this grid that produces the most $electricity$: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Each grid is named for its hub, so states with the same hub are on the same grid.",
+  "de": "#b Knoten#!\\nDer Staat in diesem Netz, der die meiste $electricity$ erzeugt: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Jedes Netz ist nach seinem Knoten benannt, Staaten mit demselben Knoten liegen also im selben Netz."
  },
  "TE_STATE_GRID_ROW_MARKET_TT": {
   "en": "#b Between Markets#!\\nThis grid joins more than one [concept_market]. This state's market's stations on it #v [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)1'), 'te_grid_market_send_more')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)2'), 'te_grid_market_receive_more')]#!, by #v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|1]#! $grid_power$ a week.\\n\\nStations settle in $grid_power$ at the grid's price, and its own price is fixed, so what crosses is paid for at that: a market's senders are paid for all they send, and its receivers pay for all they receive.",
@@ -3764,16 +3768,16 @@
   "de": "Modus"
  },
  "TE_STATE_GRID_ROW_MODE_TT": {
-  "en": "#b Mode#!\\n#v Sending#!: $electricity$ is cheap here, and the station sends the spare to the grid for $grid_power$.\\n#v Receiving#!: it is dear here, and the station pays $grid_power$ for power from the grid.\\n#v Idle#!: its price is too close to the grid's for the losses, or the grid has nothing to share.\\n#v Offline#!: not balanced yet; it joins its grid at the next month's balancing.\\nA thinly staffed station is asked for more, down to a fifth staffed; one with no staff moves nothing until it hires.",
-  "de": "#b Modus#!\\n#v Sendend#!: $electricity$ ist hier billig, und die Station gibt den Überschuss gegen $grid_power$ an das Netz ab.\\n#v Empfangend#!: Sie ist hier teuer, und die Station zahlt $grid_power$ für Strom aus dem Netz.\\n#v Leerlauf#!: Ihr Preis liegt zu nahe am Preis des Netzes, als dass sich die Verluste lohnten, oder das Netz hat nichts zu verteilen.\\n#v Offline#!: Noch nicht abgeglichen; sie schließt sich beim Netzausgleich des nächsten Monats ihrem Netz an.\\nVon einer dünn besetzten Station wird mehr verlangt, bis hinunter zu einer Besetzung von einem Fünftel; eine ganz ohne Personal bewegt nichts, bis sie Personal einstellt."
+  "en": "#b Mode#!\\n#v Sending#!: $electricity$ is cheap here, so the station sends the spare to the grid for $grid_power$.\\n#v Receiving#!: it is expensive here, so the station buys power from the grid with $grid_power$.\\n#v Idle#!: the price here is too close to the grid's to be worth the losses, or the grid has none to spare.\\n#v Offline#!: not on a grid yet; it joins at the next monthly balancing.\\nA short-staffed station is ordered to move more to make up the gap, down to a fifth staffed; an unstaffed one moves nothing.",
+  "de": "#b Modus#!\\n#v Sendend#!: $electricity$ ist hier billig, daher gibt die Station den Überschuss gegen $grid_power$ an das Netz ab.\\n#v Empfangend#!: Sie ist hier teuer, daher kauft die Station Strom aus dem Netz mit $grid_power$.\\n#v Leerlauf#!: Der Preis hier liegt zu nahe am Preis des Netzes, als dass sich die Verluste lohnten, oder das Netz hat nichts übrig.\\n#v Offline#!: Noch nicht an ein Netz angeschlossen; sie schließt sich beim nächsten monatlichen Abgleich an.\\nEine knapp besetzte Station muss mehr bewegen, um die Lücke auszugleichen, bis hinunter zu einer Besetzung von einem Fünftel; eine ohne Personal bewegt nichts."
  },
  "TE_STATE_GRID_ROW_MOVED": {
   "en": "Flow",
   "de": "Fluss"
  },
  "TE_STATE_GRID_ROW_MOVED_TT": {
-  "en": "#b Flow#!\\nThe $electricity$ this station sends to its grid, or delivers to this state after losses, a week: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!. At this flow $electricity$ here sells at #v [State.MakeScope.ScriptValue('te_grid_price_target_disp')|%0]#! of its base price.",
-  "de": "#b Fluss#!\\nDie Menge an $electricity$, die diese Station pro Woche an ihr Netz sendet oder nach Verlusten an diesen Staat liefert: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!. Bei diesem Fluss wird $electricity$ hier zu #v [State.MakeScope.ScriptValue('te_grid_price_target_disp')|%0]#! ihres Grundpreises verkauft."
+  "en": "#b Flow#!\\nThe $electricity$ this station moves each week: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!, sent to the grid when it is sending, or delivered to this state after losses when it is receiving.\\nWith this flow, $electricity$ here sells at #v [State.MakeScope.ScriptValue('te_grid_price_target_disp')|%0]#! of its base price.",
+  "de": "#b Durchfluss#!\\nDie $electricity$, die diese Station jede Woche bewegt: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!, an das Netz gesendet, wenn sie sendet, oder nach Verlusten an diesen Staat geliefert, wenn sie empfängt.\\nBei diesem Durchfluss wird $electricity$ hier zu #v [State.MakeScope.ScriptValue('te_grid_price_target_disp')|%0]#! ihres Grundpreises verkauft."
  },
  "TE_STATE_GRID_ROW_PASS": {
   "en": "Pass-through",
@@ -3788,12 +3792,12 @@
   "de": "Netzgröße"
  },
  "TE_STATE_GRID_ROW_SIZE_TT": {
-  "en": "#b Grid Size#!\\nThe number of states whose stations share this state's [concept_power_grid].",
-  "de": "#b Netzgröße#!\\nDie Anzahl der Staaten, deren Stationen sich das [concept_power_grid] dieses Staates teilen."
+  "en": "#b Grid Size#!\\nThe number of stations on this state's [concept_power_grid], its own included.",
+  "de": "#b Netzgröße#!\\nDie Anzahl der Stationen im [concept_power_grid] dieses Staates, seine eigene eingeschlossen."
  },
  "TE_STATE_GRID_TT": {
-  "en": "#bold [concept_power_grid]#!\\nThis state's $building_grid_transfer_station$ shares $electricity$ with #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! states' stations. Once a month the grid moves $electricity$ until it sells at one price in the states that send it and at that price over their transmission efficiency in the states that receive it. Its supply against its demand: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]",
-  "de": "#bold [concept_power_grid]#!\\nDie $building_grid_transfer_station$ dieses Staates teilt $electricity$ mit den Stationen von #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Staaten. Einmal im Monat bewegt das Netz $electricity$, bis sie in den Staaten, die sie senden, zu einem Preis verkauft wird und in den Staaten, die sie empfangen, zu diesem Preis geteilt durch ihre Übertragungseffizienz. Sein Angebot im Verhältnis zu seinem Bedarf: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]"
+  "en": "#bold [concept_power_grid]#!\\nOnce a month the grid moves $electricity$ from states where it is cheap to states where it is expensive, until it sells at one price in the sending states and, to cover the losses on the way, at a higher price in the receiving ones.\\n\\nStations on this grid: #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!\\nSupply: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#! of demand\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]",
+  "de": "#bold [concept_power_grid]#!\\nEinmal im Monat bewegt das Netz $electricity$ aus Staaten, in denen sie billig ist, in Staaten, in denen sie teuer ist, bis sie in den sendenden Staaten zu einem Preis verkauft wird und in den empfangenden, um die Verluste unterwegs zu decken, zu einem höheren.\\n\\nStationen in diesem Netz: #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!\\nAngebot: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#! des Bedarfs\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]"
  },
  "TE_STATE_HOMELAND_TT": {
   "en": "#bold [concept_homeland_dynamics]#!\\nCreation Rate: #v +[State.MakeScope.ScriptValue('te_homeland_annual_progress')|1]%#! a year #grey (base 10%)#!\\nRemoval Rate: #v +[State.MakeScope.ScriptValue('te_homeland_removal_annual_progress')|1]%#! a year #grey (slower under the UN Convention on Cultural Diversity)#!\\nChange Speed: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\nCreation Threshold: #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! of the population\\nRemoval Threshold: below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!\\n$TOOLTIP_DELIMITER$\\n#bold Multipliers#!\\n• State [concept_turmoil] #v 25%#! or more: #v ×1.25#!; #v 50%#! or more: #v ×1.5#!\\n• [concept_legitimacy] under #v 25#!: #v ×0.5#!; #v 75#! or more: #v ×1.25#!\\n$TOOLTIP_DELIMITER$\\n#bold Enabled by any one of#!\\n$TE_HOMELAND_UNLOCK_SOURCES$",
@@ -5956,8 +5960,8 @@
   "de": " (ohne die Untergrenze würde sie ihren Zinssatz auf #v [Country.MakeScope.Var('te_mon_virtual_rate').GetValue|1]%#! festlegen)"
  },
  "banking_dash_mon_range_commodity": {
-  "en": "#lore The coin is the commodity, so the price of credit here can never stray far from what the metal costs everywhere else. The bank may hold its discount rate up to one point under the world's, or up to three over it: cheap money sends coin abroad, while dear money was always a bank's answer to a panic and costs only what it costs the country's borrowers and its treasury. Enough to lean against a season, not enough to run a policy. Prices are held from outside rather than by the dial: let inflation run more than a point above the world's and coin goes abroad until it stops. A formal standard would free the dial and make the reserves pay for it instead.#!",
-  "de": "#lore Die Münze ist die Ware selbst, also kann der Kreditpreis hier nie weit von dem abweichen, was das Metall überall sonst kostet. Die Bank darf ihren Diskontsatz bis zu einem Punkt unter dem der Welt halten, oder bis zu drei darüber: billiges Geld schickt Münzen ins Ausland, während teures Geld schon immer die Antwort einer Bank auf eine Panik war und nur das kostet, was es die Kreditnehmer des Landes und seine Staatskasse kostet. Genug, um sich gegen eine Saison zu stemmen, nicht genug, um eine Politik zu betreiben. Die Preise werden von außen gehalten statt vom Regler: Lässt man die Inflation mehr als einen Punkt über der der Welt laufen, wandert Münze ins Ausland, bis es aufhört. Ein förmlicher Standard würde den Regler befreien und stattdessen die Reserven dafür zahlen lassen.#!"
+  "en": "#lore The coin is the commodity, so the price of credit here can never stray far from what the metal costs everywhere else. The bank may hold its discount rate up to one point under the world's, or up to three over it: cheap money sends coin abroad, while tight money was always a bank's answer to a panic and costs only what it costs the country's borrowers and its treasury. Enough to lean against a season, not enough to run a policy. Prices are held from outside rather than by the dial: let inflation run more than a point above the world's and coin goes abroad until it stops. A formal standard would free the dial and make the reserves pay for it instead.#!",
+  "de": "#lore Die Münze ist die Ware selbst, also kann der Kreditpreis hier nie weit von dem abweichen, was das Metall überall sonst kostet. Die Bank darf ihren Diskontsatz bis zu einem Punkt unter dem der Welt halten, oder bis zu drei darüber: billiges Geld schickt Münzen ins Ausland, während knappes Geld schon immer die Antwort einer Bank auf eine Panik war und nur das kostet, was es die Kreditnehmer des Landes und seine Staatskasse kostet. Genug, um sich gegen eine Saison zu stemmen, nicht genug, um eine Politik zu betreiben. Die Preise werden von außen gehalten statt vom Regler: Lässt man die Inflation mehr als einen Punkt über der der Welt laufen, wandert Münze ins Ausland, bis es aufhört. Ein förmlicher Standard würde den Regler befreien und stattdessen die Reserven dafür zahlen lassen.#!"
  },
  "banking_dash_mon_range_free": {
   "en": "#lore Nothing the country has promised to redeem constrains the dial: the range is its to use, and what it costs is what it does to prices.#!",
@@ -6512,8 +6516,8 @@
   "de": "#v [Country.MakeScope.ScriptValue('te_mon_fx_index_display')|1]#! (abgewertet)"
  },
  "banking_dash_ro_fx_tt": {
-  "en": "#header Exchange Rate Index#!\\nHow dear the currency is to foreigners, in real terms: #v 100#! is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it is the parity and stays at par, and a currency tied to another's takes that one's. A floating currency rises with a real rate above the world's and falls with inflation above the world's.\\n$TOOLTIP_DELIMITER$\\nEvery point under par is #G +1.25%#! $state_export_advantage_mult$ and #R −1.25%#! $state_import_advantage_mult$ in every state, and every point over par the reverse. Exports now: #v [Country.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#!.",
-  "de": "#header Wechselkursindex#!\\nWie teuer die Währung für Ausländer ist, real gerechnet: #v 100#! ist die Parität, niedriger ist eine schwache Währung, höher eine starke. Niemand legt ihn fest. Bei Metalldeckung ist er die Parität und bleibt auf Parität, und eine an eine andere gebundene Währung übernimmt deren Wert. Eine frei schwankende Währung steigt mit einem realen Zinssatz über dem der Welt und fällt mit einer Inflation über der der Welt.\\n$TOOLTIP_DELIMITER$\\nJeder Punkt unter der Parität bedeutet #G +1,25%#! $state_export_advantage_mult$ und #R −1,25%#! $state_import_advantage_mult$ in jedem Staat, jeder Punkt darüber das Gegenteil. Exporte derzeit: #v [Country.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#!."
+  "en": "#header Exchange Rate Index#!\\nWhat the currency is worth to foreigners, in real terms: #v 100#! is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it is the parity and stays at par, and a currency tied to another's takes that one's. A floating currency rises with a real rate above the world's and falls with inflation above the world's.\\n$TOOLTIP_DELIMITER$\\nEvery point under par is #G +1.25%#! $state_export_advantage_mult$ and #R −1.25%#! $state_import_advantage_mult$ in every state, and every point over par the reverse. Exports now: #v [Country.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#!.",
+  "de": "#header Wechselkursindex#!\\nWas die Währung für Ausländer wert ist, real gerechnet: #v 100#! ist die Parität, niedriger ist eine schwache Währung, höher eine starke. Niemand legt ihn fest. Bei Metalldeckung ist er die Parität und bleibt auf Parität, und eine an eine andere gebundene Währung übernimmt deren Wert. Eine frei schwankende Währung steigt mit einem realen Zinssatz über dem der Welt und fällt mit einer Inflation über der der Welt.\\n$TOOLTIP_DELIMITER$\\nJeder Punkt unter der Parität bedeutet #G +1,25%#! $state_export_advantage_mult$ und #R −1,25%#! $state_import_advantage_mult$ in jedem Staat, jeder Punkt darüber das Gegenteil. Exporte derzeit: #v [Country.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#!."
  },
  "banking_dash_ro_mandate_tt": {
   "en": "#header Mandate#!\\nThe rule the central bank follows when it sets its rate each month.\\n$TOOLTIP_DELIMITER$\\n#title $banking_dash_mon_mandate_inflation$#! answers for prices alone: it tightens as prices climb, and leaves the [concept_banking_cycle] to them.\\n#title $banking_dash_mon_mandate_dual$#! reacts to inflation as hard, and leans against the cycle as well. Every bank starts on it.\\n#title $banking_dash_mon_mandate_growth$#! runs about a point looser and ignores inflation until it passes about four percent.\\n#title $banking_dash_mon_mandate_peg$#! holds the world rate, so that gold does not drain away. Only a convertible gold standard can run it.\\n#lore Choosing the mandate, or setting the rate by hand, comes with the $banking_dash_ro_entry_name$ journal entry. Under $law_central_bank_independence$ the mandate is an act on the law instead.#!",
@@ -9136,8 +9140,8 @@
   "de": "Auf der Erde geschieht nichts. Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, steigt das Feuer unserer Flotten auf die Verteidigung jeder Kolonie des Ziels um #G +20%#!; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, um #G +40%#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht es auf #G +80%#!. Solange die Operation läuft, zeigt unsere Flottenübersicht die Verteidigung, Integrität und Marineinfanterie der Kolonien des Ziels genau an."
  },
  "covert_warfare_unlock_tt": {
-  "en": "You hold more [Concept('concept_operation_slots', 'operation slots')] than your rank grants: at least 4 as a [concept_great_power], 3 as a [concept_major_power], or 2 as any other country",
-  "de": "Sie verfügen über mehr [Concept('concept_operation_slots', 'Operationsplätze')], als Ihr Rang vorsieht: mindestens 4 als [concept_great_power], 3 als [concept_major_power] oder 2 als jedes andere Land"
+  "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
+  "de": "Ein [Concept('concept_operation_slots', 'Operationsplatz')] über den Rang hinaus, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$ oder $quantum_computing$ oder das Gesetz $law_ministry_of_intelligence_and_security$"
  },
  "cr_base_drift_tt": {
   "en": "Movement decay",
@@ -9964,8 +9968,8 @@
   "de": "Forensisch"
  },
  "gm_arch_launch_forensic_tooltip": {
-  "en": "#b Forensic and Remote Sensing#!\\nWith radar and radiocarbon dating: about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! months here, the dearest, and the monument comes out with #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! more levels. Diverts #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! weekly [concept_innovation] while it runs.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
-  "de": "#b Forensisch und Fernerkundung#!\\nMit Radar und Radiokarbondatierung: etwa #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! Monate hier, am teuersten, und das Monument entsteht mit #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! zusätzlichen Stufen. Zweigt #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! [concept_innovation] pro Woche ab, solange sie läuft.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+  "en": "#b Forensic and Remote Sensing#!\\nWith radar and radiocarbon dating: about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! months here, the most expensive, and the monument comes out with #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! more levels. Diverts #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! weekly [concept_innovation] while it runs.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
+  "de": "#b Forensik und Fernerkundung#!\\nMit Radar und Radiokarbondatierung: etwa #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! Monate hier, am teuersten, und das Monument entsteht mit #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! zusätzlichen Stufen. Zweigt #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! [concept_innovation] pro Woche ab, solange sie läuft.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
  },
  "gm_arch_launch_forensic_tt": {
   "en": "Begin a Forensic dig at this site",
@@ -12136,7 +12140,7 @@
   "de": "Wartet auf eine Entscheidung"
  },
  "gm_je_how_archaeology": {
-  "en": "A buried site opens to a country that holds its ground and has the technology that gates it; some are only turned up by chance, by a plow or a railway cutting. A dig takes months, and what it unearths stands as a Grand Monument in our part of the ground. Its only cost is the [concept_innovation] it diverts each week while it runs: our universities already pay for it, and the innovation cap does not fall. An Antiquarian dig is quick and the cheapest, but hasty, and may destroy half of what it finds. A Systematic one is slow and careful, and the monument comes out whole. A Forensic one, with radar and radiocarbon dating, is the dearest, and the monument comes out with more levels. A site abroad is dug by a treaty article with its owner: an $archaeological_concession$ brings half the levels home as a trophy, and an $excavation_permit$ leaves the finds there and gives us Foreign Scholarship.",
+  "en": "A buried site opens to a country that holds its ground and has the technology that gates it; some are only turned up by chance, by a plow or a railway cutting. A dig takes months, and what it unearths stands as a Grand Monument in our part of the ground. Its only cost is the [concept_innovation] it diverts each week while it runs: our universities already pay for it, and the innovation cap does not fall. An Antiquarian dig is quick and the cheapest, but hasty, and may destroy half of what it finds. A Systematic one is slow and careful, and the monument comes out whole. A Forensic one, with radar and radiocarbon dating, is the most expensive, and the monument comes out with more levels. A site abroad is dug by a treaty article with its owner: an $archaeological_concession$ brings half the levels home as a trophy, and an $excavation_permit$ leaves the finds there and gives us Foreign Scholarship.",
   "de": "Eine verschüttete Fundstätte öffnet sich einem Land, das den Boden hält und über die dafür nötige Technologie verfügt; manche werden nur zufällig entdeckt, von einem Pflug oder einem Bahneinschnitt. Eine Grabung dauert Monate, und was sie zutage fördert, steht als Großes Monument in unserem Teil des Bodens. Ihre einzigen Kosten sind die [concept_innovation], die sie jede Woche abzweigt, solange sie läuft: Unsere Universitäten bezahlen sie ohnehin schon, und die Innovationsobergrenze sinkt nicht. Eine antiquarische Grabung geht schnell und ist die billigste, aber hastig und kann die Hälfte dessen zerstören, was sie findet. Eine systematische ist langsam und sorgfältig, und das Monument kommt unversehrt zutage. Eine forensische, mit Radar und Radiokarbondatierung, ist die teuerste, und das Monument kommt mit mehr Stufen zutage. Eine Fundstätte im Ausland wird durch einen Vertragsartikel mit ihrem Eigentümer ausgegraben: Eine $archaeological_concession$ bringt die Hälfte der Stufen als Trophäe nach Hause, und eine $excavation_permit$ lässt die Funde dort und verschafft uns Gelehrsamkeit im Ausland."
  },
  "gm_je_how_choices": {
@@ -17791,6 +17795,10 @@
   "en": "Minority Business Protection",
   "de": "Schutz für Minderheitsunternehmen"
  },
+ "minority_protection_protector_bloc_possible_tt": {
+  "en": "The protecting power belongs to a [concept_power_bloc] with the $identity_cultural$ or $identity_religious$ identity",
+  "de": "Die Schutzmacht gehört einem [concept_power_bloc] mit der Identität $identity_cultural$ oder $identity_religious$ an"
+ },
  "minority_protection_protector_bloc_tt": {
   "en": "[SCOPE.sCountry('target_country').GetName], the protecting power, belongs to a [concept_power_bloc] with the $identity_cultural$ or $identity_religious$ identity",
   "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')|U], die Schutzmacht, gehört einem [concept_power_bloc] mit der Identität $identity_cultural$ oder $identity_religious$ an"
@@ -21766,6 +21774,10 @@
  "religious_institution_investigation_modifier": {
   "en": "Religious Institution Investigation",
   "de": "Untersuchung religiöser Institutionen"
+ },
+ "religious_mission_rights_missionary_bloc_possible_tt": {
+  "en": "The country that sends the missionaries belongs to a [concept_power_bloc] with the $identity_religious$ identity",
+  "de": "Das Land, das die Missionare entsendet, gehört einem [concept_power_bloc] mit der Identität $identity_religious$ an"
  },
  "religious_mission_rights_missionary_bloc_tt": {
   "en": "[SCOPE.sCountry('target_country').GetName], which sends the missionaries, belongs to a [concept_power_bloc] with the $identity_religious$ identity",
@@ -26623,6 +26635,90 @@
   "en": "Remove the active map-mode overlay from every state.",
   "de": "Entfernt das aktive Kartenmodus-Overlay von jedem Staat."
  },
+ "te_cm_bar_desc": {
+  "en": "Least converted culture: toward the switch at [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0]",
+  "de": "Am wenigsten umgewandelte Kultur: auf dem Weg zum Wechsel bei [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0]"
+ },
+ "te_cm_bar_name": {
+  "en": "Merge Progress",
+  "de": "Verschmelzungsfortschritt"
+ },
+ "te_cm_je_invalid_conclusion_desc": {
+  "en": "Another country runs this merge, or a wider merge has taken in its culture or one of its core cultures.",
+  "de": "Ein anderes Land führt diese Verschmelzung durch, oder eine umfassendere Verschmelzung hat seine Kultur oder eine seiner Kernkulturen aufgenommen."
+ },
+ "te_cm_speed_tt": {
+  "en": "#tooltip_header $country_culture_merge_speed_mult$#!\\n[GetPlayer.GetModifier.GetValueWithBreakdownFor('country_culture_merge_speed_mult')]\\n$TOOLTIP_DELIMITER$\\nOur pops of the merge convert this much faster; a subject's or bloc member's go by its own figure. $law_public_schools$, the $institution_ministry_of_culture$ (each level), $radio$, $film$ and $mass_propaganda$ raise it. A pop's literacy and its state's urbanization speed it up as well, about as much as all of these together.",
+  "de": "#tooltip_header $country_culture_merge_speed_mult$#!\\n[GetPlayer.GetModifier.GetValueWithBreakdownFor('country_culture_merge_speed_mult')]\\n$TOOLTIP_DELIMITER$\\nUnsere Pops der Verschmelzung wandeln sich um diesen Wert schneller um; bei Klientelstaaten und Blockmitgliedern gilt ihr eigener Wert. $law_public_schools$, das $institution_ministry_of_culture$ (je Stufe), $radio$, $film$ und $mass_propaganda$ erhöhen ihn. Die Alphabetisierung eines Pops und die Urbanisierung seines Staates beschleunigen die Umwandlung zusätzlich, ungefähr so stark wie alle genannten Faktoren zusammen."
+ },
+ "te_cm_status_elsewhere": {
+  "en": "Another country has started this merge.",
+  "de": "Ein anderes Land hat diese Verschmelzung begonnen."
+ },
+ "te_cm_status_not_candidate": {
+  "en": "A core culture must be primary here and the technology known before this merge can start.",
+  "de": "Eine Kernkultur muss hier Primärkultur sein und die Technologie bekannt, bevor diese Verschmelzung beginnen kann."
+ },
+ "te_cm_status_pending": {
+  "en": "Not every condition is met yet. The start button lists what is missing.",
+  "de": "Noch sind nicht alle Bedingungen erfüllt. Die Schaltfläche zum Beginnen führt auf, was fehlt."
+ },
+ "te_cm_status_ready": {
+  "en": "Nothing stands in the way. The button starts the merge.",
+  "de": "Nichts steht im Weg. Die Schaltfläche beginnt die Verschmelzung."
+ },
+ "te_cm_status_rule_off": {
+  "en": "The $rule_culture_merges_rule$ game rule is off. Merges are paused, and none can start, until it is turned back on.",
+  "de": "Die Spielregel $rule_culture_merges_rule$ ist ausgeschaltet. Verschmelzungen pausieren, und keine kann beginnen, bis sie wieder eingeschaltet wird."
+ },
+ "te_cm_status_sol": {
+  "en": "The core cultures' standards of living have not been compared yet. The next yearly census will compare them.",
+  "de": "Der Lebensstandard der Kernkulturen wurde noch nicht verglichen. Die nächste jährliche Volkszählung holt das nach."
+ },
+ "te_cm_status_unmeasured": {
+  "en": "The yearly census has not measured the constituent cultures yet. The first figures arrive with the next one.",
+  "de": "Die jährliche Volkszählung hat die Teilkulturen noch nicht erfasst. Die ersten Zahlen liegen mit der nächsten vor."
+ },
+ "te_cm_tt_dlc_off_rp1_content": {
+  "en": "The $dlc008$ content is off. With it on, the base game's own $je_brazilian_nation_building$ entry merges these cultures instead.",
+  "de": "Die Inhalte von $dlc008$ sind ausgeschaltet. Sind sie eingeschaltet, verschmilzt stattdessen der Eintrag $je_brazilian_nation_building$ des Basisspiels diese Kulturen."
+ },
+ "te_cm_tt_done_all": {
+  "en": "Every other culture that joined the merge has switched too.",
+  "de": "Jede weitere Kultur, die sich der Verschmelzung angeschlossen hat, ist ebenfalls gewechselt."
+ },
+ "te_cm_tt_done_starter": {
+  "en": "We are running this merge.",
+  "de": "Wir führen diese Verschmelzung durch."
+ },
+ "te_cm_tt_idle": {
+  "en": "Nobody is running this merge yet, and it is not complete.",
+  "de": "Noch führt niemand diese Verschmelzung durch, und sie ist nicht abgeschlossen."
+ },
+ "te_cm_tt_result_not_merged_on": {
+  "en": "The culture this merge would make has not already merged into a wider culture.",
+  "de": "Die Kultur, die diese Verschmelzung hervorbringen würde, ist nicht bereits in eine umfassendere Kultur verschmolzen."
+ },
+ "te_cm_tt_rule_on": {
+  "en": "The $rule_culture_merges_rule$ game rule is on.",
+  "de": "Die Spielregel $rule_culture_merges_rule$ ist eingeschaltet."
+ },
+ "te_cm_tt_sol": {
+  "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0].",
+  "de": "Die Kernkulturen leben auf ähnlichem Lebensstandard: Der Abstand zwischen den am besten und den am schlechtesten gestellten liegt zu Beginn unter [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0], und eine laufende Verschmelzung gerät ins Stocken, sobald er [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0] überschreitet."
+ },
+ "te_cm_tt_tech_1": {
+  "en": "$pan-nationalism$ is researched.",
+  "de": "Die Technologie $pan-nationalism$ ist erforscht."
+ },
+ "te_cm_tt_tech_2": {
+  "en": "$mass_media$ is researched.",
+  "de": "Die Technologie $mass_media$ ist erforscht."
+ },
+ "te_cm_tt_tech_3": {
+  "en": "$television$ is researched.",
+  "de": "Die Technologie $television$ ist erforscht."
+ },
  "te_construction_market_bg": {
   "en": "Construction Sites",
   "de": "Baustellen"
@@ -27176,16 +27272,16 @@
   "de": "Volkszählung: Arbeitskräfte"
  },
  "te_demog_census_workforce_down_desc": {
-  "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count, and the game's own workforce moves toward it over the years that follow.",
-  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
+  "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count. The game's own workforce takes up a new figure only as people are born, a few percent of the way a year, so while it trails, this line runs past the census's figure, by as much as closes about half the gap in a year and at most 20% either way.",
+  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien. Die eigenen Arbeitskräfte des Spiels übernehmen einen neuen Wert nur, wenn Menschen geboren werden, einige Prozent des Weges pro Jahr; solange sie hinterherhinken, liegt diese Zeile über dem Wert der Volkszählung, und zwar um so viel, dass etwa die Hälfte der Lücke in einem Jahr geschlossen wird, höchstens aber um 20% in jede Richtung."
  },
  "te_demog_census_workforce_up": {
   "en": "Census: Workforce",
   "de": "Volkszählung: Arbeitskräfte"
  },
  "te_demog_census_workforce_up_desc": {
-  "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count, and the game's own workforce moves toward it over the years that follow.",
-  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
+  "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count. The game's own workforce takes up a new figure only as people are born, a few percent of the way a year, so while it trails, this line runs past the census's figure, by as much as closes about half the gap in a year and at most 20% either way.",
+  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien. Die eigenen Arbeitskräfte des Spiels übernehmen einen neuen Wert nur, wenn Menschen geboren werden, einige Prozent des Weges pro Jahr; solange sie hinterherhinken, liegt diese Zeile über dem Wert der Volkszählung, und zwar um so viel, dass etwa die Hälfte der Lücke in einem Jahr geschlossen wird, höchstens aber um 20% in jede Richtung."
  },
  "te_demog_census_youth_bulge": {
   "en": "Census: Youth Bulge",
@@ -27604,8 +27700,8 @@
   "de": "Der blasse Umriss der Pyramide schreibt die Bevölkerung des Landes mit den eigenen Geburten- und Sterberaten der Volkszählung für dieses Jahr zwanzig Jahre fort, in Schritten von fünf Jahren. Er lässt Wanderung außer Acht und hält die Raten, wie sie sind, zeigt also, wohin der heutige Kurs führt, und ist keine Prognose."
  },
  "te_demog_how_pensions": {
-  "en": "Under $law_old_age_pension$ the government chooses the pension age from five positions, and a choice holds for five years: Early at 60, Standard at 65, Raised at 70, and two linked to longevity, which start from at least 65 and move a year a year toward five years below where old age begins. Linked to Average follows old age as all the people reach it; Linked to Common follows it for those not in longevity care, whose bodies still age, so the treated may draw a pension forever. Until longevity treatment exists the two give the same age. Under the Full setting the pension bill pays each pensioner a share of output per head for each level of $institution_social_security$, on top of the law's own welfare payments, and the health system's bureaucracy cost follows the care the people's ages need.",
-  "de": "Unter $law_old_age_pension$ wählt die Regierung das Rentenalter aus fünf Stufen, und eine Wahl gilt fünf Jahre: Früh mit 60, Standard mit 65, Angehoben mit 70 und zwei an die Langlebigkeit gekoppelte, die bei mindestens 65 beginnen und sich pro Jahr um ein Jahr in Richtung fünf Jahre unter dem Beginn des hohen Alters bewegen. „An Durchschnitt gekoppelt“ folgt dem hohen Alter, wie alle Menschen es erreichen; „An Gewöhnliche gekoppelt“ folgt ihm für jene ohne Langlebigkeitsmedizin, deren Körper weiter altern, sodass die Behandelten für immer eine Rente beziehen können. Bis es Langlebigkeitsbehandlung gibt, ergeben beide dasselbe Alter. In der Einstellung „Voll“ zahlt die Rentenrechnung jedem Rentner einen Anteil der Wirtschaftsleistung pro Kopf für jede Stufe von $institution_social_security$, zusätzlich zu den eigenen Sozialhilfezahlungen des Gesetzes, und die Bürokratiekosten des Gesundheitssystems folgen der Pflege, die das Alter der Menschen erfordert."
+  "en": "Under $law_old_age_pension$ the government chooses the pension age from five settings, and a choice holds for five years: Early at 60, Standard at 65, Raised at 70, and two linked to longevity. A linked setting keeps the pension age where it is (at least 65) and moves it at most one year each year toward five years below Old Age From, the age at which people have fifteen years left to live. Linked to Average follows the average lifespan of all the people, the treated included, so once longevity treatment spreads it can climb past the age those who still age live to. Linked to Common follows the common lifespan, that of the people outside longevity care, so the pension stays within their reach, but the treated draw it for life. Until longevity care begins the two would give the same age, so Linked to Common can be chosen only once it has. Under the Full setting the pension bill pays each pensioner a share of output per head for each level of $institution_social_security$, on top of the law's own welfare payments, and the health system's bureaucracy cost follows the care the people's ages need.",
+  "de": "Unter $law_old_age_pension$ wählt die Regierung das Rentenalter aus fünf Einstellungen, und eine Wahl gilt fünf Jahre: Früh mit 60, Standard mit 65, Angehoben mit 70 und zwei an die Langlebigkeit gekoppelte. Eine gekoppelte Einstellung lässt das Rentenalter, wo es ist (mindestens 65), und bewegt es um höchstens ein Jahr pro Jahr in Richtung fünf Jahre unter „Hohes Alter ab“, dem Alter, in dem Menschen noch fünfzehn Lebensjahre vor sich haben. „An Durchschnitt gekoppelt“ folgt der durchschnittlichen Lebensspanne aller Menschen, der Behandelten eingeschlossen, sodass es, sobald sich die Langlebigkeitsbehandlung verbreitet, über das Alter hinaus steigen kann, das jene erreichen, die weiter altern. „An Gewöhnliche gekoppelt“ folgt der gewöhnlichen Lebensspanne, der Menschen außerhalb der Langlebigkeitsmedizin, sodass die Rente für sie erreichbar bleibt, doch die Behandelten beziehen sie ein Leben lang. Bis die Langlebigkeitsmedizin beginnt, ergäben beide dasselbe Alter, daher kann „An Gewöhnliche gekoppelt“ erst danach gewählt werden. In der Einstellung „Voll“ zahlt die Rentenrechnung jedem Rentner einen Anteil der Wirtschaftsleistung pro Kopf für jede Stufe von $institution_social_security$, zusätzlich zu den eigenen Sozialhilfezahlungen des Gesetzes, und die Bürokratiekosten des Gesundheitssystems folgen der Pflege, die das Alter der Menschen erfordert."
  },
  "te_demog_how_places": {
   "en": "For the urban pattern each state counts as one city, and its urban people are everyone not working the land or the mines, $peasants$ counting as rural. Primacy is the largest city's share of all urban people, and the effective number of cities is how many cities of equal size would spread them as evenly. The pattern is $te_demog_pattern_0$ when the largest city holds 40% or more, $te_demog_pattern_1$ from 25%, $te_demog_pattern_2$ from 10% and $te_demog_pattern_3$ below that. Within a state, its metropolitan share is the share of its urban people living in its largest city: a modeled figure that moves a twentieth of the way each year to a target the capital, a world market hub, a financial district, the state's size and economy, its infrastructure, crowding, urban planning and the country's urbanization set. It reads $te_demog_mt_label_0$ from 60%, $te_demog_mt_label_1$ from 40%, $te_demog_mt_label_2$ from 20% and $te_demog_mt_label_3$ below; each state's Settlement row on its Demographics subtab shows the terms. Largest Cities names the towns themselves: a state's capital and its port, mining, farming and logging towns, as the map names them, ordered by the people at work in each kind of building, farm, mine and logging work at a quarter and subsistence farms not at all; a port, mining, farming or logging town with no such work is left out. The largest holds the state's metropolitan share of its urban people (before the state's first yearly count, the target it starts at) and each next town that share of the rest. Largest Urban States lists the three states the game's city ranking puts first.",
@@ -28943,6 +29039,10 @@
   "en": "Old-age pensions paid to the people at or above the pension age, a share of our output for each of them by the level of Social Security. Set at each census.",
   "de": "Altersrenten für die Menschen im Rentenalter oder darüber, für jeden von ihnen ein Anteil unserer Wirtschaftsleistung nach der Stufe der Sozialversicherung. Wird bei jeder Volkszählung festgelegt."
  },
+ "te_demog_pension_common_split_tt": {
+  "en": "Longevity care has begun in our country; until then this gives the same age as Linked to Average",
+  "de": "Die Langlebigkeitsmedizin hat in unserem Land begonnen; bis dahin ergibt dies dasselbe Alter wie „An Durchschnitt gekoppelt“"
+ },
  "te_demog_pension_current_tt": {
   "en": "It is not the setting already in force",
   "de": "Es ist nicht die bereits geltende Einstellung"
@@ -28968,24 +29068,24 @@
   "de": "Gekoppelt: Durchschnitt"
  },
  "te_demog_pension_linked_average_effect_tt": {
-  "en": "The pension age starts from at least #b 65#! and moves a year a year toward five years below where old age begins for our people; the bill and the workforce follow at each census. The setting then holds for #v 5#! years.",
-  "de": "Das Rentenalter beginnt bei mindestens #b 65#! und nähert sich um ein Jahr pro Jahr einem Wert fünf Jahre unter dem Alter, ab dem das hohe Alter für unsere Menschen beginnt; die Kosten und die Arbeitskräfte ziehen bei jeder Volkszählung nach. Die Einstellung gilt dann #v 5#! Jahre lang."
+  "en": "The pension age stays where it is, rising to #b 65#! if it is lower, then moves at most one year each year toward five years below Old Age From for all our people; the bill and the workforce follow at each census. The setting then holds for #v 5#! years.",
+  "de": "Das Rentenalter bleibt, wo es ist, und steigt auf #b 65#!, falls es niedriger ist; dann bewegt es sich um höchstens ein Jahr pro Jahr in Richtung fünf Jahre unter „Hohes Alter ab“ für alle unsere Menschen; die Kosten und die Arbeitskräfte ziehen bei jeder Volkszählung nach. Die Einstellung gilt dann #v 5#! Jahre lang."
  },
  "te_demog_pension_linked_average_tt": {
-  "en": "#b Linked to Average Longevity#!\\nPensions from five years below where old age begins for the country's people as a whole, never under 65, moving at most a year a year. The cheapest as lives lengthen, but once longevity treatment reaches part of the country, those who still age may never reach it.\\n[GetStaticModifier('te_demog_pension_pos_linked_average').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]",
-  "de": "#b An durchschnittliche Langlebigkeit gekoppelt#!\\nRenten ab fünf Jahren unter dem Alter, ab dem das hohe Alter für die Menschen des Landes insgesamt beginnt, nie unter 65, mit höchstens einem Jahr Veränderung pro Jahr. Am günstigsten, wenn die Leben länger werden; doch sobald Langlebigkeitsmedizin einen Teil des Landes erreicht, erreichen diejenigen, die weiter altern, das Rentenalter womöglich nie.\\n[GetStaticModifier('te_demog_pension_pos_linked_average').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+  "en": "#b Linked to Average Longevity#!\\nThe pension age follows the average lifespan of all the country's people, the treated included: five years below Old Age From, never under 65, moving at most one year each year.\\nUntil longevity care begins this is the only linked setting. Once treatment spreads, the treated live longer and pull the age up with them, without limit if they stop aging: the cheapest choice, but those who still age may die before they reach it.\\n[GetStaticModifier('te_demog_pension_pos_linked_average').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]",
+  "de": "#b An durchschnittliche Langlebigkeit gekoppelt#!\\nDas Rentenalter folgt der durchschnittlichen Lebensspanne aller Menschen des Landes, der Behandelten eingeschlossen: fünf Jahre unter „Hohes Alter ab“, nie unter 65, mit höchstens einem Jahr Veränderung pro Jahr.\\nBis die Langlebigkeitsmedizin beginnt, ist dies die einzige gekoppelte Einstellung. Sobald sich die Behandlung verbreitet, leben die Behandelten länger und ziehen das Alter mit nach oben, ohne Grenze, wenn sie nicht mehr altern: die günstigste Wahl, doch jene, die weiter altern, sterben womöglich, bevor sie es erreichen.\\n[GetStaticModifier('te_demog_pension_pos_linked_average').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
  },
  "te_demog_pension_linked_common_button": {
   "en": "Linked: Common",
   "de": "Gekoppelt: Gewöhnlich"
  },
  "te_demog_pension_linked_common_effect_tt": {
-  "en": "The pension age starts from at least #b 65#! and moves a year a year toward five years below where old age begins for those who still age; the bill and the workforce follow at each census. The setting then holds for #v 5#! years.",
-  "de": "Das Rentenalter beginnt bei mindestens #b 65#! und nähert sich um ein Jahr pro Jahr einem Wert fünf Jahre unter dem Alter, ab dem das hohe Alter für diejenigen beginnt, die weiter altern; die Kosten und die Arbeitskräfte ziehen bei jeder Volkszählung nach. Die Einstellung gilt dann #v 5#! Jahre lang."
+  "en": "The pension age stays where it is, rising to #b 65#! if it is lower, then moves at most one year each year toward five years below Old Age From for those of our people outside longevity care; the bill and the workforce follow at each census. The setting then holds for #v 5#! years.",
+  "de": "Das Rentenalter bleibt, wo es ist, und steigt auf #b 65#!, falls es niedriger ist; dann bewegt es sich um höchstens ein Jahr pro Jahr in Richtung fünf Jahre unter „Hohes Alter ab“ für diejenigen unserer Menschen außerhalb der Langlebigkeitsmedizin; die Kosten und die Arbeitskräfte ziehen bei jeder Volkszählung nach. Die Einstellung gilt dann #v 5#! Jahre lang."
  },
  "te_demog_pension_linked_common_tt": {
-  "en": "#b Linked to Common Longevity#!\\nPensions from five years below where old age begins for those who still age, never under 65, moving at most a year a year. Fairer to them, but once longevity treatment arrives the treated draw a pension for ever, and that bill is the price.\\n[GetStaticModifier('te_demog_pension_pos_linked_common').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]",
-  "de": "#b An gewöhnliche Langlebigkeit gekoppelt#!\\nRenten ab fünf Jahren unter dem Alter, ab dem das hohe Alter für diejenigen beginnt, die weiter altern, nie unter 65, mit höchstens einem Jahr Veränderung pro Jahr. Fairer für sie, doch sobald Langlebigkeitsmedizin verfügbar ist, beziehen die Behandelten für immer eine Rente, und diese Kosten sind der Preis dafür.\\n[GetStaticModifier('te_demog_pension_pos_linked_common').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+  "en": "#b Linked to Common Longevity#!\\nThe pension age follows the common lifespan: that of the people outside longevity care, whose bodies still age. It sits five years below their Old Age From, never under 65, moving at most one year each year.\\nUntil longevity care begins it would give the same age as Linked to Average, so it can be chosen only then. After that, the pension stays within reach of those who still age; the treated reach it too and, no longer aging, draw it for life, so the bill grows.\\n[GetStaticModifier('te_demog_pension_pos_linked_common').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]",
+  "de": "#b An gewöhnliche Langlebigkeit gekoppelt#!\\nDas Rentenalter folgt der gewöhnlichen Lebensspanne: der Menschen außerhalb der Langlebigkeitsmedizin, deren Körper weiter altern. Es liegt fünf Jahre unter deren „Hohes Alter ab“, nie unter 65, mit höchstens einem Jahr Veränderung pro Jahr.\\nBis die Langlebigkeitsmedizin beginnt, ergäbe es dasselbe Alter wie „An Durchschnitt gekoppelt“, daher kann es erst dann gewählt werden. Danach bleibt die Rente für jene erreichbar, die weiter altern; auch die Behandelten erreichen sie und beziehen sie, da sie nicht mehr altern, ein Leben lang, sodass die Kosten wachsen.\\n[GetStaticModifier('te_demog_pension_pos_linked_common').GetDesc]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
  },
  "te_demog_pension_pos_early": {
   "en": "Early Retirement",
@@ -30248,8 +30348,8 @@
   "de": "#lore Die [concept_inheritance_concentration] dieses Staates wird bei seiner nächsten jährlichen Zählung bewertet.#!"
  },
  "te_demog_st_wk_engine": {
-  "en": "The census aims at #v [State.MakeScope.ScriptValue('te_demog_wf_engine_target')|%0]#! of the people. The game counts #v [State.MakeScope.Var('te_dg_wf_engine').GetValue|%0]#! in its workforce now and moves its count toward the #v [State.MakeScope.ScriptValue('te_demog_wf_set')|%0]#! its pops are set to.",
-  "de": "Die Volkszählung zielt auf #v [State.MakeScope.ScriptValue('te_demog_wf_engine_target')|%0]#! der Menschen. Das Spiel zählt jetzt #v [State.MakeScope.Var('te_dg_wf_engine').GetValue|%0]#! zu seinen Arbeitskräften und bewegt seine Zahl auf die #v [State.MakeScope.ScriptValue('te_demog_wf_set')|%0]#! zu, auf die seine Pops eingestellt sind."
+  "en": "The census aims at #v [State.MakeScope.ScriptValue('te_demog_wf_engine_target')|%0]#! of the people. The game counts #v [State.MakeScope.Var('te_dg_wf_engine').GetValue|%0]#! in its workforce now and moves its count toward the #v [State.MakeScope.ScriptValue('te_demog_wf_set')|%0]#! its pops are set to. Only newborns take up a new figure, so while the count trails, the census sets the pops past its aim, by as much as closes about half the gap in a year.",
+  "de": "Die Volkszählung zielt auf #v [State.MakeScope.ScriptValue('te_demog_wf_engine_target')|%0]#! der Menschen. Das Spiel zählt jetzt #v [State.MakeScope.Var('te_dg_wf_engine').GetValue|%0]#! zu seinen Arbeitskräften und bewegt seine Zahl auf die #v [State.MakeScope.ScriptValue('te_demog_wf_set')|%0]#! zu, auf die seine Pops eingestellt sind. Nur Neugeborene übernehmen einen neuen Wert, daher stellt die Volkszählung die Pops, solange die Zahl hinterherhinkt, über ihr Ziel hinaus ein, und zwar um so viel, dass etwa die Hälfte der Lücke in einem Jahr geschlossen wird."
  },
  "te_demog_st_wk_need_tt": {
   "en": "#b Health Need#!\\nHow much care this state's people need for their ages, against the world of 1836: the old need several times what the young do, so need rises as a people ages. The country's need sets its health system's bureaucracy cost under the Full Demographics rule.",
@@ -30272,8 +30372,8 @@
   "de": "#b Rentner#!\\nDie Menschen dieses Staates im Rentenalter oder darüber, als Anteil an all seinen Menschen."
  },
  "te_demog_st_wk_term": {
-  "en": "Under the Full rule the census sets what the pops are set to with Census: Workforce, a term on the pops' own base of #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! from its last count, its aim #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#!. The game's own count moves toward it over the years that follow. The laws, unions and pollution that change who works enter as shares: men #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, everyone #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, fitness for work ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Lines the census leaves on top add #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#!.",
-  "de": "Unter „Voll“ legt die Volkszählung mit „Volkszählung: Arbeitskräfte“ fest, worauf die Pops eingestellt sind, als Posten auf der eigenen Basis der Pops von #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! aus der letzten Zählung, ihr Ziel #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#!. Die eigene Zählung des Spiels bewegt sich in den folgenden Jahren darauf zu. Die Gesetze, Gewerkschaften und die Umweltverschmutzung, die verändern, wer arbeitet, gehen als Anteile ein: Männer #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, alle #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, Arbeitsfähigkeit ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Zeilen, die die Volkszählung obendrauf lässt, tragen #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#! bei."
+  "en": "Under the Full rule the census sets what the pops are set to with Census: Workforce, a term on the pops' own base of #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! from its last count: its aim #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#!, and #v [State.MakeScope.ScriptValue('te_demog_wf_lead_shown')|+%0]#! past it while the game's own count trails. The laws, unions and pollution that change who works enter as shares: men #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, everyone #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, fitness for work ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Lines the census leaves on top add #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#!.",
+  "de": "Unter „Voll“ legt die Volkszählung mit „Volkszählung: Arbeitskräfte“ fest, worauf die Pops eingestellt sind, als Posten auf der eigenen Basis der Pops von #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! aus der letzten Zählung: ihr Ziel #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#!, und #v [State.MakeScope.ScriptValue('te_demog_wf_lead_shown')|+%0]#! darüber hinaus, solange die eigene Zählung des Spiels hinterherhinkt. Die Gesetze, Gewerkschaften und die Umweltverschmutzung, die verändern, wer arbeitet, gehen als Anteile ein: Männer #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, alle #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, Arbeitsfähigkeit ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Zeilen, die die Volkszählung obendrauf lässt, tragen #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#! bei."
  },
  "te_demog_st_wk_term_pending": {
   "en": "#grey Under the Full rule the census takes this state's workforce over at its next step.#!",
@@ -31272,8 +31372,8 @@
   "de": "Preis hier"
  },
  "te_grid_bld_price_tt": {
-  "en": "#b Price Here#!\\nWhat $electricity$ sells for in this state at the station's flow, as a share of its base price.",
-  "de": "#b Preis hier#!\\nZu welchem Preis $electricity$ in diesem Staat beim Durchfluss der Station verkauft wird, als Anteil an ihrem Grundpreis."
+  "en": "#b Price Here#!\\nWhat $electricity$ sells for in this state, with the station's flow, as a share of its base price.",
+  "de": "#b Preis hier#!\\nZu welchem Preis $electricity$ in diesem Staat bei einem Durchfluss der Station verkauft wird, als Anteil an ihrem Grundpreis."
  },
  "te_grid_bld_supply": {
   "en": "[State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0] of demand",
@@ -31288,8 +31388,8 @@
   "de": "Kein Bedarf"
  },
  "te_grid_bld_supply_tt": {
-  "en": "#b Supply#!\\nThe $electricity$ the grid's states make, without their stations, as a share of what they use. Over 100%, the grid has power to spare.",
-  "de": "#b Angebot#!\\nDie $electricity$, die die Staaten des Netzes ohne ihre Stationen erzeugen, als Anteil an dem, was sie verbrauchen. Über 100% hat das Netz Strom übrig."
+  "en": "#b Supply#!\\nThe $electricity$ the grid's states make, as a share of what they use, not counting what the stations move. Over 100%, the grid has power to spare; under 100%, it is short.",
+  "de": "#b Angebot#!\\nDie $electricity$, die die Staaten des Netzes erzeugen, als Anteil an dem, was sie verbrauchen, ohne das, was die Stationen bewegen. Über 100% hat das Netz Strom übrig; unter 100% ist es knapp."
  },
  "te_grid_cables_intro": {
   "en": "Joined by cable to:",
@@ -31304,44 +31404,44 @@
   "de": "Länder:"
  },
  "te_grid_card_countries_tt": {
-  "en": "#b Countries#!\\nThe countries with a station on this grid: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!, joined by Grid Interconnection Agreements.",
-  "de": "#b Länder#!\\nDie Länder mit einer Station in diesem Netz: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!, verbunden durch Netzverbundabkommen."
+  "en": "#b Countries#!\\nThe countries with stations on this grid: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!, joined by Grid Interconnection Agreements.",
+  "de": "#b Länder#!\\nDie Länder mit Stationen in diesem Netz: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!, verbunden durch Netzverbundabkommen."
  },
  "te_grid_card_delivered": {
   "en": "Delivered: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!",
   "de": "Geliefert: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!"
  },
  "te_grid_card_delivered_tt": {
-  "en": "#b Delivered#!\\nThe $electricity$ the grid's receiving stations deliver a week, after losses on the way: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!, with #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! lost.",
-  "de": "#b Geliefert#!\\nDie $electricity$, die die empfangenden Stationen des Netzes pro Woche liefern, nach Verlusten auf dem Weg: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!, davon #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! verloren."
+  "en": "#b Delivered#!\\nThe $electricity$ the grid's receiving stations deliver each week: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!. Another #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! is lost on the way.",
+  "de": "#b Geliefert#!\\nDie $electricity$, die die empfangenden Stationen des Netzes jede Woche liefern: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!. Weitere #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! gehen unterwegs verloren."
  },
  "te_grid_card_markets": {
   "en": "Markets: #v [State.MakeScope.ScriptValue('te_grid_rec_markets_disp')|0]#!",
   "de": "Märkte: #v [State.MakeScope.ScriptValue('te_grid_rec_markets_disp')|0]#!"
  },
  "te_grid_card_markets_tt": {
-  "en": "#b Markets#!\\nThis grid joins more than one [concept_market]. What one market's stations send beyond what they receive crosses the border, paid for in $grid_power$ at the grid's price. Each state's tile shows its market's exports or imports.",
-  "de": "#b Märkte#!\\nDieses Netz verbindet mehr als einen [concept_market]. Was die Stationen eines Marktes über das hinaus senden, was sie empfangen, überquert die Grenze, bezahlt in $grid_power$ zum Preis des Netzes. Die Kachel jedes Staates zeigt die Exporte oder Importe seines Marktes."
+  "en": "#b Markets#!\\nThis grid spans more than one [concept_market]. Where one market's stations send more than they receive, the difference crosses the border as an export, paid for in $grid_power$ at the grid's price. Each state's Power Grid tile shows its market's exports or imports.",
+  "de": "#b Märkte#!\\nDieses Netz umfasst mehr als einen [concept_market]. Wo die Stationen eines Marktes mehr senden, als sie empfangen, überquert die Differenz als Export die Grenze, bezahlt in $grid_power$ zum Preis des Netzes. Die Stromnetz-Kachel jedes Staates zeigt die Exporte oder Importe seines Marktes."
  },
  "te_grid_card_name_tt": {
-  "en": "#b Hub#!\\nThe grid's largest producer of $electricity$, which names it: #v [State.GetNameNoFormatting]#!.",
-  "de": "#b Knoten#!\\nDer größte Erzeuger von $electricity$ des Netzes, nach dem es benannt ist: #v [State.GetNameNoFormatting]#!."
+  "en": "#b Hub#!\\nThe grid is named for its hub, #v [State.GetNameNoFormatting]#!: the state on it that produces the most $electricity$.",
+  "de": "#b Knoten#!\\nDas Netz ist nach seinem Knoten benannt, #v [State.GetNameNoFormatting]#!: dem Staat in diesem Netz, der die meiste $electricity$ erzeugt."
  },
  "te_grid_card_price": {
   "en": "Price: #v [State.MakeScope.ScriptValue('te_grid_rec_price_disp')|%0]#!",
   "de": "Preis: #v [State.MakeScope.ScriptValue('te_grid_rec_price_disp')|%0]#!"
  },
  "te_grid_card_price_tt": {
-  "en": "#b Price#!\\nWhat $electricity$ sells for in the grid's sending states, as a share of its base price. A receiving state pays this over its owner's transmission efficiency.",
-  "de": "#b Preis#!\\nZu welchem Preis $electricity$ in den sendenden Staaten des Netzes verkauft wird, als Anteil an ihrem Grundpreis. Ein empfangender Staat zahlt diesen Preis, geteilt durch die Übertragungseffizienz seines Eigentümers."
+  "en": "#b Price#!\\nWhat $electricity$ sells for in the grid's sending states, as a share of its base price.\\nIn a receiving state it sells for more, to cover the power lost on the way: this price divided by its owner's transmission efficiency, a third more at 75%.",
+  "de": "#b Preis#!\\nZu welchem Preis $electricity$ in den sendenden Staaten des Netzes verkauft wird, als Anteil an ihrem Grundpreis.\\nIn einem empfangenden Staat wird sie teurer verkauft, um den Verlust unterwegs zu decken: dieser Preis geteilt durch die Übertragungseffizienz seines Besitzers, bei 75% ein Drittel mehr."
  },
  "te_grid_card_sent": {
   "en": "Sent: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|K]#!",
   "de": "Gesendet: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|K]#!"
  },
  "te_grid_card_sent_tt": {
-  "en": "#b Sent#!\\nThe $electricity$ the grid's sending stations send a week: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|1]#!.",
-  "de": "#b Gesendet#!\\nDie $electricity$, die die sendenden Stationen des Netzes pro Woche senden: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|1]#!."
+  "en": "#b Sent#!\\nThe $electricity$ the grid's sending stations put on it each week: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|1]#!.",
+  "de": "#b Gesendet#!\\nDie $electricity$, die die sendenden Stationen des Netzes jede Woche in es einspeisen: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|1]#!."
  },
  "te_grid_card_size": {
   "en": "Stations: #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!",
@@ -31356,8 +31456,8 @@
   "de": "Angebot: kein Bedarf"
  },
  "te_grid_card_supply_tt": {
-  "en": "#b Supply#!\\nThe $electricity$ the grid's states make a week, without their stations, as a share of what they use: #v [State.MakeScope.ScriptValue('te_grid_rec_supply_disp')|K]#! against #v [State.MakeScope.ScriptValue('te_grid_rec_demand_disp')|K]#!. Over 100%, the grid has power to spare and its price is under base; under 100%, it is short and its price is over.",
-  "de": "#b Angebot#!\\nDie $electricity$, die die Staaten des Netzes pro Woche ohne ihre Stationen erzeugen, als Anteil an dem, was sie verbrauchen: #v [State.MakeScope.ScriptValue('te_grid_rec_supply_disp')|K]#! gegenüber #v [State.MakeScope.ScriptValue('te_grid_rec_demand_disp')|K]#!. Über 100% hat das Netz Strom übrig, und sein Preis liegt unter dem Grundpreis; unter 100% ist es knapp, und sein Preis liegt darüber."
+  "en": "#b Supply#!\\nThe $electricity$ the grid's states make each week, against what they use: #v [State.MakeScope.ScriptValue('te_grid_rec_supply_disp')|K]#! made, #v [State.MakeScope.ScriptValue('te_grid_rec_demand_disp')|K]#! used. Power the stations move isn't counted.\\nOver 100%, the grid has power to spare and $electricity$ on it sells below its base price; under 100%, it is short and sells above.",
+  "de": "#b Angebot#!\\nDie $electricity$, die die Staaten des Netzes jede Woche erzeugen, im Verhältnis zu dem, was sie verbrauchen: #v [State.MakeScope.ScriptValue('te_grid_rec_supply_disp')|K]#! erzeugt, #v [State.MakeScope.ScriptValue('te_grid_rec_demand_disp')|K]#! verbraucht. Strom, den die Stationen bewegen, zählt nicht.\\nÜber 100% hat das Netz Strom übrig, und $electricity$ wird darin unter dem Grundpreis verkauft; unter 100% ist es knapp und sie wird darüber verkauft."
  },
  "te_grid_grids_asof": {
   "en": "Balanced monthly",
@@ -31396,12 +31496,12 @@
   "de": "Ein Netz kann Länder in verschiedenen [Concept('concept_market', 'Märkten')] verbinden. Es sendet dann Strom über die Grenze vom Markt mit mehr Überschuss zu dem mit weniger. Der Preis von $grid_power$ ist festgelegt, sodass der Strom auf beiden Seiten zum Preis des Netzes bezahlt wird. Eine Station im empfangenden Markt nimmt den Import auf, kauft ihn und verkauft ihn wieder, sodass es ihrem Markt nie an $grid_power$ fehlt."
  },
  "te_grid_how_prices": {
-  "en": "A grid moves power until $electricity$ sells at one price in the states that send it, and at that price over their transmission efficiency in the states that receive it. A grid with power to spare lowers the price in every state on it, the senders' too, and a grid short of power raises it in every state together. A state whose price lies between the two neither sends nor receives, since losses would eat what the grid could move. Stations settle in $grid_power$, whose price is fixed at $electricity$'s base: a sending station is paid what its power costs, and a receiving one pays what its power sells for.",
-  "de": "Ein Netz bewegt Strom, bis $electricity$ in den Staaten, die sie senden, zu einem Preis verkauft wird, und in den Staaten, die sie empfangen, zu diesem Preis geteilt durch ihre Übertragungseffizienz. Ein Netz mit überschüssigem Strom senkt den Preis in jedem Staat auf ihm, auch bei den Sendern, und ein Netz mit Strommangel hebt ihn in allen Staaten zusammen an. Ein Staat, dessen Preis zwischen den beiden liegt, sendet und empfängt nichts, da die Verluste auffressen würden, was das Netz bewegen könnte. Stationen rechnen in $grid_power$ ab, dessen Preis auf den Grundpreis von $electricity$ festgelegt ist: Eine sendende Station erhält, was ihr Strom kostet, und eine empfangende zahlt, wofür ihr Strom verkauft wird."
+  "en": "A grid moves power until $electricity$ sells at one price in the states that send it. Some power is lost on the way, so in the states that receive it, it sells at that price divided by their transmission efficiency: a third more at 75%. A grid with power to spare lowers the price in every state on it, the senders' too, and a grid short of power raises it in every state together. A state whose price is already close to the grid's neither sends nor receives, since the losses would eat what the grid could move. Stations settle in $grid_power$, whose price is fixed at $electricity$'s base: a sending station is paid what its power costs, and a receiving one pays what its power sells for.",
+  "de": "Ein Netz bewegt Strom, bis $electricity$ in den Staaten, die sie senden, zu einem Preis verkauft wird. Unterwegs geht etwas Strom verloren, daher wird sie in den Staaten, die sie empfangen, zu diesem Preis geteilt durch ihre Übertragungseffizienz verkauft: bei 75% ein Drittel mehr. Ein Netz mit überschüssigem Strom senkt den Preis in jedem Staat auf ihm, auch bei den Sendern, und ein Netz mit Strommangel hebt ihn in allen Staaten zusammen an. Ein Staat, dessen Preis dem des Netzes schon nahe kommt, sendet und empfängt nichts, da die Verluste auffressen würden, was das Netz bewegen könnte. Stationen rechnen in $grid_power$ ab, dessen Preis auf den Grundpreis von $electricity$ festgelegt ist: Eine sendende Station erhält, was ihr Strom kostet, und eine empfangende zahlt, wofür ihr Strom verkauft wird."
  },
  "te_grid_how_stations": {
-  "en": "One station a state. Our first in a market area can go in any of our states there, and each later one must border a state of ours with a station, built or queued, so a grid grows outward. A station joins its grid at the first monthly balancing after it is built. It moves its staff's share of what it is asked, so a thinly staffed one is asked for more, down to a fifth staffed; with no staff it moves nothing until it hires. Our government pays whatever its wages and upkeep cost beyond what it earns.",
-  "de": "Eine Station je Staat. Unsere erste in einem Marktgebiet kann in jedem unserer Staaten dort stehen, und jede weitere muss an einen Staat von uns mit einer Station grenzen, gebaut oder in Bau, sodass ein Netz nach außen wächst. Eine Station schließt sich dem Netz beim ersten monatlichen Abgleich nach ihrem Bau an. Sie bewegt den Anteil ihres Personals an dem, was von ihr verlangt wird, sodass von einer dünn besetzten mehr verlangt wird, bis hinunter zu einem Fünftel Besetzung; ohne Personal bewegt sie nichts, bis sie Personal einstellt. Unsere Regierung zahlt, was Löhne und Unterhalt über ihre Einnahmen hinaus kosten."
+  "en": "One station a state. Our first in a market area can go in any of our states there, and each later one must border a state of ours with a station, built or queued, so a grid grows outward. A station joins its grid at the first monthly balancing after it is built. It moves power in proportion to its staff, so the grid orders a short-staffed station to move more to make up the gap, as far down as a fifth staffed; with no staff it moves nothing until it hires. Our government pays whatever its wages and upkeep cost beyond what it earns.",
+  "de": "Eine Station je Staat. Unsere erste in einem Marktgebiet kann in jedem unserer Staaten dort stehen, und jede weitere muss an einen Staat von uns mit einer Station grenzen, gebaut oder in Bau, sodass ein Netz nach außen wächst. Eine Station schließt sich dem Netz beim ersten monatlichen Abgleich nach ihrem Bau an. Sie bewegt Strom im Verhältnis zu ihrem Personal, daher muss eine knapp besetzte Station vom Netz mehr bewegen, um die Lücke auszugleichen, bis hinunter zu einer Besetzung von einem Fünftel; ohne Personal bewegt sie nichts, bis sie Personal einstellt. Unsere Regierung zahlt, was Löhne und Unterhalt über ihre Einnahmen hinaus kosten."
  },
  "te_grid_how_sub_grids": {
   "en": "Grids",
@@ -31476,8 +31576,8 @@
   "de": "In Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#!"
  },
  "te_grid_ov_agreements_tt": {
-  "en": "#b Grid Interconnection Agreements#!\\nCountries with a $grid_interconnection_agreement$ with this one: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!. Its stations join theirs where they border, and its undersea cables theirs across the sea.\\nIn reach: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! more countries whose undersea cables reach its own, or its theirs, with no agreement yet.",
-  "de": "#b Netzverbundabkommen#!\\nLänder, die mit diesem ein $grid_interconnection_agreement$ haben: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!. Seine Stationen schließen sich ihren an, wo sie aneinandergrenzen, und seine Seekabel ihren über das Meer hinweg.\\nIn Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! weitere Länder, deren Seekabel seine eigenen erreichen oder seine ihre, noch ohne Abkommen."
+  "en": "#b Grid Interconnection Agreements#!\\nPartners: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, the countries with a $grid_interconnection_agreement$ with this one. Its stations join a partner's where they share a border, and its undersea cables join theirs across the sea.\\nIn reach: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! more countries with no agreement yet, where one side's undersea cables reach the other's. An agreement would join those cables.",
+  "de": "#b Netzverbundabkommen#!\\nPartner: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, die Länder mit einem $grid_interconnection_agreement$ mit diesem. Seine Stationen schließen sich denen eines Partners an, wo sie eine Grenze teilen, und seine Seekabel schließen sich ihren über das Meer hinweg an.\\nIn Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! weitere Länder ohne Abkommen, bei denen die Seekabel der einen Seite die der anderen erreichen. Ein Abkommen würde diese Kabel verbinden."
  },
  "te_grid_ov_agreements_word": {
   "en": "Partners: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!",
@@ -31496,8 +31596,8 @@
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_loss_disp')|%0]#! verloren"
  },
  "te_grid_ov_efficiency_tt": {
-  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $electricity$ sent to the country's receiving stations that arrives: #v [Country.MakeScope.ScriptValue('te_grid_tab_efficiency_disp')|%0]#!. The rest is lost on the way, so a receiving state pays the senders' price over this share. Technologies raise it to 100%; the Help page lists them.",
-  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil der $electricity$, die an die empfangenden Stationen des Landes gesendet wird und ankommt: #v [Country.MakeScope.ScriptValue('te_grid_tab_efficiency_disp')|%0]#!. Der Rest geht unterwegs verloren, sodass ein empfangender Staat den Preis der Sender geteilt durch diesen Anteil zahlt. Technologien heben ihn auf 100%; die Hilfeseite listet sie auf."
+  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $electricity$ sent to the country's receiving stations that arrives: #v [Country.MakeScope.ScriptValue('te_grid_tab_efficiency_disp')|%0]#!. The rest is lost on the way.\\nLosses make received power more expensive: a receiving state's price is the senders' price divided by this share, a third higher at 75%. Technologies raise it to 100%; the Help page lists them.",
+  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil der $electricity$, die an die empfangenden Stationen des Landes gesendet wird und ankommt: #v [Country.MakeScope.ScriptValue('te_grid_tab_efficiency_disp')|%0]#!. Der Rest geht unterwegs verloren.\\nVerluste machen empfangenen Strom teurer: Der Preis eines empfangenden Staates ist der Preis der Sender geteilt durch diesen Anteil, bei 75% ein Drittel höher. Technologien heben ihn auf 100%; die Hilfeseite listet sie auf."
  },
  "te_grid_ov_efficiency_word": {
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_efficiency_disp')|%0]#! arrives",
@@ -31516,8 +31616,8 @@
   "de": "Noch nicht abgeglichen"
  },
  "te_grid_ov_grids_tt": {
-  "en": "#b Grids#!\\nThe [concept_power_grid]s the country's stations are on: #v [Country.MakeScope.ScriptValue('te_grid_tab_grids_disp')|0]#!, joining #v [Country.MakeScope.ScriptValue('te_grid_tab_grid_stations_disp')|0]#! stations in all, other countries' among them. Each is named for its hub, its largest producer of $electricity$.",
-  "de": "#b Netze#!\\nDie [Concept('concept_power_grid', 'Stromnetze')], in denen die Stationen des Landes liegen: #v [Country.MakeScope.ScriptValue('te_grid_tab_grids_disp')|0]#!, die insgesamt #v [Country.MakeScope.ScriptValue('te_grid_tab_grid_stations_disp')|0]#! Stationen verbinden, darunter die anderer Länder. Jedes ist nach seinem Knoten benannt, seinem größten Erzeuger von $electricity$."
+  "en": "#b Grids#!\\nThe [concept_power_grid]s the country's stations are on: #v [Country.MakeScope.ScriptValue('te_grid_tab_grids_disp')|0]#!\\nStations on them in all: #v [Country.MakeScope.ScriptValue('te_grid_tab_grid_stations_disp')|0]#!, other countries' included\\nEach grid is named for its hub, the state on it that produces the most $electricity$.",
+  "de": "#b Netze#!\\nDie [Concept('concept_power_grid', 'Stromnetze')], in denen die Stationen des Landes liegen: #v [Country.MakeScope.ScriptValue('te_grid_tab_grids_disp')|0]#!\\nStationen darin insgesamt: #v [Country.MakeScope.ScriptValue('te_grid_tab_grid_stations_disp')|0]#!, die anderer Länder eingeschlossen\\nJedes Netz ist nach seinem Knoten benannt, dem Staat darin, der die meiste $electricity$ erzeugt."
  },
  "te_grid_ov_grids_word_none": {
   "en": "None",
@@ -31532,8 +31632,8 @@
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|K]#! pro Woche"
  },
  "te_grid_ov_received_tt": {
-  "en": "#b Received#!\\nThe $electricity$ the country's receiving stations deliver a week, after losses on the way: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, at #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! stations. A station receives where $electricity$ is dear, and pays in $grid_power$ what its power sells for.",
-  "de": "#b Empfangen#!\\nDie $electricity$, die die empfangenden Stationen des Landes pro Woche liefern, nach Verlusten auf dem Weg: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, an #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! Stationen. Eine Station empfängt dort, wo $electricity$ teuer ist, und zahlt in $grid_power$, wofür ihr Strom verkauft wird."
+  "en": "#b Received#!\\nThe $electricity$ the country's receiving stations deliver each week, after losses: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, at #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! stations.\\nA station receives where $electricity$ is expensive. It sells the power in its state and pays the grid what that power sells for, in $grid_power$.",
+  "de": "#b Empfangen#!\\nDie $electricity$, die die empfangenden Stationen des Landes jede Woche nach Verlusten liefern: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, an #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! Stationen.\\nEine Station empfängt dort, wo $electricity$ teuer ist. Sie verkauft den Strom in ihrem Staat und zahlt dem Netz in $grid_power$, wofür dieser Strom verkauft wird."
  },
  "te_grid_ov_received_word": {
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! receiving",
@@ -31548,8 +31648,8 @@
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|K]#! pro Woche"
  },
  "te_grid_ov_sent_tt": {
-  "en": "#b Sent#!\\nThe $electricity$ the country's sending stations send to their grids a week: #v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|1]#!, from #v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! stations. A station sends where $electricity$ is cheap, and is paid in $grid_power$ what its power costs.",
-  "de": "#b Gesendet#!\\nDie $electricity$, die die sendenden Stationen des Landes pro Woche an ihre Netze senden: #v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|1]#!, von #v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! Stationen. Eine Station sendet dort, wo $electricity$ billig ist, und erhält in $grid_power$, was ihr Strom kostet."
+  "en": "#b Sent#!\\nThe $electricity$ the country's sending stations put on their grids each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|1]#!, from #v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! stations.\\nA station sends where $electricity$ is cheap. It buys its state's spare power and is paid for it in $grid_power$ at the grid's price.",
+  "de": "#b Gesendet#!\\nDie $electricity$, die die sendenden Stationen des Landes jede Woche in ihre Netze einspeisen: #v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|1]#!, von #v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! Stationen.\\nEine Station sendet dort, wo $electricity$ billig ist. Sie kauft den überschüssigen Strom ihres Staates und erhält dafür in $grid_power$ den Preis des Netzes."
  },
  "te_grid_ov_sent_word": {
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! sending",
@@ -31564,8 +31664,8 @@
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_stations_disp')|0]#! gebaut"
  },
  "te_grid_ov_stations_tt": {
-  "en": "#b Stations#!\\nThe country's $building_grid_transfer_station$s: #v [Country.MakeScope.ScriptValue('te_grid_tab_stations_disp')|0]#! built, #v [Country.MakeScope.ScriptValue('te_grid_tab_on_grid_disp')|0]#! of them on a [concept_power_grid] at the last monthly balancing, and #v [Country.MakeScope.ScriptValue('te_grid_tab_queued_disp')|0]#! being built. A station joins its grid at the first balancing after it is built.",
-  "de": "#b Stationen#!\\nDie $building_grid_transfer_station$en des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_stations_disp')|0]#! gebaut, #v [Country.MakeScope.ScriptValue('te_grid_tab_on_grid_disp')|0]#! davon beim letzten monatlichen Abgleich an einem [concept_power_grid] und #v [Country.MakeScope.ScriptValue('te_grid_tab_queued_disp')|0]#! im Bau. Eine Station schließt sich ihrem Netz beim ersten Abgleich nach ihrem Bau an."
+  "en": "#b Stations#!\\nThe country's $building_grid_transfer_station$s.\\nBuilt: #v [Country.MakeScope.ScriptValue('te_grid_tab_stations_disp')|0]#!\\nOn a [concept_power_grid] at the last monthly balancing: #v [Country.MakeScope.ScriptValue('te_grid_tab_on_grid_disp')|0]#!\\nUnder construction: #v [Country.MakeScope.ScriptValue('te_grid_tab_queued_disp')|0]#!\\nA new station joins its grid at the first balancing after it is finished.",
+  "de": "#b Stationen#!\\nDie $building_grid_transfer_station$en des Landes.\\nGebaut: #v [Country.MakeScope.ScriptValue('te_grid_tab_stations_disp')|0]#!\\nBeim letzten monatlichen Abgleich an einem [concept_power_grid]: #v [Country.MakeScope.ScriptValue('te_grid_tab_on_grid_disp')|0]#!\\nIm Bau: #v [Country.MakeScope.ScriptValue('te_grid_tab_queued_disp')|0]#!\\nEine neue Station schließt sich ihrem Netz beim ersten Abgleich nach ihrer Fertigstellung an."
  },
  "te_grid_ov_stations_word": {
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_on_grid_disp')|0]#! on a grid",
@@ -31576,16 +31676,16 @@
   "de": "Durchfluss"
  },
  "te_grid_st_col_flow_tt": {
-  "en": "#b Flow#!\\nThe $electricity$ a sending station sends a week, or a receiving one delivers after losses.",
-  "de": "#b Durchfluss#!\\nDie $electricity$, die eine sendende Station pro Woche sendet oder eine empfangende nach Verlusten liefert."
+  "en": "#b Flow#!\\nThe $electricity$ each station moves a week: what a sending station sends, or what a receiving station delivers after losses.",
+  "de": "#b Durchfluss#!\\nDie $electricity$, die jede Station pro Woche bewegt: was eine sendende Station sendet oder eine empfangende nach Verlusten liefert."
  },
  "te_grid_st_col_grid": {
   "en": "Grid",
   "de": "Netz"
  },
  "te_grid_st_col_grid_tt": {
-  "en": "#b Grid#!\\nThe station's grid, named for its hub, its largest producer of $electricity$.",
-  "de": "#b Netz#!\\nDas Netz der Station, nach seinem Knoten benannt, seinem größten Erzeuger von $electricity$."
+  "en": "#b Grid#!\\nThe grid the station is on, named for its hub: the state on it that produces the most $electricity$.",
+  "de": "#b Netz#!\\nDas Netz, in dem die Station liegt, nach seinem Knoten benannt: dem Staat darin, der die meiste $electricity$ erzeugt."
  },
  "te_grid_st_col_mode": {
   "en": "Mode",
@@ -31596,8 +31696,8 @@
   "de": "Personal"
  },
  "te_grid_st_col_staff_tt": {
-  "en": "#b Staff#!\\nHow fully each station is staffed. A thinly staffed station is asked for more, down to a fifth staffed; one with no staff moves nothing until it hires.",
-  "de": "#b Personal#!\\nWie vollständig jede Station besetzt ist. Von einer dünn besetzten Station wird mehr verlangt, bis hinunter zu einem Fünftel Besetzung; eine ohne Personal bewegt nichts, bis sie Personal einstellt."
+  "en": "#b Staff#!\\nHow fully each station is staffed. A station moves power in proportion to its staff, so the grid orders a short-staffed one to move more to make up the gap, as far down as a fifth staffed. A station with no staff moves nothing until it hires.",
+  "de": "#b Personal#!\\nWie vollständig jede Station besetzt ist. Eine Station bewegt Strom im Verhältnis zu ihrem Personal, daher muss eine knapp besetzte vom Netz mehr bewegen, um die Lücke auszugleichen, bis hinunter zu einer Besetzung von einem Fünftel. Eine Station ohne Personal bewegt nichts, bis sie Personal einstellt."
  },
  "te_grid_st_col_state": {
   "en": "State",
@@ -31612,8 +31712,8 @@
   "de": "Keine"
  },
  "te_grid_st_staff_tt": {
-  "en": "#b Staff#!\\nThis station is #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#! staffed. A thinly staffed station is asked for more, down to a fifth staffed; one with no staff moves nothing until it hires.",
-  "de": "#b Personal#!\\nDiese Station ist zu #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#! besetzt. Von einer dünn besetzten Station wird mehr verlangt, bis hinunter zu einem Fünftel Besetzung; eine ohne Personal bewegt nichts, bis sie Personal einstellt."
+  "en": "#b Staff#!\\nThis station is #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#! staffed. A station moves power in proportion to its staff, so the grid orders a short-staffed one to move more to make up the gap, as far down as a fifth staffed. A station with no staff moves nothing until it hires.",
+  "de": "#b Personal#!\\nDiese Station ist zu #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#! besetzt. Eine Station bewegt Strom im Verhältnis zu ihrem Personal, daher muss eine knapp besetzte vom Netz mehr bewegen, um die Lücke auszugleichen, bis hinunter zu einer Besetzung von einem Fünftel. Eine Station ohne Personal bewegt nichts, bis sie Personal einstellt."
  },
  "te_grid_station_adjacent_tt": {
   "en": "Borders a state of ours with a $building_grid_transfer_station$, or would be our first in this market area",
@@ -31867,6 +31967,10 @@
   "en": "#b Show on the Map#!\\nOpens the Map Room on grandeur, each state colored by its monuments'. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei der Grandeur, jeder Staat nach der Grandeur seiner Monumente eingefärbt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_grid_button_tt": {
+  "en": "#b Show on the Map#!\\nOpens the Map Room on the power grids, each grid in a color of its own. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
+  "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum mit den Stromnetzen, jedes Netz in einer eigenen Farbe. Die Karte erscheint, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite blendet sie aus, sodass die ganze Karte sichtbar ist."
+ },
  "te_jmap_gw_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on emissions, each state's share of the world's. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Emissionen, dem Anteil jedes Staates an denen der Welt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
@@ -31874,6 +31978,10 @@
  "te_jmap_nuclear_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on nuclear weapons: the world's nuclear powers, and your deterrent's hosts, umbrella and guarantees. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Nuklearwaffen: die Nuklearmächte der Welt sowie die Gastländer, der Schirm und die Garantien Ihrer Abschreckung. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
+ },
+ "te_jmap_pick_armed_forces": {
+  "en": "Armed Forces",
+  "de": "Streitkräfte"
  },
  "te_jmap_pick_base_comfort": {
   "en": "Base Comfort",
@@ -31883,9 +31991,17 @@
   "en": "Birth Rate",
   "de": "Geburtsrate"
  },
+ "te_jmap_pick_city_rank": {
+  "en": "City Rank",
+  "de": "Stadtrang"
+ },
  "te_jmap_pick_colonies": {
   "en": "Colonies",
   "de": "Kolonien"
+ },
+ "te_jmap_pick_company_hqs": {
+  "en": "Company HQs",
+  "de": "Unternehmenshauptsitze"
  },
  "te_jmap_pick_crowding": {
   "en": "Crowding Penalty",
@@ -31907,9 +32023,17 @@
   "en": "Emissions",
   "de": "Emissionen"
  },
+ "te_jmap_pick_family_planning": {
+  "en": "Family Planning",
+  "de": "Familienplanung"
+ },
  "te_jmap_pick_fertility": {
   "en": "Fertility",
   "de": "Fruchtbarkeit"
+ },
+ "te_jmap_pick_fighting_age_men": {
+  "en": "Fighting-Age Men",
+  "de": "Wehrfähige Männer"
  },
  "te_jmap_pick_gdp_per_capita": {
   "en": "GDP per Capita",
@@ -31922,6 +32046,10 @@
  "te_jmap_pick_grandeur": {
   "en": "Grandeur",
   "de": "Grandeur"
+ },
+ "te_jmap_pick_health_care": {
+  "en": "Health Care",
+  "de": "Gesundheitsversorgung"
  },
  "te_jmap_pick_infant_mortality": {
   "en": "Infant Mortality",
@@ -31963,9 +32091,21 @@
   "en": "Aged 65 and Over",
   "de": "65 und älter"
  },
+ "te_jmap_pick_ownership": {
+  "en": "Ownership",
+  "de": "Eigentum"
+ },
  "te_jmap_pick_political_models": {
   "en": "Political Models",
   "de": "Politische Modelle"
+ },
+ "te_jmap_pick_population_growth": {
+  "en": "Population Growth",
+  "de": "Bevölkerungswachstum"
+ },
+ "te_jmap_pick_power_grids": {
+  "en": "Power Grids",
+  "de": "Stromnetze"
  },
  "te_jmap_pick_sex_balance": {
   "en": "Sex Balance",
@@ -31986,6 +32126,10 @@
  "te_jmap_pick_urban_share": {
   "en": "Urban People",
   "de": "Stadtbevölkerung"
+ },
+ "te_jmap_pick_war_dead": {
+  "en": "War Dead",
+  "de": "Kriegstote"
  },
  "te_jmap_room_pick_heading": {
   "en": "#b Show on the map#!",
@@ -32099,6 +32243,18 @@
   "en": "#b [THIS.GetState.GetOwner.GetName]#!\\nNo political model yet: every country's is read at the next census of models.",
   "de": "#b [THIS.GetState.GetOwner.GetName]#!\\nNoch kein politisches Modell: Das Modell jedes Landes wird bei der nächsten Erhebung der Modelle ausgelesen."
  },
+ "te_jmap_tt_city_ranked": {
+  "en": "#b [THIS.GetState.GetName]#!\\nCity rank: #v [THIS.GetState.MakeScope.ScriptValue('city_size_rank')|0]#! in the world, below the 20 largest, whose cities draw tourists",
+  "de": "#b [THIS.GetState.GetName]#!\\nStadtrang: #v [THIS.GetState.MakeScope.ScriptValue('city_size_rank')|0]#! weltweit, unter den 20 größten, deren Städte Touristen anziehen"
+ },
+ "te_jmap_tt_city_top": {
+  "en": "#b [THIS.GetState.GetName]#!\\nCity rank: #v [THIS.GetState.MakeScope.ScriptValue('city_size_rank')|0]#! in the world\\n$concept_tourism_cities$: [THIS.GetState.MakeScope.ScriptValue('tourism_bonus_from_urban_centers')|+=0%] tourism output",
+  "de": "#b [THIS.GetState.GetName]#!\\nStadtrang: #v [THIS.GetState.MakeScope.ScriptValue('city_size_rank')|0]#! weltweit\\n$concept_tourism_cities$: [THIS.GetState.MakeScope.ScriptValue('tourism_bonus_from_urban_centers')|+=0%] Tourismusertrag"
+ },
+ "te_jmap_tt_city_unranked": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNot among the world's 501 largest cities.",
+  "de": "#b [THIS.GetState.GetName]#!\\nNicht unter den 501 größten Städten der Welt."
+ },
  "te_jmap_tt_crowding": {
   "en": "#b [THIS.GetState.GetName]#!\\n$concept_migration_crowding$: #R -[THIS.GetState.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#! migration attraction\\n#v [THIS.GetState.GetPopulationSize|K]#! people against a threshold of #v [THIS.GetState.MakeScope.ScriptValue('migration_crowding_threshold_pop')|K]#!",
   "de": "#b [THIS.GetState.GetName]#!\\n$concept_migration_crowding$: #R -[THIS.GetState.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#! Migrationsanziehung\\n#v [THIS.GetState.GetPopulationSize|K]#! Menschen bei einer Schwelle von #v [THIS.GetState.MakeScope.ScriptValue('migration_crowding_threshold_pop')|K]#!"
@@ -32127,6 +32283,10 @@
   "en": "#b [THIS.GetState.GetName]#!\\n$concept_inheritance_concentration$: #v [THIS.GetState.MakeScope.Var('te_dg_wc').GetValue|0]#!, heading for #v [THIS.GetState.MakeScope.ScriptValue('te_demog_wc_target')|0]#!",
   "de": "#b [THIS.GetState.GetName]#!\\n$concept_inheritance_concentration$: #v [THIS.GetState.MakeScope.Var('te_dg_wc').GetValue|0]#!, mit Kurs auf #v [THIS.GetState.MakeScope.ScriptValue('te_demog_wc_target')|0]#!"
  },
+ "te_jmap_tt_fam": {
+  "en": "#b [THIS.GetState.GetName]#!\\nMen aged 20 to 39: #v [THIS.GetState.MakeScope.Var('te_dg_fam').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_fam_men_share')|%0]#! of its men and #v [THIS.GetState.MakeScope.ScriptValue('te_demog_fam_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nMänner im Alter von 20 bis 39: #v [THIS.GetState.MakeScope.Var('te_dg_fam').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_fam_men_share')|%0]#! seiner Männer und #v [THIS.GetState.MakeScope.ScriptValue('te_demog_fam_share')|%1]#! seiner Einwohner"
+ },
  "te_jmap_tt_fertility": {
   "en": "#b [THIS.GetState.GetName]#!\\nFertility: #v [THIS.GetState.MakeScope.Var('te_dg_tfr').GetValue|2]#! children a woman (replacement is 2.1)",
   "de": "#b [THIS.GetState.GetName]#!\\nFruchtbarkeit: #v [THIS.GetState.MakeScope.Var('te_dg_tfr').GetValue|2]#! Kinder je Frau (Bestandserhaltung liegt bei 2,1)"
@@ -32143,6 +32303,26 @@
   "en": "#b [THIS.GetState.GetName]#!\\nNo grand monument.",
   "de": "#b [THIS.GetState.GetName]#!\\nKein Großes Monument."
  },
+ "te_jmap_tt_grid": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOn the grid around #v [THIS.GetState.MakeScope.Var('te_grid_hub').GetState.GetName]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! stations.",
+  "de": "#b [THIS.GetState.GetName]#!\\nIm Netz um #v [THIS.GetState.MakeScope.Var('te_grid_hub').GetState.GetName]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Stationen."
+ },
+ "te_jmap_tt_grid_hub": {
+  "en": "#b [THIS.GetState.GetName]#!\\nThe hub of its grid, its largest producer of $electricity$: #v [THIS.GetState.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! stations.",
+  "de": "#b [THIS.GetState.GetName]#!\\nDer Knoten seines Netzes, sein größter Erzeuger von $electricity$: #v [THIS.GetState.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Stationen."
+ },
+ "te_jmap_tt_grid_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo $building_grid_transfer_station$.",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine $building_grid_transfer_station$."
+ },
+ "te_jmap_tt_grid_off": {
+  "en": "#b [THIS.GetState.GetName]#!\\nA $building_grid_transfer_station$ on no grid this month: offline, cut off, or with no other station to join.",
+  "de": "#b [THIS.GetState.GetName]#!\\nEine $building_grid_transfer_station$ in keinem Netz diesen Monat: offline, abgeschnitten oder ohne andere Station zum Anschließen."
+ },
+ "te_jmap_tt_growth": {
+  "en": "#b [THIS.GetState.GetName]#!\\nPopulation growth: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_pop_growth')|+1]#! per 1,000 people over the last year (#v [THIS.GetState.MakeScope.Var('te_dg_walk_pop').GetValue|K]#! now, #v [THIS.GetState.MakeScope.Var('te_dg_walk_pop_prev').GetValue|K]#! a year before)",
+  "de": "#b [THIS.GetState.GetName]#!\\nBevölkerungswachstum: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_pop_growth')|+1]#! pro 1.000 Einwohner im letzten Jahr (#v [THIS.GetState.MakeScope.Var('te_dg_walk_pop').GetValue|K]#! jetzt, #v [THIS.GetState.MakeScope.Var('te_dg_walk_pop_prev').GetValue|K]#! ein Jahr zuvor)"
+ },
  "te_jmap_tt_gw": {
   "en": "#b [THIS.GetState.GetName]#!\\nEmissions last year: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_disp_emis')|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_share')|%2]#! of the world's",
   "de": "#b [THIS.GetState.GetName]#!\\nEmissionen im Vorjahr: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_disp_emis')|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_share')|%2]#! der weltweiten"
@@ -32155,6 +32335,30 @@
   "en": "#b [THIS.GetState.GetName]#!\\nTakes more greenhouse gas out of the air than it puts in: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_disp_emis')|K]#! last year",
   "de": "#b [THIS.GetState.GetName]#!\\nEntzieht der Luft mehr Treibhausgas, als es ausstößt: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_gw_disp_emis')|K]#! im Vorjahr"
  },
+ "te_jmap_tt_health": {
+  "en": "#b [THIS.GetState.GetName]#!\\n$concept_health_care_access$: #v [THIS.GetState.MakeScope.Var('te_dg_acc').GetValue|%0]#! of its people\\nWhere it is heading: #v [THIS.GetState.MakeScope.ScriptValue('te_demog_access_target')|%0]#!\\nMothers who die in childbirth: #v [THIS.GetState.MakeScope.Var('te_dg_m_mat').GetValue|0]#! in 100,000 births",
+  "de": "#b [THIS.GetState.GetName]#!\\n$concept_health_care_access$: #v [THIS.GetState.MakeScope.Var('te_dg_acc').GetValue|%0]#! seiner Einwohner\\nWohin es sich entwickelt: #v [THIS.GetState.MakeScope.ScriptValue('te_demog_access_target')|%0]#!\\nMütter, die bei der Geburt sterben: #v [THIS.GetState.MakeScope.Var('te_dg_m_mat').GetValue|0]#! auf 100.000 Geburten"
+ },
+ "te_jmap_tt_health_only": {
+  "en": "#b [THIS.GetState.GetName]#!\\n$concept_health_care_access$: #v [THIS.GetState.MakeScope.Var('te_dg_acc').GetValue|%0]#! of its people\\nWhere it is heading: #v [THIS.GetState.MakeScope.ScriptValue('te_demog_access_target')|%0]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\n$concept_health_care_access$: #v [THIS.GetState.MakeScope.Var('te_dg_acc').GetValue|%0]#! seiner Einwohner\\nWohin es sich entwickelt: #v [THIS.GetState.MakeScope.ScriptValue('te_demog_access_target')|%0]#!"
+ },
+ "te_jmap_tt_hq": {
+  "en": "#b [THIS.GetState.GetName]#!\\nCompany headquarters: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\\nTheir weekly profit: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\nUnternehmenshauptsitze: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\\nIhr wöchentlicher Gewinn: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!"
+ },
+ "te_jmap_tt_hq_loss": {
+  "en": "#b [THIS.GetState.GetName]#!\\nCompany headquarters: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\\nTheir weekly profit: #R @money![THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\nUnternehmenshauptsitze: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\\nIhr wöchentlicher Gewinn: #R @money![THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!"
+ },
+ "te_jmap_tt_hq_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo company headquarters.",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine Unternehmenshauptsitze."
+ },
+ "te_jmap_tt_hq_regional": {
+  "en": "Regional headquarters, in the stripes: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!",
+  "de": "Regionale Hauptsitze, in den Streifen: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!"
+ },
  "te_jmap_tt_infant_mortality": {
   "en": "#b [THIS.GetState.GetName]#!\\nInfant mortality: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! deaths in the first year per 1,000 births",
   "de": "#b [THIS.GetState.GetName]#!\\nSäuglingssterblichkeit: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! Todesfälle im ersten Lebensjahr pro 1.000 Geburten"
@@ -32166,6 +32370,10 @@
  "te_jmap_tt_life_expectancy_over": {
   "en": "#b [THIS.GetState.GetName]#!\\nLife expectancy: $te_demog_ov_e0_over$",
   "de": "#b [THIS.GetState.GetName]#!\\nLebenserwartung: $te_demog_ov_e0_over$"
+ },
+ "te_jmap_tt_means": {
+  "en": "#b [THIS.GetState.GetName]#!\\nMeans to plan a family: #v [THIS.GetState.MakeScope.Var('te_dg_means').GetValue|%0]#!\\nWomen marry at about #v [THIS.GetState.MakeScope.ScriptValue('te_demog_marriage_age')|0]#!, and #v [THIS.GetState.MakeScope.ScriptValue('te_demog_pr_share_bs')|%0]#! of families space births by custom",
+  "de": "#b [THIS.GetState.GetName]#!\\nMittel zur Familienplanung: #v [THIS.GetState.MakeScope.Var('te_dg_means').GetValue|%0]#!\\nFrauen heiraten mit etwa #v [THIS.GetState.MakeScope.ScriptValue('te_demog_marriage_age')|0]#!, und #v [THIS.GetState.MakeScope.ScriptValue('te_demog_pr_share_bs')|%0]#! der Familien legen Geburten aus Brauch auseinander"
  },
  "te_jmap_tt_median_age": {
   "en": "#b [THIS.GetState.GetName]#!\\nMedian age: #v [THIS.GetState.MakeScope.Var('te_dg_median').GetValue|1]#! years",
@@ -32231,6 +32439,14 @@
   "en": "#b [THIS.GetState.GetName]#!\\nAged 65 and over: #v [THIS.GetState.MakeScope.Var('te_dg_old_share').GetValue|%0]#!",
   "de": "#b [THIS.GetState.GetName]#!\\n65 und älter: #v [THIS.GetState.MakeScope.Var('te_dg_old_share').GetValue|%0]#!"
  },
+ "te_jmap_tt_own": {
+  "en": "#b [THIS.GetState.GetName]#!\\nWho holds its capital: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_priv_share')|%0]#! private owners, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_self_share')|%0]#! its own workers, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_ctry_share')|%0]#! the state",
+  "de": "#b [THIS.GetState.GetName]#!\\nWer sein Kapital hält: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_priv_share')|%0]#! private Besitzer, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_self_share')|%0]#! die eigenen Arbeiter, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_ctry_share')|%0]#! der Staat"
+ },
+ "te_jmap_tt_own_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo owned buildings to count.",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine Gebäude in Besitz, die zu zählen wären."
+ },
  "te_jmap_tt_seabed_arctic": {
   "en": "#b [THIS.GetState.GetName]#!\\nOcean basin: #v $te_seabed_basin_arctic$#!",
   "de": "#b [THIS.GetState.GetName]#!\\nMeeresbecken: #v $te_seabed_basin_arctic$#!"
@@ -32262,6 +32478,14 @@
  "te_jmap_tt_sex_balance": {
   "en": "#b [THIS.GetState.GetName]#!\\nSex balance: #v [THIS.GetState.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! men per 100 women aged 20 to 59",
   "de": "#b [THIS.GetState.GetName]#!\\nGeschlechterverhältnis: #v [THIS.GetState.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! Männer je 100 Frauen im Alter von 20 bis 59"
+ },
+ "te_jmap_tt_soldiers": {
+  "en": "#b [THIS.GetState.GetName]#!\\nSoldiers and Officers: #v [THIS.GetState.MakeScope.Var('te_dg_soldiers').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_soldiers_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nSoldaten und Offiziere: #v [THIS.GetState.MakeScope.Var('te_dg_soldiers').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_soldiers_share')|%1]#! seiner Einwohner"
+ },
+ "te_jmap_tt_soldiers_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo Soldiers or Officers.",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine Soldaten oder Offiziere."
  },
  "te_jmap_tt_tourism_appeal": {
   "en": "#b [THIS.GetState.GetName]#!\\n$concept_tourism_base_appeal$: [THIS.GetState.MakeScope.Var('te_tourism_base_appeal').GetValue|+=0%] tourism output",
@@ -32310,6 +32534,14 @@
  "te_jmap_tt_urban_share": {
   "en": "#b [THIS.GetState.GetName]#!\\nUrban people: #v [THIS.GetState.MakeScope.Var('te_dg_urban_share').GetValue|%0]#!",
   "de": "#b [THIS.GetState.GetName]#!\\nStadtbevölkerung: #v [THIS.GetState.MakeScope.Var('te_dg_urban_share').GetValue|%0]#!"
+ },
+ "te_jmap_tt_war_dead": {
+  "en": "#b [THIS.GetState.GetName]#!\\nWar dead last year: #v [THIS.GetState.MakeScope.Var('te_dg_dc_war').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of its deaths",
+  "de": "#b [THIS.GetState.GetName]#!\\nKriegstote im letzten Jahr: #v [THIS.GetState.MakeScope.Var('te_dg_dc_war').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! seiner Todesfälle"
+ },
+ "te_jmap_tt_war_dead_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo war dead last year.",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine Kriegstote im letzten Jahr."
  },
  "te_jmap_un_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the United Nations: its members, the Security Council and the missions at work. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
@@ -32788,12 +33020,12 @@
   "de": "Seit einem halben Jahr liest Ihre Zentralbank ihren eigenen Zinssatz als #b locker#! — niedriger, als sie es der Wirtschaft zutraut. Billiges Geld ist der Freund des Schuldners, und jeder, der eher schuldet als besitzt, hat es bemerkt: Industrielle, die ihr Betriebskapital revolvieren, verschuldete Bauern und die Arbeiter, deren Arbeitsplätze von beidem abhängen, günstig zu leihen. Auch diejenigen, deren Einkommen ein Anspruch auf fremde Schulden ist, haben es bemerkt, und sie sind nicht erfreut — Mieten, Hypothekenzinsen und die Familienersparnisse kaufen alle weniger als zuvor. Das spiegelt die Haltung wider, wie die Bank sie #b liest#!, nicht die wahren Kosten des Geldes, die niemand kennt. Es verblasst, sobald die Bank zu einer neutralen Einstellung zurückkehrt — binnen sechs Monaten, und früher, je kürzer die Haltung andauerte — und endet sofort, wenn sie stattdessen strafft."
  },
  "te_mon_stance_politics_tight": {
-  "en": "Dear Money Politics",
-  "de": "Politik des teuren Geldes"
+  "en": "Tight Money Politics",
+  "de": "Politik des knappen Geldes"
  },
  "te_mon_stance_politics_tight_desc": {
-  "en": "For half a year now your central bank has read its own rate as #b tight#! — above what it believes the economy can bear. Dear money rewards whoever holds the paper: landowners living off rents and mortgage interest, and shopkeepers whose savings are the family's capital. Everyone who owes pays for it. The industrialist rolls over working capital at the higher rate, the mortgaged farmer pays it out of the same harvest, and the jobs that depend on both get scarcer. This reflects the stance as the bank #b reads#! it, not the true cost of money, which nobody knows. It fades once the bank returns to a neutral setting — within six months, and sooner the shorter the stance ran — and lifts at once if it starts easing instead.",
-  "de": "Seit einem halben Jahr liest Ihre Zentralbank ihren eigenen Zinssatz als #b straff#! — höher, als sie es der Wirtschaft zutraut. Teures Geld belohnt, wer das Papier hält: Grundbesitzer, die von Mieten und Hypothekenzinsen leben, und Ladenbesitzer, deren Ersparnisse das Kapital der Familie sind. Jeder, der Schulden hat, zahlt dafür. Der Industrielle revolviert sein Betriebskapital zum höheren Satz, der verschuldete Bauer zahlt ihn aus derselben Ernte, und die Arbeitsplätze, die von beidem abhängen, werden knapper. Das spiegelt die Haltung wider, wie die Bank sie #b liest#!, nicht die wahren Kosten des Geldes, die niemand kennt. Es verblasst, sobald die Bank zu einer neutralen Einstellung zurückkehrt — binnen sechs Monaten, und früher, je kürzer die Haltung andauerte — und endet sofort, wenn sie stattdessen zu lockern beginnt."
+  "en": "For half a year now your central bank has read its own rate as #b tight#! — above what it believes the economy can bear. Tight money rewards whoever holds the paper: landowners living off rents and mortgage interest, and shopkeepers whose savings are the family's capital. Everyone who owes pays for it. The industrialist rolls over working capital at the higher rate, the mortgaged farmer pays it out of the same harvest, and the jobs that depend on both get scarcer. This reflects the stance as the bank #b reads#! it, not the true cost of money, which nobody knows. It fades once the bank returns to a neutral setting — within six months, and sooner the shorter the stance ran — and lifts at once if it starts easing instead.",
+  "de": "Seit einem halben Jahr liest Ihre Zentralbank ihren eigenen Zinssatz als #b straff#! — höher, als sie es der Wirtschaft zutraut. Knappes Geld belohnt, wer das Papier hält: Grundbesitzer, die von Mieten und Hypothekenzinsen leben, und Ladenbesitzer, deren Ersparnisse das Kapital der Familie sind. Jeder, der Schulden hat, zahlt dafür. Der Industrielle revolviert sein Betriebskapital zum höheren Satz, der verschuldete Bauer zahlt ihn aus derselben Ernte, und die Arbeitsplätze, die von beidem abhängen, werden knapper. Das spiegelt die Haltung wider, wie die Bank sie #b liest#!, nicht die wahren Kosten des Geldes, die niemand kennt. Es verblasst, sobald die Bank zu einer neutralen Einstellung zurückkehrt — binnen sechs Monaten, und früher, je kürzer die Haltung andauerte — und endet sofort, wenn sie stattdessen zu lockern beginnt."
  },
  "te_mon_union_adopt_effect_tt": {
   "en": "You #b adopt your bloc leader's currency#!. Your policy rate becomes theirs, your exchange rate jumps to theirs, you can no longer monetize your deficit, and you gain #G +5%#! export and import advantage. Your inflation, your cycle and your debts remain your own.",
@@ -36978,6 +37210,26 @@
  "war_goal_te_reunify_country_type_name": {
   "en": "Reunify the Nation",
   "de": "Die Nation wiedervereinigen"
+ },
+ "war_goal_te_seize_strait": {
+  "en": "Seize [WAR_GOAL_DRAFT.GetTargetState.GetCountry.GetFlagTextIcon] [WAR_GOAL_DRAFT.GetTargetState.GetName] Strait Shore",
+  "de": "[WAR_GOAL_DRAFT.GetTargetState.GetCountry.GetFlagTextIcon] Küste an der Meerenge von [WAR_GOAL_DRAFT.GetTargetState.GetName] einnehmen"
+ },
+ "war_goal_te_seize_strait_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] cedes the [concept_strait] shore of [WAR_GOAL_DRAFT.GetTargetState.GetName] to [WAR_GOAL_DRAFT.GetHolder.GetName] and keeps the rest of the [concept_state].",
+  "de": "[WAR_GOAL_DRAFT.GetTarget.GetName] tritt die [concept_strait]-Küste von [WAR_GOAL_DRAFT.GetTargetState.GetName] an [WAR_GOAL_DRAFT.GetHolder.GetName] ab und behält den Rest des [concept_state]."
+ },
+ "war_goal_te_seize_strait_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by forcing [WAR_GOAL_DRAFT.GetWarGoalStakeholder.GetName] to cede them the [concept_strait] shore of [WAR_GOAL_DRAFT.GetTargetState.GetName].",
+  "de": "Versuchen, [WAR_GOAL_DRAFT.GetHolder.GetName] zu überzeugen, sich unserer Seite anzuschließen, indem [WAR_GOAL_DRAFT.GetWarGoalStakeholder.GetName] gezwungen wird, die [concept_strait]-Küste von [WAR_GOAL_DRAFT.GetTargetState.GetName] abzutreten."
+ },
+ "war_goal_te_seize_strait_type_desc": {
+  "en": "Take only the [concept_strait] shore of an enemy [concept_state] and leave the rest of the state to its owner. Holding a shore gives us [concept_strait_control] of that strait. A canal can be seized only once it is built. Costs a quarter of the #b [concept_infamy]#! of conquering the whole state, or the share of its provinces taken if that is more.",
+  "de": "Nur die [concept_strait]-Küste eines feindlichen [concept_state] nehmen und den Rest des Staates seinem Besitzer lassen. Eine gehaltene Küste gibt uns [concept_strait_control] über diese Meerenge. Ein Kanal kann erst eingenommen werden, wenn er gebaut ist. Kostet ein Viertel der #b [concept_infamy]#! der Eroberung des ganzen Staates oder den Anteil der genommenen Provinzen, falls der höher ist."
+ },
+ "war_goal_te_seize_strait_type_name": {
+  "en": "Seize Strait",
+  "de": "Meerenge einnehmen"
  },
  "war_goal_te_un_mandate_restore_state": {
   "en": "Recover [WAR_GOAL_DRAFT.GetTargetState.GetName] under UN mandate",

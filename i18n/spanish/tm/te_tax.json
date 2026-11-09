@@ -3,6 +3,10 @@
   "en": "Tax Code",
   "es": "Código fiscal"
  },
+ "je_tax_code_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the $rule_te_tax_code_rule$ game rule was switched to Disabled, and the code with it",
+  "es": "La $concept_journal_entry$ terminó cuando la regla de juego $rule_te_tax_code_rule$ se cambió a Desactivado, y el código con ella"
+ },
  "je_tax_code_reason_full": {
   "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
   "es": "Todos los impuestos se fijan por ley. Un tipo del [concept_tax_code|l] se mantiene hasta que un [concept_tax_bill|l] lo cambia o llega su expiración. Una reforma empieza como borrador, se presenta como proyecto de ley, se aprueba cuando suficientes [Concept('concept_interest_group','$concept_interest_groups|q$')|l] se comprometen con él, y entra en vigor en su [concept_tax_commencement|l]."
