@@ -27,6 +27,10 @@
   "en": "Cooperative Finance Dashboard",
   "de": "Genossenschaftliches Finanz-Dashboard"
  },
+ "je_banking_cycle_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Banking System game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Bankensystem ausgeschaltet wurde"
+ },
  "je_banking_cycle_reason_command_economy": {
   "en": "In a Command Economy the [concept_banking_cycle] is a logistics gauge: [concept_banking_momentum] and [concept_bubble_pressure] track how well supply chains keep in step and how strained the administration is, not investor confidence.",
   "de": "In einer Planwirtschaft ist der [concept_banking_cycle] eine Messgröße für die Logistik: [concept_banking_momentum] und [concept_bubble_pressure] zeigen, wie gut die Lieferketten im Takt bleiben und wie angespannt die Verwaltung ist, nicht das Anlegervertrauen."
@@ -484,8 +488,8 @@
   "de": "Der $concept_journal_entry$ endete mit der #b Niederlage#! der Bewegung"
  },
  "je_civil_rights_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended with no discriminated community left to campaign",
-  "de": "Der $concept_journal_entry$ endete, ohne dass eine diskriminierte Gemeinschaft übrig war, die noch Kampagne führen könnte"
+  "en": "The $concept_journal_entry$ ended with no discriminated community left to campaign, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete, ohne dass eine diskriminierte Gemeinschaft übrig war, die noch Kampagne führen könnte, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_civil_rights_months_line": {
   "en": "\\n#bold Months run:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]",
@@ -496,8 +500,8 @@
   "de": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold Wenn sie jetzt siegt:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold Wenn sie jetzt zusammenbricht:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]"
  },
  "je_civil_rights_reason": {
-  "en": "Discriminated communities are demanding equal treatment under the law.",
-  "de": "Diskriminierte Gemeinschaften fordern gleiche Behandlung vor dem Gesetz."
+  "en": "Discriminated communities are demanding equal treatment under the law. The movement wins when $civil_rights_support_bar_name$ reaches #v 100#! and collapses if it falls to #v 0#!. Hover the bar for what moves it each month: laws, technology, grievances, [Concept('concept_radical', 'radicals')] and the policy buttons.",
+  "de": "Diskriminierte Gemeinschaften fordern gleiche Behandlung vor dem Gesetz. Die Bewegung siegt, wenn $civil_rights_support_bar_name$ #v 100#! erreicht, und bricht zusammen, wenn sie auf #v 0#! fällt. Fahren Sie über die Leiste, um zu sehen, was sie jeden Monat bewegt: Gesetze, Technologie, Missstände, [Concept('concept_radical', 'Radikale')] und die Politik-Schaltflächen."
  },
  "je_civil_rights_status_active": {
   "en": "The movement is on the front page, and the cabinet is forced to take public positions.$je_civil_rights_progress_lines$",
@@ -914,6 +918,10 @@
  "je_colonial_empire_how_sub_stance": {
   "en": "Our Stance on Colonialism",
   "de": "Unsere Haltung zum Kolonialismus"
+ },
+ "je_colonial_empire_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Decolonization game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Dekolonisierung ausgeschaltet wurde"
  },
  "je_colonial_empire_invest_body_theirs": {
   "en": "Pour resources into developing [concept_infrastructure] and institutions in the colonial territories. Its weekly upkeep grows with the [concept_gdp] of the colonies.",
@@ -1787,6 +1795,10 @@
   "en": "Covert Warfare",
   "de": "Verdeckte Kriegsführung"
  },
+ "je_covert_warfare_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Covert Warfare game rule was switched off, and every operation with it",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Verdeckte Kriegsführung ausgeschaltet wurde, und mit ihm jede Operation"
+ },
  "je_covert_warfare_reason": {
   "en": "The covert battlefield is invisible but decisive. Our intelligence services wage shadow wars of subversion and sabotage, while our [concept_intelligence_capacity] protects us from foreign interference.",
   "de": "Das verdeckte Schlachtfeld ist unsichtbar, aber entscheidend. Unsere Geheimdienste führen Schattenkriege der Unterwanderung und Sabotage, während unsere [concept_intelligence_capacity] uns vor fremder Einmischung schützt."
@@ -1798,6 +1810,10 @@
  "je_create_new_religion_complete_conclusion_desc": {
   "en": "The $concept_journal_entry$ concluded with a #b new faith#! proclaimed",
   "de": "Der $concept_journal_entry$ endete mit der Verkündung eines #b neuen Glaubens#!"
+ },
+ "je_create_new_religion_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Custom Religion Allowed game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Benutzerdefinierte Religion erlaubt ausgeschaltet wurde"
  },
  "je_create_new_religion_reason": {
   "en": "Found a faith of our own in four steps: three ideologies, three traits for the Devout, a name and the tradition it grows from. Proclaiming it makes it the religion of the state, our ruler and our heir, converts a fifth of the capital's population and a tenth of every other incorporated state's, and exiles every Devout character.",
@@ -1823,6 +1839,10 @@
   "en": "Cultural Hegemony",
   "de": "Kulturelle Hegemonie"
  },
+ "je_cultural_hegemony_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Cultural Hegemony game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Kulturelle Hegemonie ausgeschaltet wurde"
+ },
  "je_cultural_hegemony_reason": {
   "en": "Our nation's arts, technology, and way of life project influence across the globe. The world watches, imitates, or resents our cultural dominance.",
   "de": "Die Kunst, Technologie und Lebensweise unserer Nation entfalten Einfluss auf der ganzen Welt. Die Welt beobachtet, ahmt nach oder verübelt uns unsere kulturelle Vorherrschaft."
@@ -1840,8 +1860,8 @@
   "de": "Der $concept_journal_entry$ endete mit einem #b Überwachungsstaat#!"
  },
  "je_digital_rights_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended without a government to settle it",
-  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können"
+  "en": "The $concept_journal_entry$ ended without a government to settle it, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_digital_rights_reason": {
   "en": "As digital surveillance becomes ubiquitous, citizens demand privacy protections. The state must balance security against liberty in the digital age.",
@@ -1928,8 +1948,8 @@
   "de": "Monumente"
  },
  "je_grand_monuments_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended with no #b $building_grand_monument$#! left in our hands",
-  "de": "Der $concept_journal_entry$ endete, ohne dass noch ein #b $building_grand_monument$#! in unserer Hand war"
+  "en": "The $concept_journal_entry$ ended with no #b $building_grand_monument$#! left in our hands, or with the Grand Monuments game rule switched off",
+  "de": "Der $concept_journal_entry$ endete, ohne dass noch ein #b $building_grand_monument$#! in unserer Hand war, oder mit ausgeschalteter Spielregel Große Monumente"
  },
  "je_grand_monuments_reason": {
   "en": "A monument says something about the government that raised it. While its crown, republic, revolution or leader still stands, it lends legitimacy; every monument that is not contested lends prestige, and each pleases the interest groups that share its message. When that falls, the next government must decide what to do with it. Everything here grows with [concept_grandeur].",
@@ -1952,8 +1972,8 @@
   "de": "Der $concept_journal_entry$ endete damit, dass unser Erbe #b volljährig#! ist"
  },
  "je_heir_education_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended with the #b monarchy#! abolished",
-  "de": "Der $concept_journal_entry$ endete mit der #b abgeschafften Monarchie#!"
+  "en": "The $concept_journal_entry$ ended with the #b monarchy#! abolished, or with the Heir Education game rule switched off",
+  "de": "Der $concept_journal_entry$ endete mit der #b abgeschafften Monarchie#! oder mit ausgeschalteter Spielregel Erbenerziehung"
  },
  "je_heir_education_reason": {
   "en": "Set up to three focuses for the [concept_heir], one of each kind. Each active focus has a monthly chance of advancing that area of study.\\n• #bold Skill:#! administrative, diplomatic or military; more study improves the odds of better aptitude traits\\n• #bold Ideology:#! progressive or conservative tutors shape the heir's political outlook\\n• #bold Faction:#! radical, moderate or regressive mentors influence the heir's [concept_interest_group] affiliation\\nThe results are settled when the heir comes of age. Sustained focus improves the odds but guarantees nothing.",
@@ -1992,8 +2012,8 @@
   "de": "Der $concept_journal_entry$ endete mit #b $law_human_purity$#!"
  },
  "je_human_augmentation_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended without a government to settle it",
-  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können"
+  "en": "The $concept_journal_entry$ ended without a government to settle it, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_human_augmentation_reason": {
   "en": "Augmentation technology forces society to confront fundamental questions about human identity. The divide between enhanced and natural citizens threatens social cohesion. Set the legal status of mechanical and biotechnological enhancement of the human body.",
@@ -2728,8 +2748,8 @@
   "de": "Der $concept_journal_entry$ endete damit, dass der Krise mit #b Bestrafung#! begegnet wurde"
  },
  "je_mental_health_crisis_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended without a government to answer it",
-  "de": "Der $concept_journal_entry$ endete ohne Regierung, die darauf hätte antworten können"
+  "en": "The $concept_journal_entry$ ended without a government to answer it, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete ohne Regierung, die darauf hätte antworten können, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_mental_health_crisis_reason": {
   "en": "Modern life has produced a mental health epidemic. Depression, anxiety, and addiction sweep through the population, demanding a response.",
@@ -2764,8 +2784,8 @@
   "de": "Der $concept_journal_entry$ endete mit #b $law_prescribed_form$#!"
  },
  "je_morphological_freedom_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended without a government to settle it",
-  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können"
+  "en": "The $concept_journal_entry$ ended without a government to settle it, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete ohne Regierung, die ihn hätte beilegen können, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_morphological_freedom_reason": {
   "en": "Clinics can now give a person a new face, a new skin or a different sex, and fur and a tail besides. Our citizens want to know whether they may have the work done at home, and what the law will make of them if they do.",
@@ -3156,8 +3176,8 @@
   "de": "Der $concept_journal_entry$ endete damit, dass die #b Knappheit#! hinter uns liegt"
  },
  "je_post_scarcity_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended without a government to see it through",
-  "de": "Der $concept_journal_entry$ endete ohne eine Regierung, die ihn zu Ende führen konnte"
+  "en": "The $concept_journal_entry$ ended without a government to see it through, or with the Social Movements game rule switched off",
+  "de": "Der $concept_journal_entry$ endete ohne eine Regierung, die ihn zu Ende führen konnte, oder mit ausgeschalteter Spielregel Soziale Bewegungen"
  },
  "je_post_scarcity_reason": {
   "en": "Automation and AI are making traditional labor obsolete. Society must decide what comes next as the old economic order crumbles.",
@@ -3282,6 +3302,10 @@
  "je_space_race_interstellar_results_status": {
   "en": "Our probe is en route to Alpha Centauri. At best speed, the journey will take five to six years. Electromagnetic transmissions must then cross 4.37 light-years back to Earth. We wait.",
   "de": "Unsere Sonde ist auf dem Weg nach Alpha Centauri. Bei bester Geschwindigkeit wird die Reise fünf bis sechs Jahre dauern. Elektromagnetische Übertragungen müssen dann 4,37 Lichtjahre zurück zur Erde überbrücken. Wir warten."
+ },
+ "je_space_race_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Space Race game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Wettlauf ins All ausgeschaltet wurde"
  },
  "je_space_race_mars_landing": {
   "en": "Mars Landing",
@@ -8352,8 +8376,8 @@
   "de": "#bold [concept_un_development_fund]:#! wir erhalten @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! pro Woche, in unseren [concept_investment_pool]."
  },
  "je_un_chamber_dev_fund_treasury": {
-  "en": "#bold [concept_un_development_fund]:#! we receive @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week, into our [concept_treasury]: our laws allow no investment pool, or we have no banking system yet.",
-  "de": "#bold [concept_un_development_fund]:#! wir erhalten @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! pro Woche, in unsere [concept_treasury]: Unsere Gesetze lassen keinen Investitionsfonds zu, oder wir haben noch kein Bankensystem."
+  "en": "#bold [concept_un_development_fund]:#! we receive @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week, into our [concept_treasury]: our laws allow no investment pool, or we have no banking system.",
+  "de": "#bold [concept_un_development_fund]:#! Wir erhalten @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! pro Woche in unsere [concept_treasury]: Unsere Gesetze erlauben keinen Investitionsfonds, oder wir haben noch kein Bankensystem."
  },
  "je_un_chamber_dev_fund_withholding": {
   "en": "#bold [concept_un_development_fund]:#! #R nothing while we withhold our dues#!, though we are below its line.",
@@ -12415,6 +12439,10 @@
   "en": "United Nations",
   "de": "Vereinte Nationen"
  },
+ "je_united_nations_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the United Nations game rule was switched off, and the organization with it",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Vereinte Nationen ausgeschaltet wurde, und die Organisation mit ihr"
+ },
  "je_united_nations_reason": {
   "en": "An intergovernmental organization promoting international cooperation. Its members gain diplomatic benefits that grow with [concept_un_authority], and the institution is as strong as the world's powers make it. How the UN Works, above, explains the rest.",
   "de": "Eine zwischenstaatliche Organisation zur Förderung internationaler Zusammenarbeit. Ihre Mitglieder erhalten diplomatische Vorteile, die mit der [concept_un_authority] wachsen, und die Institution ist so stark, wie die Mächte der Welt sie machen. „Wie die UN funktionieren“ oben erklärt den Rest."
@@ -12458,6 +12486,10 @@
  "je_world_war_ideology_nonaligned": {
   "en": "\\n#bold Our Ideology:#! Non-Aligned",
   "de": "\\n#bold Unsere Ideologie:#! Blockfrei"
+ },
+ "je_world_war_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the World War game rule was switched off",
+  "de": "Der $concept_journal_entry$ endete, als die Spielregel Weltkrieg ausgeschaltet wurde"
  },
  "je_world_war_reason": {
   "en": "Ideological tensions between the [Concept('concept_great_power', 'great powers')] are escalating. Democratic, fascist, and communist blocs eye one another with growing hostility. The world teeters on the brink of a conflict unlike any before. Pick a side, prepare, or try to stop it.",

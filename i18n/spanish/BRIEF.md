@@ -83,6 +83,8 @@ Write *de* and *a* before a name, never *del* or *al*: the name brings no articl
 
 `GetAdjective` gives the masculine singular, lowercase («francés», «británico»). The official Spanish places it after a masculine singular noun (*el estado [X.GetAdjective]*, *el gobierno [X.GetAdjective]*). Keep every `GetAdjective` call the English has (the checker counts them, and swapping one for `GetName` is rejected). Where the English attaches it to a feminine or plural noun, choose a masculine singular noun to carry it (*el sistema bancario [X.GetAdjective]*, *el mercado [X.GetAdjective]*) rather than letting it disagree.
 
+A `$key$` reference that inserts a name (a country tag such as `$CZH$`, a culture, a technology) gives the bare name, whose gender and number you can't know. Phrase so nothing has to agree with it: «Se ha investigado la tecnología $mass_media$» (not «$mass_media$ está investigado»: the name may be feminine or plural), «los colectivos de cultura $yankee$».
+
 ## Terminology
 
 The chunk header lists up to three glossaries. Follow them exactly:

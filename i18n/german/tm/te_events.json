@@ -16508,7 +16508,7 @@
   "de": "Ein neues Planungssystem frisst Überstunden, Fehler und Egos. Manager schielen auf die Bilanz; Arbeiter schielen auf den Ausgang. Wir können den Gewinnen nachjagen, den Schlag abfedern oder einen ganz anderen Handel versuchen."
  },
  "repeatable_events.30.d_robotics": {
-  "en": "Machines master the night shift. Output surges, but the rumble on the shop floor is not just from motors. Layoffs promise cheaper goods and dearer politics.",
+  "en": "Machines master the night shift. Output surges, but the rumble on the shop floor is not just from motors. Layoffs promise cheaper goods and costlier politics.",
   "de": "Maschinen beherrschen die Nachtschicht. Die Produktion schnellt in die Höhe, doch das Grollen in der Werkshalle kommt nicht nur von Motoren. Entlassungen versprechen billigere Waren und teurere Politik."
  },
  "repeatable_events.30.f": {
@@ -21767,6 +21767,22 @@
   "en": "Foreign Cyber-Espionage",
   "de": "Ausländische Cyberspionage"
  },
+ "te_culture_merge.1.a": {
+  "en": "One people, at last.",
+  "de": "Endlich ein Volk."
+ },
+ "te_culture_merge.1.d": {
+  "en": "In the [SCOPE.sCulture('te_cm_ev_part').GetName] homeland most people now call themselves [SCOPE.sCulture('te_cm_ev_result').GetName], and the last [SCOPE.sCulture('te_cm_ev_part').GetName] pops, at home and abroad, have followed them. The [SCOPE.sCulture('te_cm_ev_part').GetName] lands are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland as well, and [SCOPE.sCulture('te_cm_ev_part').GetName] stays a primary culture wherever it was one.",
+  "de": "Im Heimatland der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName] bezeichnen sich die meisten Menschen inzwischen als [SCOPE.sCulture('te_cm_ev_result').GetName], und auch die letzten Pops der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName], im Inland wie im Ausland, sind ihnen gefolgt. Auch die Länder der Kultur [SCOPE.sCulture('te_cm_ev_part').GetName] sind nun ein Heimatland der Kultur [SCOPE.sCulture('te_cm_ev_result').GetName], und [SCOPE.sCulture('te_cm_ev_part').GetName] bleibt überall dort eine Primärkultur, wo sie es war."
+ },
+ "te_culture_merge.1.f": {
+  "en": "\\\"When I was a boy, the schoolmaster rapped our knuckles for talking the way we talked at home. My grandson has never had his knuckles rapped. He has nothing left to be rapped for.\\\"\\n\\n\\\"The census clerk asked what we were. My father gave the old answer out of habit, and the clerk wrote down the new one without looking up. Nobody in the queue said a word. Most of them had already written it themselves.\\\"",
+  "de": "„Als ich ein Junge war, gab der Schulmeister uns Schläge auf die Finger, wenn wir so sprachen wie zu Hause. Mein Enkel hat nie Schläge auf die Finger bekommen. Es gibt nichts mehr, wofür man ihn schlagen könnte.“\\n\\n„Der Volkszählungsbeamte fragte, was wir seien. Mein Vater gab aus Gewohnheit die alte Antwort, und der Beamte schrieb die neue auf, ohne aufzusehen. Niemand in der Schlange sagte ein Wort. Die meisten hatten sie schon selbst hingeschrieben.“"
+ },
+ "te_culture_merge.1.t": {
+  "en": "From [SCOPE.sCulture('te_cm_ev_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]",
+  "de": "Von [SCOPE.sCulture('te_cm_ev_part').GetName] zu [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
  "te_debug_ch.1.a": {
   "en": "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running",
   "de": "A – Einrichten: Kulturministerium, Förderobergrenze 4, Förderung bei 2, Außenarbeit + Institute + Protektionismus laufen"
@@ -21810,6 +21826,38 @@
  "te_debug_ch.1.t": {
   "en": "Cultural Hegemony Test Console",
   "de": "Testkonsole: Kulturelle Hegemonie"
+ },
+ "te_debug_cm.1.a": {
+  "en": "A — Run the census now, with no lock and no year guard",
+  "de": "A — Volkszählung jetzt durchführen, ohne Sperre und ohne Jahresprüfung"
+ },
+ "te_debug_cm.1.b": {
+  "en": "B — Run this country's yearly conversion now",
+  "de": "B — Die jährliche Umwandlung dieses Landes jetzt durchführen"
+ },
+ "te_debug_cm.1.c": {
+  "en": "C — Run the dominance step now: every joined part at or over the switch share switches",
+  "de": "C — Den Dominanzschritt jetzt durchführen: Jede beigetretene Teilkultur ab dem Wechselanteil wechselt"
+ },
+ "te_debug_cm.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event; it exists so the culture merges can be driven by hand in a play-test.#!\\n\\nEvery option waits for the culture merges rule. #b A#! runs the census at once (it adds a year to the years-together counters, so a second run in the same year counts a year twice). #b B#! converts one more step in this country. #b C#! recomputes each joined part's dominance from the last census and switches every part at or over the switch share. #b D#! writes every culture merge variable of this country's merges, and of every merge that is running or complete, to debug.log as TE_CM_DEBUG lines.\\n\\nThe once-a-game self-checks are separate: grep TE_SELF_CHECK in debug.log.",
+  "de": "#lore Nur Konsole. Kein Teil der Mod löst dieses Ereignis aus; es existiert, damit die Kulturverschmelzungen in einem Probespiel von Hand gesteuert werden können.#!\\n\\nJede Option wartet auf die Spielregel für Kulturverschmelzungen. #b A#! führt die Volkszählung sofort durch (sie erhöht die Zähler für die gemeinsamen Jahre um ein Jahr, ein zweiter Durchlauf im selben Jahr zählt also doppelt). #b B#! wandelt in diesem Land einen weiteren Schritt um. #b C#! berechnet die Dominanz jeder beigetretenen Teilkultur aus der letzten Volkszählung neu und lässt jede Teilkultur ab dem Wechselanteil wechseln. #b D#! schreibt jede Kulturverschmelzungsvariable der Verschmelzungen dieses Landes und jeder laufenden oder abgeschlossenen Verschmelzung als TE_CM_DEBUG-Zeilen in die debug.log.\\n\\nDie einmal pro Spiel laufenden Selbsttests sind getrennt: TE_SELF_CHECK in der debug.log suchen."
+ },
+ "te_debug_cm.1.d_option": {
+  "en": "D — Log every culture merge variable of this country's merges (TE_CM_DEBUG)",
+  "de": "D — Jede Kulturverschmelzungsvariable der Verschmelzungen dieses Landes protokollieren (TE_CM_DEBUG)"
+ },
+ "te_debug_cm.1.f": {
+  "en": "\\\"Closely related peoples can come to see themselves as one nation.\\\"",
+  "de": "„Eng verwandte Völker können sich irgendwann als eine Nation begreifen.“"
+ },
+ "te_debug_cm.1.t": {
+  "en": "Culture Merges Test Console",
+  "de": "Testkonsole für Kulturverschmelzungen"
+ },
+ "te_debug_cm.1.z": {
+  "en": "Close",
+  "de": "Schließen"
  },
  "te_debug_colonial_empire.1.a": {
   "en": "Solidified (95)",
@@ -24280,7 +24328,7 @@
   "de": "Lasst sie das fremde Geld behalten. Sie tun es bereits."
  },
  "te_inflation.1.b.tt": {
-  "en": "Prices, wages and contracts pass to a foreign currency, and the inflation ends with the notes it was printed on. Monetary policy is made abroad from now on, the deficit can no longer be monetized, and #b three quarters of the minting income#! a state earns by issuing the money its people use is gone for as long as the arrangement stands. The mint's books close on it with next month's accounts. Putting a currency of your own back into people's hands — by enacting any monetary law — is founding one, and lenders charge more for it for #b a decade#!. If the new money is nobody's promise but yours it also starts where a currency reform starts, near #b 5%#!; make it redeemable in metal and the promise carries the prices instead, leaving only the dearer borrowing.\\n$te_inflation_wc_fired$ Dollarizing takes nothing more.",
+  "en": "Prices, wages and contracts pass to a foreign currency, and the inflation ends with the notes it was printed on. Monetary policy is made abroad from now on, the deficit can no longer be monetized, and #b three quarters of the minting income#! a state earns by issuing the money its people use is gone for as long as the arrangement stands. The mint's books close on it with next month's accounts. Putting a currency of your own back into people's hands — by enacting any monetary law — is founding one, and lenders charge more for it for #b a decade#!. If the new money is nobody's promise but yours it also starts where a currency reform starts, near #b 5%#!; make it redeemable in metal and the promise carries the prices instead, leaving only the costlier borrowing.\\n$te_inflation_wc_fired$ Dollarizing takes nothing more.",
   "de": "Preise, Löhne und Verträge gehen zu einer fremden Währung über, und die Inflation endet mit den Scheinen, auf die sie gedruckt wurde. Die Geldpolitik wird von nun an im Ausland gemacht, das Defizit kann nicht mehr monetisiert werden, und #b drei Viertel der Prägeeinnahmen#!, die ein Staat durch die Ausgabe des von seinem Volk genutzten Geldes verdient, sind verloren, solange die Regelung besteht. Die Bücher der Münzstätte schließen damit zu den Konten des nächsten Monats ab. Dem Volk eine eigene Währung zurückzugeben — durch den Erlass irgendeines Geldgesetzes — heißt, eine zu gründen, und Kreditgeber verlangen dafür für #b ein Jahrzehnt#! einen Aufschlag. Ist das neue Geld niemandes Versprechen außer Ihrem eigenen, beginnt es zudem dort, wo eine Währungsreform beginnt, nahe #b 5%#!; machen Sie es in Metall einlösbar, und das Versprechen trägt stattdessen die Preise, sodass nur die teurere Kreditaufnahme bleibt.\\n$te_inflation_wc_fired$ Die Dollarisierung kostet nichts weiter."
  },
  "te_inflation.1.c": {
@@ -24896,11 +24944,11 @@
   "de": "Die Bindung hält. Der Goldpreis nicht."
  },
  "te_peg.1.c.no_je_tt": {
-  "en": "The currency is re-pegged at a lower value. The gold already in the central bank's vault is worth more of it, #v Peg Confidence#! is reset to #v 50#!, and the great powers you have just undercut will not thank you. Your #v Exchange Rate Index#! drops to #v 88#! and climbs back to par over five years: #G +15%#! $state_export_advantage_mult$ and #R −15%#! $state_import_advantage_mult$ at first, half of it gone in under two years. Dearer imports work through your prices for two years.",
+  "en": "The currency is re-pegged at a lower value. The gold already in the central bank's vault is worth more of it, #v Peg Confidence#! is reset to #v 50#!, and the great powers you have just undercut will not thank you. Your #v Exchange Rate Index#! drops to #v 88#! and climbs back to par over five years: #G +15%#! $state_export_advantage_mult$ and #R −15%#! $state_import_advantage_mult$ at first, half of it gone in under two years. Costlier imports work through your prices for two years.",
   "de": "Die Währung wird zu einem niedrigeren Wert neu gebunden. Das Gold, das bereits im Tresor der Zentralbank liegt, ist in dieser Währung nun mehr wert, #v Bindungsvertrauen#! wird auf #v 50#! zurückgesetzt, und die Großmächte, die Sie soeben unterboten haben, werden es Ihnen nicht danken. Ihr #v Wechselkursindex#! fällt auf #v 88#! und steigt über fünf Jahre auf die Parität zurück: zunächst #G +15%#! $state_export_advantage_mult$ und #R −15%#! $state_import_advantage_mult$, die Hälfte davon in weniger als zwei Jahren wieder abgebaut. Teurere Importe wirken zwei Jahre lang auf Ihre Preise."
  },
  "te_peg.1.c.tt": {
-  "en": "The currency is re-pegged at a lower value. The gold already in the central bank's vault is worth more of it — the reserve gains #b 15%#! of its limit — #v Peg Confidence#! is reset to #v 50#!, and the great powers you have just undercut will not thank you. Your #v Exchange Rate Index#! drops to #v 88#! and climbs back to par over five years: #G +15%#! $state_export_advantage_mult$ and #R −15%#! $state_import_advantage_mult$ at first, half of it gone in under two years. Dearer imports work through your prices for two years.",
+  "en": "The currency is re-pegged at a lower value. The gold already in the central bank's vault is worth more of it — the reserve gains #b 15%#! of its limit — #v Peg Confidence#! is reset to #v 50#!, and the great powers you have just undercut will not thank you. Your #v Exchange Rate Index#! drops to #v 88#! and climbs back to par over five years: #G +15%#! $state_export_advantage_mult$ and #R −15%#! $state_import_advantage_mult$ at first, half of it gone in under two years. Costlier imports work through your prices for two years.",
   "de": "Die Währung wird zu einem niedrigeren Wert neu gebunden. Das bereits im Tresor der Zentralbank liegende Gold ist mehr davon wert — die Reserve gewinnt #b 15%#! ihrer Grenze hinzu —, #v Bindungsvertrauen#! wird auf #v 50#! zurückgesetzt, und die Großmächte, die Sie gerade unterboten haben, werden es Ihnen nicht danken. Ihr #v Wechselkursindex#! fällt auf #v 88#! und klettert über fünf Jahre zurück zur Parität: zunächst #G +15%#! $state_export_advantage_mult$ und #R −15%#! $state_import_advantage_mult$, wovon binnen unter zwei Jahren die Hälfte verschwunden ist. Teurere Importe wirken sich zwei Jahre lang auf Ihre Preise aus."
  },
  "te_peg.1.d": {
@@ -24960,7 +25008,7 @@
   "de": "Sie behalten die Bindung bei einer #b schlechteren Parität#!: Ihr Wechselkurs sinkt um #b die Hälfte Ihrer Überbewertung#! und bleibt so weit unter deren Wert. #v Bindungsvertrauen#! kehrt auf #v 50#! zurück, nicht auf 100 — eine Parität, die sich einmal bewegt hat, kann sich wieder bewegen."
  },
  "te_peg.2.d": {
-  "en": "Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are dear, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. What we do have is a border, a treaty, and a number that could be changed.",
+  "en": "Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are expensive, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. What we do have is a border, a treaty, and a number that could be changed.",
   "de": "Unsere Währung ist an die Währung [SCOPE.sCountry('te_peg_anchor_country').GetAltName('GEN')] gebunden, und die Märkte glauben es nicht mehr. Die Preise und Löhne hier sind den ihren schon zu lange vorausgeeilt: Zur versprochenen Parität sind unsere Waren teuer, unsere Reserven schwinden, und jeder Händler in der Hauptstadt fragt sich, was unser Geld einbrächte, ließen wir es frei. Wir haben keinen eigenen Zins, den wir anheben könnten. Was wir haben, ist eine Grenze, ein Vertrag und eine Zahl, die sich ändern ließe."
  },
  "te_peg.2.f": {
