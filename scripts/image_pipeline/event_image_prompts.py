@@ -535,7 +535,7 @@ IMAGES = {
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
             "extra_law_events.73", "extra_law_events.88",
-            "amendment_petition_events.1",
+            "amendment_petition_events.1", "te_culture_merge.1",
         ],
     },
     "digital_privacy_screen": {
