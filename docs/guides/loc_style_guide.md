@@ -1,30 +1,91 @@
 # Writing in-game text
 
-**Draft for the owner's review (2026-11-09).** The questions at the end are open; nothing lints against this yet.
+**Draft, second revision (2026-11-09), after the owner read sample text written from the first.** Nothing lints against this yet.
 
-This is the house style for everything under `localization/english/`: what a player reads in the game. It says how each kind of text should read. It does not repeat the rules that already have a home:
+This is the house style for everything under `localization/english/`: what a player reads in the game. It says how each kind of text should read. Where it and `event_creation_guide.md` differ on voice, this guide wins; that guide keeps the mechanics of events (keys, scope references, images, option design). Other homes:
 
-- Event titles, descriptions, flavor and options in depth, with the vanilla conventions they follow: `event_creation_guide.md` § "Event Localization Style Guide".
 - Labels that fit their cells, type sizes, what goes in a tooltip and what in a How section: `gui_style_guide.md`.
 - Loc syntax (scope references, `#b`, concept links, quoting): `.claude/rules/localization.md` and `scripting_best_practices.md`.
 - The player guide, which is prose about the game, not text in it: `docs/player_guide/STYLE.md`.
 
 ## The voice
 
-The game's text is written by someone who knows exactly what happened and sees no need to dress it up. It names the thing, gives the figure, and stops. When it is funny, it is funny because it is exact: "The intruder was a bear."
+The game's text is plain and particular. It names the thing, gives the figure, and stops.
 
-Two tests cover most cases.
+Three tests cover most cases.
 
 **Could this sentence be about anything else?** "The resolution has brought stability and improved relations with our neighbors" fits a treaty, a wedding or a new bus route. "The loan and a tenth more, over five years" fits one thing. If a sentence would survive being moved to a different modifier, event or law, it is filler: replace it with the particular fact, or cut it.
 
-**Would a minister's private secretary say it?** The register is a capable official briefing the government: dry, specific, unimpressed. Not a press release ("a hallmark of a modern, healthy society"), not a textbook ("this represents a significant shift"), not a film trailer ("the cultural establishment is reeling").
+**Could a game make this sentence false?** See [Detail that cannot be wrong](#detail-that-cannot-be-wrong).
+
+**Is the sentence trying to be admired?** See [No kicker](#no-kicker). This is the commonest fault in the mod's event text and in drafts written from this guide.
+
+The register is a capable official briefing the government. Not a press release ("a hallmark of a modern, healthy society"), not a textbook ("this represents a significant shift"), not a film trailer ("the cultural establishment is reeling"), and not a columnist either: the official does not polish a remark and wait for the laugh.
+
+## No kicker
+
+A kicker is a last line built to land: a dry reversal, a hint left hanging, a neat irony, a short sentence after long ones. Examples from the mod and from drafts:
+
+- "Nobody has yet said whether the books were wrong or were written to be."
+- "If we don't, what exactly are we for?"
+- "They sent me a pamphlet about cultural enrichment."
+- "The bankers reply that they were leaned on once before."
+- "Keeps it. Very carefully."
+
+Each is fine alone. The trouble is that a writer, and a language model above all, reaches for one every time, so every text in the game ends on the same beat, and by the tenth event the player hears the machinery. An earlier draft of this guide said "end on a fact, not a mood", and the writers it was tested on swapped the mood for a quip, which is the same habit.
+
+What marks the first example as machine-written, taken apart:
+
+- **It reports something that has not happened.** "Nobody has yet said" is the narrator pointing at a silence so that the reader will fill it. The narrator knows nothing the sentence does not hint at.
+- **Its grammar is ornamental.** "Were wrong or were written to be" leaves out a word so that the reader has to complete the phrase, and the pleasure of completing it is the sentence's whole content.
+- **It is the paragraph's last sentence,** where a draft feels something is owed.
+
+The rules:
+
+- **A text ends when the facts are told.** The last sentence is as plain as the others: the last thing that happened, or what is now being asked of the government. If the paragraph is complete without its final sentence, delete the final sentence.
+- **The narrator does not insinuate.** Say what is known. If fraud is suspected, somebody in the text suspects it: "The auditors have asked who signed the quarterly counts."
+- **No sentence that needs the reader to finish it,** and no two-part sentence whose second half reverses the first.
+- **A flavor text may turn at the end about one time in five.** Before writing one, read the two or three events that fire near it. If they turn, this one does not.
+
+> **Kicker:** An audit of the grain reserve has found that a tenth of the stock has rotted in its silos. The warehouse books listed every sack as sound. Nobody has yet said whether the books were wrong or were written to be.
+> **Plain:** An audit of the grain reserve has found that a tenth of the stock has rotted in its silos. The warehouse books list every sack as sound, and the quartermaster's office signed each count. The auditors want to know who did the counting.
+
+## Detail that cannot be wrong
+
+An invented detail makes a text particular, and is welcome, **as long as no game can contradict it.** The same event fires for Sweden in 1850 and for Singapore in 2020. Before keeping a detail, ask what a country would have to be for the sentence to be false, and whether the event's trigger rules that country out.
+
+Things an event may not assume unless its trigger guarantees them or the text reads them from a scope:
+
+| Assumption | How it goes wrong |
+|---|---|
+| Elapsed time, dates, "for two years", "since the war", "a generation ago" | The reserve was built last year; there was no war |
+| Quantities of anything the game tracks (tons in the reserve, the size of the army, the price of bread) | The game shows a different figure one click away |
+| Era and technology (telegrams, radio, cars, cameras, the internet, a railway) | The event fires in 1840, or in 2030 |
+| Religion, clergy, holy days, places of worship | A sermon in a country with no church |
+| Culture: personal names, food, dress, forms of address | "Sir" and "Father" are English and Christian |
+| Climate and land: snow, monsoon, a coast, a river, mountains, a desert | A landlocked tropical country |
+| Government: a king, a parliament, elections, parties, a free press, ministries | An absolute monarchy has no opposition benches |
+| Economy: factories, a stock exchange, private banks, wage labor, slavery | A command economy, a subsistence one |
+| Other countries: "the Americans", a neighbor, a great power, an empire | They may not exist, or may be us |
+| Peace or war, colonies, a navy | Any of them may be absent |
+
+Three ways to keep a detail that is at risk:
+
+1. **Read it from the game.** `[ROOT.GetCountry.GetAdjective]`, a state's name, a law's name, a script value for the figure.
+2. **Gate it.** A variant description or flavor (`first_valid`, a triggered `desc`) for the countries where it holds, with a neutral default last. "The Old Rules" does this for its priest.
+3. **Write it one level more general.** "A message arrived before dawn", not "the telegram"; "the district's elders", not "the parish council"; "for as long as the ledgers go back", not "for two years"; "a tenth of the stock", which is the mechanic, not "twelve thousand tons".
+
+Details that are always safe are the ones the game holds no fact about: what a clerk said, the state of a ledger, a queue, the hour, someone's hands, the order in which things were found.
 
 ## Who is speaking
 
-- **Events and their options, modifier descriptions, notifications and tooltips about the player's own country speak as the country: "we", "our".** "Our people's average standard of living has fallen below 4." This is the base game's voice and most of the mod's.
-- **Text that can appear on any country** (a modifier another country holds, a law's description, a tooltip on a foreign state) **says "this country" or names it.** "This country is repaying an emergency loan from the United Nations."
-- **Concept descriptions and How sections state the rule impersonally:** "a country", "the holder", "a milestone". They say "you" only for a control the player works: "Where you want the policy rate to end up."
-- **Flavor text has its own speakers.** Whoever is talking in it talks as themselves.
+**"We", nearly always.** The player's country speaks as itself in events, options, modifier descriptions, notifications, journal entries and tooltips: "we", "our". This is the base game's voice.
+
+The exceptions, in order of precedence:
+
+1. **Flavor text has its own speakers,** who talk as themselves.
+2. **Text the game displays on a country that is not the player's** (a modifier listed on a foreign country, a tooltip on a foreign state, a diplomatic row) says "this country" or names it, because "we" would be false there. If the player only ever sees the text on their own country, it is "we", even when other countries hold the same modifier unseen.
+3. **A concept description states a rule about any country:** "a country", "the holder". Where the rule is easier to follow from the player's side, "we" is fine. "You" is for a control the player's hand works: "Where you want the policy rate to end up."
 
 ## Each kind of text
 
@@ -51,17 +112,19 @@ A name tells the thing apart from its neighbors in a list. Prefer the plain noun
 
 ### Modifier descriptions
 
-The modifier's lines already show what it does. The description says why the country has it, in one concrete sentence, and does not restate the effects.
+The modifier's lines already show what it does. The description says why we have it, in one concrete sentence, and does not restate the effects.
 
 > **Before** (`border_dispute_resolved_modifier_desc`): The resolution of a border dispute has brought stability and improved relations with our neighbors.
-> **After:** A border dispute with a neighbor has been settled.
+> **After:** We have settled a border dispute with a neighbor.
 
 > **Before** (`predictive_intelligence_only_modifier_desc`): AI is used only for intelligence analysis, not direct policing, balancing security with civil liberties.
-> **After:** AI sorts intelligence reports. It does not direct the police.
+> **After:** Our analysts use AI to sort intelligence reports. The police do not use it.
 
-"Brought stability" and "balancing security with civil liberties" are the effects, restated as abstractions; the modifier's own lines say them better. Where the terms are the interesting part, give them:
+"Brought stability" and "balancing security with civil liberties" are the effects restated as abstractions; the modifier's own lines say them better. Where the terms are the interesting part, give them:
 
 > **As it should be** (`un_loan_repayment_modifier_desc`): This country is repaying an emergency loan from the United Nations: the loan and a tenth more, over five years.
+
+**Find the reason in the script, not in the modifier's lines.** Look up what adds the modifier (`/references/<name>` on the server, or grep `common/` and `events/`): the event option, the journal entry's completion, the button. The description names that cause. If you find yourself turning an effect into a story ("scientists are leaving" for an innovation penalty), you are restating the effect. Say what was done ("We have put every citizen under watch") and leave the consequence to the numbers.
 
 ### Law descriptions
 
@@ -83,6 +146,7 @@ These explain rules, so they are judged on whether a player could act on them.
 - **Name the tab, not the journal entry**, when sending the player somewhere.
 - **Link a concept the first time it appears** in a text, and not again.
 - **Say only what the script does.** A tooltip that promises an effect the script does not produce is a bug. Read the script first.
+- **A limit nobody reaches is not a figure to give.** "Up to 15 legitimacy" was true of a gap of 100 points, which no game sees. Give the rate and one worked case: "0.15 for each point of the gap: 4.5 at a gap of 30".
 
 > **As it should be** (`concept_banking_rate_target_desc`): Where you want the [policy rate] to end up. Stepping it does not move the rate today: the rate closes the gap a little each month. There is no fee and no cooldown for changing it.
 
@@ -90,22 +154,51 @@ It answers the three things a player wonders on first seeing the control: what i
 
 ### Events
 
-`event_creation_guide.md` has the full conventions. What matters most for the voice:
+`event_creation_guide.md` has the mechanics. For the voice:
 
 **The description reports particulars.** A reader should see the situation, not be told how serious it is.
 
 > **Before** (`banking_cycle_events.3.d`): Banks are sitting on mountains of reserves while businesses starve for credit. Lending has ground to a near-halt as financial institutions, scarred by recent uncertainty, refuse to take on risk. Merchants and manufacturers are demanding that the government intervene to restart the flow of capital - but bankers warn that forcing premature lending could plant the seeds of the next crisis.
-> **After:** The banks hold more in reserve than they have in years and are lending none of it. A mill owner with a full warehouse cannot borrow against it to meet his payroll. Merchants and manufacturers want the government to lean on the banks. The bankers reply that they were leaned on once before.
+> **After:** Our banks hold more in reserve than they have in years and are lending almost none of it. Sound businesses with goods in their warehouses cannot borrow against them to pay wages. Merchants and manufacturers have asked the government to make the banks lend. The banks say they will lend when borrowers look safer.
 
-The first version has four stock metaphors (mountains, starving, grinding to a halt, planting seeds) and ends on a balanced "but". The second has one case the reader can picture and lets the bankers have the last, dry word.
+The first version has four stock metaphors (mountains, starving, grinding to a halt, planting seeds). The second says who cannot borrow, who is asking for what, and what the banks answer, and it stops there.
 
-**Flavor is a scene, with someone in it.** The model is `nuclear_incident.40.f`: two unnamed voices, a forty-page report, and "Most of them say 'check it twice.'" Nothing in it states that the incident was absurd or alarming; the exchange shows it.
+**Options are what the ruler says, not labels,** and an option's wording is a claim like any other. "Rush a replacement vehicle to the next pad" was the slowest of its event's three options. Read what each option does before naming it, and promise no speed, safety or saving the script does not deliver.
 
-**The description's last sentence is the one most worth rereading.** Drafts tend to close on a summary of the mood ("The cultural establishment is reeling.", "The survivors' accounts are harrowing."). End on a fact instead: the last thing that happened, or the question now on the table.
+**Titles hint,** in two to five words: "A Routine Mishap", not "Hacker Collective Attack". A title needs no wordplay.
 
-**Options are what the ruler says, not labels.** "Fix the procedure that failed, and check the ones that didn't." beats "Hire the hackers".
+### Flavor text: vary the form
 
-**Titles hint.** "A Routine Mishap", not "Hacker Collective Attack".
+Flavor is the slot where sameness shows most. Of the mod's 1,155 flavor texts, 44% are an exchange between two unnamed voices, and in several chains nearly all are (banking 72 of 83, elections 35 of 35, movements 31 of 32, wonders 25 of 26). Most of those end on a dry last line. A player who has read five has read them all.
+
+So the form is a choice to make each time, and the two-voice exchange is no longer the default. Forms that work:
+
+| Form | What it is | Suits |
+|---|---|---|
+| One voice | A single speaker at some length: testimony, a complaint, a speech, an order, an explanation to a child | Anger, pride, fear, fatigue |
+| A document | A letter, a diary entry, a dispatch, minutes, a memorandum, a notice posted on a wall, a line from a ledger, a newspaper paragraph, an advertisement | Institutions; things discovered; distance |
+| A scene without speech | What one person sees and does, in a place, over a minute or an hour | Aftermath, labor, waiting |
+| Several voices | Three or four unconnected remarks overheard in different places about the same thing | A public mood; disagreement |
+| A real quotation | A historical line, attributed with `— Name` | A moment with a famous witness |
+| A list | An inventory, a schedule, the items of a report, the contents of a room | Bureaucracy; loss |
+| An exchange | Two voices, back and forth | Conflict between two people who both have a point |
+
+The rules:
+
+- **In a chain, no form takes more than a third of the events,** and events that can fire one after another differ in form. `python3 scripts/analysis/flavor_forms.py <namespace>` prints a chain's current mix: run it before adding to a chain, and write in a form the chain is short of.
+- **The register varies too.** Dry is one register among several: a text can be angry, proud, frightened, tired, formal or tender. Most events are not funny, and their flavor is not either.
+- **Most flavor texts stop without turning** ([No kicker](#no-kicker)). A scene can end in the middle of the work; a letter can end with its closing; a speaker can simply finish.
+- **Someone is there.** Every form has a point of view: who is writing the letter, who is counting the sacks. Narration from nowhere reads as a news summary.
+- **Speakers are unnamed and unplaced** unless a scope supplies the name ([Detail that cannot be wrong](#detail-that-cannot-be-wrong)). A document's letterhead, date and place are assumptions like any other.
+- **Length:** 50 to 150 words. A short exchange under 50 words is usually a setup and a punchline; give it a different form.
+
+The same event in three forms, none ending on a turn:
+
+> **A document.** To the government, from the examiners of the grain reserve. We opened one sack in every twenty and found the grain in a tenth of them black with rot. The store ledgers show every sack as sound. We attach the counts as we made them, the ledger pages for the same bays, and the names of the officers who signed them. We ask for instructions on the remainder.
+
+> **A scene without speech.** The examiner worked along the bay with a knife and a light. He cut each sack below the seam, took a handful and held it to the light. Good grain went back in. When a handful came out gray and warm he tied a strip of red cloth to the sack and moved on. By evening he had reached the far wall, and there was red cloth on one sack in ten.
+
+> **One voice.** "I signed the counts because the storemen gave me the counts. That is how it has always been done. I have forty bays and two clerks. If the government wants every sack opened at every count, it may send me the men to open them. I did not spoil the grain. I wrote down what I was told, and I will say so to whoever asks."
 
 ## Sentences
 
@@ -130,21 +223,23 @@ The first version has four stock metaphors (mountains, starving, grinding to a h
 
 ## Words
 
-- **One name per thing.** Use the in-game name, spelled and capitalized as its own key renders it, and splice it (`$key$`) rather than retyping it, so a rename reaches every mention.
+- **One name per thing.** Use the in-game name, spelled and capitalized as its own key renders it, and splice it (`$key$`) rather than retyping it, so a rename reaches every mention. Splice only a name that reads as a noun in the sentence: a law whose name is "Ministry of Intelligence and Security Established" goes in a list of laws, or the sentence is written around it.
+- **Props that fit every era the event can fire in.** "Crates", not "bales"; "a message", not "a telegram", unless the event is gated to the years that had them.
 - **A coined term says what it means** the first time, or links the concept that does.
 - **Do not put one faith's furniture in a scene any country can get** (a priest, a pew, a sermon). Write the scene without a named faith or gate the version. `event_creation_guide.md` has the pattern.
 
 ## Before you commit a text
 
-1. Read it without its key. Can you tell what it is attached to? If not, it is generic.
-2. Find the sentence that would survive being moved to another entry, and replace or cut it.
-3. Check every claim about an effect against the script.
-4. Check the last sentence: a fact, not a mood.
-5. Read the longest it can render (the longest country name, the largest figure) against the cell or tooltip it sits in.
+1. Check the key is live: it is not in `te_unused_l_english.yml`, and something in `common/`, `events/` or `gui/` uses it.
+2. Read the script the text describes. Check every claim against it, option wording included.
+3. Read the text without its key. Can you tell what it is attached to? If not, it is generic: find the sentence that would survive being moved to another entry, and replace or cut it.
+4. Ask of each invented detail what country or year would make it false.
+5. Cover the last sentence. If the text is complete without it, delete it.
+6. For flavor, run `scripts/analysis/flavor_forms.py <namespace>` and pick a form the chain is short of.
+7. Read the longest it can render (the longest country name, the largest figure) against the cell or tooltip it sits in.
 
 ## Open questions for the owner
 
-1. **"We" or "you" in tooltips.** The mod uses "we/our" in about 500 tooltips and "you/your" in about 80, and concept descriptions use "you" more than "we". The rule above ("we" for the country, "you" only for a control the player works) is my reading of the majority. Is it yours?
-2. **How dry.** The examples lean toward the driest text in the mod (`nuclear_incident.40`). Some older events are warmer and more literary (`environmentalism_events.5.f`, the farmer and the cracked soil). Is that range welcome, or is the dry end the target?
-3. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. I've allowed them for paired facts and discouraged them in event prose.
-4. **Existing text.** About 110 lines match the machine-writing list, 114 event descriptions use ` - ` as a dash and 150 use an em dash. A lint would start from an allowlist of today's hits and fail only new ones. Rewriting the old lines is a separate pass, and each changed line needs retranslating into German and Spanish.
+1. **Existing text.** Of 1,155 flavor texts, 510 are two-voice exchanges. Bringing the heaviest chains (banking, elections, movements, wonders, law events) under a third each means rewriting roughly 250 of them, and every rewritten line needs retranslating into German and Spanish. I would do it a chain at a time, with you reading the first chain before the rest.
+2. **A lint.** `flavor_forms.py --check` could fail a chain whose share of one form rises, starting from today's figures as the ceiling. The word-list part (stock metaphors, verdict words, ` - ` as a dash) would start from an allowlist of today's hits and fail only new ones.
+3. **Semicolons in rules text.** About 250 tooltips and 70 concept descriptions use them. The guide allows them for paired facts and discourages them in event prose.

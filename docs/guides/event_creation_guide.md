@@ -111,6 +111,8 @@ Only the game shows which one a recipient got, so a new popup belongs on the sys
 
 ## Event Localization Style Guide (Based on Vanilla Conventions)
 
+**`loc_style_guide.md` governs the voice** (plain and particular, no closing kicker, no detail a game could contradict, varied flavor forms). Where this section and that guide differ, that guide wins; this section keeps the per-key conventions.
+
 The following patterns are derived from analysis of 40+ vanilla events across `events_l_english.yml`, `ip2`/`ip3`/`ip4` DLC packs, and `sphere_of_influence` content. **Follow these conventions** so mod events feel consistent with the base game.
 
 ### Titles (`.t`)
@@ -136,7 +138,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 ### Flavor Text (`.f`)
 - **Literary, atmospheric, and character-driven.** Flavor text is the creative writing showcase of the event. It sets mood and humanizes the situation. It is not a place to summarize what happened — the description (.d) is where the player learns the facts. Flavor text exists to give that situation texture and a human grain.
 - **Typical length:** 3–8 sentences, roughly 50–150 words. Shorter is not better. Flavor text below this range reads as a news ticker and wastes the slot.
-- **Default form: direct speech (quotes).** The vast majority of vanilla flavor texts contain dialogue, and this is the defining stylistic signature of Victoria 3 events. Reach for dialogue first. Use one of the other forms only when you have a specific reason — an epigraph that fits the theme, or a vignette that captures something dialogue can't.
+- **Choose the form each time; the two-voice exchange is not the default** (owner, 2026-11-09). 44% of the mod's flavor texts are a back-and-forth between two unnamed voices ending on a dry last line, and whole chains are nothing else, so they read as one text. `loc_style_guide.md` § "Flavor text: vary the form" lists the forms (one voice, a document, a scene without speech, several voices, a real quotation, a list, an exchange) and the rule: no form takes more than a third of a chain. `python3 scripts/analysis/flavor_forms.py <namespace>` prints a chain's mix.
 - **Dialogue conventions:**
   - Multiple speakers are separated by `\n\n` (paragraph breaks).
   - Speakers are almost never named — they are anonymous voices (a farmer, a politician, a soldier, a shopkeeper). This lets the text feel universal rather than character-specific.
@@ -146,7 +148,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Anti-patterns to avoid:**
   - **Two-line reportage.** "X happened. Then Y happened." compressed to a single visual line is the most common failure mode. It can technically clear the length minimum if the sentences are long enough, but it reads as a wire summary, not flavor. If the prose could appear unchanged in a newspaper headline rundown, it isn't doing the job of flavor text.
   - **Subject-less observation.** Sentences that describe events from no one's vantage point ("The march filled six city blocks. The police stopped counting heads.") read as sterile reportage. Anchor in a perspective — even an unnamed bystander, organiser, officer, journalist, or letter-writer. This is the "show, don't tell" principle from the General Tone section, applied to flavor specifically.
-  - **Formulaic repetition across a chain.** Even if individual entries pass on their own, a journal entry chain where most events share the same compressed structure reads as monotonous and stylistically distinct from the rest of the mod. Vary forms across a chain: dialogue should dominate, with a minority of vignettes and the occasional epigraph for variety. If you've written three events in the chain and they all open with "The [noun] [verbed]. The [other noun]...", stop and rewrite.
+  - **Formulaic repetition across a chain.** Even if individual entries pass on their own, a chain whose events share one form reads as monotonous. Vary the forms across a chain (`loc_style_guide.md` § "Flavor text: vary the form"), and vary how they end: a closing line built to land, on every event, is the commonest sameness of all (§ "No kicker").
   - **One faith's scene in an event any country gets.** A priest, a pew, a sermon or "Father" read wrong in Singapore ("The Old Rules", `society_technology_events.4`, 2026-11-08). Write the scene with no named faith (a family elder, a matchmaker, a house of worship), or gate the faith's version in a `first_valid` on `religion = { has_discrimination_trait = heritage_christian }` (or `heritage_islamic`, `heritage_dharmic`, …) with a neutral default last. `religious_revival_events.1` shows the ladder. The open cases are listed in #1531.
 - **Attributed fictional quotes with random character names:** For events where dialogue is attributed to a role (scientist, commander, engineer), use `create_character` in `immediate` to generate a culturally-appropriate character name, then `kill_character` in `after` to clean up. This gives each event a unique, culture-matching name without reusing existing game characters. Pattern:
   - **Script:**
@@ -176,7 +178,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
   - The em-dash (`—`) followed by the scoped name and role title matches vanilla's attributed-quote convention while adding cultural authenticity.
   - **Do NOT use `random_scope_character`** — countries have few characters (generals, politicians), so the same name would appear across many events.
 - **Formatting in flavor text:** `#bold text#!` for emphasis, `#italic text#!` for italics, `\n` / `\n\n` for line/paragraph breaks. Used sparingly.
-- **Tone:** Sardonic, wry, occasionally darkly humorous. Victoria 3 flavor text frequently has an ironic or world-weary quality.
+- **Tone:** varied. Dry and ironic is one register; a text can as well be angry, proud, frightened, tired or formal. Most events are not funny, and their flavor is not either.
 
 ### Option Text (`.a`, `.b`, `.c`, etc.)
 - **Short, punchy, and in the voice of the player/ruler.** Option text is what the player "says" when choosing.
