@@ -193,13 +193,15 @@ gm_mon_add_age = {
 	}
 }
 
-# Container scope: this secondary monument into its state's list.
+# Container scope: this secondary monument into its state's list. Not while
+# its state is merged away and still resolves with no owner
+# (gm_tr_origin_gone): gm_tr_repair_places moves it first, or next month.
 gm_mon_list_one = {
 	save_scope_as = gm_mon_listing
 	if = {
 		limit = {
 			has_variable = gm_tr_origin
-			exists = var:gm_tr_origin
+			gm_tr_origin_gone = no
 		}
 		set_global_variable = gm_mon_lists_written
 		var:gm_tr_origin = {

@@ -4695,6 +4695,18 @@ class MultiMonumentDataTests(unittest.TestCase):
                       "gm_tr_update_picture = yes ", monthly)
         self.assertLess(monthly.find("gm_tr_repair_places = yes"), monthly.find("gm_monument_pass = yes"))
 
+    def test_an_ownerless_origin_counts_as_gone(self):
+        # 2026-11-08 observer game: a state merged into another part of its region still resolved, with no owner,
+        # so the monthly listing read its owner and logged `Scoped object is not valid. Type: Country`, and the
+        # repair (which asked only `exists`) left it alone. Both now ask gm_tr_origin_gone.
+        gone = squash(block(read("common/scripted_triggers/gm_trophy_triggers.txt"), "gm_tr_origin_gone"))
+        self.assertIn("NOT = { exists = var:gm_tr_origin }", gone)
+        self.assertIn("var:gm_tr_origin ?= { NOT = { exists = owner } }", gone)
+        repair = squash(block(read("common/scripted_effects/gm_trophy_effects.txt"), "gm_tr_repair_places"))
+        self.assertEqual(repair.count("gm_tr_origin_gone = yes"), 2)
+        self.assertNotIn("NOT = { exists = var:gm_tr_origin }", repair)
+        self.assertIn("gm_tr_origin_gone = no", squash(block(read(MON_EFFECTS), "gm_mon_list_one")))
+
     def test_the_pass_has_nothing_to_do_in_a_game_with_no_secondary(self):
         monthly = squash(block(read(MON_EFFECTS), "gm_monument_monthly"))
         self.assertIn("has_global_variable_list = gm_monuments", monthly)
