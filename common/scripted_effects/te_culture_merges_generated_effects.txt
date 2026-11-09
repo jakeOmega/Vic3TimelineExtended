@@ -2031,7 +2031,6 @@ te_cmg_french_result_sol = {
 			limit = {
 				OR = {
 					state_region = { is_homeland = cu:french }
-					state_region = { is_homeland = cu:wallonian }
 					state_region = { is_homeland = cu:occitan }
 				}
 			}
@@ -2069,12 +2068,12 @@ te_cmg_census_french_country = {
 		te_cm_census_part = { MERGE = french CULTURE = french RESULT = french TIER = 1 }
 	}
 	if = {
-		limit = { NOT = { has_global_variable = te_cm_switched_wallonian } }
-		te_cm_census_part = { MERGE = french CULTURE = wallonian RESULT = french TIER = 1 }
-	}
-	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_occitan } }
 		te_cm_census_part = { MERGE = french CULTURE = occitan RESULT = french TIER = 1 }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_wallonian } }
+		te_cm_census_part = { MERGE = french CULTURE = wallonian RESULT = french TIER = 1 }
 	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_catalan } }
@@ -2094,19 +2093,6 @@ te_cmg_census_french_country = {
 		change_local_variable = { name = te_cm_sg_slots add = 1 }
 	}
 	if = {
-		limit = { te_cmg_french_wallonian_measured = yes }
-		te_cm_sol_track = { MERGE = french CULTURE = wallonian }
-	}
-	if = {
-		limit = {
-			OR = {
-				te_cmg_french_wallonian_measured = yes
-				te_cmg_french_wallonian_switched_in = yes
-			}
-		}
-		change_local_variable = { name = te_cm_sg_slots add = 1 }
-	}
-	if = {
 		limit = { te_cmg_french_occitan_measured = yes }
 		te_cm_sol_track = { MERGE = french CULTURE = occitan }
 	}
@@ -2120,7 +2106,7 @@ te_cmg_census_french_country = {
 		change_local_variable = { name = te_cm_sg_slots add = 1 }
 	}
 	if = {
-		limit = { local_var:te_cm_sg_slots = 3 }
+		limit = { local_var:te_cm_sg_slots = 2 }
 		set_local_variable = { name = te_cm_sg_all value = 1 }
 	}
 	if = {
@@ -2167,12 +2153,20 @@ te_cmg_census_french_country = {
 			local_var:te_cm_sg_all = 1
 			OR = {
 				AND = {
+					NOT = { has_global_variable = te_cm_switched_wallonian }
+					var:te_cm_ok_french_wallonian ?= 1
+				}
+				AND = {
 					NOT = { has_global_variable = te_cm_switched_catalan }
 					var:te_cm_ok_french_catalan ?= 1
 				}
 			}
 		}
 		te_cmg_french_result_sol = yes
+	}
+	if = {
+		limit = { NOT = { has_global_variable = te_cm_switched_wallonian } }
+		te_cm_sol_gate_part = { MERGE = french CULTURE = wallonian }
 	}
 	if = {
 		limit = { NOT = { has_global_variable = te_cm_switched_catalan } }
@@ -2192,15 +2186,15 @@ te_cmg_french_join_ready = {
 		}
 		if = {
 			limit = {
-				te_cmg_french_wallonian_can_join = yes
-			}
-			te_cm_join_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
-		}
-		if = {
-			limit = {
 				te_cmg_french_occitan_can_join = yes
 			}
 			te_cm_join_part = { MERGE = french CULTURE = occitan INDEX = 10 }
+		}
+		if = {
+			limit = {
+				te_cmg_french_wallonian_can_join = yes
+			}
+			te_cm_join_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
 		}
 		if = {
 			limit = {
@@ -8276,8 +8270,8 @@ te_cmg_release_lost_starters = {
 			global_var:te_cm_state_french ?= 2
 			te_cmg_french_starter_gone = yes
 		}
-		te_cm_unjoin_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
 		te_cm_unjoin_part = { MERGE = french CULTURE = occitan INDEX = 10 }
+		te_cm_unjoin_part = { MERGE = french CULTURE = wallonian INDEX = 10 }
 		te_cm_unjoin_part = { MERGE = french CULTURE = catalan INDEX = 10 }
 	}
 	if = {
@@ -9468,19 +9462,6 @@ te_cmg_census_all = {
 	}
 	if = {
 		limit = {
-			NOT = { has_global_variable = te_cm_switched_wallonian }
-			te_cmg_french_census_wanted = yes
-		}
-		if = {
-			limit = { global_var:te_cm_joined_french_wallonian ?= 1 }
-			te_cm_census_culture_joined = { CULTURE = wallonian RESULT = french }
-		}
-		else = {
-			te_cm_census_culture = { CULTURE = wallonian }
-		}
-	}
-	if = {
-		limit = {
 			NOT = { has_global_variable = te_cm_switched_occitan }
 			te_cmg_french_census_wanted = yes
 		}
@@ -9490,6 +9471,19 @@ te_cmg_census_all = {
 		}
 		else = {
 			te_cm_census_culture = { CULTURE = occitan }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cm_switched_wallonian }
+			te_cmg_french_census_wanted = yes
+		}
+		if = {
+			limit = { global_var:te_cm_joined_french_wallonian ?= 1 }
+			te_cm_census_culture_joined = { CULTURE = wallonian RESULT = french }
+		}
+		else = {
+			te_cm_census_culture = { CULTURE = wallonian }
 		}
 	}
 	if = {
@@ -11391,16 +11385,6 @@ te_cmg_yearly_country = {
 			}
 			if = {
 				limit = {
-					global_var:te_cm_joined_french_wallonian ?= 1
-					NOT = { has_global_variable = te_cm_switched_wallonian }
-					scope:te_cm_starter = {
-						var:te_cm_ok_french_wallonian ?= 1
-					}
-				}
-				te_cm_convert_part = { MERGE = french CULTURE = wallonian RESULT = french TIER = 1 }
-			}
-			if = {
-				limit = {
 					global_var:te_cm_joined_french_occitan ?= 1
 					NOT = { has_global_variable = te_cm_switched_occitan }
 					scope:te_cm_starter = {
@@ -11408,6 +11392,17 @@ te_cmg_yearly_country = {
 					}
 				}
 				te_cm_convert_part = { MERGE = french CULTURE = occitan RESULT = french TIER = 1 }
+			}
+			if = {
+				limit = {
+					global_var:te_cm_joined_french_wallonian ?= 1
+					NOT = { has_global_variable = te_cm_switched_wallonian }
+					scope:te_cm_starter = {
+						var:te_cm_ok_french_wallonian ?= 1
+						var:te_cm_sol_ok_french_wallonian ?= 1
+					}
+				}
+				te_cm_convert_part = { MERGE = french CULTURE = wallonian RESULT = french TIER = 1 }
 			}
 			if = {
 				limit = {
@@ -13281,19 +13276,19 @@ te_cmg_dominance_all = {
 		}
 		if = {
 			limit = {
-				global_var:te_cm_joined_french_wallonian ?= 1
-				NOT = { has_global_variable = te_cm_switched_wallonian }
-			}
-			te_cm_census_dominance = { MERGE = french CULTURE = wallonian }
-			te_cm_switch_part = { MERGE = french CULTURE = wallonian RESULT = french }
-		}
-		if = {
-			limit = {
 				global_var:te_cm_joined_french_occitan ?= 1
 				NOT = { has_global_variable = te_cm_switched_occitan }
 			}
 			te_cm_census_dominance = { MERGE = french CULTURE = occitan }
 			te_cm_switch_part = { MERGE = french CULTURE = occitan RESULT = french }
+		}
+		if = {
+			limit = {
+				global_var:te_cm_joined_french_wallonian ?= 1
+				NOT = { has_global_variable = te_cm_switched_wallonian }
+			}
+			te_cm_census_dominance = { MERGE = french CULTURE = wallonian }
+			te_cm_switch_part = { MERGE = french CULTURE = wallonian RESULT = french }
 		}
 		if = {
 			limit = {
@@ -14423,12 +14418,12 @@ te_cmg_monthly_country = {
 		te_cm_monthly_switched_culture = { CULTURE = karelian }
 	}
 	if = {
-		limit = { has_global_variable = te_cm_switched_wallonian }
-		te_cm_monthly_switched_culture = { CULTURE = wallonian }
-	}
-	if = {
 		limit = { has_global_variable = te_cm_switched_occitan }
 		te_cm_monthly_switched_culture = { CULTURE = occitan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_wallonian }
+		te_cm_monthly_switched_culture = { CULTURE = wallonian }
 	}
 	if = {
 		limit = { has_global_variable = te_cm_switched_catalan }
@@ -15181,12 +15176,12 @@ te_cmg_copy_fervor_all = {
 		te_cm_copy_fervor = { CULTURE = sorb }
 	}
 	if = {
-		limit = { has_global_variable = te_cm_switched_wallonian }
-		te_cm_copy_fervor = { CULTURE = wallonian }
-	}
-	if = {
 		limit = { has_global_variable = te_cm_switched_occitan }
 		te_cm_copy_fervor = { CULTURE = occitan }
+	}
+	if = {
+		limit = { has_global_variable = te_cm_switched_wallonian }
+		te_cm_copy_fervor = { CULTURE = wallonian }
 	}
 	if = {
 		limit = { has_global_variable = te_cm_switched_catalan }
@@ -16438,12 +16433,12 @@ te_cmg_formed_country = {
 					has_variable = te_cm_converted_french
 					OR = {
 						AND = {
-							global_var:te_cm_joined_french_wallonian ?= 1
-							country_has_primary_culture = cu:wallonian
-						}
-						AND = {
 							global_var:te_cm_joined_french_occitan ?= 1
 							country_has_primary_culture = cu:occitan
+						}
+						AND = {
+							global_var:te_cm_joined_french_wallonian ?= 1
+							country_has_primary_culture = cu:wallonian
 						}
 						AND = {
 							global_var:te_cm_joined_french_catalan ?= 1
@@ -17570,17 +17565,17 @@ te_cmg_remove_switched_part_homelands = {
 	}
 	if = {
 		limit = {
-			global_var:te_cm_switched_wallonian ?= scope:te_cm_removed_culture
-			is_homeland = cu:wallonian
-		}
-		remove_homeland = cu:wallonian
-	}
-	if = {
-		limit = {
 			global_var:te_cm_switched_occitan ?= scope:te_cm_removed_culture
 			is_homeland = cu:occitan
 		}
 		remove_homeland = cu:occitan
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_wallonian ?= scope:te_cm_removed_culture
+			is_homeland = cu:wallonian
+		}
+		remove_homeland = cu:wallonian
 	}
 	if = {
 		limit = {
@@ -18355,17 +18350,17 @@ te_cmg_remove_parts_of_cm_czechoslovak = {
 te_cmg_remove_parts_of_french = {
 	if = {
 		limit = {
-			global_var:te_cm_switched_wallonian ?= cu:french
-			is_homeland = cu:wallonian
-		}
-		remove_homeland = cu:wallonian
-	}
-	if = {
-		limit = {
 			global_var:te_cm_switched_occitan ?= cu:french
 			is_homeland = cu:occitan
 		}
 		remove_homeland = cu:occitan
+	}
+	if = {
+		limit = {
+			global_var:te_cm_switched_wallonian ?= cu:french
+			is_homeland = cu:wallonian
+		}
+		remove_homeland = cu:wallonian
 	}
 	if = {
 		limit = {
@@ -18608,8 +18603,8 @@ te_cmg_debug_dump = {
 	if = {
 		limit = { OR = { global_var:te_cm_state_french ?= 1 global_var:te_cm_state_french ?= 2 te_cmg_french_is_candidate = yes } }
 		te_cm_debug_dump_merge = { MERGE = french }
-		te_cm_debug_dump_part = { MERGE = french CULTURE = wallonian SOL_OK = te_cm_sol_ok_french }
 		te_cm_debug_dump_part = { MERGE = french CULTURE = occitan SOL_OK = te_cm_sol_ok_french }
+		te_cm_debug_dump_part = { MERGE = french CULTURE = wallonian SOL_OK = te_cm_sol_ok_french_wallonian }
 		te_cm_debug_dump_part = { MERGE = french CULTURE = catalan SOL_OK = te_cm_sol_ok_french_catalan }
 	}
 	if = {

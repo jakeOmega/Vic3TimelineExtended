@@ -294,7 +294,7 @@ society laws](06-politics.md#rights-and-society-laws).
 
 Closely related cultures can merge into one national culture over a few
 decades: North and South German pops become German, Yankee and Dixie pops
-American, and Wallonian and Occitan pops French. A merge starts in a country
+American, and Occitan pops French. A merge starts in a country
 that holds most of its constituent cultures and treats them as equals. Each
 year a share of their pops converts, and once the merged culture holds 60% of a
 constituent culture's homeland, every remaining pop of that culture in the
@@ -313,7 +313,7 @@ The mod defines 32 merges. A merge's core cultures must all qualify before it
 can start; an optional culture joins once it qualifies too, while the merge runs
 or after it is complete. Most merges make a new culture, and eleven, marked
 existing, fold their constituent cultures into one that already exists, as
-French takes in Wallonian and Occitan. A culture can belong to several merges,
+French takes in Occitan. A culture can belong to several merges,
 but to only one running merge at a time. The tier, explained
 [below](#starting-a-culture-merge), is the one a merge starts on; a culture
 marked with another tier joins on that tier's conditions.
@@ -322,7 +322,7 @@ marked with another tier joins on that tier's conditions.
 |---|---|---|---|
 | German | North German, South German | Alemannic, Eastern German | 1 |
 | East Slavic | Russian, Ukrainian, Byelorussian | none | 1 |
-| French (existing) | French, Wallonian, Occitan | Catalan (tier 2) | 1 |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 |
 | American | Yankee, Dixie | Afro-American (tier 1b) | 1 |
 | Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b |
 | Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 |
@@ -334,10 +334,10 @@ Every merge is in the [Culture merge list](20-appendix-reference-lists.md#cultur
 Each merge has a journal entry under Domestic Affairs, such as Cultural Merge:
 German. It appears once one of the merge's core cultures is a primary culture of
 yours and you have the technology for its tier. Until the merge can start, the
-entry names the first condition that fails; then a button, Begin the German
-Merge, starts it, and its tooltip lists anything still missing. The AI starts a
-merge as soon as it qualifies. Only one country runs each merge, and once
-another country has started it, your entry ends.
+entry lists its conditions and checks off each one that holds; then a button,
+Begin the German Merge, starts it, and its tooltip lists anything still
+missing. The AI starts a merge as soon as it qualifies. Only one country runs
+each merge, and once another country has started it, your entry ends.
 
 The conditions are measured across your sphere: your country, your subjects and,
 if you lead a power bloc, its members. For every core culture:
@@ -349,8 +349,9 @@ if you lead a power bloc, its members. For every core culture:
   average acceptance is at least 80, Full Acceptance (Provisional Acceptance
   isn't enough), or 90 for a tier 1b culture;
 - the core cultures' average standards of living across the sphere are less than
-  3 apart. While they aren't, the entry names the best- and worst-off core
-  cultures, their standards of living and the gap.
+  3 apart. Once a yearly census has measured them, the condition names the
+  best- and worst-off core cultures, their standards of living and the gap.
+  Only cultures already held and accepted are measured.
 
 Each constituent culture has a tier, set by how close it is to the others:
 
