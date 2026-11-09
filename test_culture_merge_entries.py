@@ -511,12 +511,14 @@ class StatusTextTest(unittest.TestCase):
             descs = [d for d, _ in rows]
             # The rule being off comes first: is_candidate needs the rule, so any later row would never show with it
             # off, and a starter's running merge pauses (review B, M1). "Ready" closes the list.
-            self.assertEqual(descs[0], "te_cm_status_rule_off")
-            self.assertEqual(descs[1], "je_te_cm_%s_status_complete" % key)
-            self.assertEqual(descs[2], "je_te_cm_%s_status_late" % key)
-            self.assertEqual(descs[3], "je_te_cm_%s_status_running" % key)
-            self.assertEqual(descs[4], "te_cm_status_elsewhere")
-            self.assertEqual(descs[5:7], ["te_cm_status_not_candidate", "te_cm_status_unmeasured"])
+            # A standing gate that fails pauses a running or complete merge whole: its row sits after complete (nothing
+            # is left to convert there) and before the late and running rows, which would report a stalled merge as under way.
+            head = ["te_cm_status_rule_off", "je_te_cm_%s_status_complete" % key]
+            if gen.standing_gate(merge):
+                head.append("je_te_cm_%s_status_paused" % key)
+            head += ["je_te_cm_%s_status_late" % key, "je_te_cm_%s_status_running" % key, "te_cm_status_elsewhere",
+                     "te_cm_status_not_candidate", "te_cm_status_unmeasured"]
+            self.assertEqual(descs[:len(head)], head, key)
             self.assertEqual(descs[-1], "te_cm_status_ready")
             self.assertEqual(descs.count("te_cm_status_rule_off"), 1)
             # The unconditional fallback, after the last row (the only `desc` that no triggered_desc holds).
@@ -533,6 +535,15 @@ class StatusTextTest(unittest.TestCase):
                     self.assertLess(descs.index("je_te_cm_%s_status_component_%s" % (key, component)), busy, key)
             for part in gen.core_waits(merge):
                 self.assertGreater(descs.index("je_te_cm_%s_status_wait_%s" % (key, part.cultures[0])), sol)
+            # The merge's own gate comes after the components and before every slot: it is the history keeping these
+            # peoples apart, which a slot's hold row would otherwise hide.
+            if merge.gate:
+                gate = descs.index("je_te_cm_%s_status_gate" % key)
+                self.assertLess(gate, descs.index("je_te_cm_%s_status_busy_1" % key), key)
+                for component in merge.components:
+                    self.assertGreater(gate, descs.index("je_te_cm_%s_status_component_%s" % (key, component)), key)
+            else:
+                self.assertNotIn("je_te_cm_%s_status_gate" % key, descs)
             # The complete row needs every joined part switched; the late row is the core's completion with one left.
             rows = dict(self.rows(key)[1])
             self.assertIn("te_cmg_%s_all_switched = yes" % key, rows["je_te_cm_%s_status_complete" % key])
@@ -655,11 +666,12 @@ class StatusTextTest(unittest.TestCase):
                     self.assertIn("ScriptValue('%s')" % want, text, "%s %s" % (merge.key, culture))
 
     def test_a_vanilla_wait_has_a_row_and_a_tooltip(self):
-        # One per distinct entry. German and Yugoslav wait on nothing: the fervor copy took R37's waits' place.
+        # One per distinct entry. German and Yugoslav wait on nothing: the fervor copy took R37's waits' place. Brazil's
+        # Sulista waits on the Ragamuffin War, its Farroupilha revolt (owner, 2026-11-09).
         waits = [(m, p) for m in cfg.MERGES for p in gen.core_waits(m)]
         self.assertEqual(
             [(m.key, p.cultures[0]) for m, p in waits],
-            [("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("american", "dixie")],
+            [("east_slavic", "ukrainian"), ("east_slavic", "byelorussian"), ("american", "dixie"), ("brazilian", "sulista")],
         )
         for key, culture in (("german", "north_german"), ("german", "south_german"), ("yugoslav", "serb")):
             self.assertNotIn("je_te_cm_%s_status_wait_%s" % (key, culture), self.loc)
@@ -791,6 +803,9 @@ class CanStartTest(unittest.TestCase):
             if merge.skip_if_dlc:
                 head.append("te_cm_tt_dlc_off_%s" % merge.skip_if_dlc)
             head += ["te_cmg_%s_primary_tt" % key, "te_cm_tt_tech_%d" % tier]
+            # The merge's own gate follows the technology (owner, 2026-11-09).
+            if merge.gate:
+                head.append("te_cmg_%s_gate_tt" % key)
             self.assertEqual(
                 texts[:len(head) + len(merge.core)],
                 head + ["te_cmg_%s_core_%d_tt" % (key, i) for i in range(1, len(merge.core) + 1)],
@@ -1105,10 +1120,12 @@ class CensusTailTest(unittest.TestCase):
             guard = idle(key)
             if gen.result_can_switch(merge, cfg.MERGES):
                 guard += " NOT = { te_cmg_%s_result_switched = yes }" % key
+            # A milestone gate held, since can_start did: the start latches it, as the census would.
+            latch = " set_variable = { name = te_cm_gate_met_%s value = 1 }" % key if gen.milestone_gate(merge) else ""
             self.assertEqual(
                 squash(block(self.effects, "te_cmg_start_%s" % key)),
-                "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s } te_cmg_%s_join_ready = yes }"
-                % (guard, key, merge.result, key),
+                "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s }%s te_cmg_%s_join_ready = yes }"
+                % (guard, key, merge.result, latch, key),
             )
 
     def test_a_wait_year_counts_once_a_census_while_the_merge_could_start_and_an_entry_is_open(self):
@@ -1798,7 +1815,10 @@ class WordingTest(unittest.TestCase):
         for merge in cfg.MERGES:
             if merge.optional:
                 text = self.generated["je_te_cm_%s_reason" % merge.key]
-                self.assertIn(" pops can join once they qualify as well.", text, merge.key)
+                # A lone optional culture with a gate of its own says it in the same sentence.
+                gated = [p for p in merge.optional if p.gate]
+                tail = ", and only once %s." % gated[0].gate.clause if gated and len(merge.optional) == 1 else "."
+                self.assertIn(" pops can join once they qualify as well" + tail, text, merge.key)
 
     def test_a_slot_shows_its_alternatives_in_the_reason_and_the_button(self):
         # Review B, M7: the status rows already said "$yankee$ or $cm_american$"; the summary texts said "$yankee$".

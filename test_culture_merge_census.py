@@ -875,6 +875,8 @@ class TriggerShapeTest(unittest.TestCase):
                 expected.add("te_cmg_%s_start_basics" % merge.key)
             if gen.core_left_slots(merge, cfg.MERGES):
                 expected.add("te_cmg_%s_core_left" % merge.key)
+            if merge.gate:
+                expected.add("te_cmg_%s_gate_ok" % merge.key)
             for culture in slot_cultures(merge):
                 for suffix in ("available", "measured", "can_join"):
                     expected.add("te_cmg_%s_%s_%s" % (merge.key, culture, suffix))

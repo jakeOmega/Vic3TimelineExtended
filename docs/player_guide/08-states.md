@@ -368,10 +368,33 @@ held and accepted; they keep what they have when it isn't. The mod sets some tie
 hand where history differs from the game's traits: Occitan and Wallonian join
 French at tier 1, Catalan at tier 2.
 
+Most merges also have a condition of their own: what history says had to be
+settled before these peoples became one. Some need a nation formed, and count
+it for good once you have: German needs Germany or Central Europe, Italian
+Italy, Scandinavian Scandinavia, Yugoslav Yugoslavia, Czechoslovak
+Czechoslovakia, Platine Rio de la Plata, Gran Colombian Gran Colombia, Andean
+Peru-Bolivia or the Federation of the Andes, Dravidian Dravida Nadu and
+Indonesian Indonesia. Japanese needs the Honorable Restoration concluded, or
+the Bakufu law gone. The conditions below must keep holding instead, and while
+one fails the merge pauses: no culture joins or converts, even after the merge
+is complete.
+
+| Merge | Its own condition |
+|---|---|
+| American | Slavery settled one way or the other, and any civil war over it ended: Slavery Banned with The Slavery Debate over, or slavery legal in every state under Slave Trade or Debt Slavery. Legacy Slavery and Colonial Slavery keep it shut |
+| Anglophone | Slavery Banned |
+| French, Han | Public Schools |
+| Hindustani, Pilipino | You aren't a subject of another country |
+| Arab, East African | You aren't a subject of another country, and Public Schools |
+
+Afro-American pops (in American) and Afro-Brazilian pops join only under
+Slavery Banned. A merge's journal entry lists its condition with the others.
+
 A few cultures wait while any country has a base-game journal entry open that
 works on them. A merge doesn't start while a core culture waits: East Slavic for
-the Ukrainian and Byelorussian Renaissances, and American for Readmit the
-Secessionist States. It waits at most 20 years, then goes ahead. A waiting
+the Ukrainian and Byelorussian Renaissances, American for Readmit the
+Secessionist States, and Brazilian for the Ragamuffin War. It waits at most 20
+years, then goes ahead. A waiting
 optional culture stays out until the entry closes, or in American until the start
 has waited its 20 years: Afro-American (Equality for All) in American and
 Anglophone, and Dixie (Readmit the Secessionist States) in Anglophone.
@@ -421,7 +444,8 @@ pace.
 
 If a core culture's hold falls below 50%, or the core cultures' standards of living
 drift more than 4 apart, the whole merge stalls until the hold is back at 60%
-and the gap under 3. An optional culture stalls on its own conditions. A country of
+and the gap under 3; so it does while a condition of its own that must keep
+holding fails. An optional culture stalls on its own conditions. A country of
 your sphere whose acceptance of a culture falls below 75 (85 for a tier 1b
 culture) stops converting that culture until it is back at 80 (90), and the rest of the
 sphere carries on. Nothing converted is lost while a merge stalls.

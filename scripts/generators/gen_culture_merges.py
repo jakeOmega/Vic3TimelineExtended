@@ -88,6 +88,12 @@ Outputs, all rewritten only when their content changes (UTF-8 BOM):
   higher one has joined its result (R38), a complete merge whose starter is gone for good lets go of its joined,
   unswitched parts (R38), and a merge whose core slot a higher merge has switched is no candidate
   (``te_cmg_<m>_core_left``, R38). The hand-written helpers are in the same ``te_culture_merge_effects.txt``.
+* A merge with a bespoke gate (``cfg.Gate``, owner, 2026-11-09: Germany formed, slavery settled ...) gains
+  ``te_cmg_<m>_gate_ok`` (a trigger calling the gate's hand-written ``te_cm_gate_*`` in
+  ``common/scripted_triggers/te_culture_merge_gate_triggers.txt``), a ``can_start`` line after the technology, a status
+  row before the slots and, for a standing gate, a ``paused`` row and a whole-merge stall of joining and conversion; a
+  milestone is latched in ``te_cm_gate_met_<m>`` by the census and the start. An optional part's own gate joins its
+  ``can_join`` and its conversion.
 * The effects file ends with ``te_cmg_debug_dump`` (plan Task 8), the console menu's option D: for each merge that is running,
   complete or has this country as a candidate, ``te_cm_debug_dump_merge`` and a ``te_cm_debug_dump_part`` per slot culture a
   starter can bring in (hand-written, ``common/scripted_effects/te_debug_cm_effects.txt``).
@@ -916,6 +922,50 @@ def _wait_entry_open(out: "_Script", entries: tuple[str, ...]) -> None:
                 out.line("has_journal_entry = %s" % entry)
 
 
+def _gate_ok(merge: cfg.Merge) -> str:
+    """The merge's own precondition holds (cfg.Gate): a call of the generated ``te_cmg_<m>_gate_ok``."""
+    return "te_cmg_%s_gate_ok = yes" % merge.key
+
+
+def gate_latch(merge: cfg.Merge) -> str:
+    """The country variable that keeps a milestone gate met once it was: the census and the start set it."""
+    return "te_cm_gate_met_%s" % merge.key
+
+
+def standing_gate(merge: cfg.Merge) -> bool:
+    """The merge has a gate that is read for as long as it runs (slavery, schooling, independence)."""
+    return merge.gate is not None and not merge.gate.milestone
+
+
+def milestone_gate(merge: cfg.Merge) -> bool:
+    """The merge has a gate that, once met, stays met (a formation, the Meiji restoration)."""
+    return merge.gate is not None and merge.gate.milestone
+
+
+def _sentence(clause: str) -> str:
+    """A gate's clause as a condition line: capitalized, with a full stop."""
+    return clause[0].upper() + clause[1:] + "."
+
+
+def _write_gate_ok(out: "_Script", merge: cfg.Merge) -> None:
+    """``te_cmg_<m>_gate_ok``, country scope, for a merge with a gate. A milestone is met for good once the census or the
+    start has latched it; a standing one is its trigger alone."""
+    gate = merge.gate
+    out.line()
+    if gate.milestone:
+        out.line("# Country scope. The %s merge's own precondition, a milestone (%s): met now, or latched in %s" % (merge.key, gate.trigger, gate_latch(merge)))
+        out.line("# by a census or the start while it was, so a later formation or a civil war's winner keeps it. Read only to start.")
+        with out.block("te_cmg_%s_gate_ok" % merge.key):
+            with out.block("OR"):
+                out.line("has_variable = %s" % gate_latch(merge))
+                out.line("%s = yes" % gate.trigger)
+    else:
+        out.line("# Country scope. The %s merge's own precondition, a standing one (%s): read to start and, on the starter," % (merge.key, gate.trigger))
+        out.line("# for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.")
+        with out.block("te_cmg_%s_gate_ok" % merge.key):
+            out.line("%s = yes" % gate.trigger)
+
+
 def _result_exists(merge: cfg.Merge) -> str:
     """A new result culture is there to merge into. The engine makes a culture's object when a game starts, so a game
     begun before the culture was added has none: ``cu:<result>`` is empty there, and starting the merge would add that
@@ -931,8 +981,8 @@ def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[
     (the rule, which the button and the entry gate on their own, apart), so a country that is no candidate
     cannot start: the merge being idle, a core culture primary, the technology, the merge's result not
     switched into a wider culture (R36: pressing the button would start a merge whose result has gone) and
-    the skipped DLC absent. Then ``core_ok``'s slots (the same routes), the standard-of-living gate and the
-    component merges. ``test_culture_merge_switch`` pins that none of ``is_candidate``'s conditions is missing."""
+    the skipped DLC absent. Then the merge's own gate (cfg.Gate), ``core_ok``'s slots (the same routes), the
+    standard-of-living gate and the component merges. ``test_culture_merge_switch`` pins that none of ``is_candidate``'s conditions is missing."""
     key = merge.key
     if merge.new is not None:
         # The result culture exists (is_candidate's first test), out of the button's reasons: it fails only in a game
@@ -958,6 +1008,10 @@ def _write_start_items(out: "_Script", merge: cfg.Merge, tier: int, tiers: dict[
     with out.block("custom_tooltip"):
         out.line("text = te_cm_tt_tech_%d" % tier)
         out.line("te_cm_tier_tech = { TIER = %d }" % tier)
+    if merge.gate:
+        with out.block("custom_tooltip"):
+            out.line("text = te_cmg_%s_gate_tt" % key)
+            out.line(_gate_ok(merge))
     for index, part in enumerate(merge.core, start=1):
         with out.block("custom_tooltip"):
             out.line("text = te_cmg_%s_core_%d_tt" % (key, index))
@@ -1018,6 +1072,8 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
         _write_result_switched(out, merge, merges)
         if core_left:
             _write_core_left(out, merge, merges)
+        if merge.gate:
+            _write_gate_ok(out, merge)
         out.line()
         out.line("# Country scope. Can this country start the %s merge? The system is on, a core culture is" % key)
         out.line("# primary, the technology of the highest core tier is known, the merge is not complete and, where its result is a")
@@ -1092,6 +1148,9 @@ def render_triggers(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) 
                     out.line("te_cmg_%s_%s_years_met = yes" % (key, culture))
                 if culture in optional:
                     out.line("var:te_cm_sol_ok_%s_%s ?= 1" % (key, culture))
+                part_gate = _part_of(merge, culture).gate
+                if part_gate:
+                    out.line("%s = yes" % part_gate.trigger)
             wait_for = _part_of(merge, culture).wait_for
             if wait_for and not _is_absorb_result(merge, culture):
                 out.line()
@@ -1246,12 +1305,17 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
         out.line("# merge's own result has switched into a higher merge's (R33), nor once a higher merge has joined it (R38).")
     else:
         out.line("# merge's own result has switched into a higher merge's (R33).")
+    if standing_gate(merge):
+        out.line("# Nor while the merge's standing gate (%s) fails." % merge.gate.trigger)
     with out.block("te_cmg_%s_join_ready" % key):
         with out.block("if"):
-            if result_can_switch(merge, merges):
+            if result_can_switch(merge, merges) or standing_gate(merge):
                 with out.block("limit"):
                     out.line("NOT = { %s }" % _result_switched(merge))
-                    out.line("NOT = { %s }" % _result_joined_higher(merge))
+                    if result_can_switch(merge, merges):
+                        out.line("NOT = { %s }" % _result_joined_higher(merge))
+                    if standing_gate(merge):
+                        out.line(_gate_ok(merge))
             else:
                 out.line("limit = { NOT = { %s } }" % _result_switched(merge))
             for culture in slot_cultures(merge):
@@ -1278,6 +1342,9 @@ def _write_start_effects(out: "_Script", merge: cfg.Merge, merges: tuple[cfg.Mer
             else:
                 out.line("limit = { %s }" % _state_idle(key))
             out.line("te_cm_start_merge = { MERGE = %s RESULT = %s }" % (key, merge.result))
+            if milestone_gate(merge):
+                # can_start held, so the milestone did: latch it, as the census would.
+                out.line("set_variable = { name = %s value = 1 }" % gate_latch(merge))
             out.line("te_cmg_%s_join_ready = yes" % key)
     out.line()
     out.line("# Country scope: the tail of te_cmg_census_%s_country, run after the part gates are fresh." % key)
@@ -1370,6 +1437,13 @@ def render_effects(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -
         out.line("# The status row names the core gap's two ends: te_cm_sol_best_%s and te_cm_sol_worst_%s (cultures)," % (key, key))
         out.line("# te_cm_sol_hi_%s, te_cm_sol_lo_%s and te_cm_sol_gap_%s, removed while no core part has a figure." % (key, key, key))
         with out.block("te_cmg_census_%s_country" % key):
+            if milestone_gate(merge):
+                # The milestone, once met, stays met (cfg.Gate): a later formation changes the tag the trigger reads.
+                with out.block("if"):
+                    with out.block("limit"):
+                        out.line("NOT = { has_variable = %s }" % gate_latch(merge))
+                        out.line("%s = yes" % merge.gate.trigger)
+                    out.line("set_variable = { name = %s value = 1 }" % gate_latch(merge))
             for culture in cultures:
                 tier = cfg.derive_tier(merge, culture, vanilla, merges)
                 with out.block("if"):
@@ -1567,6 +1641,11 @@ def _write_debug_dump(out: "_Script", merges: tuple[cfg.Merge, ...]) -> None:
                     out.line("te_cm_debug_dump_merge_waiting = { MERGE = %s }" % key)
                 else:
                     out.line("te_cm_debug_dump_merge = { MERGE = %s }" % key)
+                # Only a milestone has a latch: naming it for a standing gate would read a name nothing sets.
+                if milestone_gate(merge):
+                    out.line("te_cm_debug_dump_gate_milestone = { MERGE = %s }" % key)
+                elif standing_gate(merge):
+                    out.line("te_cm_debug_dump_gate = { MERGE = %s }" % key)
                 for culture in _joinable_slot_cultures(merge):
                     gate = "te_cm_sol_ok_%s_%s" % (key, culture) if culture in optional else "te_cm_sol_ok_%s" % key
                     out.line("te_cm_debug_dump_part = { MERGE = %s CULTURE = %s SOL_OK = %s }" % (key, culture, gate))
@@ -1589,8 +1668,11 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
     out.line("# - While the merge runs (state 1), the whole merge stalls when its starter fails te_cmg_<m>_core_ok or")
     out.line("#   te_cm_sol_ok_<m>: both cover the core cultures only. A complete merge has no core part left to stall it.")
     out.line("# - Nothing converts once the merge's own result has switched into a higher merge's (R33).")
+    out.line("# - A merge with a standing gate (cfg.Gate: slavery, schooling, independence) stalls whole, complete or not, while")
+    out.line("#   its starter fails te_cmg_<m>_gate_ok.")
     out.line("# - One part stalls on its own gates, read on the starter: te_cm_ok_<m>_<c> (the hold alone, once joined: R29) and,")
-    out.line("#   for an optional part, its own standard-of-living gate te_cm_sol_ok_<m>_<c> (R23). Progress is kept while stalled.")
+    out.line("#   for an optional part, its own standard-of-living gate te_cm_sol_ok_<m>_<c> (R23) and any gate of its own (Afro-American")
+    out.line("#   pops once slavery is banned). Progress is kept while stalled.")
     with out.block("te_cmg_yearly_country"):
         for merge in merges:
             key = merge.key
@@ -1611,8 +1693,11 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                             with out.block("scope:te_cm_starter"):
                                 out.line("te_cmg_%s_core_ok = yes" % key)
                                 out.line("var:te_cm_sol_ok_%s ?= 1" % key)
+                        if standing_gate(merge):
+                            out.line("scope:te_cm_starter = { %s }" % _gate_ok(merge))
                     for culture in _joinable_slot_cultures(merge):
                         tier = cfg.derive_tier(merge, culture, vanilla, merges)
+                        part_gate = _part_of(merge, culture).gate
                         with out.block("if"):
                             with out.block("limit"):
                                 out.line("global_var:te_cm_joined_%s_%s ?= 1" % (key, culture))
@@ -1621,6 +1706,8 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                                     out.line("var:te_cm_ok_%s_%s ?= 1" % (key, culture))
                                     if culture in optional:
                                         out.line("var:te_cm_sol_ok_%s_%s ?= 1" % (key, culture))
+                                    if part_gate:
+                                        out.line("%s = yes" % part_gate.trigger)
                             out.line(
                                 "te_cm_convert_part = { MERGE = %s CULTURE = %s RESULT = %s TIER = %d }"
                                 % (key, culture, merge.result, tier)
@@ -1958,8 +2045,9 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     """The rows of the status text in order; the first whose trigger holds is shown.
 
     Complete (every part that joined has switched), complete for its core with a late part still
-    converting, running, running under another country, then an idle merge's first failing condition: no
-    longer a candidate, not yet measured, a component merge, each core slot (busy in another merge, not
+    converting (after a paused row for a standing gate that fails), running, running under another country, then an
+    idle merge's first failing condition: no longer a candidate, not yet measured, a component merge, the merge's
+    own gate, each core slot (busy in another merge, not
     held, not accepted, not together long enough, a technology of its own tier missing), the
     standard-of-living gap, a vanilla wait, and last that the button is ready. The rule being off comes
     before all of them: is_candidate needs the rule, so a later row would never show, and a starter's
@@ -1981,6 +2069,19 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key, "te_cmg_%s_all_switched = yes" % key],
             "The merge is complete: %s is the national culture across the sphere. Cultures that qualify later can still join." % result,
         ),
+    ]
+    # A standing gate that fails pauses a running or complete merge whole (cfg.Gate): before the late and running rows,
+    # which would otherwise report a merge that converts nothing as under way.
+    if standing_gate(merge):
+        rows.append(
+            Row(
+                base + "paused",
+                ["te_cmg_%s_is_starter = yes" % key] + _negated([_gate_ok(merge)]),
+                "The merge is paused: no constituent culture joins or converts until this holds again. %s"
+                % _sentence(merge.gate.clause),
+            )
+        )
+    rows += [
         Row(
             base + "late",
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key],
@@ -2008,6 +2109,10 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
                 "The %s merge has to finish first." % _names([merge_by_key(component).result]),
             )
         )
+    # The merge's own precondition comes before the slots: it is the history that keeps these peoples apart, and a slot's
+    # hold or acceptance row would hide it (owner, 2026-11-09).
+    if merge.gate:
+        rows.append(Row(base + "gate", _negated([_gate_ok(merge)]), merge.gate.why))
     for index, part in enumerate(merge.core, start=1):
         unmet = _negated(_lines(lambda s, part=part: _write_routes(s, _slot_routes(merge, part, tiers))))
         # A slot that only another merge's result fills is waiting for that merge, not taken by it (review B, M8).
@@ -2271,7 +2376,19 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
                 % (_part_labels([p for p in merge.core if p.cultures[0] != merge.result]), result)
             )
         if optional:
-            reason += " %s pops can join once they qualify as well." % optional
+            reason += " %s pops can join once they qualify as well" % optional
+            gated = [part for part in merge.optional if part.gate]
+            if gated and len(merge.optional) == 1:
+                reason += ", and only once %s" % gated[0].gate.clause
+            else:
+                for part in gated:
+                    reason += "; %s pops only once %s" % (_part_label(part), part.gate.clause)
+            reason += "."
+        if merge.gate:
+            reason += " The merge begins only once %s." % merge.gate.clause
+            if not merge.gate.milestone:
+                reason += " It pauses whenever that stops being true."
+            out["te_cmg_%s_gate_tt" % key] = _sentence(merge.gate.clause)
         out[entry + "_reason"] = reason
         # The complete outcome's middle condition: the merge's state is 2 once every core slot has switched. An absorb
         # merge's result is one of its core cultures, and it doesn't switch into itself.
