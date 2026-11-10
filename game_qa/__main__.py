@@ -25,6 +25,7 @@ from game_qa import gate, restore, snapshot
 
 MIN_FREE_BYTES = 2 * 1024**3
 KEEP_SNAPSHOTS = 5
+SELFTEST_TIME_TOLERANCE_NS = 2_000_000_000
 
 
 def _paths() -> tuple[Path, Path]:
@@ -127,13 +128,19 @@ def cmd_held(args) -> tuple[dict, int]:
 
 def cmd_selftest_restore(args) -> tuple[dict, int]:
     """Snapshot the real user-data folder, restore it into an empty temp
-    folder, and compare every file's hash and time with its manifest entry.
-    Reads the user-data folder; writes only under the backup root, where the
-    temp folder also sits, so the check runs on the backup drive's own
-    filesystem (a Windows drive keeps times differently from /tmp)."""
+    folder, and compare every file's hash with its manifest entry. Reads the
+    user-data folder; writes only under the backup root, where the temp
+    folder also sits, so the check runs on a Windows drive and not on /tmp.
+
+    Contents must match exactly. Times are compared within two seconds and
+    the coarsened ones counted: a file time set from WSL on a Windows drive
+    keeps whole seconds only (measured on C: and D:, both NTFS, 2026-11-10),
+    so a restored file's time is its original time cut to the second."""
     user, backups = _paths()
     snap = snapshot.take(user, backups)
     mismatched = []
+    wrong_time = []
+    coarsened = 0
     with tempfile.TemporaryDirectory(prefix="selftest_", dir=backups) as tmp:
         target = Path(tmp)
         for rel in snap.files:
@@ -141,10 +148,17 @@ def cmd_selftest_restore(args) -> tuple[dict, int]:
         out = restore.restore(snap, target, other_game_running=False)
         for rel, entry in snap.files.items():
             path = target / rel
-            if not path.is_file() or _sha256(path) != entry.sha256 or path.stat().st_mtime_ns != entry.mtime_ns:
+            if not path.is_file() or _sha256(path) != entry.sha256:
                 mismatched.append(rel)
-    ok = not mismatched and not out.held and len(out.restored) == len(snap.files)
-    return {"match": ok, "id": snap.id, "files": len(snap.files), "mismatched": mismatched}, 0 if ok else 2
+                continue
+            drift = abs(path.stat().st_mtime_ns - entry.mtime_ns)
+            if drift > SELFTEST_TIME_TOLERANCE_NS:
+                wrong_time.append(rel)
+            elif drift:
+                coarsened += 1
+    ok = not mismatched and not wrong_time and not out.held and len(out.restored) == len(snap.files)
+    return {"match": ok, "id": snap.id, "files": len(snap.files), "mismatched": mismatched,
+            "wrong_time": wrong_time, "times_coarsened": coarsened}, 0 if ok else 2
 
 
 def _sha256(path: Path) -> str:

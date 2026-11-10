@@ -226,9 +226,31 @@ class CommandLineTest(unittest.TestCase):
     def test_selftest_restore_matches_and_changes_nothing(self):
         before = self.tree()
         out, code = self.run_cli("selftest-restore")
-        self.assertEqual((code, out["match"], out["mismatched"]), (0, True, []))
+        self.assertEqual((code, out["match"], out["mismatched"], out["wrong_time"]), (0, True, [], []))
         self.assertEqual(out["files"], 4)
         self.assertEqual(self.tree(), before)
+
+    def test_selftest_restore_accepts_times_a_coarse_drive_rounds_but_not_wrong_ones(self):
+        real_utime = os.utime
+
+        def to_whole_seconds(path, times=None, *, ns=None, **kw):
+            if ns is not None:
+                ns = tuple(t - t % 1_000_000_000 for t in ns)
+            return real_utime(path, times, ns=ns, **kw) if ns is not None else real_utime(path, times, **kw)
+
+        with mock.patch("os.utime", to_whole_seconds):
+            out, code = self.run_cli("selftest-restore")
+        self.assertEqual((code, out["match"], out["wrong_time"]), (0, True, []))
+
+        def an_hour_off(path, times=None, *, ns=None, **kw):
+            if ns is not None:
+                ns = tuple(t + 3600 * 1_000_000_000 for t in ns)
+            return real_utime(path, times, ns=ns, **kw) if ns is not None else real_utime(path, times, **kw)
+
+        with mock.patch("os.utime", an_hour_off):
+            out, code = self.run_cli("selftest-restore")
+        self.assertEqual((code, out["match"]), (2, False))
+        self.assertEqual(len(out["wrong_time"]), out["files"])
 
     def test_gate_refuses_without_a_backup_folder(self):
         with mock.patch.dict(os.environ, {"VIC3_QA_BACKUPS": "/nonexistent/drive/backups"}):
