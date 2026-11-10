@@ -158,12 +158,10 @@ def _store_file(path: Path, store: Path) -> Entry:
             if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns) or size != after.st_size:
                 continue
             sha256 = digest.hexdigest()
-            entry = Entry(size=size, mtime_ns=after.st_mtime_ns, sha256=sha256)
-            if not _blob_is_intact(store, entry):
-                blob = _blob_path(store, sha256)
-                blob.parent.mkdir(exist_ok=True)
-                os.replace(temp_name, blob)
-            return entry
+            blob = _blob_path(store, sha256)
+            blob.parent.mkdir(exist_ok=True)
+            os.replace(temp_name, blob)  # also over a blob already there: the fresh, fsynced copy heals a bad one
+            return Entry(size=size, mtime_ns=after.st_mtime_ns, sha256=sha256)
         finally:
             with contextlib.suppress(FileNotFoundError):
                 os.unlink(temp_name)
@@ -276,7 +274,12 @@ def take(
     try:
         _write_manifest(folder, taken, files, listing)
     except BaseException:
-        shutil.rmtree(folder, ignore_errors=True)  # our own unfinished folder, with no manifest
+        # Clear our own unfinished folder. rmdir cannot remove one that holds a manifest, so
+        # a snapshot that was committed before the failure is never deleted by the run that made it.
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(folder / (MANIFEST_NAME + ".tmp"))
+        with contextlib.suppress(OSError):
+            folder.rmdir()
         raise
     return Snapshot(id=snapshot_id, dir=folder, files=files, listing=listing)
 

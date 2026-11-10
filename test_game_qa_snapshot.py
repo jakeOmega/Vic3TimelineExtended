@@ -160,10 +160,11 @@ class TakeTests(SnapshotTestCase):
 
     def test_entry_records_size_and_mtime(self):
         path = self.user / "pdx_settings.json"
-        os.utime(path, ns=(1_700_000_000_123_456_789, 1_700_000_000_123_456_789))
+        os.utime(path, ns=(1_700_000_000 * 10**9, 1_700_000_000 * 10**9))  # whole seconds: any filesystem
         entry = snapshot.take(self.user, self.backups).files["pdx_settings.json"]
         self.assertEqual(entry.size, path.stat().st_size)
-        self.assertEqual(entry.mtime_ns, 1_700_000_000_123_456_789)
+        self.assertEqual(entry.mtime_ns, path.stat().st_mtime_ns)
+        self.assertEqual(entry.mtime_ns, 1_700_000_000 * 10**9)
 
     def test_store_layout_is_the_content_hash(self):
         snap = snapshot.take(self.user, self.backups)
@@ -213,6 +214,17 @@ class TakeTests(SnapshotTestCase):
         second = snapshot.take(self.user, self.backups)
         self.assertEqual((self.backups / "store" / sha[:2] / sha).read_bytes(), b'{"save": "autosave.v3"}')
         self.assertEqual(second.files["continue_game.json"], first.files["continue_game.json"])
+
+    def test_a_same_size_blob_that_is_corrupt_is_replaced_by_the_fresh_copy(self):
+        path = self.user / "continue_game.json"
+        first = snapshot.take(self.user, self.backups)
+        sha = first.files["continue_game.json"].sha256
+        blob = self.backups / "store" / sha[:2] / sha
+        blob.write_bytes(b"x" * first.files["continue_game.json"].size)  # same size, wrong bytes
+        stamp = path.stat().st_mtime_ns + 5 * 10**9
+        os.utime(path, ns=(stamp, stamp))  # a new mtime, so the file is read again rather than reused
+        snapshot.take(self.user, self.backups)
+        self.assertEqual(blob.read_bytes(), b'{"save": "autosave.v3"}')
 
     def test_a_reused_hash_whose_blob_is_the_wrong_size_is_copied_again(self):
         first = snapshot.take(self.user, self.backups)
@@ -379,6 +391,32 @@ class IdAndOrderTests(SnapshotTestCase):
                 snapshot.take(self.user, self.backups, now=self.NOW)
         self.assertEqual(sorted(p.name for p in (self.backups / "snapshots").iterdir()), [snap.id])
         self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [snap.id])
+
+    def test_a_failure_after_the_manifest_is_in_place_keeps_the_snapshot(self):
+        # the run that made a snapshot never deletes it: once manifest.json exists, a late error
+        # (an interrupt, a mount that reports one after the rename) must leave it on disk and loadable
+        real_write = snapshot._write_manifest
+
+        def write_then_fail(*args, **kwargs):
+            real_write(*args, **kwargs)
+            raise KeyboardInterrupt
+
+        with mock.patch.object(snapshot, "_write_manifest", write_then_fail):
+            with self.assertRaises(KeyboardInterrupt):
+                snapshot.take(self.user, self.backups, now=self.NOW)
+        kept = self.backups / "snapshots" / "20261110T204035Z"
+        self.assertTrue((kept / "manifest.json").is_file())
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], ["20261110T204035Z"])
+
+    def test_a_failure_before_the_manifest_leaves_no_temp_manifest_behind(self):
+        def write_tmp_then_fail(folder, *args, **kwargs):
+            (folder / "manifest.json.tmp").write_text("{")
+            raise OSError("disk fell off")
+
+        with mock.patch.object(snapshot, "_write_manifest", write_tmp_then_fail):
+            with self.assertRaises(OSError):
+                snapshot.take(self.user, self.backups, now=self.NOW)
+        self.assertEqual(list((self.backups / "snapshots").iterdir()), [])
 
 
 class JournalTests(SnapshotTestCase):
