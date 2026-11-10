@@ -14655,31 +14655,14 @@ te_cmg_east_african_untouched = {
 # Any scope, one per culture that can switch. Is anything still tied to this culture being a primary culture? While
 # it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the
 # ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that
-# tests the culture and that some country has active holds it whenever; until 1936.1.1, vanilla's end date
+# tests the culture and that some country has running holds it whenever (one only on offer does not, but for the
+# ledger's ON_OFFER_HOLDS); until 1936.1.1, vanilla's end date
 # so do the reads the owner ruled to keep (historical characters, decisions, laws, Siberian exile; "none should
-# hold past 1936") and, by the designer's extension of that date, such an entry on offer and a formable that needs
-# the culture and does not exist. Any country, not this one: an entry also tests its targets' and its overlord's
-# cultures.
+# hold past 1936") and, by the designer's extension of that date, a formable that needs the culture and does not
+# exist. Any country, not this one: an entry also tests its targets' and its overlord's cultures.
 
 te_cmg_part_held_north_german = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_confederation_of_the_rhine
-						has_inactive_journal_entry = je_german_unification_idea
-						has_inactive_journal_entry = je_grunderzeit
-						has_inactive_journal_entry = je_nihilist_movement
-						has_inactive_journal_entry = je_north_german_unification
-						has_inactive_journal_entry = je_schleswig_holstein_question
-						has_inactive_journal_entry = je_south_german_unification
-						has_inactive_journal_entry = je_springtime_of_the_peoples
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_confederation_of_the_rhine
@@ -14697,23 +14680,6 @@ te_cmg_part_held_north_german = {
 
 te_cmg_part_held_south_german = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_confederation_of_the_rhine
-						has_inactive_journal_entry = je_german_unification_idea
-						has_inactive_journal_entry = je_grunderzeit
-						has_inactive_journal_entry = je_nihilist_movement
-						has_inactive_journal_entry = je_north_german_unification
-						has_inactive_journal_entry = je_schleswig_holstein_question
-						has_inactive_journal_entry = je_south_german_unification
-						has_inactive_journal_entry = je_springtime_of_the_peoples
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_confederation_of_the_rhine
@@ -14735,17 +14701,6 @@ te_cmg_part_held_alemannic = {
 
 te_cmg_part_held_east_german = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_russia_civil_war
@@ -14761,13 +14716,6 @@ te_cmg_part_held_north_italian = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:ITA }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_danubian_federation
-						has_inactive_journal_entry = je_risorgimento
-						has_inactive_journal_entry = je_springtime_of_the_peoples
-					}
-				}
 			}
 		}
 		any_country = {
@@ -14786,12 +14734,6 @@ te_cmg_part_held_south_italian = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:ITA }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_risorgimento
-						has_inactive_journal_entry = je_springtime_of_the_peoples
-					}
-				}
 			}
 		}
 		any_country = {
@@ -14866,18 +14808,6 @@ te_cmg_part_held_russian = {
 
 te_cmg_part_held_ukrainian = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_danubian_federation
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_danubian_federation
@@ -14890,17 +14820,6 @@ te_cmg_part_held_ukrainian = {
 
 te_cmg_part_held_byelorussian = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_russia_civil_war
@@ -14916,13 +14835,6 @@ te_cmg_part_held_serb = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:YUG }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_balkan_national_awakenings
-						has_inactive_journal_entry = je_danubian_federation
-						has_inactive_journal_entry = je_yugoslavia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -14950,17 +14862,6 @@ te_cmg_part_held_croat = {
 
 te_cmg_part_held_bosniak = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_balkan_national_awakenings
-						has_inactive_journal_entry = je_yugoslavia
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_balkan_national_awakenings
@@ -14976,13 +14877,6 @@ te_cmg_part_held_slovene = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:YUG }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_balkan_national_awakenings
-						has_inactive_journal_entry = je_danubian_federation
-						has_inactive_journal_entry = je_yugoslavia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -14997,18 +14891,6 @@ te_cmg_part_held_slovene = {
 
 te_cmg_part_held_bulgarian = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_balkan_national_awakenings
-						has_inactive_journal_entry = je_eastern_question_russia
-						has_inactive_journal_entry = je_yugoslavia
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_balkan_national_awakenings
@@ -15021,16 +14903,6 @@ te_cmg_part_held_bulgarian = {
 
 te_cmg_part_held_czech = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_danubian_federation
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_danubian_federation
@@ -15041,16 +14913,6 @@ te_cmg_part_held_czech = {
 
 te_cmg_part_held_slovak = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_danubian_federation
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_danubian_federation
@@ -15077,16 +14939,6 @@ te_cmg_part_held_karelian = {
 
 te_cmg_part_held_occitan = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_vernacular_policy
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_vernacular_policy
@@ -15102,11 +14954,6 @@ te_cmg_part_held_wallonian = {
 			OR = {
 				NOT = { exists = c:HRE }
 				NOT = { exists = c:UNL }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_vernacular_policy
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15150,18 +14997,6 @@ te_cmg_part_held_afro_american = {
 
 te_cmg_part_held_british = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_imperialism_of_promise
-						has_inactive_journal_entry = je_mughal_hindustan
-						has_inactive_journal_entry = je_victoria_terminus
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_imperialism_of_promise
@@ -15178,16 +15013,6 @@ te_cmg_part_held_cm_american = {
 
 te_cmg_part_held_anglo_canadian = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_canada
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_canada
@@ -15222,18 +15047,6 @@ te_cmg_part_held_afro_brazilian = {
 
 te_cmg_part_held_platinean = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_andean_federation
-						has_inactive_journal_entry = je_la_plata
-						has_inactive_journal_entry = je_patagonia
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_andean_federation
@@ -15246,17 +15059,6 @@ te_cmg_part_held_platinean = {
 
 te_cmg_part_held_argentine = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_la_plata
-						has_inactive_journal_entry = je_patagonia
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_la_plata
@@ -15268,16 +15070,6 @@ te_cmg_part_held_argentine = {
 
 te_cmg_part_held_uruguayan = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_la_plata
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_la_plata
@@ -15288,16 +15080,6 @@ te_cmg_part_held_uruguayan = {
 
 te_cmg_part_held_paraguayan = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_la_plata
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_la_plata
@@ -15312,12 +15094,6 @@ te_cmg_part_held_north_andean = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:FND }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_andean_federation
-						has_inactive_journal_entry = je_gran_colombia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15367,16 +15143,6 @@ te_cmg_part_held_bolivian = {
 
 te_cmg_part_held_colombian = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_gran_colombia
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_gran_colombia
@@ -15391,11 +15157,6 @@ te_cmg_part_held_venezuelan = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:FND }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_gran_colombia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15412,11 +15173,6 @@ te_cmg_part_held_ecuadorian = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:FND }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_gran_colombia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15445,16 +15201,6 @@ te_cmg_part_held_ryukyuan = {
 
 te_cmg_part_held_maghrebi = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_conquest_of_tetouan
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_conquest_of_tetouan
@@ -15517,15 +15263,6 @@ te_cmg_part_held_tajik = {
 				NOT = { exists = c:AFG }
 				NOT = { exists = c:TJI }
 				NOT = { exists = c:TRH }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_eastern_frontier
-						has_inactive_journal_entry = je_maintain_afghan_protectorate
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-						has_inactive_journal_entry = je_unify_afghanistan
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15556,11 +15293,6 @@ te_cmg_part_held_baluchi = {
 				NOT = { exists = c:BHT }
 				NOT = { exists = c:BLH }
 				NOT = { exists = c:PAK }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_uneasy_raj
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15577,17 +15309,6 @@ te_cmg_part_held_turkish = {
 
 te_cmg_part_held_azerbaijani = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_russia_civil_war
@@ -15599,18 +15320,6 @@ te_cmg_part_held_azerbaijani = {
 
 te_cmg_part_held_turkmen = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_pacify_the_steppes
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
@@ -15627,16 +15336,6 @@ te_cmg_part_held_avadhi = {
 
 te_cmg_part_held_bundeli = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_uneasy_raj
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_uneasy_raj
@@ -15651,16 +15350,6 @@ te_cmg_part_held_chhattisgarhi = {
 
 te_cmg_part_held_bageli = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_uneasy_raj
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_uneasy_raj
@@ -15675,16 +15364,6 @@ te_cmg_part_held_tamil = {
 
 te_cmg_part_held_kannada = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_uneasy_raj
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_uneasy_raj
@@ -15695,16 +15374,6 @@ te_cmg_part_held_kannada = {
 
 te_cmg_part_held_malayalam = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_uneasy_raj
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_uneasy_raj
@@ -15826,11 +15495,6 @@ te_cmg_part_held_chilean = {
 			game_date < 1936.1.1
 			OR = {
 				NOT = { exists = c:FND }
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_patagonia
-					}
-				}
 			}
 		}
 		any_country = {
@@ -15875,18 +15539,6 @@ te_cmg_part_held_cm_oghuz_turkic = {
 
 te_cmg_part_held_uzbek = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_pacify_the_steppes
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
@@ -15899,19 +15551,6 @@ te_cmg_part_held_uzbek = {
 
 te_cmg_part_held_kazak = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_pacify_the_steppes
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-						has_inactive_journal_entry = je_the_last_kazakh_khan
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
@@ -15929,19 +15568,6 @@ te_cmg_part_held_tatar = {
 
 te_cmg_part_held_kirgiz = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_pacify_the_steppes
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-						has_inactive_journal_entry = je_the_eastern_border
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
@@ -15963,16 +15589,6 @@ te_cmg_part_held_crimean_tatar = {
 
 te_cmg_part_held_caucasian_turk = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_caucasian_war
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_caucasian_war
@@ -15983,18 +15599,6 @@ te_cmg_part_held_caucasian_turk = {
 
 te_cmg_part_held_uighur = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_pacify_the_steppes
-						has_inactive_journal_entry = je_russia_civil_war
-						has_inactive_journal_entry = je_russia_provisional_government
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_pacify_the_steppes
@@ -16015,16 +15619,6 @@ te_cmg_part_held_filipino = {
 
 te_cmg_part_held_swahili = {
 	OR = {
-		AND = {
-			game_date < 1936.1.1
-			OR = {
-				any_country = {
-					OR = {
-						has_inactive_journal_entry = je_lion_of_the_zanj
-					}
-				}
-			}
-		}
 		any_country = {
 			OR = {
 				has_journal_entry = je_lion_of_the_zanj

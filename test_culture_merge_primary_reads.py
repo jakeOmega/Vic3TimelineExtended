@@ -286,6 +286,24 @@ class HoldTriggerTest(unittest.TestCase):
         for culture, hold in self.holds.items():
             self.assertEqual(self.body(culture) == "always = no", not hold.any, culture)
 
+    def test_an_entry_on_offer_holds_nothing_by_default(self):
+        # Owner, 2026-11-09: "only on offer shouldn't block, but there may be exceptions". None yet.
+        self.assertEqual(ledger.ON_OFFER_HOLDS, ())
+        self.assertNotIn("has_inactive_journal_entry", self.text.split("# ---- Dead primary cultures ----")[1])
+        self.assertEqual(self.body("north_german").count("has_journal_entry = "), len(self.holds["north_german"].entries))
+        self.assertNotIn("game_date", self.body("north_german"))  # nothing but its running entries
+
+    def test_an_excepted_entry_holds_while_on_offer_until_the_window_ends(self):
+        merges = cfg.MERGES
+        holds = {"north_german": ledger.Holds(entries=("je_a", "je_b"), on_offer=("je_b",))}
+        text = gen.render_triggers(gen.load_vanilla(), merges, holds)
+        body = squash(block(text, "te_cmg_part_held_north_german"))
+        self.assertEqual(
+            body,
+            "OR = { AND = { game_date < 1936.1.1 OR = { any_country = { OR = { has_inactive_journal_entry = je_b } } } } "
+            "any_country = { OR = { has_journal_entry = je_a has_journal_entry = je_b } } }",
+        )
+
     def test_only_a_running_entry_holds_past_the_window(self):
         # Owner: "none should hold past 1936". Outside the window clause there is nothing but has_journal_entry.
         for culture, hold in self.holds.items():
@@ -297,8 +315,10 @@ class HoldTriggerTest(unittest.TestCase):
                 self.assertIn("game_date < 1936.1.1 ", body, culture)
                 self.assertNotIn("has_inactive_journal_entry", body, culture)
                 self.assertNotIn("exists = c:", body, culture)
-            else:
+            elif hold.unformed or hold.on_offer:
                 self.assertIn("AND = { game_date < 1936.1.1 OR = { ", body, culture)
+            else:
+                self.assertNotIn("game_date", body, culture)
             outside = re.sub(r"AND = \{ game_date < 1936\.1\.1 OR = \{.*?\} \} (?=any_country|\}$)", "", body)
             outside = outside.replace("game_date < 1936.1.1 ", "")
             for word in re.findall(r"[a-z_]+(?= = )", outside):

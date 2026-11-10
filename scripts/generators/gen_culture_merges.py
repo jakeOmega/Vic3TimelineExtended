@@ -1400,11 +1400,11 @@ def _write_dead_primary_triggers(out: "_Script", merges: tuple[cfg.Merge, ...], 
     out.line("# Any scope, one per culture that can switch. Is anything still tied to this culture being a primary culture? While")
     out.line("# it is, te_cm_monthly_switched_culture leaves the switched culture among a country's primary cultures. From the")
     out.line("# ledger of vanilla's reads (scripts/generators/culture_merge_primary_ledger.py): a vanilla journal entry that")
-    out.line("# tests the culture and that some country has active holds it whenever; until %s, vanilla's end date" % ledger.WINDOW_END)
+    out.line("# tests the culture and that some country has running holds it whenever (one only on offer does not, but for the")
+    out.line("# ledger's ON_OFFER_HOLDS); until %s, vanilla's end date" % ledger.WINDOW_END)
     out.line("# so do the reads the owner ruled to keep (historical characters, decisions, laws, Siberian exile; \"none should")
-    out.line("# hold past 1936\") and, by the designer's extension of that date, such an entry on offer and a formable that needs")
-    out.line("# the culture and does not exist. Any country, not this one: an entry also tests its targets' and its overlord's")
-    out.line("# cultures.")
+    out.line("# hold past 1936\") and, by the designer's extension of that date, a formable that needs the culture and does not")
+    out.line("# exist. Any country, not this one: an entry also tests its targets' and its overlord's cultures.")
     for culture in switchable_cultures(merges):
         hold = holds.get(culture, ledger.Holds())
         out.line()
@@ -1415,16 +1415,16 @@ def _write_dead_primary_triggers(out: "_Script", merges: tuple[cfg.Merge, ...], 
             with out.block("OR"):
                 if hold.cases:
                     out.line("game_date < %s # %s" % (ledger.WINDOW_END, ", ".join(hold.cases)))
-                elif hold.unformed or hold.entries:
+                elif hold.unformed or hold.on_offer:
                     with out.block("AND"):
                         out.line("game_date < %s" % ledger.WINDOW_END)
                         with out.block("OR"):
                             for tag in hold.unformed:
                                 out.line("NOT = { exists = c:%s }" % tag)
-                            if hold.entries:
+                            if hold.on_offer:
                                 with out.block("any_country"):
                                     with out.block("OR"):
-                                        for entry in hold.entries:
+                                        for entry in hold.on_offer:
                                             out.line("has_inactive_journal_entry = %s" % entry)
                 if hold.entries:
                     with out.block("any_country"):

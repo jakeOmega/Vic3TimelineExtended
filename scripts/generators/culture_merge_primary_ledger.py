@@ -15,9 +15,8 @@ The rulings are the owner's (2026-11-09):
   case": such reads are grouped into ``CASES``, each with the owner's ruling;
 * of the cases that hold, "none should hold past 1936 - vanilla's end date"
   (``WINDOW_END``). The owner said it of the cases. Applying the same date to
-  a journal entry that is only on offer and to an unformed country is the
-  designer's call, made so that the rule is one sentence ("after 1936 only a
-  running journal entry holds a part");
+  an unformed country is the designer's call, made so that the rule is one
+  sentence ("after 1936 only a running journal entry holds a part");
 * a small helper can be overridden ("is it not possible to override something
   like 'Is Indian' though? That seems small, unlike replacing a whole JE"):
   ``TRIGGER_OVERRIDES``.
@@ -32,14 +31,15 @@ Dispositions:
                government type whose title belonged to the whole merged people
                (``restated_government_types``). No hold.
 ``entries``    belongs to journal entries: the part is held while **any** country
-               has one of them active, and, until ``WINDOW_END``, while any
-               country has one on offer (inactive, waiting on its ``possible``).
-               Any country, because an entry also reads other countries'
-               cultures (its targets, its overlord), and the scan can't tell
-               whose culture a line tests. An entry that never began stops
-               holding at vanilla's end date like the cases do; one that is
-               running holds whenever, since it could not finish without the
-               part.
+               has one of them running, whenever that is, since the entry could
+               not finish without the part. Any country, because an entry also
+               reads other countries' cultures (its targets, its overlord), and
+               the scan can't tell whose culture a line tests. An entry that is
+               only on offer (inactive, waiting on its ``possible``) holds
+               nothing (owner, 2026-11-09: "only on offer shouldn't block, but
+               there may be exceptions"): German National Identity is offered to
+               a country *because* North German is still a primary culture. The
+               exceptions go in ``ON_OFFER_HOLDS`` and hold until ``WINDOW_END``.
 ``unformed``   a formable's own trigger requires the part: held until
                ``WINDOW_END`` while the tag does not exist.
 ``case``       one of ``CASES``: holds the part until ``WINDOW_END`` if the
@@ -78,7 +78,10 @@ COSMETIC, COMPANY, MOOT, MIRRORED, ENTRIES, UNFORMED, CASE = (
     "cosmetic", "company", "moot", "mirrored", "entries", "unformed", "case",
 )
 # Vanilla's end date (owner, 2026-11-09, of the cases: "none should hold past 1936"). Every hold but a running journal
-# entry ends on this day; for an entry on offer and an unformed country that is the designer's call (module docstring).
+# entry ends on this day; for an unformed country that is the designer's call (module docstring).
+# Journal entries important enough to hold a part while they are only on offer, until WINDOW_END. None so far (owner,
+# 2026-11-09: "We can make that the default for now and change if we encounter ones that are important enough").
+ON_OFFER_HOLDS: tuple[str, ...] = ()
 WINDOW_END = "1936.1.1"
 # Vanilla scripted triggers the mod restates, the merged cultures added beside the parts they list: a trigger that is
 # nothing but a list of cultures, so the copy is small and a vanilla patch to it shows as a changed list in the
@@ -356,13 +359,14 @@ def classify(row: dict) -> Disposition | None:
 class Holds:
     """What keeps one part a primary culture after its switch."""
 
-    entries: tuple[str, ...] = ()  # while any country has one active; until WINDOW_END, also while one is on offer
+    entries: tuple[str, ...] = ()  # while any country has one running
+    on_offer: tuple[str, ...] = ()  # until WINDOW_END, while any country has one on offer: entries in ON_OFFER_HOLDS
     unformed: tuple[str, ...] = ()  # until WINDOW_END, while one of these tags does not exist
     cases: tuple[str, ...] = ()  # until WINDOW_END: cases ruled to hold, or not ruled yet
 
     @property
     def any(self) -> bool:
-        return bool(self.entries or self.unformed or self.cases)
+        return bool(self.entries or self.on_offer or self.unformed or self.cases)
 
 
 def part_holds(inventory: dict | None = None) -> dict[str, Holds]:
@@ -394,6 +398,7 @@ def part_holds(inventory: dict | None = None) -> dict[str, Holds]:
     return {
         part: Holds(
             tuple(sorted(entries.get(part, ()))),
+            tuple(sorted(e for e in entries.get(part, ()) if e in ON_OFFER_HOLDS)),
             tuple(sorted(unformed.get(part, ()))),
             tuple(sorted(cases.get(part, ()))),
         )
