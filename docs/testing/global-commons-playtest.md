@@ -624,6 +624,10 @@ decision Begin Orbital Debris Removal and wait a month.
    action is greyed against that target for 12 months for every country. Hover the target's
    Orbital Network Disrupted: it expires a year on (six months on the Mars Mission), not at once
    and not never (its duration was a `{ value = N }` script value until 2026-10-23).
+   As the target (2026-11-10, #1559): Our Satellites Destroyed (`te_orbital_debris.2`) opens at
+   once, names the striker, and its option's tooltip shows Orbital Network Disrupted with the
+   length and strength the modifier list shows. Note whether the action's own message also
+   reached us as the target; if it did, the event can drop to a card (remove `popup = yes`).
 7. **The AI and the strike.** In an observer run with a late war between space powers: an AI
    strikes only an enemy with more in orbit than itself, rarely, and almost never once the
    index is 50 or more unless it is losing. An AI should never strike a country with no

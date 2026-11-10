@@ -326,3 +326,126 @@ te_pb_summit.1 = {
 		}
 	}
 }
+
+# ----------------------------------------------------------------------------
+# te_pb_summit.2: the communiqué, told to the other members (#1558)
+# ----------------------------------------------------------------------------
+# te_pb_summit_grant_member_initiative sends it, a day on, to every member but
+# the leader when the leader's summit gives each member a ten-year initiative
+# (options i, j, k, m, n and o of te_pb_summit.1). Only the leader saw that
+# event. The member carries <modifier>_told for a month: it picks the text and
+# the modifier the option lists, and is removed here. The option changes
+# nothing. scope:te_pb_summit_leader is the leader that convened the summit.
+te_pb_summit.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = te_pb_summit.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_drills_told }
+				desc = te_pb_summit.2.d_drills
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_council_told }
+				desc = te_pb_summit.2.d_council
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_customs_members_told }
+				desc = te_pb_summit.2.d_customs_members
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_congress_told }
+				desc = te_pb_summit.2.d_congress
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_culture_told }
+				desc = te_pb_summit.2.d_culture
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_pb_summit.2.d_ambassadors
+			}
+		}
+	}
+	flavor = te_pb_summit.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_pb_summit_leader
+		OR = {
+			has_variable = te_pb_summit_drills_told
+			has_variable = te_pb_summit_council_told
+			has_variable = te_pb_summit_customs_members_told
+			has_variable = te_pb_summit_congress_told
+			has_variable = te_pb_summit_culture_told
+			has_variable = te_pb_summit_ambassadors_told
+		}
+	}
+
+	option = {
+		name = te_pb_summit.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		# The line the leader's option ran on us, shown and not run again.
+		show_as_tooltip = {
+			if = {
+				limit = { has_variable = te_pb_summit_drills_told }
+				add_modifier = {
+					name = te_pb_summit_drills
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_council_told }
+				add_modifier = {
+					name = te_pb_summit_council
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_customs_members_told }
+				add_modifier = {
+					name = te_pb_summit_customs_members
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_congress_told }
+				add_modifier = {
+					name = te_pb_summit_congress
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_culture_told }
+				add_modifier = {
+					name = te_pb_summit_culture
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_ambassadors_told }
+				add_modifier = {
+					name = te_pb_summit_ambassadors
+					days = long_modifier_time
+				}
+			}
+		}
+	}
+
+	after = {
+		remove_variable = te_pb_summit_drills_told
+		remove_variable = te_pb_summit_council_told
+		remove_variable = te_pb_summit_customs_members_told
+		remove_variable = te_pb_summit_congress_told
+		remove_variable = te_pb_summit_culture_told
+		remove_variable = te_pb_summit_ambassadors_told
+	}
+}

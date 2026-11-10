@@ -96,6 +96,9 @@
 					state_collapse_remove_infrastructure = yes
 				}
 				reset_all_institutions_and_ministries = yes
+				# The country hears what the step took: the entry's outcome
+				# never fires, and neither effect above posts anything (#1554).
+				trigger_event = { id = minor_events_timelineextended.10 popup = yes }
 			}
 		}
 	}

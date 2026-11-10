@@ -205,19 +205,20 @@ un_ladder_dissolution_check = {
 
 # Power blocs fill the vacuum while the UN is Moribund, and while no UN
 # exists after a dissolution: every bloc carries un_bloc_vacuum_modifier.
-# The single refresh site for that modifier.
+# The single refresh site for that modifier. The leader is told when its bloc
+# gains it (un_bloc_vacuum_notice): a bloc leader need not be a member or a
+# great power, so no UN event is sure to reach it.
 # Scope: none (every month, founded or not)
 un_ladder_bloc_vacuum_update = {
 	if = {
 		limit = { un_bloc_vacuum_active = yes }
 		every_country = {
-			limit = { is_power_bloc_leader = yes }
-			power_bloc ?= {
-				if = {
-					limit = { NOT = { has_modifier = un_bloc_vacuum_modifier } }
-					add_modifier = { name = un_bloc_vacuum_modifier }
-				}
+			limit = {
+				is_power_bloc_leader = yes
+				power_bloc ?= { NOT = { has_modifier = un_bloc_vacuum_modifier } }
 			}
+			power_bloc ?= { add_modifier = { name = un_bloc_vacuum_modifier } }
+			post_notification = un_bloc_vacuum_notice
 		}
 	}
 	else = {
@@ -307,7 +308,9 @@ un_dissolve = {
 		trigger_event = { id = un_events.30 }
 	}
 
-	# 3. Power blocs fill the vacuum.
+	# 3. Power blocs fill the vacuum. Every leader is told what its bloc
+	#    gains: un_events.30 above does not name the modifier, and does not
+	#    reach a leader that is neither a member nor a great power.
 	every_country = {
 		limit = { is_power_bloc_leader = yes }
 		power_bloc ?= {
@@ -317,6 +320,7 @@ un_dissolve = {
 				is_decaying = yes
 			}
 		}
+		post_notification = un_dissolution_vacuum_notice
 	}
 
 	# 4–9. The organisation's business, members, headquarters, agencies and

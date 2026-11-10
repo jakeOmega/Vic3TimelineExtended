@@ -368,9 +368,20 @@ covert_warfare.1 = {
 			# order), applied here with a notice; otherwise covert_warfare.2
 			# asks the defender (owner, 2026-11-04: a second event after the
 			# player had already decided read oddly).
+			# covert_warfare.2 says what the exposure did at home. The other
+			# two roads did not (#1559): the response notices name only the
+			# follow-up, and an exposure inside .2's 24-month cooldown sent the
+			# defender nothing at all. Each now posts a notice.
 			if = {
 				limit = { has_variable = iw_expose_response }
-				scope:detected_by_country = { covert_exposure_response_apply = yes }
+				scope:detected_by_country = {
+					covert_exposure_response_apply = yes
+					covert_exposure_tell_public = yes
+				}
+			}
+			else_if = {
+				limit = { scope:detected_by_country = { has_variable = iw_defender_event_cooldown } }
+				scope:detected_by_country = { covert_exposure_tell_repeat = yes }
 			}
 			else = {
 				scope:detected_by_country = {

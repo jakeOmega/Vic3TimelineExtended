@@ -2131,6 +2131,32 @@ gp_intervention_condemned_notice = {
 	color = bad
 }
 
+# Monetary: a swap line's balance settled in one payment when the line ends
+# (te_mon_effect_swap_settle), to the recipient that paid and the provider
+# that was repaid (#1556).
+te_mon_swap_settled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_mon_swap_repaid_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+# Irredentism: the neighbor a country funded cultural ties with
+# (irredentism.1.b) hears who did it and what it gained (#1557).
+irr_cultural_ties_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
 nationalization_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
@@ -2179,6 +2205,25 @@ covert_exposure_shored_notice = {
 	notification_type = feed
 	group = "te_covert_notification_group"
 	color = good
+}
+
+# An exposure that covert_warfare.2 does not report (its 24-month cooldown),
+# and the public backlash at home where that event is not shown
+# (covert_exposure_tell_repeat, covert_exposure_tell_public).
+covert_exposure_repeat_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_backlash_public_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = neutral
 }
 
 covert_exposure_expelled_notice = {
@@ -2259,6 +2304,37 @@ un_conference_opened_notice = {
 # We have taken a permanent seat on the Security Council (to the new holder;
 # un_seat_grant, un_seat_effects.txt).
 un_permanent_seat_granted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# Effects of the UN on a country that did not choose them (#1555, #1558).
+# The Decolonization Declaration's pressure, to every colonial power it lands
+# on, member or not (un_vote.2).
+un_decolonization_pressure_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+# The headquarters has passed to us (un_hq_assign_host, un_hq_effects.txt).
+un_headquarters_host_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# Our power bloc gains from a UN that is Moribund or gone
+# (un_ladder_bloc_vacuum_update), and from its dissolution (un_dissolve); to
+# the bloc's leader.
+un_bloc_vacuum_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_dissolution_vacuum_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed

@@ -35,7 +35,8 @@ un_hq_make_host = {
 # great power, or to a random member of any rank when no other great power is
 # in the UN. With no other member at all it clears un_hq_country, so nobody
 # holds building rights for an HQ the UN no longer has; un_hq_monthly_update
-# seats the next member.
+# seats the next member. The new host is told (un_headquarters_host_notice):
+# it did not ask for the headquarters.
 #
 # The outgoing host is excluded by un_hq_is_host, not by its membership.
 # un_leave_button removes un_member_modifier just before calling this, and a
@@ -68,6 +69,7 @@ un_hq_assign_host = {
 				NOT = { un_hq_is_host = yes }
 			}
 			un_hq_make_host = yes
+			post_notification = un_headquarters_host_notice
 		}
 	}
 	else_if = {
@@ -83,6 +85,7 @@ un_hq_assign_host = {
 				NOT = { un_hq_is_host = yes }
 			}
 			un_hq_make_host = yes
+			post_notification = un_headquarters_host_notice
 		}
 	}
 	else = {

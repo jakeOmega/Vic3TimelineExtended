@@ -7204,6 +7204,8 @@
  st_res_small_arms_withdraw_flow:0 "Strategic Reserve Small Arms Release"
  st_res_tanks_store_flow:0 "Strategic Reserve Tanks Intake"
  st_res_tanks_withdraw_flow:0 "Strategic Reserve Tanks Release"
+ state_collapse_buildings_lost_tt:0 "Every state has lost its Barracks, Military Base, Naval Administration, Naval Fortification, Naval Logistics Center, Port, Railway, University and Government Administration"
+ state_collapse_institutions_reset_tt:0 "Every institution and ministry is abolished: each of those laws is replaced by the one that provides none"
  state_power_grid_connection_bool:0 "[concept_power_grid] Connection"
  state_power_grid_disrupted_bool:0 "[concept_power_grid] Disruption"
  state_violence_against_minorities_bool:0 "Violence Against Minorities"

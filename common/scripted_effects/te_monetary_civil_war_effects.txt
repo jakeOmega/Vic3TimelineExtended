@@ -68,7 +68,10 @@
 #       loser's modifier is exactly audit F7's bug. Nor the events' 120-day
 #       flags (te_lolr_answer / _paid, te_peg_crisis_slump,
 #       te_peg_resume_asked, te_mandate.1's te_mon_mandate_asked): they describe
-#       an event the loser holds. Nor te_mon_mandate_statute, which step 2
+#       an event the loser holds. Nor what two reports print, te_union.2's
+#       te_union_exit_from and the swap settlement's
+#       te_mon_swap_settled_amount: each describes something the loser was
+#       told. Nor te_mon_mandate_statute, which step 2
 #       re-reads from the winner's own independence law (#799). A winner
 #       still suspended in the last month is asked te_peg.3 afresh at its next
 #       pulse — or, if the engine's own inheritance carried the flag across,

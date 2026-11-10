@@ -20,6 +20,8 @@
 # Event 10 "[Leader] Blesses Our Claim"   (member, follow-up to Event 7 option A)
 # Event 8  "[Member] Considers Voluntary Union" (bloc leader, about the country
 #          that actually proposed, var:irr_union_proposer from Event 4 option A)
+# Event 12 "[Leader] Blesses the Union"   (both countries, follow-up to Event 8 option A)
+# Event 13 "[Leader] Forbids the Union"   (both countries, follow-up to Event 8 option B)
 #
 # See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
@@ -184,12 +186,15 @@ irredentism.1 = {
 			days = 1825   # 5 years
 			is_decaying = yes
 		}
+		# The neighbor hears who funded the ties and what it gained (#1557).
+		save_scope_as = irr_ties_funder
 		scope:target_country = {
 			add_modifier = {
 				name = irr_cultural_ties_modifier
 				days = 1825
 				is_decaying = yes
 			}
+			post_notification = irr_cultural_ties_notice
 		}
 	}
 
@@ -928,6 +933,13 @@ irredentism.8 = {
 				}
 			}
 		}
+		# Both countries hear the ruling (#1557): neither was sent anything.
+		# Not a proposer that is this leader itself: it has just ruled.
+		scope:irr_proposed_target = { trigger_event = { id = irredentism.12 days = 1 } }
+		if = {
+			limit = { NOT = { scope:irr_unifier = ROOT } }
+			scope:irr_unifier = { trigger_event = { id = irredentism.12 days = 1 } }
+		}
 	}
 
 	# --- Forbid the union ---
@@ -953,6 +965,120 @@ irredentism.8 = {
 				name = irr_union_forbidden_modifier
 				days = 1825
 				is_decaying = yes
+			}
+		}
+		# Both countries hear the ruling (#1557).
+		scope:irr_proposed_target = { trigger_event = { id = irredentism.13 days = 1 } }
+		if = {
+			limit = { NOT = { scope:irr_unifier = ROOT } }
+			scope:irr_unifier = { trigger_event = { id = irredentism.13 days = 1 } }
+		}
+	}
+}
+
+# ============================================================================
+# Event 12: "[Leader] Blesses the Union"
+# Fires on both countries of a proposed voluntary union after the target's
+# bloc leader blesses it (Event 8 option A): the target, which may now accept,
+# and the country that proposed. Triggered only, no cooldown. Scopes
+# irr_bloc_leader, irr_proposed_target and irr_unifier carry over from Event 8.
+# The text is chosen by which of the two ROOT is.
+# ============================================================================
+irredentism.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.12.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:irr_proposed_target ?= { this = root } }
+				desc = irredentism.12.d_target
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = irredentism.12.d_unifier
+			}
+		}
+	}
+	flavor = irredentism.12.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:irr_bloc_leader
+		exists = scope:irr_proposed_target
+		exists = scope:irr_unifier
+	}
+
+	option = {
+		name = irredentism.12.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = irredentism.12.a.tt }
+	}
+}
+
+# ============================================================================
+# Event 13: "[Leader] Forbids the Union"
+# Fires on both countries after the target's bloc leader forbids the union
+# (Event 8 option B): the target, which carries irr_union_forbidden_modifier
+# for five years and cannot accept, and the country that proposed. Same scopes
+# as Event 12. The option changes nothing: it shows the target the modifier it
+# already has.
+# ============================================================================
+irredentism.13 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.13.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:irr_proposed_target ?= { this = root } }
+				desc = irredentism.13.d_target
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = irredentism.13.d_unifier
+			}
+		}
+	}
+	flavor = irredentism.13.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:irr_bloc_leader
+		exists = scope:irr_proposed_target
+		exists = scope:irr_unifier
+	}
+
+	option = {
+		name = irredentism.13.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = irredentism.13.a.tt }
+		if = {
+			limit = { scope:irr_proposed_target ?= { this = root } }
+			show_as_tooltip = {
+				add_modifier = {
+					name = irr_union_forbidden_modifier
+					days = 1825
+					is_decaying = yes
+				}
 			}
 		}
 	}

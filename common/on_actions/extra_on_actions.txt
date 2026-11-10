@@ -252,6 +252,9 @@ te_banking_law_change_cleanup = {
 			}
 			set_variable = { name = te_mon_dollarised value = 0 }
 			te_mon_effect_new_currency = yes
+			# te_inflation.1.b's tooltip warned of this at dollarization, which
+			# may be decades back. te_inflation.2 says it when it lands (#1556).
+			trigger_event = { id = te_inflation.2 popup = yes }
 		}
 	}
 }

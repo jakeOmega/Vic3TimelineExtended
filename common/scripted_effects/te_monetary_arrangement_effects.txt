@@ -390,7 +390,20 @@ te_monetary_discover_arrangements = {
 			var:te_mon_anchor_kind_new = 0
 			te_mon_bloc_has_common_currency = no
 		}
+		# THE MEMBER IS TOLD (#1556). This exit was not its choice, and it runs
+		# from a hidden event or the yearly pulse, so te_union.2 reports it: the
+		# premium, the pool, the radicals and the lock. te_union_exit_from names
+		# the currency's leader while te_mon_anchor still does (the change logic
+		# below un-anchors); the event reads it and removes it.
+		if = {
+			limit = {
+				has_variable = te_mon_anchor
+				exists = var:te_mon_anchor
+			}
+			set_variable = { name = te_union_exit_from value = var:te_mon_anchor days = 30 }
+		}
 		te_mon_effect_union_exit_costs = yes
+		trigger_event = { id = te_union.2 popup = yes }
 	}
 	if = {
 		limit = {
@@ -901,6 +914,10 @@ te_monetary_apply_arrangement_modifiers = {
 # Scope: the RECIPIENT. Called from the discovery the moment the recipient role
 # ends with a balance outstanding, and from nowhere else. te_mon_swap_provider
 # still names the lender at that point; the discovery re-derives it afterwards.
+#
+# BOTH SIDES ARE TOLD (#1556): the whole balance moves in one payment, from a
+# hidden pulse. te_mon_swap_settled_amount keeps the sum on the recipient for
+# the two notices to print (te_mon_work is scratch and is rewritten at once).
 te_mon_effect_swap_settle = {
 	set_variable = { name = te_mon_work value = var:te_mon_swap_drawn }
 	add_treasury = {
@@ -908,7 +925,14 @@ te_mon_effect_swap_settle = {
 		multiply = -1
 	}
 	var:te_mon_swap_provider = { add_treasury = prev.var:te_mon_work }
+	set_variable = { name = te_mon_swap_settled_amount value = var:te_mon_swap_drawn }
 	set_variable = { name = te_mon_swap_drawn value = 0 }
+	save_scope_as = te_mon_swap_settle_recipient
+	var:te_mon_swap_provider = {
+		save_scope_as = te_mon_swap_settle_provider
+		post_notification = te_mon_swap_repaid_notice
+	}
+	post_notification = te_mon_swap_settled_notice
 }
 
 

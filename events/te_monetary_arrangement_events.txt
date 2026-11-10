@@ -315,3 +315,89 @@ te_union.1 = {
 		}
 	}
 }
+
+
+# ----------------------------------------------------------------------------
+# te_union.2 — out of the common currency, not by choice (#1556)
+# ----------------------------------------------------------------------------
+# Fired on a member by te_monetary_discover_arrangements when it has adopted
+# and there is no common currency left for it to be in: it left the bloc, the
+# bloc lost the tier, the leader lost its dial, or it now leads the bloc
+# itself. The discovery has already run te_mon_effect_union_exit_costs; the
+# option changes nothing and lists what that did. A chosen exit (the dashboard
+# button, the AI's own decision) goes through te_mon_effect_union_exit and
+# does not come here: its tooltip said all this before the click.
+# var:te_union_exit_from is the currency's leader, when one could be named.
+te_union.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_union.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = te_union_exit_from
+					exists = var:te_union_exit_from
+					NOT = { is_in_same_power_bloc = var:te_union_exit_from }
+				}
+				desc = te_union.2.d_left_bloc
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = te_union_exit_from
+					exists = var:te_union_exit_from
+				}
+				desc = te_union.2.d_ended
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_union.2.d
+			}
+		}
+	}
+	flavor = te_union.2.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	is_popup = yes
+
+	# No trigger block, the te_peg.1 rule: the caller has decided, and the
+	# premium it added the same instant is not yet visible to has_modifier.
+
+	option = {
+		name = te_union.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = te_union.2.a.tt }
+		# The lines te_mon_effect_union_exit_costs ran, shown and not run
+		# again. The pool hit and the radicals are in the tooltip above: shown
+		# as effects they would be worked out afresh on a pool already cut.
+		show_as_tooltip = {
+			add_modifier = {
+				name = te_mon_union_exit_premium
+				days = 3650
+				is_decaying = yes
+			}
+			if = {
+				limit = {
+					has_variable = te_union_exit_from
+					exists = var:te_union_exit_from
+				}
+				var:te_union_exit_from = {
+					change_relations = {
+						country = root
+						value = -30
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		remove_variable = te_union_exit_from
+	}
+}
