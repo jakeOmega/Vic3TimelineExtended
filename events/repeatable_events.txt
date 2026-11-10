@@ -492,6 +492,7 @@ repeatable_events.80 = {
 		name = repeatable_events.80.a
 		default_option = yes
 		add_modifier = { name = re_sbsp_reserves days = short_modifier_time }
+		add_modifier = { name = re_sbsp_reserves_cost days = short_modifier_time multiplier = sv_money_flow_event_modest }
 	}
 
 	option = {
@@ -543,6 +544,7 @@ repeatable_events.90 = {
 		name = repeatable_events.90.a
 		default_option = yes
 		add_modifier = { name = re_quantum_subsidy days = normal_modifier_time }
+		add_modifier = { name = re_quantum_subsidy_cost days = normal_modifier_time multiplier = sv_money_flow_event_tiny }
 	}
 
 	option = {

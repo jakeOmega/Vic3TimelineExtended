@@ -3777,6 +3777,12 @@ sv_treasury_event_huge   = { value = yearly_gross_income  multiply = 0.30  }
 # Same shape as banking_event_expense_<tier> (which stays for banking
 # events; sv_money_flow_event_<tier> is the generic name to prefer for
 # new content). Tiers are weekly fractions of GDP.
+# The two below small are sized to the government-wage lines they replaced
+# in six event modifiers, +3% and +5%, so the options cost about what they
+# did: 0.1% and 0.16% of GDP a year. That rests on an estimate, not a
+# measurement: a government wage bill of 2-3% of GDP a year.
+sv_money_flow_event_tiny   = { value = gdp  multiply = 0.00002 }  # 0.002% GDP / week
+sv_money_flow_event_modest = { value = gdp  multiply = 0.00003 }  # 0.003% GDP / week
 sv_money_flow_event_small  = { value = gdp  multiply = 0.0001 }   # 0.01% GDP / week
 sv_money_flow_event_medium = { value = gdp  multiply = 0.0002 }   # 0.02% GDP / week
 sv_money_flow_event_large  = { value = gdp  multiply = 0.0004 }   # 0.04% GDP / week
