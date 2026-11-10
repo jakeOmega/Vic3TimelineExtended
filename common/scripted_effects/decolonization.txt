@@ -250,6 +250,32 @@ decol_path_contagion = {
 decol_mark_former_colony = {
 	set_variable = { name = former_overlord value = $OVERLORD$ }
 	set_variable = { name = recently_decolonized days = 7300 }
+	decol_young_state_reset = yes
+}
+
+# The young-state events (.4, .7, .16, .17, .18, .21) each fire once per
+# independence (owner, 2026-11-10). Their 10-year cooldown inside the 20-year
+# recently_decolonized window let each fire twice, and a second "the euphoria
+# of independence has given way" a decade on read as a repeat. Each event's
+# immediate calls this; its trigger and its pool entry test the variable. The
+# variable runs as long as the window, so it outlives whatever is left of it,
+# and being a variable it passes to a civil war's winner.
+# Parameters: $EVENT$ = the event's number
+# Scope: country (the former colony)
+decol_young_state_seen = {
+	set_variable = { name = decol_young_state_seen_$EVENT$ days = 7300 }
+}
+
+# A country freed again starts over. Called wherever recently_decolonized is
+# set: decol_mark_former_colony and te_construction_market_on_released_independent.
+# Scope: country (the former colony)
+decol_young_state_reset = {
+	if = { limit = { has_variable = decol_young_state_seen_4 } remove_variable = decol_young_state_seen_4 }
+	if = { limit = { has_variable = decol_young_state_seen_7 } remove_variable = decol_young_state_seen_7 }
+	if = { limit = { has_variable = decol_young_state_seen_16 } remove_variable = decol_young_state_seen_16 }
+	if = { limit = { has_variable = decol_young_state_seen_17 } remove_variable = decol_young_state_seen_17 }
+	if = { limit = { has_variable = decol_young_state_seen_18 } remove_variable = decol_young_state_seen_18 }
+	if = { limit = { has_variable = decol_young_state_seen_21 } remove_variable = decol_young_state_seen_21 }
 }
 
 # The people who would form a country released from this state, saved as

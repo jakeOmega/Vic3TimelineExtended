@@ -175,7 +175,8 @@ and loses 20.
 
 The young-state events of a former colony's first 20 years need only that some
 country in the world has researched Decolonization; the former colony doesn't
-need the technology itself.
+need the technology itself. Each fires at most once per independence; a
+country that is made a subject and freed again can see them again.
 
 | Event | Who gets it | Choices |
 |---|---|---|

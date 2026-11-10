@@ -69,5 +69,62 @@ class TestRankGates(unittest.TestCase):
             self.assertIn(gate, _norm(trigger), name)
 
 
+YOUNG_STATE = (4, 7, 16, 17, 18, 21)
+
+
+class TestOncePerIndependence(unittest.TestCase):
+    """Each young-state event fires once per independence (owner, 2026-11-10):
+    a 10-year cooldown inside the 20-year recently_decolonized window let The
+    Strongman's Promise fire twice. The event marks itself seen, its trigger
+    and its pool entry test the mark, and being freed again clears it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.events = _strip((ROOT / "events/decolonization_events.txt").read_text(encoding="utf-8-sig"))
+        cls.pool = _strip((ROOT / "common/on_actions/extra_on_actions.txt").read_text(encoding="utf-8-sig"))
+        cls.effects = _strip((ROOT / "common/scripted_effects/decolonization.txt").read_text(encoding="utf-8-sig"))
+        cls.release = _strip(
+            (ROOT / "common/on_actions/te_construction_market_on_actions.txt").read_text(encoding="utf-8-sig"))
+
+    def test_the_list_is_every_event_that_reads_the_window(self):
+        found = set()
+        for m in re.finditer(r"^decolonization_events\.(\d+)\s*=\s*\{", self.events, re.M):
+            event = self.events[m.end():_close(self.events, m.end())]
+            trigger = _block(event, r"^\ttrigger\s*=\s*\{") if re.search(r"^\ttrigger\s*=", event, re.M) else ""
+            if re.search(r"^\t\thas_variable = recently_decolonized", trigger, re.M):
+                found.add(int(m[1]))
+        self.assertEqual(found, set(YOUNG_STATE))
+
+    def test_event_marks_itself_and_tests_the_mark(self):
+        for n in YOUNG_STATE:
+            event = _block(self.events, rf"^decolonization_events\.{n}\s*=\s*\{{")
+            self.assertIn(f"NOT = {{ has_variable = decol_young_state_seen_{n} }}",
+                          _norm(_block(event, r"^\ttrigger\s*=\s*\{")), n)
+            self.assertIn(f"decol_young_state_seen = {{ EVENT = {n} }}",
+                          _norm(_block(event, r"^\timmediate\s*=\s*\{")), n)
+
+    def test_pool_entry_tests_the_mark(self):
+        for n in YOUNG_STATE:
+            call = re.search(rf"trigger_event\s*=\s*\{{\s*id\s*=\s*decolonization_events\.{n}\s*\}}", self.pool)
+            start = self.pool.rfind("trigger = {", 0, call.start())
+            trigger = self.pool[start:_close(self.pool, start + len("trigger = {"))]
+            self.assertIn(f"NOT = {{ has_variable = decol_young_state_seen_{n} }}", _norm(trigger), n)
+
+    def test_mark_lasts_the_window(self):
+        seen = _norm(_block(self.effects, r"^decol_young_state_seen\s*=\s*\{"))
+        self.assertIn("name = decol_young_state_seen_$EVENT$ days = 7300", seen)
+        self.assertIn("name = recently_decolonized days = 7300", _norm(self.effects))
+
+    def test_being_freed_again_clears_every_mark(self):
+        reset = _block(self.effects, r"^decol_young_state_reset\s*=\s*\{")
+        for n in YOUNG_STATE:
+            self.assertIn(f"remove_variable = decol_young_state_seen_{n}", reset, n)
+        for text in (_block(self.effects, r"^decol_mark_former_colony\s*=\s*\{"), self.release):
+            self.assertRegex(_norm(text), r"name = recently_decolonized days = 7300 \} decol_young_state_reset = yes")
+        # Nothing else sets the window without the reset.
+        sets = len(re.findall(r"name = recently_decolonized\b", self.effects + self.release + self.events + self.pool))
+        self.assertEqual(sets, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

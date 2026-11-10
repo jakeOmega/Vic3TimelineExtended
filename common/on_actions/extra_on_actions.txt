@@ -2214,6 +2214,7 @@ decolonization_events_on_action = {
 				# but rarely seen because the trigger is exclusive (former colony only)
 				12 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_4 }
 						is_subject = no
 						has_variable = recently_decolonized
 						NOT = { any_scope_state = { is_homeland_of_country_cultures = ROOT } }
@@ -2267,6 +2268,7 @@ decolonization_events_on_action = {
 				# Post-Colonial Nation Building (for new countries)
 				10 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_7 }
 						country_rank <= rank_value:minor_power
 						has_variable = recently_decolonized
 					}
@@ -2398,6 +2400,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Partition Question (new nations near neighbors)
 				10 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_16 }
 						has_variable = recently_decolonized
 						is_subject = no
 						any_scope_state = {
@@ -2421,6 +2424,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Border Disputes (new nations vs new nations)
 				10 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_17 }
 						has_variable = recently_decolonized
 						is_subject = no
 						any_scope_state = {
@@ -2438,6 +2442,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Strongman's Promise (political instability)
 				10 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_18 }
 						has_variable = recently_decolonized
 						is_subject = no
 						OR = {
@@ -2467,6 +2472,7 @@ decolonization_events_on_action = {
 				# Post-Independence: Non-Aligned Movement (Cold War alignment)
 				10 = {
 					trigger = {
+						NOT = { has_variable = decol_young_state_seen_21 }
 						has_variable = recently_decolonized
 						is_subject = no
 						# Not a great power itself: the event's own gate.
