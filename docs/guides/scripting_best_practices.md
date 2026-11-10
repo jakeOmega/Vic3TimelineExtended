@@ -5532,3 +5532,7 @@ Seen in game on 2026-11-05:
 - **`alpha` binds on a side panel's root** (`journal_entry_panel`): the see-through page fades (2026-11-06).
 
 The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.
+
+## An Effect That Changes Another Country Tells That Country
+
+An option, a pulse or a helper that changes the laws of a country other than the one clicking, or gives it a modifier lasting a year or more, also sends that country an event or a `post_notification` naming who did it and what it gained. The tooltip the acting country reads does not reach the receiving one, and `activate_law` and `add_modifier` on a foreign scope post nothing themselves. A country `create_dynamic_country` forms has no option of its own at all: its starting laws and legacy went unreported until `decolonization_events.22` (2026-11-10), and the same sweep found the same gap in a dozen other systems. Save the acting country as a scope before the post, so the notice can name it.

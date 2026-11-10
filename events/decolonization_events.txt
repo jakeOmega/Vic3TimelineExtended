@@ -2694,7 +2694,11 @@ decolonization_events.19 = {
 		# scopes travel with the trigger_event, so .20 names the real
 		# intervener and its real target instead of re-picking them.
 		save_scope_as = intervening_power
-		scope:nationalizing_country = { save_scope_as = intervention_victim }
+		scope:nationalizing_country = {
+			save_scope_as = intervention_victim
+			# The target hears who did this to it.
+			post_notification = gp_intervention_target_notice
+		}
 		custom_tooltip = {
 			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
 			every_country = {
@@ -2830,8 +2834,11 @@ decolonization_events.20 = {
 				country = scope:intervening_power
 				value = -40
 			}
-			# The condemning power's moral authority
+			# The condemning power's moral authority; the intervener hears who
+			# condemned it.
+			save_scope_as = decol_condemning_power
 			scope:intervening_power = {
+				post_notification = gp_intervention_condemned_notice
 				add_modifier = {
 					name = gp_intervention_condemned_modifier
 					days = normal_modifier_time

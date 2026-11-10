@@ -207,6 +207,12 @@ decol_path_contagion = {
 			NOT = { has_variable = decol_liberation_contagion }
 		}
 		set_variable = { name = decol_liberation_contagion months = 12 }
+		# One notice per copy, so one a year at most; it names the new
+		# country and the empire it left.
+		if = {
+			limit = { exists = scope:decolonizing_parent }
+			post_notification = decol_liberation_contagion_notice
+		}
 		add_modifier = {
 			name = colonial_stability_negative_event
 			months = 12
