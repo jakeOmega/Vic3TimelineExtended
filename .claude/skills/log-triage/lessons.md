@@ -1,0 +1,462 @@
+# Log triage lessons
+
+What earlier triages learned, one `###` section each. A heading states the rule and ends with the date it was learned; the body is the evidence. `python3 scripts/lessons.py <words>` searches these sections with the guides': give it the cpp source of a line (`pdx_assert`), a piece of its message (`used but is never set`), or what you are looking at (`burst`, `self-check`, `crash`), and `--show N` prints one. Search before you investigate a line by hand, and read a whole topic when the triage is about it (a crash, a registry edit).
+
+Adding one: a new `###` section at the end of its topic, the rule as its heading, one paragraph of evidence. It belongs here when it is about reading logs, the registries or the triage tools. An engine or scripting rule goes in `docs/guides/scripting_best_practices.md`; what one vanilla message means goes in its registry entry. A step a script can do goes into `scripts/analysis/log_triage.py`, with one line here saying so: several sections below begin with that line, and their hand procedure is kept for when the script's answer needs checking.
+
+## Reading the logs: which file, which launch, what rotates
+
+### `debug.log` is the primary signal; `error.log` holds a small subset (2026-04-29)
+
+`debug.log` is the primary signal; `error.log` only surfaces a small subset (mostly script-value type errors). Always start with the canonical debug.log curl above. Source: `CLAUDE.md` § "Triage workflow for log issues".
+
+### A plain English phrase from `jomini_effect_impl.cpp` is vanilla's own `debug_log`, not an error (2026-04-29)
+
+`category=other` entries with `source=jomini_effect_impl.cpp:454` and a message body that's a plain English phrase (e.g. "Election Campaign Started", "Conservative Party Created", "Revolutionary Coalition Disbanded") are **intentional vanilla `debug_log = "..."` calls** in `common/on_actions/00_code_on_actions.txt`, not bugs. They dominate `mod_only=true` triage results during election cycles because the categorizer can't distinguish them from real errors. Recognize and skip; don't dig into vanilla source for them.
+
+### For comprehensive vanilla-bug discovery, aggregate across all `error*.log` and `debug*.log` generations, not just current.log (2026-05-05)
+
+*`scripts/analysis/log_triage.py` does this now: every generation is read.*
+
+Bugs that only fire under specific conditions (certain country exists / specific JE active / particular UI panel open) often appear in older generations but not current. Pattern: `for path in sorted(glob.glob(os.path.join(game_logs_path, 'error*.log'))): if 'Manfred' not in path and 'pickle' not in path: all_entries.extend(parse_log(path))`. Then `tag_vanilla_bugs(...)` and group by basename — the high-volume basenames are the registration targets. Took error-log tagging from 22% → 86% in one session.
+
+### The canonical `mod_only=true` filter hides errors whose `files` field never resolves to a mod path, even when a mod loc string is the cause (2026-05-09)
+
+Unregistered concept refs (`[concept_X]` with no `common/game_concepts/` entry) fire `Could not find data system function 'concept_X'` from `pdx_data_factory.cpp` — vanilla source, no mod file in the message body — at hundreds of times per render, causing UI lag. The canonical curl returned `Total: 0` while the underlying file had 600+ such lines. **For a thorough sweep, use `?mod_only=unknown` instead of the default `?mod_only=true`** — it keeps mod-path entries AND uncategorized empty-files entries, dropping only entries positively tagged as registered vanilla bugs. The unregistered-concept failure mode itself is now caught at parse time by `concept_reference_audit` (`docs/engine/concept_reference_report.md`), which scans every loc YAML for `[concept_X]` / `[Concept('concept_X', ...)]` references and flags any not declared in `common/game_concepts/`. Engine-fact write-up of the concept-registration requirement lives in `docs/guides/scripting_best_practices.md` § Game Concept Hyperlinks.
+
+### `debug.log` rotates aggressively — capture the canonical triage output to a file before drilling in (2026-05-14)
+
+*`scripts/analysis/log_triage.py` does this now: the snapshot is its first step.*
+
+Vic3 caps each debug.log at 524 KB, then rolls 0..5; a 5-launch session (or any session with high-volume mod-side spam) can scroll your initial gen=0 findings entirely out of all six retained files. Pattern: run the canonical curl, drill into one entry, return for the next entry — by then the user may have re-launched the game and gen=0 is a fresh 5 KB file. Earlier findings (line numbers, repeat counts) are still valid against the mod files themselves (those haven't changed), but the API view of them is gone. Solution: `curl -s "http://localhost:8950/logs/debug?..." > /tmp/debug_triage.json` early; re-query with `python3 -c "import json; ..." < /tmp/debug_triage.json`. The /tmp file survives the rotation. Same pattern for `error.log`. The `summary=true` view is small enough to keep in conversation but the full deduped entry list is not — save it.
+
+### A rotated/late `debug.log` hides parse-time errors; only a fresh game-start log has them (2026-05-24)
+
+*`scripts/analysis/log_triage.py` does this now: the Launches section says which families still hold a launch's start.*
+
+A first triage pass on a mid-session log showed just 2 runtime entries; after a relaunch the fresh startup log surfaced ~10 more (parse errors, BOM, duplicate-key, orphans) that load only at game start. After any fix-verify relaunch, re-run the full canonical curl — the "clean" view from a rotated log is not proof the mod is clean.
+
+### Ad-hoc `/logs/error?...` queries need `mod_noise=hide` too, not just `vanilla_bugs=hide` (2026-05-24)
+
+The canonical *debug* command sets both, but when you drop to error.log with a hand-built query (e.g. `mod_only=unknown&vanilla_bugs=hide`) and omit `mod_noise=hide`, already-registered mod noise re-surfaces and looks like a fresh finding. This session the harvest-condition sound-entity warnings (`Couldn't find any animation state for harvest condition type` — already in `mod_known_noise.md`, tracked `open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`) appeared "new" purely because the error.log query lacked `mod_noise=hide`. Mirror the canonical filter set on every family.
+
+### Older log generations can be OneDrive cloud-only placeholders (2026-09-13)
+
+`grep` on `debug.2..5.log` returned `Input/output error` because the files were never downloaded to this machine (the logs folder is OneDrive-synced across machines). The API silently returns nothing for them, so "0 hits in older generations" is not evidence an error class is new. Date error classes against the vanilla clone's version commits (`git -C <vanilla_source_repo_path> grep ... <OLD_REF>` vs `<NEW_REF>`) and the Modding-Digests docs dumps instead, or ask the user to mark the logs folder "Always keep on this device".
+
+### When the game is running while you triage, snapshot the logs to the scratchpad and analyse them with a direct `game_log_reader` import — the server can't boot fast enough (2026-09-20)
+
+*`scripts/analysis/log_triage.py` does this now: it is this pass, in one command.*
+
+Cold start is ~110s to load plus the full generator/audit chain before the port binds (~3.5 min total), and a live session with a render-loop spam burst rotates all six `debug.*.log` / `error.*.log` generations inside that window. `cp` every generation first, then: `parse_log(p)` per file, `filter_external_mods(entries)`, `load_vanilla_bug_registry('docs/vanilla/vanilla_known_bugs.md')` + `load_mod_noise_registry('docs/audits/mod_known_noise.md')`, then `tag_vanilla_bugs(entries, by_basename, by_source, mod_root=<mod checkout>)` once per registry (the second pass won't overwrite the first's matches; without `mod_root` the `- stack: vanilla only` entries tag nothing). That reproduces the canonical curl's filtering across *all* generations at once — this session it went 34,399 parsed → 15,228 untagged → 19 after registry work, and the 19 were exactly the actionable mod bugs. `/logs/*` only reads `gen=0` by default, so even a healthy server would have missed the rotated-out ones.
+
+### Check which launch a log generation is before reading it as "mod on" or "mod off" (2026-09-30)
+
+*`scripts/analysis/log_triage.py` does this now: the Launches section.*
+
+The rotating logs keep the *last few launches*, and a `script_docs` dump session is often followed within minutes by a normal launch, so gen 0 and gen 1 can differ in whether the mod was loaded. Two cheap tells: `Mounted Data: .../mod/<name>` (present only when the mod loaded; it also precedes the `dlc.cpp:753 Mod ... does not match game version` line) and the first timestamp (`head -1`). In the mod-off log, whatever errors remain are vanilla's, and that is the log to triage for `vanilla_known_bugs.md`; a `Failed to read key reference: <mod game rule>` burst appears in both. Then date each error class against the pre-update generations before calling it new (1.14.5: the only new mod-attributed entries were the 7 `Unknown modifier type` lines and the version line; `st_res_policy_set_by_hand_base`, `sr_rival`, the city-type parse errors and `monument_events.11` were all in the 1.14.4 mod logs). Also: a patch can *revert* a rename (1.14.5 undid 1.14.4's `country_prestige_from_navy_power_projection_mult` rename), so an engine-docs dump from the previous patch validates the wrong name; `scripts/analysis/vanilla_patch_diff.py docs <old> <new> --mod-uses` finds it before launch.
+
+### When you snapshot the logs folder for a direct `game_log_reader` pass, glob the generations exactly: `debug.log` plus `debug.[1-5].log`, not `debug*.log` (2026-10-04)
+
+*`scripts/analysis/log_triage.py` does this now: it copies by exact name.*
+
+The folder also holds `debug-Manfred*.log` and `debug-pickle*.log`, other machines' logs from 2024 and January 2026 (OneDrive-synced). A `debug*.log` glob read them in, and they produced a false drift report (six cpp anchors "moved") and hundreds of stale parse errors (`Unexpected token`, `Total startup duration`, `Mounted Data`) that looked like this launch's startup log. Use `re.fullmatch(r'debug(\.\d)?\.log', name)`. Same for `error`. A mod-file error that tracks a window of game time with no change in the mod (here ~190 lines in seven minutes, then none) is usually one odd country, and a co-occurring vanilla line that names a country (`Could not get leader of interest group … in country 'Khiva'`) identifies it faster than decoding a save. See `scripting_best_practices.md` § Guard Scope References in Triggers.
+
+### An observer run's archive holds every rotation and minute copy of the logs, so count each line once (2026-10-10)
+
+The 2026-10-10 folder had 546 `debug.*` and 425 `error.*` files (`debug.N.<ns>.log`, `debug.live.<ns>.log`, `debug.final.log`). `parse_log` each one, key entries on (timestamp, source, message), and keep the largest count any single file shows; summing across files multiplies every line by the number of copies. The run's autosaves are **plain text** (debug mode), which `save_country_probe.py` refuses (`PlainTextSave`); `grep -n '^<country id>={'` finds the country record (`definition=`, `capital=`, and `game_over_date=` once it has lost its last state), and a state's record carries `country=` and `previous_country=`.
+
+### Read `gui.log` too: GUI layout warnings land there, and the snapshot pass doesn't read it (2026-11-03)
+
+*`scripts/analysis/log_triage.py` does this now: gui.log is read and tagged with the other families.*
+
+`pdx_gui_layout.cpp:186 <file>:<line> - Widget cannot have a position in a layout` goes to both gui.log and error.log, but a flood that rotates error.log (that day vanilla's Congo Free State status line, 13,720 lines in 18 s) erases the error.log copies, and `game_log_reader`'s families have no gui.log. #1369's first fix worked from error.log's surviving `te_systems_window.gui:206` lines and missed the same footer's `:162` lines in the other frame; gui.log had 28 of each. `grep -a "te_\|gui/" gui.log | sed 's/^\[[0-9:]*\]//' | sort | uniq -c` lists the mod's lines in seconds. Copy `gui.log` with the other families when you snapshot.
+
+### When error.log has rotated a launch away, look in `game.log`: it records every `Script system error!` too (145 of 145 in one window), though not all of error.log's other lines (145 of 507), and rotates on its own schedule (2026-11-09)
+
+*`scripts/analysis/log_triage.py` does this now: game.log is read, less what error.log also holds.*
+
+That night error.log's six generations reached back only to 21:32, but `game.3`–`game.5.log` still held the construction-market stepper burst from 21:19 and 21:31, four times as many lines as the surviving error.log copy. Snapshot `game.log` and `game.[1-5].log` with the other families, then read them like error.log (the snapshot pass runs on them once they are renamed `error*.log` in a separate folder). Ignore their `jomini_eventmanager.cpp` and `journal_entry_manager.cpp` traces, and the `diplomatic_action_type.cpp:105 … lacks an evaluation_chance block` lines, which appear nowhere else: vanilla's subject actions, none of them the mod's.
+
+### `dedicated_server.log` dates every line, and `system.log` counts the launches (2026-11-09)
+
+*`scripts/analysis/log_triage.py` does this now: the Launches section, and each finding's game date and paused share.*
+
+`dedicated_server.log` logs `Processing Tick: 1873.5.24` four times a game day beside the wall clock, and every `Pause Toggled! Paused: true` and speed change, so any line's timestamp converts to a game date and to paused or running. It rotates like the other families (that day six generations covered three launches). `system.log` is written once at each launch and keeps six generations, so their first lines are the last six launch times and exe versions; `custom_automated_stats.log` gives the seconds to the menu and into the game. A log line carries no date, so the script works each one back from its file's mtime, which is why a snapshot must keep mtimes (`cp -p`). Before this a window was dated by hunting for a trace line that printed `date=`, and "which launch is this generation" by reading `Mounted Data` lines.
+
+### gui.log lines met no registry until the report read them; register the ones the mod causes on purpose (2026-11-09)
+
+Triage read gui.log by `grep`, so eight lines a launch looked new at every read: `gui/country_panel.gui:379 - Type '…' already registered at 'gui/00_te_country_panel_information.gui:19'`, the engine dropping vanilla's copy of a type the mod defines first (gui_modding_guide.md, gotcha #30). The report now tags gui.log like the other families and counts a line error.log also holds once. The entry's signature is the kept file's prefix, `already registered at 'gui/00_te_`, so the reverse case stays visible: a line that starts with a `00_te_` file and names a vanilla file as the one kept means the mod's override lost.
+
+## Mod, vanilla or third party
+
+### A path in neither the mod nor vanilla is a third-party Workshop mod (2026-05-02)
+
+A referenced file path that exists in **neither** this mod (`ls <path>` from repo root) **nor** vanilla (`"$VAN/game/<path>"`, where `VAN=$(python3 -c 'import path_constants; print(path_constants.base_game_path)')`) is almost always a **third-party Steam Workshop mod**. Locate it under the sibling workshop tree — `find "$(dirname "$(dirname "$VAN")")/workshop/content/529340" -name <basename>` and identify via `<workshop>/<id>/.metadata/metadata.json`'s `name` field. The `mod_only=true` filter can't distinguish workshop mods from this mod, so they leak through. Not our problem — skip without recording in `vanilla_known_bugs.md`. Recent example: `GDPGR_scripted_effects.txt` and `events/gdp_events.txt` Div/0 entries trace to "GDP Growth Rate Improved" v1.2.2 (workshop id 3255320685).
+
+### A frameless `pdx_assert.cpp:641` line can still have a script cause: read error.log at the same second before calling it engine noise (2026-10-17)
+
+*`scripts/analysis/log_triage.py` does this now: the `near:` lines under a finding with no file.*
+
+debug.log carries no script errors, and error.log rotates faster, so take the archived runs (`grep -r -a --include='error*.log'` under `/mnt/d/vic3te-data`, skipping the `*.live.*` minute copies). Three `Attempted to create relations for invalid countries!` asserts there followed, in the same second, a `has_attitude trigger [ Invalid Country! ]` from the mod's `international_relations_events.5` (fixed); a fourth followed vanilla's `create_political_lobby … targeting null country`. So that message stays unregistered. An assert also doesn't log every time its cause runs: one session logged that `has_attitude` error with the assert at 10:45 and without it at 11:49, so an assert's count is a floor and its first line may not be the first occurrence. `change_relations` aimed at its own country logs a script error (`Trying to change relations between the same country`), never the `relations between a country and itself` assert, which logged 11 times across the archives and today's snapshot, never with a script error in the same second (five had error.log coverage), and stays unattributed: no mod-off run to compare.
+
+### error.log `files` lists the whole script call stack, so a third-party mod's error can be attributed to this mod (2026-09-13)
+
+A Workshop mod's on_action (`historical_record_on_actions.txt`, "历史记录", id 3772525185) fired from a law change our `extra_on_actions.txt` / `extra_law_consistency_generated.txt` made, and the server grouped ~9,700 errors under our files. Read the `Script location:` line (first frame) before treating an entry as mod-owned; if that file exists in neither repo nor vanilla, it's the third-party mod. A 5-generation error.log rotation inside one second is usually one such spam burst.
+
+### A registered `Value of wrong type in '<vanilla file>:<line>'. Got value of type 'none'` can be the mod's script-value override (2026-10-05)
+
+The engine reports a wrong-scope read at the outermost script value, so an override in `common/script_values/extra_script_values.txt` that holds in only one scope logs at the vanilla consumer's line. `28_invite_to_power_bloc.txt:87` had sat in the registry since 2026-05-15, twelve days after the mod restored a `leverage_threshold_to_invite` override that hops through `power_bloc_leader` (power-bloc input only), and vanilla reads that value from a country at line 104. Check once per high-volume entry of this shape: list the script values the vanilla block reads, then `git grep -n "^<name> = {" common/script_values` for each. This one was 33,000 lines in 27 minutes, which rotated debug.log every five minutes and took the startup log with it.
+
+### Before tagging a "vanilla" file's errors vanilla, check whether the mod overrides that file (2026-10-10)
+
+`Div/0 near common/treaty_articles/05_transfer_money.txt:149` sat in `vanilla_known_bugs.md` for months and was 6,510 lines in one observer run, a sixth of its error.log. The mod overrides that file whole (`ls common/treaty_articles/05_transfer_money.txt` in the repo finds it), so vanilla's copy never loads, and the mod's own `divide = gdp` tiers were the cause (a country with no states has GDP 0). The test is one `ls` per path; the engine names the script value's opening line, not the divide, so read every `divide` in the block. The STATE_HAWAII entry was the same family: a vanilla path in the registry that mod script reached (bare-path signatures: #873).
+
+### A vanilla error that starts the day a mod feature lands is often vanilla content the feature is the first to show (2026-10-25)
+
+`GOODS.GetPrice` (114 lines) came from vanilla's own `GOODS_PRICE_DESC_FIXED`, which only renders for a `fixed_price` good: gold, and now Grid Power. The fix is a `replace/` loc override with a function the type has (check the data-types dump, `Modding-Digests/<version>/docs/data_types_uncategorized.txt`), not a registry entry. The same session's 40 `sr_discovery_*_mult` "used but is never set" lines were one shared helper (`sr_site_hide_modifier`) reading `$MODIFIER$_mult` for callers whose show path never sets it. When a family of parameter-built names is flagged, find the helper that reads the name and the callers that pass it, and split the helper, as `sr_site_hide_modifier_at` now does.
+
+### A registered line called harmless can be a mod bug's symptom: check the claim when the line names a mod key (2026-11-06)
+
+Two entries filed `Localization key hash collision. Key 'Ricchieri' and 'extra_law_events.42.f'` as benign and Ricchieri's `Missing localization key for character last name` as a vanilla template gap. They were one mod bug: the engine keeps one string per hash (MurmurHash3-32), and vanilla's key existed but lost to the mod's. Both entries are gone, and `test_loc_hash_collisions.py` now fails on a mod key that shares a hash with another key. A startup `pdx_localize.cpp:187` line is a mod bug unless both keys are vanilla's.
+
+## The registries: writing and checking an entry
+
+### Use `?vanilla_bugs=hide` (or `=only` to inspect what's tagged) on every `/logs/*` call (2026-05-05)
+
+`docs/vanilla/vanilla_known_bugs.md` is now a parsed registry — entries with `### \`path/to/file.txt[:line]\`` headings, an optional fenced code block whose lines become signature substrings, and a body whose backticked path references extend the heading's basenames. Multiple distinct error variants per bug should all go inside the same code block (`tag_vanilla_bugs` matches if ANY signature substring appears in the message, normalized for `:NNN` line refs). Avoid `<X>` placeholders in signatures — they're matched literally and won't hit real messages with quoted values. The `## Expected mod-override noise` section uses the same parser to register the `replace/*.yml` warnings as known by-design noise.
+
+### `vanilla_known_bugs.md` entries can parse, persist, and still match nothing if the heading isn't shaped `### \`anchor\` — title` (2026-05-10)
+
+A free-text heading like `### Vanilla journal_entries — ...` survives parse but never tags real log entries; only a backtick-quoted anchor at the front (file path, file path + line refs, or cpp source token) gets indexed. Full reload's `warnings` array does NOT flag this — it only catches the related "no file path or source anchor — would match every log entry" case (which fires when the signature block has no script path *and* there's no `- source:` line). The "parses but matches nothing" failure is silent; verify by running the canonical curl after each batch and confirming the entries you expected to swallow are actually gone.
+
+### `POST /reload?engine_only=true` re-parses the bug registry but skips audits (2026-05-10)
+
+Useful for fast iteration when adding `vanilla_known_bugs.md` entries (~1s instead of ~77s). But you have to run a full `POST /reload` once at the end to surface the parser's rejection warnings — `engine_only` returns `warnings: []` even when entries were rejected.
+
+### Two registry-heading parse gotchas, both surface as `'X' has no file path or source anchor — rejected` warnings (2026-05-11)
+
+- **Line-ref format:** the `_PATH_REF_RE` regex in `game_log_reader.py` accepts `\`path.txt:N\`` and `\`path.txt:N, N, N\`` (single colon, then comma-separated numbers), but NOT `\`path.txt:N, :N, :N\`` (repeated colons). The repeated-colon form fails the whole anchor capture, leaving `file_basenames` empty even though the path is right there. Format multi-line headings as `### \`events/foo.txt:112, 205, 206, 210\`` not `### \`events/foo.txt:112, :205, :206, :210\``.
+- **Title-as-signature:** the parser ALSO treats the text after ` — ` in the heading (`_TITLE_AFTER_DASH_RE`) as a signature line. If that title text *looks* like an engine error message (e.g. `Undefined event target 'X'`), the parser captures it, fails its anchor check, and rejects the whole entry. Keep titles paraphrased ("unbound option-branch scope") rather than verbatim engine-error keywords.
+
+### Engine assertions (`pdx_assert.cpp:637`) mix actionable mod bugs with vanilla noise — message body distinguishes (2026-05-16)
+
+This source emits both: vanilla internals (`IsWithinBounds( ProvinceIndex )`, `_ProvinceSet.GetNumRanges() <= 1`, `Possible loss of data when converting from int to float` — register and ignore) AND mod-caused asserts (e.g. `Exceeding maximum amount of Prestige Goods per Goods for engines (3)` — fix the mod). Don't auto-suppress all `pdx_assert.cpp:637` entries; register each distinct vanilla message individually so new mod-caused asserts still surface. Each `vanilla_known_bugs.md` entry needs a distinct heading + signature substring so the parser can tag them separately.
+
+### A vanilla patch bump invalidates source-anchored registry entries (cpp line drift) and spawns new-validation error classes — do both checks up front (2026-07-03)
+
+(1) The 1.13.9 engine moved `character_templates_utils.cpp:1812` → `:1814`, silently un-tagging the registered missing-last-name noise; when a "new" entry looks familiar, grep `vanilla_known_bugs.md` for its signature text before re-diagnosing, and keep both old+new `- source:` anchors on re-anchor. (2) Date every unfamiliar error class against pre-patch generations (`for g in error.*.log; do grep -c "<sig>" $g; done` — all-zero pre-patch = new engine validation surfacing old state, not a new mod regression). 1.13.9 examples: law-retention warnings (474, all pre-existing state), create_building tech refusal (69, real behavior change), set_institution_investment_level validation (18, issue #226).
+
+### Check cpp source-anchor drift before triaging — a vanilla bump silently un-tags whole registry entries (2026-09-20)
+
+*`scripts/analysis/log_triage.py` does this now: the Registry section's DRIFT lines.*
+
+The 2026-07-03 lesson said to watch for it; this makes it a mechanical first step. Compare the registry's `- source:` tokens against the sources actually present in the logs, grouped by cpp basename: a basename registered at one line and observed only at a *different* line is drift. This session `pdx_assert.cpp:637` → `:641` (11 entries, silently dead) and `pdx_gui_localize.cpp:140` → `:302`. Keep the old anchor and add the new one — `- source:` lines are a list, and signature substrings still filter within a source match, so an extra anchor cannot over-swallow. Script:
+
+```python
+reg = set(by_src) | set(mod_by_src)
+seen = collections.Counter(e.source for e in entries if e.source)
+for b, regs in itertools.groupby(sorted(reg), lambda s: s.split(':')[0]):
+    obs = {s for s in seen if s.split(':')[0] == b}
+    regs = set(regs)
+    if obs and not (regs & obs):
+        print('DRIFT', b, sorted(regs), '->', sorted(obs))
+```
+
+### A missing-asset entry must be source-anchored — the registry's basename index only accepts `.txt` / `.gui` / `.yml` / `.yaml` (2026-09-20)
+
+`_PATH_REF_RE` in `game_log_reader.py` is `` `([A-Za-z0-9_./-]+\.(?:txt|gui|yml|yaml))(?::[0-9,\s\-]+)?` ``, so a `missing_file` / `missing_texture_for_entity` entry whose only file reference is a `.dds` can never be tagged by path, no matter how the heading is written — and the parser does not warn, because the heading still carries a valid `.gui` anchor for the file that *references* the asset. Give those a `- source:` line (e.g. `virtualfilesystem.cpp:569`) and pin the signature to the specific asset. Same trap for the second and third file in a multi-file entry: only backticked `.txt`/`.gui`/`.yml` paths **in the body prose** extend the basename index — a path that appears only inside the fenced signature block does not, so `03_conquer_state.txt` stayed untagged until it was named in a sentence. After adding any entry, re-run the tagging over a snapshot and confirm the count actually dropped; `POST /validate/registries` returns 0 warnings either way.
+
+### The drift script's `DRIFT` lines need the message checked before adding an anchor (2026-09-26)
+
+*`scripts/analysis/log_triage.py` does this now: DRIFT lists only lines that carry the registered signature.*
+
+It groups by cpp basename, so one file that emits *different* messages from different lines looks like drift: `application.cpp:1861` (registered, "Quit from inside game") vs `:925` ("Starting checksum calculation"), and `character_templates_utils.cpp:1812/1814` (missing last name) vs `:40` (a mod ideology given to a character, a real mod bug). Re-anchor only when the observed line carries the registered entry's signature text.
+
+### A registry entry anchored on a vanilla *helper* file (a scripted effect or trigger the mod also calls) swallows the mod's errors through it (2026-10-04)
+
+error.log's `files` is the whole call stack, so a mod event that calls vanilla's `add_lobby_appeasement_from_diplomacy_unidirectional` logs with `00_lobby_effects.txt` in its stack. The `change_appeasement` entry anchored there had been tagging five mis-signed mod options as vanilla since it was written, and blamed two vanilla lines that were correct. Anchor such entries on the vanilla *caller* (the catalyst, event or JE file at the bottom of the stack) and narrow the signature to the vanilla case. When reviewing an entry, ask whether the mod calls the anchored file: `POST /validate/registries` now answers that (#730), warning `helper_anchor_mod_calls` with the mod's call sites for every entry anchored on a vanilla scripted effect, trigger or script value file the mod uses (it needs the game files). Re-anchor, or record why the signature cannot match a mod call in a `- reviewed: helper anchor, signature cannot match a mod call (<why>)` line. Likewise, don't backtick any path in an entry's body prose, a vanilla helper's included, because it joins the basename index: write it plain.
+
+### Group your own snapshot script by the full message, or count names in the raw log, before writing signatures (2026-10-05)
+
+*`scripts/analysis/log_triage.py` does this now: findings are grouped by the exact message.*
+
+A grouping key that folds digits (`re.sub(r'\d+', …)`) showed one `te_tax_obl_is_maintenance_2` entry where kinds 2 and 4 both failed, and two of the ten `tp_<n>_*_rel` variables. The registry entry first written from that view named two variables and missed eight. `grep -aoE "Variable 'tp_[0-9]_[a-z_]+'" debug.1.log | sort | uniq -c` gives the real list (extends the 2026-09-26 dedupe note).
+
+### A registry signature line that holds a file path matches that file at every line (2026-10-10)
+
+The matcher folds `:NNN` to `:N` before comparing, so `common/ai_strategies/00_default_strategy.txt:2382` in the STATE_HAWAII entry's code block matched any error with the default AI strategy anywhere in its stack, and error.log stacks are long: 42 mod-caused lines from UN ballots (a diplomatic catalyst making vanilla AI strategies read a stateless country's capital) were tagged vanilla. Put only message text in a signature; the heading's backticked path already restricts the file. A vanilla AI-strategy or catalyst frame is no proof of a vanilla cause, since mod effects reach them too: read the whole stack before registering, and leave a class unregistered when the same message also arrives through mod frames (that day's 20 engine-only AI-strategy capital lines, `00_scripted_triggers.txt:1065` via the default strategy and `01_admin_strategies.txt:51`, were left visible for that reason, until #863's `- stack: vanilla only` entry line let them be registered for stacks with no mod frame).
+
+### Check a registry edit by re-tagging an archive with the old and the new registry, and count the lines each entry tags whose stack has a mod frame (2026-10-11)
+
+`scripts/analysis/registry_retag_diff.py corpus` builds the corpus once from a run's archive (every `error*`/`debug*` file, each line counted once), and `diff` tags it with the registries at `origin/main` and in the working tree: a gain with a mod frame is a mod error newly hidden (exit 1), and a loss shows what the old line was really catching. The #873 sweep ran it over four runs (149,671 distinct lines, about 5 s). Two traps it caught: emptying the code block of an entry that also has a `- source:` anchor turns it into a match-everything rule for that cpp source (the Paris Commune entry would have swallowed 3,263 mod lines), and a generic message on a source anchor shared by every script error (`jomini_script_system.cpp:247`) tags the same message at a mod location (1,787 lines from a mod scripted GUI under the `<unknown>:0` entry). Its `modframed` command, the per-entry mod-frame count, is also the quickest way to find entries that should carry `- stack: vanilla only`.
+
+### `registry_retag_diff.py diff` counts lines from a mod GUI override as gained "with a mod frame", even when the override keeps vanilla's block as it is (2026-10-24)
+
+`gui/building_details_panel.gui` and `gui/right_click_menu.gui` exist in this repo, so their path is a mod path, and an entry anchored on one shows as hiding mod lines (exit 1). Before reading that as a hidden mod error, compare the logged line with vanilla's copy of the file (`grep -n '<expression>' "<base_game_path>/game/<path>"`): the same expression a few lines away is vanilla's bug carried in the override. Also, a decision or button tooltip that reads a variable its own effect sets shows as one burst of a few hundred lines in a few seconds at a single line, which is one hover, not a monthly pulse (`scripting_best_practices.md`, the tooltip-pass paragraph).
+
+### Run `registry_retag_diff.py corpus <snapshot>` then `modframed` on every triage snapshot, and read any mod-framed line under a save-noise or engine-noise entry as a hidden error (2026-10-27)
+
+*`scripts/analysis/log_triage.py` does this now: the section "Hidden by a vanilla entry, with a mod file in the stack".*
+
+It is a few seconds on one session's logs. Today it found #1194's `create_pop` load error (`Failed to read key reference: scope:sr_evac_culture … in file: "common/scripted_effects/sr_colony_autonomy_effects.txt"`) filed under "stale save-game key references on load", whose signature was the bare message. `pdx_persistent_reader.cpp:268` reports both a save load and a script file's literal-key field read at load with that message, so a message-only signature on a shared load-time source swallows real script errors. Pin such an entry on the `in file:` value instead (`in file: "save games/`, `in file: "" near line`). The same pass flagged the Distribution of Power entry's lines carrying the law-consistency cascade's frames: still vanilla's `on_activate`, so only its `- reviewed:` note changed.
+
+### `modframed` can't see a mod GUI error filed under a source-only GUI entry, so count those entries' payloads too (2026-10-31)
+
+The `pdx_data_callstack.cpp:16`, `pdx_gui_localize.cpp:140` and `pdx_data_localize_helper.cpp:286` entries match a cpp source and a generic message, and their lines name no file, so a mod GUI that draws a vanilla key outside the window it was written for is tagged vanilla. That day all three were one mod bug, about 40,000 lines across debug.log and error.log in two minutes, which rotated every generation: #1263's Census Data window drew vanilla's `POPS_OVERVIEW_AVERAGE_INCOME_*_LABEL`, which reads `PopsOverviewPanel`, a panel only the Population window has. After `modframed`, list the top messages under each of those entries by count, then `git grep` the key or data type each one names in the mod's `gui/`. A hit in a file vanilla doesn't have (`te_demographics_widgets.gui`, against vanilla's `pops_overview.gui`) is ours. The tell is a flood that rotates every generation in the first session after a GUI PR.
+
+### Write a registry signature from `repr(e.message)`, not from printed output: a line with `@money!`-formatted values carries `\x15`/`\x16` bytes between its words that the terminal and `cut` hide (2026-11-06)
+
+The goods price tooltip's `!!! - money!v;`, copied from the screen, parsed with no warning and matched nothing; the raw line read `\x15!\x15!\x15! - \x16money!\x15v;`. Pick a run of plain text between the bytes (`MIN_AFTER_PRICE_ICON -`, `COIN_STACK_TOOLTIP`), then re-tag the snapshot and confirm the count drops (the 2026-05-10 note).
+
+### A line that could be either side's goes on the watch list, with the check that settles it (2026-11-09)
+
+`Invalid Culture scope when creating Character` had been left unregistered on purpose since 2026-10-07, so that a mod-caused culture failure would still show; the reason was written only inside another entry's prose, and the next triage had to work out again why twelve lines were untagged. An occupation-data assert the same day had no home at all. `vanilla_known_bugs.md` now ends with a `## Watch list`: an entry there tags its line and nothing hides it, and its required `- check:` line is printed beside the line. Doing the check is the triage step. That day the report's `near:` lines answered it: `TE_CIVIL_WAR: Dominion of India faces an uprising` and `East India Liberal Revolt` in the same second, which is vanilla's Indian-revolution hack (`c:BIC ?= ROOT` in `on_revolution_start`). An entry whose lines carry a mod frame by design gets `- reviewed: mod frame, <why>` instead; without it the report lists them as a possible hidden mod error.
+
+## Bursts and floods: what a shape means
+
+### A diplomatic action's `accept_effect` erroring hundreds of times a second is a tooltip render, not repeated acceptances (2026-09-14)
+
+Tells: error.log rotates several times within seconds. Every generation cites one action's `accept_effect` line (`covert_operations.txt:766`, then `:1050`, then `:351`) and it changes as the user hovers from action to action. Lines that only write (`add_to_variable_list`) stay silent while scope changes (`scope:x = { }`) error. A real acceptance fires once per pact. The fix is an `exists` guard on the scope, not a logic change (`scripting_best_practices.md` § Script Containers, rule 6). Also, an error line inside a parameterized scripted effect can be a few lines off: `:111` meant file line `:114` in `covert_op_start`, and the cause is unknown. Before suspecting a stale deploy, `cmp` the repo file against `mod_deploy_target`, then look a few lines around the reported number.
+
+### A burst that interleaves several *vanilla* files in one frame is one UI render, and the mod file mixed into it is the actionable one (2026-09-20)
+
+`28_invite_to_power_bloc.txt:87`, `14_treaty_port.txt:425` and `00_infamy_values.txt` cycled together ~15,000 times in six generations; buried two-per-frame in the same interleave were 10 lines from `common/scripted_effects/extra_effects.txt`. Sort by count and you chase vanilla; group by *frame* (identical timestamp) and the mod entry stands out. Both root causes were the same class — a preview pass evaluating an effect/value tree whose scopes are only bound at execution time.
+
+### `error.log` timestamps time the month boundary for free, and a JE-scoped multiplier error marks where it is (2026-10-03)
+
+Monthly-pulse errors arrive as one burst: `Value of wrong type … Got value of type 'none'` from `banking_cycle_effects.txt:1866` and `je_united_nations.txt:367`, one line per country. In a late-game session that burst ran 12:01:14–12:01:19, so the month tick cost about five seconds of wall time, which is useful context for a script-profiler capture (`scripting_best_practices.md` § Script Performance). Those `none` lines were real bugs, not noise: a `je:X = { add_modifier = { multiplier = … } }` that reads country properties applies at ×1 (#677). A burst with **one line per country** at a fixed `add_modifier` line is that fingerprint. Also, a scripted-GUI button whose effect `set_variable`s and then reads the variable in a `limit` logs whenever its tooltip is built, because the tooltip pass reads the `limit` without running the `set_variable` (`un_deleg_bulk_row`: 72 lines per build, 1,584 in nine minutes). Guard the read with `has_variable`.
+
+### When one trigger errors through some call sites and not others, group the error's stack frames before reading the trigger (2026-10-18)
+
+`un_mission_in_slot` reads `var:un_msn_slot` behind a sibling `has_variable` and logged 39 lines. Every one was framed by the bare `any_in_global_list` at `un_mission_triggers.txt:337`, and none by the four `custom_tooltip`-wrapped copies of the same call over the same list. The Join tooltip lays out the bare call line by line, so the guard never stopped the read. `grep -a -A6 '<script location>' error*.log | grep -av '^\[' | sort | uniq -c` lists the frames; a frame in every stack, beside siblings that are in none, names the evaluation path at fault (`scripting_best_practices.md` § Guard Scope References in Triggers). The same session's 7,900-line Grand Monuments flood was already fixed on `main` by #1042, so the 2026-10-16 check (diff each named file against `main` first) saved re-fixing it.
+
+### A burst at one script value line that starts when an event opens and stops at that event's `choice_` trace line is an option's tooltip walk, even inside a `hidden_effect` (2026-10-25)
+
+`extra_effects.txt:548` and `:600` (the two weights of `nuclear_first_strike`'s `random_list`) logged 1,606 lines at about 50 a second for 16 seconds. The `TE_TAX` lines before the burst and the `choice_nuclear_incident.50.b` line that ended it print the same `date=`, so the game was paused with the event open. `git grep` the callers up from the logged line to an event option to find the walk. A `save_scope_as` + `exists` fence doesn't stop it; a variable marker does (`scripting_best_practices.md` § "An Option's Tooltip Walks Its Effects"). Also, a `VFSOpen Error` for a `timed_modifier_icons/` name means a name vanilla doesn't have: list vanilla's folder (nine pairs) before you pick a replacement. `event_creation_guide.md` had recommended the missing `modifier_military_negative.dds`.
+
+### A flood of `Scoped object of type 'country' is not valid (Country  (4294967295))` at a scripted GUI's `is_shown` line means the game has no player: an observer (2026-10-25)
+
+Every such line came from a `GuiScope.SetRoot( GetPlayer.MakeScope )` call, and debug.log had no `choice_` trace lines. Check the session first: `Mounted Data` and the first self-check dates told a new game (1836) on the deploy from 22:14. The fix is GUI-side, with `Not( GetMetaPlayer.IsObserver )` first in the `visible` (`gui_modding_guide.md`, the Scoping Pattern note). Two habits from it. A flood that rotates error.log takes the launch's start with it: this one rotated five times in seven minutes, so the oldest surviving generation (22:25) bounds the same-second check for any debug.log assert before it, and the three frameless asserts at 22:16–22:23 couldn't be checked against error.log. And a sibling widget whose scripted GUI *didn't* log is evidence too. On the same card, under the same visible ancestor, an `And( <false>, IsShown(…) )` logged nothing while the ungated button logged 9,591 times, which showed that `And` skips its second argument.
+
+### A burst in the seconds between `DeleteAllPlayers - #0 players` and the save load is the frontend rendering loc with no player, and the counts per message name what it rendered (2026-10-27)
+
+08:04:06–09 logged `jomini_custom_text.h:91 Object of type 'country' is not valid for '<entry>'` for three Demographics custom-loc entries in a fixed 2:2:1 ratio (792, 792, 396), one set per frame. Only `state_region_pollution_health` carries exactly that mix of tagged lines, and vanilla's Pollution Impact concept, one of 127 `is_loading_tip` concepts picked at random, prints it with `[GetStaticModifier(…).GetDesc]`: so the burst comes and goes with the tip, and earlier launches of the same build were clean. To find which tips reach a loc pattern, walk each `is_loading_tip` concept's `_desc` (with its `$key$` expansions) and the static modifiers it prints through `/raw/Game Concepts/<id>`, `/localize/<key>` and `/raw/Modifiers/<id>`. Vanilla's own loading-tip text guards player reads with `SelectLocalization(GetPlayer.IsValid, …)`; the fix and its test are in `scripting_best_practices.md`, the modifier-name paragraph.
+
+### In an observer game, tell whether the owner later took a country before reading a GUI-fed script value's error as an observer flood (2026-11-07)
+
+11 lines in one second, `Undefined event target 'institution_levels'` and `te_budget_administration_cost` type `none`, came from the Budget Breakdown's script values, which read scopes the section's `datacontext` adds from `GetPlayer`. An observer's missing player fails differently (`Scoped object of type 'country' is not valid`, every frame), so this is a valid root with the scopes gone, once: most likely the frame where the owner switched from observing to a country. The tells: three `Adding trigger/effect after PostInitAndValidate` lines (a console command) 23 seconds before, and a `TE_JMAP` Map Room line minutes later, since an observer can't open a journal entry, where the Map Room lives. Left unregistered as a one-off. The same session showed what a self-check's line can't: `demog_runaway`'s single line stood for eight marked states in the autosaves (#1500). Read the marks in every save when one BROKEN line turns up.
+
+### A flood of `Scoped object of type 'culture' is not valid (Culture  (-1))` from vanilla culture triggers, starting the day a mod adds cultures, is a save older than those cultures (2026-11-08)
+
+The engine makes culture objects at game start and a load adds none, so a merge that ran `add_primary_culture` on a new `cm_` culture in a 1883 save put an empty culture in Germany's and the United States' primaries, and every `any_primary_culture` walk in vanilla's movements, laws and AI strategies errored (8,715 lines in two hours). The tell in the save: a self-check variable that stored the culture as a scope reads `flag` in `save_country_probe.py --var` (USA's `te_cm_chk_primary_of`) where a vanilla culture's reads `0x…:15`. And a once-a-game self-check that printed nothing all session: look for its latch global in the autosave (`zipfile` + `gamestate.count(b'<latch>')`). No latch means its arming condition never held, so test that condition before the fact it checks: the Company HQs map's check armed on `has_building = building_company_headquarter`, which matches no state because each company's headquarters has its own building type (`scripting_best_practices.md` § "A Company's Headquarters Is a Building Type of Its Own"). `save_world_report.py buildings` misses those records too; the HQ ownership PM strings (`pm_company_headquarter_*`) find them.
+
+## Parse-time and load-time errors
+
+### A single `script_parse_error` typically chains downstream `inconsistent_effect_scope` / "Unknown trigger type" / "Unknown effect" entries in the same file (2026-05-06)
+
+The parser loses block boundaries after the first failure and mis-attributes valid sibling triggers/effects as unknown. Fix the upstream parse error first, then re-check — the cascade usually disappears on its own. Don't independently chase the downstream entries; they're symptoms, not root causes. Recent example: `country_prestige >= 100` (script value used as trigger) at extra_decisions.txt:160 cascaded into "Unknown effect add_authority" at :164 and "Unknown effect set_country_flag" at :169 — all three were one bug. Same shape with `radical_fraction >= 0.10` (block trigger called as scalar) cascading into "Unknown trigger type: add" at the next line.
+
+### The "single-script_parse_error cascades downstream" rule does NOT apply to engine-foreign keywords (2026-05-16)
+
+When the engine reports "Unknown trigger type: X" / "Unknown effect: X" / "Unexpected token: X" on a keyword that looks valid but isn't actually in Vic3 (Stellaris/EU4 imports like `is_triggered_only`, `has_country_flag`, `set_country_flag`, `has_leader = yes`), each occurrence is independent — the parser doesn't lose state because the surrounding block parses fine, just the unknown token gets dropped. Don't defer these as "investigate later, might be cascades" — investigate immediately. Detection: `grep -rl "<keyword>" "$(python3 -c 'import path_constants; print(path_constants.base_game_path)')/game/" | head -3` — zero vanilla hits means engine-foreign. See `docs/guides/scripting_best_practices.md` § "Stellaris/EU4 Idioms That Silently Fail in Vic3" for the equivalence table.
+
+### For `Unknown modifier type` after a vanilla patch, trust `/validate/vanilla-surface-diff?old_ref=HEAD`, not `/engine-docs/origin` (2026-09-26)
+
+The server's engine docs come from the pinned `vanilla_snapshot_docs_path` (here the 1.14-openbeta digest), not from the runtime dump. Running `script_docs` with the mod loaded does not change them, and should not: that dump also lists the mod's own modifier types. They stay pre-patch until a vanilla-only dump or a newer digest is pinned (#392). So `/engine-docs/origin` answers `found: true, origin: vanilla` for `country_prestige_from_navy_power_projection_mult`, a name 1.14.4 renamed, and `found: false` for its replacement `…navy_combat_power_mult`. Going by the dump, #436 switched a modifier from the new name back to the old one two days after #386 had renamed it, and #424 used the old name too. #436's commit message even calls the five correct uses a bug left "for a separate fix". The surface diff's `removed_and_used_by_mod` listed it the whole time. `test_validate_migration`'s HTTP smoke test failed on the same entry at the time. Since #485, its identity check skips while the mirror lags the install, so query the endpoint itself rather than waiting for a red test. Tooling gap tracked in #391.
+
+### The dedupe folds two lines of one file into one entry, so count parse errors per line in the raw logs (2026-09-26)
+
+*`scripts/analysis/log_triage.py` does this now: findings are grouped by the exact message, with every line of the file listed.*
+
+`dedupe(key="message+file")` replaces every digit in the message with `<n>`. `unknown command 'value' for MTTH at …nuclear_loose_effects.txt:45` therefore hid the same error at `:99`, and only the first line number showed. For any parse-time error that names a line, run `grep -h "<message stem>" <snapshot>/*.log | sed 's/^\[[0-9:]*\]//' | sort | uniq -c` before deciding how many sites there are. The engine's line numbers in scripted-effect files are also unreliable: they were off by 0–13 lines, unpredictably, even within one file (`nuclear_custody_effects.txt` reported `:312` as `:304` but `:573` exactly; `:99` was really `:112`). So find the site by the message text and the order of the errors, not by the number. This extends the 2026-09-14 note.
+
+### A `PostValidate of effect 'X' returned false at <file>:<line>` at load does not remove the effect: it still runs, and logs its own runtime error each time (2026-10-06)
+
+Read the pair together. The load line says the argument form is wrong (`remove_principle = scope:x`: the effect takes only a literal key), and a later `Script system error! … remove_principle effect [ Power bloc principle provided is invalid ] Script location: <sgui file>` proves the click got from the GUI into the scripted GUI. That told a "button does nothing" report apart from a broken GUI binding, which would have logged a `pdx_data_factory.cpp` line at load instead (as `PowerBlocPrincipleSlot.RemovePrinciple` did).
+
+### Loading a save never runs `common/history/`, so checking a history edit in the logs needs a new game (2026-10-10)
+
+The 1.1.8 release check's first launch only loaded a save: its log was clean, but it couldn't speak for the release's history edit (France's Family Limitation line commented out), and a history edit is the classic new-game-only crash (2026-05-06). Tell the two apart from the log: a new game's startup logs history-time lines (while #226 lasts, 18 `set_institution_investment_level … invalid institution type` errors from `history/countries/*.txt`); a launch that only loads a save has none of them (it may log `Failed to read key reference` for keys its saves hold that the build no longer defines, as the census rule's did). A background watcher grepping `debug.log`/`error.log` misses lines the game rotated into `.1` at that moment, so grep the generations too.
+
+### A load-time `PostValidate … returned false` repeated N times at one line of a parameterized scripted effect is one bug, logged once per `$KEY$` instantiation, not N runtime calls (2026-10-26)
+
+`sr_site_transfer_marines` logged 34 at `sr_fleet_effects.txt:544` in the same second as the `Flag … is used but is never set` validation burst, with a matching `Script system error!` per copy in error.log; there are 34 generated callers (`gen_solar_sites.py`). The timestamp tells load from run time: inside the startup validation burst means no game event ran it. `type = alliance` in `has_diplomatic_pact` was already a documented gotcha and still shipped, so the fix added a check (`test_diplomatic_pact_types.py`) rather than another note. In the same session, the afternoon launches' `te_probe_ord*` / `te_probe_roc` parse errors and missing JE loc were #1185's load-order probe files, deployed for those runs and gone by the next: skip probe-named files whose PR is open or merged (`git log --all -S <name>`).
+
+### Some load-time validation lands in error.log only, so read both families before calling a launch clean (2026-10-29)
+
+`modifier_types.cpp:626 Invalid category prefix for modifier <name>` (five Grand Monuments types, once per load) never reached debug.log, so the canonical debug.log curl can't show it; the snapshot pass over `debug*` and `error*` together did. Two more from the same pass. A `Promote 'ROOT' returned nullptr` burst whose parent string's identical `ROOT` reads stay silent, with `Data error in loc string` naming only the nested key, is a key named in `AddLocalizationIf` / `SelectLocalization` losing `ROOT`, as it loses `SCOPE`; the test covers both now. And a PR that swaps slot variables for lists can register some of its old-save cleanup under L24 and miss the rest: #1215 registered its `tp_` and `gw_` names and not 131 `sr_` and `te_seabed_` ones. When a parse-time never-set block appears the launch after a merge, list the names from the raw log and check each family against the cleanup effects that PR added.
+
+## GUI and localization errors
+
+### `GetCustom` in a JE `name` loc has no vanilla precedent and emits a per-render `jomini_custom_text.h:91 "Object of type 'country' is not valid for 'X'"` burst (2026-05-24)
+
+The burst comes even when the title renders correctly. A JE name like `[GetPlayer.GetCustom('te_banking_cycle_title')]` (custom loc `type = country`) renders fine but the JE name appears to evaluate in a `journal_entry` data context that validates the country-typed `GetCustom` against the call-site rather than `GetPlayer`'s return. Measured ~83 error.log writes in a ~1s burst per panel render (0 in debug.log); cosmetic, only cost is synchronous-write hitch. Registered as tracked mod noise (`mod_known_noise.md`, `open_issues.md#l11-banking-cycle-je-title-custom-loc-scope-validation-burst`). Candidate fix (resolve the country from the JE scope chain instead of `GetPlayer`) deferred. Discriminator: `grep -rln "GetCustom" "<vanilla>/localization/english/"*journal*` returns nothing — vanilla never does this.
+
+### A UI section that renders as *nothing* is a log-spam suspect, not a script-logic bug — check `debug.log` before reading the script (2026-09-20)
+
+A history-chart marker tooltip showed no marker section at all; the loc, the scripted GUI and the recorded variables all looked correct on paper. The log named the cause outright, 2,239 times in two and a half minutes (and again in error.log): `pdx_data_callstack.cpp:325 New data types does not contain a 'JournalEntry' data context`, then `Promote 'SetRoot' returned nullptr`, then `pdx_data_localize.cpp:151 Data error in loc string '<key>'`. That triple is the signature of a loc expression asking for a data context the render does not have; the third line names the offending key directly, which beats any amount of reading. Two gotchas when confirming a fix: `filter_external_mods` + both registries leave this class untagged (it is real and ours), and if the user is committing alongside you, `git show HEAD:<file>` is **not** a pre-fix baseline — reintroduce the bug in a scratch copy of the tree instead, or you will 'prove' a regression guard works while it silently matches nothing.
+
+### A live loc key can be exiled to `te_unused_l_english.yml` and still render — and log errors from there (2026-09-21)
+
+All `*_l_english.yml` under `localization/english/` load regardless of filename, so organize_loc's "unused" bucket is a filing decision, not a disabling one. The five `[concept_leverage]` strings above were `<treaty_article>_effects_desc` keys: an engine autokey family (`<article>`, `_desc`, `_effects_desc`, `_article_short_desc`, `_effect_desc_first/_third/_global`) that is never referenced from script, so `organize_loc.py` had no way to see it — 49 live keys across 34 articles were filed as unused. Fixed by adding `find_treaty_article_keys`. The general shape (per `te_unused_l_english.yml` being an organize_loc *output*): when a log error cites a key living in te_unused, the filing is the second bug — fix the detector, don't hand-move the key.
+
+### A burst of `Event target '<name>' is used but is never set` after a GUI panel merges is L14, and `/logs/*` now hides it by itself (2026-10-05)
+
+The budget panel's groups (#711) added about 420 such lines a launch: script values reading `scope:row_army`, `scope:subtree_un` and the like, which the panel's `.gui` sets with `AddScope`. `tag_gui_injected_scopes` (`game_log_reader.py`, wired into `_apply_known_noise_tagging`) collects every `AddScope('<name>'` in the mod's `gui/` and English loc and tags exactly those names, so a never-set name that nothing sets still shows. In a direct-import snapshot pass, call it after the two registry passes: `tag_gui_injected_scopes(entries, gui_injected_scope_names(['gui', 'localization/english']))`.
+
+### Two kinds of GUI binding failure, told apart by source (2026-10-05)
+
+A binding that loads but evaluates to nothing logs `pdx_gui_data_manager.cpp:233 FetchData failed for '<expr>' - <file>:<line>` (or `pdx_data_localize_helper.cpp:286` plus `pdx_gui_localize.cpp:140` for text) every frame, with no reason given; `Promote 'AddScope' returned nullptr` (`pdx_data_callstack.cpp:52`) means an argument to `AddScope` came back empty. A binding the engine can't build logs `pdx_data_factory.cpp` lines once, at load or hot-reload (`Could not find promote for 'X'`, `Failed converting statement`, `Failed parsing localized text`). Turn diagnostic readouts off before clicking, and copy the logs the moment the test ends: with the readouts on, five failing bindings in one journal-entry row rotated all six generations in 15 seconds, and the click errors went with them (`gui_modding_guide.md` § "Typed text into script").
+
+### `SelectLocalization` drops `SCOPE` too, so verify a loc fix in the next game's logs before you believe it (2026-10-07)
+
+#767 moved the Subjugate identity lines from `AddLocalizationIf` to `SelectLocalization` on the strength of a vanilla precedent. The same evening's game logged the same `Promote 'SCOPE' returned nullptr` three-line set 993 times from the new form. The precedent was a notification; a diplomatic action's tooltip evidently passes `SCOPE` differently. After a loc fix for a data-context error, search the first launch that has it deployed for the `Data error in loc string '<key>'` line by key name; it is the cheapest proof either way (`gui_modding_guide.md` § the `SCOPE` note).
+
+### `Value of wrong type in '<scripted gui file>:<is_shown line>'. Got value of type 'none'` means a value the GUI can't read, so trace the value tree to a trigger read as a value (2026-10-16)
+
+The Youth row's gate compared `te_demog_youth_bulge_shown > 0`, whose only read that wasn't a variable or a constant was `state_unemployment_rate` (through `te_demog_unemployment`). The yearly census read the same value in effects for every state with no error, and the rows beside it read their state fine, so the GUI context was the difference. Store the read from an effect and have the GUI read the variable (`scripting_best_practices.md`, the trigger-dispatch paragraph). Thousands of lines of this shape are also a sign that the widget it gates has never been seen.
+
+### A `pdx_data_factory.cpp:1408` / `:1092` pair at a run-time timestamp, not in the startup burst, is a `debug_log` or tooltip string built for the first time, and the `Data error in loc string` line after it names the string (2026-10-31)
+
+At 14:12 that day the pair said `Could not find promote for 'MakeScope' in 'THIS.MakeScope.ScriptValue(…)'`, and the named string was Space Command's once-a-game `TE_SELF_CHECK ship_construction`: its verdict was gone, and the check couldn't fire again in that save. Fix the accessor, then grep every `debug_log` for the same form before re-arming (`_v2` marker): 129 console lines had copied it, and `test_engine_literal_forms.py` now catches it. Same day, a report with no log line at all (the city-states had no adjective) was a missing `TAG_ADJ` key: read the loc family before the logs, as the 2026-09-25 note says.
+
+## Self-checks, probes and trace lines
+
+### A probe answers through which branch fired, not through the numbers it prints (2026-09-26)
+
+The civil-war probes printed blanks and zeros (`ROOT` does not resolve in `debug_log`, and `.Var().GetValue` prints a silent 0), which made them look like they had failed. But `TE_CW_PROBE monetary 1/2` sits behind a script canary on the dead loser, so the line firing at all settled the question the PR was waiting on. When you read probe output, check what condition gated each line before you trust or dismiss its figures. When you write a probe, put the question in the `limit` and log literal lines (`scripting_best_practices.md` § "Conditional `debug_log` for Trustworthy Scope Diagnostics").
+
+### A probe that fires once per save loses its answer to log rotation (2026-09-27)
+
+#488's `TE_PROBE_LOC` fired on the first launch after the merge. Five more launches the same day pushed that `debug.log` out of all six generations before anyone read it, and the save's marker stopped it firing again. When a PR waits on a probe, read it right after the owner's next launch: `?debug_log=only&q=TE_`, or snapshot the logs. If the answer is gone, re-arm the probe by renaming its marker (`_v2`) rather than guessing. Also check each probe's own "delete once …" condition against what the logs show. The Settlement Authority readout probe had met its condition and was still running.
+
+### A self-check line the engine can't render never reaches `debug_log=only`, so search the probe's name across every category too (2026-10-17)
+
+*`scripts/analysis/log_triage.py` does this now: the LOST lines under Self-checks.*
+
+A `debug_log` string with a bad accessor is dropped whole, and the only trace is a `pdx_data_localize.cpp:136` line, `Data error in loc string 'TE_SELF_CHECK …'`, in the `other` category. The probe read `?debug_log=only&q=TE_` misses it, and so does a grep for the verdict word. Seabed's `seabed_power_projection` printed its OK line while all five `INFO` lines, the data the scale was to be set from, went that way (bare `[THIS.GetNameNoFormatting]`; it needs `.GetCountry`). After reading a PR's probe lines, run `grep -a "loc string 'TE_" debug*.log` too, and re-arm a once-a-game check whose lines were lost (rename its marker `_v2`).
+
+### Before reporting a self-check's BROKEN line, rule out the cases its branch can't tell apart, using the other trace lines' timestamps (2026-10-25)
+
+`decol_iw_war_started`'s BROKEN branch runs for any war-of-independence record whose war never started, and its line doesn't print the record's kind. A colonial secession opens a record too, and `TE_CIVIL_WAR: <country> faces an uprising` logs at every secession's start, so no such line in the 30 game days before the BROKEN (date the window by lines that print `date=`) left a territory's Fight as the only source: a real BROKEN. Its blank `metropole=` / `rebels=` are the documented blank of a saved scope's name in `debug_log`, not unset scopes (424 `TE_CUSTODY: settled an ended arsenal to` lines in the archives end the same way). The same session's 3,208 `country.cpp:9608` lines (zero construction speed, no frame) were tracked as unattributed mod noise (L28), not registered as vanilla: the mod's construction market is as likely a cause as a stateless country.
+
+### A self-check that judges one building can't tell its causes apart, so read the building's panel before arguing about the verdict (2026-10-25)
+
+`grid_level_scaled` printed BROKEN for one station (moved 16 of 176). I first explained it away with an input shortage, then a supply cap, and each was refuted by a screenshot the owner sent: a market panel in surplus, and Process figures that didn't change when staffing did. The panel's goods tooltip (its base line, the modifier percentages, and "Amount produced") settled it in one hover: the station ran its staffing's share of its setting, to a tenth of a percent. Ask for that hover first. Panel goods figures follow the staffing of the last weekly tick, not the live staff count, so in a building that is always hiring one screenshot can mislead. Write such checks to compare groups across all buildings (#1158's `grid_unscaled`), and check whether a check's inputs come from the old build: here `te_grid_staffed`, which only #1148 writes, showed they didn't.
+
+### List a session's self-checks by name and status, and treat a `START` that never gets its verdict as a dead path until the save says otherwise (2026-11-06)
+
+*`scripts/analysis/log_triage.py` does this now: the Self-checks section.*
+
+The playtest doc explained a missing verdict as "the state changed hands within the week", and nobody had looked further. In the 1.15 observer game four checks printed `START` and nothing more, and the variable each verdict removes was still on its state in the 1849 autosave (`save_country_probe.py --states --var '^te_inh_pr_chk_before$'`: Malta, armed in January 1836). The October 1.14.5 saves held the same variables on the same states. What those checks shared was a verdict that was a state event triggered with `days = 7`; the country events delayed the same way had read OK. `workforce_lines_net` arms in every game, so its silence alone ruled out bad luck. A `sed` that prints `time status name date` per `TE_SELF_CHECK` line shows the unmatched STARTs at a glance. `test_delayed_state_events.py` now fails on a new delayed state event; the probe `delayed_state_event` tests the engine fact.
+
+## When the log is silent or says too little: read the save
+
+### A raw loc key in the UI never shows up in any log — go straight to the key family, not the logs (2026-09-25)
+
+The engine logs nothing for a missing key (not even with `mod_only=unknown`), so a screenshot of `<entity>_<suffix>` is the whole signal. Check whether `loc_coverage_audit._REQUIREMENTS[<entity type>]` models that suffix. If it is still `_simple_name`, the engine's autokey family for that type is probably unmodelled. Read the family off vanilla loc (which suffixes exist, keyed against the entity's flags), then add a derivation function like `_diplomatic_action_keys`. Check `organize_loc.py`'s matching `find_*_keys` suffix list too: an unmodelled family usually also leaves live keys filed in `te_unused_l_english.yml`. Example: `nd_nuclear_ultimatum_action_action_notification_third_party_desc` (PR #433).
+
+### An engine assert that names one country can stand for a whole broken save. Read the save before calling it a one-off (2026-09-27)
+
+`already has an active law in group lawgroup_criminal_justice - two laws are active in the same group at once!` named only Byzantium, once per load. The save held 116 countries with two active laws in that group: one log line per load, 116 broken groups. `scripts/analysis/save_country_probe.py` decodes laws (`--laws`, `--law REGEX`, `--law-conflicts`) and answered it in seconds. Diffing a save from before the suspect PR against one after it dated the damage to one load (`scripting_best_practices.md` § "First Law in a Lawgroup File Is the Unseeded Default").
+
+### An error at the one unguarded line of a block full of `exists` guards means the guards were false too: check the save (2026-10-05)
+
+`apply_decolonization_path` logged `Invalid right side during comparison 'scope'` once per country it formed, from its only unguarded `this = scope:decolonizing_parent`. Every `exists = scope:decolonizing_parent` above it had silently skipped as well. `save_country_probe.py --var '^(former_overlord|recently_decolonized)$'` on the next autosave found none of the five new countries carrying what that block sets, which turned "one cosmetic line" into "the whole legacy never ran" (the saved scope is unset inside `create_dynamic_country`'s `on_created`; `scripting_best_practices.md`).
+
+### Check a `Could not get leader of interest group` that one country logs for years against the save (2026-10-07)
+
+It is registered vanilla noise (`leader = { ... }` read with no guard), and a group normally lacks a leader for a few months. Bengal logged about 1,700 lines an hour for nine game years. In the save its seven groups' leader ids (`0x2856`) named characters that no longer existed, so the engine never replaced them. Recipe: the interest-group and character records in `save_country_probe.py`'s BINARY LAYOUT. To date it, grep every generation for the country's name and read the first lines before it. Here they were vanilla's Indian-revolution hack (`vanilla_known_bugs.md`, `00_code_on_actions.txt:5440`): a failed `change_tag`, then one `Invalid Culture scope when creating Character` per retired leader. The country's name can change on the way: the rebels were "Indian Uprising" and took the Bengal tag when they won.
+
+### A system that does the wrong thing silently every year logs nothing, so read the save, not the logs (2026-10-09)
+
+The first demographics observer run's logs were clean, but every state re-seeded its census at every pulse and none stepped (PR #833). Only the autosave showed it: `te_dg_stepped 0`, births 0 and `te_dg_scale` exactly 1 on all 881 states. Read state variables with `save_country_probe.py --states` (#1061): `--var '^te_dg_'`, `--state <id or region>`, `--owner TAG`, and `--diff <before> <after> --states` pairs states by id, the inputs before a pulse against the values it wrote. It takes an autosave's date from the gamestate, as autosaves have no `meta`. Two traps:
+- this game wrote one every three game months;
+- the names rotate (`autosave.v3` → `_1` → …) while you copy, so copy by mtime, not by name.
+
+### A registry entry that calls its lines a harmless transient is a claim about the save: check it there, and group the lines by country type (2026-11-05)
+
+L16 called 158 × 4 `is not permitted to retain law` lines an init-order transient that history then fixed. The first new game after #1408's start-date gate added a fifth law, 146 Violent Hostility lines. Classifying every retention line's country against the save's `country_manager` showed every line of all five was a decentralized nation, and the 1837 autosave showed all 158 still holding the five laws, so the lines had been real for months. A debug-mode (`-debug_mode`) save is plain text, which `save_country_probe.py` refuses. Read laws straight from it: each `law=law_x` record carries `country=<id>` and `active=yes` when held, and `country_manager={ database={ <id>={ definition="TAG" country_type=… } } }` maps ids to tags at one tab of depth. When a PR changes when or where something runs (a gate, a pulse), diff the affected countries' law sets between a save from before it and one from after; here that took a minute and named the regression exactly.
+
+### Count a system's records in the saves, not only its loss lines in the log (2026-11-06)
+
+Six ticks of the observer game read four Grand Monument losses from `TE_MONUMENTS` lines. Diffing the states' `gm_landmark` across the 1849, 1872 and 1893 autosaves against the session's `landmark … placed` lines found sixteen missing. Counting the containers too (a monument beside another, a trophy) left ten: `scripts/analysis/gm_landmark_census.py` reads all three. AI teardowns and carry-offs logged nothing, and the monthly pass's stale drop doesn't either. Run the diff every few ticks while a system's losses are in question, and copy an autosave each tick: the game keeps only five, about one game year apart.
+
+### A load-time burst whose size matches a count in the save is one line per record (2026-11-09)
+
+Two registered classes were 44% of a session's lines, and one entry had said for a week that its vanilla attribution was unchecked. At one save load: 897 `Failed to read key reference: : , near line: 1" in file: ""` lines, 897 `Adding trigger after PostInitAndValidate` and 1,794 `Adding effect …`. The save held exactly 897 records of concluded journal entries, each with a key field the engine writes empty (token `0x551f`), and 875 of them were vanilla entries (`je_government_petition`, `je_krakatoa`, copied to every revolt country), so the burst is vanilla's and grows with the game's length. To find what a save holds N of: count its empty string values by the token before them (`re.finditer(rb"\x01\x00\x0f\x00\x00\x00", gamestate)`, the two bytes before each hit, with `read_gamestate` from check_save_history_order.py), then decode around one hit with `save_country_probe.tokens`. A count that fits the burst exactly, at several loads (201, 847, 897 as the game went on), is the attribution.
+
+## Crashes
+
+### Crashes that ONLY happen on new-game start (load-from-save is fine) implicate `common/history/` (2026-05-06)
+
+New-game start runs every `common/history/*` file; load-from-save bypasses them entirely. When a crash is gated specifically on new-game and not on load, the suspect is whatever changed in `common/history/` — not the broader entity definitions, scripted effects, events, or modifier types (those load on both paths). Bisect by removing recently-touched history files first. **Parse-clean ≠ runtime-safe**: the engine can crash inside the C++ effect-execution path (e.g. `create_political_lobby`) without flushing a script_parse_error or any actionable log line — `debug.log` may stop mid-load with only benign notices like `should be in utf8-bom encoding` against the file. Don't trust silence in logs as innocence; the load-vs-new-game differential is faster than further log analysis. Recent example: a single domestic-lobby (`category = foreign`) seed in the mod's then-existing `common/history/lobbies/01_extended_lobbies.txt` crashed new games; logs showed only the BOM warning, no script error. That whole political-lobbies extension was subsequently **reverted** — neither the history file nor `common/political_lobbies/` exists today (design preserved in `docs/archive/political_lobbies_design.md`), so the path is history, not something to go look at.
+
+### For a crash, start from `<user dir>/crashes/victoria3_<stamp>/`, not the rotating logs (2026-09-23)
+
+Each folder holds `exception.txt`, `meta.yml` (exe version, launch args, **the enabled mod list**) and a `logs/` copy of debug/error/game.log frozen at the moment of the crash, so rotation can't erase the lead-up. Two cheap signals do most of the work. (1) The same fault address in every `exception.txt` means one deterministic code site, not random memory corruption (across launches, compare only the address's low 16 bits: 2026-10-06 below). (2) A crash still happening with a smaller mod list in `meta.yml` rules out whichever mods were dropped. To see what a Steam patch changed, run `find "<base_game_path>/game" -newermt "<day before>" -type f`. Steam rewrites only the files that changed, so that is the patch's file list; the exe's mtime tells you when the update landed. Then grep the crash-folder logs for `... is missing X!`-style warnings naming mod entities. A new mandatory field emits one such line per offending entity and keeps loading. Here it was `ship_type.cpp:385: Ship Type is missing ai_ship_category!` × 19 mod ship types, after 1.14.4 added `common/ai_ship_categories/` (see `scripting_best_practices.md` § Every Ship Type Needs `ai_ship_category`).
+
+### Compare crash addresses across launches by their low 16 bits (2026-10-06)
+
+Address-space layout randomisation loads `victoria3.exe` at a different base each launch, so the same crash site has a different `at address 0x…` every time. Windows aligns image bases to 64 KB, so the last four hex digits survive: twelve 1.14.5 dumps read `…728A` twice, `…4386` twice and `…42A6` twice (`0x00007FF61EDB42A6` and `0x00007FF7179E42A6` are one site), and a new `…2CA8` was a site never seen before. List them with `for d in <crashes>/victoria3_*; do echo "$(basename $d) $(grep -o 'at address 0x[0-9A-F]*' $d/exception.txt)"; done`; only dumps from the same game version compare. When the dump has no symbols (every frame `function-name not available`), the next cheapest test is the owner relaunching with **Continue** (it loads the last autosave): a repeat crash near the same game date makes it deterministic and worth bisecting, while running past it (the 2022.10 observer crash ran on to 2022.12) marks a one-off engine fault. Read the frozen `logs/error.log` tail for the last game state before the crash. That one ended with a country that had lost every state, whose interest-group leaders the engine could not generate (`Failed to generate leader for … in Dharampur!`), and no mod frame. `…2CA8` came back on 2026-10-12, in an observer run in late January 1876 (Continue loaded the 1876.1.1 autosave). The original run crashed seconds after a civil war ended with both sides dead (Hesse the original, Rhineland the uprising), with vanilla's `05_struggle_for_the_highveld_buttons.txt` logging `Event target link 'capital' returned an invalid object` and a `FirstBest.Lookup().IsValid()` assert about three seconds before. The Continue run replayed the same civil war, assert and `capital` errors and didn't crash, running on to 1904. So those symptoms don't mark the crash, and the site looks like a nondeterministic engine fault, not a mod bug.
+
+### A stack-overflow dump (`C00000FD`, thousands of frames) is a script loop, and the minidump names it (2026-10-17)
+
+No log line precedes it (debug.log's last seconds were never flushed), and every frame is `function-name not available`, but the overflowed stack is in `minidump.dmp`. `python3 scripts/analysis/crash_stack_strings.py <crash folder>` lists the script names its frames point at. A loop's code shows up once per round, so the top of the list shares one count. On 2026-10-17 two dumps (a fresh run and the Continue that reloaded its autosave) both showed `monument_events.26`, `gm_com_progress` and `gm_init_ledgers` 198 times, which is one opportunity completing again and again inside its own refresh (`scripting_best_practices.md` § "A `trigger_event` With No Delay Runs the Event Inside the Effect That Fires It"). Then confirm the loop in the script: list the cycles through undelayed `trigger_event` in the call graph, and find the state write that should break the loop but comes after the event. Read the save for the record that drives it (`save_country_probe.py --var`): one country there had the open opportunity. A Continue that crashes again within seconds of loading marks a deterministic loop, as the 2026-10-06 note says.
+
+### A crash that moves between sites is heap corruption; find the save it entered, not the site (2026-10-20)
+
+Three access violations in one late-game playthrough looked unrelated: one while opening a state view (preceded by `Assertion failed: ExistsInternal( Index )`), two seconds after unpausing a reloaded autosave. `crash_stack_strings.py --exe <victoria3.exe>` named the code at the second site from the strings it references: mimalloc, the allocator (RVA `0x4223fd0`, its delayed-free loop). The first site read through a register of random bits. Neither stack held a mod frame; the damage was done earlier by other code. Two tells: an allocator site, and the same garbage register value (`rdi 0x7ff77fc83b4d`) in two launches, which means the save replays the damage. Then bisect the autosaves: copy them to the scratchpad *and* back into the save folder under fixed names (`te_bisect_2058_10_1.v3`), because every Continue rotates `autosave_N`. The Nov 1 save crashed every time it was loaded and run, near Nov 6; the Oct 1 save played the same October past Dec 1 cleanly, so continuing from Oct 1 was safe. Things that ruled leads out: a lead from the state that was being viewed (a stale monument namesake) didn't crash when that state was opened; a vanilla defect present in an older save that ran clean (India's 7 interest groups pointing at deleted leaders, the `00_code_on_actions.txt:5440` entry) can't be the cause alone; a full `save_country_probe --diff` of the two Nov 1 saves is mostly market noise, since a replay diverges numerically. The access-violation recipe: `--min 1 --all` (the default 20 suits only a stack overflow), then `--depth 400` on each dump, so two crashes' shared return addresses show one call chain, and the slots near the fault show what it was working on (a state key, STATE_CAMBODIA then STATE_LAOS).
+
+### `Assertion failed: This data is likely not a container` as the last `debug.log` line before an access violation is a GUI `datamodel` bound to something that is no list (2026-10-30)
+
+`crash_stack_strings.py <crash folder> --min 1 --all --exe <victoria3.exe>` shows the code at the fault referencing that string and `pdx_gui_data_model.h`. Look at the screen the player had just opened for a `datamodel` or `IsDataModelEmpty` the mod added. That day it was Cede Colony's picker reading `ArticleDraft.GetValidBuildingTypes` with no company, which vanilla never does (`gui_modding_guide.md` gotcha #28). Two screens that both crash point at a template they share: the war-goal and treaty Add dialogs both draw `article_input_items`. Two dumps at one address settled that it was one site before any of this.
+
+## Before you fix, and after
+
+### A clean `docs/engine/*_report.md` is not evidence of a clean audit — check the report's timestamp against the content it covers (2026-09-21)
+
+612 debug lines + 32 error lines traced to `[concept_leverage]` (vanilla's concept is `concept_power_bloc_leverage`) in five loc values, while the committed `concept_reference_report.md` said `total flags: 0`. The report was regenerated at 07:52 and the offending loc landed at 17:32 the same day — the feature PR shipped without a full `POST /reload`, so nobody re-ran the audit. `git log -1 --format=%ci -- <report>` vs `-- <source file>` settles stale-vs-blind-spot in one command; to actually prove the audit isn't blind, most of these modules take an explicit path (`concept_reference_audit.audit(ms, mod_path=<scratch tree>)`) and `ms` can be a `types.SimpleNamespace(mod_parsers={'Game Concepts': <stub with .data>})`, so you can run the pre-fix file through the real audit in seconds without touching the working tree.
+
+### Before deleting the readers behind a `Flag '<x>' is used but is never set`, grep the tests for the value (2026-10-12)
+
+When a feature retires a value, its readers can stay on purpose for older saves, and a test may pin them. #909 retired the Memorial monument form but kept its `gm_form_name` branch so an old monument keeps its name, and `test_grand_monument_registry.py`'s `RETIRED_FORMS` asserts that branch exists. Deleting the "dead" reader would have failed the suite and broken old saves. `git grep -n "<x>" -- 'test_*.py'` settles it. A kept reader belongs in `mod_known_noise.md` (here the L26 entry), not in a fix. (The Memorial branches and `RETIRED_FORMS` went with #1407 at 1.15, which loads no older save.)
+
+### When `main` has moved on since the game ran, check each error's files against it before fixing (2026-10-16)
+
+The logs are the deployed build's, so first find what that was (the main checkout's `git reflog` around the launch time, or the deploy branch), then `git diff --stat <deployed> origin/main -- <file>` for every file an entry names and read the merged PRs that touched them. That day #985 had already fixed every banking-cycle entry, diagnosed from the same session's logs by another agent; re-fixing them would have conflicted with it. Read error line numbers against the deployed tree, not `main`.
+
+### Check open PRs, not just `main`, before fixing a mod-side entry, and check `mod_known_noise.md` before chasing a gui.log line (2026-11-06)
+
+The one mod finding that day (`Variable 'sr_program_lost_moon_base' is used but is never set`, the retired Moon Base's dead program-loss reader) was already removed by open PR #1430, which was clearing the Moon Base's old-save code; fixing it too would have conflicted. `gh pr list --state open --limit 60 --json number,title,files -q '.[] | select(any(.files[]; .path|test("<file>"))) | "\(.number) \(.title)"'` lists the open PRs touching a file. And gui.log is no `/logs` family, so its lines never meet the registries: `tooltip.gui:328 - Could not find template 'vertical_scrollbar'` looked new there and was a tracked entry. The first triage after a vanilla patch is mostly unregistered vanilla content: 1,900 of that day's 1,905 untagged lines were new 1.15 vanilla bugs and one cpp anchor drift (`country.cpp:9608` → `:9794`). On a snapshot of rotation generations, `registry_retag_diff.py corpus` keeps each line's largest single-file count (it was written for archives of copies), so its totals undercount: quote the direct-parse counts for volume and use the corpus for the mod-frame check only.
+
+### From 1.15 on, which loads no older save, a reader kept for an old save is dead code: remove it rather than register its `is used but is never set` lines (2026-11-06)
+
+#1428 kept 31 once-only events' guard reads "until 2026-12-31" for pre-change saves, and they logged 31 never-set lines at every load. The owner: "this is for the release of 1.15 which is save-incompatible anyway." That replaces the 2026-10-12 note's "a kept reader belongs in `mod_known_noise.md`" for anything kept for a pre-1.15 save; its grep-the-tests step still holds (`test_once_only_events.py` pinned these reads). The same session's error.log flood was a saved-scope tooltip fence the best-practices guide had ruled out on 2026-10-25: when a triage finds a pattern the guide already names, grep the tree for its other uses.
+
+### A fix that silences one load-time class can open another at the same file, so diff the first launch after it by file, not by message (2026-11-08, evening)
+
+#1518 generated the culture merges' expected static modifiers to stop 126 `Missing expected culture static modifier` lines; the next launch logged 126 `Unknown modifier type` lines from the new file, because the engine creates no per-culture modifier type (vanilla registers three for each of its 322 cultures). `/validate/engine-coverage` would have caught it, but its report is only as fresh as the server's last full reload, and a worktree build never reloads: query `/raw/<type>/<a new entity>` first, and if it's missing, the validator's silence means nothing. `test_static_modifier_types.py` now covers this class offline. Also: when a probe's playtest row says what to do on each verdict, its first BROKEN (here `delayed_state_event`, January 1836) is the go-ahead, not a new question; check the row's prescription against the code before following it.
+
+### During a long observer run, refresh the PR branch from `main` at each check-in when the owner is merging in the same system (2026-11-08, night)
+
+Four culture-merge PRs landed during the run, each touching `culture-merges-playtest.md`, and GitHub runs no `pull_request` workflow while a PR conflicts: a push showed no CI run at all, and `gh pr view --json mergeable` (`CONFLICTING`) was the only sign. `git merge-tree --write-tree --name-only HEAD origin/main` tells you before you merge. Also, `gui.log` stays at its 4 KB buffer until the game quits, so a snapshot of a running game misses most of it; read it after a quit.
+
+## Single messages worth knowing
+
+### `add_loyalists` and `add_radicals` share the same `*_radicals` script values (2026-05-05)
+
+Vanilla `event_values.txt` only defines `small_radicals = 0.02 / medium_radicals = 0.05 / large_radicals = 0.1`. There are NO `*_loyalists` script values — vanilla event code uses the radicals values for both effects (`acceptance_events.txt` calls `add_loyalists = { value = large_radicals }`). Mod usages of `value = small_loyalists` will silently fail (`Failed to find a valid event target link`) — replace with the matching `*_radicals` value, not a literal. Note: this triple-fires per occurrence — `Failed to find a valid event target link 'small_loyalists'` + `Badly read script value small_loyalists` + `add_loyalists effect [ The 'value' field must be set ]` — recognize as one bug, not three.
+
+### `pdx_3dtypes.cpp:217` "Total time X_mesh in N ms" entries can dominate a triage round (671 of 697 in one session) (2026-05-16)
+
+Pure 3D asset-load instrumentation, never actionable. Now registered in `vanilla_known_bugs.md` § "Engine noise (source-anchored)" with signature `Total time "` so `vanilla_bugs=hide` swallows them. If a triage curl returns an inflated count dominated by mesh-load entries, the registry entry may have been removed or the source line shifted in an engine patch — check `vanilla_known_bugs.md`.
+
+### `Duplicated event ID 'X' found. New Location: A, Previous Location: B` — the engine KEEPS `Previous` (B) and rejects `New` (A) (2026-05-24)
+
+So a mod event override of a vanilla event *works* iff the mod file is reported as `Previous`. Example this session: `te_formation_overrides.txt` (mod) was `Previous`, vanilla `misc_unifications.txt` was `New` → mod's `formation.17` won, the warning is benign by-design noise. A drift-warning comment that says "if you see Duplicated key X, the engine dropped THIS copy" is too coarse — it ignores the New/Previous field, which tells you *which* copy was dropped. Only conclude the override failed if the **mod** file is `New`. (Definitive confirmation still needs in-game observation of the overridden behavior.)
+
+### `Event X is orphaned` (`jomini_eventmanager.cpp:376`) = the event is fully defined but reachable from no dispatch path (2026-05-24)
+
+For this mod's law-enactment events, dispatch is `random_events = { <weight> = <id> }` lists in `common/on_actions/law_events_on_actions.txt` (advance / debate / stall pools) — NOT explicit `trigger_event = { id = X }`. An orphaned enactment event is almost always one the author wrote (full loc + options) but forgot to add to the matching pool; fix by adding `10 = <id>` to the pool whose theme matches the event's `# ... – <X> flavor` header comment. Distinguish from parse-cascade orphans: check the event's line number vs. any parse-error line in the same file — orphans *before* the parse error are genuinely unreferenced, not cascade fallout.

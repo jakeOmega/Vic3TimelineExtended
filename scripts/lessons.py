@@ -10,7 +10,8 @@ The guides hold several hundred lessons, each a `##` section whose heading
 states the rule. They are filed in the order they were learned, so the way in
 is a search, and the best search term is a name from the script: an effect, a
 trigger, a modifier, a scope, a file. Run this before writing an effect or
-trigger you have not used in this mod before.
+trigger you have not used in this mod before. The log-triage lessons are
+searched too: give it a log line's cpp source or a piece of its message.
 
 Hits are ranked: a term in the heading counts far more than one in the body.
 Stdlib only; needs neither the server nor the game.
@@ -32,6 +33,7 @@ GUIDES = (
     "docs/guides/python_tools.md",
     "docs/guides/git_workflow.md",
     ".claude/rules/script.md",
+    ".claude/skills/log-triage/lessons.md",
 )
 
 HEADING = re.compile(r"^(#{2,3}) +(.*\S)\s*$")
