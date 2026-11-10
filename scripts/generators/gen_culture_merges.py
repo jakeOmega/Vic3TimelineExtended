@@ -2001,6 +2001,23 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                         out.line("te_cmg_remove_parts_of_%s = yes" % part)
 
 
+def cultures_below(result: str, merges: tuple[cfg.Merge, ...]) -> list[str]:
+    """Every culture whose people can end up in ``result``: the cultures that switch into it, and down the chain the
+    ones that switch into those (cm_latin: French, cm_italian, North Italian, Corsican ...), nearest first."""
+    below = switched_into(merges)
+    found: list[str] = []
+    frontier = [result]
+    while frontier:
+        following = []
+        for culture in frontier:
+            for part in below.get(culture, ()):
+                if part not in found and part != result:
+                    found.append(part)
+                    following.append(part)
+        frontier = following
+    return found
+
+
 def _chain_order(merges: tuple[cfg.Merge, ...]) -> list[str]:
     """The results that can themselves switch, the lowest in a chain first (cm_italian before cm_latin), so one pass
     over them follows a chain to its end."""
@@ -2071,10 +2088,18 @@ def _write_dead_primary_effects(out: "_Script", vanilla: dict, merges: tuple[cfg
     out.line()
     out.line("# Country scope. Monthly and on formation, with no rule gate (te_cm_strip_on_action). A formable's definition lists")
     out.line("# the merged cultures beside their parts, so that a country whose parts are gone can still form it, and forming a")
-    out.line("# tag adds every culture its definition lists. A merged culture whose merge never began has no people: it is taken")
-    out.line("# off again here, unless it is the country's only primary culture. te_cm_chk_strip is the TEMPORARY self-check")
-    out.line("# cm_untouched_stripped.")
+    out.line("# tag adds every culture its definition lists. So a country can be handed a merged culture it has no claim to, and")
+    out.line("# it is taken off again here, unless it is the country's only primary culture:")
+    out.line("#   - the merge never began (te_cmg_<m>_untouched): the culture has no people anywhere;")
+    out.line("#   - or the merge did begin, but this country is not its starter, has never converted for it (te_cm_converted_<m>,")
+    out.line("#     set where te_cm_convert_part gives the culture: R34), has no pops of the culture, and has none of the switched")
+    out.line("#     cultures that end in it as a primary culture (Romania, formed while France runs the Latin merge and Romanian")
+    out.line("#     has not joined: review, 2026-11-09). The last test is the monthly upkeep's own reason to give the culture, so")
+    out.line("#     the two never undo each other; once that part has left, a culture with no people here goes too.")
+    out.line("# te_cm_chk_strip_verify and te_cm_chk_strip are the TEMPORARY self-check cm_untouched_stripped: the verdict on the")
+    out.line("# country's next pass, before anything is taken off again.")
     with out.block("te_cmg_strip_untouched_results"):
+        out.line("te_cm_chk_strip_verify = yes")
         for merge in merges:
             if merge.new is None:
                 continue
@@ -2082,7 +2107,16 @@ def _write_dead_primary_effects(out: "_Script", vanilla: dict, merges: tuple[cfg
                 with out.block("limit"):
                     out.line(_result_exists(merge))
                     out.line("country_has_primary_culture = cu:%s" % merge.result)
-                    out.line("te_cmg_%s_untouched = yes" % merge.key)
+                    with out.block("OR"):
+                        out.line("te_cmg_%s_untouched = yes" % merge.key)
+                        with out.block("NOR"):
+                            out.line("has_variable = te_cm_started_%s" % merge.key)
+                            out.line("has_variable = te_cm_converted_%s" % merge.key)
+                            out.line("culture_percent_country = { target = cu:%s value > 0 }" % merge.result)
+                            for culture in cultures_below(merge.result, merges):
+                                with out.block("AND"):
+                                    out.line("has_global_variable = te_cm_switched_%s" % culture)
+                                    out.line("country_has_primary_culture = cu:%s" % culture)
                     out.line("any_primary_culture = { NOT = { this = cu:%s } }" % merge.result)
                 out.line("remove_primary_culture = cu:%s" % merge.result)
                 out.line("te_cm_chk_strip = { CULTURE = %s }" % merge.result)

@@ -57,9 +57,9 @@ SELFCHECKS = (
 # The checks that read merge state and so wait for the rule (ruling 4). Russification's reads the INJECTed outcome
 # of a vanilla entry, which has no rule gate (Task 7), and no merge variable; the fervor copy's rides the copy, which
 # has no rule gate either (it serves pops that stay switched with the rule off).
-# The four of 2026-11-09 (a switched part leaving the primary cultures) ride the global monthly pulse beside the fervor
-# copy: the removal they read is itself behind the rule, the traditions serve parts that already switched, and the
-# definitions are injected whatever the rule says.
+# The four of 2026-11-09 (a switched part leaving the primary cultures) carry no rule gate of their own: the removal
+# check rides the monthly upkeep, which is itself behind the rule; the strip, the traditions and the definitions work
+# whatever the rule says.
 UNGATED = ("cm_russification_outcome", "cm_fervor_copy", "cm_dead_primary_removed", "cm_untouched_stripped",
            "cm_tradition_carried", "cm_definition_inject")
 RULE_GATED = tuple(n for n in SELFCHECKS if n not in UNGATED)
@@ -267,11 +267,11 @@ class HookTest(unittest.TestCase):
         (MERGE_EFFECTS, "te_cm_switch_part", "te_cm_chk_switch = { CULTURE = $CULTURE$ }"),
         (MERGE_EFFECTS, "te_cm_copy_fervor", "te_cm_chk_fervor = { CULTURE = $CULTURE$ }"),
         (MERGE_EFFECTS, "te_cm_monthly_switched_culture", "te_cm_chk_dead_primary = { CULTURE = $CULTURE$ }"),
+        (MERGE_EFFECTS, "te_cm_monthly_switched_culture", "te_cm_chk_dead_primary_verify = { CULTURE = $CULTURE$ }"),
         (MERGE_ON_ACTIONS, "te_cm_fervor_on_action", "te_cm_chk_fervor_monthly = yes"),
-        (MERGE_ON_ACTIONS, "te_cm_fervor_on_action", "te_cm_chk_dead_primary_monthly = yes"),
-        (MERGE_ON_ACTIONS, "te_cm_fervor_on_action", "te_cm_chk_strip_monthly = yes"),
         (MERGE_ON_ACTIONS, "te_cm_fervor_on_action", "te_cm_chk_definition_inject = yes"),
         (GEN_EFFECTS, "te_cmg_carry_traditions", "te_cm_chk_traditions = yes"),
+        (GEN_EFFECTS, "te_cmg_strip_untouched_results", "te_cm_chk_strip_verify = yes"),
         (MERGE_ON_ACTIONS, "te_cm_yearly_on_action", "te_cm_chk_census_year = yes"),
         (MERGE_ON_ACTIONS, "te_cm_formed_on_action", "te_cm_chk_formation = yes"),
     )

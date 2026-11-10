@@ -16,7 +16,7 @@
 #   cm_russification_outcome    the INJECTed second outcome concludes Russification
 #   cm_fervor_copy              the literal ladder sets a switched culture's fervor, and the culture keeps it a month
 #   cm_dead_primary_removed     remove_primary_culture takes a switched part off a country and leaves its successor
-#   cm_untouched_stripped       a merged culture a formation added before its merge began is taken off again
+#   cm_untouched_stripped       a merged culture a formation gave a country with no claim to it is taken off again
 #   cm_tradition_carried        add_tradition_trait gives a merged culture a part's tradition, and it stays
 #   cm_definition_inject        an INJECTed `cultures` list reaches a vanilla country definition beside vanilla's own
 #
@@ -26,17 +26,17 @@
 #     te_cm_convert_part    te_cm_chk_conversion = { CULTURE = $CULTURE$ RESULT = $RESULT$ }
 #     te_cm_switch_part     te_cm_chk_switch = { CULTURE = $CULTURE$ }
 #     te_cm_copy_fervor     te_cm_chk_fervor = { CULTURE = $CULTURE$ }
-#     te_cm_monthly_switched_culture   te_cm_chk_dead_primary = { CULTURE = $CULTURE$ }
+#     te_cm_monthly_switched_culture   te_cm_chk_dead_primary = { CULTURE = $CULTURE$ }   (after the removal)
+#                                      te_cm_chk_dead_primary_verify = { CULTURE = $CULTURE$ }   (the verdict, at the top of the next pass)
 #   te_culture_merges_generated_effects.txt (the line is gen_culture_merges's, in _write_dead_primary_effects)
 #     te_cmg_carry_traditions   te_cm_chk_traditions = yes
 #     te_cmg_strip_untouched_results   te_cm_chk_strip = { CULTURE = <merged culture> }   (one per merge that makes a culture)
+#                                      te_cm_chk_strip_verify = yes   (the verdict, at the top of the next pass)
 #   te_culture_merge_on_actions.txt
 #     te_cm_yearly_on_action   te_cm_chk_census_year = yes
 #     te_cm_formed_on_action   te_cm_chk_formation = yes
 #     te_cm_fervor_on_action   te_cm_chk_fervor_monthly = yes   (the global pulse, before the copy: it reads last
 #                              month's copy, so it can't sit in this file's country pass)
-#                              te_cm_chk_dead_primary_monthly = yes   (the verdict, 20 days after a removal)
-#                              te_cm_chk_strip_monthly = yes          (the same, for the strip)
 #                              te_cm_chk_definition_inject = yes      (once, at the first global pulse)
 # and this file's monthly pass, which reads what the hooks stored.
 

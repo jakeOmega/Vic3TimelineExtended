@@ -766,6 +766,9 @@ te_cm_switch_part = {
 te_cm_monthly_switched_culture = {
 	global_var:te_cm_switched_$CULTURE$ = { save_temporary_scope_as = te_cm_switched_result }
 	te_cmg_resolve_switched_result = yes
+	# TEMPORARY self-check cm_dead_primary_removed (te_culture_merge_selfcheck_effects.txt; delete after the 1.3.x play-test):
+	# the verdict on last month's removal, read before this pass can take the part off again.
+	te_cm_chk_dead_primary_verify = { CULTURE = $CULTURE$ }
 	if = {
 		limit = {
 			country_has_primary_culture = cu:$CULTURE$

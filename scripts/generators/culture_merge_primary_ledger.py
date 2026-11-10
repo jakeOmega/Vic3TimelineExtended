@@ -152,7 +152,11 @@ CASES: dict[str, Case] = {
         "Political movements, ideologies and lobbies",
         "The pan-national movements (German, Italian, Yugoslav), the Carlist and Miguelist movements and ideologies, "
         "Russian royalists, the Spanish anarchists' bonus, the anti-slavery movement's Yankee and Dixie terms, the "
-        "Utilitarian movement, and a Bonapartist lobby's dislike of British and German countries.",
+        "Utilitarian movement, and a Bonapartist lobby's dislike of British and German countries. Filed here too, as "
+        "the same kind of read (the designer's filing, 2026-11-09, after review): the terms in six parties' "
+        "`join_weight` (the antebellum Northern and Southern interests, French legitimism), an interest group's pop "
+        "attraction and membership effects (French intelligentsia, Zanzibar's Bedouin), and the Carlist swap when "
+        "Corporatism is researched.",
         hold=False,
         ruled="2026-11-09",
     ),
@@ -182,8 +186,6 @@ CASES: dict[str, Case] = {
 
 _COSMETIC_DIRS = {
     "common/government_types/": "ruler titles and government names",
-    "common/parties/": "party names",
-    "common/interest_groups/": "interest-group names",
     "common/customizable_localization/": "text",
     "common/power_bloc_names/": "power bloc names",
     "common/dynamic_country_names/": "country names",
@@ -201,7 +203,6 @@ _MOOT_DIRS = {
 _CASE_DIRS = {
     "common/character_templates/": "historical_characters",
     "common/ai_strategies/": "ai_weights",
-    "common/technology/": "ai_weights",
     "common/diplomatic_catalysts/": "ai_weights",
     "common/scripted_triggers/00_ai_triggers.txt": "ai_weights",
     "common/political_movements/": "politics",
@@ -250,6 +251,23 @@ def _prefix(table: dict[str, str], file: str) -> str | None:
     return None
 
 
+def _by_field(file: str, blocks: set[str]) -> Disposition | None:
+    """The folders where one entity holds reads of different kinds, told apart by the field the read sits in
+    (review, 2026-11-09: a folder rule called an interest group's ideology setup and a party's `join_weight` "names")."""
+    if file.startswith("common/interest_groups/"):
+        if blocks <= {"on_enable"}:
+            return Disposition(MOOT, why="run once, when the group is enabled: the name, ideology or trait it sets then "
+                                         "stays, and a country created later starts with the cultures its definition lists")
+        if blocks <= {"on_enable", "priority_cultures"}:
+            return Disposition(COSMETIC, why="which cultures a group's generated leaders are drawn from")
+        return Disposition(CASE, case="politics")
+    if file.startswith("common/parties/"):
+        return Disposition(COSMETIC, why="party names") if blocks <= {"name"} else Disposition(CASE, case="politics")
+    if file.startswith("common/technology/"):
+        return Disposition(CASE, case="ai_weights" if blocks <= {"ai_weight"} else "politics")
+    return None
+
+
 def classify(row: dict) -> Disposition | None:
     """The disposition of one inventory row, or None when no rule covers it."""
     global _RESTATED_TYPES
@@ -259,6 +277,9 @@ def classify(row: dict) -> Disposition | None:
             _RESTATED_TYPES = restated_government_types()
         if entity in _RESTATED_TYPES:
             return Disposition(MIRRORED, why="restated with the merged culture")
+    by_field = _by_field(file, set(row.get("blocks", ())))
+    if by_field is not None:
+        return by_field
     why = _prefix(_COSMETIC_DIRS, file)
     if why:
         return Disposition(COSMETIC, why=why)

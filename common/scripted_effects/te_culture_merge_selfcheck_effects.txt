@@ -10,7 +10,9 @@
 # GetGlobalVariable (a $X$ inside a [..] accessor is unproven), then removed.
 # Checks 1-7 read merge state and wait for the rule (te_cm_system_enabled), so none fires in a game with no merges;
 # cm_russification_outcome reads the INJECTed outcome of a vanilla entry, which has no rule gate, and no merge variable;
-# cm_fervor_copy rides the fervor copy, which has no rule gate either, and so do the last four, on the same pulse.
+# cm_fervor_copy rides the fervor copy, which has no rule gate either, and so do the last two, on the same pulse;
+# cm_dead_primary_removed rides the monthly upkeep, which is itself behind the rule, and cm_untouched_stripped the strip,
+# which has no rule gate.
 #
 #   cm_census_sane                te_cm_chk_census           the first candidate's census of a part it holds
 #   cm_acceptance_scale           te_cm_chk_census           the first candidate with a primary core culture
@@ -27,9 +29,9 @@
 #   cm_fervor_copy                te_cm_chk_fervor           the first copy whose source has fervor 5 or more, read
 #                                 te_cm_chk_fervor_monthly   on the global pulse before the next month's copy
 #   cm_dead_primary_removed       te_cm_chk_dead_primary     the first part taken off a country's primary cultures,
-#                                 te_cm_chk_dead_primary_monthly   read on the global pulse 20 days on
-#   cm_untouched_stripped         te_cm_chk_strip            the first never-begun merge's culture taken off a country,
-#                                 te_cm_chk_strip_monthly    read on the global pulse 20 days on
+#                                 te_cm_chk_dead_primary_verify   read at that country's next monthly pass
+#   cm_untouched_stripped         te_cm_chk_strip            the first merged culture a country had no claim to taken off it,
+#                                 te_cm_chk_strip_verify     read at that country's next strip pass
 #   cm_tradition_carried          te_cm_chk_traditions       the monthly passes of te_cmg_carry_traditions
 #   cm_definition_inject          te_cm_chk_definition_inject   GER's definition, at the first global pulse
 #
@@ -645,52 +647,54 @@ te_cm_chk_fervor_monthly = {
 # ----------------------------------------------------------------------------
 
 # Country scope, right after te_cm_monthly_switched_culture's remove_primary_culture. $CULTURE$ = the part;
-# scope:te_cm_switched_result = the culture the country keeps. Stores the three and a 20-day wait, once a game.
+# scope:te_cm_switched_result = the culture the country keeps. Stores the three, once a game (again if the country it
+# stored has died).
 #
-# cm_dead_primary_removed, read by te_cm_chk_dead_primary_monthly on the first global pulse after the wait:
-#   OK      the country no longer has the part as a primary culture and still has the successor.
-#   BROKEN  the part is still primary (remove_primary_culture did nothing here: the fallback is to leave the parts,
-#           an `always = yes` in every te_cmg_part_held_<c>), or the successor is gone (the remove took the wrong one).
-#           A formation in those 20 days brings the part back for a month and reads as BROKEN too: check the date.
-#   no line a year after a switch: the country it armed on died before the read, or nothing was ever unheld.
+# cm_dead_primary_removed, read by te_cm_chk_dead_primary_verify at the top of the same country's next monthly pass for
+# the same part, before that pass can take the part off again (a verdict on the global pulse would come after it, and
+# call a removal that is undone every month OK: review, 2026-11-09):
+#   OK      the country does not have the part as a primary culture and still has the successor.
+#   BROKEN  the part is primary again (remove_primary_culture did nothing, or something gives the part back: the
+#           fallback is to leave the parts, an `always = yes` in every te_cmg_part_held_<c>), or the successor is gone
+#           (the remove took the wrong one). A formation in that month brings the part back once and reads as BROKEN
+#           too: check the date.
+#   no line a year after a switch: nothing was unheld yet (most big cultures are held until 1936), or the country it
+#           armed on died before its next pass.
 te_cm_chk_dead_primary = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_cm_chk_dead_primary_removed_done }
-			NOT = { has_global_variable = te_cm_chk_dp_country }
+			OR = {
+				NOT = { has_global_variable = te_cm_chk_dp_country }
+				NOT = { exists = global_var:te_cm_chk_dp_country }
+			}
 		}
 		set_global_variable = { name = te_cm_chk_dp_country value = this }
 		set_global_variable = { name = te_cm_chk_dp_part value = cu:$CULTURE$ }
 		set_global_variable = { name = te_cm_chk_dp_result value = scope:te_cm_switched_result }
-		set_global_variable = { name = te_cm_chk_dp_wait value = yes days = 20 }
 	}
 }
 
-# No root scope: the global monthly pulse (te_cm_fervor_on_action).
-te_cm_chk_dead_primary_monthly = {
+# Country scope, at the top of te_cm_monthly_switched_culture. $CULTURE$ = the part this pass is for.
+te_cm_chk_dead_primary_verify = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_cm_chk_dead_primary_removed_done }
 			has_global_variable = te_cm_chk_dp_country
-			NOT = { has_global_variable = te_cm_chk_dp_wait }
+			global_var:te_cm_chk_dp_country ?= this
+			global_var:te_cm_chk_dp_part ?= cu:$CULTURE$
 		}
+		set_global_variable = { name = te_cm_chk_dead_primary_removed_done value = yes }
+		global_var:te_cm_chk_dp_result = { save_temporary_scope_as = te_cm_chk_dp_result_s }
 		if = {
-			limit = { exists = global_var:te_cm_chk_dp_country }
-			set_global_variable = { name = te_cm_chk_dead_primary_removed_done value = yes }
-			global_var:te_cm_chk_dp_part = { save_temporary_scope_as = te_cm_chk_dp_part_s }
-			global_var:te_cm_chk_dp_result = { save_temporary_scope_as = te_cm_chk_dp_result_s }
-			global_var:te_cm_chk_dp_country = {
-				if = {
-					limit = {
-						NOT = { country_has_primary_culture = scope:te_cm_chk_dp_part_s }
-						country_has_primary_culture = scope:te_cm_chk_dp_result_s
-					}
-					debug_log = "TE_SELF_CHECK OK cm_dead_primary_removed date=[TimeKeeper.GetCurrentDate.GetString] (a switched part left a country's primary cultures and its successor stayed)"
-				}
-				else = {
-					debug_log = "TE_SELF_CHECK BROKEN cm_dead_primary_removed date=[TimeKeeper.GetCurrentDate.GetString] (20 days after remove_primary_culture the part is still primary, or the successor is not; unless the country formed a tag in between)"
-				}
+			limit = {
+				NOT = { country_has_primary_culture = cu:$CULTURE$ }
+				country_has_primary_culture = scope:te_cm_chk_dp_result_s
 			}
+			debug_log = "TE_SELF_CHECK OK cm_dead_primary_removed part=$CULTURE$ country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a month after a switched part left this country's primary cultures it is still gone, and its successor is there)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_dead_primary_removed part=$CULTURE$ country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a month after remove_primary_culture the part is a primary culture again, or the successor is not; unless the country formed a tag in between)"
 		}
 		te_cm_chk_remove_global = { NAME = te_cm_chk_dp_country }
 		te_cm_chk_remove_global = { NAME = te_cm_chk_dp_part }
@@ -699,47 +703,46 @@ te_cm_chk_dead_primary_monthly = {
 }
 
 # Country scope, right after te_cmg_strip_untouched_results's remove_primary_culture. $CULTURE$ = the merged culture
-# taken off. No rule gate, like the strip. Stores the country and the culture and a 20-day wait, once a game.
+# taken off. No rule gate, like the strip. Stores the country and the culture, once a game (again if that country died).
 #
-# cm_untouched_stripped, read by te_cm_chk_strip_monthly on the first global pulse after the wait:
-#   OK      the country no longer has the culture as a primary culture: a formation (or a release) had added a merged
-#           culture whose merge never began, as the definitions make it do, and the strip took it off.
-#   BROKEN  it still has it: remove_primary_culture did nothing, and countries keep an empty culture after forming a
-#           tag. The fallback is the definitions file deleted and a hold on every part a formable lists.
+# cm_untouched_stripped, read by te_cm_chk_strip_verify at the top of the same country's next strip pass, before
+# that pass can take the culture off again:
+#   OK      the country does not have the culture as a primary culture: a formation (or a release) had added a merged
+#           culture it has no claim to, as the definitions make it do, and the strip took it off for good.
+#   BROKEN  it has it again: remove_primary_culture did nothing, or something keeps giving it back, and countries keep
+#           an empty culture after forming a tag. The fallback is the definitions file deleted and a hold on every part
+#           a formable lists. A second formation in that month reads as BROKEN too.
 #   no line: no country has formed or been created from a definition that lists a merged culture yet.
 te_cm_chk_strip = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_cm_chk_untouched_stripped_done }
-			NOT = { has_global_variable = te_cm_chk_st_country }
+			OR = {
+				NOT = { has_global_variable = te_cm_chk_st_country }
+				NOT = { exists = global_var:te_cm_chk_st_country }
+			}
 		}
 		set_global_variable = { name = te_cm_chk_st_country value = this }
 		set_global_variable = { name = te_cm_chk_st_culture value = cu:$CULTURE$ }
-		set_global_variable = { name = te_cm_chk_st_wait value = yes days = 20 }
 	}
 }
 
-# No root scope: the global monthly pulse (te_cm_fervor_on_action).
-te_cm_chk_strip_monthly = {
+# Country scope, at the top of te_cmg_strip_untouched_results.
+te_cm_chk_strip_verify = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_cm_chk_untouched_stripped_done }
 			has_global_variable = te_cm_chk_st_country
-			NOT = { has_global_variable = te_cm_chk_st_wait }
+			global_var:te_cm_chk_st_country ?= this
 		}
+		set_global_variable = { name = te_cm_chk_untouched_stripped_done value = yes }
+		global_var:te_cm_chk_st_culture = { save_temporary_scope_as = te_cm_chk_st_culture_s }
 		if = {
-			limit = { exists = global_var:te_cm_chk_st_country }
-			set_global_variable = { name = te_cm_chk_untouched_stripped_done value = yes }
-			global_var:te_cm_chk_st_culture = { save_temporary_scope_as = te_cm_chk_st_culture_s }
-			global_var:te_cm_chk_st_country = {
-				if = {
-					limit = { NOT = { country_has_primary_culture = scope:te_cm_chk_st_culture_s } }
-					debug_log = "TE_SELF_CHECK OK cm_untouched_stripped date=[TimeKeeper.GetCurrentDate.GetString] (a merged culture whose merge never began was taken off a country that a definition had given it to)"
-				}
-				else = {
-					debug_log = "TE_SELF_CHECK BROKEN cm_untouched_stripped date=[TimeKeeper.GetCurrentDate.GetString] (20 days after the strip the country still has a merged culture whose merge never began)"
-				}
-			}
+			limit = { NOT = { country_has_primary_culture = scope:te_cm_chk_st_culture_s } }
+			debug_log = "TE_SELF_CHECK OK cm_untouched_stripped country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a merged culture this country had no claim to was taken off its primary cultures and stayed off)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cm_untouched_stripped country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a pass after the strip the country has the merged culture again; unless it formed a tag in between)"
 		}
 		te_cm_chk_remove_global = { NAME = te_cm_chk_st_country }
 		te_cm_chk_remove_global = { NAME = te_cm_chk_st_culture }

@@ -95,14 +95,22 @@ def _tokens(text: str):
             yield match.group(0), number
 
 
-def scan_text(text: str, parts: frozenset[str]) -> list[tuple[str, str, int]]:
-    """(top-level entity, part, line) for every read of a part as a primary culture in one file's text."""
-    found: list[tuple[str, str, int]] = []
+def scan_text(text: str, parts: frozenset[str]) -> list[tuple[str, str, int, str]]:
+    """(top-level entity, part, line, block) for every read of a part as a primary culture in one file's text.
+    ``block`` is the entity's own field the read sits in (``possible``, ``on_enable``, ``name``), or "" for a read
+    directly in the entity.
+
+    What it does not see (review, 2026-11-09): a read through a saved scope (``cu:x = { save_scope_as = s }`` and,
+    elsewhere, ``country_has_primary_culture = scope:s``; vanilla 1.15 has two such names, ``relevant_culture_scope``
+    and ``russian_warlord_state_culture``, whose cultures other rows already hold), and a ``#`` inside a quoted
+    string, which ends the line for it (vanilla has none beside a read)."""
+    found: list[tuple[str, str, int, str]] = []
     stack: list[str] = []  # the key that opened each block we are inside
     tokens = list(_tokens(text))
     index = 0
 
     def part_of(token: str) -> str | None:
+        token = token.strip('"')
         name = token[3:] if token.startswith("cu:") else None
         return name if name in parts else None
 
@@ -124,20 +132,21 @@ def scan_text(text: str, parts: frozenset[str]) -> list[tuple[str, str, int]]:
             index += 3
             continue
         entity = stack[0] if stack else ""
-        if token == "country_has_primary_culture" and nxt in ("=", "?="):
+        block = stack[1] if len(stack) > 1 else ""
+        if token == "country_has_primary_culture" and nxt in ("=", "?=", "!="):
             part = part_of(after)
             if part:
-                found.append((entity, part, line))
+                found.append((entity, part, line, block))
             index += 3
             continue
         if token == "is_primary_culture_of":
             for key in reversed(stack):
                 part = part_of(key)
                 if part:
-                    found.append((entity, part, line))
+                    found.append((entity, part, line, block))
                     break
         elif part_of(token) and any(key in PRIMARY_ITERATORS for key in stack):
-            found.append((entity, part_of(token), line))
+            found.append((entity, part_of(token), line, block))
         index += 1
     return found
 
@@ -199,6 +208,7 @@ def trace_entries(file: str, entity: str, index: dict[str, set[tuple[str, str]]]
 def scan_reads(game: Path, parts: list[str]) -> list[dict]:
     wanted = frozenset(parts)
     rows: dict[tuple[str, str, str], int] = {}
+    blocks: dict[tuple[str, str, str], set[str]] = {}
     for top in SCAN_DIRS:
         for path in sorted((game / top).rglob("*.txt")):
             relative = path.relative_to(game).as_posix()
@@ -207,16 +217,20 @@ def scan_reads(game: Path, parts: list[str]) -> list[dict]:
             text = _read(path)
             if "primary_culture" not in text:
                 continue
-            for entity, part, _line in scan_text(text, wanted):
+            for entity, part, _line, block in scan_text(text, wanted):
                 key = (relative, entity, part)
                 rows[key] = rows.get(key, 0) + 1
+                blocks.setdefault(key, set()).add(block)
     index = reference_index(game)
     traced: dict[tuple[str, str], list[str]] = {}
     found = []
     for (file, entity, part), count in sorted(rows.items()):
         if (file, entity) not in traced:
             traced[(file, entity)] = trace_entries(file, entity, index)
-        found.append({"file": file, "entity": entity, "part": part, "count": count, "entries": traced[(file, entity)]})
+        found.append({
+            "file": file, "entity": entity, "part": part, "count": count,
+            "blocks": sorted(blocks[(file, entity, part)]), "entries": traced[(file, entity)],
+        })
     return found
 
 

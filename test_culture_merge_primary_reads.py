@@ -58,7 +58,7 @@ class ScanTest(unittest.TestCase):
     PARTS = frozenset({"north_german", "serb"})
 
     def scan(self, text):
-        return [(entity, part) for entity, part, _line in reads.scan_text(text, self.PARTS)]
+        return [(entity, part) for entity, part, _line, _block in reads.scan_text(text, self.PARTS)]
 
     def test_a_plain_read(self):
         self.assertEqual(
@@ -72,6 +72,15 @@ class ScanTest(unittest.TestCase):
 
     def test_is_primary_culture_of(self):
         self.assertEqual(self.scan("ev.1 = {\n\tcu:serb = { is_primary_culture_of = root }\n}\n"), [("ev.1", "serb")])
+
+    def test_the_field_a_read_sits_in(self):
+        text = "ig_x = {\n\ton_enable = {\n\t\tif = { limit = { country_has_primary_culture = cu:serb } }\n\t}\n\tpop_weight = { country_has_primary_culture = cu:serb }\n}\n"
+        self.assertEqual([row[3] for row in reads.scan_text(text, self.PARTS)], ["on_enable", "pop_weight"])
+        self.assertEqual([row[3] for row in reads.scan_text("e = { country_has_primary_culture = cu:serb }", self.PARTS)], [""])
+
+    def test_a_negated_or_quoted_read(self):
+        self.assertEqual(self.scan("e = { possible = { country_has_primary_culture != cu:serb } }"), [("e", "serb")])
+        self.assertEqual(self.scan('e = { possible = { country_has_primary_culture = "cu:serb" } }'), [("e", "serb")])
 
     def test_what_is_not_a_read(self):
         for text in (
@@ -171,8 +180,25 @@ class LedgerTest(unittest.TestCase):
             kinds.setdefault(row["file"].split("/")[1] if row["file"].startswith("common/") else "events", set()).add(
                 ledger.classify(row).kind
             )
-        for folder in ("parties", "interest_groups", "flag_definitions", "power_bloc_names"):
+        for folder in ("flag_definitions", "power_bloc_names", "dynamic_country_names"):
             self.assertEqual(kinds[folder], {ledger.COSMETIC}, folder)
+        # One entity can hold reads of different kinds, told apart by the field (review, 2026-11-09): a party's name
+        # ladder is cosmetic and its join_weight is politics; an interest group's on_enable runs once.
+        self.assertEqual(kinds["parties"], {ledger.COSMETIC, ledger.CASE})
+        self.assertEqual(kinds["interest_groups"], {ledger.MOOT, ledger.COSMETIC, ledger.CASE})
+        by_field = {}
+        for row in self.inventory["reads"]:
+            if row["file"].startswith(("common/parties/", "common/interest_groups/", "common/technology/")):
+                disposition = ledger.classify(row)
+                by_field.setdefault((row["file"].split("/")[1], tuple(row["blocks"])), set()).add(
+                    disposition.case or disposition.kind
+                )
+        self.assertEqual(by_field[("parties", ("name",))], {ledger.COSMETIC})
+        self.assertEqual(by_field[("parties", ("join_weight",))], {"politics"})
+        self.assertEqual(by_field[("interest_groups", ("on_enable",))], {ledger.MOOT})
+        self.assertEqual(by_field[("interest_groups", ("pop_weight",))], {"politics"})
+        self.assertEqual(by_field[("technology", ("ai_weight",))], {"ai_weights"})
+        self.assertEqual(by_field[("technology", ("on_researched",))], {"politics"})
         # A ruler's title is cosmetic too, and holds nothing; the ones that belonged to a whole merged people are restated.
         self.assertEqual(kinds["government_types"], {ledger.COSMETIC, ledger.MIRRORED})
         self.assertEqual(kinds["company_types"], {ledger.COMPANY})
@@ -306,17 +332,44 @@ class EffectTest(unittest.TestCase):
                 if successor in order:
                     self.assertLess(order.index(culture), order.index(successor), (culture, successor))
 
-    def test_the_strip_takes_a_never_begun_merges_culture_off(self):
+    def test_the_strip_takes_off_a_merged_culture_a_country_has_no_claim_to(self):
         body = squash(block(self.text, "te_cmg_strip_untouched_results"))
         for merge in cfg.MERGES:
+            below = gen.cultures_below(merge.result, cfg.MERGES)
+            # Never began; or began, and this country is not its starter, never converted for it, has none of its
+            # people and none of the switched cultures the monthly upkeep would give it for (review, 2026-11-09:
+            # Romania formed while the Latin merge runs kept cm_latin for good).
             line = (
-                "if = { limit = { exists = cu:%s country_has_primary_culture = cu:%s te_cmg_%s_untouched = yes "
+                "if = { limit = { exists = cu:%s country_has_primary_culture = cu:%s OR = { te_cmg_%s_untouched = yes "
+                "NOR = { has_variable = te_cm_started_%s has_variable = te_cm_converted_%s "
+                "culture_percent_country = { target = cu:%s value > 0 } %s } } "
                 "any_primary_culture = { NOT = { this = cu:%s } } } remove_primary_culture = cu:%s "
                 "te_cm_chk_strip = { CULTURE = %s } }"
-                % (merge.result, merge.result, merge.key, merge.result, merge.result, merge.result)
+                % (
+                    merge.result, merge.result, merge.key, merge.key, merge.key, merge.result,
+                    " ".join(
+                        "AND = { has_global_variable = te_cm_switched_%s country_has_primary_culture = cu:%s }" % (c, c)
+                        for c in below
+                    ),
+                    merge.result, merge.result, merge.result,
+                )
             )
             self.assertEqual(body.count(line), int(merge.new is not None), merge.key)
         self.assertEqual(body.count("remove_primary_culture"), len(new_results()))
+        self.assertTrue(body.startswith("te_cm_chk_strip_verify = yes "))
+
+    def test_the_strip_and_the_upkeep_cannot_undo_each_other(self):
+        # The upkeep gives a country the end of a switched part's chain; the strip keeps every culture a switched
+        # primary part can end in. So every (part, result it can reach) pair is among the strip's exemptions.
+        for merge in cfg.MERGES:
+            if merge.new is None:
+                continue
+            below = set(gen.cultures_below(merge.result, cfg.MERGES))
+            for culture in gen.switchable_cultures(cfg.MERGES):
+                if merge.result in cfg.successors_of(culture):
+                    self.assertIn(culture, below, (culture, merge.result))
+        self.assertEqual(gen.cultures_below("cm_latin", cfg.MERGES)[:1], ["french"])
+        self.assertIn("corsican", gen.cultures_below("cm_latin", cfg.MERGES))
 
     def test_the_strip_runs_monthly_and_on_formation_with_no_rule_gate(self):
         on_actions = text_of(ON_ACTIONS)
