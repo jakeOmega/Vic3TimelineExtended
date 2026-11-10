@@ -78,7 +78,11 @@ class FakeBackend:
         self.lose_focus_after: int | None = None        # the game loses the foreground after this many keys
         self.lose_focus_after_sleep = False
         self.focus_succeeds = True
+        self.needs_alt = True                   # the plain SetForegroundWindow fails until ALT has been tapped
+        self.alt_taps = 0
         self.set_foreground_calls = 0
+        self.during_focus_wait = None           # called while the helper waits after a tap, for a person to "type"
+        self.on_foreground_check = None         # called whenever the foreground window is looked at
         self.terminated: list[int] = []
         self.terminate_args: list[tuple[int, str]] = []
         self.terminate_result = True
@@ -118,14 +122,28 @@ class FakeBackend:
         return dict(win) if win else None
 
     def foreground_hwnd(self) -> int:
+        if self.on_foreground_check is not None:
+            self.on_foreground_check()
         return self.foreground
 
-    def set_foreground(self, hwnd: int) -> bool:
+    def set_foreground(self, hwnd: int) -> tuple[bool, int | None]:
+        """Like the real one: a plain attempt, then (only if needed) an ALT tap and a second attempt.
+
+        Returns (in front afterwards, the tick of the ALT tap or None); a tap is input the system sees.
+        """
         self.set_foreground_calls += 1
-        self.last_input = self.now              # the ALT tap is input the system sees
+        if self.focus_succeeds and not self.needs_alt:
+            self.foreground = hwnd
+            return True, None
+        self.alt_taps += 1
+        self.last_input = self.now
+        tapped_at = self.now
+        self.now += 300                         # the wait after the second attempt
+        if self.during_focus_wait is not None:
+            self.during_focus_wait()
         if self.focus_succeeds:
             self.foreground = hwnd
-        return self.foreground == hwnd
+        return self.foreground == hwnd, tapped_at
 
     def _key(self, kind: str, value: object) -> None:
         self.sent.append((kind, value))

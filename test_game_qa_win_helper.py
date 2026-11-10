@@ -225,13 +225,64 @@ class LaunchWindowTest(BackendCase):
 
 class KeysTest(BackendCase):
     def test_steps_run_in_order_while_the_game_is_in_front(self):
-        out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "event é.1"}, {"wait_ms": 250}, {"scan": 0x1C}])
+        out = self.call("keys", pid=7, steps=[{"scan": 0x29}, {"text": "event é1"}, {"wait_ms": 250}, {"scan": 0x1C}])
         self.assertTrue(out["ok"]); self.assertEqual(out["steps_done"], 4)
-        self.assertEqual(self.backend.sent, [("scan", 0x29), ("text", "event é.1"), ("scan", 0x1C)])
+        self.assertEqual(self.backend.sent, [("scan", 0x29), ("text", "event é1"), ("scan", 0x1C)])
         self.assertEqual(self.backend.slept, [250])
 
     def test_an_empty_list_of_steps_is_fine(self):
         self.assertTrue(self.call("keys", pid=7, steps=[])["ok"]); self.assertEqual(self.backend.sent, [])
+
+    def test_long_text_goes_out_in_chunks_of_at_most_eight_characters(self):
+        self.call("keys", pid=7, steps=[{"text": "0123456789abcdefghij"}])
+        self.assertEqual(self.backend.sent, [("text", "01234567"), ("text", "89abcdef"), ("text", "ghij")])
+
+    def test_eight_characters_are_one_chunk(self):
+        self.call("keys", pid=7, steps=[{"text": "01234567"}])
+        self.assertEqual(self.backend.sent, [("text", "01234567")])
+
+    def test_chunks_never_split_a_character(self):
+        self.call("keys", pid=7, steps=[{"text": "abcdefg\U0001F600h"}])
+        self.assertEqual(self.backend.sent, [("text", "abcdefg\U0001F600"), ("text", "h")])
+
+    def test_the_foreground_is_checked_before_each_chunk(self):
+        looked = []
+        self.backend.on_foreground_check = lambda: looked.append(1)
+        self.call("keys", pid=7, steps=[{"text": "0123456789abcdefghij"}])
+        self.assertEqual(len(looked), 3)
+
+    def test_focus_lost_mid_string_stops_the_rest_and_says_how_much_went_out(self):
+        self.backend.lose_focus_after = 3
+        out = self.call("keys", pid=7, steps=[{"scan": 1}, {"text": "0123456789abcdefghij"}, {"scan": 2}])
+        self.assertEqual(out["error"], "not_foreground")
+        self.assertEqual((out["steps_done"], out["chars_sent"]), (1, 16))
+        self.assertEqual(self.backend.sent, [("scan", 1), ("text", "01234567"), ("text", "89abcdef")])
+
+    def test_a_refusal_before_the_first_character_says_zero_went_out(self):
+        self.backend.foreground = 999
+        out = self.call("keys", pid=7, steps=[{"text": "abc"}])
+        self.assertEqual((out["error"], out["steps_done"], out["chars_sent"]), ("not_foreground", 0, 0))
+
+    def test_an_empty_text_sends_nothing_but_still_needs_the_game_in_front(self):
+        self.assertTrue(self.call("keys", pid=7, steps=[{"text": ""}])["ok"]); self.assertEqual(self.backend.sent, [])
+        self.backend.foreground = 999
+        self.assertEqual(self.call("keys", pid=7, steps=[{"text": ""}])["error"], "not_foreground")
+
+    def test_the_last_input_is_looked_at_after_the_foreground_check_not_before(self):
+        # A person types in the gap between the check and our key: the look must come after the check.
+        self.backend.now = 100_000; self.backend.last_input = 40_000
+        checks = []
+
+        def person_types_during_the_second_check():
+            checks.append(1)
+            if len(checks) == 2:
+                self.backend.now += 500; self.backend.last_input = self.backend.now
+
+        self.backend.on_foreground_check = person_types_during_the_second_check
+        self.call("keys", pid=7, steps=[{"scan": 1}, {"scan": 2}])
+        self.backend.on_foreground_check = None
+        self.backend.now = 101_500
+        self.assertEqual(self.call("idle_ms")["idle_ms"], 1_000)
 
     def test_focus_lost_during_a_wait_stops_the_next_key(self):
         self.backend.lose_focus_after_sleep = True
@@ -278,6 +329,31 @@ class IdleTest(BackendCase):
         self.backend.now = 101_000
         self.assertEqual(self.backend.last_input, 100_000)        # the fake taps ALT, as Windows would see it
         self.assertEqual(self.call("idle_ms")["idle_ms"], 61_000)
+
+    def test_no_alt_tap_when_the_plain_attempt_works(self):
+        # A bare ALT lands in whatever window is in front, often the owner's, and can open its menu bar.
+        self.backend.now = 100_000; self.backend.last_input = 40_000; self.backend.foreground = 999
+        self.backend.needs_alt = False
+        out = self.call("focus", pid=7)
+        self.assertTrue(out["foreground"])
+        self.assertEqual((self.backend.alt_taps, self.backend.set_foreground_calls), (0, 1))
+        self.assertEqual(self.backend.last_input, 40_000); self.assertIsNone(self.state.last_sent_tick)
+        self.backend.now = 101_000
+        self.assertEqual(self.call("idle_ms")["idle_ms"], 61_000)
+
+    def test_alt_is_tapped_once_when_the_plain_attempt_fails(self):
+        self.backend.foreground = 999; self.backend.needs_alt = True
+        self.assertTrue(self.call("focus", pid=7)["foreground"])
+        self.assertEqual(self.backend.alt_taps, 1)
+
+    def test_the_tap_not_the_end_of_the_wait_is_when_the_helper_last_sent(self):
+        self.backend.now = 100_000; self.backend.last_input = 40_000; self.backend.foreground = 999
+        # a person types while the helper waits for the window to come forward
+        self.backend.during_focus_wait = lambda: setattr(self.backend, "last_input", self.backend.now)
+        self.call("focus", pid=7)
+        self.assertEqual(self.state.last_sent_tick, 100_000)
+        self.backend.now = 101_000
+        self.assertEqual(self.call("idle_ms")["idle_ms"], 700)
 
     def test_a_person_before_our_focus_attempt_still_counts(self):
         self.backend.now = 100_000; self.backend.last_input = 99_000; self.backend.foreground = 999
@@ -431,6 +507,71 @@ class PureFunctionTest(unittest.TestCase):
     def test_scaling_keeps_a_row(self):
         w, h, out = win_helper.scale_rgb(1000, 1, b"\x01\x02\x03" * 1000, 10)
         self.assertEqual((w, h, len(out)), (10, 1, 30))
+
+    def test_bgra_to_rgb(self):
+        self.assertEqual(win_helper.bgra_to_rgb(2, 1, bytes([1, 2, 3, 255, 4, 5, 6, 255])), bytes([3, 2, 1, 6, 5, 4]))
+        two_rows = bytes([10, 20, 30, 0, 40, 50, 60, 0])
+        self.assertEqual(win_helper.bgra_to_rgb(1, 2, two_rows), bytes([30, 20, 10, 60, 50, 40]))
+
+    def test_bgra_to_rgb_refuses_the_wrong_amount_of_pixels(self):
+        with self.assertRaises(ValueError):
+            win_helper.bgra_to_rgb(2, 1, b"\x00" * 7)
+
+    def test_tick_age(self):
+        self.assertEqual(win_helper.tick_age_ms(100, 40), 60)
+        self.assertEqual(win_helper.tick_age_ms(7, 7), 0)
+
+    def test_tick_age_across_the_32_bit_wrap(self):
+        self.assertEqual(win_helper.tick_age_ms(5, 0xFFFFFFFB), 10)
+
+    def test_last_input_on_the_64_bit_clock(self):
+        self.assertEqual(win_helper.last_input_tick_from(10_000, 10_000, 4_000), 4_000)
+        # the 64-bit clock is 3 ms past the wrap, the last input 19 ms ago, just before it
+        self.assertEqual(win_helper.last_input_tick_from(2**32 + 3, 3, 0xFFFFFFF0), 2**32 - 16)
+
+    def test_text_chunks(self):
+        self.assertEqual(win_helper.text_chunks(""), [""])
+        self.assertEqual(win_helper.text_chunks("abc"), ["abc"])
+        self.assertEqual(win_helper.text_chunks("a" * 17), ["a" * 8, "a" * 8, "a"])
+        self.assertEqual(win_helper.text_chunks("abcdef", 4), ["abcd", "ef"])
+
+    def test_a_key_is_released_after_it_is_pressed(self):
+        calls, naps = [], []
+        win_helper.tap_key(lambda code, flags: calls.append((code, flags)), naps.append, 0x29, win_helper.KEYEVENTF_SCANCODE, 0.04)
+        self.assertEqual(calls, [(0x29, 0x0008), (0x29, 0x0008 | 0x0002)]); self.assertEqual(naps, [0.04])
+
+    def test_a_key_is_released_even_if_the_wait_between_fails(self):
+        calls = []
+
+        def nap(seconds):
+            raise RuntimeError("interrupted")
+
+        with self.assertRaises(RuntimeError):
+            win_helper.tap_key(lambda code, flags: calls.append((code, flags)), nap, 0x29, 0x0008, 0.04)
+        self.assertEqual(calls, [(0x29, 0x0008), (0x29, 0x000A)])
+
+    def test_a_failed_release_is_attempted_once_and_reported(self):
+        calls = []
+
+        def send(code, flags):
+            calls.append(flags)
+            if flags & win_helper.KEYEVENTF_KEYUP:
+                raise OSError("SendInput refused")
+
+        with self.assertRaises(OSError):
+            win_helper.tap_key(send, lambda seconds: None, 0x29, 0x0008, 0.04)
+        self.assertEqual(calls, [0x0008, 0x000A])
+
+    def test_a_key_that_never_went_down_is_not_released(self):
+        calls = []
+
+        def send(code, flags):
+            calls.append(flags)
+            raise OSError("SendInput refused")
+
+        with self.assertRaises(OSError):
+            win_helper.tap_key(send, lambda seconds: None, 0x29, 0x0008, 0.04)
+        self.assertEqual(calls, [0x0008])
 
     def test_filetime_epoch_and_a_real_moment(self):
         self.assertEqual(win_helper.filetime_to_iso(116444736000000000), "1970-01-01T00:00:00.0000000Z")

@@ -15,7 +15,8 @@ What the helper refuses, because a wrong key in the owner's session is worse
 than a failed step:
 
   * keys go only to the process's own window while that window is in front,
-    checked again before every step;
+    checked again before every step and before every 8-character chunk of
+    typed text;
   * a process is ended only if this helper started it (or was told its
     creation time) and the live process still has that creation time: a
     process id is reused, the pair is not;
@@ -48,6 +49,9 @@ DEFAULT_MAX_WIDTH = 1600
 DEFAULT_RECV_TIMEOUT_MS = 1000
 RECV_BYTES = 65536
 SEND_TIMEOUT_S = 5.0          # a send never inherits the 1 ms a poll-style tcp_recv left on the socket
+TEXT_CHUNK_CHARS = 8          # typed text goes out this many characters at a time, the foreground checked between
+KEY_HOLD_S = 0.04             # between key down and key up; the game ignores a shorter press
+CHAR_GAP_S = 0.008
 
 INPUT_KEYBOARD = 1
 KEYEVENTF_KEYUP = 0x0002
@@ -170,6 +174,42 @@ def encode_png(width: int, height: int, rgb: bytes) -> bytes:
             + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
             + chunk(b"IDAT", zlib.compress(bytes(raw), 6))
             + chunk(b"IEND", b""))
+
+
+def bgra_to_rgb(width: int, height: int, bgra: bytes) -> bytes:
+    """A 32-bit-per-pixel BGRA capture (what GetDIBits returns) as 3-byte RGB, same row order."""
+    if width < 1 or height < 1 or len(bgra) != width * height * 4:
+        raise ValueError("%d bytes is not a %dx%d BGRA image" % (len(bgra), width, height))
+    rgb = bytearray(width * height * 3)
+    rgb[0::3] = bgra[2::4]
+    rgb[1::3] = bgra[1::4]
+    rgb[2::3] = bgra[0::4]
+    return bytes(rgb)
+
+
+def tick_age_ms(now32: int, then32: int) -> int:
+    """Milliseconds from `then32` to `now32`, both 32-bit tick counts that wrap every 49.7 days."""
+    return (now32 - then32) & 0xFFFFFFFF
+
+
+def last_input_tick_from(tick64: int, now32: int, input32: int) -> int:
+    """When the last input was, on the 64-bit tick clock: GetLastInputInfo only has the 32-bit one."""
+    return tick64 - tick_age_ms(now32, input32)
+
+
+def text_chunks(text: str, size: int = TEXT_CHUNK_CHARS) -> list[str]:
+    """`text` in pieces of at most `size` characters (never splitting a character); an empty text is one empty piece."""
+    return [text[i:i + size] for i in range(0, len(text), size)] or [""]
+
+
+def tap_key(send, sleep, code: int, flags: int, hold_s: float) -> None:
+    """Press then release one key through `send(code, flags)`. Once the press went out, the release is
+    always attempted, even if the wait between them fails: a key left held types into whatever is in front."""
+    send(code, flags)
+    try:
+        sleep(hold_s)
+    finally:
+        send(code, flags | KEYEVENTF_KEYUP)
 
 
 # --- The request handler.
@@ -299,10 +339,9 @@ def _op_focus(req, backend, state):
         return {"foreground": False}
     _observe(backend, state)            # before our own ALT tap lands in the system's input time
     if backend.foreground_hwnd() != win["hwnd"]:
-        try:
-            backend.set_foreground(win["hwnd"])
-        finally:
-            state.last_sent_tick = backend.tick()
+        _front, tapped_at = backend.set_foreground(win["hwnd"])
+        if tapped_at is not None:       # only a tap that was sent is our input, and only from the moment it went out
+            state.last_sent_tick = tapped_at
     return {"foreground": _in_front(backend, pid)}
 
 
@@ -333,24 +372,41 @@ def _steps(req: dict) -> list[tuple[str, object]]:
     return checked
 
 
+def _clear_to_send(backend, state: State, pid: int, done: int, chars_sent: int = 0) -> None:
+    """The game's window must be in front; then look at the system's latest input, as close to the send as
+    possible, so a person's key in the gap is seen and not written over by ours."""
+    if not _in_front(backend, pid):
+        raise _Refusal("not_foreground", "the game's window is not in front", steps_done=done, chars_sent=chars_sent)
+    _observe(backend, state)
+
+
+def _send_key(backend, state: State, send, argument) -> None:
+    try:
+        send(argument)
+    finally:
+        state.last_sent_tick = backend.tick()      # after the key-up, which lands later than the call starts
+
+
 def _op_keys(req, backend, state):
     pid = _pid(req)
     steps = _steps(req)
     done = 0
     for kind, value in steps:
-        _observe(backend, state)        # before each step, so input during a wait is not overwritten by our key
-        if not _in_front(backend, pid):
-            raise _Refusal("not_foreground", "the game's window is not in front", steps_done=done)
         if kind == "wait_ms":
+            _clear_to_send(backend, state, pid, done)
             backend.sleep(value)
+        elif kind == "scan":
+            _clear_to_send(backend, state, pid, done)
+            _send_key(backend, state, backend.send_scan, value)
         else:
-            try:
-                if kind == "scan":
-                    backend.send_scan(value)
-                else:
-                    backend.send_text(value)
-            finally:
-                state.last_sent_tick = backend.tick()      # after the key-up, which lands later than the call starts
+            # A string takes about 10 ms a character and an Alt-Tab mid-string would type the rest into the
+            # new window, so it goes in short chunks with the foreground checked before each.
+            sent = 0
+            for chunk in text_chunks(value):
+                _clear_to_send(backend, state, pid, done, chars_sent=sent)
+                if chunk:
+                    _send_key(backend, state, backend.send_text, chunk)
+                sent += len(chunk)
         done += 1
     return {"steps_done": done}
 
@@ -518,13 +574,12 @@ class WindowsBackend:
     VK_MENU = 0x12
     SRCCOPY = 0x00CC0020
     CAPTUREBLT = 0x40000000
-    KEY_HOLD_S = 0.04               # between key down and key up; the game ignores a shorter press
-    CHAR_GAP_S = 0.008
 
     def __init__(self) -> None:
         self._user32 = ctypes.WinDLL("user32", use_last_error=True)
         self._kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
         self._gdi32 = ctypes.WinDLL("gdi32", use_last_error=True)
+        # A Popen object keeps a handle to its child open, which pins the child's pid against reuse while we hold it.
         self._children: dict[int, subprocess.Popen] = {}
         self._declare()
         self._user32.SetProcessDPIAware()       # client rectangles and captures in physical pixels
@@ -653,20 +708,26 @@ class WindowsBackend:
     def foreground_hwnd(self) -> int:
         return int(self._user32.GetForegroundWindow() or 0)
 
-    def set_foreground(self, hwnd: int) -> bool:
-        """Bring `hwnd` to the front; True if it is there afterwards.
+    def set_foreground(self, hwnd: int) -> tuple[bool, int | None]:
+        """Bring `hwnd` to the front. Returns (in front afterwards, tick at which ALT was tapped or None).
 
-        A tap of ALT first lets SetForegroundWindow through when this process
-        has had no input of its own (the trick the probe used).
+        Plain `SetForegroundWindow` first: it works when the helper may take the foreground, and sends no
+        input. Only if the window is still not in front is ALT tapped (the trick the probe used, which lets
+        a second attempt through); a bare ALT lands in whatever window is in front, so it is the exception.
         """
         user32 = self._user32
         if user32.IsIconic(hwnd):
             user32.ShowWindow(hwnd, self.SW_RESTORE)
+        user32.SetForegroundWindow(hwnd)
+        time.sleep(0.1)
+        if self.foreground_hwnd() == hwnd:
+            return True, None
         user32.keybd_event(self.VK_MENU, 0, 0, 0)
         user32.keybd_event(self.VK_MENU, 0, KEYEVENTF_KEYUP, 0)
+        tapped_at = self.tick()
         user32.SetForegroundWindow(hwnd)
         time.sleep(0.3)
-        return self.foreground_hwnd() == hwnd
+        return self.foreground_hwnd() == hwnd, tapped_at
 
     # -- input
 
@@ -682,16 +743,13 @@ class WindowsBackend:
                           % (sent, ctypes.get_last_error()))
 
     def send_scan(self, scan: int) -> None:
-        self._send(scan, KEYEVENTF_SCANCODE)
-        time.sleep(self.KEY_HOLD_S)
-        self._send(scan, KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP)
-        time.sleep(self.KEY_HOLD_S)
+        tap_key(self._send, time.sleep, scan, KEYEVENTF_SCANCODE, KEY_HOLD_S)
+        time.sleep(KEY_HOLD_S)
 
     def send_text(self, text: str) -> None:
         for unit in utf16_units(text):
-            self._send(unit, KEYEVENTF_UNICODE)
-            self._send(unit, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP)
-            time.sleep(self.CHAR_GAP_S)
+            tap_key(self._send, time.sleep, unit, KEYEVENTF_UNICODE, 0)       # the probe sent down and up back to back
+            time.sleep(CHAR_GAP_S)
 
     def tick(self) -> int:
         return int(self._kernel32.GetTickCount64())
@@ -700,14 +758,14 @@ class WindowsBackend:
         """When the system last saw keyboard or mouse input, on the same clock as `tick`.
 
         GetLastInputInfo reports the 32-bit tick count, which wraps every 49
-        days, so its age is taken modulo 2**32 and subtracted from the 64-bit one.
+        days, so its age is taken modulo 2**32 and subtracted from the 64-bit one
+        (`last_input_tick_from`).
         """
         info = LASTINPUTINFO()
         info.cbSize = ctypes.sizeof(LASTINPUTINFO)
         if not self._user32.GetLastInputInfo(ctypes.byref(info)):
             raise OSError("GetLastInputInfo failed (error %d)" % ctypes.get_last_error())
-        age = (self._kernel32.GetTickCount() - info.dwTime) & 0xFFFFFFFF
-        return self.tick() - age
+        return last_input_tick_from(self.tick(), self._kernel32.GetTickCount(), info.dwTime)
 
     def sleep(self, ms: int) -> None:
         time.sleep(ms / 1000)
@@ -749,11 +807,7 @@ class WindowsBackend:
             if memory:
                 gdi32.DeleteDC(memory)
             user32.ReleaseDC(None, screen)
-        rgb = bytearray(w * h * 3)
-        rgb[0::3] = bgra[2::4]
-        rgb[1::3] = bgra[1::4]
-        rgb[2::3] = bgra[0::4]
-        return w, h, bytes(rgb)
+        return w, h, bgra_to_rgb(w, h, bgra)
 
     # -- network
 
