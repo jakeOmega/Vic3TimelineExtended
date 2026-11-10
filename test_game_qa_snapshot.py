@@ -1,0 +1,442 @@
+"""Tests for game_qa.snapshot: the content-addressed snapshot of the owner's saves, settings and logs.
+
+No game and no Windows program is needed: every test builds a user-data folder in a temp dir.
+"""
+
+import hashlib
+import json
+import os
+import tempfile
+import unittest
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from unittest import mock
+
+from game_qa import snapshot
+
+
+def make_user_data(root: Path) -> None:
+    """Write a small user-data folder: the set, plus `save games/mine.v3`, which is not in it."""
+    (root / "save games").mkdir(parents=True)
+    (root / "logs").mkdir()
+    files = {
+        "save games/autosave.v3": b"autosave zero",
+        "save games/autosave_1.v3": b"autosave one",
+        "save games/mine.v3": b"the owner's own save",
+        "continue_game.json": b'{"save": "autosave.v3"}',
+        "console_history.txt": b"set_variable x\n",
+        "pdx_settings.json": b'{"language": "english"}',
+        "content_load.json": b'{"enabled_mods": []}',
+        "logs/debug.log": b"debug line\n",
+        "logs/error.log": b"error line\n",
+    }
+    for name, data in files.items():
+        (root / name).write_bytes(data)
+
+
+def store_blobs(backups: Path) -> list[str]:
+    return sorted(p.name for p in (backups / "store").rglob("*") if p.is_file())
+
+
+class SnapshotTestCase(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.base = Path(tmp.name)
+        self.user = self.base / "user data"
+        make_user_data(self.user)
+        self.backups = self.base / "backups"  # does not exist yet; take() creates it
+
+
+class TakeTests(SnapshotTestCase):
+    def test_takes_the_set_and_nothing_else(self):
+        snap = snapshot.take(self.user, self.backups)
+        self.assertIn("save games/autosave_1.v3", snap.files)
+        self.assertIn("logs/debug.log", snap.files)
+        self.assertNotIn("save games/mine.v3", snap.files)
+        self.assertIn("save games/mine.v3", snap.listing)
+
+    def test_extra_saves_are_taken(self):
+        snap = snapshot.take(self.user, self.backups, extra=["save games/mine.v3"])
+        self.assertIn("save games/mine.v3", snap.files)
+
+    def test_names_with_spaces_and_commas(self):
+        name = "save games/TEST_FAIL_te_qa_fixture_2 January, 1836.v3"
+        (self.user / name).write_bytes(b"x" * 10)
+        snap = snapshot.take(self.user, self.backups, extra=[name])
+        self.assertEqual(snap.files[name].size, 10)
+
+    def test_unchanged_file_is_not_copied_again(self):
+        first = snapshot.take(self.user, self.backups)
+        stored = sorted(p.name for p in (self.backups / "store").rglob("*") if p.is_file())
+        second = snapshot.take(self.user, self.backups)
+        self.assertEqual(stored, sorted(p.name for p in (self.backups / "store").rglob("*") if p.is_file()))
+        self.assertEqual(first.files, second.files)
+
+    def test_manifest_records_the_content_hash(self):
+        # size and time only decide whether take() may skip a copy; Task 3 decides overwrites by this hash
+        snap = snapshot.take(self.user, self.backups)
+        entry = snap.files["continue_game.json"]
+        self.assertEqual(entry.sha256, hashlib.sha256((self.user / "continue_game.json").read_bytes()).hexdigest())
+
+    def test_load_round_trips(self):
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(snapshot.load(snap.dir).files, snap.files)
+
+    def test_journal_appends_in_order(self):
+        snap = snapshot.take(self.user, self.backups)
+        snapshot.record(snap, "started", pid=7, created="2026-11-10T12:00:00Z")
+        snapshot.record(snap, "heartbeat")
+        self.assertEqual([e["event"] for e in snapshot.journal(snap)], ["started", "heartbeat"])
+        self.assertEqual(snapshot.journal(snap)[0]["pid"], 7)
+
+    def test_missing_backup_parent_refuses(self):
+        with self.assertRaises(snapshot.BackupRootError):
+            snapshot.take(self.user, Path("/nonexistent/drive/backups"))
+
+    def test_too_little_free_space_refuses(self):
+        with mock.patch("shutil.disk_usage", return_value=(10**12, 10**12, 5)):
+            with self.assertRaises(snapshot.BackupRootError):
+                snapshot.take(self.user, self.backups)
+
+    # --- beyond the brief ---------------------------------------------------------------
+
+    def test_load_matches_take_in_files_and_listing(self):
+        snap = snapshot.take(self.user, self.backups, extra=["save games/mine.v3"])
+        loaded = snapshot.load(snap.dir)
+        self.assertEqual(loaded.files, snap.files)
+        self.assertEqual(loaded.listing, snap.listing)
+        self.assertIsInstance(loaded.listing, frozenset)
+        self.assertEqual(loaded.id, snap.id)
+        self.assertEqual(loaded.dir, snap.dir)
+
+    def test_set_is_files_only_and_not_recursive(self):
+        (self.user / "logs" / "data_types").mkdir()
+        (self.user / "logs" / "data_types" / "triggers.txt").write_text("deep")
+        (self.user / "save games" / "sub").mkdir()
+        (self.user / "save games" / "sub" / "autosave_9.v3").write_bytes(b"deep save")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertFalse([name for name in snap.files if "data_types" in name or "/sub/" in name])
+        self.assertFalse([name for name in snap.listing if "data_types" in name or "/sub/" in name])
+        self.assertNotIn("logs/data_types", snap.listing)
+
+    def test_listing_is_every_file_in_the_three_folders(self):
+        (self.user / "notes.txt").write_text("owner's note")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(
+            snap.listing,
+            frozenset(
+                {
+                    "save games/autosave.v3",
+                    "save games/autosave_1.v3",
+                    "save games/mine.v3",
+                    "continue_game.json",
+                    "console_history.txt",
+                    "pdx_settings.json",
+                    "content_load.json",
+                    "notes.txt",
+                    "logs/debug.log",
+                    "logs/error.log",
+                }
+            ),
+        )
+
+    def test_a_symlink_is_listed_but_not_copied(self):
+        # a name missing from the listing would read as "created by the run" at restore time
+        (self.user / "logs" / "latest.log").symlink_to("debug.log")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertIn("logs/latest.log", snap.listing)
+        self.assertNotIn("logs/latest.log", snap.files)
+
+    def test_the_listing_covers_every_folder_the_set_reads_from(self):
+        for pattern in snapshot.SNAPSHOT_SET:
+            self.assertIn(pattern.rpartition("/")[0], snapshot.LISTED_FOLDERS, pattern)
+
+    def test_a_set_file_that_is_absent_is_not_in_files(self):
+        (self.user / "console_history.txt").unlink()
+        snap = snapshot.take(self.user, self.backups)
+        self.assertNotIn("console_history.txt", snap.files)
+        self.assertNotIn("console_history.txt", snap.listing)
+
+    def test_entry_records_size_and_mtime(self):
+        path = self.user / "pdx_settings.json"
+        os.utime(path, ns=(1_700_000_000_123_456_789, 1_700_000_000_123_456_789))
+        entry = snapshot.take(self.user, self.backups).files["pdx_settings.json"]
+        self.assertEqual(entry.size, path.stat().st_size)
+        self.assertEqual(entry.mtime_ns, 1_700_000_000_123_456_789)
+
+    def test_store_layout_is_the_content_hash(self):
+        snap = snapshot.take(self.user, self.backups)
+        entry = snap.files["logs/debug.log"]
+        blob = self.backups / "store" / entry.sha256[:2] / entry.sha256
+        self.assertEqual(blob.read_bytes(), b"debug line\n")
+
+    def test_no_temp_files_stay_in_the_store(self):
+        snapshot.take(self.user, self.backups)
+        for p in (self.backups / "store").rglob("*"):
+            if p.is_file():
+                self.assertEqual(p.name, hashlib.sha256(p.read_bytes()).hexdigest())
+
+    def test_identical_content_is_stored_once(self):
+        (self.user / "logs" / "twin.log").write_bytes(b"debug line\n")
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(snap.files["logs/twin.log"].sha256, snap.files["logs/debug.log"].sha256)
+        self.assertEqual(len(store_blobs(self.backups)), len(set(store_blobs(self.backups))))
+        self.assertEqual(len(store_blobs(self.backups)), len({e.sha256 for e in snap.files.values()}))
+
+    def test_changed_file_gets_a_new_blob_and_the_old_one_stays(self):
+        first = snapshot.take(self.user, self.backups)
+        (self.user / "pdx_settings.json").write_bytes(b'{"language": "german", "extra": 1}')
+        second = snapshot.take(self.user, self.backups)
+        old, new = first.files["pdx_settings.json"], second.files["pdx_settings.json"]
+        self.assertNotEqual(old.sha256, new.sha256)
+        self.assertEqual(new.sha256, hashlib.sha256((self.user / "pdx_settings.json").read_bytes()).hexdigest())
+        self.assertIn(old.sha256, store_blobs(self.backups))
+        self.assertIn(new.sha256, store_blobs(self.backups))
+        self.assertEqual(snapshot.load(first.dir).files["pdx_settings.json"], old)
+
+    def test_matching_size_and_mtime_reuse_the_previous_hash(self):
+        # the documented trade: size and mtime_ns decide whether take() may skip reading a file
+        path = self.user / "content_load.json"
+        stamp = path.stat().st_mtime_ns
+        first = snapshot.take(self.user, self.backups)
+        path.write_bytes(b'{"enabled_mods": {}}')  # same length as before, different bytes
+        self.assertEqual(path.stat().st_size, first.files["content_load.json"].size)
+        os.utime(path, ns=(stamp, stamp))
+        second = snapshot.take(self.user, self.backups)
+        self.assertEqual(second.files["content_load.json"], first.files["content_load.json"])
+
+    def test_a_reused_hash_whose_blob_is_gone_is_copied_again(self):
+        first = snapshot.take(self.user, self.backups)
+        sha = first.files["continue_game.json"].sha256
+        (self.backups / "store" / sha[:2] / sha).unlink()
+        second = snapshot.take(self.user, self.backups)
+        self.assertEqual((self.backups / "store" / sha[:2] / sha).read_bytes(), b'{"save": "autosave.v3"}')
+        self.assertEqual(second.files["continue_game.json"], first.files["continue_game.json"])
+
+    def test_a_reused_hash_whose_blob_is_the_wrong_size_is_copied_again(self):
+        first = snapshot.take(self.user, self.backups)
+        sha = first.files["continue_game.json"].sha256
+        (self.backups / "store" / sha[:2] / sha).write_bytes(b"torn")
+        snapshot.take(self.user, self.backups)
+        self.assertEqual((self.backups / "store" / sha[:2] / sha).read_bytes(), b'{"save": "autosave.v3"}')
+
+    def test_file_with_a_different_size_is_rehashed_even_if_mtime_matches(self):
+        path = self.user / "content_load.json"
+        stamp = path.stat().st_mtime_ns
+        first = snapshot.take(self.user, self.backups)
+        path.write_bytes(b'{"enabled_mods": ["a", "b"]}')
+        os.utime(path, ns=(stamp, stamp))
+        second = snapshot.take(self.user, self.backups)
+        self.assertNotEqual(first.files["content_load.json"].sha256, second.files["content_load.json"].sha256)
+
+    def test_missing_user_data_raises_instead_of_taking_an_empty_snapshot(self):
+        with self.assertRaises(FileNotFoundError):
+            snapshot.take(self.base / "no such folder", self.backups)
+        self.assertFalse(self.backups.exists())
+
+    def test_backup_root_that_is_a_file_refuses(self):
+        self.backups.write_text("not a folder")
+        with self.assertRaises(snapshot.BackupRootError):
+            snapshot.take(self.user, self.backups)
+
+    def test_backup_root_inside_user_data_refuses(self):
+        with self.assertRaises(snapshot.BackupRootError):
+            snapshot.take(self.user, self.user / "logs" / "backups")
+        self.assertFalse((self.user / "logs" / "backups").exists())
+
+    def test_space_check_counts_only_what_must_be_copied(self):
+        # mine.v3 is not in the set, so its bytes are not counted
+        total_size = sum(p.stat().st_size for p in self.user.rglob("*") if p.is_file() and p.name != "mine.v3")
+        margin = snapshot.FREE_SPACE_MARGIN
+        # room for the margin but not for the bytes: refuse before creating the root
+        with mock.patch("shutil.disk_usage", return_value=(10**12, 10**12, margin + total_size - 1)):
+            with self.assertRaises(snapshot.BackupRootError):
+                snapshot.take(self.user, self.backups)
+        self.assertFalse(self.backups.exists())
+        # room for both: succeeds
+        with mock.patch("shutil.disk_usage", return_value=(10**12, 10**12, margin + total_size)):
+            snapshot.take(self.user, self.backups)
+        # nothing changed, so a second take needs only the margin
+        with mock.patch("shutil.disk_usage", return_value=(10**12, 10**12, margin)):
+            snapshot.take(self.user, self.backups)
+
+    def test_space_is_checked_against_the_parent_while_the_root_is_missing(self):
+        seen = []
+
+        def usage(path):
+            seen.append(Path(path))
+            return (10**12, 10**12, 10**12)
+
+        with mock.patch("shutil.disk_usage", usage):
+            snapshot.take(self.user, self.backups)
+        self.assertEqual(seen[0], self.backups.parent)
+
+
+class ExtraPathTests(SnapshotTestCase):
+    def test_extra_that_is_missing_raises_and_writes_nothing(self):
+        with self.assertRaises(FileNotFoundError):
+            snapshot.take(self.user, self.backups, extra=["save games/not there.v3"])
+        self.assertFalse(self.backups.exists())
+
+    def test_extra_must_stay_inside_user_data(self):
+        outside = self.base / "secret.txt"
+        outside.write_text("outside")
+        for bad in ("../secret.txt", "save games/../../secret.txt", str(outside)):
+            with self.subTest(bad=bad):
+                with self.assertRaises(ValueError):
+                    snapshot.take(self.user, self.backups, extra=[bad])
+        self.assertFalse(self.backups.exists())
+
+    def test_extra_that_is_a_folder_raises(self):
+        with self.assertRaises(FileNotFoundError):
+            snapshot.take(self.user, self.backups, extra=["logs"])
+
+    def test_extra_overlapping_the_set_is_taken_once(self):
+        snap = snapshot.take(self.user, self.backups, extra=["save games/autosave.v3", "./save games/autosave.v3"])
+        self.assertEqual(list(snap.files).count("save games/autosave.v3"), 1)
+
+
+class IdAndOrderTests(SnapshotTestCase):
+    NOW = datetime(2026, 11, 10, 20, 40, 35, tzinfo=timezone.utc)
+
+    def test_id_is_the_utc_second(self):
+        snap = snapshot.take(self.user, self.backups, now=self.NOW)
+        self.assertEqual(snap.id, "20261110T204035Z")
+        self.assertEqual(snap.dir, self.backups / "snapshots" / "20261110T204035Z")
+
+    def test_naive_time_is_utc_and_aware_time_is_converted(self):
+        naive = snapshot.take(self.user, self.backups, now=datetime(2026, 11, 10, 20, 40, 35))
+        self.assertEqual(naive.id, "20261110T204035Z")
+        plus_two = timezone(timedelta(hours=2))
+        aware = snapshot.take(self.user, self.backups, now=datetime(2026, 11, 10, 22, 41, 0, tzinfo=plus_two))
+        self.assertEqual(aware.id, "20261110T204100Z")
+
+    def test_same_second_gets_a_numbered_suffix(self):
+        ids = [snapshot.take(self.user, self.backups, now=self.NOW).id for _ in range(3)]
+        self.assertEqual(ids, ["20261110T204035Z", "20261110T204035Z-2", "20261110T204035Z-3"])
+
+    def test_all_snapshots_is_oldest_first_with_numeric_suffix_order(self):
+        later = self.NOW + timedelta(minutes=5)
+        taken = [snapshot.take(self.user, self.backups, now=self.NOW).id for _ in range(11)]
+        taken.append(snapshot.take(self.user, self.backups, now=later).id)
+        listed = [s.id for s in snapshot.all_snapshots(self.backups)]
+        self.assertEqual(listed, taken)
+        self.assertEqual(listed[9], "20261110T204035Z-10")
+        self.assertEqual(listed[-1], "20261110T204535Z")
+
+    def test_all_snapshots_without_a_backup_root_is_empty(self):
+        self.assertEqual(snapshot.all_snapshots(self.base / "nothing here"), [])
+        self.assertEqual(snapshot.all_snapshots(self.backups), [])
+
+    def test_a_snapshot_without_a_manifest_does_not_load_and_is_skipped(self):
+        good = snapshot.take(self.user, self.backups, now=self.NOW)
+        half = self.backups / "snapshots" / "20261110T210000Z"
+        half.mkdir()
+        (half / "manifest.json.tmp").write_text('{"version": 1, "files": {')
+        with self.assertRaises(FileNotFoundError):
+            snapshot.load(half)
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [good.id])
+
+    def test_a_corrupt_manifest_is_skipped_and_load_raises_value_error(self):
+        good = snapshot.take(self.user, self.backups, now=self.NOW)
+        bad = self.backups / "snapshots" / "20261110T210000Z"
+        bad.mkdir()
+        (bad / "manifest.json").write_text('{"version": 1, "files": {')
+        with self.assertRaises(ValueError):
+            snapshot.load(bad)
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [good.id])
+
+    def test_a_manifest_missing_a_key_raises_value_error(self):
+        bad = self.backups / "snapshots" / "20261110T210000Z"
+        bad.mkdir(parents=True)
+        (bad / "manifest.json").write_text(json.dumps({"version": 1, "files": {}}))
+        with self.assertRaises(ValueError):
+            snapshot.load(bad)
+
+    def test_stray_folders_in_snapshots_are_ignored(self):
+        good = snapshot.take(self.user, self.backups, now=self.NOW)
+        (self.backups / "snapshots" / "scratch").mkdir()
+        (self.backups / "snapshots" / "notes.txt").write_text("hi")
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [good.id])
+
+    def test_take_reuses_hashes_from_the_newest_loadable_snapshot(self):
+        path = self.user / "content_load.json"
+        stamp = path.stat().st_mtime_ns
+        first = snapshot.take(self.user, self.backups, now=self.NOW)
+        # a newer directory that never finished must not hide the real previous snapshot
+        (self.backups / "snapshots" / "20261110T230000Z").mkdir()
+        path.write_bytes(b'{"enabled_mods": {}}')  # same size and mtime, so the hash is reused
+        os.utime(path, ns=(stamp, stamp))
+        second = snapshot.take(self.user, self.backups, now=self.NOW + timedelta(hours=1))
+        self.assertEqual(second.files, first.files)
+
+    def test_manifest_is_written_by_rename_and_a_failed_take_leaves_no_snapshot(self):
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(sorted(p.name for p in snap.dir.iterdir()), ["manifest.json"])
+        with mock.patch("os.replace", side_effect=OSError("disk fell off")):
+            with self.assertRaises(OSError):
+                snapshot.take(self.user, self.backups, now=self.NOW)
+        self.assertEqual(sorted(p.name for p in (self.backups / "snapshots").iterdir()), [snap.id])
+        self.assertEqual([s.id for s in snapshot.all_snapshots(self.backups)], [snap.id])
+
+
+class JournalTests(SnapshotTestCase):
+    NOW = datetime(2026, 11, 10, 20, 40, 35, tzinfo=timezone.utc)
+
+    def test_a_new_snapshot_has_an_empty_journal(self):
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(snapshot.journal(snap), [])
+
+    def test_records_carry_a_utc_timestamp_under_at(self):
+        snap = snapshot.take(self.user, self.backups)
+        snapshot.record(snap, "started", now=self.NOW, pid=7)
+        (entry,) = snapshot.journal(snap)
+        self.assertEqual(entry, {"event": "started", "at": "2026-11-10T20:40:35Z", "pid": 7})
+
+    def test_record_defaults_to_the_current_time(self):
+        snap = snapshot.take(self.user, self.backups)
+        before = datetime.now(timezone.utc).replace(microsecond=0)
+        snapshot.record(snap, "heartbeat")
+        at = datetime.strptime(snapshot.journal(snap)[0]["at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+        self.assertLessEqual(before, at)
+        self.assertLessEqual(at, datetime.now(timezone.utc))
+
+    def test_fields_may_not_overwrite_the_timestamp(self):
+        snap = snapshot.take(self.user, self.backups)
+        with self.assertRaises(ValueError):
+            snapshot.record(snap, "held", at="yesterday")
+        self.assertEqual(snapshot.journal(snap), [])
+
+    def test_journal_is_read_back_from_disk_not_from_the_object(self):
+        snap = snapshot.take(self.user, self.backups)
+        snapshot.record(snap, "started", pid=7)
+        again = snapshot.load(snap.dir)
+        snapshot.record(again, "restored")
+        self.assertEqual([e["event"] for e in snapshot.journal(snap)], ["started", "restored"])
+
+    def test_non_ascii_and_odd_values_round_trip(self):
+        snap = snapshot.take(self.user, self.backups)
+        reason = 'owner played "Österreich", then\nquit'
+        snapshot.record(snap, "held", reason=reason)
+        self.assertEqual(snapshot.journal(snap)[0]["reason"], reason)
+
+    def test_a_torn_last_line_is_skipped_and_the_next_record_survives(self):
+        snap = snapshot.take(self.user, self.backups)
+        snapshot.record(snap, "started", pid=7)
+        with open(snap.dir / "journal.jsonl", "ab") as handle:
+            handle.write(b'{"event": "heartb')  # the machine died mid-write: no newline
+        self.assertEqual([e["event"] for e in snapshot.journal(snap)], ["started"])
+        snapshot.record(snap, "restored")
+        self.assertEqual([e["event"] for e in snapshot.journal(snap)], ["started", "restored"])
+
+    def test_names_with_odd_characters_survive_the_manifest(self):
+        name = "save games/Königreich_Württemberg, 1836 — “final”.v3"
+        (self.user / name).write_bytes(b"x" * 3)
+        snap = snapshot.take(self.user, self.backups, extra=[name])
+        self.assertEqual(snapshot.load(snap.dir).files[name].size, 3)
+        self.assertIn(name, snapshot.load(snap.dir).listing)
+
+
+if __name__ == "__main__":
+    unittest.main()
