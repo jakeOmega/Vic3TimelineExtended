@@ -1,0 +1,58 @@
+﻿# ============================================================================
+# STATE PICTURES - the yearly pass (design: docs/superpowers/specs/2026-11-10-state-pictures-design.md;
+# system doc: docs/systems/mod_systems/state_pictures.md).
+#
+# The banner at the top of the state panel is picked by the weights in
+# common/terrain/te_state_pictures_generated.txt, which the engine may evaluate every frame. So a
+# weight reads the owner's technology and this pass's stored tags, and nothing dearer:
+#   te_sp_size   1 town, 2 city, 3 metropolis, 4 megacity; absent before the state's first walk
+# A picture can therefore lag a change by up to a year.
+# ============================================================================
+
+# State scope, from on_yearly_pulse_state (te_state_picture_on_actions.txt).
+te_state_picture_refresh = {
+	if = {
+		limit = { te_state_picture_city_people < 0 }
+		remove_variable = te_sp_size
+	}
+	# no size yet, or grown past the next floor: the size its people make it
+	else_if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < te_state_picture_size_up
+			}
+		}
+		set_variable = { name = te_sp_size value = te_state_picture_size_up }
+	}
+	# shrunk below the share of its floor that keeps it
+	else_if = {
+		limit = { var:te_sp_size > te_state_picture_size_down }
+		set_variable = { name = te_sp_size value = te_state_picture_size_down }
+	}
+	te_state_picture_selfcheck = yes
+}
+
+# Once a game: the first state stored at metropolis or larger says whether its figures hold together.
+# The pass rests on te_dg_urban being a head count on the scale of state_population, so its largest
+# city can't hold more people than the state does; BROKEN means it isn't, and the floors in
+# te_state_picture_values.txt are in the wrong unit. The picture itself can't be logged
+# ([THIS.GetState.GetBestTexture] prints empty), so the play-test list
+# (docs/testing/state-pictures-playtest.md) covers the banner.
+te_state_picture_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_sp_selfcheck_done }
+			has_variable = te_sp_size
+			var:te_sp_size >= 3
+		}
+		set_global_variable = { name = te_sp_selfcheck_done value = yes }
+		if = {
+			limit = { te_state_picture_city_people <= te_state_picture_state_people }
+			debug_log = "TE_SELF_CHECK OK state_picture_size state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_size state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0] (the largest city holds more people than its state: te_dg_urban is not a head count on state_population's scale)"
+		}
+	}
+}

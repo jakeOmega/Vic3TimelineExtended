@@ -1,0 +1,93 @@
+﻿# ============================================================================
+# STATE PICTURES - the yearly pass's figures (design: docs/superpowers/specs/2026-11-10-state-pictures-design.md;
+# system doc: docs/systems/mod_systems/state_pictures.md). State scope.
+# ============================================================================
+
+# The floors of the city sizes, in people living in the state's largest city. Provisional: to be set
+# against an observer game before the size pictures are painted in number (design section 9).
+te_state_picture_k_city = { value = 100000 }
+te_state_picture_k_metropolis = { value = 1000000 }
+te_state_picture_k_megacity = { value = 10000000 }
+# A size is left only below this share of its floor, so a city at a floor doesn't change picture each year.
+te_state_picture_k_keep = { value = 0.9 }
+te_state_picture_k_city_keep = {
+	value = te_state_picture_k_city
+	multiply = te_state_picture_k_keep
+}
+te_state_picture_k_metropolis_keep = {
+	value = te_state_picture_k_metropolis
+	multiply = te_state_picture_k_keep
+}
+te_state_picture_k_megacity_keep = {
+	value = te_state_picture_k_megacity
+	multiply = te_state_picture_k_keep
+}
+# The largest city's share of the state's urban people where the census keeps none (Demographics
+# disabled, or under 5,000 urban people): te_demog_k_mt_base as a fraction.
+te_state_picture_k_share = { value = 0.4 }
+
+# The people of the state's largest city: the walk's urban people (te_dg_urban, written every year
+# whatever the Demographics rule) times the metropolitan share (te_dg_mt, 0-100, only while the
+# census runs). -1 before the state's first walk.
+te_state_picture_city_people = {
+	value = -1
+	if = {
+		limit = { has_variable = te_dg_urban }
+		value = var:te_dg_urban
+		if = {
+			limit = { has_variable = te_dg_mt }
+			multiply = var:te_dg_mt
+			divide = 100
+		}
+		else = {
+			multiply = te_state_picture_k_share
+		}
+	}
+}
+
+# The size a city of that many people grows into (1 town, 2 city, 3 metropolis, 4 megacity) ...
+te_state_picture_size_up = {
+	value = 1
+	if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_megacity }
+		value = 4
+	}
+	else_if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_metropolis }
+		value = 3
+	}
+	else_if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_city }
+		value = 2
+	}
+}
+
+# ... and the size it has shrunk to: the same floors times te_state_picture_k_keep. Never below
+# te_state_picture_size_up; between the two a state keeps the size it has.
+te_state_picture_size_down = {
+	value = 1
+	if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_megacity_keep }
+		value = 4
+	}
+	else_if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_metropolis_keep }
+		value = 3
+	}
+	else_if = {
+		limit = { te_state_picture_city_people >= te_state_picture_k_city_keep }
+		value = 2
+	}
+}
+
+# The state's whole population, for the self-check: its largest city can't hold more.
+te_state_picture_state_people = { value = state_population }
+
+# The stored size, for a log line: 0 with none.
+te_state_picture_size_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_sp_size }
+		value = var:te_sp_size
+	}
+}
