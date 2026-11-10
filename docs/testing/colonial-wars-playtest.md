@@ -74,3 +74,9 @@ has happened (a declaration fought, talks concluded), so OK cannot be a false pa
 | Check | Expected | If not |
 |---|---|---|
 | **The conscription crisis in a war with a colony.** A colonial empire at war with its own colonial subject, or with rebels it has a war of independence on record with, and no crackdown running. | `.51` (the conscription crisis) can fire, and `error.log` has no `is_subject_of trigger [ Invalid Country! ]` from `colonial_empire_triggers.txt`. | Until 2026-10-25 `decol_fighting_colonial_war` saved its scope with `save_scope_as`, an effect the trigger parser drops, so only a running crackdown counted. |
+
+## From the 2026-11-10 legacy notice
+
+| Check | Expected | If not |
+|---|---|---|
+| **A new country hears of its legacy.** Release a territory after more than two years of one program, switch to the new country (or observe it) and open its events. Repeat for a lost war of independence. | What the Empire Left (`.22`) a day after it forms, with the text for its legacy (the bloody one after a lost war); the option's tooltip lists the legacy modifier and the starting laws and changes nothing when taken. | No event: the modifier was not yet on the country a day later, so send it from a variable set beside the modifier. Laws in the tooltip the country does not hold: the law-consistency sweep replaced them. The former ruler's name blank: `scope:decolonizing_parent` did not reach the event. |

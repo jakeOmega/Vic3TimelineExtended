@@ -779,6 +779,8 @@ decol_iw_aftermath_bloody = {
 	activate_law = law_type:law_autocracy
 	activate_law = law_type:law_outlawed_dissent
 	activate_law = law_type:law_minority_rights_discrimination
+	# Tell the former colony what it starts with (.22).
+	trigger_event = { id = decolonization_events.22 days = 1 }
 }
 
 # ---------------------------------------------------------------------------
